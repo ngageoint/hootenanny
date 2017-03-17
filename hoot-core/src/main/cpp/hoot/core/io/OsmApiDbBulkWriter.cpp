@@ -832,20 +832,20 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   outStream << "BEGIN TRANSACTION;\n";
   outStream.flush();
 
-//  if (!_destinationIsDatabase() && !_reserveRecordIdsBeforeWritingData)
-//  {
-      //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
-      //statements to the sql output here for applying at a later time.
-//    QString reserveElementIdsSql;
-//    _writeSequenceUpdatesToStream(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
-//                                 _idMappings.currentNodeId + _writeStats.nodesWritten,
-//                                 _idMappings.currentWayId + _writeStats.waysWritten,
-//                                 _idMappings.currentRelationId + _writeStats.relationsWritten,
-//                                 reserveElementIdsSql);
-//    LOG_VART(reserveElementIdsSql);
-//    outStream << reserveElementIdsSql;
-//    outStream.flush();
-//  }
+  if (!_destinationIsDatabase() && !_reserveRecordIdsBeforeWritingData)
+  {
+    //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
+    //statements to the sql output here for applying at a later time.
+    QString reserveElementIdsSql;
+    _writeSequenceUpdatesToStream(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
+                                 _idMappings.currentNodeId + _writeStats.nodesWritten,
+                                 _idMappings.currentWayId + _writeStats.waysWritten,
+                                 _idMappings.currentRelationId + _writeStats.relationsWritten,
+                                 reserveElementIdsSql);
+    LOG_VART(reserveElementIdsSql);
+    outStream << reserveElementIdsSql;
+    outStream.flush();
+  }
 
   long progressLineCtr = 0;
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
