@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.clipping;
 
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -39,7 +40,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +51,7 @@ import hoot.services.command.ExternalCommandManager;
 import hoot.services.controllers.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.utils.JsonUtils;
 
 
 @Controller
@@ -101,15 +102,14 @@ public class ClipDatasetResource {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject arguments = (JSONObject) parser.parse(params);
-            String newDatasetOutputName = arguments.get("OUTPUT_NAME").toString();
+            Map<String, String> paramMap = JsonUtils.jsonToMap(params);
+            String newDatasetOutputName = paramMap.get("OUTPUT_NAME");
 
             Command[] commands = {
 
                 // Clip to a bounding box
                 () -> {
-                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(params, debugLevel, this.getClass());
+                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(paramMap, debugLevel, this.getClass());
                     return externalCommandManager.exec(jobId, clipCommand);
                 },
 

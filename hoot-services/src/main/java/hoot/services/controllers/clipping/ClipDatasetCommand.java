@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
-import hoot.services.utils.JsonUtils;
 
 /*
 #
@@ -60,17 +59,15 @@ step1:
 
 class ClipDatasetCommand extends ExternalCommand {
 
-    ClipDatasetCommand(String params, String debugLevel, Class<?> caller) {
-        Map<String, String> paramsMap = JsonUtils.paramsToMap(params);
-
+    ClipDatasetCommand(Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         List<String> options = new LinkedList<>();
         options.add("-D hootapi.db.writer.overwrite.map=true");
         options.add("-D hootapi.db.writer.create.user=true");
         options.add("-D api.db.email=test@test.com");
 
-        String input = HOOTAPI_DB_URL + "/" + paramsMap.get("INPUT_NAME");
-        String output = HOOTAPI_DB_URL + "/" + paramsMap.get("OUTPUT_NAME");
-        String bounds = paramsMap.get("BBOX");
+        String input = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT_NAME");
+        String output = HOOTAPI_DB_URL + "/" + paramMap.get("OUTPUT_NAME");
+        String bounds = paramMap.get("BBOX");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
         /*

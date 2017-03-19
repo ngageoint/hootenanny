@@ -26,6 +26,8 @@
  */
 package hoot.services.controllers.job;
 
+import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -35,7 +37,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.JobStatusManager;
+import hoot.services.utils.JsonUtils;
 
 
 @Controller
@@ -64,7 +66,7 @@ public class JobCancellationResource {
     /**
      * Cancel job.
      * 
-     * @param args
+     * @param params
      *            - json containing following parameters jobid: Target job id; mapid: Target map id.
      * 
      *            Example: {"jobid":"123", "mapid":"45"}
@@ -74,14 +76,13 @@ public class JobCancellationResource {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response process(String args) {
+    public Response process(String params) {
         String jobIdToCancel = null;
 
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject command = (JSONObject) parser.parse(args);
-            jobIdToCancel = command.get("jobid").toString();
-            String mapDisplayName = command.get("mapid").toString();
+            Map<String, String> paramMap = JsonUtils.jsonToMap(params);
+            jobIdToCancel = paramMap.get("jobid");
+            String mapDisplayName = paramMap.get("mapid");
 
             this.externalCommandInterface.terminate(jobIdToCancel);
             this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");

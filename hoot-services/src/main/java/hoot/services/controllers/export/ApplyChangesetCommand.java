@@ -79,7 +79,7 @@ public class ApplyChangesetCommand extends ExportCommand {
         String input1 = OSMAPI_DB_URL;
         String input2 = super.getInput();
 
-        //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
+        //hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
         String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + output;
 
         super.configureAsHootCommand(command, caller);

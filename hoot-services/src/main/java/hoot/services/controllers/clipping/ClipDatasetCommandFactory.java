@@ -26,13 +26,15 @@
  */
 package hoot.services.controllers.clipping;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 
 @Component
 class ClipDatasetCommandFactory {
 
-    ClipDatasetCommand build(String params, String debugLevel, Class<?> caller) {
-        return new ClipDatasetCommand(params, debugLevel, caller);
+    ClipDatasetCommand build(Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+        return new ClipDatasetCommand(paramMap, debugLevel, caller);
     }
 }

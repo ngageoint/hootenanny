@@ -59,7 +59,6 @@ import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +76,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
+import hoot.services.utils.JsonUtils;
 
 
 @Controller
@@ -355,9 +355,8 @@ public class BasemapResource {
                 String name = FilenameUtils.getBaseName(basemapName);
 
                 String metadata = FileUtils.readFileToString(file, Charset.defaultCharset());
-                JSONParser parser = new JSONParser();
-                JSONObject json = (JSONObject) parser.parse(metadata);
-                String jobId = json.get("jobid").toString();
+                Map<String, String> map = JsonUtils.jsonToMap(metadata);
+                String jobId = map.get("jobid");
 
                 JSONObject jsonExtent = null;
 

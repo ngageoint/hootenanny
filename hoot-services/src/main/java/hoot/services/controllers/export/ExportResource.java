@@ -121,30 +121,14 @@ public class ExportResource {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
-            Map<String, String> paramMap = JsonUtils.paramsToMap(params);
+            Map<String, String> paramMap = JsonUtils.jsonToMap(params);
 
             String outputType = paramMap.get("outputtype");
             String input = paramMap.get("input");
 
             Command[] commands;
 
-            if ("wfs".equalsIgnoreCase(outputType)) {
-                commands = new Command[] {
-                    () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, this.getClass());
-                        return externalCommandManager.exec(jobId, exportCommand);
-                    },
-                    () -> {
-                        try {
-                            return WFSManager.createWfsResource(jobId, jobId);
-                        }
-                        catch (Exception e) {
-                            throw new RuntimeException("Error creating WFS resource!", e);
-                        }
-                    }
-                };
-            }
-            else {
+            {
                 commands = new Command [] {
                     () -> {
                         ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, this.getClass());
@@ -256,8 +240,7 @@ public class ExportResource {
         Response response = null;
         try {
             out = getExportFile(id, id, StringUtils.isEmpty(ext) ? "xml" : ext);
-            response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8"))))
-                    .build();
+            response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8")))).build();
         }
         catch (WebApplicationException e) {
             throw e;

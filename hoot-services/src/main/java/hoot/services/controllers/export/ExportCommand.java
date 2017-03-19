@@ -94,11 +94,11 @@ TDS40_TEMPLATE=$(TEMPLATE_PATH)/tds40.tgz
 
 
 ifeq "$(outputtype)" "shp"
-	OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
+    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
 endif
 
 ifeq "$(inputtype)" "file"
-	INPUT_PATH=$(input)
+    INPUT_PATH=$(input)
 endif
 
 #####
@@ -107,40 +107,39 @@ endif
 # Osm2Ogr
 ###
 step1:
-ifeq ("$(outputtype)","wfs")
-	hoot osm2ogr $(REMOVE_REVIEW) -D ogr.writer.pre.layer.name=$(outputname)_ $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" $(OP_PG_URL)
-else ifeq ("$(outputtype)","osm")
-	mkdir -p "$(outputfolder)"
-	hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-	cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
-else ifeq ("$(outputtype)","osm.pbf")
-	mkdir -p "$(outputfolder)"
-	hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-else ifeq ("$(outputtype)","osm_api_db")
-	hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
-	hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
-else ifeq ("$(outputtype)","osc")
-	mkdir -p "$(outputfolder)"
-	hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
-else
-	mkdir -p "$(outputfolder)"
-ifeq "$(append)" "true"
-ifeq "$(translation)" "translations/TDSv61.js"
-ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
-	mkdir -p $(OP_OUTPUT)
-	tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
-endif # Template Path
-else
-ifeq "$(translation)" "translations/TDSv40.js"
-ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
-	mkdir -p $(OP_OUTPUT)
-	tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
-endif # Template Path
-endif # Translations TDSv40
-endif # Else
-endif # Append
-	hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
-	$(OP_ZIP)
+    ifeq ("$(outputtype)","osm")
+        mkdir -p "$(outputfolder)"
+        hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
+        cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+    else ifeq ("$(outputtype)","osm.pbf")
+        mkdir -p "$(outputfolder)"
+        hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
+    else ifeq ("$(outputtype)","osm_api_db")
+        hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
+        hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
+    else ifeq ("$(outputtype)","osc")
+        mkdir -p "$(outputfolder)"
+        hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
+    else
+        mkdir -p "$(outputfolder)"
+        ifeq "$(append)" "true"
+            ifeq "$(translation)" "translations/TDSv61.js"
+                ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
+                    mkdir -p $(OP_OUTPUT)
+                    tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
+                endif # Template Path
+            else
+            ifeq "$(translation)" "translations/TDSv40.js"
+                ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
+                    mkdir -p $(OP_OUTPUT)
+                    tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
+                endif # Template Path
+            endif # Translations TDSv40
+        endif # Else
+    endif # Append
+
+    hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
+    $(OP_ZIP)
 
 endif # Shape/FGDB
 
@@ -207,7 +206,7 @@ class ExportCommand extends ExternalCommand {
         }
 
         String translation = JsonUtils.getParameterValue("translation", oParams);
-        if ((StringUtils.trimToNull(translation) != null) && !translation.toUpperCase().equals("NONE")) {
+        if ((StringUtils.trimToNull(translation) != null) && !translation.equalsIgnoreCase("NONE")) {
             String msg = "Custom translation not allowed when exporting to OSM API database.";
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
         }
@@ -249,7 +248,7 @@ class ExportCommand extends ExternalCommand {
         // if sent a bbox in the url (reflecting task grid bounds)
         // use that, otherwise use the bounds of the conflated output
         BoundingBox bbox;
-            if (oParams.get("TASK_BBOX") != null) {
+        if (oParams.containsKey("TASK_BBOX")) {
             bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
         }
         else {

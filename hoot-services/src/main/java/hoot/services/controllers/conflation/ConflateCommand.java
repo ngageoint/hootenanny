@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
-import hoot.services.utils.JsonUtils;
 
 /*
 #
@@ -131,9 +130,7 @@ ifeq "$(GENERATE_REPORT)" "true"
 
 class ConflateCommand extends ExternalCommand {
 
-    ConflateCommand(String params, BoundingBox bounds, String debugLevel, Class<?> caller) {
-        Map<String, String> paramMap = JsonUtils.paramsToMap(params);
-
+    ConflateCommand(Map<String, String> paramMap, BoundingBox bounds, String debugLevel, Class<?> caller) {
         String conflateaoi = null;
         if (bounds != null) {
             conflateaoi = bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();

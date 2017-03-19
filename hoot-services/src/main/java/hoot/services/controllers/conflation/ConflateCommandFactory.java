@@ -26,14 +26,17 @@
  */
 package hoot.services.controllers.conflation;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
+
 import hoot.services.geo.BoundingBox;
 
 
 @Component
 class ConflateCommandFactory {
 
-    ConflateCommand build(String params, BoundingBox bbox, String debugLevel, Class<?> caller) {
-        return new ConflateCommand(params, bbox, debugLevel, caller);
+    ConflateCommand build(Map<String, String> paramMap, BoundingBox bbox, String debugLevel, Class<?> caller) {
+        return new ConflateCommand(paramMap, bbox, debugLevel, caller);
     }
 }

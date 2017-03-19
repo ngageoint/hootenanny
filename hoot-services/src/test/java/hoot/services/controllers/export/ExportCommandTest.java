@@ -89,60 +89,6 @@ public class ExportCommandTest {
 
     @Test
     @Category(UnitTest.class)
-    public void testWFSCommandCreation() throws Exception {
-        String jobId = UUID.randomUUID().toString();
-
-/*
-        String params = "{\"translation\":\"MGCP.js\"," +
-                         "\"inputtype\":\"db\"," +
-                         "\"input\":\"ToyTestA\"," +
-                         "\"outputtype\":\"wfs\"," +
-                         "\"removereview\" : \"false\"}";
-*/
-        Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("translation", "MGCP.js");
-        paramMap.put("inputtype", "db");
-        paramMap.put("input", "ToyTestA");
-        paramMap.put("outputtype", "wfs");
-        paramMap.put("removereview", "false");
-
-        ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-        ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "wfs", "ToyTestA", this.getClass());
-
-        String actualCaller = exportCommand.get("caller").toString();
-        String expectedCaller = this.getClass().getName();
-
-        assertEquals(expectedCaller, actualCaller);
-
-        String actualExectype = exportCommand.get("exectype").toString();
-        String expectedExectype = "make";
-
-        assertEquals(expectedExectype, actualExectype);
-
-        String actualExec = exportCommand.get("exec").toString();
-        String expectedExec = "osm2ogrscript";
-
-        assertEquals(expectedExec, actualExec);
-
-        String actualParams = exportCommand.get("params").toString();
-        String expectedParams =
-                "[{\"input\":\"ToyTestA\"}," +
-                "{\"translation\":\"MGCP.js\"}," +
-                "{\"inputtype\":\"db\"}," +
-                "{\"outputtype\":\"wfs\"}," +
-                "{\"removereview\":\"false\"}," +
-                "{\"outputfolder\":\"" + TEMP_OUTPUT_PATH.replace("/", "\\/") + "\\/" + jobId + "\"}," +
-                "{\"output\":\"" + jobId + "\"}," +
-                "{\"DB_URL\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\"}," +
-                "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${OSMAPI_DB_USER}:${OSMAPI_DB_PASSWORD}@${OSMAPI_DB_HOST}:${OSMAPI_DB_PORT}\\/${OSMAPI_DB_NAME}\"}," +
-                "{\"outputname\":\"" + jobId + "\"}," +
-                "{\"PG_URL\":\"host='${HOOTAPI_DB_HOST}' port='${HOOTAPI_DB_PORT}' user='${HOOTAPI_DB_USER}' password='${HOOTAPI_DB_PASSWORD}' dbname='wfsstoredb'\"}]";
-
-        assertEquals(expectedParams, actualParams);
-    }
-
-    @Test
-    @Category(UnitTest.class)
     public void testExportToOsmApiDb() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
@@ -168,7 +114,7 @@ public class ExportCommandTest {
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
 
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osm_api_db", MAP_NAME, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
 
             String actualCaller = exportCommand.get("caller").toString();
             String expectedCaller = this.getClass().getName();
@@ -230,7 +176,7 @@ public class ExportCommandTest {
 
         ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
 
-        ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osc", MAP_NAME, this.getClass());
+        ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
 
         String actualCaller = exportCommand.get("caller").toString();
         String expectedCaller = this.getClass().getName();
@@ -290,7 +236,7 @@ public class ExportCommandTest {
             paramMap.put("translation", "MyTranslation.js");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osm_api_db", MAP_NAME, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -329,7 +275,7 @@ public class ExportCommandTest {
             paramMap.put("TASK_BBOX", "10.1,10.1,10.1,10.1");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osm_api_db", MAP_NAME, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.CONFLICT.getStatusCode(), e.getResponse().getStatus());
@@ -368,7 +314,7 @@ public class ExportCommandTest {
             paramMap.put("TASK_BBOX", "10.1,10.1,10.1,10.1");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osm_api_db", MAP_NAME, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -406,7 +352,7 @@ public class ExportCommandTest {
             paramMap.put("TASK_BBOX", "10.1,10.1,10.1,10.1");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osm_api_db", MAP_NAME, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
@@ -445,7 +391,7 @@ public class ExportCommandTest {
             paramMap.put("TASK_BBOX", "10.1,10.1,10.1,10.1");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osm_api_db", MAP_NAME, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -476,7 +422,7 @@ public class ExportCommandTest {
             paramMap.put("USER_ID", "test_user");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", "osc", MAP_NAME, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());

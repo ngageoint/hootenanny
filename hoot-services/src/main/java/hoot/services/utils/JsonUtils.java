@@ -31,7 +31,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -90,7 +89,7 @@ public final class JsonUtils {
      * @return string value
      */
     public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes) {
-        JsonNode root = null;
+        JsonNode root;
         try {
             root = (new ObjectMapper()).readTree(json).path(fieldName);
         }
@@ -151,24 +150,7 @@ public final class JsonUtils {
         return JSONObject.escape(json.toString());
     }
 
-    public static Map<String, String> paramsToMap(JSONObject command) {
-        JSONArray paramsList = (JSONArray) command.get("params");
-
-        Map<String, String> paramsMap = new HashMap<>();
-        for (Object aParamsList : paramsList) {
-            JSONObject o = (JSONObject) aParamsList;
-            for (Object o1 : o.entrySet()) {
-                Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o1;
-                String key = (String) mEntry.getKey();
-                String val = (String) mEntry.getValue();
-                paramsMap.put(key, val);
-            }
-        }
-
-        return paramsMap;
-    }
-
-    public static Map<String, String> paramsToMap(String json) {
+    public static Map<String, String> jsonToMap(String json) {
         JSONParser parser = new JSONParser();
         JSONObject command;
         try {
@@ -187,31 +169,6 @@ public final class JsonUtils {
         }
 
         return paramsMap;
-    }
-
-    public static JSONArray parseParams(String json) {
-        JSONParser parser = new JSONParser();
-        JSONObject command;
-        try {
-            command = (JSONObject) parser.parse(json);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing JSON: " + json, pe);
-        }
-
-        JSONArray commandArgs = new JSONArray();
-
-        for (Object o : command.entrySet()) {
-            Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o;
-            String key = (String) mEntry.getKey();
-            String val = (String) mEntry.getValue();
-
-            JSONObject arg = new JSONObject();
-            arg.put(key, val);
-            commandArgs.add(arg);
-        }
-
-        return commandArgs;
     }
 
     public static String getParameterValue(String key, JSONObject jsonObject) {

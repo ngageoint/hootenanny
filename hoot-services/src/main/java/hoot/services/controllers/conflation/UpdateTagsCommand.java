@@ -26,7 +26,8 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
+import static hoot.services.HootProperties.RPT_STORE_PATH;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -37,9 +38,6 @@ import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,18 +59,11 @@ class UpdateTagsCommand implements InternalCommand {
         this.jobId = jobId;
         this.tags = new HashMap<>();
 
-        JSONParser parser = new JSONParser();
-        JSONObject oParams;
-        try {
-            oParams = (JSONObject) parser.parse(params);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
-        }
+        Map<String, String> paramMap = JsonUtils.jsonToMap(params);
 
-        String confOutputName = oParams.get("OUTPUT_NAME").toString();
-        String input1Name = oParams.get("INPUT1").toString();
-        String input2Name = oParams.get("INPUT2").toString();
+        String confOutputName = paramMap.get("OUTPUT_NAME");
+        String input1Name = paramMap.get("INPUT1");
+        String input2Name = paramMap.get("INPUT2");
 
         // add map tags
         // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
@@ -85,15 +76,15 @@ class UpdateTagsCommand implements InternalCommand {
         // Hack alert!
         // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the
         // file will be read and its contents placed in the stats tag.
-        if ((oParams.get("COLLECT_STATS") != null)
-                && oParams.get("COLLECT_STATS").toString().equalsIgnoreCase("true")) {
-            String statsName = RPT_STORE_PATH + File.separator + confOutputName + "-stats.csv";
+        if ((paramMap.get("COLLECT_STATS") != null)
+                && paramMap.get("COLLECT_STATS").equalsIgnoreCase("true")) {
+            String statsName = new File(RPT_STORE_PATH, confOutputName + "-stats.csv").getAbsolutePath();
             tags.put("stats", statsName);
         }
 
         // osm api db related input params have already been validated by
         // this point, so just check to see if any osm api db input is present
-        if (ConflationResource.oneLayerIsOsmApiDb(oParams) && OSM_API_DB_ENABLED) {
+        if (ConflationResource.oneLayerIsOsmApiDb(paramMap) && OSM_API_DB_ENABLED) {
             // write a timestamp representing the time the osm api db data was queried out
             // from the source; to be used conflict detection during export of conflated
             // data back into the osm api db at a later time; timestamp must be 24 hour utc
