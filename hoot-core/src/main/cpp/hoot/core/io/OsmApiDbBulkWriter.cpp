@@ -50,7 +50,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
 
 OsmApiDbBulkWriter::OsmApiDbBulkWriter() :
 _outputDelimiter("\t"),
-_tempFileDataPassCtr(0)
+_fileDataPassCtr(0)
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -329,7 +329,7 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
   }
 }
 
-unsigned int OsmApiDbBulkWriter::_numberOfTempFileDataPasses() const
+unsigned int OsmApiDbBulkWriter::_numberOfFileDataPasses() const
 {
   unsigned int numPasses = 1;
   if (_writerApp == "psql")
@@ -346,10 +346,10 @@ unsigned int OsmApiDbBulkWriter::_numberOfTempFileDataPasses() const
 void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
 {
   _timer->restart();
-  _tempFileDataPassCtr++;
+  _fileDataPassCtr++;
   LOG_INFO(
-    "Updating record IDs for CSV files .  (data pass #" << _tempFileDataPassCtr << " of " <<
-    _numberOfTempFileDataPasses() << "...");
+    "Updating record IDs for CSV files .  (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << "...");
   LOG_VART(_sectionNames.size());
   LOG_VART(_outputSections.size());
 
@@ -428,7 +428,7 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
         _outputSections[*it].first->remove();
         if (!newCsvFile->flush())
         {
-          throw HootException("Could not flush tempfile for table " + *it);
+          throw HootException("Could not flush file for table " + *it);
         }
         newCsvFile->close();
         _outputSections[*it] =
@@ -454,13 +454,13 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
   }
 
   LOG_INFO(
-    "CSV ID update write complete.  (data pass #" << _tempFileDataPassCtr << " of " <<
-    _numberOfTempFileDataPasses() << "...");
+    "CSV ID update write complete.  (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << "...");
   LOG_DEBUG(
     "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total CSV file lines.");
 }
 
-void OsmApiDbBulkWriter::_flushTempStreams()
+void OsmApiDbBulkWriter::_flushStreams()
 {
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
@@ -480,7 +480,7 @@ void OsmApiDbBulkWriter::_flushTempStreams()
     _outputSections[*it].second->flush();
     if (!_outputSections[*it].first->flush())
     {
-      throw HootException("Could not flush tempfile for table " + *it);
+      throw HootException("Could not flush file for table " + *it);
     }
   }
 }
@@ -488,8 +488,8 @@ void OsmApiDbBulkWriter::_flushTempStreams()
 void OsmApiDbBulkWriter::finalizePartial()
 {
   LOG_INFO(
-    "Input records parsed (data pass #" << _tempFileDataPassCtr << " of " <<
-    _numberOfTempFileDataPasses() << ".  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    "Input records parsed (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << ".  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _idMappings.nodeIdMap.reset();
@@ -500,7 +500,7 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   if (_writeStats.nodesWritten == 0)
   {
-    LOG_DEBUG("No input data was written to temporary files.");
+    LOG_DEBUG("No input data was written to files.");
     return;
   }
 
@@ -515,7 +515,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   {
     _changesetData.changesetsWritten++;
   }
-  _flushTempStreams();
+  _flushStreams();
 
   if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
   {
@@ -536,7 +536,7 @@ void OsmApiDbBulkWriter::finalizePartial()
     // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
     _createOutputFile("byte_order_mark", "\n", true);
 
-    //combine all the element/changeset temp files that were written during partial streaming into
+    //combine all the element/changeset files that were written during partial streaming into
     //one file and update the ids in the SQL file according to the id sequences previously reserved
     //out
     _writeCombinedSqlFile();
@@ -547,7 +547,7 @@ void OsmApiDbBulkWriter::finalizePartial()
     _updateRecordLinesWithIdOffsetInCsvFiles();
   }
 
-  LOG_INFO("Temporary file write stats:");
+  LOG_INFO("File write stats:");
   _logStats();
 
   if (_destinationIsDatabase())
@@ -558,7 +558,7 @@ void OsmApiDbBulkWriter::finalizePartial()
   else
   {
     LOG_DEBUG("Skipping SQL execution against database due to configuration...");
-    LOG_INFO("Final temporary file write stats:");
+    LOG_INFO("Final file write stats:");
   }
   _logStats();
 
@@ -568,12 +568,13 @@ void OsmApiDbBulkWriter::finalizePartial()
 
 void OsmApiDbBulkWriter::_handleFileOutputs()
 {
-  //retain the output file(s) if that option was selected;
+  //retain the output file(s) during a database write, if that option was selected
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
     _retainOutputFiles(_outputFilesCopyLocation);
   }
-  //otherwise a file output was selected
+  //otherwise, a file output was specified rather than a database output; we'll move the temp
+  //files to permanent locations
   else if (!_destinationIsDatabase())
   {
     if (_outputUrl.endsWith(".sql"))
@@ -611,17 +612,24 @@ void OsmApiDbBulkWriter::_retainOutputFilesPsql(const QString finalLocation)
   LOG_VART(_sqlOutputMasterFile->autoRemove());
   if (!_sqlOutputMasterFile->rename(_sqlOutputMasterFile->fileName(), finalLocation))
   {
-    LOG_WARN("Unable to move SQL output file to " << finalLocation << ".");
+    LOG_WARN(
+      "Unable to move SQL output file at " << _sqlOutputMasterFile->fileName() << " to " <<
+      finalLocation << ".");
+    _sqlOutputMasterFile->setAutoRemove(false);
+  }
+  else
+  {
+    _sqlOutputMasterFile->setAutoRemove(true);
   }
 }
 
 void OsmApiDbBulkWriter::_retainOutputFilesPgBulk(const QString finalLocation)
 {
-  LOG_INFO("Copying temporary CSV output files to " << finalLocation);
+  LOG_INFO("Copying CSV output files to " << finalLocation);
 
   if (!QDir().mkpath(finalLocation))
   {
-    LOG_ERROR("Unable to create temp copy file output directory.");
+    LOG_ERROR("Unable to create copy file output directory.");
     return;
   }
 
@@ -631,8 +639,7 @@ void OsmApiDbBulkWriter::_retainOutputFilesPgBulk(const QString finalLocation)
   {
     if (_outputSections[*sectionNamesItr].first)
     {
-      const QString outputPath =
-        outputDir.path() + "/" + /*outputDir.dirName() + "-" +*/ *sectionNamesItr + ".csv";
+      const QString outputPath = outputDir.path() + "/" + *sectionNamesItr + ".csv";
       const QString fileToCopyPath = (_outputSections[*sectionNamesItr].first)->fileName();
       QFile copyDestFile(outputPath);
       if (copyDestFile.exists())
@@ -645,17 +652,15 @@ void OsmApiDbBulkWriter::_retainOutputFilesPgBulk(const QString finalLocation)
         "at " << fileToCopyPath << " to " << outputPath << "...");
       if (!(_outputSections[*sectionNamesItr].first)->copy(outputPath))
       {
-        LOG_WARN("Unable to copy CSV output file to " << outputPath << ".");
-      }
-      //TODO: temp
-//      if (!copyDestFile.setPermissions(QFile::ReadOther))
-//      {
-//        LOG_WARN("Unable to set permissions on " << outputPath);
-//      }
-      if (!(_outputSections[*sectionNamesItr].first)->remove())
-      {
         LOG_WARN(
-          "Unable to remove temp file " << (_outputSections[*sectionNamesItr].first)->fileName());
+          "Unable to copy CSV output file at " <<
+          _outputSections[*sectionNamesItr].first->fileName() << " to " << outputPath << ".");
+        //we've already done this, but being super careful:
+        _outputSections[*sectionNamesItr].first->setAutoRemove(false);
+      }
+      else
+      {
+        _outputSections[*sectionNamesItr].first->setAutoRemove(true);
       }
     }
   }
@@ -736,12 +741,12 @@ void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
   {
     if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first)
     {
-      LOG_DEBUG("Closing temp file for " << *sectionNamesItr << "...");
+      LOG_DEBUG("Closing file for " << *sectionNamesItr << "...");
       _outputSections[*sectionNamesItr].second.reset();
       if (!_outputSections[*sectionNamesItr].first->exists())
       {
         throw HootException(
-          "Temp file " + _outputSections[*sectionNamesItr].first->fileName() + " does not exist.");
+          "File " + _outputSections[*sectionNamesItr].first->fileName() + " does not exist.");
       }
 
       const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
@@ -842,7 +847,7 @@ void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
 
       if (_destinationIsDatabase() && _outputFilesCopyLocation.isEmpty())
       {
-        LOG_DEBUG("Removing temp file for " << *sectionNamesItr << "...");
+        LOG_DEBUG("Removing file for " << *sectionNamesItr << "...");
         _outputSections[*sectionNamesItr].first->remove();
         _outputSections[*sectionNamesItr].first.reset();
       }
@@ -871,7 +876,7 @@ void OsmApiDbBulkWriter::_writeDataToDb()
 void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 {
   _timer->restart();
-  _tempFileDataPassCtr++;
+  _fileDataPassCtr++;
 
   _sqlOutputMasterFile.reset(new QTemporaryFile());
   if (!_destinationIsDatabase() || !_outputFilesCopyLocation.isEmpty())
@@ -880,13 +885,12 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   }
   if (!_sqlOutputMasterFile->open())
   {
-    throw HootException(
-      "Could not open temp file for SQL output: " + _sqlOutputMasterFile->fileName());
+    throw HootException("Could not open file for SQL output: " + _sqlOutputMasterFile->fileName());
   }
 
   LOG_INFO(
     "Writing combined SQL output file to " << _sqlOutputMasterFile->fileName() <<
-    ".  (data pass #" << _tempFileDataPassCtr << " of " << _numberOfTempFileDataPasses() << "...");
+    ".  (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() << "...");
   LOG_VART(_sectionNames.size());
   LOG_VART(_outputSections.size());
 
@@ -922,10 +926,10 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
     QFile tempInputFile(_outputSections[*it].first->fileName());
     try
     {
-      LOG_DEBUG("Opening temp file: " << _outputSections[*it].first->fileName());
+      LOG_DEBUG("Opening file: " << _outputSections[*it].first->fileName());
       if (tempInputFile.open(QIODevice::ReadOnly))
       {
-        LOG_DEBUG("Parsing temp file for table: " << *it << "...");
+        LOG_DEBUG("Parsing file for table: " << *it << "...");
         QTextStream inStream(&tempInputFile);
         QString line;
         long lineCtr = 0;
@@ -970,7 +974,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
         outStream.flush();
 
         tempInputFile.close();
-        LOG_DEBUG("Closing and removing temp file for " << *it << "...");
+        LOG_DEBUG("Closing and removing file for " << *it << "...");
         _outputSections[*it].second.reset();
         _outputSections[*it].first->close();
         _outputSections[*it].first->remove();
@@ -978,7 +982,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
       }
       else
       {
-        throw HootException("Unable to open temp input file: " + tempInputFile.fileName());
+        throw HootException("Unable to open input file: " + tempInputFile.fileName());
       }
     }
     catch (const Exception& e)
@@ -995,8 +999,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   _sqlOutputMasterFile->close();
 
   LOG_INFO(
-    "SQL file write complete.  (data pass #" << _tempFileDataPassCtr << " of " <<
-    _numberOfTempFileDataPasses() << "...");
+    "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << "...");
   LOG_DEBUG(
     "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputMasterFile->fileName());
@@ -1144,10 +1148,10 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
 
   if (_writeStats.nodesWritten == 0)
   {
-    _tempFileDataPassCtr++;
+    _fileDataPassCtr++;
     LOG_INFO(
-      "Streaming elements from input to temporary file outputs.  (data pass #" <<
-      _tempFileDataPassCtr << " of " << _numberOfTempFileDataPasses() << "...");
+      "Streaming elements from input to file outputs.  (data pass #" <<
+      _fileDataPassCtr << " of " << _numberOfFileDataPasses() << "...");
   }
 
   LOG_VART(node);
@@ -1194,7 +1198,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " nodes to temp files...");
+      " nodes to files...");
     _outputSections[ApiDb::getCurrentNodesTableName()].second->flush();
     _outputSections[ApiDb::getNodesTableName()].second->flush();
   }
@@ -1203,7 +1207,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " node tags to temp files...");
+      " node tags to files...");
     _outputSections[ApiDb::getCurrentNodeTagsTableName()].second->flush();
     _outputSections[ApiDb::getNodeTagsTableName()].second->flush();
   }
@@ -1274,7 +1278,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " ways to temp files...");
+      " ways to files...");
     _outputSections[ApiDb::getCurrentWaysTableName()].second->flush();
     _outputSections[ApiDb::getWaysTableName()].second->flush();
   }
@@ -1283,7 +1287,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " way tags to temp files...");
+      " way tags to files...");
     _outputSections[ApiDb::getCurrentWayTagsTableName()].second->flush();
     _outputSections[ApiDb::getWayTagsTableName()].second->flush();
   }
@@ -1291,7 +1295,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " way nodes to temp files...");
+      " way nodes to files...");
     _outputSections[ApiDb::getCurrentWayNodesTableName()].second->flush();
     _outputSections[ApiDb::getWayNodesTableName()].second->flush();
   }
@@ -1340,7 +1344,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " relations to temp files...");
+      " relations to files...");
     _outputSections[ApiDb::getCurrentRelationsTableName()].second->flush();
     _outputSections[ApiDb::getRelationsTableName()].second->flush();
   }
@@ -1349,7 +1353,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " relation tags to temp files...");
+      " relation tags to files...");
     _outputSections[ApiDb::getCurrentRelationTagsTableName()].second->flush();
     _outputSections[ApiDb::getRelationTagsTableName()].second->flush();
   }
@@ -1357,7 +1361,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   {
     LOG_TRACE(
       "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " relation members to temp files...");
+      " relation members to files...");
     _outputSections[ApiDb::getCurrentRelationMembersTableName()].second->flush();
     _outputSections[ApiDb::getRelationMembersTableName()].second->flush();
   }
@@ -1916,21 +1920,20 @@ void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QStrin
   msg += "...";
   LOG_TRACE(msg);
 
-  shared_ptr<QTemporaryFile> tempfile(new QTemporaryFile());
+  shared_ptr<QTemporaryFile> file(new QTemporaryFile());
   if (!_destinationIsDatabase() && _writerApp == "pg_bulkload" &&
       !_outputFilesCopyLocation.isEmpty())
   {
-    tempfile->setAutoRemove(false);
+    file->setAutoRemove(false);
   }
-  if (!tempfile->open())
+  if (!file->open())
   {
     throw HootException(
-      "Could not open temp file at: " + tempfile->fileName() + " for contents of table " +
-      tableName);
+      "Could not open file at: " + file->fileName() + " for contents of table " + tableName);
   }
   _outputSections[tableName] =
     pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> >(
-      tempfile, shared_ptr<QTextStream>(new QTextStream(tempfile.get())));
+      file, shared_ptr<QTextStream>(new QTextStream(file.get())));
 
   // Database is encoded in UTF-8, so force encoding as otherwise file is in local
   //    Western encoding which goes poorly for a lot of countries

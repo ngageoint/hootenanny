@@ -101,6 +101,10 @@ static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\
  *   is used OR the record ID reservation option is selected; only one pass over the data beforehand
  *   otherwise
  *
+ * * treats output files as temp files up until the end, then if the user specified a file output or
+ *   the option to retain temp files during a db write, the temp files are copied to permanent
+ *   locations; TODO: this logic has ended up being kind of messy, so may be worth cleaning up
+ *
  * Originally, the psql and pg_bulkload sets of logic were separated into two classes
  * (pg_bulkload subclassing the psql logic).  In some ways, this resulted in cleaner code but in
  * other ways the code was harder to maintain.  The decision was made to collapse the logic into
@@ -225,7 +229,7 @@ private:
   QString _pgBulkBadRecordsLogPath;
   QString _writerApp;
   bool _reserveRecordIdsBeforeWritingData;
-  unsigned int _tempFileDataPassCtr;
+  unsigned int _fileDataPassCtr;
 
   map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
@@ -240,7 +244,7 @@ private:
   QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   void _reset();
-  unsigned int _numberOfTempFileDataPasses() const;
+  unsigned int _numberOfFileDataPasses() const;
   bool _destinationIsDatabase() const;
 
   void _logStats(const bool debug = false);
@@ -254,10 +258,10 @@ private:
   void _verifyStartingIds();
   void _verifyFileOutputs();
   void _closeOutputFiles();
-  void _flushTempStreams();
+  void _flushStreams();
   void _handleFileOutputs();
 
-  //creates the temporary output files containing the data
+  //creates the output files containing the data
   void _createNodeOutputFiles();
   QStringList _createSectionNameList();
   void _createWayOutputFiles();
