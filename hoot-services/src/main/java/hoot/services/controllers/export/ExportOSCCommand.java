@@ -26,34 +26,75 @@
  */
 package hoot.services.controllers.export;
 
-
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import hoot.services.geo.BoundingBox;
+
+/*
+== derive-changeset
+
+=== Description
+
+The +derive-changeset+ command creates an OSM changeset file that represents the difference
+between two input OSM files.  The changeset can later be applied to an OSM API database.
+
+* +input1+ - OSM data input 1 (e.g. .osm file).
+* +input2+ - OSM data input 2 (e.g. .osm file).
+* +output+ - Output location (e.g. .osc or .osc.sql file).
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
+                        element ID continuity with the target database when generating SQL changesets only.
+                        Required only if the changeset output format is .osc.sql.
+
+=== Usage
+
+--------------------------------------
+derive-changeset (input1) (input2) (output.osc) [jobId] [hootApiDatabaseUrl]
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+# xml changeset output
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc
+
+# sql changeset output
+hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+--------------------------------------
+*/
 
 public class ExportOSCCommand extends ExportCommand {
 
     ExportOSCCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         super(jobId, paramMap, debugLevel, caller);
 
-        String aoi = super.getBoundingBox();
-        String output = super.getOutputPath();
+        String aoi = getBoundingBox(paramMap);
+        String outputPath = super.getOutputPath();
 
-        List<String> options = super.getHootOptions();
+        List<String> options = super.getCommonExportHootOptions();
         options.add("-D convert.bounding.box=" + aoi);
         options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
         String input1 = OSMAPI_DB_URL;
-        String input2 = super.getInput();
+        String input2 = HOOTAPI_DB_URL + "/" + paramMap.get("input");
 
-        //mkdir -p "$(outputfolder)"
-        //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
-        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + output;
+        //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
+        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + outputPath;
 
         super.configureAsHootCommand(command, caller);
+    }
+
+    private static String getBoundingBox(Map<String, String> paramMap) {
+        if (!paramMap.containsKey("TASK_BBOX")) {
+            throw new IllegalArgumentException("When exporting to a changeset, TASK_BBOX must be specified.");
+        }
+
+        BoundingBox bounds = new BoundingBox(paramMap.get("TASK_BBOX"));
+        return bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
     }
 }

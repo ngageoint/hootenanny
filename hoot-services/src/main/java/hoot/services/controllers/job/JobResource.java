@@ -96,6 +96,7 @@ public class JobResource {
 
                 if (includeCommandDetail) {
                     List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
+
                     JSONArray commands = new JSONArray();
                     for (CommandStatus commandStatus : commandDetail) {
                         JSONObject command = new JSONObject();

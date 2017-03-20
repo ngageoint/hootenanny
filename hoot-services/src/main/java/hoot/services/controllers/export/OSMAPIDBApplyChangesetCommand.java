@@ -63,25 +63,37 @@ hoot apply-changeset changeset.osc.sql osmapidb://username:password@localhost:54
 --------------------------------------
  */
 
-public class ApplyChangesetCommand extends ExportCommand {
+public class OSMAPIDBApplyChangesetCommand extends ExportCommand {
 
-    ApplyChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+    OSMAPIDBApplyChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         super(jobId, paramMap, debugLevel, caller);
 
-        String aoi = super.getBoundingBox();
-        String output = super.getOutputPath();
-
-        List<String> options = super.getHootOptions();
-        options.add("-D convert.bounding.box=" + aoi);
-        options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
+        List<String> options = super.getCommonExportHootOptions();
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input1 = OSMAPI_DB_URL;
-        String input2 = super.getInput();
+        String mapName = paramMap.get("input");
+        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
+
+        // AOI = Area of Interest
+        String aoi = getAoi(paramMap, conflatedMap);
+        String changesetSourceDataTimestamp = getMapForExportTag(conflatedMap);
+
+        // Services currently always write changeset with sql
+        String changesetoutput = super.getChangesetOutputPath();
 
         //hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
-        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + output;
+        String command = "hoot apply-changeset --" + debugLevel + " " + hootOptions + " " + changesetoutput + " " + OSMAPI_DB_URL + " " + aoi + " " + changesetSourceDataTimestamp;
 
         super.configureAsHootCommand(command, caller);
+    }
+
+    private static String getMapForExportTag(hoot.services.models.osm.Map conflatedMap) {
+        Map<String, String> tags = (Map<String, String>) conflatedMap.getTags();
+
+        if (! tags.containsKey("osm_api_db_export_time")) {
+            throw new IllegalStateException("Error exporting data.  Map with ID: " + conflatedMap.getId() + " has no osm_api_db_export_time tag.");
+        }
+
+        return tags.get("osm_api_db_export_time");
     }
 }

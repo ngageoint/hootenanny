@@ -46,7 +46,7 @@ public class ExportOSMPBFCommand extends ExportCommand {
 
         //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
         //ifeq "$(textstatus)" "true"
-        //    OSM_OPTS+=  -D writer.text.status=true
+        //    OSM_OPTS+= -D writer.text.status=true
         //endif
         if (Boolean.valueOf(paramMap.get("textstatus"))) {
             options.add("-D writer.text.status=true");
@@ -54,11 +54,10 @@ public class ExportOSMPBFCommand extends ExportCommand {
 
         String osmOptions = options.stream().collect(Collectors.joining(" "));
         String input = super.getInput();
-        String output = super.getOutputPath();
+        String outputPath = super.getOutputPath();
 
-        //mkdir -p "$(outputfolder)"
         //hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        String command = "hoot convert " + debugLevel + " " + osmOptions + " " + input + " " + output;
+        String command = "hoot convert --" + debugLevel + " " + osmOptions + " " + input + " " + outputPath;
 
         super.configureAsHootCommand(command, caller);
     }

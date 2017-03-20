@@ -34,7 +34,7 @@ public final class ZipUtils {
 
     private ZipUtils() {}
 
-    public static void unzipFiles(List<String> zipList, File outputFoler) {
+    public static void unzipFiles(List<String> zipList, File outputFolder) {
         for (String zip : zipList) {
             try {
                 // TODO: Add logic here!
@@ -43,5 +43,10 @@ public final class ZipUtils {
                 throw new RuntimeException("Error unzipping : " + zip, e);
             }
         }
+    }
+
+    public static File zipFile(File directory) {
+        // TODO: Add logic here
+        return null;
     }
 }

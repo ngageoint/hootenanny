@@ -126,7 +126,16 @@ public class ExportResource {
             String outputType = paramMap.get("outputtype");
             String input = paramMap.get("input");
 
+            // Created scratch area for each export request.  This is where downloadable files will be stored.
+            File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
+            FileUtils.forceMkdir(outputFolder);
+
             Command[] commands;
+
+            if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("pbf")) {
+                // osm and pbf output types share the same export command
+            }
+
 
             {
                 commands = new Command [] {

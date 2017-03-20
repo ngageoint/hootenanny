@@ -64,24 +64,30 @@ hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osma
 --------------------------------------
 */
 
-public class DeriveChangesetCommand extends ExportCommand {
+public class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
 
-    DeriveChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+    OSMAPIDBDeriveChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         super(jobId, paramMap, debugLevel, caller);
 
-        String aoi = super.getBoundingBox();
-        String output = super.getOutputPath();
+        String mapName = paramMap.get("input");
+        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
 
-        List<String> options = super.getHootOptions();
+        String aoi = getAoi(paramMap, conflatedMap);
+        String userId = paramMap.get("USER_ID");
+
+        List<String> options = super.getCommonExportHootOptions();
         options.add("-D convert.bounding.box=" + aoi);
         options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
+        options.add("-D changeset.user.id=" + userId);
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input1 = OSMAPI_DB_URL;
-        String input2 = super.getInput();
+        String input = super.getInput();
 
-        //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
-        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + output;
+        // Services currently always write changeset with sql
+        String changesetOutput = super.getChangesetOutputPath();
+
+        //hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
+        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + OSMAPI_DB_URL + " " + input + " " + changesetOutput + " " +  OSMAPI_DB_URL;
 
         super.configureAsHootCommand(command, caller);
     }

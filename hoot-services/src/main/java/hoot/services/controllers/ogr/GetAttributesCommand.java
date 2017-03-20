@@ -54,7 +54,7 @@ class GetAttributesCommand extends ExternalCommand {
 
     GetAttributesCommand(String jobId, List<String> fileList, String debugLevel, Class<?> caller) {
         String inputFiles = fileList.stream().map(file -> "\"" + file + "\"").collect(Collectors.joining(" "));
-        String outputFile = "\"" + TEMP_OUTPUT_PATH + File.separator + jobId + ".out" + "\"";
+        String outputFile = "\"" + new File(TEMP_OUTPUT_PATH, jobId + ".out").getAbsolutePath() + "\"";
 
         //hoot attribute-count --error $(INPUT_FILES) >> "$(OP_OUTPUT)"
         String command = "hoot attribute-count --" + debugLevel + " " + inputFiles + " >> " + outputFile;

@@ -45,7 +45,7 @@ public class ExportOSMCommand extends ExportCommand {
 
         //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
         //ifeq "$(textstatus)" "true"
-        //    OSM_OPTS+=  -D writer.text.status=true
+        //    OSM_OPTS+= -D writer.text.status=true
         //endif
         if (Boolean.valueOf(paramMap.get("textstatus"))) {
             options.add("-D writer.text.status=true");
@@ -53,12 +53,15 @@ public class ExportOSMCommand extends ExportCommand {
 
         String osmOptions = options.stream().collect(Collectors.joining(" "));
         String input = super.getInput();
-        String output = super.getOutputPath();
+        String outputPath = super.getOutputPath();
 
-        //mkdir -p "$(outputfolder)"
         //hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        String command = "hoot convert --" + debugLevel + " " + osmOptions + " " + input + " " + output;
-        //cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+        String command = "hoot convert --" + debugLevel + " " + osmOptions + " " + input + " " + outputPath;
+
+        if (paramMap.get("outputtype").equalsIgnoreCase("osm")) {
+            // TODO: The step below is needed for .osm and may not be for .pbf.  Need to confirm with Matt J.
+            //cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+        }
 
         super.configureAsHootCommand(command, caller);
     }
