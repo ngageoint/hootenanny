@@ -240,21 +240,21 @@ private:
   QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   void _reset();
-  bool _usingDatabase() const;
   unsigned int _numberOfTempFileDataPasses() const;
   bool _destinationIsDatabase() const;
 
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
-  void _retainOutputFiles();
-  void _retainOutputFilesPgBulk();
-  void _retainOutputFilesPsql();
+  void _retainOutputFiles(const QString finalLocation);
+  void _retainOutputFilesPgBulk(const QString finalLocation);
+  void _retainOutputFilesPsql(const QString finalLocation);
   void _verifyDependencies();
   void _verifyApp();
   void _verifyOutputCopySettings();
   void _verifyStartingIds();
   void _closeOutputFiles();
   void _flushTempStreams();
+  void _handleFileOutputs();
 
   //creates the temporary output files containing the data
   void _createNodeOutputFiles();

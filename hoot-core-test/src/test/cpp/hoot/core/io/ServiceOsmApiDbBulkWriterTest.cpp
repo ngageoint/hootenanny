@@ -53,8 +53,6 @@ namespace hoot
  * - unresolved way node members
  * - unresolved relation members
  * - config options error handling
- * - sql output destination
- * - csv output destination
  */
 class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
@@ -65,6 +63,8 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPgBulkDbOfflineTest);
   CPPUNIT_TEST(runPgBulkDbOnlineTest);
   CPPUNIT_TEST(runPgBulkCustomStartingIdsDbOfflineTest);
+  CPPUNIT_TEST(runSqlFileOutputTest);
+  //CPPUNIT_TEST(runCsvFilesOutputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -406,6 +406,59 @@ public:
     reader.close();
   }
 
+  void verifyDatabaseEmpty()
+  {
+    OsmApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    reader.read(map);
+
+    //verify current elements
+    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
+
+    //verify historical element table sizes
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+    //verify changeset table size
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+    //verify sequences
+    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+
+    reader.close();
+  }
+
   void runPsqlDbOfflineTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
@@ -631,6 +684,73 @@ public:
 
     verifyCsvOutput(outputDirPath);
     verifyDatabaseOutputOfflineWithCustomStartingIds();
+  }
+
+  void runSqlFileOutputTest()
+  {
+    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    writer.setFileOutputLineBufferSize(1);
+    const QString outFile =
+      "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-sql-file-out.sql";
+    writer.setWriterApp("psql");
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputLineBufferSize(3);
+
+    writer.open(outFile);
+    writer.write(createTestMap());
+    writer.close();
+
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
+    verifyDatabaseEmpty();
+  }
+
+  void runCsvFilesOutputTest()
+  {
+    const QString outputDirPath =
+      "test-output/io/OsmApiDbBulkWriterTest/CsvFilesOut/OsmApiDbBulkWriterTest.csv";
+    QDir().mkpath(outputDirPath);
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    writer.setWriterApp("pg_bulkload");
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setFileOutputLineBufferSize(1);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputLineBufferSize(3);
+    writer.setDisableWriteAheadLogging(true);
+    writer.setDisableConstraints(true);
+    //deciding not to enable this for fear of build machine issues...maybe will if I get brave later
+    writer.setWriteMultithreaded(false);
+    //for debugging
+    //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
+    //writer.setPgBulkloadBadRecordsLogPath(
+    //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
+    //TODO: temp
+    //writer.setPgBulkloadLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkload.log");
+    //writer.setPgBulkloadBadRecordsLogPath(
+      //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(createTestMap());
+    writer.close();
+
+    verifyCsvOutput(outputDirPath);
+    verifyDatabaseEmpty();
   }
 };
 
