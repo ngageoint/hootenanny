@@ -1326,7 +1326,7 @@ Optional path to the log the pg_bulkload utility writes to.  This option is igno
 === osmapidb.bulk.writer.reserve.record.ids.before.writing.data
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, the OSM API database writer will update the database to reserve the range of record IDs
 parsed from the input data *before* writing the data to output.  IMPORTANT:  This option should

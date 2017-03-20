@@ -32,7 +32,7 @@
 #include <vector>
 
 #include <QString>
-#include <QTemporaryFile>
+#include <QFile>
 #include <QTextStream>
 #include <QElapsedTimer>
 
@@ -100,10 +100,6 @@ static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\
  * * requires two passes over the input data *before* writing it to the database if the psql writer
  *   is used OR the record ID reservation option is selected; only one pass over the data beforehand
  *   otherwise
- *
- * * treats output files as temp files up until the end, then if the user specified a file output or
- *   the option to retain temp files during a db write, the temp files are copied to permanent
- *   locations; TODO: this logic has ended up being kind of messy, so may be worth cleaning up
  *
  * Originally, the psql and pg_bulkload sets of logic were separated into two classes
  * (pg_bulkload subclassing the psql logic).  In some ways, this resulted in cleaner code but in
@@ -224,14 +220,15 @@ private:
   QString _outputUrl;
   bool _disableConstraints;
   QString _outputDelimiter;
-  shared_ptr<QTemporaryFile> _sqlOutputMasterFile;
+  shared_ptr<QFile> _sqlOutputCombinedFile;
   QString _pgBulkLogPath;
   QString _pgBulkBadRecordsLogPath;
   QString _writerApp;
   bool _reserveRecordIdsBeforeWritingData;
   unsigned int _fileDataPassCtr;
 
-  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
+  //ended up not going with temp files here, since the file outputs aren't always temporary
+  map<QString, pair<shared_ptr<QFile>, shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
@@ -249,9 +246,6 @@ private:
 
   void _logStats(const bool debug = false);
   long _getTotalRecordsWritten() const;
-  void _retainOutputFiles(const QString finalLocation);
-  void _retainOutputFilesPgBulk(const QString finalLocation);
-  void _retainOutputFilesPsql(const QString finalLocation);
   void _verifyDependencies();
   void _verifyApp();
   void _verifyOutputCopySettings();
@@ -259,7 +253,6 @@ private:
   void _verifyFileOutputs();
   void _closeOutputFiles();
   void _flushStreams();
-  void _handleFileOutputs();
 
   //creates the output files containing the data
   void _createNodeOutputFiles();
@@ -268,6 +261,9 @@ private:
   void _createRelationOutputFiles();
   void _createOutputFile(const QString tableName, const QString header = "",
                          const bool addByteOrderMarker = false);
+  QString _getCombinedSqlFileName() const;
+  QString _getTableOutputFileName(const QString tableName) const;
+  QString _getUpdatedCsvFileName(const QString tableName) const;
 
   void _writeSequenceUpdatesToStream(const long changesetId, const long nodeId, const long wayId,
                                      const long relationId, QString& outputStr);

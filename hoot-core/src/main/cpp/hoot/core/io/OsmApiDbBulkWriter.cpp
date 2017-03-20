@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QStringBuilder>
 #include <QDir>
+#include <QUuid>
 
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
@@ -113,31 +114,17 @@ void OsmApiDbBulkWriter::_verifyFileOutputs()
     finalOutput = _outputFilesCopyLocation;
   }
   //just a test to make sure we can write to specified file output locations
-  if (_writerApp == "psql")
+  QFile outputFile(finalOutput);
+  if (outputFile.exists())
   {
-    QFile outputFile(finalOutput);
-    if (outputFile.exists())
-    {
-      outputFile.remove();
-    }
-    if (!outputFile.open(QIODevice::WriteOnly))
-    {
-      throw HootException("Could not open file for SQL output: " + finalOutput);
-    }
-    outputFile.close();
     outputFile.remove();
   }
-  else
+  if (!outputFile.open(QIODevice::WriteOnly))
   {
-    //we're dropping the extension and creating a directory the same name as the specified
-    //output file name to hold the collection of output files
-    QFileInfo outputInfo(finalOutput);
-    LOG_VART(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName());
-    if (!QDir().mkpath(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName()))
-    {
-      throw HootException("Could not open directory for CSV output: " + finalOutput);
-    }
+    throw HootException("Could not open file for output: " + finalOutput);
   }
+  outputFile.close();
+  outputFile.remove();
 }
 
 void OsmApiDbBulkWriter::_verifyStartingIds()
@@ -212,7 +199,7 @@ void OsmApiDbBulkWriter::_verifyApp()
   {
     throw HootException(
       QString("When using the 'pg_bulkload' writer application, the only valid output ") +
-      QString("formats are CSV file (.sql) or OSM API database (osmapidb://)."));
+      QString("formats are CSV file (.csv) or OSM API database (osmapidb://)."));
   }
 
   if (_writerApp == "psql")
@@ -221,7 +208,7 @@ void OsmApiDbBulkWriter::_verifyApp()
   }
   else
   {
-  _outputDelimiter = ",";
+    _outputDelimiter = ",";
   }
 }
 
@@ -230,12 +217,13 @@ void OsmApiDbBulkWriter::_verifyOutputCopySettings()
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
     QFileInfo outputCopyLocationInfo(_outputFilesCopyLocation);
-    if (_writerApp == "pg_bulkload" && !outputCopyLocationInfo.completeSuffix().isEmpty())
+    if (_writerApp == "pg_bulkload" &&
+        !outputCopyLocationInfo.completeSuffix().toLower().endsWith("csv"))
     {
       throw HootException(
-        QString("Output file copy location should be set to a directory when using the ") +
+        QString("Output file copy location should be set to a CSV file (.csv) when using the ") +
         QString("'pg_bulkload' writer application.  Location specified: ") +
-                _outputFilesCopyLocation);
+        _outputFilesCopyLocation);
     }
     else if (_writerApp == "psql" &&
              !outputCopyLocationInfo.completeSuffix().toLower().endsWith("sql"))
@@ -271,9 +259,9 @@ void OsmApiDbBulkWriter::_closeOutputFiles()
     }
   }
 
-  if (_sqlOutputMasterFile)
+  if (_sqlOutputCombinedFile)
   {
-    _sqlOutputMasterFile->close();
+    _sqlOutputCombinedFile->close();
   }
 }
 
@@ -343,6 +331,26 @@ unsigned int OsmApiDbBulkWriter::_numberOfFileDataPasses() const
   return numPasses;
 }
 
+QString OsmApiDbBulkWriter::_getUpdatedCsvFileName(const QString tableName) const
+{
+  QString dest;
+  if (!_destinationIsDatabase())
+  {
+    QFileInfo outputInfo(_outputUrl);
+    dest = outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+  }
+  else if (!_outputFilesCopyLocation.isEmpty())
+  {
+    QFileInfo outputInfo(_outputFilesCopyLocation);
+    dest = outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+  }
+  else
+  {
+    dest = QDir::tempPath() + "/" + tableName + "-" + QUuid::createUuid().toString() + ".csv";
+  }
+  return dest;
+}
+
 void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
 {
   _timer->restart();
@@ -365,17 +373,20 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
     // Write updated IDs to a new copy of each file
 
     QFile tempInputFile(_outputSections[*it].first->fileName());
-    shared_ptr<QTemporaryFile> newCsvFile(new QTemporaryFile());
+    shared_ptr<QFile> newCsvFile;
     try
     {
-      if (!_destinationIsDatabase() || !_outputFilesCopyLocation.isEmpty())
+      QString dest = _getUpdatedCsvFileName(*it);
+      LOG_VART(dest);
+      QFile outputFile(dest);
+      if (outputFile.exists())
       {
-        newCsvFile->setAutoRemove(false);
+        outputFile.remove();
       }
-      if (!newCsvFile->open())
+      newCsvFile.reset(new QFile(dest));
+      if (!newCsvFile->open(QIODevice::Append))
       {
-        throw HootException(
-          "Could not open new CSV file for updated ID output: " + newCsvFile->fileName());
+        throw HootException("Could not open new CSV file for updated ID output: " + dest);
       }
       QTextStream outStream(newCsvFile.get());
 
@@ -393,10 +404,8 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
 
           if (!line.isEmpty())
           {
-            if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
-            {
-              _updateRecordLineWithIdOffset(*it, line);
-            }
+
+            _updateRecordLineWithIdOffset(*it, line);
             progressLineCtr++;
             outStream << line << "\n";
             lineCtr++;
@@ -432,8 +441,7 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
         }
         newCsvFile->close();
         _outputSections[*it] =
-          pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> >(
-            newCsvFile, shared_ptr<QTextStream>());
+          pair<shared_ptr<QFile>, shared_ptr<QTextStream> >(newCsvFile, shared_ptr<QTextStream>());
 
         QFileInfo outputInfo(_outputSections[*it].first->fileName());
         LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
@@ -561,121 +569,11 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_INFO("Final file write stats:");
   }
   _logStats();
-
-  //this needs to happen after the database write
-  _handleFileOutputs();
-}
-
-void OsmApiDbBulkWriter::_handleFileOutputs()
-{
-  //retain the output file(s) during a database write, if that option was selected
-  if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
-  {
-    _retainOutputFiles(_outputFilesCopyLocation);
-  }
-  //otherwise, a file output was specified rather than a database output; we'll move the temp
-  //files to permanent locations
-  else if (!_destinationIsDatabase())
-  {
-    if (_outputUrl.endsWith(".sql"))
-    {
-      _retainOutputFiles(_outputUrl);
-    }
-    else if (_outputUrl.endsWith(".csv"))
-    {
-      //we're dropping the extension and creating a directory the same name as the specified
-      //output file name to hold the collection of output files
-      QFileInfo outputInfo(_outputUrl);
-      LOG_VART(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName());
-      _retainOutputFiles(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName());
-    }
-   }
 }
 
 bool OsmApiDbBulkWriter::_destinationIsDatabase() const
 {
   return _outputUrl.toLower().startsWith("osmapidb://");
-}
-
-void OsmApiDbBulkWriter::_retainOutputFilesPsql(const QString finalLocation)
-{
-  QFile copyFile(finalLocation);
-  if (copyFile.exists())
-  {
-    copyFile.remove();
-  }
-  LOG_VART(QFile::exists(finalLocation));
-  QFileInfo sqlOutputFileInfo(_sqlOutputMasterFile->fileName());
-  LOG_INFO(
-    "Moving " << SystemInfo::humanReadable(sqlOutputFileInfo.size()) << " SQL output file " <<
-    " at " << _sqlOutputMasterFile->fileName() << " to " << finalLocation << "...");
-  LOG_VART(_sqlOutputMasterFile->autoRemove());
-  if (!_sqlOutputMasterFile->rename(_sqlOutputMasterFile->fileName(), finalLocation))
-  {
-    LOG_WARN(
-      "Unable to move SQL output file at " << _sqlOutputMasterFile->fileName() << " to " <<
-      finalLocation << ".");
-    _sqlOutputMasterFile->setAutoRemove(false);
-  }
-  else
-  {
-    _sqlOutputMasterFile->setAutoRemove(true);
-  }
-}
-
-void OsmApiDbBulkWriter::_retainOutputFilesPgBulk(const QString finalLocation)
-{
-  LOG_INFO("Copying CSV output files to " << finalLocation);
-
-  if (!QDir().mkpath(finalLocation))
-  {
-    LOG_ERROR("Unable to create copy file output directory.");
-    return;
-  }
-
-  QDir outputDir(finalLocation);
-  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
-       sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
-  {
-    if (_outputSections[*sectionNamesItr].first)
-    {
-      const QString outputPath = outputDir.path() + "/" + *sectionNamesItr + ".csv";
-      const QString fileToCopyPath = (_outputSections[*sectionNamesItr].first)->fileName();
-      QFile copyDestFile(outputPath);
-      if (copyDestFile.exists())
-      {
-        copyDestFile.remove();
-      }
-      QFileInfo fileToCopyInfo(fileToCopyPath);
-      LOG_DEBUG(
-        "Copying " << SystemInfo::humanReadable(fileToCopyInfo.size()) << " CSV output file " <<
-        "at " << fileToCopyPath << " to " << outputPath << "...");
-      if (!(_outputSections[*sectionNamesItr].first)->copy(outputPath))
-      {
-        LOG_WARN(
-          "Unable to copy CSV output file at " <<
-          _outputSections[*sectionNamesItr].first->fileName() << " to " << outputPath << ".");
-        //we've already done this, but being super careful:
-        _outputSections[*sectionNamesItr].first->setAutoRemove(false);
-      }
-      else
-      {
-        _outputSections[*sectionNamesItr].first->setAutoRemove(true);
-      }
-    }
-  }
-}
-
-void OsmApiDbBulkWriter::_retainOutputFiles(const QString finalLocation)
-{
-  if (_writerApp == "psql")
-  {
-    _retainOutputFilesPsql(finalLocation);
-  }
-  else
-  {
-    _retainOutputFilesPgBulk(finalLocation);
-  }
 }
 
 void OsmApiDbBulkWriter::_writeDataToDbPsql()
@@ -697,7 +595,7 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
   {
     cmd += " --quiet";
   }
-  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputMasterFile->fileName();
+  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputCombinedFile->fileName();
   if (!(Log::getInstance().getLevel() <= Log::Info))
   {
     cmd += " > /dev/null";
@@ -873,28 +771,49 @@ void OsmApiDbBulkWriter::_writeDataToDb()
   }
 }
 
+QString OsmApiDbBulkWriter::_getCombinedSqlFileName() const
+{
+  QString dest;
+  if (!_destinationIsDatabase())
+  {
+    dest = _outputUrl;
+  }
+  else if (!_outputFilesCopyLocation.isEmpty())
+  {
+    dest = _outputFilesCopyLocation;
+  }
+  else
+  {
+    dest = QDir::tempPath() + "/OsmApiDbBulkWriter-" + QUuid::createUuid().toString() + ".sql";
+  }
+  return dest;
+}
+
 void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 {
   _timer->restart();
   _fileDataPassCtr++;
 
-  _sqlOutputMasterFile.reset(new QTemporaryFile());
-  if (!_destinationIsDatabase() || !_outputFilesCopyLocation.isEmpty())
+  const QString dest = _getCombinedSqlFileName();
+  LOG_VART(dest);
+  QFile outputFile(dest);
+  if (outputFile.exists())
   {
-    _sqlOutputMasterFile->setAutoRemove(false);
+    outputFile.remove();
   }
-  if (!_sqlOutputMasterFile->open())
+  _sqlOutputCombinedFile.reset(new QFile(dest));
+  if (!_sqlOutputCombinedFile->open(QIODevice::Append))
   {
-    throw HootException("Could not open file for SQL output: " + _sqlOutputMasterFile->fileName());
+    throw HootException("Could not open file for SQL output: " + dest);
   }
 
   LOG_INFO(
-    "Writing combined SQL output file to " << _sqlOutputMasterFile->fileName() <<
-    ".  (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() << "...");
+    "Writing combined SQL output file to " << _sqlOutputCombinedFile->fileName() <<
+    ".  (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() << ")...");
   LOG_VART(_sectionNames.size());
   LOG_VART(_outputSections.size());
 
-  QTextStream outStream(_sqlOutputMasterFile.get());
+  QTextStream outStream(_sqlOutputCombinedFile.get());
   outStream << "BEGIN TRANSACTION;\n\n";
   outStream.flush();
 
@@ -952,7 +871,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
           if (lineCtr == _fileOutputLineBufferSize)
           {
             LOG_TRACE(
-              "Flushing records to combined file " << _sqlOutputMasterFile->fileName() << "...");
+              "Flushing records to combined file " << _sqlOutputCombinedFile->fileName() << "...");
             outStream.flush();
             lineCtr = 0;
           }
@@ -995,15 +914,15 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
   }
   outStream << "COMMIT;";
   outStream.flush();
-  _sqlOutputMasterFile->flush();
-  _sqlOutputMasterFile->close();
+  _sqlOutputCombinedFile->flush();
+  _sqlOutputCombinedFile->close();
 
   LOG_INFO(
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << "...");
   LOG_DEBUG(
     "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
-  QFileInfo outputInfo(_sqlOutputMasterFile->fileName());
+  QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
 }
 
@@ -1909,6 +1828,40 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationD
   _writeStats.relationMembersWritten++;
 }
 
+QString OsmApiDbBulkWriter::_getTableOutputFileName(const QString tableName) const
+{
+  QString dest;
+  if (_writerApp == "psql")
+  {
+    dest = QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".sql";
+  }
+  else
+  {
+    if (_reserveRecordIdsBeforeWritingData && _destinationIsDatabase())
+    {
+      dest =
+        QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".csv";
+    }
+    else if (!_destinationIsDatabase())
+    {
+      QFileInfo outputInfo(_outputUrl);
+      dest =
+        outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+    }
+    else if (!_outputFilesCopyLocation.isEmpty())
+    {
+      QFileInfo outputInfo(_outputFilesCopyLocation);
+      dest =
+        outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+    }
+    else
+    {
+      assert(false);
+    }
+  }
+  return dest;
+}
+
 void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QString header,
                                            const bool addByteOrderMark)
 {
@@ -1920,26 +1873,28 @@ void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QStrin
   msg += "...";
   LOG_TRACE(msg);
 
-  shared_ptr<QTemporaryFile> file(new QTemporaryFile());
-  if (!_destinationIsDatabase() && _writerApp == "pg_bulkload" &&
-      !_outputFilesCopyLocation.isEmpty())
+  const QString dest = _getTableOutputFileName(tableName);
+  LOG_VART(dest);
+  QFile outputFile(dest);
+  if (outputFile.exists())
   {
-    file->setAutoRemove(false);
+    outputFile.remove();
   }
-  if (!file->open())
+  shared_ptr<QFile> file(new QFile(dest));
+  if (!file->open(QIODevice::Append))
   {
     throw HootException(
-      "Could not open file at: " + file->fileName() + " for contents of table " + tableName);
+      "Could not open file at: " + file->fileName() + " for contents of table: " + tableName);
   }
   _outputSections[tableName] =
-    pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> >(
+    pair<shared_ptr<QFile>, shared_ptr<QTextStream> >(
       file, shared_ptr<QTextStream>(new QTextStream(file.get())));
 
   // Database is encoded in UTF-8, so force encoding as otherwise file is in local
   //    Western encoding which goes poorly for a lot of countries
   _outputSections[tableName].second->setCodec("UTF-8");
 
-  // First table written out should have byte order mark to help identifify content as UTF-8
+  // First table written out should have byte order mark to help identify content as UTF-8
   if (addByteOrderMark)
   {
     _outputSections[tableName].second->setGenerateByteOrderMark(true);

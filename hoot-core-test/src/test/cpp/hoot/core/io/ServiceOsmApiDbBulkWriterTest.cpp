@@ -178,7 +178,8 @@ public:
     }
   }
 
-  void verifyCsvOutput(const QString stdDirPath, const QString outDirPath)
+  void verifyCsvOutput(const QString stdDirPath, const QString outDirPath,
+                       const QString stdFileNameExclude)
   {
     QDir outputDir(outDirPath);
     const QStringList outputDirContents = outputDir.entryList(QDir::Files, QDir::Name);
@@ -187,10 +188,13 @@ public:
       LOG_VART(outputDirContents.at(i));
       if (outputDirContents.at(i).toLower().endsWith("csv"))
       {
-        const QString stdFilePath = stdDirPath + "/" + outputDirContents.at(i);
+        const QString dirContent = outputDirContents.at(i);
+        QString stdFileName = dirContent;
+        stdFileName.replace(stdFileNameExclude, "");
+        QString stdFilePath = stdDirPath + "/" + stdFileName;
         LOG_VART(stdFilePath)
         const QStringList stdCsvTokens = tokenizeOutputFileWithoutDates(stdFilePath);
-        const QString outFilePath = outDirPath + "/" + outputDirContents.at(i);
+        const QString outFilePath = outDirPath + "/" + dirContent;
         LOG_VART(outFilePath)
         const QStringList outputCsvTokens = tokenizeOutputFileWithoutDates(outFilePath);
         CPPUNIT_ASSERT_EQUAL(stdCsvTokens.size(), outputCsvTokens.size());
@@ -560,8 +564,10 @@ public:
 
   void runPgBulkDbOfflineTest()
   {
-    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/PgBulkOffline";
+    const QString prefix = "PgBulkOffline";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
     QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -571,7 +577,7 @@ public:
     writer.setWriterApp("pg_bulkload");
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setFileOutputLineBufferSize(1);
-    writer.setOutputFilesCopyLocation(outputDirPath);
+    writer.setOutputFilesCopyLocation(outputPath);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
@@ -592,14 +598,17 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath);
+    verifyCsvOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath, prefix + "-");
     verifyDatabaseOutputOffline();
   }
 
   void runPgBulkDbOnlineTest()
   {
-    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/PgBulkOnline";
+    const QString prefix = "PgBulkOnline";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
     QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -609,7 +618,7 @@ public:
     writer.setWriterApp("pg_bulkload");
     writer.setReserveRecordIdsBeforeWritingData(true);
     writer.setFileOutputLineBufferSize(1);
-    writer.setOutputFilesCopyLocation(outputDirPath);
+    writer.setOutputFilesCopyLocation(outputPath);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
@@ -622,9 +631,9 @@ public:
     //writer.setPgBulkloadBadRecordsLogPath(
     //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
     //TODO: temp
-    writer.setPgBulkloadLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkload.log");
-    writer.setPgBulkloadBadRecordsLogPath(
-      "/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
+    //writer.setPgBulkloadLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkload.log");
+    //writer.setPgBulkloadBadRecordsLogPath(
+      //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
@@ -637,15 +646,17 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOnline", outputDirPath);
+    verifyCsvOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOnline", outputDirPath, prefix + "-");
     verifyDatabaseOutputOnline();
   }
 
   void runPgBulkCustomStartingIdsDbOfflineTest()
   {
-    const QString outputDirPath =
-      "test-output/io/OsmApiDbBulkWriterTest/PgBulkOffline-custom-starting-ids";
+    const QString prefix = "PgBulkOffline-custom-starting-ids";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
     QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -655,7 +666,7 @@ public:
     writer.setWriterApp("pg_bulkload");
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setFileOutputLineBufferSize(1);
-    writer.setOutputFilesCopyLocation(outputDirPath);
+    writer.setOutputFilesCopyLocation(outputPath);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
@@ -681,7 +692,8 @@ public:
     writer.close();
 
     verifyCsvOutput(
-      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline-custom-starting-ids", outputDirPath);
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline-custom-starting-ids", outputDirPath,
+      prefix + "-");
     verifyDatabaseOutputOfflineWithCustomStartingIds();
   }
 
@@ -715,13 +727,10 @@ public:
 
   void runCsvFilesOutputTest()
   {
-    const QString outputPath =
-      "test-output/io/OsmApiDbBulkWriterTest/CsvFilesOut/OsmApiDbBulkWriterTest.csv";
-    QFile outputFile(outputPath);
-    QFileInfo outputPathInfo(outputFile);
-    LOG_VART(outputPathInfo.absoluteDir().absolutePath());
-    const QString outputDir = outputPathInfo.absoluteDir().absolutePath();
-    QDir().mkpath(outputDir);
+    const QString prefix = "CsvFilesOut";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
+    QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -753,7 +762,8 @@ public:
 
     //writer outputs a directory named the same as the base file name specified as the output path;
     //the directory contains a collections of csv files
-    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDir);
+    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath,
+                    prefix + "-");
     verifyDatabaseEmpty();
   }
 };
