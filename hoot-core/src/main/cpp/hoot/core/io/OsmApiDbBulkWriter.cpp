@@ -86,6 +86,12 @@ void OsmApiDbBulkWriter::open(QString url)
   _verifyStartingIds();
   _verifyApp();
   _verifyOutputCopySettings();
+  //early test to make sure we can write to file output locations, so we don't get a nasty
+  //surprise after taking a long amount of time to write a huge output file
+  if (!_destinationIsDatabase() || !_outputFilesCopyLocation.isEmpty())
+  {
+    _verifyFileOutputs();
+  }
   if (_destinationIsDatabase() && _database.getDB().isOpen())
   {
     throw HootException(
@@ -97,6 +103,41 @@ void OsmApiDbBulkWriter::open(QString url)
     _database.open(_outputUrl);
   }
   _verifyDependencies();
+}
+
+void OsmApiDbBulkWriter::_verifyFileOutputs()
+{
+  QString finalOutput = _outputUrl;
+  if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
+  {
+    finalOutput = _outputFilesCopyLocation;
+  }
+  //just a test to make sure we can write to specified file output locations
+  if (_writerApp == "psql")
+  {
+    QFile outputFile(finalOutput);
+    if (outputFile.exists())
+    {
+      outputFile.remove();
+    }
+    if (!outputFile.open(QIODevice::WriteOnly))
+    {
+      throw HootException("Could not open file for SQL output: " + finalOutput);
+    }
+    outputFile.close();
+    outputFile.remove();
+  }
+  else
+  {
+    //we're dropping the extension and creating a directory the same name as the specified
+    //output file name to hold the collection of output files
+    QFileInfo outputInfo(finalOutput);
+    LOG_VART(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName());
+    if (!QDir().mkpath(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName()))
+    {
+      throw HootException("Could not open directory for CSV output: " + finalOutput);
+    }
+  }
 }
 
 void OsmApiDbBulkWriter::_verifyStartingIds()
@@ -492,12 +533,6 @@ void OsmApiDbBulkWriter::finalizePartial()
 
   if (_writerApp == "psql")
   {
-    _sqlOutputMasterFile.reset(new QTemporaryFile());
-    if (!_destinationIsDatabase() || !_outputFilesCopyLocation.isEmpty())
-    {
-      _sqlOutputMasterFile->setAutoRemove(false);
-    }
-
     // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
     _createOutputFile("byte_order_mark", "\n", true);
 
@@ -547,8 +582,11 @@ void OsmApiDbBulkWriter::_handleFileOutputs()
     }
     else if (_outputUrl.endsWith(".csv"))
     {
+      //we're dropping the extension and creating a directory the same name as the specified
+      //output file name to hold the collection of output files
       QFileInfo outputInfo(_outputUrl);
-      _retainOutputFiles(outputInfo.absoluteDir().path());
+      LOG_VART(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName());
+      _retainOutputFiles(outputInfo.absoluteDir().absolutePath() + "/" + outputInfo.baseName());
     }
    }
 }
@@ -594,7 +632,7 @@ void OsmApiDbBulkWriter::_retainOutputFilesPgBulk(const QString finalLocation)
     if (_outputSections[*sectionNamesItr].first)
     {
       const QString outputPath =
-        outputDir.path() + "/" + outputDir.dirName() + "-" + *sectionNamesItr + ".csv";
+        outputDir.path() + "/" + /*outputDir.dirName() + "-" +*/ *sectionNamesItr + ".csv";
       const QString fileToCopyPath = (_outputSections[*sectionNamesItr].first)->fileName();
       QFile copyDestFile(outputPath);
       if (copyDestFile.exists())
@@ -834,17 +872,23 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 {
   _timer->restart();
   _tempFileDataPassCtr++;
-  LOG_INFO(
-    "Writing combined SQL output file to " << _sqlOutputMasterFile->fileName() <<
-    ".  (data pass #" << _tempFileDataPassCtr << " of " << _numberOfTempFileDataPasses() << "...");
-  LOG_VART(_sectionNames.size());
-  LOG_VART(_outputSections.size());
 
+  _sqlOutputMasterFile.reset(new QTemporaryFile());
+  if (!_destinationIsDatabase() || !_outputFilesCopyLocation.isEmpty())
+  {
+    _sqlOutputMasterFile->setAutoRemove(false);
+  }
   if (!_sqlOutputMasterFile->open())
   {
     throw HootException(
       "Could not open temp file for SQL output: " + _sqlOutputMasterFile->fileName());
   }
+
+  LOG_INFO(
+    "Writing combined SQL output file to " << _sqlOutputMasterFile->fileName() <<
+    ".  (data pass #" << _tempFileDataPassCtr << " of " << _numberOfTempFileDataPasses() << "...");
+  LOG_VART(_sectionNames.size());
+  LOG_VART(_outputSections.size());
 
   QTextStream outStream(_sqlOutputMasterFile.get());
   outStream << "BEGIN TRANSACTION;\n\n";
@@ -856,10 +900,10 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
     //statements to the sql output here for applying at a later time.
     QString reserveElementIdsSql;
     _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
-                                 _idMappings.currentNodeId - 1,
-                                 _idMappings.currentWayId - 1,
-                                 _idMappings.currentRelationId - 1,
-                                 reserveElementIdsSql);
+                                  _idMappings.currentNodeId - 1,
+                                  _idMappings.currentWayId - 1,
+                                  _idMappings.currentRelationId - 1,
+                                  reserveElementIdsSql);
     LOG_VART(reserveElementIdsSql);
     outStream << reserveElementIdsSql;
     outStream.flush();
@@ -1864,7 +1908,7 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const long sourceRelationD
 void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QString header,
                                            const bool addByteOrderMark)
 {
-  QString msg = "Creating output file";
+  QString msg = "Creating output file " + tableName;
   if (!header.trimmed().isEmpty())
   {
     msg += " and writing table header";

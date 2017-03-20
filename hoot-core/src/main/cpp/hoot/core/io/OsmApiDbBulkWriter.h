@@ -252,6 +252,7 @@ private:
   void _verifyApp();
   void _verifyOutputCopySettings();
   void _verifyStartingIds();
+  void _verifyFileOutputs();
   void _closeOutputFiles();
   void _flushTempStreams();
   void _handleFileOutputs();

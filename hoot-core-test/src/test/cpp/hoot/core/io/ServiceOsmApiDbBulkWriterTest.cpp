@@ -40,6 +40,7 @@
 
 // Qt
 #include <QDir>
+#include <QFileInfo>
 
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
@@ -64,7 +65,7 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPgBulkDbOnlineTest);
   CPPUNIT_TEST(runPgBulkCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runSqlFileOutputTest);
-  //CPPUNIT_TEST(runCsvFilesOutputTest);
+  CPPUNIT_TEST(runCsvFilesOutputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -177,12 +178,10 @@ public:
     }
   }
 
-  void verifyCsvOutput(const QString outDirPath)
+  void verifyCsvOutput(const QString stdDirPath, const QString outDirPath)
   {
     QDir outputDir(outDirPath);
     const QStringList outputDirContents = outputDir.entryList(QDir::Files, QDir::Name);
-    QString stdDirPath = outDirPath;
-    stdDirPath.replace("test-output", "test-files");
     for (int i = 0; i < outputDirContents.size(); i++)
     {
       LOG_VART(outputDirContents.at(i));
@@ -579,7 +578,6 @@ public:
     writer.setFileOutputLineBufferSize(3);
     writer.setDisableWriteAheadLogging(true);
     writer.setDisableConstraints(true);
-    //deciding not to enable this for fear of build machine issues...maybe will if I get brave later
     writer.setWriteMultithreaded(false);
     //for debugging
     //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
@@ -594,7 +592,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyCsvOutput(outputDirPath);
+    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath);
     verifyDatabaseOutputOffline();
   }
 
@@ -639,7 +637,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyCsvOutput(outputDirPath);
+    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOnline", outputDirPath);
     verifyDatabaseOutputOnline();
   }
 
@@ -682,7 +680,8 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyCsvOutput(outputDirPath);
+    verifyCsvOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline-custom-starting-ids", outputDirPath);
     verifyDatabaseOutputOfflineWithCustomStartingIds();
   }
 
@@ -716,9 +715,13 @@ public:
 
   void runCsvFilesOutputTest()
   {
-    const QString outputDirPath =
+    const QString outputPath =
       "test-output/io/OsmApiDbBulkWriterTest/CsvFilesOut/OsmApiDbBulkWriterTest.csv";
-    QDir().mkpath(outputDirPath);
+    QFile outputFile(outputPath);
+    QFileInfo outputPathInfo(outputFile);
+    LOG_VART(outputPathInfo.absoluteDir().absolutePath());
+    const QString outputDir = outputPathInfo.absoluteDir().absolutePath();
+    QDir().mkpath(outputDir);
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -734,7 +737,6 @@ public:
     writer.setFileOutputLineBufferSize(3);
     writer.setDisableWriteAheadLogging(true);
     writer.setDisableConstraints(true);
-    //deciding not to enable this for fear of build machine issues...maybe will if I get brave later
     writer.setWriteMultithreaded(false);
     //for debugging
     //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
@@ -745,11 +747,13 @@ public:
     //writer.setPgBulkloadBadRecordsLogPath(
       //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
 
-    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.open(outputPath);
     writer.write(createTestMap());
     writer.close();
 
-    verifyCsvOutput(outputDirPath);
+    //writer outputs a directory named the same as the base file name specified as the output path;
+    //the directory contains a collections of csv files
+    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDir);
     verifyDatabaseEmpty();
   }
 };
