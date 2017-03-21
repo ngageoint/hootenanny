@@ -67,7 +67,7 @@ hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osma
 --------------------------------------
 */
 
-public class ExportOSCCommand extends ExportCommand {
+class ExportOSCCommand extends ExportCommand {
 
     ExportOSCCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         super(jobId, paramMap, debugLevel, caller);
@@ -80,13 +80,13 @@ public class ExportOSCCommand extends ExportCommand {
         options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input1 = OSMAPI_DB_URL;
-        String input2 = HOOTAPI_DB_URL + "/" + paramMap.get("input");
+        String input1 = "\"" + OSMAPI_DB_URL + "\"";
+        String input2 = "\"" + HOOTAPI_DB_URL + "/" + paramMap.get("input") + "\"";
 
         //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
         String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + outputPath;
 
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 
     private static String getBoundingBox(Map<String, String> paramMap) {

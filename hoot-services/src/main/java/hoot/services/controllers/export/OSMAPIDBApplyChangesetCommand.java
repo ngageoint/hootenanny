@@ -63,7 +63,7 @@ hoot apply-changeset changeset.osc.sql osmapidb://username:password@localhost:54
 --------------------------------------
  */
 
-public class OSMAPIDBApplyChangesetCommand extends ExportCommand {
+class OSMAPIDBApplyChangesetCommand extends ExportCommand {
 
     OSMAPIDBApplyChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         super(jobId, paramMap, debugLevel, caller);
@@ -88,12 +88,15 @@ public class OSMAPIDBApplyChangesetCommand extends ExportCommand {
         //hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
         String command = "hoot apply-changeset --" + debugLevel + " " + hootOptions + " " + sqlChangeset + " " + targetDatabaseUrl + " " + conflictAOI + " " + conflictTimestamp;
 
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 
     private static String getMapForExportTag(hoot.services.models.osm.Map conflatedMap) {
         Map<String, String> tags = (Map<String, String>) conflatedMap.getTags();
 
+        //+osm_api_db_export_time+ is a timestamp that's written at the time the data in the OSM API database is first exported.
+        // It's checked against when writing the resulting changeset after the conflation job to see if any other changesets
+        // were added to the OSM API db between the export time and the time the changeset is written.
         if (! tags.containsKey("osm_api_db_export_time")) {
             throw new IllegalStateException("Error exporting data.  Map with ID: " + conflatedMap.getId() + " has no osm_api_db_export_time tag.");
         }

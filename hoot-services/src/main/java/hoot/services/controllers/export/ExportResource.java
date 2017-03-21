@@ -29,6 +29,7 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -59,8 +60,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.common.UnTARFileCommand;
+import hoot.services.command.common.ZIPDirectoryCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.DbUtils;
@@ -130,95 +134,147 @@ public class ExportResource {
             File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
             FileUtils.forceMkdir(outputFolder);
 
-            Command[] commands;
+            List<Command> commands = new LinkedList<>();
 
             if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("pbf")) {
-                commands = new Command [] {
+                commands.add(
                     () -> {
                         ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportOSMCommand.class, this.getClass());
-                        return externalCommandManager.exec(jobId, exportOSMCommand);
+
+                        CommandResult commandResult = externalCommandManager.exec(jobId, exportOSMCommand);
+
+                        if (paramMap.get("outputtype").equalsIgnoreCase("osm")) {
+                            //cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+
+                            // ZIP_OUTPUT = $(outputname).zip
+                            File targetZip = new File(outputFolder, jobId + ".zip");
+                            File sourceFolder = outputFolder;
+
+                            ExternalCommand zipDirectoryCommand = new ZIPDirectoryCommand(targetZip, sourceFolder, this.getClass());
+                            return externalCommandManager.exec(jobId, zipDirectoryCommand);
+                        }
+
+                        return commandResult;
                     }
-                };
+                );
             }
             else if (outputType.equalsIgnoreCase("osc")) {
-                commands = new Command [] {
+                commands.add(
                     () -> {
                         ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportOSCCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, exportOSCCommand);
                     }
-                };
+                );
             }
             //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
-                commands = new Command [] {
+                commands.add(
                     () -> {
                         ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, OSMAPIDBDeriveChangesetCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, osmAPIDBDeriveChangesetCommand);
-                    },
+                    }
+                );
 
+                commands.add(
                     () -> {
                         ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, OSMAPIDBApplyChangesetCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, osmAPIDBApplyChangesetCommand);
                     }
-                };
+                );
             }
-            else {
-                commands = new Command [] {
-                    () -> {
-                        if (outputType.equalsIgnoreCase("shp")) {
+            else { //else Shape/FGDB
+                if (outputType.equalsIgnoreCase("shp")) {
+                    commands.add(
+                        () -> {
                             //ifeq "$(outputtype)" "shp"
                             //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
                             //endif
+
+                            // ZIP_OUTPUT = $(outputname).zip
+                            File targetZip = new File(outputFolder, jobId + ".zip");
+                            File sourceFolder = outputFolder;
+
+                            ExternalCommand zipDirectoryCommand = new ZIPDirectoryCommand(targetZip, sourceFolder, this.getClass());
+                            return externalCommandManager.exec(jobId, zipDirectoryCommand);
                         }
+                    );
+                }
 
-                        //TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
-                        //TDS61_TEMPLATE=$(TEMPLATE_PATH)/tds61.tgz
-                        //TDS40_TEMPLATE=$(TEMPLATE_PATH)/tds40.tgz
+                //TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
+                //TDS61_TEMPLATE=$(TEMPLATE_PATH)/tds61.tgz
+                //TDS40_TEMPLATE=$(TEMPLATE_PATH)/tds40.tgz
 
-                        // ifeq "$(append)" "true"
-                        //     ifeq "$(translation)" "translations/TDSv61.js"
-                        //         ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
-                        //             mkdir -p $(OP_OUTPUT)
-                        //             tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
-                        //         endif # Template Path
-                        //    else
-                        //       ifeq "$(translation)" "translations/TDSv40.js"
-                        //           ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
-                        //               mkdir -p $(OP_OUTPUT)
-                        //               tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
-                        //           endif # Template Path
-                        //       endif # Translations TDSv40
-                        //    endif # Else
-                        // endif # Append
+                // ifeq "$(append)" "true"
+                //     ifeq "$(translation)" "translations/TDSv61.js"
+                //         ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
+                //             mkdir -p $(OP_OUTPUT)
+                //             tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
+                //         endif # Template Path
+                //    else
+                //       ifeq "$(translation)" "translations/TDSv40.js"
+                //           ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
+                //               mkdir -p $(OP_OUTPUT)
+                //               tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
+                //           endif # Template Path
+                //       endif # Translations TDSv40
+                //    endif # Else
+                // endif # Append
 
-                        /*
-                        String templateHome = HOME_FOLDER + File.separator + "translations-local" + File.separator + "template";
-                        if (Boolean.valueOf(paramMap.get("append"))) {
-                            if (translation.equals("translations/TDSv61.js")) {
-                                String tds61TemplatePath = templateHome + File.separator + "tds61.tgz";
-                                //tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
-                            }
-                            else if (translation.equals("translations/TDSv40.js")) {
-                                String tds40TemplatePath = templateHome + File.separator + "tds40.tgz";
+                String translation = paramMap.get("translation");
+                if (Boolean.valueOf(paramMap.get("append"))) {
+                    //Appends data to a blank fgdb. The template is stored with the fouo translations.
+                    File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
+                    if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
+                        File tds61TemplatePath = new File(templateHome, "tds61.tgz");
+                        if (tds61TemplatePath.exists()) {
+                            commands.add(
+                                () -> {
+                                    //tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
+                                    ExternalCommand untarFileCommand = new UnTARFileCommand(tds61TemplatePath, outputFolder, this.getClass());
+                                    return externalCommandManager.exec(jobId, untarFileCommand);
+                                }
+                            );
+                        }
+                    }
+                    else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
+                        File tds40TemplatePath = new File(templateHome, "tds40.tgz");
+                        if (tds40TemplatePath.exists()) {
+                            commands.add(
+                                () -> {
+                                    //OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
+                                    //tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
+                                    ExternalCommand untarFileCommand = new UnTARFileCommand(tds40TemplatePath, outputFolder, this.getClass());
+                                    return externalCommandManager.exec(jobId, untarFileCommand);
+                                }
+                            );
+                        }
+                    }
+                }
 
-                                //tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
-                            }
-                        }*/
-
+                commands.add(
+                    () -> {
                         // ExportCommand
                         ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportCommand.class, this.getClass());
-                        return externalCommandManager.exec(jobId, exportCommand);
-                        //cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+                        CommandResult commandResult = externalCommandManager.exec(jobId, exportCommand);
+
+                        // ZIP_OUTPUT = $(outputname).zip
+                        File targetZip = new File(outputFolder, jobId + ".zip");
+                        File sourceFolder = new File(outputFolder, jobId + "." + outputType);
+
+                        // OP_OUTPUT_FILE=$(outputname).$(outputtype)
+                        // cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+                        ExternalCommand zipDirectoryCommand = new ZIPDirectoryCommand(targetZip, sourceFolder, this.getClass());
+                        return externalCommandManager.exec(jobId, zipDirectoryCommand);
                     }
-                };
+                );
             }
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands.toArray(new Command[commands.size()])));
         }
         catch (WebApplicationException wae) {
             throw wae;

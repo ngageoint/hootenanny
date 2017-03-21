@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -66,11 +67,11 @@ import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.controllers.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
-import hoot.services.utils.ZipUtils;
 
 
 @Controller
@@ -265,38 +266,45 @@ public class FileUploadResource {
 
             String mapDisplayName = etlName;
 
-            Command[] commands = {
-                    // Clip to a bounding box
-                    () -> {
-                        //# Unzip when semicolon separated lists are provided
-                        //ifneq ($(strip $(UNZIP_LIST)), )
-                        //    bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
-                        //endif
+            List<Command> commands = new LinkedList<>();
 
-                        if (!zipList.isEmpty()) {
-                            ZipUtils.unzipFiles(zipList, workingDir);
-                        }
+            //# Unzip when semicolon separated lists are provided
+            //ifneq ($(strip $(UNZIP_LIST)), )
+            //    bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
+            //endif
+            if (!zipList.isEmpty()) {
+                for (String zip : zipList) {
+                    File file = new File(zip);
+                    commands.add(() -> {
+                        ExternalCommand unzipCommand = new UnZIPFileCommand(file, workingDir, this.getClass());
+                        return externalCommandManager.exec(jobId, unzipCommand);
+                    });
+                }
+            }
 
-                        CommandResult commandResult = externalCommandManager.exec(jobId, etlCommand);
+            commands.add(() -> {
+                CommandResult commandResult = externalCommandManager.exec(jobId, etlCommand);
 
-                        try {
-                            //rm -rf "$(OP_INPUT_PATH)"
-                            FileUtils.delete(workingDir);
-                        }
-                        catch (IOException ioe) {
-                            logger.error("Error deleting {}", workingDir.getAbsolutePath(), ioe);
-                        }
+                // cleanup
+                try {
+                    //rm -rf "$(OP_INPUT_PATH)"
+                    FileUtils.delete(workingDir);
+                }
+                catch (IOException ioe) {
+                    logger.error("Error deleting {}", workingDir.getAbsolutePath(), ioe);
+                }
 
-                        return commandResult;
-                    },
+                return commandResult;
+            });
 
-                    () -> {
-                        ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(mapDisplayName, this.getClass());
-                        return externalCommandManager.exec(jobId, exportRenderDBCommand);
-                    }
-            };
+            commands.add(
+                () -> {
+                    ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(mapDisplayName, this.getClass());
+                    return externalCommandManager.exec(jobId, exportRenderDBCommand);
+            });
 
-            jobProcessor.process(new Job(jobId, commands));
+
+            jobProcessor.process(new Job(jobId, commands.toArray(new Command[commands.size()])));
 
             String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
             JSONObject res = new JSONObject();

@@ -32,6 +32,7 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,26 +142,25 @@ endif # Shape/FGDB
  */
 
 class ExportCommand extends ExternalCommand {
-
     private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
 
-    private String jobId;
-    private java.util.Map<String, String> paramMap;
-    private String outputType;
-    private String input;
+    private final String jobId;
+    private final java.util.Map<String, String> paramMap;
+    private final String outputType;
+    private final String input;
 
     ExportCommand(String jobId, java.util.Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         this.jobId = jobId;
         this.paramMap = paramMap;
         this.outputType = paramMap.get("outputtype");
-        this.input = paramMap.get("input");
+        this.input = "\"" + paramMap.get("input") + "\"";
 
-        List<String> hootOptions = this.getCommonExportHootOptions();
-        String translation = paramMap.get("translation");
+        String hootOptions = this.getCommonExportHootOptions().stream().collect(Collectors.joining(" "));
         String outputPath = this.getOutputPath();
+        String translation = paramMap.get("translation");
 
         // hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        String command = "hoot osm2ogr --" + debugLevel + " " + "-C RemoveReview2Pre.conf" + " " + hootOptions + " " + translation + " " + input + " " + outputPath;
+        String command = "hoot osm2ogr --" + debugLevel + " -C RemoveReview2Pre.conf " + hootOptions + " " + translation + " " + input + " " + outputPath;
     }
 
     List<String> getCommonExportHootOptions() {
@@ -195,7 +195,7 @@ class ExportCommand extends ExternalCommand {
     String getOutputPath() {
         File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
         File outputFile = new File(outputFolder,jobId + "." + outputType);
-        return "\"" + outputFile.getAbsolutePath() + "\"";
+        return "\"" + outputFile.toPath() + "\"";
     }
 
     String getInput() {
@@ -239,6 +239,6 @@ class ExportCommand extends ExternalCommand {
 
     String getSQLChangesetPath() {
         // Services currently always write changeset with sql
-        return "\"" + new File(getOutputPath(), "changeset-" + jobId + ".osc.sql").getAbsolutePath() + "\"";
+        return "\"" + new File(getOutputPath(), "changeset-" + jobId + ".osc.sql").toPath() + "\"";
     }
 }

@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 
+
 /*
 #
 #  Clip Dataset Make file
@@ -64,23 +65,23 @@ class ClipDatasetCommand extends ExternalCommand {
         options.add("-D hootapi.db.writer.overwrite.map=true");
         options.add("-D hootapi.db.writer.create.user=true");
         options.add("-D api.db.email=test@test.com");
-
-        String input = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT_NAME");
-        String output = HOOTAPI_DB_URL + "/" + paramMap.get("OUTPUT_NAME");
-        String bounds = paramMap.get("BBOX");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
+        String input = "\"" + HOOTAPI_DB_URL + "/" + paramMap.get("INPUT_NAME") + "\"";
+        String output = "\"" + HOOTAPI_DB_URL + "/" + paramMap.get("OUTPUT_NAME") + "\"";
+        String bounds = "\"" + paramMap.get("BBOX") + "\"";
+
         /*
-            "crop-map" - Crops the input map to the given bounds. Individual features on the border are modified to make
-                     sure nothing is outside the given bounds.
-            • input - The input OSM data path.
-            • output - The output OSM data path.
-            • bounds - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+            "crop-map" - Crops the input map to the given bounds. Individual features on the border are
+                         modified to make sure nothing is outside the given bounds.
+                • input - The input OSM data path.
+                • output - The output OSM data path.
+                • bounds - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
 
             hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
         */
         String command = "hoot crop-map --" + debugLevel + " " + hootOptions + " " + input + " " + output + " " + bounds;
 
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }

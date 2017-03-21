@@ -88,6 +88,6 @@ class IngestBasemapCommand extends ExternalCommand {
         String command = "/usr/local/bin/gdal2tiles.py " + verboseSwitch + " " + projection + " " +
                 webviewerSwitch + " " + titleSwitch + " " + zoomSwitch + " " + input + " " + tilesOutputDir;
 
-        super.configureAsRegularCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }

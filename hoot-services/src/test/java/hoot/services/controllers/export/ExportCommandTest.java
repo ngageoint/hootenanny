@@ -114,7 +114,7 @@ public class ExportCommandTest {
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
 
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", ExportOSMCommand.class, this.getClass());
 
             String actualCaller = exportCommand.get("caller").toString();
             String expectedCaller = this.getClass().getName();
@@ -176,7 +176,7 @@ public class ExportCommandTest {
 
         ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
 
-        ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
+        ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", ExportOSCCommand.class, this.getClass());
 
         String actualCaller = exportCommand.get("caller").toString();
         String expectedCaller = this.getClass().getName();
@@ -212,6 +212,7 @@ public class ExportCommandTest {
         assertEquals(expectedParams, actualParams);
     }
 
+/*
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbWithTranslation() throws Exception {
@@ -220,13 +221,13 @@ public class ExportCommandTest {
 
             String jobId = UUID.randomUUID().toString();
 
-/*
+/ *
             String params = "{\"inputtype\":\"db\"," +
                              "\"input\":\"" + MAP_NAME + "\"," +
                              "\"outputtype\":\"osm_api_db\"," +
                              "\"removereview\":\"false\"," +
                              "\"translation\":\"MyTranslation.js\"}";
-*/
+* /
 
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("inputtype", "db");
@@ -236,7 +237,7 @@ public class ExportCommandTest {
             paramMap.put("translation", "MyTranslation.js");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error",  this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -249,7 +250,8 @@ public class ExportCommandTest {
         }
 
     }
-
+*/
+/*
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbNoTimestampTag() throws Exception {
@@ -260,13 +262,13 @@ public class ExportCommandTest {
 
             String jobId = UUID.randomUUID().toString();
 
-/*
+/ *
             String params = "{\"inputtype\":\"db\"," +
                              "\"input\":\"" + MAP_NAME + "\"," +
                              "\"outputtype\":\"osm_api_db\"," +
                              "\"removereview\":\"false\"," +
                              "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
-*/
+* /
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("inputtype", "db");
             paramMap.put("input", MAP_NAME);
@@ -286,7 +288,9 @@ public class ExportCommandTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
+*/
 
+/*
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbMissingMap() throws Exception {
@@ -298,13 +302,13 @@ public class ExportCommandTest {
 
             String jobId = UUID.randomUUID().toString();
 
-/*
+/ *
             String params = "{\"inputtype\":\"db\"," +
                              "\"input\":\"" + MAP_NAME + "\"," +
                              "\"outputtype\":\"osm_api_db\"," +
                              "\"removereview\":\"false\"," +
                              "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
-*/
+* /
 
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("inputtype", "db");
@@ -325,7 +329,9 @@ public class ExportCommandTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
+*/
 
+/*
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportOsmApiDbNotEnabled() throws Exception {
@@ -336,13 +342,13 @@ public class ExportCommandTest {
 
             String jobId = UUID.randomUUID().toString();
 
-/*
+/ *
             String params = "{\"inputtype\":\"db\"," +
                     "\"input\":\"" + MAP_NAME + "\"," +
                     "\"outputtype\":\"osm_api_db\"," +
                     "\"removereview\":\"false\"," +
                     "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
-*/
+* /
 
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("inputtype", "db");
@@ -364,7 +370,9 @@ public class ExportCommandTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
         }
     }
+*/
 
+/*
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
     public void testExportToOsmApiDbBadInputType() throws Exception {
@@ -375,13 +383,13 @@ public class ExportCommandTest {
 
             String jobId = UUID.randomUUID().toString();
 
-/*
+/ *
             String params = "{\"inputtype\":\"file\"," +
                     "\"input\":\"" + MAP_NAME + "\"," +
                     "\"outputtype\":\"osm_api_db\"," +
                     "\"removereview\":\"false\"," +
                     "\"TASK_BBOX\":\"10.1,10.1,10.1,10.1\"}";
-*/
+* /
 
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("inputtype", "file");
@@ -403,6 +411,7 @@ public class ExportCommandTest {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
         }
     }
+*/
 
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
@@ -422,7 +431,7 @@ public class ExportCommandTest {
             paramMap.put("USER_ID", "test_user");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", ExportOSCCommand.class, this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());

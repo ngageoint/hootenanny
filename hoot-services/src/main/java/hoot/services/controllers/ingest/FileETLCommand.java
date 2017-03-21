@@ -234,7 +234,7 @@ class FileETLCommand extends ExternalCommand {
             command = "hoot convert --" + debugLevel + " " + hootOptions + " " + inputs + " " + inputName;
         }
 
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
 
         // override working directory set during super.configureAsHootCommand()
         this.put("workingDir", workingDir);

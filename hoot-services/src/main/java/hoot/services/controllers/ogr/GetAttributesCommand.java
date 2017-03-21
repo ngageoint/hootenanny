@@ -59,6 +59,6 @@ class GetAttributesCommand extends ExternalCommand {
         //hoot attribute-count --error $(INPUT_FILES) >> "$(OP_OUTPUT)"
         String command = "hoot attribute-count --" + debugLevel + " " + inputFiles + " >> " + outputFile;
 
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }

@@ -43,7 +43,7 @@ class HGISCommand extends ExternalCommand {
 
         String command = script + " " + source + " " + output;
 
-        super.configureAsRegularCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 
     /**

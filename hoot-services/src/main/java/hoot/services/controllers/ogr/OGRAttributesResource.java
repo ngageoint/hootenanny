@@ -34,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -65,10 +66,10 @@ import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;
-import hoot.services.utils.ZipUtils;
 
 
 @Controller
@@ -117,16 +118,27 @@ public class OGRAttributesResource {
 
             processFormDataMultiPart(fileList, zipList, jobId, inputType, multiPart);
 
-            Command[] commands = {
+            File targetFolder = new File(UPLOAD_FOLDER, jobId);
+            FileUtils.forceMkdir(targetFolder);
+
+            List<Command> commands = new LinkedList<>();
+
+            for (String zip : zipList) {
+                commands.add(
+                    () -> {
+                        // OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
+                        // bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
+                        File sourceZIP = new File(zip);
+                        ExternalCommand unZIPFileCommand = new UnZIPFileCommand(sourceZIP, targetFolder, this.getClass());
+                        return externalCommandManager.exec(jobId, unZIPFileCommand);
+                    }
+                );
+            }
+
+            commands.add(
                 () -> {
-                    // OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
-                    File outputFolder = new File(UPLOAD_FOLDER, jobId);
-
                     // OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
-                    File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
-
-                    // bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
-                    ZipUtils.unzipFiles(zipList, outputFolder);
+                    //File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
 
                     ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, fileList, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
@@ -134,17 +146,17 @@ public class OGRAttributesResource {
                     try {
                         // Do cleanup
                         // cd .. && rm -rf "$(OP_INPUT)"
-                        FileUtils.forceDelete(outputFolder);
+                        FileUtils.forceDelete(targetFolder);
                     }
                     catch (IOException ioe) {
-                        logger.error("Error deleting {} directory!", outputFolder, ioe);
+                        logger.error("Error deleting {} directory!", targetFolder, ioe);
                     }
 
                     return commandResult;
                 }
-            };
+            );
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, commands.toArray(new Command[commands.size()])));
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();

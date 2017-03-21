@@ -34,7 +34,6 @@ class HootVersionCommand extends ExternalCommand {
 
     HootVersionCommand(boolean withDetails, Class<?> caller) {
         String command = withDetails ? "hoot version --debug" : "hoot version";
-
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }

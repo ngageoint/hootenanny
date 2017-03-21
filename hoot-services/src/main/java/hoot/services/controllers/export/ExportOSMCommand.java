@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class ExportOSMCommand extends ExportCommand {
+class ExportOSMCommand extends ExportCommand {
 
     ExportOSMCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         super(jobId, paramMap, debugLevel, caller);
@@ -56,11 +56,6 @@ public class ExportOSMCommand extends ExportCommand {
         //hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
         String command = "hoot convert --" + debugLevel + " " + osmOptions + " " + input + " " + outputPath;
 
-        if (paramMap.get("outputtype").equalsIgnoreCase("osm")) {
-            // TODO: The step below is needed for .osm and may not be for .pbf.  Need to confirm with Matt J.
-            //cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
-        }
-
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }

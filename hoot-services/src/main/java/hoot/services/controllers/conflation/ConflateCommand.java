@@ -162,16 +162,22 @@ class ConflateCommand extends ExternalCommand {
             endif
          */
 
+        String input1;
         String input1Type = paramMap.get("INPUT1_TYPE");
-        String input1 = paramMap.get("INPUT1");
-        if (input1Type.equals("DB")) {
-            input1 = HOOTAPI_DB_URL + "/" + input1;
+        if (input1Type.equalsIgnoreCase("DB")) {
+            input1 = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT1");
+        }
+        else {
+            input1 = paramMap.get("INPUT1");
         }
 
+        String input2;
         String input2Type = paramMap.get("INPUT2_TYPE");
-        String input2 = paramMap.get("INPUT2");
-        if (input2Type.equals("DB")) {
-            input2 = HOOTAPI_DB_URL + "/" + input2;
+        if (input2Type.equalsIgnoreCase("DB")) {
+            input2 = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT2");
+        }
+        else {
+            input2 = paramMap.get("INPUT2");
         }
 
         /*
@@ -195,8 +201,8 @@ class ConflateCommand extends ExternalCommand {
           endif
          */
         String referenceLayer = paramMap.get("REFERENCE_LAYER");
-        if (referenceLayer.equals("1")) {
-            if (input1Type.equals("OSM_API_DB")) {
+        if (referenceLayer.equalsIgnoreCase("1")) {
+            if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
                 input1 = OSMAPI_DB_URL;
                 options.add("-D convert.bounding.box=" + conflateaoi);
                 options.add("-D conflate.use.data.source.ids=true");
@@ -205,9 +211,9 @@ class ConflateCommand extends ExternalCommand {
                 options.add("-D osmapidb.id.aware.url=\"" + OSMAPI_DB_URL + "\"");
             }
         }
-        else if (referenceLayer.equals("2")) {
+        else if (referenceLayer.equalsIgnoreCase("2")) {
             options.add("-D tag.merger.default=hoot::OverwriteTag1Merger");
-            if (input2Type.equals("OSM_API_DB")) {
+            if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
                 input2 = OSMAPI_DB_URL;
                 options.add("-D convert.bounding.box=" + conflateaoi);
                 options.add("-D conflate.use.data.source.ids=true");
@@ -242,6 +248,6 @@ class ConflateCommand extends ExternalCommand {
         // hoot conflate -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
         String command = "hoot conflate --" + debugLevel + " " + removeReview + " " + hootOptions + " " + input1 + " " + input2 + " " + output + " " + stats;
 
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }

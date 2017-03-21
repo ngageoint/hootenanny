@@ -64,7 +64,7 @@ hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osma
 --------------------------------------
 */
 
-public class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
+class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
 
     OSMAPIDBDeriveChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         super(jobId, paramMap, debugLevel, caller);
@@ -89,6 +89,6 @@ public class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
         //hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
         String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + OSMAPI_DB_URL + " " + input + " " + changesetOutput + " " +  OSMAPI_DB_URL;
 
-        super.configureAsHootCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }

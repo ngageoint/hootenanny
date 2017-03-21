@@ -26,8 +26,6 @@
  */
 package hoot.services.utils;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,76 +35,14 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 /**
  * Various JSON utilities
  */
 public final class JsonUtils {
-
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
 
-    private JsonUtils() {
-    }
-
-    /**
-     * Converts a POJO to JSON
-     * 
-     * @param obj
-     *            POJO
-     * @return JSON string
-     */
-    public static String objectToJson(Object obj) {
-        StringWriter writer = new StringWriter();
-        try {
-            try (JsonGenerator jsonGenerator = new JsonFactory().createGenerator(writer)) {
-                jsonGenerator.setCodec(new ObjectMapper());
-                jsonGenerator.writeObject(obj);
-            }
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error converting object to JSON!", ioe);
-        }
-
-        return writer.toString();
-    }
-
-    /**
-     * Returns the value of the top level property in the specified JSON without
-     * "'s removed. Use this to return JSON string values.
-     * 
-     * @param fieldName
-     *            name of the value to retrieve
-     * @param json
-     *            JSON to parse
-     * @param retainQuotes
-     *            if true, "'s are left in the parse value; otherwise they are
-     *            removed
-     * @return string value
-     */
-    public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes) {
-        JsonNode root;
-        try {
-            root = (new ObjectMapper()).readTree(json).path(fieldName);
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error reading JSON : " + json, ioe);
-        }
-
-        if (root != null) {
-            String value = root.toString();
-            if (!retainQuotes && (value != null)) {
-                value = value.replaceAll("\"", "");
-            }
-            return value;
-        }
-
-        return null;
-    }
+    private JsonUtils() {}
 
     /**
      *
@@ -169,9 +105,5 @@ public final class JsonUtils {
         }
 
         return paramsMap;
-    }
-
-    public static String getParameterValue(String key, JSONObject jsonObject) {
-        return (jsonObject.get(key) != null) ? jsonObject.get(key).toString() : null;
     }
 }

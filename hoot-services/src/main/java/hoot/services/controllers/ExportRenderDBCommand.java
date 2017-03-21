@@ -47,6 +47,6 @@ class ExportRenderDBCommand extends ExternalCommand {
 
         String command = script + " " + mapId + " " + HOOTAPI_DB_URL;
 
-        super.configureAsRegularCommand(command, caller);
+        super.configureCommand(command, caller);
     }
 }
