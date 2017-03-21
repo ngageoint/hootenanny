@@ -47,9 +47,7 @@ public class ExportOSMCommand extends ExportCommand {
         //ifeq "$(textstatus)" "true"
         //    OSM_OPTS+= -D writer.text.status=true
         //endif
-        if (Boolean.valueOf(paramMap.get("textstatus"))) {
-            options.add("-D writer.text.status=true");
-        }
+        options.add("-D writer.text.status=" + Boolean.valueOf(paramMap.get("textstatus")));
 
         String osmOptions = options.stream().collect(Collectors.joining(" "));
         String input = super.getInput();

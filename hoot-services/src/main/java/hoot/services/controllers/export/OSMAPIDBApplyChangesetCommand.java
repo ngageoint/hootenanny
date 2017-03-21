@@ -75,14 +75,18 @@ public class OSMAPIDBApplyChangesetCommand extends ExportCommand {
         hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
 
         // AOI = Area of Interest
-        String aoi = getAoi(paramMap, conflatedMap);
-        String changesetSourceDataTimestamp = getMapForExportTag(conflatedMap);
+        String conflictAOI = getAoi(paramMap, conflatedMap);
+
+        //timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted dat
+        String conflictTimestamp = getMapForExportTag(conflatedMap);
 
         // Services currently always write changeset with sql
-        String changesetoutput = super.getChangesetOutputPath();
+        String sqlChangeset = super.getSQLChangesetPath();
+
+        String targetDatabaseUrl = OSMAPI_DB_URL;
 
         //hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
-        String command = "hoot apply-changeset --" + debugLevel + " " + hootOptions + " " + changesetoutput + " " + OSMAPI_DB_URL + " " + aoi + " " + changesetSourceDataTimestamp;
+        String command = "hoot apply-changeset --" + debugLevel + " " + hootOptions + " " + sqlChangeset + " " + targetDatabaseUrl + " " + conflictAOI + " " + conflictTimestamp;
 
         super.configureAsHootCommand(command, caller);
     }

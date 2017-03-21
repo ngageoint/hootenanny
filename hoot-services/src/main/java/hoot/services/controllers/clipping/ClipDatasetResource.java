@@ -103,10 +103,8 @@ public class ClipDatasetResource {
 
         try {
             Map<String, String> paramMap = JsonUtils.jsonToMap(params);
-            String newDatasetOutputName = paramMap.get("OUTPUT_NAME");
 
             Command[] commands = {
-
                 // Clip to a bounding box
                 () -> {
                     ExternalCommand clipCommand = clipDatasetCommandFactory.build(paramMap, debugLevel, this.getClass());
@@ -114,6 +112,7 @@ public class ClipDatasetResource {
                 },
 
                 () -> {
+                    String newDatasetOutputName = paramMap.get("OUTPUT_NAME");
                     ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(newDatasetOutputName, this.getClass());
                     return externalCommandManager.exec(jobId, exportRenderDBCommand);
                 }

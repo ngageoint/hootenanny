@@ -124,24 +124,96 @@ public class ExportResource {
             Map<String, String> paramMap = JsonUtils.jsonToMap(params);
 
             String outputType = paramMap.get("outputtype");
-            String input = paramMap.get("input");
 
-            // Created scratch area for each export request.  This is where downloadable files will be stored.
+            // Created scratch area for each export request.
+            // This is where downloadable files will be stored and other intermediate artifacts.
             File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
             FileUtils.forceMkdir(outputFolder);
 
             Command[] commands;
 
             if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("pbf")) {
-                // osm and pbf output types share the same export command
-            }
-
-
-            {
                 commands = new Command [] {
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap, debugLevel, this.getClass());
+                        ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, paramMap,
+                                debugLevel, ExportOSMCommand.class, this.getClass());
+                        return externalCommandManager.exec(jobId, exportOSMCommand);
+                    }
+                };
+            }
+            else if (outputType.equalsIgnoreCase("osc")) {
+                commands = new Command [] {
+                    () -> {
+                        ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, paramMap,
+                                debugLevel, ExportOSCCommand.class, this.getClass());
+                        return externalCommandManager.exec(jobId, exportOSCCommand);
+                    }
+                };
+            }
+            //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
+            else if (outputType.equalsIgnoreCase("osm_api_db")) {
+                commands = new Command [] {
+                    () -> {
+                        ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, paramMap,
+                                debugLevel, OSMAPIDBDeriveChangesetCommand.class, this.getClass());
+                        return externalCommandManager.exec(jobId, osmAPIDBDeriveChangesetCommand);
+                    },
+
+                    () -> {
+                        ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, paramMap,
+                                debugLevel, OSMAPIDBApplyChangesetCommand.class, this.getClass());
+                        return externalCommandManager.exec(jobId, osmAPIDBApplyChangesetCommand);
+                    }
+                };
+            }
+            else {
+                commands = new Command [] {
+                    () -> {
+                        if (outputType.equalsIgnoreCase("shp")) {
+                            //ifeq "$(outputtype)" "shp"
+                            //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
+                            //endif
+                        }
+
+                        //TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
+                        //TDS61_TEMPLATE=$(TEMPLATE_PATH)/tds61.tgz
+                        //TDS40_TEMPLATE=$(TEMPLATE_PATH)/tds40.tgz
+
+                        // ifeq "$(append)" "true"
+                        //     ifeq "$(translation)" "translations/TDSv61.js"
+                        //         ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
+                        //             mkdir -p $(OP_OUTPUT)
+                        //             tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
+                        //         endif # Template Path
+                        //    else
+                        //       ifeq "$(translation)" "translations/TDSv40.js"
+                        //           ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
+                        //               mkdir -p $(OP_OUTPUT)
+                        //               tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
+                        //           endif # Template Path
+                        //       endif # Translations TDSv40
+                        //    endif # Else
+                        // endif # Append
+
+                        /*
+                        String templateHome = HOME_FOLDER + File.separator + "translations-local" + File.separator + "template";
+                        if (Boolean.valueOf(paramMap.get("append"))) {
+                            if (translation.equals("translations/TDSv61.js")) {
+                                String tds61TemplatePath = templateHome + File.separator + "tds61.tgz";
+                                //tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
+                            }
+                            else if (translation.equals("translations/TDSv40.js")) {
+                                String tds40TemplatePath = templateHome + File.separator + "tds40.tgz";
+
+                                //tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
+                            }
+                        }*/
+
+                        // ExportCommand
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap,
+                                debugLevel, ExportCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
+                        //cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
                     }
                 };
             }

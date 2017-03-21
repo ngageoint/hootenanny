@@ -84,7 +84,7 @@ public class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
         String input = super.getInput();
 
         // Services currently always write changeset with sql
-        String changesetOutput = super.getChangesetOutputPath();
+        String changesetOutput = super.getSQLChangesetPath();
 
         //hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
         String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + OSMAPI_DB_URL + " " + input + " " + changesetOutput + " " +  OSMAPI_DB_URL;

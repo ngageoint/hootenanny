@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.export;
 
+import java.lang.reflect.Constructor;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -34,7 +35,13 @@ import org.springframework.stereotype.Component;
 @Component
 class ExportCommandFactory {
 
-    ExportCommand build(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
-        return new ExportCommand(jobId, paramMap, debugLevel, caller);
+    ExportCommand build(String jobId, Map<String, String> paramMap, String debugLevel, Class<? extends ExportCommand> exportCommandClass, Class<?> caller) {
+        try {
+            Constructor<? extends ExportCommand> constuctor = exportCommandClass.getConstructor(String.class, Map.class, String.class, Class.class);
+            return constuctor.newInstance(jobId, paramMap, debugLevel, caller);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate an instance of class: " + exportCommandClass.getName());
+        }
     }
 }

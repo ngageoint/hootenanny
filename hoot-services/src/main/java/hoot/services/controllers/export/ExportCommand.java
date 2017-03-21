@@ -149,7 +149,6 @@ class ExportCommand extends ExternalCommand {
     private String outputType;
     private String input;
 
-    //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
     ExportCommand(String jobId, java.util.Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         this.jobId = jobId;
         this.paramMap = paramMap;
@@ -157,36 +156,11 @@ class ExportCommand extends ExternalCommand {
         this.input = paramMap.get("input");
 
         List<String> hootOptions = this.getCommonExportHootOptions();
+        String translation = paramMap.get("translation");
+        String outputPath = this.getOutputPath();
 
-        //ifeq "$(outputtype)" "shp"
-        //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
-        //endif
-        if (outputType.equals("shp")) {
-            //OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
-        }
-
-        //ifeq "$(inputtype)" "file"
-        //    INPUT_PATH=$(input)
-        //endif
-
-        // mkdir -p "$(outputfolder)"
-        // ifeq "$(append)" "true"
-        //     ifeq "$(translation)" "translations/TDSv61.js"
-        //         ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
-        //             mkdir -p $(OP_OUTPUT)
-        //             tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
-        //         endif # Template Path
-        //    else
-        //       ifeq "$(translation)" "translations/TDSv40.js"
-        //           ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
-        //               mkdir -p $(OP_OUTPUT)
-        //               tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
-        //           endif # Template Path
-        //       endif # Translations TDSv40
-        //    endif # Else
-        // endif # Append
         // hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        // $(OP_ZIP)
+        String command = "hoot osm2ogr --" + debugLevel + " " + "-C RemoveReview2Pre.conf" + " " + hootOptions + " " + translation + " " + input + " " + outputPath;
     }
 
     List<String> getCommonExportHootOptions() {
@@ -196,28 +170,24 @@ class ExportCommand extends ExternalCommand {
         //HOOT_OPTS+= -D api.db.email=test@test.com
         //HOOT_OPTS+= -D ogr.writer.pre.layer.name
 
+        //# Add the option to append
+        //ifeq "$(append)" "true"
+        //    HOOT_OPTS+= -D ogr.append.data=true
+        //endif
+
+        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
+        //ifeq "$(textstatus)" "true"
+        //    HOOT_OPTS+= -D writer.text.status=true
+        //endif
+
         List<String> options = new LinkedList<>();
         options.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("-D hootapi.db.writer.overwrite.map=true");
         options.add("-D hootapi.db.writer.create.user=true");
         options.add("-D api.db.email=test@test.com");
         options.add("-D ogr.writer.pre.layer.name=" + jobId + "_");
-
-        //# Add the option to append
-        //ifeq "$(append)" "true"
-        //    HOOT_OPTS+= -D ogr.append.data=true
-        //endif
-        if (Boolean.valueOf(paramMap.get("append"))) {
-            options.add("-D ogr.append.data=true");
-        }
-
-        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
-        //ifeq "$(textstatus)" "true"
-        //    HOOT_OPTS+= -D writer.text.status=true
-        //endif
-        if (Boolean.valueOf(paramMap.get("textstatus"))) {
-            options.add("-D writer.text.status=true");
-        }
+        options.add("-D writer.text.status=" + Boolean.valueOf(paramMap.get("textstatus")));
+        options.add("-D ogr.append.data=" + Boolean.valueOf(paramMap.get("append")));
 
         return options;
     }
@@ -233,10 +203,10 @@ class ExportCommand extends ExternalCommand {
         //    INPUT_PATH=$(input)
         //endif
         if (! this.paramMap.get("inputtype").equalsIgnoreCase("file")) {
-            input = HOOTAPI_DB_URL + "/" + input;
+            return HOOTAPI_DB_URL + "/" + this.input;
         }
 
-        return input;
+        return this.input;
     }
 
     static Map getConflatedMap(String mapName) {
@@ -257,7 +227,7 @@ class ExportCommand extends ExternalCommand {
         // if sent a bbox in the url (reflecting task grid bounds)
         // use that, otherwise use the bounds of the conflated output
         BoundingBox boundingBox;
-        if (paramMap.get("TASK_BBOX") != null) {
+        if (paramMap.containsKey("TASK_BBOX")) {
             boundingBox = new BoundingBox(paramMap.get("TASK_BBOX"));
         }
         else {
@@ -267,7 +237,7 @@ class ExportCommand extends ExternalCommand {
         return boundingBox.getMinLon() + "," + boundingBox.getMinLat() + "," + boundingBox.getMaxLon() + "," + boundingBox.getMaxLat();
     }
 
-    String getChangesetOutputPath() {
+    String getSQLChangesetPath() {
         // Services currently always write changeset with sql
         return "\"" + new File(getOutputPath(), "changeset-" + jobId + ".osc.sql").getAbsolutePath() + "\"";
     }
