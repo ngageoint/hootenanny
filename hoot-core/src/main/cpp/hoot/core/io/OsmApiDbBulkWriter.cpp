@@ -165,13 +165,23 @@ void OsmApiDbBulkWriter::_verifyDependencies()
       "Unable to access the " + _writerApp + " application.  Is " + _writerApp + " installed?");
   }
 
-  if (_destinationIsDatabase() && _writerApp == "pg_bulkload" &&
-      !_database.hasExtension(_writerApp))
+  if (_writerApp == "pg_bulkload" && _destinationIsDatabase())
   {
-    throw HootException(
-      QString("The " + _writerApp + " application was selected for database writing. ") +
-      QString("To use this writer application, the database being written to must have the ") +
-      QString(_writerApp + " extension installed."));
+    //need psql to execute sequence id sql file if using pgbulk, not reserving ids beforehand, and
+    //the destination is a database
+    if (!_reserveRecordIdsBeforeWritingData &&
+        system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
+    {
+      throw HootException("Unable to access the psql application.  Is psql installed?");
+    }
+
+    if (!_database.hasExtension(_writerApp))
+    {
+      throw HootException(
+        QString("The " + _writerApp + " application was selected for database writing. ") +
+        QString("To use this writer application, the database being written to must have the ") +
+        QString(_writerApp + " extension installed."));
+    }
   }
 }
 
@@ -556,10 +566,19 @@ void OsmApiDbBulkWriter::finalizePartial()
     //out
     _writeCombinedSqlFile();
   }
-  else if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
+  else
   {
-    //update the ids in the CSV file according to the id sequences previously reserved
-    _updateRecordLinesWithIdOffsetInCsvFiles();
+    if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
+    {
+      //update the ids in the CSV file according to the id sequences previously reserved
+      _updateRecordLinesWithIdOffsetInCsvFiles();
+    }
+    else if (!_reserveRecordIdsBeforeWritingData)
+    {
+      //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
+      //statements to a sql file here for applying at a later time.
+      _writeSequenceIdUpdateSqlFile();
+    }
   }
 
   LOG_INFO("File write stats:");
@@ -576,6 +595,68 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_INFO("Final file write stats:");
   }
   _logStats();
+}
+
+QString OsmApiDbBulkWriter::_getSequenceIdSqlFileName() const
+{
+  if (!_destinationIsDatabase())
+  {
+    QFileInfo outputInfo(_outputUrl);
+    return outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + ".sql";
+  }
+  else if (!_outputFilesCopyLocation.isEmpty())
+  {
+    QFileInfo outputInfo(_outputFilesCopyLocation);
+    return outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + ".sql";
+  }
+  else
+  {
+    assert(false);
+  }
+}
+
+void OsmApiDbBulkWriter::_writeSequenceIdUpdateSqlFile()
+{
+  LOG_TRACE("Writing separate sequence ID update file...");
+
+  shared_ptr<QFile> outputFile;
+  try
+  {
+    QString reserveElementIdsSql;
+    _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
+                                  _idMappings.currentNodeId - 1,
+                                  _idMappings.currentWayId - 1,
+                                  _idMappings.currentRelationId - 1,
+                                  reserveElementIdsSql);
+    LOG_VART(reserveElementIdsSql);
+    QFileInfo outputInfo(_outputUrl);
+    const QString dest = _getSequenceIdSqlFileName();
+    LOG_VART(dest);
+    outputFile.reset(new QFile(dest));
+    if (outputFile->exists())
+    {
+      outputFile->remove();
+    }
+    if (!outputFile->open(QIODevice::Append))
+    {
+      throw HootException(
+        "Could not open file at: " + outputFile->fileName() +
+        " for contents of SQL sequence ID output.");
+    }
+    QTextStream outStream(outputFile.get());
+    outStream << reserveElementIdsSql;
+    outStream.flush();
+    outputFile->flush();
+    outputFile->close();
+  }
+  catch (const Exception& e)
+  {
+    if (outputFile)
+    {
+      outputFile->close();
+    }
+    throw e;
+  }
 }
 
 bool OsmApiDbBulkWriter::_destinationIsDatabase() const
@@ -598,27 +679,36 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
   //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
   //applying it to a QSqlQuery.
+  _execSqlFile(_sqlOutputCombinedFile->fileName());
+
+  LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+}
+
+void OsmApiDbBulkWriter::_execSqlFile(const QString fileName)
+{
+  //this assumes a database destination
   const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
   QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
   if (!(Log::getInstance().getLevel() <= Log::Info))
   {
     cmd += " --quiet";
   }
-  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputCombinedFile->fileName();
+  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + fileName;
   if (!(Log::getInstance().getLevel() <= Log::Info))
   {
     cmd += " > /dev/null";
   }
   LOG_DEBUG(cmd);
+  LOG_INFO("Executing SQL file: " << fileName);
   if (system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
+    throw HootException(
+      "Failed executing write against the OSM API database of SQL file: " + fileName);
   }
-  LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
 }
 
 void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
-{
+{    
   _timer->restart();
   _fileDataPassCtr++;
   bool someDataNotLoaded = false;
@@ -643,6 +733,15 @@ void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
     {
       pgBulkBadRecordsOutputLog.remove();
     }
+  }
+
+  //if we're writing this data offline, write the sequence id updates to the db first with psql,
+  //using the sql file that was earlier output to the same dir as the csv files; doing this to
+  //stay consistent with the fact that when using psql sequence id update statements are always
+  //written to the output sql file if ids aren't reserved
+  if (!_reserveRecordIdsBeforeWritingData)
+  {
+    _execSqlFile(_getSequenceIdSqlFileName());
   }
 
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();

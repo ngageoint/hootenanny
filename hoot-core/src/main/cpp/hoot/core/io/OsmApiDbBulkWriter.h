@@ -264,6 +264,7 @@ private:
   QString _getCombinedSqlFileName() const;
   QString _getTableOutputFileName(const QString tableName) const;
   QString _getUpdatedCsvFileName(const QString tableName) const;
+  QString _getSequenceIdSqlFileName() const;
 
   void _writeSequenceUpdatesToStream(const long changesetId, const long nodeId, const long wayId,
                                      const long relationId, QString& outputStr);
@@ -295,6 +296,8 @@ private:
   void _writeDataToDb();
   void _writeDataToDbPgBulk();
   void _writeDataToDbPsql();
+  void _writeSequenceIdUpdateSqlFile();
+  void _execSqlFile(const QString fileName);
 };
 
 }

@@ -169,6 +169,8 @@ public:
   {
     LOG_VART(stdFilePath);
     LOG_VART(outFilePath);
+    assert(stdFilePath.endsWith(".sql"));
+    assert(outFilePath.endsWith(".sql"));
     const QStringList stdSqlTokens = tokenizeOutputFileWithoutDates(stdFilePath);
     const QStringList outputSqlTokens = tokenizeOutputFileWithoutDates(outFilePath);
     CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
@@ -264,12 +266,11 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
-//    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
-//    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
-//    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
-//    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -332,12 +333,11 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
-//    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
-//    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
-//    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Relation));
-//    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -598,6 +598,9 @@ public:
     writer.write(createTestMap());
     writer.close();
 
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/" + prefix + "/" + prefix + ".sql",
+      outputDirPath + "/" + prefix + ".sql");
     verifyCsvOutput(
       "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath, prefix + "-");
     verifyDatabaseOutputOffline();
@@ -691,6 +694,9 @@ public:
     writer.write(createTestMap());
     writer.close();
 
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/" + prefix + "/" + prefix + ".sql",
+      outputDirPath + "/" + prefix + ".sql");
     verifyCsvOutput(
       "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline-custom-starting-ids", outputDirPath,
       prefix + "-");
@@ -760,6 +766,9 @@ public:
     writer.write(createTestMap());
     writer.close();
 
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline/PgBulkOffline.sql",
+      outputDirPath + "/" + prefix + ".sql");
     //writer outputs a directory named the same as the base file name specified as the output path;
     //the directory contains a collections of csv files
     verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath,
