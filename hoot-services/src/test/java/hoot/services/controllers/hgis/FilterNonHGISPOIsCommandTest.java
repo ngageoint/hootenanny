@@ -26,18 +26,9 @@
  */
 package hoot.services.controllers.hgis;
 
-import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
-import static hoot.services.HootProperties.HOME_FOLDER;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-
-import hoot.services.UnitTest;
-
-
 public class FilterNonHGISPOIsCommandTest {
 
+/*
     @Test
     @Category(UnitTest.class)
     public void testFilterNonHgisPoisCommand() throws Exception {
@@ -64,5 +55,5 @@ public class FilterNonHGISPOIsCommandTest {
 
         assertEquals(expectedCommandArgs, actualCommandArgs);
     }
-
+*/
 }

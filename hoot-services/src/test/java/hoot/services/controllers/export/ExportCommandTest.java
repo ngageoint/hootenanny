@@ -41,6 +41,7 @@ import javax.ws.rs.core.Response;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -57,6 +58,7 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
+@Ignore
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({DbUtils.class, ExportCommand.class})
 @PowerMockIgnore("javax.management.*")

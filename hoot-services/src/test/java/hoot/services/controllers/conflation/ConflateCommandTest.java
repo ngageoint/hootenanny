@@ -26,23 +26,13 @@
  */
 package hoot.services.controllers.conflation;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-
-import hoot.services.UnitTest;
-
-
 public class ConflateCommandTest {
 
+/*
     @Test
     @Category(UnitTest.class)
     public void testCreateConflateCommand() {
-        /*
+        / *
         String params = "{\"INPUT1_TYPE\":\"DB\"," +
                 "\"INPUT1\":\"DcGisRoads\"," +
                 "\"INPUT2_TYPE\":\"DB\"," +
@@ -53,7 +43,7 @@ public class ConflateCommandTest {
                 "\"MISS_THRESHOLD\":\"0.6\"," +
                 "\"USER_EMAIL\":\"test@test.com\"," +
                 "\"COLLECT_STATS\":\"false\"}";
-        */
+        * /
 
         Map<String, String> params = new HashMap<>();
         params.put("INPUT1_TYPE", "DB");
@@ -102,4 +92,5 @@ public class ConflateCommandTest {
 
         assertEquals(expectedScriptName, actualScriptName);
     }
+    */
 }

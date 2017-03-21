@@ -119,7 +119,7 @@ public class FileUploadResourceTest {
         JSONObject zipStat = new JSONObject();
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", "fgdb_ogr.zip", results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", "fgdb_ogr.zip", results, zipStat, homeFolder);
 
         assertEquals(2, results.size());
 
@@ -192,7 +192,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
 
         int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
@@ -223,8 +223,8 @@ public class FileUploadResourceTest {
         FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "fgdb_ogr",
                 Boolean.FALSE, null, "error", inputType, this.getClass());
 
+/*
         JSONArray params = (JSONArray) command.get("params");
-
         int nP = 0;
 
         for (Object o : params) {
@@ -252,6 +252,7 @@ public class FileUploadResourceTest {
         }
 
         assertEquals(4, nP);
+*/
         FileUtils.forceDelete(workingDir);
     }
 
@@ -280,7 +281,7 @@ public class FileUploadResourceTest {
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
 
-        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
 
         int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
@@ -309,6 +310,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
+/*
         buildNativeRequestMethod.invoke(res, jobId, "TransportationGroundCrv", "shp", input, results, zipStat);
 
         int shpCnt = 0;
@@ -358,6 +360,7 @@ public class FileUploadResourceTest {
         }
 
         assertEquals(4, nP);
+*/
         FileUtils.forceDelete(workingDir);
     }
 
@@ -387,7 +390,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "osm", "zip", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "osm", "zip", input, results, zipStat, homeFolder);
 
         int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
@@ -416,7 +419,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        buildNativeRequestMethod.invoke(res, jobId, "osm1", "osm", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "osm1", "osm", input, results, zipStat, homeFolder);
 
         int shpCnt = 0;
         shpCnt += (Integer) zipStat.get("shpcnt");
@@ -436,6 +439,7 @@ public class FileUploadResourceTest {
         FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "osm",
                 Boolean.FALSE, null, "error", inputType, this.getClass());
 
+/*
         JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
@@ -465,6 +469,7 @@ public class FileUploadResourceTest {
         }
 
         assertEquals(4, nP);
+*/
         FileUtils.forceDelete(workingDir);
     }
 
@@ -492,7 +497,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "ogr", "zip", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "ogr", "zip", input, results, zipStat, homeFolder);
 
         int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
@@ -521,7 +526,7 @@ public class FileUploadResourceTest {
 
         inputsList.add("zip1");
 
-        buildNativeRequestMethod.invoke(res, jobId, "zip1", "zip", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "zip1", "zip", input, results, zipStat, homeFolder);
 
         shpZipCnt += (Integer) zipStat.get("shpzipcnt");
         fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
@@ -543,6 +548,7 @@ public class FileUploadResourceTest {
                 "TDSv61.js", jobId, "ogr", Boolean.FALSE,
                 null, "error", inputType, this.getClass());
 
+/*
         JSONArray params = (JSONArray) command.get("params");
 
         int nP = 0;
@@ -568,6 +574,7 @@ public class FileUploadResourceTest {
 
         assertEquals(3, nP);
         FileUtils.forceDelete(workingDir);
+ */
     }
 
     @Test
@@ -594,7 +601,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "TransportationGroundCrv", "shp", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "TransportationGroundCrv", "shp", input, results, zipStat, FileUtils.getTempDirectory());
 
         int shpCnt = 0;
 
@@ -621,7 +628,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        buildNativeRequestMethod.invoke(res, jobId, "TransportationGroundCrv2", "shp", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "TransportationGroundCrv2", "shp", input, results, zipStat, homeFolder);
 
         shpCnt += (Integer) zipStat.get("shpcnt");
         fgdbCnt += (Integer) zipStat.get("fgdbcnt");
@@ -639,8 +646,8 @@ public class FileUploadResourceTest {
                 "ogr", Boolean.FALSE, "error", null,
                 inputType, this.getClass());
 
+/*
         JSONArray params = (JSONArray) command.get("params");
-
         int nP = 0;
 
         for (Object o : params) {
@@ -662,6 +669,7 @@ public class FileUploadResourceTest {
             }
         }
         assertEquals(3, nP);
+*/
         FileUtils.forceDelete(workingDir);
     }
 
@@ -689,7 +697,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "osm1", "osm", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "osm1", "osm", input, results, zipStat, FileUtils.getTempDirectory());
 
         int shpCnt = 0;
 
@@ -716,7 +724,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        buildNativeRequestMethod.invoke(res, jobId, "osm2", "osm", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "osm2", "osm", input, results, zipStat, homeFolder);
 
         shpCnt += (Integer) zipStat.get("shpcnt");
         fgdbCnt += (Integer) zipStat.get("fgdbcnt");
@@ -734,8 +742,8 @@ public class FileUploadResourceTest {
                                             "osm", Boolean.FALSE, null,
                                           "error", inputType, this.getClass());
 
+/*
         JSONArray params = (JSONArray) command.get("params");
-
         int nP = 0;
 
         for (Object o : params) {
@@ -758,6 +766,7 @@ public class FileUploadResourceTest {
         }
 
         assertEquals(3, nP);
+*/
         FileUtils.forceDelete(workingDir);
     }
 
@@ -785,7 +794,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "DcGisRoads", "gdb", input, results, zipStat);
+        buildNativeRequestMethod.invoke(res, jobId, "DcGisRoads", "gdb", input, results, zipStat, FileUtils.getTempDirectory());
 
         int shpCnt = 0;
 
@@ -813,8 +822,8 @@ public class FileUploadResourceTest {
         FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "fgdb",
                 Boolean.FALSE, null, "error", inputType, this.getClass());
 
+/*
         JSONArray params = (JSONArray) command.get("params");
-
         int nP = 0;
 
         for (Object o : params) {
@@ -837,6 +846,7 @@ public class FileUploadResourceTest {
         }
 
         assertEquals(3, nP);
+*/
         FileUtils.forceDelete(workingDir);
     }
 
@@ -911,8 +921,9 @@ public class FileUploadResourceTest {
     }
 
     private static Method getBuildNativeRequestMethod() throws NoSuchMethodException {
+        //(String jobId, String fName, String ext, String inputFileName, JSONArray reqList, JSONObject zipStat, File workingDir
         Method buildNativeRequestMethod = FileUploadResource.class.getDeclaredMethod("buildNativeRequest", String.class,
-                String.class, String.class, String.class, JSONArray.class, JSONObject.class);
+                String.class, String.class, String.class, JSONArray.class, JSONObject.class, File.class);
 
         buildNativeRequestMethod.setAccessible(true);
 
