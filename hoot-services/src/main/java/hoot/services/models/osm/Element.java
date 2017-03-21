@@ -29,8 +29,9 @@ package hoot.services.models.osm;
 import static hoot.services.models.db.QChangesets.changesets;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
-import static hoot.services.utils.StringUtils.encodeURIComponentForJavaScript;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -705,4 +706,19 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
     public abstract void checkAndFailIfUsedByOtherObjects()
             throws OSMAPIAlreadyDeletedException, OSMAPIPreconditionException;
+
+    /**
+     * URI encodes a string for Javascript consumption; client should call
+     * decodeURIComponent to decode
+     *
+     * @param str
+     *            string to encode
+     * @return a URI encoded string safe for Javascript consumption
+     * @throws UnsupportedEncodingException
+     */
+    private static String encodeURIComponentForJavaScript(String str) throws UnsupportedEncodingException {
+        return URLEncoder.encode(str, "UTF-8").replaceAll("\\+", "%20").replaceAll("\\%21", "!")
+                .replaceAll("\\%27", "'").replaceAll("\\%28", "(").replaceAll("\\%29", ")").replaceAll("\\%7E", "~")
+                .replaceAll("\\%3B", ";");
+    }
 }

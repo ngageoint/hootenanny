@@ -26,6 +26,9 @@
  */
 package hoot.services.utils;
 
+import org.apache.commons.math.util.MathUtils;
+
+
 /**
  * Various geospatial utilities for hoot services
  */
@@ -47,5 +50,29 @@ public final class GeoUtils {
      */
     public static boolean coordsInWorld(double lat, double lon) {
         return (lat >= -90) && (lat <= 90) && (lon >= -180) && (lon <= 180);
+    }
+
+    /**
+     * Calculates the quad tile for a point
+     *
+     * @param latitude
+     *            point's latitude
+     * @param longitude
+     *            points longitude
+     * @return tile integer
+     */
+    public static long tileForPoint(double latitude,double longitude) {
+        int lonInt = (int) MathUtils.round((((longitude + 180.0) * 65535.0) / 360.0), 0);
+        int latInt = (int) MathUtils.round((((latitude + 90.0) * 65535.0) / 180.0), 0);
+
+        // use a long here, because java doesn't have unsigned int
+        long tileUnsigned = 0;
+        for (int i = 15; i >= 0; i--) {
+            // use y, x ordering
+            tileUnsigned = (tileUnsigned << 1) | ((lonInt >> i) & 1);
+            tileUnsigned = (tileUnsigned << 1) | ((latInt >> i) & 1);
+        }
+
+        return tileUnsigned;
     }
 }

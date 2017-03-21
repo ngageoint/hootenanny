@@ -82,7 +82,6 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.PostgresUtils;
-import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -1324,7 +1323,7 @@ public class OSMTestUtils {
                 .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
                         currentNodes.visible, currentNodes.tile, currentNodes.version, currentNodes.tags)
                 .values(nodeId, latitude, longitude, changesetId,
-                        Boolean.TRUE, QuadTileCalculator.tileForPoint(latitude, longitude), 1L, tags)
+                        Boolean.TRUE, GeoUtils.tileForPoint(latitude, longitude), 1L, tags)
                 .execute();
     }
 

@@ -31,14 +31,14 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.QuadTileCalculator;
+import hoot.services.utils.GeoUtils;
 
 
 public class QuadTileCalculatorTest {
     @Test
     @Category(UnitTest.class)
     public void testTileFromPoint() {
-        Assert.assertEquals(1329332431L, QuadTileCalculator.tileForPoint(38, -104));
-        Assert.assertEquals(3851856485L, QuadTileCalculator.tileForPoint(38, 104));
+        Assert.assertEquals(1329332431L, GeoUtils.tileForPoint(38, -104));
+        Assert.assertEquals(3851856485L, GeoUtils.tileForPoint(38, 104));
     }
 }
