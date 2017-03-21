@@ -1269,19 +1269,23 @@ should only be enabled the database has previously been taken offline (you are t
 === osmapidb.bulk.writer.file.output.buffer.max.line.size
 
 * Data Type: long
-* Default Value: `100000`
+* Default Value: `1000000`
 
-Maximum number of lines to keep in memory when serializing the temporary file output just before
-writing SQL records to an OSM API database.  Each line represents a separate SQL record.
+Maximum number of lines to keep in memory when serializing elements to a file output, where each
+line represents a separate SQL record.  If you have enough memory available and the dataset you are
+writing is larger than the value of this setting, you may be able to increase the input file parsing
+performance by raising this value.  This setting has no impact on the performance of writing records
+to a database, only on the input data parsing done beforehand.
 
 === osmapidb.bulk.writer.file.output.status.update.interval
 
 * Data Type: long
 * Default Value: `1000000`
 
-Count at which the temporary file output status of each element type should be logged when writing
-to temporary files that are to be loaded into an OSM API database.  e.g. With a value of 100, you
-will see a load status update message logged for every 100 temporary file lines written.
+Count at which the parse status of each element type should be logged when writing to them to
+files.  e.g. With a value of 100, you will see a load status update message logged for every 100
+file lines written.  This setting will have a negative impact on performance if set to a very low
+value.
 
 === osmapidb.bulk.writer.multithreaded
 
@@ -1297,10 +1301,10 @@ option "osmapidb.bulk.writer.app" must be set to "pg_bulkload" to enable this op
 * Data Type: string
 * Default Value: ``
 
-Use this option if you wish to retain the temporary data generated during an OSM API database write.
+Use this option if you wish to retain the file data generated during an OSM API database write.
 This option is not needed and will be ignored if writing OSM data to a SQL file or set of CSV
 files that will be applied/written to an OSM API database at a later time.  If this option is
-populated, any temporary data files generated as a result of executing the hoot convert command
+populated, any file data files generated as a result of executing the hoot convert command
 with an OSM API database target are copied to the specified location.  If "osmapidb.bulk.writer.app"
 is set to "psql", this option should be set to a full file path to a SQL file (.sql).  If
 "osmapidb.bulk.writer.app" is set to "pg_bulkload", this should be set to a directory path where

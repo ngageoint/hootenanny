@@ -294,7 +294,7 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
   messages.append(
     QString("\tRelation tags: ") + _formatPotentiallyLargeNumber(_writeStats.relationTagsWritten));
   messages.append(
-    QString("\tUnresolved relations: ") +
+    QString("\tUnresolved relation members: ") +
     _formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
   messages.append(
     QString("\tChangesets: ") + _formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
@@ -320,12 +320,20 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
 unsigned int OsmApiDbBulkWriter::_numberOfFileDataPasses() const
 {
   unsigned int numPasses = 1;
+  if (_destinationIsDatabase())
+  {
+    //writing to the database is another pass over the data
+    numPasses++;
+  }
   if (_writerApp == "psql")
   {
+    //using psql always requires a minimum of two passes due to having to combine all the temp
+    //sql files into one
     numPasses++;
   }
   else if (_writerApp != "psql" && _destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
   {
+    //pgbulk only adds an extra pass if the record id offsets have to be updated
     numPasses++;
   }
   return numPasses;
@@ -357,7 +365,7 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
   _fileDataPassCtr++;
   LOG_INFO(
     "Updating record IDs for CSV files .  (data pass #" << _fileDataPassCtr << " of " <<
-    _numberOfFileDataPasses() << "...");
+    _numberOfFileDataPasses() << ")...");
   LOG_VART(_sectionNames.size());
   LOG_VART(_outputSections.size());
 
@@ -404,7 +412,6 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
 
           if (!line.isEmpty())
           {
-
             _updateRecordLineWithIdOffset(*it, line);
             progressLineCtr++;
             outStream << line << "\n";
@@ -463,7 +470,7 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
 
   LOG_INFO(
     "CSV ID update write complete.  (data pass #" << _fileDataPassCtr << " of " <<
-    _numberOfFileDataPasses() << "...");
+    _numberOfFileDataPasses() << ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
   LOG_DEBUG(
     "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total CSV file lines.");
 }
@@ -497,7 +504,7 @@ void OsmApiDbBulkWriter::finalizePartial()
 {
   LOG_INFO(
     "Input records parsed (data pass #" << _fileDataPassCtr << " of " <<
-    _numberOfFileDataPasses() << ".  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    _numberOfFileDataPasses() << ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _idMappings.nodeIdMap.reset();
@@ -579,12 +586,14 @@ bool OsmApiDbBulkWriter::_destinationIsDatabase() const
 void OsmApiDbBulkWriter::_writeDataToDbPsql()
 {
   _timer->restart();
+  _fileDataPassCtr++;
   //I believe a COPY header is created whether there are any records to copy for the table or not,
   //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
   //to not write the header if there are no records to copy for the table...
   LOG_INFO(
     "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-    " records.  17 separate SQL COPY statements will be executed...");
+    " records (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
+    ").  17 separate SQL COPY statements will be executed...");
 
   //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
@@ -611,10 +620,12 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
 void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
 {
   _timer->restart();
+  _fileDataPassCtr++;
   bool someDataNotLoaded = false;
   LOG_INFO(
     "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
-    " records.  " << _outputSections.size() - 1 << " CSV files will be written to the database...");
+    " records (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
+    ")." << _outputSections.size() - 1 << " CSV files will be written to the database...");
 
   //Do we want to remove these every time?
   if (!_pgBulkLogPath.isEmpty())
@@ -852,6 +863,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
         QTextStream inStream(&tempInputFile);
         QString line;
         long lineCtr = 0;
+        const bool updateIdOffsets = _destinationIsDatabase() && _reserveRecordIdsBeforeWritingData;
         do
         {
           line = inStream.readLine();
@@ -859,7 +871,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 
           if (!line.contains("COPY") && !line.isEmpty() && line != "\\.")
           {
-            if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
+            if (updateIdOffsets)
             {
               _updateRecordLineWithIdOffset(*it, line);
             }
@@ -919,7 +931,7 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 
   LOG_INFO(
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
-    _numberOfFileDataPasses() << "...");
+    _numberOfFileDataPasses() << ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
   LOG_DEBUG(
     "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
@@ -1070,7 +1082,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
     _fileDataPassCtr++;
     LOG_INFO(
       "Streaming elements from input to file outputs.  (data pass #" <<
-      _fileDataPassCtr << " of " << _numberOfFileDataPasses() << "...");
+      _fileDataPassCtr << " of " << _numberOfFileDataPasses() << ")...");
   }
 
   LOG_VART(node);
