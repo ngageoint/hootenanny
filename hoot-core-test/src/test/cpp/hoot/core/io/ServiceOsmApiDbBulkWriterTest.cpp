@@ -589,10 +589,6 @@ public:
     //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
     //writer.setPgBulkloadBadRecordsLogPath(
     //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
-    //TODO: temp
-    //writer.setPgBulkloadLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkload.log");
-    //writer.setPgBulkloadBadRecordsLogPath(
-      //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());
@@ -633,10 +629,6 @@ public:
     //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
     //writer.setPgBulkloadBadRecordsLogPath(
     //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
-    //TODO: temp
-    //writer.setPgBulkloadLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkload.log");
-    //writer.setPgBulkloadBadRecordsLogPath(
-      //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
@@ -682,10 +674,6 @@ public:
     //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
     //writer.setPgBulkloadBadRecordsLogPath(
     //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
-    //TODO: temp
-    //writer.setPgBulkloadLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkload.log");
-    //writer.setPgBulkloadBadRecordsLogPath(
-      //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
     writer.setStartingNodeId(3);
     writer.setStartingWayId(4);
     writer.setStartingRelationId(5);
@@ -757,10 +745,6 @@ public:
     //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
     //writer.setPgBulkloadBadRecordsLogPath(
     //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
-    //TODO: temp
-    //writer.setPgBulkloadLogPath("/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkload.log");
-    //writer.setPgBulkloadBadRecordsLogPath(
-      //"/home/vagrant/pg_bulkload/bin/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
 
     writer.open(outputPath);
     writer.write(createTestMap());

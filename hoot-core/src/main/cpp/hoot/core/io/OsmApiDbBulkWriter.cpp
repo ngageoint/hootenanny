@@ -759,30 +759,14 @@ void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
 
       const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
 
-      //TODO:
-      // - this needs to work for the hoot user
-      // - need to remove vagrant home path from executable
-
-      if (!(_outputSections[*sectionNamesItr]).first->setPermissions(QFile::ReadOther))
-      {
-        LOG_WARN(
-          "Unable to set permissions on " << (_outputSections[*sectionNamesItr]).first->fileName());
-      }
-      QString cmd =
-        "sudo -u postgres /home/vagrant/pg_bulkload/bin/pg_bulkload -d " +
-        dbUrlParts["database"] + " -O " + *sectionNamesItr + " -i " +
-        (_outputSections[*sectionNamesItr]).first->fileName();
-
-//      QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + ";";
-//      cmd += " export PGDATABASE=" + dbUrlParts["database"] + ";";
-//      cmd += " export PGHOST=" + dbUrlParts["host"] + ";";
-//      cmd += " export PGPORT=" + dbUrlParts["port"] + ";";
-//      cmd += " export PGUSER=" + dbUrlParts["user"] + ";";
-//      cmd +=
-//        " pg_bulkload -d " + dbUrlParts["database"] + " -h " + dbUrlParts["host"] + " -p " +
-//        dbUrlParts["port"] + " -U " + dbUrlParts["user"] + " -W " + dbUrlParts["password"] +
-//        " -O " + *sectionNamesItr + " -i " +
-//         (_outputSections[*sectionNamesItr]).first->fileName();
+      QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + ";";
+      cmd += " export PGDATABASE=" + dbUrlParts["database"] + ";";
+      cmd += " export PGHOST=" + dbUrlParts["host"] + ";";
+      cmd += " export PGPORT=" + dbUrlParts["port"] + ";";
+      cmd += " export PGUSER=" + dbUrlParts["user"] + ";";
+      cmd +=
+        " pg_bulkload -d " + dbUrlParts["database"] + " -O " + *sectionNamesItr + " -i " +
+         (_outputSections[*sectionNamesItr]).first->fileName();
 
       if (!_pgBulkLogPath.isEmpty())
       {
