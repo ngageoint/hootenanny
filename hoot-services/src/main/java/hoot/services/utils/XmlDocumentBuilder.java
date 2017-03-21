@@ -87,6 +87,9 @@ public final class XmlDocumentBuilder {
 
         DocumentBuilder builder = domFactory.newDocumentBuilder();
 
+        // Disable printing of messages to System.out and System.err
+        builder.setErrorHandler(null);
+
         InputSource is = new InputSource();
         is.setCharacterStream(new StringReader(xml));
 
