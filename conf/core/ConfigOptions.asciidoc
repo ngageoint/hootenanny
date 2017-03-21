@@ -2029,8 +2029,8 @@ a new map is written.
 * Data Type: string
 * Default Value: ``
 
-This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter 
-It forces database reading/writing use the specified OSM API database as master for determining the 
+This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter
+It forces database reading/writing use the specified OSM API database as master for determining the
 sequencing of element ID's.
 
 === remove.attribute.visitor.types

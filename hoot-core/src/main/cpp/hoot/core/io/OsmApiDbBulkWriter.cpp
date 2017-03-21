@@ -708,7 +708,7 @@ void OsmApiDbBulkWriter::_execSqlFile(const QString fileName)
 }
 
 void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
-{    
+{
   _timer->restart();
   _fileDataPassCtr++;
   bool someDataNotLoaded = false;
