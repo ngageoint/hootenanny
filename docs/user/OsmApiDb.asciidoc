@@ -32,9 +32,8 @@ Hootenanny's 'hoot convert' command uses optimized SQL routines to write large a
 has two possible workflows: online and offline.  The offline mode is meant for the fastest performance writing against offline
 databases (no other writers present), while the online mode sacrifices some performance but is safe for writing against online databases (other writers present).
 
-Hootenanny supports two underlying applications for writing OSM API database data: psql and pg_bulkload.  pg_bulkload provides extra option beyond what is available with psql and is currently used experimentally within Hootenanny.  When using psql, a SQL
-file is created with the option of executing its statements against a databse.  When pg_bulkload is used, data is converted to 
-multiple CSV files that can be loaded into the database.
+Hootenanny supports two underlying applications for writing OSM API database data: psql and pg_bulkload.  pg_bulkload provides extra options beyond what is available with psql and is currently used experimentally within Hootenanny.  psql is the default
+writer application.  When using psql, a SQL file is created with the option of executing its statements against a databse.  When pg_bulkload is used, data is converted to multiple CSV files that can be loaded into the database.
 
 Its easiest to demonstrate the two workflows with some examples:
 
