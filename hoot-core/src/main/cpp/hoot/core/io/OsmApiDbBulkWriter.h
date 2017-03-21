@@ -83,29 +83,15 @@ static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\
  *   up by configuring the writer with the appropriate options.  See the user documentation for
  *   details on the two workflows and examples of how to use them.
  *
- * * gives the option of two underlying database writer applications: psql and pg_bulkload;
- *   currently, pg_bulkload is considered experimental (in the future it may be possible to
- *   discontinue use of psql and use pg_bulkload exclusively)
- *
- * * allows for directly writing to a target database or generating output files that can be
- *   manually written to a database; SQL files are written for the psql writer and CSV files are
- *   written for the pg_bulkload writer
+ * * allows for directly writing to a target database or an generating output SQL file that can be
+ *   manually written to a database
  *
  * * has the ability to guarantee element ID uniqueness against a live database if the record ID
  *   reservation option is used.
  *
- * * is transaction safe when using the psql writer but not transaction safe with the pg_bulkload
- *   writer
+ * * is transaction safe
  *
- * * requires two passes over the input data *before* writing it to the database if the psql writer
- *   is used OR the record ID reservation option is selected; only one pass over the data beforehand
- *   otherwise
- *
- * Originally, the psql and pg_bulkload sets of logic were separated into two classes
- * (pg_bulkload subclassing the psql logic).  In some ways, this resulted in cleaner code but in
- * other ways the code was harder to maintain.  The decision was made to collapse the logic into
- * the same class.  However, separating them again at some point may make sense if the two logic
- * paths end up being permanent
+ * * requires two passes over the input data *before* writing it to the database
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
