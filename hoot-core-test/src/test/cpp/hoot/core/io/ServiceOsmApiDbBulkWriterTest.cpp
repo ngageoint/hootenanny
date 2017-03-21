@@ -51,7 +51,7 @@ namespace hoot
 /*
  * TODO: need tests for:
  *
- * - unresolved way node members
+ * - unresolved way nodes
  * - unresolved relation members
  * - config options error handling
  */
