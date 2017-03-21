@@ -1234,38 +1234,81 @@ Operations that should be applied to ingested OGR data before saving the data.
 === osmapidb.bulk.writer.file.output.buffer.max.line.size
 
 * Data Type: long
-* Default Value: `100000`
+* Default Value: `1000000`
 
-Maximum number of lines to keep in memory when serializing the OsmApiDbBulkWriter's SQL output.
-For the most part, each line represents an element or an element tag.
-
-=== osmapidb.bulk.writer.execute.sql
-
-* Data Type: bool
-* Default Value: `true`
-
-If false, outputting to an OSM API database will write the SQL file to be executed only without
-executing the SQL against the database.  Use this setting in conjuction with the
-osmapidb.bulk.writer.sql.output.file.copy.location setting to view SQL output before applying it to
-a database.
+Maximum number of lines to keep in memory when serializing elements to a file output, where each
+line represents a separate SQL record.  If you have enough memory available and the dataset you are
+writing is larger than the value of this setting, you may be able to increase the input file parsing
+performance by raising this value.  This setting has no impact on the performance of writing records
+to a database, only on the input data parsing done beforehand.
 
 === osmapidb.bulk.writer.file.output.status.update.interval
 
 * Data Type: long
 * Default Value: `1000000`
 
-Count at which the SQL file output status of each element type should be logged when bulk writing
-the SQL file that is to be applied to an OSM API database.  e.g. With a value of 100, you will see
-a load status update message logged for every 100 SQL lines parsed.
+Count at which the parse status of each element type should be logged when writing to them to
+files.  e.g. With a value of 100, you will see a load status update message logged for every 100
+file lines written.  This setting will have a negative impact on performance if set to a very low
+value.
 
-=== osmapidb.bulk.writer.sql.output.file.copy.location
+=== osmapidb.bulk.writer.output.files.copy.location
 
 * Data Type: string
 * Default Value: ``
 
-If populated, the generated SQL file whose statements are executed against the target database as
-the result of a hoot convert command with an OSM API database target is copied to the specified
-location. For debugging purposes.
+Use this option if you wish to retain the file data generated during an OSM API database write.
+This option is not needed and will be ignored if writing OSM data to a SQL file or set of CSV
+files that will be applied/written to an OSM API database at a later time.  If this option is
+populated, any file data files generated as a result of executing the hoot convert command
+with an OSM API database target are copied to the specified location.  If "osmapidb.bulk.writer.app"
+is set to "psql", this option should be set to a full file path to a SQL file (.sql).  If
+"osmapidb.bulk.writer.app" is set to "pg_bulkload", this should be set to a directory path where
+a set of CSV data files will be written.
+
+=== osmapidb.bulk.writer.reserve.record.ids.before.writing.data
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writer will update the database to reserve the range of record IDs
+parsed from the input data *before* writing the data to output.  IMPORTANT:  This option should
+always be enabled in online environments (other writers present).  If it is not enabled in online
+environments, the risk of record ID conflicts will be present in the database.  The output
+destination must be an OSM API database or this setting will always be treated as being "false".
+If the output destination is a SQL file, the SQL statements to update the record IDs will be
+written to the SQL output for later execution.  If the output destination is a CSV file, the user is
+responsible for executing their own record ID sequence update SQL statements against the database.
+
+=== osmapidb.bulk.writer.starting.node.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Use
+this when working with an offline database and know the ID range you want to assign to node records.
+This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to
+true.
+
+=== osmapidb.bulk.writer.starting.way.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written ways when writing to an OSM API database or SQL file.  Use
+this when working with an offline database and know the ID range you want to assign to way records.
+This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to
+true.
+
+=== osmapidb.bulk.writer.starting.relation.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written relations when writing to an OSM API database or SQL file.  Use
+this when working with an offline database and know the ID range you want to assign to relation
+records.  This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data"
+is set to true.
 
 === osm.changeset.sql.file.writer.generate.new.ids
 

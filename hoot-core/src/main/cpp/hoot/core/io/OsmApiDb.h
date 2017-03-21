@@ -155,6 +155,9 @@ public:
 
   virtual QString tableTypeToTableName(const TableType& tableType) const;
 
+  static QString elementTypeToElementTableName(const ElementType& elementType,
+                                               const bool historical, const bool tags);
+
 protected:
 
   void _resetQueries();
@@ -174,7 +177,7 @@ private:
 
   void _init();
 
-  QString _elementTypeToElementTableName(const ElementType& elementType) const;
+  QString _elementTypeToElementTableNameStr(const ElementType& elementType) const;
 
   long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
   long _getIdFromSequence(const QString tableName, const QString sequenceType);
