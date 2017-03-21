@@ -16,7 +16,7 @@ If you are using Hootenanny from the command line no configuration is required, 
 
 === Creating an OSM API Database
 
-If you do not already have an OSM API database, you can run the following:
+If you do not already have an OSM API database available, you can run the following:
 
 ----------------------------
 $HOOT_HOME/scripts/database/CleanAndInitializeOsmApiDb.sh
