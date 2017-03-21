@@ -1258,13 +1258,11 @@ value.
 * Default Value: ``
 
 Use this option if you wish to retain the file data generated during an OSM API database write.
-This option is not needed and will be ignored if writing OSM data to a SQL file or set of CSV
-files that will be applied/written to an OSM API database at a later time.  If this option is
-populated, any file data files generated as a result of executing the hoot convert command
-with an OSM API database target are copied to the specified location.  If "osmapidb.bulk.writer.app"
-is set to "psql", this option should be set to a full file path to a SQL file (.sql).  If
-"osmapidb.bulk.writer.app" is set to "pg_bulkload", this should be set to a directory path where
-a set of CSV data files will be written.
+This option is not needed and will be ignored if writing OSM data to a SQL file that will be
+applied/written to an OSM API database at a later time.  If this option is populated, any file data
+files generated as a result of executing the hoot convert command with an OSM API database target
+are copied to the specified location.  This option should be set to a full file path to a SQL
+file (.sql).
 
 === osmapidb.bulk.writer.reserve.record.ids.before.writing.data
 
@@ -1277,8 +1275,7 @@ always be enabled in online environments (other writers present).  If it is not 
 environments, the risk of record ID conflicts will be present in the database.  The output
 destination must be an OSM API database or this setting will always be treated as being "false".
 If the output destination is a SQL file, the SQL statements to update the record IDs will be
-written to the SQL output for later execution.  If the output destination is a CSV file, the user is
-responsible for executing their own record ID sequence update SQL statements against the database.
+written to the SQL output for later execution.
 
 === osmapidb.bulk.writer.starting.node.id
 
