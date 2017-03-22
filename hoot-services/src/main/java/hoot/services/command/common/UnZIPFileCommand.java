@@ -36,7 +36,7 @@ public class UnZIPFileCommand extends ExternalCommand {
 
     public UnZIPFileCommand(File sourceZIP, File targetFolder, Class<?> caller) {
         //unzip sourceZIP -d targetFolder
-        String command = "unzip " + sourceZIP.toPath() + " -d " + targetFolder.toPath();
+        String command = "unzip " + quote(sourceZIP.getAbsolutePath()) + " -d " + quote(targetFolder.getAbsolutePath());
         super.configureCommand(command, caller);
     }
 }

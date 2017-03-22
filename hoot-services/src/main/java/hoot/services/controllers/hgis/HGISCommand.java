@@ -27,10 +27,10 @@
 package hoot.services.controllers.hgis;
 
 import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.io.File;
 
-import hoot.services.HootProperties;
 import hoot.services.command.ExternalCommand;
 
 
@@ -41,7 +41,7 @@ class HGISCommand extends ExternalCommand {
         String output = generateDbMapParam(outputMap);
         String script = new File(CORE_SCRIPT_PATH, scriptName).getAbsolutePath();
 
-        String command = script + " " + source + " " + output;
+        String command = quote(script) + " " + quote(source) + " " + quote(output);
 
         super.configureCommand(command, caller);
     }
@@ -53,6 +53,6 @@ class HGISCommand extends ExternalCommand {
      * @return output looks like: postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
      */
     private static String generateDbMapParam(String mapName) {
-        return HootProperties.HOOTAPI_DB_URL + "/" + mapName;
+        return HOOTAPI_DB_URL + "/" + mapName;
     }
 }

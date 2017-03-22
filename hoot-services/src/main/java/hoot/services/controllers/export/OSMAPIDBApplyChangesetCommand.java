@@ -75,10 +75,10 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
         hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
 
         // AOI = Area of Interest
-        String conflictAOI = getAoi(paramMap, conflatedMap);
+        String conflictAOI = getAOI(paramMap, conflatedMap);
 
         //timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted dat
-        String conflictTimestamp = getMapForExportTag(conflatedMap);
+        String conflictTimestamp = getExportTimeTagFrom(conflatedMap);
 
         // Services currently always write changeset with sql
         String sqlChangeset = super.getSQLChangesetPath();
@@ -86,21 +86,24 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
         String targetDatabaseUrl = OSMAPI_DB_URL;
 
         //hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
-        String command = "hoot apply-changeset --" + debugLevel + " " + hootOptions + " " + sqlChangeset + " " + targetDatabaseUrl + " " + conflictAOI + " " + conflictTimestamp;
+        String command = "hoot apply-changeset --" + debugLevel + " " + hootOptions + " " +
+                            quote(sqlChangeset) + " " + quote(targetDatabaseUrl) + " " + quote(conflictAOI) + " " + quote(conflictTimestamp);
 
         super.configureCommand(command, caller);
     }
 
-    private static String getMapForExportTag(hoot.services.models.osm.Map conflatedMap) {
+    private static String getExportTimeTagFrom(hoot.services.models.osm.Map conflatedMap) {
         Map<String, String> tags = (Map<String, String>) conflatedMap.getTags();
+        String exportTimeTag = "osm_api_db_export_time";
 
         //+osm_api_db_export_time+ is a timestamp that's written at the time the data in the OSM API database is first exported.
         // It's checked against when writing the resulting changeset after the conflation job to see if any other changesets
         // were added to the OSM API db between the export time and the time the changeset is written.
-        if (! tags.containsKey("osm_api_db_export_time")) {
-            throw new IllegalStateException("Error exporting data.  Map with ID: " + conflatedMap.getId() + " has no osm_api_db_export_time tag.");
+        if (! tags.containsKey(exportTimeTag)) {
+            throw new IllegalStateException("Error exporting data.  Map with ID: " + conflatedMap.getId() +
+                    " is missing " + exportTimeTag + ".");
         }
 
-        return tags.get("osm_api_db_export_time");
+        return tags.get(exportTimeTag);
     }
 }

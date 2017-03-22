@@ -72,14 +72,12 @@ class IngestBasemapCommand extends ExternalCommand {
         String projectionSwitch = !StringUtils.isBlank(projection) ? ("-s " + projection) : "";
         String verboseSwitch = verboseOutput ? "-v" : "";
         String zoomSwitch = "-z '0-20'";
-        String input = "\"" + inputFile + "\"";
-        String titleSwitch = "-t " + input;
+        String titleSwitch = "-t " + quote(inputFile);
         String webviewerSwitch = "-w none";
-        String tilesOutputDir = "\"" + tileOutputDir + "\"";
 
         //"$(GDAL2TILES)" $(OP_PROJECTION)  -w none -t "$(OP_INPUT)" -z '0-20' "$(OP_INPUT)" "$(OP_TILE_OUTPUT_DIR)"
         String command = "/usr/local/bin/gdal2tiles.py " + verboseSwitch + " " + projectionSwitch + " " +
-                webviewerSwitch + " " + titleSwitch + " " + zoomSwitch + " " + input + " " + tilesOutputDir;
+                webviewerSwitch + " " + titleSwitch + " " + zoomSwitch + " " + quote(inputFile) + " " + quote(tileOutputDir);
 
         super.configureCommand(command, caller);
     }

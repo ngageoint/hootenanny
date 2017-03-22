@@ -72,7 +72,7 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
         String mapName = paramMap.get("input");
         hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
 
-        String aoi = getAoi(paramMap, conflatedMap);
+        String aoi = getAOI(paramMap, conflatedMap);
         String userId = paramMap.get("USER_ID");
 
         List<String> options = super.getCommonExportHootOptions();
@@ -87,7 +87,8 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
         String changesetOutput = super.getSQLChangesetPath();
 
         //hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
-        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + OSMAPI_DB_URL + " " + input + " " + changesetOutput + " " +  OSMAPI_DB_URL;
+        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + quote(OSMAPI_DB_URL) + " " +
+                quote(input) + " " + quote(changesetOutput) + " " + quote(OSMAPI_DB_URL);
 
         super.configureCommand(command, caller);
     }

@@ -153,14 +153,18 @@ class ExportCommand extends ExternalCommand {
         this.jobId = jobId;
         this.paramMap = paramMap;
         this.outputType = paramMap.get("outputtype");
-        this.input = "\"" + paramMap.get("input") + "\"";
+        this.input = paramMap.get("input");
 
         String hootOptions = this.getCommonExportHootOptions().stream().collect(Collectors.joining(" "));
         String outputPath = this.getOutputPath();
         String translation = paramMap.get("translation");
+        String removeReviewSwitch = "-C RemoveReview2Pre.conf";
 
         // hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        String command = "hoot osm2ogr --" + debugLevel + " -C RemoveReview2Pre.conf " + hootOptions + " " + translation + " " + input + " " + outputPath;
+        String command = "hoot osm2ogr --" + debugLevel + " " + removeReviewSwitch + " " + hootOptions + " " +
+                                    quote(translation) + " " + quote(input) + " " + quote(outputPath);
+
+        super.configureCommand(command, caller);
     }
 
     List<String> getCommonExportHootOptions() {
@@ -195,7 +199,7 @@ class ExportCommand extends ExternalCommand {
     String getOutputPath() {
         File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
         File outputFile = new File(outputFolder,jobId + "." + outputType);
-        return "\"" + outputFile.toPath() + "\"";
+        return outputFile.getAbsolutePath();
     }
 
     String getInput() {
@@ -223,7 +227,7 @@ class ExportCommand extends ExternalCommand {
         return conflatedMap;
     }
 
-    static String getAoi(java.util.Map<String, String> paramMap, hoot.services.models.osm.Map conflatedMap) {
+    static String getAOI(java.util.Map<String, String> paramMap, hoot.services.models.osm.Map conflatedMap) {
         // if sent a bbox in the url (reflecting task grid bounds)
         // use that, otherwise use the bounds of the conflated output
         BoundingBox boundingBox;
@@ -239,6 +243,6 @@ class ExportCommand extends ExternalCommand {
 
     String getSQLChangesetPath() {
         // Services currently always write changeset with sql
-        return "\"" + new File(getOutputPath(), "changeset-" + jobId + ".osc.sql").toPath() + "\"";
+        return new File(getOutputPath(), "changeset-" + jobId + ".osc.sql").getAbsolutePath();
     }
 }

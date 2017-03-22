@@ -36,7 +36,8 @@ public class ZIPDirectoryCommand extends ExternalCommand {
 
     public ZIPDirectoryCommand(File targetZip, File sourceDirectory, Class<?> caller) {
         //zip -r targetZip srcDirectory
-        String command = "zip -r " + targetZip.toPath() +  " " + sourceDirectory.toPath();
+        String command = "zip -r " + quote(targetZip.getAbsolutePath()) + " " + quote(sourceDirectory.getAbsolutePath());
+
         super.configureCommand(command, caller);
     }
 }

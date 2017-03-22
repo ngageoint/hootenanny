@@ -107,7 +107,7 @@ public class HGISReviewResource extends HGISResource {
                         return externalCommandManager.exec(jobId, validationCommand);
                     },
                     () -> {
-                        InternalCommand updateMapTagsCommand = updateMapTagsCommandFactory.build(jobId, request.getOutputMap());
+                        InternalCommand updateMapTagsCommand = updateMapTagsCommandFactory.build(jobId, request.getOutputMap(), this.getClass());
                         return internalCommandManager.exec(jobId, updateMapTagsCommand);
                     }
             };

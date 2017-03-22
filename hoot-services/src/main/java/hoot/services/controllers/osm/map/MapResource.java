@@ -679,7 +679,7 @@ public class MapResource {
         try {
             Command[] commands = {
                 () -> {
-                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId);
+                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId, this.getClass());
                     return mapResourcesCleaner.execute();
                 }
             };

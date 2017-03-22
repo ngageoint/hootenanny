@@ -53,11 +53,13 @@ class UpdateTagsCommand implements InternalCommand {
     private final Map<String, String> tags;
     private final String mapName;
     private final String jobId;
+    private final Class<?> caller;
 
     UpdateTagsCommand(String params, String mapName, String jobId, Class<?> caller) {
         this.mapName = mapName;
         this.jobId = jobId;
         this.tags = new HashMap<>();
+        this.caller = caller;
 
         Map<String, String> paramMap = JsonUtils.jsonToMap(params);
 
@@ -76,10 +78,9 @@ class UpdateTagsCommand implements InternalCommand {
         // Hack alert!
         // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the
         // file will be read and its contents placed in the stats tag.
-        if ((paramMap.get("COLLECT_STATS") != null)
-                && paramMap.get("COLLECT_STATS").equalsIgnoreCase("true")) {
-            String statsName = new File(RPT_STORE_PATH, confOutputName + "-stats.csv").getAbsolutePath();
-            tags.put("stats", statsName);
+        if (Boolean.valueOf(paramMap.get("COLLECT_STATS"))) {
+            String statsFile = new File(RPT_STORE_PATH, confOutputName + "-stats.csv").getAbsolutePath();
+            tags.put("stats", statsFile);
         }
 
         // osm api db related input params have already been validated by
@@ -104,6 +105,7 @@ class UpdateTagsCommand implements InternalCommand {
         commandResult.setJobId(jobId);
         commandResult.setCommand("[Update Map Tags] of map with name = " + mapName);
         commandResult.setStart(LocalDateTime.now());
+        commandResult.setCaller(caller.getName());
 
         updateTagsDirect();
 

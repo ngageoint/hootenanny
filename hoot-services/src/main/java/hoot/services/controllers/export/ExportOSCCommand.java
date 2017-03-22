@@ -80,11 +80,11 @@ class ExportOSCCommand extends ExportCommand {
         options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input1 = "\"" + OSMAPI_DB_URL + "\"";
-        String input2 = "\"" + HOOTAPI_DB_URL + "/" + paramMap.get("input") + "\"";
+        String input1 = OSMAPI_DB_URL;
+        String input2 = HOOTAPI_DB_URL + "/" + paramMap.get("input");
 
         //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
-        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + input1 + " " + input2 + " " + outputPath;
+        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + quote(input1) + " " + quote(input2) + " " + quote(outputPath);
 
         super.configureCommand(command, caller);
     }

@@ -67,9 +67,9 @@ class ClipDatasetCommand extends ExternalCommand {
         options.add("-D api.db.email=test@test.com");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input = "\"" + HOOTAPI_DB_URL + "/" + paramMap.get("INPUT_NAME") + "\"";
-        String output = "\"" + HOOTAPI_DB_URL + "/" + paramMap.get("OUTPUT_NAME") + "\"";
-        String bounds = "\"" + paramMap.get("BBOX") + "\"";
+        String input = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT_NAME");
+        String output = HOOTAPI_DB_URL + "/" + paramMap.get("OUTPUT_NAME");
+        String bounds = paramMap.get("BBOX");
 
         /*
             "crop-map" - Crops the input map to the given bounds. Individual features on the border are
@@ -80,7 +80,7 @@ class ClipDatasetCommand extends ExternalCommand {
 
             hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
         */
-        String command = "hoot crop-map --" + debugLevel + " " + hootOptions + " " + input + " " + output + " " + bounds;
+        String command = "hoot crop-map --" + debugLevel + " " + hootOptions + " " + quote(input) + " " + quote(output) + " " + quote(bounds);
 
         super.configureCommand(command, caller);
     }

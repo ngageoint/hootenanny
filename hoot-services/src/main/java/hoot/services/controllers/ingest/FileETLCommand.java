@@ -107,15 +107,16 @@ import hoot.services.command.ExternalCommand;
 
 class FileETLCommand extends ExternalCommand {
 
-    FileETLCommand(JSONArray reqList, List<String> zipList, String translation, String jobId, String etlName,
+    FileETLCommand(JSONArray requests, List<String> zipList, String translation, String jobId, String etlName,
                    Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, String inputType,
                    Class<?> caller) {
 
-        String inputs = "";
-        for (Object r : reqList) {
-            JSONObject rr = (JSONObject) r;
-            inputs += "\"" + rr.get("name") + "\" ";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Object o : requests) {
+            stringBuilder.append(quote(((JSONObject) o).get("name").toString())).append(" ");
         }
+
+        String inputs = stringBuilder.toString().trim();
 
         //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
         //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
@@ -135,9 +136,9 @@ class FileETLCommand extends ExternalCommand {
         // OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
 
         String translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
-        if ("GEONAMES".equals(inputType)) {
+        if ("GEONAMES".equalsIgnoreCase(inputType)) {
             options.add("-D convert.ops=hoot::TranslationOp");
-            options.add("-D translation.script=\"" + translationPath + "\"");
+            options.add("-D translation.script=" + quote(translationPath));
         }
 
         //ifeq "$(INPUT_TYPE)" "OSM"
@@ -147,9 +148,9 @@ class FileETLCommand extends ExternalCommand {
         //    endif
         //endif
 
-        if ("OSM".equals(inputType) && !isNoneTranslation) {
+        if ("OSM".equalsIgnoreCase(inputType) && !isNoneTranslation) {
             options.add("-D convert.ops=hoot::TranslationOp");
-            options.add("-D translation.script=\"" + translation + "\"");
+            options.add("-D translation.script=" + quote(translation));
         }
 
         // OP_INPUT_PATH (INPUT_PATH)
@@ -161,7 +162,7 @@ class FileETLCommand extends ExternalCommand {
         //   OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
         //endif
 
-        if ("ZIP".equals(inputType)) {
+        if ("ZIP".equalsIgnoreCase(inputType)) {
             //Reading a GDAL dataset in a .gz file or a .zip archive
             inputs = zipList.stream()
                             .map(zip -> "/vsizip/" + workingDir.getAbsolutePath() + File.separator + zip)
@@ -180,7 +181,7 @@ class FileETLCommand extends ExternalCommand {
         //param.put("DB_URL", HOOTAPI_DB_URL);
 
         if (inputType.equalsIgnoreCase("FGDB") && !StringUtils.isBlank(fgdbFeatureClasses)) {
-            Object oRq = reqList.get(0);
+            Object oRq = requests.get(0);
 
             if (oRq != null) {
                 JSONObject json = (JSONObject) oRq;
@@ -225,13 +226,13 @@ class FileETLCommand extends ExternalCommand {
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
         String command = null;
 
-        if ("OGR".equals(inputType) || "FGDB".equals(inputType) || "ZIP".equals(inputType)) {
+        if ("OGR".equalsIgnoreCase(inputType) || "FGDB".equalsIgnoreCase(inputType) || "ZIP".equalsIgnoreCase(inputType)) {
             // hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-            command = "hoot ogr2osm --" + debugLevel + " " + hootOptions + " " + translationPath + " " + inputName + " " + inputs;
+            command = "hoot ogr2osm --" + debugLevel + " " + hootOptions + " " + quote(translationPath) + " " + quote(inputName) + " " + inputs;
         }
         else if ("OSM".equals(inputType) || "GEONAMES".equals(inputType)) {
             //hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
-            command = "hoot convert --" + debugLevel + " " + hootOptions + " " + inputs + " " + inputName;
+            command = "hoot convert --" + debugLevel + " " + hootOptions + " " + inputs + " " + quote(inputName);
         }
 
         super.configureCommand(command, caller);

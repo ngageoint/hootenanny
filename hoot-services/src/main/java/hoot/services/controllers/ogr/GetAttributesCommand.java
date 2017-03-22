@@ -53,11 +53,11 @@ import hoot.services.command.ExternalCommand;
 class GetAttributesCommand extends ExternalCommand {
 
     GetAttributesCommand(String jobId, List<String> fileList, String debugLevel, Class<?> caller) {
-        String inputFiles = fileList.stream().map(file -> "\"" + file + "\"").collect(Collectors.joining(" "));
-        String outputFile = "\"" + new File(TEMP_OUTPUT_PATH, jobId + ".out").getAbsolutePath() + "\"";
+        String inputFiles = fileList.stream().map(ExternalCommand::quote).collect(Collectors.joining(" "));
+        String outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out").getAbsolutePath();
 
         //hoot attribute-count --error $(INPUT_FILES) >> "$(OP_OUTPUT)"
-        String command = "hoot attribute-count --" + debugLevel + " " + inputFiles + " >> " + outputFile;
+        String command = "hoot attribute-count --" + debugLevel + " " + inputFiles + " >> " + quote(outputFile);
 
         super.configureCommand(command, caller);
     }

@@ -41,4 +41,8 @@ public class ExternalCommand extends JSONObject {
         this.put("command", command);
         this.put("workingDir", new File(HootProperties.TEMP_OUTPUT_PATH));
     }
+
+    protected static String quote(String commandOption) {
+        return "\"" + commandOption + "\"";
+    }
 }

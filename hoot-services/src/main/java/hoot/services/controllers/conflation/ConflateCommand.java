@@ -131,9 +131,10 @@ ifeq "$(GENERATE_REPORT)" "true"
 class ConflateCommand extends ExternalCommand {
 
     ConflateCommand(Map<String, String> paramMap, BoundingBox bounds, String debugLevel, Class<?> caller) {
-        String conflateaoi = null;
+        String aoi = null;
+
         if (bounds != null) {
-            conflateaoi = bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
+            aoi = bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
         }
 
         //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D conflate.add.score.tags=yes
@@ -161,7 +162,6 @@ class ConflateCommand extends ExternalCommand {
                 OP_INPUT2=$(DB_URL)/$(INPUT2)
             endif
          */
-
         String input1;
         String input1Type = paramMap.get("INPUT1_TYPE");
         if (input1Type.equalsIgnoreCase("DB")) {
@@ -204,22 +204,22 @@ class ConflateCommand extends ExternalCommand {
         if (referenceLayer.equalsIgnoreCase("1")) {
             if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
                 input1 = OSMAPI_DB_URL;
-                options.add("-D convert.bounding.box=" + conflateaoi);
+                options.add("-D convert.bounding.box=" + aoi);
                 options.add("-D conflate.use.data.source.ids=true");
                 options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
                 options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("-D osmapidb.id.aware.url=\"" + OSMAPI_DB_URL + "\"");
+                options.add("-D osmapidb.id.aware.url=" + quote(OSMAPI_DB_URL));
             }
         }
         else if (referenceLayer.equalsIgnoreCase("2")) {
             options.add("-D tag.merger.default=hoot::OverwriteTag1Merger");
             if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
                 input2 = OSMAPI_DB_URL;
-                options.add("-D convert.bounding.box=" + conflateaoi);
+                options.add("-D convert.bounding.box=" + aoi);
                 options.add("-D conflate.use.data.source.ids=true");
                 options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
                 options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("-D osmapidb.id.aware.url=\"" + OSMAPI_DB_URL + "\"");
+                options.add("-D osmapidb.id.aware.url=" + quote(OSMAPI_DB_URL));
             }
         }
 
@@ -230,23 +230,23 @@ class ConflateCommand extends ExternalCommand {
               HOOT_OPTS+= --error
           endif
          */
-        Boolean collectStats = Boolean.valueOf(paramMap.get("COLLECT_STATS"));
         String outputName = paramMap.get("OUTPUT_NAME");
         String output = HOOTAPI_DB_URL + "/" + outputName;
 
         //Hootenanny map statistics such as node and way count
         String stats = "";
-        if (collectStats) {
+        if (Boolean.valueOf(paramMap.get("COLLECT_STATS"))) {
             // Don't include non-error log messages in stdout because we are redirecting to file
             debugLevel = "error";
-            stats = "--stats > " + "\"" + new File(RPT_STORE_PATH, outputName).getAbsolutePath() + "-stats.csv\"";
+            stats = "--stats > " + quote(new File(RPT_STORE_PATH, outputName + "-stats.csv").getAbsolutePath());
         }
 
         String hootOptions = options.stream().collect(Collectors.joining(" "));
-        String removeReview = "-C RemoveReview2Pre.conf";
+        String removeReviewSwitch = "-C RemoveReview2Pre.conf";
 
         // hoot conflate -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
-        String command = "hoot conflate --" + debugLevel + " " + removeReview + " " + hootOptions + " " + input1 + " " + input2 + " " + output + " " + stats;
+        String command = "hoot conflate --" + debugLevel + " " + removeReviewSwitch + " " + hootOptions + " "
+                + quote(input1) + " " + quote(input2) + " " + quote(output) + " " + stats;
 
         super.configureCommand(command, caller);
     }

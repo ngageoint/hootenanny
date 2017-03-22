@@ -54,7 +54,7 @@ class ExportOSMCommand extends ExportCommand {
         String outputPath = super.getOutputPath();
 
         //hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        String command = "hoot convert --" + debugLevel + " " + osmOptions + " " + input + " " + outputPath;
+        String command = "hoot convert --" + debugLevel + " " + osmOptions + " " + quote(input) + " " + quote(outputPath);
 
         super.configureCommand(command, caller);
     }
