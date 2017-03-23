@@ -16,7 +16,7 @@ If you are using Hootenanny from the command line no configuration is required, 
 
 === Creating an OSM API Database
 
-If you do not already have an OSM API database, you can run the following:
+If you do not already have an OSM API database available, you can run the following:
 
 ----------------------------
 $HOOT_HOME/scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -28,38 +28,76 @@ osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 
 === Writing to an OpenStreetMap Editing API Database Using the Command Line
 
-Hootenanny's 'hoot convert' command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port).  The operation
-is completely record ID safe, meaning that it can be used while other concurrent users are writing to the target database without fear of record ID conflicts. 
+Hootenanny's 'hoot convert' command uses optimized SQL routines to write large amounts of data to the OSM API database, which results in much faster performance than using XML changesets passed to the OSM web services over HTTP (Rails Port).  The writer
+has two possible workflows: online and offline.  The offline mode is meant for the fastest performance writing against offline
+databases (no other writers present), while the online mode sacrifices some performance but is safe for writing against online databases (other writers present).
 
-IMPORTANT: OSM API database writing with 'hoot convert' is meant only for creating new data and is not meant for updating existing data.  If you are writing smaller amounts of data, or need to update existing data, you should either use the 'hoot derive-changeset' and 'hoot apply-changeset' commands, Osmosis, or the Rails Port to update your data.
+Its easiest to demonstrate the two workflows with some examples:
 
-Below are some examples of how to write to an OSM API database using 'hoot convert':
+==== Use Case #1 (offline) ==== 
 
-This writes the contents of an OSM PBF file to the OSM API database, "osmapi_test":
-------------------------------
-hoot convert -D changeset.user.id=1 myOsmData.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
-------------------------------
+Write to a SQL file or CSV files and handle all record ID updates outside of Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 myOsmDataInput.osm.pbf myOsmDataOutput.sql
+-----------------
 
-This writes the contents of an OSM PBF file out as SQL statements to an executable SQL file, but does not execute the SQL statements against the specified database:
-------------------------------
-hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.execute.sql=false -D osmapidb.bulk.writer.sql.output.file.copy.location=mySqlFile.sql myOsmData.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
-------------------------------
+Write directly to a database and handle all record ID updates outside of Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
 
-Even though no actual data is written by the above command, executing the command will still reserve the necessary record ID range for the output data, so the SQL file that was output by the command can be executed at any time in the future against the referenced database without record ID conflict issues.
+Write directly to a database, handle all record ID updates outside of Hootenanny, and retain the SQL output file:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
 
-If you are writing extreme amounts of data and have adequate memory available, you may be able to improve the performance of the write operation with these tweaks:
-------------------------------
-hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.file.output.buffer.max.line.size=<super large number> -D osmapidb.bulk.writer.file.output.status.update.interval=<large number> myOsmData.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
-------------------------------
+==== Use Case #2 (offline) ==== 
 
-The configuration option, osmapidb.bulk.writer.file.output.buffer.max.line.size, determines how many SQL lines are held in memory before they are flushed out to disk when generating the output SQL file.  The defaut setting is fairly large, but you may be able
-to improve write performance by increasing it (conversely, if your memory is limited, you may need to decrease this setting).  This optimization deals *only* with the SQL file generation, however, and does nothing to increase the performance of the SQL execution against the target database (database tuning may help there).
+Write to a SQL file or CSV files and manually specify record starting IDs with Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 myOsmDataInput.osm.pbf myOsmDataOutput.sql
+-----------------
 
-The configuration option, osmapidb.bulk.writer.file.output.status.update.interval, simply determines how often you see progress updates when generating the SQL file.  The default value is fairly large, but for very large amounts of data you may wish to increase the value of this option to avoid too frequent of progress update messages.
+Write directly to a database and manually specify record starting IDs with Hootenanny:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
 
-IMPORTANT: The configuration option, "changeset.user.id", is required and must match a valid user ID in your OSM API database.  All writes you do with 'hoot convert' will be associated with this user ID.
+Write directly to a database, manually specify record starting IDs with Hootenanny, and retain the SQL output file:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+==== Use Case #3 (online) ==== 
+
+Write to a SQL file and reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true myOsmDataInput.osm.pbf myOsmDataOutput.sql
+-----------------
+
+Write directly to a database and reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+Write directly to a database, eserve a range of record IDs so that you can execute the SQL at a later time against a live database safely, and retain the SQL output file:
+-----------------
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+-----------------
+
+When 'osmapidb.bulk.writer.reserve.record.ids.before.writing.data' is set to true, the data write operation is completely 
+record ID safe, meaning that it can be used while other concurrent users are writing to the target database without fear of 
+record ID conflicts.
+
+If you are writing extreme amounts of data and have adequate memory available, you may be able to improve the performance of the write operation with additional tweaks.  The configuration option, 'osmapidb.bulk.writer.file.output.buffer.max.line.size', determines how many file lines are held in memory before they are flushed out to disk when generating the output files.  The default setting is fairly large, but you may be able to improve write performance by increasing it (conversely, if your memory is limited, you may need to decrease this setting).  This optimization deals *only* with the output file generation, however, and does nothing to increase the performance of the SQL execution against the target database (database tuning may help there).
+
+The configuration option, 'osmapidb.bulk.writer.file.output.status.update.interval', simply determines how often you see progress updates when generating the output files.  The default value is fairly large, but for very large amounts of data you may wish to increase the value of this option to avoid too frequent of progress update messages.
+
+IMPORTANT: The configuration option, 'changeset.user.id', is required and must match a valid user ID in your OSM API database.  All writes you do with 'hoot convert' will be associated with this user ID.
 
 IMPORTANT: OSM PBF (.osm.pbf) is currently the most efficient OSM source format for writing large amounts of data to an OSM API database, as Hootenanny is able to stream in the data during reading in a buffered fashion and, thus, avoid memory constraints.  Reading the .osm XML file format is currently memory bound with Hootenanny and using it as a source file type when writing to an OSM API database may fail if your system does not have enough memory to support loading the entire file.  The process of writing the data to the OSM API database is, however, not memory bound.  See the 'hoot convert' command documentation for details on which geodata formats are currently memory bound for both reading and writing with Hootenanny.
+
+See the User Guide descriptions of all settings prefixed with "osmapidb.bulk.writer" for a complete overview of the OSM API database writing options available.
 
 === Reading from an OpenStreetMap Editing API Database
 

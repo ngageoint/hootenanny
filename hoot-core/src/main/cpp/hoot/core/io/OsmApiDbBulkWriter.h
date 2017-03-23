@@ -32,8 +32,9 @@
 #include <vector>
 
 #include <QString>
-#include <QTemporaryFile>
+#include <QFile>
 #include <QTextStream>
+#include <QElapsedTimer>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/util/Configurable.h>
@@ -51,36 +52,46 @@ using namespace boost;
 using namespace std;
 using namespace Tgs;
 
+//These match up exclusively with the v0.6 OSM API database and shouldn't be changed.
+static const QString CHANGESETS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
+static const QString CURRENT_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
+static const QString HISTORICAL_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
+static const QString CURRENT_WAYS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\tt\t1\n";
+static const QString HISTORICAL_WAYS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t1\tt\t\\N\n";
+static const QString CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\n";
+static const QString HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING = "%1\t%2\t1\t%3\n";
+static const QString CURRENT_RELATIONS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\tt\t1\n";
+static const QString HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t1\tt\t\\N\n";
+static const QString CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\t%5\n";
+static const QString HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t%4\t1\t%5\n";
+static const QString CURRENT_TAGS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\n";
+static const QString HISTORICAL_TAGS_OUTPUT_FORMAT_STRING = "%1\t%2\t%3\t1\n";
+//for whatever strange reason, the historical node tags table column order in the API datbase
+//is different than the other historical tags tables; this makes a difference when using the
+//offline loader, since it is sensitive to ordering
+static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING = "%1\t1\t%2\t%3\n";
+
 /**
- * OSM element writer optimized for bulk element inserts to an OSM API database.
+ * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
  *
  * If you need to write small amounts of elements to an OSM API database or modify data in an
- * existing database, you're beter off creating a new writer class or using the Rails Port.
+ * existing database, you may be better off creating a new writer class or using the Rails Port.
  *
- * This writer guarantees element ID uniqueness against a live database.  If the element SQL
- * write transaction fails, the element data will not be written but the IDs reserved will not be
- * freed and will go unused in the database.
+ * This writer:
  *
- * This writer requires two passes over the data.  The first pass streams elements from input and
- * writes out generated SQL statements to temporary files for each database table type.  The second
- * pass combines the data from all temp SQL files into a single SQL file with the correct
- * statement ordering, as well as updates record IDs to ensure no ID conflicts will occur if external
- * writing occurred during the first pass of the data.
+ * * has two intended workflows for use: online and offline.  The appropriate workflow can be set
+ *   up by configuring the writer with the appropriate options.  See the user documentation for
+ *   details on the two workflows and examples of how to use them.
  *
- * Detailed workflow:
+ * * allows for directly writing to a target database or an generating output SQL file that can be
+ *   manually written to a database
  *
- *   * write the element/changeset SQL copy statements out to individual temp SQL files in a
- *     buffered fashion with a first pass over the data; arbitrarily start all ID sequences at 1
+ * * has the ability to guarantee element ID uniqueness against a live database if the record ID
+ *   reservation option is used.
  *
- *   * use the element counts obtained during the first pass SQL files write to determine the ID
- *     ranges the elements and changesets being written consume; lock these ID ranges out by
- *     executing setval statements against the database
+ * * is transaction safe
  *
- *   * combine the temp files into a master SQL file in a buffered fashion in a second pass over
- *     the data; while parsing each record update element/changeset IDs based on those locked out
- *     in the previous step
- *
- *   * execute the element/changeset SQL copy statements against the database
+ * * requires two passes over the input data *before* writing it to the database
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
@@ -99,12 +110,15 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
   struct IdMappings
   {
+    long startingNodeId;
     long currentNodeId;
     shared_ptr<BigMap<long, long> > nodeIdMap;
 
+    long startingWayId;
     long currentWayId;
     shared_ptr<BigMap<long, long> > wayIdMap;
 
+    long startingRelationId;
     long currentRelationId;
     shared_ptr<BigMap<long, long> > relationIdMap;
   };
@@ -128,10 +142,12 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
   struct UnresolvedReferences
   {
+    //keeps track of unresolved way nodees, which is a deal breaker when writing to the db
     // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
     // order for waynode)
-    shared_ptr<BigMap<long, vector< pair<long, unsigned long> > > > unresolvedWaynodeRefs;
-    shared_ptr< map<ElementId, UnresolvedRelationReference > > unresolvedRelationRefs;
+    shared_ptr<BigMap<long, vector<pair<long, unsigned long> > > > unresolvedWaynodeRefs;
+    //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
+    shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
 
 public:
@@ -141,31 +157,29 @@ public:
   static unsigned int logWarnCount;
 
   OsmApiDbBulkWriter();
-
   virtual ~OsmApiDbBulkWriter();
 
   virtual bool isSupported(QString url);
-
   virtual void open(QString url);
-
   void close();
 
   virtual void finalizePartial();
-
-  virtual void writePartial(const ConstNodePtr& n);
-
-  virtual void writePartial(const ConstWayPtr& w);
-
-  virtual void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstNodePtr& node);
+  virtual void writePartial(const ConstWayPtr& way);
+  virtual void writePartial(const ConstRelationPtr& relation);
 
   virtual void setConfiguration(const Settings& conf);
 
   void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
-  void setSqlFileCopyLocation(QString location) { _sqlFileCopyLocation = location; }
+  void setOutputFilesCopyLocation(QString location) { _outputFilesCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
-  void setExecuteSql(bool exec) { _executeSql = exec; }
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
+  void setReserveRecordIdsBeforeWritingData(bool reserve)
+  { _reserveRecordIdsBeforeWritingData = reserve; }
+  void setStartingNodeId(long id) { _idMappings.startingNodeId = id; }
+  void setStartingWayId(long id) { _idMappings.startingWayId = id; }
+  void setStartingRelationId(long id) { _idMappings.startingRelationId = id; }
 
 private:
 
@@ -173,66 +187,84 @@ private:
   friend class ServiceOsmApiDbBulkWriterTest;
 
   ElementWriteStats _writeStats;
-  IdMappings _idMappings;
   ChangesetData _changesetData;
+  IdMappings _idMappings;
   UnresolvedReferences _unresolvedRefs;
+
+  long _fileOutputLineBufferSize;
+  long _statusUpdateInterval;
+  long _maxChangesetSize;
+  QString _outputFilesCopyLocation;
+  QString _outputUrl;
+  QString _outputDelimiter;
+  shared_ptr<QFile> _sqlOutputCombinedFile;
+  bool _reserveRecordIdsBeforeWritingData;
+  unsigned int _fileDataPassCtr;
+
+  //ended up not going with temp files here, since the file outputs aren't always temporary
+  map<QString, pair<shared_ptr<QFile>, shared_ptr<QTextStream> > > _outputSections;
+  QStringList _sectionNames;
 
   OsmApiDb _database;
 
-  map<QString, pair<shared_ptr<QTemporaryFile>, shared_ptr<QTextStream> > > _outputSections;
-  QStringList _sectionNames;
+  shared_ptr<QElapsedTimer> _timer;
 
-  QString _outputUrl;
-  long _fileOutputLineBufferSize;
-  long _statusUpdateInterval;
-  QString _sqlFileCopyLocation;
-  bool _executeSql;
-  long _maxChangesetSize;
-  shared_ptr<QTemporaryFile> _sqlOutputMasterFile;
+  unsigned int _convertDegreesToNanodegrees(const double degrees) const;
+  QString _formatPotentiallyLargeNumber(const long number);
+  QString _escapeCopyToData(const QString stringToOutput) const;
+  QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   void _reset();
+  unsigned int _numberOfFileDataPasses() const;
+  bool _destinationIsDatabase() const;
 
-  void _createNodeTables();
+  void _logStats(const bool debug = false);
+  long _getTotalRecordsWritten() const;
+  void _verifyDependencies();
+  void _verifyOutputCopySettings();
+  void _verifyStartingIds();
+  void _verifyFileOutputs();
+  void _closeOutputFiles();
+  void _flushStreams();
+
+  //creates the output files containing the data
+  void _createNodeOutputFiles();
   QStringList _createSectionNameList();
-  void _createWayTables();
-  void _createRelationTables();
-  void _createTable(const QString tableName, const QString tableHeader);
-  void _createTable(const QString tableName, const QString tableHeader,
-                    const bool addByteOrderMarker);
-  void _closeSectionTempFilesAndConcat();
+  void _createWayOutputFiles();
+  void _createRelationOutputFiles();
+  void _createOutputFile(const QString tableName, const QString header = "",
+                         const bool addByteOrderMarker = false);
+  QString _getCombinedSqlFileName() const;
+  QString _getTableOutputFileName(const QString tableName) const;
+
+  void _writeSequenceUpdatesToStream(const long changesetId, const long nodeId, const long wayId,
+                                     const long relationId, QString& outputStr);
+  void _writeChangesetToStream();
+  void _writeRelationToStream(const long relationDbId);
+  void _writeRelationMembersToStream(const ConstRelationPtr& relation);
+  void _writeRelationMemberToStream(const long sourceRelation,
+                                    const RelationData::Entry& memberEntry, const long memberDbId,
+                                    const unsigned int memberSequenceIndex);
+  void _writeWayToStream(const long wayDbId);
+  void _writeWayNodesToStream(const long wayId, const vector<long>& waynodeIds);
+  void _writeNodeToStream(const ConstNodePtr& node, const long nodeDbId);
+  void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
+                          const long dbId, shared_ptr<QTextStream>& currentTable,
+                          shared_ptr<QTextStream>& historicalTable);
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();
+  /*
+   * Since we're converting the input element IDs to our own sequence, we need to keep a mapping
+   * between the two for reference.
+   */
   long _establishNewIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
-
-  unsigned int _convertDegreesToNanodegrees(const double degrees) const;
-  QString _escapeCopyToData(const QString stringToOutput) const;
-
-  void _writeChangesetToTable();
-  void _writeSequenceUpdates(const long changesetId, const long nodeId, const long wayId,
-                             const long relationId, QString& outputStr);
-  void _writeRelationToTables(const long relationDbId);
-  void _writeRelationMembersToTables(const ConstRelationPtr& relation);
-  void _writeRelationMember(const long sourceRelation, const RelationData::Entry& memberEntry,
-                            const long memberDbId, const unsigned int memberSequenceIndex);
-  void _writeWayToTables(const long wayDbId);
-  void _writeWaynodesToTables(const long wayId,
-    const vector<long>& waynodeIds);
-  void _writeNodeToTables(const ConstNodePtr& node, const long nodeDbId);
-  void _writeTagsToTables(const Tags& tags, const long nodeDbId,
-    shared_ptr<QTextStream>& currentTable, const QString currentTableFormatString,
-    shared_ptr<QTextStream>& historicalTable, const QString historicalTableFormatString);
-
-  void _updateRecordLineWithIdOffset(const QString tableName, QString& sqlRecordLine);
-  void _executeElementSql();
+  void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _writeCombinedSqlFile();
-  void _retainSqlOutputFile();
-  void _lockIds();
-  long _getTotalRecordsWritten() const;
-
-  QString _formatPotentiallyLargeNumber(const long number);
-  void _logStats(const bool debug = false);
+  void _reserveIdsInDb();
+  void _writeDataToDb();
+  void _writeDataToDbPsql();
 };
 
 }
