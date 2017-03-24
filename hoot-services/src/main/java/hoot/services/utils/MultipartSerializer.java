@@ -173,13 +173,15 @@ public final class MultipartSerializer {
      *            = The list of uploaded files paths
      * @param multiPart
      *            = The request object that holds post data
+     * @param targetFolder
+     *            = Folder where to store uploaded files
      */
     public static void serializeUpload(String jobId, String inputType, Map<String, String> uploadedFiles,
-            Map<String, String> uploadedFilesPaths, FormDataMultiPart multiPart) {
+            Map<String, String> uploadedFilesPaths, FormDataMultiPart multiPart, File targetFolder) {
 
         try {
             // Uploaded data container folder path. It is unique to each job
-            String repFolderPath = UPLOAD_FOLDER + File.separator + jobId;
+            String repFolderPath = targetFolder.getAbsolutePath();
             boolean isPathSafe = validatePath(UPLOAD_FOLDER, repFolderPath);
 
             if (isPathSafe) {

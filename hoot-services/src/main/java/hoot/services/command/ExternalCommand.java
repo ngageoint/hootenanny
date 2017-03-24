@@ -39,7 +39,7 @@ public class ExternalCommand extends JSONObject {
     protected void configureCommand(String command, Class<?> caller) {
         this.put("caller", caller.getName());
         this.put("command", command);
-        this.put("workingDir", new File(HootProperties.TEMP_OUTPUT_PATH));
+        this.put("workDir", new File(HootProperties.TEMP_OUTPUT_PATH));
     }
 
     protected static String quote(String commandOption) {

@@ -117,6 +117,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             commandResult.setStart(start);
             commandResult.setFinish(finish);
             commandResult.setJobId(jobId);
+            commandResult.setWorkingDir(workingDir);
 
             updateDatabase(commandResult);
 

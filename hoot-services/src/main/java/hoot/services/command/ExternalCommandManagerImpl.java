@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Component
-//@Profile("production")
 public class ExternalCommandManagerImpl implements ExternalCommandManager {
     private static final Logger logger = LoggerFactory.getLogger(ExternalCommandManagerImpl.class);
 
@@ -67,9 +66,10 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
     @Override
     public CommandResult exec(String jobId, ExternalCommand externalCommand) {
         ExternalCommandRunner cmdRunner = new ExternalCommandRunnerImpl();
+
         String command = (String) externalCommand.get("command");
+        File workDir = (File) externalCommand.get("workDir");
         String caller = (String) externalCommand.get("caller");
-        File workingDir = (File) externalCommand.get("workingDir");
 
         if (jobId != null) {
             activeCommands.put(jobId, cmdRunner);
@@ -77,7 +77,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
 
         CommandResult commandResult;
         try {
-            commandResult = cmdRunner.exec(command, jobId, caller, workingDir);
+            commandResult = cmdRunner.exec(command, jobId, caller, workDir);
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to execute: " + command, e);

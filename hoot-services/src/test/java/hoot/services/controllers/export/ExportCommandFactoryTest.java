@@ -22,21 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.ogr;
+package hoot.services.controllers.export;
+
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import hoot.services.UnitTest;
 
 
-import java.io.File;
-import java.util.List;
+public class ExportCommandFactoryTest {
 
-import org.springframework.stereotype.Component;
+    @Ignore
+    @Test
+    @Category(UnitTest.class)
+    public void testCreateOSCCommand() {
+        String jobId = "1";
+        Map<String, String> paramMap = new HashMap<>();
 
+        ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+        Constructor[] constructors = ExportOSCCommand.class.getDeclaredConstructors();
 
-@Component
-class GetAttributesCommandFactory {
-
-    GetAttributesCommand build(String jobId, List<File> fileList, String debugLevel, Class<?> caller) {
-        return new GetAttributesCommand(jobId, fileList, debugLevel, caller);
+        exportCommandFactory.build(jobId, paramMap, "debug", ExportOSCCommand.class, this.getClass());
     }
 }

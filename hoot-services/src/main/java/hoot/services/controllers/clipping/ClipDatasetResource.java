@@ -121,7 +121,7 @@ public class ClipDatasetResource {
             jobProcessor.process(new Job(jobId, commands));
         }
         catch (Exception e) {
-            String msg = "Error processing dataset clipping request!";
+            String msg = "Error processing dataset clipping request!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

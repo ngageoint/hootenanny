@@ -27,7 +27,11 @@
 package hoot.services.controllers.conflation;
 
 import static hoot.services.HootProperties.OSM_API_DB_ENABLED;
+import static hoot.services.HootProperties.RPT_STORE_PATH;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -41,6 +45,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +54,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
@@ -175,7 +181,19 @@ public class ConflationResource {
             Command[] commands = {
                 () -> {
                     ExternalCommand conflateCommand = conflateCommandFactory.build(paramMap, bbox, debugLevel, this.getClass());
-                    return externalCommandManager.exec(jobId, conflateCommand);
+                    CommandResult commandResult = externalCommandManager.exec(jobId, conflateCommand);
+
+                    if (Boolean.valueOf(paramMap.get("COLLECT_STATS"))) {
+                        File statsFile = new File(RPT_STORE_PATH, confOutputName + "-stats.csv");
+                        try {
+                            FileUtils.write(statsFile, commandResult.getStdout(), Charset.defaultCharset());
+                        }
+                        catch (IOException ioe) {
+                            throw new RuntimeException("Error writing to " + statsFile.getAbsolutePath(), ioe);
+                        }
+                    }
+
+                    return commandResult;
                 },
 
                 () -> {

@@ -26,9 +26,9 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -238,7 +238,7 @@ class ConflateCommand extends ExternalCommand {
         if (Boolean.valueOf(paramMap.get("COLLECT_STATS"))) {
             // Don't include non-error log messages in stdout because we are redirecting to file
             debugLevel = "error";
-            stats = "--stats > " + quote(new File(RPT_STORE_PATH, outputName + "-stats.csv").getAbsolutePath());
+            stats = "--stats";
         }
 
         String hootOptions = options.stream().collect(Collectors.joining(" "));

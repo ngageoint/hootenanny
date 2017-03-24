@@ -32,6 +32,7 @@ import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -55,6 +56,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -66,6 +68,8 @@ import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.InternalCommand;
+import hoot.services.command.InternalCommandManager;
 import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
@@ -82,6 +86,9 @@ public class OGRAttributesResource {
 
     @Autowired
     private ExternalCommandManager externalCommandManager;
+
+    @Autowired
+    private InternalCommandManager internalCommandManager;
 
     @Autowired
     private GetAttributesCommandFactory getAttributesCommandFactory;
@@ -102,6 +109,8 @@ public class OGRAttributesResource {
      * 
      * @param inputType
      *            : [FILE | DIR] where FILE type should represents zip,shp or OMS and DIR represents FGDB
+     * @param debugLevel
+     *            debug level of some of the commands that are executed during the method's execution
      */
     @POST
     @Path("/upload")
@@ -113,23 +122,23 @@ public class OGRAttributesResource {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            List<String> fileList = new ArrayList<>();
-            List<String> zipList = new ArrayList<>();
+            File workFolder = new File(UPLOAD_FOLDER, jobId);
+            FileUtils.forceMkdir(workFolder);
 
-            processFormDataMultiPart(fileList, zipList, jobId, inputType, multiPart);
+            List<File> fileList = new ArrayList<>();
+            List<File> zipList = new ArrayList<>();
 
-            File targetFolder = new File(UPLOAD_FOLDER, jobId);
-            FileUtils.forceMkdir(targetFolder);
+            processFormDataMultiPart(fileList, zipList, jobId, inputType, multiPart, workFolder);
 
             List<Command> commands = new LinkedList<>();
 
-            for (String zip : zipList) {
+            for (File zip : zipList) {
                 commands.add(
                     () -> {
                         // OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
                         // bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
-                        File sourceZIP = new File(zip);
-                        ExternalCommand unZIPFileCommand = new UnZIPFileCommand(sourceZIP, targetFolder, this.getClass());
+                        File targetFolder = new File(workFolder, FilenameUtils.getBaseName(zip.getName()));
+                        ExternalCommand unZIPFileCommand = new UnZIPFileCommand(zip, targetFolder, this.getClass());
                         return externalCommandManager.exec(jobId, unZIPFileCommand);
                     }
                 );
@@ -139,20 +148,42 @@ public class OGRAttributesResource {
                 () -> {
                     // OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
                     //File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
-
                     ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, fileList, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
 
+                    File outputFile = getAttributesOutputFile(jobId);
                     try {
-                        // Do cleanup
-                        // cd .. && rm -rf "$(OP_INPUT)"
-                        FileUtils.forceDelete(targetFolder);
+                        FileUtils.write(outputFile, commandResult.getStdout(), Charset.defaultCharset());
                     }
                     catch (IOException ioe) {
-                        logger.error("Error deleting {} directory!", targetFolder, ioe);
+                        throw new RuntimeException("Error writing attributes to: " + outputFile.getAbsolutePath(), ioe);
                     }
 
                     return commandResult;
+                }
+            );
+
+            commands.add(
+                () -> {
+                    InternalCommand command = () -> {
+                        CommandResult commandResult = new CommandResult();
+                        commandResult.setJobId(jobId);
+
+                        try {
+                            // cd .. && rm -rf "$(OP_INPUT)"
+                            // Do cleanup
+                            FileUtils.forceDelete(workFolder);
+                            commandResult.setExitCode(CommandResult.SUCCESS);
+                        }
+                        catch(IOException ioe) {
+                            commandResult.setExitCode(CommandResult.FAILURE);
+                            logger.error("Error deleting {} directory!", workFolder, ioe);
+                        }
+
+                        return commandResult;
+                    };
+
+                    return internalCommandManager.exec(jobId, command);
                 }
             );
 
@@ -172,7 +203,7 @@ public class OGRAttributesResource {
     /**
      * This rest end point is for getting the result of get attribute upload operation
      * 
-     * @param id
+     * @param jobId
      *            : The jobid from upload
      *
      * @param doDelete
@@ -184,32 +215,34 @@ public class OGRAttributesResource {
      */
     @GET
     @Path("/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getAttributes(@PathParam("id") String id, @QueryParam("deleteoutput") String doDelete) {
-        String script;
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAttributes(@PathParam("id") String jobId, @QueryParam("deleteoutput") String doDelete) {
+        String json = null;
         try {
-            File file = new File(TEMP_OUTPUT_PATH, id + ".out");
-            script = FileUtils.readFileToString(file, "UTF-8");
+            File fileWithAttributes = getAttributesOutputFile(jobId);
+            if (fileWithAttributes.exists()) {
+                json = FileUtils.readFileToString(fileWithAttributes, "UTF-8");
 
-            if ("true".equalsIgnoreCase(doDelete)) {
-                FileUtils.deleteQuietly(file);
+                if (Boolean.valueOf(doDelete)) {
+                    FileUtils.deleteQuietly(fileWithAttributes);
+                }
             }
         }
         catch (Exception e) {
-            String msg = "Error getting attribute: " + id + ".  Cause: " + e.getMessage();
+            String msg = "Error retrieving attributes for job with ID = " + jobId;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(script).build();
+        return Response.ok(json).build();
     }
 
-    private static void processFormDataMultiPart(List<String> fileList, List<String> zipList, String jobId,
-                                                 String inputType, FormDataMultiPart multiPart)
+    private static void processFormDataMultiPart(List<File> fileList, List<File> zipList, String jobId,
+                                                 String inputType, FormDataMultiPart multiPart, File workFolder)
             throws IOException {
         Map<String, String> uploadedFiles = new HashMap<>();
         Map<String, String> uploadedFilesPaths = new HashMap<>();
 
-        MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
+        MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart, workFolder);
 
         for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
             String name = pairs.getKey();
@@ -219,8 +252,9 @@ public class OGRAttributesResource {
             // If it is zip file then we crack open to see if it contains FGDB.
             // If so then we add the folder location and desired output name which is fgdb name in the zip.
             if (ext.equalsIgnoreCase("ZIP")) {
-                zipList.add(name);
-                File zipFile = new File(new File(UPLOAD_FOLDER, jobId), inputFileName);
+                File zipFile = new File(workFolder, inputFileName);
+                zipList.add(zipFile);
+
                 try (FileInputStream fin = new FileInputStream(zipFile)) {
                     try (ZipInputStream zis = new ZipInputStream(fin)) {
                         ZipEntry zipEntry = zis.getNextEntry();
@@ -233,12 +267,12 @@ public class OGRAttributesResource {
                                     if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
                                         fgdbZipName = zeName.substring(0, zeName.length() - 1);
                                     }
-                                    fileList.add("\"" + name + "/" + fgdbZipName + "\"");
+                                    fileList.add(new File(new File(workFolder, name), fgdbZipName));
                                 }
                             }
                             else {
                                 if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
-                                    fileList.add("\"" + name + "/" + zeName + "\"");
+                                    fileList.add(new File(new File(workFolder, name), zeName));
                                 }
                             }
                             zipEntry = zis.getNextEntry();
@@ -247,8 +281,12 @@ public class OGRAttributesResource {
                 }
             }
             else {
-                fileList.add("\"" + inputFileName + "\"");
+                fileList.add(new File(workFolder, inputFileName));
             }
         }
+    }
+
+    private static File getAttributesOutputFile(String jobId) {
+        return new File(TEMP_OUTPUT_PATH, jobId + ".out");
     }
 }

@@ -60,7 +60,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.common.UnTARFileCommand;
@@ -131,33 +130,25 @@ public class ExportResource {
 
             // Created scratch area for each export request.
             // This is where downloadable files will be stored and other intermediate artifacts.
-            File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
-            FileUtils.forceMkdir(outputFolder);
+            File workDir = new File(TEMP_OUTPUT_PATH, jobId);
+            FileUtils.forceMkdir(workDir);
 
             List<Command> commands = new LinkedList<>();
 
-            if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("pbf")) {
+            if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
                 commands.add(
                     () -> {
                         ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportOSMCommand.class, this.getClass());
 
-                        CommandResult commandResult = externalCommandManager.exec(jobId, exportOSMCommand);
-
-                        if (paramMap.get("outputtype").equalsIgnoreCase("osm")) {
-                            //cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
-
-                            // ZIP_OUTPUT = $(outputname).zip
-                            File targetZip = new File(outputFolder, jobId + ".zip");
-                            File sourceFolder = outputFolder;
-
-                            ExternalCommand zipDirectoryCommand = new ZIPDirectoryCommand(targetZip, sourceFolder, this.getClass());
-                            return externalCommandManager.exec(jobId, zipDirectoryCommand);
-                        }
-
-                        return commandResult;
+                        return externalCommandManager.exec(jobId, exportOSMCommand);
                     }
                 );
+
+                if (outputType.equalsIgnoreCase("osm")) {
+                    Command zipCommand = getZIPCommand(jobId, workDir, outputType);
+                    commands.add(zipCommand);
+                }
             }
             else if (outputType.equalsIgnoreCase("osc")) {
                 commands.add(
@@ -188,20 +179,8 @@ public class ExportResource {
             }
             else { //else Shape/FGDB
                 if (outputType.equalsIgnoreCase("shp")) {
-                    commands.add(
-                        () -> {
-                            //ifeq "$(outputtype)" "shp"
-                            //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
-                            //endif
-
-                            // ZIP_OUTPUT = $(outputname).zip
-                            File targetZip = new File(outputFolder, jobId + ".zip");
-                            File sourceFolder = outputFolder;
-
-                            ExternalCommand zipDirectoryCommand = new ZIPDirectoryCommand(targetZip, sourceFolder, this.getClass());
-                            return externalCommandManager.exec(jobId, zipDirectoryCommand);
-                        }
-                    );
+                    Command zipCommand = getZIPCommand(jobId, workDir, outputType);
+                    commands.add(zipCommand);
                 }
 
                 //TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
@@ -234,7 +213,7 @@ public class ExportResource {
                             commands.add(
                                 () -> {
                                     //tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
-                                    ExternalCommand untarFileCommand = new UnTARFileCommand(tds61TemplatePath, outputFolder, this.getClass());
+                                    ExternalCommand untarFileCommand = new UnTARFileCommand(tds61TemplatePath, workDir, this.getClass());
                                     return externalCommandManager.exec(jobId, untarFileCommand);
                                 }
                             );
@@ -247,7 +226,7 @@ public class ExportResource {
                                 () -> {
                                     //OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
                                     //tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
-                                    ExternalCommand untarFileCommand = new UnTARFileCommand(tds40TemplatePath, outputFolder, this.getClass());
+                                    ExternalCommand untarFileCommand = new UnTARFileCommand(tds40TemplatePath, workDir, this.getClass());
                                     return externalCommandManager.exec(jobId, untarFileCommand);
                                 }
                             );
@@ -260,18 +239,12 @@ public class ExportResource {
                         // ExportCommand
                         ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportCommand.class, this.getClass());
-                        CommandResult commandResult = externalCommandManager.exec(jobId, exportCommand);
-
-                        // ZIP_OUTPUT = $(outputname).zip
-                        File targetZip = new File(outputFolder, jobId + ".zip");
-                        File sourceFolder = new File(outputFolder, jobId + "." + outputType);
-
-                        // OP_OUTPUT_FILE=$(outputname).$(outputtype)
-                        // cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
-                        ExternalCommand zipDirectoryCommand = new ZIPDirectoryCommand(targetZip, sourceFolder, this.getClass());
-                        return externalCommandManager.exec(jobId, zipDirectoryCommand);
+                        return externalCommandManager.exec(jobId, exportCommand);
                     }
                 );
+
+                Command zipCommand = getZIPCommand(jobId, workDir, outputType);
+                commands.add(zipCommand);
             }
 
             jobProcessor.process(new Job(jobId, commands.toArray(new Command[commands.size()])));
@@ -280,7 +253,7 @@ public class ExportResource {
             throw wae;
         }
         catch (Exception e) {
-            String msg = "Error exporting data!";
+            String msg = "Error exporting data!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -297,7 +270,7 @@ public class ExportResource {
      * defined name]&removecache=[true | false]&ext=[file extension override
      * from zip]
      *
-     * @param id
+     * @param jobId
      *            job id
      * @param outputname
      *            parameter overrides the output file name with the user defined
@@ -313,23 +286,23 @@ public class ExportResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response exportFile(@PathParam("id") String id, @QueryParam("outputname") String outputname,
-            @QueryParam("removeCache") Boolean removeCache, @QueryParam("ext") String ext) {
-        Response response = null;
-        File out = null;
+    public Response exportFile(@PathParam("id") String jobId, @QueryParam("outputname") String outputname,
+                               @QueryParam("removeCache") Boolean removeCache, @QueryParam("ext") String ext) {
+        Response response;
+
         try {
             String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
-            out = getExportFile(id, outputname, fileExt);
+            File exportFile = getExportFile(jobId, outputname, fileExt);
 
-            String outFileName = id;
-            if ((outputname != null) && (!outputname.isEmpty())) {
+            String outFileName = jobId;
+            if (! StringUtils.isBlank(outputname)) {
                 outFileName = outputname;
             }
 
-            ResponseBuilder rBuild = Response.ok(out);
-            rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
+            ResponseBuilder responseBuilder = Response.ok(exportFile);
+            responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
 
-            response = rBuild.build();
+            response = responseBuilder.build();
         }
         catch (WebApplicationException e) {
             throw e;
@@ -354,7 +327,7 @@ public class ExportResource {
      * * GET hoot-services/job/export/xml/[job id from export
      * job]?removeCache=[true | false]&ext=[file extension override from xml]
      *
-     * @param id
+     * @param jobId
      *            job id
      * @param removeCache
      *            parameter controls if the output file from export job should
@@ -371,12 +344,12 @@ public class ExportResource {
     @GET
     @Path("/xml/{id}")
     @Produces(MediaType.TEXT_XML)
-    public Response getXmlOutput(@PathParam("id") String id, @QueryParam("removeCache") Boolean removeCache,
-            @QueryParam("ext") String ext) {
-        File out = null;
-        Response response = null;
+    public Response getXmlOutput(@PathParam("id") String jobId, @QueryParam("removeCache") Boolean removeCache,
+                                 @QueryParam("ext") String ext) {
+        Response response;
+
         try {
-            out = getExportFile(id, id, StringUtils.isEmpty(ext) ? "xml" : ext);
+            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "xml" : ext);
             response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8")))).build();
         }
         catch (WebApplicationException e) {
@@ -412,13 +385,9 @@ public class ExportResource {
     @Path("/wfs/remove/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeWfsResource(@PathParam("id") String id) {
-        JSONObject entity = new JSONObject();
-
         try {
             WFSManager.removeWfsResource(id);
-
             List<String> tbls = DbUtils.getTablesList(id);
-
             DbUtils.deleteTables(tbls);
         }
         catch (WebApplicationException wae) {
@@ -429,6 +398,7 @@ public class ExportResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
+        JSONObject entity = new JSONObject();
         entity.put("id", id);
 
         return Response.ok(entity.toJSONString()).build();
@@ -447,12 +417,12 @@ public class ExportResource {
     public Response getWfsResources() {
         JSONArray wfsResources = new JSONArray();
         try {
-            List<String> list = WFSManager.getAllWfsServices();
+            List<String> wfsServices = WFSManager.getAllWfsServices();
 
-            if (list != null) {
-                for (String wfsResource : list) {
+            if (wfsServices != null) {
+                for (String wfsService : wfsServices) {
                     JSONObject resource = new JSONObject();
-                    resource.put("id", wfsResource);
+                    resource.put("id", wfsService);
                     wfsResources.add(resource);
                 }
             }
@@ -513,14 +483,27 @@ public class ExportResource {
         return Response.ok(exportResources.toJSONString()).build();
     }
 
-    private static File getExportFile(String id, String outputname, String fileExt) {
-        File out = new File(new File(TEMP_OUTPUT_PATH, id), outputname + "." + fileExt);
+    private static File getExportFile(String jobId, String outputname, String fileExt) {
+        File exportFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputname + "." + fileExt);
 
-        if (!out.exists()) {
+        if (!exportFile.exists()) {
             String errorMsg = "Error exporting data.  Missing output file.";
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
         }
 
-        return out;
+        return exportFile;
+    }
+
+    private Command getZIPCommand(String jobId, File workDir, String outputType) {
+        return () -> {
+            // ZIP_OUTPUT = $(outputname).zip
+            File targetZip = new File(workDir, jobId + ".zip");
+            File sourceFolder = new File(workDir, jobId + "." + outputType);
+
+            // OP_OUTPUT_FILE=$(outputname).$(outputtype)
+            // cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+            ExternalCommand zipDirectoryCommand = new ZIPDirectoryCommand(targetZip, sourceFolder, this.getClass());
+            return externalCommandManager.exec(jobId, zipDirectoryCommand);
+        };
     }
 }

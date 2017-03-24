@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.ogr;
 
-import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,12 +50,11 @@ import hoot.services.command.ExternalCommand;
  */
 class GetAttributesCommand extends ExternalCommand {
 
-    GetAttributesCommand(String jobId, List<String> fileList, String debugLevel, Class<?> caller) {
-        String inputFiles = fileList.stream().map(ExternalCommand::quote).collect(Collectors.joining(" "));
-        String outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out").getAbsolutePath();
+    GetAttributesCommand(String jobId, List<File> fileList, String debugLevel, Class<?> caller) {
+        String inputFiles = fileList.stream().map((file) -> quote(file.getAbsolutePath())).collect(Collectors.joining(" "));
 
-        //hoot attribute-count --error $(INPUT_FILES) >> "$(OP_OUTPUT)"
-        String command = "hoot attribute-count --" + debugLevel + " " + inputFiles + " >> " + quote(outputFile);
+        //hoot attribute-count --error $(INPUT_FILES)"
+        String command = "hoot attribute-count --" + debugLevel + " " + inputFiles;
 
         super.configureCommand(command, caller);
     }

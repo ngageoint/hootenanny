@@ -136,9 +136,9 @@ public class FileUploadResource {
             Map<String, String> uploadedFilesPaths = new HashMap<>();
 
             String jobId = UUID.randomUUID().toString();
-            File workingDir = new File(UPLOAD_FOLDER, jobId);
+            File workDir = new File(UPLOAD_FOLDER, jobId);
 
-            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart);
+            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart, workDir);
 
             int shpCnt = 0;
             int osmCnt = 0;
@@ -173,7 +173,7 @@ public class FileUploadResource {
                 // for fgdb
 
                 JSONObject zipStat = new JSONObject();
-                buildNativeRequest(jobId, fName, ext, inputFileName, reqList, zipStat, workingDir);
+                buildNativeRequest(jobId, fName, ext, inputFileName, reqList, zipStat, workDir);
 
                 if (ext.equalsIgnoreCase("zip")) {
                     shpZipCnt += (Integer) zipStat.get("shpzipcnt");
@@ -194,8 +194,8 @@ public class FileUploadResource {
                 if (inputType.equalsIgnoreCase("geonames") &&
                         ext.equalsIgnoreCase("txt") && (geonamesCnt == 1)) {
                     inputFileName = fName + "." + "geonames";
-                    File srcFile = new File(workingDir, inputsList.get(0));
-                    File destFile = new File(workingDir, inputFileName);
+                    File srcFile = new File(workDir, inputsList.get(0));
+                    File destFile = new File(workDir, inputFileName);
 
                     // we need to rename the file for hoot to ingest
                     org.apache.commons.io.FileUtils.moveFile(srcFile, destFile);
@@ -203,7 +203,7 @@ public class FileUploadResource {
                     inputsList.set(0, inputFileName);
                     reqList = new JSONArray();
 
-                    buildNativeRequest(jobId, fName, "geonames", inputFileName, reqList, zipStat, workingDir);
+                    buildNativeRequest(jobId, fName, "geonames", inputFileName, reqList, zipStat, workDir);
                 }
             }
 
@@ -218,7 +218,7 @@ public class FileUploadResource {
 
             if ((osmZipCnt == 1) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
                 // we want to unzip the file and modify any necessary parameters for the ensuing makefile
-                File zipFile = new File(workingDir, inputsList.get(0));
+                File zipFile = new File(workDir, inputsList.get(0));
 
                 try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile))) {
                     ZipEntry zipEntry = zis.getNextEntry();
@@ -226,7 +226,7 @@ public class FileUploadResource {
                     byte[] buffer = new byte[2048];
                     while (zipEntry != null) {
                         String entryName = zipEntry.getName();
-                        File file = new File(workingDir, entryName);
+                        File file = new File(workDir, entryName);
 
                         // for now assuming no subdirectories
                         try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -244,7 +244,7 @@ public class FileUploadResource {
                         inputsList = new ArrayList<>();
                         JSONObject zipStat = new JSONObject();
 
-                        buildNativeRequest(jobId, inputName, "OSM", entryName, reqList, zipStat, workingDir);
+                        buildNativeRequest(jobId, inputName, "OSM", entryName, reqList, zipStat, workDir);
 
                         zipEntry = zis.getNextEntry();
                     }
@@ -276,7 +276,7 @@ public class FileUploadResource {
                 for (String zip : zipList) {
                     File file = new File(zip);
                     commands.add(() -> {
-                        ExternalCommand unzipCommand = new UnZIPFileCommand(file, workingDir, this.getClass());
+                        ExternalCommand unzipCommand = new UnZIPFileCommand(file, workDir, this.getClass());
                         return externalCommandManager.exec(jobId, unzipCommand);
                     });
                 }
@@ -288,10 +288,10 @@ public class FileUploadResource {
                 // cleanup
                 try {
                     //rm -rf "$(OP_INPUT_PATH)"
-                    FileUtils.delete(workingDir);
+                    FileUtils.delete(workDir);
                 }
                 catch (IOException ioe) {
-                    logger.error("Error deleting {}", workingDir.getAbsolutePath(), ioe);
+                    logger.error("Error deleting {}", workDir.getAbsolutePath(), ioe);
                 }
 
                 return commandResult;
@@ -386,7 +386,7 @@ public class FileUploadResource {
     }
 
     private static void buildNativeRequest(String jobId, String fName, String ext, String inputFileName,
-            JSONArray reqList, JSONObject zipStat, File workingDir) throws IOException {
+            JSONArray reqList, JSONObject zipStat, File workDir) throws IOException {
 
         int shpZipCnt = 0;
         Object oShpStat = zipStat.get("shpzipcnt");
@@ -452,7 +452,7 @@ public class FileUploadResource {
         }
         else if (ext.equalsIgnoreCase("zip")) {
             // Check to see the type of zip (osm, ogr or fgdb)
-            String zipFilePath = new File(workingDir, inputFileName).getAbsolutePath();
+            String zipFilePath = new File(workDir, inputFileName).getAbsolutePath();
 
             JSONObject res = getZipContentType(zipFilePath, reqList, fName);
 

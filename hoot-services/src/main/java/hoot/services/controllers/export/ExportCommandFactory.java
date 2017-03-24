@@ -37,11 +37,12 @@ class ExportCommandFactory {
 
     ExportCommand build(String jobId, Map<String, String> paramMap, String debugLevel, Class<? extends ExportCommand> exportCommandClass, Class<?> caller) {
         try {
-            Constructor<? extends ExportCommand> constuctor = exportCommandClass.getConstructor(String.class, Map.class, String.class, Class.class);
+            Constructor<? extends ExportCommand> constuctor =
+                    exportCommandClass.getDeclaredConstructor(String.class, Map.class, String.class, Class.class);
             return constuctor.newInstance(jobId, paramMap, debugLevel, caller);
         }
         catch (Exception e) {
-            throw new RuntimeException("Failed to instantiate an instance of class: " + exportCommandClass.getName());
+            throw new RuntimeException("Failed to instantiate an instance of class: " + exportCommandClass.getName(), e);
         }
     }
 }

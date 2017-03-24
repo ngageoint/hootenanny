@@ -80,14 +80,15 @@ public class JobRunnable implements Runnable {
                 CommandResult result = command.execute();
 
                 if (result.failed()) {
-                    jobStatusManager.setFailed(job.getJobId(), "Chain job FAILED due to --> " + result.getCommand());
+                    jobStatusManager.setFailed(job.getJobId(), "Job with ID = " + job.getJobId() + " failed." +
+                            "  Command with ID = " + result.getId() + " caused the failure.");
                     break;
                 }
                 else {
                     commandCounter++;
                     Double percentComplete = ((commandCounter * 100.0d) / job.getCommands().length);
-                    jobStatusManager.updateJob(job.getJobId(),
-                            commandCounter + " out of " + job.getCommands().length + " have been processed.", percentComplete);
+                    jobStatusManager.updateJob(job.getJobId(), commandCounter + " out of " +
+                            job.getCommands().length + " have been processed.", percentComplete);
                 }
             }
 
@@ -95,7 +96,7 @@ public class JobRunnable implements Runnable {
         }
         catch (Exception e) {
             jobStatusManager.setFailed(job.getJobId(),
-                    "Chain job FAILED with the following error --> " + ExceptionUtils.getStackTrace(e));
+                    "Job with ID = " + job.getJobId() + " failed with the following error --> " + ExceptionUtils.getStackTrace(e));
             throw e;
         }
 

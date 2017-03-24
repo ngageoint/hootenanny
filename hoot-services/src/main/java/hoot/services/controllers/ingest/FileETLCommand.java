@@ -154,7 +154,7 @@ class FileETLCommand extends ExternalCommand {
         }
 
         // OP_INPUT_PATH (INPUT_PATH)
-        File workingDir = new File(UPLOAD_FOLDER, jobId);
+        File workDir = new File(UPLOAD_FOLDER, jobId);
 
         //# This replaces semicolon with vsizip and path
         //ifeq "$(INPUT_TYPE)" "ZIP"
@@ -165,7 +165,7 @@ class FileETLCommand extends ExternalCommand {
         if ("ZIP".equalsIgnoreCase(inputType)) {
             //Reading a GDAL dataset in a .gz file or a .zip archive
             inputs = zipList.stream()
-                            .map(zip -> "/vsizip/" + workingDir.getAbsolutePath() + File.separator + zip)
+                            .map(zip -> "/vsizip/" + workDir.getAbsolutePath() + File.separator + zip)
                             .collect(Collectors.joining(" "));
         }
 
@@ -238,6 +238,6 @@ class FileETLCommand extends ExternalCommand {
         super.configureCommand(command, caller);
 
         // override working directory set during super.configureAsHootCommand()
-        this.put("workingDir", workingDir);
+        this.put("workDir", workDir);
     }
 }
