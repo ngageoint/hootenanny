@@ -51,6 +51,7 @@ HootApiDbWriter::HootApiDbWriter()
   _nodesWritten = 0;
   _waysWritten = 0;
   _relationsWritten = 0;
+  _includeIds = false;
 
   setConfiguration(conf());
 }
@@ -62,11 +63,17 @@ HootApiDbWriter::~HootApiDbWriter()
 
 void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& t)
 {
-  if (e->getCircularError() >= 0.0)
+  if (!t.contains(MetadataTags::HootStatus()))
   {
-    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    if ((_textStatus && t.getNonDebugCount() > 0) || (_includeDebug && _textStatus))
+      t[MetadataTags::HootStatus()] = e->getStatus().toTextStatus();
+    else if (_includeDebug && !_textStatus)
+      t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
   }
-  t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
+  if (e->hasCircularError() && _includeCircularError)
+    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+  if (_includeDebug || _includeIds)
+    t[MetadataTags::HootId()] = QString("%1").arg(e->getId());
 }
 
 void HootApiDbWriter::close()
@@ -300,6 +307,9 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(configOptions.getApiDbEmail());
   setCreateUser(configOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
+  setIncludeDebug(configOptions.getWriterIncludeDebug());
+  setTextStatus(configOptions.getWriterTextStatus());
+  setIncludeCircularError(configOptions.getWriterIncludeCircularError());
 }
 
 void HootApiDbWriter::_startNewChangeSet()

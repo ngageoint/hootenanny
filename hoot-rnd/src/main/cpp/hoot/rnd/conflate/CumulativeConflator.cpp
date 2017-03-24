@@ -140,7 +140,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
         //features.
         LOG_DEBUG("Setting status tags for map " << QString::number(i + 1) << "...");
         SetTagVisitor statusTagVisitor(
-          "hoot:status", QString("%1").arg(Status(Status::Unknown1).getEnum()));
+          MetadataTags::HootStatus(), QString("%1").arg(Status(Status::Unknown1).getEnum()));
         cumulativeMap->visitRw(statusTagVisitor);
       }
 
