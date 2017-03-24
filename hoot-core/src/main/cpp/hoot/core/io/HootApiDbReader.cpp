@@ -323,7 +323,6 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
       resultIterator.value(ApiDb::NODES_LONGITUDE).toDouble(),
       resultIterator.value(ApiDb::NODES_LATITUDE).toDouble(),
       -1,
-//      ConfigOptions().getCircularErrorDefaultValue(),
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -351,7 +350,6 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
       _status,
       newWayId,
       -1,
-//      ConfigOptions().getCircularErrorDefaultValue(),
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -385,7 +383,6 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
       _status,
       newRelationId,
       -1,
-//      ConfigOptions().getCircularErrorDefaultValue(),
       "",/*"collection"*/ //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
