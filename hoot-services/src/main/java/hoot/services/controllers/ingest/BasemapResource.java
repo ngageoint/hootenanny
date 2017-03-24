@@ -59,7 +59,6 @@ import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,8 +175,8 @@ public class BasemapResource {
 
                         File inputFile = new File(workingDir, inputFileName);
 
-                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(inputFile.getAbsolutePath(),
-                                projection, tileOutputDir.getAbsolutePath(), verboseOutput, this.getClass());
+                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(inputFile,
+                                projection, tileOutputDir, verboseOutput, this.getClass());
 
                         CommandResult commandResult = externalCommandManager.exec(jobId, ingestBasemapCommand);
 
@@ -341,7 +340,7 @@ public class BasemapResource {
         }
     }
 
-    private static JSONArray getBasemapListHelper() throws IOException, ParseException {
+    private static JSONArray getBasemapListHelper() throws IOException {
         JSONArray filesList = new JSONArray();
 
         String[] exts = { "processing", "enabled", "disabled", "failed" };

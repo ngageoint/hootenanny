@@ -28,17 +28,17 @@ package hoot.services.controllers.ingest;
 
 
 import java.util.List;
+import java.util.Map;
 
-import org.json.simple.JSONArray;
 import org.springframework.stereotype.Component;
 
 
 @Component
 class FileETLCommandFactory {
 
-    FileETLCommand build(JSONArray reqList, List<String> zipList, String translation, String jobId,
-                         String etlName, Boolean isNoneTranslation, String fgdbFeatureClasses,
+    FileETLCommand build(List<Map<String, String>> requests, List<String> zipNames, String translation,
+                         String jobId, String etlName, Boolean isNoneTranslation, String fgdbFeatureClasses,
                          String debugLevel, String inputType, Class<?> caller) {
-        return new FileETLCommand(reqList, zipList, translation, jobId, etlName, isNoneTranslation, fgdbFeatureClasses, debugLevel, inputType, caller);
+        return new FileETLCommand(requests, zipNames, translation, jobId, etlName, isNoneTranslation, fgdbFeatureClasses, debugLevel, inputType, caller);
     }
 }

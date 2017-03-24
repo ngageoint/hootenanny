@@ -37,14 +37,16 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -75,12 +77,13 @@ public class FileUploadResourceTest {
             homeFolder = new File(FileUtils.getTempDirectory(), "FileUploadResourceTest");
             FileUtils.forceMkdir(homeFolder);
             assertTrue(homeFolder.exists());
+
             HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
             HootCustomPropertiesSetter.setProperty("UPLOAD_FOLDER", homeFolder.getAbsolutePath() + "/" + "upload");
 
             copyResourcesInfoTestFolder(new String[]
                     {"ogr.zip", "zip1.zip", "osm.zip", "osm1.osm", "osm2.osm",
-                            "fgdb_ogr.zip", "TransportationGroundCrv.shp",  "DcGisRoads.zip" });
+                     "fgdb_ogr.zip", "TransportationGroundCrv.shp",  "DcGisRoads.zip" });
 
             String command = "/usr/bin/unzip " + new File(homeFolder, "DcGisRoads.zip").getAbsolutePath() +
                     " -d " + homeFolder.getAbsolutePath();
@@ -100,7 +103,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestBuildNativeRequestFgdbOgr() throws Exception {
+    public void TestFgdbOgrRequest() throws Exception {
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
@@ -115,29 +118,29 @@ public class FileUploadResourceTest {
         FileUploadResource res = new FileUploadResource();
 
         // Let's test zip
-        JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        List<Map<String, String>> results = new LinkedList<>();
+        Map<String, Integer> zipStat = new HashMap<>();
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", "fgdb_ogr.zip", results, zipStat, homeFolder);
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", "fgdb_ogr.zip", results, zipStat, homeFolder);
 
         assertEquals(2, results.size());
 
-        for (Object oRes : results) {
-            JSONObject cnt = (JSONObject) oRes;
-            if (cnt.get("type").toString().equals("FGDB_ZIP")) {
-                assertEquals("fgdb_ogr/DcGisRoads.gdb", cnt.get("name").toString());
+        for (Map<String, String> request : results) {
+            if (request.get("type").equalsIgnoreCase("FGDB_ZIP")) {
+                assertEquals("fgdb_ogr/DcGisRoads.gdb", request.get("name"));
             }
-            else if (cnt.get("type").toString().equals("OGR_ZIP")) {
-                assertEquals("fgdb_ogr/jakarta_raya_coastline.shp", cnt.get("name").toString());
+            else if (request.get("type").equalsIgnoreCase("OGR_ZIP")) {
+                assertEquals("fgdb_ogr/jakarta_raya_coastline.shp", request.get("name"));
             }
         }
+
         FileUtils.forceDelete(workingDir);
     }
 
     @Test(expected = Exception.class)
     @Category(UnitTest.class)
-    public void TestBuildNativeRequestFgdbOsm() throws Exception {
+    public void TestFgdbOsmRequest() throws Exception {
         String input = "fgdb_osm.zip";
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
@@ -154,11 +157,11 @@ public class FileUploadResourceTest {
 
         // Let's test zip
         JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        Map<String, Integer> zipStat = new HashMap<>();
 
         try {
-            Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-            buildNativeRequestMethod.invoke(res, jobId, "fgdb_osm", "zip", input, results, zipStat);
+            Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+            analyzeUploadedFileMethod.invoke(res, "fgdb_osm", "zip", input, results, zipStat);
         }
         catch (Exception ex) {
             assertEquals("Zip should not contain both osm and ogr types.", ex.getMessage());
@@ -170,7 +173,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestCreateNativeRequestFgdbOgrZip() throws Exception {
+    public void testFgdbOgrZipRequest() throws Exception {
         String input = "fgdb_ogr.zip";
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
@@ -186,27 +189,20 @@ public class FileUploadResourceTest {
         FileUploadResource res = new FileUploadResource();
 
         // Let's test zip
-        JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        List<Map<String, String>> results = new LinkedList<>();
+        Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
 
-        int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
 
-        shpZipCnt += (Integer) zipStat.get("shpzipcnt");
-
-        int fgdbZipCnt = 0;
-        fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
-
-        int osmZipCnt = 0;
-        osmZipCnt += (Integer) zipStat.get("osmzipcnt");
-
-        int geonamesZipCnt = 0;
-        geonamesZipCnt += (Integer) zipStat.get("geonameszipcnt");
+        int shpZipCnt = zipStat.get("shpzipcnt");
+        int fgdbZipCnt = zipStat.get("fgdbzipcnt");
+        int osmZipCnt = zipStat.get("osmzipcnt");
+        int geonamesZipCnt = zipStat.get("geonameszipcnt");
 
         zipList.add("fgdb_ogr");
         int zipCnt = 0;
@@ -222,7 +218,6 @@ public class FileUploadResourceTest {
 
         FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "fgdb_ogr",
                 Boolean.FALSE, null, "error", inputType, this.getClass());
-
 /*
         JSONArray params = (JSONArray) command.get("params");
         int nP = 0;
@@ -258,7 +253,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestCreateNativeRequestOgrZipAndShp() throws Exception {
+    public void TestOgrZipAndShpRequest() throws Exception {
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
@@ -274,28 +269,20 @@ public class FileUploadResourceTest {
         FileUploadResource res = new FileUploadResource();
 
         // Let's test zip
-        JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        List<Map<String, String>> results = new LinkedList<>();
+        Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
 
-        buildNativeRequestMethod.invoke(res, jobId, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
-
-        int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
 
-        shpZipCnt += (Integer) zipStat.get("shpzipcnt");
-
-        int fgdbZipCnt = 0;
-        fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
-
-        int osmZipCnt = 0;
-        osmZipCnt += (Integer) zipStat.get("osmzipcnt");
-
-        int geonamesZipCnt = 0;
-        geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
+        int shpZipCnt = zipStat.get("shpzipcnt");
+        int fgdbZipCnt = zipStat.get("fgdbzipcnt");
+        int osmZipCnt = zipStat.get("osmzipcnt");
+        int geonamesZipCnt = zipStat.get("osmzipcnt");
 
         zipList.add("fgdb_ogr");
         int zipCnt = 0;
@@ -366,7 +353,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestCreateNativeRequestOsmZipAndOsm() throws Exception {
+    public void TestOsmZipAndOsmRequest() throws Exception {
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
@@ -384,27 +371,20 @@ public class FileUploadResourceTest {
         FileUploadResource res = new FileUploadResource();
 
         // Let's test zip
-        JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        List<Map<String, String>> results = new LinkedList<>();
+        Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "osm", "zip", input, results, zipStat, homeFolder);
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "osm", "zip", input, results, zipStat, homeFolder);
 
-        int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
 
-        shpZipCnt += (Integer) zipStat.get("shpzipcnt");
-
-        int fgdbZipCnt = 0;
-        fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
-
-        int osmZipCnt = 0;
-        osmZipCnt += (Integer) zipStat.get("osmzipcnt");
-
-        int geonamesZipCnt = 0;
-        geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
+        int shpZipCnt = zipStat.get("shpzipcnt");
+        int fgdbZipCnt = zipStat.get("fgdbzipcnt");
+        int osmZipCnt = zipStat.get("osmzipcnt");
+        int geonamesZipCnt = zipStat.get("osmzipcnt");
 
         zipList.add("osm");
         int zipCnt = 0;
@@ -419,19 +399,12 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        buildNativeRequestMethod.invoke(res, jobId, "osm1", "osm", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "osm1", "osm", input, results, zipStat, homeFolder);
 
-        int shpCnt = 0;
-        shpCnt += (Integer) zipStat.get("shpcnt");
-
-        int fgdbCnt = 0;
-        fgdbCnt += (Integer) zipStat.get("fgdbcnt");
-
-        int osmCnt = 0;
-        osmCnt += (Integer) zipStat.get("osmcnt");
-
-        int geonamesCnt = 0;
-        geonamesCnt += (Integer) zipStat.get("osmcnt");
+        int shpCnt = zipStat.get("shpcnt");
+        int fgdbCnt = zipStat.get("fgdbcnt");
+        int osmCnt = zipStat.get("osmcnt");
+        int geonamesCnt = zipStat.get("osmcnt");
 
         String inputType = "";
 
@@ -475,7 +448,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestCreateNativeRequestOgrZip() throws Exception {
+    public void testOgrZipRequest() throws Exception {
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
@@ -491,27 +464,20 @@ public class FileUploadResourceTest {
         FileUploadResource res = new FileUploadResource();
 
         // Let's test zip
-        JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        List<Map<String, String>> results = new LinkedList<>();
+        Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "ogr", "zip", input, results, zipStat, homeFolder);
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "ogr", "zip", input, results, zipStat, homeFolder);
 
-        int shpZipCnt = 0;
         List<String> zipList = new ArrayList<>();
 
-        shpZipCnt += (Integer) zipStat.get("shpzipcnt");
-
-        int fgdbZipCnt = 0;
-        fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
-
-        int osmZipCnt = 0;
-        osmZipCnt += (Integer) zipStat.get("osmzipcnt");
-
-        int geonamesZipCnt = 0;
-        geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
+        int shpZipCnt = zipStat.get("shpzipcnt");
+        int fgdbZipCnt = zipStat.get("fgdbzipcnt");
+        int osmZipCnt = zipStat.get("osmzipcnt");
+        int geonamesZipCnt = zipStat.get("osmzipcnt");
 
         zipList.add("ogr");
         int zipCnt = 0;
@@ -526,13 +492,12 @@ public class FileUploadResourceTest {
 
         inputsList.add("zip1");
 
-        buildNativeRequestMethod.invoke(res, jobId, "zip1", "zip", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "zip1", "zip", input, results, zipStat, homeFolder);
 
-        shpZipCnt += (Integer) zipStat.get("shpzipcnt");
-        fgdbZipCnt += (Integer) zipStat.get("fgdbzipcnt");
-        osmZipCnt += (Integer) zipStat.get("osmzipcnt");
-        int geonamesCnt = 0;
-        geonamesCnt += (Integer) zipStat.get("osmcnt");
+        shpZipCnt += zipStat.get("shpzipcnt");
+        fgdbZipCnt += zipStat.get("fgdbzipcnt");
+        osmZipCnt += zipStat.get("osmzipcnt");
+        int geonamesCnt = zipStat.get("osmcnt");
 
         zipList.add("zip1");
         zipCnt++;
@@ -579,7 +544,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestCreateNativeRequestOgr() throws Exception {
+    public void TestOgrRequest() throws Exception {
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
@@ -595,28 +560,20 @@ public class FileUploadResourceTest {
         FileUploadResource res = new FileUploadResource();
 
         // Shape 1
-        JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        List<Map<String, String>> results = new LinkedList<>();
+        Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "TransportationGroundCrv", "shp", input, results, zipStat, FileUtils.getTempDirectory());
-
-        int shpCnt = 0;
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "TransportationGroundCrv", "shp", input, results, zipStat, FileUtils.getTempDirectory());
 
         List<String> zipList = new ArrayList<>();
 
-        shpCnt += (Integer) zipStat.get("shpcnt");
-
-        int fgdbCnt = 0;
-        fgdbCnt += (Integer) zipStat.get("fgdbcnt");
-
-        int osmCnt = 0;
-        osmCnt += (Integer) zipStat.get("osmcnt");
-
-        int geonamesZipCnt = 0;
-        geonamesZipCnt += (Integer) zipStat.get("osmzipcnt");
+        int shpCnt = zipStat.get("shpcnt");
+        int fgdbCnt = zipStat.get("fgdbcnt");
+        int osmCnt = zipStat.get("osmcnt");
+        int geonamesZipCnt = zipStat.get("osmzipcnt");
 
         // shape 2
         // shape
@@ -628,14 +585,13 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        buildNativeRequestMethod.invoke(res, jobId, "TransportationGroundCrv2", "shp", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "TransportationGroundCrv2", "shp", input, results, zipStat, homeFolder);
 
-        shpCnt += (Integer) zipStat.get("shpcnt");
-        fgdbCnt += (Integer) zipStat.get("fgdbcnt");
-        osmCnt += (Integer) zipStat.get("osmcnt");
-        int geonamesCnt = 0;
-        geonamesCnt += (Integer) zipStat.get("osmcnt");
+        shpCnt += zipStat.get("shpcnt");
+        fgdbCnt += zipStat.get("fgdbcnt");
+        osmCnt += zipStat.get("osmcnt");
 
+        int geonamesCnt = zipStat.get("osmcnt");
         int zipCnt = 0;
         int shpZipCnt = 0;
         int osmZipCnt = 0;
@@ -675,7 +631,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestCreateNativeRequestOsm() throws Exception {
+    public void testOsmRequest() throws Exception {
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
@@ -692,27 +648,19 @@ public class FileUploadResourceTest {
 
         // Shape 1
         JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "osm1", "osm", input, results, zipStat, FileUtils.getTempDirectory());
-
-        int shpCnt = 0;
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "osm1", "osm", input, results, zipStat, FileUtils.getTempDirectory());
 
         List<String> zipList = new ArrayList<>();
 
-        shpCnt += (Integer) zipStat.get("shpcnt");
-
-        int fgdbCnt = 0;
-        fgdbCnt += (Integer) zipStat.get("fgdbcnt");
-
-        int osmCnt = 0;
-        osmCnt += (Integer) zipStat.get("osmcnt");
-
-        int geonamesCnt = 0;
-        geonamesCnt += (Integer) zipStat.get("osmcnt");
+        int shpCnt = zipStat.get("shpcnt");
+        int fgdbCnt = zipStat.get("fgdbcnt");
+        int osmCnt = zipStat.get("osmcnt");
+        int geonamesCnt = zipStat.get("osmcnt");
 
         // shape 2
         // shape
@@ -724,12 +672,12 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        buildNativeRequestMethod.invoke(res, jobId, "osm2", "osm", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "osm2", "osm", input, results, zipStat, homeFolder);
 
-        shpCnt += (Integer) zipStat.get("shpcnt");
-        fgdbCnt += (Integer) zipStat.get("fgdbcnt");
-        osmCnt += (Integer) zipStat.get("osmcnt");
-        geonamesCnt += (Integer) zipStat.get("osmcnt");
+        shpCnt += zipStat.get("shpcnt");
+        fgdbCnt += zipStat.get("fgdbcnt");
+        osmCnt += zipStat.get("osmcnt");
+        geonamesCnt += zipStat.get("osmcnt");
 
         int zipCnt = 0;
         int shpZipCnt = 0;
@@ -772,7 +720,7 @@ public class FileUploadResourceTest {
 
     @Test
     @Category(UnitTest.class)
-    public void TestCreateNativeRequestFgdb() throws Exception {
+    public void testFgdbRequest() throws Exception {
         String jobId = "test-id-123";
         String wkdirpath = UPLOAD_FOLDER + File.separator + jobId;
         File workingDir = new File(wkdirpath);
@@ -788,28 +736,20 @@ public class FileUploadResourceTest {
         FileUploadResource res = new FileUploadResource();
 
         // Shape 1
-        JSONArray results = new JSONArray();
-        JSONObject zipStat = new JSONObject();
+        List<Map<String, String>> results = new LinkedList<>();
+        Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
-        Method buildNativeRequestMethod = getBuildNativeRequestMethod();
-        buildNativeRequestMethod.invoke(res, jobId, "DcGisRoads", "gdb", input, results, zipStat, FileUtils.getTempDirectory());
-
-        int shpCnt = 0;
+        Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
+        analyzeUploadedFileMethod.invoke(res, "DcGisRoads", "gdb", input, results, zipStat, FileUtils.getTempDirectory());
 
         List<String> zipList = new ArrayList<>();
 
-        shpCnt += (Integer) zipStat.get("shpcnt");
-
-        int fgdbCnt = 0;
-        fgdbCnt += (Integer) zipStat.get("fgdbcnt");
-
-        int osmCnt = 0;
-        osmCnt += (Integer) zipStat.get("osmcnt");
-
-        int geonamesCnt = 0;
-        geonamesCnt += (Integer) zipStat.get("osmcnt");
+        int shpCnt = zipStat.get("shpcnt");
+        int fgdbCnt = zipStat.get("fgdbcnt");
+        int osmCnt = zipStat.get("osmcnt");
+        int geonamesCnt = zipStat.get("osmcnt");
 
         int zipCnt = 0;
         int shpZipCnt = 0;
@@ -920,13 +860,10 @@ public class FileUploadResourceTest {
         assertTrue(out.exists());
     }
 
-    private static Method getBuildNativeRequestMethod() throws NoSuchMethodException {
-        //(String jobId, String fName, String ext, String inputFileName, JSONArray reqList, JSONObject zipStat, File workingDir
-        Method buildNativeRequestMethod = FileUploadResource.class.getDeclaredMethod("buildNativeRequest", String.class,
-                String.class, String.class, String.class, JSONArray.class, JSONObject.class, File.class);
-
-        buildNativeRequestMethod.setAccessible(true);
-
-        return buildNativeRequestMethod;
+    private static Method getAnalyzeUploadedFileMethod() throws NoSuchMethodException {
+        Method analyzeUploadedFileMethod = FileUploadResource.class.getDeclaredMethod("analyzeUploadedFile",
+                String.class, String.class, String.class, List.class, Map.class, File.class);
+        analyzeUploadedFileMethod.setAccessible(true);
+        return analyzeUploadedFileMethod;
     }
 }

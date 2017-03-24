@@ -32,11 +32,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import hoot.services.command.ExternalCommand;
 
@@ -107,15 +106,14 @@ import hoot.services.command.ExternalCommand;
 
 class FileETLCommand extends ExternalCommand {
 
-    FileETLCommand(JSONArray requests, List<String> zipList, String translation, String jobId, String etlName,
+    FileETLCommand(List<Map<String, String>> requests, List<String> zipNames, String translation, String jobId, String etlName,
                    Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, String inputType,
                    Class<?> caller) {
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (Object o : requests) {
-            stringBuilder.append(quote(((JSONObject) o).get("name").toString())).append(" ");
+        for (Map<String,String> request : requests) {
+            stringBuilder.append(quote(request.get("name"))).append(" ");
         }
-
         String inputs = stringBuilder.toString().trim();
 
         //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
@@ -153,9 +151,6 @@ class FileETLCommand extends ExternalCommand {
             options.add("-D translation.script=" + quote(translation));
         }
 
-        // OP_INPUT_PATH (INPUT_PATH)
-        File workDir = new File(UPLOAD_FOLDER, jobId);
-
         //# This replaces semicolon with vsizip and path
         //ifeq "$(INPUT_TYPE)" "ZIP"
         //   #OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
@@ -164,9 +159,12 @@ class FileETLCommand extends ExternalCommand {
 
         if ("ZIP".equalsIgnoreCase(inputType)) {
             //Reading a GDAL dataset in a .gz file or a .zip archive
-            inputs = zipList.stream()
-                            .map(zip -> "/vsizip/" + workDir.getAbsolutePath() + File.separator + zip)
-                            .collect(Collectors.joining(" "));
+            // OP_INPUT_PATH (INPUT_PATH)
+            File workDir = new File(UPLOAD_FOLDER, jobId);
+
+            inputs = zipNames.stream()
+                    .map(zip -> "/vsizip/" + workDir.getAbsolutePath() + File.separator + zip)
+                    .collect(Collectors.joining(" "));
         }
 
         // Formulate request parameters
@@ -181,11 +179,10 @@ class FileETLCommand extends ExternalCommand {
         //param.put("DB_URL", HOOTAPI_DB_URL);
 
         if (inputType.equalsIgnoreCase("FGDB") && !StringUtils.isBlank(fgdbFeatureClasses)) {
-            Object oRq = requests.get(0);
+            Map<String, String> request = requests.get(0);
 
-            if (oRq != null) {
-                JSONObject json = (JSONObject) oRq;
-                String rawInput = json.get("name").toString();
+            if (request != null) {
+                String rawInput = request.get("name");
                 List<String> fgdbInputs = new ArrayList<>();
                 String[] classes = fgdbFeatureClasses.split(",");
 
@@ -238,6 +235,6 @@ class FileETLCommand extends ExternalCommand {
         super.configureCommand(command, caller);
 
         // override working directory set during super.configureAsHootCommand()
-        this.put("workDir", workDir);
+        //this.put("workDir", workDir);
     }
 }
