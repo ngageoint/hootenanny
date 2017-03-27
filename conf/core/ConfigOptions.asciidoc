@@ -1269,7 +1269,7 @@ should only be enabled the database has previously been taken offline (you are t
 === osmapidb.bulk.writer.file.output.buffer.max.line.size
 
 * Data Type: long
-* Default Value: `1000000`
+* Default Value: `100000`
 
 Maximum number of lines to keep in memory when serializing elements to a file output, where each
 line represents a separate SQL record.  If you have enough memory available and the dataset you are
