@@ -505,7 +505,7 @@ public:
     OsmApiDbBulkWriter writer;
     writer.setFileOutputLineBufferSize(1);
     const QString outFile =
-      "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-startings-ids-out.sql";
+      "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-starting-ids-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
