@@ -157,7 +157,7 @@ class FileETLCommand extends ExternalCommand {
         //   OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
         //endif
 
-        if ("ZIP".equalsIgnoreCase(inputType)) {
+        if (!zipNames.isEmpty()) {
             //Reading a GDAL dataset in a .gz file or a .zip archive
             // OP_INPUT_PATH (INPUT_PATH)
             File workDir = new File(UPLOAD_FOLDER, jobId);

@@ -52,6 +52,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
@@ -136,13 +137,10 @@ public class FileUploadResource {
             // Save multipart data into file
             logger.debug("Starting ETL Process for : {}", inputName);
 
-            Map<String, String> uploadedFiles = new HashMap<>();
-            Map<String, String> uploadedFilesPaths = new HashMap<>();
-
             String jobId = UUID.randomUUID().toString();
             File workDir = new File(UPLOAD_FOLDER, jobId);
 
-            MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart, workDir);
+            Map<File, String> uploadedFiles = MultipartSerializer.serializeUpload(inputType, multiPart, workDir);
 
             int shpCnt = 0;
             int osmCnt = 0;
@@ -159,15 +157,15 @@ public class FileUploadResource {
             List<String> zipList = new ArrayList<>();
 
             String etlName = inputName;
-            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-                String fName = pairs.getKey();
+            for (Map.Entry<File, String> pairs : uploadedFiles.entrySet()) {
+                String inputFileName = pairs.getKey().getName();
+                String basename = FilenameUtils.getBaseName(inputFileName);
                 String ext = pairs.getValue();
 
                 if (StringUtils.isBlank(etlName)) {
-                    etlName = fName;
+                    etlName = basename;
                 }
 
-                String inputFileName = uploadedFilesPaths.get(fName);
                 inputsList.add(inputFileName);
 
                 // for osm
@@ -178,15 +176,15 @@ public class FileUploadResource {
 
                 Map<String, Integer> zipStat = new HashMap<>();
 
-                analyzeUploadedFile(fName, ext, inputFileName, reqList, zipStat, workDir);
+                analyzeUploadedFile(basename, ext, inputFileName, reqList, zipStat, workDir);
 
-                if (ext.equalsIgnoreCase("zip")) {
+                if (ext.equalsIgnoreCase("ZIP")) {
                     shpZipCnt += zipStat.get("shpzipcnt");
                     fgdbZipCnt += zipStat.get("fgdbzipcnt");
                     osmZipCnt += zipStat.get("osmzipcnt");
                     geonamesZipCnt += zipStat.get("geonameszipcnt");
 
-                    zipList.add(fName);
+                    zipList.add(inputFileName);
                     zipCnt++;
                 }
                 else {
@@ -196,9 +194,9 @@ public class FileUploadResource {
                     geonamesCnt += zipStat.get("geonamescnt");
                 }
 
-                if (inputType.equalsIgnoreCase("geonames") &&
-                        ext.equalsIgnoreCase("txt") && (geonamesCnt == 1)) {
-                    inputFileName = fName + "." + "geonames";
+                if (inputType.equalsIgnoreCase("GEONAMES") &&
+                        ext.equalsIgnoreCase("TXT") && (geonamesCnt == 1)) {
+                    inputFileName = basename + "." + "geonames";
                     File srcFile = new File(workDir, inputsList.get(0));
                     File destFile = new File(workDir, inputFileName);
 
@@ -208,7 +206,7 @@ public class FileUploadResource {
                     inputsList.set(0, inputFileName);
                     reqList.clear();
 
-                    analyzeUploadedFile(fName, "geonames", inputFileName, reqList, zipStat, workDir);
+                    analyzeUploadedFile(basename, "GEONAMES", inputFileName, reqList, zipStat, workDir);
                 }
             }
 
@@ -260,7 +258,7 @@ public class FileUploadResource {
             }
 
             String finalInputType = determineInputType(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
-                                                       shpCnt, fgdbCnt, osmCnt, geonamesCnt, zipList);
+                                                       shpCnt, fgdbCnt, osmCnt, geonamesCnt);
 
             String finalETLName = etlName;
 
@@ -281,7 +279,7 @@ public class FileUploadResource {
             }
 
             commands.add(() -> {
-                FileETLCommand etlCommand = fileETLCommandFactory.build(reqList, zipList, translation, jobId, finalETLName,
+                ExternalCommand etlCommand = fileETLCommandFactory.build(reqList, zipList, translation, jobId, finalETLName,
                         noneTranslation, fgdbFeatureClasses, debugLevel, finalInputType, this.getClass());
 
                 return externalCommandManager.exec(jobId, etlCommand);
@@ -323,9 +321,7 @@ public class FileUploadResource {
             res.put("jobid", jobId);
             res.put("input", mergedInputList);
             res.put("output", etlName);
-
-            String batchJobReqStatus = "success";
-            res.put("status", batchJobReqStatus);
+            res.put("status", "success");
 
             response.add(res);
         }
@@ -341,7 +337,8 @@ public class FileUploadResource {
     }
 
     private static String determineInputType(int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
-            int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt, List<String> zipList) {
+                                             int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt,
+                                             int geonamesCnt) {
         // if fgdb zip > 0 then all becomes fgdb so it can be uzipped first
         // if fgdb zip == 0 and shp zip > then it is standard zip.
         // if fgdb zip == 0 and shp zip == 0 and osm zip > 0 then it is osm zip
@@ -365,11 +362,6 @@ public class FileUploadResource {
                 else { // One or more zip (all ogr) || One or more zip (all osm)
                     // If contains zip of just shape or osm then we will etl zip directly
                     inputType = "ZIP";
-
-                    // add zip extension
-                    for (int j = 0; j < zipList.size(); j++) {
-                        zipList.set(j, zipList.get(j) + ".zip");
-                    }
                 }
             }
         }
@@ -389,8 +381,8 @@ public class FileUploadResource {
         return inputType;
     }
 
-    private static void analyzeUploadedFile(String fileName, String ext, String inputFileName,
-            List<Map<String, String>> reqList, Map<String, Integer> zipStat, File workDir) throws IOException {
+    private static void analyzeUploadedFile(String basename, String ext, String inputFileName,
+            List<Map<String, String>> requests, Map<String, Integer> zipStat, File workDir) throws IOException {
 
         int osmZipCnt = zipStat.getOrDefault("osmzipcnt", 0);
         int shpZipCnt = zipStat.getOrDefault("shpzipcnt", 0);
@@ -401,32 +393,31 @@ public class FileUploadResource {
         int fgdbCnt = zipStat.getOrDefault("fgdbcnt", 0);
         int geonamesCnt = zipStat.getOrDefault("geonamescnt", 0);
 
-        if (ext.equalsIgnoreCase("osm") || ext.equalsIgnoreCase("pbf")) {
+        if (ext.equalsIgnoreCase("OSM") || ext.equalsIgnoreCase("PBF")) {
             Map<String, String> request = new HashMap<>();
             request.put("type", "OSM");
             request.put("name", inputFileName);
-            reqList.add(request);
+            requests.add(request);
             osmCnt++;
         }
-        else if (ext.equalsIgnoreCase("geonames") || ext.equalsIgnoreCase("txt")) {
+        else if (ext.equalsIgnoreCase("GEONAMES") || ext.equalsIgnoreCase("TXT")) {
             Map<String, String> request = new HashMap<>();
             request.put("type", "GEONAMES");
             request.put("name", inputFileName);
-            reqList.add(request);
+            requests.add(request);
             geonamesCnt++;
         }
-        else if (ext.equalsIgnoreCase("shp")) {
+        else if (ext.equalsIgnoreCase("SHP")) {
             Map<String, String> request = new HashMap<>();
             request.put("type", "OGR");
             request.put("name", inputFileName);
-            reqList.add(request);
+            requests.add(request);
             shpCnt++;
         }
-        else if (ext.equalsIgnoreCase("zip")) {
+        else if (ext.equalsIgnoreCase("ZIP")) {
             // Check to see the type of zip (osm, ogr or fgdb)
             String zipFilePath = new File(workDir, inputFileName).getAbsolutePath();
-
-            Map<String, Integer> results = getZipContentType(zipFilePath, reqList, fileName);
+                Map<String, Integer> results = getZipContentType(zipFilePath, requests, basename);
 
             shpZipCnt += results.get("shpcnt");
             fgdbZipCnt += results.get("fgdbcnt");
@@ -438,11 +429,11 @@ public class FileUploadResource {
                 throw new IllegalArgumentException("Zip should not contain both osm and ogr types.");
             }
         }
-        else if (ext.equalsIgnoreCase("gdb")) {
+        else if (ext.equalsIgnoreCase("GDB")) {
             Map<String, String> request = new HashMap<>();
             request.put("type", "FGDB");
             request.put("name", inputFileName);
-            reqList.add(request);
+            requests.add(request);
             fgdbCnt++;
         }
 
@@ -459,7 +450,7 @@ public class FileUploadResource {
     // returns the type of file in zip
     // throws error if there are mix of osm and ogr
     // zip does not allow fgdb so it needs to be expanded out
-    private static Map<String, Integer> getZipContentType(String zipFilePath, List<Map<String, String>> contentTypes, String fName)
+    private static Map<String, Integer> getZipContentType(String zipFilePath, List<Map<String, String>> contentTypes, String basename)
             throws IOException {
 
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
@@ -471,15 +462,15 @@ public class FileUploadResource {
             int fgdbCnt = 0;
 
             while (zipEntry != null) {
-                String zipName = zipEntry.getName();
+                String zipEntryName = zipEntry.getName();
 
                 // check to see if zipName ends with slash and remove
-                if (zipName.endsWith("/")) {
-                    zipName = zipName.substring(0, zipName.length() - 1);
+                if (zipEntryName.endsWith("/")) {
+                    zipEntryName = zipEntryName.substring(0, zipEntryName.length() - 1);
                 }
 
                 String ext = null;
-                String[] fileNameParts = zipName.split("\\.");
+                String[] fileNameParts = zipEntryName.split("\\.");
 
                 int partsLen = fileNameParts.length;
                 if (partsLen > 1) {
@@ -488,19 +479,19 @@ public class FileUploadResource {
 
                 // See if there is extension and if none then throw error
                 if (StringUtils.isBlank(ext)) {
-                    throw new IllegalArgumentException("Unknown file type: " + zipName);
+                    throw new IllegalArgumentException("Unknown file type: " + zipEntryName);
                 }
 
-                String[] extList = { "gdb", "osm", "shp", "geonames", "pbf" };
+                String[] extList = { "GDB", "OSM", "SHP", "GEONAMES", "PBF" };
 
                 // for each type of extensions
                 for (String anExtList : extList) {
                     if (ext.equalsIgnoreCase(anExtList)) {
                         if (zipEntry.isDirectory()) {
-                            if (ext.equalsIgnoreCase("gdb")) {
+                            if (ext.equalsIgnoreCase("GDB")) {
                                 Map<String, String> contentType = new HashMap<>();
                                 contentType.put("type", "FGDB_ZIP");
-                                contentType.put("name", fName + File.separator + zipName);
+                                contentType.put("name", basename + File.separator + zipEntryName);
                                 contentTypes.add(contentType);
                                 fgdbCnt++;
                             }
@@ -509,27 +500,27 @@ public class FileUploadResource {
                             }
                         }
                         else { // file
-                            switch (ext) {
-                                case "shp": {
+                            switch (ext.toUpperCase()) {
+                                case "SHP": {
                                     Map<String, String> contentType = new HashMap<>();
                                     contentType.put("type", "OGR_ZIP");
-                                    contentType.put("name", fName + File.separator + zipName);
+                                    contentType.put("name", basename + File.separator + zipEntryName);
                                     contentTypes.add(contentType);
                                     shpCnt++;
                                     break;
                                 }
-                                case "osm": {
+                                case "OSM": {
                                     Map<String, String> contentType = new HashMap<>();
                                     contentType.put("type", "OSM_ZIP");
-                                    contentType.put("name", fName + File.separator + zipName);
+                                    contentType.put("name", basename + File.separator + zipEntryName);
                                     contentTypes.add(contentType);
                                     osmCnt++;
                                     break;
                                 }
-                                case "geonames": {
+                                case "GEONAMES": {
                                     Map<String, String> contentType = new HashMap<>();
                                     contentType.put("type", "GEONAMES_ZIP");
-                                    contentType.put("name", fName + File.separator + zipName);
+                                    contentType.put("name", basename + File.separator + zipEntryName);
                                     contentTypes.add(contentType);
                                     geonamesCnt++;
                                     break;

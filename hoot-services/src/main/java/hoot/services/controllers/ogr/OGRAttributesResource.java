@@ -34,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -96,7 +95,9 @@ public class OGRAttributesResource {
 
     /**
      * This rest endpoint uploads multipart data from UI and then generates attribute output.
+     *
      * Example: http://localhost:8080//hoot-services/ogr/info/upload?INPUT_TYPE=DIR
+     *
      * Output: {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb"}
      * 
      * After getting the jobId, one can track the progress through job status rest end point
@@ -128,7 +129,7 @@ public class OGRAttributesResource {
             List<File> fileList = new ArrayList<>();
             List<File> zipList = new ArrayList<>();
 
-            processFormDataMultiPart(fileList, zipList, jobId, inputType, multiPart, workFolder);
+            processFormDataMultiPart(fileList, zipList, inputType, multiPart, workFolder);
 
             List<Command> commands = new LinkedList<>();
 
@@ -236,52 +237,51 @@ public class OGRAttributesResource {
         return Response.ok(json).build();
     }
 
-    private static void processFormDataMultiPart(List<File> fileList, List<File> zipList, String jobId,
+    private static void processFormDataMultiPart(List<File> fileList, List<File> zipList,
                                                  String inputType, FormDataMultiPart multiPart, File workFolder)
             throws IOException {
-        Map<String, String> uploadedFiles = new HashMap<>();
-        Map<String, String> uploadedFilesPaths = new HashMap<>();
+        Map<File, String> uploadedFiles = MultipartSerializer.serializeUpload(inputType, multiPart, workFolder);
 
-        MultipartSerializer.serializeUpload(jobId, inputType, uploadedFiles, uploadedFilesPaths, multiPart, workFolder);
-
-        for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-            String name = pairs.getKey();
-            String ext = pairs.getValue();
-            String inputFileName = uploadedFilesPaths.get(name);
+        for (Map.Entry<File, String> pairs : uploadedFiles.entrySet()) {
+            File inputFile = pairs.getKey();
+            String baseName = FilenameUtils.getBaseName(inputFile.getName());
+            String extension = pairs.getValue();
 
             // If it is zip file then we crack open to see if it contains FGDB.
             // If so then we add the folder location and desired output name which is fgdb name in the zip.
-            if (ext.equalsIgnoreCase("ZIP")) {
-                File zipFile = new File(workFolder, inputFileName);
+            if (extension.equalsIgnoreCase("ZIP")) {
+                File zipFile = inputFile;
                 zipList.add(zipFile);
 
                 try (FileInputStream fin = new FileInputStream(zipFile)) {
                     try (ZipInputStream zis = new ZipInputStream(fin)) {
                         ZipEntry zipEntry = zis.getNextEntry();
                         while (zipEntry != null) {
-                            String zeName = zipEntry.getName();
+                            String zipEntryName = zipEntry.getName();
+
                             if (zipEntry.isDirectory()) {
-                                if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")
-                                        || zeName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
-                                    String fgdbZipName = zeName;
-                                    if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
-                                        fgdbZipName = zeName.substring(0, zeName.length() - 1);
+                                if (zipEntryName.toLowerCase().endsWith(".gdb/")
+                                        || zipEntryName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
+                                    String fgdbZipName = zipEntryName;
+                                    if (zipEntryName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
+                                        fgdbZipName = zipEntryName.substring(0, zipEntryName.length() - 1);
                                     }
-                                    fileList.add(new File(new File(workFolder, name), fgdbZipName));
+                                    fileList.add(new File(new File(workFolder, fgdbZipName), fgdbZipName));
                                 }
                             }
                             else {
-                                if (zeName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
-                                    fileList.add(new File(new File(workFolder, name), zeName));
+                                if (zipEntryName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
+                                    fileList.add(new File(new File(workFolder, baseName), zipEntryName));
                                 }
                             }
+
                             zipEntry = zis.getNextEntry();
                         }
                     }
                 }
             }
             else {
-                fileList.add(new File(workFolder, inputFileName));
+                fileList.add(inputFile);
             }
         }
     }
