@@ -61,10 +61,10 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPsqlDbOfflineTest);
   CPPUNIT_TEST(runPsqlDbOnlineTest);
   CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
+  CPPUNIT_TEST(runSqlFileOutputTest);
   CPPUNIT_TEST(runPgBulkDbOfflineTest);
   CPPUNIT_TEST(runPgBulkDbOnlineTest);
   CPPUNIT_TEST(runPgBulkCustomStartingIdsDbOfflineTest);
-  CPPUNIT_TEST(runSqlFileOutputTest);
   CPPUNIT_TEST(runCsvFilesOutputTest);
   CPPUNIT_TEST_SUITE_END();
 

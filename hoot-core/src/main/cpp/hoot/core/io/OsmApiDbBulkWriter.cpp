@@ -55,7 +55,6 @@ _fileDataPassCtr(0)
 {
   _reset();
   _sectionNames = _createSectionNameList();
-  _initOutputFormatStrings();
   setConfiguration(conf());
 }
 
@@ -221,6 +220,7 @@ void OsmApiDbBulkWriter::_verifyApp()
   {
     _outputDelimiter = ",";
   }
+  _initOutputFormatStrings();
 }
 
 void OsmApiDbBulkWriter::_verifyOutputCopySettings()
@@ -497,7 +497,7 @@ void OsmApiDbBulkWriter::_flushStreams(const bool writeClosingMark)
     }
 
     LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it].first->fileName());
-    if (writeClosingMark && *it != "byte_order_mark")
+    if (writeClosingMark && _writerApp != "pg_bulkload" && *it != "byte_order_mark")
     {
       LOG_TRACE("Writing closing byte order mark to stream...");
       *(_outputSections[*it].second) << QString("\\.\n\n\n");
@@ -1369,12 +1369,14 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   LOG_VART(_writerApp);
   LOG_VART(_reserveRecordIdsBeforeWritingData);
   LOG_VART(_idMappings.startingNodeId);
-  LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_idMappings.startingWayId);
+  LOG_VART(_idMappings.startingRelationId);
 }
 
 void OsmApiDbBulkWriter::_initOutputFormatStrings()
 {
+  _outputFormatStrings.clear();
+
   QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getChangesetsTableName()] =
     formatString.replace("\t", _outputDelimiter);
@@ -1386,8 +1388,7 @@ void OsmApiDbBulkWriter::_initOutputFormatStrings()
     formatString.replace("\t", _outputDelimiter);
   if (_writerApp == "pg_bulkload")
   {
-     _outputFormatStrings[ApiDb::getNodesTableName()] =
-       _outputFormatStrings[ApiDb::getNodesTableName()].replace("\\N", "");
+    _outputFormatStrings[ApiDb::getNodesTableName()].replace("\\N", "");
   }
   formatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWaysTableName()] =
@@ -1397,8 +1398,7 @@ void OsmApiDbBulkWriter::_initOutputFormatStrings()
     formatString.replace("\t", _outputDelimiter);
   if (_writerApp == "pg_bulkload")
   {
-     _outputFormatStrings[ApiDb::getWaysTableName()] =
-       _outputFormatStrings[ApiDb::getWaysTableName()].replace("\\N", "");
+    _outputFormatStrings[ApiDb::getWaysTableName()].replace("\\N", "");
   }
   formatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] =
@@ -1414,8 +1414,7 @@ void OsmApiDbBulkWriter::_initOutputFormatStrings()
     formatString.replace("\t", _outputDelimiter);
   if (_writerApp == "pg_bulkload")
   {
-     _outputFormatStrings[ApiDb::getRelationsTableName()] =
-       _outputFormatStrings[ApiDb::getRelationsTableName()].replace("\\N", "");
+    _outputFormatStrings[ApiDb::getRelationsTableName()].replace("\\N", "");
   }
   formatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] =
