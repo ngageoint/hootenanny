@@ -677,14 +677,14 @@ public class MapResource {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            Command[] commands = {
+            Command[] workflow = {
                 () -> {
                     InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId, this.getClass());
                     return mapResourcesCleaner.execute();
                 }
             };
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, workflow));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;

@@ -178,7 +178,7 @@ public class ConflationResource {
 
             String confOutputName = paramMap.get("OUTPUT_NAME");
 
-            Command[] commands = {
+            Command[] workflow = {
                 () -> {
                     ExternalCommand conflateCommand = conflateCommandFactory.build(paramMap, bbox, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, conflateCommand);
@@ -207,7 +207,7 @@ public class ConflationResource {
                 }
             };
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, workflow));
         }
         catch (WebApplicationException wae) {
             throw wae;

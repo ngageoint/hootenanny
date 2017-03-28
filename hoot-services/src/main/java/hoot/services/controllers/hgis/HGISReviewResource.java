@@ -100,7 +100,7 @@ public class HGISReviewResource extends HGISResource {
         try {
             String jobId = UUID.randomUUID().toString();
 
-            Command[] commands = {
+            Command[] workflow = {
                     () -> {
                         ExternalCommand validationCommand = hgisPrepareForValidationCommandFactory.build(
                                 request.getSourceMap(), request.getOutputMap(), this.getClass());
@@ -112,7 +112,7 @@ public class HGISReviewResource extends HGISResource {
                     }
             };
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, workflow));
 
             response.setJobId(jobId);
         }

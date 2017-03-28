@@ -105,7 +105,7 @@ import hoot.services.command.ExternalCommand;
 
 class FileETLCommand extends ExternalCommand {
 
-    FileETLCommand(List<Map<String, String>> requests, List<String> zipNames, String translationPath, String jobId, String etlName,
+    FileETLCommand(List<Map<String, String>> requests, List<File> zips, String translationPath, String jobId, String etlName,
                    Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, String inputType, Class<?> caller) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -131,7 +131,7 @@ class FileETLCommand extends ExternalCommand {
 
         // OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
 
-        if ("GEONAMES".equalsIgnoreCase(inputType)) {
+        if (inputType.equalsIgnoreCase("GEONAMES")) {
             options.add("-D convert.ops=hoot::TranslationOp");
             options.add("-D translation.script=" + quote(translationPath));
         }
@@ -143,7 +143,7 @@ class FileETLCommand extends ExternalCommand {
         //    endif
         //endif
 
-        if ("OSM".equalsIgnoreCase(inputType) && !isNoneTranslation) {
+        if (inputType.equalsIgnoreCase("OSM") && !isNoneTranslation) {
             options.add("-D convert.ops=hoot::TranslationOp");
             options.add("-D translation.script=" + quote(translationPath));
         }
@@ -154,13 +154,11 @@ class FileETLCommand extends ExternalCommand {
         //   OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
         //endif
 
-        if (!zipNames.isEmpty()) {
+        if (!zips.isEmpty()) {
             //Reading a GDAL dataset in a .gz file or a .zip archive
             // OP_INPUT_PATH (INPUT_PATH)
-            File workDir = new File(UPLOAD_FOLDER, jobId);
-
-            inputs = zipNames.stream()
-                    .map(zip -> "/vsizip/" + workDir.getAbsolutePath() + File.separator + zip)
+            inputs = zips.stream()
+                    .map(zip -> "/vsizip/" + zip.getAbsolutePath())
                     .collect(Collectors.joining(" "));
         }
 
@@ -230,8 +228,5 @@ class FileETLCommand extends ExternalCommand {
         }
 
         super.configureCommand(command, caller);
-
-        // override working directory set during super.configureAsHootCommand()
-        //this.put("workDir", workDir);
     }
 }

@@ -69,6 +69,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
 import hoot.services.command.InternalCommandManager;
+import hoot.services.command.common.DeleteFolderCommand;
 import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
@@ -94,20 +95,8 @@ public class OGRAttributesResource {
 
 
     /**
-     * This rest endpoint uploads multipart data from UI and then generates attribute output.
+     * This REST endpoint uploads multipart data from UI and then generates attribute output.
      *
-     * Example: http://localhost:8080//hoot-services/ogr/info/upload?INPUT_TYPE=DIR
-     *
-     * Output: {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb"}
-     * 
-     * After getting the jobId, one can track the progress through job status rest end point
-     * Example: http://localhost:8080/hoot-services/job/status/e43feae4-0644-47fd-a23c-6249e6e7f7fb
-     * Output: {"jobId":"e43feae4-0644-47fd-a23c-6249e6e7f7fb","statusDetail":null, "status":"complete"}
-     * 
-     * Once status is "complete", result attribute can be obtained through.
-     * Example:http://localhost:8080/hoot-services/ogr/info/e43feae4-0644-47fd-a23c-6249e6e7f7fb
-     * Output: JSON of attributes
-     * 
      * @param inputType
      *            : [FILE | DIR] where FILE type should represents zip,shp or OMS and DIR represents FGDB
      * @param debugLevel
@@ -131,10 +120,10 @@ public class OGRAttributesResource {
 
             processFormDataMultiPart(fileList, zipList, inputType, multiPart, workFolder);
 
-            List<Command> commands = new LinkedList<>();
+            List<Command> workflow = new LinkedList<>();
 
             for (File zip : zipList) {
-                commands.add(
+                workflow.add(
                     () -> {
                         // OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
                         // bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
@@ -145,7 +134,7 @@ public class OGRAttributesResource {
                 );
             }
 
-            commands.add(
+            workflow.add(
                 () -> {
                     // OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
                     //File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
@@ -164,31 +153,15 @@ public class OGRAttributesResource {
                 }
             );
 
-            commands.add(
+            workflow.add(
                 () -> {
-                    InternalCommand command = () -> {
-                        CommandResult commandResult = new CommandResult();
-                        commandResult.setJobId(jobId);
-
-                        try {
-                            // cd .. && rm -rf "$(OP_INPUT)"
-                            // Do cleanup
-                            FileUtils.forceDelete(workFolder);
-                            commandResult.setExitCode(CommandResult.SUCCESS);
-                        }
-                        catch(IOException ioe) {
-                            commandResult.setExitCode(CommandResult.FAILURE);
-                            logger.error("Error deleting {} directory!", workFolder, ioe);
-                        }
-
-                        return commandResult;
-                    };
-
-                    return internalCommandManager.exec(jobId, command);
+                    // cd .. && rm -rf "$(OP_INPUT)"
+                    InternalCommand deleteFolderCommand = new DeleteFolderCommand(jobId, workFolder);
+                    return internalCommandManager.exec(jobId, deleteFolderCommand);
                 }
             );
 
-            jobProcessor.process(new Job(jobId, commands.toArray(new Command[commands.size()])));
+            jobProcessor.process(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();
@@ -202,7 +175,7 @@ public class OGRAttributesResource {
     }
 
     /**
-     * This rest end point is for getting the result of get attribute upload operation
+     * This REST end point is for getting the result of get attribute upload operation
      * 
      * @param jobId
      *            : The jobid from upload

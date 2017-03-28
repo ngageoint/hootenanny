@@ -80,8 +80,7 @@ public class JobRunnable implements Runnable {
                 CommandResult result = command.execute();
 
                 if (result.failed()) {
-                    jobStatusManager.setFailed(job.getJobId(), "Job with ID = " + job.getJobId() + " failed." +
-                            "  Command with ID = " + result.getId() + " caused the failure.");
+                    jobStatusManager.setFailed(job.getJobId(), "Command with ID = " + result.getId() + " caused the failure.");
                     break;
                 }
                 else {

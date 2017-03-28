@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +37,9 @@ import org.springframework.stereotype.Component;
 @Component
 class FileETLCommandFactory {
 
-    FileETLCommand build(List<Map<String, String>> requests, List<String> zipNames, String translationPath,
+    FileETLCommand build(List<Map<String, String>> requests, List<File> zips, String translationPath,
                          String jobId, String etlName, Boolean isNoneTranslation, String fgdbFeatureClasses,
                          String debugLevel, String inputType, Class<?> caller) {
-        return new FileETLCommand(requests, zipNames, translationPath, jobId, etlName, isNoneTranslation, fgdbFeatureClasses, debugLevel, inputType, caller);
+        return new FileETLCommand(requests, zips, translationPath, jobId, etlName, isNoneTranslation, fgdbFeatureClasses, debugLevel, inputType, caller);
     }
 }

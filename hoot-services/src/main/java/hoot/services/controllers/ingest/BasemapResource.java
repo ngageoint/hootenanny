@@ -160,7 +160,7 @@ public class BasemapResource {
                 File tileOutputDir = new File(BASEMAPS_TILES_FOLDER, basemapName);
                 FileUtils.forceMkdir(tileOutputDir);
 
-                Command[] commands = {
+                Command[] workflow = {
                     () -> {
                         String extension = ".processing";
                         File file = new File(BASEMAPS_FOLDER, basemapName + extension);
@@ -194,7 +194,7 @@ public class BasemapResource {
                     }
                 };
 
-                jobProcessor.process(new Job(jobId, commands));
+                jobProcessor.process(new Job(jobId, workflow));
 
                 JSONObject response = new JSONObject();
                 response.put("jobid", jobId);

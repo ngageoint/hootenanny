@@ -104,7 +104,7 @@ public class ClipDatasetResource {
         try {
             Map<String, String> paramMap = JsonUtils.jsonToMap(params);
 
-            Command[] commands = {
+            Command[] workflow = {
                 // Clip to a bounding box
                 () -> {
                     ExternalCommand clipCommand = clipDatasetCommandFactory.build(paramMap, debugLevel, this.getClass());
@@ -118,7 +118,7 @@ public class ClipDatasetResource {
                 }
             };
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.process(new Job(jobId, workflow));
         }
         catch (Exception e) {
             String msg = "Error processing dataset clipping request!  Params: " + params;

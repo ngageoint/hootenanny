@@ -133,10 +133,10 @@ public class ExportResource {
             File workDir = new File(TEMP_OUTPUT_PATH, jobId);
             FileUtils.forceMkdir(workDir);
 
-            List<Command> commands = new LinkedList<>();
+            List<Command> workflow = new LinkedList<>();
 
             if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
-                commands.add(
+                workflow.add(
                     () -> {
                         ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportOSMCommand.class, this.getClass());
@@ -147,11 +147,11 @@ public class ExportResource {
 
                 if (outputType.equalsIgnoreCase("osm")) {
                     Command zipCommand = getZIPCommand(jobId, workDir, outputType);
-                    commands.add(zipCommand);
+                    workflow.add(zipCommand);
                 }
             }
             else if (outputType.equalsIgnoreCase("osc")) {
-                commands.add(
+                workflow.add(
                     () -> {
                         ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportOSCCommand.class, this.getClass());
@@ -161,7 +161,7 @@ public class ExportResource {
             }
             //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
-                commands.add(
+                workflow.add(
                     () -> {
                         ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, OSMAPIDBDeriveChangesetCommand.class, this.getClass());
@@ -169,7 +169,7 @@ public class ExportResource {
                     }
                 );
 
-                commands.add(
+                workflow.add(
                     () -> {
                         ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, OSMAPIDBApplyChangesetCommand.class, this.getClass());
@@ -180,7 +180,7 @@ public class ExportResource {
             else { //else Shape/FGDB
                 if (outputType.equalsIgnoreCase("shp")) {
                     Command zipCommand = getZIPCommand(jobId, workDir, outputType);
-                    commands.add(zipCommand);
+                    workflow.add(zipCommand);
                 }
 
                 //TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
@@ -210,7 +210,7 @@ public class ExportResource {
                     if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
                         File tds61TemplatePath = new File(templateHome, "tds61.tgz");
                         if (tds61TemplatePath.exists()) {
-                            commands.add(
+                            workflow.add(
                                 () -> {
                                     //tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
                                     ExternalCommand untarFileCommand = new UnTARFileCommand(tds61TemplatePath, workDir, this.getClass());
@@ -222,7 +222,7 @@ public class ExportResource {
                     else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
                         File tds40TemplatePath = new File(templateHome, "tds40.tgz");
                         if (tds40TemplatePath.exists()) {
-                            commands.add(
+                            workflow.add(
                                 () -> {
                                     //OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
                                     //tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
@@ -234,7 +234,7 @@ public class ExportResource {
                     }
                 }
 
-                commands.add(
+                workflow.add(
                     () -> {
                         // ExportCommand
                         ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap,
@@ -244,10 +244,10 @@ public class ExportResource {
                 );
 
                 Command zipCommand = getZIPCommand(jobId, workDir, outputType);
-                commands.add(zipCommand);
+                workflow.add(zipCommand);
             }
 
-            jobProcessor.process(new Job(jobId, commands.toArray(new Command[commands.size()])));
+            jobProcessor.process(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
         catch (WebApplicationException wae) {
             throw wae;
