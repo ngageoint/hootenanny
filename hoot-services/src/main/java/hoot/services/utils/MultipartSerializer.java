@@ -60,10 +60,6 @@ public final class MultipartSerializer {
      *            = Directory where to store uploaded files
      */
     public static Map<File, String> serializeUpload(String inputType, FormDataMultiPart multiPart, File destinationDir) {
-        if (!Arrays.asList("FILE", "DIR").contains(inputType.toUpperCase())) {
-            throw new IllegalArgumentException("Unsupported inputType: " + inputType);
-        }
-
         Map<File, String> uploadedFiles = new HashMap<>();
 
         List<String> supportedExtensions = Arrays.asList("OSM", "GEONAMES", "SHP", "ZIP", "PBF", "TXT");
@@ -89,7 +85,12 @@ public final class MultipartSerializer {
 
             String extension = FilenameUtils.getExtension(fileName).toUpperCase();
 
-            if (inputType.equalsIgnoreCase("FILE")) {
+            if (inputType.equalsIgnoreCase("DIR")) {
+                //If user request type is DIR then treat it as FGDB folder
+                extension = "GDB";
+                uploadedFiles.put(uploadedFile, extension);
+            }
+            else {
                 if (supportedExtensions.contains(extension)) {
                     uploadedFiles.put(uploadedFile, extension);
                     logger.debug("Successfully uploaded file: {}", uploadedFile.getAbsolutePath());
@@ -97,11 +98,6 @@ public final class MultipartSerializer {
                 else {
                     logger.info("Skipping upload of {} file.  Extension {} not supported!", fileName, extension);
                 }
-            }
-            else if (inputType.equalsIgnoreCase("DIR")) {
-                //If user request type is DIR then treat it as FGDB folder
-                extension = "GDB";
-                uploadedFiles.put(uploadedFile, extension);
             }
         }
 

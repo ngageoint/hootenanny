@@ -122,7 +122,7 @@ public class FileUploadResourceTest {
         Map<String, Integer> zipStat = new HashMap<>();
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", "fgdb_ogr.zip", results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", destFile.getAbsolutePath(), results, zipStat);
 
         assertEquals(2, results.size());
 
@@ -195,7 +195,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", destFile.getAbsolutePath(), results, zipStat);
 
         List<String> zipList = new ArrayList<>();
 
@@ -275,7 +275,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "fgdb_ogr", "zip", destFile.getAbsolutePath(), results, zipStat);
 
         List<String> zipList = new ArrayList<>();
 
@@ -377,7 +377,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "osm", "zip", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "osm", "zip", destFile.getAbsolutePath(), results, zipStat);
 
         List<String> zipList = new ArrayList<>();
 
@@ -399,7 +399,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        analyzeUploadedFileMethod.invoke(res, "osm1", "osm", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "osm1", "osm", destFile.getAbsolutePath(), results, zipStat);
 
         int shpCnt = zipStat.get("shpcnt");
         int fgdbCnt = zipStat.get("fgdbcnt");
@@ -470,7 +470,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "ogr", "zip", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "ogr", "zip", destFile.getAbsolutePath(), results, zipStat);
 
         List<String> zipList = new ArrayList<>();
 
@@ -492,7 +492,7 @@ public class FileUploadResourceTest {
 
         inputsList.add("zip1");
 
-        analyzeUploadedFileMethod.invoke(res, "zip1", "zip", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "zip1", "zip", destFile.getAbsolutePath(), results, zipStat);
 
         shpZipCnt += zipStat.get("shpzipcnt");
         fgdbZipCnt += zipStat.get("fgdbzipcnt");
@@ -566,7 +566,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "TransportationGroundCrv", "shp", input, results, zipStat, FileUtils.getTempDirectory());
+        analyzeUploadedFileMethod.invoke(res, "TransportationGroundCrv", "shp", destFile.getAbsolutePath(), results, zipStat);
 
         List<String> zipList = new ArrayList<>();
 
@@ -585,7 +585,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        analyzeUploadedFileMethod.invoke(res, "TransportationGroundCrv2", "shp", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "TransportationGroundCrv2", "shp", destFile.getAbsolutePath(), results, zipStat);
 
         shpCnt += zipStat.get("shpcnt");
         fgdbCnt += zipStat.get("fgdbcnt");
@@ -653,7 +653,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "osm1", "osm", input, results, zipStat, FileUtils.getTempDirectory());
+        analyzeUploadedFileMethod.invoke(res, "osm1", "osm", destFile.getAbsolutePath(), results, zipStat);
 
         List<String> zipList = new ArrayList<>();
 
@@ -672,7 +672,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        analyzeUploadedFileMethod.invoke(res, "osm2", "osm", input, results, zipStat, homeFolder);
+        analyzeUploadedFileMethod.invoke(res, "osm2", "osm", destFile.getAbsolutePath(), results, zipStat);
 
         shpCnt += zipStat.get("shpcnt");
         fgdbCnt += zipStat.get("fgdbcnt");
@@ -742,7 +742,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        analyzeUploadedFileMethod.invoke(res, "DcGisRoads", "gdb", input, results, zipStat, FileUtils.getTempDirectory());
+        analyzeUploadedFileMethod.invoke(res, "DcGisRoads", "gdb", destDir.getAbsolutePath(), results, zipStat);
 
         List<String> zipList = new ArrayList<>();
 
@@ -862,7 +862,7 @@ public class FileUploadResourceTest {
 
     private static Method getAnalyzeUploadedFileMethod() throws NoSuchMethodException {
         Method analyzeUploadedFileMethod = FileUploadResource.class.getDeclaredMethod("analyzeUploadedFile",
-                String.class, String.class, String.class, List.class, Map.class, File.class);
+                String.class, String.class, String.class, List.class, Map.class);
         analyzeUploadedFileMethod.setAccessible(true);
         return analyzeUploadedFileMethod;
     }

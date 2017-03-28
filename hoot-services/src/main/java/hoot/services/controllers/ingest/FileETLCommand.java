@@ -103,12 +103,10 @@ import hoot.services.command.ExternalCommand;
     rm -rf "$(OP_INPUT_PATH)"
 */
 
-
 class FileETLCommand extends ExternalCommand {
 
-    FileETLCommand(List<Map<String, String>> requests, List<String> zipNames, String translation, String jobId, String etlName,
-                   Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, String inputType,
-                   Class<?> caller) {
+    FileETLCommand(List<Map<String, String>> requests, List<String> zipNames, String translationPath, String jobId, String etlName,
+                   Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, String inputType, Class<?> caller) {
 
         StringBuilder stringBuilder = new StringBuilder();
         for (Map<String,String> request : requests) {
@@ -133,7 +131,6 @@ class FileETLCommand extends ExternalCommand {
 
         // OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
 
-        String translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
         if ("GEONAMES".equalsIgnoreCase(inputType)) {
             options.add("-D convert.ops=hoot::TranslationOp");
             options.add("-D translation.script=" + quote(translationPath));
@@ -148,7 +145,7 @@ class FileETLCommand extends ExternalCommand {
 
         if ("OSM".equalsIgnoreCase(inputType) && !isNoneTranslation) {
             options.add("-D convert.ops=hoot::TranslationOp");
-            options.add("-D translation.script=" + quote(translation));
+            options.add("-D translation.script=" + quote(translationPath));
         }
 
         //# This replaces semicolon with vsizip and path
