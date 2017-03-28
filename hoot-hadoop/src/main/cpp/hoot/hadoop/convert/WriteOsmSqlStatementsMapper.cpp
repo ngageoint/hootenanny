@@ -25,6 +25,8 @@
 // Hoot
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/io/ApiDb.h>
 
 namespace hoot
 {
@@ -33,12 +35,20 @@ PP_FACTORY_REGISTER(pp::Mapper, WriteOsmSqlStatementsMapper)
 
 WriteOsmSqlStatementsMapper::WriteOsmSqlStatementsMapper()
 {
-
 }
 
-void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& /*map*/, HadoopPipes::MapContext& /*context*/)
+void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context)
 {
+  const QString table = QString::fromStdString(context.getJobConf()->get(tableKey()));
+  if (table == ApiDb::getCurrentNodesTableName())
+  {
+    const NodeMap& nodes = map->getNodes();
+    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+      shared_ptr<const Node> node = it->second;
 
+    }
+  }
 }
 
 }

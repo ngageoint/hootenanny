@@ -20,6 +20,7 @@
 #include <hoot/hadoop/stats/MapStats.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
+#include <hoot/core/io/ApiDb.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
@@ -54,13 +55,10 @@ void WriteOsmSqlStatementsDriver::write(const QString input, const QString outpu
 //      "-PaintNodes";
   job.setInput(fs.getAbsolutePath(input.toStdString()));
   job.setOutput(fs.getAbsolutePath(output.toStdString()));
-  //job.getConfiguration().set(ConflateMapper::envelopesKey(), _toString(envelopes));
-  //job.getConfiguration().set(ConflateMapper::replacementsKey(),
-    //fs.getAbsolutePath(in.toStdString()));
-  //job.getConfiguration().setDouble(ConflateMapper::maxWaySizeKey(), buffer);
-  //job.getConfiguration().setDouble(ConflateMapper::bufferKey(), buffer);
+  job.getConfiguration().set(
+    WriteOsmSqlStatementsMapper::tableKey(), ApiDb::getCurrentNodesTableName().toStdString());
   job.setMapperClass(WriteOsmSqlStatementsMapper::className());
-  job.setReducerClass(WriteOsmSqlStatementsReducer::className());
+  //job.setReducerClass(WriteOsmSqlStatementsReducer::className());
   job.setInputFormatClass(PbfInputFormat::className());
   job.setRecordReaderClass(PbfRecordReader::className());
   job.setRecordWriterClass(pp::LineRecordWriter::className());

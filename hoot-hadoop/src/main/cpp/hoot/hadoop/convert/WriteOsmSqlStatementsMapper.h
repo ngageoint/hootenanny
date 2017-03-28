@@ -31,6 +31,8 @@ public:
 
   static std::string className() { return "hoot::WriteOsmSqlStatementsMapper"; }
 
+  static string tableKey() { return "hoot.table"; }
+
   WriteOsmSqlStatementsMapper();
 
   virtual ~WriteOsmSqlStatementsMapper() {}
