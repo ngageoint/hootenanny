@@ -20,7 +20,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/hadoop/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>

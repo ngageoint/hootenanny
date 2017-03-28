@@ -36,8 +36,8 @@ using namespace std;
 
 #include "PaintNodesMapper.h"
 #include "PaintNodesReducer.h"
-#include "../PbfInputFormat.h"
-#include "../PbfRecordReader.h"
+#include "../pbf/PbfInputFormat.h"
+#include "../pbf/PbfRecordReader.h"
 
 namespace hoot
 {
