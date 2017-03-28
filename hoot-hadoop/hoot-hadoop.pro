@@ -42,18 +42,17 @@ HEADERS += \
 
 SOURCES += \
     src/test/cpp/hoot/hadoop/TestPlugin.cpp \
-    src/test/cpp/hoot/hadoop/PbfInputFormatTest.cpp \
-    src/test/cpp/hoot/hadoop/PbfRecordWriterTest.cpp \
+    src/test/cpp/hoot/hadoop/pbf/PbfInputFormatTest.cpp \
+    src/test/cpp/hoot/hadoop/pbf/PbfRecordWriterTest.cpp \
     src/test/cpp/hoot/hadoop/way-join/WayJoin1Test.cpp \
     src/test/cpp/hoot/hadoop/way-join/WayJoin2InputFormatTest.cpp \
     src/test/cpp/hoot/hadoop/way-join/WayJoinDriverTest.cpp \
     src/test/cpp/hoot/hadoop/conflate/ConflateDriverTest.cpp \
-    src/test/cpp/hoot/hadoop/PaintNodesDriverTest.cpp \
+    src/test/cpp/hoot/hadoop/paint-nodes/PaintNodesDriverTest.cpp \
     src/test/cpp/hoot/hadoop/HadoopTileWorkerTest.cpp \
     src/test/cpp/hoot/hadoop/stats/MapStatsDriverTest.cpp \
     src/test/cpp/hoot/hadoop/HadoopTileWorker2Test.cpp \
-    src/test/cpp/hoot/hadoop/MapStatsTest.cpp \
-
+    src/test/cpp/hoot/hadoop/stats/MapStatsTest.cpp
 }
 
 HEADERS += \

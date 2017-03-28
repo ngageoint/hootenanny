@@ -34,7 +34,7 @@ using namespace pp;
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 
-#include "MapReduceTestFixture.h"
+#include "../MapReduceTestFixture.h"
 
 namespace hoot
 {
