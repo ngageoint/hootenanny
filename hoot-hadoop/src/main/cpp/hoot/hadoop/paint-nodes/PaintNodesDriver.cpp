@@ -21,7 +21,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 
 // Pretty Pipes
 #include <pp/Hdfs.h>
@@ -36,8 +36,8 @@ using namespace std;
 
 #include "PaintNodesMapper.h"
 #include "PaintNodesReducer.h"
-#include "PbfInputFormat.h"
-#include "PbfRecordReader.h"
+#include "../PbfInputFormat.h"
+#include "../PbfRecordReader.h"
 
 namespace hoot
 {

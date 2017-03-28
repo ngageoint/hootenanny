@@ -60,12 +60,12 @@ HEADERS += \
     src/main/cpp/hoot/hadoop/PbfInputFormat.h \
     src/main/cpp/hoot/hadoop/PbfInputSplit.h \
     src/main/cpp/hoot/hadoop/PbfRecordReader.h \
-    src/main/cpp/hoot/hadoop/PaintNodesMapper.h \
+    src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesMapper.h \
     src/main/cpp/hoot/hadoop/MatrixRecordWriter.h \
     src/main/cpp/hoot/hadoop/OsmMapMapper.h \
-    src/main/cpp/hoot/hadoop/PaintNodesReducer.h \
+    src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesReducer.h \
     src/main/cpp/hoot/hadoop/NodeDensity.h \
-    src/main/cpp/hoot/hadoop/PaintNodesDriver.h \
+    src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesDriver.h \
     src/main/cpp/hoot/hadoop/way-join/WayJoinDriver.h \
     src/main/cpp/hoot/hadoop/way-join/WayJoinCmd.h \
     src/main/cpp/hoot/hadoop/PbfRecordWriter.h \
@@ -78,7 +78,7 @@ HEADERS += \
     src/main/cpp/hoot/hadoop/way-join/WayJoin2InputSplit.h \
     src/main/cpp/hoot/hadoop/way-join/WayJoin2RecordReader.h \
     src/main/cpp/hoot/hadoop/HadoopIdGenerator.h \
-    src/main/cpp/hoot/hadoop/MapStats.h \
+    src/main/cpp/hoot/hadoop/stats/MapStats.h \
     src/main/cpp/hoot/hadoop/HadoopTileWorker.h \
     src/main/cpp/hoot/hadoop/conflate/ConflateMapper.h \
     src/main/cpp/hoot/hadoop/conflate/ConflateReducer.h \
@@ -96,12 +96,12 @@ SOURCES += \
     src/main/cpp/hoot/hadoop/PbfInputFormat.cpp \
     src/main/cpp/hoot/hadoop/PbfInputSplit.cpp \
     src/main/cpp/hoot/hadoop/PbfRecordReader.cpp \
-    src/main/cpp/hoot/hadoop/PaintNodesMapper.cpp \
+    src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesMapper.cpp \
     src/main/cpp/hoot/hadoop/MatrixRecordWriter.cpp \
     src/main/cpp/hoot/hadoop/OsmMapMapper.cpp \
-    src/main/cpp/hoot/hadoop/PaintNodesReducer.cpp \
+    src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesReducer.cpp \
     src/main/cpp/hoot/hadoop/NodeDensity.cpp \
-    src/main/cpp/hoot/hadoop/PaintNodesDriver.cpp \
+    src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesDriver.cpp \
     src/main/cpp/hoot/hadoop/way-join/WayJoinDriver.cpp \
     src/main/cpp/hoot/hadoop/way-join/WayJoinCmd.cpp \
     src/main/cpp/hoot/hadoop/PbfRecordWriter.cpp \
@@ -114,7 +114,7 @@ SOURCES += \
     src/main/cpp/hoot/hadoop/way-join/WayJoin2InputSplit.cpp \
     src/main/cpp/hoot/hadoop/way-join/WayJoin2RecordReader.cpp \
     src/main/cpp/hoot/hadoop/HadoopIdGenerator.cpp \
-    src/main/cpp/hoot/hadoop/MapStats.cpp \
+    src/main/cpp/hoot/hadoop/stats/MapStats.cpp \
     src/main/cpp/hoot/hadoop/HadoopTileWorker.cpp \
     src/main/cpp/hoot/hadoop/conflate/ConflateMapper.cpp \
     src/main/cpp/hoot/hadoop/conflate/ConflateReducer.cpp \
@@ -131,5 +131,5 @@ SOURCES += \
     src/main/cpp/hoot/hadoop/cmd/BigCookieCutterCmd.cpp \
     src/main/cpp/hoot/hadoop/cmd/BigPertyCmd.cpp \
     src/main/cpp/hoot/hadoop/cmd/BigUnifyCmd.cpp \
-    src/main/cpp/hoot/hadoop/BigPaintNodesCmd.cpp \
+    src/main/cpp/hoot/hadoop/cmd/BigPaintNodesCmd.cpp \
     src/main/cpp/hoot/hadoop/Driver.cpp

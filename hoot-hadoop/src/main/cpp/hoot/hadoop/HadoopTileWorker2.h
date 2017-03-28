@@ -19,7 +19,7 @@
 
 #include <hoot/core/fourpass/TileWorker2.h>
 
-#include "MapStats.h"
+#include "stats/MapStats.h"
 
 namespace hoot
 {

@@ -28,8 +28,8 @@ using namespace pp;
 
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>
-#include <hoot/hadoop/PaintNodesMapper.h>
-#include <hoot/hadoop/PaintNodesReducer.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesMapper.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesReducer.h>
 
 #include "MapReduceTestFixture.h"
 

@@ -17,8 +17,8 @@
 #ifndef PAINTNODESMAPPER_H
 #define PAINTNODESMAPPER_H
 
-#include "NodeDensity.h"
-#include "OsmMapMapper.h"
+#include "../NodeDensity.h"
+#include "../OsmMapMapper.h"
 
 namespace hoot
 {

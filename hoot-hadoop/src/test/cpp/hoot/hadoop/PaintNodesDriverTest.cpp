@@ -32,7 +32,7 @@ using namespace pp;
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/PbfInputFormat.h>
 #include <hoot/hadoop/PbfRecordReader.h>
-#include <hoot/hadoop/PaintNodesDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 
 #include "MapReduceTestFixture.h"
 
