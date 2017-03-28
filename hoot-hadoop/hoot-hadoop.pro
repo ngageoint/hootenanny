@@ -57,9 +57,9 @@ SOURCES += \
 }
 
 HEADERS += \
-    src/main/cpp/hoot/hadoop/PbfInputFormat.h \
-    src/main/cpp/hoot/hadoop/PbfInputSplit.h \
-    src/main/cpp/hoot/hadoop/PbfRecordReader.h \
+    src/main/cpp/hoot/hadoop/pbf/PbfInputFormat.h \
+    src/main/cpp/hoot/hadoop/pbf/PbfInputSplit.h \
+    src/main/cpp/hoot/hadoop/pbf/PbfRecordReader.h \
     src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesMapper.h \
     src/main/cpp/hoot/hadoop/MatrixRecordWriter.h \
     src/main/cpp/hoot/hadoop/OsmMapMapper.h \
@@ -67,8 +67,8 @@ HEADERS += \
     src/main/cpp/hoot/hadoop/NodeDensity.h \
     src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesDriver.h \
     src/main/cpp/hoot/hadoop/way-join/WayJoinDriver.h \
-    src/main/cpp/hoot/hadoop/way-join/WayJoinCmd.h \
-    src/main/cpp/hoot/hadoop/PbfRecordWriter.h \
+    src/main/cpp/hoot/hadoop/cmd/WayJoinCmd.h \
+    src/main/cpp/hoot/hadoop/pbf/PbfRecordWriter.h \
     src/main/cpp/hoot/hadoop/way-join/WayJoin1Mapper.h \
     src/main/cpp/hoot/hadoop/way-join/WayJoin1Reducer.h \
     src/main/cpp/hoot/hadoop/OsmMapReducer.h \
@@ -93,9 +93,9 @@ HEADERS += \
     src/main/cpp/hoot/hadoop/Driver.h
 
 SOURCES += \
-    src/main/cpp/hoot/hadoop/PbfInputFormat.cpp \
-    src/main/cpp/hoot/hadoop/PbfInputSplit.cpp \
-    src/main/cpp/hoot/hadoop/PbfRecordReader.cpp \
+    src/main/cpp/hoot/hadoop/pbf/PbfInputFormat.cpp \
+    src/main/cpp/hoot/hadoop/pbf/PbfInputSplit.cpp \
+    src/main/cpp/hoot/hadoop/pbf/PbfRecordReader.cpp \
     src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesMapper.cpp \
     src/main/cpp/hoot/hadoop/MatrixRecordWriter.cpp \
     src/main/cpp/hoot/hadoop/OsmMapMapper.cpp \
@@ -103,8 +103,8 @@ SOURCES += \
     src/main/cpp/hoot/hadoop/NodeDensity.cpp \
     src/main/cpp/hoot/hadoop/paint-nodes/PaintNodesDriver.cpp \
     src/main/cpp/hoot/hadoop/way-join/WayJoinDriver.cpp \
-    src/main/cpp/hoot/hadoop/way-join/WayJoinCmd.cpp \
-    src/main/cpp/hoot/hadoop/PbfRecordWriter.cpp \
+    src/main/cpp/hoot/hadoop/cmd/WayJoinCmd.cpp \
+    src/main/cpp/hoot/hadoop/pbf/PbfRecordWriter.cpp \
     src/main/cpp/hoot/hadoop/way-join/WayJoin1Mapper.cpp \
     src/main/cpp/hoot/hadoop/way-join/WayJoin1Reducer.cpp \
     src/main/cpp/hoot/hadoop/OsmMapReducer.cpp \
