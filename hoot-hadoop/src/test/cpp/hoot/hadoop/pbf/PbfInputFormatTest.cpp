@@ -31,7 +31,7 @@ using namespace pp;
 #include <hoot/hadoop/paint-nodes/PaintNodesMapper.h>
 #include <hoot/hadoop/paint-nodes/PaintNodesReducer.h>
 
-#include "MapReduceTestFixture.h"
+#include "../MapReduceTestFixture.h"
 
 namespace hoot
 {
