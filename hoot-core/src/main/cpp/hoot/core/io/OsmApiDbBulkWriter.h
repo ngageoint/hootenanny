@@ -52,27 +52,7 @@ using namespace boost;
 using namespace std;
 using namespace Tgs;
 
-//These match up exclusively with the v0.6 OSM API database and shouldn't be changed.
-static const QString CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
-static const QString CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
-static const QString HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
-static const QString CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
-static const QString CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t1\t%3\n";
-static const QString CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
-static const QString CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
-static const QString HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t1\t%5\n";
-static const QString CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\n";
-//for whatever strange reason, the historical node tags table column order in the API datbase
-//is different than the other historical tags tables; this makes a difference when using the
-//offline loader, since it is sensitive to ordering
-static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\t%2\t%3\n";
+class OsmApiDbSqlStatementFormatter;
 
 /**
  * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
@@ -204,19 +184,16 @@ private:
   bool _reserveRecordIdsBeforeWritingData;
   unsigned int _fileDataPassCtr;
 
-  QMap<QString, QString> _outputFormatStrings;
-
   //ended up not going with temp files here, since the file outputs aren't always temporary
   map<QString, pair<shared_ptr<QFile>, shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
+  shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
 
   shared_ptr<QElapsedTimer> _timer;
 
-  unsigned int _convertDegreesToNanodegrees(const double degrees) const;
   QString _formatPotentiallyLargeNumber(const long number);
-  QString _escapeCopyToData(const QString stringToOutput) const;
   QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   void _reset();
@@ -241,7 +218,6 @@ private:
                          const bool addByteOrderMarker = false);
   QString _getCombinedSqlFileName() const;
   QString _getTableOutputFileName(const QString tableName) const;
-  void _initOutputFormatStrings();
 
   void _writeSequenceUpdatesToStream(const long changesetId, const long nodeId, const long wayId,
                                      const long relationId, QString& outputStr);
@@ -249,7 +225,7 @@ private:
   void _writeRelationToStream(const long relationDbId);
   void _writeRelationMembersToStream(const ConstRelationPtr& relation, const long dbRelationId);
   void _writeRelationMemberToStream(const long sourceRelation,
-                                    const RelationData::Entry& memberEntry, const long memberDbId,
+                                    const RelationData::Entry& member, const long memberDbId,
                                     const unsigned int memberSequenceIndex);
   void _writeWayToStream(const long wayDbId);
   void _writeWayNodesToStream(const long wayId, const vector<long>& waynodeIds);

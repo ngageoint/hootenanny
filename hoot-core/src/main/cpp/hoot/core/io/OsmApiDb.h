@@ -29,6 +29,9 @@
 
 // Hoot
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Relation.h>
 
 // Qt
 #include <QFile>
@@ -181,7 +184,6 @@ private:
 
   long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
   long _getIdFromSequence(const QString tableName, const QString sequenceType);
-
 };
 
 }

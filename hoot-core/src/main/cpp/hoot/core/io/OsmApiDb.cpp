@@ -27,9 +27,6 @@
 #include "OsmApiDb.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
