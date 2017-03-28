@@ -862,7 +862,7 @@ public class FileUploadResourceTest {
 
     private static Method getAnalyzeUploadedFileMethod() throws NoSuchMethodException {
         Method analyzeUploadedFileMethod = FileUploadResource.class
-                .getDeclaredMethod("processUploadedFile", String.class, File.class, Map.class);
+                .getDeclaredMethod("handleUploadedFile", String.class, File.class, Map.class);
         analyzeUploadedFileMethod.setAccessible(true);
         return analyzeUploadedFileMethod;
     }
