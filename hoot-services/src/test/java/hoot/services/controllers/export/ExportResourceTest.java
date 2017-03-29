@@ -27,7 +27,8 @@
 package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -47,6 +48,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -121,6 +123,7 @@ public class ExportResourceTest {
      * test ExportJobResource at all but will leave it in this test class for lack of a better
      * place to put it.
      */
+    @Ignore
     @Test
     @Category(IntegrationTest.class)
     public void testExportToChangesetScript() throws Exception {

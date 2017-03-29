@@ -40,12 +40,24 @@ public class ExternalCommand extends JSONObject {
         this.put("caller", caller.getName());
         this.put("command", command);
         this.put("workDir", new File(HootProperties.TEMP_OUTPUT_PATH));
+        this.put("trackable", Boolean.TRUE);
     }
 
     protected void configureCommand(String command, Class<?> caller, File workDir) {
         this.put("caller", caller.getName());
         this.put("command", command);
         this.put("workDir", workDir);
+        this.put("trackable", Boolean.TRUE);
+    }
+
+    protected void configureCommand(String command, Class<?> caller, Boolean trackable) {
+        this.configureCommand(command, caller);
+        this.put("trackable", trackable);
+    }
+
+    protected void configureCommand(String command, Class<?> caller, File workDir, Boolean trackable) {
+        this.configureCommand(command, caller, workDir);
+        this.put("trackable", trackable);
     }
 
     protected static String quote(String commandOption) {

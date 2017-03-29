@@ -70,6 +70,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
         String command = (String) externalCommand.get("command");
         File workDir = (File) externalCommand.get("workDir");
         String caller = (String) externalCommand.get("caller");
+        Boolean trackable = (Boolean) externalCommand.get("trackable");
 
         if (jobId != null) {
             activeCommands.put(jobId, cmdRunner);
@@ -77,7 +78,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
 
         CommandResult commandResult;
         try {
-            commandResult = cmdRunner.exec(command, jobId, caller, workDir);
+            commandResult = cmdRunner.exec(command, jobId, caller, workDir, trackable);
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to execute: " + command, e);

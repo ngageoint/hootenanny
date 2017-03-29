@@ -35,37 +35,6 @@ import java.util.stream.Collectors;
 
 import hoot.services.geo.BoundingBox;
 
-/*
-== derive-changeset
-
-=== Description
-
-The +derive-changeset+ command creates an OSM changeset file that represents the difference
-between two input OSM files.  The changeset can later be applied to an OSM API database.
-
-* +input1+ - OSM data input 1 (e.g. .osm file).
-* +input2+ - OSM data input 2 (e.g. .osm file).
-* +output+ - Output location (e.g. .osc or .osc.sql file).
-* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
-                        element ID continuity with the target database when generating SQL changesets only.
-                        Required only if the changeset output format is .osc.sql.
-
-=== Usage
-
---------------------------------------
-derive-changeset (input1) (input2) (output.osc) [jobId] [hootApiDatabaseUrl]
---------------------------------------
-
-==== Examples
-
---------------------------------------
-# xml changeset output
-hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc
-
-# sql changeset output
-hoot derive-changeset inputData1.osm inputData2.osm outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
---------------------------------------
-*/
 
 class ExportOSCCommand extends ExportCommand {
 

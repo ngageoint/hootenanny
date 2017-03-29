@@ -63,7 +63,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public ExternalCommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String command, String jobId, String caller, File workingDir) {
+    public CommandResult exec(String command, String jobId, String caller, File workingDir, Boolean trackable) {
         logger.debug("About to execute the following command: {}", commandArrayToString(command, caller));
 
         try (OutputStream stdout = new ByteArrayOutputStream();
@@ -119,7 +119,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             commandResult.setJobId(jobId);
             commandResult.setWorkingDir(workingDir);
 
-            updateDatabase(commandResult);
+            if (trackable) {
+                updateDatabase(commandResult);
+            }
 
             if (commandResult.failed()) {
                 logger.error("FAILURE of: {}", commandResult, exception);

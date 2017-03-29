@@ -200,12 +200,15 @@ public class ExportResource {
                 //    endif # Else
                 // endif # Append
 
-                String translation = paramMap.get("translation");
                 if (Boolean.valueOf(paramMap.get("append"))) {
                     //Appends data to a blank fgdb. The template is stored with the fouo translations.
+
+                    //$(HOOT_HOME)/translations-local/template
                     File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
 
+                    String translation = paramMap.get("translation");
                     File tdsTemplate = null;
+
                     if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
                         tdsTemplate = new File(templateHome, "tds61.tgz");
                     }
