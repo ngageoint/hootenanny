@@ -49,7 +49,7 @@ namespace Tgs
     /**
      * @brief ~BaseRandomForestManager destructor
      */
-    ~BaseRandomForestManager();
+    virtual ~BaseRandomForestManager();
 
     /**
     *  Adds a training vector to the random forest training set
