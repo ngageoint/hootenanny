@@ -207,14 +207,13 @@ protected:
    */
   bool _isRLayer(int depth) const
   {
-    bool result;
+    bool result = true;
     // this is the standard case, we haven't exceeded either depth, then alternate layering
     if (depth < _rDepth && depth < _fqDepth)
     {
       result = depth % 2 == 0;
     }
-    // if we've exceeded either depth
-    else if (depth >= _rDepth || depth >= _fqDepth)
+    else  // we've exceeded one depth or the other
     {
       // if the depths are equal then continue alternating.
       if (_fqDepth == _rDepth)
