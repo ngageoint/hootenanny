@@ -31,17 +31,19 @@ import java.io.File;
 import hoot.services.command.ExternalCommand;
 
 
-public class UnTARFileCommand extends ExternalCommand {
+public class ZIPFileCommand extends ExternalCommand {
 
     /**
+     * Compresses file into a ZIP file using system's 'zip' utility
      *
-     * @param sourceTAR
-     * @param targetFolder
-     * @param caller
+     * @param targetZIP ZIP file to produce
+     * @param workDir present working directory (PWD) during execution
+     * @param file file to zip.  This file must be a child of workDir
+     * @param caller class that identifies caller of the command
      */
-    public UnTARFileCommand(File sourceTAR, File targetFolder, Class<?> caller) {
-        //tar -zxf sourceTAR -C targetFolder
-        String command = "tar -zxf " + quote(sourceTAR.getAbsolutePath()) + " -C " + quote(targetFolder.getAbsolutePath());
-        super.configureCommand(command, caller);
+    public ZIPFileCommand(File targetZIP, File workDir, String file, Class<?> caller) {
+        //zip targetZIP fileToZIP
+        String command = "zip " + quote(targetZIP.getAbsolutePath()) + " " + quote(file);
+        super.configureCommand(command, caller, workDir);
     }
 }

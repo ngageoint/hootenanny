@@ -32,12 +32,18 @@ import java.io.File;
 import hoot.services.command.ExternalCommand;
 
 
-public class ZIPDirectoryCommand extends ExternalCommand {
+public class ZIPDirectoryContentsCommand extends ExternalCommand {
 
-    public ZIPDirectoryCommand(File targetZip, File sourceDirectory, Class<?> caller) {
-        //zip -r targetZip srcDirectory
-        String command = "zip -r " + quote(targetZip.getAbsolutePath()) + " " + quote(sourceDirectory.getAbsolutePath());
-
-        super.configureCommand(command, caller);
+    /**
+     * Recursively compresses directory contents into a ZIP file using system's 'zip' utility
+     *
+     * @param targetZIP ZIP file to produce
+     * @param workDir present working directory (PWD) during execution
+     * @param caller class that identifies caller of the command
+     */
+    public ZIPDirectoryContentsCommand(File targetZIP, File workDir, Class<?> caller) {
+        //zip -r targetZip *
+        String command = "zip -r " + quote(targetZIP.getAbsolutePath()) + " " + "*";
+        super.configureCommand(command, caller, workDir);
     }
 }

@@ -34,6 +34,13 @@ import hoot.services.command.ExternalCommand;
 
 public class UnZIPFileCommand extends ExternalCommand {
 
+    /**
+     * Decompresses a ZIP file
+     *
+     * @param sourceZIP ZIP file to decompress
+     * @param targetFolder directory where to store the contents of the ZIP
+     * @param caller class that identifies caller of the command
+     */
     public UnZIPFileCommand(File sourceZIP, File targetFolder, Class<?> caller) {
         //unzip sourceZIP -d targetFolder
         String command = "unzip " + quote(sourceZIP.getAbsolutePath()) + " -d " + quote(targetFolder.getAbsolutePath());

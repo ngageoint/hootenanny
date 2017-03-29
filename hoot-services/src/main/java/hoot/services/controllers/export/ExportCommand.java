@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.export;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 
@@ -34,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,22 +149,24 @@ class ExportCommand extends ExternalCommand {
     private final String jobId;
     private final java.util.Map<String, String> paramMap;
     private final String outputType;
+    private final String outputName;
     private final String input;
 
     ExportCommand(String jobId, java.util.Map<String, String> paramMap, String debugLevel, Class<?> caller) {
         this.jobId = jobId;
         this.paramMap = paramMap;
         this.outputType = paramMap.get("outputtype");
+        this.outputName = paramMap.get("outputname");
         this.input = paramMap.get("input");
 
         String hootOptions = this.getCommonExportHootOptions().stream().collect(Collectors.joining(" "));
         String outputPath = this.getOutputPath();
-        String translation = paramMap.get("translation");
+        String translationPath = new File(HOME_FOLDER, paramMap.get("translation")).getAbsolutePath();
         String removeReviewSwitch = "-C RemoveReview2Pre.conf";
 
         // hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
         String command = "hoot osm2ogr --" + debugLevel + " " + removeReviewSwitch + " " + hootOptions + " " +
-                                    quote(translation) + " " + quote(input) + " " + quote(outputPath);
+                                    quote(translationPath) + " " + quote(input) + " " + quote(outputPath);
 
         super.configureCommand(command, caller);
     }
@@ -198,7 +202,15 @@ class ExportCommand extends ExternalCommand {
 
     String getOutputPath() {
         File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
-        File outputFile = new File(outputFolder,jobId + "." + outputType);
+        File outputFile;
+
+        if (!StringUtils.isBlank(this.outputName)) {
+            outputFile = new File(outputFolder, this.outputName + "." + this.outputType);
+        }
+        else {
+            outputFile = new File(outputFolder, jobId + "." + this.outputType);
+        }
+
         return outputFile.getAbsolutePath();
     }
 
