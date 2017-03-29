@@ -24,14 +24,13 @@ namespace hoot
 {
 
 class OsmMap;
+class OsmApiDbSqlStatementFormatter;
 
 class WriteOsmSqlStatementsMapper : public OsmMapMapper
 {
 public:
 
   static std::string className() { return "hoot::WriteOsmSqlStatementsMapper"; }
-
-  static string tableKey() { return "hoot.table"; }
 
   WriteOsmSqlStatementsMapper();
 
@@ -40,6 +39,15 @@ public:
 protected:
 
   virtual void _map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context);
+
+private:
+
+  //HadoopPipes::MapContext* _context;
+  long _recordCount;
+  shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+
+//  void _writeElementSqlStatements(const ConstElementPtr& element,
+//                                  HadoopPipes::MapContext& context);
 
 };
 

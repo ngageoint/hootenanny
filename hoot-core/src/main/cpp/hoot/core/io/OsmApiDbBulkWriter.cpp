@@ -1023,7 +1023,7 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType:
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
     const QStringList tagSqlStrs =
-      _sqlFormatter->tagToSqlStrings(ElementId(elementType, dbId), it.key(), it.value());
+      _sqlFormatter->tagToSqlStrings(dbId, elementType, it.key(), it.value());
     *currentTable << tagSqlStrs[0];
     *historicalTable << tagSqlStrs[1];
   }

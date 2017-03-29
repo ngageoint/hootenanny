@@ -55,10 +55,10 @@ void WriteOsmSqlStatementsDriver::write(const QString input, const QString outpu
 //      "-PaintNodes";
   job.setInput(fs.getAbsolutePath(input.toStdString()));
   job.setOutput(fs.getAbsolutePath(output.toStdString()));
-  job.getConfiguration().set(
-    WriteOsmSqlStatementsMapper::tableKey(), ApiDb::getCurrentNodesTableName().toStdString());
+  //job.getConfiguration().set(
+    //WriteOsmSqlStatementsMapper::tableKey(), ApiDb::getCurrentNodesTableName().toStdString());
   job.setMapperClass(WriteOsmSqlStatementsMapper::className());
-  //job.setReducerClass(WriteOsmSqlStatementsReducer::className());
+  job.setReducerClass(WriteOsmSqlStatementsReducer::className());
   job.setInputFormatClass(PbfInputFormat::className());
   job.setRecordReaderClass(PbfRecordReader::className());
   job.setRecordWriterClass(pp::LineRecordWriter::className());

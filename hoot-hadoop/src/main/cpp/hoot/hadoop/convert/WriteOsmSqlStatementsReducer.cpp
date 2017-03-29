@@ -17,6 +17,7 @@
 #include "WriteOsmSqlStatementsReducer.h"
 
 // Hoot
+#include <hoot/core/util/HootException.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
@@ -30,12 +31,29 @@ PP_FACTORY_REGISTER(pp::Reducer, WriteOsmSqlStatementsReducer)
 
 WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer()
 {
-
+  _writer = NULL;
 }
 
-void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& /*context*/)
+void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
 {
+  if (_writer == NULL)
+  {
+    HadoopPipes::RecordWriter* writer = pp::HadoopPipesUtils::getRecordWriter(&context);
+    _writer = dynamic_cast<pp::RecordWriter*>(writer);
+    if (_writer == NULL)
+    {
+      throw HootException("Error getting RecordWriter.");
+    }
+  }
 
+  const string& keyStr = context.getInputKey();
+  QString values = "";
+  while (context.nextValue())
+  {
+    const string& value = context.getInputValue();
+    values += QString::fromStdString(value)/*.trimmed()*/;
+  }
+  _writer->emit(keyStr, values.toStdString());
 }
 
 }

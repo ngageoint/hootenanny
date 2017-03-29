@@ -75,8 +75,8 @@ public:
   QStringList relationMemberToSqlStrings(const long relationId, const long memberId,
                                          const RelationData::Entry& member,
                                          const unsigned int memberSequenceIndex);
-  QStringList tagToSqlStrings(const ElementId& elementId, const QString tagKey,
-                              const QString tagValue);
+  QStringList tagToSqlStrings(const long elementId, const ElementType& elementType,
+                              const QString tagKey, const QString tagValue);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
                                const long numChangesInChangeset, const Envelope& changesetBounds);
 
@@ -89,6 +89,10 @@ public:
   QStringList getWayTagSqlHeaderStrings() const;
   QStringList getRelationTagSqlHeaderStrings() const;
   QString getChangesetSqlHeaderString() const;
+
+  QStringList elementToSqlStrings(const ConstElementPtr& element, const long elementId,
+                                  const long changesetId);
+  QStringList getElementSqlHeaderStrings(const ElementType& elementType) const;
 
 private:
 

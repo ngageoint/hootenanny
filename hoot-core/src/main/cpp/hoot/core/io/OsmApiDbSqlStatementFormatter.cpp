@@ -249,13 +249,14 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
   return sqlStrs;
 }
 
-QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const ElementId& elementId,
+QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
+                                                           const ElementType& elementType,
                                                            const QString tagKey,
                                                            const QString tagValue)
 {
   QStringList sqlStrs;
 
-  const QString elementIdStr = QString::number(elementId.getId());
+  const QString elementIdStr = QString::number(elementId);
   QString key = _escapeCopyToData(tagKey);
   //pg_bulkload doesn't seem to be tolerating the empty data
   if (key.trimmed().isEmpty())
@@ -276,7 +277,7 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const ElementId& elem
       .arg(elementIdStr, key, value));
   //all three of them are not the same for historical
   QString historicalFormatString = _outputFormatStrings[ApiDb::getWayTagsTableName()];
-  if (elementId.getType() == ElementType::Node)
+  if (elementType == ElementType::Node)
   {
     //see explanation for this silliness in the header file
     historicalFormatString = _outputFormatStrings[ApiDb::getNodeTagsTableName()];
@@ -405,6 +406,46 @@ QString OsmApiDbSqlStatementFormatter::getChangesetSqlHeaderString() const
   return "COPY " + ApiDb::getChangesetsTableName() +
           " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
           "FROM stdin;\n";
+}
+
+QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElementPtr& element,
+                                                               const long elementId,
+                                                               const long changesetId)
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      return nodeToSqlStrings(dynamic_pointer_cast<const Node>(element), elementId, changesetId);
+
+    case ElementType::Way:
+      return wayToSqlStrings(elementId, changesetId);
+
+    case ElementType::Relation:
+      return relationToSqlStrings(elementId, changesetId);
+
+    default:
+      throw HootException("Unsupported element member type.");
+  }
+  return QStringList();
+}
+
+QStringList OsmApiDbSqlStatementFormatter::getElementSqlHeaderStrings(const ElementType& elementType) const
+{
+  switch (elementType.getEnum())
+  {
+    case ElementType::Node:
+      return getNodeSqlHeaderStrings();
+
+    case ElementType::Way:
+      return getWaySqlHeaderStrings();
+
+    case ElementType::Relation:
+      return getRelationSqlHeaderStrings();
+
+    default:
+      throw HootException("Unsupported element member type.");
+  }
+  return QStringList();
 }
 
 }
