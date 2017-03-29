@@ -42,8 +42,8 @@ public class ZIPDirectoryContentsCommand extends ExternalCommand {
      * @param caller class that identifies caller of the command
      */
     public ZIPDirectoryContentsCommand(File targetZIP, File workDir, Class<?> caller) {
-        //zip -r targetZip *
-        String command = "zip -r " + quote(targetZIP.getAbsolutePath()) + " " + "*";
+        //zip -r targetZip .
+        String command = "zip -r " + quote(targetZIP.getAbsolutePath()) + " " + ".";
         super.configureCommand(command, caller, workDir);
     }
 }

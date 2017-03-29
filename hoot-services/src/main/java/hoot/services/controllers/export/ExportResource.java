@@ -128,11 +128,7 @@ public class ExportResource {
             Map<String, String> paramMap = JsonUtils.jsonToMap(params);
 
             String outputType = paramMap.get("outputtype");
-
-            String outputName = paramMap.get("outputname");
-            if (outputName == null) {
-                outputName = jobId;
-            }
+            String outputName = !StringUtils.isBlank(paramMap.get("outputname")) ? paramMap.get("outputname") : jobId;
 
             // Created scratch area for each export request.
             // This is where downloadable files will be stored and other intermediate artifacts.
@@ -146,7 +142,6 @@ public class ExportResource {
                     () -> {
                         ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportOSMCommand.class, this.getClass());
-
                         return externalCommandManager.exec(jobId, exportOSMCommand);
                     }
                 );
@@ -184,10 +179,6 @@ public class ExportResource {
                 );
             }
             else { //else Shape/FGDB
-                if (outputType.equalsIgnoreCase("shp")) {
-                    Command zipCommand = getZIPCommand(jobId, workDir, outputName, outputType);
-                    workflow.add(zipCommand);
-                }
 
                 //TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
                 //TDS61_TEMPLATE=$(TEMPLATE_PATH)/tds61.tgz
@@ -228,7 +219,7 @@ public class ExportResource {
                             () -> {
                                 //OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
                                 //tar -zxf $(TDS_TEMPLATE) -C $(OP_OUTPUT)
-                                File outputDir = new File(workDir, jobId + "." + outputType);
+                                File outputDir = new File(workDir, outputName + "." + outputType);
                                 ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplatePath, outputDir, this.getClass());
                                 return externalCommandManager.exec(jobId, untarFileCommand);
                             }
@@ -238,7 +229,6 @@ public class ExportResource {
 
                 workflow.add(
                     () -> {
-                        // ExportCommand
                         ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap,
                                 debugLevel, ExportCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
@@ -505,24 +495,29 @@ public class ExportResource {
         //endif
         if (outputType.equalsIgnoreCase("shp")) {
             return () -> {
-                // ZIP_OUTPUT = $(outputname).zip
-                File currentDirectory = new File(workDir, outputName);
-                File targetZip = new File(workDir, outputName + ".zip");
+                // pwd = present working directory during execution of ZIPDirectoryContentsCommand
+                File pwd = new File(workDir, outputName);
 
-                ExternalCommand zipDirectoryCommand = new ZIPDirectoryContentsCommand(targetZip, currentDirectory, this.getClass());
+                // ZIP_OUTPUT = $(outputname).zip
+                File targetZIP = new File(workDir, outputName + ".zip");
+
+                ExternalCommand zipDirectoryCommand = new ZIPDirectoryContentsCommand(targetZIP, pwd, this.getClass());
                 return externalCommandManager.exec(jobId, zipDirectoryCommand);
             };
         }
         else {
             return () -> {
+                // pwd = present working directory during execution of ZIPFileCommand
+                File pwd = workDir;
+
                 // ZIP_OUTPUT = $(outputname).zip
-                File targetZip = new File(workDir, outputName + ".zip");
+                File targetZIP = new File(workDir, outputName + ".zip");
 
                 // OP_OUTPUT_FILE=$(outputname).$(outputtype)
-                String fileToZIP = outputName + "." + outputType;
+                String fileToCompress = outputName + "." + outputType;
 
                 // cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
-                ExternalCommand zipFileCommand = new ZIPFileCommand(targetZip, workDir, fileToZIP, this.getClass());
+                ExternalCommand zipFileCommand = new ZIPFileCommand(targetZIP, pwd, fileToCompress, this.getClass());
                 return externalCommandManager.exec(jobId, zipFileCommand);
             };
         }

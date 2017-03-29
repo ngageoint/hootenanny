@@ -163,10 +163,11 @@ class ExportCommand extends ExternalCommand {
         String outputPath = this.getOutputPath();
         String translationPath = new File(HOME_FOLDER, paramMap.get("translation")).getAbsolutePath();
         String removeReviewSwitch = "-C RemoveReview2Pre.conf";
+        String inputPath = this.getInput();
 
         // hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
         String command = "hoot osm2ogr --" + debugLevel + " " + removeReviewSwitch + " " + hootOptions + " " +
-                                    quote(translationPath) + " " + quote(input) + " " + quote(outputPath);
+                                    quote(translationPath) + " " + quote(inputPath) + " " + quote(outputPath);
 
         super.configureCommand(command, caller);
     }

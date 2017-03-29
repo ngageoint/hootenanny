@@ -283,7 +283,17 @@ public class FileUploadResource {
             }
 
             workflow.add(() -> {
-                String translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
+                String translationPath;
+                // TODO: Reconcile this logic with the UI.  Passing of translation script's name appears to be inconsistent!
+                if (translation.startsWith("translations/")) {
+                    // Example: @QueryParam("TRANSLATION") == "translations/GeoNames.js"
+                    translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
+                }
+                else {
+                    // Example: @QueryParam("TRANSLATION") == "GeoNames.js"
+                    translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
+                }
+
                 ExternalCommand etlCommand = fileETLCommandFactory.build(etlRequests, zipList, translationPath, jobId, finalETLName,
                         noneTranslation, fgdbFeatureClasses, debugLevel, uploadedFileClassification, this.getClass());
 
