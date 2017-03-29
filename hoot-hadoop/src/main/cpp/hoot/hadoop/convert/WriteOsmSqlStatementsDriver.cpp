@@ -17,10 +17,8 @@
 // Hoot
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/hadoop/stats/MapStats.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
-#include <hoot/core/io/ApiDb.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
@@ -44,41 +42,53 @@ WriteOsmSqlStatementsDriver::WriteOsmSqlStatementsDriver()
 
 void WriteOsmSqlStatementsDriver::write(const QString input, const QString output)
 {
-  pp::Job job;
-  job.setVerbose(Log::getInstance().getLevel() <= Log::Debug);
-  job.setName("WriteOsmSqlStatementsDriver");
+  pp::Job sqlStatementWriteJob;
+  sqlStatementWriteJob.setVerbose(Log::getInstance().getLevel() <= Log::Debug);
+  sqlStatementWriteJob.setName("WriteOsmSqlStatementsDriver");
   // be nice and don't start the reduce tasks until most of the map tasks are done.
-  job.getConfiguration().setDouble("mapred.reduce.slowstart.completed.maps", 0.98);
+  //job.getConfiguration().setDouble("mapred.reduce.slowstart.completed.maps", 0.98);
+
   pp::Hdfs fs;
-//  fs.mkdirs("tmp");
-//  QString output = "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
-//      "-PaintNodes";
-  job.setInput(fs.getAbsolutePath(input.toStdString()));
-  job.setOutput(fs.getAbsolutePath(output.toStdString()));
-  //job.getConfiguration().set(
-    //WriteOsmSqlStatementsMapper::tableKey(), ApiDb::getCurrentNodesTableName().toStdString());
-  job.setMapperClass(WriteOsmSqlStatementsMapper::className());
-  job.setReducerClass(WriteOsmSqlStatementsReducer::className());
-  job.setInputFormatClass(PbfInputFormat::className());
-  job.setRecordReaderClass(PbfRecordReader::className());
-  job.setRecordWriterClass(pp::LineRecordWriter::className());
+  sqlStatementWriteJob.setInput(fs.getAbsolutePath(input.toStdString()));
+  //we'll ignore the output file name for now and dump all the output in separate files in the
+  //output dir
+  QFileInfo outputInfo(output);
+  QString hdfsOutput = QString::fromStdString(fs.getAbsolutePath(output.toStdString()));
+  hdfsOutput.replace(outputInfo.fileName(), "");
+  //LOG_VARD(hdfsOutput.toStdString());
+  sqlStatementWriteJob.setOutput(hdfsOutput.toStdString());
+
+  sqlStatementWriteJob.setMapperClass(WriteOsmSqlStatementsMapper::className());
+  sqlStatementWriteJob.setReducerClass(WriteOsmSqlStatementsReducer::className());
+  sqlStatementWriteJob.setInputFormatClass(PbfInputFormat::className());
+  sqlStatementWriteJob.setRecordReaderClass(PbfRecordReader::className());
+  sqlStatementWriteJob.setRecordWriterClass(pp::LineRecordWriter::className());
+
   // Adds all libraries in this directory to the job.
-  job.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
-  job.addFile(ConfPath::search("hoot.json").toStdString());
+  sqlStatementWriteJob.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
+  sqlStatementWriteJob.addFile(ConfPath::search("hoot.json").toStdString());
   // This library will be used to provide mapper/reducer classes and anything else referenced
   // by the factory.
-  job.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootHadoop.so.1"));
-  _addDefaultJobSettings(job);
+  sqlStatementWriteJob.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootHadoop.so.1"));
+  _addDefaultJobSettings(sqlStatementWriteJob);
   // conflation runs can go for a _long_ time. Setting timeout to 6 hours.
-  job.getConfiguration().setInt("mapred.task.timeout", 6 * 3600 * 1000);
-
-  // read the max ids from in and write them to the configuration
-//  MapStats stats;
-//  stats.readDir(input);
-//  stats.write(job.getConfiguration());
+  //job.getConfiguration().setInt("mapred.task.timeout", 6 * 3600 * 1000);
 
   // run the job.
-  job.run();
+  sqlStatementWriteJob.run();
+
+  //TODO: update changeset ids
+
+  //merge all the output files into one and copy back to the local file system
+  const QString cmd = "hadoop fs -getmerge " + hdfsOutput + " " + output;
+  LOG_VARD(cmd);
+  if (system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Failed merging SQL statement output into a single SQL file: " + output);
+  }
+
+  //TODO: append the sequence id update statements to the end of the merged sql file
+
 }
 
 }

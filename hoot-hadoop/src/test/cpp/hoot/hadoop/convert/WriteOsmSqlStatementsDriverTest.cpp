@@ -44,6 +44,11 @@ public:
   void testJob()
   {
     string outDir = "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest";
+    QString outFile = QString::fromStdString(outDir) + "/DcGisRoads.sql";
+    if (QFile::exists(outFile))
+    {
+      QFile::remove(outFile);
+    }
     Hdfs fs;
     if (fs.exists(outDir))
     {
@@ -55,10 +60,9 @@ public:
 
     WriteOsmSqlStatementsDriver driver;
     driver.write(
-      QString::fromStdString(outDir) + "/input/AllDataTypesA.osm.pbf",
-      QString::fromStdString(outDir) + "/DcGisRoads.sql");
+      QString::fromStdString(outDir) + "/input/AllDataTypesA.osm.pbf", outFile);
 
-    //TODO: verify
+    //TODO: verify output
   }
 };
 

@@ -76,6 +76,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     _recordCount++;
     context.emit(nodeSqlHeaders[1].toStdString(), nodeSqlStatements[1].toStdString());
     _recordCount++;
+    //context.emit(/* nodes */, "1");
 
     const Tags& tags = node->getTags();
     for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
@@ -110,6 +111,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     _recordCount++;
     context.emit(waySqlHeaders[1].toStdString(), waySqlStatements[1].toStdString());
     _recordCount++;
+    //context.emit(/* ways */, "1");
 
     const vector<long> wayNodeIds = way->getNodeIds();
     unsigned int wayNodeIndex = 1;
@@ -164,6 +166,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     _recordCount++;
     context.emit(relationSqlHeaders[1].toStdString(), relationSqlStatements[1].toStdString());
     _recordCount++;
+    //context.emit(/* relations */, "1");
 
     unsigned int memberSequenceIndex = 1;
     const vector<RelationData::Entry> relationMembers = relation->getMembers();

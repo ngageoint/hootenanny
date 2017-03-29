@@ -24,6 +24,9 @@
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
 
+// Qt
+#include <QMap>
+
 namespace hoot
 {
 
@@ -46,14 +49,55 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     }
   }
 
-  const string& keyStr = context.getInputKey();
+  const QString key = QString::fromStdString(context.getInputKey());
   QString values = "";
+  QMap<QString, long> elementCounts;
+  elementCounts["nodes"] = 0;
+  elementCounts["ways"] = 0;
+  elementCounts["relations"] = 0;
   while (context.nextValue())
   {
-    const string& value = context.getInputValue();
-    values += QString::fromStdString(value)/*.trimmed()*/;
+    const QString value = QString::fromStdString(context.getInputValue());
+    values += value;
+
+    if (key.contains("current_nodes"))
+    {
+      elementCounts["nodes"] = elementCounts["nodes"] + 1;
+    }
+    else if (key.contains("current_ways"))
+    {
+      elementCounts["ways"] = elementCounts["ways"] + 1;
+    }
+    if (key.contains("current_relations"))
+    {
+      elementCounts["relations"] = elementCounts["relations"] + 1;
+    }
   }
-  _writer->emit(keyStr, values.toStdString());
+  values += "\\.\n";
+  _writer->emit(key.toStdString(), values.toStdString());
+
+  QString sequenceUpdateStatement;
+  if (elementCounts["nodes"] > 0)
+  {
+    sequenceUpdateStatement =
+      "SELECT pg_catalog.setval('current_nodes_id_seq', " +
+      QString::number(elementCounts["nodes"]) + ");";
+    _writer->emit("/* nodes */\n", sequenceUpdateStatement.toStdString());
+  }
+  if (elementCounts["ways"] > 0)
+  {
+    sequenceUpdateStatement =
+      "SELECT pg_catalog.setval('current_ways_id_seq', " +
+      QString::number(elementCounts["ways"]) + ");";
+    _writer->emit("/* ways */\n", sequenceUpdateStatement.toStdString());
+  }
+  if (elementCounts["relations"] > 0)
+  {
+    sequenceUpdateStatement =
+      "SELECT pg_catalog.setval('current_relations_id_seq', " +
+      QString::number(elementCounts["relations"]) + ");";
+    _writer->emit("/* relations */\n", sequenceUpdateStatement.toStdString());
+  }
 }
 
 }
