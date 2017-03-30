@@ -1231,16 +1231,16 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osmapidb.bulk.writer.file.output.buffer.max.line.size
+=== osmapidb.bulk.writer.file.output.element.buffer.size
 
 * Data Type: long
 * Default Value: `100000`
 
-Maximum number of lines to keep in memory when serializing elements to a file output, where each
-line represents a separate SQL record.  If you have enough memory available and the dataset you are
-writing is larger than the value of this setting, you may be able to increase the input file parsing
-performance by raising this value.  This setting has no impact on the performance of writing records
-to a database, only on the input data parsing done beforehand.
+Maximum number of elements to keep in memory when serializing input elements to a file output
+before they are written to an OSM API database.  If you have enough memory available and the
+dataset you are writing is significantly larger than the value of this setting, you may be able to
+increase the input file parsing performance by raising this value.  This setting has no impact on
+the performance of writing records to a database, only on the input data parsing done beforehand.
 
 === osmapidb.bulk.writer.file.output.status.update.interval
 
@@ -1249,8 +1249,8 @@ to a database, only on the input data parsing done beforehand.
 
 Count at which the parse status of each element type should be logged when writing to them to
 files.  e.g. With a value of 100, you will see a load status update message logged for every 100
-file lines written.  This setting will have a negative impact on performance if set to a very low
-value.
+elements parsed or file lines written.  This setting will have a negative impact on performance
+if set to a very low value.
 
 === osmapidb.bulk.writer.output.files.copy.location
 
@@ -2257,7 +2257,7 @@ Hootenanny will only use Greedy Constrained Matches.
 === unify.optimizer.time.limit
 
 * Data Type: double
-* Default Value: `60`
+* Default Value: `30`
 
 The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes
 the wait time limit unlimited.
