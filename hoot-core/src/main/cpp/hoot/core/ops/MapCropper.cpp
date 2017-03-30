@@ -129,7 +129,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
 
   // go through all the ways
   const WayMap ways = result->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const shared_ptr<Way>& w = it->second;
     shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
@@ -160,7 +160,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   // go through all the nodes
   long nodesRemoved = 0;
   const NodeMap nodes = result->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Coordinate& c = it->second->toCoordinate();
 

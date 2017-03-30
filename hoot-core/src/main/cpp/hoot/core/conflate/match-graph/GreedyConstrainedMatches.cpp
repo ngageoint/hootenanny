@@ -105,14 +105,12 @@ vector<const Match *> GreedyConstrainedMatches::calculateSubset()
     size_t mi = matchOrder[i];
 
     // see if any of our conflicting matches are already being kept
-    MatchConflicts::ConflictMap::const_iterator it = cm.find(mi);
-    while (it != cm.end() && it.key() == mi)
+    for (MatchConflicts::ConflictMap::const_iterator it = cm.find(mi); it != cm.end() && it.key() == mi; ++it)
     {
       if (keepers.count(it.value()))
       {
         keep = false;
       }
-      it++;
     }
 
     if (keep)

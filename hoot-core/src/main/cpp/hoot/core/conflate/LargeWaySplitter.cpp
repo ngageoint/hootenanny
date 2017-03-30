@@ -59,7 +59,7 @@ void LargeWaySplitter::apply(shared_ptr<OsmMap> map)
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     shared_ptr<Way> w = it->second;
     shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);

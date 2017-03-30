@@ -169,7 +169,7 @@ void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr
     writer.writeAttribute("timestamp", "");
 
   const Tags& tags = n->getTags();
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     if (it.key().isEmpty() == false && it.value().isEmpty() == false)
     {

@@ -611,7 +611,14 @@ Edge EdgeIterator::operator*()
   return _e;
 }
 
-void EdgeIterator::operator++(int)
+Edge EdgeIterator::operator++(int)
+{
+  Edge tmp(_e);
+  operator++();
+  return tmp;
+}
+
+Edge& EdgeIterator::operator++()
 {
   while (_todo.size() == 0 && _it != _edges->end())
   {
@@ -629,13 +636,19 @@ void EdgeIterator::operator++(int)
   if (_todo.size() == 0 && _it == _edges->end())
   {
     _atEnd = true;
-    return;
+    return _e;
   }
 
   _e = Edge(*_todo.begin());
   _todo.pop_front();
+
+  return _e;
 }
 
+Face::Face(Face& other)
+{
+  *this = other;
+}
 
 Face::Face(const Face& other)
 {
@@ -786,7 +799,14 @@ const Face& FaceIterator::operator*()
   return *_f;
 }
 
-void FaceIterator::operator++(int)
+Face FaceIterator::operator ++(int)
+{
+  Face tmp(*_f);
+  operator++();
+  return tmp;
+}
+
+Face& FaceIterator::operator++()
 {
   if (_it == _end)
   {
@@ -798,7 +818,7 @@ void FaceIterator::operator++(int)
     do
     {
       _f = new Face(*_it);
-      _it++;
+      ++_it;
 
       alreadyDone = _done.find(_f) != _done.end();
       if (alreadyDone)
@@ -817,6 +837,7 @@ void FaceIterator::operator++(int)
       _atEnd = true;
     }
   }
+  return *_f;
 }
 
 DelaunayTriangulation::DelaunayTriangulation()

@@ -50,8 +50,8 @@ namespace Tgs
     int result = 0;
     if (_inputs.size() != 0)
     {
-      for (map<string, shared_ptr<CalculatorGenomeNode> >::const_iterator it = 
-        _inputs.begin(); it != _inputs.end(); ++it)
+      for (map<string, shared_ptr<CalculatorGenomeNode> >::const_iterator it =
+           _inputs.begin(); it != _inputs.end(); ++it)
       {
         if (it->second)
         {
@@ -74,8 +74,8 @@ namespace Tgs
   void CalculatorGenomeNode::copy(const TreeGenomeNode& from)
   {
     const CalculatorGenomeNode& cgnFrom = dynamic_cast<const CalculatorGenomeNode&>(from);
-    for (map<string, shared_ptr<CalculatorGenomeNode> >::const_iterator it = 
-      cgnFrom._inputs.begin(); it != cgnFrom._inputs.end(); ++it)
+    for (map<string, shared_ptr<CalculatorGenomeNode> >::const_iterator it =
+         cgnFrom._inputs.begin(); it != cgnFrom._inputs.end(); ++it)
     {
       if (it->second)
       {
@@ -107,8 +107,8 @@ namespace Tgs
 
   shared_ptr<CalculatorGenomeNode> CalculatorGenomeNode::getInput(const std::string& name) const
   {
-    std::map<std::string, shared_ptr<CalculatorGenomeNode> >::const_iterator it = 
-      _inputs.find(name);
+    std::map<std::string, shared_ptr<CalculatorGenomeNode> >::const_iterator it =
+        _inputs.find(name);
 
     if (it != _inputs.end())
     {
@@ -132,7 +132,7 @@ namespace Tgs
     if(str == "<Children>")
     {
       while(buffer.find("</Children>") == std::string::npos && s.eof() == false)
-      {  
+      {
         std::getline(s, buffer);
         stringstream strm1(buffer);
         strm1 >> str;
@@ -147,7 +147,7 @@ namespace Tgs
             throw Exception("Error, more inputs/children than expected.");
           }
           setInput(it->first, cg);
-          it++;
+          ++it;
         }
       }
     }
@@ -183,7 +183,7 @@ namespace Tgs
     setInput(name, shared_ptr<CalculatorGenomeNode>(node));
   }
 
-  void CalculatorGenomeNode::setInput(const std::string& name, 
+  void CalculatorGenomeNode::setInput(const std::string& name,
     shared_ptr<CalculatorGenomeNode> node)
   {
     _inputs[name] = node;

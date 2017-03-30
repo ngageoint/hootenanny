@@ -71,7 +71,7 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
   WayMap wm = _map->getWays();
 
   // go through each way and remove duplicate nodes in one way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const shared_ptr<Way>& w = it->second;
     vector<long> newNodes;
@@ -92,7 +92,7 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
 
   OsmSchema& schema = OsmSchema::getInstance();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     long key = it->first;
     const shared_ptr<Way>& w = it->second;
@@ -109,7 +109,7 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
     for (size_t i = 0; i < nodes.size(); i++)
     {
       const set<long>& ways = n2w[nodes[i]];
-      for (set<long>::iterator wit = ways.begin(); wit != ways.end(); wit++)
+      for (set<long>::iterator wit = ways.begin(); wit != ways.end(); ++wit)
       {
         if (*wit != w->getId() && _isCandidateWay(w))
         {
@@ -119,7 +119,7 @@ void DuplicateWayRemover::apply(shared_ptr<OsmMap>& map)
     }
 
     for (std::map<long, int>::iterator wit = nodesSharedCount.begin();
-      wit != nodesSharedCount.end(); wit++)
+      wit != nodesSharedCount.end(); ++wit)
     {
       // if a way shares 2 or more nodes
       if (wit->second >= 2 && _map->containsWay(wit->first) && _map->containsWay(w->getId()))
@@ -306,7 +306,7 @@ void DuplicateWayRemover::_replaceMultiple(const shared_ptr<const Way>& oldWay,
 
   // make a copy just in case the index changes while we're replacing elements.
   set<long> rids = _map->getIndex().getElementToRelationMap()->getRelationByElement(oldWay.get());
-  for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
+  for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
   {
     const shared_ptr<Relation>& r = _map->getRelation(*it);
     if (r)

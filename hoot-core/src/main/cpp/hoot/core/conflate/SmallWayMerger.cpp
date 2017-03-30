@@ -81,7 +81,7 @@ void SmallWayMerger::apply(shared_ptr<OsmMap>& map)
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     // if we haven't already merged the way
     if (_map->containsWay(it->first))

@@ -207,7 +207,7 @@ void PertyTestRunner::_writePlotFile(const QString outputPath,
   QString outStr = "";
   double dynamicVariableValue = _dynamicVariableStartValue;
   for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = testRunResults.begin();
-       it != testRunResults.end(); it++)
+       it != testRunResults.end(); ++it)
   {
     shared_ptr<const PertyTestRunResult> result = *it;
     outStr += QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";

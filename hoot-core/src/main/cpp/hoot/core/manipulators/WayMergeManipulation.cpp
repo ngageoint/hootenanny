@@ -144,7 +144,7 @@ void WayMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   RemoveWayOp::removeWay(result, _left);
   RemoveWayOp::removeWay(result, _right);
 
-  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
+  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); ++it)
   {
     if (result->containsElement(*it) == false)
     {
@@ -298,7 +298,7 @@ void WayMergeManipulation::_removeSpans(shared_ptr<OsmMap> map,
   shared_ptr<Way> right = map->getWay(_right);
 
   set<ElementId> impactedWaysTmp = impactedElements;
-  for (set<ElementId>::iterator it = impactedWaysTmp.begin(); it != impactedWaysTmp.end(); it++)
+  for (set<ElementId>::iterator it = impactedWaysTmp.begin(); it != impactedWaysTmp.end(); ++it)
   {
     ElementId eid = *it;
     shared_ptr<Way> w = map->getWay(eid.getId());
@@ -371,7 +371,7 @@ void WayMergeManipulation::_splitWays(shared_ptr<OsmMap> map, shared_ptr<Way>& l
   RemoveWayOp::removeWay(result, _left);
   RemoveWayOp::removeWay(result, _right);
 
-  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
+  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); ++it)
   {
     if (result->containsElement(*it) == false)
     {

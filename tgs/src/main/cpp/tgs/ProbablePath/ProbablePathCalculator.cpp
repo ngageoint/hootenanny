@@ -361,7 +361,7 @@ namespace Tgs
     {
       float minD = 1e10f;
       for (HashSet<int>::const_iterator it = _destPending.begin(); it != _destPending.end(); 
-        it++)
+        ++it)
       {
         float d = _calculateDistance(_toPoint(start), _destinations[0]);
         minD = std::min(minD, d);
@@ -432,7 +432,7 @@ namespace Tgs
         PpPoint c = _toPoint(i);
         float w = 0.0;
         float r = 0.0;
-        for (map<int, float>::iterator it = patch.begin(); it != patch.end(); it++)
+        for (map<int, float>::iterator it = patch.begin(); it != patch.end(); ++it)
         {
           PpPoint p = _toPoint(it->first);
           float d = _calculateDistance(c, p);
@@ -643,7 +643,7 @@ namespace Tgs
 
     _destPending.clear();
     for (list<Destination>::iterator it = _remainingDest.begin(); it != _remainingDest.end();
-      it++)
+      ++it)
     {
       _destPending.insert(_toIndex(it->row, it->col));
     }

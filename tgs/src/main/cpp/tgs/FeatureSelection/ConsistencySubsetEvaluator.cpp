@@ -116,7 +116,7 @@ namespace Tgs
     int count = 0;
     int max = 0;
     for (InconsistentInstancesMap::const_iterator it = classes.begin(); it != classes.end();
-      it++)
+      ++it)
     {
       count += *it;
       max = *it > max ? *it : max;
@@ -152,7 +152,7 @@ namespace Tgs
     }
 
     int inconsistencyCount = 0;
-    for (BinMap::const_iterator it = binMap.begin(); it != binMap.end(); it++)
+    for (BinMap::const_iterator it = binMap.begin(); it != binMap.end(); ++it)
     {
       inconsistencyCount += _calculateInconsistentCount(it->second);
     }

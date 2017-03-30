@@ -85,14 +85,12 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
-  set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin();
-  while (sit != _pairs.end())
+  for (set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin(); sit != _pairs.end(); ++sit)
   {
     firstPairs.insert(sit->first);
     secondPairs.insert(sit->second);
     combined.insert(sit->first);
     combined.insert(sit->second);
-    sit++;
   }
   if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
   {

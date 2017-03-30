@@ -263,7 +263,7 @@ void Conflator::_createManipulations(shared_ptr<OsmMap> map, const set<ElementId
     if (newM[i]->isValid(map))
     {
       const set<ElementId> ids = newM[i]->getImpactedElementIds(map);
-      for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); it++)
+      for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
       {
         ElementId eid = *it;
         _impacted2Manipulation[eid].insert(newM[i]);
@@ -307,7 +307,7 @@ void Conflator::_createManipulations()
   for (size_t i = 0; i < _manipulations.size(); i++)
   {
     const set<ElementId> ids = _manipulations[i]->getImpactedElementIds(_map);
-    for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); it++)
+    for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
     {
       ElementId eid = *it;
       _impacted2Manipulation[eid].insert(_manipulations[i]);
@@ -338,13 +338,13 @@ void Conflator::_updateManipulationEstimates(shared_ptr<const OsmMap> map,
   const set<ElementId>& eids)
 {
   set< shared_ptr<Manipulation>, LessThanManipulation > found;
-  for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); it++)
+  for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
     const set< shared_ptr<Manipulation>, LessThanManipulation >& s = _impacted2Manipulation[*it];
     found.insert(s.begin(), s.end());
   }
 
-  for (set< shared_ptr<Manipulation> >::iterator it = found.begin(); it != found.end(); it++)
+  for (set< shared_ptr<Manipulation> >::iterator it = found.begin(); it != found.end(); ++it)
   {
     shared_ptr<Manipulation> m = *it;
     if (m->isValid(map))

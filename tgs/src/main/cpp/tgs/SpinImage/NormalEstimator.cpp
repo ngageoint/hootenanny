@@ -76,7 +76,7 @@ namespace Tgs
     // load point cloud into RTree
     _loadPointCloud(pc);
 
-    // The point w/ the max z value becomes the initial plane when traversing the minimum 
+    // The point w/ the max z value becomes the initial plane when traversing the minimum
     // spanning tree (MST)
     double maxZ = -1e300;
     int maxZId = -1;
@@ -116,7 +116,7 @@ namespace Tgs
 //       /// @todo if this becomes a real problem, we can try the min z, max x, min x, ...
 //       throw Exception("The uppermost point has no z component in the normal. Failing.");
 //     }
-// 
+//
 //     // this is done to make sure all normals are pointed "out"
 //     _processMst();
 
@@ -155,7 +155,7 @@ namespace Tgs
     }
   }
 
-  void NormalEstimator::_calculatePrincipalComponent(const std::vector<int>& neighbors, int k, 
+  void NormalEstimator::_calculatePrincipalComponent(const std::vector<int>& neighbors, int k,
     Point3d& normal)
   {
     PointCloud& pc = *_pc;
@@ -177,11 +177,11 @@ namespace Tgs
     for(int i = 0; i < k; i++)
     {
       const CloudPoint& cp = pc.getPoints()[neighbors[i]];
-      //std::cout << cp << endl; 
+      //std::cout << cp << endl;
 
       dataMat.element(0, i) = cp.x;
       means.element(0)+= cp.x / (float)k;
-      dataMat.element(1, i) = cp.y;  
+      dataMat.element(1, i) = cp.y;
       means.element(1)+= cp.y / (float)k;
       dataMat.element(2, i) = cp.z;
       means.element(2)+= cp.z / (float)k;
@@ -209,19 +209,19 @@ namespace Tgs
 //     ////
 //     // See [2] Algorithm 1 for details.
 //     ////
-//     
+//
 //     // [2] uses a max count of 10 in their example.
 //     const int MAX_COUNT = 10;
 //     const int k0 = 15;
-// 
+//
 //     // standard deviation of the noise in the point cloud. I'm guessing 1cm for our data.
 //     double sigmaN = .01;
-// 
+//
 //     // [2] uses these in their example. These values may need tweaking
 //     double d1 = 1;
 //     double d2 = 4;
 //     double epsilon = .1;
-// 
+//
 //     int k = MAX(k0, _nearestNeighbors.size());
 //     for (int count = 0; count < MAX_COUNT; count++)
 //     {
@@ -259,7 +259,7 @@ namespace Tgs
         _edges[index].insert(nId);
         _edges[nId].insert(index);
       }
-    }    
+    }
   }
 
   void NormalEstimator::_processMst()
@@ -291,7 +291,7 @@ namespace Tgs
 
       // go through all our neighbors
       const HashSet<int>& neighbors = _edges[vo.id];
-      for (HashSet<int>::const_iterator it = neighbors.begin(); it != neighbors.end(); it++)
+      for (HashSet<int>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
       {
         if (_processed[*it] == false)
         {

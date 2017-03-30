@@ -39,7 +39,7 @@ namespace Tgs
   {
     std::vector<Point3d>& normals = _pc->getNormals();
     const HashSet<int>& neighbors = _edges[id];
-    for (HashSet<int>::const_iterator it = neighbors.begin(); it != neighbors.end(); it++)
+    for (HashSet<int>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       const Point3d& p = normals[*it];
       if (_isVertical(p) == false)
@@ -83,7 +83,7 @@ namespace Tgs
       // it isn't pointing vertically or
       // it's neighbors aren't pointing vertically
       if (points[i].z >= minZ + .20 ||
-        _isVertical(normals[i]) == false || 
+        _isVertical(normals[i]) == false ||
         _areNeighborsVertical(i) == false)
       {
         newPoints.push_back(points[i]);

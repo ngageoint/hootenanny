@@ -56,7 +56,7 @@ namespace Tgs
       _pageFile = fopen(fileName, "wb+");
       if(_pageFile != NULL)
       {
-        _pageCount = _determinePageCount();    
+        _pageCount = _determinePageCount();
       }
     }
     if (_pageFile == NULL)
@@ -81,7 +81,7 @@ namespace Tgs
     // first create in file
     char * pData = Page::allocateAligned(_pageSize);
     _writePage(_pageCount, pData);
-    shared_ptr<Page> newPage(_createPage(this, _pageCount, pData, 
+    shared_ptr<Page> newPage(_createPage(this, _pageCount, pData,
       _pageSize));
 
     _pagesMap[_pageCount] = newPage;
@@ -94,9 +94,9 @@ namespace Tgs
   {
     if(_fseeki64(_pageFile, 0, SEEK_END) == 0)
     {
-      __int64 fileSize64 = _ftelli64(_pageFile); 
+      __int64 fileSize64 = _ftelli64(_pageFile);
       assert(fileSize64 % (__int64)getPageSize() == 0);
-      return (int)(fileSize64 / (__int64)getPageSize()); 
+      return (int)(fileSize64 / (__int64)getPageSize());
     }
     else
     {
@@ -124,9 +124,9 @@ namespace Tgs
     return newPage;
   }
 
-  int FilePageStore::getPageCount() const 
-  { 
-    return _pageCount; 
+  int FilePageStore::getPageCount() const
+  {
+    return _pageCount;
   }
 
   int FilePageStore::getPageSize() const
@@ -148,7 +148,7 @@ namespace Tgs
     if (!_readOnly)
     {
       PageMap::const_iterator it;
-      for (it = _pagesMap.begin(); it != _pagesMap.end(); it++)
+      for (it = _pagesMap.begin(); it != _pagesMap.end(); ++it)
       {
         if(!(*it).second.expired())
         {

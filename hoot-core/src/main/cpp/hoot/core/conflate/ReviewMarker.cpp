@@ -209,12 +209,10 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
-  set<ElementId>::iterator it = ids.begin();
-  while (it != ids.end())
+  for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
   {
     ElementId id = *it;
     r->addElement(_revieweeKey, id);
-    it++;
   }
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
