@@ -746,6 +746,8 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   _incrementChangesInChangeset();
   _checkUnresolvedReferences(node, nodeDbId);
 
+  //we're never going to partially write a node (node without some of its tags), so we buffer on
+  //element count, not record count here
   if (_writeStats.nodesWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
@@ -814,6 +816,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   _incrementChangesInChangeset();
   _checkUnresolvedReferences(way, wayDbId);
 
+  //see comment in writePartial node
   if (_writeStats.waysWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
@@ -860,6 +863,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   _incrementChangesInChangeset();
   _checkUnresolvedReferences(relation, relationDbId);
 
+  //see comment in writePartial node
   if (_writeStats.relationsWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
