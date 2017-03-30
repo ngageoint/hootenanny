@@ -139,14 +139,14 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
     _mergeUnrecognizedTags(t1, t2, result);
   }
 
-  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
+  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); ++it1)
   {
     QString kvp1 = it1.key() + "=" + it1.value();
     QString kvp2;
     double bestScore = 0;
     QString bestKvp;
     QString bestK2;
-    for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
+    for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); ++it2)
     {
       kvp2 = it2.key() + "=" + it2.value();
       double score;
@@ -175,7 +175,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
     }
   }
 
-  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
+  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); ++it2)
   {
     if (k2.find(it2.key()) == k2.end())
     {
@@ -183,7 +183,7 @@ void TagComparator::averageTags(const Tags& t1In, double w1, const Tags& t2In, d
     }
   }
 
-  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
+  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); ++it1)
   {
     if (k1.find(it1.key()) == k1.end())
     {
@@ -286,7 +286,7 @@ void TagComparator::compareTextTags(const Tags& t1, const Tags& t2, double& scor
   score = 1.0;
   weight = 0.0;
 
-  for (Tags::const_iterator it = t1.begin(); it != t1.end(); it++)
+  for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
   {
     const SchemaVertex& tv = schema.getTagVertex(it.key());
     if (schema.isAncestor(it.key(), "abstract_name") == false &&
@@ -432,7 +432,7 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
   Tags t1Filtered;
-  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
+  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); ++it1)
   {
     QString key = it1.key();
     QString value = it1.value();
@@ -451,7 +451,7 @@ bool TagComparator::nonNameTagsExactlyMatch(const Tags& t1, const Tags& t2)
   }
 
   Tags t2Filtered;
-  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
+  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); ++it2)
   {
     QString key = it2.key();
     QString value = it2.value();
@@ -557,7 +557,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
 
   toRemove.insert("alt_name");
 
-  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); it1++)
+  for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); ++it1)
   {
     if (it1.key() == "alt_name")
     {
@@ -577,7 +577,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
     }
   }
 
-  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); it2++)
+  for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); ++it2)
   {
     if (it2.key() == "alt_name")
     {
@@ -606,7 +606,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
     }
   }
 
-  for (set<QString>::const_iterator it = toRemove.begin(); it != toRemove.end(); it++)
+  for (set<QString>::const_iterator it = toRemove.begin(); it != toRemove.end(); ++it)
   {
     t1.remove(*it);
     t2.remove(*it);
@@ -614,7 +614,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
 
   // add all the altNames that don't exist in nonAltNames
   QStringList l;
-  for (set<QString>::const_iterator it = altNames.begin(); it != altNames.end(); it++)
+  for (set<QString>::const_iterator it = altNames.begin(); it != altNames.end(); ++it)
   {
     if (nonAltNames.find(*it) == nonAltNames.end())
     {

@@ -134,13 +134,13 @@ const set<ElementId>& DanglerRemoverManipulation::getImpactedElementIds(const Co
   ConstWayPtr way = map->getWay(_wayId);
 
   const set<long>& s1 = n2w.at(way->getNodeId(0));
-  for (set<long>::const_iterator it = s1.begin(); it != s1.end(); it++)
+  for (set<long>::const_iterator it = s1.begin(); it != s1.end(); ++it)
   {
     _impactedElements.insert(ElementId::way(*it));
   }
 
   const set<long>& s2 = n2w.at(way->getLastNodeId());
-  for (set<long>::const_iterator it = s2.begin(); it != s2.end(); it++)
+  for (set<long>::const_iterator it = s2.begin(); it != s2.end(); ++it)
   {
     _impactedElements.insert(ElementId::way(*it));
   }

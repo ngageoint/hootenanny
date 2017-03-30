@@ -371,7 +371,7 @@ private:
       LOG_TRACE("Looking for node ID " << searchId);
       bool madeProgress = false;
       bool hitError = false;
-      for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+      for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
       {
         // Does this way have the node we're looking for?
         WayPtr currWay = it->second;

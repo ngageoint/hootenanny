@@ -99,7 +99,7 @@ OgrUtilities& OgrUtilities::getInstance()
 
 OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
 {
-  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); it++)
+  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); ++it)
   {
     if (((it->_is_ext && url.endsWith(it->_indicator)) || (!it->_is_ext && url.startsWith(it->_indicator))) &&
         (readonly || it->_is_rw))

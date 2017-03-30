@@ -91,7 +91,7 @@ public:
 
     ElementConverter ec(map);
     const WayMap& ways = map->getWays();
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); itw++)
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); ++itw)
     {
       const WayPtr& w = itw->second;
       boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
@@ -373,7 +373,7 @@ public:
 
     t.restart();
     int i = 0;
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       const WayPtr& w = itw->second;
 
@@ -387,7 +387,7 @@ public:
 
     t.restart();
     i = 0;
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       WayPtr w = itw->second;
 
@@ -639,7 +639,7 @@ public:
     CPPUNIT_ASSERT( 4 == ways.size() );
 
     int i = 1;
-    for ( WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); iterator++ )
+    for ( WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); ++iterator )
     {
       WayPtr way = iterator->second;
       //LOG_DEBUG(way->toString());

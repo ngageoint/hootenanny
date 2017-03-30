@@ -323,7 +323,7 @@ for (unsigned int si = 0; si < s.size(); si++)
         }
 
         int max = -1;
-        for (std::map<string, int>::iterator it = results.begin(); it != results.end(); it++)
+        for (std::map<string, int>::iterator it = results.begin(); it != results.end(); ++it)
         {
           max = std::max(it->second, max);
         }

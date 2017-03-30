@@ -546,7 +546,7 @@ void OgrWriter::write(ConstOsmMapPtr map)
   _failOnSkipRelation = true;
   LOG_DEBUG("Writing second pass relations...");
   for (QList<long>::const_iterator relationIdIter = _unwrittenFirstPassRelationIds.begin();
-       relationIdIter != _unwrittenFirstPassRelationIds.end(); relationIdIter++)
+       relationIdIter != _unwrittenFirstPassRelationIds.end(); ++relationIdIter)
   {
     _writePartial(provider, map->getRelation(*relationIdIter));
   }
@@ -662,7 +662,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
   const std::vector<long> wayNodeIds = newWay->getNodeIds();
   std::vector<long>::const_iterator nodeIdIterator;
 
-  for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); nodeIdIterator++)
+  for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); ++nodeIdIterator)
   {
     if (_elementCache->containsNode(*nodeIdIterator) == false)
     {
@@ -697,7 +697,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   unsigned long relationCount = 0;
 
   for (std::vector<RelationData::Entry>::const_iterator relationElementIter = relationEntries.begin();
-       relationElementIter != relationEntries.end(); relationElementIter++)
+       relationElementIter != relationEntries.end(); ++relationElementIter)
   {
     switch (relationElementIter->getElementId().getType().getEnum())
     {

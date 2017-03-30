@@ -50,7 +50,7 @@ void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
   // go through all the relations to get duplicate reviews
   const RelationMap& relations = map->getRelations();
   QMap< set<ElementId>, QList<ReviewMarker::ReviewUid> > membersToReview;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId eid = ElementId::relation(it->first);
     if (ReviewMarker::isReviewUid(map, eid))

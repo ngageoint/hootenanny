@@ -455,7 +455,7 @@ void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r
   }
 
   const NodeMap& nm = map->getNodes();
-  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     const boost::shared_ptr<Node>& n = it->second;
     _countNode(n);

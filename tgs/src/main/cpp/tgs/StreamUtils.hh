@@ -210,7 +210,7 @@ inline std::ostream & operator << (std::ostream& o, const QHash<QString, QString
   for (QHash<QString, QString>::const_iterator it = map.constBegin(); it != map.constEnd();)
   {
     o << "(" << it.key() << ", " << it.value() << ")";
-    it++;
+    ++it;
     if (it != map.end())
     {
       o << ", ";

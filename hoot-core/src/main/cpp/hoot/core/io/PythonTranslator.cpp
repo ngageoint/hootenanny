@@ -149,7 +149,7 @@ void PythonTranslator::_translateToOsm(Tags& tags, const char* layerName, const 
   PyObject* geomTypePy = PyString_FromString(geomType);
   PyObject* attrs = PyDict_New();
 
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); it++)
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
     QByteArray keyUtf8 = it.key().toUtf8();
     QByteArray valueUtf8 = it.value().toUtf8();

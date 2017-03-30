@@ -383,7 +383,7 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const boost::
 
     // create a copy of the set b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
-    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
       const RelationPtr& r = getRelation(*it);
       r->replaceElement(from, to);
@@ -425,7 +425,7 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<E
 
     // create a copy of the set b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
-    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
       const RelationPtr& r = getRelation(*it);
       r->replaceElement(from, to);
@@ -455,7 +455,7 @@ void OsmMap::replaceNode(long oldId, long newId)
 
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
 
-  for (set<long>::iterator it = ways.begin(); it != ways.end(); it++)
+  for (set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = getWay(*it);
 

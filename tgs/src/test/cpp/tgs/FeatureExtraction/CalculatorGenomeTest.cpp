@@ -213,7 +213,7 @@ namespace Tgs
       params["learningRate"] = Parameter(.01, .99, .2, .3);
 
       results << "score\tindividuals\tvariableSize";
-      for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+      for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
       {
         results << "\t" << it->first;
       }
@@ -233,7 +233,7 @@ namespace Tgs
           int individuals;
           cout << "Temp: " << temp << endl;
           cout << "Parameters:" << endl;
-          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
           {
             cout << "\t" << it->first << ": \t" << it->second.value << endl;
           }
@@ -254,7 +254,7 @@ namespace Tgs
           }
 
           results << score << "\t" << individuals << "\t" << vs;
-          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
           {
             results << "\t" << it->second.value;
           }
@@ -262,7 +262,7 @@ namespace Tgs
 
           temp *= .8;
           params = bestParams;
-          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
           {
             it->second.mutate(temp);
           }

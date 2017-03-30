@@ -1283,19 +1283,19 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     // need the reader to go faster.
 
     element.reset(new Node(*_nodesItr->second.get()));
-    _nodesItr++;
+    ++_nodesItr;
     _partialNodesRead++;
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
     element.reset(new Way(*_waysItr->second.get()));
-    _waysItr++;
+    ++_waysItr;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelations().size()))
   {
     element.reset(new Relation(*_relationsItr->second.get()));
-    _relationsItr++;
+    ++_relationsItr;
     _partialRelationsRead++;
   }
   assert(element.get());

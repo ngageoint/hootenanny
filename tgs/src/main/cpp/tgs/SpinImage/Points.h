@@ -88,12 +88,12 @@ namespace Tgs
     double x, y, z;
     double r, g, b, i;
 
-    CloudPoint() {};
+    CloudPoint() {}
 
-    CloudPoint(const CloudPoint& cp) 
+    CloudPoint(const CloudPoint& cp)
     {
       *this = cp;
-    };
+    }
 
     CloudPoint(double x, double y, double z)
     {
@@ -156,7 +156,7 @@ namespace Tgs
   class PointCloud
   {
   public:
-    PointCloud() {};
+    PointCloud() {}
 
     void addPoint(const CloudPoint& cp) { _points.push_back(cp); }
 
@@ -178,7 +178,7 @@ namespace Tgs
       {
         while(!ins.eof())
         {
-          Tgs::CloudPoint cp; 
+          Tgs::CloudPoint cp;
           ins.getline(inLine, 512);
           std::stringstream ss;
           ss << inLine;
@@ -204,7 +204,7 @@ namespace Tgs
   class Point2d
   {
   public:
-    Point2d() {};
+    Point2d() {}
 
     Point2d(double p1, double p2) { this->p1 = p1; this->p2 = p2; }
 

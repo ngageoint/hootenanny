@@ -61,11 +61,9 @@ public:
     uut.insert(1, 1);
     uut.insert(0.7, 0.3);
     int count = 0;
-    EdgeIterator ei = uut.getEdgeIterator();
-    while (ei != uut.getEdgeEnd())
+    for (EdgeIterator ei = uut.getEdgeIterator();  ei != uut.getEdgeEnd(); ++ei)
     {
       count++;
-      ei++;
     }
     CPPUNIT_ASSERT_EQUAL(12, count);
   }
@@ -78,10 +76,8 @@ public:
     uut.insert(1, 1);
     uut.insert(0.7, 0.3);
     int count = 0;
-    FaceIterator fi = uut.getFaceIterator();
-    while (fi != uut.getFaceEnd())
+    for (FaceIterator fi = uut.getFaceIterator(); fi != uut.getFaceEnd(); ++fi)
     {
-      fi++;
       count++;
     }
     CPPUNIT_ASSERT_EQUAL(4, count);

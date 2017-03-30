@@ -65,7 +65,7 @@ class PertyTestCmd : public BaseCommand
       bool anyTestFailed = false;
       bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
       for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-           it != results.end(); it++)
+           it != results.end(); ++it)
       {
         boost::shared_ptr<const PertyTestRunResult> result = *it;
         LOG_INFO(result->toString());
