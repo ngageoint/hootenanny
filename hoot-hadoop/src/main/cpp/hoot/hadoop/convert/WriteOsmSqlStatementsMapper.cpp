@@ -53,6 +53,11 @@ _outputDelimiter("\t")
 
 //}
 
+//void WriteOsmSqlStatementsMapper::_flush()
+//{
+
+//}
+
 void WriteOsmSqlStatementsMapper::_checkForNewChangeset(HadoopPipes::MapContext& context,
                                                         const long changesetMaxSize,
                                                         const long changesetUserId,
@@ -73,8 +78,6 @@ void WriteOsmSqlStatementsMapper::_checkForNewChangeset(HadoopPipes::MapContext&
     //context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "changesets"), 1);
   }
 }
-
-//TODO: buffer this writing
 
 void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context)
 {
@@ -109,9 +112,11 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     const QStringList nodeSqlStatements = _sqlFormatter->nodeToSqlStrings(node, nodeId, 1);
     context.emit(nodeSqlHeaders[0].toStdString(), nodeSqlStatements[0].toStdString());
     context.emit(nodeSqlHeaders[1].toStdString(), nodeSqlStatements[1].toStdString());
+    //the pretty pipes version of the local job runner doesn't support counters
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "nodes"), 1);
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
     }
 
     const Tags& tags = node->getTags();
@@ -124,11 +129,22 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       context.emit(nodeTagSqlHeaders[1].toStdString(), nodeTagSqlStatements[1].toStdString());
       if (!localJobTracker)
       {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "nodeTags"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "node tags"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
       }
     }
 
     elementCount++;
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+    }
+//    if (_statementsBuffer.size() >=
+//        ConfigOptions().getOsmapidbBulkWriterFileOutputBufferMaxLineSize())
+//    {
+//      _flush();
+//    }
     //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
@@ -153,6 +169,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "ways"), 1);
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
     }
 
     const vector<long> wayNodeIds = way->getNodeIds();
@@ -173,7 +190,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       wayNodeIndex++;
       if (!localJobTracker)
       {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "wayNodes"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "way nodes"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
       }
     }
 
@@ -187,11 +205,21 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       context.emit(wayTagSqlHeaders[1].toStdString(), wayTagSqlStatements[1].toStdString());
       if (!localJobTracker)
       {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "wayTags"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "way tags"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
       }
     }
 
     elementCount++;
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
+    }
+//    if (_statementsBuffer.size() >=
+//        ConfigOptions().getOsmapidbBulkWriterFileOutputBufferMaxLineSize())
+//    {
+//      _flush();
+//    }
     //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
@@ -216,6 +244,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relations"), 1);
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
     }
 
     unsigned int memberSequenceIndex = 1;
@@ -242,7 +271,9 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       memberSequenceIndex++;
       if (!localJobTracker)
       {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relationMembers"), 1);
+        context.incrementCounter(
+          context.getCounter("WriteOsmSqlStatements", "relation members"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
       }
     }
 
@@ -258,11 +289,21 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
         relationTagSqlHeaders[1].toStdString(), relationTagSqlStatements[1].toStdString());
       if (!localJobTracker)
       {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relationTags"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relation tags"), 1);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
       }
     }
 
     elementCount++;
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
+    }
+//    if (_statementsBuffer.size() >=
+//        ConfigOptions().getOsmapidbBulkWriterFileOutputBufferMaxLineSize())
+//    {
+//      _flush();
+//    }
     //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 }
