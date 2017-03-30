@@ -98,10 +98,12 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
   //job.getConfiguration().setInt("mapred.map.tasks", 8);
   //job.getConfiguration().setInt("mapred.reduce.tasks", 4);
   job.getConfiguration().setLong("changesetMaxSize", ConfigOptions().getChangesetMaxSize());
+  //TODO: fix
+  job.getConfiguration().setLong("changesetUserId", 1);
 
   //job.setDefaultJobTracker("localhost:9001");
   //job.setJobTracker("localhost:9001");
-  //LOG_INFO(job.getJobTracker());
+  LOG_DEBUG(job.getJobTracker());
   job.run();
 }
 

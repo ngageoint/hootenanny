@@ -24,19 +24,10 @@
 // std
 #include <string>
 
-#include <geos/geom/Envelope.h>
-
-// Qt
-#include <QString>
-
 namespace hoot
 {
 
 using namespace std;
-using namespace geos::geom;
-using namespace boost;
-
-class OsmApiDbSqlStatementFormatter;
 
 class WriteOsmSqlStatementsReducer : public pp::Reducer
 {
@@ -52,13 +43,6 @@ public:
 private:
 
   pp::RecordWriter* _writer;
-  long _elementCount;
-  shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
-  Envelope _bounds;
-  QString _outputDelimiter;
-
-  void _updateRecordChangesetId(const QString tableName, const long changesetId,
-                                QString& recordLine);
 
 };
 

@@ -32,6 +32,9 @@
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/elements/Tags.h>
 
+#include <geos/geom/Envelope.h>
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -50,6 +53,27 @@ _outputDelimiter("\t")
 
 //}
 
+void WriteOsmSqlStatementsMapper::_checkForNewChangeset(HadoopPipes::MapContext& context,
+                                                        const long changesetMaxSize,
+                                                        const long changesetUserId,
+                                                        long& elementCount)
+{
+  if (elementCount == changesetMaxSize)
+  {
+    //TODO: fix
+    const long changesetId = 1;
+    Envelope bounds;
+    bounds.init();
+    const QString changesetHeaderStr = _sqlFormatter->getChangesetSqlHeaderString();
+    const QString changesetStatement =
+      _sqlFormatter->changesetToSqlString(changesetId, changesetUserId, elementCount, bounds);
+    context.emit(changesetHeaderStr.toStdString(), changesetStatement.toStdString());
+    //_currentChangesetId++; //TODO: fix
+    elementCount = 0;
+    //context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "changesets"), 1);
+  }
+}
+
 //TODO: buffer this writing
 
 void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context)
@@ -60,10 +84,13 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 //  }
 
   shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
-  long changesetMaxSize = config->getLong("changesetMaxSize");
+  //long changesetMaxSize = config->getLong("changesetMaxSize");
   //TODO: temp
-  changesetMaxSize = 5;
+  //changesetMaxSize = 5;
+  //const long changesetUserId = config->getLong("changesetUserId");
   //LOG_VARD(config->getInt("mapred.map.tasks"));
+  long elementCount = 0;
+  const bool localJobTracker = config->get("mapred.job.tracker") == "local";
 
   const QStringList nodeSqlHeaders = _sqlFormatter->getNodeSqlHeaderStrings();
   const QStringList nodeTagSqlHeaders = _sqlFormatter->getNodeTagSqlHeaderStrings();
@@ -82,6 +109,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     const QStringList nodeSqlStatements = _sqlFormatter->nodeToSqlStrings(node, nodeId, 1);
     context.emit(nodeSqlHeaders[0].toStdString(), nodeSqlStatements[0].toStdString());
     context.emit(nodeSqlHeaders[1].toStdString(), nodeSqlStatements[1].toStdString());
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "nodes"), 1);
+    }
 
     const Tags& tags = node->getTags();
     for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
@@ -91,7 +122,14 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
           nodeId, node->getElementId().getType(), it.key(), it.value());
       context.emit(nodeTagSqlHeaders[0].toStdString(), nodeTagSqlStatements[0].toStdString());
       context.emit(nodeTagSqlHeaders[1].toStdString(), nodeTagSqlStatements[1].toStdString());
+      if (!localJobTracker)
+      {
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "nodeTags"), 1);
+      }
     }
+
+    elementCount++;
+    //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
   const QStringList waySqlHeaders = _sqlFormatter->getWaySqlHeaderStrings();
@@ -112,6 +150,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     const QStringList waySqlStatements = _sqlFormatter->wayToSqlStrings(wayId, 1);
     context.emit(waySqlHeaders[0].toStdString(), waySqlStatements[0].toStdString());
     context.emit(waySqlHeaders[1].toStdString(), waySqlStatements[1].toStdString());
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "ways"), 1);
+    }
 
     const vector<long> wayNodeIds = way->getNodeIds();
     unsigned int wayNodeIndex = 1;
@@ -129,6 +171,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       context.emit(wayNodeSqlHeaders[0].toStdString(), wayNodeSqlStatements[0].toStdString());
       context.emit(wayNodeSqlHeaders[1].toStdString(), wayNodeSqlStatements[1].toStdString());
       wayNodeIndex++;
+      if (!localJobTracker)
+      {
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "wayNodes"), 1);
+      }
     }
 
     const Tags& tags = way->getTags();
@@ -139,7 +185,14 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
           wayId, way->getElementId().getType(), it.key(), it.value());
       context.emit(wayTagSqlHeaders[0].toStdString(), wayTagSqlStatements[0].toStdString());
       context.emit(wayTagSqlHeaders[1].toStdString(), wayTagSqlStatements[1].toStdString());
+      if (!localJobTracker)
+      {
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "wayTags"), 1);
+      }
     }
+
+    elementCount++;
+    //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
   const QStringList relationSqlHeaders = _sqlFormatter->getRelationSqlHeaderStrings();
@@ -160,6 +213,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     const QStringList relationSqlStatements = _sqlFormatter->relationToSqlStrings(relationId, 1);
     context.emit(relationSqlHeaders[0].toStdString(), relationSqlStatements[0].toStdString());
     context.emit(relationSqlHeaders[1].toStdString(), relationSqlStatements[1].toStdString());
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relations"), 1);
+    }
 
     unsigned int memberSequenceIndex = 1;
     const vector<RelationData::Entry> relationMembers = relation->getMembers();
@@ -183,6 +240,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       context.emit(
         relationMemberSqlHeaders[1].toStdString(), relationMemberSqlStatements[1].toStdString());
       memberSequenceIndex++;
+      if (!localJobTracker)
+      {
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relationMembers"), 1);
+      }
     }
 
     const Tags& tags = relation->getTags();
@@ -195,7 +256,14 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
         relationTagSqlHeaders[0].toStdString(), relationTagSqlStatements[0].toStdString());
       context.emit(
         relationTagSqlHeaders[1].toStdString(), relationTagSqlStatements[1].toStdString());
+      if (!localJobTracker)
+      {
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relationTags"), 1);
+      }
     }
+
+    elementCount++;
+    //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 }
 

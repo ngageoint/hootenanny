@@ -48,6 +48,8 @@ private:
 
 //  void _writeElementSqlStatements(const ConstElementPtr& element,
 //                                  HadoopPipes::MapContext& context);
+  void _checkForNewChangeset(HadoopPipes::MapContext& context, const long changesetMaxSize,
+                             const long changesetUserId, long& elementCount);
 
 };
 

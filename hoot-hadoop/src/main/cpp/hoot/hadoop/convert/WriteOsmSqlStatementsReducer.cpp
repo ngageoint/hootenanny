@@ -20,7 +20,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/io/ApiDb.h>
 
 // Pretty Pipes
@@ -36,53 +35,9 @@ namespace hoot
 
 PP_FACTORY_REGISTER(pp::Reducer, WriteOsmSqlStatementsReducer)
 
-WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer() :
-_elementCount(0),
-_outputDelimiter("\t")
+WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer()
 {
   _writer = NULL;
-  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
-  //empty dummy bounds
-  _bounds.init();
-}
-
-void WriteOsmSqlStatementsReducer::_updateRecordChangesetId(const QString tableName,
-                                                            const long changesetId,
-                                                            QString& recordLine)
-{
-  LOG_TRACE("Updating changeset ID for line...");
-  LOG_VART(tableName);
-  LOG_VART(changesetId);
-
-  QStringList lineParts = recordLine.split(_outputDelimiter);
-  LOG_VART(lineParts.size());
-
-  bool lineUpdated = true;
-  if (tableName == ApiDb::getCurrentNodesTableName() || tableName == ApiDb::getNodesTableName())
-  {
-    lineParts[3] = QString::number(changesetId);
-  }
-  else if (tableName == ApiDb::getCurrentWaysTableName() || tableName == ApiDb::getWaysTableName())
-  {
-    lineParts[1] = QString::number(changesetId);
-  }
-  else if (tableName == ApiDb::getCurrentRelationsTableName() ||
-           tableName == ApiDb::getRelationsTableName())
-  {
-    lineParts[1] = QString::number(changesetId);
-  }
-  else
-  {
-    lineUpdated = false;
-  }
-
-  if (!lineUpdated)
-  {
-    throw HootException("Bad line passed to record changeset ID updater: " + recordLine.left(100));
-  }
-
-  recordLine = lineParts.join(_outputDelimiter);
-  LOG_TRACE("Changeset ID updated for line: " << recordLine.left(100));
 }
 
 //TODO: buffer this writing
@@ -99,15 +54,11 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     }
   }
 
-  shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
-  long changesetMaxSize = config->getLong("changesetMaxSize");
-  //TODO: temp
-  changesetMaxSize = 5;
+  //shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   //LOG_VARD(config->getInt("mapred.reduce.tasks"));
 
-  const QString changesetHeaderStr = _sqlFormatter->getChangesetSqlHeaderString();
-  const long changesetUserId = ConfigOptions().getChangesetUserId(); //TODO: fix
-
+  //I wanted to track the counts with counters instead, but pipes won't let you retrieve counter
+  //values, so doing it this way...not sure yet this is good parallel logic, though.
   QMap<QString, long> elementCounts;
   elementCounts["nodes"] = 0;
   elementCounts["ways"] = 0;
@@ -115,70 +66,24 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
 
   const QString key = QString::fromStdString(context.getInputKey());
   QString values = "";
-  long currentChangesetId = 1;
   while (context.nextValue())
   {
-    QString value = QString::fromStdString(context.getInputValue());
+    const QString value = QString::fromStdString(context.getInputValue());
 
-    if (key.contains(ApiDb::getNodesTableName()) || key.contains(ApiDb::getWaysTableName()) ||
-        key.contains(ApiDb::getRelationsTableName()))
+    if (key.contains("current_nodes"))
     {
-      //all changeset id's default to 1, so don't start editing until its equal to 2
-//      if (currentChangesetId >= 2)
-//      {
-//        if (key.contains(ApiDb::getCurrentNodesTableName()))
-//        {
-//          _updateRecordChangesetId(ApiDb::getCurrentNodesTableName(), currentChangesetId, value);
-//        }
-//        else if (key.contains(ApiDb::getCurrentWaysTableName()))
-//        {
-//          _updateRecordChangesetId(ApiDb::getCurrentWaysTableName(), currentChangesetId, value);
-//        }
-//        else if (key.contains(ApiDb::getCurrentRelationsTableName()))
-//        {
-//          _updateRecordChangesetId(ApiDb::getCurrentRelationsTableName(), currentChangesetId, value);
-//        }
-//        else if (key.contains(ApiDb::getNodesTableName()) &&
-//                 !key.contains(ApiDb::getWayNodesTableName()))
-//        {
-//          _updateRecordChangesetId(ApiDb::getNodesTableName(), currentChangesetId, value);
-//        }
-//        else if (key.contains(ApiDb::getWaysTableName()))
-//        {
-//          _updateRecordChangesetId(ApiDb::getWaysTableName(), currentChangesetId, value);
-//        }
-//        else if (key.contains(ApiDb::getRelationsTableName()))
-//        {
-//          _updateRecordChangesetId(ApiDb::getRelationsTableName(), currentChangesetId, value);
-//        }
-//      }
-
-      if (key.contains("current_nodes"))
-      {
-        elementCounts["nodes"] = elementCounts["nodes"] + 1;
-      }
-      else if (key.contains("current_ways"))
-      {
-        elementCounts["ways"] = elementCounts["ways"] + 1;
-      }
-      else if (key.contains("current_relations"))
-      {
-        elementCounts["relations"] = elementCounts["relations"] + 1;
-      }
+      elementCounts["nodes"] = elementCounts["nodes"] + 1;
+    }
+    else if (key.contains("current_ways"))
+    {
+      elementCounts["ways"] = elementCounts["ways"] + 1;
+    }
+    else if (key.contains("current_relations"))
+    {
+      elementCounts["relations"] = elementCounts["relations"] + 1;
     }
 
     values += value;
-
-    _elementCount++;
-    if (_elementCount == changesetMaxSize)
-    {
-      const QString changesetStatement =
-        _sqlFormatter->changesetToSqlString(
-          currentChangesetId, changesetUserId, _elementCount, _bounds);
-      //_writer->emit(changesetHeaderStr.toStdString(), changesetStatement.toStdString());
-      currentChangesetId++;
-      _elementCount = 0;
-    }
   }
   values += "\\.\n";
   //write the record data
