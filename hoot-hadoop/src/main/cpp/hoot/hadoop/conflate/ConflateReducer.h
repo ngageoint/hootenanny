@@ -18,7 +18,7 @@
 #define CONFLATEREDUCER_H
 
 // Hoot
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 
 // Pretty Pipes

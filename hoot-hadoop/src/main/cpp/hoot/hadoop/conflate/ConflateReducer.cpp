@@ -40,7 +40,7 @@
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>

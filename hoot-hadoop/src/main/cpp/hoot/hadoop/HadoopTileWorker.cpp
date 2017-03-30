@@ -20,14 +20,13 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 #include <hoot/hadoop/way-join/WayJoinDriver.h>
 #include <hoot/core/util/UuidHelper.h>
 
 // Pretty Pipes
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
-
-#include "PaintNodesDriver.h"
 
 namespace hoot
 {

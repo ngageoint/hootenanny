@@ -21,7 +21,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/hadoop/HadoopTileWorker.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
-#include <hoot/hadoop/PaintNodesDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
 #include <hoot/core/util/ConfigOptions.h>
 

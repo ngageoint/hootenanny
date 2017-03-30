@@ -50,7 +50,7 @@ Feature: Advanced Conflation Options
 		Examples:
 			| option name | option id | element | placeholder |
 			| Cleaning Options | hoot_cleaning_options_label | small_way_merger_threshold | 15 |
-			| General Conflation Options | hoot_general_conflation_options_label | unify_optimizer_time_limit | 30 |
+			| General Conflation Options | hoot_general_conflation_options_label | unify_optimizer_time_limit | 60 |
 			| General Conflation Options | hoot_general_conflation_options_label | element_cache_size_node | 2000000 |
 			| General Conflation Options | hoot_general_conflation_options_label | element_cache_size_relation | 200000 |
 			| General Conflation Options | hoot_general_conflation_options_label | element_cache_size_way | 200000 |
