@@ -104,7 +104,7 @@ bool NodeToWayMap::validate(const OsmMap& map)
   }
 
   // verify that the map doesn't contain anything it shouldn't.
-  for (const_iterator it = begin(); it != end(); it++)
+  for (const_iterator it = begin(); it != end(); ++it)
   {
     long nid = it->first;
     const set<long>& s = it->second;
@@ -112,7 +112,7 @@ bool NodeToWayMap::validate(const OsmMap& map)
     // this assumption causes problems when a OsmMap is incomplete (think map reduce)
     //assert(map.containsNode(nid) || s.size() == 0);
 
-    for (set<long>::const_iterator it = s.begin(); it != s.end(); it++)
+    for (set<long>::const_iterator it = s.begin(); it != s.end(); ++it)
     {
       assert(*it != 0);
       if (map.containsWay(*it) == false)

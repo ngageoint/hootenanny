@@ -44,7 +44,7 @@ QStringList Tags::_pseudoNameKeys;
 
 void Tags::addTags(const Tags& t)
 {
-  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); it++)
+  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
     operator[](it.key()) = it.value();
   }
@@ -298,7 +298,7 @@ Length Tags::getLength(const QString& k) const
 int Tags::getInformationCount() const
 {
   int count = 0;
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); it++)
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
     LOG_VART(key);
@@ -329,7 +329,7 @@ QStringList Tags::getMatchingKeys(const QStringList& k)
       QString regexStr = k[i].mid(6);
       QRegExp regex(regexStr);
 
-      for (const_iterator it = begin(); it != end(); it++)
+      for (const_iterator it = begin(); it != end(); ++it)
       {
         if (regex.exactMatch(it.key()))
         {
@@ -387,7 +387,7 @@ const QStringList& Tags::getNameKeys()
 int Tags::getNonDebugCount() const
 {
   int count = 0;
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); it++)
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     QString key = it.key();
     if (!key.startsWith(MetadataTags::HootTagPrefix()) && key != "created_by" && it.value() != "")
@@ -456,7 +456,7 @@ bool Tags::operator==(const Tags& other) const
     return false;
   }
 
-  for (const_iterator it = begin(); it != end(); it++)
+  for (const_iterator it = begin(); it != end(); ++it)
   {
     QStringList l1 = split(it.value());
     l1.sort();
@@ -491,7 +491,7 @@ void Tags::readValues(const QString &k, QStringList& list) const
     QString regexStr = k.mid(6);
     QRegExp regex(regexStr);
 
-    for (const_iterator it = begin(); it != end(); it++)
+    for (const_iterator it = begin(); it != end(); ++it)
     {
       if (regex.exactMatch(it.key()))
       {
@@ -591,7 +591,7 @@ QString Tags::toString() const
 {
   QString result;
 
-  for (Tags::const_iterator it = constBegin(); it != constEnd(); it++)
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
     result += it.key() + " = " + it.value() + "\n";
   }

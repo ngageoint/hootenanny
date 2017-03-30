@@ -58,7 +58,7 @@ namespace Tgs
       for (std::map<int, std::list< pair<int, int> >::iterator>::const_iterator it = map.begin(); it != map.end();)
       {
         cout << "(" << it->first << ", " << *(it->second) << ")";
-        it++;
+        ++it;
         if (it != map.end())
         {
           cout << ", ";

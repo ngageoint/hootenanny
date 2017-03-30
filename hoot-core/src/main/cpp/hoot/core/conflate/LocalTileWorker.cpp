@@ -240,7 +240,7 @@ shared_ptr<OsmMap> LocalTileWorker::_readTile(QString input, const Envelope& e)
 void LocalTileWorker::_replaceNodes(shared_ptr<OsmMap> map, const HashMap<long, long>& replacements)
 {
   for (HashMap<long, long>::const_iterator it = replacements.begin(); it != replacements.end();
-       it++)
+       ++it)
   {
     long from = it->first;
     long to = it->second;

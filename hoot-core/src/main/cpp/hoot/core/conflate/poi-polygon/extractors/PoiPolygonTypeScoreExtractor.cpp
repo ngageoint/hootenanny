@@ -181,7 +181,7 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
 {
   QStringList tagsList;
 
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const QStringList values = it.value().split(";");
     for (int i = 0; i < values.size(); i++)

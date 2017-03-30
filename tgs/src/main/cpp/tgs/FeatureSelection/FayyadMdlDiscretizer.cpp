@@ -115,7 +115,7 @@ namespace Tgs
     }
 
     double entropy = 0.0;
-    for (it = frequency.begin(); it != frequency.end(); it++)
+    for (it = frequency.begin(); it != frequency.end(); ++it)
     {
       double proportion = (double)it->second / (double)size;
       entropy += proportion * log(proportion) / log2;
@@ -178,7 +178,7 @@ namespace Tgs
       cnt++;
 
       double entropy = 0.0;
-      for (it = frequency.begin(); it != frequency.end(); it++)
+      for (it = frequency.begin(); it != frequency.end(); ++it)
       {
         double proportion = (double)it->second / (double)cnt;
         entropy += proportion * log(proportion) / log2;
@@ -205,7 +205,7 @@ namespace Tgs
       cnt++;
 
       double entropy = 0.0;
-      for (it = frequency.begin(); it != frequency.end(); it++)
+      for (it = frequency.begin(); it != frequency.end(); ++it)
       {
         double proportion = (double)it->second / (double)cnt;
         entropy += proportion * log(proportion) / log2;
@@ -233,9 +233,9 @@ namespace Tgs
 
       double leftSize = i - start + 1;
       double rightSize = size - leftSize;
-      double gain = totalEntropy - 
-        (rightEnt * rightSize / (double)size + 
-        leftEnt * leftSize / (double)size);
+      double gain = totalEntropy -
+        (rightEnt * rightSize / (double)size +
+         leftEnt * leftSize / (double)size);
 
       int smallSide = (int)((leftSize < rightSize ? leftSize : rightSize) + .5);
       // find the split with the most information gain and the most even split

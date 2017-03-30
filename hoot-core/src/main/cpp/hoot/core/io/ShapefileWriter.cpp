@@ -227,7 +227,7 @@ void ShapefileWriter::writeLines(shared_ptr<const OsmMap> map, const QString& pa
   }
 
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     shared_ptr<Way> way = it->second;
 
@@ -442,7 +442,7 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
   }
 
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     shared_ptr<Way> way = it->second;
 
@@ -453,7 +453,7 @@ void ShapefileWriter::writePolygons(shared_ptr<const OsmMap> map, const QString&
   }
 
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     shared_ptr<Relation> relation = it->second;
 

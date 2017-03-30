@@ -484,7 +484,7 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
+    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
     {
       result.push_back(_graph[*it]);
     }
@@ -499,7 +499,7 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
+    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
     {
       result.push_back(_graph[*it]);
     }
@@ -1211,7 +1211,7 @@ private:
       {
         set<VertexId> children;
         _getChildTags(*vi, children);
-        for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); it++)
+        for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); ++it)
         {
           pair<EdgeId, EdgeId> p = addSimilarTo(_graph[*it].name, _graph[*vi].name,
                                                 _graph[*vi].childWeight);

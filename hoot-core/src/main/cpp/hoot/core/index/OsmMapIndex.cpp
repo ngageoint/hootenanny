@@ -458,7 +458,7 @@ shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
 
   OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
   for (set<long>::const_iterator it = _pendingNodeInsert.begin(); it != _pendingNodeInsert.end();
-       it++)
+       ++it)
   {
     if (_map.containsNode(*it))
     {
@@ -515,7 +515,7 @@ shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
   }
 
   OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
-  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end(); it++)
+  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end(); ++it)
   {
     if (_map.containsWay(*it))
     {

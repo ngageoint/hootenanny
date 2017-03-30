@@ -193,7 +193,7 @@ void OsmApiDbBulkWriter::close()
 void OsmApiDbBulkWriter::_closeOutputFiles()
 {
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
-       sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+       sectionNamesItr != _sectionNames.end(); ++sectionNamesItr)
   {
     if (_outputSections[*sectionNamesItr].first)
     {

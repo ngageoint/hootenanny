@@ -114,7 +114,7 @@ public:
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
     for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
+         it != results.end(); ++it)
     {
       shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
@@ -227,7 +227,7 @@ public:
         "test-output/perty/PertyTestRunnerTest");
     QString testRunResultsStr = "";
     for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
+         it != results.end(); ++it)
     {
       shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
@@ -330,7 +330,7 @@ public:
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
     for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
+         it != results.end(); ++it)
     {
       shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();

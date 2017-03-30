@@ -329,7 +329,7 @@ void Job::_writeConfiguration(QFile& f)
   doc.appendChild(root);
 
   const map<string, string>& m = _conf.getMap();
-  for (map<string, string>::const_iterator it = m.begin(); it != m.end(); it++)
+  for (map<string, string>::const_iterator it = m.begin(); it != m.end(); ++it)
   {
     QDomElement property = doc.createElement("property");
     root.appendChild(property);

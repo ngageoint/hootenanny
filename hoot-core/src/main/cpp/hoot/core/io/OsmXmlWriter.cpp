@@ -254,11 +254,10 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> nids;
-  NodeMap::const_iterator it = map->getNodes().begin();
-  while (it != map->getNodes().end())
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     nids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
@@ -275,7 +274,7 @@ void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& w
 
     const Tags& tags = n->getTags();
 
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key().isEmpty() == false && it.value().isEmpty() == false)
       {
@@ -350,11 +349,10 @@ void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& w
 void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> wids;
-  WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     wids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
@@ -453,11 +451,10 @@ void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& wr
 void OsmXmlWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> rids;
-  RelationMap::const_iterator it = map->getRelations().begin();
-  while (it != map->getRelations().end())
+  const RelationMap& relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     rids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.

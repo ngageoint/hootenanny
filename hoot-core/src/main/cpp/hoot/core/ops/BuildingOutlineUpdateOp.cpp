@@ -122,7 +122,7 @@ void BuildingOutlineUpdateOp::apply(shared_ptr<OsmMap>& map)
 
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const shared_ptr<Relation>& r = it->second;
     // add the relation to a building group if appropriate
@@ -334,13 +334,13 @@ void BuildingOutlineUpdateOp::_mergeNodes(const shared_ptr<Element>& changed,
   map<long, long> nodeIdMap;
 
   double epsilon = 1e-9;
-  for (set<long>::const_iterator ci = changedNodes.begin(); ci != changedNodes.end(); ci++)
+  for (set<long>::const_iterator ci = changedNodes.begin(); ci != changedNodes.end(); ++ci)
   {
     double bestDistance = epsilon;
     // should never be used uninitialized
     long bestMatch = -9999;
     const shared_ptr<Node>& cn = _map->getNode(*ci);
-    for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ri++)
+    for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ++ri)
     {
       const shared_ptr<Node>& rn = _map->getNode(*ri);
       double distance = cn->toCoordinate().distance(rn->toCoordinate());
