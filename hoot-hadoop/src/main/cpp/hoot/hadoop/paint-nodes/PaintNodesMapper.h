@@ -14,56 +14,42 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef WAYJOINREDUCER_H
-#define WAYJOINREDUCER_H
+#ifndef PAINTNODESMAPPER_H
+#define PAINTNODESMAPPER_H
 
-// Hoot
-#include <hoot/hadoop/stats/MapStats.h>
-
-// Pretty Pipes
-#include <pp/io/RecordWriter.h>
-#include <pp/mapreduce/Reducer.h>
-
-// Standard
-#include <string>
-#include <vector>
+#include "../NodeDensity.h"
+#include "../OsmMapMapper.h"
 
 namespace hoot
 {
-using namespace std;
+using namespace boost;
 
-class WayJoin1Reducer : public pp::Reducer
+class PaintNodesMapper : public OsmMapMapper
 {
 public:
 
-  struct Value
-  {
-    int64_t nodeId;
-    double x;
-    double y;
-  } __attribute__((packed));
+  static std::string className() { return "hoot::PaintNodesMapper"; }
 
-  static string className() { return "hoot::WayJoin1Reducer"; }
+  virtual void close();
 
-  static unsigned int logWarnCount;
+  void flush();
 
-  WayJoin1Reducer();
+  PaintNodesMapper();
 
-  void close();
+protected:
 
-  void reduce(HadoopPipes::ReduceContext& context);
+  virtual void _init(HadoopPipes::MapContext& context);
 
-private:
-  pp::RecordWriter* _writer;
-  vector<int64_t> _wayIds;
-  int _missingNodes;
+  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
 
-  MapStats _stats;
+  NodeDensity _nd;
+  Envelope _envelope;
+  double _pixelSize;
+  int _width, _height;
 
-  string _workDir;
-  int _partition;
+  HadoopPipes::MapContext* _context;
 };
 
 }
 
-#endif // WAYJOINREDUCER_H
+#endif // PAINTNODESMAPPER_H

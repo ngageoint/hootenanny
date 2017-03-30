@@ -18,7 +18,7 @@
 #define WAYJOIN2REDUCER_H
 
 // Hoot
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 #include <hoot/core/elements/Status.h>
 
 // Pretty Pipes

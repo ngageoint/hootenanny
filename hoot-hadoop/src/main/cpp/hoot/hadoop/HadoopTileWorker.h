@@ -19,7 +19,7 @@
 
 #include <hoot/core/conflate/TileWorker.h>
 
-#include "MapStats.h"
+#include "stats/MapStats.h"
 
 namespace hoot
 {

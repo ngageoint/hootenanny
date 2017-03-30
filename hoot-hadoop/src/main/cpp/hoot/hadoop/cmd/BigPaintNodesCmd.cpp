@@ -30,13 +30,12 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 
 // Qt
 #include <QImage>
 #include <QString>
 #include <QStringList>
-
-#include "PaintNodesDriver.h"
 
 namespace hoot
 {

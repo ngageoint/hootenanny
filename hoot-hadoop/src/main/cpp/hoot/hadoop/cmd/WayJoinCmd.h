@@ -14,42 +14,32 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef PAINTNODESMAPPER_H
-#define PAINTNODESMAPPER_H
+#ifndef WAYJOINCMD_H
+#define WAYJOINCMD_H
 
-#include "NodeDensity.h"
-#include "OsmMapMapper.h"
+#include <hoot/core/cmd/Command.h>
 
 namespace hoot
 {
-using namespace boost;
 
-class PaintNodesMapper : public OsmMapMapper
+class WayJoinCmd : public Command
 {
 public:
 
-  static std::string className() { return "hoot::PaintNodesMapper"; }
+  static string className() { return "hoot::WayJoinCmd"; }
 
-  virtual void close();
+  WayJoinCmd();
 
-  void flush();
+  virtual ~WayJoinCmd() {}
 
-  PaintNodesMapper();
+  virtual QString getHelp() const;
 
-protected:
+  virtual QString getName() const { return "way-bbox"; }
 
-  virtual void _init(HadoopPipes::MapContext& context);
-
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
-
-  NodeDensity _nd;
-  Envelope _envelope;
-  double _pixelSize;
-  int _width, _height;
-
-  HadoopPipes::MapContext* _context;
+  int run(char *argv[], int argc);
 };
 
 }
 
-#endif // PAINTNODESMAPPER_H
+
+#endif // WAYJOINCMD_H

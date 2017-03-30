@@ -30,7 +30,7 @@ using namespace pp;
 #include <iostream>
 #include <stdlib.h>
 
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 namespace hoot
 {
