@@ -226,16 +226,8 @@ public:
         "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
         "test-output/perty/PertyTestRunnerTest");
     QString testRunResultsStr = "";
-<<<<<<< HEAD
     for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
-||||||| merged common ancestors
-    for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
-=======
-    for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
          it != results.end(); ++it)
->>>>>>> Using prefix iterator increment as opposed to slower postfix and other minor changes.
     {
       boost::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
@@ -337,16 +329,8 @@ public:
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-<<<<<<< HEAD
     for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
-||||||| merged common ancestors
-    for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
-=======
-    for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
          it != results.end(); ++it)
->>>>>>> Using prefix iterator increment as opposed to slower postfix and other minor changes.
     {
       boost::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();

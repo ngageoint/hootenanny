@@ -647,7 +647,7 @@ void MatchComparator::_tagTestOutcome(const OsmMapPtr& map, const QString uuid,
   {
     if (it.key().contains(uuid))
     {
-     boost::shared_ptr<Element> eid = map->getElement(it.value());
+      boost::shared_ptr<Element> eid = map->getElement(it.value());
       stv1.visit(eid);
       stv2.visit(eid);
     }
