@@ -21,7 +21,8 @@
 #include <hoot/hadoop/OsmMapMapper.h>
 
 // Qt
-#include <QMultiMap>
+#include <QVector>
+#include <QPair>
 
 namespace hoot
 {
@@ -45,16 +46,16 @@ protected:
 
 private:
 
-  //HadoopPipes::MapContext* _context;
+  HadoopPipes::MapContext* _context;
   shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
   QString _outputDelimiter;
-  //QMultiMap<QString, QString> _statementsBuffer;
+  shared_ptr<QVector<QPair<QString, QString> > > _statementsBuffer;
 
 //  void _writeElementSqlStatements(const ConstElementPtr& element,
 //                                  HadoopPipes::MapContext& context);
-  void _checkForNewChangeset(HadoopPipes::MapContext& context, const long changesetMaxSize,
-                             const long changesetUserId, long& elementCount);
-  //void _flush();
+//  void _checkForNewChangeset(HadoopPipes::MapContext& context, const long changesetMaxSize,
+//                             const long changesetUserId, long& elementCount);
+  void _flush();
 
 };
 

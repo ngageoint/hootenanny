@@ -44,6 +44,8 @@ private:
 
   pp::RecordWriter* _writer;
 
+  void _flush();
+
 };
 
 }

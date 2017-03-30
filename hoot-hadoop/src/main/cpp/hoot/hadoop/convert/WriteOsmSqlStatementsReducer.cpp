@@ -40,8 +40,6 @@ WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer()
   _writer = NULL;
 }
 
-//TODO: buffer this writing
-
 void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
 {
   if (_writer == NULL)

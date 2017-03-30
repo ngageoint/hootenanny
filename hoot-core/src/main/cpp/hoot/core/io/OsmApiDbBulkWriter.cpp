@@ -388,22 +388,8 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
   //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
   //applying it to a QSqlQuery.
-  const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
-  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
-  if (!(Log::getInstance().getLevel() <= Log::Info))
-  {
-    cmd += " --quiet";
-  }
-  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputCombinedFile->fileName();
-  if (!(Log::getInstance().getLevel() <= Log::Info))
-  {
-    cmd += " > /dev/null";
-  }
-  LOG_DEBUG(cmd);
-  if (system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
-  }
+  ApiDb::execSqlFile(_outputUrl, _sqlOutputCombinedFile->fileName());
+
   LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
 }
 

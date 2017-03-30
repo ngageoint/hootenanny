@@ -19,6 +19,7 @@
 
 // hoot
 #include <hoot/hadoop/Driver.h>
+#include <hoot/core/io/OsmApiDb.h>
 
 // Standard
 #include <string>
@@ -36,7 +37,14 @@ public:
 
   void write(const QString input, const QString output);
 
+  void setWriteBufferSize(long size) { _writeBufferSize = size; }
+  void setOutputFileCopyLocation(QString loc) { _outputFileCopyLocation = loc; }
+
 private:
+
+  OsmApiDb _database;
+  long _writeBufferSize;
+  QString _outputFileCopyLocation;
 
   void _runElementSqlStatementsWriteJob(const string& input, const string& output);
   void _runChangesetSqlStatementsWriteJob(const string& input, const string& output);

@@ -37,6 +37,9 @@
 namespace hoot
 {
 
+//If we end up supporting more than one writer class with this, then this logic should be more
+//in line with the convert command and all readers/writers used should implement appropriate
+//interfaces.
 class BigConvertCmd : public BaseCommand
 {
 public:
@@ -54,13 +57,16 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
-    if (!args[0].endsWith(".pbf"))
+    if (!args[0].toLower().endsWith(".pbf"))
     {
-      throw HootException(QString("%1 must take a .pbf file as input.").arg(getName()));
+      throw HootException(
+        QString("%1 must take an OSM PBF file (.pbf or .osm.pbf) as input.").arg(getName()));
     }
-    if (!args[1].endsWith(".sql"))
+    if (!args[1].toLower().endsWith(".sql") && !args[1].toLower().startsWith("osmapidb://"))
     {
-      throw HootException(QString("%1 must take a .sql file as output.").arg(getName()));
+      throw HootException(
+        QString("%1 must take a SQL file (.sql) or an OSM API database (osmapidb://) as output.")
+          .arg(getName()));
     }
 
     WriteOsmSqlStatementsDriver().write(args[0], args[1]);

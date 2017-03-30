@@ -44,6 +44,8 @@ WriteOsmSqlStatementsMapper::WriteOsmSqlStatementsMapper() :
 _outputDelimiter("\t")
 {
   _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
+  _statementsBuffer.reset(new QVector<QPair<QString, QString> >());
+  _context = NULL;
 }
 
 //TODO: consolidate duplicated code here
@@ -53,38 +55,46 @@ _outputDelimiter("\t")
 
 //}
 
-//void WriteOsmSqlStatementsMapper::_flush()
-//{
-
-//}
-
-void WriteOsmSqlStatementsMapper::_checkForNewChangeset(HadoopPipes::MapContext& context,
-                                                        const long changesetMaxSize,
-                                                        const long changesetUserId,
-                                                        long& elementCount)
+void WriteOsmSqlStatementsMapper::_flush()
 {
-  if (elementCount == changesetMaxSize)
+  LOG_TRACE("Flushing " << _statementsBuffer->size() << " records to disk...");
+  for (QVector<QPair<QString, QString> >::const_iterator it = _statementsBuffer->begin();
+       it != _statementsBuffer->end(); ++it)
   {
-    //TODO: fix
-    const long changesetId = 1;
-    Envelope bounds;
-    bounds.init();
-    const QString changesetHeaderStr = _sqlFormatter->getChangesetSqlHeaderString();
-    const QString changesetStatement =
-      _sqlFormatter->changesetToSqlString(changesetId, changesetUserId, elementCount, bounds);
-    context.emit(changesetHeaderStr.toStdString(), changesetStatement.toStdString());
-    //_currentChangesetId++; //TODO: fix
-    elementCount = 0;
-    //context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "changesets"), 1);
+    QPair<QString, QString> statementPair = *it;
+    LOG_TRACE(statementPair.first << " " << statementPair.second);
+    _context->emit(statementPair.first.toStdString(), statementPair.second.toStdString());
   }
+  _statementsBuffer->clear();
 }
+
+//void WriteOsmSqlStatementsMapper::_checkForNewChangeset(HadoopPipes::MapContext& context,
+//                                                        const long changesetMaxSize,
+//                                                        const long changesetUserId,
+//                                                        long& elementCount)
+//{
+//  if (elementCount == changesetMaxSize)
+//  {
+//    //TODO: fix
+//    const long changesetId = 1;
+//    Envelope bounds;
+//    bounds.init();
+//    const QString changesetHeaderStr = _sqlFormatter->getChangesetSqlHeaderString();
+//    const QString changesetStatement =
+//      _sqlFormatter->changesetToSqlString(changesetId, changesetUserId, elementCount, bounds);
+//    context.emit(changesetHeaderStr.toStdString(), changesetStatement.toStdString());
+//    //_currentChangesetId++; //TODO: fix
+//    elementCount = 0;
+//    //context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "changesets"), 1);
+//  }
+//}
 
 void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context)
 {
-//  if (_context == NULL)
-//  {
-//    _context = &context;
-//  }
+  if (_context == NULL)
+  {
+    _context = &context;
+  }
 
   shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   //long changesetMaxSize = config->getLong("changesetMaxSize");
@@ -94,6 +104,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
   //LOG_VARD(config->getInt("mapred.map.tasks"));
   long elementCount = 0;
   const bool localJobTracker = config->get("mapred.job.tracker") == "local";
+  const long writeBufferSize = config->getLong("writeBufferSize");
 
   const QStringList nodeSqlHeaders = _sqlFormatter->getNodeSqlHeaderStrings();
   const QStringList nodeTagSqlHeaders = _sqlFormatter->getNodeTagSqlHeaderStrings();
@@ -110,8 +121,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     }
 
     const QStringList nodeSqlStatements = _sqlFormatter->nodeToSqlStrings(node, nodeId, 1);
-    context.emit(nodeSqlHeaders[0].toStdString(), nodeSqlStatements[0].toStdString());
-    context.emit(nodeSqlHeaders[1].toStdString(), nodeSqlStatements[1].toStdString());
+    _statementsBuffer->append(QPair<QString, QString>(nodeSqlHeaders[0], nodeSqlStatements[0]));
+    _statementsBuffer->append(QPair<QString, QString>(nodeSqlHeaders[1], nodeSqlStatements[1]));
     //the pretty pipes version of the local job runner doesn't support counters
     if (!localJobTracker)
     {
@@ -125,8 +136,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       const QStringList nodeTagSqlStatements =
         _sqlFormatter->tagToSqlStrings(
           nodeId, node->getElementId().getType(), it.key(), it.value());
-      context.emit(nodeTagSqlHeaders[0].toStdString(), nodeTagSqlStatements[0].toStdString());
-      context.emit(nodeTagSqlHeaders[1].toStdString(), nodeTagSqlStatements[1].toStdString());
+      _statementsBuffer->append(
+        QPair<QString, QString>(nodeTagSqlHeaders[0], nodeTagSqlStatements[0]));
+      _statementsBuffer->append(
+        QPair<QString, QString>(nodeTagSqlHeaders[1], nodeTagSqlStatements[1]));
       if (!localJobTracker)
       {
         context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "node tags"), 1);
@@ -140,11 +153,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
     }
-//    if (_statementsBuffer.size() >=
-//        ConfigOptions().getOsmapidbBulkWriterFileOutputBufferMaxLineSize())
-//    {
-//      _flush();
-//    }
+    if (_statementsBuffer->size() >= writeBufferSize)
+    {
+      _flush();
+    }
     //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
@@ -164,8 +176,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     }
 
     const QStringList waySqlStatements = _sqlFormatter->wayToSqlStrings(wayId, 1);
-    context.emit(waySqlHeaders[0].toStdString(), waySqlStatements[0].toStdString());
-    context.emit(waySqlHeaders[1].toStdString(), waySqlStatements[1].toStdString());
+    _statementsBuffer->append(QPair<QString, QString>(waySqlHeaders[0], waySqlStatements[0]));
+    _statementsBuffer->append(QPair<QString, QString>(waySqlHeaders[1], waySqlStatements[1]));
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "ways"), 1);
@@ -185,8 +197,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 
       const QStringList wayNodeSqlStatements =
         _sqlFormatter->wayNodeToSqlStrings(wayId, wayNodeId, wayNodeIndex);
-      context.emit(wayNodeSqlHeaders[0].toStdString(), wayNodeSqlStatements[0].toStdString());
-      context.emit(wayNodeSqlHeaders[1].toStdString(), wayNodeSqlStatements[1].toStdString());
+      _statementsBuffer->append(
+        QPair<QString, QString>(wayNodeSqlHeaders[0], wayNodeSqlStatements[0]));
+      _statementsBuffer->append(
+        QPair<QString, QString>(wayNodeSqlHeaders[1], wayNodeSqlStatements[1]));
       wayNodeIndex++;
       if (!localJobTracker)
       {
@@ -201,8 +215,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       const QStringList wayTagSqlStatements =
         _sqlFormatter->tagToSqlStrings(
           wayId, way->getElementId().getType(), it.key(), it.value());
-      context.emit(wayTagSqlHeaders[0].toStdString(), wayTagSqlStatements[0].toStdString());
-      context.emit(wayTagSqlHeaders[1].toStdString(), wayTagSqlStatements[1].toStdString());
+      _statementsBuffer->append(
+        QPair<QString, QString>(wayTagSqlHeaders[0], wayTagSqlStatements[0]));
+      _statementsBuffer->append(
+        QPair<QString, QString>(wayTagSqlHeaders[1], wayTagSqlStatements[1]));
       if (!localJobTracker)
       {
         context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "way tags"), 1);
@@ -215,11 +231,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
     }
-//    if (_statementsBuffer.size() >=
-//        ConfigOptions().getOsmapidbBulkWriterFileOutputBufferMaxLineSize())
-//    {
-//      _flush();
-//    }
+    if (_statementsBuffer->size() >= writeBufferSize)
+    {
+      _flush();
+    }
     //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
@@ -239,8 +254,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     }
 
     const QStringList relationSqlStatements = _sqlFormatter->relationToSqlStrings(relationId, 1);
-    context.emit(relationSqlHeaders[0].toStdString(), relationSqlStatements[0].toStdString());
-    context.emit(relationSqlHeaders[1].toStdString(), relationSqlStatements[1].toStdString());
+    _statementsBuffer->append(
+      QPair<QString, QString>(relationSqlHeaders[0], relationSqlStatements[0]));
+    _statementsBuffer->append(
+      QPair<QString, QString>(relationSqlHeaders[1], relationSqlStatements[1]));
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relations"), 1);
@@ -264,10 +281,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       const QStringList relationMemberSqlStatements =
         _sqlFormatter->relationMemberToSqlStrings(
           relationId, memberId, member, memberSequenceIndex);
-      context.emit(
-        relationMemberSqlHeaders[0].toStdString(), relationMemberSqlStatements[0].toStdString());
-      context.emit(
-        relationMemberSqlHeaders[1].toStdString(), relationMemberSqlStatements[1].toStdString());
+      _statementsBuffer->append(
+        QPair<QString, QString>(relationMemberSqlHeaders[0], relationMemberSqlStatements[0]));
+      _statementsBuffer->append(
+        QPair<QString, QString>(relationMemberSqlHeaders[1], relationMemberSqlStatements[1]));
       memberSequenceIndex++;
       if (!localJobTracker)
       {
@@ -283,10 +300,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       const QStringList relationTagSqlStatements =
         _sqlFormatter->tagToSqlStrings(
           relationId, relation->getElementId().getType(), it.key(), it.value());
-      context.emit(
-        relationTagSqlHeaders[0].toStdString(), relationTagSqlStatements[0].toStdString());
-      context.emit(
-        relationTagSqlHeaders[1].toStdString(), relationTagSqlStatements[1].toStdString());
+      _statementsBuffer->append(
+        QPair<QString, QString>(relationTagSqlHeaders[0], relationTagSqlStatements[0]));
+      _statementsBuffer->append(
+        QPair<QString, QString>(relationTagSqlHeaders[1], relationTagSqlStatements[1]));
       if (!localJobTracker)
       {
         context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relation tags"), 1);
@@ -299,13 +316,14 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
     }
-//    if (_statementsBuffer.size() >=
-//        ConfigOptions().getOsmapidbBulkWriterFileOutputBufferMaxLineSize())
-//    {
-//      _flush();
-//    }
+    if (_statementsBuffer->size() >= writeBufferSize)
+    {
+      _flush();
+    }
     //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
+
+  _flush();
 }
 
 }

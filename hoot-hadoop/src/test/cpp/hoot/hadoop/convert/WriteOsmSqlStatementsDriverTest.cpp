@@ -23,8 +23,9 @@ using namespace pp;
 #include <QDir>
 
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/util/FileUtils.h>
 #include <hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h>
+#include <hoot/core/io/OsmApiDbReader.h>
+#include <hoot/core/io/ServicesDbTestUtils.h>
 
 #include "../MapReduceTestFixture.h"
 
@@ -39,17 +40,21 @@ class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
 
 public:
 
-  void verifyStdMatchesOutput(const QString stdFilePath, const QString outFilePath)
+  void verifyDatabaseOutput()
   {
-    LOG_VART(stdFilePath);
-    LOG_VART(outFilePath);
-    const QStringList stdSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
-    const QStringList outputSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
-    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
-    for (int i = 0; i < stdSqlTokens.size(); i++)
-    {
-      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
-    }
+    OsmApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    reader.read(map);
+
+    //we're validating the sql output file, so just doing minimal db validation here
+
+    //verify current elements
+    CPPUNIT_ASSERT_EQUAL((size_t)117, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
+
+    reader.close();
   }
 
   void testJob()
@@ -70,12 +75,22 @@ public:
       /*"test-files/DcGisRoads.pbf"*/
       "test-files/conflate/unified/AllDataTypesA.osm.pbf", outDir + "/input.osm.pbf");
 
-    WriteOsmSqlStatementsDriver().write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
+    WriteOsmSqlStatementsDriver driver;
+    driver.setWriteBufferSize(10);
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
 
-    verifyStdMatchesOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
 
-    //TODO: verify db output
+    //TODO: We have to turn off constraints before writing the sql file to the db, since the table
+    //copy commands are out of order and will violate ref integrity.
+
+
+
+    //TODO: now re-enable the constraints to make sure the db is valid before reading from it
+
+
+    //verifyDatabaseOutput();
   }
 };
 

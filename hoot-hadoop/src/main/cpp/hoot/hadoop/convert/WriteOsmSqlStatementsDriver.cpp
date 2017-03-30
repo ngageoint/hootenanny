@@ -15,16 +15,16 @@
  */
 
 // Hoot
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
+#include <hoot/core/io/ApiDb.h>
+#include <hoot/core/util/UuidHelper.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
 #include <pp/Hdfs.h>
 #include <pp/io/LineRecordWriter.h>
-#include <pp/io/LineRecordReader.h>
 
 // Qt
 #include <QFileInfo>
@@ -36,32 +36,56 @@
 namespace hoot
 {
 
-WriteOsmSqlStatementsDriver::WriteOsmSqlStatementsDriver()
+WriteOsmSqlStatementsDriver::WriteOsmSqlStatementsDriver() :
+_outputFileCopyLocation("")
 {
 }
 
 void WriteOsmSqlStatementsDriver::write(const QString input, const QString output)
 {
-  //we'll ignore the output file name for now and dump all the output in separate files in the
-  //output dir
   pp::Hdfs fs;
-  QFileInfo outputInfo(output);
-  QString hdfsOutput = QString::fromStdString(fs.getAbsolutePath(output.toStdString()));
-  hdfsOutput.replace(outputInfo.fileName(), "");
-  const QString elementSqlOutputDir = hdfsOutput + "/WriteOsmSqlStatements";
-  fs.mkdirs(elementSqlOutputDir.toStdString());
+
+  const bool databaseDestination = output.toLower().startsWith("osmapidb://");
+
+  QString hdfsOutput =
+    "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
+    "-WriteOsmSqlStatementsDriver/";
+  fs.mkdirs(hdfsOutput.toStdString());
 
   _runElementSqlStatementsWriteJob(
-    fs.getAbsolutePath(input.toStdString()), elementSqlOutputDir.toStdString());
+    fs.getAbsolutePath(input.toStdString()), hdfsOutput.toStdString());
+
+  QString sqlFile;
+  if (!databaseDestination)
+  {
+    sqlFile = output;
+  }
+  else if (!_outputFileCopyLocation.isEmpty())
+  {
+    sqlFile = _outputFileCopyLocation;
+  }
+  else
+  {
+    sqlFile = hdfsOutput + "/output.sql";
+  }
 
   //merge all the output files into one and copy back to the local file system
   //const QString cmd = "hadoop fs -getmerge " + changesetSqlOutputDir + " " + output;
-  LOG_INFO("Merging output files...");
-  const QString cmd = "hadoop fs -getmerge " + elementSqlOutputDir + " " + output;
+  //how expensive is this going to be for a ton of files?
+  LOG_INFO("Merging SQL output temporary files...");
+  //const QString cmd = "hadoop fs -getmerge " + elementSqlOutputDir + " " + sqlFile;
+  const QString cmd = "hadoop fs -getmerge " + hdfsOutput + " " + sqlFile;
   LOG_VARD(cmd);
   if (system(cmd.toStdString().c_str()) != 0)
   {
     throw HootException("Failed merging SQL statements output into a single SQL file: " + output);
+  }
+
+  if (databaseDestination)
+  {
+    //TODO: add file name and record count to this message
+    LOG_INFO("Executing element SQL.  17 separate SQL COPY statements will be executed...");
+    ApiDb::execSqlFile(output, sqlFile);
   }
 }
 
@@ -91,18 +115,16 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
   job.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootHadoop.so.1"));
   _addDefaultJobSettings(job);
 
-  // Setting timeout to 6 hours
-  //job.getConfiguration().setInt("mapred.task.timeout", 6 * 3600 * 1000);
+  //job.getConfiguration().setInt("mapred.task.timeout", 6 * 3600 * 1000); //timeout to 6 hours
   // be nice and don't start the reduce tasks until most of the map tasks are done.
   //job.getConfiguration().setDouble("mapred.reduce.slowstart.completed.maps", 0.98);
   //job.getConfiguration().setInt("mapred.map.tasks", 8);
   //job.getConfiguration().setInt("mapred.reduce.tasks", 4);
-  job.getConfiguration().setLong("changesetMaxSize", ConfigOptions().getChangesetMaxSize());
-  //TODO: fix
-  job.getConfiguration().setLong("changesetUserId", 1);
 
-  //job.setDefaultJobTracker("localhost:9001");
-  //job.setJobTracker("localhost:9001");
+  //job.getConfiguration().setLong("changesetMaxSize", ConfigOptions().getChangesetMaxSize());
+  //job.getConfiguration().setLong("changesetUserId", 1);
+  job.getConfiguration().setLong("writeBufferSize", _writeBufferSize);
+
   LOG_DEBUG(job.getJobTracker());
   job.run();
 }

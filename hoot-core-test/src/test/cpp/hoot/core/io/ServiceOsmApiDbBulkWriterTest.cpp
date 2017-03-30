@@ -37,7 +37,6 @@
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/DbUtils.h>
-#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDir>
@@ -131,19 +130,6 @@ public:
     map->addRelation(r1);
 
     return map;
-  }
-
-  void verifyStdMatchesOutput(const QString stdFilePath, const QString outFilePath)
-  {
-    LOG_VART(stdFilePath);
-    LOG_VART(outFilePath);
-    const QStringList stdSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
-    const QStringList outputSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
-    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
-    for (int i = 0; i < stdSqlTokens.size(); i++)
-    {
-      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
-    }
   }
 
   void verifyDatabaseOutputOffline()
@@ -424,7 +410,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyStdMatchesOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
 
     verifyDatabaseOutputOffline();
@@ -459,7 +445,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyStdMatchesOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-online.sql", outFile);
     verifyDatabaseOutputOnline();
   }
@@ -489,7 +475,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyStdMatchesOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-starting-ids.sql",
       outFile);
 
@@ -517,7 +503,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifyStdMatchesOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
     verifyDatabaseEmpty();
   }
