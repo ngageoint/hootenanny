@@ -23,6 +23,7 @@ using namespace pp;
 #include <QDir>
 
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h>
 
 #include "../MapReduceTestFixture.h"
@@ -37,6 +38,19 @@ class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  void verifyStdMatchesOutput(const QString stdFilePath, const QString outFilePath)
+  {
+    LOG_VART(stdFilePath);
+    LOG_VART(outFilePath);
+    const QStringList stdSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
+    const QStringList outputSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
+    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
+    for (int i = 0; i < stdSqlTokens.size(); i++)
+    {
+      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
+    }
+  }
 
   void testJob()
   {
@@ -53,12 +67,15 @@ public:
     }
     QDir().mkpath(QString::fromStdString(outDir));
     fs.copyFromLocal(
-      "test-files/conflate/unified/AllDataTypesA.osm.pbf"/*"test-files/DcGisRoads.pbf"*/,
-      outDir + "/input.osm.pbf");
+      /*"test-files/DcGisRoads.pbf"*/
+      "test-files/conflate/unified/AllDataTypesA.osm.pbf", outDir + "/input.osm.pbf");
 
     WriteOsmSqlStatementsDriver().write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
 
-    //TODO: verify output
+    verifyStdMatchesOutput(
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
+
+    //TODO: verify db output
   }
 };
 

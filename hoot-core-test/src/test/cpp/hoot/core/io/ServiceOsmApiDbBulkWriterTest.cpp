@@ -37,6 +37,7 @@
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDir>
@@ -132,41 +133,12 @@ public:
     return map;
   }
 
-  QStringList tokenizeOutputFileWithoutDates(const QString filePath)
-  {
-    QStringList tokens;
-
-    //parse all the string tokens, except those containing dates, which we can't directly compare
-    const QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
-    const QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
-
-    QFile file(filePath);
-    if (file.open(QIODevice::ReadOnly))
-    {
-      QTextStream in(&file);
-      while (!in.atEnd())
-      {
-        QString line = in.readLine();
-        line = line.remove(reDate);
-        line = line.remove(reTime);
-        tokens << line;
-      }
-      file.close();
-    }
-    else
-    {
-      throw HootException("Unable to open file " + filePath + ".");
-    }
-
-    return tokens;
-  }
-
-  void verifySqlOutput(const QString stdFilePath, const QString outFilePath)
+  void verifyStdMatchesOutput(const QString stdFilePath, const QString outFilePath)
   {
     LOG_VART(stdFilePath);
     LOG_VART(outFilePath);
-    const QStringList stdSqlTokens = tokenizeOutputFileWithoutDates(stdFilePath);
-    const QStringList outputSqlTokens = tokenizeOutputFileWithoutDates(outFilePath);
+    const QStringList stdSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
+    const QStringList outputSqlTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
     CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
     for (int i = 0; i < stdSqlTokens.size(); i++)
     {
@@ -452,7 +424,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifySqlOutput(
+    verifyStdMatchesOutput(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
 
     verifyDatabaseOutputOffline();
@@ -487,7 +459,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifySqlOutput(
+    verifyStdMatchesOutput(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-online.sql", outFile);
     verifyDatabaseOutputOnline();
   }
@@ -517,7 +489,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifySqlOutput(
+    verifyStdMatchesOutput(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-starting-ids.sql",
       outFile);
 
@@ -545,7 +517,7 @@ public:
     writer.write(createTestMap());
     writer.close();
 
-    verifySqlOutput(
+    verifyStdMatchesOutput(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
     verifyDatabaseEmpty();
   }

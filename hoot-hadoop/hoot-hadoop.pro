@@ -52,7 +52,10 @@ SOURCES += \
     src/test/cpp/hoot/hadoop/HadoopTileWorkerTest.cpp \
     src/test/cpp/hoot/hadoop/stats/MapStatsDriverTest.cpp \
     src/test/cpp/hoot/hadoop/HadoopTileWorker2Test.cpp \
-    src/test/cpp/hoot/hadoop/stats/MapStatsTest.cpp \
+    src/test/cpp/hoot/hadoop/stats/MapStatsTest.cpp
+
+# These tests only succeed if the database has been populated by the java code.
+services:SOURCES += \
     src/test/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsDriverTest.cpp
 }
 

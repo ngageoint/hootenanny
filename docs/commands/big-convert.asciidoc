@@ -1,0 +1,32 @@
+== big-convert
+
+=== Description
+
+The +big-convert+ command uses a cluster of machines to convert from one input to another.  
+This does not perform any translation, only conversion.  Use this command instead of
++convert+ when working with very large amounts of data.  
+
+=== Usage
+
+--------------------------------------
+big-convert (input) (output)
+--------------------------------------
+
+=== Supported Formats
+
+The supported input formats are:
+
+* OpenStreetMap Protocol Buffers (.osm.pbf)
+
+The supported output formats are:
+
+* OpenStreetMap API Database SQL file (.sql)
+
+=== Notes
+
+==== Converting to SQL File
+
+* The input must be a .pbf file and it must reside on HDFS.
+* The output SQL file can only be applied to an offline database (no other writers) and all table constraints must be disabled.
+* All elements in the output SQL file belong to a single changeset.
+

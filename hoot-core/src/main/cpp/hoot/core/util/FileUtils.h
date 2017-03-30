@@ -43,6 +43,13 @@ public:
    * @return true on success; false on error.
    */
   static void removeDir(const QString& dirName);
+
+  /**
+   * @brief tokenizeOutputFileWithoutDates
+   * @param filePath
+   * @return
+   */
+  static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
 };
 
 }

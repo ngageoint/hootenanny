@@ -54,10 +54,8 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
-    //if (!args[0].endsWith(".osm.pbf"))
     if (!args[0].endsWith(".pbf"))
     {
-      //throw HootException(QString("%1 must take a .osm.pbf file as input.").arg(getName()));
       throw HootException(QString("%1 must take a .pbf file as input.").arg(getName()));
     }
     if (!args[1].endsWith(".sql"))

@@ -32,6 +32,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
+#include <QTextStream>
 
 // Hoot
 #include <hoot/core/util/HootException.h>
@@ -68,6 +69,35 @@ void FileUtils::removeDir(const QString& dirName)
       throw HootException(QString("Failed to remove %1").arg(dirName));
     }
   }
+}
+
+QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString filePath)
+{
+  QStringList tokens;
+
+  //parse all the string tokens, except those containing dates, which we can't directly compare
+  const QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
+  const QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
+
+  QFile file(filePath);
+  if (file.open(QIODevice::ReadOnly))
+  {
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+      QString line = in.readLine();
+      line = line.remove(reDate);
+      line = line.remove(reTime);
+      tokens << line;
+    }
+    file.close();
+  }
+  else
+  {
+    throw HootException("Unable to open file " + filePath + ".");
+  }
+
+  return tokens;
 }
 
 }
