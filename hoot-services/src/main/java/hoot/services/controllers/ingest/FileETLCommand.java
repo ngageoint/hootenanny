@@ -162,17 +162,6 @@ class FileETLCommand extends ExternalCommand {
                     .collect(Collectors.joining(" "));
         }
 
-        // Formulate request parameters
-
-        //param.put("NONE_TRANSLATION", isNone.toString());
-        //param.put("TRANSLATION", translationPath);
-        //param.put("INPUT_TYPE", inputType);
-        //param.put("INPUT_PATH", UPLOAD_FOLDER + File.separator + jobId);
-        //param.put("INPUT", inputs);
-        //param.put("INPUT_NAME", etlName);
-        //param.put("USER_EMAIL", userEmail);
-        //param.put("DB_URL", HOOTAPI_DB_URL);
-
         if (inputType.equalsIgnoreCase("FGDB") && !StringUtils.isBlank(fgdbFeatureClasses)) {
             Map<String, String> request = requests.get(0);
 
@@ -188,11 +177,6 @@ class FileETLCommand extends ExternalCommand {
                 inputs = fgdbInputs.stream().collect(Collectors.joining(" "));
             }
         }
-
-        //# Unzip when semicolon separated lists are provided
-        //ifneq ($(strip $(UNZIP_LIST)), )
-        //  bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
-        //endif
 
         //ifeq "$(INPUT_TYPE)" "OGR"
         //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
