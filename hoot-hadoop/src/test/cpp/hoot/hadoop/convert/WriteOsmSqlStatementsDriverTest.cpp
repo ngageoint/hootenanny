@@ -22,9 +22,6 @@ using namespace pp;
 // Qt
 #include <QDir>
 
-// Standard
-
-
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h>
 
@@ -43,8 +40,8 @@ public:
 
   void testJob()
   {
-    string outDir = "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest";
-    QString outFile = QString::fromStdString(outDir) + "/DcGisRoads.sql";
+    const string outDir = "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest";
+    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
     if (QFile::exists(outFile))
     {
       QFile::remove(outFile);
@@ -56,11 +53,10 @@ public:
     }
     QDir().mkpath(QString::fromStdString(outDir));
     fs.copyFromLocal(
-      "test-files/conflate/unified/AllDataTypesA.osm.pbf", outDir + "/input/AllDataTypesA.osm.pbf");
+      "test-files/conflate/unified/AllDataTypesA.osm.pbf"/*"test-files/DcGisRoads.pbf"*/,
+      outDir + "/input.osm.pbf");
 
-    WriteOsmSqlStatementsDriver driver;
-    driver.write(
-      QString::fromStdString(outDir) + "/input/AllDataTypesA.osm.pbf", outFile);
+    WriteOsmSqlStatementsDriver().write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
 
     //TODO: verify output
   }

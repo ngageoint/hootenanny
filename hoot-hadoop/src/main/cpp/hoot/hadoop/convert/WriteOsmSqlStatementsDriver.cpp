@@ -24,9 +24,9 @@
 #include <pp/mapreduce/Job.h>
 #include <pp/Hdfs.h>
 #include <pp/io/LineRecordWriter.h>
+#include <pp/io/LineRecordReader.h>
 
 // Qt
-#include <QDir>
 #include <QFileInfo>
 
 #include "WriteOsmSqlStatementsMapper.h"
@@ -42,53 +42,67 @@ WriteOsmSqlStatementsDriver::WriteOsmSqlStatementsDriver()
 
 void WriteOsmSqlStatementsDriver::write(const QString input, const QString output)
 {
-  pp::Job sqlStatementWriteJob;
-  sqlStatementWriteJob.setVerbose(Log::getInstance().getLevel() <= Log::Debug);
-  sqlStatementWriteJob.setName("WriteOsmSqlStatementsDriver");
-  // be nice and don't start the reduce tasks until most of the map tasks are done.
-  //job.getConfiguration().setDouble("mapred.reduce.slowstart.completed.maps", 0.98);
-
-  pp::Hdfs fs;
-  sqlStatementWriteJob.setInput(fs.getAbsolutePath(input.toStdString()));
   //we'll ignore the output file name for now and dump all the output in separate files in the
   //output dir
+  pp::Hdfs fs;
   QFileInfo outputInfo(output);
   QString hdfsOutput = QString::fromStdString(fs.getAbsolutePath(output.toStdString()));
   hdfsOutput.replace(outputInfo.fileName(), "");
-  //LOG_VARD(hdfsOutput.toStdString());
-  sqlStatementWriteJob.setOutput(hdfsOutput.toStdString());
+  const QString elementSqlOutputDir = hdfsOutput + "/WriteOsmSqlStatements";
+  fs.mkdirs(elementSqlOutputDir.toStdString());
 
-  sqlStatementWriteJob.setMapperClass(WriteOsmSqlStatementsMapper::className());
-  sqlStatementWriteJob.setReducerClass(WriteOsmSqlStatementsReducer::className());
-  sqlStatementWriteJob.setInputFormatClass(PbfInputFormat::className());
-  sqlStatementWriteJob.setRecordReaderClass(PbfRecordReader::className());
-  sqlStatementWriteJob.setRecordWriterClass(pp::LineRecordWriter::className());
-
-  // Adds all libraries in this directory to the job.
-  sqlStatementWriteJob.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
-  sqlStatementWriteJob.addFile(ConfPath::search("hoot.json").toStdString());
-  // This library will be used to provide mapper/reducer classes and anything else referenced
-  // by the factory.
-  sqlStatementWriteJob.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootHadoop.so.1"));
-  _addDefaultJobSettings(sqlStatementWriteJob);
-  // conflation runs can go for a _long_ time. Setting timeout to 6 hours.
-  //job.getConfiguration().setInt("mapred.task.timeout", 6 * 3600 * 1000);
-
-  // run the job.
-  sqlStatementWriteJob.run();
-
-  //TODO: update changeset ids
+  _runElementSqlStatementsWriteJob(
+    fs.getAbsolutePath(input.toStdString()), elementSqlOutputDir.toStdString());
 
   //merge all the output files into one and copy back to the local file system
-  const QString cmd = "hadoop fs -getmerge " + hdfsOutput + " " + output;
+  //const QString cmd = "hadoop fs -getmerge " + changesetSqlOutputDir + " " + output;
+  LOG_INFO("Merging output files...");
+  const QString cmd = "hadoop fs -getmerge " + elementSqlOutputDir + " " + output;
   LOG_VARD(cmd);
   if (system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Failed merging SQL statement output into a single SQL file: " + output);
+    throw HootException("Failed merging SQL statements output into a single SQL file: " + output);
   }
+}
 
-  //TODO: append the sequence id update statements to the end of the merged sql file
+void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string& input,
+                                                                   const string& output)
+{
+  LOG_INFO("Running element SQL statements write job...");
 
+  pp::Job job;
+  job.setVerbose(Log::getInstance().getLevel() <= Log::Debug);
+  job.setName("WriteElementSqlStatements");
+
+  job.setInput(input);
+  job.setOutput(output);
+
+  job.setMapperClass(WriteOsmSqlStatementsMapper::className());
+  job.setReducerClass(WriteOsmSqlStatementsReducer::className());
+  job.setInputFormatClass(PbfInputFormat::className());
+  job.setRecordReaderClass(PbfRecordReader::className());
+  job.setRecordWriterClass(pp::LineRecordWriter::className());
+
+  // Adds all libraries in this directory to the job.
+  job.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
+  job.addFile(ConfPath::search("hoot.json").toStdString());
+  // This library will be used to provide mapper/reducer classes and anything else referenced
+  // by the factory.
+  job.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootHadoop.so.1"));
+  _addDefaultJobSettings(job);
+
+  // Setting timeout to 6 hours
+  //job.getConfiguration().setInt("mapred.task.timeout", 6 * 3600 * 1000);
+  // be nice and don't start the reduce tasks until most of the map tasks are done.
+  //job.getConfiguration().setDouble("mapred.reduce.slowstart.completed.maps", 0.98);
+  //job.getConfiguration().setInt("mapred.map.tasks", 8);
+  //job.getConfiguration().setInt("mapred.reduce.tasks", 4);
+  job.getConfiguration().setLong("changesetMaxSize", ConfigOptions().getChangesetMaxSize());
+
+  //job.setDefaultJobTracker("localhost:9001");
+  //job.setJobTracker("localhost:9001");
+  //LOG_INFO(job.getJobTracker());
+  job.run();
 }
 
 }

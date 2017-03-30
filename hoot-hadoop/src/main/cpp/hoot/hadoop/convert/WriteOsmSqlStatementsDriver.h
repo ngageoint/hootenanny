@@ -20,8 +20,13 @@
 // hoot
 #include <hoot/hadoop/Driver.h>
 
+// Standard
+#include <string>
+
 namespace hoot
 {
+
+using namespace std;
 
 class WriteOsmSqlStatementsDriver : public Driver
 {
@@ -31,6 +36,10 @@ public:
 
   void write(const QString input, const QString output);
 
+private:
+
+  void _runElementSqlStatementsWriteJob(const string& input, const string& output);
+  void _runChangesetSqlStatementsWriteJob(const string& input, const string& output);
 };
 
 }

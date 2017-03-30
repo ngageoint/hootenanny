@@ -43,8 +43,8 @@ protected:
 private:
 
   //HadoopPipes::MapContext* _context;
-  long _recordCount;
   shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+  QString _outputDelimiter;
 
 //  void _writeElementSqlStatements(const ConstElementPtr& element,
 //                                  HadoopPipes::MapContext& context);
