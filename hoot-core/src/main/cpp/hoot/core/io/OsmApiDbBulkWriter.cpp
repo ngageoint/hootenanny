@@ -278,7 +278,7 @@ void OsmApiDbBulkWriter::_flushStreams(const bool writeClosingMark)
   {
     if (_outputSections.find(*it) == _outputSections.end())
     {
-      LOG_DEBUG("No data for table " + *it);
+      LOG_TRACE("No data for table " + *it);
       continue;
     }
 
