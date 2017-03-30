@@ -187,7 +187,16 @@ public:
       iocp.msg_lev = GLP_MSG_OFF;
     }
 
-    int result = glp_intopt(_lp, &iocp);
+    int result = 0;
+    try
+    {
+      //  This function can intermittently throw an exception that is heretofore unhandled
+      result = glp_intopt(_lp, &iocp);
+    }
+    catch (...)
+    {
+      throw Exception(QString("Error solving integer programming problem in glp_intopt()."));
+    }
 
     // if there was an error and the error was not a timeout or iteration limit error.
     if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
@@ -217,7 +226,16 @@ public:
       smcp.msg_lev = GLP_MSG_OFF;
     }
 
-    int result = glp_simplex(_lp, &smcp);
+    int result = 0;
+    try
+    {
+      //  This function can potentially throw an exception that is heretofore unhandled
+      result = glp_simplex(_lp, &smcp);
+    }
+    catch (...)
+    {
+      throw Exception(QString("Error solving integer programming problem in glp_simplex()."));
+    }
 
     // if there was an error and the error was not a timeout or iteration limit error.
     if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)

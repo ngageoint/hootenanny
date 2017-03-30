@@ -23,7 +23,7 @@
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
-#include <hoot/hadoop/PaintNodesDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
 
 // Pretty Pipes

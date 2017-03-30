@@ -18,7 +18,7 @@
 #define WAYJOIN2INPUTFORMAT_H
 
 // Hoot
-#include <hoot/hadoop/PbfInputSplit.h>
+#include <hoot/hadoop/pbf/PbfInputSplit.h>
 
 // Pretty Pipes
 #include <pp/conf/Configuration.h>

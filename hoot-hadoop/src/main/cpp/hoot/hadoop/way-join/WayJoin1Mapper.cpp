@@ -19,7 +19,7 @@
 // Hoot
 #include <hoot/core/filters/TagCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
 
