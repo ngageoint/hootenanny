@@ -509,7 +509,10 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
           outStream << line << "\n";
           lineCtr++;
 
-          if (lineCtr == _fileOutputLineBufferSize)
+          //technically, this buffer size is for elements, not record lines, but we'll use this
+          //value anyway...the two could be separated into different config settings if deemed
+          //necessary
+          if (lineCtr == _fileOutputElementBufferSize)
           {
             LOG_TRACE(
               "Flushing records to combined file " << _sqlOutputCombinedFile->fileName() << "...");
@@ -743,12 +746,11 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   _incrementChangesInChangeset();
   _checkUnresolvedReferences(node, nodeDbId);
 
-  if (((_writeStats.nodesWritten + _writeStats.nodeTagsWritten) / 2) %
-      _fileOutputLineBufferSize == 0)
+  if (_writeStats.nodesWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " lines of node data to files...");
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      " nodes to file...");
     _flushStreams();
   }
 
@@ -802,7 +804,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   LOG_VART(wayDbId);
 
   _writeWayToStream(wayDbId);
-  _writeWayNodesToStream(/*_idMappings.wayIdMap->at(way->getId())*/wayDbId, way->getNodeIds());
+  _writeWayNodesToStream(wayDbId, way->getNodeIds());
   _writeTagsToStream(way->getTags(), ElementType::Way, wayDbId,
     _outputSections[ApiDb::getCurrentWayTagsTableName()].second,
     _outputSections[ApiDb::getWayTagsTableName()].second);
@@ -812,12 +814,11 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   _incrementChangesInChangeset();
   _checkUnresolvedReferences(way, wayDbId);
 
-  if (((_writeStats.waysWritten + _writeStats.wayTagsWritten + _writeStats.wayNodesWritten) / 2) %
-      _fileOutputLineBufferSize == 0)
+  if (_writeStats.waysWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " lines of way data to files...");
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      " ways to file...");
     _flushStreams();
   }
 
@@ -859,13 +860,11 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   _incrementChangesInChangeset();
   _checkUnresolvedReferences(relation, relationDbId);
 
-  if (((_writeStats.relationsWritten + _writeStats.relationTagsWritten +
-        _writeStats.relationMembersWritten) / 2) %
-      _fileOutputLineBufferSize == 0)
+  if (_writeStats.relationsWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputLineBufferSize) <<
-      " lines of relation data to files...");
+      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      " relations to file...");
     _flushStreams();
   }
 
@@ -883,7 +882,7 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
 
   setOutputFilesCopyLocation(confOptions.getOsmapidbBulkWriterOutputFilesCopyLocation().trimmed());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
-  setFileOutputLineBufferSize(confOptions.getOsmapidbBulkWriterFileOutputBufferMaxLineSize());
+  setFileOutputElementBufferSize(confOptions.getOsmapidbBulkWriterFileOutputElementBufferSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
   setReserveRecordIdsBeforeWritingData(
@@ -893,7 +892,7 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   setStartingRelationId(confOptions.getOsmapidbBulkWriterStartingRelationId());
 
   LOG_VART(_changesetData.changesetUserId);
-  LOG_VART(_fileOutputLineBufferSize);
+  LOG_VART(_fileOutputElementBufferSize);
   LOG_VART(_statusUpdateInterval);
   LOG_VART(_maxChangesetSize);
   LOG_VART(_outputFilesCopyLocation);

@@ -187,7 +187,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  void setFileOutputLineBufferSize(long size) { _fileOutputLineBufferSize = size; }
+  void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
   void setOutputFilesCopyLocation(QString location) { _outputFilesCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
@@ -208,7 +208,7 @@ private:
   IdMappings _idMappings;
   UnresolvedReferences _unresolvedRefs;
 
-  long _fileOutputLineBufferSize;
+  long _fileOutputElementBufferSize;
   long _statusUpdateInterval;
   long _maxChangesetSize;
   QString _outputFilesCopyLocation;
