@@ -25,6 +25,7 @@ using namespace pp;
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h>
 #include <hoot/core/io/OsmApiDbReader.h>
+#include <hoot/core/io/OsmApiDbBulkWriter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/DbUtils.h>
 
@@ -138,6 +139,17 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
   }
 
+  void writeAdditionalNewRecords()
+  {
+    OsmApiDbBulkWriter writer;
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setChangesetUserId(1);
+    writer.setReserveRecordIdsBeforeWritingData(true);
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(ServicesDbTestUtils::createTestMap1());
+    writer.close();
+  }
+
   void testSqlFileOutput()
   {
     const string outDir =
@@ -194,6 +206,10 @@ public:
     }
 
     verifyDatabaseOutput();
+
+    //let's write some new records just to make sure we didn't mess the constraints up; only
+    //checking for errors here and not checking that this data is written
+    writeAdditionalNewRecords();
   }
 
   void testDatabaseOutput()
@@ -214,6 +230,10 @@ public:
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
 
     verifyDatabaseOutput();
+
+    //let's write some new records just to make sure we didn't mess the constraints up; only
+    //checking for errors here and not checking that this data is written
+    writeAdditionalNewRecords();
   }
 };
 
