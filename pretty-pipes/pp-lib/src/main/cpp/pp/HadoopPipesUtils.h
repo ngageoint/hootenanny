@@ -46,7 +46,9 @@ namespace pp
  */
 class HadoopPipesUtils
 {
+
 public:
+
   HadoopPipesUtils();
 
   static Configuration* toConfiguration(const HadoopPipes::JobConf* conf);
@@ -54,6 +56,8 @@ public:
   static HadoopPipes::RecordReader* getRecordReader(HadoopPipes::TaskContext* context);
 
   static HadoopPipes::RecordWriter* getRecordWriter(HadoopPipes::TaskContext* context);
+
+  static void mergeFilesToLocalFileSystem(const string& filesDir, const string& mergeFileLocation);
 };
 
 }

@@ -88,6 +88,9 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   _writer->emit(key.toStdString(), values.toStdString());
 
   //write the sequence id update sql statements
+  //TODO: this code is suspect to me; its worked so far with multiple reducers in what I believe
+  //to be pseudo-distributed mode.  if all keys of one type are going to each reducer, then I guess
+  //this will work
 
   QString sequenceUpdateStatement;
   if (elementCounts["nodes"] > 0)
@@ -111,10 +114,6 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
       QString::number(elementCounts["relations"]) + ");";
     _writer->emit("/* relations */\n", sequenceUpdateStatement.toStdString());
   }
-//  sequenceUpdateStatement =
-//    "SELECT pg_catalog.setval('changesets_id_seq', " +
-//    QString::number(currentChangesetId) + ");";
-//  _writer->emit("/* changesets */\n", sequenceUpdateStatement.toStdString());
 }
 
 }

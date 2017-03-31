@@ -32,8 +32,8 @@
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/elements/Tags.h>
 
-#include <geos/geom/Envelope.h>
-using namespace geos::geom;
+//#include <geos/geom/Envelope.h>
+//using namespace geos::geom;
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ namespace hoot
 PP_FACTORY_REGISTER(pp::Mapper, WriteOsmSqlStatementsMapper)
 
 WriteOsmSqlStatementsMapper::WriteOsmSqlStatementsMapper() :
-_outputDelimiter("\t")
+_outputDelimiter("\t") //TODO: fix
 {
   _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
   _statementsBuffer.reset(new QVector<QPair<QString, QString> >());

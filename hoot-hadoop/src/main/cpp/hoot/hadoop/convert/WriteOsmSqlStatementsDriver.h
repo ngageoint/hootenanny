@@ -29,6 +29,8 @@ namespace hoot
 
 using namespace std;
 
+class OsmApiDbSqlStatementFormatter;
+
 class WriteOsmSqlStatementsDriver : public Driver
 {
 public:
@@ -45,9 +47,15 @@ private:
   OsmApiDb _database;
   long _writeBufferSize;
   QString _outputFileCopyLocation;
+  shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+  QString _outputDelimiter;
 
   void _runElementSqlStatementsWriteJob(const string& input, const string& output);
   void _runChangesetSqlStatementsWriteJob(const string& input, const string& output);
+  QString _getSqlFileOutputLocation(const QString hdfsOutput,
+                                    const QString userSpecifiedOutput) const;
+  void _writeChangesetToSqlFile(const QString sqlFileLocation);
+  bool _outputIsDatabaseDestination(const QString output) const;
 };
 
 }
