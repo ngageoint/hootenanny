@@ -2322,7 +2322,7 @@ Hootenanny will only use Greedy Constrained Matches.
 === unify.optimizer.time.limit
 
 * Data Type: double
-* Default Value: `30`
+* Default Value: `60`
 
 The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes
 the wait time limit unlimited.
