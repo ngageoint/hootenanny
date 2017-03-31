@@ -37,18 +37,18 @@ WaySublineMatch::WaySublineMatch()
 }
 
 WaySublineMatch::WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr& newMap)
+  : _ws1(WaySubline(other.getSubline1(), newMap)),
+    _ws2(WaySubline(other.getSubline2(), newMap)),
+    _reversed(other.isReverseMatch())
 {
-  _ws1 = WaySubline(other.getSubline1(), newMap);
-  _ws2 = WaySubline(other.getSubline2(), newMap);
-  _reversed = other.isReverseMatch();
 }
 
 WaySublineMatch::WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed) :
   _ws1(ws1),
-  _ws2(ws2)
+  _ws2(ws2),
+  _reversed(reversed)
 {
   assert(_ws1.getWay() != _ws2.getWay());
-  _reversed = reversed;
 }
 
 WaySublineCollection WaySublineMatch::getSublineString1() const

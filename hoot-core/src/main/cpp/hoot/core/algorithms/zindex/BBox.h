@@ -43,7 +43,7 @@ public:
 
   static string className() { return "hoot::BBox"; }
 
-  BBox(vector<double> min, vector<double> max);
+  BBox(const vector<double>& min, const vector<double>& max);
 
   BBox(Envelope envelope);
 

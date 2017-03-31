@@ -31,7 +31,7 @@ namespace Tgs
 
     int getHeight() const { return _height; }
 
-    int getPixelCount() const { return _values.size(); };
+    int getPixelCount() const { return _values.size(); }
 
     const std::vector<_T>& getVector() const { return _values; }
 

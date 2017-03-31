@@ -68,7 +68,7 @@ namespace Tgs
 
     /**
      * Returns a map of names of all the inputs this calculator takes. Each input must have a
-     * unique name and specify a class that provides the necessary input. These inputs must 
+     * unique name and specify a class that provides the necessary input. These inputs must
      * be constant for the class (no adding or removing inputs during its life cycle).
      * @return At this point the type is ignored.
      */
@@ -86,7 +86,7 @@ namespace Tgs
 
     virtual void load(std::istream& s, CalculatorGenomeNodeFactory& factory);
 
-    virtual void save(std::ostream& s, const std::string indent = "");
+    virtual void save(std::ostream& s, const std::string& indent = "");
 
     virtual void setInput(const std::string& name, CalculatorGenomeNode* node);
     virtual void setInput(const std::string& name, shared_ptr<CalculatorGenomeNode> node);
@@ -100,19 +100,19 @@ namespace Tgs
     /**
      * Copies all the internal class data (e.g. parameters). Everything but the children.
      */
-    virtual void _copyInternalData(const CalculatorGenomeNode& /*node*/) {};
+    virtual void _copyInternalData(const CalculatorGenomeNode& /*node*/) {}
 
     virtual CalculatorGenomeNode* _createNew() const = 0;
 
     /**
      * To be overloaded by subclasses. This is for loading any class specific information
      */
-    virtual void _loadInternals(std::istream& /*s*/) {};
+    virtual void _loadInternals(std::istream& /*s*/) {}
 
     /**
      * To be overloaded by subclasses. This is for saving any class specific information
      */
-    virtual void _saveInternals(std::ostream& /*s*/, const std::string /*indent = ""*/) const {};
+    virtual void _saveInternals(std::ostream& /*s*/, const std::string& /*indent = ""*/) const {}
 
     virtual std::string _toLabel() const = 0;
 

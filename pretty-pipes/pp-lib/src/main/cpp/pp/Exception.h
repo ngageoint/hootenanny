@@ -41,9 +41,9 @@ namespace pp
 class Exception : public std::exception
 {
 public:
-  Exception(const char* what) { _what = std::string(what); }
-  Exception(const std::string& what) { _what = what; }
-  Exception(const QString& what) { _what = what.toStdString(); }
+  Exception(const char* what) : _what(std::string(what)) { }
+  Exception(const std::string& what) : _what(what) { }
+  Exception(const QString& what) : _what(what.toStdString()) { }
 
   virtual ~Exception() throw() {}
 

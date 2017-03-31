@@ -769,20 +769,20 @@ std::string Face::toString() const
 
 
 FaceIterator::FaceIterator(const FaceIterator& from)
+  : _it(from._it),
+    _end(from._end),
+    _done(from._done),
+    _atEnd(from._atEnd)
 {
-  _it = from._it;
-  _end = from._end;
-  _atEnd = from._atEnd;
   _f = new Face(*_it);
-  _done = from._done;
 }
 
 FaceIterator::FaceIterator(EdgeIterator it, EdgeIterator end)
+  : _f(new Face(*it)),
+    _it(it),
+    _end(end),
+    _atEnd(false)
 {
-  _it = it;
-  _end = end;
-  _atEnd = false;
-  _f = new Face(*it);
   _done.insert(_f);
 }
 

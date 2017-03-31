@@ -37,10 +37,10 @@
 namespace hoot
 {
 
-BBox::BBox(vector<double> min, vector<double> max)
+BBox::BBox(const vector<double>& min, const vector<double>& max)
+  : _min(min),
+    _max(max)
 {
-  _min = min;
-  _max = max;
   _check();
 }
 

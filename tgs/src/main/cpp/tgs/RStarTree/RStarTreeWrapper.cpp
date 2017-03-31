@@ -41,26 +41,26 @@ namespace Tgs
     delete _irtw;
   }
 
-  void RStarTreeWrapper::bulkInsert(const std::vector<int>& uniqueId, 
-    const std::vector<double>& minBounds, 
+  void RStarTreeWrapper::bulkInsert(const std::vector<int>& uniqueId,
+    const std::vector<double>& minBounds,
     const std::vector<double>& maxBounds)
   {
     _irtw->bulkInsert(uniqueId, minBounds, maxBounds);
   }
 
-  void RStarTreeWrapper::getIntersectingObjects(const std::vector<double> minBounds, 
-    const std::vector<double> maxBounds, std::vector<int> & objIds)
+  void RStarTreeWrapper::getIntersectingObjects(const std::vector<double>& minBounds,
+    const std::vector<double>& maxBounds, std::vector<int>& objIds)
   {
     _irtw->getIntersectingObjects(minBounds, maxBounds, objIds);
   }
 
-  void RStarTreeWrapper::getObjectsWithinRange(std::vector<double> point, double radius, 
+  void RStarTreeWrapper::getObjectsWithinRange(std::vector<double> point, double radius,
     std::vector<int> & objIds)
   {
     _irtw->getObjectsWithinRange(point, radius, objIds);
   }
 
-  void RStarTreeWrapper::insert(int objId, std::vector<double> & minBounds, 
+  void RStarTreeWrapper::insert(int objId, std::vector<double> & minBounds,
                                 std::vector<double> & maxBounds)
   {
     _irtw->insert(objId, minBounds, maxBounds);

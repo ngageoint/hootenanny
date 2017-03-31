@@ -37,12 +37,11 @@ namespace Tgs
 {
 
   FilePageStore::FilePageStore(int pageSize,  const char * fileName, bool readOnly)
+    : _pageSize(pageSize),
+      _readOnly(readOnly),
+      _bDestructing(false),
+      _fileName(fileName)
   {
-    _bDestructing = false;
-    _pageSize = pageSize;
-    _readOnly = readOnly;
-    _fileName = fileName;
-
     if (readOnly == true)
     {
       _pageFile = fopen(fileName, "rb");

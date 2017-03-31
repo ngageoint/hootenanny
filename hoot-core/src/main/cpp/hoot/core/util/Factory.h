@@ -73,9 +73,8 @@ class ObjectCreatorTemplate : public ObjectCreator
 {
 public:
   ObjectCreatorTemplate(std::string baseName, std::string name)
+    : _name(name), _baseName(baseName)
   {
-    _baseName = baseName;
-    _name = name;
   }
 
   virtual ~ObjectCreatorTemplate() { }

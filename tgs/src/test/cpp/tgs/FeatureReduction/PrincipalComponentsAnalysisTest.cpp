@@ -56,7 +56,7 @@ namespace Tgs
   class DblVec : public std::vector<double>
   {
   public:
-    DblVec() {};
+    DblVec() {}
 
     DblVec(double f1, double f2)
     {

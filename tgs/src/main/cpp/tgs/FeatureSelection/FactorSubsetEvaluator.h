@@ -42,14 +42,14 @@ namespace Tgs
   {
   public:
 
-    virtual ~FactorSubsetEvaluator() {};
+    virtual ~FactorSubsetEvaluator() {}
 
     /**
-     * Evaluates the specified set of columns in the data frame and returns a value that 
+     * Evaluates the specified set of columns in the data frame and returns a value that
      * describes how "good" the data frame is. Higher values are better.
      * @returns the quality of the data frame.
      */
-    virtual double evaluateSubset(const std::vector<int>& columns, 
+    virtual double evaluateSubset(const std::vector<int>& columns,
       TgsProgress* progress = NULL) = 0;
 
     /**

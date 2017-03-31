@@ -43,12 +43,12 @@ namespace Tgs
 
     virtual ~DataFrameCalculatorNodeSource() {}
 
-    virtual const std::map<std::string, std::string> getInputs() const 
+    virtual const std::map<std::string, std::string> getInputs() const
     { return std::map<std::string, std::string>(); }
 
     virtual double getOutput(const int uid) const;
 
-    virtual void mutate(double /*p*/) {};
+    virtual void mutate(double /*p*/) {}
 
   protected:
     shared_ptr<DataFrame> _source;

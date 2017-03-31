@@ -48,16 +48,9 @@ public:
 
     Entry() {}
 
-    Entry(QString role, ElementId eid)
-    {
-      this->role = role;
-      _eid = eid;
-    }
+    Entry(QString r, ElementId eid) : role(r), _eid(eid)  { }
 
-    Entry(ElementId eid) :
-      _eid(eid)
-    {
-    }
+    Entry(ElementId eid) : _eid(eid) { }
 
     ElementId getElementId() const { return _eid; }
     void setElementId(ElementId eid) { _eid = eid; }

@@ -39,7 +39,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapWriter"; }
 
-  OsmMapWriter() {};
+  OsmMapWriter() {}
 
   virtual ~OsmMapWriter() {}
 

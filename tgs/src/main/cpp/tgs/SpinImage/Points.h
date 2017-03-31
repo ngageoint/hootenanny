@@ -168,7 +168,7 @@ namespace Tgs
 
     const std::vector<CloudPoint>& getPoints() const { return _points; }
 
-    void load(const std::string fn)
+    void load(const std::string& fn)
     {
       std::fstream ins(fn.c_str(), std::fstream::in);
 
