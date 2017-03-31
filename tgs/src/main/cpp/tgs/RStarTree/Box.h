@@ -51,7 +51,7 @@ namespace Tgs
 
     Box(int dimensions);
 
-    ~Box() {};
+    ~Box() {}
 
     double calculateOverlap(const Box& b) const;
 
@@ -88,7 +88,7 @@ namespace Tgs
     std::string toString() const;
 
     bool isContained(const Box& b);
- 
+
   private:
     double _lowerBound[MAX_DIMENSIONS];
     double _upperBound[MAX_DIMENSIONS];

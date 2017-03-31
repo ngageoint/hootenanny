@@ -34,18 +34,17 @@
 
 namespace Tgs
 {
-  DistanceIterator::DistanceIterator(RStarTree* tree, const std::vector<double>& point, 
+  DistanceIterator::DistanceIterator(RStarTree* tree, const std::vector<double>& point,
     double distance)
+    : nodeHits(1),
+      distCalcs(0),
+      _tree(tree),
+      _point(point),
+      _distance(distance),
+      _done(false)
   {
-    _done = false;
-    _tree = tree;
-    _distance = distance;
-    _point = point;
-
     const RTreeNode* root = _tree->getRoot();
     _pendingNodes.push_back(root->getId());  //Begin traversal at root
-    nodeHits = 1;
-    distCalcs = 0;
 
     _populateNext();  //Traverse tree to gather nodes within range
   }
@@ -67,7 +66,7 @@ namespace Tgs
       else if (point[i] < box.getLowerBound(i))
       {
         a = point[i] - box.getLowerBound(i);
-      } 
+      }
       c += a * a;
     }
     return sqrt(c);
@@ -83,7 +82,7 @@ namespace Tgs
     return _currentResult.id;
   }
 
-  bool DistanceIterator::hasNext() 
+  bool DistanceIterator::hasNext()
   {
     _populateNext();
     return !_done;
@@ -113,7 +112,7 @@ namespace Tgs
       else
       {
         //Get the first node in the list to examine
-        const RTreeNode* node = _tree->getNode(_pendingNodes.front());  
+        const RTreeNode* node = _tree->getNode(_pendingNodes.front());
         nodeHits++;
         _pendingNodes.pop_front(); //Remove node from future consideration
         for (int i = 0; i < node->getChildCount(); i++)

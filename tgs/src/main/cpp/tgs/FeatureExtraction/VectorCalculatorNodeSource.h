@@ -38,18 +38,18 @@ namespace Tgs
   class TGS_EXPORT VectorCalculatorNodeSource : public CalculatorGenomeNode
   {
   public:
-    VectorCalculatorNodeSource() { _label = "v[]"; };
+    VectorCalculatorNodeSource() : _label("v[]") { }
 
     VectorCalculatorNodeSource(const std::vector<double>& source);
 
     virtual ~VectorCalculatorNodeSource() {}
 
-    virtual const std::map<std::string, std::string> getInputs() const 
+    virtual const std::map<std::string, std::string> getInputs() const
     { return std::map<std::string, std::string>(); }
 
     virtual double getOutput(const int uid) const { return _source[uid]; }
 
-    virtual void mutate(double /*p*/) {};
+    virtual void mutate(double /*p*/) {}
 
     void setLabel(std::string label) { _label = label; }
 

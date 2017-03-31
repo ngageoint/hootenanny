@@ -39,7 +39,7 @@
 
 namespace Tgs
 {
-  InternalRStarTreeWrapper::InternalRStarTreeWrapper(unsigned int pageSize, unsigned int dimensions) : 
+  InternalRStarTreeWrapper::InternalRStarTreeWrapper(unsigned int pageSize, unsigned int dimensions) :
   _dimensions(dimensions)
   {
     shared_ptr<MemoryPageStore> mps(new MemoryPageStore((int)pageSize));
@@ -52,8 +52,8 @@ namespace Tgs
 
   }
 
-  void InternalRStarTreeWrapper::bulkInsert(const std::vector<int>& uniqueId, 
-    const std::vector<double>& minBounds, 
+  void InternalRStarTreeWrapper::bulkInsert(const std::vector<int>& uniqueId,
+    const std::vector<double>& minBounds,
     const std::vector<double>& maxBounds)
   {
     std::vector<Box> boxes;
@@ -74,11 +74,11 @@ namespace Tgs
     _tree->bulkInsert(boxes, uniqueId);
   }
 
-  void InternalRStarTreeWrapper::getIntersectingObjects(const std::vector<double> minBounds, 
-    const std::vector<double> maxBounds, std::vector<int> & objIds)
+  void InternalRStarTreeWrapper::getIntersectingObjects(const std::vector<double>& minBounds,
+    const std::vector<double>& maxBounds, std::vector<int>& objIds)
   {
     shared_ptr<IntersectionIterator> interItr = shared_ptr<IntersectionIterator>(new IntersectionIterator(_tree.get(), minBounds, maxBounds));
-    
+
     while(interItr->next())
     {
       objIds.push_back(interItr->getId());
@@ -95,7 +95,7 @@ namespace Tgs
     }
   }
 
-  void InternalRStarTreeWrapper::insert(int objId, std::vector<double> & minBounds, 
+  void InternalRStarTreeWrapper::insert(int objId, std::vector<double> & minBounds,
     std::vector<double> & maxBounds)
   {
     assert(_dimensions == minBounds.size());
@@ -109,8 +109,6 @@ namespace Tgs
     }
 
     _tree->insert(tmpBox, objId);
-
   }
 
-  
 }

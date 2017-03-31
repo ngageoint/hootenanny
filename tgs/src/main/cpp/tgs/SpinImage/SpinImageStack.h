@@ -41,7 +41,7 @@ namespace Tgs
   class  TGS_EXPORT SpinImageStack
   {
   public:
-    SpinImageStack() {};
+    SpinImageStack() {}
 
     virtual ~SpinImageStack();
 

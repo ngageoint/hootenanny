@@ -55,9 +55,8 @@ public:
   LongBoxContainer() {}
 
   LongBoxContainer(LongBox box, long int excess)
+    : _box(box), _excess(excess)
   {
-    _box = box;
-    _excess = excess;
   }
 
   bool operator=(LongBoxContainer bc) const
@@ -123,10 +122,9 @@ struct range_sort {
 } range_object;
 
 ZCurveRanger::ZCurveRanger(const ZValue& zv)
+  : _slop(5), //  completely arbitrary.
+    _zv(zv)
 {
-  _zv = zv;
-  //completely arbitrary.
-  _slop = 5;
 }
 
 vector<shared_ptr<LongBox> > ZCurveRanger::breakBox(shared_ptr<LongBox> box)

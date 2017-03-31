@@ -330,7 +330,7 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   } // End layer does not exist
 }
 
-OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
+OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
 {
   // Check if the layer exists in the output.
   int layerCount = _ds->GetLayerCount();
@@ -349,7 +349,7 @@ OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
   return NULL;
 }
 
-OGRLayer* OgrWriter::_getLayer(const QString layerName)
+OGRLayer* OgrWriter::_getLayer(const QString& layerName)
 {
   if (!_layers.contains(layerName))
   {

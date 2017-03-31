@@ -46,7 +46,7 @@ namespace Tgs
   {
   public:
 
-    virtual ~GroundPlaneRemover() {};
+    virtual ~GroundPlaneRemover() {}
 
     /**
      * This function will calculate normals and remove the ground plane all at once.

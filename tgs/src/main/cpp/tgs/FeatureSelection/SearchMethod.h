@@ -49,7 +49,7 @@ namespace Tgs
   {
   public:
 
-    virtual ~SearchMethod() {};
+    virtual ~SearchMethod() {}
 
     /**
      * Searches for a good subset of factors.

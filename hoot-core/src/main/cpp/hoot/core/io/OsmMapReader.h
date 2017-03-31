@@ -40,7 +40,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapReader"; }
 
-  OsmMapReader() {};
+  OsmMapReader() {}
 
   virtual ~OsmMapReader() {}
 

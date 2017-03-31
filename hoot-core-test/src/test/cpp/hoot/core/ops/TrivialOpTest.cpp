@@ -76,7 +76,7 @@ public:
   void runTest()
   {
     QDataStream dataStream;
-    string className = "";
+    string className;
 
     // AddHilbertReviewSortOrderOp
     AddHilbertReviewSortOrderOp addHilbertReviewSortOrderOp;

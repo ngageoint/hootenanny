@@ -41,7 +41,7 @@ namespace Tgs
 
   /**
    * Calculates the symmetric uncertainty as described in [1] section 4.2.1
-   * 
+   *
    * [1] M. Hall 1999, Correlation-based Feature Selection for Machine Learning
    * (http://www.cs.waikato.ac.nz/~mhall/thesis.pdf)
    * [2] Wikipedia, Conditional Entropy (http://en.wikipedia.org/wiki/Conditional_entropy)
@@ -51,14 +51,14 @@ namespace Tgs
   {
   public:
 
-    SymmetricUncertaintyCalculator() {};
+    SymmetricUncertaintyCalculator() {}
 
-    virtual ~SymmetricUncertaintyCalculator() {};
+    virtual ~SymmetricUncertaintyCalculator() {}
 
-    virtual double calculateScore(const DataFrame& df1, int factorIndex1, 
+    virtual double calculateScore(const DataFrame& df1, int factorIndex1,
       const DataFrame& df2, int factorIndex2);
 
-    double calculateUncertainty(const DataFrame& df1, int factorIndex1, 
+    double calculateUncertainty(const DataFrame& df1, int factorIndex1,
       const DataFrame& df2, int factorIndex2);
 
   protected:
@@ -73,7 +73,7 @@ namespace Tgs
     /**
      * See [2] and [1] section 4.2.1
      */
-    double _calculateConditionalEntropy(const DataFrame& dfY, int factorIndexY, 
+    double _calculateConditionalEntropy(const DataFrame& dfY, int factorIndexY,
       const DataFrame& dfX, int factorIndexX);
 
   };

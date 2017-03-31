@@ -50,10 +50,7 @@ namespace Tgs
     *
     * @param error - a string describing the error
     */
-    Exception(const std::string& error)
-    {
-      _errorStr = error;
-    }
+    Exception(const std::string& error) : _errorStr(error) { }
 
     /**
      * @brief Exception an exception object

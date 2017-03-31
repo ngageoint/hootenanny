@@ -91,7 +91,7 @@ protected:
   /**
    * Calculate the squared error for a given fold.
    */
-  double _calculateFoldError(int fold, const vector<size_t> indexes) const;
+  double _calculateFoldError(int fold, const vector<size_t>& indexes) const;
 
   virtual double _estimateError(unsigned int /*index*/) const { throw Tgs::Exception("Not Implemented."); }
 

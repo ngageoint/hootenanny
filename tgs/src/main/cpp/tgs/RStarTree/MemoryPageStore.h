@@ -38,7 +38,7 @@
 namespace Tgs
 {
   /**
-   * A PageStore that simply stores all pages in memory. Obviously, when this page store is 
+   * A PageStore that simply stores all pages in memory. Obviously, when this page store is
    * destroyed all the pages are lost.
    */
   class TGS_EXPORT MemoryPageStore : public PageStore
@@ -50,7 +50,7 @@ namespace Tgs
 
     virtual shared_ptr<Page> createPage();
 
-    virtual void flush() {};
+    virtual void flush() {}
 
     virtual shared_ptr<Page> getPage(int id);
 
@@ -58,14 +58,14 @@ namespace Tgs
 
     virtual int getPageSize() const;
 
-    virtual void save() {};
+    virtual void save() {}
 
   private:
 
     int _pageSize;
     std::vector< shared_ptr<Page> > _pages;
 
-    virtual void _savePage(int, char *) {};
+    virtual void _savePage(int, char *) {}
 
   };
 }

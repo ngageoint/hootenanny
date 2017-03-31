@@ -96,7 +96,7 @@ namespace Tgs
   }
 
   void ConstantCalculatorNodeSource::_saveInternals(std::ostream& s,
-    const std::string indent) const
+    const std::string& indent) const
   {
     s << indent << "<value>" << _v << "</value>" << endl;
     s << indent << "<sigma>" << _sigma << "</sigma>" << endl;

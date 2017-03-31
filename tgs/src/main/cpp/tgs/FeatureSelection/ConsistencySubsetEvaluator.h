@@ -47,9 +47,9 @@ namespace Tgs
    * Zhao & Liu suggest using Consistency-based feature selection with a backward elimination
    * search routine (INTERACT), however this is a more flexible but less efficient implementation
    * that allows arbitrary search routines.
-   * 
+   *
    * See also Zhao, Liu, Searching for Interacting Features for a technical description
-   * http://www.ijcai.org/papers07/Papers/IJCAI07-187.pdf (Section 2 Interaction and Data 
+   * http://www.ijcai.org/papers07/Papers/IJCAI07-187.pdf (Section 2 Interaction and Data
    * Consistency is most relevant)
    *
    * See also wikipedia http://en.wikipedia.org/wiki/Feature_selection for a general overview of
@@ -59,7 +59,7 @@ namespace Tgs
   {
   public:
 
-    virtual ~ConsistencySubsetEvaluator() {};
+    virtual ~ConsistencySubsetEvaluator() {}
 
     /**
      * Evaluates the columns in the data frame and returns -inconsistency rate. Zero is the best
@@ -67,7 +67,7 @@ namespace Tgs
      * @param columns a vector of ints that refer to the columns in the data frame
      * @returns the quality of the data frame (bigger is better).
      */
-    virtual double evaluateSubset(const std::vector<int>& columns, 
+    virtual double evaluateSubset(const std::vector<int>& columns,
       TgsProgress* progress = NULL);
 
     virtual void setDataFrame(const DataFrame& dataFrame, TgsProgress* progress = NULL);
@@ -101,7 +101,7 @@ namespace Tgs
     /**
      * Calculates the inconsistency count for an Inconsistent Instances Set. This boils down to
      * classes.size() - maxCountOfSingleEnumeration(classes)
-     * Zhao & Liu give a much more complicated definition (def 4) in their paper if you're 
+     * Zhao & Liu give a much more complicated definition (def 4) in their paper if you're
      * interested.
      */
     int _calculateInconsistentCount(const InconsistentInstancesMap& classes) const;

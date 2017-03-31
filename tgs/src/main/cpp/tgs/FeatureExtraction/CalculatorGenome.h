@@ -37,8 +37,8 @@
 
 namespace Tgs
 {
-  class TGS_EXPORT CalculatorGenome : 
-    public TreeGenome, 
+  class TGS_EXPORT CalculatorGenome :
+    public TreeGenome,
     public CalculatorGenomeNodeFactory
   {
   public:
@@ -94,7 +94,7 @@ namespace Tgs
 
     shared_ptr<CalculatorGenomeNode> createNode(const std::string& id) const;
 
-    virtual void crossoverSexually(const Genome& father, const Genome& mother, 
+    virtual void crossoverSexually(const Genome& father, const Genome& mother,
       shared_ptr<Genome>& brother, shared_ptr<Genome>& sister);
 
     const AvailableNodeMap& getAvailableNodes() const { return _availableNodes; }
@@ -110,7 +110,7 @@ namespace Tgs
     virtual void mutate(double p);
 
     /**
-     * Resets all the weights to v. If at least one terminal weight isn't a positive, non-zero 
+     * Resets all the weights to v. If at least one terminal weight isn't a positive, non-zero
      * values before a mutation or initialization bad things will happen.
      */
     void resetWeights(double v);
@@ -118,9 +118,9 @@ namespace Tgs
     /**
      * Save this genome to the specified stream as XML.
      */
-    void save(std::ostream& s, const std::string indent = "") const;
+    void save(std::ostream& s, const std::string& indent = "") const;
 
-    void setInitializationDepth(int depth) { _depth = depth; };
+    void setInitializationDepth(int depth) { _depth = depth; }
 
     void setWeight(const std::string& label, double weight);
 
@@ -128,7 +128,7 @@ namespace Tgs
 
   private:
     AvailableNodeMap _availableNodes;
-    
+
     shared_ptr<CalculatorGenomeNode> _root;
 
     double _totalWeight, _sourceWeight;
@@ -148,13 +148,13 @@ namespace Tgs
     shared_ptr<CalculatorGenomeNode> _createNewTree(int maxDepth) const;
 
     /**
-     * I realize this is inefficient, but it makes maintenance and creation of the 
+     * I realize this is inefficient, but it makes maintenance and creation of the
      * CalculatorGenomeNode much easier. Also, compared to the other computations that will be
      * occurring, this is small potatoes.
      */
     shared_ptr<CalculatorGenomeNode> _findParent(shared_ptr<CalculatorGenomeNode> node) const;
 
-    shared_ptr<CalculatorGenomeNode> _findParent(shared_ptr<CalculatorGenomeNode> node, 
+    shared_ptr<CalculatorGenomeNode> _findParent(shared_ptr<CalculatorGenomeNode> node,
       shared_ptr<CalculatorGenomeNode> current) const;
 
     shared_ptr<CalculatorGenomeNode> _findNode(int index) const;
