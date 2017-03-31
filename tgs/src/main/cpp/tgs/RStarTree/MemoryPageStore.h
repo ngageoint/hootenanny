@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
 #ifndef __TGS__MEMORY_PAGE_STORE_H__
 #define __TGS__MEMORY_PAGE_STORE_H__
 

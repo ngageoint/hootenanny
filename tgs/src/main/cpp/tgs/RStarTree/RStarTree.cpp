@@ -41,8 +41,8 @@ using namespace std;
 
 using namespace Tgs;
 
-RStarTree::RStarTree(boost::shared_ptr<PageStore> ps, int dimensions) :
-  _store(dimensions, ps)
+RStarTree::RStarTree(boost::shared_ptr<PageStore> ps, int dimensions)
+  : _store(dimensions, ps)
 {
   RTreeNode* root;
 
