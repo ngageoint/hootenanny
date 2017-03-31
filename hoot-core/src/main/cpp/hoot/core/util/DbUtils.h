@@ -30,7 +30,7 @@
 
 // Qt
 #include <QString>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 
 namespace hoot
 {
@@ -57,6 +57,17 @@ public:
    * @return number of rows
    */
   static long getRowCount(const QSqlDatabase& database, const QString tableName);
+
+  static QStringList getConstraintsForTable(const QSqlDatabase& database, const QString tableName);
+
+  static void disableTableConstraints(QSqlDatabase& database, const QString tableName);
+  static void enableTableConstraints(QSqlDatabase& database, const QString tableName);
+
+private:
+
+  static void _modifyTableConstraints(QSqlDatabase& database, const QString tableName,
+                                      const bool disable = true);
+
 };
 
 }

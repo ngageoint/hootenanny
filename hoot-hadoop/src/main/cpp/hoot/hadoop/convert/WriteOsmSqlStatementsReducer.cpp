@@ -84,6 +84,11 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     values += value;
   }
   values += "\\.\n";
+  if (values.startsWith("\t"))
+  {
+    LOG_ERROR("found");
+    values.replace(0, 2, "");
+  }
   //write the record data
   _writer->emit(key.toStdString(), values.toStdString());
 

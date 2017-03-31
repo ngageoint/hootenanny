@@ -30,7 +30,7 @@
 
 // Qt
 #include <QString>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 #include <QSqlQuery>
 
 namespace  hoot

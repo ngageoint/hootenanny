@@ -63,7 +63,13 @@ void WriteOsmSqlStatementsMapper::_flush()
   {
     QPair<QString, QString> statementPair = *it;
     LOG_TRACE(statementPair.first << " " << statementPair.second);
-    _context->emit(statementPair.first.toStdString(), statementPair.second.toStdString());
+    QString value = statementPair.second;
+    if (value.startsWith("\t"))
+    {
+      LOG_ERROR("found");
+      value.replace(0, 2, "");
+    }
+    _context->emit(statementPair.first.toStdString(), /*statementPair.second*/value.toStdString());
   }
   _statementsBuffer->clear();
 }

@@ -25,7 +25,9 @@ using namespace pp;
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h>
 #include <hoot/core/io/OsmApiDbReader.h>
+#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
+#include <hoot/core/util/DbUtils.h>
 
 #include "../MapReduceTestFixture.h"
 
@@ -35,7 +37,7 @@ namespace hoot
 class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
 {
   CPPUNIT_TEST_SUITE(WriteOsmSqlStatementsDriverTest);
-  CPPUNIT_TEST(testJob);
+  CPPUNIT_TEST(testSqlFileOutput);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -57,7 +59,7 @@ public:
     reader.close();
   }
 
-  void testJob()
+  void testSqlFileOutput()
   {
     const string outDir = "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest";
     const QString outFile = QString::fromStdString(outDir) + "/output.sql";
@@ -76,6 +78,10 @@ public:
       "test-files/conflate/unified/AllDataTypesA.osm.pbf",
       outDir + "/input.osm.pbf");
 
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
     WriteOsmSqlStatementsDriver driver;
     driver.setWriteBufferSize(10);
     driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
@@ -83,15 +89,23 @@ public:
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
 
-    //TODO: We have to turn off constraints before writing the sql file to the db, since the table
+    //even though only sql file output was specified, we're still going to try to write this
+    //to a db to see that its valid for now
+
+    OsmApiDb database;
+    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    //We have to turn off constraints before writing the sql file to the db, since the table
     //copy commands are out of order and will violate ref integrity.
+    database.disableConstraints();
 
+    //write the sql file
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), outFile);
 
+    //now re-enable the constraints to make sure the db is valid before reading from it
+    database.enableConstraints();
+    database.close();
 
-    //TODO: now re-enable the constraints to make sure the db is valid before reading from it
-
-
-    //verifyDatabaseOutput();
+    ServicesDbTestUtils::verifyTestDatabaseEmpty();
   }
 };
 

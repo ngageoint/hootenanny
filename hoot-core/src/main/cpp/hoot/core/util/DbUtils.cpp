@@ -30,6 +30,7 @@
 // Qt
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QStringList>
 
 // Hoot
 #include <hoot/core/util/HootException.h>
@@ -83,6 +84,109 @@ long DbUtils::getRowCount(const QSqlDatabase& database, const QString tableName)
   query.finish();
 
   return result;
+}
+
+QStringList DbUtils::getConstraintsForTable(const QSqlDatabase& database, const QString tableName)
+{
+  QStringList constraints;
+
+  const QString sql =
+    //QString("SELECT n.nspname as schema_name, t.relname as table_name, c.conname as constraint_name ") +
+    QString("SELECT c.conname as constraint_name ") +
+    QString("FROM pg_constraint c ") +
+    QString("JOIN pg_class t on c.conrelid = t.oid ") +
+    QString("JOIN pg_namespace n on t.relnamespace = n.oid ") +
+    QString("WHERE t.relname = '%1'")
+      .arg(tableName);
+  QSqlQuery query(database);
+  if (!query.exec(sql))
+  {
+    throw HootException(
+      QString("Error executing constraints query: %1 (%2)")
+        .arg(query.lastError().text())
+        .arg(tableName));
+  }
+
+  while (query.next())
+  {
+    constraints.append(query.value(0).toString());
+  }
+
+  LOG_VARD(constraints);
+  return constraints;
+}
+
+void DbUtils::disableTableConstraints(QSqlDatabase& database, const QString tableName)
+{
+  _modifyTableConstraints(database, tableName, true);
+}
+
+void DbUtils::enableTableConstraints(QSqlDatabase& database, const QString tableName)
+{
+  _modifyTableConstraints(database, tableName, false);
+}
+
+void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tableName,
+                                      const bool disable)
+{
+//  QString operation = "DROP";
+//  if (!disable)
+//  {
+//    operation = "ADD";
+//  }
+//  LOG_DEBUG(operation << " constraints on " << tableName);
+
+//  const QStringList constraints = getConstraintsForTable(database, tableName);
+//  LOG_VARD(constraints.size());
+//  if (constraints.size() > 0)
+//  {
+//    QString sql;
+//    for (int i = 0; i < constraints.size(); i++)
+//    {
+//      sql +=
+//        QString("ALTER TABLE %1 %2 CONSTRAINT %3;\n")
+//          .arg(tableName)
+//          .arg(operation)
+//          .arg(constraints.at(i));
+//    }
+//    LOG_VARD(sql);
+
+//    QSqlQuery query(database);
+//    if (!query.exec(sql))
+//    {
+//      throw HootException(
+//        QString("Error modifying constraints: %1 (%2)")
+//          .arg(query.lastError().text())
+//          .arg(tableName));
+//    }
+//  }
+//  else
+//  {
+//    LOG_DEBUG("No constraints to modify for " << tableName);
+//  }
+
+  //TODO: do we want to do the style that checks constraints at the end here instead?
+  QString operation = "DISABLE";
+  if (!disable)
+  {
+    operation = "ENABLE";
+  }
+  LOG_DEBUG(operation << " constraints on " << tableName);
+
+  QString sql =
+    QString("ALTER TABLE %1 %2 TRIGGER ALL\n")
+      .arg(tableName)
+      .arg(operation);
+  LOG_VARD(sql);
+
+  QSqlQuery query(database);
+  if (!query.exec(sql))
+  {
+    throw HootException(
+      QString("Error modifying constraints: %1 (%2)")
+        .arg(query.lastError().text())
+        .arg(tableName));
+  }
 }
 
 }

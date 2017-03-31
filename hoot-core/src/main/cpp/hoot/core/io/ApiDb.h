@@ -271,6 +271,7 @@ public:
   QSqlError getLastError() const { return _db.lastError(); }
 
   inline static QString getChangesetsTableName()                { return "changesets"; }
+  inline static QString getChangesetCommentsTableName()         { return "changeset_comments"; }
   inline static QString getChangesetsSubscribersTableName()     { return "changesets_subscribers"; }
   inline static QString getChangesetTagsTableName()             { return "changeset_tags"; }
   inline static QString getCurrentNodeTagsTableName()           { return "current_node_tags"; }

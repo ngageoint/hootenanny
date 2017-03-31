@@ -161,6 +161,9 @@ public:
   static QString elementTypeToElementTableName(const ElementType& elementType,
                                                const bool historical, const bool tags);
 
+  void disableConstraints();
+  void enableConstraints();
+
 protected:
 
   void _resetQueries();
@@ -184,6 +187,9 @@ private:
 
   long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
   long _getIdFromSequence(const QString tableName, const QString sequenceType);
+
+  static QStringList _getContraintsTableOrdering(const bool disable = true);
+  void _modifyConstraints(const QStringList tableNames, const bool disable = true);
 };
 
 }

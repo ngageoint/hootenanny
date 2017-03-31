@@ -85,6 +85,7 @@ private:
 
   //for white box testing
   friend class ServiceOsmApiDbBulkWriterTest;
+  friend class ServicesDbTestUtils;
 
   shared_ptr<OsmApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;

@@ -335,59 +335,6 @@ public:
     reader.close();
   }
 
-  void verifyDatabaseEmpty()
-  {
-    OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    reader.read(map);
-
-    //verify current elements
-    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
-
-    //verify historical element table sizes
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
-
-    //verify changeset table size
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
-
-    //verify sequences
-    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Node));
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Way));
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
-
-    reader.close();
-  }
-
   void runPsqlDbOfflineTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
@@ -505,7 +452,7 @@ public:
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
-    verifyDatabaseEmpty();
+    ServicesDbTestUtils::verifyTestDatabaseEmpty();
   }
 };
 

@@ -85,6 +85,8 @@ public:
 
   static void deleteDataFromOsmApiTestDatabase();
 
+  static void verifyTestDatabaseEmpty();
+
 private:
 
   static Settings _readDbConfig();
