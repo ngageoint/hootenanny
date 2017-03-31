@@ -89,11 +89,11 @@ public:
     Description() : experimental() {}
     Description(string className, QString description, BaseFeatureType featureType,
                 bool experimental)
+      : experimental(experimental),
+        className(className),
+        description(description),
+        baseFeatureType(featureType)
     {
-      this->className = className;
-      this->experimental = experimental;
-      this->description = description;
-      this->baseFeatureType = featureType;
     }
 
     bool experimental;

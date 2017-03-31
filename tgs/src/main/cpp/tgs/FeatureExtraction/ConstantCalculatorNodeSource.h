@@ -44,7 +44,7 @@ namespace Tgs
 
     virtual ~ConstantCalculatorNodeSource() {}
 
-    virtual const std::map<std::string, std::string> getInputs() const 
+    virtual const std::map<std::string, std::string> getInputs() const
     { return std::map<std::string, std::string>(); }
 
     virtual double getOutput(const int /*uid*/) const { return _v; }
@@ -63,7 +63,7 @@ namespace Tgs
 
     virtual void _loadInternals(std::istream& s);
 
-    virtual void _saveInternals(std::ostream& s, const std::string indent = "") const;
+    virtual void _saveInternals(std::ostream& s, const std::string& indent = "") const;
 
     virtual std::string _toLabel() const;
   };

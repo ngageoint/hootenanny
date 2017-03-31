@@ -158,7 +158,7 @@ namespace Tgs
     }
   }
 
-  void CalculatorGenomeNode::save(std::ostream& s, const std::string indent)
+  void CalculatorGenomeNode::save(std::ostream& s, const std::string& indent)
   {
     s << indent << "<CalculatorGenomeNode id='" << getId() << "'>" << endl;
     _saveInternals(s, indent + "  ");

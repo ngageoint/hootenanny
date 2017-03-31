@@ -119,7 +119,7 @@ void DelaunayInterpolator::_buildModel()
   }
 }
 
-double DelaunayInterpolator::_calculateFoldError(int fold, const vector<size_t> indexes) const
+double DelaunayInterpolator::_calculateFoldError(int fold, const vector<size_t>& indexes) const
 {
  boost::shared_ptr<const DataFrame> originalDf = _df;
  boost::shared_ptr<DataFrame> copiedDf(new DataFrame());

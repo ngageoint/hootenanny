@@ -92,7 +92,7 @@ public:
     std::vector<int> result;
     uut.setRandomNoise(0.0);
     uut.calculateProbablePaths(1);
-    result = uut.getRouteCounts();
+    uut.getRouteCounts();
     vector<float> costSurface = uut.getCostSurface();
 
     uut.setRandomPatches(0.1f, 10);
@@ -170,9 +170,9 @@ public:
     std::vector<int> result;
     uut.setRandomNoise(0.0);
     uut.calculateProbablePaths(1);
-    result = uut.getRouteCounts();
+    uut.getRouteCounts();
     uut.calculateProbablePaths(1);
-    result = uut.getRouteCounts();
+    uut.getRouteCounts();
   }
 
   void testUpdateCostSurface()

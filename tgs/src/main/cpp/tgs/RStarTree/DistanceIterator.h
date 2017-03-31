@@ -43,7 +43,7 @@ namespace Tgs
 
   /**
    * This class returns all items from an RStarTree that fall within a specified distance.
-   * Distance is calculated as a simple euclidean distance in n dimensional space. This is probably 
+   * Distance is calculated as a simple euclidean distance in n dimensional space. This is probably
    * not what you desire.
    */
   class TGS_EXPORT DistanceIterator : public Iterator
@@ -73,16 +73,9 @@ namespace Tgs
     {
     public:
 
-      Result()
-      {
-        id = -1;
-      }
+      Result() : id(-1) { }
 
-      Result(const Box& box, int id) 
-      { 
-        this->box = box;
-        this->id = id;
-      }
+      Result(const Box& box, int id) : box(box), id(id) { }
 
       Box box;
       int id;

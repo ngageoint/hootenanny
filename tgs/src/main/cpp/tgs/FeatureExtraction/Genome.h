@@ -46,12 +46,12 @@ namespace Tgs
 
     Genome() { setInvalidScore(); }
 
-    virtual ~Genome() {};
+    virtual ~Genome() {}
 
     /**
      * Clears any cache that may be stored up during the evaluation process.
      */
-    virtual void clearCache() {};
+    virtual void clearCache() {}
 
     /**
      * Make an exact copy of this genome and return it.
@@ -72,8 +72,8 @@ namespace Tgs
     /**
      * Mate the two specified genomes to create two new offspring.
      */
-    virtual void crossoverSexually(const Genome& father, const Genome& mother, 
-     boost::shared_ptr<Genome>& brother,boost::shared_ptr<Genome>& sister) = 0;
+    virtual void crossoverSexually(const Genome& father, const Genome& mother,
+      boost::shared_ptr<Genome>& brother, boost::shared_ptr<Genome>& sister) = 0;
 
     double getScore() const { return _score; }
 

@@ -38,16 +38,15 @@ namespace Tgs
 {
   IntersectionIterator::IntersectionIterator(const RStarTree *tree, const std::vector<double>& minBounds,
     const std::vector<double>& maxBounds)
+    : nodeHits(1),
+      distCalcs(0),
+      _tree(tree),
+      _minBounds(minBounds),
+      _maxBounds(maxBounds),
+      _done(false)
   {
-    _done = false;
-    _tree = tree;
-    _minBounds = minBounds;
-    _maxBounds = maxBounds;
-
     const RTreeNode* root = _tree->getRoot();
     _pendingNodes.push_back(root->getId());  //Begin traversal at root
-    nodeHits = 1;
-    distCalcs = 0;
 
     _populateNext();  //Traverse tree to gather nodes within range
   }
@@ -80,7 +79,7 @@ namespace Tgs
     return _currentResult.id;
   }
 
-  bool IntersectionIterator::hasNext() 
+  bool IntersectionIterator::hasNext()
   {
     _populateNext();
     return !_done;
@@ -110,7 +109,7 @@ namespace Tgs
       else
       {
         //Get the first node in the list to examine
-        const RTreeNode* node = _tree->getNode(_pendingNodes.front());  
+        const RTreeNode* node = _tree->getNode(_pendingNodes.front());
         nodeHits++;
         _pendingNodes.pop_front(); //Remove node from future consideration
         for (int i = 0; i < node->getChildCount(); i++)

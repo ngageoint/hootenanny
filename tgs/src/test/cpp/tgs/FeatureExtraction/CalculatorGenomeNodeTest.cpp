@@ -60,10 +60,7 @@ namespace Tgs
   class SimpleFitness : public FitnessFunction
   {
   public:
-    SimpleFitness(const vector<double>& v)
-    {
-      _values = v;
-    }
+    SimpleFitness(const vector<double>& v) : _values(v) { }
 
     virtual double calculateFitness(const Genome& genome)
     {

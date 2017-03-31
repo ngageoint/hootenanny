@@ -43,7 +43,7 @@ public:
 
   ZValue() {}
 
-  ZValue(int dimensions, int depth, vector<double> min, vector<double> max);
+  ZValue(int dimensions, int depth, const vector<double>& min, const vector<double>& max);
 
   ~ZValue();
 

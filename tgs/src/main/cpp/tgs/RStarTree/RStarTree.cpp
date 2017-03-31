@@ -373,11 +373,7 @@ public:
 
   Child() {}
 
-  Child(int id, const BoxInternalData& b)
-  {
-    this->id = id;
-    this->b = b.toBox();
-  }
+  Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
 };
 
 typedef std::pair<double, int> DistancePair;
@@ -647,4 +643,3 @@ void RStarTree::_updateBounds(RTreeNode* node)
     parentId = node->getParentId();
   }
 }
-

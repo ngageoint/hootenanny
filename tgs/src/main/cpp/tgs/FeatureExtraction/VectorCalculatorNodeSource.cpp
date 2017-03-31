@@ -30,9 +30,9 @@
 namespace Tgs
 {
   VectorCalculatorNodeSource::VectorCalculatorNodeSource(const std::vector<double>& source)
-  { 
-    _label = "v[]"; 
-    _source = source; 
+    : _source(source),
+      _label("v[]")
+  {
   }
 
   void VectorCalculatorNodeSource::_copyInternalData(const CalculatorGenomeNode& node)

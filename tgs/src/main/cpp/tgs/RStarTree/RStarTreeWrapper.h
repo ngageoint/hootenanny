@@ -63,8 +63,8 @@ namespace Tgs
     * @param maxBounds the minimum values of the bounding region of interest
     * @param returns the list of object ids
     */
-    void getIntersectingObjects(const std::vector<double> minBounds, const std::vector<double> maxBounds, 
-      std::vector<int> & objIds);
+    void getIntersectingObjects(const std::vector<double>& minBounds, const std::vector<double>& maxBounds,
+      std::vector<int>& objIds);
 
     /**
     *  Updates an iterator over all the current R*Tree of all objects within
@@ -84,7 +84,7 @@ namespace Tgs
     */
     void insert(int uniqueId, std::vector<double> & minBounds, std::vector<double> & maxBounds);
 
-    void bulkInsert(const std::vector<int>& uniqueId, const std::vector<double>& minBounds, 
+    void bulkInsert(const std::vector<int>& uniqueId, const std::vector<double>& minBounds,
       const std::vector<double>& maxBounds);
 
   private:

@@ -36,9 +36,9 @@ namespace Tgs
   {
   public:
 
-    TreeGenomeNode() {};
+    TreeGenomeNode() {}
 
-    virtual ~TreeGenomeNode() {};
+    virtual ~TreeGenomeNode() {}
 
     virtual boost::shared_ptr<TreeGenomeNode> clone() const = 0;
 

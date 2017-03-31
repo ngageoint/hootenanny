@@ -395,7 +395,7 @@ namespace Tgs
     }
   }
 
-  void CalculatorGenome::save(std::ostream& s, const std::string indent) const
+  void CalculatorGenome::save(std::ostream& s, const std::string& indent) const
   {
     s << indent << "<Genome type='CalculatorGenome'>" << endl;
     if (_root)
