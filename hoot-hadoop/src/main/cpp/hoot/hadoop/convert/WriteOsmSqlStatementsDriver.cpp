@@ -108,20 +108,15 @@ void WriteOsmSqlStatementsDriver::_writeChangesetToSqlFile(const QString sqlFile
 QString WriteOsmSqlStatementsDriver::_getSqlFileOutputLocation(const QString hdfsOutput,
                                                                const QString userSpecifiedOutput) const
 {
-  QString outputLocation;
   if (!_outputIsDatabaseDestination(userSpecifiedOutput))
   {
-    outputLocation = userSpecifiedOutput;
+    return userSpecifiedOutput;
   }
   else if (!_outputFileCopyLocation.isEmpty())
   {
-    outputLocation = _outputFileCopyLocation;
+    return _outputFileCopyLocation;
   }
-  else
-  {
-    outputLocation = hdfsOutput + "/output.sql";
-  }
-  return outputLocation;
+  return hdfsOutput + "/output.sql";
 }
 
 void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string& input,

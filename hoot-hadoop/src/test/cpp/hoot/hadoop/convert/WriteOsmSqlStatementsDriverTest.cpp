@@ -47,7 +47,7 @@ public:
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
-    //we're validating the sql output file, so just doing minimal db validation here
+    //we're already validating the sql output file, so just doing minimal db validation here
 
     //verify current elements
     CPPUNIT_ASSERT_EQUAL((size_t)117, map->getNodes().size());
@@ -73,7 +73,8 @@ public:
     QDir().mkpath(QString::fromStdString(outDir));
     fs.copyFromLocal(
       /*"test-files/DcGisRoads.pbf"*/
-      "test-files/conflate/unified/AllDataTypesA.osm.pbf", outDir + "/input.osm.pbf");
+      "test-files/conflate/unified/AllDataTypesA.osm.pbf",
+      outDir + "/input.osm.pbf");
 
     WriteOsmSqlStatementsDriver driver;
     driver.setWriteBufferSize(10);
