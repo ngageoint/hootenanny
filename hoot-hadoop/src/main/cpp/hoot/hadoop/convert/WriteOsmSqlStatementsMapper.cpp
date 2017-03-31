@@ -63,37 +63,10 @@ void WriteOsmSqlStatementsMapper::_flush()
   {
     QPair<QString, QString> statementPair = *it;
     LOG_TRACE(statementPair.first << " " << statementPair.second);
-    QString value = statementPair.second;
-    if (value.startsWith("\t"))
-    {
-      LOG_ERROR("found");
-      value.replace(0, 2, "");
-    }
-    _context->emit(statementPair.first.toStdString(), /*statementPair.second*/value.toStdString());
+    _context->emit(statementPair.first.toStdString(), statementPair.second.toStdString());
   }
   _statementsBuffer->clear();
 }
-
-//void WriteOsmSqlStatementsMapper::_checkForNewChangeset(HadoopPipes::MapContext& context,
-//                                                        const long changesetMaxSize,
-//                                                        const long changesetUserId,
-//                                                        long& elementCount)
-//{
-//  if (elementCount == changesetMaxSize)
-//  {
-//    //TODO: fix
-//    const long changesetId = 1;
-//    Envelope bounds;
-//    bounds.init();
-//    const QString changesetHeaderStr = _sqlFormatter->getChangesetSqlHeaderString();
-//    const QString changesetStatement =
-//      _sqlFormatter->changesetToSqlString(changesetId, changesetUserId, elementCount, bounds);
-//    context.emit(changesetHeaderStr.toStdString(), changesetStatement.toStdString());
-//    //_currentChangesetId++; //TODO: fix
-//    elementCount = 0;
-//    //context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "changesets"), 1);
-//  }
-//}
 
 void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context)
 {
@@ -103,10 +76,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
   }
 
   shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
-  //long changesetMaxSize = config->getLong("changesetMaxSize");
-  //TODO: temp
-  //changesetMaxSize = 5;
-  //const long changesetUserId = config->getLong("changesetUserId");
+  //const long changesetUserId = config->getLong("changesetUserId"); //TODO: fix
   //LOG_VARD(config->getInt("mapred.map.tasks"));
   long elementCount = 0;
   const bool localJobTracker = config->get("mapred.job.tracker") == "local";
@@ -163,7 +133,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     {
       _flush();
     }
-    //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
   const QStringList waySqlHeaders = _sqlFormatter->getWaySqlHeaderStrings();
@@ -241,7 +210,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     {
       _flush();
     }
-    //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
   const QStringList relationSqlHeaders = _sqlFormatter->getRelationSqlHeaderStrings();
@@ -326,7 +294,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     {
       _flush();
     }
-    //_checkForNewChangeset(context, changesetMaxSize, changesetUserId, elementCount);
   }
 
   _flush();

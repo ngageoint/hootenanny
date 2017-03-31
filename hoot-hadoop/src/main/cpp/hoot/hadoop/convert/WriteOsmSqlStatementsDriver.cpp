@@ -145,13 +145,9 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
   job.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootHadoop.so.1"));
   _addDefaultJobSettings(job);
 
-  //job.getConfiguration().setInt("mapred.task.timeout", 6 * 3600 * 1000); //timeout to 6 hours
-  // be nice and don't start the reduce tasks until most of the map tasks are done.
-  //job.getConfiguration().setDouble("mapred.reduce.slowstart.completed.maps", 0.98);
   //job.getConfiguration().setInt("mapred.map.tasks", 8);
   //job.getConfiguration().setInt("mapred.reduce.tasks", 4);
 
-  //job.getConfiguration().setLong("changesetMaxSize", ConfigOptions().getChangesetMaxSize());
   //job.getConfiguration().setLong("changesetUserId", 1); //TODO: fix
   job.getConfiguration().setLong("writeBufferSize", _writeBufferSize);
 

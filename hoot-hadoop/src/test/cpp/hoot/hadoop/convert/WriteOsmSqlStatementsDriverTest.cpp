@@ -25,7 +25,6 @@ using namespace pp;
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h>
 #include <hoot/core/io/OsmApiDbReader.h>
-#include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/DbUtils.h>
 
@@ -38,6 +37,7 @@ class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
 {
   CPPUNIT_TEST_SUITE(WriteOsmSqlStatementsDriverTest);
   CPPUNIT_TEST(testSqlFileOutput);
+  //CPPUNIT_TEST(testDatabaseOutput);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -49,12 +49,68 @@ public:
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.read(map);
 
-    //we're already validating the sql output file, so just doing minimal db validation here
+    //we're already validating the sql output file, so just basic db row count validation here
 
     //verify current elements
     CPPUNIT_ASSERT_EQUAL((size_t)117, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)14, map->getWays().size());
     CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
+
+    CPPUNIT_ASSERT_EQUAL(
+      (long)38,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getCurrentNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)39,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getCurrentWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)121,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getCurrentWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getCurrentRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(),
+      ApiDb::getCurrentRelationMembersTableName()));
+
+    //verify historical element table sizes
+    CPPUNIT_ASSERT_EQUAL(
+      (long)117,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)38,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)14,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)39,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)121,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)0,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+    //verify changeset table size
+    CPPUNIT_ASSERT_EQUAL(
+      (long)1,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+    //verify sequences - sequences can't be updated b/c of a chicken egg situation with nextval; sql
+    //file validation will have to be good enough
+//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    CPPUNIT_ASSERT_EQUAL((long)118, osmApiDb->getNextId(ElementType::Node));
+//    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Way));
+//    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));
+//    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -89,23 +145,36 @@ public:
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
 
+    //TODO: move this to another test
     //even though only sql file output was specified, we're still going to try to write this
     //to a db to see that its valid for now
 
     OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    //We have to turn off constraints before writing the sql file to the db, since the table
-    //copy commands are out of order and will violate ref integrity.
-    database.disableConstraints();
+    try
+    {
+      database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+      //We have to turn off constraints before writing the sql file to the db, since the table
+      //copy commands are out of order and will violate ref integrity.
+      //TODO: make enabling/disabling constraints using psql an option of the driver and
+      //OsmApiDbBulkWriter
+      database.disableConstraints();
 
-    //write the sql file
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), outFile);
+      //write the sql file
+      ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), outFile);
 
-    //now re-enable the constraints to make sure the db is valid before reading from it
-    database.enableConstraints();
-    database.close();
+      //now re-enable the constraints to make sure the db is valid before reading from it
+      database.enableConstraints();
+      database.close();
+    }
+    catch (const HootException& e)
+    {
+      database.enableConstraints();
+      database.close();
+      throw e;
+    }
 
-    ServicesDbTestUtils::verifyTestDatabaseEmpty();
+    //ServicesDbTestUtils::verifyTestDatabaseEmpty();
+    verifyDatabaseOutput();
   }
 };
 

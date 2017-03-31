@@ -672,7 +672,6 @@ double OsmApiDb::fromOsmApiDbCoord(const long x)
   return (double)x / COORDINATE_SCALE;
 }
 
-//TODO: the table ordering probably doesn't matter anymore
 QStringList OsmApiDb::_getContraintsTableOrdering(const bool disable)
 {
   QStringList tableNames;
@@ -710,9 +709,12 @@ QStringList OsmApiDb::_getContraintsTableOrdering(const bool disable)
   return tableNames;
 }
 
+//TODO: the table ordering actually doesn't matter for enabling/disabling, only for
+//adding/dropping, so rework this
+
 void OsmApiDb::disableConstraints()
 {
-  _modifyConstraints(_getContraintsTableOrdering(/*true*/false), true);
+  _modifyConstraints(_getContraintsTableOrdering(true), true);
 }
 
 void OsmApiDb::enableConstraints()

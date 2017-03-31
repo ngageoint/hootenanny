@@ -129,42 +129,6 @@ void DbUtils::enableTableConstraints(QSqlDatabase& database, const QString table
 void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tableName,
                                       const bool disable)
 {
-//  QString operation = "DROP";
-//  if (!disable)
-//  {
-//    operation = "ADD";
-//  }
-//  LOG_DEBUG(operation << " constraints on " << tableName);
-
-//  const QStringList constraints = getConstraintsForTable(database, tableName);
-//  LOG_VARD(constraints.size());
-//  if (constraints.size() > 0)
-//  {
-//    QString sql;
-//    for (int i = 0; i < constraints.size(); i++)
-//    {
-//      sql +=
-//        QString("ALTER TABLE %1 %2 CONSTRAINT %3;\n")
-//          .arg(tableName)
-//          .arg(operation)
-//          .arg(constraints.at(i));
-//    }
-//    LOG_VARD(sql);
-
-//    QSqlQuery query(database);
-//    if (!query.exec(sql))
-//    {
-//      throw HootException(
-//        QString("Error modifying constraints: %1 (%2)")
-//          .arg(query.lastError().text())
-//          .arg(tableName));
-//    }
-//  }
-//  else
-//  {
-//    LOG_DEBUG("No constraints to modify for " << tableName);
-//  }
-
   //TODO: do we want to do the style that checks constraints at the end here instead?
   QString operation = "DISABLE";
   if (!disable)

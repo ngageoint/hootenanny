@@ -2,7 +2,7 @@
 
 === Description
 
-The +big-convert+ command uses a cluster of machines to convert from one input to another.  
+The +big-convert+ command uses a cluster of machines to convert from one input format to another.  
 This does not perform any translation, only conversion.  Use this command instead of
 +convert+ when working with very large amounts of data.  
 
@@ -21,12 +21,15 @@ The supported input formats are:
 The supported output formats are:
 
 * OpenStreetMap API Database SQL file (.sql)
+* OpenStreetMap API Database (osmapidb://)
 
 === Notes
 
-==== Converting to SQL File
+==== Converting to SQL File or OSM API Database
 
 * The input must be a .pbf file and it must reside on HDFS.
-* The output SQL file can only be applied to an offline database (no other writers) and all table constraints must be disabled.
-* All elements in the output SQL file belong to a single changeset.
+* The output can only be written to an offline database (no other writers) and all table constraints must be disabled
+on the database.
+* All elements in the output belong to a single changeset.
+* No OSM validation is done on the output.
 

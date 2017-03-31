@@ -56,7 +56,7 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   //LOG_VARD(config->getInt("mapred.reduce.tasks"));
 
   //I wanted to track the counts with counters instead, but pipes won't let you retrieve counter
-  //values, so doing it this way...not sure yet this is good parallel logic, though.
+  //values, so doing it this way...not sure yet if this is good parallel logic, though.
   QMap<QString, long> elementCounts;
   elementCounts["nodes"] = 0;
   elementCounts["ways"] = 0;
@@ -84,18 +84,13 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     values += value;
   }
   values += "\\.\n";
-  if (values.startsWith("\t"))
-  {
-    LOG_ERROR("found");
-    values.replace(0, 2, "");
-  }
   //write the record data
   _writer->emit(key.toStdString(), values.toStdString());
 
   //write the sequence id update sql statements
   //TODO: this code is suspect to me; its worked so far with multiple reducers in what I believe
   //to be pseudo-distributed mode.  if all keys of one type are going to each reducer, then I guess
-  //this will work
+  //this will work...although it does seem like some of the reducers are going to get bogged down
 
   QString sequenceUpdateStatement;
   if (elementCounts["nodes"] > 0)
