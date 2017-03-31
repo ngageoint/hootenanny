@@ -63,9 +63,13 @@ public:
 
   virtual void setReduceContext(HadoopPipes::ReduceContext& context);
 
-private:
-  string _path;
+protected:
+
   shared_ptr<ostream> _out;
+
+private:
+
+  string _path;
 };
 
 }

@@ -63,7 +63,7 @@ void LineRecordWriter::emitRecord(const char* keyData, size_t keySize, const cha
     throw Exception("output stream is not good.");
   }
   os.write(keyData, keySize);
-  //os.write("\t", 1);
+  os.write("\t", 1);
   os.write(valueData, valueSize);
   os.write("\n", 1);
 }

@@ -26,9 +26,11 @@
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
+using namespace pp;
 
 // Qt
 #include <QMap>
+#include <QStringBuilder>
 
 namespace hoot
 {
@@ -44,8 +46,8 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
 {
   if (_writer == NULL)
   {
-    HadoopPipes::RecordWriter* writer = pp::HadoopPipesUtils::getRecordWriter(&context);
-    _writer = dynamic_cast<pp::RecordWriter*>(writer);
+    HadoopPipes::RecordWriter* writer = HadoopPipesUtils::getRecordWriter(&context);
+    _writer = dynamic_cast<RecordWriter*>(writer);
     if (_writer == NULL)
     {
       throw HootException("Error getting RecordWriter.");
@@ -81,9 +83,11 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
       elementCounts["relations"] = elementCounts["relations"] + 1;
     }
 
-    values += value;
+    //values += value;
+    values = values % value;
   }
-  values += "\\.\n";
+  //values += "\\.\n";
+  values = values % "\\.\n";
   //write the record data
   _writer->emit(key.toStdString(), values.toStdString());
 

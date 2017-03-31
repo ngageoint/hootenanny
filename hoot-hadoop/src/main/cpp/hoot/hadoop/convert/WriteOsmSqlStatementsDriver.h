@@ -20,6 +20,7 @@
 // hoot
 #include <hoot/hadoop/Driver.h>
 #include <hoot/core/io/OsmApiDb.h>
+#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <string>
@@ -31,7 +32,7 @@ using namespace std;
 
 class OsmApiDbSqlStatementFormatter;
 
-class WriteOsmSqlStatementsDriver : public Driver
+class WriteOsmSqlStatementsDriver : public Driver, public Configurable
 {
 public:
 
@@ -39,16 +40,20 @@ public:
 
   void write(const QString input, const QString output);
 
-  void setWriteBufferSize(long size) { _writeBufferSize = size; }
-  void setOutputFileCopyLocation(QString loc) { _outputFileCopyLocation = loc; }
+  virtual void setConfiguration(const Settings& conf);
+
+  void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
+  void setOutputFilesCopyLocation(QString loc) { _outputFileCopyLocation = loc; }
+  void setChangesetUserId(long id) { _changesetUserId = id; }
 
 private:
 
   OsmApiDb _database;
-  long _writeBufferSize;
+  long _fileOutputElementBufferSize;
   QString _outputFileCopyLocation;
   shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
   QString _outputDelimiter;
+  long _changesetUserId;
 
   void _runElementSqlStatementsWriteJob(const string& input, const string& output);
   void _runChangesetSqlStatementsWriteJob(const string& input, const string& output);

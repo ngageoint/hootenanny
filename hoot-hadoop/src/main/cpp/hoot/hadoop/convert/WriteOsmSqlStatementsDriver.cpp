@@ -25,8 +25,8 @@
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
 #include <pp/Hdfs.h>
-#include <pp/io/LineRecordWriter.h>
 #include <pp/HadoopPipesUtils.h>
+using namespace pp;
 
 // Qt
 #include <QFileInfo>
@@ -38,17 +38,19 @@ using namespace geos::geom;
 #include "WriteOsmSqlStatementsMapper.h"
 #include "WriteOsmSqlStatementsReducer.h"
 #include "WriteOsmSqlStatementsDriver.h"
-
-using namespace pp;
+#include "SqlStatementLineRecordWriter.h"
 
 namespace hoot
 {
 
+//TODO: should open and issupported methods be added to make this more like a writer?
+
 WriteOsmSqlStatementsDriver::WriteOsmSqlStatementsDriver() :
 _outputFileCopyLocation(""),
-_outputDelimiter("\t") //TODO: fix
+_outputDelimiter("\t")
 {
   _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
+  setConfiguration(conf());
 }
 
 bool WriteOsmSqlStatementsDriver::_outputIsDatabaseDestination(const QString output) const
@@ -58,7 +60,7 @@ bool WriteOsmSqlStatementsDriver::_outputIsDatabaseDestination(const QString out
 
 void WriteOsmSqlStatementsDriver::write(const QString input, const QString output)
 {
-  pp::Hdfs fs;
+  Hdfs fs;
   LOG_DEBUG("Creating work directory...");
   QString hdfsOutput =
     "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
@@ -72,7 +74,7 @@ void WriteOsmSqlStatementsDriver::write(const QString input, const QString outpu
   //merge all the output files into one and copy back to the local file system; how expensive
   //is this going to be for a ton of big files?
   LOG_INFO("Merging temporary output files into one SQL file...");
-  pp::HadoopPipesUtils::mergeFilesToLocalFileSystem(hdfsOutput.toStdString(), sqlFile.toStdString());
+  HadoopPipesUtils::mergeFilesToLocalFileSystem(hdfsOutput.toStdString(), sqlFile.toStdString());
 
   //append the single changeset entry to the file
   _writeChangesetToSqlFile(sqlFile);
@@ -114,7 +116,7 @@ void WriteOsmSqlStatementsDriver::_writeChangesetToSqlFile(const QString sqlFile
   Envelope bounds;
   bounds.init();
   //TODO: fix num changes?...how?
-  const QString changesetStr = _sqlFormatter->changesetToSqlString(1, 1, 1, bounds);
+  const QString changesetStr = _sqlFormatter->changesetToSqlString(1, _changesetUserId, 1, bounds);
   QFile outputSqlFile(sqlFileLocation);
   if (!outputSqlFile.open(QIODevice::Append))
   {
@@ -146,7 +148,7 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
 {
   LOG_INFO("Running element SQL statements write job...");
 
-  pp::Job job;
+  Job job;
   job.setVerbose(Log::getInstance().getLevel() <= Log::Debug);
   job.setName("WriteElementSqlStatements");
 
@@ -157,7 +159,7 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
   job.setReducerClass(WriteOsmSqlStatementsReducer::className());
   job.setInputFormatClass(PbfInputFormat::className());
   job.setRecordReaderClass(PbfRecordReader::className());
-  job.setRecordWriterClass(pp::LineRecordWriter::className());
+  job.setRecordWriterClass(SqlStatementLineRecordWriter::className());
 
   // Adds all libraries in this directory to the job.
   job.addLibraryDirs(ConfigOptions().getHootHadoopLibpath());
@@ -170,11 +172,24 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
   //job.getConfiguration().setInt("mapred.map.tasks", 8);
   //job.getConfiguration().setInt("mapred.reduce.tasks", 4);
 
-  //job.getConfiguration().setLong("changesetUserId", 1); //TODO: fix
-  job.getConfiguration().setLong("writeBufferSize", _writeBufferSize);
+  job.getConfiguration().setLong("changesetUserId", _changesetUserId);
+  job.getConfiguration().setLong("writeBufferSize", _fileOutputElementBufferSize);
 
   LOG_DEBUG(job.getJobTracker());
   job.run();
+}
+
+void WriteOsmSqlStatementsDriver::setConfiguration(const Settings& conf)
+{
+  const ConfigOptions confOptions(conf);
+
+  setOutputFilesCopyLocation(confOptions.getOsmapidbBulkWriterOutputFilesCopyLocation().trimmed());
+  setFileOutputElementBufferSize(confOptions.getOsmapidbBulkWriterFileOutputElementBufferSize());
+  setChangesetUserId(confOptions.getChangesetUserId());
+
+  LOG_VART(_outputFileCopyLocation);
+  LOG_VART(_fileOutputElementBufferSize);
+  LOG_VART(_changesetUserId);
 }
 
 }

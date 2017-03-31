@@ -96,7 +96,8 @@ HEADERS += \
     src/main/cpp/hoot/hadoop/Driver.h \
     src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h \
     src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsMapper.h \
-    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsReducer.h
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsReducer.h \
+    src/main/cpp/hoot/hadoop/convert/SqlStatementLineRecordWriter.h
 
 SOURCES += \
     src/main/cpp/hoot/hadoop/pbf/PbfInputFormat.cpp \
@@ -142,4 +143,5 @@ SOURCES += \
     src/main/cpp/hoot/hadoop/cmd/BigConvertCmd.cpp \
     src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsDriver.cpp \
     src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsMapper.cpp \
-    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsReducer.cpp
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsReducer.cpp \
+    src/main/cpp/hoot/hadoop/convert/SqlStatementLineRecordWriter.cpp

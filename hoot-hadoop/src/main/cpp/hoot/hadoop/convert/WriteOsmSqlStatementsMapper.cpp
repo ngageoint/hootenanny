@@ -32,16 +32,13 @@
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/elements/Tags.h>
 
-//#include <geos/geom/Envelope.h>
-//using namespace geos::geom;
-
 namespace hoot
 {
 
 PP_FACTORY_REGISTER(pp::Mapper, WriteOsmSqlStatementsMapper)
 
 WriteOsmSqlStatementsMapper::WriteOsmSqlStatementsMapper() :
-_outputDelimiter("\t") //TODO: fix
+_outputDelimiter("\t")
 {
   _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
   _statementsBuffer.reset(new QVector<QPair<QString, QString> >());
@@ -76,9 +73,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
   }
 
   shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
-  //const long changesetUserId = config->getLong("changesetUserId"); //TODO: fix
   //LOG_VARD(config->getInt("mapred.map.tasks"));
-  long elementCount = 0;
   const bool localJobTracker = config->get("mapred.job.tracker") == "local";
   const long writeBufferSize = config->getLong("writeBufferSize");
 
@@ -123,7 +118,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       }
     }
 
-    elementCount++;
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
@@ -201,7 +195,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       }
     }
 
-    elementCount++;
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
@@ -285,7 +278,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       }
     }
 
-    elementCount++;
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);

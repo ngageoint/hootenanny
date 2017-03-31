@@ -157,7 +157,8 @@ public:
     init(outDir, outFile);
 
     WriteOsmSqlStatementsDriver driver;
-    driver.setWriteBufferSize(10);
+    driver.setFileOutputElementBufferSize(10);
+    driver.setChangesetUserId(1);
     driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
@@ -174,8 +175,9 @@ public:
     init(outDir, outFile);
 
     WriteOsmSqlStatementsDriver driver;
-    driver.setWriteBufferSize(10);
-    driver.setOutputFileCopyLocation(outFile);
+    driver.setFileOutputElementBufferSize(10);
+    driver.setChangesetUserId(1);
+    driver.setOutputFilesCopyLocation(outFile);
     driver.write(
       QString::fromStdString(outDir) + "/input.osm.pbf",
       ServicesDbTestUtils::getOsmApiDbUrl().toString());
@@ -186,7 +188,7 @@ public:
     verifyDatabaseOutput();
 
     //let's write some new records just to make sure we didn't mess the constraints up; only
-    //checking for errors here and not checking that this data is written
+    //checking for errors here and not reading back this data after its written
     writeAdditionalNewRecords();
   }
 };
