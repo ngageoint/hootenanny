@@ -37,7 +37,7 @@ class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
 {
   CPPUNIT_TEST_SUITE(WriteOsmSqlStatementsDriverTest);
   CPPUNIT_TEST(testSqlFileOutput);
-  //CPPUNIT_TEST(testDatabaseOutput);
+  CPPUNIT_TEST(testDatabaseOutputUsingSqlFile);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -115,10 +115,8 @@ public:
     reader.close();
   }
 
-  void testSqlFileOutput()
+  void init(const string& outDir, const QString outFile)
   {
-    const string outDir = "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest";
-    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
     if (QFile::exists(outFile))
     {
       QFile::remove(outFile);
@@ -137,6 +135,14 @@ public:
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+  }
+
+  void testSqlFileOutput()
+  {
+    const string outDir =
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testSqlFileOutput";
+    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
+    init(outDir, outFile);
 
     WriteOsmSqlStatementsDriver driver;
     driver.setWriteBufferSize(10);
@@ -145,10 +151,25 @@ public:
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
 
-    //TODO: move this to another test
+    ServicesDbTestUtils::verifyTestDatabaseEmpty();
+  }
+
+  void testDatabaseOutputUsingSqlFile()
+  {
+    const string outDir =
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testDatabaseOutputUsingSqlFile";
+    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
+    init(outDir, outFile);
+
+    WriteOsmSqlStatementsDriver driver;
+    driver.setWriteBufferSize(10);
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
+
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
+
     //even though only sql file output was specified, we're still going to try to write this
     //to a db to see that its valid for now
-
     OsmApiDb database;
     try
     {
@@ -173,7 +194,6 @@ public:
       throw e;
     }
 
-    //ServicesDbTestUtils::verifyTestDatabaseEmpty();
     verifyDatabaseOutput();
   }
 };
