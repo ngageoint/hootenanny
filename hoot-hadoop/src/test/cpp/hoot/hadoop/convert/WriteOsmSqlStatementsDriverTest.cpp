@@ -38,6 +38,7 @@ class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
   CPPUNIT_TEST_SUITE(WriteOsmSqlStatementsDriverTest);
   CPPUNIT_TEST(testSqlFileOutput);
   CPPUNIT_TEST(testDatabaseOutputUsingSqlFile);
+  CPPUNIT_TEST(testDatabaseOutput);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -176,8 +177,6 @@ public:
       database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
       //We have to turn off constraints before writing the sql file to the db, since the table
       //copy commands are out of order and will violate ref integrity.
-      //TODO: make enabling/disabling constraints using psql an option of the driver and
-      //OsmApiDbBulkWriter
       database.disableConstraints();
 
       //write the sql file
@@ -193,6 +192,26 @@ public:
       database.close();
       throw e;
     }
+
+    verifyDatabaseOutput();
+  }
+
+  void testDatabaseOutput()
+  {
+    const string outDir =
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testDatabaseOutput";
+    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
+    init(outDir, outFile);
+
+    WriteOsmSqlStatementsDriver driver;
+    driver.setWriteBufferSize(10);
+    driver.setOutputFileCopyLocation(outFile);
+    driver.write(
+      QString::fromStdString(outDir) + "/input.osm.pbf",
+      ServicesDbTestUtils::getOsmApiDbUrl().toString());
+
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
 
     verifyDatabaseOutput();
   }
