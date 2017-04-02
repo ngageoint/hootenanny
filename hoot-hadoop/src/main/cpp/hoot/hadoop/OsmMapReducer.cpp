@@ -22,7 +22,7 @@
 // Hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/OsmMap.h>
-#include "PbfRecordWriter.h"
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 #include <pp/HadoopPipesUtils.h>
 

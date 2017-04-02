@@ -439,7 +439,6 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     OsmApiDbBulkWriter writer;
-    writer.setFileOutputLineBufferSize(1);
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
@@ -447,7 +446,7 @@ public:
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(createTestMap());
@@ -468,7 +467,6 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     OsmApiDbBulkWriter writer;
-    writer.setFileOutputLineBufferSize(1);
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-online-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(true);
@@ -476,7 +474,7 @@ public:
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
@@ -503,7 +501,6 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     OsmApiDbBulkWriter writer;
-    writer.setFileOutputLineBufferSize(1);
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-starting-ids-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
@@ -511,7 +508,7 @@ public:
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
     writer.setStartingNodeId(3);
     writer.setStartingWayId(4);
     writer.setStartingRelationId(5);
@@ -536,14 +533,13 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
 
     OsmApiDbBulkWriter writer;
-    writer.setFileOutputLineBufferSize(1);
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-sql-file-out.sql";
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
 
     writer.open(outFile);
     writer.write(createTestMap());

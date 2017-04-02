@@ -17,7 +17,7 @@
 #include "WayJoin2InputSplit.h"
 
 // Hoot
-#include <hoot/hadoop/PbfInputSplit.h>
+#include <hoot/hadoop/pbf/PbfInputSplit.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 

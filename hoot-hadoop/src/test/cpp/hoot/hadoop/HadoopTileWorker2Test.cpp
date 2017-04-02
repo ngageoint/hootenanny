@@ -37,8 +37,8 @@ using namespace pp;
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/hadoop/PbfInputFormat.h>
-#include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
 
