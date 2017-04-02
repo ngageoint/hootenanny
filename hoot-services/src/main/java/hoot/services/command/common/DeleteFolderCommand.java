@@ -37,6 +37,9 @@ import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
 
 
+/**
+ * Deletes a folder
+ */
 public class DeleteFolderCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(DeleteFolderCommand.class);
 

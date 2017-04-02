@@ -35,7 +35,7 @@ import hoot.services.command.ExternalCommand;
 public class ZIPDirectoryContentsCommand extends ExternalCommand {
 
     /**
-     * Recursively compresses directory contents into a ZIP file using system's 'zip' utility
+     * Recursively compresses directory contents into a ZIP file using system 'zip' utility
      *
      * @param targetZIP ZIP file to produce
      * @param workDir present working directory (PWD) during execution

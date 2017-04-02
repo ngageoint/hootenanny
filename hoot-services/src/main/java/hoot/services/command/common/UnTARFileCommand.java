@@ -34,10 +34,11 @@ import hoot.services.command.ExternalCommand;
 public class UnTARFileCommand extends ExternalCommand {
 
     /**
+     * Decompresses a TAR file using system 'tar' utility
      *
-     * @param sourceTAR
-     * @param targetFolder
-     * @param caller
+     * @param sourceTAR TAR file to decompress
+     * @param targetFolder Folder to store the contents of the TAR to
+     * @param caller identifies the caller of the command
      */
     public UnTARFileCommand(File sourceTAR, File targetFolder, Class<?> caller) {
         //tar -zxf sourceTAR -C targetFolder

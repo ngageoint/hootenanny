@@ -34,7 +34,7 @@ import hoot.services.command.ExternalCommand;
 public class ZIPFileCommand extends ExternalCommand {
 
     /**
-     * Compresses file into a ZIP file using system's 'zip' utility
+     * Compresses file into a ZIP file using system 'zip' utility
      *
      * @param targetZIP ZIP file to produce
      * @param workDir present working directory (PWD) during execution
