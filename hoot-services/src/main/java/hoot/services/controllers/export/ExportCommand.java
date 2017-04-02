@@ -147,21 +147,15 @@ class ExportCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
 
     private final String jobId;
-    private final java.util.Map<String, String> paramMap;
-    private final String outputType;
-    private final String outputName;
-    private final String input;
+    private final ExportParams params;
 
-    ExportCommand(String jobId, java.util.Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+    ExportCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         this.jobId = jobId;
-        this.paramMap = paramMap;
-        this.outputType = paramMap.get("outputtype");
-        this.outputName = paramMap.get("outputname");
-        this.input = paramMap.get("input");
+        this.params = params;
 
         String hootOptions = this.getCommonExportHootOptions().stream().collect(Collectors.joining(" "));
         String outputPath = this.getOutputPath();
-        String translationPath = new File(HOME_FOLDER, paramMap.get("translation")).getAbsolutePath();
+        String translationPath = new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath();
         String removeReviewSwitch = "-C RemoveReview2Pre.conf";
         String inputPath = this.getInput();
 
@@ -177,26 +171,27 @@ class ExportCommand extends ExternalCommand {
         //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true
         //HOOT_OPTS+= -D hootapi.db.writer.create.user=true
         //HOOT_OPTS+= -D api.db.email=test@test.com
-        //HOOT_OPTS+= -D ogr.writer.pre.layer.name
-
-        //# Add the option to append
-        //ifeq "$(append)" "true"
-        //    HOOT_OPTS+= -D ogr.append.data=true
-        //endif
-
-        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
-        //ifeq "$(textstatus)" "true"
-        //    HOOT_OPTS+= -D writer.text.status=true
-        //endif
-
         List<String> options = new LinkedList<>();
         options.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("-D hootapi.db.writer.overwrite.map=true");
         options.add("-D hootapi.db.writer.create.user=true");
         options.add("-D api.db.email=test@test.com");
-        options.add("-D ogr.writer.pre.layer.name=" + jobId + "_");
-        options.add("-D writer.text.status=" + Boolean.valueOf(paramMap.get("textstatus")));
-        options.add("-D ogr.append.data=" + Boolean.valueOf(paramMap.get("append")));
+
+        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
+        //ifeq "$(textstatus)" "true"
+        //    HOOT_OPTS+= -D writer.text.status=true
+        //endif
+        if (params.getTextStatus()) {
+            options.add("-D writer.text.status=true");
+        }
+
+        //# Add the option to append
+        //ifeq "$(append)" "true"
+        //    HOOT_OPTS+= -D ogr.append.data=true
+        //endif
+        if (params.getAppend()) {
+            options.add("-D ogr.append.data=true");
+        }
 
         return options;
     }
@@ -205,11 +200,11 @@ class ExportCommand extends ExternalCommand {
         File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
         File outputFile;
 
-        if (!StringUtils.isBlank(this.outputName)) {
-            outputFile = new File(outputFolder, this.outputName + "." + this.outputType);
+        if (!StringUtils.isBlank(params.getOutputName())) {
+            outputFile = new File(outputFolder, params.getOutputName() + "." + params.getOutputType());
         }
         else {
-            outputFile = new File(outputFolder, jobId + "." + this.outputType);
+            outputFile = new File(outputFolder, jobId + "." + params.getOutputType());
         }
 
         return outputFile.getAbsolutePath();
@@ -219,11 +214,11 @@ class ExportCommand extends ExternalCommand {
         //ifeq "$(inputtype)" "file"
         //    INPUT_PATH=$(input)
         //endif
-        if (! this.paramMap.get("inputtype").equalsIgnoreCase("file")) {
-            return HOOTAPI_DB_URL + "/" + this.input;
+        if (! params.getInputType().equalsIgnoreCase("file")) {
+            return HOOTAPI_DB_URL + "/" + params.getInput();
         }
 
-        return this.input;
+        return params.getInput();
     }
 
     static Map getConflatedMap(String mapName) {
@@ -240,12 +235,12 @@ class ExportCommand extends ExternalCommand {
         return conflatedMap;
     }
 
-    static String getAOI(java.util.Map<String, String> paramMap, hoot.services.models.osm.Map conflatedMap) {
+    static String getAOI(ExportParams params, Map conflatedMap) {
         // if sent a bbox in the url (reflecting task grid bounds)
         // use that, otherwise use the bounds of the conflated output
         BoundingBox boundingBox;
-        if (paramMap.containsKey("TASK_BBOX")) {
-            boundingBox = new BoundingBox(paramMap.get("TASK_BBOX"));
+        if (params.getBounds() != null) {
+            boundingBox = new BoundingBox(params.getBounds());
         }
         else {
             boundingBox = conflatedMap.getBounds();

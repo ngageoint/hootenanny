@@ -35,17 +35,17 @@ import java.util.stream.Collectors;
 
 class OSMAPIDBApplyChangesetCommand extends ExportCommand {
 
-    OSMAPIDBApplyChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
-        super(jobId, paramMap, debugLevel, caller);
+    OSMAPIDBApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+        super(jobId, params, debugLevel, caller);
 
         List<String> options = super.getCommonExportHootOptions();
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String mapName = paramMap.get("input");
+        String mapName = params.getInput();
         hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
 
         // AOI = Area of Interest
-        String conflictAOI = getAOI(paramMap, conflatedMap);
+        String conflictAOI = getAOI(params, conflatedMap);
 
         //timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted dat
         String conflictTimestamp = getExportTimeTagFrom(conflatedMap);

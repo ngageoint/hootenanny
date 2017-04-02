@@ -105,7 +105,7 @@ import hoot.services.command.ExternalCommand;
 
 class FileETLCommand extends ExternalCommand {
 
-    FileETLCommand(List<Map<String, String>> requests, List<File> zips, String translationPath, String jobId, String etlName,
+    FileETLCommand(List<Map<String, String>> requests, List<File> zips, String translationPath, String etlName,
                    Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, String inputType, Class<?> caller) {
 
         StringBuilder stringBuilder = new StringBuilder();

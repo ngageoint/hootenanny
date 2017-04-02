@@ -29,20 +29,21 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+
+import hoot.services.models.osm.Map;
 
 
 class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
 
-    OSMAPIDBDeriveChangesetCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
-        super(jobId, paramMap, debugLevel, caller);
+    OSMAPIDBDeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+        super(jobId, params, debugLevel, caller);
 
-        String mapName = paramMap.get("input");
-        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
+        String mapName = params.getInput();
+        Map conflatedMap = getConflatedMap(mapName);
 
-        String aoi = getAOI(paramMap, conflatedMap);
-        String userId = paramMap.get("USER_ID");
+        String aoi = getAOI(params, conflatedMap);
+        String userId = params.getUserId();
 
         List<String> options = super.getCommonExportHootOptions();
         options.add("-D convert.bounding.box=" + aoi);

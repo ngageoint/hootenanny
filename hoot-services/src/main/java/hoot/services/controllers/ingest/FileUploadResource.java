@@ -294,7 +294,7 @@ public class FileUploadResource {
                     translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
                 }
 
-                ExternalCommand etlCommand = fileETLCommandFactory.build(etlRequests, zipList, translationPath, jobId, finalETLName,
+                ExternalCommand etlCommand = fileETLCommandFactory.build(etlRequests, zipList, translationPath, finalETLName,
                         noneTranslation, fgdbFeatureClasses, debugLevel, uploadedFileClassification, this.getClass());
 
                 return externalCommandManager.exec(jobId, etlCommand);

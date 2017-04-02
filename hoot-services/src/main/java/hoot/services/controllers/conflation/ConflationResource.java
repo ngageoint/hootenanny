@@ -64,7 +64,6 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.models.osm.Map;
-import hoot.services.utils.JsonUtils;
 
 
 @Controller
@@ -129,16 +128,14 @@ public class ConflationResource {
      */
     @POST
     @Path("/execute")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response conflate(String params,
+    public Response conflate(ConflateParams params,
                              @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            java.util.Map<String, String> paramMap = JsonUtils.jsonToMap(params);
-
-            boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(paramMap);
+            boolean conflatingOsmApiDbData = oneLayerIsOsmApiDb(params);
 
             //Since we're not returning the osm api db layer to the hoot ui, this exception
             //shouldn't actually ever occur, but will leave this check here anyway.
@@ -152,20 +149,20 @@ public class ConflationResource {
             // osm api db related input params have already been validated by
             // this point, so just check to see if any osm api db input is present
             if (conflatingOsmApiDbData && OSM_API_DB_ENABLED) {
-                validateOsmApiDbConflateParams(paramMap);
+                validateOsmApiDbConflateParams(params);
 
-                String secondaryParameterKey = (firstLayerIsOsmApiDb(paramMap)) ? "INPUT2" : "INPUT1";
+                String secondaryParameterKey = firstLayerIsOsmApiDb(params) ? params.getInput2() : params.getInput1();
 
                 //Record the aoi of the conflation job (equal to that of the secondary layer), as
                 //we'll need it to detect conflicts at export time.
-                long secondaryMapId = Long.parseLong(paramMap.get(secondaryParameterKey));
+                long secondaryMapId = Long.parseLong(secondaryParameterKey);
                 if (!Map.mapExists(secondaryMapId)) {
                     String msg = "No secondary map exists with ID: " + secondaryMapId;
                     throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
                 }
 
-                if (paramMap.containsKey("TASK_BBOX")) {
-                    bbox = new BoundingBox(paramMap.get("TASK_BBOX"));
+                if (params.getBounds() != null) {
+                    bbox = new BoundingBox(params.getBounds());
                 }
                 else {
                     Map secondaryMap = new Map(secondaryMapId);
@@ -176,15 +173,13 @@ public class ConflationResource {
                 bbox = null;
             }
 
-            String confOutputName = paramMap.get("OUTPUT_NAME");
-
             Command[] workflow = {
                 () -> {
-                    ExternalCommand conflateCommand = conflateCommandFactory.build(paramMap, bbox, debugLevel, this.getClass());
+                    ExternalCommand conflateCommand = conflateCommandFactory.build(params, bbox, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, conflateCommand);
 
-                    if (Boolean.valueOf(paramMap.get("COLLECT_STATS"))) {
-                        File statsFile = new File(RPT_STORE_PATH, confOutputName + "-stats.csv");
+                    if (params.getCollectStats()) {
+                        File statsFile = new File(RPT_STORE_PATH, params.getOutputName() + "-stats.csv");
                         try {
                             FileUtils.write(statsFile, commandResult.getStdout(), Charset.defaultCharset());
                         }
@@ -197,12 +192,12 @@ public class ConflationResource {
                 },
 
                 () -> {
-                    InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, confOutputName, this.getClass());
+                    InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, this.getClass());
                     return internalCommandManager.exec(jobId, updateTagsCommand);
                 },
 
                 () -> {
-                    ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(confOutputName, this.getClass());
+                    ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(params.getOutputName(), this.getClass());
                     return externalCommandManager.exec(jobId, exportRenderDBCommand);
                 }
             };
@@ -223,28 +218,28 @@ public class ConflationResource {
         return Response.ok(json.toJSONString()).build();
     }
 
-    static boolean oneLayerIsOsmApiDb(java.util.Map<String, String> inputParams) {
-        return firstLayerIsOsmApiDb(inputParams) || secondLayerIsOsmApiDb(inputParams);
+    static boolean oneLayerIsOsmApiDb(ConflateParams conflationParams) {
+        return firstLayerIsOsmApiDb(conflationParams) || secondLayerIsOsmApiDb(conflationParams);
     }
 
-    private static boolean firstLayerIsOsmApiDb(java.util.Map<String, String> inputParams) {
-        return inputParams.get("INPUT1_TYPE").equalsIgnoreCase("OSM_API_DB");
+    private static boolean firstLayerIsOsmApiDb(ConflateParams params) {
+        return params.getInputType1().equalsIgnoreCase("OSM_API_DB");
     }
 
-    private static boolean secondLayerIsOsmApiDb(java.util.Map<String, String> inputParams) {
-        return inputParams.get("INPUT2_TYPE").equalsIgnoreCase("OSM_API_DB");
+    private static boolean secondLayerIsOsmApiDb(ConflateParams params) {
+        return params.getInputType2().equalsIgnoreCase("OSM_API_DB");
     }
 
-    private static void validateOsmApiDbConflateParams(java.util.Map<String, String> inputParams) {
+    private static void validateOsmApiDbConflateParams(ConflateParams params) {
         // default REFERENCE_LAYER = 1
-        if (inputParams.containsKey("REFERENCE_LAYER")) {
-            if ((firstLayerIsOsmApiDb(inputParams) && inputParams.get("REFERENCE_LAYER").equalsIgnoreCase("2"))
-                    || ((secondLayerIsOsmApiDb(inputParams)) && inputParams.get("REFERENCE_LAYER").equalsIgnoreCase("1"))) {
+        if (params.getReferenceLayer() != null) {
+            if ((firstLayerIsOsmApiDb(params) && params.getReferenceLayer().equalsIgnoreCase("2"))
+                    || ((secondLayerIsOsmApiDb(params)) && params.getReferenceLayer().equalsIgnoreCase("1"))) {
                 String msg = "OSM_API_DB not allowed as secondary input type.";
                 throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
             }
         }
-        else if (secondLayerIsOsmApiDb(inputParams)) {
+        else if (secondLayerIsOsmApiDb(params)) {
             String msg = "OSM_API_DB not allowed as secondary input type.";
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
         }

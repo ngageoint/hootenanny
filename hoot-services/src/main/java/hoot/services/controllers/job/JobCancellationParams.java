@@ -22,19 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.conflation;
-
-import org.springframework.stereotype.Component;
-
-import hoot.services.geo.BoundingBox;
+package hoot.services.controllers.job;
 
 
-@Component
-class ConflateCommandFactory {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    ConflateCommand build(ConflateParams params, BoundingBox bbox, String debugLevel, Class<?> caller) {
-        return new ConflateCommand(params, bbox, debugLevel, caller);
+
+public class JobCancellationParams {
+
+    @JsonProperty("jobid")
+    private String jobId;
+
+    @JsonProperty("mapid")
+    private String mapId;
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    public String getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(String mapId) {
+        this.mapId = mapId;
+    }
+
+    @Override
+    public String toString() {
+        return "JobCancellationParams{" +
+                "jobId='" + jobId + '\'' +
+                ", mapId='" + mapId + '\'' +
+                '}';
     }
 }

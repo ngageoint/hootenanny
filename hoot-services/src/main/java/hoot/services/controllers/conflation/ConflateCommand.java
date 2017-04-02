@@ -31,7 +31,6 @@ import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
@@ -130,7 +129,7 @@ ifeq "$(GENERATE_REPORT)" "true"
 
 class ConflateCommand extends ExternalCommand {
 
-    ConflateCommand(Map<String, String> paramMap, BoundingBox bounds, String debugLevel, Class<?> caller) {
+    ConflateCommand(ConflateParams params, BoundingBox bounds, String debugLevel, Class<?> caller) {
         String aoi = null;
 
         if (bounds != null) {
@@ -149,8 +148,8 @@ class ConflateCommand extends ExternalCommand {
         options.add("-D api.db.email=test@test.com");
 
         //HOOT_OPTS+= $(ADV_OPTIONS)
-        if (paramMap.containsKey("ADV_OPTIONS")) {
-            options.add(paramMap.get("ADV_OPTIONS"));
+        if (params.getAdvancedOptions() != null) {
+            options.add(params.getAdvancedOptions());
         }
 
         /*
@@ -163,32 +162,45 @@ class ConflateCommand extends ExternalCommand {
             endif
          */
         String input1;
-        String input1Type = paramMap.get("INPUT1_TYPE");
+        String input1Type = params.getInputType1();
         if (input1Type.equalsIgnoreCase("DB")) {
-            input1 = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT1");
+            input1 = HOOTAPI_DB_URL + "/" + params.getInput1();
         }
         else {
-            input1 = paramMap.get("INPUT1");
+            input1 = params.getInput1();
         }
 
         String input2;
-        String input2Type = paramMap.get("INPUT2_TYPE");
+        String input2Type = params.getInputType2();
         if (input2Type.equalsIgnoreCase("DB")) {
-            input2 = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT2");
+            input2 = HOOTAPI_DB_URL + "/" + params.getInput2();
         }
         else {
-            input2 = paramMap.get("INPUT2");
+            input2 = params.getInput2();
         }
 
         /*
-          # This is also depending on some extra input validation present in ConflationResource.
+           # This is also depending on some extra input validation present in ConflationResource.
           ifeq "$(REFERENCE_LAYER)" "1"
               ifeq "$(INPUT1_TYPE)" "OSM_API_DB"
                   OP_INPUT1=$(OSM_API_DB_URL)
                   HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
               endif
           endif
+         */
+        String referenceLayer = params.getReferenceLayer();
+        if (referenceLayer.equalsIgnoreCase("1")) {
+            if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
+                input1 = OSMAPI_DB_URL;
+                options.add("-D convert.bounding.box=" + aoi);
+                options.add("-D conflate.use.data.source.ids=true");
+                options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
+                options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
+                options.add("-D osmapidb.id.aware.url=" + quote(OSMAPI_DB_URL));
+            }
+        }
 
+        /*
           ifeq "$(REFERENCE_LAYER)" "2"
               HOOT_OPTS+= -D tag.merger.default=hoot::OverwriteTag1Merger
           endif
@@ -200,17 +212,6 @@ class ConflateCommand extends ExternalCommand {
               endif
           endif
          */
-        String referenceLayer = paramMap.get("REFERENCE_LAYER");
-        if (referenceLayer.equalsIgnoreCase("1")) {
-            if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
-                input1 = OSMAPI_DB_URL;
-                options.add("-D convert.bounding.box=" + aoi);
-                options.add("-D conflate.use.data.source.ids=true");
-                options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
-                options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("-D osmapidb.id.aware.url=" + quote(OSMAPI_DB_URL));
-            }
-        }
         else if (referenceLayer.equalsIgnoreCase("2")) {
             options.add("-D tag.merger.default=hoot::OverwriteTag1Merger");
             if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
@@ -230,12 +231,12 @@ class ConflateCommand extends ExternalCommand {
               HOOT_OPTS+= --error
           endif
          */
-        String outputName = paramMap.get("OUTPUT_NAME");
+        String outputName = params.getOutputName();
         String output = HOOTAPI_DB_URL + "/" + outputName;
 
         //Hootenanny map statistics such as node and way count
         String stats = "";
-        if (Boolean.valueOf(paramMap.get("COLLECT_STATS"))) {
+        if (params.getCollectStats()) {
             // Don't include non-error log messages in stdout because we are redirecting to file
             debugLevel = "error";
             stats = "--stats";

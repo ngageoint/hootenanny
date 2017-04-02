@@ -30,7 +30,6 @@ import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
@@ -60,26 +59,23 @@ step1:
 
 class ClipDatasetCommand extends ExternalCommand {
 
-    ClipDatasetCommand(Map<String, String> paramMap, String debugLevel, Class<?> caller) {
+    ClipDatasetCommand(ClipDatasetParams params, String debugLevel, Class<?> caller) {
         List<String> options = new LinkedList<>();
         options.add("-D hootapi.db.writer.overwrite.map=true");
         options.add("-D hootapi.db.writer.create.user=true");
         options.add("-D api.db.email=test@test.com");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input = HOOTAPI_DB_URL + "/" + paramMap.get("INPUT_NAME");
-        String output = HOOTAPI_DB_URL + "/" + paramMap.get("OUTPUT_NAME");
-        String bounds = paramMap.get("BBOX");
+        //The input OSM data path
+        String input = HOOTAPI_DB_URL + "/" + params.getInputName();
 
-        /*
-            "crop-map" - Crops the input map to the given bounds. Individual features on the border are
-                         modified to make sure nothing is outside the given bounds.
-                • input - The input OSM data path.
-                • output - The output OSM data path.
-                • bounds - Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+        //The output - The output OSM data path.
+        String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
 
-            hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
-        */
+        //Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+        String bounds = params.getBounds();
+
+        // hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
         String command = "hoot crop-map --" + debugLevel + " " + hootOptions + " " + quote(input) + " " + quote(output) + " " + quote(bounds);
 
         super.configureCommand(command, caller);

@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.clipping;
 
-import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -51,7 +50,6 @@ import hoot.services.command.ExternalCommandManager;
 import hoot.services.controllers.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
-import hoot.services.utils.JsonUtils;
 
 
 @Controller
@@ -95,24 +93,22 @@ public class ClipDatasetResource {
      */
     @POST
     @Path("/execute")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response clipDataset(String params,
+    public Response clipDataset(ClipDatasetParams params,
                                 @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            Map<String, String> paramMap = JsonUtils.jsonToMap(params);
-
             Command[] workflow = {
                 // Clip to a bounding box
                 () -> {
-                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(paramMap, debugLevel, this.getClass());
+                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(params, debugLevel, this.getClass());
                     return externalCommandManager.exec(jobId, clipCommand);
                 },
 
                 () -> {
-                    String newDatasetOutputName = paramMap.get("OUTPUT_NAME");
+                    String newDatasetOutputName = params.getOutputName();
                     ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(newDatasetOutputName, this.getClass());
                     return externalCommandManager.exec(jobId, exportRenderDBCommand);
                 }

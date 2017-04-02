@@ -28,14 +28,13 @@ package hoot.services.controllers.export;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
 class ExportOSMCommand extends ExportCommand {
 
-    ExportOSMCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
-        super(jobId, paramMap, debugLevel, caller);
+    ExportOSMCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+        super(jobId, params, debugLevel, caller);
 
         //# Options for osm & osm.pbf export
         // OSM_OPTS=-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com
@@ -47,7 +46,10 @@ class ExportOSMCommand extends ExportCommand {
         //ifeq "$(textstatus)" "true"
         //    OSM_OPTS+= -D writer.text.status=true
         //endif
-        options.add("-D writer.text.status=" + Boolean.valueOf(paramMap.get("textstatus")));
+
+        if (params.getTextStatus()) {
+            options.add("-D writer.text.status=true");
+        }
 
         String osmOptions = options.stream().collect(Collectors.joining(" "));
         String input = super.getInput();

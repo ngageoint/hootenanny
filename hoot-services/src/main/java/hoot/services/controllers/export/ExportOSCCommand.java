@@ -30,7 +30,6 @@ import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.geo.BoundingBox;
@@ -38,10 +37,10 @@ import hoot.services.geo.BoundingBox;
 
 class ExportOSCCommand extends ExportCommand {
 
-    ExportOSCCommand(String jobId, Map<String, String> paramMap, String debugLevel, Class<?> caller) {
-        super(jobId, paramMap, debugLevel, caller);
+    ExportOSCCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+        super(jobId, params, debugLevel, caller);
 
-        String aoi = getBoundingBox(paramMap);
+        String aoi = getBoundingBox(params);
         String outputPath = super.getOutputPath();
 
         List<String> options = super.getCommonExportHootOptions();
@@ -50,7 +49,7 @@ class ExportOSCCommand extends ExportCommand {
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
         String input1 = OSMAPI_DB_URL;
-        String input2 = HOOTAPI_DB_URL + "/" + paramMap.get("input");
+        String input2 = HOOTAPI_DB_URL + "/" + params.getInput();
 
         //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
         String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + quote(input1) + " " + quote(input2) + " " + quote(outputPath);
@@ -58,12 +57,12 @@ class ExportOSCCommand extends ExportCommand {
         super.configureCommand(command, caller);
     }
 
-    private static String getBoundingBox(Map<String, String> paramMap) {
-        if (!paramMap.containsKey("TASK_BBOX")) {
-            throw new IllegalArgumentException("When exporting to a changeset, TASK_BBOX must be specified.");
+    private static String getBoundingBox(ExportParams params) {
+        if (params.getBounds() != null) {
+            throw new IllegalArgumentException("When exporting to a changeset, bounds must be specified.");
         }
 
-        BoundingBox bounds = new BoundingBox(paramMap.get("TASK_BBOX"));
+        BoundingBox bounds = new BoundingBox(params.getBounds());
         return bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
     }
 }

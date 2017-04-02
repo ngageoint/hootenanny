@@ -55,46 +55,36 @@ class UpdateTagsCommand implements InternalCommand {
     private final String jobId;
     private final Class<?> caller;
 
-    UpdateTagsCommand(String params, String mapName, String jobId, Class<?> caller) {
-        this.mapName = mapName;
+    UpdateTagsCommand(ConflateParams params, String jobId, Class<?> caller) {
+        this.mapName = params.getOutputName();
         this.jobId = jobId;
         this.tags = new HashMap<>();
         this.caller = caller;
 
-        Map<String, String> paramMap = JsonUtils.jsonToMap(params);
-
-        String confOutputName = paramMap.get("OUTPUT_NAME");
-        String input1Name = paramMap.get("INPUT1");
-        String input2Name = paramMap.get("INPUT2");
-
         // add map tags
         // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
-        tags.put("input1", input1Name);
-        tags.put("input2", input2Name);
+        tags.put("input1", params.getInput1());
+        tags.put("input2", params.getInput2());
 
         // Need to reformat the list of hoot command options to json properties
-        tags.put("params", JsonUtils.escapeJson(params));
+        tags.put("params", JsonUtils.escapeJson(JsonUtils.pojoToJSON(params)));
 
         // Hack alert!
         // Write stats file name to tags, if the file exists when this updateMapsTagsCommand job is run, the
         // file will be read and its contents placed in the stats tag.
-        if (Boolean.valueOf(paramMap.get("COLLECT_STATS"))) {
-            String statsFile = new File(RPT_STORE_PATH, confOutputName + "-stats.csv").getAbsolutePath();
+        if (params.getCollectStats()) {
+            String statsFile = new File(RPT_STORE_PATH, params.getOutputName() + "-stats.csv").getAbsolutePath();
             tags.put("stats", statsFile);
         }
 
         // osm api db related input params have already been validated by
         // this point, so just check to see if any osm api db input is present
-        if (ConflationResource.oneLayerIsOsmApiDb(paramMap) && OSM_API_DB_ENABLED) {
+        if (ConflationResource.oneLayerIsOsmApiDb(params) && OSM_API_DB_ENABLED) {
             // write a timestamp representing the time the osm api db data was queried out
             // from the source; to be used conflict detection during export of conflated
             // data back into the osm api db at a later time; timestamp must be 24 hour utc
             // to match rails port
-            String now = DateTimeFormat
-                    .forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT)
-                    .withZone(DateTimeZone.UTC)
-                    .print(new DateTime());
-
+            String now = DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
             tags.put("osm_api_db_export_time", now);
         }
     }

@@ -31,7 +31,6 @@ import static hoot.services.HootProperties.*;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -68,7 +67,6 @@ import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.JsonUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 import hoot.services.wfs.WFSManager;
 
@@ -118,17 +116,15 @@ public class ExportResource {
      */
     @POST
     @Path("/execute")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response export(String params,
+    public Response export(ExportParams params,
                            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
-            Map<String, String> paramMap = JsonUtils.jsonToMap(params);
-
-            String outputType = paramMap.get("outputtype");
-            String outputName = !StringUtils.isBlank(paramMap.get("outputname")) ? paramMap.get("outputname") : jobId;
+            String outputType = params.getOutputType();
+            String outputName = !StringUtils.isBlank(params.getOutputName()) ? params.getOutputName() : jobId;
 
             // Created scratch area for each export request.
             // This is where downloadable files will be stored and other intermediate artifacts.
@@ -140,7 +136,7 @@ public class ExportResource {
             if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
                 workflow.add(
                     () -> {
-                        ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, paramMap,
+                        ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params,
                                 debugLevel, ExportOSMCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, exportOSMCommand);
                     }
@@ -154,7 +150,7 @@ public class ExportResource {
             else if (outputType.equalsIgnoreCase("osc")) {
                 workflow.add(
                     () -> {
-                        ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, paramMap,
+                        ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, params,
                                 debugLevel, ExportOSCCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, exportOSCCommand);
                     }
@@ -164,7 +160,7 @@ public class ExportResource {
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
                 workflow.add(
                     () -> {
-                        ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, paramMap,
+                        ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, params,
                                 debugLevel, OSMAPIDBDeriveChangesetCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, osmAPIDBDeriveChangesetCommand);
                     }
@@ -172,7 +168,7 @@ public class ExportResource {
 
                 workflow.add(
                     () -> {
-                        ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, paramMap,
+                        ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, params,
                                 debugLevel, OSMAPIDBApplyChangesetCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, osmAPIDBApplyChangesetCommand);
                     }
@@ -200,13 +196,13 @@ public class ExportResource {
                 //    endif # Else
                 // endif # Append
 
-                if (Boolean.valueOf(paramMap.get("append"))) {
+                if (params.getAppend()) {
                     //Appends data to a blank fgdb. The template is stored with the fouo translations.
 
                     //$(HOOT_HOME)/translations-local/template
                     File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
 
-                    String translation = paramMap.get("translation");
+                    String translation = params.getTranslation();
                     File tdsTemplate = null;
 
                     if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
@@ -232,7 +228,7 @@ public class ExportResource {
 
                 workflow.add(
                     () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, paramMap,
+                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,
                                 debugLevel, ExportCommand.class, this.getClass());
                         return externalCommandManager.exec(jobId, exportCommand);
                     }
@@ -396,10 +392,10 @@ public class ExportResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject entity = new JSONObject();
-        entity.put("id", id);
+        JSONObject json = new JSONObject();
+        json.put("id", id);
 
-        return Response.ok(entity.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 
     /**
@@ -455,22 +451,22 @@ public class ExportResource {
 
         JSONArray exportResources = new JSONArray();
         try {
-            JSONObject o = new JSONObject();
-            o.put("name", "TDS");
-            o.put("description", "LTDS 4.0");
-            exportResources.add(o);
+            JSONObject json = new JSONObject();
+            json.put("name", "TDS");
+            json.put("description", "LTDS 4.0");
+            exportResources.add(json);
 
-            o = new JSONObject();
-            o.put("name", "MGCP");
-            o.put("description", "MGCP");
-            exportResources.add(o);
+            json = new JSONObject();
+            json.put("name", "MGCP");
+            json.put("description", "MGCP");
+            exportResources.add(json);
 
-            File f = new File(transExtPath);
-            if (f.exists() && f.isDirectory()) {
-                o = new JSONObject();
-                o.put("name", "UTP");
-                o.put("description", "UTP");
-                exportResources.add(o);
+            File file = new File(transExtPath);
+            if (file.exists() && file.isDirectory()) {
+                json = new JSONObject();
+                json.put("name", "UTP");
+                json.put("description", "UTP");
+                exportResources.add(json);
             }
         }
         catch (Exception e) {

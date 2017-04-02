@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.job;
 
-import java.util.Map;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -45,7 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.JobStatusManager;
-import hoot.services.utils.JsonUtils;
 
 
 @Controller
@@ -74,15 +71,14 @@ public class JobCancellationResource {
      * @return json containing cancel job id Example: {"jobid":"321"}
      */
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response process(String params) {
+    public Response process(JobCancellationParams params) {
         String jobIdToCancel = null;
 
         try {
-            Map<String, String> paramMap = JsonUtils.jsonToMap(params);
-            jobIdToCancel = paramMap.get("jobid");
-            String mapDisplayName = paramMap.get("mapid");
+            jobIdToCancel = params.getJobId();
+            String mapDisplayName = params.getMapId();
 
             this.externalCommandInterface.terminate(jobIdToCancel);
             this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
