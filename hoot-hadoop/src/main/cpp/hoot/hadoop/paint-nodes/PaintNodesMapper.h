@@ -46,8 +46,7 @@ protected:
   Envelope _envelope;
   double _pixelSize;
   int _width, _height;
-
-  HadoopPipes::MapContext* _context;
+  bool _initialized;
 };
 
 }
