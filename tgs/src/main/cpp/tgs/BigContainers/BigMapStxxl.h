@@ -106,6 +106,8 @@ public:
 
   V& operator[](const K& k) { _bloom->insert(k); return _map->operator[](k); }
 
+  void clear() { _map->clear(); }
+
 private:
 
   template <typename A>

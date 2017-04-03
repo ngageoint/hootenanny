@@ -46,7 +46,9 @@ namespace Tgs
 template <typename K, typename V>
 class BigMap
 {
+
 public:
+
   BigMap(size_t maxEntriesInRam = 10000000)
   {
     _inMemory = true;
@@ -94,7 +96,20 @@ public:
     }
   }
 
+  void clear()
+  {
+    if (_inMemory)
+    {
+      return _smallMap.clear();
+    }
+    else
+    {
+      return _bigMap->clear();
+    }
+  }
+
 private:
+
   bool _inMemory;
   std::map<K,V> _smallMap;
   std::auto_ptr< BigMapStxxl<K,V> > _bigMap;
@@ -104,14 +119,14 @@ private:
   {
     if (_inMemory && _smallMap.size() > _maxEntriesInRam)
     {
-      std::cerr << "Creating stxxl" << std::endl;
+      //std::cerr << "Creating stxxl" << std::endl;
       _bigMap.reset(new BigMapStxxl<K,V>());
       for (typename std::map<K, V>::const_iterator it = _smallMap.begin(); it != _smallMap.end();
            ++it)
       {
         _bigMap->insert(it->first, it->second);
       }
-      std::cerr << "Created stxxl" << std::endl;
+      //std::cerr << "Created stxxl" << std::endl;
       _smallMap.clear();
       _inMemory = false;
     }
