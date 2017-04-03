@@ -513,6 +513,68 @@ public class ChangesetResourceUploadModifyTest extends OSMResourceTestAbstract {
         Changeset hootChangeset = new Changeset(mapId, changesetId);
         BoundingBox changesetBounds = hootChangeset.getBounds();
         assertEquals(changesetBounds, expandedBounds);
+
+        //Now update a single node and confirm that the version incremented
+        changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+            .queryParam("mapId", String.valueOf(mapId))
+            .request(MediaType.TEXT_XML)
+            .post(Entity.entity(
+                "<osmChange version=\"0.3\" generator=\"iD\">" +
+                    "<create/>" +
+                    "<modify>" +
+                        "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " + "lat=\"" +
+                                 updatedBounds.getMinLat() + "\" version=\"2\" changeset=\"" + changesetId + "\">" +
+                            "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                            "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                            "<tag k=\"key 2c\" v=\"val 2c\"></tag>" +
+                        "</node>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
+
+        assertNotNull(responseData);
+
+        returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
+        assertEquals(1, returnedNodes.getLength());
+
+        assertEquals((long) nodeIdsArr[0],
+                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)));
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)),
+                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)));
+        assertEquals(3, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
+
+        //Now update a single node again and confirm that the version incremented
+        changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+            .queryParam("mapId", String.valueOf(mapId))
+            .request(MediaType.TEXT_XML)
+            .post(Entity.entity(
+                "<osmChange version=\"0.3\" generator=\"iD\">" +
+                    "<create/>" +
+                    "<modify>" +
+                        "<node id=\"" + nodeIdsArr[0] + "\" lon=\"" + updatedBounds.getMinLon() + "\" " + "lat=\"" +
+                                 updatedBounds.getMinLat() + "\" version=\"3\" changeset=\"" + changesetId + "\">" +
+                            "<tag k=\"key 1b\" v=\"val 1b\"></tag>" +
+                            "<tag k=\"key 2b\" v=\"val 2b\"></tag>" +
+                            "<tag k=\"key 2c\" v=\"val 3c\"></tag>" +
+                        "</node>" +
+                        "</modify>" +
+                        "<delete if-unused=\"true\"/>" +
+                "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
+
+        assertNotNull(responseData);
+
+        returnedNodes = XPathAPI.selectNodeList(responseData, "//osm/diffResult/node");
+        assertEquals(1, returnedNodes.getLength());
+
+        assertEquals((long) nodeIdsArr[0],
+                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)));
+        assertEquals(Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@old_id", responseData)),
+                Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_id", responseData)));
+        assertEquals(4, Long.parseLong(xpath.evaluate("//osm/diffResult/node[1]/@new_version", responseData)));
+
+
     }
 
     @Test

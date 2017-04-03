@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -359,21 +359,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     }
 
     /*
-     * If a new element is being created, it always gets a newly assigned
-     * version = 1. Otherwise, the version passed in the changeset request must
-     * match the existing version the server to ensure data integrity.
+     * Increment the version
      */
-    long parseVersion() {
-        long version = 1;
-
-        // version passed in the request can be ignored if it is a create
-        // request, since we've already
-        // done version error checking at this point
-        if (entityChangeType != EntityChangeType.CREATE) {
-            version++;
-        }
-
-        return version;
+    long incrementVersion(NamedNodeMap xmlAttributes) {
+        long version = Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
+        return ++version;
     }
 
     // is this timestamp even actually honored from the xml in the rails
