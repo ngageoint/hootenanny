@@ -49,13 +49,13 @@ public:
 
   virtual bool hasDefaultValue() const;
 
-  bool hasEnumeratedValue(int v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
+  bool hasEnumeratedValue(long long v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
-  void setDefaultValue(double v) { _defaultValue = v; }
+  void setDefaultValue(long long v) { _defaultValue = v; }
 
-  void setMaxValue(double max) { _max = max; }
+  void setMaxValue(long long max) { _max = max; }
 
-  void setMinValue(double min) { _min = min; }
+  void setMinValue(long long min) { _min = min; }
 
   virtual QString toString() const;
 
