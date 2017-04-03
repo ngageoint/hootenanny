@@ -375,13 +375,10 @@ namespace Tgs
   }
 
   void RandomTree::trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
-    std::string posClass, unsigned int nodeSize, bool balanced)
+    std::string /*posClass*/, unsigned int nodeSize, bool balanced)
   {
     try
     {
-      //Warning suppression
-      posClass = posClass;
-
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
@@ -448,13 +445,10 @@ namespace Tgs
   }
 
   void RandomTree::trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
-    std::string posClass, std::string negClass, unsigned int nodeSize, bool balanced)
+    std::string posClass, std::string negClass, unsigned int nodeSize, bool /*balanced*/)
   {
     try
     {
-      //Warning suppression
-      balanced = balanced;
-
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
@@ -530,14 +524,14 @@ namespace Tgs
 
           double minVal, maxVal, mean, q1, q3;
 
-          double bandwidth = data->computeBandwidthByFactor(fIdx, dataSet, minVal,
+          //  bandwidth
+          data->computeBandwidthByFactor(fIdx, dataSet, minVal,
             maxVal, mean, q1, q3);
-          bandwidth = bandwidth;
-  //         node->rangeMin = mean - (6 * bandwidth);
-  //         node->rangeMax = mean + (6 * bandwidth);
-  //           double midVal = (maxVal - minVal) / 2.0;
-  //           node->rangeMin = minVal - (0.5 *(maxVal - minVal));
-  //           node->rangeMax = maxVal + (0.5 * (maxVal - minVal));
+//          node->rangeMin = mean - (6 * bandwidth);
+//          node->rangeMax = mean + (6 * bandwidth);
+//          double midVal = (maxVal - minVal) / 2.0;
+//          node->rangeMin = minVal - (0.5 *(maxVal - minVal));
+//          node->rangeMax = maxVal + (0.5 * (maxVal - minVal));
            double iqr = q3 - q1;
            node->rangeMin = q1 - ( 3 * iqr);
            node->rangeMax = q3 + (3 * iqr);

@@ -78,27 +78,6 @@ public:
 
   }
 
-  void _dumpString(const string& str)
-  {
-    cout << "const unsigned char data[] = {";
-    for (size_t i = 0; i < str.size(); i++)
-    {
-      if (i != 0)
-      {
-        cout << ", ";
-      }
-      if (i % 18 == 0)
-      {
-        cout << endl << "  ";
-      }
-      //printf("%3d%c", (unsigned char)str.at(i),
-      //  str.at(i) >= 32 && str.at(i) <= 125 ? (char)(str.at(i)) : '#');
-      printf("%3d", (unsigned char)str.at(i));
-    }
-    cout << "};" << endl;
-    cout << "size_t dataSize = " << str.size() << ";" << endl;
-  }
-
   void runWriteNodeTest()
   {
     stringstream ss(stringstream::out);
@@ -110,7 +89,7 @@ public:
     n->setTag("note", "test tag");
     writer.writePb(n, &ss);
 
-    //_dumpString(ss.str());
+    //TestUtils::dumpString(ss.str());
 
     const unsigned char data[] = {
         0,   0,   0, 101,  10,  69,  10,   0,  10,   4, 110, 111, 116, 101,  10,   8, 116, 101,

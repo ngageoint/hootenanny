@@ -83,7 +83,7 @@ public:
     uut.writeObject(t);
     uut.flush();
 
-    //_dumpString(ss.str());
+    //TestUtils::dumpString(ss.str());
 
     const unsigned char data[] = {
         0,   0,   0,  18,   0,  84,   0, 101,   0, 115,   0, 116,   0,  67,   0, 108,   0,  97,
@@ -112,7 +112,7 @@ public:
       }
       //printf("%3d%c", (unsigned char)str.at(i),
       //  str.at(i) >= 32 && str.at(i) <= 125 ? (char)(str.at(i)) : '#');
-      printf("%3d", (unsigned char)str.at(i));
+      printf("%3u", (unsigned char)str.at(i));
     }
     cout << "};" << endl;
     cout << "size_t dataSize = " << str.size() << ";" << endl;

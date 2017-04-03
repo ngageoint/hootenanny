@@ -31,8 +31,8 @@ namespace hoot
 PP_FACTORY_REGISTER(pp::Mapper, PaintNodesMapper)
 
 PaintNodesMapper::PaintNodesMapper()
+  : _initialized(false)
 {
-  _context = NULL;
 }
 
 void PaintNodesMapper::close()
@@ -82,11 +82,12 @@ void PaintNodesMapper::_init(HadoopPipes::MapContext& context)
   _height = ceil(_envelope.getHeight() / _pixelSize) + 1;
   LOG_INFO("w: " << _width << " h: " << _height);
   _nd.reset(_width, _height);
+  _initialized = true;
 }
 
 void PaintNodesMapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
-  if (_context == NULL)
+  if (!_initialized)
   {
     _init(context);
   }

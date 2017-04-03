@@ -1056,13 +1056,6 @@ namespace Tgs
   {
     try
     {
-      //Warning killer
-      numTrees = numTrees;
-      numFactors = numFactors;
-      nodeSize = nodeSize;
-      retrain = retrain;
-      balanced = balanced;
-
       std::set<std::string> classNames = _data->getClassLabels();
       std::set<std::string>::iterator itr;
       std::set<std::string>::iterator itr2;

@@ -577,7 +577,7 @@ public:
     {
       if (found[i] != true)
       {
-        printf("Didn't find %d\n", i);
+        printf("Didn't find %u\n", i);
       }
       CPPUNIT_ASSERT_EQUAL(true, (bool)found[i]);
     }
