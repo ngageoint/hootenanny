@@ -54,6 +54,7 @@ class FieldDefinition;
 class Layer;
 class DoubleFieldDefinition;
 class IntegerFieldDefinition;
+class LongIntegerFieldDefinition;
 class Schema;
 class ElementType;
 
@@ -140,6 +141,8 @@ protected:
   void _parseEnumerations(DoubleFieldDefinition* fd, QVariant& enumerations) const;
 
   void _parseEnumerations(IntegerFieldDefinition* fd, QVariant& enumerations) const;
+
+  void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
 
   shared_ptr<FieldDefinition> _parseFieldDefinition(QVariant fieldV) const;
 
