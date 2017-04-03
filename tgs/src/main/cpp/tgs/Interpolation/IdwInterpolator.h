@@ -70,7 +70,6 @@ public:
 protected:
   double _p;
   double _stopDelta;
-  mutable auto_ptr<HilbertRTree> _index;
 
   virtual void _buildModel();
 

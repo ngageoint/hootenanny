@@ -142,9 +142,7 @@ void TestUtils::dumpString(const string& str)
     {
       cout << endl << "  ";
     }
-    //printf("%3d%c", (unsigned char)str.at(i),
-    //  str.at(i) >= 32 && str.at(i) <= 125 ? (char)(str.at(i)) : '#');
-    printf("%3d", (unsigned char)str.at(i));
+    printf("%3u", (unsigned char)str.at(i));
   }
   cout << "};" << endl;
   cout << "size_t dataSize = " << str.size() << ";" << endl;

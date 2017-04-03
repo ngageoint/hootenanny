@@ -79,13 +79,8 @@ public:
   {
     if (_init == false)
     {
-      const char* ldLibChar = getenv("LD_LIBRARY_PATH");
-      cout << "LD_LIBRARY_PATH start: " << ldLibChar << endl;
-      QString ldLib;
-      if (ldLibChar != NULL)
-      {
-        ldLib = ldLibChar;
-      }
+      QString ldLib(getenv("LD_LIBRARY_PATH"));
+      cout << "LD_LIBRARY_PATH start: " << ldLib.toStdString() << endl;
       const char* javaHome = getenv("JAVA_HOME");
       if (javaHome == NULL)
       {

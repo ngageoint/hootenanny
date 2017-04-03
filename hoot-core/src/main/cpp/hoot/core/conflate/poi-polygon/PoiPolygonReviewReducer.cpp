@@ -174,7 +174,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
 
   //Similar to previous, except more focused for restrooms.
-  if (poiHasType && polyHasType && !_typeScore == 1.0 &&
+  if (poiHasType && polyHasType && _typeScore != 1.0 &&
       PoiPolygonTypeScoreExtractor::isRestroom(poi) &&
       !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
         OsmSchemaCategory::building()))

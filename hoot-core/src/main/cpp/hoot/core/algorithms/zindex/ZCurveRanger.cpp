@@ -59,7 +59,7 @@ public:
   {
   }
 
-  bool operator=(LongBoxContainer bc) const
+  bool operator==(LongBoxContainer bc) const
   {
     if (_excess != bc.getExcess())
     {
