@@ -972,59 +972,6 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   LOG_VART(_validateData);
 }
 
-void OsmApiDbBulkWriter::_initOutputFormatStrings()
-{
-  QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getChangesetsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentWaysTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWaysTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWayNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentRelationsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getRelationsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getRelationMembersTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  _outputFormatStrings[ApiDb::getCurrentWayTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  _outputFormatStrings[ApiDb::getCurrentRelationTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWayTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  _outputFormatStrings[ApiDb::getRelationTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getNodeTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
->>>>>>> 1431
-}
-
 QStringList OsmApiDbBulkWriter::_createSectionNameList()
 {
   QStringList sections;
@@ -1336,7 +1283,7 @@ void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& r
 }
 
 void OsmApiDbBulkWriter::_writeRelationMemberToStream(const unsigned long sourceRelationDbId,
-                                                      const RelationData::Entry& memberEntry,
+                                                      const RelationData::Entry& member,
                                                       const unsigned long memberDbId,
                                                       const unsigned int memberSequenceIndex)
 {
@@ -1472,7 +1419,7 @@ void OsmApiDbBulkWriter::_writeChangesetToStream()
       _changesetData.changesetBounds);
 }
 
-void OsmApiDbBulkWriter::_writeSequenceUpdatesToStream(unsigned long changesetId,
+void OsmApiDbBulkWriter::_writeSequenceUpdatesToStream(long changesetId,
                                                        const unsigned long nodeId,
                                                        const unsigned long wayId,
                                                        const unsigned long relationId,

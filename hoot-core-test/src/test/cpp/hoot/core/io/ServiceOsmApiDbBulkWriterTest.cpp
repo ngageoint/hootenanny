@@ -387,12 +387,12 @@ public:
     writer.setValidateData(false);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
     //the element IDs will be reversed in the sql output with validation off, due to the way the
     //osm data reading works
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-validate-off.sql",
       outFile);
     verifyDatabaseOutputOfflineValidateOff();
@@ -418,10 +418,10 @@ public:
     writer.setStxxlMapMinSize(3);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
     verifyDatabaseOutputOffline();
   }

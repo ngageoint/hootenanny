@@ -244,7 +244,7 @@ private:
   QString _getCombinedSqlFileName() const;
   QString _getTableOutputFileName(const QString tableName) const;
 
-  void _writeSequenceUpdatesToStream(unsigned long changesetId, const unsigned long nodeId,
+  void _writeSequenceUpdatesToStream(long changesetId, const unsigned long nodeId,
                                      const unsigned long wayId,
                                      const unsigned long relationId, QString& outputStr);
   void _writeChangesetToStream();
