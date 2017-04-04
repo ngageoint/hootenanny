@@ -37,8 +37,10 @@ namespace hoot
 class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
 {
   CPPUNIT_TEST_SUITE(WriteOsmSqlStatementsDriverTest);
-  CPPUNIT_TEST(testSqlFileOutput);
-  CPPUNIT_TEST(testDatabaseOutput);
+  CPPUNIT_TEST(testSqlFileOutputNoBuffering);
+  CPPUNIT_TEST(testDatabaseOutputNoBuffering);
+  CPPUNIT_TEST(testSqlFileOutputWithBuffering);
+  CPPUNIT_TEST(testDatabaseOutputWithBuffering);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -149,10 +151,52 @@ public:
     writer.close();
   }
 
-  void testSqlFileOutput()
+  void testSqlFileOutputNoBuffering()
   {
     const string outDir =
-      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testSqlFileOutput";
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testSqlFileOutput-no-buffering";
+    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
+    init(outDir, outFile);
+
+    WriteOsmSqlStatementsDriver driver;
+    //set this very high to avoid buffering
+    driver.setFileOutputElementBufferSize(10000);
+    driver.setChangesetUserId(1);
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
+
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-no-buffering.sql", outFile);
+    ServicesDbTestUtils::verifyTestDatabaseEmpty();
+  }
+
+  void testDatabaseOutputNoBuffering()
+  {
+    const string outDir =
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testDatabaseOutput-no-buffering";
+    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
+    init(outDir, outFile);
+
+    WriteOsmSqlStatementsDriver driver;
+    //set this very high to avoid buffering
+    driver.setFileOutputElementBufferSize(10000);
+    driver.setChangesetUserId(1);
+    driver.setOutputFilesCopyLocation(outFile);
+    driver.write(
+      QString::fromStdString(outDir) + "/input.osm.pbf",
+      ServicesDbTestUtils::getOsmApiDbUrl().toString());
+
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-no-buffering.sql", outFile);
+    verifyDatabaseOutput();
+    //let's write some new records just to make sure we didn't mess the constraints up; only
+    //checking for errors here and not reading back this data after its written
+    writeAdditionalNewRecords();
+  }
+
+  void testSqlFileOutputWithBuffering()
+  {
+    const string outDir =
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testSqlFileOutput-with-buffering";
     const QString outFile = QString::fromStdString(outDir) + "/output.sql";
     init(outDir, outFile);
 
@@ -162,15 +206,15 @@ public:
     driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
-
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-with-buffering.sql",
+      outFile);
     ServicesDbTestUtils::verifyTestDatabaseEmpty();
   }
 
-  void testDatabaseOutput()
+  void testDatabaseOutputWithBuffering()
   {
     const string outDir =
-      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testDatabaseOutput";
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testDatabaseOutput-with-buffering";
     const QString outFile = QString::fromStdString(outDir) + "/output.sql";
     init(outDir, outFile);
 
@@ -183,10 +227,9 @@ public:
       ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
-      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output.sql", outFile);
-
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-with-buffering.sql",
+      outFile);
     verifyDatabaseOutput();
-
     //let's write some new records just to make sure we didn't mess the constraints up; only
     //checking for errors here and not reading back this data after its written
     writeAdditionalNewRecords();

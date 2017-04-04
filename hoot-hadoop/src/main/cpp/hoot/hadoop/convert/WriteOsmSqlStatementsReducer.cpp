@@ -37,13 +37,32 @@ namespace hoot
 
 PP_FACTORY_REGISTER(pp::Reducer, WriteOsmSqlStatementsReducer)
 
-WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer()
+WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer() :
+_tableHeader(""),
+_sqlStatements(""),
+_sqlStatementBufferSize(0)
 {
   _writer = NULL;
 }
 
+void WriteOsmSqlStatementsReducer::_flush()
+{
+  assert(_sqlStatementBufferSize > 0);
+  assert(!_sqlStatements.isEmpty());
+  LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to disk...");
+  _sqlStatements += "\\.\n";
+  _context->emit(_tableHeader.toStdString(), _sqlStatements.toStdString());
+  _sqlStatements = "";
+  _sqlStatementBufferSize = 0;
+}
+
 void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
 {
+  if (_context == NULL)
+  {
+    _context = &context;
+  }
+
   if (_writer == NULL)
   {
     HadoopPipes::RecordWriter* writer = HadoopPipesUtils::getRecordWriter(&context);
@@ -54,8 +73,12 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     }
   }
 
-  //shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   //LOG_VARD(config->getInt("mapred.reduce.tasks"));
+  const bool localJobTracker = config->get("mapred.job.tracker") == "local";
+  const long writeBufferSize = config->getLong("writeBufferSize");
+  _sqlStatementBufferSize = 0;
+  _sqlStatements = "";
 
   //I wanted to track the counts with counters instead, but pipes won't let you retrieve counter
   //values, so doing it this way...not sure yet if this is good parallel logic, though.
@@ -64,32 +87,43 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   elementCounts["ways"] = 0;
   elementCounts["relations"] = 0;
 
-  const QString key = QString::fromStdString(context.getInputKey());
-  QString values = "";
+  _tableHeader = QString::fromStdString(context.getInputKey());
   while (context.nextValue())
   {
     const QString value = QString::fromStdString(context.getInputValue());
 
-    if (key.contains("current_nodes"))
+    if (_tableHeader.contains("current_nodes"))
     {
       elementCounts["nodes"] = elementCounts["nodes"] + 1;
     }
-    else if (key.contains("current_ways"))
+    else if (_tableHeader.contains("current_ways"))
     {
       elementCounts["ways"] = elementCounts["ways"] + 1;
     }
-    else if (key.contains("current_relations"))
+    else if (_tableHeader.contains("current_relations"))
     {
       elementCounts["relations"] = elementCounts["relations"] + 1;
     }
 
-    //values += value;
-    values = values % value;
+    _sqlStatements = _sqlStatements % value;
+    _sqlStatementBufferSize++;
+
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 1);
+    }
+
+    //this flush can cause the same table to be written to the file twice, each time with a
+    //different set of sql records...but that's ok.
+    if (_sqlStatementBufferSize >= writeBufferSize && !_sqlStatements.isEmpty())
+    {
+      _flush();
+    }
   }
-  //values += "\\.\n";
-  values = values % "\\.\n";
-  //write the record data
-  _writer->emit(key.toStdString(), values.toStdString());
+  if (_sqlStatementBufferSize > 0 && !_sqlStatements.isEmpty())
+  {
+    _flush();
+  }
 
   //write the sequence id update sql statements
   //TODO: this code is suspect to me; its worked so far with multiple reducers in what I believe

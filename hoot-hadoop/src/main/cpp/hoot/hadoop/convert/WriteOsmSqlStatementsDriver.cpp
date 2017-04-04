@@ -82,15 +82,13 @@ void WriteOsmSqlStatementsDriver::write(const QString input, const QString outpu
   if (_outputIsDatabaseDestination(output))
   {
     //TODO: add file name and record count to this message
-    LOG_INFO("Executing element SQL.  17 separate SQL COPY statements will be executed...");
+    LOG_INFO("Executing element SQL...");
     OsmApiDb database;
     try
     {
       database.open(output);
       //We have to turn off constraints before writing the sql file to the db, since the table
-      //copy commands are out of order and will violate ref integrity.
-      //TODO: make enabling/disabling constraints using psql an option of the driver and
-      //OsmApiDbBulkWriter
+      //copy commands are out of dependency order and will violate ref integrity.
       database.disableConstraints();
 
       //write the sql file

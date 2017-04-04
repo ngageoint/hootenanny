@@ -24,6 +24,9 @@
 // std
 #include <string>
 
+// Qt
+#include <QString>
+
 namespace hoot
 {
 
@@ -43,6 +46,10 @@ public:
 private:
 
   pp::RecordWriter* _writer;
+  HadoopPipes::ReduceContext* _context;
+  QString _tableHeader;
+  QString _sqlStatements;
+  long _sqlStatementBufferSize;
 
   void _flush();
 
