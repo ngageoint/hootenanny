@@ -43,6 +43,7 @@ _sqlStatements(""),
 _sqlStatementBufferSize(0)
 {
   _writer = NULL;
+  _context = NULL;
 }
 
 void WriteOsmSqlStatementsReducer::_flush()
