@@ -18,7 +18,6 @@
 #define WRITEOSMSQLSTATEMENTSREDUCER_H
 
 // Pretty Pipes
-#include <pp/io/RecordWriter.h>
 #include <pp/mapreduce/Reducer.h>
 
 // std
@@ -45,7 +44,6 @@ public:
 
 private:
 
-  pp::RecordWriter* _writer;
   HadoopPipes::ReduceContext* _context;
   QString _tableHeader;
   QString _sqlStatements;

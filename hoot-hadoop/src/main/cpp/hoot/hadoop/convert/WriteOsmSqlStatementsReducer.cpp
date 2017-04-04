@@ -42,7 +42,6 @@ _tableHeader(""),
 _sqlStatements(""),
 _sqlStatementBufferSize(0)
 {
-  _writer = NULL;
   _context = NULL;
 }
 
@@ -62,16 +61,6 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   if (_context == NULL)
   {
     _context = &context;
-  }
-
-  if (_writer == NULL)
-  {
-    HadoopPipes::RecordWriter* writer = HadoopPipesUtils::getRecordWriter(&context);
-    _writer = dynamic_cast<RecordWriter*>(writer);
-    if (_writer == NULL)
-    {
-      throw HootException("Error getting RecordWriter.");
-    }
   }
 
   shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
@@ -109,9 +98,11 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     _sqlStatements = _sqlStatements % value;
     _sqlStatementBufferSize++;
 
-    if (!localJobTracker)
+    if (!localJobTracker && !value.trimmed().isEmpty() && value.trimmed() != "\\.")
     {
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 1);
+      //I'm getting a different number here than what comes from the mapper, so need to figure
+      //out what's up with that.
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
     }
 
     //this flush can cause the same table to be written to the file twice, each time with a
@@ -127,9 +118,12 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   }
 
   //write the sequence id update sql statements
-  //TODO: this code is suspect to me; its worked so far with multiple reducers in what I believe
-  //to be pseudo-distributed mode.  if all keys of one type are going to each reducer, then I guess
-  //this will work...although it does seem like some of the reducers are going to get bogged down
+
+  //I'm completely sure about this part yet.  Its worked so far with multiple reducers in what
+  //I believe to be pseudo-distributed mode.  if all keys of one type are going to each reducer,
+  //then I guess this will work.  In that case, though it does seem like some of the reducers are
+  //going to pretty get bogged down, but there may be nothing that can be done about that w/o
+  //reworking the key/value pairs.
 
   QString sequenceUpdateStatement;
   if (elementCounts["nodes"] > 0)
@@ -137,21 +131,33 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     sequenceUpdateStatement =
       "SELECT pg_catalog.setval('current_nodes_id_seq', " +
       QString::number(elementCounts["nodes"]) + ");";
-    _writer->emit("/* nodes */\n", sequenceUpdateStatement.toStdString());
+    _context->emit("/* nodes */\n", sequenceUpdateStatement.toStdString());
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
+    }
   }
   if (elementCounts["ways"] > 0)
   {
     sequenceUpdateStatement =
       "SELECT pg_catalog.setval('current_ways_id_seq', " +
       QString::number(elementCounts["ways"]) + ");";
-    _writer->emit("/* ways */\n", sequenceUpdateStatement.toStdString());
+    _context->emit("/* ways */\n", sequenceUpdateStatement.toStdString());
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
+    }
   }
   if (elementCounts["relations"] > 0)
   {
     sequenceUpdateStatement =
       "SELECT pg_catalog.setval('current_relations_id_seq', " +
       QString::number(elementCounts["relations"]) + ");";
-    _writer->emit("/* relations */\n", sequenceUpdateStatement.toStdString());
+    _context->emit("/* relations */\n", sequenceUpdateStatement.toStdString());
+    if (!localJobTracker)
+    {
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
+    }
   }
 }
 

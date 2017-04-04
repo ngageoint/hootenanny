@@ -1,0 +1,32 @@
+17/04/04 19:00:41 INFO mapred.JobClient: Running job: job_201704032211_0013
+17/04/04 19:00:42 INFO mapred.JobClient:  map 0% reduce 0%
+17/04/04 19:01:00 INFO mapred.JobClient:  map 100% reduce 0%
+17/04/04 19:01:13 INFO mapred.JobClient:  map 100% reduce 100%
+17/04/04 19:01:21 INFO mapred.JobClient: Job complete: job_201704032211_0013
+17/04/04 19:01:21 INFO mapred.JobClient: Counters: 22
+17/04/04 19:01:21 INFO mapred.JobClient:   Map-Reduce Framework
+17/04/04 19:01:21 INFO mapred.JobClient:     Combine output records=0
+17/04/04 19:01:21 INFO mapred.JobClient:     Spilled Records=41920
+17/04/04 19:01:21 INFO mapred.JobClient:     Reduce input records=20960
+17/04/04 19:01:21 INFO mapred.JobClient:     Reduce output records=0
+17/04/04 19:01:21 INFO mapred.JobClient:     Map input records=1
+17/04/04 19:01:21 INFO mapred.JobClient:     Map output records=20960
+17/04/04 19:01:21 INFO mapred.JobClient:     Map output bytes=2597472
+17/04/04 19:01:21 INFO mapred.JobClient:     Reduce shuffle bytes=0
+17/04/04 19:01:21 INFO mapred.JobClient:     Combine input records=0
+17/04/04 19:01:21 INFO mapred.JobClient:     Map input bytes=0
+17/04/04 19:01:21 INFO mapred.JobClient:     Reduce input groups=8
+17/04/04 19:01:21 INFO mapred.JobClient:   WriteOsmSqlStatements
+17/04/04 19:01:21 INFO mapred.JobClient:     way nodes=5034
+17/04/04 19:01:21 INFO mapred.JobClient:     way tags=748
+17/04/04 19:01:21 INFO mapred.JobClient:     nodes=4324
+17/04/04 19:01:21 INFO mapred.JobClient:     ways=374
+17/04/04 19:01:21 INFO mapred.JobClient:     elements=4698
+17/04/04 19:01:21 INFO mapred.JobClient:     SQL statements=50570
+17/04/04 19:01:21 INFO mapred.JobClient:   FileSystemCounters
+17/04/04 19:01:21 INFO mapred.JobClient:     FILE_BYTES_WRITTEN=5278828
+17/04/04 19:01:21 INFO mapred.JobClient:     FILE_BYTES_READ=2639398
+17/04/04 19:01:21 INFO mapred.JobClient:   Job Counters 
+17/04/04 19:01:21 INFO mapred.JobClient:     Launched map tasks=1
+17/04/04 19:01:21 INFO mapred.JobClient:     Launched reduce tasks=1
+17/04/04 19:01:21 INFO mapred.JobClient:     Data-local map tasks=1

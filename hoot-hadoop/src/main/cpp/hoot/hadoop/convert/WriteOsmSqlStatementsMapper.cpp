@@ -45,7 +45,7 @@ _outputDelimiter("\t")
   _context = NULL;
 }
 
-//TODO: consolidate duplicated code here
+//TODO: consolidate duplicated code in _map here
 //void WriteElementSqlStatementsMapper::_writeElementSqlStatements(const ConstElementPtr& element,
 //                                                             HadoopPipes::MapContext& context)
 //{
@@ -84,12 +84,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
   {
     shared_ptr<const Node> node = it->second;
 
-    long nodeId = node->getId();
-    if (nodeId < 1)
-    {
-      assert(nodeId != 0);
-      nodeId = nodeId * -1;
-    }
+    assert(nodeId != 0);
+    const long nodeId = abs(node->getId());
 
     const QStringList nodeSqlStatements = _sqlFormatter->nodeToSqlStrings(node, nodeId, 1);
     _statementsBuffer->append(QPair<QString, QString>(nodeSqlHeaders[0], nodeSqlStatements[0]));
@@ -98,7 +94,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "nodes"), 1);
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+      //x2 due to one statement for the current table and one for the historical table
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
     }
 
     const Tags& tags = node->getTags();
@@ -114,14 +111,14 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       if (!localJobTracker)
       {
         context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "node tags"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
     }
     if (_statementsBuffer->size() >= writeBufferSize)
     {
@@ -137,12 +134,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
   {
     const shared_ptr<Way>& way = it->second;
 
-    long wayId = way->getId();
-    if (wayId < 1)
-    {
-      assert(wayId != 0);
-      wayId = wayId * -1;
-    }
+    assert(wayId != 0);
+    const long wayId = abs(way->getId());
 
     const QStringList waySqlStatements = _sqlFormatter->wayToSqlStrings(wayId, 1);
     _statementsBuffer->append(QPair<QString, QString>(waySqlHeaders[0], waySqlStatements[0]));
@@ -150,19 +143,15 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "ways"), 1);
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
     }
 
     const vector<long> wayNodeIds = way->getNodeIds();
     unsigned int wayNodeIndex = 1;
     for (vector<long>::const_iterator it = wayNodeIds.begin(); it != wayNodeIds.end(); ++it)
     {
-      long wayNodeId = *it;
-      if (wayNodeId < 1)
-      {
-        assert(wayNodeId != 0);
-        wayNodeId = wayNodeId * -1;
-      }
+      assert(*it != 0);
+      const long wayNodeId = abs(*it);
 
       const QStringList wayNodeSqlStatements =
         _sqlFormatter->wayNodeToSqlStrings(wayId, wayNodeId, wayNodeIndex);
@@ -174,7 +163,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       if (!localJobTracker)
       {
         context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "way nodes"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
@@ -191,7 +180,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       if (!localJobTracker)
       {
         context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "way tags"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
@@ -213,12 +202,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
   {
     RelationPtr relation = it->second;
 
-    long relationId = relation->getId();
-    if (relationId < 1)
-    {
-      assert(relationId != 0);
-      relationId = relationId * -1;
-    }
+    assert(relation->getId() != 0);
+    const long relationId = abs(relation->getId());
 
     const QStringList relationSqlStatements = _sqlFormatter->relationToSqlStrings(relationId, 1);
     _statementsBuffer->append(
@@ -228,7 +213,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     if (!localJobTracker)
     {
       context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relations"), 1);
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
     }
 
     unsigned int memberSequenceIndex = 1;
@@ -238,12 +223,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     {
       const RelationData::Entry member = *it;
 
-      long memberId = member.getElementId().getId();
-      if (memberId < 1)
-      {
-        assert(memberId != 0);
-        memberId = memberId * -1;
-      }
+      assert(member.getElementId().getId() != 0);
+      const long memberId = abs(member.getElementId().getId());
 
       const QStringList relationMemberSqlStatements =
         _sqlFormatter->relationMemberToSqlStrings(
@@ -257,7 +238,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       {
         context.incrementCounter(
           context.getCounter("WriteOsmSqlStatements", "relation members"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
@@ -274,7 +255,7 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       if (!localJobTracker)
       {
         context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relation tags"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL records"), 2);
+        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
