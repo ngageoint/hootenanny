@@ -680,6 +680,7 @@ QStringList OsmApiDb::_getContraintsTableOrdering(const bool disable)
   tableNames.append(ApiDb::getCurrentRelationTagsTableName());
   tableNames.append(ApiDb::getCurrentRelationsTableName());
   tableNames.append(ApiDb::getRelationMembersTableName());
+  tableNames.append(ApiDb::getRelationTagsTableName());
   tableNames.append(ApiDb::getRelationsTableName());
 
   tableNames.append(ApiDb::getCurrentWayNodesTableName());
