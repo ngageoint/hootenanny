@@ -41,7 +41,7 @@ class LongIntegerFieldDefinition : public FieldDefinition
 public:
   LongIntegerFieldDefinition();
 
-  void addEnumeratedValue(int v) { _enumeratedValues.insert(v); }
+  void addEnumeratedValue(long long v) { _enumeratedValues.insert(v); }
 
   virtual QVariant getDefaultValue() const;
 
