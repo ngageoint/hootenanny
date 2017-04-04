@@ -280,7 +280,7 @@ private:
                                     const unsigned long memberDbId,
                                     const unsigned int memberSequenceIndex);
   void _writeWayToStream(const unsigned long wayDbId);
-  void _writeWayNodesToStream(const unsigned long wayId, const vector<long>& waynodeIds);
+  void _writeWayNodesToStream(const unsigned long wayId, const vector<long>& wayNodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
                           const unsigned long dbId, shared_ptr<QTextStream>& currentTable,

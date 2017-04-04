@@ -1340,25 +1340,18 @@ void OsmApiDbBulkWriter::_writeWayToStream(const unsigned long wayDbId)
 }
 
 void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
-                                                const vector<long>& waynodeIds)
+                                                const vector<long>& wayNodeIds)
 {
   LOG_TRACE("Writing way nodes to stream...");
 
   unsigned int nodeIndex = 1;
   const QString dbWayIdString( QString::number(dbWayId));
-  for (vector<long>::const_iterator it = waynodeIds.begin(); it != waynodeIds.end(); ++it)
+  for (vector<long>::const_iterator it = wayNodeIds.begin(); it != wayNodeIds.end(); ++it)
   {
     unsigned long wayNodeIdVal;
     if (!_validateData)
     {
-      if (*it < 0)
-      {
-        wayNodeIdVal = *it * -1;
-      }
-      else
-      {
-        wayNodeIdVal = *it;
-      }
+      wayNodeIdVal = abs(*it);
     }
     else if (_idMappings.nodeIdMap->contains(*it))
     {
