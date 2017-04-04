@@ -78,6 +78,9 @@ class OsmApiDbSqlStatementFormatter;
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
+  //some ids are stored as unsigned long and some as long due to the fact, the incoming data could
+  //have positive or negative ids and when writing the output we end up with only positive ids
+
   struct ElementWriteStats
   {
     unsigned long nodesWritten;
@@ -93,23 +96,23 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
   struct IdMappings
   {
-    long startingNodeId;
-    long currentNodeId;
-    shared_ptr<BigMap<long, long> > nodeIdMap;
+    unsigned long startingNodeId;
+    unsigned long currentNodeId;
+    shared_ptr<BigMap<long, unsigned long> > nodeIdMap;
 
-    long startingWayId;
-    long currentWayId;
-    shared_ptr<BigMap<long, long> > wayIdMap;
+    unsigned long startingWayId;
+    unsigned long currentWayId;
+    shared_ptr<BigMap<long, unsigned long> > wayIdMap;
 
-    long startingRelationId;
-    long currentRelationId;
-    shared_ptr<BigMap<long, long> > relationIdMap;
+    unsigned long startingRelationId;
+    unsigned long currentRelationId;
+    shared_ptr<BigMap<long, unsigned long> > relationIdMap;
   };
 
   struct ChangesetData
   {
-    long changesetUserId;
-    long currentChangesetId;
+    long changesetUserId; //keep this as signed b/c the default is -1 to force users to update it
+    unsigned long currentChangesetId;
     unsigned long changesetsWritten;
     unsigned int changesInChangeset;
     Envelope changesetBounds;
@@ -118,17 +121,13 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   struct UnresolvedRelationReference
   {
     long sourceRelationId;
-    long sourceDbRelationId;
+    unsigned long sourceDbRelationId;
     RelationData::Entry relationMemberData;
     unsigned int relationMemberSequenceId;
   };
 
   struct UnresolvedReferences
   {
-    //keeps track of unresolved way nodees, which is a deal breaker when writing to the db
-    // Schema: node ID -> vector of entries w/ type: pair(way ID for waynode, 1-based sequence
-    // order for waynode)
-    shared_ptr<BigMap<long, vector<pair<long, unsigned long> > > > unresolvedWaynodeRefs;
     //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
     shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
@@ -160,9 +159,32 @@ public:
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
   void setReserveRecordIdsBeforeWritingData(bool reserve)
   { _reserveRecordIdsBeforeWritingData = reserve; }
-  void setStartingNodeId(long id) { _idMappings.startingNodeId = id; }
-  void setStartingWayId(long id) { _idMappings.startingWayId = id; }
-  void setStartingRelationId(long id) { _idMappings.startingRelationId = id; }
+  void setStartingNodeId(long id)
+  {
+    if (id < 1)
+    {
+      throw HootException("Invalid starting ID: " + QString::number(id));
+    }
+    _idMappings.startingNodeId = id;
+  }
+  void setStartingWayId(long id)
+  {
+    if (id < 1)
+    {
+      throw HootException("Invalid starting ID: " + QString::number(id));
+    }
+    _idMappings.startingWayId = id;
+  }
+  void setStartingRelationId(long id)
+  {
+    if (id < 1)
+    {
+      throw HootException("Invalid starting ID: " + QString::number(id));
+    }
+    _idMappings.startingRelationId = id;
+  }
+  void setStxxlMapMinSize(long size) { _stxxlMapMinSize = size; }
+  void setValidateData(bool validate) { _validateData = validate; }
 
 private:
 
@@ -183,6 +205,8 @@ private:
   shared_ptr<QFile> _sqlOutputCombinedFile;
   bool _reserveRecordIdsBeforeWritingData;
   unsigned int _fileDataPassCtr;
+  long _stxxlMapMinSize;
+  bool _validateData;
 
   //ended up not going with temp files here, since the file outputs aren't always temporary
   map<QString, pair<shared_ptr<QFile>, shared_ptr<QTextStream> > > _outputSections;
@@ -193,15 +217,16 @@ private:
 
   shared_ptr<QElapsedTimer> _timer;
 
-  QString _formatPotentiallyLargeNumber(const long number);
+  QString _formatPotentiallyLargeNumber(const unsigned long number);
   QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   void _reset();
+  void _clearIdCollections();
   unsigned int _numberOfFileDataPasses() const;
   bool _destinationIsDatabase() const;
 
   void _logStats(const bool debug = false);
-  long _getTotalRecordsWritten() const;
+  unsigned long _getTotalRecordsWritten() const;
   void _verifyDependencies();
   void _verifyOutputCopySettings();
   void _verifyStartingIds();
@@ -219,19 +244,22 @@ private:
   QString _getCombinedSqlFileName() const;
   QString _getTableOutputFileName(const QString tableName) const;
 
-  void _writeSequenceUpdatesToStream(const long changesetId, const long nodeId, const long wayId,
-                                     const long relationId, QString& outputStr);
+  void _writeSequenceUpdatesToStream(unsigned long changesetId, const unsigned long nodeId,
+                                     const unsigned long wayId,
+                                     const unsigned long relationId, QString& outputStr);
   void _writeChangesetToStream();
-  void _writeRelationToStream(const long relationDbId);
-  void _writeRelationMembersToStream(const ConstRelationPtr& relation, const long dbRelationId);
-  void _writeRelationMemberToStream(const long sourceRelation,
-                                    const RelationData::Entry& member, const long memberDbId,
+  void _writeRelationToStream(const unsigned long relationDbId);
+  void _writeRelationMembersToStream(const ConstRelationPtr& relation,
+                                     const unsigned long dbRelationId);
+  void _writeRelationMemberToStream(const unsigned long sourceRelationDbId,
+                                    const RelationData::Entry& member,
+                                    const unsigned long memberDbId,
                                     const unsigned int memberSequenceIndex);
-  void _writeWayToStream(const long wayDbId);
-  void _writeWayNodesToStream(const long wayId, const vector<long>& waynodeIds);
-  void _writeNodeToStream(const ConstNodePtr& node, const long nodeDbId);
+  void _writeWayToStream(const unsigned long wayDbId);
+  void _writeWayNodesToStream(const unsigned long wayId, const vector<long>& wayNodeIds);
+  void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
-                          const long dbId, shared_ptr<QTextStream>& currentTable,
+                          const unsigned long dbId, shared_ptr<QTextStream>& currentTable,
                           shared_ptr<QTextStream>& historicalTable);
 
   void _incrementAndGetLatestIdsFromDb();
@@ -240,8 +268,8 @@ private:
    * Since we're converting the input element IDs to our own sequence, we need to keep a mapping
    * between the two for reference.
    */
-  long _establishNewIdMapping(const ElementId& sourceId);
-  void _checkUnresolvedReferences(const ConstElementPtr& element, const long elementDbId);
+  unsigned long _establishNewIdMapping(const ElementId& sourceId);
+  void _checkUnresolvedReferences(const ConstElementPtr& element, const unsigned long elementDbId);
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _writeCombinedSqlFile();
   void _reserveIdsInDb();

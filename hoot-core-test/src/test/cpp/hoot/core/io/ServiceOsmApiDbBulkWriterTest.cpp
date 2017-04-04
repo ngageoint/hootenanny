@@ -59,6 +59,8 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
+  CPPUNIT_TEST(runPsqlDbOfflineValidateOffTest);
+  CPPUNIT_TEST(runPsqlDbOfflineStxxlTest);
   CPPUNIT_TEST(runPsqlDbOnlineTest);
   CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runSqlFileOutputTest);
@@ -126,6 +128,74 @@ public:
     //verify sequences - sequences can't be updated b/c of a chicken egg situation with nextval; sql
     //file validation will have to be good enough
 //    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
+//    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
+//    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
+//    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+
+    reader.close();
+  }
+
+  void verifyDatabaseOutputOfflineValidateOff()
+  {
+    OsmApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    reader.read(map);
+
+    //verify current elements
+
+    CPPUNIT_ASSERT_EQUAL((size_t)14, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getNode(1)->getTags().size());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(3)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getWay(2)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((int)3, map->getWay(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(5)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(4)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(3)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWay(2)->getNodeCount());
+    CPPUNIT_ASSERT_EQUAL((size_t)4, map->getWay(1)->getNodeCount());
+
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
+    CPPUNIT_ASSERT_EQUAL((int)2, map->getRelation(1)->getTags().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelation(1)->getMembers().size());
+
+    //verify historical element table sizes
+    CPPUNIT_ASSERT_EQUAL(
+      (long)14,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)5,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)7,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)16,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)1,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+    CPPUNIT_ASSERT_EQUAL(
+      (long)2,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+    //verify changeset table size
+    CPPUNIT_ASSERT_EQUAL(
+      (long)4,
+      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+    //verify sequences
+//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    //TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
@@ -293,7 +363,66 @@ public:
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
+    verifyDatabaseOutputOffline();
+  }
 
+  void runPsqlDbOfflineValidateOffTest()
+  {
+    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+    OsmMap::resetCounters();
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    const QString outFile =
+      "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-validate-off-out.sql";
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setOutputFilesCopyLocation(outFile);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    writer.setValidateData(false);
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(createTestMap());
+    writer.close();
+
+    //the element IDs will be reversed in the sql output with validation off, due to the way the
+    //osm data reading works
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-validate-off.sql",
+      outFile);
+    verifyDatabaseOutputOfflineValidateOff();
+  }
+
+  void runPsqlDbOfflineStxxlTest()
+  {
+    QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    const QString outFile =
+      "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-stxxl-out.sql";
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setOutputFilesCopyLocation(outFile);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    writer.setStxxlMapMinSize(3);
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(createTestMap());
+    writer.close();
+
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
     verifyDatabaseOutputOffline();
   }
 
