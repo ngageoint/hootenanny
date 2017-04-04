@@ -701,13 +701,12 @@ public:
 
     OsmApiDbBulkWriter writer;
     writer.setWriterApp("pg_bulkload");
-    writer.setReserveRecordIdsBeforeWritingData(false);
-    writer.setFileOutputLineBufferSize(1);
+    writer.setReserveRecordIdsBeforeWritingData(false);;
     writer.setOutputFilesCopyLocation(outputPath);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
     writer.setDisableWriteAheadLogging(true);
     writer.setDisableConstraints(true);
     writer.setWriteMultithreaded(false);
@@ -742,12 +741,11 @@ public:
     OsmApiDbBulkWriter writer;
     writer.setWriterApp("pg_bulkload");
     writer.setReserveRecordIdsBeforeWritingData(true);
-    writer.setFileOutputLineBufferSize(1);
     writer.setOutputFilesCopyLocation(outputPath);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
     writer.setDisableWriteAheadLogging(false);
     writer.setDisableConstraints(false);
     writer.setWriteMultithreaded(false);
@@ -786,12 +784,11 @@ public:
     OsmApiDbBulkWriter writer;
     writer.setWriterApp("pg_bulkload");
     writer.setReserveRecordIdsBeforeWritingData(false);
-    writer.setFileOutputLineBufferSize(1);
     writer.setOutputFilesCopyLocation(outputPath);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
     writer.setDisableWriteAheadLogging(true);
     writer.setDisableConstraints(true);
     //deciding not to enable this for fear of build machine issues...maybe will if I get brave later
@@ -858,11 +855,10 @@ public:
     OsmApiDbBulkWriter writer;
     writer.setWriterApp("pg_bulkload");
     writer.setReserveRecordIdsBeforeWritingData(false);
-    writer.setFileOutputLineBufferSize(1);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
-    writer.setFileOutputLineBufferSize(3);
+    writer.setFileOutputElementBufferSize(3);
     writer.setDisableWriteAheadLogging(true);
     writer.setDisableConstraints(true);
     writer.setWriteMultithreaded(false);
