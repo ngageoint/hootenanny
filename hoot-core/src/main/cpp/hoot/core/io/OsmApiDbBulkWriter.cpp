@@ -449,7 +449,7 @@ void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
             lineCtr++;
           }
 
-          if (lineCtr == _fileOutputLineBufferSize)
+          if (lineCtr == _fileOutputElementBufferSize)
           {
             LOG_TRACE("Flushing records to combined file " << newCsvFile->fileName() << "...");
             outStream.flush();
