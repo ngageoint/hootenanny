@@ -98,6 +98,9 @@ static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
+  //some ids are stored as unsigned long and some as long due to the fact, the incoming data could
+  //have positive or negative ids and when writing the output we end up with only positive ids
+
   struct ElementWriteStats
   {
     unsigned long nodesWritten;

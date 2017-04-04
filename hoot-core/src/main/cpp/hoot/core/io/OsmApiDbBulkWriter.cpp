@@ -506,10 +506,11 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
     //statements to the sql output here for applying at a later time.  we want
     //setval to reflect the last id in the sequence
     QString reserveElementIdsSql;
+    //TODO: may be able to collapse this logic; see notes in _establishNewIdMapping
     if (_validateData)
     {
-      //here, all our counters were incremented one past the element/changeset count and we need
-      //to decrement them by one
+      //with data validation on, we increment for each element read and all our counters are
+      //incremented one past the element/changeset count and we need to decrement them by one
       _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
                                     _idMappings.currentNodeId - 1,
                                     _idMappings.currentWayId - 1,
@@ -518,8 +519,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
     }
     else
     {
-      //here, changesets were incremented one past, but the element current id's were always
-      //assigned the highest parsed value
+      //with data validation off, changesets are incremented one past, but the element current
+      //id's were always assigned the highest parsed value
       _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
                                     _idMappings.currentNodeId,
                                     _idMappings.currentWayId,
@@ -1117,7 +1118,6 @@ void OsmApiDbBulkWriter::_reset()
   _idMappings.currentRelationId = 1;
   _idMappings.relationIdMap.reset();
 
-  //_unresolvedRefs.unresolvedWayNodeRefs.reset();
   _unresolvedRefs.unresolvedRelationRefs.reset();
 
   _outputSections.clear();
@@ -1127,6 +1127,9 @@ void OsmApiDbBulkWriter::_reset()
 
 unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& sourceId)
 {
+  //TODO: can probably reduce the current element id increment logic to just that of when
+  //_validateData = false
+
   unsigned long dbIdentifier;
 
   switch (sourceId.getType().getEnum())
@@ -1140,14 +1143,7 @@ unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& source
     }
     else
     {
-      if (sourceId.getId() < 0)
-      {
-        dbIdentifier = sourceId.getId() * -1;
-      }
-      else
-      {
-        dbIdentifier = sourceId.getId();
-      }
+      dbIdentifier = abs(sourceId.getId());
       if (dbIdentifier > _idMappings.currentNodeId)
       {
         _idMappings.currentNodeId = dbIdentifier;
@@ -1165,14 +1161,7 @@ unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& source
       }
       else
       {
-        if (sourceId.getId() < 0)
-        {
-          dbIdentifier = sourceId.getId() * -1;
-        }
-        else
-        {
-          dbIdentifier = sourceId.getId();
-        }
+        dbIdentifier = abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentWayId)
         {
           _idMappings.currentWayId = dbIdentifier;
@@ -1189,14 +1178,7 @@ unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& source
       }
       else
       {
-        if (sourceId.getId() < 0)
-        {
-          dbIdentifier = sourceId.getId() * -1;
-        }
-        else
-        {
-          dbIdentifier = sourceId.getId();
-        }
+        dbIdentifier = abs(sourceId.getId());
         if (dbIdentifier > _idMappings.currentRelationId)
         {
           _idMappings.currentRelationId = dbIdentifier;
@@ -1664,19 +1646,6 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
       _unresolvedRefs.unresolvedRelationRefs->erase(relationRef);
     }
   }
-
-  //TODO: I don't see unresolvedWayNodeRefs ever being inserted into, so what is this code actually
-  //doing?
-  // If newly written element is a node, check noderefs as well
-//  if (element->getElementType().getEnum() == ElementType::Node)
-//  {
-//    if (_unresolvedRefs.unresolvedWayNodeRefs &&
-//        _unresolvedRefs.unresolvedWayNodeRefs->contains(element->getId()))
-//    {
-//      throw UnsupportedException(
-//        "Found unresolved way node ref for node: " + QString::number(element->getId()));
-//    }
-//  }
 }
 
 QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) const
