@@ -1179,10 +1179,6 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
     else if (_idMappings.nodeIdMap->contains(*it))
     {
       wayNodeIdVal = _idMappings.nodeIdMap->at(*it);
-      const QStringList wayNodeSqlStrs =
-        _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex);
-      *_outputSections[ApiDb::getCurrentWayNodesTableName()].second << wayNodeSqlStrs[0];
-      *_outputSections[ApiDb::getWayNodesTableName()].second << wayNodeSqlStrs[1];
     }
     else
     {
@@ -1190,6 +1186,12 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
         "Unresolved way nodes are not supported.  " +
         QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it));
     }
+
+    const QStringList wayNodeSqlStrs =
+      _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex);
+    *_outputSections[ApiDb::getCurrentWayNodesTableName()].second << wayNodeSqlStrs[0];
+    *_outputSections[ApiDb::getWayNodesTableName()].second << wayNodeSqlStrs[1];
+
     ++wayNodeIndex;
   }
 }
