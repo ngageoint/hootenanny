@@ -1234,7 +1234,7 @@ Operations that should be applied to ingested OGR data before saving the data.
 === osmapidb.bulk.writer.file.output.element.buffer.size
 
 * Data Type: long
-* Default Value: `100000`
+* Default Value: `10000`
 
 Maximum number of elements to keep in memory when serializing input elements to a file output
 before they are written to an OSM API database.  If you have enough memory available and the
@@ -1282,30 +1282,52 @@ written to the SQL output for later execution.
 * Data Type: long
 * Default Value: `1`
 
-First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Use
-this when working with an offline database and know the ID range you want to assign to node records.
-This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to
-true.
+First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Must
+be a positive number.  Use this when working with an offline database and know the ID range you
+want to assign to node records.  This option is ignored if
+"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
 
 === osmapidb.bulk.writer.starting.way.id
 
 * Data Type: long
 * Default Value: `1`
 
-First record ID to assign to written ways when writing to an OSM API database or SQL file.  Use
-this when working with an offline database and know the ID range you want to assign to way records.
-This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to
-true.
+First record ID to assign to written ways when writing to an OSM API database or SQL file.  Must
+be a positive number.  Use this when working with an offline database and know the ID range you
+want to assign to way records.  This option is ignored if
+"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
 
 === osmapidb.bulk.writer.starting.relation.id
 
 * Data Type: long
 * Default Value: `1`
 
-First record ID to assign to written relations when writing to an OSM API database or SQL file.  Use
-this when working with an offline database and know the ID range you want to assign to relation
-records.  This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data"
-is set to true.
+First record ID to assign to written relations when writing to an OSM API database or SQL file.
+Must be a positive number.  Use this when working with an offline database and know the ID range
+you want to assign to relation records.  This option is ignored if
+"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
+
+=== osmapidb.bulk.writer.stxxl.map.min.size
+
+* Data Type: long
+* Default Value: `10000000`
+
+Size at which the ID mappings storage for the OSM API database bulk writer switches from a std::map
+to an stxxl::map, which is a container optimized for very large amounts of data.  For debugging
+purposes only.
+
+=== osmapidb.bulk.writer.validate.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the OSM API database bulk writer will create new element ID mappings, check for duplicate
+element IDs, invalid way node references, and invalid relation member references.  Only duplicate
+element IDs and invalid way node references will cause a failure.  Invalid relation members will
+cause a warning to be logged.  You should only set this to false as an optimization if you are
+loading data that was previously validated in another OSM API database, all element IDs are
+unique in the data you are loading, and the IDs will not conflict with any existing data in the
+destination database.
 
 === osm.changeset.sql.file.writer.generate.new.ids
 
