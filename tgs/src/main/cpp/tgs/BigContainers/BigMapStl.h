@@ -42,6 +42,9 @@ class BigMap
 public:
   BigMap() {}
 
+  //constructor to appease --without-stxxl; input parameter is ignored
+  BigMap(size_t maxEntriesInRam) {}
+
   const V& at(const K& k) const { return _map.at(k); }
 
   bool contains(const K& k) const { return count(k) > 0; }
@@ -51,6 +54,8 @@ public:
   void insert(const K& k, const V& v) { _map[k] = v; }
 
   V& operator[](const K& k) { return _map[k]; }
+
+  void clear() { _map.clear(); }
 
 private:
   std::map<K,V> _map;
