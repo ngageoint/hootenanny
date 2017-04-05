@@ -323,7 +323,6 @@ void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& w
         }
         writer.writeEndElement();
       }
-
     }
 
     // turn this on when we start using node circularError.
