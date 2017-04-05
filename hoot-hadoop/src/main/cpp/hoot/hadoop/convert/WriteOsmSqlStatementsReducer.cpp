@@ -67,6 +67,7 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   //LOG_VARD(config->getInt("mapred.reduce.tasks"));
   const bool localJobTracker = config->get("mapred.job.tracker") == "local";
   const long writeBufferSize = config->getLong("writeBufferSize");
+  //const int execSqlWithMapreduce = config->getInt("execSqlWithMapreduce");
   _sqlStatementBufferSize = 0;
   _sqlStatements = "";
 
@@ -117,13 +118,8 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     _flush();
   }
 
-  //write the sequence id update sql statements
-
-  //I'm completely sure about this part yet.  Its worked so far with multiple reducers in what
-  //I believe to be pseudo-distributed mode.  if all keys of one type are going to each reducer,
-  //then I guess this will work.  In that case, though it does seem like some of the reducers are
-  //going to pretty get bogged down, but there may be nothing that can be done about that w/o
-  //reworking the key/value pairs.
+  //write the sequence id update sql statements - I believe this will work since all keys of the
+  //same type will be sent to each reducer...still remains to be tested on a real cluster, though.
 
   QString sequenceUpdateStatement;
   if (elementCounts["nodes"] > 0)

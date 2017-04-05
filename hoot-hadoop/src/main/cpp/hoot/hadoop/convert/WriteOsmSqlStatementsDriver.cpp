@@ -216,10 +216,14 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
   _addDefaultJobSettings(job);
 
   //job.getConfiguration().setInt("mapred.map.tasks", 8);
-  //job.getConfiguration().setInt("mapred.reduce.tasks", 4);
 
   job.getConfiguration().setLong("changesetUserId", _changesetUserId);
   job.getConfiguration().setLong("writeBufferSize", _fileOutputElementBufferSize);
+  //job.getConfiguration().setInt("execSqlWithMapreduce", QString::number(_execSqlWithMapreduce));
+  if (_numReduceTasks != -1)
+  {
+      job.getConfiguration().setInt("mapred.reduce.tasks", _numReduceTasks);
+  }
 
   LOG_DEBUG(job.getJobTracker());
   job.run();
@@ -232,10 +236,14 @@ void WriteOsmSqlStatementsDriver::setConfiguration(const Settings& conf)
   setOutputFilesCopyLocation(confOptions.getOsmapidbBulkWriterOutputFilesCopyLocation().trimmed());
   setFileOutputElementBufferSize(confOptions.getOsmapidbBulkWriterFileOutputElementBufferSize());
   setChangesetUserId(confOptions.getChangesetUserId());
+  //setExecSqlWithMapreduce(confOptions.getBigConvertExecSqlWithMapreduce());
+  setNumReduceTasks(confOptions.getBigConvertNumReduceTasks());
 
   LOG_VART(_outputFileCopyLocation);
   LOG_VART(_fileOutputElementBufferSize);
   LOG_VART(_changesetUserId);
+  //LOG_VART(_execSqlWithMapreduce);
+  LOG_VART(_numReduceTasks);
 }
 
 }

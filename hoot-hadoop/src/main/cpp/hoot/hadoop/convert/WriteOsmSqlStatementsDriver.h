@@ -52,6 +52,8 @@ public:
   void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setOutputFilesCopyLocation(QString loc) { _outputFileCopyLocation = loc; }
   void setChangesetUserId(long id) { _changesetUserId = id; }
+  //void setExecSqlWithMapreduce(bool exec) { _execSqlWithMapreduce = exec; }
+  void setNumReduceTasks(int numTasks) { _numReduceTasks = numTasks; }
 
 private:
 
@@ -62,6 +64,8 @@ private:
   QString _outputDelimiter;
   long _changesetUserId;
   QString _output;
+  //bool _execSqlWithMapreduce;
+  int _numReduceTasks;
 
   void _runElementSqlStatementsWriteJob(const string& input, const string& output);
   void _runChangesetSqlStatementsWriteJob(const string& input, const string& output);

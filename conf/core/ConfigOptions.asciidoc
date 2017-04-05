@@ -77,6 +77,23 @@ The maximum number of values returned for each attribute by the attribute-count 
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
+=== big.convert.exec.sql.with.mapreduce
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true, when writing to an OSM API database from a PBF file using the big-convert command
+the writer will execute the OSM SQL statements using mapreduce.  If set to false, the writer will
+execute the OSM SQL statements in a single thread from a single Hootenanny instance.
+
+=== big.convert.num.reduce.tasks
+
+* Data Type: int
+* Default Value: `-1`
+
+Sets the number of reduce tasks spawned by big-convert command writer.  If set to -1, then Hadoop
+determines the number of tasks.  This setting is for testing purposes only.
+
 === big.perty.op.max.distance
 
 * Data Type: double
