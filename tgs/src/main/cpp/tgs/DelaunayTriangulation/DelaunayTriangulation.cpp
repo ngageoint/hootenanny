@@ -76,7 +76,7 @@ public:
   void EndPoints(Point2d *, Point2d *);
   QuadEdge *Qedge()
   {
-    return (QuadEdge *) (this - num);
+    return reinterpret_cast<QuadEdge *>(this - num);
   }
 
 };
@@ -729,13 +729,14 @@ bool Face::operator<(const Face& other) const
   return false;
 }
 
-void Face::operator=(const Face& other)
+Face& Face::operator=(const Face& other)
 {
   _id = other._id;
   for (int i = 0; i < 6; i++)
   {
     _edges[i] = other._edges[i];
   }
+  return *this;
 }
 
 bool Face::overlaps(const Point2d& p) const

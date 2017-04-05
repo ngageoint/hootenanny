@@ -124,7 +124,7 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
       }
     }
   }
-  catch (NeedsReviewException& ex)
+  catch (const NeedsReviewException& ex)
   {
     LOG_VART(ex.getClassName());
     _p.setReview();
@@ -224,7 +224,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
         conflicting = false;
       }
     }
-    catch (NeedsReviewException& e)
+    catch (const NeedsReviewException& e)
     {
       conflicting = true;
     }

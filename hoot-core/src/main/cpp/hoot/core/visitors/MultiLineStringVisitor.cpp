@@ -51,7 +51,6 @@ MultiLineString* MultiLineStringVisitor::createMultiLineString()
   if (_ls != 0)
   {
     return GeometryFactory::getDefaultInstance()->createMultiLineString(_ls);
-    _ls = 0;
   }
   else
   {

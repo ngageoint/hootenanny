@@ -211,7 +211,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }
@@ -250,7 +250,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }
@@ -282,7 +282,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }
@@ -303,7 +303,7 @@ public:
     {
       mapA->append(mapA);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -330,7 +330,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }

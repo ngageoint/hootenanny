@@ -74,7 +74,7 @@ public:
     {
       edgeLoc.getVertex(0.1);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

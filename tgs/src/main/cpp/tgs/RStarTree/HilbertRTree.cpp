@@ -198,10 +198,7 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
   {
     incr += weights[i];
     if (r <= incr)
-    {
       return i;
-      break;
-    }
   }
   assert(result != -1);
   return result;

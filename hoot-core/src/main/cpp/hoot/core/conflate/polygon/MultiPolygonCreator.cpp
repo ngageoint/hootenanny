@@ -205,7 +205,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
         {
           result.reset(result->Union(child.get()));
         }
-        catch (geos::util::TopologyException& e)
+        catch (const geos::util::TopologyException&)
         {
           child.reset(GeometryUtils::validateGeometry(child.get()));
           result.reset(GeometryUtils::validateGeometry(result.get()));

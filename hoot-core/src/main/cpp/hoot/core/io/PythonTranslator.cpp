@@ -127,7 +127,7 @@ bool PythonTranslator::isValidScript()
       _init();
       _initialized = true;
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
       // pass
     }

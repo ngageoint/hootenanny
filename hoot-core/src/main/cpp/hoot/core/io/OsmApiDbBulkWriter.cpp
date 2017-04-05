@@ -600,11 +600,11 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
         throw HootException("Unable to open input file: " + tempInputFile.fileName());
       }
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
       tempInputFile.close();
       _closeOutputFiles();
-      throw e;
+      throw;
     }
 
     LOG_DEBUG("Wrote contents of section " << *it);

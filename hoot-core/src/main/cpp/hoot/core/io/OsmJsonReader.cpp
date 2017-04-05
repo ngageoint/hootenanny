@@ -149,7 +149,7 @@ void OsmJsonReader::open(QString url)
       _isWeb = true;
     }
   }
-  catch (std::exception ex)
+  catch (const std::exception& ex)
   {
     ostringstream oss;
     oss << "Exception opening URL (" << url << "): " << ex.what();
@@ -228,13 +228,13 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   {
     pt::read_json(ss, _propTree);
   }
-  catch (pt::json_parser::json_parser_error e)
+  catch (const pt::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
     throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
-  catch (std::exception e)
+  catch (const std::exception& e)
   {
     QString reason = e.what();
     throw HootException("Error parsing JSON " + reason);

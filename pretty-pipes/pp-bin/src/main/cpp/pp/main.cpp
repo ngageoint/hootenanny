@@ -336,8 +336,9 @@ void terminateHandler()
   try
   {
     // try once to re-throw currently active exception
-    if (!tried_throw++)
+    if (!tried_throw)
     {
+      tried_throw = true;
       throw;
     }
   }

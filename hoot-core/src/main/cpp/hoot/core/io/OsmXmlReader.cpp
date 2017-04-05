@@ -648,7 +648,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
                 isBad = true;
               }
             }
-            catch (const HootException& e)
+            catch (const HootException&)
             {
               isBad = true;
             }

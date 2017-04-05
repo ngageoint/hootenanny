@@ -142,7 +142,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
   {
     outline.reset(outline->Union(g.get()));
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException& e)
   {
     LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
     LOG_VART(buildingMember->toString());
@@ -151,7 +151,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
     {
       outline.reset(outline->Union(cleanedGeom));
     }
-    catch (geos::util::TopologyException& e)
+    catch (const geos::util::TopologyException& e)
     {
       //couldn't clean, so mark parent relation for review (eventually we'll come up with
       //cleaning that works here)
@@ -200,7 +200,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
             {
               outline.reset(outline->Union(g.get()));
             }
-            catch (geos::util::TopologyException& e)
+            catch (const geos::util::TopologyException& e)
             {
               LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
               LOG_VART(way->toString());
@@ -209,7 +209,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
               {
                 outline.reset(outline->Union(cleanedGeom));
               }
-              catch (geos::util::TopologyException& e)
+              catch (const geos::util::TopologyException& e)
               {
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)
@@ -252,7 +252,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
             {
               outline.reset(outline->Union(g.get()));
             }
-            catch (geos::util::TopologyException& e)
+            catch (const geos::util::TopologyException& e)
             {
               LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
               LOG_VART(relation->toString());
@@ -261,7 +261,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
               {
                 outline.reset(outline->Union(cleanedGeom));
               }
-              catch (geos::util::TopologyException& e)
+              catch (const geos::util::TopologyException& e)
               {
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)

@@ -131,7 +131,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
   {
     tiePointDistances = rubberSheet->calculateTiePointDistances();
   }
-  catch (const HootException& /*e*/)
+  catch (const HootException&)
   {
     //unrecoverable error...we'll end up using the default search distance instead
   }

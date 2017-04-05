@@ -225,7 +225,7 @@ public:
       reader.open(
         ServicesDbTestUtils::getDbReadUrl(mapId).toString().replace("/" + QString::number(mapId), ""));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -246,7 +246,7 @@ public:
         ServicesDbTestUtils::getDbReadUrl(mapId).toString().replace(
           "/" + QString::number(mapId), "/" + QString::number(invalidMapId)));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

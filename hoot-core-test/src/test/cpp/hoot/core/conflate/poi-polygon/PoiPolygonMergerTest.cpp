@@ -504,7 +504,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -523,7 +523,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -542,7 +542,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -562,7 +562,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

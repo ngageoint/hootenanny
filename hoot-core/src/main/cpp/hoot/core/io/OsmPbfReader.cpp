@@ -174,7 +174,7 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
           isBad = true;
         }
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         isBad = true;
       }

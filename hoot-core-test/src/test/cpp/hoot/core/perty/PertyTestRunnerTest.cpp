@@ -415,7 +415,7 @@ public:
     {
       PertyTestRunner().setNumTestRuns(0);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -433,7 +433,7 @@ public:
     {
       testRunner.runTest("", "");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -449,7 +449,7 @@ public:
     {
       PertyTestRunner().setNumTestSimulations(0);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -471,7 +471,7 @@ public:
     {
       testRunner.runTest("", "");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -487,7 +487,7 @@ public:
     {
       PertyTestRunner().setAllowedScoreVariance(-0.1);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -499,7 +499,7 @@ public:
     {
       PertyTestRunner().setAllowedScoreVariance(1.1);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -519,7 +519,7 @@ public:
     {
       testRunner.setDynamicVariables(dynamicVariables);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -539,7 +539,7 @@ public:
     {
       testRunner.setExpectedScores(expectedScores);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

@@ -113,10 +113,10 @@ bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) 
 
     return result;
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     LOG_VART(ElementConverter(_map).convertToLineString(_map->getWay(w->getId())));
-    throw e;
+    throw;
   }
 }
 

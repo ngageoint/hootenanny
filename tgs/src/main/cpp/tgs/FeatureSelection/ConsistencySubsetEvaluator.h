@@ -59,6 +59,8 @@ namespace Tgs
   {
   public:
 
+    ConsistencySubsetEvaluator();
+
     virtual ~ConsistencySubsetEvaluator() {}
 
     /**

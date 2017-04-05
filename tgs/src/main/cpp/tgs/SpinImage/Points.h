@@ -102,7 +102,7 @@ namespace Tgs
       this->z = z;
     }
 
-    const CloudPoint& operator=(const CloudPoint& cp)
+    CloudPoint& operator=(const CloudPoint& cp)
     {
       x = cp.x;
       y = cp.y;

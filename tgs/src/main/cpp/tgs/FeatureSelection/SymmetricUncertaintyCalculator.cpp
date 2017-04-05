@@ -118,7 +118,6 @@ namespace Tgs
 
   double SymmetricUncertaintyCalculator::_calculateEntropy(const DataFrame& df, int factorIndex)
   {
-    typedef HashMap<int, int> ClassCounts;
     ClassCounts cc;
 
     for(unsigned int i = 0; i < df.getNumDataVectors(); i++)

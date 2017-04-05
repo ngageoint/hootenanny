@@ -159,7 +159,7 @@ public:
 
   bool operator==(const Face& other) const;
   bool operator<(const Face& other) const;
-  void operator=(const Face& other);
+  Face& operator=(const Face& other);
 
   std::string toString() const;
 

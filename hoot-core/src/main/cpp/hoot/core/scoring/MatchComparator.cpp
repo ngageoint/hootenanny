@@ -473,10 +473,6 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
       {
         u1.insert(uuidStr);
       }
-      else if (u2.size() == 0 && u1.size() > 0)
-      {
-        u2.insert(uuidStr);
-      }
       else
       {
         u2.insert(uuidStr);

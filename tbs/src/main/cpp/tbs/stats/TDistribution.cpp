@@ -90,7 +90,7 @@ double TDistribution::_calculateDataLogLikelihood(const Mat& m, double v)
     Mat d = (m.row(i) - _mu) * _sigma.inv() * (m.row(i) - _mu).t();
     delta[i] = d.at<double>(0);
 
-    deltaSum += log(1.0 + delta[i] / v) / 2.0;
+    deltaSum += log1p(delta[i] / v) / 2.0;
   }
   double D = m.cols;
 

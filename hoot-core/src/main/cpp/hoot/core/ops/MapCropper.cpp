@@ -241,7 +241,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
     {
       g.reset(fg->intersection(_envelopeG.get()));
     }
-    catch (geos::util::GEOSException& e)
+    catch (const geos::util::GEOSException&)
     {
       // try cleaning up the geometry and try again.
       fg.reset(GeometryUtils::validateGeometry(fg.get()));
@@ -254,7 +254,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
     {
       g.reset(fg->difference(_envelopeG.get()));
     }
-    catch (geos::util::GEOSException& e)
+    catch (const geos::util::GEOSException&)
     {
       // try cleaning up the geometry and try again.
       fg.reset(GeometryUtils::validateGeometry(fg.get()));
