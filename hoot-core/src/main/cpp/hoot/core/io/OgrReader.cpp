@@ -638,7 +638,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
           throw HootException("Unsupported geometry type.");
       }
     }
-    catch (IllegalArgumentException& e)
+    catch (const IllegalArgumentException& e)
     {
       throw IllegalArgumentException(
         "Error projecting geometry with tags: " + t.toString() + " " + e.what());
@@ -988,7 +988,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::ErrorCircular()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -1010,7 +1010,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::Accuracy()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }

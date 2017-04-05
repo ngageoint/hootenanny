@@ -66,10 +66,10 @@ void ProjectToGeographicVisitor::visit(const shared_ptr<Element>& e)
     {
       _rcf->project(&coord);
     }
-    catch(IllegalArgumentException& e)
+    catch(const IllegalArgumentException&)
     {
       LOG_ERROR("Failure projecting node: " << node->toString());
-      throw e;
+      throw;
     }
 
     node->setX(coord.x);

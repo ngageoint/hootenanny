@@ -58,7 +58,7 @@ void PaintNodesReducer::reduce(HadoopPipes::ReduceContext& context)
   const string& key = context.getInputKey();
   if (key.size() == sizeof(Pixel))
   {
-    Pixel* p = (Pixel*)(key.data());
+    const Pixel* p = reinterpret_cast<const Pixel*>(key.data());
     int sum = 0;
 
     while (context.nextValue())

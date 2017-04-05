@@ -61,6 +61,8 @@ namespace Tgs
       AllNullsException(const std::string& error) : Exception(error) {}
     };
 
+    DataFrameDiscretizer() : _df(NULL) { }
+
     /**
      * Modifies the specified data frame in place by making all numeric factors nominal.
      */

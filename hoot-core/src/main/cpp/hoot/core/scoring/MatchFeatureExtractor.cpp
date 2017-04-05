@@ -298,7 +298,7 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
           _samples.push_back(s);
         }
       }
-      catch (const NeedsReviewException& e)
+      catch (const NeedsReviewException&)
       {
         // pass don't include the bad match pairs. A classifier won't impact those situations.
       }

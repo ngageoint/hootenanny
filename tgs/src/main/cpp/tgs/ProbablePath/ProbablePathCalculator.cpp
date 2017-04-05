@@ -654,13 +654,10 @@ namespace Tgs
       
       _costSurface[index] = _tmpCost[index];
 
-      if (_destPending.find(index) != _destPending.end())
+      _destPending.erase(index);
+      if (_destPending.size() == 0)
       {
-        _destPending.erase(index);
-        if (_destPending.size() == 0)
-        {
-          return;
-        }
+        return;
       }
 
       _surround(index, _costSurface[index], q);

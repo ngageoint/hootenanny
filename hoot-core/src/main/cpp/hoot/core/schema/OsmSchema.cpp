@@ -509,7 +509,7 @@ public:
 
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
   {
-    if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp1))
+    if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp2))
     {
       return empty;
     }

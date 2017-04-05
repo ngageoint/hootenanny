@@ -174,7 +174,7 @@ void OsmPbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
           isBad = true;
         }
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         isBad = true;
       }

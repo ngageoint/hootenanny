@@ -413,7 +413,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
           cleanAndRetry = true;
         }
       }
-      catch (geos::util::GEOSException& e)
+      catch (const geos::util::GEOSException& e)
       {
         LOG_TRACE("Topology error. Attempting to fix it: " << e.what());
         cleanAndRetry = true;
@@ -428,7 +428,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
           g.reset(tmp[i]->Union(tmp[i + 1].get()));
         }
         // if the cleaning didn't fix the problem.
-        catch(geos::util::GEOSException& e)
+        catch(const geos::util::GEOSException& e)
         {
           // report an error.
           QString error = "Error unioning two geometries. " + QString(e.what()) + "\n" +

@@ -414,13 +414,13 @@ void OgrWriter::open(QString url)
   {
     _ds = OgrUtilities::getInstance().openDataSource(url);
   }
-  catch(HootException& openException)
+  catch(const HootException& openException)
   {
     try
     {
       _ds = OgrUtilities::getInstance().createDataSource(url);
     }
-    catch(HootException& createException)
+    catch(const HootException& createException)
     {
       throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
         "Creating error: \"%2\"").arg(openException.what()).arg(createException.what()));
@@ -571,7 +571,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     {
       g = ElementConverter(provider).convertToGeometry(e);
     }
-    catch (IllegalArgumentException& err)
+    catch (const IllegalArgumentException& err)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {

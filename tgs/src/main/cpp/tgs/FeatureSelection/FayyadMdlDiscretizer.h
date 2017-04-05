@@ -53,6 +53,8 @@ namespace Tgs
 
     typedef std::vector<int> SplitPoints;
 
+    FayyadMdlDiscretizer();
+
     virtual ~FayyadMdlDiscretizer() {}
 
     /**

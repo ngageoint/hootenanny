@@ -289,12 +289,12 @@ shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   {
     comparator->evaluateMatches(combinedDataToConflate, conflationCopy);
   }
-  catch (const HootException& e)
+  catch (const HootException&)
   {
     // save map modifies the map so we want to make sure comparator runs first. 'finally' would be
     // nice.
     _saveMap(conflationCopy, conflatedMapOutputPath);
-    throw e;
+    throw;
   }
 
   _saveMap(conflationCopy, conflatedMapOutputPath);

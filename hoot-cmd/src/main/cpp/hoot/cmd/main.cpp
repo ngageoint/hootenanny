@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     {
       return c->run(argv, argc);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
       cerr << "Error running " << c->getName().toStdString() << ":" << endl;
       cerr << e.what() << endl;

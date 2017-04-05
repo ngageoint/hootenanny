@@ -98,7 +98,7 @@ void ConflateCaseTest::runTest()
   {
     result = cmd.runSimple(args);
   }
-  catch(HootException& e)
+  catch(const HootException& e)
   {
     CPPUNIT_ASSERT_MESSAGE(e.what(), false);
   }
