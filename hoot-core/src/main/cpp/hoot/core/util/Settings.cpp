@@ -73,7 +73,7 @@ public:
     {
       load(is);
     }
-    catch (HootException& e)
+    catch (const HootException& e)
     {
       throw HootException("Error parsing file: " + path + ". " + e.what());
     }
@@ -87,7 +87,7 @@ public:
       pt::read_json(is, pt);
       _loadTags(pt);
     }
-    catch (std::exception e)
+    catch (const std::exception& e)
     {
       QString reason = e.what();
       throw HootException("Error parsing JSON " + reason);
@@ -419,7 +419,7 @@ void Settings::loadDefaults()
     QString localPath = ConfPath::search("LocalHoot.json");
     loadJson(localPath);
   }
-  catch (FileNotFoundException& e)
+  catch (const FileNotFoundException&)
   {
     // pass
   }

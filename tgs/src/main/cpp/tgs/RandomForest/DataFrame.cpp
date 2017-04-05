@@ -994,7 +994,7 @@ namespace Tgs
     }
   }
 
-  void DataFrame::operator=(const DataFrame& from)
+  DataFrame& DataFrame::operator=(const DataFrame& from)
   {
     try
     {
@@ -1014,6 +1014,7 @@ namespace Tgs
     {
       throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
     }
+    return *this;
   }
 
   std::vector<double> & DataFrame::operator[](unsigned int vIdx)

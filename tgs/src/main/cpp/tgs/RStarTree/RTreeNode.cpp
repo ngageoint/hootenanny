@@ -276,12 +276,12 @@ int RTreeNode::getChildUserId(int childIndex) const
 
 RTreeNode::ChildData* RTreeNode::_getChildPtr(int index) 
 {
-  return (ChildData*)(_page->getData() + _getChildSize() * index + _getHeaderSize());
+  return reinterpret_cast<ChildData*>(_page->getData() + _getChildSize() * index + _getHeaderSize());
 }
 
 const RTreeNode::ChildData* RTreeNode::_getChildPtr(int index) const
 {
-  return (ChildData*)(_page->getData() + _getChildSize() * index + _getHeaderSize());
+  return reinterpret_cast<ChildData*>(_page->getData() + _getChildSize() * index + _getHeaderSize());
 }
 
 int RTreeNode::_getChildSize() const
@@ -291,12 +291,12 @@ int RTreeNode::_getChildSize() const
 
 RTreeNode::Header* RTreeNode::_getHeader()
 {
-  return (Header*)_page->getData();
+  return reinterpret_cast<Header*>(_page->getData());
 }
 
 const RTreeNode::Header* RTreeNode::_getHeader() const
 {
-  return (const Header*)_page->getData();
+  return reinterpret_cast<Header*>(_page->getData());
 }
 
 int RTreeNode::getParentId() const

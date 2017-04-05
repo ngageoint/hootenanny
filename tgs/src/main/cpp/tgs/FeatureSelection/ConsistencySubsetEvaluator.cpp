@@ -85,6 +85,11 @@ namespace Tgs
 
   std::vector<int> BinHashFunctor::_columns;
 
+  ConsistencySubsetEvaluator::ConsistencySubsetEvaluator()
+    : _enumCnt(0)
+  {
+  }
+
   int ConsistencySubsetEvaluator::_calculateBin(double v, int column)
   {
     const DataFrame& df = _dataFrame;

@@ -63,13 +63,13 @@ void WayJoinDriver::calculateWayBounds(QString in, QString out)
 
     fs.deletePath(tmp.toStdString(), true);
   }
-  catch (HootException& e)
+  catch (const HootException&)
   {
     if (fs.exists(tmp.toStdString()))
     {
       fs.deletePath(tmp.toStdString(), true);
     }
-    throw e;
+    throw;
   }
 }
 

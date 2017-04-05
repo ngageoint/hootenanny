@@ -687,6 +687,7 @@ shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
       throw HootException("Found multiple fields with the same name. (" + fd->getName() + ")");
     }
     dfd->addField(fd);
+    names.insert(fd->getName());
   }
   newLayer->setFeatureDefinition(dfd);
 

@@ -40,7 +40,12 @@ using namespace std;
 
 namespace Tgs
 {
-  double log2 = log(2.0);
+  const double log2 = log(2.0);
+
+  FayyadMdlDiscretizer::FayyadMdlDiscretizer()
+    : _classes(NULL), _values(NULL)
+  {
+  }
 
   FayyadMdlDiscretizer::SplitPoints FayyadMdlDiscretizer::calculateSplitPoints(
     const std::vector<int>& classes, const vector<double>& values)
@@ -159,7 +164,6 @@ namespace Tgs
     HashMap<int, int> frequency;
 
     HashMap<int, int>::const_iterator it;
-    double log2 = log(2.0);
     int cnt = 0;
     for (int i = start; i < start + size; i++)
     {

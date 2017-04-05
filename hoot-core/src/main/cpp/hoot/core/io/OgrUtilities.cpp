@@ -142,8 +142,8 @@ shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url)
    */
   OgrDriverInfo driverInfo = getDriverInfo(url);
   const char* drivers[2] = { driverInfo._driverName, NULL };
-  shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(),
-    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL));
+  shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
+    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL)));
 
   if (!result)
     throw HootException("Unable to open: " + url);

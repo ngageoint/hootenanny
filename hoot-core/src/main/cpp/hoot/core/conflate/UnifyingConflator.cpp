@@ -194,7 +194,7 @@ void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
       {
         cmMatches = cm.calculateSubset();
       }
-      catch (Exception& exp)
+      catch (const Exception& exp)
       {
         LOG_WARN(exp.what());
       }
