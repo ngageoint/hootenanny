@@ -69,7 +69,10 @@ public:
           .arg(getName()));
     }
 
-    WriteOsmSqlStatementsDriver().write(args[0], args[1]);
+    WriteOsmSqlStatementsDriver driver;
+    driver.open(args[1]);
+    driver.write(args[0]);
+    driver.close();
 
     return 0;
   }
