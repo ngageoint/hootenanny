@@ -1070,19 +1070,6 @@ Geodatabase. The default is to import all layers from a FGDB.  Setting this vari
 override the filter value that can be set by the layerNameFilter function inside a translation
 script.
 
-=== ogr.mgcp.extra
-
-* Data Type: string
-* Default Value: `file`
-
-When exporting to MGCP:
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "note" Add unused tags to the "TXT" field.
-- "none" Don't save the unused tags, just drop them.
-
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
-255 characters. Extra text will be truncated.
-
 === ogr.reader.bounding.box
 
 * Data Type: string
@@ -1192,7 +1179,8 @@ When exporting to MGCP:
 - "file" Save the unused tags in a new layer (extra_[PLA]).
 - "none" Don't save the unused tags, just drop them.
 
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of 255 characters. Extra text will be truncated.
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
+255 characters. Extra text will be truncated.
 
 === ogr.thematic.structure
 
