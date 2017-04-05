@@ -41,9 +41,9 @@ class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
+  static string className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
 
-  RemoveInvalidReviewRelationsVisitor();
+  RemoveInvalidMultilineStringMembersVisitor();
 
   virtual void visit(const ElementPtr& e);
 
