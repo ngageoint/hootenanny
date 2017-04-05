@@ -1662,6 +1662,65 @@ tds = {
             attrs.UFI = createUuid().replace('{','').replace('}','');
         }
 
+        // Add Weather Restrictions to transportation features
+        if (['AP010','AP030','AP050'].indexOf(attrs.FCODE > -1) && !attrs.ZI016_WTC )
+        {
+            switch (tags.highway)
+            {
+                case 'motorway':
+                case 'motorway_link':
+                case 'trunk':
+                case 'trunk_link':
+                case 'primary':
+                case 'primary_link':
+                case 'secondary':
+                case 'secondary_link':
+                case 'tertiary':
+                case 'tertiary_link':
+                case 'residential':
+                case 'unclassified':
+                    attrs.ZI016_WTC = '1'; // All weather
+                    break;
+
+                case 'track':
+                    attrs.ZI016_WTC = '4'; // Limited All-weather
+                    break;
+
+                case 'path':
+                    attrs.ZI016_WTC = '2'; // Fair Weather
+                    break;
+            }
+
+            // Use the road surface to possibly override the classification.
+            // We are assumeing that unpaved roads are Fair Weather only
+            switch (attrs.ZI016_ROC)
+            {
+                case undefined: // Break early if no value
+                    break;
+
+                case '1': // Unimproved
+                    attrs.ZI016_WTC = '2'; // Fair Weather
+                    break;
+
+                case '2': // Stabilized Earth
+                case '4': // Gravel
+                    attrs.ZI016_WTC = '4'; // Limited All-weather
+                    break;
+
+                case '17': // Ice
+                case '18': // Snow
+                    attrs.ZI016_WTC = '3'; // Winter Only
+                    break;
+
+                case '999': // Other
+                    attrs.ZI016_WTC = '-999999'; // No Information
+                    break;
+
+                default:
+                    attrs.ZI016_WTC = '1' // All Weather
+            }
+        }
+
         // Custom Road rules
         // - Fix the "highway=" stuff that cant be done in the one2one rules
         if (attrs.F_CODE == 'AP030')
