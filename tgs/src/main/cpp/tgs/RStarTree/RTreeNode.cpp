@@ -362,4 +362,3 @@ void RTreeNode::updateChildEnvelope(int index, const Box& envelope)
   BoxInternalData bid(_dimensions, _getChildPtr(index)->getBox(), envelope);
   _page->setDirty();
 }
-
