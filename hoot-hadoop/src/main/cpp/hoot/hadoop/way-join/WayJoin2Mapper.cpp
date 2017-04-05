@@ -61,7 +61,7 @@ void WayJoin2Mapper::_emitNode(const shared_ptr<Node>& n)
 {
   _nodeMap->addNode(n);
 
-  if (_nodeMap->getNodeMap().size() >= 100000)
+  if (_nodeMap->getNodes().size() >= 100000)
   {
     _flushNodes();
   }
@@ -71,9 +71,9 @@ void WayJoin2Mapper::_flushNodes()
 {
   // this map should only contain nodes.
   assert(_nodeMap->getWays().size() == 0);
-  if (_nodeMap->getNodeMap().size() > 0)
+  if (_nodeMap->getNodes().size() > 0)
   {
-    LOG_INFO("Flushing nodes. " << _nodeMap->getNodeMap().size());
+    LOG_INFO("Flushing nodes. " << _nodeMap->getNodes().size());
     _key->elementType = NodesType;
     _key->id = Tgs::Random::instance()->generateInt();
     stringstream ss(stringstream::out);
@@ -141,7 +141,7 @@ void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
 
   _key->elementType = NodesType;
   // Go through all the nodes
-  const NodeMap& nm = m->getNodeMap();
+  const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     // add this node onto a map. Since the nodes aren't very important at this stage we'll just

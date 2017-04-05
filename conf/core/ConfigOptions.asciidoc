@@ -136,11 +136,10 @@ The maximum allowed element size of an OSM changeset written to an OSM API datab
 
 === changeset.user.id
 
-* Data Type: double
-* Default Value: `1`
+* Data Type: long
+* Default Value: `-1`
 
-The user ID used when writing to an OSM API database used by changeset writers and the
-PostgresqlDumpFileWriter.
+The user ID used by certain changeset writers when writing to an OSM API database.
 
 === circular.error.default.value
 
@@ -1237,7 +1236,83 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osm.changeset.sql.writer.generate.new.ids
+=== osmapidb.bulk.writer.file.output.element.buffer.size
+
+* Data Type: long
+* Default Value: `100000`
+
+Maximum number of elements to keep in memory when serializing input elements to a file output
+before they are written to an OSM API database.  If you have enough memory available and the
+dataset you are writing is significantly larger than the value of this setting, you may be able to
+increase the input file parsing performance by raising this value.  This setting has no impact on
+the performance of writing records to a database, only on the input data parsing done beforehand.
+
+=== osmapidb.bulk.writer.file.output.status.update.interval
+
+* Data Type: long
+* Default Value: `1000000`
+
+Count at which the parse status of each element type should be logged when writing to them to
+files.  e.g. With a value of 100, you will see a load status update message logged for every 100
+elements parsed or file lines written.  This setting will have a negative impact on performance
+if set to a very low value.
+
+=== osmapidb.bulk.writer.output.files.copy.location
+
+* Data Type: string
+* Default Value: ``
+
+Use this option if you wish to retain the file data generated during an OSM API database write.
+This option is not needed and will be ignored if writing OSM data to a SQL file that will be
+applied/written to an OSM API database at a later time.  If this option is populated, any file data
+files generated as a result of executing the hoot convert command with an OSM API database target
+are copied to the specified location.  This option should be set to a full file path to a SQL
+file (.sql).
+
+=== osmapidb.bulk.writer.reserve.record.ids.before.writing.data
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writer will update the database to reserve the range of record IDs
+parsed from the input data *before* writing the data to output.  IMPORTANT:  This option should
+always be enabled in online environments (other writers present).  If it is not enabled in online
+environments, the risk of record ID conflicts will be present in the database.  The output
+destination must be an OSM API database or this setting will always be treated as being "false".
+If the output destination is a SQL file, the SQL statements to update the record IDs will be
+written to the SQL output for later execution.
+
+=== osmapidb.bulk.writer.starting.node.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Use
+this when working with an offline database and know the ID range you want to assign to node records.
+This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to
+true.
+
+=== osmapidb.bulk.writer.starting.way.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written ways when writing to an OSM API database or SQL file.  Use
+this when working with an offline database and know the ID range you want to assign to way records.
+This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to
+true.
+
+=== osmapidb.bulk.writer.starting.relation.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written relations when writing to an OSM API database or SQL file.  Use
+this when working with an offline database and know the ID range you want to assign to relation
+records.  This option is ignored if "osmapidb.bulk.writer.reserve.record.ids.before.writing.data"
+is set to true.
+
+=== osm.changeset.sql.file.writer.generate.new.ids
 
 * Data Type: bool
 * Default Value: `true`
@@ -1708,74 +1783,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== postgresql.dumpfile.writer.auto.calc.ids
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then the OSM API database ingest operation will check the ID sequences of the target
-database (one time only) to determine the starting changeset and element ID's to use for the entire
-write operation.  Enabling this setting precludes a user from having to specify the
-"postgresql.dumpfile.writer.start.id.*" configuration options (it overrides them).  This setting
-must be used in conjunction with the "osmapidb.id.aware.url" setting.  IMPORTANT: This setting
-should only be enabled in situations where a single user is writing to the target OSM API database
-(database is offline).  Since the command does not continually check for the next available ID
-(for performance reasons), ID conflict errors may occur if multiple users are writing to the
-database simultaneously when this option is enabled.
-
-=== postgresql.dumpfile.writer.element.status.count.interval
-
-* Data Type: long
-* Default Value: `100000`
-
-Count at which the load status of each element type should be logged by the PostgresqlDumpfileWriter.
-e.g. With a value of 100000, you will see a element load status update message for every 100000
-elements parsed.
-
-=== postgresql.dumpfile.writer.start.id.changeset
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for changesets created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.node
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for nodes created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.relation
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for relations created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.way
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for ways created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.user.email
-
-* Data Type: string
-* Default Value: ``
-
-If this value is set, the generated dumpfile will insert statements that add a user with the
-specified email address to the database.
-
-=== postgresql.dumpfile.writer.user.id
-
-* Data Type: int
-* Default Value: `1`
-
-If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the
-database will be assigned the user id set by this field.
-
 === progress.reporting.format
 
 * Data Type: string
@@ -1962,9 +1969,8 @@ a new map is written.
 * Data Type: string
 * Default Value: ``
 
-This is required when using either the OsmApiDbAwareHootApiDbReader, OsmApiDbAwareHootApiDbWriter,
-or PostgresqlDumpfileWriter with the postgresql.dumpfile.writer.auto.calc.ids=true setting.  It
-forces database reading/writing use the specified OSM API database as master for determining the
+This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter 
+It forces database reading/writing use the specified OSM API database as master for determining the 
 sequencing of element ID's.
 
 === remove.attribute.visitor.types
@@ -2256,7 +2262,7 @@ Hootenanny will only use Greedy Constrained Matches.
 === unify.optimizer.time.limit
 
 * Data Type: double
-* Default Value: `30`
+* Default Value: `60`
 
 The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes
 the wait time limit unlimited.

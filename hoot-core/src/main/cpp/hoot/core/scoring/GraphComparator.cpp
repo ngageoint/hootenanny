@@ -330,7 +330,7 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
 void GraphComparator::_exportGraphImage(shared_ptr<OsmMap> map, DirectedGraph& /*graph*/,
                                         ShortestPath& sp, QString path)
 {
-  const NodeMap& nodes = map->getNodeMap();
+  const NodeMap& nodes = map->getNodes();
 
   double maxCost = 1e-100;
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)

@@ -31,7 +31,7 @@
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 #include <hoot/core/OsmMap.h>
 
 // Pretty Pipes
@@ -133,7 +133,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
   }
-  LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
+  LOG_INFO("Got map. Node count: " << map->getNodes().size() << " way count: " <<
     map->getWays().size());
   Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
@@ -177,7 +177,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     }
   }
 
-  LOG_INFO("Result before way splitting. Node count: " << map->getNodeMap().size() <<
+  LOG_INFO("Result before way splitting. Node count: " << map->getNodes().size() <<
            " way count: " << map->getWays().size());
 
   MapProjector::projectToWgs84(map);
@@ -208,7 +208,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     }
 # endif
 
-  LOG_INFO("Result map. Node count: " << map->getNodeMap().size() << " way count: " <<
+  LOG_INFO("Result map. Node count: " << map->getNodes().size() << " way count: " <<
     map->getWays().size());
 
   _emitMap(map);
@@ -295,7 +295,7 @@ shared_ptr<OsmMap> TileOpReducer::_readMap(const string& value)
   reader.setUseFileStatus(true);
   reader.parse(&ss, result);
 //  LOG_INFO("Read map. value size: " << value.size() << " node count: " <<
-//    result->getNodeMap().size() << " way count: " << result->getWays().size());
+//    result->getNodes().size() << " way count: " << result->getWays().size());
 
   return result;
 }
@@ -321,7 +321,7 @@ void TileOpReducer::reduce(HadoopPipes::ReduceContext& context)
     while (context.nextValue())
     {
       shared_ptr<OsmMap> map = _readMap(context.getInputValue());
-      LOG_INFO("Passing dregs. Node Count: " << map->getNodeMap().size() << " Way Count: " <<
+      LOG_INFO("Passing dregs. Node Count: " << map->getNodes().size() << " Way Count: " <<
                map->getWays().size());
       _emitMap(map);
     }

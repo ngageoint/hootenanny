@@ -577,7 +577,7 @@ public:
     reader.read("test-files/ToyTestA.osm", map);
 
     /*
-    const OsmMap::NodeMap displayNodes = map->getNodeMap();
+    const OsmMap::NodeMap displayNodes = map->getNodes();
     for ( OsmMap::NodeMap::const_iterator nodeIter = displayNodes.constBegin();
           nodeIter != displayNodes.constEnd(); ++nodeIter )
     {
@@ -617,7 +617,7 @@ public:
     // Original data had nodes -1 through -36.  Make sure that even-numbered nodes -2 through
     //  -20 are gone
 
-    const NodeMap nodes = map->getNodeMap();
+    const NodeMap nodes = map->getNodes();
     CPPUNIT_ASSERT_EQUAL(26, (int)nodes.size());
     for ( NodeMap::const_iterator nodeIter = nodes.begin();
           nodeIter != nodes.end(); ++nodeIter )
@@ -684,7 +684,7 @@ public:
     }
 
     // Make sure relations were updated properly
-    RelationMap checkRelations = map->getRelationMap();
+    RelationMap checkRelations = map->getRelations();
     i = 0;
     CPPUNIT_ASSERT(5 == checkRelations.size());
 

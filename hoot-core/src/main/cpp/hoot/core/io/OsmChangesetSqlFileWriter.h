@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCHANGESETSQLWRITER_H
-#define OSMCHANGESETSQLWRITER_H
+#ifndef OSMCHANGESETSQLFILEWRITER_H
+#define OSMCHANGESETSQLFILEWRITER_H
 
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
@@ -49,13 +49,13 @@ namespace hoot
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
  */
-class OsmChangesetSqlWriter : public Configurable
+class OsmChangesetSqlFileWriter : public Configurable
 {
 
 public:
 
-  OsmChangesetSqlWriter(QUrl url);
-  ~OsmChangesetSqlWriter();
+  OsmChangesetSqlFileWriter(QUrl url);
+  ~OsmChangesetSqlFileWriter();
 
   /**
    * Write a SQL changeset to the specified output path
@@ -103,6 +103,8 @@ private:
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 
+  void setChangesetUserId(long id) { _changesetUserId = id; }
+
   OsmApiDb _db;
   QFile _outputSql;
 
@@ -114,10 +116,10 @@ private:
   double _changesetUserId;
   bool _changesetGenerateNewIds;
 
-  friend class ServiceOsmApiDbChangesetSqlWriterTest;
+  friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 
 };
 
 }
 
-#endif // OSMCHANGESETSQLWRITER_H
+#endif // OSMCHANGESETSQLFILEWRITER_H

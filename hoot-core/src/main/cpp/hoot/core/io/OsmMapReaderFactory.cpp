@@ -52,22 +52,6 @@ OsmMapReaderFactory& OsmMapReaderFactory::getInstance()
   return *_theInstance;
 }
 
-bool OsmMapReaderFactory::hasReader(QString url)
-{
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
-  bool result = false;
-  for (size_t i = 0; i < names.size() && !result; ++i)
-  {
-    shared_ptr<OsmMapReader> reader(Factory::getInstance().constructObject<OsmMapReader>(names[i]));
-    if (reader->isSupported(url))
-    {
-      result = true;
-    }
-  }
-  return result;
-}
-
 bool OsmMapReaderFactory::hasElementInputStream(QString url)
 {
   bool result = false;
@@ -148,7 +132,7 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
 void OsmMapReaderFactory::read(shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
                                Status defaultStatus)
 {
-  LOG_INFO("Loading map from " << url << " ...");
+  LOG_INFO("Loading map from " << url << "...");
   shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
   reader->open(url);

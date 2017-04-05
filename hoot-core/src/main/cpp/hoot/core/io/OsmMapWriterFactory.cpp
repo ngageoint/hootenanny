@@ -53,7 +53,10 @@ OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
 
 shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
+  LOG_VART(url);
+
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
+  LOG_VART(writerOverride);
 
   shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
@@ -65,10 +68,11 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
     Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
+    LOG_VART(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
     if (writer->isSupported(url))
     {
-      LOG_DEBUG("Using writer: " << names[i]);
+      LOG_DEBUG("Using output writer: " << names[i]);
     }
     else
     {
@@ -97,45 +101,12 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-
-bool OsmMapWriterFactory::hasPartialWriter(QString url)
-{
-  bool result = false;
-  shared_ptr<OsmMapWriter> writer = createWriter(url);
-  shared_ptr<PartialOsmMapWriter> streamWriter = dynamic_pointer_cast<PartialOsmMapWriter>(writer);
-  if (streamWriter)
-  {
-    result = true;
-  }
-
-  return result;
-}
-
-bool OsmMapWriterFactory::hasWriter(QString url)
-{
-  vector<std::string> names = Factory::getInstance().getObjectNamesByBase(
-    OsmMapWriter::className());
-
-  bool result = false;
-  for (size_t i = 0; i < names.size() && !result; ++i)
-  {
-    shared_ptr<OsmMapWriter> writer(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
-    if (writer->isSupported(url))
-    {
-      result = true;
-    }
-  }
-
-  return result;
-}
-
 void OsmMapWriterFactory::write(const shared_ptr<const OsmMap>& map, QString url)
 {
-  LOG_INFO("Writing map to " << url);
+  LOG_INFO("Writing map to " << url << "...");
   shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
   writer->open(url);
   writer->write(map);
 }
-
 
 }

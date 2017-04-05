@@ -28,7 +28,6 @@ package hoot.services.controllers.info;
 
 
 import static hoot.services.HootProperties.HOME_FOLDER;
-import static hoot.services.HootProperties.RPT_STORE_PATH;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -51,8 +50,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
@@ -67,9 +66,9 @@ public class ReportsResourceTest extends HootServicesJerseyTestAbstract {
         FileUtils.forceMkdir(homeFolder);
         assertTrue(homeFolder.exists());
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
-        HootCustomPropertiesSetter.setProperty("REPORTS_PATH", homeFolder.getAbsolutePath() + "/" + RPT_STORE_PATH, ReportsResource.class);
+        HootCustomPropertiesSetter.setProperty("RPT_STORE_PATH", homeFolder.getAbsolutePath() + "/" + "reports");
 
-        storePath = HOME_FOLDER + "/" + RPT_STORE_PATH;
+        storePath = homeFolder.getAbsolutePath() + "/" + "reports";
         File dir = new File(storePath);
         FileUtils.forceMkdir(dir);
     }

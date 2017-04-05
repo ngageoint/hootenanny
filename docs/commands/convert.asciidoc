@@ -3,9 +3,10 @@
 === Description
 
 The +convert+ command converts from one input format to another. This does not
-perform any translation, only conversion. Process is memory bound. Convert from
-one input format to another. Please see ogr2osm and osm2shp for a description of
-conversions between tabular formats and OSM. The supported formats are:
+perform any translation, only conversion.  The process may be memory bound, 
+depending upon the formats selected (see below). Convert from one input format 
+to another. Please see ogr2osm and osm2shp for a description of conversions 
+between tabular formats and OSM.  Input parameters:
 
 * +input+ - Input (e.g. .osm file).
 * +output+ - Output file (e.g. .osm file).
@@ -19,6 +20,42 @@ output.
 --------------------------------------
 convert (input) (output)
 --------------------------------------
+
+=== Supported Formats
+
+The supported input formats are:
+
+* OpenStreetMap XML (.osm)
+* Shapefile (.shp)
+* ESRI File Geodatabase (.gdb)
+* Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
+* OpenStreetMap Protocol Buffers (.osm.pbf)
+* OpenStreetMap JSON file (.json; similar to Overpass JSON)
+* geonames.org (.geonames)
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
+
+The following input formats are memory bound: .osm, .shp, .json, and osmapidb://.
+
+The supported output formats are:
+
+* OpenStreetMap XML file (.osm)
+* Shapefile (.shp)
+* ESRI File Geodatabase (.gdb)
+* OpenStreetMap Protocol Buffers file (.osm.pbf)
+* OpenStreetMap JSON file (.json; similar to Overpass JSON)
+* Hootenanny API Database (hootapidb://)
+* OpenStreetMap API Database (osmapidb://)
+
+The following output formats are memory bound: .osm, .shp, .pbf, .json.
+
+=== Database URL Format
+
+The format for database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
+
+=== Notes
+
+* Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on existing data).
 
 === See Also
 

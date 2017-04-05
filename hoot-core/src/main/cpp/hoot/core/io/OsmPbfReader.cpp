@@ -1211,9 +1211,9 @@ bool OsmPbfReader::hasMoreElements()
   //see if we've iterated through all of the elements
   else
   {
-    if (_partialNodesRead < int(_map->getNodeMap().size()) ||
+    if (_partialNodesRead < int(_map->getNodes().size()) ||
         _partialWaysRead < int(_map->getWays().size()) ||
-        _partialRelationsRead < int(_map->getRelationMap().size()))
+        _partialRelationsRead < int(_map->getRelations().size()))
     {
       return true;
     }
@@ -1230,9 +1230,9 @@ shared_ptr<Element> OsmPbfReader::readNextElement()
 
   //if this is the first time through, or we've run out of an element buffer to read from
   if (!_firstPartialReadCompleted ||
-      (_partialNodesRead == int(_map->getNodeMap().size()) &&
+      (_partialNodesRead == int(_map->getNodes().size()) &&
         _partialWaysRead == int(_map->getWays().size()) &&
-        _partialRelationsRead == int(_map->getRelationMap().size())))
+        _partialRelationsRead == int(_map->getRelations().size())))
   {
     if (!_firstPartialReadCompleted)
     {
@@ -1249,9 +1249,9 @@ shared_ptr<Element> OsmPbfReader::readNextElement()
 
     parseBlob(_blobs[_blobIndex++], _in, _map);
 
-    _nodesItr = _map->getNodeMap().begin();
+    _nodesItr = _map->getNodes().begin();
     _waysItr = _map->getWays().begin();
-    _relationsItr = _map->getRelationMap().begin();
+    _relationsItr = _map->getRelations().begin();
 
     _firstPartialReadCompleted = true;
   }
@@ -1276,7 +1276,7 @@ shared_ptr<Element> OsmPbfReader::readNextElement()
   //there's possibly a way to read the element in one code block instead of three...just wasn't
   //able to get it to work yet
   shared_ptr<Element> element;
-  if (_partialNodesRead < int(_map->getNodeMap().size()))
+  if (_partialNodesRead < int(_map->getNodes().size()))
   {
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
@@ -1292,7 +1292,7 @@ shared_ptr<Element> OsmPbfReader::readNextElement()
     _waysItr++;
     _partialWaysRead++;
   }
-  else if (_partialRelationsRead < int(_map->getRelationMap().size()))
+  else if (_partialRelationsRead < int(_map->getRelations().size()))
   {
     element.reset(new Relation(*_relationsItr->second.get()));
     _relationsItr++;

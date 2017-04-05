@@ -77,12 +77,14 @@ protected:
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator,
-                                                 const OsmMap& map);
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
   virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
 private:
+
+  //for white box testing
+  friend class ServiceOsmApiDbBulkWriterTest;
 
   shared_ptr<OsmApiDb> _database;
   shared_ptr<QSqlQuery> _elementResultIterator;

@@ -19,7 +19,7 @@
 
 // Hoot
 #include <hoot/core/conflate/NodeReplacements.h>
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Reducer.h>

@@ -199,9 +199,9 @@ public:
     reader.read(map);
 
     HOOT_STR_EQUALS("[5]{-5, -4, -3, -2, -1}",
-      getKeys(map->getNodeMap().begin(), map->getNodeMap().end()));
+      getKeys(map->getNodes().begin(), map->getNodes().end()));
     HOOT_STR_EQUALS("[2]{-2, -1}",
-      getKeys(map->getRelationMap().begin(), map->getRelationMap().end()));
+      getKeys(map->getRelations().begin(), map->getRelations().end()));
     HOOT_STR_EQUALS("[3]{-3, -2, -1}", getKeys(map->getWays().begin(), map->getWays().end()));
 
     HOOT_STR_EQUALS("[1]{-2}", map->getWay(-3)->getNodeIds());
@@ -257,7 +257,7 @@ public:
   {
     //nodes
 
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
 
     shared_ptr<Node> node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
@@ -376,7 +376,7 @@ public:
 
     //relations
 
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
     shared_ptr<Relation> relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
@@ -422,7 +422,7 @@ public:
   {
     //nodes
 
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
 
     shared_ptr<Node> node = map->getNode(3);
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
@@ -492,10 +492,10 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(
       chunkSize,
-      (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodeMap().size());
+      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     shared_ptr<Node> node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
@@ -540,10 +540,10 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(
       chunkSize,
-      (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
+      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     node = map->getNode(4);
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
@@ -590,10 +590,10 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(
       chunkSize,
-      (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     way = map->getWay(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown2, way->getStatus().getEnum());
@@ -647,10 +647,10 @@ public:
     reader.readPartial(map);
     CPPUNIT_ASSERT_EQUAL(
       1,
-      (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+      (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
 
     relation = map->getRelation(2);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
@@ -689,9 +689,9 @@ public:
 
     //See explanations for these assertions in ServiceOsmApiDbReaderTest::runReadByBoundsTest
     //(exact same input data)
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
 
     //We need to drop to set all the element changeset tags here to empty, which will cause them
     //to be dropped from the file output.  If they aren't dropped, they will increment with each
@@ -719,9 +719,9 @@ public:
     map.reset(new OsmMap());
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();
   }

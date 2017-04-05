@@ -29,7 +29,7 @@
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
@@ -152,7 +152,7 @@ void WayJoin2Reducer::_writeNodes(HadoopPipes::ReduceContext& context)
     Debug::printTroubled(_map);
 
     LOG_INFO("map data size: " << context.getInputValue().size());
-    LOG_INFO("Writing nodes: " << _map->getNodeMap().size());
+    LOG_INFO("Writing nodes: " << _map->getNodes().size());
     _writer->emitRecord(_map);
     LOG_INFO("Wrote nodes.");
   }
@@ -222,11 +222,11 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
   const vector<long>& nids = w->getNodeIds();
   nodeIds.insert(nids.begin(), nids.end());
   // if the way has all the intended nodes.
-  if (_map->getNodeMap().size() == nodeIds.size())
+  if (_map->getNodes().size() == nodeIds.size())
   {
     QList<long> tempNodes;
-    for (NodeMap::const_iterator it = _map->getNodeMap().begin();
-      it != _map->getNodeMap().end(); ++it)
+    for (NodeMap::const_iterator it = _map->getNodes().begin();
+      it != _map->getNodes().end(); ++it)
     {
       tempNodes.append(it->first);
     }

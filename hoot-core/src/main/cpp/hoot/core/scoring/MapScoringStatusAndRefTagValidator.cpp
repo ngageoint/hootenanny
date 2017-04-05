@@ -31,7 +31,6 @@
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/SingleStatistic.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 
@@ -46,29 +45,23 @@ bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& m
 {
   //if first map has any element with a hoot::status = Unknown1 tag and a tag with key = REF2,
   //then fail
-  FilteredVisitor unknown1Visitor(
-    new ChainCriterion(
-      new StatusCriterion(Status::Unknown1),
-      new TagKeyCriterion(MetadataTags::Ref2())),
-    new ElementCountVisitor());
-  FilteredVisitor& filteredRefVisitor = const_cast<FilteredVisitor&>(unknown1Visitor);
-  SingleStatistic* singleStat = dynamic_cast<SingleStatistic*>(&unknown1Visitor.getChildVisitor());
-  assert(singleStat != 0);
-  map->visitRo(filteredRefVisitor);
-  const long numFirstInputBadTags = singleStat->getStat();
+  const long numFirstInputBadTags =
+    (int)FilteredVisitor::getStat(
+      new ChainCriterion(
+        new StatusCriterion(Status::Unknown1),
+        new TagKeyCriterion(MetadataTags::Ref2())),
+      new ElementCountVisitor(),
+      map);
 
   //if second map has any element with a hoot::status = Unknown2 tag and a tag with key = REF1,
   //then fail
-  FilteredVisitor unknown2Visitor(
-    new ChainCriterion(
-      new StatusCriterion(Status::Unknown2),
-      new TagKeyCriterion(MetadataTags::Ref1())),
-    new ElementCountVisitor());
-  filteredRefVisitor = const_cast<FilteredVisitor&>(unknown2Visitor);
-  singleStat = dynamic_cast<SingleStatistic*>(&unknown2Visitor.getChildVisitor());
-  assert(singleStat != 0);
-  map->visitRo(filteredRefVisitor);
-  const long numSecondInputBadTags = singleStat->getStat();
+  const long numSecondInputBadTags =
+    (int)FilteredVisitor::getStat(
+      new ChainCriterion(
+        new StatusCriterion(Status::Unknown2),
+        new TagKeyCriterion(MetadataTags::Ref1())),
+      new ElementCountVisitor(),
+      map);
 
   return (numFirstInputBadTags + numSecondInputBadTags) == 0;
 }

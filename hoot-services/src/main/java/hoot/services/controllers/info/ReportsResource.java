@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.info;
 
-import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.RPT_STORE_PATH;
 
 import java.io.File;
@@ -62,8 +61,6 @@ import org.springframework.stereotype.Controller;
 public class ReportsResource {
     private static final Logger logger = LoggerFactory.getLogger(ReportsResource.class);
 
-    private static final String REPORTS_PATH = HOME_FOLDER + "/" + RPT_STORE_PATH;
-
     public ReportsResource() {}
 
     /**
@@ -87,8 +84,7 @@ public class ReportsResource {
             report = getReportFile(id);
         }
         catch (Exception e) {
-            String msg = "Error returning report with id = " + id + ", reportname = "  + name +
-                    ".  Cause: " + e.getMessage();
+            String msg = "Error returning report with id = " + id + ", reportname = "  + name + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -143,13 +139,13 @@ public class ReportsResource {
         boolean wasDeleted;
 
         try {
-            File folder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, reportId);
-            if ((folder != null) && folder.exists()) {
+            File folder = new File(RPT_STORE_PATH, reportId);
+            if (folder.exists()) {
                 FileUtils.forceDelete(folder);
                 wasDeleted = true;
             }
             else {
-                String msg = "Folder with id = " + reportId + " under " + REPORTS_PATH + " wasn't found!";
+                String msg = "Folder with id = " + reportId + " under " + RPT_STORE_PATH + " wasn't found!";
                 throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(msg).build());
             }
         }
@@ -172,16 +168,11 @@ public class ReportsResource {
     private static JSONObject getMetaData(String id) throws IOException, ParseException {
         JSONObject metadata = new JSONObject();
 
-        File metaFolder = hoot.services.utils.FileUtils.getSubFolderFromFolder(REPORTS_PATH, id);
-
-        if (metaFolder != null) {
-            String metaDataPath = REPORTS_PATH + "/" + id + "/meta.data";
-            File file = new File(metaDataPath);
-            if (file.exists()) {
-                String meta = FileUtils.readFileToString(file, "UTF-8");
-                JSONParser p = new JSONParser();
-                metadata = (JSONObject) p.parse(meta);
-            }
+        File file = new File(new File(RPT_STORE_PATH, id), "meta.data");
+        if (file.exists()) {
+            String meta = FileUtils.readFileToString(file, "UTF-8");
+            JSONParser p = new JSONParser();
+            metadata = (JSONObject) p.parse(meta);
         }
 
         return metadata;
@@ -193,7 +184,7 @@ public class ReportsResource {
         // sort by name
         Map<String, JSONObject> sorted = new TreeMap<>();
 
-        File dir = new File(REPORTS_PATH);
+        File dir = new File(RPT_STORE_PATH);
         if (dir.exists()) {
             List<File> files = (List<File>) FileUtils.listFilesAndDirs(dir, new NotFileFilter(TrueFileFilter.INSTANCE),
                     DirectoryFileFilter.DIRECTORY);
@@ -202,7 +193,7 @@ public class ReportsResource {
                     if (file.isDirectory()) {
                         String id = file.getName();
                         String absPath = file.getAbsolutePath();
-                        if (!absPath.equals(REPORTS_PATH)) {
+                        if (!absPath.equals(RPT_STORE_PATH)) {
                             JSONObject meta = getMetaData(id);
                             meta.put("id", id);
                             sorted.put(meta.get("name").toString(), meta);

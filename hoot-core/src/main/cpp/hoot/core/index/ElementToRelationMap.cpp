@@ -175,7 +175,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
 
       // first check to see that this element maps to the right relations.
       const set<long>& mappedRelations = _mapping.getRelationByElement(ElementId(type, id));
-      const RelationMap& relationMap = _map.getRelationMap();
+      const RelationMap& relationMap = _map.getRelations();
       for (RelationMap::const_iterator it = relationMap.begin(); it != relationMap.end(); ++it)
       {
         bool inMappedRelation = mappedRelations.find(it->first) != mappedRelations.end();

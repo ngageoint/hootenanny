@@ -48,7 +48,6 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
-
 namespace hoot
 {
 
@@ -65,13 +64,8 @@ public:
 
   void setUp()
   {
-    _deleteData();
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
   }
-
-//  void tearDown()
-//  {
-//    _deleteData();
-//  }
 
   void insertData()
   {
@@ -138,7 +132,7 @@ public:
   void verifyFullReadOutput(shared_ptr<OsmMap> map)
   {
     //nodes
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     HOOT_STR_EQUALS(true, map->containsNode(1));
     shared_ptr<Node> node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
@@ -210,13 +204,13 @@ public:
     //requested bounds, but one of them is referenced by a way within the bounds and the other by a
     //relation within the bounds.  The node not returned is outside of the requested bounds and not
     //reference by any other element.
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
     //All but one of the five ways should be returned.  The way not returned contains all nodes
     //that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
     //All but one of the six relations should be returned.  The relation not returned contains all
     //members that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
 
     QDir().mkpath("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
@@ -232,21 +226,11 @@ public:
     map.reset(new OsmMap());
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();
-  }
-
-private:
-
-  void _deleteData()
-  {
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    database.deleteData();
-    database.close();
   }
 };
 

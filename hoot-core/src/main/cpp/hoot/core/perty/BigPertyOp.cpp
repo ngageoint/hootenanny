@@ -63,7 +63,7 @@ void BigPertyOp::apply(shared_ptr<OsmMap>& map)
   const QString pertiedStr(MetadataTags::HootPertied());
   const QString trueStr("true");
 
-  const NodeMap& nm = map->getNodeMap();
+  const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     NodePtr n = it->second;

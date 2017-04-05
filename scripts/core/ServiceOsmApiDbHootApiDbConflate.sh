@@ -3,7 +3,7 @@ set -e
 
 # This is a base test script for conflating datasets where one dataset comes from an osm api database and the other from 
 # a hoot api database.  It simulates end to end at the command line level what one possible conflation workflow with MapEdit data 
-# looks like.  See ServiceOsmApiDbAllDataTypesConflateTest.sh for an example of how to call this script.
+# looks like.  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an example of how to call this script.
 # 
 # This script:
 #   - writes two datasets, one to an OSM API database and one to a Hoot API database; assumes the two have overlapping aoi's 
@@ -36,9 +36,7 @@ export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NA
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true"
-#-D writer.include.debug=true
-#-D conflate.add.score.tags=true
+export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true"
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
@@ -48,8 +46,7 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   echo ""
   echo "STEP 1: Cleaning out the osm api db and initializing it for use..."
   echo ""
-  source scripts/database/SetupOsmApiDB.sh force
-  psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
+  scripts/database/CleanAndInitializeOsmApiDb.sh
 
   echo ""
   echo "STEP 2: Writing the complete reference dataset to the osm api db..."
@@ -59,12 +56,10 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
     hoot convert $HOOT_OPTS $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   else
     cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
-  fi
-  # By default, all of these element ID's will be written starting at 1 by the postgres dump file writer.  
+  fi 
   # By using reader.preserve.all.tags=true, we're forcing the hoot xml file reader to preserve all tags here, such as 'accuracy', 
   # 'type', etc., to simulate the data that would likely be coming from an osm api db.
-  hoot convert $HOOT_OPTS $OUTPUT_DIR/2-ref-raw-complete.osm $OUTPUT_DIR/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql
-  psql --quiet $OSM_API_DB_AUTH -d $DB_NAME_OSMAPI -f $OUTPUT_DIR/2-ref-raw-complete-ToBeAppliedToOsmApiDb.sql
+  hoot convert $HOOT_OPTS -D osmapidb.bulk.writer.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -135,8 +130,8 @@ fi
 echo ""
 echo "STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-#hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.writer.generate.new.ids=false -D convert.bounding.box.osm.api.database=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
-hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+#hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box.osm.api.database=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
 echo "STEP 12: Executing the changeset SQL on the osm api db..."

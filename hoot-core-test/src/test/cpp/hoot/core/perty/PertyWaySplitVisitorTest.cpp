@@ -76,7 +76,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-1.osm", map);
-    const int numNodesBeforeSplitting = map->getNodeMap().size();
+    const int numNodesBeforeSplitting = map->getNodes().size();
     LOG_VARD(numNodesBeforeSplitting);
     const int numWaysBeforeSplitting = map->getWays().size();
     LOG_VARD(numWaysBeforeSplitting)
@@ -90,7 +90,7 @@ public:
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
     MapProjector::projectToWgs84(map);
-    const int numNewNodesCreatedBySpliting = map->getNodeMap().size() - numNodesBeforeSplitting;
+    const int numNewNodesCreatedBySpliting = map->getNodes().size() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySpliting);
     const int numNewWaysCreatedBySpliting = map->getWays().size() - numWaysBeforeSplitting;
     LOG_VARD(numNewWaysCreatedBySpliting);
@@ -119,7 +119,7 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-2.osm", map);
-    const int numNodesBeforeSplitting = map->getNodeMap().size();
+    const int numNodesBeforeSplitting = map->getNodes().size();
     LOG_VARD(numNodesBeforeSplitting);
     const int numWaysBeforeSplitting = map->getWays().size();
     LOG_VARD(numWaysBeforeSplitting)
@@ -133,7 +133,7 @@ public:
     waySplitVisitor.setMinNodeSpacing(1.0);
     map->visitRw(waySplitVisitor);
     MapProjector::projectToWgs84(map);
-    const int numNewNodesCreatedBySplitting = map->getNodeMap().size() - numNodesBeforeSplitting;
+    const int numNewNodesCreatedBySplitting = map->getNodes().size() - numNodesBeforeSplitting;
     LOG_VARD(numNewNodesCreatedBySplitting);
     const int numNewWaysCreatedBySplitting = map->getWays().size() - numWaysBeforeSplitting;
     LOG_VARD(numNewWaysCreatedBySplitting);

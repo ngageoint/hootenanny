@@ -91,7 +91,8 @@ void MapCropper::setConfiguration(const Settings& conf)
   if (!boundsStr.isEmpty())
   {
     const QString errorMsg =
-      "Invalid bounds passed to map cropper: " + boundsStr + ".  Must be of the form: minx,miny,maxx,maxy";
+      "Invalid bounds passed to map cropper: " + boundsStr +
+      ".  Must be of the form: minx,miny,maxx,maxy";
     const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
     if (!boundsRegEx.exactMatch(boundsStr))
     {
@@ -115,7 +116,7 @@ void MapCropper::setConfiguration(const Settings& conf)
 
 void MapCropper::apply(shared_ptr<OsmMap>& map)
 {
-  LOG_INFO("Cropping map.");
+  LOG_INFO("Cropping map...");
   shared_ptr<OsmMap> result = map;
 
   if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
@@ -158,7 +159,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
 
   // go through all the nodes
   long nodesRemoved = 0;
-  const NodeMap nodes = result->getNodeMap();
+  const NodeMap nodes = result->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
     const Coordinate& c = it->second->toCoordinate();

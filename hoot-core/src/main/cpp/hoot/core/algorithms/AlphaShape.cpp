@@ -346,7 +346,7 @@ shared_ptr<OsmMap> AlphaShape::toOsmMap()
 
   GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
 
-  const RelationMap& rm = result->getRelationMap();
+  const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();

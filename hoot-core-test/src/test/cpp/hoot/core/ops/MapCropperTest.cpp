@@ -100,7 +100,7 @@ public:
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     int insideCount = 0;
-    const NodeMap& nm = map->getNodeMap();
+    const NodeMap& nm = map->getNodes();
     for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       Coordinate c = it->second->toCoordinate();
@@ -115,7 +115,7 @@ public:
       MapCropper uut(g, false);
       uut.apply(map);
 
-      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodes().size());
     }
 
     {
@@ -123,7 +123,7 @@ public:
 
       MapCropper uut(g, true);
       uut.apply(map);
-      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
     }
   }
 
@@ -149,7 +149,7 @@ public:
     post->apply(mapPost);
 
     // do we get the same result before/after serialization.
-    CPPUNIT_ASSERT_EQUAL(mapPre->getNodeMap().size(), mapPost->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(mapPre->getNodes().size(), mapPost->getNodes().size());
   }
 
   void runConfigurationTest()
@@ -259,7 +259,7 @@ public:
     MapCropper::crop(map, env);
 
     //compare relations
-    const RelationMap relations = map->getRelationMap();
+    const RelationMap relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
     QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way:-1556;   Entry: role: inner, eid: Way:-1552; ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
