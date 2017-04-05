@@ -8,7 +8,7 @@ function pass {
 
 # SQL file and OSM API database outputs test
 
-HDFS_TEST_OUTPUT=test-output/BigConvertCmd
+#HDFS_TEST_OUTPUT=test-output/BigConvertCmd
 LOCAL_TEST_OUTPUT=test-output/cmd/glacial/BigConvertCmd
 REF_FILES=test-files/cmd/glacial/BigConvertCmd
 source conf/database/DatabaseConfig.sh
@@ -20,8 +20,8 @@ echo "Removing previous outputs..."
 hadoop fs -rmr DcGisRoads.osm.pbf &> /dev/null || pass
 rm -rf $LOCAL_TEST_OUTPUT
 mkdir -p $LOCAL_TEST_OUTPUT
-hadoop fs -rmr $HDFS_TEST_OUTPUT &> /dev/null || pass
-hadoop fs -mkdir $HDFS_TEST_OUTPUT
+#hadoop fs -rmr $HDFS_TEST_OUTPUT &> /dev/null || pass
+#hadoop fs -mkdir $HDFS_TEST_OUTPUT
 
 #echo "Converting input data to pbf..."
 #hoot convert test-files/BostonSubsetRoadBuilding_FromOsm.osm $LOCAL_TEST_OUTPUT/BostonSubsetRoadBuilding.osm.pbf

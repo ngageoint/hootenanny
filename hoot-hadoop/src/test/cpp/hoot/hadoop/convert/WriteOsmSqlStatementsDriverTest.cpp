@@ -159,10 +159,12 @@ public:
     init(outDir, outFile);
 
     WriteOsmSqlStatementsDriver driver;
-    //set this very high to avoid buffering
+    //set this much higher than the total element size of the map to avoid buffering
     driver.setFileOutputElementBufferSize(10000);
     driver.setChangesetUserId(1);
-    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
+    driver.open(outFile);
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
+    driver.close();
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-no-buffering.sql", outFile);
@@ -177,13 +179,13 @@ public:
     init(outDir, outFile);
 
     WriteOsmSqlStatementsDriver driver;
-    //set this very high to avoid buffering
+    //set this much higher than the total element size of the map to avoid buffering
     driver.setFileOutputElementBufferSize(10000);
     driver.setChangesetUserId(1);
     driver.setOutputFilesCopyLocation(outFile);
-    driver.write(
-      QString::fromStdString(outDir) + "/input.osm.pbf",
-      ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    driver.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
+    driver.close();
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-no-buffering.sql", outFile);
@@ -203,7 +205,9 @@ public:
     WriteOsmSqlStatementsDriver driver;
     driver.setFileOutputElementBufferSize(10);
     driver.setChangesetUserId(1);
-    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf", outFile);
+    driver.open(outFile);
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
+    driver.close();
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-with-buffering.sql",
@@ -222,9 +226,9 @@ public:
     driver.setFileOutputElementBufferSize(10);
     driver.setChangesetUserId(1);
     driver.setOutputFilesCopyLocation(outFile);
-    driver.write(
-      QString::fromStdString(outDir) + "/input.osm.pbf",
-      ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    driver.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
+    driver.close();
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-with-buffering.sql",

@@ -43,8 +43,6 @@ using namespace geos::geom;
 namespace hoot
 {
 
-//TODO: should open and issupported methods be added to make this more like a writer?
-
 WriteOsmSqlStatementsDriver::WriteOsmSqlStatementsDriver() :
 _outputFileCopyLocation(""),
 _outputDelimiter("\t")
@@ -53,23 +51,73 @@ _outputDelimiter("\t")
   setConfiguration(conf());
 }
 
-bool WriteOsmSqlStatementsDriver::_outputIsDatabaseDestination(const QString output) const
+WriteOsmSqlStatementsDriver::~WriteOsmSqlStatementsDriver()
+{
+
+}
+
+//void WriteOsmSqlStatementsDriver::_reset()
+//{
+//  _output = "";
+//  _changesetUserId = -1;
+//  _outputFileCopyLocation = "";
+//}
+
+bool WriteOsmSqlStatementsDriver::_destinationIsDatabase(const QString output) const
 {
   return output.toLower().startsWith("osmapidb://");
 }
 
-void WriteOsmSqlStatementsDriver::write(const QString input, const QString output)
+bool WriteOsmSqlStatementsDriver::isSupported(QString urlStr)
 {
+  LOG_VARD(urlStr);
+  QUrl url(urlStr);
+  //if we ever want any other writers that the convert command invokes to output sql, then
+  //this will have to be made more specific
+  return urlStr.toLower().endsWith(".sql") || _database.isSupported(url);
+}
+
+void WriteOsmSqlStatementsDriver::open(QString url)
+{
+  _output = url;
+
+  // Make sure we're not already open and the URL is valid
+  if (!isSupported(url))
+  {
+    throw HootException(QString("Could not open URL ") + url);
+  }
+}
+
+void WriteOsmSqlStatementsDriver::close()
+{
+  LOG_DEBUG("Closing writer...");
+
+  if (_destinationIsDatabase(_output))
+  {
+    _database.close();
+  }
+
+  //_reset();
+  //setConfiguration(conf());
+}
+
+void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
+{
+  if (_output.isEmpty())
+  {
+    throw HootException("Writer has not been opened.");
+  }
+
   Hdfs fs;
   LOG_DEBUG("Creating work directory...");
   QString hdfsOutput =
     "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
     "-WriteOsmSqlStatementsDriver/";
   fs.mkdirs(hdfsOutput.toStdString());
-  const QString sqlFile = _getSqlFileOutputLocation(hdfsOutput, output);
+  const QString sqlFile = _getSqlFileOutputLocation(hdfsOutput, _output);
 
   _runElementSqlStatementsWriteJob(
-    fs.getAbsolutePath(input.toStdString()), hdfsOutput.toStdString());
+    fs.getAbsolutePath(inputMapFile.toStdString()), hdfsOutput.toStdString());
 
   //merge all the output files into one and copy back to the local file system; how expensive
   //is this going to be for a ton of big files?
@@ -79,20 +127,20 @@ void WriteOsmSqlStatementsDriver::write(const QString input, const QString outpu
   //append the single changeset entry to the file
   _writeChangesetToSqlFile(sqlFile);
 
-  if (_outputIsDatabaseDestination(output))
+  if (_destinationIsDatabase(_output))
   {
     //TODO: add file name and record count to this message
     LOG_INFO("Executing element SQL...");
     OsmApiDb database;
     try
     {
-      database.open(output);
+      database.open(_output);
       //We have to turn off constraints before writing the sql file to the db, since the table
       //copy commands are out of dependency order and will violate ref integrity.
       database.disableConstraints();
 
       //write the sql file
-      ApiDb::execSqlFile(output, sqlFile);
+      ApiDb::execSqlFile(_output, sqlFile);
 
       //now re-enable the constraints to make sure the db is valid before reading from it
       database.enableConstraints();
@@ -130,7 +178,7 @@ void WriteOsmSqlStatementsDriver::_writeChangesetToSqlFile(const QString sqlFile
 QString WriteOsmSqlStatementsDriver::_getSqlFileOutputLocation(const QString hdfsOutput,
                                                                const QString userSpecifiedOutput) const
 {
-  if (!_outputIsDatabaseDestination(userSpecifiedOutput))
+  if (!_destinationIsDatabase(userSpecifiedOutput))
   {
     return userSpecifiedOutput;
   }
