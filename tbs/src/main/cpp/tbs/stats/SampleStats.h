@@ -29,6 +29,7 @@
 
 // Qt
 #include <QString>
+#include <qnumeric.h>
 
 // Standard
 #include <vector>
