@@ -37,21 +37,16 @@ class WriteOsmSqlStatementsDriver : public Driver, public Configurable
 public:
 
   WriteOsmSqlStatementsDriver();
-  ~WriteOsmSqlStatementsDriver();
 
-  void write(const QString inputMapFile);
-  void close();
+  void write(const QString input, const QString output);
 
   virtual void setConfiguration(const Settings& conf);
-
-  //The OsmMapWriter interface doesn't really fit here, due to the write(OsmMapPtr) method it has,
-  //but we'll go ahead and partially mimic it with open and isSupported.
-  bool isSupported(QString urlStr);
-  void open(QString url);
 
   void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setOutputFilesCopyLocation(QString loc) { _outputFileCopyLocation = loc; }
   void setChangesetUserId(long id) { _changesetUserId = id; }
+  //void setExecSqlWithMapreduce(bool exec) { _execSqlWithMapreduce = exec; }
+  void setNumReduceTasks(int numTasks) { _numReduceTasks = numTasks; }
 
 private:
 
@@ -61,14 +56,15 @@ private:
   shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
   QString _outputDelimiter;
   long _changesetUserId;
-  QString _output;
+  //bool _execSqlWithMapreduce;
+  int _numReduceTasks;
 
   void _runElementSqlStatementsWriteJob(const string& input, const string& output);
   void _runChangesetSqlStatementsWriteJob(const string& input, const string& output);
   QString _getSqlFileOutputLocation(const QString hdfsOutput,
                                     const QString userSpecifiedOutput) const;
   void _writeChangesetToSqlFile(const QString sqlFileLocation);
-  bool _destinationIsDatabase(const QString output) const;
+  bool _outputIsDatabaseDestination(const QString output) const;
 };
 
 }
