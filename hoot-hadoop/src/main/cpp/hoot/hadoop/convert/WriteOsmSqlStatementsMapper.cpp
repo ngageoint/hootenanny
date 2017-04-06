@@ -19,16 +19,13 @@
 // Pretty Pipes
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
-#include <pp/Hdfs.h>
 #include <pp/conf/Configuration.h>
 
 // Hoot
-#include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/elements/Tags.h>
 

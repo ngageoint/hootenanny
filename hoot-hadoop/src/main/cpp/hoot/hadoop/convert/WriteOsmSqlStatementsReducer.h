@@ -25,6 +25,7 @@
 
 // Qt
 #include <QString>
+#include <QMap>
 
 // libpq
 #include <postgresql/libpq-fe.h>
@@ -56,10 +57,13 @@ private:
   QString _dbConnStr;
   PGconn* _pqConn;
   PGresult* _pqQueryResult;
+  QMap<QString, long> _elementCounts;
+  bool _localJobTracker;
 
   void _flush();
   void _flushToDb();
-
+  void _updateElementCounts(const QString tableHeader);
+  void _writeSequenceUpdateStatements();
 };
 
 }
