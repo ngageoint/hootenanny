@@ -127,6 +127,11 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
     {
       throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
     }
+    else
+    {
+      _context->incrementCounter(
+        _context->getCounter("WriteOsmSqlStatements", "table copies executed"), 1);
+    }
   }
 
   PQclear(_pqQueryResult);
