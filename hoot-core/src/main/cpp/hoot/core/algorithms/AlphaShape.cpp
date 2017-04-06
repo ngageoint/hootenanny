@@ -154,7 +154,7 @@ AlphaShape::AlphaShape(double alpha)
   _dt.reset(new Tgs::DelaunayTriangulation);
 }
 
-WayPtr AlphaShape::_addFaceAsWay(const Face* face, OsmMapPtr map)
+WayPtr AlphaShape::_addFaceAsWay(const Face* face, boost::shared_ptr<OsmMap> map)
 {
   Edge e = face->getEdge(0);
   e.getOriginX();
@@ -340,9 +340,9 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
   }
 }
 
-OsmMapPtr AlphaShape::toOsmMap()
+boost::shared_ptr<OsmMap> AlphaShape::toOsmMap()
 {
-  OsmMapPtr result(new OsmMap());
+  boost::shared_ptr<OsmMap> result(new OsmMap());
 
   GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
 

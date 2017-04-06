@@ -76,9 +76,9 @@ protected:
 
   bool _isComplete(const boost::shared_ptr<const Element>& e);
 
-  void _visit(const ConstWayPtr& w);
+  void _visit(const boost::shared_ptr<const Way>& w);
 
-  void _visit(const ConstRelationPtrR r);
+  void _visit(const boost::shared_ptr<const Relation> &r);
 };
 
 }

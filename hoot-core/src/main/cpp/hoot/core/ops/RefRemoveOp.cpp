@@ -127,7 +127,7 @@ RefRemoveOp::RefRemoveOp()
 {
 }
 
-void RefRemoveOp::apply(OsmMapPtr& map)
+void RefRemoveOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   // get all the REF1 IDs that will be removed
   GetRefVisitor grv(_criterion);

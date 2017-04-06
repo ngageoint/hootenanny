@@ -52,7 +52,7 @@ public:
 
   virtual ~FindIntersectionsOp() {}
 
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 };
 
 }

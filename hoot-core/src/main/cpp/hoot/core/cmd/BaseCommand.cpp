@@ -117,7 +117,7 @@ int BaseCommand::run(char* argv[], int argc)
   return runSimple(args);
 }
 
-void BaseCommand::saveMap(ConstOsmMapPtr map, QString path)
+void BaseCommand::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
 {
   OsmMapWriterFactory::write(map, path);
 }

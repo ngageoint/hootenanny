@@ -44,13 +44,13 @@ RdpWayGeneralizer::RdpWayGeneralizer(double epsilon)
   setEpsilon(epsilon);
 }
 
-RdpWayGeneralizer::RdpWayGeneralizer(OsmMapPtr map, double epsilon) :
+RdpWayGeneralizer::RdpWayGeneralizer(boost::shared_ptr<OsmMap> map, double epsilon) :
 _map(map)
 {
   setEpsilon(epsilon);
 }
 
-void RdpWayGeneralizer::generalize(WayPtr way)
+void RdpWayGeneralizer::generalize(boost::shared_ptr<Way> way)
 {
   if (!_map.get())
   {
@@ -80,7 +80,7 @@ void RdpWayGeneralizer::generalize(WayPtr way)
   LOG_VART(wayNodeIdsAfterFiltering);
 
   //get the generalized points
-  const QList<ConstNodePtr >& generalizedPoints =
+  const QList<boost::shared_ptr<const Node> >& generalizedPoints =
     getGeneralizedPoints(OsmUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
   LOG_VART(generalizedPoints.size());
   OsmUtils::printNodes("generalizedPoints", generalizedPoints);
@@ -93,8 +93,8 @@ void RdpWayGeneralizer::generalize(WayPtr way)
   LOG_VART(QVector<long>::fromStdVector(_map->getWay(way->getId())->getNodeIds()).toList());
 }
 
-QList<ConstNodePtr > RdpWayGeneralizer::getGeneralizedPoints(
-  const QList<ConstNodePtr >& wayPoints)
+QList<boost::shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
+  const QList<boost::shared_ptr<const Node> >& wayPoints)
 {
   LOG_VART(wayPoints.size());
   if (wayPoints.size() < 3)
@@ -102,9 +102,9 @@ QList<ConstNodePtr > RdpWayGeneralizer::getGeneralizedPoints(
     return wayPoints;
   }
 
-  ConstNodePtr firstPoint = wayPoints.at(0);
+  boost::shared_ptr<const Node> firstPoint = wayPoints.at(0);
   LOG_VART(firstPoint->toString());
-  ConstNodePtr lastPoint = wayPoints.at(wayPoints.size() - 1);
+  boost::shared_ptr<const Node> lastPoint = wayPoints.at(wayPoints.size() - 1);
   LOG_VART(lastPoint->toString());
 
   int indexOfLargestPerpendicularDistance = -1;
@@ -127,22 +127,22 @@ QList<ConstNodePtr > RdpWayGeneralizer::getGeneralizedPoints(
   if (largestPerpendicularDistance > _epsilon)
   {
     //split the curve into two parts and recursively reduce the two lines
-    const QList<ConstNodePtr > splitLine1 =
+    const QList<boost::shared_ptr<const Node> > splitLine1 =
       wayPoints.mid(0, indexOfLargestPerpendicularDistance + 1);
     OsmUtils::printNodes("splitLine1", splitLine1);
-    const QList<ConstNodePtr > splitLine2 =
+    const QList<boost::shared_ptr<const Node> > splitLine2 =
       wayPoints.mid(indexOfLargestPerpendicularDistance);
     OsmUtils::printNodes("splitLine2", splitLine2);
 
-    const QList<ConstNodePtr > recursivelySplitLine1 =
+    const QList<boost::shared_ptr<const Node> > recursivelySplitLine1 =
       getGeneralizedPoints(splitLine1);
     OsmUtils::printNodes("recursivelySplitLine1", recursivelySplitLine1);
-    const QList<ConstNodePtr > recursivelySplitLine2 =
+    const QList<boost::shared_ptr<const Node> > recursivelySplitLine2 =
       getGeneralizedPoints(splitLine2);
     OsmUtils::printNodes("recursivelySplitLine2", recursivelySplitLine2);
 
     //concat r2 to r1 minus the end/start point that will be the same
-    QList<ConstNodePtr > combinedReducedLines =
+    QList<boost::shared_ptr<const Node> > combinedReducedLines =
       recursivelySplitLine1.mid(0, recursivelySplitLine1.size() - 1);
     combinedReducedLines.append(recursivelySplitLine2);
     OsmUtils::printNodes("combinedReducedLines", combinedReducedLines);
@@ -151,7 +151,7 @@ QList<ConstNodePtr > RdpWayGeneralizer::getGeneralizedPoints(
   else
   {
     //reduce the line by remove all points between the first and last points
-    QList<ConstNodePtr > reducedLine;
+    QList<boost::shared_ptr<const Node> > reducedLine;
     reducedLine.append(firstPoint);
     reducedLine.append(lastPoint);
     OsmUtils::printNodes("reducedLine", reducedLine);
@@ -160,8 +160,8 @@ QList<ConstNodePtr > RdpWayGeneralizer::getGeneralizedPoints(
 }
 
 double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-  const ConstNodePtr splitPoint, const ConstNodePtr lineToBeReducedStartPoint,
-  const ConstNodePtr lineToBeReducedEndPoint) const
+  const boost::shared_ptr<const Node> splitPoint, const boost::shared_ptr<const Node> lineToBeReducedStartPoint,
+  const boost::shared_ptr<const Node> lineToBeReducedEndPoint) const
 {
   LOG_VART(lineToBeReducedStartPoint->getX());
   LOG_VART(lineToBeReducedEndPoint->getX());

@@ -42,7 +42,7 @@ NamedOp::NamedOp()
   _conf = 0;
 }
 
-void NamedOp::apply(OsmMapPtr& map)
+void NamedOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   Factory& f = Factory::getInstance();
 

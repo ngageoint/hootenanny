@@ -110,7 +110,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 
   LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
 
- OsmMapPtr map(new OsmMap());
+ boost::shared_ptr<OsmMap> map(new OsmMap());
   map->setIdGenerator(_idGen);
 
 //#warning remove temporary map.
@@ -186,7 +186,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   const WayMap wm = map->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const WayPtr& w = map->getWay(it->first);
+    const boost::shared_ptr<Way>& w = map->getWay(it->first);
     WaySplitter::split(map, w, _maxWaySize);
   }
 
@@ -197,7 +197,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     const WayMap& wm2 = map->getWays();
     for (WayMap::const_iterator it = wm2.begin(); it != wm2.end(); ++it)
     {
-      const ConstWayPtr& w = it->second;
+      const boost::shared_ptr<const Way>& w = it->second;
 
       const Envelope e = w->getEnvelopeInternal(map);
 
@@ -216,7 +216,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
 }
 
-void TileOpReducer::_emitMap(OsmMapPtr map)
+void TileOpReducer::_emitMap(boost::shared_ptr<OsmMap> map)
 {
   Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
@@ -226,7 +226,7 @@ void TileOpReducer::_emitMap(OsmMapPtr map)
   LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
 }
 
-const Envelope& TileOpReducer::_getContainingEnvelope(const OsmMapPtr& map)
+const Envelope& TileOpReducer::_getContainingEnvelope(const boost::shared_ptr<OsmMap>& map)
 {
  boost::shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
@@ -285,10 +285,10 @@ void TileOpReducer::_init(HadoopPipes::ReduceContext& context)
   _initialized = true;
 }
 
-OsmMapPtr TileOpReducer::_readMap(const string& value)
+boost::shared_ptr<OsmMap> TileOpReducer::_readMap(const string& value)
 {
   // read the map from the given string.
- OsmMapPtr result(new OsmMap());
+ boost::shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
   OsmPbfReader reader(true);
@@ -320,7 +320,7 @@ void TileOpReducer::reduce(HadoopPipes::ReduceContext& context)
     // emit all the data right out to disk.
     while (context.nextValue())
     {
-     OsmMapPtr map = _readMap(context.getInputValue());
+     boost::shared_ptr<OsmMap> map = _readMap(context.getInputValue());
       LOG_INFO("Passing dregs. Node Count: " << map->getNodes().size() << " Way Count: " <<
                map->getWays().size());
       _emitMap(map);
@@ -328,7 +328,7 @@ void TileOpReducer::reduce(HadoopPipes::ReduceContext& context)
   }
 }
 
-void TileOpReducer::_validate(const OsmMapPtr& map)
+void TileOpReducer::_validate(const boost::shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Validating map.");
   Debug::printTroubled(map);

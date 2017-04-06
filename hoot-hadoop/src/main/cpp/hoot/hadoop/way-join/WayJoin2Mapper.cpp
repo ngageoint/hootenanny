@@ -57,7 +57,7 @@ WayJoin2Mapper::WayJoin2Mapper()
   Tgs::Random::instance()->seed(time(NULL));
 }
 
-void WayJoin2Mapper::_emitNode(const NodePtr& n)
+void WayJoin2Mapper::_emitNode(const boost::shared_ptr<Node> &n)
 {
   _nodeMap->addNode(n);
 
@@ -82,7 +82,7 @@ void WayJoin2Mapper::_flushNodes()
     dos.writeByte(PbfData);
     OsmPbfWriter writer;
     // RHEL calls this ambiguous.
-    const ConstOsmMapPtrR co = _nodeMap;
+    const boost::shared_ptr<const OsmMap>& co = _nodeMap;
     writer.writePb(co, &ss);
     _context->emit(_keyStr, ss.str());
     _nodeMap->clear();
@@ -130,7 +130,7 @@ void WayJoin2Mapper::map(HadoopPipes::MapContext& context)
   }
 }
 
-void WayJoin2Mapper::mapOsmMap(OsmMapPtr m)
+void WayJoin2Mapper::mapOsmMap(boost::shared_ptr<OsmMap> m)
 {
   // The first byte on the value says if it is a PBF/WayJoin1Reducer::Value
   OsmPbfWriter writer;
@@ -146,7 +146,7 @@ void WayJoin2Mapper::mapOsmMap(OsmMapPtr m)
   {
     // add this node onto a map. Since the nodes aren't very important at this stage we'll just
     // ship a bunch at a time in one big record.
-    _emitNode(NodePtr((Node*)it->second->clone()));
+    _emitNode(boost::shared_ptr<Node>((Node*)it->second->clone()));
   }
 
   _key->elementType = WayType;

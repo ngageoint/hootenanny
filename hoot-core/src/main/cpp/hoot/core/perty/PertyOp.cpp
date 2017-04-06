@@ -205,7 +205,7 @@ QString PertyOp::toString()
   return str;
 }
 
-void PertyOp::apply(OsmMapPtr& map)
+void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   // permute the data first
   permute(map);
@@ -238,10 +238,10 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
   return _gridCalculator->permute(env, rows, cols);
 }
 
-OsmMapPtr PertyOp::generateDebugMap(OsmMapPtr& map)
+boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& map)
 {
   MapProjector::projectToPlanar(map);
- OsmMapPtr result(new OsmMap(map->getProjection()));
+ boost::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
 
   LOG_INFO(toString());
 
@@ -285,7 +285,7 @@ OsmMapPtr PertyOp::generateDebugMap(OsmMapPtr& map)
   return result;
 }
 
-void PertyOp::permute(const OsmMapPtr &map)
+void PertyOp::permute(const boost::shared_ptr<OsmMap> &map)
 {
   MapProjector::projectToPlanar(map);
 

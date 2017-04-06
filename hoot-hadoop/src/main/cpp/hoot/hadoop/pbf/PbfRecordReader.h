@@ -43,7 +43,7 @@ public:
 
   virtual ~PbfRecordReader() {}
 
- OsmMapPtr getMap();
+ boost::shared_ptr<OsmMap> getMap();
 
   virtual bool next(std::string& key, std::string& value);
 

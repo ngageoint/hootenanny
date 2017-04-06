@@ -54,7 +54,7 @@ _caseSensitive(true)
   setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
-void DuplicateNameRemover::apply(OsmMapPtr& map)
+void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
   _map = map;
 
@@ -160,7 +160,7 @@ QString DuplicateNameRemover::_getBestName(QString n1, QString n2)
   }
 }
 
-void DuplicateNameRemover::removeDuplicates(OsmMapPtr map)
+void DuplicateNameRemover::removeDuplicates(boost::shared_ptr<OsmMap> map)
 {
   DuplicateNameRemover a;
   a.apply(map);

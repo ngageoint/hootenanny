@@ -42,12 +42,12 @@ NodeToWayMap::NodeToWayMap(const OsmMap& map)
   const WayMap& ways = map.getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    WayPtr w = it->second;
+    boost::shared_ptr<Way> w = it->second;
     addWay(w);
   }
 }
 
-void NodeToWayMap::addWay(ConstWayPtr w)
+void NodeToWayMap::addWay(boost::shared_ptr<const Way> w)
 {
   const std::vector<long>& nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
@@ -69,7 +69,7 @@ const set<long>& NodeToWayMap::getWaysByNode(long nid) const
   }
 }
 
-void NodeToWayMap::removeWay(ConstWayPtr w)
+void NodeToWayMap::removeWay(boost::shared_ptr<const Way> w)
 {
   const std::vector<long>& nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
@@ -91,7 +91,7 @@ bool NodeToWayMap::validate(const OsmMap& map)
   const WayMap& ways = map.getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const WayPtr& w = it->second;
+    const boost::shared_ptr<Way>& w = it->second;
     assert(w->getId() != 0);
     const std::vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)

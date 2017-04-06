@@ -164,7 +164,7 @@ protected:
 
   deque< boost::shared_ptr<Manipulator> > _manipulators;
   vector< boost::shared_ptr<Manipulation> > _manipulations;
-  OsmMapPtr _map;
+  boost::shared_ptr<OsmMap> _map;
   boost::shared_ptr<WorkingMap> _bestMap;
   boost::shared_ptr<OGRSpatialReference> _planarSrs;
   map< ElementId, set< boost::shared_ptr<Manipulation>, LessThanManipulation > > _impacted2Manipulation;
@@ -179,11 +179,11 @@ protected:
   /**
    * Create manipulations for the specified ways.
    */
-  void _createManipulations(OsmMapPtr map, const set<ElementId>& eids);
+  void _createManipulations(boost::shared_ptr<OsmMap> map, const set<ElementId>& eids);
 
   void _saveMap(QString path);
 
-  void _updateManipulationEstimates(ConstOsmMapPtr map, const set<ElementId>& eids);
+  void _updateManipulationEstimates(boost::shared_ptr<const OsmMap> map, const set<ElementId>& eids);
 };
 
 }

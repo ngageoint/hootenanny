@@ -81,14 +81,14 @@ public:
 
   RdpWayGeneralizer(double epsilon);
 
-  RdpWayGeneralizer(OsmMapPtr map, double epsilon);
+  RdpWayGeneralizer(boost::shared_ptr<OsmMap> map, double epsilon);
 
   /**
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
 
     @param way the way whose points are to be reduced
     */
-  void generalize(WayPtr way);
+  void generalize(boost::shared_ptr<Way> way);
 
   /**
     Generates a set of points that make up a generalized set of the input points
@@ -96,8 +96,8 @@ public:
     @param wayPoints the collection of points to be reduced
     @returns a reduced set of line points
     */
-  virtual QList<ConstNodePtr > getGeneralizedPoints(
-    const QList<ConstNodePtr >& wayPoints);
+  virtual QList<boost::shared_ptr<const Node> > getGeneralizedPoints(
+    const QList<boost::shared_ptr<const Node> >& wayPoints);
 
   /**
     Sets the distance parameter that determines to what degree the way is generalized; higher
@@ -119,7 +119,7 @@ private:
 
   double _epsilon;
 
-  OsmMapPtr _map;
+  boost::shared_ptr<OsmMap> _map;
 
   /*
     Finds the perpendicular distance between an imaginary line drawn from the first point on a line
@@ -132,8 +132,8 @@ private:
     point for the imaginary line drawn directly from start to end point on the line to be reduced
     */
   double _getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-    const ConstNodePtr splitPoint, const ConstNodePtr lineToBeReducedStartPoint,
-    const ConstNodePtr lineToBeReducedEndPoint) const;
+    const boost::shared_ptr<const Node> splitPoint, const boost::shared_ptr<const Node> lineToBeReducedStartPoint,
+    const boost::shared_ptr<const Node> lineToBeReducedEndPoint) const;
 
 };
 

@@ -47,7 +47,7 @@ RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const ElementCri
 {
 }
 
-void RecursiveElementRemover::apply(const OsmMapPtr &map)
+void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
 {
   assert(_eid.isNull() == false);
   if (map->containsElement(_eid) == false)
@@ -118,7 +118,7 @@ void RecursiveElementRemover::apply(const OsmMapPtr &map)
   _remove(map, _eid, toErase);
 }
 
-void RecursiveElementRemover::_remove(const OsmMapPtr& map, ElementId eid,
+void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, ElementId eid,
   const set<ElementId>& removeSet)
 {
   // if this element isn't being removed

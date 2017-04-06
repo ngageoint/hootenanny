@@ -39,7 +39,7 @@ ElementToRelationMap::ElementToRelationMap()
 {
 }
 
-void ElementToRelationMap::addRelation(const OsmMap& map, const ConstRelationPtrR r)
+void ElementToRelationMap::addRelation(const OsmMap& map, const boost::shared_ptr<const Relation> &r)
 {
   class AddMemberVisitor : public ElementVisitor
   {
@@ -92,7 +92,7 @@ const set<long>& ElementToRelationMap::getRelationByElement(const Element* e) co
   return getRelationByElement(e->getElementId());
 }
 
-void ElementToRelationMap::removeRelation(const OsmMap& map, const ConstRelationPtrR r)
+void ElementToRelationMap::removeRelation(const OsmMap& map, const boost::shared_ptr<const Relation>& r)
 {
   class RemoveMemberVisitor : public ElementVisitor
   {
@@ -179,7 +179,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       for (RelationMap::const_iterator it = relationMap.begin(); it != relationMap.end(); ++it)
       {
         bool inMappedRelation = mappedRelations.find(it->first) != mappedRelations.end();
-        const ConstRelationPtrR r = it->second;
+        const boost::shared_ptr<const Relation>& r = it->second;
         ElementId childEid(type, id);
         if (inMappedRelation)
         {

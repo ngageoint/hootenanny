@@ -43,13 +43,13 @@ SuperfluousWayRemover::SuperfluousWayRemover()
 
 }
 
-SuperfluousWayRemover::SuperfluousWayRemover(OsmMapPtr map)
+SuperfluousWayRemover::SuperfluousWayRemover(boost::shared_ptr<OsmMap> map)
 {
   _inputMap = map;
 }
 
 
-void SuperfluousWayRemover::removeWays(OsmMapPtr map)
+void SuperfluousWayRemover::removeWays(boost::shared_ptr<OsmMap> map)
 {
   SuperfluousWayRemover swr(map);
   return swr.removeWays();
@@ -91,7 +91,7 @@ void SuperfluousWayRemover::removeWays()
   }
 }
 
-void SuperfluousWayRemover::apply(OsmMapPtr& map)
+void SuperfluousWayRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
   removeWays(map);
 }

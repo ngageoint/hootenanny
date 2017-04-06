@@ -53,7 +53,7 @@ public:
 
   BuildingOutlineUpdateOp();
 
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual string getClassName() const { return className(); }
 
@@ -63,7 +63,7 @@ public:
 
 private:
 
-  OsmMapPtr _map;
+  boost::shared_ptr<OsmMap> _map;
 
   void _createOutline(const RelationPtr& building);
 

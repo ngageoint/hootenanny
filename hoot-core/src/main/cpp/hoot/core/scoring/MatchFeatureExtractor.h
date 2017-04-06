@@ -93,7 +93,7 @@ public:
   /**
    * Evaluates all the features in the given map.
    */
-  void processMap(const ConstOsmMapPtrR map);
+  void processMap(const boost::shared_ptr<const OsmMap>& map);
 
 private:
   DataSamples _samples;
@@ -104,7 +104,7 @@ private:
   bool _useNulls;
   const MatchFactory* _matchFactory;
 
-  MatchType _getActualMatchType(const set<ElementId> &eids, const ConstOsmMapPtrR map)
+  MatchType _getActualMatchType(const set<ElementId> &eids, const boost::shared_ptr<const OsmMap>& map)
     const;
 
   /**

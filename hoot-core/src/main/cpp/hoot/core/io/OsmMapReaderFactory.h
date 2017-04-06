@@ -63,7 +63,7 @@ public:
 
   bool hasElementInputStream(QString url);
 
-  static void read(OsmMapPtr map, QString url, bool useFileId = true,
+  static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
 
 private:

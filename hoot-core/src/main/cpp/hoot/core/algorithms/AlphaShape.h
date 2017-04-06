@@ -84,7 +84,7 @@ public:
 
   QString toString();
 
-  OsmMapPtr toOsmMap();
+  boost::shared_ptr<OsmMap> toOsmMap();
 
 private:
 
@@ -93,7 +93,7 @@ private:
   std::auto_ptr<Tgs::DelaunayTriangulation> _dt;
   set< pair<double, double> > _outsidePoint;
 
-  boost::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, OsmMapPtr map);
+  boost::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, boost::shared_ptr<OsmMap> map);
 
   boost::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 
@@ -102,7 +102,7 @@ private:
   // second level children are empty
   // third filled
   // etc, alternating at each level between filled and empty
-  OsmMapPtr _groupFaces();
+  boost::shared_ptr<OsmMap> _groupFaces();
 
   bool _isBoundary(const Tgs::Edge& e) const;
 

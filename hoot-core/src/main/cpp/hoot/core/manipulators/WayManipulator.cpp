@@ -31,7 +31,7 @@ namespace hoot
 {
 
 const vector< boost::shared_ptr<Manipulation> >& WayManipulator::findManipulations(
-    ConstOsmMapPtr map, const vector<ElementId>& ids)
+    boost::shared_ptr<const OsmMap> map, const vector<ElementId>& ids)
 {
   vector<long> wids(ids.size());
 

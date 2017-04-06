@@ -84,13 +84,13 @@ public:
   /**
    * Removes an element as defined by this object.
    */
-  virtual void apply(const OsmMapPtr& map);
+  virtual void apply(const boost::shared_ptr<OsmMap>& map);
 
 private:
   ElementId _eid;
   const ElementCriterion* _filter;
 
-  void _remove(const OsmMapPtr &map, ElementId eid, const set<ElementId>& removeSet);
+  void _remove(const boost::shared_ptr<OsmMap> &map, ElementId eid, const set<ElementId>& removeSet);
 };
 
 }

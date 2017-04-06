@@ -129,7 +129,7 @@ boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, b
   return reader;
 }
 
-void OsmMapReaderFactory::read(OsmMapPtr map, QString url, bool useDataSourceIds,
+void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
                                Status defaultStatus)
 {
   LOG_INFO("Loading map from " << url << "...");

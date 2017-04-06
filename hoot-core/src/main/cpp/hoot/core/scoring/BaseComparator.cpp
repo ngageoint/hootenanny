@@ -54,7 +54,7 @@ using namespace geos::operation::distance;
 namespace hoot
 {
 
-BaseComparator::BaseComparator(OsmMapPtr map1,OsmMapPtr map2)
+BaseComparator::BaseComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2)
 {
   _init(map1, map2);
 }
@@ -144,7 +144,7 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
   }
 }
 
-Coordinate BaseComparator::_findNearestPointOnFeature(OsmMapPtr map, Coordinate c)
+Coordinate BaseComparator::_findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, Coordinate c)
 {
   Coordinate result;
 
@@ -164,7 +164,7 @@ Coordinate BaseComparator::_findNearestPointOnFeature(OsmMapPtr map, Coordinate 
   return result;
 }
 
-void BaseComparator::_init(OsmMapPtr map1,OsmMapPtr map2)
+void BaseComparator::_init(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2)
 {
   _map1 = map1;
   _map2 = map2;

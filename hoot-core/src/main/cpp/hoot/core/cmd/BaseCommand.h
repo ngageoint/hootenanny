@@ -52,7 +52,7 @@ public:
 
   virtual QString getHelp() const;
 
-  void loadMap(OsmMapPtr map, QString path, bool useFileId,
+  void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
     Status defaultStatus = Status::Invalid);
 
   /**
@@ -71,7 +71,7 @@ public:
    */
   virtual int runSimple(QStringList args) = 0;
 
-  void saveMap(ConstOsmMapPtr map, QString path);
+  void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
 
   QStringList toQStringList(char* argv[], int argc);
 

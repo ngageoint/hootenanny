@@ -534,7 +534,7 @@ Coordinate MapProjector::project(const Coordinate& c,boost::shared_ptr<OGRSpatia
 }
 
 
-void MapProjector::project(OsmMapPtr map,boost::shared_ptr<OGRSpatialReference> ref)
+void MapProjector::project(boost::shared_ptr<OsmMap> map,boost::shared_ptr<OGRSpatialReference> ref)
 {
  boost::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
@@ -606,20 +606,20 @@ void MapProjector::project(const boost::shared_ptr<Geometry>& g,
   OGRCoordinateTransformation::DestroyCT(t);
 }
 
-void MapProjector::projectToAeac(OsmMapPtr map)
+void MapProjector::projectToAeac(boost::shared_ptr<OsmMap> map)
 {
  boost::shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
     CalculateMapBoundsVisitor::getBounds(map));
   project(map, srs);
 }
 
-void MapProjector::projectToOrthographic(OsmMapPtr map)
+void MapProjector::projectToOrthographic(boost::shared_ptr<OsmMap> map)
 {
   OGREnvelope env = CalculateMapBoundsVisitor::getBounds(map);
   return projectToOrthographic(map, env);
 }
 
-void MapProjector::projectToOrthographic(OsmMapPtr map, const OGREnvelope& env)
+void MapProjector::projectToOrthographic(boost::shared_ptr<OsmMap> map, const OGREnvelope& env)
 {
   MapProjector proj;
  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
@@ -632,7 +632,7 @@ void MapProjector::projectToOrthographic(OsmMapPtr map, const OGREnvelope& env)
   proj.project(map, srs);
 }
 
-void MapProjector::projectToPlanar(OsmMapPtr map)
+void MapProjector::projectToPlanar(boost::shared_ptr<OsmMap> map)
 {
   if (isGeographic(map))
   {
@@ -641,7 +641,7 @@ void MapProjector::projectToPlanar(OsmMapPtr map)
   }
 }
 
-void MapProjector::projectToPlanar(OsmMapPtr map, const OGREnvelope& env)
+void MapProjector::projectToPlanar(boost::shared_ptr<OsmMap> map, const OGREnvelope& env)
 {
   if (map->getProjection()->IsProjected() == false)
   {
@@ -650,7 +650,7 @@ void MapProjector::projectToPlanar(OsmMapPtr map, const OGREnvelope& env)
   }
 }
 
-void MapProjector::projectToWgs84(OsmMapPtr map)
+void MapProjector::projectToWgs84(boost::shared_ptr<OsmMap> map)
 {
   if (isGeographic(map) == false)
   {

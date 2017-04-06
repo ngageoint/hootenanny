@@ -68,15 +68,15 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
   }
 }
 
-void MergeNearbyNodes::apply(OsmMapPtr& map)
+void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 {
   LOG_INFO("MergeNearbyNodes start");
 
   QTime time;
   time.start();
 
-  OsmMapPtr wgs84;
-  OsmMapPtr planar;
+  boost::shared_ptr<OsmMap> wgs84;
+  boost::shared_ptr<OsmMap> planar;
 
   if (MapProjector::isGeographic(map))
   {
@@ -165,7 +165,7 @@ void MergeNearbyNodes::apply(OsmMapPtr& map)
   }
 }
 
-void MergeNearbyNodes::mergeNodes(OsmMapPtr map, Meters distance)
+void MergeNearbyNodes::mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance)
 {
   MergeNearbyNodes mnn(distance);
   mnn.apply(map);

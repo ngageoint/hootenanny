@@ -131,7 +131,7 @@ void MapCropper::apply(OsmMapPtr& map)
   const WayMap ways = result->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
   {
-    const WayPtr& w = it->second;
+    const boost::shared_ptr<Way>& w = it->second;
     boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     const Envelope& e = *(ls->getEnvelopeInternal());
 
@@ -229,7 +229,7 @@ void MapCropper::crop(OsmMapPtr map, const boost::shared_ptr<const Geometry>& g,
 
 void MapCropper::_cropWay(OsmMapPtr map, long wid)
 {
-  WayPtr way = map->getWay(wid);
+  boost::shared_ptr<Way> way = map->getWay(wid);
 
   boost::shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
 
@@ -279,7 +279,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
   }
 }
 
-long MapCropper::_findNodeId(ConstOsmMapPtr map, ConstWayPtr w,
+long MapCropper::_findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w,
   const Coordinate& c)
 {
   long result = std::numeric_limits<long>::max();
@@ -385,11 +385,11 @@ void MapCropper::readObject(QDataStream& is)
   }
 }
 
-WayPtr MapCropper::_reintroduceWay(OsmMapPtr map, ConstWayPtr w,
+boost::shared_ptr<Way> MapCropper::_reintroduceWay(OsmMapPtr map, boost::shared_ptr<const Way> w,
   const LineString* ls)
 {
   // create a new way
-  WayPtr newWay(new Way(w->getStatus(), map->createNextWayId(),
+  boost::shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
     w->getRawCircularError()));
   newWay->setTags(w->getTags());
 

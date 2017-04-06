@@ -59,7 +59,7 @@ public:
 
   WorkingMap(const WorkingMap& map);
 
-  WorkingMap(OsmMapPtr map);
+  WorkingMap(boost::shared_ptr<OsmMap> map);
 
   WorkingMap(boost::shared_ptr<const WorkingMap> map, boost::shared_ptr<const Manipulation> manipulation);
 
@@ -67,11 +67,11 @@ public:
 
   double calculatePotential() const;
 
-  ConstOsmMapPtr getMap() const;
+  boost::shared_ptr<const OsmMap> getMap() const;
 
-  OsmMapPtr getMap() { return _map; }
+  boost::shared_ptr<OsmMap> getMap() { return _map; }
 
-  OsmMapPtr takeMap() const;
+  boost::shared_ptr<OsmMap> takeMap() const;
 
   double getScore() const;
 
@@ -81,11 +81,11 @@ protected:
 
   mutable double _score;
 
-  mutable OsmMapPtr _map;
+  mutable boost::shared_ptr<OsmMap> _map;
   boost::shared_ptr<const WorkingMap> _baseWorking;
   boost::shared_ptr<const Manipulation> _manipulation;
 
-  static deque< pair< const WorkingMap*, OsmMapPtr > > _mapCache;
+  static deque< pair< const WorkingMap*, boost::shared_ptr<OsmMap> > > _mapCache;
 
   Meters _sumWayLengths(Status status) const;
 

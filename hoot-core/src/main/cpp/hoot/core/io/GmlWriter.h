@@ -70,19 +70,19 @@ public:
 
   void setIncludeHootInfo(bool includeInfo) { _includeInfo = includeInfo; }
 
-  void write(ConstOsmMapPtr map, QString path);
+  void write(boost::shared_ptr<const OsmMap> map, QString path);
 
-  void writePoints(ConstOsmMapPtr map, const QString& path);
+  void writePoints(boost::shared_ptr<const OsmMap> map, const QString& path);
 
 protected:
   QStringList _columns;
   bool _includeIds;
   bool _includeInfo;
 
-  void _writeRelationPolygon(const RelationPtr &relation, OGRLayer *poLayer,
+  void _writeRelationPolygon(const boost::shared_ptr<Relation> &relation, OGRLayer *poLayer,
     const QStringList &shpColumns);
 
-  void _writeWayPolygon(const WayPtr& way, OGRLayer *poLayer,
+  void _writeWayPolygon(const boost::shared_ptr<Way>& way, OGRLayer *poLayer,
     const QStringList& shpColumns);
 };
 

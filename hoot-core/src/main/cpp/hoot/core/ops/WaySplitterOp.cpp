@@ -43,7 +43,7 @@ WaySplitterOp::WaySplitterOp()
   setConfiguration(conf());
 }
 
-void WaySplitterOp::apply(OsmMapPtr& map)
+void WaySplitterOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   LOG_INFO("splitting with max length: " << _maxLength);
   MapProjector::projectToPlanar(map);

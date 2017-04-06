@@ -152,9 +152,9 @@ public:
 
   vector< vector<Envelope> > calculateTiles();
 
-  void renderImage(OsmMapPtr map);
+  void renderImage(boost::shared_ptr<OsmMap> map);
 
-  void renderImage(OsmMapPtr map, cv::Mat& r1, cv::Mat& r2);
+  void renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
 
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 
@@ -189,7 +189,7 @@ private:
 
   int _calculateSplitY(const PixelBox& b);
 
-  void _countNode(const NodePtr& n);
+  void _countNode(const boost::shared_ptr<Node>& n);
 
   double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
 

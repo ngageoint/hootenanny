@@ -46,36 +46,36 @@ namespace hoot
 {
 
 void OsmUtils::printNodes(const QString nodeCollectionName,
-                          const QList<ConstNodePtr >& nodes)
+                          const QList<boost::shared_ptr<const Node> >& nodes)
 {
   if (Log::getInstance().getLevel() == Log::Debug)
   {
     LOG_DEBUG(nodeCollectionName);
     LOG_VARD(nodes.size());
-    for (QList<ConstNodePtr >::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+    for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.begin(); it != nodes.end(); it++)
     {
-     ConstNodePtr node = *it;
+     boost::shared_ptr<const Node> node = *it;
       LOG_VARD(node->toString());
     }
   }
 }
 
-const QList<long> OsmUtils::nodesToNodeIds(const QList<ConstNodePtr >& nodes)
+const QList<long> OsmUtils::nodesToNodeIds(const QList<boost::shared_ptr<const Node> >& nodes)
 {
   QList<long> nodeIds;
-  for (QList<ConstNodePtr >::const_iterator it = nodes.constBegin();
+  for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.constBegin();
        it != nodes.constEnd(); ++it)
   {
-   ConstNodePtr node = *it;
+   boost::shared_ptr<const Node> node = *it;
     nodeIds.append(node->getElementId().getId());
   }
   return nodeIds;
 }
 
-QList<ConstNodePtr > OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
-                                                       ConstOsmMapPtr map)
+QList<boost::shared_ptr<const Node> > OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
+                                                       boost::shared_ptr<const OsmMap> map)
 {
-  QList<ConstNodePtr > nodes;
+  QList<boost::shared_ptr<const Node> > nodes;
   for (QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
   {
     nodes.append(dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
@@ -83,12 +83,12 @@ QList<ConstNodePtr > OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
   return nodes;
 }
 
-Coordinate OsmUtils::nodeToCoord(ConstNodePtr node)
+Coordinate OsmUtils::nodeToCoord(boost::shared_ptr<const Node> node)
 {
   return Coordinate(node->getX(), node->getY());
 }
 
-void OsmUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaultStatus)
+void OsmUtils::loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId, Status defaultStatus)
 {
   QStringList pathLayer = path.split(";");
   QString justPath = pathLayer[0];
@@ -105,7 +105,7 @@ void OsmUtils::loadMap(OsmMapPtr map, QString path, bool useFileId, Status defau
   }
 }
 
-void OsmUtils::saveMap(ConstOsmMapPtr map, QString path)
+void OsmUtils::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
 {
   OsmMapWriterFactory::write(map, path);
 }

@@ -81,7 +81,7 @@ public:
   /**
    * Defaults to 5cm threshold
    */
-  CompareVisitor(OsmMapPtr ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+  CompareVisitor(boost::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
   {
     _ref = ref;
     _threshold = threshold;
@@ -218,7 +218,7 @@ public:
   }
 
 private:
- OsmMapPtr _ref;
+ boost::shared_ptr<OsmMap> _ref;
   Meters _threshold;
   Degrees _thresholdDeg;
   bool _matches;
@@ -233,7 +233,7 @@ MapComparator::MapComparator()
   _useDateTime = false;
 }
 
-bool MapComparator::isMatch(OsmMapPtr ref,OsmMapPtr test)
+bool MapComparator::isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)
 {
   if (ref->getNodes().size() != test->getNodes().size() ||
       ref->getWays().size() != test->getWays().size() ||

@@ -53,7 +53,7 @@ public:
 private:
 
   PbfRecordWriter* _writer;
- OsmMapPtr _map;
+ boost::shared_ptr<OsmMap> _map;
   MapStats _stats;
   double _maxWaySize;
  boost::shared_ptr<HadoopIdGenerator> _idGen;

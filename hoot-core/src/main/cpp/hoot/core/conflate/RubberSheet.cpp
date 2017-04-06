@@ -123,7 +123,7 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   }
 }
 
-void RubberSheet::apply(OsmMapPtr& map)
+void RubberSheet::apply(boost::shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Rubbersheeting the map...");
 
@@ -134,7 +134,7 @@ void RubberSheet::apply(OsmMapPtr& map)
   applyTransform(map);
 }
 
-void RubberSheet::applyTransform(OsmMapPtr& map)
+void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -274,7 +274,7 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   return bestCandidate;
 }
 
-void RubberSheet::calculateTransform(OsmMapPtr& map)
+void RubberSheet::calculateTransform(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 

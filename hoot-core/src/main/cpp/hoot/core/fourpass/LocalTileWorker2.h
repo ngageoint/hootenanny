@@ -88,7 +88,7 @@ private:
   /**
    * Read all the part files from the specified directory into a single map.
    */
-  OsmMapPtr _readAllParts(QString dir);
+  boost::shared_ptr<OsmMap> _readAllParts(QString dir);
 
   /**
    * Reads node replacements from the specified input directory. The result is a map that maps
@@ -96,9 +96,9 @@ private:
    */
   HashMap<long, long> _readNodeReplacements(QString inputDir);
 
-  OsmMapPtr _readTile(QString input, const Envelope& e, double buffer);
+  boost::shared_ptr<OsmMap> _readTile(QString input, const Envelope& e, double buffer);
 
-  void _replaceNodes(OsmMapPtr map, const HashMap<long, long>& replacements);
+  void _replaceNodes(boost::shared_ptr<OsmMap> map, const HashMap<long, long>& replacements);
 
   void _simplifyNodeReplacements(HashMap<long, long>& r);
 
@@ -106,7 +106,7 @@ private:
    * Stores the specified map as a file in the specified directory. The file will not overlap with
    * other existing files in the directory.
    */
-  void _storeMapPart(OsmMapPtr map, QString dir);
+  void _storeMapPart(boost::shared_ptr<OsmMap> map, QString dir);
 
   void _writeNodeReplacements(QString dir, size_t i,
     NodeReplacements& replacements);

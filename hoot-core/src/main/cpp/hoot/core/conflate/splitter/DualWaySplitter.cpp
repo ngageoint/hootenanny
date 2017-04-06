@@ -90,7 +90,7 @@ DualWaySplitter::DualWaySplitter()
   _defaultSplitSize = ConfigOptions().getDualWaySplitterSplitSizeDefaultValue();
 }
 
-DualWaySplitter::DualWaySplitter(ConstOsmMapPtr map, DrivingSide drivingSide,
+DualWaySplitter::DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
   Meters defaultSplitSize)
 {
   _map = map;
@@ -98,7 +98,7 @@ DualWaySplitter::DualWaySplitter(ConstOsmMapPtr map, DrivingSide drivingSide,
   _defaultSplitSize = defaultSplitSize;
 }
 
-WayPtr DualWaySplitter::_createOneWay(ConstWayPtr w, Meters bufferSize,
+boost::shared_ptr<Way> DualWaySplitter::_createOneWay(boost::shared_ptr<const Way> w, Meters bufferSize,
                                                bool left)
 {
   boost::shared_ptr<const LineString> ls = ElementConverter(_result).convertToLineString(w);
@@ -110,7 +110,7 @@ WayPtr DualWaySplitter::_createOneWay(ConstWayPtr w, Meters bufferSize,
   auto_ptr<Geometry> g(bb.bufferLineSingleSided(ls.get(), bufferSize, left));
   const LineString* newLs = dynamic_cast<const LineString*>(g.get());
 
-  WayPtr result(new Way(w->getStatus(), _result->createNextWayId(),
+  boost::shared_ptr<Way> result(new Way(w->getStatus(), _result->createNextWayId(),
     w->getRawCircularError()));
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
@@ -142,7 +142,7 @@ WayPtr DualWaySplitter::_createOneWay(ConstWayPtr w, Meters bufferSize,
     const CoordinateSequence* cs = ls->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
-      NodePtr n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
+      boost::shared_ptr<Node> n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
         w->getCircularError()));
       _result->addNode(n);
       result->addNode(n->getId());
@@ -153,7 +153,7 @@ WayPtr DualWaySplitter::_createOneWay(ConstWayPtr w, Meters bufferSize,
     const CoordinateSequence* cs = newLs->getCoordinatesRO();
     for (size_t i = 0; i < cs->getSize(); i++)
     {
-      NodePtr n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
+      boost::shared_ptr<Node> n(new Node(w->getStatus(), _result->createNextNodeId(), cs->getAt(i),
         w->getCircularError()));
       _result->addNode(n);
       result->addNode(n->getId());
@@ -168,15 +168,15 @@ double DualWaySplitter::_dotProduct(const Coordinate& c1, const Coordinate& c2) 
   return c1.x * c2.x + c1.y * c2.y;
 }
 
-long DualWaySplitter::_nearestNode(long nid, ConstWayPtr w)
+long DualWaySplitter::_nearestNode(long nid, boost::shared_ptr<const Way> w)
 {
-  NodePtr src = _result->getNode(nid);
+  boost::shared_ptr<Node> src = _result->getNode(nid);
   const vector<long>& nids = w->getNodeIds();
   Meters best = std::numeric_limits<double>::max();
   long bestNid = -1;
   for (size_t i = 0; i < nids.size(); i++)
   {
-    NodePtr n = _result->getNode(nids[i]);
+    boost::shared_ptr<Node> n = _result->getNode(nids[i]);
     Meters d = Distance::euclidean(src->toCoordinate(), n->toCoordinate());
     if (d < best)
     {
@@ -205,7 +205,7 @@ Coordinate DualWaySplitter::_normalizedVector(long nid1, long nid2)
   return result;
 }
 
-bool DualWaySplitter::_onRight(long intersectionId, WayPtr inbound, long leftNn,
+bool DualWaySplitter::_onRight(long intersectionId, boost::shared_ptr<Way> inbound, long leftNn,
                                long rightNn)
 {
   // calculate the normalized vector from nodeId to the nearest end point on left.
@@ -248,16 +248,16 @@ bool DualWaySplitter::_onRight(long intersectionId, WayPtr inbound, long leftNn,
   }
 }
 
-OsmMapPtr DualWaySplitter::splitAll(ConstOsmMapPtr map, DrivingSide drivingSide,
+boost::shared_ptr<OsmMap> DualWaySplitter::splitAll(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
                                              Meters defaultSplitSize)
 {
   DualWaySplitter dws(map, drivingSide, defaultSplitSize);
   return dws.splitAll();
 }
 
-OsmMapPtr DualWaySplitter::splitAll()
+boost::shared_ptr<OsmMap> DualWaySplitter::splitAll()
 {
-  OsmMapPtr result(new OsmMap(_map));
+  boost::shared_ptr<OsmMap> result(new OsmMap(_map));
   _result = result;
 
   TagCriterion tagCrit("divider", "yes");
@@ -284,7 +284,7 @@ OsmMapPtr DualWaySplitter::splitAll()
   return result;
 }
 
-void DualWaySplitter::_fixLanes(WayPtr w)
+void DualWaySplitter::_fixLanes(boost::shared_ptr<Way> w)
 {
   QString lanesStr = w->getTags()["lanes"];
 
@@ -309,15 +309,15 @@ void DualWaySplitter::_fixLanes(WayPtr w)
   }
 }
 
-void DualWaySplitter::_reconnectEnd(long centerNodeId, WayPtr edge)
+void DualWaySplitter::_reconnectEnd(long centerNodeId, boost::shared_ptr<Way> edge)
 {
   Coordinate centerNodeC = _result->getNode(centerNodeId)->toCoordinate();
   // determine which end of edge we're operating on
   Coordinate edgeEnd;
   long edgeEndId;
 
-  ConstNodePtr first = _result->getNode(edge->getNodeId(0));
-  ConstNodePtr last = _result->getNode(edge->getLastNodeId());
+  boost::shared_ptr<const Node> first = _result->getNode(edge->getNodeId(0));
+  boost::shared_ptr<const Node> last = _result->getNode(edge->getLastNodeId());
   if (first->toCoordinate().distance(centerNodeC) <
       last->toCoordinate().distance(centerNodeC))
   {
@@ -386,7 +386,7 @@ void DualWaySplitter::_splitIntersectingWays(long nid)
   {
     if (wids[i] != _working->getId())
     {
-      WayPtr inbound = _result->getWay(wids[i]);
+      boost::shared_ptr<Way> inbound = _result->getWay(wids[i]);
       if (_onRight(nid, inbound, leftNn, rightNn))
       {
         inbound->replaceNode(nid, rightNn);
@@ -461,7 +461,7 @@ void DualWaySplitter::_splitWay(long wid)
   _result->addWay(_right);
 }
 
-void DualWaySplitter::apply(OsmMapPtr& map)
+void DualWaySplitter::apply(boost::shared_ptr<OsmMap>& map)
 {
   map = splitAll(map, _drivingSide, _defaultSplitSize);
 }

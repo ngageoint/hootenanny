@@ -67,7 +67,7 @@ public:
 
   virtual void addVisitor(const ElementVisitorPtr& e);
 
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
 private:
  boost::shared_ptr<ElementVisitor> _visitor;

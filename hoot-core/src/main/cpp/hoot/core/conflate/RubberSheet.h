@@ -80,17 +80,17 @@ public:
 
   RubberSheet();
 
-  void apply(OsmMapPtr& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Applies a perviously calculated or loaded transform to the specified map.
    */
-  void applyTransform(OsmMapPtr& map);
+  void applyTransform(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Calculates an appropriate transform for the specified map, but does not change any data.
    */
-  void calculateTransform(OsmMapPtr& map);
+  void calculateTransform(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Set this to true if Unknown1 is a reference dataset and Unknown2 should be moved toward it.
@@ -152,7 +152,7 @@ private:
       double dy() const { return c1.y - c2.y; }
   };
 
-  OsmMapPtr _map;
+  boost::shared_ptr<OsmMap> _map;
 
   // A map of nids to the list of matches.
   MatchList _matches;

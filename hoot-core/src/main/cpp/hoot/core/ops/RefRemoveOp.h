@@ -54,7 +54,7 @@ public:
   /**
    * Remove all the ops that meet the given criterion.
    */
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
 private:
   ElementCriterionPtr _criterion;

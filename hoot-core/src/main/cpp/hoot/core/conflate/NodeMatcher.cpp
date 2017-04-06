@@ -109,7 +109,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
       LOG_VART(map->getWay(*it)->toString());
     }
 
-    //OsmMapPtr copy(new OsmMap(*map));
+    //boost::shared_ptr<const OsmMap> copy(new OsmMap(*map));
     //MapProjector::reprojectToWgs84(copy);
     //OsmUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
 

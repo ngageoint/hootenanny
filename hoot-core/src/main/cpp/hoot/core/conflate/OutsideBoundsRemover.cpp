@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-OutsideBoundsRemover::OutsideBoundsRemover(OsmMapPtr map, const Envelope& e, bool inverse)
+OutsideBoundsRemover::OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
 {
   _inputMap = map;
   _envelope = e;
@@ -47,7 +47,7 @@ OutsideBoundsRemover::OutsideBoundsRemover(OsmMapPtr map, const Envelope& e, boo
 }
 
 
-void OutsideBoundsRemover::removeWays(OsmMapPtr map, const Envelope& e, bool inverse)
+void OutsideBoundsRemover::removeWays(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
 {
   OutsideBoundsRemover obr(map, e, inverse);
   return obr.removeWays();

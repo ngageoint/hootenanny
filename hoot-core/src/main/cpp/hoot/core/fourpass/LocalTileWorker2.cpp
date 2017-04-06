@@ -83,7 +83,7 @@ void LocalTileWorker2::applyOp(boost::shared_ptr<OsmMapOperation> op, const vect
   {
     NodeReplacements replacements;
     replacements.readDir(mapIn);
-    OsmMapPtr map = _readTile(mapIn, tiles[i], _buffer);
+    boost::shared_ptr<OsmMap> map = _readTile(mapIn, tiles[i], _buffer);
 
     if (map->getNodes().size() > 0)
     {
@@ -120,7 +120,7 @@ void LocalTileWorker2::applyOp(boost::shared_ptr<OsmMapOperation> op, const vect
 
 void LocalTileWorker2::breakWays(QString out)
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -140,7 +140,7 @@ void LocalTileWorker2::breakWays(QString out)
 
 OGREnvelope LocalTileWorker2::calculateEnvelope()
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -156,7 +156,7 @@ OGREnvelope LocalTileWorker2::calculateEnvelope()
 
 void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -173,7 +173,7 @@ void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 
 void LocalTileWorker2::cleanup(QString mapIn, QString mapOut)
 {
-  OsmMapPtr map = _readAllParts(mapIn);
+  boost::shared_ptr<OsmMap> map = _readAllParts(mapIn);
 
   OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
@@ -203,9 +203,9 @@ void LocalTileWorker2::mkdir(QString dir)
   }
 }
 
-OsmMapPtr LocalTileWorker2::_readAllParts(QString dir)
+boost::shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
@@ -230,9 +230,9 @@ OsmMapPtr LocalTileWorker2::_readAllParts(QString dir)
   return map;
 }
 
-OsmMapPtr LocalTileWorker2::_readTile(QString input, const Envelope& e, double buffer)
+boost::shared_ptr<OsmMap> LocalTileWorker2::_readTile(QString input, const Envelope& e, double buffer)
 {
-  OsmMapPtr map = _readAllParts(input);
+  boost::shared_ptr<OsmMap> map = _readAllParts(input);
 
   Envelope buffered = e;
   buffered.expandBy(buffer);
@@ -242,7 +242,7 @@ OsmMapPtr LocalTileWorker2::_readTile(QString input, const Envelope& e, double b
   return map;
 }
 
-void LocalTileWorker2::_replaceNodes(OsmMapPtr map, const HashMap<long, long>& replacements)
+void LocalTileWorker2::_replaceNodes(boost::shared_ptr<OsmMap> map, const HashMap<long, long>& replacements)
 {
   for (HashMap<long, long>::const_iterator it = replacements.begin(); it != replacements.end();
        it++)
@@ -262,7 +262,7 @@ void LocalTileWorker2::rmdir(QString dir)
   FileUtils::removeDir(dir);
 }
 
-void LocalTileWorker2::_storeMapPart(OsmMapPtr map, QString dir)
+void LocalTileWorker2::_storeMapPart(boost::shared_ptr<OsmMap> map, QString dir)
 {
   QString fn = dir + QString("/Part%1.osm").arg(_mapPart++, 4, 10, QChar('0'));
   OsmXmlWriter writer;
@@ -281,7 +281,7 @@ void LocalTileWorker2::_writeNodeReplacements(QString dir, size_t i,
 void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
   const vector<Envelope>& conflatedBits, double buffer)
 {
-  OsmMapPtr map = _readAllParts(dirIn);
+  boost::shared_ptr<OsmMap> map = _readAllParts(dirIn);
 
   for (size_t i = 0; i < conflatedBits.size(); i++)
   {

@@ -110,7 +110,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 {
   LOG_INFO("Conflating a map. key: " << key);
   LOG_INFO("  Envelope: " << GeometryUtils::toString(_envelopes[key]));
- OsmMapPtr map(new OsmMap());
+ boost::shared_ptr<OsmMap> map(new OsmMap());
   map->setIdGenerator(_idGen);
 
   while (context.nextValue())
@@ -181,7 +181,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   conflator.loadSource(map);
   conflator.conflate();
 
- OsmMapPtr result(new OsmMap(conflator.getBestMap()));
+ boost::shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
   MapProjector::projectToWgs84(result);
 
   for (HashMap<long, long>::const_iterator it = _nr.getReplacements().begin();
@@ -206,7 +206,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   const WayMap wm = result->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const WayPtr& w = result->getWay(it->first);
+    const boost::shared_ptr<Way>& w = result->getWay(it->first);
     WaySplitter::split(result, w, _maxWaySize);
   }
 
@@ -215,7 +215,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   const WayMap& wm2 = result->getWays();
   for (WayMap::const_iterator it = wm2.begin(); it != wm2.end(); ++it)
   {
-    const ConstWayPtr& w = it->second;
+    const boost::shared_ptr<const Way>& w = it->second;
 
     const Envelope e = w->getEnvelopeInternal(result);
 
@@ -236,7 +236,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   _emitMap(result);
 }
 
-void ConflateReducer::_emitMap(OsmMapPtr map)
+void ConflateReducer::_emitMap(boost::shared_ptr<OsmMap> map)
 {
   Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
@@ -245,7 +245,7 @@ void ConflateReducer::_emitMap(OsmMapPtr map)
   _writer->emitRecord(map);
 }
 
-const Envelope& ConflateReducer::_getContainingEnvelope(const OsmMapPtr& map)
+const Envelope& ConflateReducer::_getContainingEnvelope(const boost::shared_ptr<OsmMap>& map)
 {
  boost::shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
@@ -294,10 +294,10 @@ void ConflateReducer::_init(HadoopPipes::ReduceContext& context)
   _initialized = true;
 }
 
-OsmMapPtr ConflateReducer::_readMap(const string& value)
+boost::shared_ptr<OsmMap> ConflateReducer::_readMap(const string& value)
 {
   // read the map from the given string.
- OsmMapPtr result(new OsmMap());
+ boost::shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
   OsmPbfReader reader(true);
@@ -330,13 +330,13 @@ void ConflateReducer::reduce(HadoopPipes::ReduceContext& context)
     // emit all the data right out to disk.
     while (context.nextValue())
     {
-     OsmMapPtr map = _readMap(context.getInputValue());
+     boost::shared_ptr<OsmMap> map = _readMap(context.getInputValue());
       _emitMap(map);
     }
   }
 }
 
-void ConflateReducer::_validate(const OsmMapPtr& map)
+void ConflateReducer::_validate(const boost::shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Validating map.");
   Debug::printTroubled(map);

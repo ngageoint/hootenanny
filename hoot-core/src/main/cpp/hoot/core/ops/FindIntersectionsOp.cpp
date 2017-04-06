@@ -60,7 +60,7 @@ FindIntersectionsOp::FindIntersectionsOp()
 {
 }
 
-void FindIntersectionsOp::apply(OsmMapPtr& map)
+void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));

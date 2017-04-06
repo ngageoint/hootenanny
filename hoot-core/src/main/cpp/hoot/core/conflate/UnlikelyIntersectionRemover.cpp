@@ -67,16 +67,16 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   //
 
   // create two groups for the ways
-  vector< WayPtr > g1, g2;
+  vector< boost::shared_ptr<Way> > g1, g2;
 
   // put the first way in the first group
   g1.push_back(_result->getWay(*wayIds.begin()));
 
-  WayPtr first = g1[0];
+  boost::shared_ptr<Way> first = g1[0];
   // go through all the other ways
   for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
-    WayPtr w = _result->getWay(*it);
+    boost::shared_ptr<Way> w = _result->getWay(*it);
     double p = _pIntersection(intersectingNode, first, w);
 
     // if this is a likely intersection with the first way
@@ -105,8 +105,8 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   }
 }
 
-double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, WayPtr w1,
-                                                 WayPtr w2)
+double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, boost::shared_ptr<Way> w1,
+                                                 boost::shared_ptr<Way> w2)
 {
   // pressume it is a valid intersection
   double p = 1.0;
@@ -164,14 +164,14 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, WayPtr
   return p;
 }
 
-void UnlikelyIntersectionRemover::removeIntersections(OsmMapPtr map)
+void UnlikelyIntersectionRemover::removeIntersections(boost::shared_ptr<OsmMap> map)
 {
   UnlikelyIntersectionRemover uir;
   uir.apply(map);
 }
 
 void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
-                                                     const vector< WayPtr >& g2)
+                                                     const vector<boost::shared_ptr<Way> > &g2)
 {
   NodePtr oldNode = _result->getNode(intersectingNode);
   // create a copy of the intersecting node
@@ -189,7 +189,7 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   }
 }
 
-void UnlikelyIntersectionRemover::apply(OsmMapPtr& map)
+void UnlikelyIntersectionRemover::apply(boost::shared_ptr<OsmMap>& map)
 {
   _result = map;
 

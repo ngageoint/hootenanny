@@ -87,7 +87,7 @@ LocalTileWorker::LocalTileWorker()
 
 void LocalTileWorker::breakWays(QString out)
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -104,7 +104,7 @@ void LocalTileWorker::breakWays(QString out)
 
 OGREnvelope LocalTileWorker::calculateEnvelope()
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -117,7 +117,7 @@ OGREnvelope LocalTileWorker::calculateEnvelope()
 
 void LocalTileWorker::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -131,7 +131,7 @@ void LocalTileWorker::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 
 void LocalTileWorker::cleanup(QString mapIn, QString mapOut)
 {
-  OsmMapPtr map = _readAllParts(mapIn);
+  boost::shared_ptr<OsmMap> map = _readAllParts(mapIn);
 
   OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
@@ -146,7 +146,7 @@ void LocalTileWorker::conflate(const vector<Envelope>& tiles, QString mapIn, QSt
   {
     NodeReplacements replacements;
     replacements.readDir(mapIn);
-    OsmMapPtr map = _readTile(mapIn, tiles[i]);
+    boost::shared_ptr<OsmMap> map = _readTile(mapIn, tiles[i]);
 
     if (map->getNodes().size() > 0)
     {
@@ -159,7 +159,7 @@ void LocalTileWorker::conflate(const vector<Envelope>& tiles, QString mapIn, QSt
   _writeTheRest(mapIn, mapOut, tiles);
 }
 
-OsmMapPtr LocalTileWorker::_conflate(OsmMapPtr map,
+boost::shared_ptr<OsmMap> LocalTileWorker::_conflate(boost::shared_ptr<OsmMap> map,
   HashMap<long, long>& replacements)
 {
   boost::shared_ptr<ReplacedNodeListener> rnl(new ReplacedNodeListener(replacements));
@@ -173,7 +173,7 @@ OsmMapPtr LocalTileWorker::_conflate(OsmMapPtr map,
   conflator.loadSource(map);
   conflator.conflate();
 
-  OsmMapPtr result(new OsmMap(conflator.getBestMap()));
+  boost::shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
   MapProjector::projectToWgs84(result);
 
   return result;
@@ -200,9 +200,9 @@ void LocalTileWorker::mkdir(QString dir)
   }
 }
 
-OsmMapPtr LocalTileWorker::_readAllParts(QString dir)
+boost::shared_ptr<OsmMap> LocalTileWorker::_readAllParts(QString dir)
 {
-  OsmMapPtr map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
@@ -227,9 +227,9 @@ OsmMapPtr LocalTileWorker::_readAllParts(QString dir)
   return map;
 }
 
-OsmMapPtr LocalTileWorker::_readTile(QString input, const Envelope& e)
+boost::shared_ptr<OsmMap> LocalTileWorker::_readTile(QString input, const Envelope& e)
 {
-  OsmMapPtr map = _readAllParts(input);
+  boost::shared_ptr<OsmMap> map = _readAllParts(input);
 
   OutsideBoundsRemover::removeWays(map, e);
   map = SuperfluousNodeRemover::removeNodes(map);
@@ -237,7 +237,7 @@ OsmMapPtr LocalTileWorker::_readTile(QString input, const Envelope& e)
   return map;
 }
 
-void LocalTileWorker::_replaceNodes(OsmMapPtr map, const HashMap<long, long>& replacements)
+void LocalTileWorker::_replaceNodes(boost::shared_ptr<OsmMap> map, const HashMap<long, long>& replacements)
 {
   for (HashMap<long, long>::const_iterator it = replacements.begin(); it != replacements.end();
        it++)
@@ -257,7 +257,7 @@ void LocalTileWorker::rmdir(QString dir)
   FileUtils::removeDir(dir);
 }
 
-void LocalTileWorker::_storeMapPart(OsmMapPtr map, QString dir)
+void LocalTileWorker::_storeMapPart(boost::shared_ptr<OsmMap> map, QString dir)
 {
   QString fn = dir + QString("/Part%1.osm").arg(_mapPart++, 4, 10, QChar('0'));
   OsmXmlWriter writer;
@@ -276,7 +276,7 @@ void LocalTileWorker::_writeNodeReplacements(QString dir, size_t i,
 void LocalTileWorker::_writeTheRest(QString dirIn, QString dirOut,
   const vector<Envelope>& conflatedBits)
 {
-  OsmMapPtr map = _readAllParts(dirIn);
+  boost::shared_ptr<OsmMap> map = _readAllParts(dirIn);
 
   for (size_t i = 0; i < conflatedBits.size(); i++)
   {

@@ -36,7 +36,7 @@ namespace hoot
 class AttributeComparator : public BaseComparator
 {
 public:
-  AttributeComparator(OsmMapPtr map1,OsmMapPtr map2);
+  AttributeComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
 
   virtual ~AttributeComparator() {}
 

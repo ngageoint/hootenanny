@@ -67,22 +67,22 @@ public:
 
   SmallWayMerger(Meters threshold = -1);
 
-  void apply(OsmMapPtr& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Remove parts of ways that are duplicates.
    */
-  static void mergeWays(OsmMapPtr map, Meters threshold);
+  static void mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold);
 
 protected:
 
-  OsmMapPtr _map;
+  boost::shared_ptr<OsmMap> _map;
 
   double _threshold;
   NodeToWayMap* _n2w;
   auto_ptr<TagDifferencer> _diff;
 
-  void _mergeNeighbors(WayPtr w);
+  void _mergeNeighbors(boost::shared_ptr<Way> w);
 
   void _mergeWays(const set<long>& ids);
 };

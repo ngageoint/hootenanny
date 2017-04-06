@@ -48,7 +48,7 @@ void DirectedGraph::addEdge(long from, long to, double weight)
   _edges.insert(from, Edge(from, to, weight));
 }
 
-double DirectedGraph::determineCost(WayPtr way)
+double DirectedGraph::determineCost(boost::shared_ptr<Way> way)
 {
   QString highway = way->getTags()["highway"];
   // reasonable default for an unknown "highway"
@@ -94,13 +94,13 @@ double DirectedGraph::determineCost(WayPtr way)
   return _mphToSecondsPerMeter(mph);
 }
 
-void DirectedGraph::deriveEdges(ConstOsmMapPtr map)
+void DirectedGraph::deriveEdges(boost::shared_ptr<const OsmMap> map)
 {
   const WayMap& ways = map->getWays();
 
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const WayPtr& way = it->second;
+    const boost::shared_ptr<Way>& way = it->second;
     double cost = determineCost(way);
     double length = ElementConverter(map).convertToLineString(way)->getLength();
 
@@ -121,7 +121,7 @@ void DirectedGraph::deriveEdges(ConstOsmMapPtr map)
   }
 }
 
-bool DirectedGraph::isOneWay(WayPtr way)
+bool DirectedGraph::isOneWay(boost::shared_ptr<Way> way)
 {
   return OsmSchema::getInstance().isOneWay(*way);
 }

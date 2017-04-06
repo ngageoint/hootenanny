@@ -81,7 +81,7 @@ public:
 
   static boost::shared_ptr<OGRSpatialReference> createWgs84Projection();
 
-  static void project(OsmMapPtr map,boost::shared_ptr<OGRSpatialReference> ref);
+  static void project(boost::shared_ptr<OsmMap> map,boost::shared_ptr<OGRSpatialReference> ref);
 
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
@@ -118,29 +118,29 @@ public:
   static void project(const boost::shared_ptr<Geometry>& g, const boost::shared_ptr<OGRSpatialReference>& srs1,
     const boost::shared_ptr<OGRSpatialReference>& srs2);
 
-  static void projectToAeac(OsmMapPtr map);
+  static void projectToAeac(boost::shared_ptr<OsmMap> map);
 
   /**
    * Picks the center of the orthographic projection as the center of the map bounds. Should be
    * a reasonable projection for small areas. Units are in meters.
    */
-  static void projectToOrthographic(OsmMapPtr map);
+  static void projectToOrthographic(boost::shared_ptr<OsmMap> map);
 
-  static void projectToOrthographic(OsmMapPtr map, const OGREnvelope& env);
+  static void projectToOrthographic(boost::shared_ptr<OsmMap> map, const OGREnvelope& env);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the envelope of the map to determine the projection.
    */
-  static void projectToPlanar(OsmMapPtr map);
+  static void projectToPlanar(boost::shared_ptr<OsmMap> map);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the provided envelope to determine the projection.
    */
-  static void projectToPlanar(OsmMapPtr map, const OGREnvelope& env);
+  static void projectToPlanar(boost::shared_ptr<OsmMap> map, const OGREnvelope& env);
 
-  static void projectToWgs84(OsmMapPtr map);
+  static void projectToWgs84(boost::shared_ptr<OsmMap> map);
 
   /**
    * Very slow convenience function.

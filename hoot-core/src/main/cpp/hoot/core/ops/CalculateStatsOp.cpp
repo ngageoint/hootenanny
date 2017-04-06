@@ -124,7 +124,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
   MapProjector::projectToPlanar(map);
 
-  ConstOsmMapPtr constMap = map;
+  boost::shared_ptr<const OsmMap> constMap = map;
 
   _stats.append(SingleStat("Node Count",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
@@ -374,13 +374,13 @@ bool CalculateStatsOp::_matchDescriptorCompare(const MatchCreator::Description& 
   return m1.className > m2.className;
 }
 
-double CalculateStatsOp::_applyVisitor(ConstOsmMapPtr &map, const FilteredVisitor& v)
+double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map, const FilteredVisitor& v)
 {
   any emptyVisitorData;
   return _applyVisitor(map, v, emptyVisitorData);
 }
 
-double CalculateStatsOp::_applyVisitor(ConstOsmMapPtr &map, const FilteredVisitor& v,
+double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map, const FilteredVisitor& v,
                                        any& visitorData)
 {
   // this is a hack to let C++ pass v as a temporary. Bad Jason.
@@ -405,7 +405,7 @@ double CalculateStatsOp::_applyVisitor(ConstOsmMapPtr &map, const FilteredVisito
   return ss->getStat();
 }
 
-void CalculateStatsOp::_applyVisitor(ConstOsmMapPtrR map, ElementVisitor *v)
+void CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap>& map, ElementVisitor *v)
 {
   auto_ptr<FilteredVisitor> critFv;
   if (_criterion)
@@ -461,7 +461,7 @@ void CalculateStatsOp::printStats()
   }
 }
 
-void CalculateStatsOp::_generateFeatureStats(ConstOsmMapPtr &map, QString description,
+void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap> &map, QString description,
                                              float conflatableCount,
                                              MatchCreator::FeatureCalcType type,
                                              ElementCriterion* criterion)

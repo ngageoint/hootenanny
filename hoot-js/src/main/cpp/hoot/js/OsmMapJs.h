@@ -47,7 +47,7 @@ public:
  static Handle<Object> create(OsmMapPtr map);
 
  OsmMapPtr& getMap();
- ConstOsmMapPtrR getConstMap() { return _constMap; }
+ ConstOsmMapPtr& getConstMap() { return _constMap; }
 
  bool isConst() const { return !_map.get() && _constMap.get(); }
 
@@ -73,7 +73,7 @@ private:
   void _setMap(ConstOsmMapPtr map) { _map.reset(); _constMap = map; }
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, ConstOsmMapPtrR ptr)
+inline void toCpp(v8::Handle<v8::Value> v, ConstOsmMapPtr& ptr)
 {
   if (!v->IsObject())
   {

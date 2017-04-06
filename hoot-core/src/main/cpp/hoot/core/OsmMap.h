@@ -96,13 +96,13 @@ public:
 
   OsmMap();
 
-  explicit OsmMap(ConstOsmMapPtr);
+  explicit OsmMap(boost::shared_ptr<const OsmMap>);
 
-  explicit OsmMap(OsmMapPtr);
+  explicit OsmMap(boost::shared_ptr<OsmMap>);
 
   explicit OsmMap(boost::shared_ptr<OGRSpatialReference> srs);
 
-  OsmMap(ConstOsmMapPtr, boost::shared_ptr<OGRSpatialReference> srs);
+  OsmMap(boost::shared_ptr<const OsmMap>, boost::shared_ptr<OGRSpatialReference> srs);
 
   ~OsmMap();
 
@@ -115,7 +115,7 @@ public:
    * @throws If the map being appended to does not have the same projection as the map being
    * appended from
    */
-  void append(ConstOsmMapPtr map);
+  void append(boost::shared_ptr<const OsmMap> map);
 
   void addElement(const boost::shared_ptr<Element>& e);
   template<class T>
@@ -313,7 +313,7 @@ protected:
 
   vector< boost::shared_ptr<Element> > _replaceTmpArray;
 
-  void _copy(ConstOsmMapPtr from);
+  void _copy(boost::shared_ptr<const OsmMap> from);
 
   /**
    * Returns true if there is a node in l.
@@ -324,8 +324,8 @@ protected:
 
 };
 
-typedef OsmMapPtr OsmMapPtr;
-typedef ConstOsmMapPtr ConstOsmMapPtr;
+typedef boost::shared_ptr<OsmMap> OsmMapPtr;
+typedef boost::shared_ptr<const OsmMap> ConstOsmMapPtr;
 // ConstOsmMapPtrR - The R is for reference.
 typedef const ConstOsmMapPtr& ConstOsmMapPtrR;
 

@@ -74,14 +74,14 @@ public:
   /**
    * Permute the map and then apply all "perty.ops" to the map as well.
    */
-  virtual void apply(OsmMapPtr& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Generates a map of all the grid offset vectors and permutes the given map.
    */
- OsmMapPtr generateDebugMap(OsmMapPtr& map);
+ boost::shared_ptr<OsmMap> generateDebugMap(boost::shared_ptr<OsmMap>& map);
 
-  void permute(const OsmMapPtr& map);
+  void permute(const boost::shared_ptr<OsmMap>& map);
 
   void setCsmParameters(double D) { _D = D; }
 

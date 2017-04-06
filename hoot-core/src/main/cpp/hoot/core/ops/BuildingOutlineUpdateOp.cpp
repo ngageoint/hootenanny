@@ -116,7 +116,7 @@ BuildingOutlineUpdateOp::BuildingOutlineUpdateOp()
 {
 }
 
-void BuildingOutlineUpdateOp::apply(OsmMapPtr& map)
+void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   _map = map;
 
