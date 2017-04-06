@@ -78,7 +78,7 @@ protected:
 
   void _visit(const ConstWayPtr& w);
 
-  void _visit(const ConstRelationPtr& r);
+  void _visit(const ConstRelationPtrR r);
 };
 
 }

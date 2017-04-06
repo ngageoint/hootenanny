@@ -75,7 +75,7 @@ public:
 
   static unsigned int logWarnCount;
 
-  MultiPolygonCreator(const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
+  MultiPolygonCreator(const ConstElementProviderPtr& provider, const ConstRelationPtrR r);
 
   /**
    * Create and return a multipolygon. If the multipolygon contains gross errors then an empty
@@ -87,7 +87,7 @@ public:
 private:
 
   const ConstElementProviderPtr& _provider;
-  const ConstRelationPtr& _r;
+  const ConstRelationPtrR _r;
 
   Geometry* _addHoles(vector<LinearRing*> &outers, vector<LinearRing*> &inners) const;
 

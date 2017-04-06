@@ -77,7 +77,7 @@ public:
   virtual void writePartial(const ConstWayPtr& w) = 0;
   void writePartial(const WayPtr& w) { writePartial((const ConstWayPtr)w); }
 
-  virtual void writePartial(const ConstRelationPtr& r) = 0;
+  virtual void writePartial(const ConstRelationPtrR r) = 0;
   void writePartial(const RelationPtr& r);
 
   virtual void writeElement(ElementInputStream& in);

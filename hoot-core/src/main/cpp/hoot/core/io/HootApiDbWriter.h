@@ -85,7 +85,7 @@ public:
 
   virtual void writePartial(const ConstWayPtr& w);
 
-  virtual void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstRelationPtrR r);
 
 protected:
 

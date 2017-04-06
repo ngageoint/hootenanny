@@ -488,7 +488,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtrR map,
   }
 
   // convert the geometry.
-  const ConstRelationPtr& r = relation;
+  const ConstRelationPtrR r = relation;
   std::string wkt = ElementConverter(map).convertToGeometry(r)->toString();
   char* t = (char*)wkt.data();
   OGRGeometry* geom;

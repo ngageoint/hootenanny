@@ -151,7 +151,7 @@ public:
   void writePartial(const ConstWayPtr& w);
   void writePartial(const WayPtr& w) { writePartial((const ConstWayPtr)w); }
 
-  void writePartial(const ConstRelationPtr& r);
+  void writePartial(const ConstRelationPtrR r);
 
   /**
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
@@ -178,7 +178,7 @@ public:
    * Write a single way out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const ConstRelationPtr& r, ostream* strm);
+  void writePb(const ConstRelationPtrR r, ostream* strm);
   void writePb(const RelationPtr& r, ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
 
 private:

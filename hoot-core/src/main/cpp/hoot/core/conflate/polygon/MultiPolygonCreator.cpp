@@ -54,7 +54,7 @@ namespace hoot
 unsigned int MultiPolygonCreator::logWarnCount = 0;
 
 MultiPolygonCreator::MultiPolygonCreator(const ConstElementProviderPtr& provider,
-  const ConstRelationPtr& r) :
+  const ConstRelationPtrR r) :
   _provider(provider),
   _r(r)
 {

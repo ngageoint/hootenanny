@@ -60,7 +60,7 @@ public:
   /**
    * Recursively traverses the relation and adds all child elements to the reference.
    */
-  void addRelation(const OsmMap& map, const ConstRelationPtr& r);
+  void addRelation(const OsmMap& map, const ConstRelationPtrR r);
 
   /**
    * Returns a set of relation ids that have the specified element as a member, explicity or

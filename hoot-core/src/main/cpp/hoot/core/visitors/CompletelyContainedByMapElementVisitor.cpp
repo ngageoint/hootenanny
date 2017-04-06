@@ -110,7 +110,7 @@ void CompletelyContainedByMapElementVisitor::_visit(const ConstWayPtr& w)
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const ConstRelationPtr& r)
+void CompletelyContainedByMapElementVisitor::_visit(const ConstRelationPtrR r)
 {
   const vector<RelationData::Entry>& m = r->getMembers();
 

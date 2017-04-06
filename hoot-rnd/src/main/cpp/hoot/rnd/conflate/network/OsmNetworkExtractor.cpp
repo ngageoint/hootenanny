@@ -89,7 +89,7 @@ OsmNetworkPtr OsmNetworkExtractor::extractNetwork(ConstOsmMapPtr map)
   return _network;
 }
 
-bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtr& r)
+bool OsmNetworkExtractor::_isContiguous(const ConstRelationPtrR r)
 {
   assert(OsmSchema::getInstance().isLinear(*r));
 

@@ -906,7 +906,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   }
 }
 
-void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
+void OsmApiDbBulkWriter::writePartial(const ConstRelationPtrR relation)
 {
   LOG_VART(relation);
 
@@ -1428,7 +1428,7 @@ void OsmApiDbBulkWriter::_writeRelationToStream(const unsigned long relationDbId
   *(_outputSections[ApiDb::getRelationsTableName()].second) << outputLine;
 }
 
-void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& relation,
+void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtrR relation,
                                                        const unsigned long dbRelationId)
 {
   LOG_TRACE("Writing relation members to stream...");
