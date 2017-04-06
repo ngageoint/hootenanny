@@ -23,6 +23,7 @@
 // Qt
 #include <QVector>
 #include <QPair>
+#include <QStringList>
 
 namespace hoot
 {
@@ -50,9 +51,12 @@ private:
   shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
   QString _outputDelimiter;
   shared_ptr<QVector<QPair<QString, QString> > > _statementsBuffer;
+  bool _localJobTracker;
 
-//  void _writeElementSqlStatements(const ConstElementPtr& element,
-//                                  HadoopPipes::MapContext& context);
+  void _writeElementAndTagsSqlStatements(const ConstElementPtr& element,
+                                         const unsigned long elementId,
+                                         const QStringList& elementSqlHeaders,
+                                         const QStringList& elementTagSqlHeaders);
   void _flush();
 
 };

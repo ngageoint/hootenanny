@@ -32,25 +32,70 @@
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/elements/Tags.h>
 
+// Qt
+#include <QStringBuilder>
+
 namespace hoot
 {
 
 PP_FACTORY_REGISTER(pp::Mapper, WriteOsmSqlStatementsMapper)
 
 WriteOsmSqlStatementsMapper::WriteOsmSqlStatementsMapper() :
-_outputDelimiter("\t")
+_outputDelimiter("\t"),
+_localJobTracker(false)
 {
   _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
   _statementsBuffer.reset(new QVector<QPair<QString, QString> >());
   _context = NULL;
 }
 
-//TODO: consolidate duplicated code in _map here
-//void WriteElementSqlStatementsMapper::_writeElementSqlStatements(const ConstElementPtr& element,
-//                                                             HadoopPipes::MapContext& context)
-//{
+void WriteOsmSqlStatementsMapper::_writeElementAndTagsSqlStatements(const ConstElementPtr& element,
+                                                                    const unsigned long elementId,
+                                                               const QStringList& elementSqlHeaders,
+                                                           const QStringList& elementTagSqlHeaders)
+{
+  const QStringList elementSqlStatements =
+    _sqlFormatter->elementToSqlStrings(element, elementId, 1);
+  _statementsBuffer->append(QPair<QString, QString>(elementSqlHeaders[0], elementSqlStatements[0]));
+  _statementsBuffer->append(QPair<QString, QString>(elementSqlHeaders[1], elementSqlStatements[1]));
+  const QString elementTypeStr = element->getElementType().toString().toLower() % "s";
+  //the pretty pipes version of the local job runner doesn't support counters
+  if (!_localJobTracker)
+  {
+    _context->incrementCounter(
+      _context->getCounter("WriteOsmSqlStatements", elementTypeStr.toStdString()), 1);
+    //x2 due to one statement for the current table and one for the historical table
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
+  }
 
-//}
+  const Tags& tags = element->getTags();
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  {
+    const QStringList elementTagSqlStatements =
+      _sqlFormatter->tagToSqlStrings(
+        elementId, element->getElementId().getType(), it.key(), it.value());
+    _statementsBuffer->append(
+      QPair<QString, QString>(elementTagSqlHeaders[0], elementTagSqlStatements[0]));
+    _statementsBuffer->append(
+      QPair<QString, QString>(elementTagSqlHeaders[1], elementTagSqlStatements[1]));
+    if (!_localJobTracker)
+    {
+      QString elementTagsTypeStr = elementTypeStr;
+      elementTagsTypeStr.chop(1);
+      elementTagsTypeStr = elementTagsTypeStr % " tags";
+      _context->incrementCounter(
+        _context->getCounter("WriteOsmSqlStatements", elementTagsTypeStr.toStdString()), 1);
+      _context->incrementCounter(
+        _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
+    }
+  }
+
+  if (!_localJobTracker)
+  {
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
+  }
+}
 
 void WriteOsmSqlStatementsMapper::_flush()
 {
@@ -74,57 +119,30 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 
   shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   //LOG_VARD(config->getInt("mapred.map.tasks"));
-  const bool localJobTracker = config->get("mapred.job.tracker") == "local";
+  _localJobTracker = config->get("mapred.job.tracker") == "local";
   const long writeBufferSize = config->getLong("writeBufferSize");
+
+  //nodes
 
   const QStringList nodeSqlHeaders = _sqlFormatter->getNodeSqlHeaderStrings();
   const QStringList nodeTagSqlHeaders = _sqlFormatter->getNodeTagSqlHeaderStrings();
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    shared_ptr<const Node> node = it->second;
+    ConstNodePtr node = it->second;
 
-    assert(nodeId != 0);
-    const long nodeId = abs(node->getId());
+    assert(node->getId() != 0);
+    const unsigned long elementId = abs(node->getId());
 
-    const QStringList nodeSqlStatements = _sqlFormatter->nodeToSqlStrings(node, nodeId, 1);
-    _statementsBuffer->append(QPair<QString, QString>(nodeSqlHeaders[0], nodeSqlStatements[0]));
-    _statementsBuffer->append(QPair<QString, QString>(nodeSqlHeaders[1], nodeSqlStatements[1]));
-    //the pretty pipes version of the local job runner doesn't support counters
-    if (!localJobTracker)
-    {
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "nodes"), 1);
-      //x2 due to one statement for the current table and one for the historical table
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
-    }
+    _writeElementAndTagsSqlStatements(node, elementId, nodeSqlHeaders, nodeTagSqlHeaders);
 
-    const Tags& tags = node->getTags();
-    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-    {
-      const QStringList nodeTagSqlStatements =
-        _sqlFormatter->tagToSqlStrings(
-          nodeId, node->getElementId().getType(), it.key(), it.value());
-      _statementsBuffer->append(
-        QPair<QString, QString>(nodeTagSqlHeaders[0], nodeTagSqlStatements[0]));
-      _statementsBuffer->append(
-        QPair<QString, QString>(nodeTagSqlHeaders[1], nodeTagSqlStatements[1]));
-      if (!localJobTracker)
-      {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "node tags"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
-      }
-    }
-
-    if (!localJobTracker)
-    {
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
-    }
     if (_statementsBuffer->size() >= writeBufferSize)
     {
       _flush();
     }
   }
+
+  //ways
 
   const QStringList waySqlHeaders = _sqlFormatter->getWaySqlHeaderStrings();
   const QStringList wayNodeSqlHeaders = _sqlFormatter->getWayNodeSqlHeaderStrings();
@@ -132,19 +150,12 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
   const WayMap& wm = map->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<Way>& way = it->second;
+    ConstWayPtr way = it->second;
 
-    assert(wayId != 0);
-    const long wayId = abs(way->getId());
+    assert(way->getId() != 0);
+    const unsigned long elementId = abs(way->getId());
 
-    const QStringList waySqlStatements = _sqlFormatter->wayToSqlStrings(wayId, 1);
-    _statementsBuffer->append(QPair<QString, QString>(waySqlHeaders[0], waySqlStatements[0]));
-    _statementsBuffer->append(QPair<QString, QString>(waySqlHeaders[1], waySqlStatements[1]));
-    if (!localJobTracker)
-    {
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "ways"), 1);
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
-    }
+    _writeElementAndTagsSqlStatements(way, elementId, waySqlHeaders, wayTagSqlHeaders);
 
     const vector<long> wayNodeIds = way->getNodeIds();
     unsigned int wayNodeIndex = 1;
@@ -154,45 +165,28 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       const long wayNodeId = abs(*it);
 
       const QStringList wayNodeSqlStatements =
-        _sqlFormatter->wayNodeToSqlStrings(wayId, wayNodeId, wayNodeIndex);
+        _sqlFormatter->wayNodeToSqlStrings(elementId, wayNodeId, wayNodeIndex);
       _statementsBuffer->append(
         QPair<QString, QString>(wayNodeSqlHeaders[0], wayNodeSqlStatements[0]));
       _statementsBuffer->append(
         QPair<QString, QString>(wayNodeSqlHeaders[1], wayNodeSqlStatements[1]));
       wayNodeIndex++;
-      if (!localJobTracker)
+      if (!_localJobTracker)
       {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "way nodes"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
+        _context->incrementCounter(
+          _context->getCounter("WriteOsmSqlStatements", "way nodes"), 1);
+        _context->incrementCounter(
+          _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
-    const Tags& tags = way->getTags();
-    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-    {
-      const QStringList wayTagSqlStatements =
-        _sqlFormatter->tagToSqlStrings(
-          wayId, way->getElementId().getType(), it.key(), it.value());
-      _statementsBuffer->append(
-        QPair<QString, QString>(wayTagSqlHeaders[0], wayTagSqlStatements[0]));
-      _statementsBuffer->append(
-        QPair<QString, QString>(wayTagSqlHeaders[1], wayTagSqlStatements[1]));
-      if (!localJobTracker)
-      {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "way tags"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
-      }
-    }
-
-    if (!localJobTracker)
-    {
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
-    }
     if (_statementsBuffer->size() >= writeBufferSize)
     {
       _flush();
     }
   }
+
+  //relations
 
   const QStringList relationSqlHeaders = _sqlFormatter->getRelationSqlHeaderStrings();
   const QStringList relationMemberSqlHeaders = _sqlFormatter->getRelationMemberSqlHeaderStrings();
@@ -203,18 +197,10 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
     RelationPtr relation = it->second;
 
     assert(relation->getId() != 0);
-    const long relationId = abs(relation->getId());
+    const unsigned long elementId = abs(relation->getId());
 
-    const QStringList relationSqlStatements = _sqlFormatter->relationToSqlStrings(relationId, 1);
-    _statementsBuffer->append(
-      QPair<QString, QString>(relationSqlHeaders[0], relationSqlStatements[0]));
-    _statementsBuffer->append(
-      QPair<QString, QString>(relationSqlHeaders[1], relationSqlStatements[1]));
-    if (!localJobTracker)
-    {
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relations"), 1);
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
-    }
+    _writeElementAndTagsSqlStatements(
+      relation, elementId, relationSqlHeaders, relationTagSqlHeaders);
 
     unsigned int memberSequenceIndex = 1;
     const vector<RelationData::Entry> relationMembers = relation->getMembers();
@@ -228,41 +214,21 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 
       const QStringList relationMemberSqlStatements =
         _sqlFormatter->relationMemberToSqlStrings(
-          relationId, memberId, member, memberSequenceIndex);
+          elementId, memberId, member, memberSequenceIndex);
       _statementsBuffer->append(
         QPair<QString, QString>(relationMemberSqlHeaders[0], relationMemberSqlStatements[0]));
       _statementsBuffer->append(
         QPair<QString, QString>(relationMemberSqlHeaders[1], relationMemberSqlStatements[1]));
       memberSequenceIndex++;
-      if (!localJobTracker)
+      if (!_localJobTracker)
       {
-        context.incrementCounter(
-          context.getCounter("WriteOsmSqlStatements", "relation members"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
+        _context->incrementCounter(
+          _context->getCounter("WriteOsmSqlStatements", "relation members"), 1);
+        _context->incrementCounter(
+          _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
-    const Tags& tags = relation->getTags();
-    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-    {
-      const QStringList relationTagSqlStatements =
-        _sqlFormatter->tagToSqlStrings(
-          relationId, relation->getElementId().getType(), it.key(), it.value());
-      _statementsBuffer->append(
-        QPair<QString, QString>(relationTagSqlHeaders[0], relationTagSqlStatements[0]));
-      _statementsBuffer->append(
-        QPair<QString, QString>(relationTagSqlHeaders[1], relationTagSqlStatements[1]));
-      if (!localJobTracker)
-      {
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "relation tags"), 1);
-        context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
-      }
-    }
-
-    if (!localJobTracker)
-    {
-      context.incrementCounter(context.getCounter("WriteOsmSqlStatements", "elements"), 1);
-    }
     if (_statementsBuffer->size() >= writeBufferSize)
     {
       _flush();
