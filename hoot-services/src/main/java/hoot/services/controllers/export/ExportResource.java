@@ -66,9 +66,7 @@ import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.wfs.WFSManager;
 
 
 @Controller
@@ -102,10 +100,9 @@ public class ExportResource {
      *                            //a file path will be specified.
      *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db.
      *                            //For inputtype=file, specify full path to a file.
-     *   "outputtype":"gdb",      //[gdb | shp | wfs | osm_api_db | osc]. gdb will produce file gdb,
-     *                            //shp will output shapefile. if outputtype = wfs then a wfs
-     *                            //front end will be created. osm_api_db will derive and apply a
-     *                            //changeset to an OSM API database, osc will derive changeset
+     *   "outputtype":"gdb",      //[gdb | shp | osm_api_db | osc]. gdb will produce file gdb,
+     *                            //shp will output shapefile. osm_api_db will derive and apply a
+     *                            //changeset to an OSM API database . osc will derive changeset
      *                            //xml computing the the difference between the configured
      *                            //OSM API database and the specified input layer
      *   "removereview" : "false"
@@ -147,6 +144,8 @@ public class ExportResource {
                     workflow.add(zipCommand);
                 }
             }
+            // As of 04/03/2017, OSC support is not fully implemented yet.  This REST controller might not
+            // even be the right place to host it.
             else if (outputType.equalsIgnoreCase("osc")) {
                 workflow.add(
                     () -> {
@@ -255,23 +254,19 @@ public class ExportResource {
     }
 
     /**
-     * To retrieve the output from job make Get request.
+     * To retrieve the output from job make GET request.
      *
-     * GET hoot-services/job/export/[job id from export job]?outputname=[user
-     * defined name]&removecache=[true | false]&ext=[file extension override
-     * from zip]
+     * GET hoot-services/job/export/[job id from export job]?outputname=[user defined name]&ext=[file extension override from zip]
      *
      * @param jobId
      *            job id
      * @param outputname
      *            parameter overrides the output file name with the user defined
      *            name. If not specified then defaults to job id as name.
-     * @param removeCache
-     *            parameter controls if the output file from export job should
-     *            be deleted when Get request completes. - DISABLED
      * @param ext
      *            parameter overrides the file extension of the file being
      *            downloaded
+     *
      * @return Octet stream
      */
     @GET
@@ -279,7 +274,6 @@ public class ExportResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportFile(@PathParam("id") String jobId,
                                @QueryParam("outputname") String outputname,
-                               @QueryParam("removeCache") Boolean removeCache,
                                @QueryParam("ext") String ext) {
         Response response;
 
@@ -303,13 +297,6 @@ public class ExportResource {
         catch (Exception e) {
             throw new WebApplicationException(e);
         }
-        finally {
-            //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were
-            //made.  So, to keep from breaking some UI tests this will be left disabled for now.
-//            if (removeCache) {
-//                FileUtils.deleteQuietly(out);
-//            }
-        }
 
         return response;
     }
@@ -317,18 +304,14 @@ public class ExportResource {
     /**
      * Returns the contents of an XML job output file
      *
-     * * GET hoot-services/job/export/xml/[job id from export
-     * job]?removeCache=[true | false]&ext=[file extension override from xml]
+     * GET hoot-services/job/export/xml/[job id from exportjob]?ext=[file extension override from xml]
      *
      * @param jobId
      *            job id
-     * @param removeCache
-     *            parameter controls if the output file from export job should
-     *            be deleted when Get request completes. - DISABLED
      * @param ext
-     *            parameter overrides the file extension of the file being
-     *            downloaded
+     *            parameter overrides the file extension of the file being downloaded
      * @return job output XML
+     *
      * @throws WebApplicationException
      *             if the job with ID = id does not exist, the referenced job
      *             output file no longer exists, or the changeset is made up of
@@ -338,7 +321,6 @@ public class ExportResource {
     @Path("/xml/{id}")
     @Produces(MediaType.TEXT_XML)
     public Response getXmlOutput(@PathParam("id") String jobId,
-                                 @QueryParam("removeCache") Boolean removeCache,
                                  @QueryParam("ext") String ext) {
         Response response;
 
@@ -352,84 +334,8 @@ public class ExportResource {
         catch (Exception e) {
             throw new WebApplicationException(e);
         }
-        finally {
-            //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were
-            //made.  So, to keep from breaking some UI tests this will be left disabled for now.
-//            if (removeCache) {
-//                FileUtils.deleteQuietly(out);
-//            }
-        }
 
         return response;
-    }
-
-    /**
-     * Removes specified WFS resource.
-     *
-     * GET
-     * hoot-services/job/export/wfs/remove/ex_eed379c0b9f7469d80ab32c71550883b
-     *
-     * //TODO: should be an HTTP DELETE
-     *
-     * @param id
-     *            id of the wfs resource to remove
-     * @return Removed id
-     */
-    @GET
-    @Path("/wfs/remove/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response removeWfsResource(@PathParam("id") String id) {
-        try {
-            WFSManager.removeWfsResource(id);
-            List<String> tbls = DbUtils.getTablesList(id);
-            DbUtils.deleteTables(tbls);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception e) {
-            String msg = "Error removing WFS resource with id = " + id;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        JSONObject json = new JSONObject();
-        json.put("id", id);
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    /**
-     * Lists all wfs resources.
-     *
-     * GET hoot-services/job/export/wfs/resources
-     *
-     * @return List of wfs resources
-     */
-    @GET
-    @Path("/wfs/resources")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getWfsResources() {
-        JSONArray wfsResources = new JSONArray();
-        try {
-            List<String> wfsServices = WFSManager.getAllWfsServices();
-
-            if (wfsServices != null) {
-                for (String wfsService : wfsServices) {
-                    JSONObject resource = new JSONObject();
-                    resource.put("id", wfsService);
-                    wfsResources.add(resource);
-                }
-            }
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String msg = "Error retrieving WFS resource list!";
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-        }
-
-        return Response.ok(wfsResources.toJSONString()).build();
     }
 
     /**
@@ -477,17 +383,6 @@ public class ExportResource {
         return Response.ok(exportResources.toJSONString()).build();
     }
 
-    private static File getExportFile(String jobId, String outputName, String fileExt) {
-        File exportFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputName + "." + fileExt);
-
-        if (!exportFile.exists()) {
-            String errorMsg = "Error exporting data.  Missing output file.";
-            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
-        }
-
-        return exportFile;
-    }
-
     private Command getZIPCommand(String jobId, File workDir, String outputName, String outputType) {
         //ifeq "$(outputtype)" "shp"
         //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
@@ -520,5 +415,16 @@ public class ExportResource {
                 return externalCommandManager.exec(jobId, zipFileCommand);
             };
         }
+    }
+
+    private static File getExportFile(String jobId, String outputName, String fileExt) {
+        File exportFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputName + "." + fileExt);
+
+        if (!exportFile.exists()) {
+            String errorMsg = "Error exporting data.  Missing output file.";
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
+        }
+
+        return exportFile;
     }
 }

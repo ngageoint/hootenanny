@@ -26,8 +26,10 @@
  */
 package hoot.services.controllers.export;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -51,13 +53,19 @@ class ExportOSMCommand extends ExportCommand {
             options.add("-D writer.text.status=true");
         }
 
-        String osmOptions = options.stream().collect(Collectors.joining(" "));
+        String hootOptions = options.stream().collect(Collectors.joining(" "));
         String input = super.getInput();
         String outputPath = super.getOutputPath();
 
-        //hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        String command = "hoot convert --" + debugLevel + " " + osmOptions + " " + quote(input) + " " + quote(outputPath);
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT", input);
+        substitutionMap.put("OUTPUT_PATH", outputPath);
 
-        super.configureCommand(command, caller);
+        // '' around ${} signifies that quoting is needed
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${INPUT}' '${OUTPUT_PATH}'";
+
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

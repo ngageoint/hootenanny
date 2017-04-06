@@ -28,6 +28,7 @@ package hoot.services.command;
 
 
 import java.io.File;
+import java.util.Map;
 
 
 public interface ExternalCommandRunner {
@@ -38,7 +39,7 @@ public interface ExternalCommandRunner {
      * the CommandResult. Waits for all output and process completion then
      * returns the process exit status.  This is a blocking call.
      */
-    CommandResult exec(String command, String jobId, String caller, File workingDir, Boolean trackable);
+    CommandResult exec(String commandTemplate, Map<String, String> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable);
 
     String getStdout();
 

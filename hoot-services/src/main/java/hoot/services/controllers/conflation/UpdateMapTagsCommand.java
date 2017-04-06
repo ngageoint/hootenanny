@@ -31,13 +31,13 @@ import static hoot.services.HootProperties.RPT_STORE_PATH;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,15 +47,15 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.JsonUtils;
 
 
-class UpdateTagsCommand implements InternalCommand {
-    private static final Logger logger = LoggerFactory.getLogger(UpdateTagsCommand.class);
+class UpdateMapTagsCommand implements InternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(UpdateMapTagsCommand.class);
 
     private final Map<String, String> tags;
     private final String mapName;
     private final String jobId;
     private final Class<?> caller;
 
-    UpdateTagsCommand(ConflateParams params, String jobId, Class<?> caller) {
+    UpdateMapTagsCommand(ConflateParams params, String jobId, Class<?> caller) {
         this.mapName = params.getOutputName();
         this.jobId = jobId;
         this.tags = new HashMap<>();
@@ -79,13 +79,19 @@ class UpdateTagsCommand implements InternalCommand {
 
         // osm api db related input params have already been validated by
         // this point, so just check to see if any osm api db input is present
-        if (ConflationResource.oneLayerIsOsmApiDb(params) && OSM_API_DB_ENABLED) {
+        if (ConflationResource.isAtLeastOneLayerOsmApiDb(params) && OSM_API_DB_ENABLED) {
             // write a timestamp representing the time the osm api db data was queried out
             // from the source; to be used conflict detection during export of conflated
             // data back into the osm api db at a later time; timestamp must be 24 hour utc
             // to match rails port
-            String now = DateTimeFormat.forPattern(DbUtils.OSM_API_TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).print(new DateTime());
-            tags.put("osm_api_db_export_time", now);
+
+            ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
+            String osmAPIDBExportTime = now.format(formatter);
+            tags.put("osm_api_db_export_time", osmAPIDBExportTime);
+
+            //String now = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss.zzz").withZone(DateTimeZone.UTC).print(new DateTime());
+
         }
     }
 
@@ -97,7 +103,7 @@ class UpdateTagsCommand implements InternalCommand {
         commandResult.setStart(LocalDateTime.now());
         commandResult.setCaller(caller.getName());
 
-        updateTagsDirect();
+        updateMapTags();
 
         commandResult.setFinish(LocalDateTime.now());
         commandResult.setExitCode(CommandResult.SUCCESS);
@@ -105,7 +111,7 @@ class UpdateTagsCommand implements InternalCommand {
         return commandResult;
     }
 
-    private void updateTagsDirect() {
+    private void updateMapTags() {
         try {
             // Currently we do not have any way to get map id directly from hoot
             // core command when it runs so for now we need get the all the map ids matching name and pick

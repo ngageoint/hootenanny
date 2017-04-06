@@ -29,8 +29,10 @@ package hoot.services.controllers.conflation;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
@@ -196,7 +198,7 @@ class ConflateCommand extends ExternalCommand {
                 options.add("-D conflate.use.data.source.ids=true");
                 options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
                 options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("-D osmapidb.id.aware.url=" + quote(OSMAPI_DB_URL));
+                options.add("-D osmapidb.id.aware.url=" + OSMAPI_DB_URL);
             }
         }
 
@@ -220,7 +222,7 @@ class ConflateCommand extends ExternalCommand {
                 options.add("-D conflate.use.data.source.ids=true");
                 options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
                 options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("-D osmapidb.id.aware.url=" + quote(OSMAPI_DB_URL));
+                options.add("-D osmapidb.id.aware.url=" + OSMAPI_DB_URL);
             }
         }
 
@@ -243,12 +245,18 @@ class ConflateCommand extends ExternalCommand {
         }
 
         String hootOptions = options.stream().collect(Collectors.joining(" "));
-        String removeReviewSwitch = "-C RemoveReview2Pre.conf";
 
-        // hoot conflate -C RemoveReview2Pre.conf $(HOOT_OPTS) "$(OP_INPUT1)" "$(OP_INPUT2)" "$(DB_OUTPUT)" $(OP_STAT)
-        String command = "hoot conflate --" + debugLevel + " " + removeReviewSwitch + " " + hootOptions + " "
-                + quote(input1) + " " + quote(input2) + " " + quote(output) + " " + stats;
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT1", input1);
+        substitutionMap.put("INPUT2", input2);
+        substitutionMap.put("OUTPUT", output);
+        substitutionMap.put("STATS", stats);
 
-        super.configureCommand(command, caller);
+        // '' around ${} signifies that quoting is needed
+        String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} '${INPUT1}' '${INPUT2}' '${OUTPUT}' ${STATS}";
+
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

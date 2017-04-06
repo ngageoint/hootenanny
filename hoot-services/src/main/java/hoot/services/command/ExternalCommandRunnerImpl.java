@@ -37,6 +37,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -44,6 +49,7 @@ import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.exec.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +69,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public ExternalCommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String command, String jobId, String caller, File workingDir, Boolean trackable) {
-        logger.debug("About to execute the following command: {}", commandArrayToString(command, caller));
+    public CommandResult exec(String commandTemplate, Map<String, String> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable) {
+        String obfuscatedCommand = commandTemplate;
 
         try (OutputStream stdout = new ByteArrayOutputStream();
              OutputStream stderr = new ByteArrayOutputStream()) {
@@ -82,16 +88,25 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 executor.setWorkingDirectory(workingDir);
             }
 
+            CommandLine cmdLine = parse(commandTemplate, expandSensitiveProperties(substitutionMap));
+
+            // Sensitive params included
+            String actualCommand = Arrays.stream(quoteArgsWithSpaces(cmdLine.toStrings()))
+                    .collect(Collectors.joining(" "));
+
+            // Sensitive params obfuscated
+            obfuscatedCommand = Arrays.stream(quoteArgsWithSpaces(parse(commandTemplate, substitutionMap).toStrings()))
+                    .collect(Collectors.joining(" "));
+
             LocalDateTime start = null;
             Exception exception = null;
             int exitCode;
 
             try {
-                CommandLine cmdLine = CommandLine.parse(replaceSensitiveData(command));
-
                 start = LocalDateTime.now();
 
-                logger.debug("Command {} started at: {}", commandArrayToString(command, caller), start);
+                logger.info("Actual Command = {} ", actualCommand);
+                logger.debug("Command {} started at: {}", obfuscatedCommand, start);
 
                 exitCode = executor.execute(cmdLine);
             }
@@ -102,14 +117,14 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
             if (executor.isFailure(exitCode) && this.watchDog.killedProcess()) {
                 // it was killed on purpose by the watchdog
-                logger.info("Process for {} command was killed!", commandArrayToString(command, caller));
+                logger.info("Process for {} command was killed!", obfuscatedCommand);
             }
 
             LocalDateTime finish = LocalDateTime.now();
 
             //, exitCode, stdout.toString(), stderr.toString()
             CommandResult commandResult = new CommandResult();
-            commandResult.setCommand(command);
+            commandResult.setCommand(obfuscatedCommand);
             commandResult.setCaller(caller);
             commandResult.setExitCode(exitCode);
             commandResult.setStderr(stderr.toString());
@@ -119,10 +134,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             commandResult.setJobId(jobId);
             commandResult.setWorkingDir(workingDir);
 
-            if (trackable) {
-                updateDatabase(commandResult);
-            }
-
             if (commandResult.failed()) {
                 logger.error("FAILURE of: {}", commandResult, exception);
             }
@@ -130,11 +141,88 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
                 logger.debug("SUCCESS of: {}", commandResult);
             }
 
+            if (trackable) {
+                updateDatabase(commandResult);
+            }
+
             return commandResult;
         }
         catch (IOException e) {
-            throw new RuntimeException("Error executing: " + commandArrayToString(command, caller), e);
+            throw new RuntimeException("Error executing: " + obfuscatedCommand, e);
         }
+    }
+
+    /**
+     * Adds quotes to arguments that contain spaces
+     *
+     * @param args arguments to quotes
+     * @return array of arguments with the ones with spaces having quotes around them
+     */
+    private static String[] quoteArgsWithSpaces(String[] args) {
+        return Arrays.stream(args).map(s -> s.contains(" ") ? ("\"" + s + "\"") : s).toArray(String[]::new);
+    }
+
+    private static CommandLine parse(String commandTemplate, Map<String, String> substitutionMap) {
+        String[] tokens = commandTemplate.split(" ");
+
+        CommandLine cl = new CommandLine(tokens[0]);
+
+        cl.setSubstitutionMap(substitutionMap);
+        for (int i = 1; i < tokens.length; i++) {
+            String token = tokens[i].trim();
+            boolean handleQuoting = StringUtils.isQuoted(token);
+            if (handleQuoting) {
+                // extract & expand the contents between '...'
+                token = expandToken(token.substring(1, token.length() - 1), substitutionMap);
+                cl.addArgument(token, false);
+            }
+            else {
+                token = expandToken(token, substitutionMap);
+                if (!org.apache.commons.lang3.StringUtils.isBlank(token)) {
+                    String[] args = token.split(" ");
+                    for (String arg : args) {
+                        if (StringUtils.isQuoted(arg)) {
+                            cl.addArgument(arg.substring(1, arg.length() - 1), false);
+                        }
+                        else {
+                            cl.addArgument(arg, false);
+                        }
+                    }
+                }
+            }
+        }
+
+        return cl;
+    }
+
+    private static String expandToken(String token, Map<String, String> substitutionMap) {
+        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}"); // matches ${} pattern
+        Matcher matcher = pattern.matcher(token);
+
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        while (matcher.find()) {
+            String key = matcher.group(1);
+            String replacement = substitutionMap.get(key);
+            if (replacement == null) {
+                throw new RuntimeException("Could not expand: " + token + ".  No substitute provided!");
+            }
+            else {
+                result.append(token.substring(i, matcher.start()));
+                result.append(replacement);
+                i = matcher.end();
+            }
+        }
+
+        result.append(token.substring(i, token.length()));
+
+        return result.toString();
+    }
+
+
+    private static Map<String, String> expandSensitiveProperties(Map<String, String> substituteMap) {
+        return substituteMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> replaceSensitiveData(entry.getValue())));
     }
 
     private static void updateDatabase(CommandResult commandResult) {
@@ -150,10 +238,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         Long id = createQuery().insert(commandStatus).populate(cmdStatus).executeWithKey(commandStatus.id);
 
         commandResult.setId(id);
-    }
-
-    private static String commandArrayToString(String command, String caller) {
-        return "[" + command + "], Caller=" + caller;
     }
 
     @Override

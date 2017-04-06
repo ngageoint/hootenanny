@@ -27,6 +27,8 @@
 package hoot.services.command.common;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import hoot.services.command.ExternalCommand;
 
@@ -42,8 +44,12 @@ public class ZIPFileCommand extends ExternalCommand {
      * @param caller class that identifies caller of the command
      */
     public ZIPFileCommand(File targetZIP, File workDir, String file, Class<?> caller) {
-        //zip targetZIP fileToZIP
-        String command = "zip " + quote(targetZIP.getAbsolutePath()) + " " + quote(file);
-        super.configureCommand(command, caller, workDir);
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("TARGET_ZIP_FILE", targetZIP.getAbsolutePath());
+        substitutionMap.put("FILE_TO_ZIP", file);
+
+        String command = "zip ${TARGET_ZIP_FILE} ${FILE_TO_ZIP}";
+
+        super.configureCommand(command, substitutionMap, caller, workDir);
     }
 }

@@ -71,6 +71,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
         File workDir = (File) externalCommand.get("workDir");
         String caller = (String) externalCommand.get("caller");
         Boolean trackable = (Boolean) externalCommand.get("trackable");
+        Map<String, String> substitutionMap = (Map<String, String>) externalCommand.get("substitutionMap");
 
         if (jobId != null) {
             activeCommands.put(jobId, cmdRunner);
@@ -78,7 +79,7 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
 
         CommandResult commandResult;
         try {
-            commandResult = cmdRunner.exec(command, jobId, caller, workDir, trackable);
+            commandResult = cmdRunner.exec(command, substitutionMap, jobId, caller, workDir, trackable);
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to execute: " + command, e);

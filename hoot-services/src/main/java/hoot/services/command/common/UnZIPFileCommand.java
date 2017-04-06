@@ -28,6 +28,8 @@ package hoot.services.command.common;
 
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import hoot.services.command.ExternalCommand;
 
@@ -42,8 +44,12 @@ public class UnZIPFileCommand extends ExternalCommand {
      * @param caller class that identifies caller of the command
      */
     public UnZIPFileCommand(File sourceZIP, File targetFolder, Class<?> caller) {
-        //unzip sourceZIP -d targetFolder
-        String command = "unzip " + quote(sourceZIP.getAbsolutePath()) + " -d " + quote(targetFolder.getAbsolutePath());
-        super.configureCommand(command, caller);
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("SOURCE_ZIP_FILE", sourceZIP.getAbsolutePath());
+        substitutionMap.put("TARGET_FOLDER", targetFolder.getAbsolutePath());
+
+        String command = "unzip '${SOURCE_ZIP_FILE}' -d '${TARGET_FOLDER}'";
+
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

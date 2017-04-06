@@ -26,16 +26,14 @@
  */
 package hoot.services.controllers.ingest;
 
-import static hoot.services.HootProperties.*;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.command.ExternalCommand;
 
@@ -106,7 +104,7 @@ import hoot.services.command.ExternalCommand;
 class FileETLCommand extends ExternalCommand {
 
     FileETLCommand(List<Map<String, String>> requests, List<File> zips, String translationPath, String etlName,
-                   Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel, String inputType, Class<?> caller) {
+                   Boolean isNoneTranslation, String debugLevel, String inputType, Class<?> caller) {
 
         StringBuilder stringBuilder = new StringBuilder();
         for (Map<String,String> request : requests) {
@@ -162,22 +160,6 @@ class FileETLCommand extends ExternalCommand {
                     .collect(Collectors.joining(" "));
         }
 
-        if (inputType.equalsIgnoreCase("FGDB") && !StringUtils.isBlank(fgdbFeatureClasses)) {
-            Map<String, String> request = requests.get(0);
-
-            if (request != null) {
-                String rawInput = request.get("name");
-                List<String> fgdbInputs = new ArrayList<>();
-                String[] classes = fgdbFeatureClasses.split(",");
-
-                for (String clazz : classes) {
-                    fgdbInputs.add(rawInput + "\\;" + clazz);
-                }
-
-                inputs = fgdbInputs.stream().collect(Collectors.joining(" "));
-            }
-        }
-
         //ifeq "$(INPUT_TYPE)" "OGR"
         //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
         //endif
@@ -202,15 +184,23 @@ class FileETLCommand extends ExternalCommand {
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
         String command = null;
 
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT_NAME", inputName);
+        substitutionMap.put("INPUTS", inputs);
+
         if ("OGR".equalsIgnoreCase(inputType) || "FGDB".equalsIgnoreCase(inputType) || "ZIP".equalsIgnoreCase(inputType)) {
-            // hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-            command = "hoot ogr2osm --" + debugLevel + " " + hootOptions + " " + quote(translationPath) + " " + quote(inputName) + " " + inputs;
+            substitutionMap.put("TRANSLATION_PATH", translationPath);
+
+            // '' around ${} signifies that quoting is needed
+            command = "hoot ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${TRANSLATION_PATH}' '${INPUT_NAME}' ${INPUTS}";
         }
         else if ("OSM".equals(inputType) || "GEONAMES".equals(inputType)) {
-            //hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
-            command = "hoot convert --" + debugLevel + " " + hootOptions + " " + inputs + " " + quote(inputName);
+            // '' around ${} signifies that quoting is needed
+            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} '${INPUT_NAME}'";
         }
 
-        super.configureCommand(command, caller);
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

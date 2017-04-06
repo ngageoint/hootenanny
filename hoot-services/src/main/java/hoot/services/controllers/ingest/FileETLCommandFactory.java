@@ -38,8 +38,8 @@ import org.springframework.stereotype.Component;
 class FileETLCommandFactory {
 
     FileETLCommand build(List<Map<String, String>> requests, List<File> zips, String translationPath,
-                         String etlName, Boolean isNoneTranslation, String fgdbFeatureClasses, String debugLevel,
+                         String etlName, Boolean isNoneTranslation, String debugLevel,
                          String inputType, Class<?> caller) {
-        return new FileETLCommand(requests, zips, translationPath, etlName, isNoneTranslation, fgdbFeatureClasses, debugLevel, inputType, caller);
+        return new FileETLCommand(requests, zips, translationPath, etlName, isNoneTranslation, debugLevel, inputType, caller);
     }
 }

@@ -28,8 +28,10 @@ package hoot.services.controllers.clipping;
 
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
@@ -67,17 +69,22 @@ class ClipDatasetCommand extends ExternalCommand {
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
         //The input OSM data path
-        String input = HOOTAPI_DB_URL + "/" + params.getInputName();
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+
+        //The input OSM data path
+        substitutionMap.put("INPUT", HOOTAPI_DB_URL + "/" + params.getInputName());
 
         //The output - The output OSM data path.
-        String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
+        substitutionMap.put("OUTPUT", HOOTAPI_DB_URL + "/" + params.getOutputName());
 
         //Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
-        String bounds = params.getBounds();
+        substitutionMap.put("BOUNDS", params.getBounds());
 
-        // hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
-        String command = "hoot crop-map --" + debugLevel + " " + hootOptions + " " + quote(input) + " " + quote(output) + " " + quote(bounds);
+        // '' around ${} signifies that quoting is needed
+        String command = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${INPUT}' '${OUTPUT}' '${BOUNDS}'";
 
-        super.configureCommand(command, caller);
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

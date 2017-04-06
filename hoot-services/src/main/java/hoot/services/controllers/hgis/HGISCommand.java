@@ -30,6 +30,8 @@ import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import hoot.services.command.ExternalCommand;
 
@@ -41,9 +43,15 @@ class HGISCommand extends ExternalCommand {
         String output = generateDbMapParam(outputMap);
         String script = new File(CORE_SCRIPT_PATH, scriptName).getAbsolutePath();
 
-        String command = quote(script) + " " + quote(source) + " " + quote(output);
+        Map<String, String> substituionMap = new HashMap<>();
+        substituionMap.put("SCRIPT", script);
+        substituionMap.put("SOURCE", source);
+        substituionMap.put("OUTPUT", output);
 
-        super.configureCommand(command, caller);
+        // '' around ${} signifies that quoting is needed
+        String command = "${SCRIPT} '${SOURCE}' '${OUTPUT}'";
+
+        super.configureCommand(command, substituionMap, caller);
     }
 
     /**

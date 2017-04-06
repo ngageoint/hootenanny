@@ -70,7 +70,8 @@ import hoot.services.utils.PostgresUtils;
  */
 public abstract class Element implements XmlSerializable, DbSerializable {
     private static final Logger logger = LoggerFactory.getLogger(Element.class);
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
+
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
 
     protected Map<Long, CurrentNodes> dbNodeCache;
 

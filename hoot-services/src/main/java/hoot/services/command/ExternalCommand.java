@@ -28,6 +28,8 @@ package hoot.services.command;
 
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
@@ -36,27 +38,29 @@ import hoot.services.HootProperties;
 
 public class ExternalCommand extends JSONObject {
 
-    protected void configureCommand(String command, Class<?> caller) {
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller) {
         this.put("caller", caller.getName());
         this.put("command", command);
+        this.put("substitutionMap", substitutionMap);
         this.put("workDir", new File(HootProperties.TEMP_OUTPUT_PATH));
         this.put("trackable", Boolean.TRUE);
     }
 
-    protected void configureCommand(String command, Class<?> caller, File workDir) {
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller, File workDir) {
         this.put("caller", caller.getName());
         this.put("command", command);
+        this.put("substitutionMap", substitutionMap);
         this.put("workDir", workDir);
         this.put("trackable", Boolean.TRUE);
     }
 
     protected void configureCommand(String command, Class<?> caller, Boolean trackable) {
-        this.configureCommand(command, caller);
+        this.configureCommand(command, new HashMap<>(), caller);
         this.put("trackable", trackable);
     }
 
     protected void configureCommand(String command, Class<?> caller, File workDir, Boolean trackable) {
-        this.configureCommand(command, caller, workDir);
+        this.configureCommand(command, new HashMap<>(), caller, workDir);
         this.put("trackable", trackable);
     }
 

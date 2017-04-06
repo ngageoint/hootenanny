@@ -27,6 +27,8 @@
 package hoot.services.command.common;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import hoot.services.command.ExternalCommand;
 
@@ -41,8 +43,12 @@ public class UnTARFileCommand extends ExternalCommand {
      * @param caller identifies the caller of the command
      */
     public UnTARFileCommand(File sourceTAR, File targetFolder, Class<?> caller) {
-        //tar -zxf sourceTAR -C targetFolder
-        String command = "tar -zxf " + quote(sourceTAR.getAbsolutePath()) + " -C " + quote(targetFolder.getAbsolutePath());
-        super.configureCommand(command, caller);
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("SOURCE_TAR_FILE", sourceTAR.getAbsolutePath());
+        substitutionMap.put("TARGET_FOLDER", targetFolder.getAbsolutePath());
+
+        String command = "tar -zxf '${SOURCE_TAR_FILE}' -C '${TARGET_FOLDER}'";
+
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

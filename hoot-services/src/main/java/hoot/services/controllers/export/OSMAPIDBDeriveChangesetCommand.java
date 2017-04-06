@@ -28,6 +28,7 @@ package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,18 +49,27 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
         List<String> options = super.getCommonExportHootOptions();
         options.add("-D convert.bounding.box=" + aoi);
         options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
-        options.add("-D changeset.user.id=" + userId);
+
+        if (userId != null) {
+            options.add("-D changeset.user.id=" + userId);
+        }
+        else {
+            throw new RuntimeException("changeset.user.id cannot be null.  Please provide a valid user ID!");
+        }
+
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input = super.getInput();
+        java.util.Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("OSMAPI_DB_URL", OSMAPI_DB_URL);
+        substitutionMap.put("INPUT", super.getInput());
+        substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getSQLChangesetPath());
 
-        // Services currently always write changeset with sql
-        String changesetOutput = super.getSQLChangesetPath();
+        // '' around ${} signifies that quoting is needed
+        String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
+                "'${OSMAPI_DB_URL}' '${INPUT}' '${CHANGESET_OUTPUT_PATH}' '${OSMAPI_DB_URL}'";
 
-        //hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
-        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + quote(OSMAPI_DB_URL) + " " +
-                quote(input) + " " + quote(changesetOutput) + " " + quote(OSMAPI_DB_URL);
-
-        super.configureCommand(command, caller);
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

@@ -27,7 +27,9 @@
 package hoot.services.controllers.ogr;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
@@ -50,12 +52,16 @@ import hoot.services.command.ExternalCommand;
  */
 class GetAttributesCommand extends ExternalCommand {
 
-    GetAttributesCommand(String jobId, List<File> fileList, String debugLevel, Class<?> caller) {
-        String inputFiles = fileList.stream().map((file) -> quote(file.getAbsolutePath())).collect(Collectors.joining(" "));
+    GetAttributesCommand(List<File> fileList, String debugLevel, Class<?> caller) {
+        String inputFiles = fileList.stream()
+                .map((file) -> quote(file.getAbsolutePath())).collect(Collectors.joining(" "));
 
-        //hoot attribute-count --error $(INPUT_FILES)"
-        String command = "hoot attribute-count --" + debugLevel + " " + inputFiles;
+        Map<String, String> substituionMap = new HashMap<>();
+        substituionMap.put("DEBUG_LEVEL", debugLevel);
+        substituionMap.put("INPUT_FILES", inputFiles);
 
-        super.configureCommand(command, caller);
+        String command = "hoot attribute-count --${DEBUG_LEVEL} ${INPUT_FILES}";
+
+        super.configureCommand(command, substituionMap, caller);
     }
 }

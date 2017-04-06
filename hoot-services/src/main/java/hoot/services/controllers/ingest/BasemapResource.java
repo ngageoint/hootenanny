@@ -166,8 +166,11 @@ public class BasemapResource {
                         File file = new File(BASEMAPS_FOLDER, basemapName + extension);
 
                         try {
-                            String json = "{\"jobid\":\"" + jobId + "\",\"path\":\"" + tileOutputDir + "\"}";
-                            FileUtils.writeStringToFile(file, json, Charset.defaultCharset());
+                            JSONObject json = new JSONObject();
+                            json.put("jobid", jobId);
+                            json.put("path", tileOutputDir.getAbsolutePath());
+
+                            FileUtils.writeStringToFile(file, json.toJSONString(), Charset.defaultCharset());
                         }
                         catch (IOException ioe) {
                             throw new RuntimeException("Error creating " + file, ioe);
@@ -269,11 +272,11 @@ public class BasemapResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject entity = new JSONObject();
-        entity.put("name", basemap);
-        entity.put("isenabled", String.valueOf(enable));
+        JSONObject json = new JSONObject();
+        json.put("name", basemap);
+        json.put("isenabled", String.valueOf(enable));
 
-        return Response.ok(entity.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 
     /**
@@ -299,10 +302,10 @@ public class BasemapResource {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject entity = new JSONObject();
-        entity.put("name", basemap);
+        JSONObject json = new JSONObject();
+        json.put("name", basemap);
 
-        return Response.ok(entity.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 
     private static void toggleBaseMap(String basemapName, boolean enable) {

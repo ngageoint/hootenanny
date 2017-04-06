@@ -138,7 +138,7 @@ public class OGRAttributesResource {
                 () -> {
                     // OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
                     //File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
-                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, fileList, debugLevel, this.getClass());
+                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(fileList, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
 
                     File outputFile = getAttributesOutputFile(jobId);

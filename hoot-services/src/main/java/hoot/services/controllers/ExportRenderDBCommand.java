@@ -29,6 +29,8 @@ package hoot.services.controllers;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +47,14 @@ class ExportRenderDBCommand extends ExternalCommand {
         long mapId = DbUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
         String script = new File(CORE_SCRIPT_PATH, EXPORT_RENDERDB_SCRIPT).getAbsolutePath();
 
-        String command = script + " " + mapId + " " + HOOTAPI_DB_URL;
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("SCRIPT", script);
+        substitutionMap.put("MAP_ID", Long.toString(mapId));
+        substitutionMap.put("HOOTAPI_DB_URL", HOOTAPI_DB_URL);
 
-        super.configureCommand(command, caller);
+        // '' around ${} signifies that quoting is needed
+        String command = "${SCRIPT} '${MAP_ID}' '${HOOTAPI_DB_URL}'";
+
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

@@ -312,12 +312,11 @@ public final class HootProperties {
         while (matcher.find()) {
             String token = matcher.group(1);
             String replacement = getProperty(token);
-            if (StringUtils.isBlank(replacement)) {
-                throw new RuntimeException("Could not resolve " + token + " token to a valid value!");
+            if (!StringUtils.isBlank(replacement)) {
+                result.append(text.substring(i, matcher.start()));
+                result.append(replacement);
+                i = matcher.end();
             }
-            result.append(text.substring(i, matcher.start()));
-            result.append(replacement);
-            i = matcher.end();
         }
 
         result.append(text.substring(i, text.length()));

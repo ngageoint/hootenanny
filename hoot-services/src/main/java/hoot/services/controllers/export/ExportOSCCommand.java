@@ -29,7 +29,9 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import hoot.services.geo.BoundingBox;
@@ -48,13 +50,17 @@ class ExportOSCCommand extends ExportCommand {
         options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
         String hootOptions = options.stream().collect(Collectors.joining(" "));
 
-        String input1 = OSMAPI_DB_URL;
-        String input2 = HOOTAPI_DB_URL + "/" + params.getInput();
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT1", OSMAPI_DB_URL);
+        substitutionMap.put("INPUT2", HOOTAPI_DB_URL + "/" + params.getInput());
+        substitutionMap.put("OUTPUT_PATH", outputPath);
 
-        //hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
-        String command = "hoot derive-changeset --" + debugLevel + " " + hootOptions + " " + quote(input1) + " " + quote(input2) + " " + quote(outputPath);
+        // '' around ${} signifies that quoting is needed
+        String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${INPUT1}' '${INPUT2}' '${OUTPUT_PATH}'";
 
-        super.configureCommand(command, caller);
+        super.configureCommand(command, substitutionMap, caller);
     }
 
     private static String getBoundingBox(ExportParams params) {

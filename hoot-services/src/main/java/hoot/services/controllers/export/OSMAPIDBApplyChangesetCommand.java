@@ -28,6 +28,7 @@ package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,19 +48,25 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
         // AOI = Area of Interest
         String conflictAOI = getAOI(params, conflatedMap);
 
-        //timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted dat
+        //timestamp of the form: "yyyy-MM-dd hh:mm:ss.zzz" used to prevent writing conflicted data
         String conflictTimestamp = getExportTimeTagFrom(conflatedMap);
 
         // Services currently always write changeset with sql
-        String sqlChangeset = super.getSQLChangesetPath();
+        String sqlChangesetPath = super.getSQLChangesetPath();
 
-        String targetDatabaseUrl = OSMAPI_DB_URL;
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("SQL_CHANGESET_PATH", sqlChangesetPath);
+        substitutionMap.put("TARGET_DATABASE_URL", OSMAPI_DB_URL);
+        substitutionMap.put("CONFLICT_AOI", conflictAOI);
+        substitutionMap.put("CONFLICT_TIMESTAMP", conflictTimestamp);
 
-        //hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
-        String command = "hoot apply-changeset --" + debugLevel + " " + hootOptions + " " +
-                            quote(sqlChangeset) + " " + quote(targetDatabaseUrl) + " " + quote(conflictAOI) + " " + quote(conflictTimestamp);
+        // '' around ${} signifies that quoting is needed
+        String command = "hoot apply-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
+                "'${SQL_CHANGESET_PATH}' '${TARGET_DATABASE_URL}' '${CONFLICT_AOI}' '${CONFLICT_TIMESTAMP}'";
 
-        super.configureCommand(command, caller);
+        super.configureCommand(command, substitutionMap, caller);
     }
 
     private static String getExportTimeTagFrom(hoot.services.models.osm.Map conflatedMap) {
@@ -74,6 +81,6 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
                     " is missing " + exportTimeTag + ".");
         }
 
-        return tags.get(exportTimeTag);
+        return tags.get(exportTimeTag).trim();
     }
 }

@@ -27,6 +27,8 @@
 package hoot.services.controllers.ingest;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -71,17 +73,17 @@ import hoot.services.command.ExternalCommand;
 class IngestBasemapCommand extends ExternalCommand {
 
     IngestBasemapCommand(File inputFile, String projection, File tileOutputDir, boolean verboseOutput, Class<?> caller) {
-        String projectionSwitch = !StringUtils.isBlank(projection) ? ("-s " + projection) : "";
-        String verboseSwitch = verboseOutput ? "-v" : "";
-        String zoomSwitch = "-z '0-20'";
-        String titleSwitch = "-t " + quote(inputFile.getAbsolutePath());
-        String webviewerSwitch = "-w none";
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("VERBOSE", verboseOutput ? "-v" : "");
+        substitutionMap.put("PROJECTION", !StringUtils.isBlank(projection) ? ("-s " + projection) : "");
+        substitutionMap.put("WEBVIEWER", "-w none");
+        substitutionMap.put("INPUT_FILE", inputFile.getAbsolutePath());
+        substitutionMap.put("ZOOM", "-z '0-20'");
+        substitutionMap.put("TILE_OUTPUT_DIR", tileOutputDir.getAbsolutePath());
+        substitutionMap.put("TITLE", "-t " + quote(inputFile.getAbsolutePath()));
 
-        //"$(GDAL2TILES)" $(OP_PROJECTION)  -w none -t "$(OP_INPUT)" -z '0-20' "$(OP_INPUT)" "$(OP_TILE_OUTPUT_DIR)"
-        String command = "/usr/local/bin/gdal2tiles.py " + verboseSwitch + " " + projectionSwitch + " " +
-                webviewerSwitch + " " + titleSwitch + " " + zoomSwitch + " " +
-                quote(inputFile.getAbsolutePath()) + " " + quote(tileOutputDir.getAbsolutePath());
+        String command = "/usr/local/bin/gdal2tiles.py ${VERBOSE} ${PROJECTION} ${WEBVIEWER} ${TITLE} ${ZOOM} '${INPUT_FILE}' '${TILE_OUTPUT_DIR}'";
 
-        super.configureCommand(command, caller);
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

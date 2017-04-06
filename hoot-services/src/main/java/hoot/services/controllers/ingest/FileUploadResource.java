@@ -130,7 +130,6 @@ public class FileUploadResource {
                                       @QueryParam("INPUT_NAME") String inputName,
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
-                                      @QueryParam("FGDB_FC") String fgdbFeatureClasses,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
         JSONArray response = new JSONArray();
@@ -295,7 +294,7 @@ public class FileUploadResource {
                 }
 
                 ExternalCommand etlCommand = fileETLCommandFactory.build(etlRequests, zipList, translationPath, finalETLName,
-                        noneTranslation, fgdbFeatureClasses, debugLevel, uploadedFileClassification, this.getClass());
+                        noneTranslation, debugLevel, uploadedFileClassification, this.getClass());
 
                 return externalCommandManager.exec(jobId, etlCommand);
             });

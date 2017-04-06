@@ -26,11 +26,10 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.HOME_FOLDER;
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -154,16 +153,18 @@ class ExportCommand extends ExternalCommand {
         this.params = params;
 
         String hootOptions = this.getCommonExportHootOptions().stream().collect(Collectors.joining(" "));
-        String outputPath = this.getOutputPath();
-        String translationPath = new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath();
-        String removeReviewSwitch = "-C RemoveReview2Pre.conf";
-        String inputPath = this.getInput();
 
-        // hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        String command = "hoot osm2ogr --" + debugLevel + " " + removeReviewSwitch + " " + hootOptions + " " +
-                                    quote(translationPath) + " " + quote(inputPath) + " " + quote(outputPath);
+        java.util.Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+        substitutionMap.put("INPUT_PATH", this.getInput());
+        substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        super.configureCommand(command, caller);
+        // '' around ${} signifies that quoting is needed
+        String command = "hoot osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} '${TRANSLATION_PATH}' '${INPUT_PATH}' '${OUTPUT_PATH}'";
+
+        super.configureCommand(command, substitutionMap, caller);
     }
 
     List<String> getCommonExportHootOptions() {
@@ -197,7 +198,7 @@ class ExportCommand extends ExternalCommand {
     }
 
     String getOutputPath() {
-        File outputFolder = new File(TEMP_OUTPUT_PATH, jobId);
+        File outputFolder = this.getWorkFolder();
         File outputFile;
 
         if (!StringUtils.isBlank(params.getOutputName())) {
@@ -251,6 +252,10 @@ class ExportCommand extends ExternalCommand {
 
     String getSQLChangesetPath() {
         // Services currently always write changeset with sql
-        return new File(getOutputPath(), "changeset-" + jobId + ".osc.sql").getAbsolutePath();
+        return new File(this.getWorkFolder(), "changeset-" + jobId + ".osc.sql").getAbsolutePath();
+    }
+
+    private File getWorkFolder() {
+        return new File(TEMP_OUTPUT_PATH, jobId);
     }
 }

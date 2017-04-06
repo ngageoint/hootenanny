@@ -26,7 +26,8 @@
  */
 package hoot.services.utils;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -34,6 +35,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /**
@@ -44,14 +48,34 @@ public final class JsonUtils {
 
     private JsonUtils() {}
 
-    /**
-     *
-     *
-     * @param input
-     * @return String
-     */
+    public static Map<String, String> jsonToMap(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> map;
+        try {
+            map = mapper.readValue(json, new TypeReference<Map<String, String>>(){});
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error converting JSON to POJO.  JSON: " + json, ioe);
+        }
+
+        return map;
+    }
+
+    public static String pojoToJSON(Object pojo) {
+        ObjectMapper mapper = new ObjectMapper();
+        try (StringWriter stringWriter = new StringWriter()) {
+            mapper.writeValue(stringWriter, pojo);
+            return stringWriter.toString();
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error converting POJO to JSON:  POJO: " + pojo, ioe);
+        }
+    }
+
+    // TODO: re-examine this method's implementation.
     public static String escapeJson(String input) {
         JSONParser parser = new JSONParser();
+
         JSONObject json;
         try {
             json = (JSONObject) parser.parse(input);
@@ -84,26 +108,5 @@ public final class JsonUtils {
         }
 
         return JSONObject.escape(json.toString());
-    }
-
-    public static Map<String, String> jsonToMap(String json) {
-        JSONParser parser = new JSONParser();
-        JSONObject command;
-        try {
-            command = (JSONObject) parser.parse(json);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing JSON: " + json, pe);
-        }
-
-        Map<String, String> paramsMap = new HashMap<>();
-        for (Object o : command.entrySet()) {
-            Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o;
-            String key = (String) mEntry.getKey();
-            String val = (String) mEntry.getValue();
-            paramsMap.put(key, val);
-        }
-
-        return paramsMap;
     }
 }
