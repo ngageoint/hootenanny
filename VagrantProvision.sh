@@ -69,7 +69,7 @@ sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-d
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 >> Ubuntu_upgrade.txt 2>&1
+ libpango-1.0-0 libappindicator1 valgrind >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details

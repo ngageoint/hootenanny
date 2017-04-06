@@ -179,11 +179,11 @@ fcodeCommon = {
       ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT
       ['F_CODE','AP030','highway','road'], // Road - See Custom rules
       ['F_CODE','AP033','highway','turning_circle'], // Engineered Turn Around Site
-      ['F_CODE','AP055','highway','tank_trail'], // Tank Trail
-      ['F_CODE','AP056','crossing','tank'], // Tank Crossing
       ['F_CODE','AP040','barrier','gate'], // Gate
       ['F_CODE','AP041','barrier','yes'], // Vehicle Barrier 
       ['F_CODE','AP050','highway','path'], // Trail 
+      ['F_CODE','AP055','highway','tank_trail'], // Tank Trail
+      ['F_CODE','AP056','crossing','tank'], // Tank Crossing
       ['F_CODE','AQ035','sidewalk','yes'], // Sidewalk
       ['F_CODE','AQ040','bridge','yes'], // Bridge 
       ['F_CODE','AQ045','bridge:span','yes'], // Bridge Span 

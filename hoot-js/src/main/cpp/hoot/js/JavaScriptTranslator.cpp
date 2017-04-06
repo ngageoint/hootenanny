@@ -36,6 +36,7 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
 #include <hoot/core/io/schema/Schema.h>
@@ -453,7 +454,7 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
   }
 }
 
-void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVariant& enumerations)
+void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition *fd, QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -495,6 +496,48 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVaria
   }
 }
 
+void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations)
+  const
+{
+  if (enumerations.canConvert(QVariant::List) == false)
+  {
+    throw HootException("Expected enumerations to be an array of maps.");
+  }
+  QVariantList vl = enumerations.toList();
+
+  for (int i = 0; i < vl.size(); i++)
+  {
+    if (vl[i].canConvert(QVariant::Map) == false)
+    {
+      throw HootException("Expected enumerations to be an array of maps.");
+    }
+    QVariantMap vm = vl[i].toMap();
+
+    if (vm["value"].canConvert(QVariant::LongLong) == false)
+    {
+      throw HootException("Expected each enumeration map to contain a valid value.");
+    }
+    int v = vm["value"].toLongLong();
+
+    if (fd->hasEnumeratedValue(v))
+    {
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+    }
+    else
+    {
+      fd->addEnumeratedValue(v);
+    }
+  }
+}
+
 shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant fieldV) const
 {
   shared_ptr<FieldDefinition> result;
@@ -511,6 +554,7 @@ shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant
     throw HootException("Error parsing type in column.");
   }
   QString type = map["type"].toString().toLower();
+
   if (type == "string")
   {
     StringFieldDefinition* fd = new StringFieldDefinition();
@@ -562,7 +606,7 @@ shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant
       _parseEnumerations(fd, map["enumerations"]);
     }
   }
-  else if (type == "enumeration" || type == "long integer" || type == "integer")
+  else if (type == "enumeration" || type == "integer")
   {
     IntegerFieldDefinition* fd = new IntegerFieldDefinition();
     result.reset(fd);
@@ -587,6 +631,35 @@ shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant
       fd->setMinValue(_toInt32(map["minimum"]));
     }
 
+    if (map.contains("enumerations"))
+    {
+      _parseEnumerations(fd, map["enumerations"]);
+    }
+  }
+  else if (type == "long integer")
+  {
+    LongIntegerFieldDefinition* fd = new LongIntegerFieldDefinition();
+    result.reset(fd);
+
+    if (map.contains("defValue"))
+    {
+      if (map["defValue"].isValid() == false)
+      {
+        fd->setDefaultIsNull(true);
+      }
+      else
+      {
+        fd->setDefaultValue(_toInt64(map["defValue"]));
+      }
+    }
+    if (map.contains("maximum"))
+    {
+      fd->setMaxValue(_toInt64(map["maximum"]));
+    }
+    if (map.contains("minimum"))
+    {
+      fd->setMinValue(_toInt64(map["minimum"]));
+    }
     if (map.contains("enumerations"))
     {
       _parseEnumerations(fd, map["enumerations"]);
