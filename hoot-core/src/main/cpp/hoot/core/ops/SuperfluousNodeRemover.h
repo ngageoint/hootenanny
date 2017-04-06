@@ -65,15 +65,15 @@ public:
 
   SuperfluousNodeRemover();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 
-  static boost::shared_ptr<OsmMap> removeNodes(boost::shared_ptr<const OsmMap> map);
+  static OsmMapPtr removeNodes(ConstOsmMapPtr map);
 
-  static void removeNodes(boost::shared_ptr<OsmMap>& map, const Envelope& e);
+  static void removeNodes(OsmMapPtr& map, const Envelope& e);
 
   virtual void setBounds(const Envelope &bounds);
 

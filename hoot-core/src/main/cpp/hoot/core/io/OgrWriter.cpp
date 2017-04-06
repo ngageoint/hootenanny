@@ -515,7 +515,7 @@ void OgrWriter::strictError(QString warning)
   }
 }
 
-void OgrWriter::write(boost::shared_ptr<const OsmMap> map)
+void OgrWriter::write(ConstOsmMapPtr map)
 {
   ElementProviderPtr provider(boost::const_pointer_cast<ElementProvider>(
     boost::dynamic_pointer_cast<const ElementProvider>(map)));

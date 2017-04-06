@@ -60,7 +60,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     logWarnCount++;
   }
 
-  boost::shared_ptr<OsmMap> result;
+  OsmMapPtr result;
 
   result.reset(new OsmMap(inputMap->getProjection()));
   // add the resulting alpha shape for debugging.

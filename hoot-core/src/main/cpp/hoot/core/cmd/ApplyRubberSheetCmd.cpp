@@ -60,7 +60,7 @@ public:
 
     QString transformPath = args[0];
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[1], true, Status::Unknown1);
     QString outputPath = args[2];
 

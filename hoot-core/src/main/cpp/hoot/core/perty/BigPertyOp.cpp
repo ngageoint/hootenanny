@@ -56,7 +56,7 @@ BigPertyOp::~BigPertyOp()
 
 }
 
-void BigPertyOp::apply(boost::shared_ptr<OsmMap>& map)
+void BigPertyOp::apply(OsmMapPtr& map)
 {
   MapProjector::projectToWgs84(map);
 

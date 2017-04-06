@@ -82,7 +82,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const boost::shared_ptr<const OsmMap>& m) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   /**
    * Determines criteria for a feature to be considered a polygon for matching by

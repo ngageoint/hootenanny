@@ -102,13 +102,13 @@ public:
     writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    boost::shared_ptr<Node> n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
+    NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1',\n");
-    boost::shared_ptr<Node> n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
     n2->setTag("note", "n2\"");
-    boost::shared_ptr<Node> n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
     n3->setTag("note", "n3\\");
     map->addNode(n1);
     map->addNode(n2);
@@ -135,30 +135,30 @@ public:
     writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    boost::shared_ptr<Node> n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
-    boost::shared_ptr<Node> n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
     n2->setTag("note", "n2");
-    boost::shared_ptr<Node> n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
     map->addNode(n3);
 
-    boost::shared_ptr<Way> w1(new Way(Status::Unknown1, 1, 13.0));
+    WayPtr w1(new Way(Status::Unknown1, 1, 13.0));
     w1->addNode(1);
     w1->addNode(2);
     w1->setTag("note", "w1");
-    boost::shared_ptr<Way> w2(new Way(Status::Unknown2, 2, 14.0));
+    WayPtr w2(new Way(Status::Unknown2, 2, 14.0));
     w2->addNode(2);
     w2->addNode(3);
     w2->setTag("note", "w2");
     map->addWay(w1);
     map->addWay(w2);
 
-    boost::shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "collection"));
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15.0, "collection"));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
@@ -240,36 +240,36 @@ public:
     writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    boost::shared_ptr<Node> n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
+    NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
-    boost::shared_ptr<Node> n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
     n2->setTag("note", "n2");
-    boost::shared_ptr<Node> n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
     map->addNode(n3);
 
-    boost::shared_ptr<Way> w1(new Way(Status::Unknown1, -1, 13.0));
+    WayPtr w1(new Way(Status::Unknown1, -1, 13.0));
     w1->addNode(-1);
     w1->addNode(-2);
     w1->setTag("note", "w1");
-    boost::shared_ptr<Way> w2(new Way(Status::Unknown2, -2, 14.0));
+    WayPtr w2(new Way(Status::Unknown2, -2, 14.0));
     w2->addNode(-2);
     w2->addNode(-3);
     w2->setTag("note", "w2");
     map->addWay(w1);
     map->addWay(w2);
 
-    boost::shared_ptr<Relation> r1(new Relation(Status::Unknown1, -1, 15.0, "collection"));
+    RelationPtr r1(new Relation(Status::Unknown1, -1, 15.0, "collection"));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
     map->addRelation(r1);
 
-    boost::shared_ptr<Relation> r2(new Relation(Status::Unknown1, -2, 15.0, "collection"));
+    RelationPtr r2(new Relation(Status::Unknown1, -2, 15.0, "collection"));
     r2->addElement("r1", r1->getElementId());
     r2->setTag("note", "r2");
     map->addRelation(r2);

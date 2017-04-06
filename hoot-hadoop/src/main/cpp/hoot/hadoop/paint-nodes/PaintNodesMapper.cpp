@@ -84,7 +84,7 @@ void PaintNodesMapper::_init(HadoopPipes::MapContext& context)
   _nd.reset(_width, _height);
 }
 
-void PaintNodesMapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
+void PaintNodesMapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
   if (_context == NULL)
   {
@@ -95,7 +95,7 @@ void PaintNodesMapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContex
   LOG_INFO("Processing map. Node count: " << nm.size());
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const boost::shared_ptr<const Node>& n = it->second;
+    const ConstNodePtr& n = it->second;
 
     int px = int((n->getX() - _envelope.getMinX()) / _pixelSize);
     int py = int((n->getY() - _envelope.getMinY()) / _pixelSize);

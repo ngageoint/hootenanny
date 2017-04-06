@@ -87,8 +87,8 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
 bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
                                    const boost::shared_ptr<const Element>& e)
 {
-  boost::shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
-  boost::shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
+  ConstNodePtr rn = dynamic_pointer_cast<const Node>(re);
+  ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
 
   LOG_VART(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
   return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
@@ -97,8 +97,8 @@ bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
 bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,
                                   const boost::shared_ptr<const Element>& e)
 {
-  boost::shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
-  boost::shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
+  ConstWayPtr rw = dynamic_pointer_cast<const Way>(re);
+  ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
 
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
@@ -118,8 +118,8 @@ bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,
 bool ElementComparer::_compareRelation(const boost::shared_ptr<const Element>& re,
                                        const boost::shared_ptr<const Element>& e)
 {
-  boost::shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
-  boost::shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
+  ConstRelationPtr rr = dynamic_pointer_cast<const Relation>(re);
+  ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
 
   if (rr->getType() != r->getType() ||
       rr->getMembers().size() != r->getMembers().size())

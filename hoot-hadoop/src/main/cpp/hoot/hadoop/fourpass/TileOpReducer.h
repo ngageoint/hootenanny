@@ -68,19 +68,19 @@ private:
 
   void _conflate(int key, HadoopPipes::ReduceContext& context);
 
-  void _emitMap(boost::shared_ptr<OsmMap> map);
+  void _emitMap(OsmMapPtr map);
 
-  const Envelope& _getContainingEnvelope(const boost::shared_ptr<OsmMap>& map);
+  const Envelope& _getContainingEnvelope(const OsmMapPtr& map);
 
   void _init(HadoopPipes::ReduceContext& context);
 
- boost::shared_ptr<OsmMap> _readMap(const string& value);
+ OsmMapPtr _readMap(const string& value);
 
-  void _removeReplacedNodes(boost::shared_ptr<OsmMap>& map);
+  void _removeReplacedNodes(OsmMapPtr& map);
 
-  void _splitWay(boost::shared_ptr<Way> w);
+  void _splitWay(WayPtr w);
 
-  void _validate(const boost::shared_ptr<OsmMap>& map);
+  void _validate(const OsmMapPtr& map);
 
   void _writeNodes(HadoopPipes::ReduceContext& context);
   void _writeWay(HadoopPipes::ReduceContext& context);

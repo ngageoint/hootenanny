@@ -69,7 +69,7 @@ public:
 
     OsmXmlReader reader;
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/BuildingOutlineUpdateOp/SelfIntersectingRelationsIn.osm", map);
@@ -99,7 +99,7 @@ public:
 
     OsmXmlReader reader;
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/BuildingOutlineUpdateOp/UncleanableTopologiesIn.osm", map);

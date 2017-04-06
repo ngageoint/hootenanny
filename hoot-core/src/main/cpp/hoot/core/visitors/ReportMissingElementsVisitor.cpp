@@ -84,7 +84,7 @@ void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
 {
   if (type == ElementType::Way)
   {
-    const boost::shared_ptr<const Way>& w = _map->getWay(id);
+    const ConstWayPtr& w = _map->getWay(id);
     for (size_t i = 0; i < w->getNodeCount(); i++)
     {
       if (_map->containsNode(w->getNodeIds()[i]) == false)
@@ -95,7 +95,7 @@ void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
   }
   else if (type == ElementType::Relation)
   {
-    const boost::shared_ptr<const Relation>& r = _map->getRelation(id);
+    const ConstRelationPtr& r = _map->getRelation(id);
     for (size_t i = 0; i < r->getMembers().size(); i++)
     {
       const RelationData::Entry& e = r->getMembers()[i];
@@ -111,7 +111,7 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
 {
   if (type == ElementType::Way)
   {
-    const boost::shared_ptr<Way>& w = _map->getWay(id);
+    const WayPtr& w = _map->getWay(id);
     vector<long> newNids;
     newNids.reserve(w->getNodeCount());
     for (size_t i = 0; i < w->getNodeCount(); i++)
@@ -132,7 +132,7 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
   }
   else if (type == ElementType::Relation)
   {
-    const boost::shared_ptr<Relation>& r = _map->getRelation(id);
+    const RelationPtr& r = _map->getRelation(id);
     vector<RelationData::Entry> newEntries;
     newEntries.reserve(r->getMembers().size());
     for (size_t i = 0; i < r->getMembers().size(); i++)

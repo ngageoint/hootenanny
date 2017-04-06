@@ -67,7 +67,7 @@ class OsmUtils
       @todo Move to Element?
       */
     static void printNodes(const QString nodeCollectionName,
-                           const QList<boost::shared_ptr<const Node> >& nodes);
+                           const QList<ConstNodePtr >& nodes);
 
     /**
       Retrieves a collection of node ID's for a collection of nodes
@@ -77,7 +77,7 @@ class OsmUtils
       @todo Use a template to make this method generic for other OSM element types.
       @todo Move to Element?
       */
-    static const QList<long> nodesToNodeIds(const QList<boost::shared_ptr<const Node> >& nodes);
+    static const QList<long> nodesToNodeIds(const QList<ConstNodePtr >& nodes);
 
     /**
       Retrieves a collection of nodes given a collection of node ID's
@@ -88,8 +88,8 @@ class OsmUtils
       @todo Use a template here to make this method generic for other OSM element types.
       @todo Move to Element?
       */
-    static QList<boost::shared_ptr<const Node> > nodeIdsToNodes(const QList<long>& nodeIds,
-                                                        boost::shared_ptr<const OsmMap> map);
+    static QList<ConstNodePtr > nodeIdsToNodes(const QList<long>& nodeIds,
+                                                        ConstOsmMapPtr map);
 
     /**
       Converts a OSM node to a coordinate
@@ -97,7 +97,7 @@ class OsmUtils
       @param node the node to convert
       @returns a coordinate
       */
-    static Coordinate nodeToCoord(boost::shared_ptr<const Node> node);
+    static Coordinate nodeToCoord(ConstNodePtr node);
 
     /**
       Converts OSM nodes to a coordinates
@@ -105,7 +105,7 @@ class OsmUtils
       @param nodes the nodes to convert
       @returns coordinates
       */
-    static QList<Coordinate> nodesToCoords(const QList<boost::shared_ptr<const Node> >& nodes);
+    static QList<Coordinate> nodesToCoords(const QList<ConstNodePtr >& nodes);
 
     /**
       Converts a coordinate to an OSM node
@@ -114,7 +114,7 @@ class OsmUtils
       @param map the map owning the node to be created
       @returns a node
       */
-    static boost::shared_ptr<const Node> coordToNode(const Coordinate& coord,boost::shared_ptr<const OsmMap> map);
+    static ConstNodePtr coordToNode(const Coordinate& coord,ConstOsmMapPtr map);
 
     /**
       Converts coordinates to OSM nodes
@@ -123,8 +123,8 @@ class OsmUtils
       @param map the map owning the nodes to be created
       @returns nodes
       */
-    static QList<boost::shared_ptr<const Node> > coordsToNodes(const QList<Coordinate>& coords,
-                                                       boost::shared_ptr<const OsmMap> map);
+    static QList<ConstNodePtr > coordsToNodes(const QList<Coordinate>& coords,
+                                                       ConstOsmMapPtr map);
 
     /**
       Loads an OSM map into an OsmMap object
@@ -137,7 +137,7 @@ class OsmUtils
       @todo This was copied from BaseCommand.  Point all references to BaseCommand::loadMap to this
       instead.
       */
-    static void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId, Status defaultStatus);
+    static void loadMap(OsmMapPtr map, QString path, bool useFileId, Status defaultStatus);
 
     /**
       Saves an OSM map to an OsmMap object
@@ -147,7 +147,7 @@ class OsmUtils
       @todo This was copied from BaseCommand.  Point all references to BaseCommand::saveMap to this
       instead.
       */
-    static void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
+    static void saveMap(ConstOsmMapPtr map, QString path);
 
     /**
       Converts an unsigned int timestamp (time from epoch) to a QString (utc zulu)

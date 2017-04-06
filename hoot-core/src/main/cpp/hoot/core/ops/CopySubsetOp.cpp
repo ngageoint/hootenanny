@@ -100,7 +100,7 @@ CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId
   _eids.insert(eid2);
 }
 
-void CopySubsetOp::apply(boost::shared_ptr<OsmMap> &map)
+void CopySubsetOp::apply(OsmMapPtr &map)
 {
   map->setProjection(_from->getProjection());
   AddAllVisitor v(_from, map);

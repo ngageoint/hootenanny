@@ -69,7 +69,7 @@ vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
 
   for (size_t i = 0; i < close.size(); i++)
   {
-    const boost::shared_ptr<const Node>& n = map->getNode(close[i]);
+    const ConstNodePtr& n = map->getNode(close[i]);
     if (pCrit->isSatisfied(n))
       result.push_back(n->getId());
   }

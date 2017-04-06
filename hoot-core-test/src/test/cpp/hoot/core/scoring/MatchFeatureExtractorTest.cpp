@@ -65,14 +65,14 @@ public:
     TestUtils::resetEnvironment();
   }
 
-  boost::shared_ptr<OsmMap> load(QString s1, QString s2)
+  OsmMapPtr load(QString s1, QString s2)
   {
     OsmXmlReader reader;
 
     Tgs::Random::instance()->seed(0);
     OsmMap::resetCounters();
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(s1, map);
     reader.setDefaultStatus(Status::Unknown2);

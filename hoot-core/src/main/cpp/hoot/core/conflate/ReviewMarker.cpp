@@ -96,7 +96,7 @@ set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &m
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    boost::shared_ptr<Relation> relation = it->second;
+    RelationPtr relation = it->second;
     if (relation->getElementType() == ElementType::Relation || relation->getType() == Relation::REVIEW)
     {
       result.insert(relation->getElementId());

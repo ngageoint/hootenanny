@@ -68,21 +68,21 @@ public:
                        double matchPercent);
 
   virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
-          boost::shared_ptr<const OsmMap> map);
+          ConstOsmMapPtr map);
 
   virtual const vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
-          boost::shared_ptr<const OsmMap> map, const vector<long>& wids);
+          ConstOsmMapPtr map, const vector<long>& wids);
 
 private:
 
   vector< boost::shared_ptr<Manipulation> > _result;
-  boost::shared_ptr<const OsmMap> _map;
+  ConstOsmMapPtr _map;
 
   Meters _minSeparation, _maxSeparation, _vectorError;
   ChainCriterion _oneWayUnknownCriterion;
   double _matchPercent;
 
-  vector<long> _findCenterWays(boost::shared_ptr<const Way> w1, boost::shared_ptr<const Way> w2);
+  vector<long> _findCenterWays(ConstWayPtr w1, ConstWayPtr w2);
 
   /**
    * Find all parallel ways that go in the opposite direction and are within the appropriate

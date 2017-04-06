@@ -140,7 +140,7 @@ void Conflator::_applyManipulations()
       set<ElementId> impactedElements;
       set<ElementId> newElements;
 
-      boost::shared_ptr<OsmMap> newMap = map->takeMap();
+      OsmMapPtr newMap = map->takeMap();
 
       m->applyManipulation(newMap, impactedElements, newElements);
       boost::shared_ptr<WorkingMap> newWm(new WorkingMap(newMap));
@@ -161,7 +161,7 @@ void Conflator::_applyManipulations()
     else if (_createBogusReviewTags && m->getProbabilityEstimate() == mh.score &&
              m->isValid(map->getMap()))
     {
-      boost::shared_ptr<OsmMap> newMap = map->takeMap();
+      OsmMapPtr newMap = map->takeMap();
       boost::shared_ptr<WorkingMap> newWm(new WorkingMap(newMap));
       m->addBogusReviewTags(newMap);
       map = newWm;
@@ -185,7 +185,7 @@ void Conflator::_applyManipulations()
            " way count: " <<  _bestMap->getMap()->getWays().size());
 
   // remove unnecessary fluff before exporting.
-  boost::shared_ptr<OsmMap> tmp = _bestMap->takeMap();
+  OsmMapPtr tmp = _bestMap->takeMap();
   SuperfluousWayRemover::removeWays(tmp);
 
   LOG_INFO("Conflating map. Node count: " << tmp->getNodes().size() <<
@@ -197,7 +197,7 @@ void Conflator::_applyManipulations()
 /**
  * Load the source data up into memory for later conflation.
  */
-void Conflator::loadSource(boost::shared_ptr<OsmMap> map)
+void Conflator::loadSource(OsmMapPtr map)
 {
   LOG_DEBUG("Preprocessing inputs...");
 
@@ -230,7 +230,7 @@ void Conflator::conflate()
   _applyManipulations();
 }
 
-void Conflator::_createManipulations(boost::shared_ptr<OsmMap> map, const set<ElementId>& eids)
+void Conflator::_createManipulations(OsmMapPtr map, const set<ElementId>& eids)
 {
   vector<ElementId> vwids(eids.size());
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
@@ -319,7 +319,7 @@ void Conflator::_saveMap(QString path)
 {
   LOG_DEBUG("Writing debug .osm file..." << path.toStdString());
 
-  boost::shared_ptr<OsmMap> wgs84(new OsmMap(_map));
+  OsmMapPtr wgs84(new OsmMap(_map));
   MapProjector::projectToWgs84(wgs84);
   OsmXmlWriter writer;
   writer.setIncludeHootInfo(true);
@@ -327,14 +327,14 @@ void Conflator::_saveMap(QString path)
   writer.write(wgs84, path);
 }
 
-void Conflator::setSource(boost::shared_ptr<OsmMap> map)
+void Conflator::setSource(OsmMapPtr map)
 {
   _bestScore = std::numeric_limits<double>::min();
 
   _map = map;
 }
 
-void Conflator::_updateManipulationEstimates(boost::shared_ptr<const OsmMap> map,
+void Conflator::_updateManipulationEstimates(ConstOsmMapPtr map,
   const set<ElementId>& eids)
 {
   set< boost::shared_ptr<Manipulation>, LessThanManipulation > found;

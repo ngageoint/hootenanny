@@ -86,18 +86,18 @@ public:
     AlphaShape uut(16.0);
     uut.insert(points);
 
-    boost::shared_ptr<OsmMap> map = uut.toOsmMap();
+    OsmMapPtr map = uut.toOsmMap();
 
     const WayMap ways = map->getWays();
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      const boost::shared_ptr<Way>& w = it->second;
+      const WayPtr& w = it->second;
       w->setTag("highway", "motorway");
     }
 
     for (size_t i = 0; i < points.size(); i++)
     {
-      boost::shared_ptr<Node> n(new Node(Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
+      NodePtr n(new Node(Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
       map->addNode(n);
     }
 

@@ -73,7 +73,7 @@ RubberSheet::RubberSheet()
 
 void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
 {
-  boost::shared_ptr<Node> from = _map->getNode(nid);
+  NodePtr from = _map->getNode(nid);
   // the status type we're searching for.
   Status s;
   if (from->getStatus() == Status::Unknown1)
@@ -95,7 +95,7 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   vector<long> neighbors = _map->getIndex().findNodes(from->toCoordinate(), _searchRadius);
   for (size_t i = 0; i < neighbors.size(); ++i)
   {
-    boost::shared_ptr<Node> aNeighbor = _map->getNode(neighbors[i]);
+    NodePtr aNeighbor = _map->getNode(neighbors[i]);
     NodeToWayMap::const_iterator it = n2w->find(neighbors[i]);
     if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
     {
@@ -123,7 +123,7 @@ void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
   }
 }
 
-void RubberSheet::apply(boost::shared_ptr<OsmMap>& map)
+void RubberSheet::apply(OsmMapPtr& map)
 {
   LOG_INFO("Rubbersheeting the map...");
 
@@ -134,7 +134,7 @@ void RubberSheet::apply(boost::shared_ptr<OsmMap>& map)
   applyTransform(map);
 }
 
-void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
+void RubberSheet::applyTransform(OsmMapPtr& map)
 {
   _map = map;
 
@@ -165,7 +165,7 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
   const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const boost::shared_ptr<Node>& n = it->second;
+    const NodePtr& n = it->second;
 
     if (_ref == false || n->getStatus() == Status::Unknown2)
     {
@@ -274,7 +274,7 @@ boost::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   return bestCandidate;
 }
 
-void RubberSheet::calculateTransform(boost::shared_ptr<OsmMap>& map)
+void RubberSheet::calculateTransform(OsmMapPtr& map)
 {
   _map = map;
 
@@ -309,7 +309,7 @@ void RubberSheet::_findTies()
   // go through all the paired intersections
   for (MatchList::const_iterator it = _matches.begin(); it != _matches.end(); ++it)
   {
-    boost::shared_ptr<Node> n = _map->getNode(it->first);
+    NodePtr n = _map->getNode(it->first);
     // only look if this is Unknown1
     if (n->getStatus() == Status::Unknown1)
     {
@@ -340,8 +340,8 @@ void RubberSheet::_findTies()
 
   for (size_t i = 0; i < _finalPairs.size(); ++i)
   {
-    boost::shared_ptr<Node> n1 = _map->getNode(_finalPairs[i].nid1);
-    boost::shared_ptr<Node> n2 = _map->getNode(_finalPairs[i].nid2);
+    NodePtr n1 = _map->getNode(_finalPairs[i].nid1);
+    NodePtr n2 = _map->getNode(_finalPairs[i].nid2);
     if (touched.find(n1->getId()) == touched.end() &&
         touched.find(n2->getId()) == touched.end())
     {

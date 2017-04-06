@@ -239,13 +239,13 @@ int OsmPbfWriter::_toRelationMemberType(ElementType t)
   }
 }
 
-void OsmPbfWriter::write(boost::shared_ptr<const OsmMap> map)
+void OsmPbfWriter::write(ConstOsmMapPtr map)
 {
   write(map, _openStream.get());
   _openStream.reset();
 }
 
-void OsmPbfWriter::write(boost::shared_ptr<const OsmMap> map, ostream* strm)
+void OsmPbfWriter::write(ConstOsmMapPtr map, ostream* strm)
 {
   _out = strm;
   _map = map;
@@ -264,7 +264,7 @@ void OsmPbfWriter::write(boost::shared_ptr<const OsmMap> map, ostream* strm)
   _writePrimitiveBlock();
 }
 
-void OsmPbfWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
+void OsmPbfWriter::write(ConstOsmMapPtr map, const QString& path)
 {
   fstream output(path.toUtf8().constData(), ios::out | ios::binary);
 
@@ -286,7 +286,7 @@ void OsmPbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
   _writeOsmHeader(includeBounds, sorted);
 }
 
-void OsmPbfWriter::writePb(const boost::shared_ptr<const OsmMap>& m, ostream* strm)
+void OsmPbfWriter::writePb(const ConstOsmMapPtr& m, ostream* strm)
 {
   _initBlob();
 
@@ -301,7 +301,7 @@ void OsmPbfWriter::writePb(const boost::shared_ptr<const OsmMap>& m, ostream* st
   _enablePbFlushing = oldSetting;
 }
 
-void OsmPbfWriter::writePb(const boost::shared_ptr<const Node>& n, ostream* strm)
+void OsmPbfWriter::writePb(const ConstNodePtr& n, ostream* strm)
 {
   _initBlob();
 
@@ -311,7 +311,7 @@ void OsmPbfWriter::writePb(const boost::shared_ptr<const Node>& n, ostream* strm
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
 
-void OsmPbfWriter::writePb(const boost::shared_ptr<const Way>& w, ostream* strm)
+void OsmPbfWriter::writePb(const ConstWayPtr& w, ostream* strm)
 {
   _initBlob();
 
@@ -372,7 +372,7 @@ void OsmPbfWriter::_writeMap()
   sort(nids.begin(), nids.end());
   for (size_t i = 0; i < nids.size(); i++)
   {
-    const boost::shared_ptr<const Node>& n = _map->getNode(nids[i]);
+    const ConstNodePtr& n = _map->getNode(nids[i]);
     _writeNodeDense(n);
 
     if (_enablePbFlushing && _tick++ % 100000 == 0 &&
@@ -579,14 +579,14 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
 }
 
-void OsmPbfWriter::writePartial(const boost::shared_ptr<const OsmMap>& map)
+void OsmPbfWriter::writePartial(const ConstOsmMapPtr& map)
 {
   _map = map;
   _writeMap();
   _map.reset();
 }
 
-void OsmPbfWriter::writePartial(const boost::shared_ptr<const Node>& n)
+void OsmPbfWriter::writePartial(const ConstNodePtr& n)
 {
   _writeNodeDense(n);
 
@@ -596,7 +596,7 @@ void OsmPbfWriter::writePartial(const boost::shared_ptr<const Node>& n)
   }
 }
 
-void OsmPbfWriter::writePartial(const boost::shared_ptr<const Way>& w)
+void OsmPbfWriter::writePartial(const ConstWayPtr& w)
 {
   _writeWay(w);
 
@@ -606,7 +606,7 @@ void OsmPbfWriter::writePartial(const boost::shared_ptr<const Way>& w)
   }
 }
 
-void OsmPbfWriter::writePartial(const boost::shared_ptr<const Relation>& r)
+void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
 {
   _writeRelation(r);
 

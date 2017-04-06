@@ -100,7 +100,7 @@ public:
     TestUtils::resetEnvironment();
     OsmMap::resetCounters();
     OsmXmlReader reader;
-    boost::shared_ptr<OsmMap> referenceMap(new OsmMap());
+    OsmMapPtr referenceMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(
@@ -110,7 +110,7 @@ public:
     PertyMatchScorer matchScorer;
     matchScorer.setSearchDistance(15.0);
     matchScorer.setApplyRubberSheet(false);
-    boost::shared_ptr<OsmMap> combinedMap =
+    OsmMapPtr combinedMap =
       matchScorer._combineMapsAndPrepareForConflation(
         referenceMap,
         "test-files/perty/PertyMatchScorerTest/PertyMatchScorerTest-perturbed-out-1.osm");
@@ -134,7 +134,7 @@ public:
 
     OsmMap::resetCounters();
     OsmXmlReader reader;
-    boost::shared_ptr<OsmMap> combinedMap(new OsmMap());
+    OsmMapPtr combinedMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read(

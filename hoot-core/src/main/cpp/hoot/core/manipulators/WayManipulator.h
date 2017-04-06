@@ -45,17 +45,17 @@ public:
   static std::string className() { return "hoot::WayManipulator"; }
 
   virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
-          boost::shared_ptr<const OsmMap> map) = 0;
+          ConstOsmMapPtr map) = 0;
 
   /**
    * A convenience method that maintains compatibility with the older implementations of
    * Manipulator.
    */
   virtual const vector< boost::shared_ptr<Manipulation> >& findManipulations(
-      boost::shared_ptr<const OsmMap> map, const vector<ElementId>& ids);
+      ConstOsmMapPtr map, const vector<ElementId>& ids);
 
   virtual const vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
-      boost::shared_ptr<const OsmMap> map, const vector<long>& wids) = 0;
+      ConstOsmMapPtr map, const vector<long>& wids) = 0;
 };
 
 }

@@ -233,7 +233,7 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
 
   // read the conflation status from the file.
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-  boost::shared_ptr<OsmMap> map(new OsmMap());
+  OsmMapPtr map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 

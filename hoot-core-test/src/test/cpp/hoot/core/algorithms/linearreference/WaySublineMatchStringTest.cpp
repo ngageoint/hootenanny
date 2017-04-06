@@ -55,7 +55,7 @@ public:
 
   void runTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -84,7 +84,7 @@ public:
 
   void runTouchesTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),

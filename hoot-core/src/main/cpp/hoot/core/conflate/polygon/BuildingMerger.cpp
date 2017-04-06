@@ -196,7 +196,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, c
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
       {
-        boost::shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        RelationPtr r = dynamic_pointer_cast<Relation>(e);
         if (r->getType() == "building")
         {
           isBuilding = true;

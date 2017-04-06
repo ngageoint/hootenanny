@@ -43,7 +43,7 @@ public:
 
   virtual ~NodeFilter() {}
 
-  virtual bool isFiltered(const boost::shared_ptr<const Node>& w) const { return isFiltered(*w); }
+  virtual bool isFiltered(const ConstNodePtr& w) const { return isFiltered(*w); }
 
 protected:
   virtual bool isFiltered(const Node&) const { throw NotImplementedException(); }

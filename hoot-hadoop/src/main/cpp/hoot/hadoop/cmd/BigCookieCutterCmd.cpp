@@ -95,7 +95,7 @@ public:
     driver.setBuffer(pixelSize);
     driver.setSource(in);
 
-   boost::shared_ptr<OsmMap> cutterShapeMap(new OsmMap());
+   OsmMapPtr cutterShapeMap(new OsmMap());
     loadMap(cutterShapeMap, cookieCutterPath, false, Status::Unknown1);
 
     UnionPolygonsVisitor v;

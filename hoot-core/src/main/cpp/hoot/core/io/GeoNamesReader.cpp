@@ -147,7 +147,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  boost::shared_ptr<Node> n(new Node(_status, id, x, y, _circularError));
+  NodePtr n(new Node(_status, id, x, y, _circularError));
 
   if (_columns.size() != fields.size())
   {

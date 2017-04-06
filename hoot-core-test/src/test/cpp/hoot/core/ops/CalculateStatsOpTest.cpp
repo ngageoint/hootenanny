@@ -317,7 +317,7 @@ private:
   boost::shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
   {
     OsmXmlReader reader;
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseStatusFromFile(true);

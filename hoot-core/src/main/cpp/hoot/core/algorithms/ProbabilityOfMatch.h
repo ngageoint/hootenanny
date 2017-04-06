@@ -50,25 +50,25 @@ public:
 
   static ProbabilityOfMatch& getInstance();
 
-  double attributeScore(const ConstOsmMapPtr &map, const boost::shared_ptr<const Way>& w1,
-    const boost::shared_ptr<const Way> &w2);
+  double attributeScore(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
+    const ConstWayPtr &w2);
 
-  double distanceScore(const ConstOsmMapPtr& map, const boost::shared_ptr<const Way>& w1,
-    const boost::shared_ptr<const Way>& w2);
+  double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+    const ConstWayPtr& w2);
 
-  double distanceScore(const hoot::ConstOsmMapPtr &map, const boost::shared_ptr<const Way> &w1,
+  double distanceScore(const hoot::ConstOsmMapPtr &map, const ConstWayPtr &w1,
     const boost::shared_ptr<const LineString> &ls2, Meters circularError);
 
-  double lengthScore(const ConstOsmMapPtr& map, const boost::shared_ptr<const Way>& w1,
-    const boost::shared_ptr<const Way>& w2);
+  double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+    const ConstWayPtr& w2);
 
-  double parallelScore(const ConstOsmMapPtr& map, const boost::shared_ptr<const Way>& w1,
-    const boost::shared_ptr<const Way>& w2);
+  double parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+    const ConstWayPtr& w2);
 
-  double expertProbability(const ConstOsmMapPtr &map, const boost::shared_ptr<const Way>& w1,
-    const boost::shared_ptr<const Way> &w2);
+  double expertProbability(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
+    const ConstWayPtr &w2);
 
-   double zipperScore(const boost::shared_ptr<const Way>& w1, const boost::shared_ptr<const Way>& w2);
+   double zipperScore(const ConstWayPtr& w1, const ConstWayPtr& w2);
 
   static bool debug;
 

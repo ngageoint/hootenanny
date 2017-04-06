@@ -332,7 +332,7 @@ void GeometryPainter::drawWay(QPainter& pt, const OsmMap* map, const Way* way, c
 
   for (int j = 0; j < size; j++)
   {
-   boost::shared_ptr<const Node> n = map->getNode(way->getNodeId(j));
+   ConstNodePtr n = map->getNode(way->getNodeId(j));
     a[j] = QPointF(m.map(QPointF(n->getX(), n->getY())) - QPointF(0.5, 0.5));
   }
 

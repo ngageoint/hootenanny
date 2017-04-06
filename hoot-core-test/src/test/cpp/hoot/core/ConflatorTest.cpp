@@ -62,7 +62,7 @@ public:
   {
     OsmPbfReader reader(true);
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setUseFileStatus(true);
     reader.read("test-files/ToyTestCombined.pbf", map);
 
@@ -70,7 +70,7 @@ public:
     uut.loadSource(map);
     uut.conflate();
 
-    boost::shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
+    OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
     CPPUNIT_ASSERT_EQUAL((size_t)15, out->getWays().size());
@@ -84,7 +84,7 @@ public:
   {
     OsmXmlReader reader;
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -94,7 +94,7 @@ public:
     uut.loadSource(map);
     uut.conflate();
 
-    boost::shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
+    OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
     CPPUNIT_ASSERT_EQUAL((size_t)9, out->getWays().size());
@@ -110,7 +110,7 @@ public:
   {
     OsmXmlReader reader;
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/building_Valqueire.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -120,7 +120,7 @@ public:
     uut.loadSource(map);
     uut.conflate();
 
-    boost::shared_ptr<OsmMap> out(new OsmMap(uut.getBestMap()));
+    OsmMapPtr out(new OsmMap(uut.getBestMap()));
     MapProjector::projectToWgs84(out);
 
     CPPUNIT_ASSERT_EQUAL((size_t)2, out->getNodes().size());

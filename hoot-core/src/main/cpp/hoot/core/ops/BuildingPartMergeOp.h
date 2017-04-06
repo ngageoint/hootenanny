@@ -88,7 +88,7 @@ public:
 
   BuildingPartMergeOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual string getClassName() const { return className(); }
 
@@ -96,21 +96,21 @@ public:
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
-  boost::shared_ptr<Relation> combineParts(const OsmMapPtr &map,
+  RelationPtr combineParts(const OsmMapPtr &map,
     const vector< boost::shared_ptr<Element> >& parts);
 
 private:
 
   /// Used to keep track of which elements make up a building.
   DisjointSetMap< boost::shared_ptr<Element> > _ds;
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   set<QString> _buildingPartTagNames;
 
   void _addContainedWaysToGroup(const Geometry& g, const boost::shared_ptr<Element>& neighbor);
-  void _addNeighborsToGroup(const boost::shared_ptr<Way>& w);
-  void _addNeighborsToGroup(const boost::shared_ptr<Relation>& r);
+  void _addNeighborsToGroup(const WayPtr& w);
+  void _addNeighborsToGroup(const RelationPtr& r);
 
-  set<long> _calculateNeighbors(const boost::shared_ptr<Way>& w, const Tags& tags);
+  set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
 
   void _combineParts(const vector< boost::shared_ptr<Element> >& parts) { combineParts(_map, parts); }
 
@@ -123,13 +123,13 @@ private:
   /**
    * Returns true if the nodes n1 and n2 appear in w in consecutive order.
    */
-  bool _hasContiguousNodes(const boost::shared_ptr<Way>& w, long n1, long n2);
+  bool _hasContiguousNodes(const WayPtr& w, long n1, long n2);
 
   /**
    * Returns true if this way is a building, or part of a building through a relation.
    */
-  bool _isBuildingPart(const boost::shared_ptr<Way>& w);
-  bool _isBuildingPart(const boost::shared_ptr<Relation>& r);
+  bool _isBuildingPart(const WayPtr& w);
+  bool _isBuildingPart(const RelationPtr& r);
 
 };
 

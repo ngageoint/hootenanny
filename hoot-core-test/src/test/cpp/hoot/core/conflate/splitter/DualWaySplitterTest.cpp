@@ -62,14 +62,14 @@ public:
   {
     OsmXmlReader reader;
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/UndividedHighway.osm", map);
 
     MapProjector::projectToOrthographic(map);
 
-    boost::shared_ptr<OsmMap> after = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 10.0);
+    OsmMapPtr after = DualWaySplitter::splitAll(map, DualWaySplitter::Right, 10.0);
 
     MapProjector::projectToWgs84(after);
 

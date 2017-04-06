@@ -121,19 +121,19 @@ public:
    * If the input is a directory then the underlying files are read in turn, otherwise readFile
    * is called directly on the file.
    */
-  void read(QString path, boost::shared_ptr<OsmMap> map);
+  void read(QString path, OsmMapPtr map);
 
-  void parse(istream* strm, boost::shared_ptr<OsmMap> map);
+  void parse(istream* strm, OsmMapPtr map);
 
-  void parseBlob(BlobLocation& bl, istream* strm, boost::shared_ptr<OsmMap> map);
+  void parseBlob(BlobLocation& bl, istream* strm, OsmMapPtr map);
 
-  void parseBlob(long headerOffset, istream* strm, boost::shared_ptr<OsmMap> map);
+  void parseBlob(long headerOffset, istream* strm, OsmMapPtr map);
 
   /**
    * Reads a uint32 in network order from the stream to determine the PBF size, then reads the
    * PrimitiveBlock from the stream specified into the provided map.
    */
-  void parseElements(istream* strm, const boost::shared_ptr<OsmMap>& map);
+  void parseElements(istream* strm, const OsmMapPtr& map);
 
   /**
    * Allows loading of data that isn't complete such as unknown node IDs in a way.
@@ -148,7 +148,7 @@ public:
   /**
    * The read command called after open.
    */
-  virtual void read(boost::shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   virtual bool hasMoreElements();
 
@@ -188,7 +188,7 @@ private:
   vector<QString> _strings;
   /// @todo Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
   /// class), which was added to PartialOsmMapReader after it was implemented on this class.
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
@@ -223,7 +223,7 @@ private:
   QString _urlStr;
   bool _firstPartialReadCompleted;
 
-  void _readFile(QString path, boost::shared_ptr<OsmMap> map);
+  void _readFile(QString path, OsmMapPtr map);
 
   void _init(bool useFileId);
 

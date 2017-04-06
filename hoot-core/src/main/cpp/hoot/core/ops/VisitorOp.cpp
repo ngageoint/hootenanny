@@ -46,7 +46,7 @@ void VisitorOp::addVisitor(const ElementVisitorPtr& e)
   _visitor = e;
 }
 
-void VisitorOp::apply(boost::shared_ptr<OsmMap>& map)
+void VisitorOp::apply(OsmMapPtr& map)
 {
   map->visitRw(*_visitor);
 }

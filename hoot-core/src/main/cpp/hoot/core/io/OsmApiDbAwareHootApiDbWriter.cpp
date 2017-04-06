@@ -131,7 +131,7 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
   return retVal;
 }
 
-void OsmApiDbAwareHootApiDbWriter::writePartial(const boost::shared_ptr<const Node>& n)
+void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   Tags t = n->getTags();
   _addElementTags(n, t);
@@ -151,7 +151,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const boost::shared_ptr<const No
   _nodesWritten++;
 }
 
-void OsmApiDbAwareHootApiDbWriter::writePartial(const boost::shared_ptr<const Way>& w)
+void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& w)
 {
   Tags tags = w->getTags();
   _addElementTags(w, tags);
@@ -180,7 +180,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const boost::shared_ptr<const Wa
   _waysWritten++;
 }
 
-void OsmApiDbAwareHootApiDbWriter::writePartial(const boost::shared_ptr<const Relation>& r)
+void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
   Tags tags = r->getTags();
   _addElementTags(r, tags);

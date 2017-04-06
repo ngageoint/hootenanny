@@ -40,7 +40,7 @@ OpList::OpList()
 {
 }
 
-void OpList::apply(boost::shared_ptr<OsmMap>& map)
+void OpList::apply(OsmMapPtr& map)
 {
   for (size_t i = 0; i < _ops.size(); i++)
   {

@@ -51,7 +51,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, ParallelWayCriterion)
 
 ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map,
-                                           boost::shared_ptr<const Way> baseWay,
+                                           ConstWayPtr baseWay,
                                            bool isParallel) :
   _map(map),
   _baseWay(baseWay),
@@ -89,7 +89,7 @@ ParallelWayCriterion::~ParallelWayCriterion()
   }
 }
 
-Radians ParallelWayCriterion::calculateDifference(const boost::shared_ptr<const Way>& w) const
+Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
 {
   boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
 

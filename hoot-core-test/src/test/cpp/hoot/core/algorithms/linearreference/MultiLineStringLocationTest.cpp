@@ -67,7 +67,7 @@ public:
   void runSingleWayTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -85,7 +85,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 0), wayLocation.getCoordinate());
-    const boost::shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
@@ -108,7 +108,7 @@ public:
   void runMultipleWaysWayLocationOnFirstWayTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -129,7 +129,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 0), wayLocation.getCoordinate());
-    const boost::shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
@@ -150,7 +150,7 @@ public:
   void runMultipleWaysWayLocationOnLastWayTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -171,7 +171,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 10), wayLocation.getCoordinate());
-    const boost::shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-2", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
@@ -192,7 +192,7 @@ public:
   void runMultipleWaysWayLocationOnMiddleWayTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -217,7 +217,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(100, 7.5), wayLocation.getCoordinate());
-    const boost::shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-2", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
@@ -238,7 +238,7 @@ public:
   void runWayLocationAtBeginningOfWayTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -256,7 +256,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.0, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(0, 0), wayLocation.getCoordinate());
-    const boost::shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
@@ -279,7 +279,7 @@ public:
   void runWayLocationAtEndOfWayTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -297,7 +297,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.0, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(100, 0), wayLocation.getCoordinate());
-    const boost::shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
@@ -320,7 +320,7 @@ public:
   void runRelationHasNoWaysTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -350,7 +350,7 @@ public:
   void runRelationNotMultiLineStringTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -379,7 +379,7 @@ public:
   void runInvalidWayIndexTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -408,7 +408,7 @@ public:
   void runRelationWayMemberDoesntMatchWayLocationWayTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -439,7 +439,7 @@ public:
   void runRelationContainsFeaturesOtherThanWaysTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };

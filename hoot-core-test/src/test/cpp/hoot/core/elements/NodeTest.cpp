@@ -63,7 +63,7 @@ public:
 
   void runCopyTest()
   {
-    boost::shared_ptr<Node> n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
+    NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
     n->setTag("foo", "bar");
 
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, n->getStatus().getEnum());
@@ -73,7 +73,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.14, n->getCircularError(), 1e-3);
     CPPUNIT_ASSERT_EQUAL(QString("bar"), n->getTags()["foo"]);
 
-    boost::shared_ptr<Node> n2(new Node(*n));
+    NodePtr n2(new Node(*n));
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, n2->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(123l, n2->getId());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n2->getX(), 1e-3);
@@ -84,9 +84,9 @@ public:
 
   void runSetTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    boost::shared_ptr<Node> n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
+    NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
     n->setTag("foo", "bar");
 
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, n->getStatus().getEnum());

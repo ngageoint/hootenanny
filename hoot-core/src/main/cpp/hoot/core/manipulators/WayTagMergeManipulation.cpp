@@ -36,12 +36,12 @@ namespace hoot
 {
 
 WayTagMergeManipulation::WayTagMergeManipulation(long leftId, long rightId,
-  boost::shared_ptr<const OsmMap> map, Meters minSplitSize) :
+  ConstOsmMapPtr map, Meters minSplitSize) :
   WayMergeManipulation(leftId, rightId, map, minSplitSize)
 {
 }
 
-void WayTagMergeManipulation::applyManipulation(boost::shared_ptr<OsmMap> wm,
+void WayTagMergeManipulation::applyManipulation(OsmMapPtr wm,
   set<ElementId>& impactedElements, set<ElementId>& newElements) const
 {
   impactedElements.clear();
@@ -50,8 +50,8 @@ void WayTagMergeManipulation::applyManipulation(boost::shared_ptr<OsmMap> wm,
 
   newElements.clear();
 
-  boost::shared_ptr<Way> w1 = wm->getWay(_left);
-  boost::shared_ptr<Way> w2 = wm->getWay(_right);
+  WayPtr w1 = wm->getWay(_left);
+  WayPtr w2 = wm->getWay(_right);
 
   // make sure w1 is the Unknown1
   if (w1->getStatus() == Status::Unknown2)
@@ -65,7 +65,7 @@ void WayTagMergeManipulation::applyManipulation(boost::shared_ptr<OsmMap> wm,
   RemoveWayOp::removeWay(wm, w2->getId());
 }
 
-const set<long>& WayTagMergeManipulation::getImpactedWayIds(boost::shared_ptr<const OsmMap> /*map*/) const
+const set<long>& WayTagMergeManipulation::getImpactedWayIds(ConstOsmMapPtr /*map*/) const
 {
   _impactedWays.clear();
   _impactedWays.insert(_left);

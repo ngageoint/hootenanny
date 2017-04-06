@@ -92,7 +92,7 @@ DividedHighwayMerger::DividedHighwayMerger(Meters minSeparation, Meters maxSepar
 }
 
 const vector< boost::shared_ptr<Manipulation> >& DividedHighwayMerger::findAllManipulations(
-        boost::shared_ptr<const OsmMap> map)
+        ConstOsmMapPtr map)
 {
   // go through all the oneway, unknown ways
   vector<long> oneWays = FindWaysVisitor::findWays(map, &_oneWayUnknownCriterion);
@@ -102,7 +102,7 @@ const vector< boost::shared_ptr<Manipulation> >& DividedHighwayMerger::findAllMa
 }
 
 const vector< boost::shared_ptr<Manipulation> >& DividedHighwayMerger::findWayManipulations(
-        boost::shared_ptr<const OsmMap> map, const vector<long>& wids)
+        ConstOsmMapPtr map, const vector<long>& wids)
 {
   _result.clear();
   _map = map;
@@ -126,8 +126,8 @@ const vector< boost::shared_ptr<Manipulation> >& DividedHighwayMerger::findWayMa
   return _result;
 }
 
-vector<long> DividedHighwayMerger::_findCenterWays(boost::shared_ptr<const Way> w1,
-                                                   boost::shared_ptr<const Way> w2)
+vector<long> DividedHighwayMerger::_findCenterWays(ConstWayPtr w1,
+                                                   ConstWayPtr w2)
 {
   boost::shared_ptr<OneWayCriterion> notOneWayCrit(new OneWayCriterion(false));
 
@@ -168,7 +168,7 @@ vector<long> DividedHighwayMerger::_findCenterWays(boost::shared_ptr<const Way> 
 
 void DividedHighwayMerger::_findMatches(long baseWayId)
 {
-  boost::shared_ptr<const Way> baseWay = _map->getWay(baseWayId);
+  ConstWayPtr baseWay = _map->getWay(baseWayId);
   // find all the parallel and opposite ways that could be candidates.
   vector<long> otherWays = _findOtherWays(baseWay);
 
@@ -180,7 +180,7 @@ void DividedHighwayMerger::_findMatches(long baseWayId)
     // this ensures that we'll only test a pair of ways once.
     if (baseWay->getId() < otherWays[oi])
     {
-      boost::shared_ptr<const Way> otherWay = _map->getWay(otherWays[oi]);
+      ConstWayPtr otherWay = _map->getWay(otherWays[oi]);
 
       // find all potential center lines
       vector<long> centerWays = _findCenterWays(baseWay, otherWay);

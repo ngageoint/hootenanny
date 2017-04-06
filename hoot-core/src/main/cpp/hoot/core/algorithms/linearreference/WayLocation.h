@@ -119,7 +119,7 @@ public:
 
   const ConstOsmMapPtr& getMap() const { return _map; }
 
-  const boost::shared_ptr<const Way>& getWay() const { return _way; }
+  const ConstWayPtr& getWay() const { return _way; }
 
   /**
    * Returns the node at this WayLocation. If isNode() returns false this will thrown an exception.

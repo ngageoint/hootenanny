@@ -124,7 +124,7 @@ int ConflateCmd::runSimple(QStringList args)
   QList< QList<SingleStat> > allStats;
 
   // read input 1
-  boost::shared_ptr<OsmMap> map(new OsmMap());
+  OsmMapPtr map(new OsmMap());
   loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
   // read input 2
   if (!input2.isEmpty())
@@ -165,7 +165,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
 
-  boost::shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   if (ConfigOptions().getConflateEnableOldRoads())
   {

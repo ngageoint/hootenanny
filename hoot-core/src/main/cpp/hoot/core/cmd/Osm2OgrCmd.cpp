@@ -115,7 +115,7 @@ public:
     }
     else
     {
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
 
       loadMap(map, input, true);
 

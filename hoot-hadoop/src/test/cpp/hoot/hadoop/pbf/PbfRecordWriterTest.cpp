@@ -57,12 +57,12 @@ public:
     }
 
     uut.setReduceContext(2, "test-output/PbfRecordWriterTest");
-   boost::shared_ptr<OsmMap> map(new OsmMap());
-   boost::shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+   OsmMapPtr map(new OsmMap());
+   NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
-   boost::shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
+   WayPtr w(new Way(Status::Unknown1, 42, 1.7));
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);

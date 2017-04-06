@@ -95,12 +95,12 @@ public:
                                                      const bool statsFlag=false) const;
  boost::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const boost::shared_ptr<const Way>& w, bool throwError,
+ boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
                                                      const bool statsFlag=false) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const boost::shared_ptr<const Relation>& r,
+ boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r,
                                                      bool throwError,
                                                      const bool statsFlag=false) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const boost::shared_ptr<Relation>& r) const;
+ boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;
  boost::shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
  boost::shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;
 

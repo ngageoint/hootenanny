@@ -91,7 +91,7 @@ public:
   void runSimpleIntersectionTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -126,7 +126,7 @@ public:
   void runSimpleOverlapTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -161,7 +161,7 @@ public:
   void runSmallOverlapTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;

@@ -37,7 +37,7 @@ using namespace pp;
 
 PP_FACTORY_REGISTER(pp::RecordReader, WayJoin2RecordReader)
 
-boost::shared_ptr<OsmMap> WayJoin2RecordReader::getMap()
+OsmMapPtr WayJoin2RecordReader::getMap()
 {
   return _OsmPbfReader->getMap();
 }

@@ -49,11 +49,11 @@ public:
 
   virtual void open(QString urlStr);
 
-  virtual void writePartial(const boost::shared_ptr<const Node>& n);
+  virtual void writePartial(const ConstNodePtr& n);
 
-  virtual void writePartial(const boost::shared_ptr<const Way>& w);
+  virtual void writePartial(const ConstWayPtr& w);
 
-  virtual void writePartial(const boost::shared_ptr<const Relation>& r);
+  virtual void writePartial(const ConstRelationPtr& r);
 
 protected:
 

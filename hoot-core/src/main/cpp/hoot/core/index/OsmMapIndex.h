@@ -51,11 +51,11 @@ class OsmMapIndex : public ElementListener
 public:
   OsmMapIndex(const OsmMap& map);
 
-  void addNode(boost::shared_ptr<const Node> n);
+  void addNode(ConstNodePtr n);
 
-  void addRelation(const boost::shared_ptr<const Relation>& r);
+  void addRelation(const ConstRelationPtr& r);
 
-  void addWay(boost::shared_ptr<const Way> w);
+  void addWay(ConstWayPtr w);
 
   /**
    * The relation index can be very expensive to maintain when the relations are large. If it
@@ -80,7 +80,7 @@ public:
    * Should run in approximately O(lg(n)).
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
-  std::vector<long> findWayNeighbors(const boost::shared_ptr<const Way>& way, Meters buffer,
+  std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
                                      bool addError = false) const;
 
   /**
@@ -88,7 +88,7 @@ public:
    */
   std::vector<long> findWayNeighbors(Coordinate& from, Meters buffer) const;
 
-  std::vector<long> findWayNeighborsBruteForce(boost::shared_ptr<const Way> way, Meters buffer) const;
+  std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**
    * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
@@ -127,11 +127,11 @@ public:
 
   virtual void postGeometryChange(Element* element);
 
-  void removeNode(boost::shared_ptr<const Node> n);
+  void removeNode(ConstNodePtr n);
 
-  void removeRelation(const boost::shared_ptr<const Relation>& r);
+  void removeRelation(const ConstRelationPtr& r);
 
-  void removeWay(boost::shared_ptr<const Way> w);
+  void removeWay(ConstWayPtr w);
 
   void reset();
 

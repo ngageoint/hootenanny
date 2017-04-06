@@ -390,7 +390,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     long newId = _getNodeId(id);
     double x = _convertLon(lon);
     double y = _convertLat(lat);
-    boost::shared_ptr<Node> n(new hoot::Node(_status, newId, x, y, _circularError));
+    NodePtr n(new hoot::Node(_status, newId, x, y, _circularError));
     nodes.push_back(n);
     if (_map->containsNode(newId))
     {
@@ -907,12 +907,12 @@ void OsmPbfReader::_loadWays()
   }
 }
 
-void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, boost::shared_ptr<OsmMap> map)
+void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, OsmMapPtr map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void OsmPbfReader::parseBlob(long headerOffset, istream* strm, boost::shared_ptr<OsmMap> map)
+void OsmPbfReader::parseBlob(long headerOffset, istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
@@ -964,7 +964,7 @@ void OsmPbfReader::_parseBlobHeader()
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
-void OsmPbfReader::parseElements(istream* strm, const boost::shared_ptr<OsmMap>& map)
+void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
 {
   _map = map;
   _in = strm;
@@ -1051,7 +1051,7 @@ Status OsmPbfReader::_parseStatus(QString s)
   return result;
 }
 
-void OsmPbfReader::parse(istream* strm, boost::shared_ptr<OsmMap> map)
+void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
@@ -1089,7 +1089,7 @@ void OsmPbfReader::parse(istream* strm, boost::shared_ptr<OsmMap> map)
 }
 
 /// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
-void OsmPbfReader::read(QString path, boost::shared_ptr<OsmMap> map)
+void OsmPbfReader::read(QString path, OsmMapPtr map)
 {
   if (_status == Status::Invalid)
   {
@@ -1117,7 +1117,7 @@ void OsmPbfReader::read(QString path, boost::shared_ptr<OsmMap> map)
   map->visitRw(v);
 }
 
-void OsmPbfReader::_readFile(QString path, boost::shared_ptr<OsmMap> map)
+void OsmPbfReader::_readFile(QString path, OsmMapPtr map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 
@@ -1129,7 +1129,7 @@ void OsmPbfReader::_readFile(QString path, boost::shared_ptr<OsmMap> map)
   parse(&input, map);
 }
 
-void OsmPbfReader::read(boost::shared_ptr<OsmMap> map)
+void OsmPbfReader::read(OsmMapPtr map)
 {
   assert(map.get());
   if (_status == Status::Invalid)

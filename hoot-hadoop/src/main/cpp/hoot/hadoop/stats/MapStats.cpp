@@ -104,7 +104,7 @@ void MapStats::expandEnvelope(const Envelope& e)
   }
 }
 
-void MapStats::expandNodeRange(const boost::shared_ptr<const Node>& n)
+void MapStats::expandNodeRange(const ConstNodePtr& n)
 {
   expandNodeRange(n->getId());
   expandEnvelope(n->getX(), n->getY());

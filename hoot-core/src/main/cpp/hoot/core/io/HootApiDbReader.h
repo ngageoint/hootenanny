@@ -70,7 +70,7 @@ public:
   /**
    * The read command called after open.
    */
-  virtual void read(boost::shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   virtual void finalizePartial();
 
@@ -111,7 +111,7 @@ private:
 
   const ElementType _getCurrentSelectElementType() const;
 
-  void _read(boost::shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _read(OsmMapPtr map, const ElementType& elementType);
 
   boost::shared_ptr<Element> _getElementUsingIterator();
 

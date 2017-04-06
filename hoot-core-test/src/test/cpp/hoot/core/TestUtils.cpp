@@ -63,14 +63,14 @@ bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 
-  boost::shared_ptr<OsmMap> ref(new OsmMap());
-  boost::shared_ptr<OsmMap> test(new OsmMap());
+  OsmMapPtr ref(new OsmMap());
+  OsmMapPtr test(new OsmMap());
   reader.read(refPath, ref);
   reader.read(testPath, test);
   return compareMaps(ref, test);
 }
 
-bool TestUtils::compareMaps(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)
+bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
 {
   return MapComparator().isMatch(ref, test);
 }

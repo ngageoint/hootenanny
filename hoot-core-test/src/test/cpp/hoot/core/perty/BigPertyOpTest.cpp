@@ -62,7 +62,7 @@ public:
   void runBasicTest()
   {
     TestUtils::resetEnvironment();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -191,7 +191,7 @@ public:
 
   void runMaxDistanceTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;

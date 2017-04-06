@@ -108,7 +108,7 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::sha
 }
 
 
-boost::shared_ptr<Point> ElementConverter::convertToGeometry(const boost::shared_ptr<const Node>& n) const
+boost::shared_ptr<Point> ElementConverter::convertToGeometry(const ConstNodePtr& n) const
 {
   return boost::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 }
@@ -118,7 +118,7 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w)
   return convertToGeometry((ConstWayPtr)w);
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::shared_ptr<const Way>& e,
+boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr& e,
                                                          bool throwError,
                                                          const bool statsFlag) const
 {
@@ -139,7 +139,7 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::sha
   }
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::shared_ptr<const Relation>& e,
+boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
                                                          bool throwError,
                                                          const bool statsFlag) const
 {
@@ -165,7 +165,7 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::sha
   }
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::shared_ptr<Relation>& r) const
+boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPtr& r) const
 {
   return convertToGeometry((ConstRelationPtr)r);
 }
@@ -183,14 +183,14 @@ boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstW
 
   for (size_t i = 0; i < ids.size(); i++)
   {
-   boost::shared_ptr<const Node> n = _constProvider->getNode(ids[i]);
+   ConstNodePtr n = _constProvider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
   {
-   boost::shared_ptr<const Node> n = _constProvider->getNode(ids[0]);
+   ConstNodePtr n = _constProvider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), 1);
   }
 
@@ -225,7 +225,7 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
-   boost::shared_ptr<const Node> n = _constProvider->getNode(ids[i]);
+   ConstNodePtr n = _constProvider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
@@ -233,7 +233,7 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
   while (i < size)
   {
     // add the first point onto the end.
-   boost::shared_ptr<const Node> n = _constProvider->getNode(ids[0]);
+   ConstNodePtr n = _constProvider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i);
     i++;
   }

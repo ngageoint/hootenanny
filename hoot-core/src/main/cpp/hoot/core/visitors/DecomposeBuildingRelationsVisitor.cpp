@@ -47,7 +47,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    const boost::shared_ptr<Relation>& r = _map->getRelation(e->getId());
+    const RelationPtr& r = _map->getRelation(e->getId());
     if (r->getType() == "building")
     {
       _decomposeBuilding(r);
@@ -55,7 +55,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_ptr<Relation>& r)
+void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const RelationPtr& r)
 {
   Tags baseTags = r->getTags();
 

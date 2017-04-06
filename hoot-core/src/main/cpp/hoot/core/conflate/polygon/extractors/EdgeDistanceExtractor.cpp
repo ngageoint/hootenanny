@@ -76,7 +76,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      boost::shared_ptr<const Way> w(dynamic_pointer_cast<const Way>(e));
+      ConstWayPtr w(dynamic_pointer_cast<const Way>(e));
 
       Geometry* ls = ElementConverter(_map->shared_from_this()).convertToLineString(w)->clone();
       _lines.push_back(ls);

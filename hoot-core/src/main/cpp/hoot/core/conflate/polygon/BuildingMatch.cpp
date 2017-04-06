@@ -118,7 +118,7 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const 
   LOG_VART(toString());
 }
 
-map<QString, double> BuildingMatch::getFeatures(const boost::shared_ptr<const OsmMap>& m) const
+map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
 {
   return _rf->getFeatures(m, _eid1, _eid2);
 }

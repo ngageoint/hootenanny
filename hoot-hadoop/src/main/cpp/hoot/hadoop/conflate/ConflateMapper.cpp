@@ -37,7 +37,7 @@ ConflateMapper::ConflateMapper()
   _initialized = false;
 }
 
-void ConflateMapper::_addNode(const boost::shared_ptr<Node>& n)
+void ConflateMapper::_addNode(const NodePtr& n)
 {
   long key = -1;
 
@@ -77,7 +77,7 @@ void ConflateMapper::_addNode(const boost::shared_ptr<Node>& n)
   _writers[key]->writePartial(n);
 }
 
-void ConflateMapper::_addWay(ConstOsmMapPtrR map, const boost::shared_ptr<Way> &w)
+void ConflateMapper::_addWay(ConstOsmMapPtrR map, const WayPtr &w)
 {
   long key = -1;
 
@@ -168,7 +168,7 @@ void ConflateMapper::_init(HadoopPipes::MapContext& context)
   _initialized = true;
 }
 
-void ConflateMapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
+void ConflateMapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
   _init(context);
 
@@ -184,7 +184,7 @@ void ConflateMapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext&
   const WayMap& wm = m->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const boost::shared_ptr<Way>& w = it->second;
+    const WayPtr& w = it->second;
 
     // add way to appropriate map
     _addWay(m, w);
@@ -194,7 +194,7 @@ void ConflateMapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext&
   const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const boost::shared_ptr<Node>& n = it->second;
+    const NodePtr& n = it->second;
 
     // add node to appropriate map
     _addNode(n);
@@ -236,7 +236,7 @@ vector<Envelope> ConflateMapper::parseEnvelopes(const string& envStr)
   return result;
 }
 
-void ConflateMapper::_replaceNodes(boost::shared_ptr<OsmMap>& m)
+void ConflateMapper::_replaceNodes(OsmMapPtr& m)
 {
   pp::Hdfs fs;
 
@@ -265,7 +265,7 @@ void ConflateMapper::_replaceNodes(boost::shared_ptr<OsmMap>& m)
   }
 }
 
-void ConflateMapper::_replaceNodes(boost::shared_ptr<OsmMap>& m, istream& is)
+void ConflateMapper::_replaceNodes(OsmMapPtr& m, istream& is)
 {
   int64_t ids[2];
   while (!is.eof())

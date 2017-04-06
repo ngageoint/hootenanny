@@ -42,7 +42,7 @@ WayTagMerger::WayTagMerger()
 }
 
 Manipulation* WayTagMerger::_createManipulation(long leftId, long rightId,
-  boost::shared_ptr<const OsmMap> map, Meters minSplitSize)
+  ConstOsmMapPtr map, Meters minSplitSize)
 {
   return new WayTagMergeManipulation(leftId, rightId, map, minSplitSize);
 }

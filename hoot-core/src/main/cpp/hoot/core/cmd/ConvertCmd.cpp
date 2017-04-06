@@ -99,7 +99,7 @@ public:
     }
     else
     {
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
 
       // This keeps the status and the tags.
       conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);

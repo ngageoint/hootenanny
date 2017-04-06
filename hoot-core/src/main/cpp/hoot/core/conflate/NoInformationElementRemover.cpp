@@ -45,7 +45,7 @@ NoInformationElementRemover::NoInformationElementRemover()
 
 }
 
-void NoInformationElementRemover::apply(boost::shared_ptr<OsmMap>& map)
+void NoInformationElementRemover::apply(OsmMapPtr& map)
 {
   _map = map;
 

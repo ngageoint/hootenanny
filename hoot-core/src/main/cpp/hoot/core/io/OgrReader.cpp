@@ -106,12 +106,12 @@ public:
   /**
    * Reads all the features into the given map.
    */
-  void read(boost::shared_ptr<OsmMap> map, Progress progress);
+  void read(OsmMapPtr map, Progress progress);
 
   /**
    * Reads the next feature into the given map.
    */
-  void readNext(const boost::shared_ptr<OsmMap>& map);
+  void readNext(const OsmMapPtr& map);
 
   void setDefaultCircularError(Meters circularError) { _circularError = circularError; }
 
@@ -137,7 +137,7 @@ protected:
 
   Meters _circularError;
   Status _status;
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   OGRLayer* _layer;
   long _limit;
   long _count;
@@ -175,9 +175,9 @@ protected:
 
   void _addPoint(OGRPoint* p, Tags& t);
 
-  void _addPolygon(OGRPolygon* p, boost::shared_ptr<Relation> r, Meters circularError);
+  void _addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError);
 
-  boost::shared_ptr<Way> _createWay(OGRLinearRing* lr, Meters circularError);
+  WayPtr _createWay(OGRLinearRing* lr, Meters circularError);
 
   void _finalizeTranslate();
 
@@ -243,7 +243,7 @@ protected:
   }
 
 private:
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   OgrReaderInternal* _d;
 };
 
@@ -410,7 +410,7 @@ long OgrReader::getFeatureCount(QString path, QString layer)
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(QString path, QString layer, boost::shared_ptr<OsmMap> map, Progress progress)
+void OgrReader::read(QString path, QString layer, OsmMapPtr map, Progress progress)
 {
   _d->open(path, layer);
   _d->read(map, progress);
@@ -489,7 +489,7 @@ Progress OgrReader::streamGetProgress() const
 
 OgrReaderInternal::OgrReaderInternal()
 {
-  _map = boost::shared_ptr<OsmMap>(new OsmMap());
+  _map = OsmMapPtr(new OsmMap());
   _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
   _relationsItr = _map->getRelations().begin();
@@ -650,7 +650,7 @@ void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
-  boost::shared_ptr<Way> way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
 
   way->setTags(t);
   for (int i = 0; i < ls->getNumPoints(); i++)
@@ -658,7 +658,7 @@ void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
     double x = ls->getX(i);
     double y = ls->getY(i);
     _reproject(x, y);
-    boost::shared_ptr<Node> n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -676,7 +676,7 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
   }
   else
   {
-    boost::shared_ptr<Relation> r(new Relation(_status, _map->createNextRelationId(), circularError,
+    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
       Relation::MULTIPOLYGON));
     r->setTags(t);
 
@@ -696,7 +696,7 @@ void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
   double x = p->getX();
   double y = p->getY();
   _reproject(x, y);
-  boost::shared_ptr<Node> node(new Node(_status, _map->createNextNodeId(), x, y,
+  NodePtr node(new Node(_status, _map->createNextNodeId(), x, y,
     circularError));
 
   node->setTags(t);
@@ -709,7 +709,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
 
   if (p->getNumInteriorRings() == 0)
   {
-    boost::shared_ptr<Way> outer = _createWay(p->getExteriorRing(), circularError);
+    WayPtr outer = _createWay(p->getExteriorRing(), circularError);
     if (OsmSchema::getInstance().isArea(t, ElementType::Way) == false)
     {
       t.setArea(true);
@@ -719,7 +719,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
   else
   {
-    boost::shared_ptr<Relation> r(new Relation(_status, _map->createNextRelationId(), circularError,
+    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
       Relation::MULTIPOLYGON));
     if (OsmSchema::getInstance().isArea(t, ElementType::Relation) == false)
     {
@@ -731,15 +731,15 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
 }
 
-void OgrReaderInternal::_addPolygon(OGRPolygon* p, boost::shared_ptr<Relation> r, Meters circularError)
+void OgrReaderInternal::_addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError)
 {
-  boost::shared_ptr<Way> outer = _createWay(p->getExteriorRing(), circularError);
+  WayPtr outer = _createWay(p->getExteriorRing(), circularError);
   _map->addWay(outer);
   r->addElement(Relation::OUTER, outer);
 
   for (int i = 0; i < p->getNumInteriorRings(); i++)
   {
-    boost::shared_ptr<Way> inner = _createWay(p->getInteriorRing(i), circularError);
+    WayPtr inner = _createWay(p->getInteriorRing(i), circularError);
     _map->addWay(inner);
     r->addElement(Relation::INNER, inner);
   }
@@ -763,9 +763,9 @@ void OgrReaderInternal::close()
   }
 }
 
-boost::shared_ptr<Way> OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
+WayPtr OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
 {
-  boost::shared_ptr<Way> way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
 
   // make sure the ring is closed
   lr->closeRings();
@@ -776,7 +776,7 @@ boost::shared_ptr<Way> OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters c
     double x = lr->getX(i);
     double y = lr->getY(i);
     _reproject(x, y);
-    boost::shared_ptr<Node> n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -1025,7 +1025,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   return circularError;
 }
 
-void OgrReaderInternal::read(boost::shared_ptr<OsmMap> map, Progress progress)
+void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
 {
   _map = map;
   _count = 0;
@@ -1062,7 +1062,7 @@ void OgrReaderInternal::read(boost::shared_ptr<OsmMap> map, Progress progress)
   }
 }
 
-void OgrReaderInternal::readNext(const boost::shared_ptr<OsmMap>& map)
+void OgrReaderInternal::readNext(const OsmMapPtr& map)
 {
   bool done = false;
 

@@ -147,7 +147,7 @@ void ShapefileWriter::_removeShapefile(QString path)
   QFile::remove(base + ".PRJ");
 }
 
-void ShapefileWriter::write(boost::shared_ptr<const OsmMap> map, QString path)
+void ShapefileWriter::write(ConstOsmMapPtr map, QString path)
 {
   if (path.toLower().endsWith(".shp"))
   {
@@ -158,14 +158,14 @@ void ShapefileWriter::write(boost::shared_ptr<const OsmMap> map, QString path)
   writePolygons(map, path + "Polygons.shp");
 }
 
-void ShapefileWriter::write(boost::shared_ptr<const OsmMap> map)
+void ShapefileWriter::write(ConstOsmMapPtr map)
 {
   writeLines(map, _outputDir.absoluteFilePath("Lines.shp"));
   writePoints(map, _outputDir.absoluteFilePath("Points.shp"));
   writePolygons(map, _outputDir.absoluteFilePath("Polygons.shp"));
 }
 
-void ShapefileWriter::writeLines(boost::shared_ptr<const OsmMap> map, const QString& path)
+void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
 {
   GDALAllRegister();
 
@@ -229,7 +229,7 @@ void ShapefileWriter::writeLines(boost::shared_ptr<const OsmMap> map, const QStr
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
   {
-    boost::shared_ptr<Way> way = it->second;
+    WayPtr way = it->second;
 
     if (OsmSchema::getInstance().isArea(way) == false)
     {
@@ -276,7 +276,7 @@ void ShapefileWriter::writeLines(boost::shared_ptr<const OsmMap> map, const QStr
   GDALClose(poDS);
 }
 
-void ShapefileWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& path)
+void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
 {
   GDALAllRegister();
 
@@ -339,7 +339,7 @@ void ShapefileWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QSt
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    const boost::shared_ptr<Node>& node = it->second;
+    const NodePtr& node = it->second;
 
     if (node->getTags().getNonDebugCount() > 0)
     {
@@ -380,7 +380,7 @@ void ShapefileWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QSt
   GDALClose(poDS);
 }
 
-void ShapefileWriter::writePolygons(boost::shared_ptr<const OsmMap> map, const QString& path)
+void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
 {
   GDALAllRegister();
 
@@ -444,7 +444,7 @@ void ShapefileWriter::writePolygons(boost::shared_ptr<const OsmMap> map, const Q
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
   {
-    boost::shared_ptr<Way> way = it->second;
+    WayPtr way = it->second;
 
     if (OsmSchema::getInstance().isArea(way))
     {
@@ -455,7 +455,7 @@ void ShapefileWriter::writePolygons(boost::shared_ptr<const OsmMap> map, const Q
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
   {
-    boost::shared_ptr<Relation> relation = it->second;
+    RelationPtr relation = it->second;
 
     if (relation->isMultiPolygon())
     {
@@ -467,7 +467,7 @@ void ShapefileWriter::writePolygons(boost::shared_ptr<const OsmMap> map, const Q
 }
 
 void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
-  const boost::shared_ptr<Relation> &relation, OGRLayer *poLayer, const QStringList& columns,
+  const RelationPtr &relation, OGRLayer *poLayer, const QStringList& columns,
   const QStringList &shpColumns)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
@@ -488,7 +488,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
   }
 
   // convert the geometry.
-  const boost::shared_ptr<const Relation>& r = relation;
+  const ConstRelationPtr& r = relation;
   std::string wkt = ElementConverter(map).convertToGeometry(r)->toString();
   char* t = (char*)wkt.data();
   OGRGeometry* geom;
@@ -510,7 +510,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr &map, const boost::shared_ptr<Way> &way,
+void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr &map, const WayPtr &way,
   OGRLayer *poLayer, const QStringList& columns, const QStringList &shpColumns)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );

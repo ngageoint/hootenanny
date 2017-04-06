@@ -116,7 +116,7 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
   }
 }
 
-void UnifyingConflator::apply(boost::shared_ptr<OsmMap>& map)
+void UnifyingConflator::apply(OsmMapPtr& map)
 {
   Timer timer;
   _reset();

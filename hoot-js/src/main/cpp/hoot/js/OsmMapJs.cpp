@@ -52,7 +52,7 @@ Persistent<Function> OsmMapJs::_constructor;
 
 OsmMapJs::OsmMapJs()
 {
-  _setMap(boost::shared_ptr<OsmMap>(new OsmMap()));
+  _setMap(OsmMapPtr(new OsmMap()));
 }
 
 OsmMapJs::OsmMapJs(OsmMapPtr map)

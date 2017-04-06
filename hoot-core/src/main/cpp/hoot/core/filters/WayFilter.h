@@ -48,7 +48,7 @@ public:
   /**
    * Returns true if the way should be filtered.
    */
-  virtual bool isFiltered(const boost::shared_ptr<const Way>& w) const { return isFiltered(*w); }
+  virtual bool isFiltered(const ConstWayPtr& w) const { return isFiltered(*w); }
 
 protected:
   /**

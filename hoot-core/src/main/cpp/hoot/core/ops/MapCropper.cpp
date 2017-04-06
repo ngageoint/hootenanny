@@ -114,10 +114,10 @@ void MapCropper::setConfiguration(const Settings& conf)
   }
 }
 
-void MapCropper::apply(boost::shared_ptr<OsmMap>& map)
+void MapCropper::apply(OsmMapPtr& map)
 {
   LOG_INFO("Cropping map...");
-  boost::shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
   {
@@ -131,7 +131,7 @@ void MapCropper::apply(boost::shared_ptr<OsmMap>& map)
   const WayMap ways = result->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
   {
-    const boost::shared_ptr<Way>& w = it->second;
+    const WayPtr& w = it->second;
     boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     const Envelope& e = *(ls->getEnvelopeInternal());
 
@@ -215,21 +215,21 @@ void MapCropper::apply(boost::shared_ptr<OsmMap>& map)
   map->visitRw(v);
 }
 
-void MapCropper::crop(boost::shared_ptr<OsmMap> map, const Envelope& envelope)
+void MapCropper::crop(OsmMapPtr map, const Envelope& envelope)
 {
   MapCropper mc(envelope);
   mc.apply(map);
 }
 
-void MapCropper::crop(boost::shared_ptr<OsmMap> map, const boost::shared_ptr<const Geometry>& g, bool invert)
+void MapCropper::crop(OsmMapPtr map, const boost::shared_ptr<const Geometry>& g, bool invert)
 {
   MapCropper mc(g, invert);
   mc.apply(map);
 }
 
-void MapCropper::_cropWay(boost::shared_ptr<OsmMap> map, long wid)
+void MapCropper::_cropWay(OsmMapPtr map, long wid)
 {
-  boost::shared_ptr<Way> way = map->getWay(wid);
+  WayPtr way = map->getWay(wid);
 
   boost::shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
 
@@ -279,7 +279,7 @@ void MapCropper::_cropWay(boost::shared_ptr<OsmMap> map, long wid)
   }
 }
 
-long MapCropper::_findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w,
+long MapCropper::_findNodeId(ConstOsmMapPtr map, ConstWayPtr w,
   const Coordinate& c)
 {
   long result = std::numeric_limits<long>::max();
@@ -287,7 +287,7 @@ long MapCropper::_findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_
 
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
-    boost::shared_ptr<const Node> n = map->getNode(nodeIds[i]);
+    ConstNodePtr n = map->getNode(nodeIds[i]);
     if (n->toCoordinate() == c)
     {
       // if there are multiple corresponding nodes, throw an exception.
@@ -385,11 +385,11 @@ void MapCropper::readObject(QDataStream& is)
   }
 }
 
-boost::shared_ptr<Way> MapCropper::_reintroduceWay(boost::shared_ptr<OsmMap> map, boost::shared_ptr<const Way> w,
+WayPtr MapCropper::_reintroduceWay(OsmMapPtr map, ConstWayPtr w,
   const LineString* ls)
 {
   // create a new way
-  boost::shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
+  WayPtr newWay(new Way(w->getStatus(), map->createNextWayId(),
     w->getRawCircularError()));
   newWay->setTags(w->getTags());
 
@@ -411,7 +411,7 @@ boost::shared_ptr<Way> MapCropper::_reintroduceWay(boost::shared_ptr<OsmMap> map
         throw InternalErrorException("Internal Error: An unexpected coordinate was found.");
       }
       // create a new node
-      boost::shared_ptr<Node> node(new Node(w->getStatus(), map->createNextNodeId(), c,
+      NodePtr node(new Node(w->getStatus(), map->createNextNodeId(), c,
         w->getCircularError()));
       map->addNode(node);
       nid = node->getId();

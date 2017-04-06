@@ -53,7 +53,7 @@ public:
 
   static vector<long> findWays(const ConstOsmMapPtr& map,
                                ElementCriterion* pCrit,
-                              boost::shared_ptr<const Way> refWay,
+                              ConstWayPtr refWay,
                                Meters maxDistance,
                                bool addError);
 

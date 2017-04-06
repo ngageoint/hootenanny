@@ -71,7 +71,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual void visit(const boost::shared_ptr<const Way>& w);
+  virtual void visit(const ConstWayPtr& w);
 
 protected:
   ConstElementProviderPtr _provider;

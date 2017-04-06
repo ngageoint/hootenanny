@@ -65,7 +65,7 @@ public:
       OgrReader uut;
 
       Progress progress("runBasicTest");
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
       CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
@@ -115,7 +115,7 @@ public:
       OgrReader uut;
 
       Progress progress("runBasicTest");
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       uut.setTranslationFile("translations/cloudmade.js");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
@@ -126,7 +126,7 @@ public:
       int water = 0;
       for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
       {
-        boost::shared_ptr<Way> w = it->second;
+        WayPtr w = it->second;
         if (w->getTags()["natural"] == "shoreline")
         {
           shoreline++;
@@ -145,7 +145,7 @@ public:
       OgrReader uut;
 
       Progress progress("runBasicTest");
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       uut.setTranslationFile("cloudmade");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
@@ -156,7 +156,7 @@ public:
       int water = 0;
       for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
       {
-        boost::shared_ptr<Way> w = it->second;
+        WayPtr w = it->second;
         if (w->getTags()["natural"] == "shoreline")
         {
           shoreline++;

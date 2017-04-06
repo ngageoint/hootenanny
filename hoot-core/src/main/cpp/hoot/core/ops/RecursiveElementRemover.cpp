@@ -47,7 +47,7 @@ RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const ElementCri
 {
 }
 
-void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
+void RecursiveElementRemover::apply(const OsmMapPtr &map)
 {
   assert(_eid.isNull() == false);
   if (map->containsElement(_eid) == false)
@@ -118,7 +118,7 @@ void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
   _remove(map, _eid, toErase);
 }
 
-void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, ElementId eid,
+void RecursiveElementRemover::_remove(const OsmMapPtr& map, ElementId eid,
   const set<ElementId>& removeSet)
 {
   // if this element isn't being removed
@@ -129,7 +129,7 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
 
   if (eid.getType() == ElementType::Relation)
   {
-    const boost::shared_ptr<Relation>& r = map->getRelation(eid.getId());
+    const RelationPtr& r = map->getRelation(eid.getId());
 
     // make a copy so we can traverse it after this element is cleared.
     vector<RelationData::Entry> e = r->getMembers();
@@ -143,7 +143,7 @@ void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, Elem
   }
   else if (eid.getType() == ElementType::Way)
   {
-    const boost::shared_ptr<Way>& w = map->getWay(eid.getId());
+    const WayPtr& w = map->getWay(eid.getId());
 
     std::vector<long> nodes = w->getNodeIds();
     w->clear();

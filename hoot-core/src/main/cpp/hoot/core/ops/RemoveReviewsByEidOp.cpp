@@ -57,7 +57,7 @@ void RemoveReviewsByEidOp::addElement(const ConstElementPtr& e)
   }
 }
 
-void RemoveReviewsByEidOp::apply(const boost::shared_ptr<OsmMap> &map)
+void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
 {
   if (_eid.isNull())
   {

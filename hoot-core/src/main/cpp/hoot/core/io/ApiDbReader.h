@@ -75,9 +75,9 @@ protected:
   Envelope _bounds;
   Envelope _overrideBounds; //this will override _bounds
 
-  virtual boost::shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
-  virtual boost::shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
-  virtual boost::shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator,
                                                  const OsmMap& map) = 0;
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);

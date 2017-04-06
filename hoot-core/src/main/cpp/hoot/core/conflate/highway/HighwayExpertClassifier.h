@@ -48,7 +48,7 @@ public:
   MatchClassification classify(const ConstOsmMapPtr& map,
     const WaySublineMatch& match);
 
-  map<QString, double> getFeatures(const boost::shared_ptr<const OsmMap>& m,
+  map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 };
 

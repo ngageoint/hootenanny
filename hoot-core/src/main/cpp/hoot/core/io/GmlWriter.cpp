@@ -48,7 +48,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-void GmlWriter::write(boost::shared_ptr<const OsmMap> map, QString path)
+void GmlWriter::write(ConstOsmMapPtr map, QString path)
 {
   if (path.toLower().endsWith(".gml"))
   {
@@ -57,7 +57,7 @@ void GmlWriter::write(boost::shared_ptr<const OsmMap> map, QString path)
   writePoints(map, path + "Points.shp");
 }
 
-void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& path)
+void GmlWriter::writePoints(ConstOsmMapPtr map, const QString& path)
 {
   GDALAllRegister();
   OGRSetNonLinearGeometriesEnabledFlag(FALSE);
@@ -114,7 +114,7 @@ void GmlWriter::writePoints(boost::shared_ptr<const OsmMap> map, const QString& 
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    const boost::shared_ptr<Node>& node = it->second;
+    const NodePtr& node = it->second;
 
     if (node->getTags().getNonDebugCount() > 0)
     {

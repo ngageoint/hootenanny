@@ -56,62 +56,62 @@ class RecursiveElementRemoverTest : public CppUnit::TestFixture
 
 public:
 
-  boost::shared_ptr<OsmMap> createTestMap()
+  OsmMapPtr createTestMap()
   {
-    boost::shared_ptr<OsmMap> result(new OsmMap());
+    OsmMapPtr result(new OsmMap());
 
     for (long nid = 1; nid <= 13; nid++)
     {
-      boost::shared_ptr<Node> n(new Node(Status::Unknown1, nid, 0.0, 0.0, -1));
+      NodePtr n(new Node(Status::Unknown1, nid, 0.0, 0.0, -1));
       result->addNode(n);
     }
 
     for (long wid = 1; wid <= 5; wid++)
     {
-      boost::shared_ptr<Way> w(new Way(Status::Unknown1, wid, -1));
+      WayPtr w(new Way(Status::Unknown1, wid, -1));
       result->addWay(w);
     }
 
     for (long rid = 1; rid <= 4; rid++)
     {
-      boost::shared_ptr<Relation> r(new Relation(Status::Unknown1, rid, -1));
+      RelationPtr r(new Relation(Status::Unknown1, rid, -1));
       result->addRelation(r);
     }
 
-    boost::shared_ptr<Way> w1 = result->getWay(1);
+    WayPtr w1 = result->getWay(1);
     w1->addNode(1);
     w1->addNode(2);
     w1->addNode(3);
 
-    boost::shared_ptr<Way> w2 = result->getWay(2);
+    WayPtr w2 = result->getWay(2);
     w2->addNode(3);
     w2->addNode(4);
     w2->addNode(5);
 
-    boost::shared_ptr<Way> w3 = result->getWay(3);
+    WayPtr w3 = result->getWay(3);
     w3->addNode(5);
     w3->addNode(6);
     w3->addNode(7);
 
-    boost::shared_ptr<Way> w4 = result->getWay(4);
+    WayPtr w4 = result->getWay(4);
     w4->addNode(8);
     w4->addNode(9);
     w4->addNode(10);
 
-    boost::shared_ptr<Way> w5 = result->getWay(5);
+    WayPtr w5 = result->getWay(5);
     w5->addNode(11);
     w5->addNode(12);
     w5->addNode(13);
 
-    boost::shared_ptr<Relation> r1 = result->getRelation(1);
+    RelationPtr r1 = result->getRelation(1);
     r1->addElement("", w2);
     r1->addElement("", w3);
     r1->addElement("", w4);
 
-    boost::shared_ptr<Relation> r2 = result->getRelation(2);
+    RelationPtr r2 = result->getRelation(2);
     r2->addElement("", w4);
 
-    boost::shared_ptr<Relation> r3 = result->getRelation(3);
+    RelationPtr r3 = result->getRelation(3);
     r3->addElement("", r2);
     r3->addElement("", w5);
 
@@ -120,8 +120,8 @@ public:
 
   void removeRelationTest()
   {
-    boost::shared_ptr<OsmMap> base = createTestMap();
-    boost::shared_ptr<OsmMap> map;
+    OsmMapPtr base = createTestMap();
+    OsmMapPtr map;
     map = createTestMap();
 
     RecursiveElementRemover uut(ElementId::relation(1));
@@ -157,8 +157,8 @@ public:
 
   void removeWayTest()
   {
-    boost::shared_ptr<OsmMap> base = createTestMap();
-    boost::shared_ptr<OsmMap> map;
+    OsmMapPtr base = createTestMap();
+    OsmMapPtr map;
     map = createTestMap();
 
     RecursiveElementRemover uut(ElementId::way(1));

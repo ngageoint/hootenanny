@@ -174,7 +174,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
   if (!_start.isNode())
   {
     Coordinate c = _start.getCoordinate();
-    boost::shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(), ce);
+    NodePtr n = nf->createNode(map, c, way->getStatus(), ce);
     map->addNode(n);
     result->addNode(n->getId());
   }
@@ -187,7 +187,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
   if (!_end.isNode())
   {
     Coordinate c = _end.getCoordinate();
-    boost::shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(), ce);
+    NodePtr n = nf->createNode(map, c, way->getStatus(), ce);
     map->addNode(n);
     result->addNode(n->getId());
   }

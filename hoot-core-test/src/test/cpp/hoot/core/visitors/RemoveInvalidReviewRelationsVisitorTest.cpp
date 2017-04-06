@@ -51,7 +51,7 @@ public:
   {
     //add some nodes to a map
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
@@ -99,7 +99,7 @@ public:
   {
     //add some nodes to a map
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));

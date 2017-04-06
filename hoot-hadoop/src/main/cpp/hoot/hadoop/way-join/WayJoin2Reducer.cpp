@@ -160,7 +160,7 @@ void WayJoin2Reducer::_writeNodes(HadoopPipes::ReduceContext& context)
 
 void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
 {
- boost::shared_ptr<Way> w;
+ WayPtr w;
   Envelope env;
 
   _map->clear();
@@ -196,7 +196,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
       long nid = v->rawWay.nodeId;
       rawNodes.insert(nid);
       // create an invalid placeholder node. We'll remove it later.
-     boost::shared_ptr<Node> n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
+     NodePtr n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
       _map->addNode(n);
       env.expandToInclude(v->rawWay.x, v->rawWay.y);
       LOG_TRACE("Got node: " << n->toString());
@@ -240,7 +240,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
     const WayMap& wm = _map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
-      const boost::shared_ptr<Way>& way = it->second;
+      const WayPtr& way = it->second;
 
       if (way->getId() != w->getId() && Debug::isTroubledWay(way->getId()))
       {

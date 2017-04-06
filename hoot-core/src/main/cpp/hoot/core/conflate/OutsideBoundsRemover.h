@@ -50,18 +50,18 @@ namespace hoot
 class OutsideBoundsRemover
 {
 public:
-  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse = false);
+  OutsideBoundsRemover(OsmMapPtr map, const Envelope& e, bool inverse = false);
 
   /**
    * Removes ways completely outside the given envelope.
    */
-  static void removeWays(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse = false);
+  static void removeWays(OsmMapPtr map, const Envelope& e, bool inverse = false);
 
   void removeWays();
 
 protected:
 
-  boost::shared_ptr<OsmMap> _inputMap;
+  OsmMapPtr _inputMap;
   Envelope _envelope;
   bool _inverse;
 };

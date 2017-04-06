@@ -41,13 +41,13 @@ class WaySnapMergeManipulation : public WayMergeManipulation
 {
 public:
 
-  WaySnapMergeManipulation(long leftId, long rightId, boost::shared_ptr<const OsmMap> map,
+  WaySnapMergeManipulation(long leftId, long rightId, ConstOsmMapPtr map,
     Meters minSplitSize);
 
-  virtual void applyManipulation(boost::shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
+  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
     set<ElementId>& newElements) const;
 
-  virtual const set<long>& getImpactedWayIds(boost::shared_ptr<const OsmMap> map) const;
+  virtual const set<long>& getImpactedWayIds(ConstOsmMapPtr map) const;
 
 protected:
 

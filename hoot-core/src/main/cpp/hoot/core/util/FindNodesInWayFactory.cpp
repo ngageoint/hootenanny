@@ -43,7 +43,7 @@ void FindNodesInWayFactory::addWay(const ConstWayPtr& w)
   _nodesToSearch.insert(nids.begin(), nids.end());
 }
 
-boost::shared_ptr<Node> FindNodesInWayFactory::createNode(const boost::shared_ptr<OsmMap>& map,
+NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map,
                                                    const Coordinate& c, Status s,
                                                    double circularError)
 {
@@ -52,7 +52,7 @@ boost::shared_ptr<Node> FindNodesInWayFactory::createNode(const boost::shared_pt
   for (set<long>::const_iterator it = _nodesToSearch.begin(); it != _nodesToSearch.end(); ++it)
   {
     long nid = *it;
-   boost::shared_ptr<const Node> n = map->getNode(nid);
+   ConstNodePtr n = map->getNode(nid);
     if (n->toCoordinate() == c)
     {
       // if there are multiple corresponding nodes, throw an exception.
@@ -67,7 +67,7 @@ boost::shared_ptr<Node> FindNodesInWayFactory::createNode(const boost::shared_pt
 
   if (result == std::numeric_limits<long>::max())
   {
-   boost::shared_ptr<Node> n =boost::shared_ptr<Node>(new Node(s, map->createNextNodeId(), c,
+   NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c,
       circularError));
     map->addNode(n);
     result = n->getId();

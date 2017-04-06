@@ -66,7 +66,7 @@ public:
       OgrReader uut;
 
       Progress progress("MergeNearbyNodesTest");
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
       MapProjector::projectToOrthographic(map);

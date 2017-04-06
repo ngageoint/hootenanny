@@ -121,7 +121,7 @@ public:
     // adding the source datetime just makes things really slow.
     conf().set(ConfigOptions().getReaderAddSourceDatetimeKey(), false);
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     std::map<QString, int> counts;
     NameCountVisitor v(counts);
@@ -145,7 +145,7 @@ public:
       }
       else
       {
-        boost::shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         loadMap(map, args[i], false, Status::Unknown1);
         map->visitRo(v);
       }

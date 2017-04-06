@@ -57,7 +57,7 @@ public:
   OsmMapPtr createMap()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -70,7 +70,7 @@ public:
 
   void runTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -104,7 +104,7 @@ public:
 
   void runMoveTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),

@@ -69,11 +69,11 @@ public:
     TestUtils::resetEnvironment();
   }
 
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
 
-  boost::shared_ptr<Node> createNode(double x, double y)
+  NodePtr createNode(double x, double y)
   {
-    boost::shared_ptr<Node> n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
+    NodePtr n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
     _map->addNode(n);
     return n;
   }
@@ -81,10 +81,10 @@ public:
   void runRoadsTest()
   {
     //test highway (linestring)
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     _map = map;
 
-    boost::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w1->setTag("highway", "track");
     w1->setTag("name", "w1");
     w1->addNode(createNode(-104.9, 38.855)->getId());
@@ -92,7 +92,7 @@ public:
     w1->addNode(createNode(-104.8991, 38.8544)->getId());
     _map->addWay(w1);
 
-    boost::shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w2->setTag("highway", "road");
     w2->setTag("name", "w2");
     w2->addNode(createNode(-104.91, 38.8548)->getId());
@@ -113,7 +113,7 @@ public:
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -124,8 +124,8 @@ public:
     vector<long> r1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
     vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "name", "Target Grocery");
 
-    const boost::shared_ptr<const Way> w = map->getWay(r1[0]);
-    const boost::shared_ptr<const Way> w1 = map->getWay(r2[0]);
+    const ConstWayPtr w = map->getWay(r1[0]);
+    const ConstWayPtr w1 = map->getWay(r2[0]);
 
     MapProjector::projectToPlanar(map);
 

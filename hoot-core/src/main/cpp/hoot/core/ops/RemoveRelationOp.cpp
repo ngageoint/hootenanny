@@ -46,7 +46,7 @@ RemoveRelationOp::RemoveRelationOp(long rId):
 {
 }
 
-void RemoveRelationOp::apply(boost::shared_ptr<OsmMap>& map)
+void RemoveRelationOp::apply(OsmMapPtr& map)
 {
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
   {

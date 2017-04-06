@@ -123,7 +123,7 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
       if (it->second->getId() != elementId) {
-        const boost::shared_ptr<const Node>& n = it->second;
+        const ConstNodePtr& n = it->second;
 
         std::set< std::pair< ElementId, ElementId> > matches;
         matches.insert(std::pair<ElementId,ElementId>(firstId, ElementId::node(n->getId())));

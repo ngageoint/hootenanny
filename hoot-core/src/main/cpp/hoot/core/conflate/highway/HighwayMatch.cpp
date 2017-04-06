@@ -126,7 +126,7 @@ QString HighwayMatch::explain() const
   return _explainText;
 }
 
-map<QString, double> HighwayMatch::getFeatures(const boost::shared_ptr<const OsmMap>& m) const
+map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
 {
   map<QString, double> result;
   if (_sublineMatch.isValid())

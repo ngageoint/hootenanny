@@ -80,7 +80,7 @@ public:
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
    * map is not reprojected back to the original projection when conflation is complete.
    */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual string getClassName() const { return className(); }
 

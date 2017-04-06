@@ -62,7 +62,7 @@ public:
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
-  virtual map<QString, double> getFeatures(const boost::shared_ptr<const OsmMap>& m) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Polygon; }
 

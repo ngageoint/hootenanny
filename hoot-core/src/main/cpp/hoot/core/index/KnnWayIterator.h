@@ -51,12 +51,12 @@ namespace hoot
 class KnnWayIterator : public KnnIterator
 {
 public:
-  KnnWayIterator(const OsmMap& map, boost::shared_ptr<const Way> way, const RStarTree* tree,
+  KnnWayIterator(const OsmMap& map, ConstWayPtr way, const RStarTree* tree,
                  const vector<long>& treeIdToWid, bool addError = false);
 
   long getWayId() const { return _treeIdToWid[getId()]; }
 
-  boost::shared_ptr<const Way> getWay() const { return _map.getWay(getWayId()); }
+  ConstWayPtr getWay() const { return _map.getWay(getWayId()); }
 
   virtual bool hasNext();
 

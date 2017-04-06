@@ -46,7 +46,7 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
   set<long> hwids;
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
-   boost::shared_ptr<Way> w = _map->getWay(*it);
+   WayPtr w = _map->getWay(*it);
 
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()))
     {

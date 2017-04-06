@@ -345,7 +345,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
@@ -408,7 +408,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     const boost::shared_ptr<QList<long> > ids = insertTestMap2(database);
     CPPUNIT_ASSERT_EQUAL(8, ids->size());
@@ -445,7 +445,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     const boost::shared_ptr<QList<long> > ids = insertTestMapWithCustomTags(database);
     CPPUNIT_ASSERT_EQUAL(4, ids->size());

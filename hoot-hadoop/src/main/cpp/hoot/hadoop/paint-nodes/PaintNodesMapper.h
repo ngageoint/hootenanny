@@ -40,7 +40,7 @@ protected:
 
   virtual void _init(HadoopPipes::MapContext& context);
 
-  virtual void _map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
   NodeDensity _nd;
   Envelope _envelope;

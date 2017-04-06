@@ -96,13 +96,13 @@ public:
 
   OsmMap();
 
-  explicit OsmMap(boost::shared_ptr<const OsmMap>);
+  explicit OsmMap(ConstOsmMapPtr);
 
-  explicit OsmMap(boost::shared_ptr<OsmMap>);
+  explicit OsmMap(OsmMapPtr);
 
   explicit OsmMap(boost::shared_ptr<OGRSpatialReference> srs);
 
-  OsmMap(boost::shared_ptr<const OsmMap>, boost::shared_ptr<OGRSpatialReference> srs);
+  OsmMap(ConstOsmMapPtr, boost::shared_ptr<OGRSpatialReference> srs);
 
   ~OsmMap();
 
@@ -115,17 +115,17 @@ public:
    * @throws If the map being appended to does not have the same projection as the map being
    * appended from
    */
-  void append(boost::shared_ptr<const OsmMap> map);
+  void append(ConstOsmMapPtr map);
 
   void addElement(const boost::shared_ptr<Element>& e);
   template<class T>
   void addElements(T it, T end);
 
-  void addNode(const boost::shared_ptr<Node>& n);
+  void addNode(const NodePtr& n);
 
-  void addRelation(const boost::shared_ptr<Relation>& r);
+  void addRelation(const RelationPtr& r);
 
-  void addWay(const boost::shared_ptr<Way>& w);
+  void addWay(const WayPtr& w);
 
   void clear();
 
@@ -169,9 +169,9 @@ public:
    */
   const OsmMapIndex& getIndex() const { return *_index; }
 
-  virtual const boost::shared_ptr<const Node> getNode(long id) const;
+  virtual const ConstNodePtr getNode(long id) const;
 
-  virtual const boost::shared_ptr<Node> getNode(long id);
+  virtual const NodePtr getNode(long id);
 
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
 
@@ -186,17 +186,17 @@ public:
    */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
 
-  virtual const boost::shared_ptr<const Relation> getRelation(long id) const;
+  virtual const ConstRelationPtr getRelation(long id) const;
 
-  virtual const boost::shared_ptr<Relation> getRelation(long id);
+  virtual const RelationPtr getRelation(long id);
 
   const RelationMap& getRelations() const { return _relations; }
 
   /**
    * Return the way with the specified id or null if it doesn't exist.
    */
-  virtual const boost::shared_ptr<Way> getWay(long id);
-  const boost::shared_ptr<Way> getWay(ElementId eid);
+  virtual const WayPtr getWay(long id);
+  const WayPtr getWay(ElementId eid);
 
   /**
    * Similar to above but const'd.
@@ -205,8 +205,8 @@ public:
    * a copy. The copy would be a temporary variable if we returned a reference which creates some
    * weirdness and a warning.
    */
-  const boost::shared_ptr<const Way> getWay(long id) const;
-  const boost::shared_ptr<const Way> getWay(ElementId eid) const;
+  const ConstWayPtr getWay(long id) const;
+  const ConstWayPtr getWay(ElementId eid) const;
 
   const WayMap& getWays() const { return _ways; }
 
@@ -301,11 +301,11 @@ protected:
   mutable WayMap _ways;
 
   boost::shared_ptr<OsmMapIndex> _index;
-  boost::shared_ptr<Node> _nullNode;
-  boost::shared_ptr<const Node> _constNullNode;
-  boost::shared_ptr<Relation> _nullRelation;
-  boost::shared_ptr<Way> _nullWay;
-  boost::shared_ptr<const Way> _constNullWay;
+  NodePtr _nullNode;
+  ConstNodePtr _constNullNode;
+  RelationPtr _nullRelation;
+  WayPtr _nullWay;
+  ConstWayPtr _constNullWay;
   mutable NodeMap::const_iterator _tmpNodeMapIt;
   RelationMap::iterator _tmpRelationIt;
   mutable WayMap::const_iterator _tmpWayIt;
@@ -313,7 +313,7 @@ protected:
 
   vector< boost::shared_ptr<Element> > _replaceTmpArray;
 
-  void _copy(boost::shared_ptr<const OsmMap> from);
+  void _copy(ConstOsmMapPtr from);
 
   /**
    * Returns true if there is a node in l.
@@ -324,8 +324,8 @@ protected:
 
 };
 
-typedef boost::shared_ptr<OsmMap> OsmMapPtr;
-typedef boost::shared_ptr<const OsmMap> ConstOsmMapPtr;
+typedef OsmMapPtr OsmMapPtr;
+typedef ConstOsmMapPtr ConstOsmMapPtr;
 // ConstOsmMapPtrR - The R is for reference.
 typedef const ConstOsmMapPtr& ConstOsmMapPtrR;
 
@@ -339,7 +339,7 @@ void addElements(T it, T end)
   }
 }
 
-inline const boost::shared_ptr<Node> OsmMap::getNode(long id)
+inline const NodePtr OsmMap::getNode(long id)
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
@@ -352,7 +352,7 @@ inline const boost::shared_ptr<Node> OsmMap::getNode(long id)
   }
 }
 
-inline const boost::shared_ptr<const Node> OsmMap::getNode(long id) const
+inline const ConstNodePtr OsmMap::getNode(long id) const
 {
   _tmpNodeMapIt = _nodes.find(id);
   if (_tmpNodeMapIt != _nodes.end())
@@ -365,7 +365,7 @@ inline const boost::shared_ptr<const Node> OsmMap::getNode(long id) const
   }
 }
 
-inline const boost::shared_ptr<const Relation> OsmMap::getRelation(long id) const
+inline const ConstRelationPtr OsmMap::getRelation(long id) const
 {
   RelationMap::iterator it = _relations.find(id);
   if (it != _relations.end())
@@ -378,7 +378,7 @@ inline const boost::shared_ptr<const Relation> OsmMap::getRelation(long id) cons
   }
 }
 
-inline const boost::shared_ptr<Relation> OsmMap::getRelation(long id)
+inline const RelationPtr OsmMap::getRelation(long id)
 {
   _tmpRelationIt = _relations.find(id);
   if (_tmpRelationIt != _relations.end())
@@ -391,7 +391,7 @@ inline const boost::shared_ptr<Relation> OsmMap::getRelation(long id)
   }
 }
 
-inline const boost::shared_ptr<const Way> OsmMap::getWay(long id) const
+inline const ConstWayPtr OsmMap::getWay(long id) const
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -404,13 +404,13 @@ inline const boost::shared_ptr<const Way> OsmMap::getWay(long id) const
   }
 }
 
-inline const boost::shared_ptr<const Way> OsmMap::getWay(ElementId eid) const
+inline const ConstWayPtr OsmMap::getWay(ElementId eid) const
 {
   assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());
 }
 
-inline const boost::shared_ptr<Way> OsmMap::getWay(long id)
+inline const WayPtr OsmMap::getWay(long id)
 {
   _tmpWayIt = _ways.find(id);
   if (_tmpWayIt != _ways.end())
@@ -423,7 +423,7 @@ inline const boost::shared_ptr<Way> OsmMap::getWay(long id)
   }
 }
 
-inline const boost::shared_ptr<Way> OsmMap::getWay(ElementId eid)
+inline const WayPtr OsmMap::getWay(ElementId eid)
 {
   assert(eid.getType() == ElementType::Way);
   return getWay(eid.getId());

@@ -93,7 +93,7 @@ void OsmApiDbReader::open(QString urlStr)
   _open = true;
 }
 
-void OsmApiDbReader::read(boost::shared_ptr<OsmMap> map)
+void OsmApiDbReader::read(OsmMapPtr map)
 {
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
@@ -165,7 +165,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 
 //TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
 //this read performs better for some reason
-void OsmApiDbReader::_read(boost::shared_ptr<OsmMap> map, const ElementType& elementType)
+void OsmApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
   long elementCount = 0; //TODO: break this out by element type
   long long lastId = LLONG_MIN;
@@ -275,7 +275,7 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   const double lon =
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
 
-  boost::shared_ptr<Node> node(
+  NodePtr node(
     new Node(
       _status,
       nodeId,
@@ -305,7 +305,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
     LOG_VARD(newWayId);
   }
 
-  boost::shared_ptr<Way> way(
+  WayPtr way(
     new Way(
       _status,
       newWayId,
@@ -342,7 +342,7 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
       boost::shared_ptr<QSqlQuery> queryIterator = _database->selectNodeById(nodeIds[i]);
       while (queryIterator->next())
       {
-        boost::shared_ptr<Node> node = _resultToNode(*queryIterator.get(), map);
+        NodePtr node = _resultToNode(*queryIterator.get(), map);
         QString result = _database->extractTagFromRow(queryIterator, ElementType::Node);
         if (result != "")
         {
@@ -374,7 +374,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
     LOG_VART(newRelationId);
   }
 
-  boost::shared_ptr<Relation> relation(
+  RelationPtr relation(
     new Relation(
       _status,
       newRelationId,

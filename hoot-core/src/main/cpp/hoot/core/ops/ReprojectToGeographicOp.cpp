@@ -40,7 +40,7 @@ ReprojectToGeographicOp::ReprojectToGeographicOp()
 {
 }
 
-void ReprojectToGeographicOp::apply(boost::shared_ptr<OsmMap>& map)
+void ReprojectToGeographicOp::apply(OsmMapPtr& map)
 {
   if (MapProjector::isGeographic(map) == false)
   {

@@ -57,24 +57,24 @@ public:
 
   IntersectionSplitter();
 
-  IntersectionSplitter(boost::shared_ptr<OsmMap> map);
+  IntersectionSplitter(OsmMapPtr map);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
-  static void splitIntersections(boost::shared_ptr<OsmMap> map);
+  static void splitIntersections(OsmMapPtr map);
 
   void splitIntersections();
 
 private:
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;
 
   void _mapNodesToWays();
 
-  void _mapNodesToWay(boost::shared_ptr<Way> w);
+  void _mapNodesToWay(WayPtr w);
 
-  void _removeWayFromMap(boost::shared_ptr<Way> way);
+  void _removeWayFromMap(WayPtr way);
 
   /**
    * Given a way and a node, split the way at that node.

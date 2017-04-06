@@ -48,7 +48,7 @@ public:
 
   char getRecordType();
 
- boost::shared_ptr<OsmMap> getMap();
+ OsmMapPtr getMap();
 
   bool next(int64_t& key, WayJoin1Reducer::Value& value);
 

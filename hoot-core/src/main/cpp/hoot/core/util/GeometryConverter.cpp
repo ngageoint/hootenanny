@@ -61,7 +61,7 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Ge
   if (gc->getNumGeometries() > 1)
   {
     LOG_INFO("Creating relation. convertGeometryCollection");
-   boost::shared_ptr<Relation> r(new Relation(s, _map->createNextRelationId(), circularError));
+   RelationPtr r(new Relation(s, _map->createNextRelationId(), circularError));
     int count = gc->getNumGeometries();
 
     for (int i = 0; i < count; i++)
@@ -115,10 +115,10 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geo
   }
 }
 
-boost::shared_ptr<Way> GeometryConverter::convertLineStringToWay(const LineString* ls,
-  const boost::shared_ptr<OsmMap>& map, Status s, double circularError)
+WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
+  const OsmMapPtr& map, Status s, double circularError)
 {
- boost::shared_ptr<Way> way;
+ WayPtr way;
   if (ls->getNumPoints() > 0)
   {
     Coordinate c = ls->getCoordinateN(0);
@@ -136,15 +136,15 @@ boost::shared_ptr<Way> GeometryConverter::convertLineStringToWay(const LineStrin
 }
 
 boost::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(const MultiLineString* mls,
-  const boost::shared_ptr<OsmMap>& map, Status s, double circularError)
+  const OsmMapPtr& map, Status s, double circularError)
 {
   if (mls->getNumGeometries() > 1)
   {
-   boost::shared_ptr<Relation> r(new Relation(s, map->createNextRelationId(), circularError,
+   RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
       Relation::MULTILINESTRING));
     for (size_t i = 0; i < mls->getNumGeometries(); i++)
     {
-     boost::shared_ptr<Way> w = convertLineStringToWay(
+     WayPtr w = convertLineStringToWay(
         dynamic_cast<const LineString*>(mls->getGeometryN(i)), map, s, circularError);
       r->addElement("", w);
     }
@@ -158,10 +158,10 @@ boost::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(co
   }
 }
 
-boost::shared_ptr<Relation> GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon* mp,
-  const boost::shared_ptr<OsmMap>& map, Status s, double circularError)
+RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon* mp,
+  const OsmMapPtr& map, Status s, double circularError)
 {
- boost::shared_ptr<Relation> r(new Relation(s, map->createNextRelationId(), circularError,
+ RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
     Relation::MULTIPOLYGON));
   for (size_t i = 0; i < mp->getNumGeometries(); i++)
   {
@@ -173,7 +173,7 @@ boost::shared_ptr<Relation> GeometryConverter::convertMultiPolygonToRelation(con
 }
 
 boost::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Polygon* polygon,
-  const boost::shared_ptr<OsmMap>& map, Status s, double circularError)
+  const OsmMapPtr& map, Status s, double circularError)
 {
   // if the geometry is empty.
   if (polygon->isEmpty())
@@ -182,7 +182,7 @@ boost::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Poly
   }
   else if (polygon->getNumInteriorRing() == 0)
   {
-   boost::shared_ptr<Way> result = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
+   WayPtr result = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
     result->getTags()["area"] = "yes";
     return result;
   }
@@ -192,10 +192,10 @@ boost::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Poly
   }
 }
 
-boost::shared_ptr<Relation> GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
-  const boost::shared_ptr<OsmMap>& map, Status s, double circularError)
+RelationPtr GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
+  const OsmMapPtr& map, Status s, double circularError)
 {
- boost::shared_ptr<Relation> r(new Relation(s, map->createNextRelationId(), circularError,
+ RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
     Relation::MULTIPOLYGON));
   convertPolygonToRelation(polygon, map, r, s, circularError);
   map->addRelation(r);
@@ -204,26 +204,26 @@ boost::shared_ptr<Relation> GeometryConverter::convertPolygonToRelation(const Po
 }
 
 void GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
-  const boost::shared_ptr<OsmMap>& map, const boost::shared_ptr<Relation>& r, Status s, double circularError)
+  const OsmMapPtr& map, const RelationPtr& r, Status s, double circularError)
 {
- boost::shared_ptr<Way> outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
+ WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
   if (outer != NULL)
   {
     r->addElement(Relation::OUTER, outer);
     for (size_t i = 0; i < polygon->getNumInteriorRing(); i++)
     {
-     boost::shared_ptr<Way> inner = convertLineStringToWay(polygon->getInteriorRingN(i), map, s, circularError);
+     WayPtr inner = convertLineStringToWay(polygon->getInteriorRingN(i), map, s, circularError);
       r->addElement(Relation::INNER, inner);
     }
   }
 }
 
-boost::shared_ptr<Node> GeometryConverter::_createNode(const boost::shared_ptr<OsmMap>& map, const Coordinate& c,
+NodePtr GeometryConverter::_createNode(const OsmMapPtr& map, const Coordinate& c,
   Status s, double circularError)
 {
   if (_nf == 0)
   {
-   boost::shared_ptr<Node> n =boost::shared_ptr<Node>(new Node(s, map->createNextNodeId(), c, circularError));
+   NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
     map->addNode(n);
     return n;
   }

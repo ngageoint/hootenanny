@@ -54,14 +54,14 @@ public:
   /**
    * The default reads the map and then calls finalizePartial();
    */
-  virtual void read(boost::shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   /**
    * Reads all the entries in the OsmMap.
    *
    * The default read function reads nodes, ways, then relations.
    */
-  virtual void readPartial(boost::shared_ptr<OsmMap> map);
+  virtual void readPartial(OsmMapPtr map);
 
   /**
    * Finalize the reading of partial data. Any connections/files should be closed when this is
@@ -77,7 +77,7 @@ protected:
 
   long _maxElementsPerMap;
   long _elementsRead;
-  boost::shared_ptr<OsmMap> _partialMap;
+  OsmMapPtr _partialMap;
 
 };
 

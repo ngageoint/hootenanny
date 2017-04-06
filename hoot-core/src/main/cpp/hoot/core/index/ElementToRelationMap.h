@@ -60,7 +60,7 @@ public:
   /**
    * Recursively traverses the relation and adds all child elements to the reference.
    */
-  void addRelation(const OsmMap& map, const boost::shared_ptr<const Relation>& r);
+  void addRelation(const OsmMap& map, const ConstRelationPtr& r);
 
   /**
    * Returns a set of relation ids that have the specified element as a member, explicity or
@@ -76,7 +76,7 @@ public:
    * This function assumes that the elements that make up the relation haven't changed since it was
    * last added.
    */
-  void removeRelation(const OsmMap &map, const boost::shared_ptr<const Relation> &r);
+  void removeRelation(const OsmMap &map, const ConstRelationPtr &r);
 
   /**
    * Checks to make sure the index is consistent with the specified map. All inconsistencies are

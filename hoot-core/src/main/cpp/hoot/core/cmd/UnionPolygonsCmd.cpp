@@ -62,7 +62,7 @@ public:
 
     QString output = args[0];
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     for (int i = 1; i < args.size(); i++)
     {
@@ -85,7 +85,7 @@ public:
       LOG_INFO("No polygons were found in the input.");
     }
 
-    boost::shared_ptr<OsmMap> result(new OsmMap());
+    OsmMapPtr result(new OsmMap());
     GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
 
     saveMap(result, output);

@@ -65,7 +65,7 @@ public:
     uut.calculateWayBounds(QString::fromStdString(outDir) + "/input.pbf",
       QString::fromStdString(outDir) +  "result.pbf");
 
-   boost::shared_ptr<OsmMap> map(new OsmMap);
+   OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);

@@ -122,8 +122,8 @@ public:
               //          break;
               //        }
 
-              boost::shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-              boost::shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+              WayPtr w = dynamic_pointer_cast<Way>(e);
+              NodePtr n = dynamic_pointer_cast<Node>(e);
 
               if (w != 0)
               {

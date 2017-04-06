@@ -43,7 +43,7 @@ public:
   virtual ~WayTagMerger() {}
 
 protected:
-  virtual Manipulation* _createManipulation(long leftId, long rightId, boost::shared_ptr<const OsmMap> map,
+  virtual Manipulation* _createManipulation(long leftId, long rightId, ConstOsmMapPtr map,
     Meters minSplitSize);
 };
 

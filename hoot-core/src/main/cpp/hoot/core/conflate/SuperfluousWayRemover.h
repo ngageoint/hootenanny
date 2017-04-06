@@ -57,20 +57,20 @@ public:
 
   SuperfluousWayRemover();
 
-  SuperfluousWayRemover(boost::shared_ptr<OsmMap> map);
+  SuperfluousWayRemover(OsmMapPtr map);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static void removeWays(boost::shared_ptr<OsmMap> map);
+  static void removeWays(OsmMapPtr map);
 
   void removeWays();
 
 protected:
 
-  boost::shared_ptr<OsmMap> _inputMap;
+  OsmMapPtr _inputMap;
 };
 
 }

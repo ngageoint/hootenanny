@@ -74,7 +74,7 @@ public:
 
   void map(HadoopPipes::MapContext& context);
 
-  void mapOsmMap(boost::shared_ptr<OsmMap> map);
+  void mapOsmMap(OsmMapPtr map);
 
   void mapWayPoints(int64_t& k, WayJoin1Reducer::Value& v);
 
@@ -86,11 +86,11 @@ private:
   string _keyStr;
   KeyStruct* _key;
 
- boost::shared_ptr<OsmMap> _nodeMap;
+ OsmMapPtr _nodeMap;
 
   HadoopPipes::MapContext* _context;
 
-  void _emitNode(const boost::shared_ptr<Node>& n);
+  void _emitNode(const NodePtr& n);
 
   void _flushNodes();
 };

@@ -81,7 +81,7 @@ public:
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/LongestCommonNodeStringTest.osm", map);
 
@@ -105,7 +105,7 @@ public:
   {
     QDir().mkdir("test-output/conflate");
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined
@@ -134,7 +134,7 @@ public:
   {
     QDir().mkdir("test-output/conflate");
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined

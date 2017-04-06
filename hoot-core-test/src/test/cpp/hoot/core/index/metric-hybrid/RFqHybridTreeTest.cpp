@@ -473,7 +473,7 @@ public:
 
   void runRandomQueryTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
 //    OsmPbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
 //                             map);

@@ -47,7 +47,7 @@ public:
 
   void addWay(const ConstWayPtr& w);
 
-  virtual boost::shared_ptr<Node> createNode(const boost::shared_ptr<OsmMap>& map, const Coordinate& c,
+  virtual NodePtr createNode(const OsmMapPtr& map, const Coordinate& c,
     Status s, double circularError);
 
 private:

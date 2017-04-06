@@ -100,7 +100,7 @@ public:
   void runMajorOverlapTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -150,7 +150,7 @@ public:
   void runPartialMatchTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -201,7 +201,7 @@ public:
   void runPartialOverlapTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -249,7 +249,7 @@ public:
   void runSimpleConflictTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -298,7 +298,7 @@ public:
   void runRealWorld1Test()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld1Test.osm",
       false);
     MapProjector::projectToOrthographic(map);
@@ -326,7 +326,7 @@ public:
   void runRealWorld2Test()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld2Test.osm",
       false);
     MapProjector::projectToOrthographic(map);

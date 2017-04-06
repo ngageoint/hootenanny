@@ -109,7 +109,7 @@ private:
 
  boost::shared_ptr<RdpWayGeneralizer> _generalizer;
 
-  void _generalize(const boost::shared_ptr<Way>& way);
+  void _generalize(const WayPtr& way);
 
 };
 

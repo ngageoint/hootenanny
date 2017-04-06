@@ -190,11 +190,11 @@ public:
     vector<OsmMapPtr> maps;
     QString output = args.last();
     //for calculating the actual number of manual matches made
-    //boost::shared_ptr<OsmMap> ref2Map(new OsmMap());
+    //OsmMapPtr ref2Map(new OsmMap());
 
     for (int i = 0; i < args.size() - 1; i+=2)
     {
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       loadMap(map, args[i], false, Status::Unknown1);
       loadMap(map, args[i + 1], false, Status::Unknown2);
       //loadMap(ref2Map, args[i + 1], false, Status::Unknown2);
@@ -208,7 +208,7 @@ public:
               .arg(MetadataTags::Ref2()));
       }
 
-      boost::shared_ptr<OsmMap> mapCopy(map);
+      OsmMapPtr mapCopy(map);
       MapProjector::projectToWgs84(mapCopy);
       OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
@@ -223,7 +223,7 @@ public:
     //const long numManualMatches = manualMatchVisitor->getStat();
 
     LOG_VARD(maps.size());
-    boost::shared_ptr<OsmMap> mapCopy(maps[0]);
+    OsmMapPtr mapCopy(maps[0]);
     MapProjector::projectToWgs84(mapCopy);
     OsmUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 

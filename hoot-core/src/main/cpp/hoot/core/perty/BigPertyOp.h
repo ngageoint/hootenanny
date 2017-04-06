@@ -61,7 +61,7 @@ public:
 
   virtual ~BigPertyOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   /**
    * Returns the name of the class. Typically just returns the result of className().

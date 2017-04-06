@@ -69,23 +69,23 @@ public:
 
         Tgs::Random::instance()->seed(0);
 
-        boost::shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         reader.read("test-files/ToyTestA.osm", map);
 
-        boost::shared_ptr<OsmMap> map2(new OsmMap());
+        OsmMapPtr map2(new OsmMap());
         reader.read("test-files/ToyTestB.osm", map2);
 
         const WayMap& w1 = map->getWays();
         for (WayMap::const_iterator it = w1.begin(); it != w1.end(); ++it)
         {
-          boost::shared_ptr<Way> w = map->getWay(it->second->getId());
+          WayPtr w = map->getWay(it->second->getId());
           w->setTag("highway", "road");
         }
 
         const WayMap& w2 = map2->getWays();
         for (WayMap::const_iterator it = w2.begin(); it != w2.end(); ++it)
         {
-          boost::shared_ptr<Way> w = map2->getWay(it->second->getId());
+          WayPtr w = map2->getWay(it->second->getId());
           w->setTag("highway", "road");
         }
 
@@ -110,7 +110,7 @@ public:
 //        QCoreApplication a(argc, argv);
         LOG_WARN("Starting...");
 
-        boost::shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         reader.read("/home/jason.surratt/geoeye/src/hootenanny/tmp/denver-cleanup.osm", map);
         //reader.read("/home/jason.surratt/geoeye/src/hootenanny/test-files/jakarta-easy-osm.osm", map);
         IntersectionSplitter::splitIntersections(map);
@@ -150,7 +150,7 @@ public:
 //        QCoreApplication a(argc, argv);
         LOG_WARN("Starting...");
 
-        boost::shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         reader.read("/home/jason.surratt/tmp/MikesHouse.osm", map);
         IntersectionSplitter::splitIntersections(map);
 

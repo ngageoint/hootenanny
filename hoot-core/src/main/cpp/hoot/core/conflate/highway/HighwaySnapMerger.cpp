@@ -154,7 +154,7 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map,
 
 }
 
-bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, boost::shared_ptr<Way> w) const
+bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
 {
   boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
 
@@ -210,7 +210,7 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId> > &replaced) const
 {
-  boost::shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
@@ -303,7 +303,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
 }
 
-void HighwaySnapMerger::_removeSpans(boost::shared_ptr<OsmMap> map, const ElementPtr& e1,
+void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
   const ElementPtr& e2) const
 {
   if (e1->getElementType() != e2->getElementType())
@@ -340,7 +340,7 @@ void HighwaySnapMerger::_removeSpans(boost::shared_ptr<OsmMap> map, const Elemen
   }
 }
 
-void HighwaySnapMerger::_removeSpans(boost::shared_ptr<OsmMap> map, const WayPtr& w1, const WayPtr& w2)
+void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2)
   const
 {
   boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();

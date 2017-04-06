@@ -51,7 +51,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MergeNearbyNodes)
 
-double calcDistance(const boost::shared_ptr<Node>& n1, const boost::shared_ptr<Node>& n2)
+double calcDistance(const NodePtr& n1, const NodePtr& n2)
 {
   double dx = n1->getX() - n2->getX();
   double dy = n1->getY() - n2->getY();
@@ -68,15 +68,15 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
   }
 }
 
-void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
+void MergeNearbyNodes::apply(OsmMapPtr& map)
 {
   LOG_INFO("MergeNearbyNodes start");
 
   QTime time;
   time.start();
 
-  boost::shared_ptr<OsmMap> wgs84;
-  boost::shared_ptr<OsmMap> planar;
+  OsmMapPtr wgs84;
+  OsmMapPtr planar;
 
   if (MapProjector::isGeographic(map))
   {
@@ -100,7 +100,7 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
   const NodeMap& nodes = planar->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
   {
-    const boost::shared_ptr<Node>& n = it->second;
+    const NodePtr& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
   }
 
@@ -118,8 +118,8 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
       {
         if (v[i] != v[j] && map->containsNode(v[i]) && map->containsNode(v[j]))
         {
-          const boost::shared_ptr<Node>& n1 = planar->getNode(v[i]);
-          const boost::shared_ptr<Node>& n2 = planar->getNode(v[j]);
+          const NodePtr& n1 = planar->getNode(v[i]);
+          const NodePtr& n2 = planar->getNode(v[j]);
           double d = calcDistance(n1, n2);
           if (d < _distance && n1->getStatus() == n2->getStatus())
           {
@@ -132,8 +132,8 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
             // if the geographic bounds are specified, then make sure both points are inside.
             else
             {
-              const boost::shared_ptr<Node>& g1 = wgs84->getNode(v[i]);
-              const boost::shared_ptr<Node>& g2 = wgs84->getNode(v[j]);
+              const NodePtr& g1 = wgs84->getNode(v[i]);
+              const NodePtr& g2 = wgs84->getNode(v[j]);
               if (_bounds.contains(g1->getX(), g1->getY()) &&
                   _bounds.contains(g2->getX(), g2->getY()))
               {
@@ -165,7 +165,7 @@ void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
   }
 }
 
-void MergeNearbyNodes::mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance)
+void MergeNearbyNodes::mergeNodes(OsmMapPtr map, Meters distance)
 {
   MergeNearbyNodes mnn(distance);
   mnn.apply(map);

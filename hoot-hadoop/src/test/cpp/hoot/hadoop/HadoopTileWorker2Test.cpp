@@ -83,7 +83,7 @@ public:
     uut.setOperation(op);
     uut.apply(QString::fromStdString(outDir) + "HadoopTileWorker2Test.pbf");
 
-   boost::shared_ptr<OsmMap> map(new OsmMap);
+   OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorker2Test.pbf");

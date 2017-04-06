@@ -53,7 +53,7 @@ public:
 
   virtual ~MapCleaner() {}
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 };
 
 }

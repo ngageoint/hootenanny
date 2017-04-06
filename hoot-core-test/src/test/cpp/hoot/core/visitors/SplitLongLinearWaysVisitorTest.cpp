@@ -44,14 +44,14 @@ public:
   }
 
 private:
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
 
   void _createWay(const long wayId, const unsigned int startNodeId, const unsigned int endNodeId)
   {
     // Make sure way in question does not already exist in map
     CPPUNIT_ASSERT_EQUAL(_map->containsWay(wayId), false );
 
-    boost::shared_ptr<Way>newWay(new Way(Status::Unknown1, wayId, 1.0));
+    WayPtrnewWay(new Way(Status::Unknown1, wayId, 1.0));
 
     // Make sure there are nodes to add
     if ( startNodeId <= endNodeId )
@@ -61,7 +61,7 @@ private:
       {
         // Make sure map does not already have node in question
         if ( _map->containsNode(i) == false ) {
-          boost::shared_ptr<Node> createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
+          NodePtr createNode(new Node(Status::Unknown1, i, i * 1.0, i * 1.0, 1.0));
           _map->addNode(createNode);
         }
 

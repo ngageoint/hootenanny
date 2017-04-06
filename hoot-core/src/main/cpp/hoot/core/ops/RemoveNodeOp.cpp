@@ -50,13 +50,13 @@ RemoveNodeOp::RemoveNodeOp(long nId, bool doCheck, bool removeFully):
 {
 }
 
-void RemoveNodeOp::_removeNodeNoCheck(boost::shared_ptr<OsmMap>& map, long nId)
+void RemoveNodeOp::_removeNodeNoCheck(OsmMapPtr& map, long nId)
 {
   map->_index->removeNode(map->getNode(_nodeIdToRemove));
   map->_nodes.erase(nId);
 }
 
-void RemoveNodeOp::_removeNode(boost::shared_ptr<OsmMap>& map, long nId)
+void RemoveNodeOp::_removeNode(OsmMapPtr& map, long nId)
 {
   const boost::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long>& ways = n2w->getWaysByNode(nId);
@@ -67,7 +67,7 @@ void RemoveNodeOp::_removeNode(boost::shared_ptr<OsmMap>& map, long nId)
   _removeNodeNoCheck(map, nId);
 }
 
-void RemoveNodeOp::_removeNodeFully(boost::shared_ptr<OsmMap>& map, long nId)
+void RemoveNodeOp::_removeNodeFully(OsmMapPtr& map, long nId)
 {
   // copy the set because we may modify it later.
   set<long> rid = map->getIndex().getElementToRelationMap()->
@@ -91,7 +91,7 @@ void RemoveNodeOp::_removeNodeFully(boost::shared_ptr<OsmMap>& map, long nId)
   VALIDATE(map->validate());
 }
 
-void RemoveNodeOp::apply(boost::shared_ptr<OsmMap>& map)
+void RemoveNodeOp::apply(OsmMapPtr& map)
 {
   if (_removeFully)
     _removeNodeFully(map, _nodeIdToRemove);

@@ -46,7 +46,7 @@ using namespace geos::operation::distance;
 namespace hoot
 {
 
-ParallelWayFilter::ParallelWayFilter(const ConstOsmMapPtr& map, boost::shared_ptr<const Way> baseWay,
+ParallelWayFilter::ParallelWayFilter(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
   bool filterUnparallel) :
   _map(map)
 {
@@ -83,7 +83,7 @@ ParallelWayFilter::~ParallelWayFilter()
   }
 }
 
-Radians ParallelWayFilter::calculateDifference(const boost::shared_ptr<const Way>& w) const
+Radians ParallelWayFilter::calculateDifference(const ConstWayPtr& w) const
 {
   boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
 
@@ -125,7 +125,7 @@ Radians ParallelWayFilter::calculateDifference(const boost::shared_ptr<const Way
   }
 }
 
-bool ParallelWayFilter::isFiltered(const boost::shared_ptr<const Way>& w) const
+bool ParallelWayFilter::isFiltered(const ConstWayPtr& w) const
 {
   double difference = calculateDifference(w);
   // if the mean "normals" are within 10 degrees of perpendicular.

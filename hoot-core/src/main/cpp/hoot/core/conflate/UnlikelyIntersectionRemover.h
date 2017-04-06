@@ -58,22 +58,22 @@ public:
 
   UnlikelyIntersectionRemover();
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static void removeIntersections(boost::shared_ptr<OsmMap> map);
+  static void removeIntersections(OsmMapPtr map);
 
 protected:
 
-  boost::shared_ptr<OsmMap> _result;
+  OsmMapPtr _result;
 
   void _evaluateAndSplit(long intersectingNode, const set<long>& wayIds);
 
-  double _pIntersection(long intersectingNode, boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
+  double _pIntersection(long intersectingNode, WayPtr w1, WayPtr w2);
 
-  void _splitIntersection(long intersectingNode, const vector< boost::shared_ptr<Way> >& g2);
+  void _splitIntersection(long intersectingNode, const vector< WayPtr >& g2);
 
 };
 

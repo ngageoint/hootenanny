@@ -81,7 +81,7 @@ public:
   /**
    * Defaults to 5cm threshold
    */
-  CompareVisitor(boost::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+  CompareVisitor(OsmMapPtr ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
   {
     _ref = ref;
     _threshold = threshold;
@@ -167,8 +167,8 @@ public:
 
   void compareNode(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-   boost::shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
-   boost::shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
+   ConstNodePtr rn = dynamic_pointer_cast<const Node>(re);
+   ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
 
     if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
     {
@@ -184,8 +184,8 @@ public:
 
   void compareWay(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-   boost::shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
-   boost::shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
+   ConstWayPtr rw = dynamic_pointer_cast<const Way>(re);
+   ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
 
     CHECK_MSG(rw->getNodeIds().size() == w->getNodeIds().size(),
               "Node count does not match.");
@@ -200,8 +200,8 @@ public:
 
   void compareRelation(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-   boost::shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
-   boost::shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
+   ConstRelationPtr rr = dynamic_pointer_cast<const Relation>(re);
+   ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
 
     QString relationStr = QString("%1 vs. %2").arg(hoot::toString(rr)).arg(hoot::toString(r));
 
@@ -218,7 +218,7 @@ public:
   }
 
 private:
- boost::shared_ptr<OsmMap> _ref;
+ OsmMapPtr _ref;
   Meters _threshold;
   Degrees _thresholdDeg;
   bool _matches;
@@ -233,7 +233,7 @@ MapComparator::MapComparator()
   _useDateTime = false;
 }
 
-bool MapComparator::isMatch(boost::shared_ptr<OsmMap> ref,boost::shared_ptr<OsmMap> test)
+bool MapComparator::isMatch(OsmMapPtr ref,OsmMapPtr test)
 {
   if (ref->getNodes().size() != test->getNodes().size() ||
       ref->getWays().size() != test->getWays().size() ||

@@ -196,7 +196,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
     if (e.getElementId().getType() == ElementType::Relation &&
         (e.role == "outer" || e.role == "part"))
     {
-      boost::shared_ptr<const Relation> r = _provider->getRelation(e.getElementId().getId());
+      ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r->isMultiPolygon() ||
         OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
       {
@@ -228,7 +228,7 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
     const RelationData::Entry& e = elements[i];
     if (e.getElementId().getType() == ElementType::Way && e.role == role)
     {
-      const boost::shared_ptr<const Way>& w = _provider->getWay(e.getElementId().getId());
+      const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
 
       if (!w)
       {
@@ -421,19 +421,19 @@ LinearRing* MultiPolygonCreator::_toLinearRing(const ConstWayPtr& w) const
   size_t i = 0;
   for (; i < ids.size(); i++)
   {
-    boost::shared_ptr<const Node> n = _provider->getNode(ids[i]);
+    ConstNodePtr n = _provider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
   {
-    boost::shared_ptr<const Node> n = _provider->getNode(ids[0]);
+    ConstNodePtr n = _provider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i++);
   }
   else if (ids[0] != ids[ids.size() - 1])
   {
-    boost::shared_ptr<const Node> n = _provider->getNode(ids[0]);
+    ConstNodePtr n = _provider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i++);
   }
 

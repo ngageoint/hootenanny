@@ -51,7 +51,7 @@ public:
 
   virtual ~TranslationOp() {}
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   void setConfiguration(const Settings& conf);
 

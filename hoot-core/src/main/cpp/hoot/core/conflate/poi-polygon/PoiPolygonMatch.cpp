@@ -500,7 +500,7 @@ set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
   return result;
 }
 
-map<QString, double> PoiPolygonMatch::getFeatures(const boost::shared_ptr<const OsmMap>& m) const
+map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
 {
   return _rf->getFeatures(m, _eid1, _eid2);
 }

@@ -64,7 +64,7 @@ public:
    * Applies the operations in the order they were added. If there are no operations then nothing
    * is done.
    */
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual string getClassName() const { return className(); }
 

@@ -70,7 +70,7 @@ public:
           "translations/HootTest.js");
     uut.setConfiguration(s);
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     WayPtr w1(new Way(Status::Unknown1, -1, 0));
     w1->getTags()["name"] = "foo";
     w1->getTags()["highway"] = "road";
@@ -109,7 +109,7 @@ public:
     s.set(ConfigOptions::getTranslatedTagDifferencerIgnoreListKey(), "UFI");
     uut.setConfiguration(s);
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     WayPtr w1(new Way(Status::Unknown1, -1, 0));
     w1->getTags()["name"] = "foo";
     w1->getTags()["highway"] = "road";

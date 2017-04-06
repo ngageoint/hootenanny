@@ -69,7 +69,7 @@ public:
 
   virtual const MatchClassification& getClassification() const { return _c; }
 
-  virtual map<QString, double> getFeatures(const boost::shared_ptr<const OsmMap>& m) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   virtual QString getMatchName() const { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return _matchName; }

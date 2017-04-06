@@ -63,7 +63,7 @@ public:
 
   void runDirectSequentialSimulationTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -151,7 +151,7 @@ public:
    */
   void runDebugTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -181,7 +181,7 @@ public:
     OsmXmlWriter writer;
     QDir().mkpath("test-output/perty");
 
-    boost::shared_ptr<OsmMap> original(new OsmMap(map));
+    OsmMapPtr original(new OsmMap(map));
     MapProjector::projectToWgs84(original);
     writer.write(original, "test-output/perty/Original.osm");
 
@@ -194,15 +194,15 @@ public:
     //uut.apply(map);
 //    for (int i = 0; i < 100; i++)
 //    {
-//      boost::shared_ptr<OsmMap> tmp(new OsmMap(map));
+//      OsmMapPtr tmp(new OsmMap(map));
 //      uut.permute(tmp);
 //    }
     //tbs::SampleStats ss(uut._x);
     //LOG_TRACE("sd: " << ss.calculateUnbiasedStandardDeviation());
-    boost::shared_ptr<OsmMap> debug = uut.generateDebugMap(map);
+    OsmMapPtr debug = uut.generateDebugMap(map);
     //    for (int i = 0; i < 100; i++)
     //    {
-    //      boost::shared_ptr<OsmMap> tmp(new OsmMap(map));
+    //      OsmMapPtr tmp(new OsmMap(map));
     //      uut.permute(tmp);
     //    }
         //tbs::SampleStats ss(uut._x);

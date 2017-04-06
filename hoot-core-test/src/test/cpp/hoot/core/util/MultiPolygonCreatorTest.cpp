@@ -55,17 +55,17 @@ public:
 
   FindNodesInWayFactory f;
 
-  void addPoint(OsmMapPtr map, boost::shared_ptr<Way> w, double x, double y)
+  void addPoint(OsmMapPtr map, WayPtr w, double x, double y)
   {
     // use a node factory so nodes w/ the same coordinates get the same ids
-    boost::shared_ptr<Node> n = f.createNode(map->shared_from_this(), Coordinate(x, y), Status::Unknown1,
+    NodePtr n = f.createNode(map->shared_from_this(), Coordinate(x, y), Status::Unknown1,
       w->getCircularError());
     map->addNode(n);
     w->addNode(n->getId());
     f.addWay(w);
   }
 
-  void closeWay(boost::shared_ptr<Way> w)
+  void closeWay(WayPtr w)
   {
     w->addNode(w->getNodeId(0));
   }
@@ -77,9 +77,9 @@ public:
    */
   void runBadOuterRingsTest()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
-    boost::shared_ptr<Relation> uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
-    boost::shared_ptr<Way> w;
+    OsmMapPtr map(new OsmMap());
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    WayPtr w;
     // way #1
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -108,9 +108,9 @@ public:
    */
   void runMultiPolygonExample1Test()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
-    boost::shared_ptr<Relation> uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
-    boost::shared_ptr<Way> w;
+    OsmMapPtr map(new OsmMap());
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    WayPtr w;
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
     addPoint(map, w, 8, 2);
@@ -142,9 +142,9 @@ public:
    */
   void runMultiPolygonExample7Test()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
-    boost::shared_ptr<Relation> uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
-    boost::shared_ptr<Way> w;
+    OsmMapPtr map(new OsmMap());
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    WayPtr w;
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
     addPoint(map, w, 9, 1);
@@ -185,9 +185,9 @@ public:
    */
   void runMultipleWaysFormingARing()
   {
-    boost::shared_ptr<OsmMap> map(new OsmMap());
-    boost::shared_ptr<Relation> uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
-    boost::shared_ptr<Way> w;
+    OsmMapPtr map(new OsmMap());
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    WayPtr w;
     // way #1
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);

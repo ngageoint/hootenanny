@@ -63,7 +63,7 @@ void MatchFeatureExtractor::addMatchCreator(const boost::shared_ptr<MatchCreator
 }
 
 MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
-  const boost::shared_ptr<const OsmMap>& map) const
+  const ConstOsmMapPtr& map) const
 {
   set<QString> ref1, ref2, review;
 
@@ -243,7 +243,7 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
   return result;
 }
 
-void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap>& map)
+void MatchFeatureExtractor::processMap(const ConstOsmMapPtr& map)
 {
   vector<const Match*> matches;
   Envelope bounds;

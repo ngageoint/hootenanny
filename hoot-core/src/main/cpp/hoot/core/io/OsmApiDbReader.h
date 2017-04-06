@@ -65,7 +65,7 @@ public:
   /**
    * The read command called after open.
    */
-  virtual void read(boost::shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   void close();
 

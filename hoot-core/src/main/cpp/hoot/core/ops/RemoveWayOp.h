@@ -67,7 +67,7 @@ public:
    * @brief apply Apply the operation to the given map
    * @param map the map to operate on
    */
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * @brief setWayId set the ID of the way to remove on the apply() call
@@ -93,8 +93,8 @@ private:
   long _wayIdToRemove;
   bool _removeFully;
 
-  void _removeWay(boost::shared_ptr<OsmMap> &map, long wId);
-  void _removeWayFully(boost::shared_ptr<OsmMap> &map, long wId);
+  void _removeWay(OsmMapPtr &map, long wId);
+  void _removeWayFully(OsmMapPtr &map, long wId);
 
 };
 

@@ -72,7 +72,7 @@ public:
 
   void setRecursive(bool recursive) { _recursive = recursive; }
 
-  static void removeWays(boost::shared_ptr<OsmMap> pMap,
+  static void removeWays(OsmMapPtr pMap,
                          const boost::shared_ptr<ElementCriterion>& pCrit);
 
 private:

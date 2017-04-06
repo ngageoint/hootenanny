@@ -54,7 +54,7 @@ public:
     {
         OsmXmlReader uut;
 
-        boost::shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         uut.read("test-files/ToyTestA.osm", map);
 
         CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
@@ -70,7 +70,7 @@ public:
 
         OsmMap::resetCounters();
 
-        boost::shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         uut.setUseDataSourceIds(true);
         uut.read("test-files/ToyTestA.osm", map);
 
@@ -82,7 +82,7 @@ public:
         for (NodeMap::const_iterator it = map->getNodes().begin();
              it != map->getNodes().end(); ++it)
         {
-          const boost::shared_ptr<const Node>& n = it->second;
+          const ConstNodePtr& n = it->second;
           min = std::min(min, n->getId());
           max = std::max(max, n->getId());
         }
@@ -105,7 +105,7 @@ public:
 
         OsmMap::resetCounters();
 
-        boost::shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         uut.setUseDataSourceIds(true);
         uut.setUseStatusFromFile(true);
         uut.setDefaultStatus(Status::Invalid);

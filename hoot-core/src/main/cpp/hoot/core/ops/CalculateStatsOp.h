@@ -50,7 +50,7 @@ public:
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
                    bool inputIsConflatedMapOutput = false);
 
-  virtual void apply(const boost::shared_ptr<OsmMap>& map);
+  virtual void apply(const OsmMapPtr& map);
 
   QList<SingleStat> getStats() const { return _stats; }
 
@@ -96,17 +96,17 @@ private:
                                            const QString &matchCreatorName,
                                            MatchCreator::BaseFeatureType &featureType);
 
-  double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
+  double _applyVisitor(ConstOsmMapPtr& map, const hoot::FilteredVisitor &v);
 
-  double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
+  double _applyVisitor(ConstOsmMapPtr& map, const hoot::FilteredVisitor &v,
                        any& visitorData);
 
-  void _applyVisitor(boost::shared_ptr<const OsmMap>& map, ElementVisitor *v);
+  void _applyVisitor(ConstOsmMapPtr& map, ElementVisitor *v);
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
 
-  void _generateFeatureStats(boost::shared_ptr<const OsmMap>& map, QString description,
+  void _generateFeatureStats(ConstOsmMapPtr& map, QString description,
                              float conflatableCount, MatchCreator::FeatureCalcType type,
                              ElementCriterion* criterion);
 };

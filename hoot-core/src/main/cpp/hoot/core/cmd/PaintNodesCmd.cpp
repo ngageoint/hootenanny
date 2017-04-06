@@ -78,7 +78,7 @@ class PaintNodesCmd : public BaseCommand
           if (e.get() && e->getElementType() == ElementType::Node)
           {
             nodeCount++;
-            boost::shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+            NodePtr n = dynamic_pointer_cast<Node>(e);
             if (result.isNull())
             {
               result = Envelope(n->getX(), n->getX(), n->getY(), n->getY());
@@ -120,7 +120,7 @@ class PaintNodesCmd : public BaseCommand
 
         if (e->getElementType() == ElementType::Node)
         {
-          boost::shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+          NodePtr n = dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);
           int py = int((n->getY() - envelope.getMinY()) / pixelSize);
           px = std::min(width - 1, std::max(0, px));

@@ -60,7 +60,7 @@ void ProjectToGeographicVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getElementType().getEnum() == ElementType::Node)
   {
-    boost::shared_ptr<Node> node = dynamic_pointer_cast<Node>(e);
+    NodePtr node = dynamic_pointer_cast<Node>(e);
     Coordinate coord = node->toCoordinate();
     try
     {

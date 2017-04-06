@@ -53,11 +53,11 @@ class NoInformationElementRemover : public OsmMapOperation
     /**
       @see OsmMapOperation
     */
-    void apply(boost::shared_ptr<OsmMap>& map);
+    void apply(OsmMapPtr& map);
 
   protected:
 
-    boost::shared_ptr<OsmMap> _map;
+    OsmMapPtr _map;
 };
 
 }

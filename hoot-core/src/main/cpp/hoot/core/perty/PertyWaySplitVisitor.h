@@ -124,15 +124,15 @@ private:
   int _splitRecursionLevel;
 
   vector<ElementPtr> _split(ElementPtr element);
-  WayLocation _calcSplitPoint(boost::shared_ptr<const Way> way) const;
-  MultiLineStringLocation _calcSplitPoint(boost::shared_ptr<const Relation> relation, ElementId& wayId) const;
+  WayLocation _calcSplitPoint(ConstWayPtr way) const;
+  MultiLineStringLocation _calcSplitPoint(ConstRelationPtr relation, ElementId& wayId) const;
 
- boost::shared_ptr<Node> _getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
+ NodePtr _getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
                                         const vector<ElementPtr>& newElementsAfterSplit) const;
 
-  void _updateNewNodeProperties(boost::shared_ptr<Node> newNode,
-                               boost::shared_ptr<const Node> firstSplitBetweenNode,
-                               boost::shared_ptr<const Node> lastSplitBetweenNode);
+  void _updateNewNodeProperties(NodePtr newNode,
+                               ConstNodePtr firstSplitBetweenNode,
+                               ConstNodePtr lastSplitBetweenNode);
 };
 
 }

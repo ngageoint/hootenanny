@@ -47,7 +47,7 @@ using namespace hoot::elements;
 namespace hoot
 {
 
-deque< pair< const WorkingMap*, boost::shared_ptr<OsmMap> > > WorkingMap::_mapCache;
+deque< pair< const WorkingMap*, OsmMapPtr > > WorkingMap::_mapCache;
 
 WorkingMap::WorkingMap(const WorkingMap& map)
 {
@@ -63,7 +63,7 @@ WorkingMap::WorkingMap(boost::shared_ptr<const WorkingMap> baseWorking,
   _manipulation = manipulation;
 }
 
-WorkingMap::WorkingMap(boost::shared_ptr<OsmMap> map)
+WorkingMap::WorkingMap(OsmMapPtr map)
 {
   _map = map;
   _score = std::numeric_limits<double>::min();
@@ -80,9 +80,9 @@ double WorkingMap::calculatePotential() const
   return std::max(_sumWayLengths(Status::Unknown1), _sumWayLengths(Status::Unknown2));
 }
 
-boost::shared_ptr<const OsmMap> WorkingMap::getMap() const
+ConstOsmMapPtr WorkingMap::getMap() const
 {
-  boost::shared_ptr<OsmMap> result;
+  OsmMapPtr result;
 
   if (_map)
   {
@@ -106,7 +106,7 @@ boost::shared_ptr<const OsmMap> WorkingMap::getMap() const
         {
           _mapCache.pop_back();
         }
-        _mapCache.push_front(pair< const WorkingMap*, boost::shared_ptr<OsmMap> >(this, result));
+        _mapCache.push_front(pair< const WorkingMap*, OsmMapPtr >(this, result));
       }
     }
     _map = result;
@@ -164,7 +164,7 @@ int WorkingMap::_countIntersections(Status status) const
   WayMap::const_iterator it2 = ways.begin();
   while (it2 != ways.end())
   {
-    const boost::shared_ptr<Way>& way = it2->second;
+    const WayPtr& way = it2->second;
     if (way->getStatus() == status)
     {
       for (size_t j = 0; j < way->getNodeCount(); j++)
@@ -188,9 +188,9 @@ int WorkingMap::_countIntersections(Status status) const
   return result;
 }
 
-boost::shared_ptr<OsmMap> WorkingMap::takeMap() const
+OsmMapPtr WorkingMap::takeMap() const
 {
-  boost::shared_ptr<OsmMap> result = _map;
+  OsmMapPtr result = _map;
   _map.reset();
   return result;
 }

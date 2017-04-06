@@ -43,13 +43,13 @@ SuperfluousWayRemover::SuperfluousWayRemover()
 
 }
 
-SuperfluousWayRemover::SuperfluousWayRemover(boost::shared_ptr<OsmMap> map)
+SuperfluousWayRemover::SuperfluousWayRemover(OsmMapPtr map)
 {
   _inputMap = map;
 }
 
 
-void SuperfluousWayRemover::removeWays(boost::shared_ptr<OsmMap> map)
+void SuperfluousWayRemover::removeWays(OsmMapPtr map)
 {
   SuperfluousWayRemover swr(map);
   return swr.removeWays();
@@ -63,7 +63,7 @@ void SuperfluousWayRemover::removeWays()
   const WayMap ways = _inputMap->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const boost::shared_ptr<const Way>& w = it->second;
+    const ConstWayPtr& w = it->second;
 
     bool same = true;
     long firstId;
@@ -91,7 +91,7 @@ void SuperfluousWayRemover::removeWays()
   }
 }
 
-void SuperfluousWayRemover::apply(boost::shared_ptr<OsmMap>& map)
+void SuperfluousWayRemover::apply(OsmMapPtr& map)
 {
   removeWays(map);
 }

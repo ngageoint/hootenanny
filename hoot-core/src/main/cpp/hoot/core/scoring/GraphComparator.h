@@ -45,7 +45,7 @@ namespace hoot
 class GraphComparator : public BaseComparator
 {
 public:
-  GraphComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
+  GraphComparator(OsmMapPtr map1,OsmMapPtr map2);
 
   virtual ~GraphComparator() {}
 
@@ -66,7 +66,7 @@ public:
 
   void setIterations(int i) { _iterations = i; }
 
-  void drawCostDistance(boost::shared_ptr<OsmMap> map, vector<Coordinate>& c, QString output);
+  void drawCostDistance(OsmMapPtr map, vector<Coordinate>& c, QString output);
 
 private:
 
@@ -81,18 +81,18 @@ private:
   double _maxGraphCost;
   bool _debugImages;
 
-  cv::Mat _calculateCostDistance(boost::shared_ptr<OsmMap> map, Coordinate c);
+  cv::Mat _calculateCostDistance(OsmMapPtr map, Coordinate c);
 
   void _calculateRasterCost(cv::Mat& mat);
 
-  void _exportGraphImage(boost::shared_ptr<OsmMap> map, DirectedGraph& graph, ShortestPath& sp,
+  void _exportGraphImage(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
                          QString path);
 
   void _init();
 
-  cv::Mat _paintGraph(boost::shared_ptr<OsmMap> map, DirectedGraph& graph, ShortestPath& sp);
+  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp);
 
-  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map,boost::shared_ptr<Way> way, double friction,
+  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map,WayPtr way, double friction,
     double startCost, double endCost);
 };
 

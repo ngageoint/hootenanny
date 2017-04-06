@@ -205,7 +205,7 @@ QString PertyOp::toString()
   return str;
 }
 
-void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
+void PertyOp::apply(OsmMapPtr& map)
 {
   // permute the data first
   permute(map);
@@ -238,10 +238,10 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
   return _gridCalculator->permute(env, rows, cols);
 }
 
-boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& map)
+OsmMapPtr PertyOp::generateDebugMap(OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
- boost::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
+ OsmMapPtr result(new OsmMap(map->getProjection()));
 
   LOG_INFO(toString());
 
@@ -268,12 +268,12 @@ boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& m
       double dy = EX.at<double>((i * cols + j) * 2 + 1, 0);
       dSum += sqrt(dx * dx + dy * dy);
 
-     boost::shared_ptr<Node> n1(new Node(Status::Unknown1, result->createNextNodeId(), x, y, 5));
-     boost::shared_ptr<Node> n2(new Node(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5));
+     NodePtr n1(new Node(Status::Unknown1, result->createNextNodeId(), x, y, 5));
+     NodePtr n2(new Node(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5));
       result->addNode(n1);
       result->addNode(n2);
 
-     boost::shared_ptr<Way> w(new Way(Status::Unknown1, result->createNextWayId(), 5.0));
+     WayPtr w(new Way(Status::Unknown1, result->createNextWayId(), 5.0));
       w->addNode(n1->getId());
       w->addNode(n2->getId());
       w->getTags().addNote(QString("r: %1 c: %2").arg(i).arg(j));
@@ -285,7 +285,7 @@ boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& m
   return result;
 }
 
-void PertyOp::permute(const boost::shared_ptr<OsmMap> &map)
+void PertyOp::permute(const OsmMapPtr &map)
 {
   MapProjector::projectToPlanar(map);
 

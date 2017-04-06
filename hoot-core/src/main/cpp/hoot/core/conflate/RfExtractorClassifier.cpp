@@ -80,7 +80,7 @@ const vector< boost::shared_ptr<const FeatureExtractor> >& RfExtractorClassifier
   return _extractors;
 }
 
-map<QString, double> RfExtractorClassifier::getFeatures(const boost::shared_ptr<const OsmMap>& m,
+map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m,
   ElementId eid1, ElementId eid2) const
 {
   map<QString, double> result;

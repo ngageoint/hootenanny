@@ -55,7 +55,7 @@ public:
   void runBasicTest()
   {
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "أَلِف";
     map->addNode(n1);
@@ -68,7 +68,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(true, n1->getTags().find("note") == n1->getTags().end());
 
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map1(new OsmMap());
+    OsmMapPtr map1(new OsmMap());
     NodePtr n2(new Node(Status::Unknown1, map->createNextNodeId(), 500, 500, 10));
     n2->getTags()["name"] = "little town";
     map1->addNode(n2);

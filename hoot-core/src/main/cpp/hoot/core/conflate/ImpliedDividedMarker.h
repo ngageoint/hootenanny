@@ -60,27 +60,27 @@ public:
 
   ImpliedDividedMarker();
 
-  ImpliedDividedMarker(boost::shared_ptr<const OsmMap> map);
+  ImpliedDividedMarker(ConstOsmMapPtr map);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static boost::shared_ptr<OsmMap> markDivided(boost::shared_ptr<const OsmMap> map);
+  static OsmMapPtr markDivided(ConstOsmMapPtr map);
 
-  boost::shared_ptr<OsmMap> markDivided();
+  OsmMapPtr markDivided();
 
 protected:
 
-  boost::shared_ptr<const OsmMap> _inputMap;
-  boost::shared_ptr<OsmMap> _result;
+  ConstOsmMapPtr _inputMap;
+  OsmMapPtr _result;
   boost::shared_ptr<NodeToWayMap> _n2w;
 
   /**
    * Returns true if the given way has a divider highway connected on both ends.
    */
-  bool _dividerSandwhich(boost::shared_ptr<Way> w);
+  bool _dividerSandwhich(WayPtr w);
 
   bool _hasDividerConnected(long nodeId, long excludedWayId);
 };

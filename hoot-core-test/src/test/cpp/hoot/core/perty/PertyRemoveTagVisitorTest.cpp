@@ -57,7 +57,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "strange test";
     n1->getTags()["name:ru"] = QString::fromUtf8("странное испытание");
@@ -90,7 +90,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
     n1->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();
@@ -126,7 +126,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()[MetadataTags::Ref1()] = MetadataTags::Ref1();
     n1->getTags()[MetadataTags::Ref2()] = MetadataTags::Ref2();

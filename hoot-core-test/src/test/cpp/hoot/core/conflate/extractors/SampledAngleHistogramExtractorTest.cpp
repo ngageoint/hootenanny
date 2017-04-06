@@ -59,7 +59,7 @@ public:
   {
     OsmXmlReader reader;
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(
       "test-files/conflate/extractor/SampledAngleHistogramExtractorTest/Haiti_CNIGS_Rivers_REF1-cropped.osm",

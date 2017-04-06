@@ -65,46 +65,46 @@ public:
 
   DualWaySplitter();
 
-  DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide, Meters splitSize);
+  DualWaySplitter(ConstOsmMapPtr map, DrivingSide drivingSide, Meters splitSize);
 
-  boost::shared_ptr<OsmMap> splitAll();
+  OsmMapPtr splitAll();
 
-  static boost::shared_ptr<OsmMap> splitAll(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
+  static OsmMapPtr splitAll(ConstOsmMapPtr map, DrivingSide drivingSide,
                                      Meters defaultSplitSize);
 
-  void apply(boost::shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
 private:
   Meters _defaultSplitSize;
   DrivingSide _drivingSide;
-  boost::shared_ptr<const OsmMap> _map;
-  boost::shared_ptr<OsmMap> _result;
+  ConstOsmMapPtr _map;
+  OsmMapPtr _result;
 
   // temporary variables for convenience
-  boost::shared_ptr<Way> _left, _right;
-  boost::shared_ptr<const Way> _working;
+  WayPtr _left, _right;
+  ConstWayPtr _working;
   Meters _splitSize;
 
   void _addConnector(long nodeId);
 
-  boost::shared_ptr<Way> _createOneWay(boost::shared_ptr<const Way> w, Meters bufferSize, bool left);
+  WayPtr _createOneWay(ConstWayPtr w, Meters bufferSize, bool left);
 
-  void _createStub(boost::shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
+  void _createStub(WayPtr dividedWay, long centerNodeId, long edgeNodeId);
 
   double _dotProduct(const Coordinate& c1, const Coordinate& c2) const;
 
-  void _fixLanes(boost::shared_ptr<Way> w);
+  void _fixLanes(WayPtr w);
 
   /**
    * Returns the node id of the nearest node to nid on w
    */
-  long _nearestNode(long nid, boost::shared_ptr<const Way> w);
+  long _nearestNode(long nid, ConstWayPtr w);
 
   Coordinate _normalizedVector(long nid1, long nid2);
 
-  bool _onRight(long intersectionId, boost::shared_ptr<Way> inbound, long leftNn, long rightNn);
+  bool _onRight(long intersectionId, WayPtr inbound, long leftNn, long rightNn);
 
-  void _reconnectEnd(long centerNodeId, boost::shared_ptr<Way> edge);
+  void _reconnectEnd(long centerNodeId, WayPtr edge);
 
   void _splitIntersectingWays(long nid);
 

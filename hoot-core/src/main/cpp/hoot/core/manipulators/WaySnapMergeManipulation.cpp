@@ -46,15 +46,15 @@ namespace hoot
 {
 
 WaySnapMergeManipulation::WaySnapMergeManipulation(long leftId, long rightId,
-  boost::shared_ptr<const OsmMap> map, Meters minSplitSize) :
+  ConstOsmMapPtr map, Meters minSplitSize) :
   WayMergeManipulation(leftId, rightId, map, minSplitSize)
 {
 }
 
-void WaySnapMergeManipulation::applyManipulation(boost::shared_ptr<OsmMap> map,
+void WaySnapMergeManipulation::applyManipulation(OsmMapPtr map,
   set<ElementId>& impactedElements, set<ElementId>& newElements) const
 {
-  boost::shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   // insert the impacted ways
   impactedElements = getImpactedElementIds(map);
@@ -64,8 +64,8 @@ void WaySnapMergeManipulation::applyManipulation(boost::shared_ptr<OsmMap> map,
   // remove any ways that spanned the left & right
   _removeSpans(result, impactedElements);
 
-  boost::shared_ptr<Way> w1 = result->getWay(_left);
-  boost::shared_ptr<Way> w2 = result->getWay(_right);
+  WayPtr w1 = result->getWay(_left);
+  WayPtr w2 = result->getWay(_right);
 
   // make sure w1 is the Unknown1
   if (w1->getStatus() != Status::Unknown1)
@@ -87,17 +87,17 @@ void WaySnapMergeManipulation::applyManipulation(boost::shared_ptr<OsmMap> map,
   MaximalNearestSubline mnser1(result, w1, w2, minSplitSize,
     w1->getCircularError() + w2->getCircularError());
   int mns1Index;
-  vector< boost::shared_ptr<Way> > splits1 = mnser1.splitWay(result, mns1Index);
+  vector< WayPtr > splits1 = mnser1.splitWay(result, mns1Index);
   assert(splits1.size() != 0);
-  boost::shared_ptr<Way> mns1 = splits1[mns1Index];
+  WayPtr mns1 = splits1[mns1Index];
 
   // split right into its maximal nearest sublines
   MaximalNearestSubline mnser2(result, w2, mns1, minSplitSize,
     w1->getCircularError() + w2->getCircularError());
   int mns2Index;
-  vector< boost::shared_ptr<Way> > splits2 = mnser2.splitWay(result, mns2Index);
+  vector< WayPtr > splits2 = mnser2.splitWay(result, mns2Index);
   assert(splits2.size() != 0);
-  boost::shared_ptr<Way> mns2 = splits2[mns2Index];
+  WayPtr mns2 = splits2[mns2Index];
 
   for (size_t i = 0; i < splits1.size(); i++)
   {
@@ -137,7 +137,7 @@ void WaySnapMergeManipulation::applyManipulation(boost::shared_ptr<OsmMap> map,
   }
 }
 
-const set<long>& WaySnapMergeManipulation::getImpactedWayIds(boost::shared_ptr<const OsmMap> /*map*/) const
+const set<long>& WaySnapMergeManipulation::getImpactedWayIds(ConstOsmMapPtr /*map*/) const
 {
   _impactedWays.clear();
   _impactedWays.insert(_left);

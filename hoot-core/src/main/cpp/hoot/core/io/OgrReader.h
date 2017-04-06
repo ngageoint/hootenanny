@@ -93,7 +93,7 @@ public:
    * @param map Put what we read in this map.
    * @param progress Report progress to this object.
    */
-  void read(QString path, QString layer, boost::shared_ptr<OsmMap> map, Progress progress);
+  void read(QString path, QString layer, OsmMapPtr map, Progress progress);
 
   void setDefaultCircularError(Meters circularError);
 

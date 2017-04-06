@@ -101,7 +101,7 @@ public:
     for (int i = 0; i < args.size() - 1; i+=2)
     {
       LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
 
       loadMap(map, args[i], false, Status::Unknown1);
       loadMap(map, args[i + 1], false, Status::Unknown2);

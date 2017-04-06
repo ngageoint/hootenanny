@@ -42,16 +42,16 @@ namespace hoot
 class DanglerRemoverManipulation : public Manipulation
 {
 public:
-  DanglerRemoverManipulation(long wayId, boost::shared_ptr<const OsmMap> map, Meters errorPlus);
+  DanglerRemoverManipulation(long wayId, ConstOsmMapPtr map, Meters errorPlus);
 
   virtual ~DanglerRemoverManipulation() {}
 
-  virtual void applyManipulation(boost::shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
+  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
     set<ElementId>& newElements) const;
 
-  virtual double calculateProbability(boost::shared_ptr<const OsmMap> map) const;
+  virtual double calculateProbability(ConstOsmMapPtr map) const;
 
-  virtual double calculateScore(boost::shared_ptr<const OsmMap> map) const;
+  virtual double calculateScore(ConstOsmMapPtr map) const;
 
   virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
@@ -59,7 +59,7 @@ public:
 
   virtual double getScoreEstimate() const { return _estimate; }
 
-  virtual bool isValid(boost::shared_ptr<const OsmMap> map) const;
+  virtual bool isValid(ConstOsmMapPtr map) const;
 
   virtual QString toString() const;
 

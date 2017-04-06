@@ -72,7 +72,7 @@ public:
    */
   double scorePair(long nid1, long nid2);
 
-  void setMap(const boost::shared_ptr<const OsmMap>& map) { _map = map; }
+  void setMap(const ConstOsmMapPtr& map) { _map = map; }
 
   /**
    * Calculates the outbound heading for an node that intersects the given wids. The nid must be
@@ -87,7 +87,7 @@ public:
 
 private:
 
-  boost::shared_ptr<const OsmMap> _map;
+  ConstOsmMapPtr _map;
 
   double _strictness;
 

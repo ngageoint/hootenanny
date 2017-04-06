@@ -141,7 +141,7 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(boost::shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   /**
    * @brief setDefaultStatus Sets the default status to use for elements

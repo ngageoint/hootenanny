@@ -105,13 +105,13 @@ private:
 
   Settings _settings;
 
- boost::shared_ptr<OsmMap> _loadReferenceMap(const QString referenceMapInputPath,
+ OsmMapPtr _loadReferenceMap(const QString referenceMapInputPath,
                                        const QString referenceMapOutputPath);
   void _loadPerturbedMap(const QString perturbedMapInputPath,
                          const QString perturbedMapOutputPath);
- boost::shared_ptr<OsmMap> _combineMapsAndPrepareForConflation(boost::shared_ptr<OsmMap> referenceMap,
+ OsmMapPtr _combineMapsAndPrepareForConflation(OsmMapPtr referenceMap,
                                                          const QString perturbedMapInputPath);
- boost::shared_ptr<MatchComparator> _conflateAndScoreMatches(boost::shared_ptr<OsmMap> combinedDataToConflate,
+ boost::shared_ptr<MatchComparator> _conflateAndScoreMatches(OsmMapPtr combinedDataToConflate,
                                                        const QString conflatedMapOutputPath);
 
   /**

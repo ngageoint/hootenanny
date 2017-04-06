@@ -76,19 +76,19 @@ public:
    * @param newElements Set of all substantive elements created by this manipulation. Nodes that
    *  make up a road don't need to be included.
    */
-  virtual void applyManipulation(boost::shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
+  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
                                                set<ElementId>& newElements) const = 0;
 
   /**
    * Calculates an approximation of the probability of this being a valid match.
    */
-  virtual double calculateProbability(boost::shared_ptr<const OsmMap> map) const = 0;
+  virtual double calculateProbability(ConstOsmMapPtr map) const = 0;
 
   /**
    * Returns the exact score delta for the given map. This should always be less than or equal to
    * the estimate.
    */
-  virtual double calculateScore(boost::shared_ptr<const OsmMap> map) const = 0;
+  virtual double calculateScore(ConstOsmMapPtr map) const = 0;
 
   /**
    * Returns all the elements that are significantly impacted by this manipulation. If the way is
@@ -111,7 +111,7 @@ public:
   /**
    * Returns true if this manipulation is a valid option on the given input map.
    */
-  virtual bool isValid(boost::shared_ptr<const OsmMap> map) const = 0;
+  virtual bool isValid(ConstOsmMapPtr map) const = 0;
 
   bool operator<(const Manipulation& other) const
   {
@@ -125,7 +125,7 @@ public:
 
   virtual QString toString() const { return QString(); }
 
-  virtual void updateEstimate(boost::shared_ptr<const OsmMap> map) { _estimate = calculateScore(map); }
+  virtual void updateEstimate(ConstOsmMapPtr map) { _estimate = calculateScore(map); }
 
 protected:
   bool _addBogusReviewTags;

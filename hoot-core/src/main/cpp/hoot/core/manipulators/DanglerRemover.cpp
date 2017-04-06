@@ -75,7 +75,7 @@ DanglerRemover::DanglerRemover(Meters errorPlus)
 }
 
 const vector< boost::shared_ptr<Manipulation> >& DanglerRemover::findAllManipulations(
-        boost::shared_ptr<const OsmMap> map)
+        ConstOsmMapPtr map)
 {
   LOG_INFO("Finding all dangle remover manipulations...");
 
@@ -88,7 +88,7 @@ const vector< boost::shared_ptr<Manipulation> >& DanglerRemover::findAllManipula
 }
 
 const vector< boost::shared_ptr<Manipulation> >& DanglerRemover::findWayManipulations(
-        boost::shared_ptr<const OsmMap> map, const vector<long>& wids)
+        ConstOsmMapPtr map, const vector<long>& wids)
 {
   _result.clear();
   _map = map;

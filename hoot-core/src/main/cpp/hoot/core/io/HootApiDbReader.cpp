@@ -136,7 +136,7 @@ void  HootApiDbReader::initializePartial()
   _elementsRead = 0;
 }
 
-void HootApiDbReader::read(boost::shared_ptr<OsmMap> map)
+void HootApiDbReader::read(OsmMapPtr map)
 {
   if (!_hasBounds())
   {
@@ -164,7 +164,7 @@ void HootApiDbReader::read(boost::shared_ptr<OsmMap> map)
 
 //TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
 //this read performs better for some reason
-void HootApiDbReader::_read(boost::shared_ptr<OsmMap> map, const ElementType& elementType)
+void HootApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
   long elementCount = 0; //TODO: break this out by element type
 
@@ -316,7 +316,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
   LOG_TRACE("Reading node with ID: " << nodeId);
 
-  boost::shared_ptr<Node> node(
+  NodePtr node(
     new Node(
       _status,
       nodeId,
@@ -345,7 +345,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
   LOG_TRACE("Reading way with ID: " << wayId);
 
-  boost::shared_ptr<Way> way(
+  WayPtr way(
     new Way(
       _status,
       newWayId,
@@ -378,7 +378,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
   LOG_TRACE("Reading relation with ID: " << relationId);
 
-  boost::shared_ptr<Relation> relation(
+  RelationPtr relation(
     new Relation(
       _status,
       newRelationId,

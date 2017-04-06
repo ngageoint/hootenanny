@@ -44,14 +44,14 @@ public:
    * Logs any troubled nodes.
    * @returns true if a troubled node or way is found.
    */
-  static bool printTroubled(const boost::shared_ptr<const OsmMap>& map);
+  static bool printTroubled(const ConstOsmMapPtr& map);
 
 #else
   static bool isTroubledNode(long) { return false; }
 
   static bool isTroubledWay(long) { return false; }
 
-  static bool printTroubled(const boost::shared_ptr<const OsmMap>&) { return false; }
+  static bool printTroubled(const ConstOsmMapPtr&) { return false; }
 
 #endif
 

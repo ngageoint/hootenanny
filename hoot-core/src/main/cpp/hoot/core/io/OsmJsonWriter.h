@@ -77,14 +77,14 @@ public:
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void write(boost::shared_ptr<const OsmMap> map, const QString& path);
+  void write(ConstOsmMapPtr map, const QString& path);
 
-  virtual void write(boost::shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   /**
    * Very handy for testing.
    */
-  QString toString(boost::shared_ptr<const OsmMap> map);
+  QString toString(ConstOsmMapPtr map);
 
 protected:
   bool _includeDebug;
@@ -101,9 +101,9 @@ protected:
    */
   QString _markupString(const QString& str);
 
-  void _writeNodes(boost::shared_ptr<const OsmMap> map);
-  void _writeWays(boost::shared_ptr<const OsmMap> map);
-  void _writeRelations(boost::shared_ptr<const OsmMap> map);
+  void _writeNodes(ConstOsmMapPtr map);
+  void _writeWays(ConstOsmMapPtr map);
+  void _writeRelations(ConstOsmMapPtr map);
   void _write(const QString& str) { _write(str, _pretty); }
   void _write(const QString& str, bool newLine);
   void _writeLn(const QString& str) { _write(str, true); }

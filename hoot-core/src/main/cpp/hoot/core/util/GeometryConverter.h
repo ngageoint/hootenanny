@@ -91,7 +91,7 @@ public:
   class NodeFactory
   {
   public:
-    virtual boost::shared_ptr<Node> createNode(const boost::shared_ptr<OsmMap>& map, const Coordinate& c,
+    virtual NodePtr createNode(const OsmMapPtr& map, const Coordinate& c,
       Status s, double circularError) = 0;
   };
 
@@ -120,7 +120,7 @@ public:
    */
  boost::shared_ptr<Element> convertGeometryToElement(const Geometry* g, Status s, double circularError);
 
- boost::shared_ptr<Way> convertLineStringToWay(const LineString* ls, const boost::shared_ptr<OsmMap>& map,
+ WayPtr convertLineStringToWay(const LineString* ls, const OsmMapPtr& map,
     Status s, double circularError);
 
   /**
@@ -128,10 +128,10 @@ public:
    * multilinestring contains just one LineString a single Way is returned.
    */
  boost::shared_ptr<Element> convertMultiLineStringToElement(const MultiLineString* mls,
-    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
+    const OsmMapPtr& map, Status s, double circularError);
 
- boost::shared_ptr<Relation> convertMultiPolygonToRelation(const MultiPolygon* mp,
-    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
+ RelationPtr convertMultiPolygonToRelation(const MultiPolygon* mp,
+    const OsmMapPtr& map, Status s, double circularError);
 
   /**
    * Converts the provided polygon into an element. If the polygon contains holes then a multi
@@ -139,21 +139,21 @@ public:
    * be created and the area=yes tag will be set.
    */
  boost::shared_ptr<Element> convertPolygonToElement(const Polygon* polygon,
-    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
+    const OsmMapPtr& map, Status s, double circularError);
 
- boost::shared_ptr<Relation> convertPolygonToRelation(const Polygon* polygon,
-    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
+ RelationPtr convertPolygonToRelation(const Polygon* polygon,
+    const OsmMapPtr& map, Status s, double circularError);
 
   void convertPolygonToRelation(const Polygon* polygon,
-    const boost::shared_ptr<OsmMap>& map, const boost::shared_ptr<Relation>& r, Status s, double circularError);
+    const OsmMapPtr& map, const RelationPtr& r, Status s, double circularError);
 
-  void convertPolygonToWays(const Polygon* polygon, const boost::shared_ptr<OsmMap>& map,
+  void convertPolygonToWays(const Polygon* polygon, const OsmMapPtr& map,
     Status s, double circularError);
 
   void setNodeFactory(boost::shared_ptr<NodeFactory> nf) { _nf = nf; }
 
 protected:
- boost::shared_ptr<Node> _createNode(const boost::shared_ptr<OsmMap>& map, const Coordinate& c, Status s,
+ NodePtr _createNode(const OsmMapPtr& map, const Coordinate& c, Status s,
     double circularError);
 
  boost::shared_ptr<NodeFactory> _nf;

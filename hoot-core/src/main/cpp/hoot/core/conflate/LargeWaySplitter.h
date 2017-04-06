@@ -57,21 +57,21 @@ public:
 
   LargeWaySplitter(double threshold);
 
-  void apply(boost::shared_ptr<OsmMap> map);
+  void apply(OsmMapPtr map);
 
   /**
    * Split large ways into smaller ways.
    * @param threshold - The threshold length. This projection units.
    */
-  static void splitWays(boost::shared_ptr<OsmMap> map, double threshold);
+  static void splitWays(OsmMapPtr map, double threshold);
 
 protected:
 
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
 
   double _threshold;
 
-  void _divideWay(boost::shared_ptr<Way> way, int numPieces);
+  void _divideWay(WayPtr way, int numPieces);
 };
 
 }

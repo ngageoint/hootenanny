@@ -93,7 +93,7 @@ public:
 
     for (int i = 0; i < inputs.size(); i++)
     {
-      boost::shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       loadMap(map, inputs[i], true, Status::Invalid);
 
       MapProjector::projectToPlanar(map);

@@ -49,13 +49,13 @@ public:
 
   HighwayReviewCleanerOp();
 
-  virtual void apply(boost::shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual QString toString() const { return QString::fromStdString(className()); }
 
 private:
 
-  bool _isBadHighwayReview(boost::shared_ptr<OsmMap>& map, ReviewMarker::ReviewUid review);
+  bool _isBadHighwayReview(OsmMapPtr& map, ReviewMarker::ReviewUid review);
 };
 
 }

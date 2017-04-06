@@ -212,7 +212,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
   return vector<ElementPtr>();
 }
 
-WayLocation PertyWaySplitVisitor::_calcSplitPoint(boost::shared_ptr<const Way> way) const
+WayLocation PertyWaySplitVisitor::_calcSplitPoint(ConstWayPtr way) const
 {
   //create a way location that is the minimum node spacing distance from the beginning of the way
   WayLocation splitWayStart(_map->shared_from_this(), way, _minNodeSpacing);
@@ -238,7 +238,7 @@ WayLocation PertyWaySplitVisitor::_calcSplitPoint(boost::shared_ptr<const Way> w
   }
 }
 
-MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(boost::shared_ptr<const Relation> relation,
+MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(ConstRelationPtr relation,
                                                               ElementId& wayId) const
 {
   const vector<RelationData::Entry>& members = relation->getMembers();
@@ -278,16 +278,16 @@ MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(boost::shared_ptr<
   }
 }
 
-boost::shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
+NodePtr PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
   const vector<ElementPtr>& newElementsAfterSplit) const
 {
   //newElementsAfterSplit is assumed to only contain ways; find the new node created by the way
   //split; it will be the last node in the first way, which is the same as the first node in the
   //last way
- boost::shared_ptr<const Way> firstWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(0));
+ ConstWayPtr firstWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(0));
   const long lastNodeIdInFirstWay = firstWay->getNodeIds().at(firstWay->getNodeCount() - 1);
   LOG_VART(lastNodeIdInFirstWay);
- boost::shared_ptr<const Way> lastWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(1));
+ ConstWayPtr lastWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(1));
   const long firstNodeIdInLastWay = lastWay->getNodeIds().at(0);
   LOG_VART(firstNodeIdInLastWay);
   assert(lastNodeIdInFirstWay == firstNodeIdInLastWay);
@@ -296,9 +296,9 @@ boost::shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<l
   return _map->getNode(firstNodeIdInLastWay);
 }
 
-void PertyWaySplitVisitor::_updateNewNodeProperties(boost::shared_ptr<Node> newNode,
-                                                   boost::shared_ptr<const Node> firstSplitBetweenNode,
-                                                   boost::shared_ptr<const Node> lastSplitBetweenNode)
+void PertyWaySplitVisitor::_updateNewNodeProperties(NodePtr newNode,
+                                                   ConstNodePtr firstSplitBetweenNode,
+                                                   ConstNodePtr lastSplitBetweenNode)
 {
   //arbitrarily copy the status from one split between node to the new node
   newNode->setStatus(firstSplitBetweenNode->getStatus());

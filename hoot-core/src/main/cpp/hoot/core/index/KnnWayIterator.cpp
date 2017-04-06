@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-KnnWayIterator::KnnWayIterator(const OsmMap& map, boost::shared_ptr<const Way> way,
+KnnWayIterator::KnnWayIterator(const OsmMap& map, ConstWayPtr way,
   const RStarTree* tree, const vector<long>& treeIdToWid, bool addError) :
   KnnIterator(tree, 0.0, 0.0, Box()),
   _map(map),

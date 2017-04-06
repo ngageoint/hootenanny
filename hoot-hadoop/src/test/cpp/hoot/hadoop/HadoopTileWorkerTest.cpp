@@ -81,7 +81,7 @@ public:
 
     uut.conflate(QString::fromStdString(outDir) + "HadoopTileWorkerTest.pbf");
 
-   boost::shared_ptr<OsmMap> map(new OsmMap);
+   OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorkerTest.pbf", true);

@@ -43,7 +43,7 @@
 namespace hoot
 {
 
-WaySplitter::WaySplitter(const OsmMapPtr& map, boost::shared_ptr<Way> a) :
+WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr a) :
   _map(map)
 {
   _a = a;
@@ -107,14 +107,14 @@ WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scr
   return splits[1];
 }
 
-vector< boost::shared_ptr<Way> > WaySplitter::split(const OsmMapPtr& map, boost::shared_ptr<Way> a,
+vector< WayPtr > WaySplitter::split(const OsmMapPtr& map, WayPtr a,
   WayLocation& splitPoint)
 {
   WaySplitter s(map, a);
   return s.split(splitPoint);
 }
 
-void WaySplitter::split(const OsmMapPtr& map, const boost::shared_ptr<Way>& w, double maxSize)
+void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
 {
   boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
 
@@ -123,7 +123,7 @@ void WaySplitter::split(const OsmMapPtr& map, const boost::shared_ptr<Way>& w, d
   if (l > maxSize)
   {
     WayLocation wl (map, w, l / 2.0);
-    vector< boost::shared_ptr<Way> > children = WaySplitter(map, w).split(wl);
+    vector< WayPtr > children = WaySplitter(map, w).split(wl);
 
     for (size_t i = 0; i < children.size(); i++)
     {
@@ -132,9 +132,9 @@ void WaySplitter::split(const OsmMapPtr& map, const boost::shared_ptr<Way>& w, d
   }
 }
 
-vector< boost::shared_ptr<Way> > WaySplitter::split(WayLocation& splitPoint)
+vector< WayPtr > WaySplitter::split(WayLocation& splitPoint)
 {
-  vector< boost::shared_ptr<Way> > result;
+  vector< WayPtr > result;
 
   if (splitPoint.isFirst() || splitPoint.isLast())
   {

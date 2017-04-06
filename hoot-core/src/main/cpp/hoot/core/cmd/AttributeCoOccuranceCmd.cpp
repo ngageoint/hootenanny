@@ -92,7 +92,7 @@ public:
     }
 
 
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], false, Status::Unknown1);
     loadMap(map, args[1], false, Status::Unknown2);
 

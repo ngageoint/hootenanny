@@ -101,9 +101,9 @@ public:
       while (it.hasNext())
       {
         boost::shared_ptr<Element> e = it.next();
-        boost::shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-        boost::shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
-        boost::shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        WayPtr w = dynamic_pointer_cast<Way>(e);
+        NodePtr n = dynamic_pointer_cast<Node>(e);
+        RelationPtr r = dynamic_pointer_cast<Relation>(e);
         if (w != 0)
         {
           minWay[i - 1] = min(w->getId(), minWay[i - 1]);
@@ -144,9 +144,9 @@ public:
       while (it.hasNext())
       {
         boost::shared_ptr<Element> e = it.next();
-        boost::shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-        boost::shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
-        boost::shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        WayPtr w = dynamic_pointer_cast<Way>(e);
+        NodePtr n = dynamic_pointer_cast<Node>(e);
+        RelationPtr r = dynamic_pointer_cast<Relation>(e);
         if (w != 0)
         {
           writer.writePartial(w);

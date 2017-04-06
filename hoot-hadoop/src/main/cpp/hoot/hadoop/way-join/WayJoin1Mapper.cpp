@@ -41,7 +41,7 @@ WayJoin1Mapper::~WayJoin1Mapper()
 {
 }
 
-void WayJoin1Mapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
+void WayJoin1Mapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
   LOG_INFO("Starting map");
   string keyStr;
@@ -61,7 +61,7 @@ void WayJoin1Mapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext&
   const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const boost::shared_ptr<const Node>& n = it->second;
+    const ConstNodePtr& n = it->second;
 
     *key = n->getId();
     valueNode->x = n->getX();
@@ -75,7 +75,7 @@ void WayJoin1Mapper::_map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext&
   const WayMap& wm = m->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const boost::shared_ptr<const Way>& w = it->second;
+    const ConstWayPtr& w = it->second;
 
     valueWay->id = w->getId();
 

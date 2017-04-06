@@ -47,7 +47,7 @@ class WayDirectionCriterion : public ElementCriterion
 {
 public:
   WayDirectionCriterion(const ConstOsmMapPtr& map,
-                        boost::shared_ptr<const Way> baseWay,
+                        ConstWayPtr baseWay,
                         bool similarDirection = true);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
@@ -56,7 +56,7 @@ public:
 
 private:
   ConstOsmMapPtr _map;
-  boost::shared_ptr<const Way> _baseWay;
+  ConstWayPtr _baseWay;
   bool _similarDirection;
 };
 

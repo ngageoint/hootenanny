@@ -118,7 +118,7 @@ public:
 
   void setScriptPath(const QString& path) { _scriptPath = path; }
 
-  virtual void write(boost::shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   virtual void finalizePartial();
 

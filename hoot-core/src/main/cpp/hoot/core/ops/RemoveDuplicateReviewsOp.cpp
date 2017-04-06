@@ -43,7 +43,7 @@ RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
 {
 }
 
-void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
+void RemoveDuplicateReviewsOp::apply(OsmMapPtr& map)
 {
   _map = map;
 

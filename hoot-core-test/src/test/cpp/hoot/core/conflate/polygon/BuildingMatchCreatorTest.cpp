@@ -100,7 +100,7 @@ public:
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -135,7 +135,7 @@ public:
     BuildingMatchCreator uut;
 
     OsmXmlReader reader;
-    boost::shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);

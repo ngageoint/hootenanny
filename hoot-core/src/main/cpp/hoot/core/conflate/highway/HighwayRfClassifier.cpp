@@ -223,7 +223,7 @@ void HighwayRfClassifier::_createTestExtractors() const
 
 }
 
-map<QString, double> HighwayRfClassifier::getFeatures(const boost::shared_ptr<const OsmMap>& m,
+map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
 {
   _init();

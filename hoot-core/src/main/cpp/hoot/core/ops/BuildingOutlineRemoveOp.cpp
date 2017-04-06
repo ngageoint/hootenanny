@@ -49,7 +49,7 @@ BuildingOutlineRemoveOp::BuildingOutlineRemoveOp()
 {
 }
 
-void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
+void BuildingOutlineRemoveOp::apply(OsmMapPtr& map)
 {
   _map = map;
 
@@ -57,7 +57,7 @@ void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
   {
-    const boost::shared_ptr<Relation>& r = it->second;
+    const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
     if (r->getType() == "building")
     {
@@ -66,7 +66,7 @@ void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
   }
 }
 
-void BuildingOutlineRemoveOp::_removeOutline(const boost::shared_ptr<Relation>& building)
+void BuildingOutlineRemoveOp::_removeOutline(const RelationPtr& building)
 {
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
