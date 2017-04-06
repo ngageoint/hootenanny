@@ -718,12 +718,8 @@ void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
   }
 }
 
-QString ApiDb::getPqxxString(const QString url)
+QString ApiDb::getPqString(const QString url)
 {
-  /*
-   * "dbname=simran user=simran password=cohondob \
-      hostaddr=127.0.0.1 port=5432"
-   */
   const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
   QString hostAddr = dbUrlParts["host"];
   if (hostAddr == "localhost")

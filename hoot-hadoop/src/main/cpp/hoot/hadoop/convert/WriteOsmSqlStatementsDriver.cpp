@@ -40,8 +40,7 @@ using namespace geos::geom;
 #include "WriteOsmSqlStatementsDriver.h"
 #include "SqlStatementLineRecordWriter.h"
 
-#include <pqxx/pqxx>
-using namespace pqxx;
+#include <postgresql/libpq-fe.h>
 
 namespace hoot
 {
@@ -153,46 +152,64 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
     }
     else
     {
-      connection conn(ApiDb::getPqxxString(_output).toStdString());
-      if (!conn.is_open())
+      const char* conninfo = ApiDb::getPqString(_output).toLatin1().data();
+      PGconn* conn = PQconnectdb(conninfo);
+      if (PQstatus(conn) != CONNECTION_OK)
       {
         throw HootException("Connection not open.");
       }
-      work txn(conn);
-      const QString tableName = "changesets";
-      const QStringList columnNamesTemp =
-        _sqlFormatter->getChangesetSqlHeaderString().split("(")[1].split(")")[0].split(",");
-      vector<string> columnNames;
-      for (int i = 0; i < columnNamesTemp.size(); i++)
-      {
-        columnNames.push_back(columnNamesTemp[i].toStdString());
-      }
-      tablewriter tw(txn, tableName.toStdString(), columnNames.begin(), columnNames.end(), "\\N");
+
+      PGresult* res;
+      const char* header = _sqlFormatter->getChangesetSqlHeaderString().toLatin1().data();
+      LOG_VART(header);
+      res = PQexec(conn, header);
       Envelope bounds;
       bounds.init();
       const QString changesetSqlStr =
         _sqlFormatter->changesetToSqlString(1, _changesetUserId, 1, bounds);
-      QStringList valuesTemp = changesetSqlStr.split("\t");
-      vector<string> values;
-      for (int i = 0; i < valuesTemp.size(); i++)
+      const char* statement = changesetSqlStr.toLatin1().data();
+      LOG_VART(statement);
+      if (PQresultStatus(res) != PGRES_COPY_IN)
       {
-        QString valueTemp = valuesTemp[i];
-        LOG_VART(valueTemp);
-        values.push_back(valueTemp.toStdString());
+        throw HootException("copy in not ok");
       }
-      tw.insert(values);
-      tw.complete();
-      try
+      else
       {
-        txn.commit();
+        if (PQputCopyData(conn, statement, strlen(statement)) == 1)
+        {
+          if (PQputCopyEnd(conn, NULL) == 1)
+          {
+            int flushStatus = 1;
+            int numTries = 0;  //safety feature
+            while (flushStatus == 1 && numTries < 10)
+            {
+              flushStatus = PQflush(conn);
+              numTries++;
+            }
+
+            res = PQgetResult(conn);
+            if (PQresultStatus(res) == PGRES_COMMAND_OK)
+            {
+              LOG_INFO("done");
+            }
+            else
+            {
+              throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+            }
+          }
+          else
+          {
+            throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+          }
+        }
+        else
+        {
+          throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+        }
       }
-      catch (const std::exception& e)
-      {
-        txn.abort();
-        conn.disconnect();
-        throw HootException(e.what());
-      }
-      conn.disconnect();
+
+      PQclear(res);
+      PQfinish(conn);
     }
   }
 }

@@ -310,7 +310,7 @@ public:
   static QMap<QString, QString> getDbUrlParts(const QString url);
   static QString getPsqlString(const QString url);
   static void execSqlFile(const QString dbUrl, const QString sqlFile);
-  static QString getPqxxString(const QString url);
+  static QString getPqString(const QString url);
 
 protected:
 

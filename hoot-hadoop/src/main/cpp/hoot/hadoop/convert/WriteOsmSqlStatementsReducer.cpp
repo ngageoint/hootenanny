@@ -33,10 +33,12 @@ using namespace pp;
 #include <QMap>
 #include <QStringBuilder>
 
-#include <pqxx/pqxx>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <postgresql/libpq-fe.h>
 
 using namespace std;
-using namespace pqxx;
 
 namespace hoot
 {
@@ -47,7 +49,6 @@ WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer() :
 _tableHeader(""),
 _sqlStatements(""),
 _sqlStatementBufferSize(0),
-//_execSqlWithMapreduce(false),
 _retainSqlFile(false)
 {
   _context = NULL;
@@ -55,10 +56,6 @@ _retainSqlFile(false)
 
 WriteOsmSqlStatementsReducer::~WriteOsmSqlStatementsReducer()
 {
-//  if (_execSqlWithMapreduce)
-//  {
-//    _database.close();
-//  }
 }
 
 void WriteOsmSqlStatementsReducer::_flush()
@@ -68,78 +65,72 @@ void WriteOsmSqlStatementsReducer::_flush()
 
   LOG_VART(_tableHeader);
 
+  _sqlStatements += "\\.\n";
+
   if (_retainSqlFile)
   {
     LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to disk...");
-    const QString fileSqlStatements = _sqlStatements + "\\.\n";
-    _context->emit(_tableHeader.toStdString(), fileSqlStatements.toStdString());
+    _context->emit(_tableHeader.toStdString(), _sqlStatements.toStdString());
   }
 
-  //if (_execSqlWithMapreduce)
   if (!_dbConnStr.isEmpty())
   {
     LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to database...");
-    //_tableHeader = _tableHeader.replace("FROM stdin;", "");
-    //const QString query = "BEGIN TRANSACTION;\n" + _tableHeader + _sqlStatements + "COMMIT;";
-    //LOG_VARD(query);
 
-//    DbUtils::execNoPrepare(
-//      _database.getDB(),
-//      //QString("BEGIN TRANSACTION;\n") +
-//      QString(_tableHeader + _sqlStatements /*+ "\n"*/)// +
-//      /*QString("COMMIT;")*/);
-
-    //ApiDb::execSqlCommand(_dbConnStr, query);
-
-    //TODO: move the db connection to a mem var and buffer this write
-    connection conn(ApiDb::getPqxxString(_dbConnStr).toStdString());
-    if (!conn.is_open())
+    const char* conninfo = ApiDb::getPqString(_dbConnStr).toLatin1().data();
+    PGconn* conn = PQconnectdb(conninfo);
+    if (PQstatus(conn) != CONNECTION_OK)
     {
       throw HootException("Connection not open.");
     }
-    work txn(conn);
-    const QString tableName = _tableHeader.split(" ")[1];
-    const QStringList columnNamesTemp = _tableHeader.split("(")[1].split(")")[0].split(",");
-    vector<string> columnNames;
-    for (int i = 0; i < columnNamesTemp.size(); i++)
+
+    PGresult* res;
+    const char* header = _tableHeader.toLatin1().data();
+    LOG_VART(header);
+    res = PQexec(conn, header);
+    const char* statements = _sqlStatements.toLatin1().data();
+    LOG_VART(statements);
+    if (PQresultStatus(res) != PGRES_COPY_IN)
     {
-      columnNames.push_back(columnNamesTemp[i].toStdString());
+      throw HootException("copy in not ok");
     }
-    tablewriter tw(txn, tableName.toStdString(), columnNames.begin(), columnNames.end(), "\\N");
-    const QStringList sqlStatementsTemp = _sqlStatements.split("\n");
-    for (int i = 0; i < sqlStatementsTemp.size(); i++)
+    else
     {
-      const QString sqlStatementTemp = sqlStatementsTemp[i];
-      if (!sqlStatementTemp.contains("\\.") && !sqlStatementTemp.trimmed().isEmpty())
+      if (PQputCopyData(conn, statements, strlen(statements)) == 1)
       {
-        QStringList valuesTemp = sqlStatementTemp.split("\t");
-        //value.replace("\n", "");
-        vector<string> values;
-        for (int j = 0; j < valuesTemp.size(); j++)
+        if (PQputCopyEnd(conn, NULL) == 1)
         {
-          QString valueTemp = valuesTemp[j];
-          //if (valueTemp.contains("\N"))
-          //{
-            //valueTemp = "";
-          //}
-          LOG_VART(valueTemp);
-          values.push_back(valueTemp.toStdString());
+          int flushStatus = 1;
+          int numTries = 0;  //safety feature
+          while (flushStatus == 1 && numTries < 10)
+          {
+            flushStatus = PQflush(conn);
+            numTries++;
+          }
+
+          res = PQgetResult(conn);
+          if (PQresultStatus(res) == PGRES_COMMAND_OK)
+          {
+            LOG_INFO("done");
+          }
+          else
+          {
+            throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+          }
         }
-        tw.insert(values);
+        else
+        {
+          throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+        }
+      }
+      else
+      {
+        throw HootException(QString::fromAscii(PQerrorMessage(conn)));
       }
     }
-    tw.complete();
-    try
-    {
-      txn.commit();
-    }
-    catch (const std::exception& e)
-    {
-      txn.abort();
-      conn.disconnect();
-      throw HootException(e.what());
-    }
-    conn.disconnect();
+
+    PQclear(res);
+    PQfinish(conn);
   }
 
   _sqlStatements = "";
@@ -159,15 +150,7 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   const long writeBufferSize = config->getLong("writeBufferSize");
   if (config->hasKey("dbConnUrl"))
   {
-    //const QString dbConnStr = QString::fromStdString(config->get("dbConnUrl"));
     _dbConnStr = QString::fromStdString(config->get("dbConnUrl"));
-//    LOG_VART(dbConnStr);
-//    if (!dbConnStr.isEmpty())
-//    {
-//      QUrl url(dbConnStr);
-//      _database.open(url);
-//      _execSqlWithMapreduce = true;
-//    }
   }
   //LOG_VART(_execSqlWithMapreduce);
   LOG_VART(_dbConnStr);

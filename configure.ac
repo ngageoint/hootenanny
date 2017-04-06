@@ -145,9 +145,9 @@ CPPUNIT_INIT()
 m4_include([m4/glpk.m4])
 GLPK_INIT()
 
-# liqpqxx
-m4_include([m4/libpqxx.m4])
-PANDORA_REQUIRE_LIBPQXX()
+# liqpq
+m4_include([m4/libpq.m4])
+LIBPQ_INIT()
 
 # Newmat
 m4_include([m4/newmat.m4])
