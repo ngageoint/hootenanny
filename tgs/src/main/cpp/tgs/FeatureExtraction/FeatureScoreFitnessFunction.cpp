@@ -40,8 +40,8 @@ using namespace std;
 
 namespace Tgs
 {
-  FeatureScoreFitnessFunction::FeatureScoreFitnessFunction(shared_ptr<DataFrame> df, 
-    shared_ptr<FeatureScoreCalculator> fsc)
+  FeatureScoreFitnessFunction::FeatureScoreFitnessFunction(boost::shared_ptr<DataFrame> df, 
+   boost::shared_ptr<FeatureScoreCalculator> fsc)
   {
     _workingCopy.reset(new DataFrame());
     std::vector<std::string> factorLabels;

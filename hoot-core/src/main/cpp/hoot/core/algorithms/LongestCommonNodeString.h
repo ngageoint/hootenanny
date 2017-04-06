@@ -41,7 +41,7 @@ namespace hoot
 class LongestCommonNodeString
 {
 public:
-  LongestCommonNodeString(shared_ptr<Way> w1, shared_ptr<Way> w2);
+  LongestCommonNodeString(boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
 
   /**
    * Returns the length of the common substring. Zero if no common substring was found.
@@ -59,7 +59,7 @@ public:
   int getW2Index() { return _i2; }
 
 private:
-  shared_ptr<Way> _w1, _w2;
+  boost::shared_ptr<Way> _w1, _w2;
   size_t _i1, _i2;
 };
 

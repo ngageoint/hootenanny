@@ -53,7 +53,7 @@ namespace hoot
 {
 
 DividedHighwayManipulation::DividedHighwayManipulation(long leftId, long rightId, long midId,
-                                                       shared_ptr<const OsmMap> map,
+                                                       boost::shared_ptr<const OsmMap> map,
                                                        Meters vectorError)
 {
   _left = leftId;
@@ -69,7 +69,7 @@ DividedHighwayManipulation::DividedHighwayManipulation(long leftId, long rightId
   updateEstimate(map);
 }
 
-void DividedHighwayManipulation::_addConnector(shared_ptr<OsmMap> map,
+void DividedHighwayManipulation::_addConnector(boost::shared_ptr<OsmMap> map,
                                                long nodeId) const
 {
   vector<long> intersectingWays = FindWaysVisitor::findWaysByNode(map, nodeId);
@@ -81,7 +81,7 @@ void DividedHighwayManipulation::_addConnector(shared_ptr<OsmMap> map,
   else
   {
     // determine the angle between the ways
-    shared_ptr<Way> mid = map->getWay(_mid);
+    boost::shared_ptr<Way> mid = map->getWay(_mid);
 
     long midNodeIndex = mid->getNodeId(0) == nodeId ? 0 : mid->getNodeCount() - 1;
 
@@ -90,7 +90,7 @@ void DividedHighwayManipulation::_addConnector(shared_ptr<OsmMap> map,
       // if this is not the input way
       if (intersectingWays[i] != mid->getId())
       {
-        shared_ptr<Way> other = map->getWay(intersectingWays[i]);
+        boost::shared_ptr<Way> other = map->getWay(intersectingWays[i]);
 
         if (other->getStatus() == mid->getStatus())
         {
@@ -127,12 +127,12 @@ void DividedHighwayManipulation::_addConnector(shared_ptr<OsmMap> map,
   }
 }
 
-void DividedHighwayManipulation::applyManipulation(shared_ptr<OsmMap> wm,
+void DividedHighwayManipulation::applyManipulation(boost::shared_ptr<OsmMap> wm,
   set<ElementId>& impactedElements, set<ElementId>& newElements) const
 {
-  shared_ptr<OsmMap> result = wm;
+  boost::shared_ptr<OsmMap> result = wm;
 
-  shared_ptr<Way> mid = result->getWay(_mid);
+  boost::shared_ptr<Way> mid = result->getWay(_mid);
 
   _newWays.clear();
 
@@ -149,15 +149,15 @@ void DividedHighwayManipulation::applyManipulation(shared_ptr<OsmMap> wm,
   newElements = _newWays;
 }
 
-double DividedHighwayManipulation::calculateProbability(shared_ptr<const OsmMap> map) const
+double DividedHighwayManipulation::calculateProbability(boost::shared_ptr<const OsmMap> map) const
 {
-  shared_ptr<const Way> left = map->getWay(_left);
-  shared_ptr<const Way> right = map->getWay(_right);
-  shared_ptr<const Way> mid = map->getWay(_mid);
+  boost::shared_ptr<const Way> left = map->getWay(_left);
+  boost::shared_ptr<const Way> right = map->getWay(_right);
+  boost::shared_ptr<const Way> mid = map->getWay(_mid);
 
   ElementConverter ec(map);
   // calculate the center line of two ways.
-  shared_ptr<LineString> center = LineStringAverager::average(ec.convertToLineString(left),
+  boost::shared_ptr<LineString> center = LineStringAverager::average(ec.convertToLineString(left),
     ec.convertToLineString(right));
 
   // calculate standard deviation in meters
@@ -175,7 +175,7 @@ double DividedHighwayManipulation::calculateProbability(shared_ptr<const OsmMap>
   return ProbabilityOfMatch::getInstance().distanceScore(map, mid, center, midAccuracy);
 }
 
-double DividedHighwayManipulation::calculateScore(shared_ptr<const OsmMap> map) const
+double DividedHighwayManipulation::calculateScore(boost::shared_ptr<const OsmMap> map) const
 {
   assert(isValid(map));
 
@@ -188,15 +188,15 @@ double DividedHighwayManipulation::calculateScore(shared_ptr<const OsmMap> map) 
   return _p * (lLength + rLength) * 0.8;
 }
 
-void DividedHighwayManipulation::_createStub(shared_ptr<OsmMap> map, shared_ptr<Way> oneway,
+void DividedHighwayManipulation::_createStub(boost::shared_ptr<OsmMap> map, boost::shared_ptr<Way> oneway,
                                               long nodeId) const
 {
-  shared_ptr<Node> node = map->getNode(nodeId);
+  boost::shared_ptr<Node> node = map->getNode(nodeId);
   Coordinate c = node->toCoordinate();
 
-  shared_ptr<Way> mid = map->getWay(_mid);
+  boost::shared_ptr<Way> mid = map->getWay(_mid);
 
-  shared_ptr<const Node> endNode;
+  boost::shared_ptr<const Node> endNode;
   NodePtr first = map->getNode(oneway->getNodeId(0));
   NodePtr last = map->getNode(oneway->getLastNodeId());
   double d0 = first->toCoordinate().distance(c);
@@ -221,7 +221,7 @@ void DividedHighwayManipulation::_createStub(shared_ptr<OsmMap> map, shared_ptr<
     otherUnknown = Status::Unknown1;
   }
 
-  shared_ptr<Way> stub(new Way(otherUnknown, map->createNextWayId(),
+  boost::shared_ptr<Way> stub(new Way(otherUnknown, map->createNextWayId(),
                                oneway->getRawCircularError()));
   stub->addNode(endNode->getId());
   stub->addNode(nodeId);
@@ -236,7 +236,7 @@ double DividedHighwayManipulation::_dotProduct(const Coordinate& c1, const Coord
   return c1.x * c2.x + c1.y * c2.y;
 }
 
-bool DividedHighwayManipulation::isValid(shared_ptr<const OsmMap> map) const
+bool DividedHighwayManipulation::isValid(boost::shared_ptr<const OsmMap> map) const
 {
   bool result = false;
   if (map->containsWay(_left) && map->containsWay(_right) && map->containsWay(_mid))
@@ -254,12 +254,12 @@ const set<ElementId>& DividedHighwayManipulation::getImpactedElementIds(const Co
   return _impactedElements;
 }
 
-void DividedHighwayManipulation::_mergeInbound(shared_ptr<OsmMap> map,
-  shared_ptr<Way> inbound, long nodeId) const
+void DividedHighwayManipulation::_mergeInbound(boost::shared_ptr<OsmMap> map,
+  boost::shared_ptr<Way> inbound, long nodeId) const
 {
-  shared_ptr<Way> left = map->getWay(_left);
-  shared_ptr<Way> right = map->getWay(_right);
-  shared_ptr<Node> node = map->getNode(nodeId);
+  boost::shared_ptr<Way> left = map->getWay(_left);
+  boost::shared_ptr<Way> right = map->getWay(_right);
+  boost::shared_ptr<Node> node = map->getNode(nodeId);
 
   // calculate the normalized vector from nodeId to the nearest end point on left.
   size_t inboundNodeIndex;
@@ -334,8 +334,8 @@ void DividedHighwayManipulation::_mergeInbound(shared_ptr<OsmMap> map,
   }
 }
 
-Coordinate DividedHighwayManipulation::_nearestVector(shared_ptr<Geometry> g1,
-                                                        shared_ptr<Geometry> g2) const
+Coordinate DividedHighwayManipulation::_nearestVector(boost::shared_ptr<Geometry> g1,
+                                                        boost::shared_ptr<Geometry> g2) const
 {
   Coordinate result;
 

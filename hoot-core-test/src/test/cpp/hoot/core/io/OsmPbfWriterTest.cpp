@@ -67,7 +67,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.read("test-files/ToyTestA.osm", map);
 
     OsmPbfWriter writer;
@@ -105,7 +105,7 @@ public:
 
     OsmPbfWriter writer;
 
-    shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    boost::shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     writer.writePb(n, &ss);
@@ -134,8 +134,8 @@ public:
 
     OsmPbfWriter writer;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Relation> r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
+    boost::shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<Relation> r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
     r->addElement("s", ElementId::node(1));
     r->addElement("t", ElementId::node(2));
     r->addElement("u", ElementId::node(3));
@@ -172,8 +172,8 @@ public:
 
     OsmPbfWriter writer;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
+    boost::shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -217,12 +217,12 @@ public:
     OsmMap::resetCounters();
     Tgs::Random::instance()->seed(0);
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    boost::shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
-    shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
+    boost::shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);

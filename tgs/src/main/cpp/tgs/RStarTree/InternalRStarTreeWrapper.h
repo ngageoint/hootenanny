@@ -84,7 +84,7 @@ namespace Tgs
       const std::vector<double>& maxBounds);
 
   private:
-    shared_ptr<HilbertRTree> _tree;
+   boost::shared_ptr<HilbertRTree> _tree;
     unsigned int _dimensions;
   };
 }

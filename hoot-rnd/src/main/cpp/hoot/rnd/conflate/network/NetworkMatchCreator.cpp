@@ -165,7 +165,7 @@ bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstO
   return _userCriterion->isSatisfied(element);
 }
 
-shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
+boost::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {

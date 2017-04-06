@@ -71,7 +71,7 @@ public:
 
   virtual Element* clone() const { return new Node(*this); }
 
-  virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const;
+  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
   double getX() const { return _nodeData.getX(); }
 

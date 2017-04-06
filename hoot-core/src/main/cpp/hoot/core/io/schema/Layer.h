@@ -50,13 +50,13 @@ class Layer
 public:
   Layer();
 
-  const shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
+  const boost::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 
   GeometryTypeId getGeometryType() const { return _geometryType; }
 
   QString getName() const { return _name; }
 
-  void setFeatureDefinition(shared_ptr<FeatureDefinition> fd) { _definition = fd; }
+  void setFeatureDefinition(boost::shared_ptr<FeatureDefinition> fd) { _definition = fd; }
 
   void setGeometryType(GeometryTypeId geometryType) { _geometryType = geometryType; }
 
@@ -67,7 +67,7 @@ public:
   void setFdName(QString name) { _fdname = name; }
 
 private:
-  shared_ptr<const FeatureDefinition> _definition;
+  boost::shared_ptr<const FeatureDefinition> _definition;
   geos::geom::GeometryTypeId _geometryType;
   QString _name;
   QString _fdname;

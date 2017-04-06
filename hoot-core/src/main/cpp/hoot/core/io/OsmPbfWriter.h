@@ -125,9 +125,9 @@ public:
    */
   virtual void write(boost::shared_ptr<const OsmMap> map);
 
-  void write(shared_ptr<const OsmMap> map, const QString& path);
+  void write(boost::shared_ptr<const OsmMap> map, const QString& path);
 
-  void write(shared_ptr<const OsmMap> map, ostream* strm);
+  void write(boost::shared_ptr<const OsmMap> map, ostream* strm);
 
   /**
    * Writes the head out to the specified output stream. This is useful when manually composing
@@ -139,47 +139,47 @@ public:
    * Write out a map in chunks. This may be called multiple times and must be precceded with a
    * call to intializePartial and finalized with a call to finalizePartial.
    */
-  void writePartial(const shared_ptr<const OsmMap>& map);
+  void writePartial(const boost::shared_ptr<const OsmMap>& map);
   /**
    * These silly non-const overloads are here to placate the old compiler in RHEL 5.8.
    */
-  void writePartial(const shared_ptr<OsmMap>& map) { writePartial((const shared_ptr<const OsmMap>)map); }
+  void writePartial(const boost::shared_ptr<OsmMap>& map) { writePartial((const boost::shared_ptr<const OsmMap>)map); }
 
-  void writePartial(const shared_ptr<const Node>& n);
-  void writePartial(const shared_ptr<Node>& n) { writePartial((const shared_ptr<const Node>)n); }
+  void writePartial(const boost::shared_ptr<const Node>& n);
+  void writePartial(const boost::shared_ptr<Node>& n) { writePartial((const boost::shared_ptr<const Node>)n); }
 
-  void writePartial(const shared_ptr<const Way>& w);
-  void writePartial(const shared_ptr<Way>& w) { writePartial((const shared_ptr<const Way>)w); }
+  void writePartial(const boost::shared_ptr<const Way>& w);
+  void writePartial(const boost::shared_ptr<Way>& w) { writePartial((const boost::shared_ptr<const Way>)w); }
 
-  void writePartial(const shared_ptr<const Relation>& r);
+  void writePartial(const boost::shared_ptr<const Relation>& r);
 
   /**
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const shared_ptr<const OsmMap>& map, ostream* strm);
-  void writePb(const shared_ptr<OsmMap>& map, ostream* strm) { writePb((const shared_ptr<const OsmMap>)map, strm); }
+  void writePb(const boost::shared_ptr<const OsmMap>& map, ostream* strm);
+  void writePb(const boost::shared_ptr<OsmMap>& map, ostream* strm) { writePb((const boost::shared_ptr<const OsmMap>)map, strm); }
 
   /**
    * Write a single node out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const shared_ptr<const Node>& n, ostream* strm);
-  void writePb(const shared_ptr<Node>& n, ostream* strm) { writePb((const shared_ptr<const Node>)n, strm); }
+  void writePb(const boost::shared_ptr<const Node>& n, ostream* strm);
+  void writePb(const boost::shared_ptr<Node>& n, ostream* strm) { writePb((const boost::shared_ptr<const Node>)n, strm); }
 
   /**
    * Write a single way out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const shared_ptr<const Way>& w, ostream* strm);
-  void writePb(const shared_ptr<Way>& w, ostream* strm) { writePb((const shared_ptr<const Way>)w, strm); }
+  void writePb(const boost::shared_ptr<const Way>& w, ostream* strm);
+  void writePb(const boost::shared_ptr<Way>& w, ostream* strm) { writePb((const boost::shared_ptr<const Way>)w, strm); }
 
   /**
    * Write a single way out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const shared_ptr<const Relation>& r, ostream* strm);
-  void writePb(const shared_ptr<Relation>& r, ostream* strm) { writePb((const shared_ptr<const Relation>)r, strm); }
+  void writePb(const boost::shared_ptr<const Relation>& r, ostream* strm);
+  void writePb(const boost::shared_ptr<Relation>& r, ostream* strm) { writePb((const boost::shared_ptr<const Relation>)r, strm); }
 
 private:
 
@@ -194,7 +194,7 @@ private:
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
   OsmPbfWriterData* _d;
   QHash<QString, int> _strings;
-  shared_ptr<const OsmMap> _map;
+  boost::shared_ptr<const OsmMap> _map;
   int _rawSize;
   pb::DenseNodes* _dn;
   pb::PrimitiveGroup* _pg;
@@ -219,7 +219,7 @@ private:
   long _relationIdDelta;
   auto_ptr<fstream> _openStream;
 
-  void _addTag(shared_ptr<Element> n, QString k, QString v);
+  void _addTag(boost::shared_ptr<Element> n, QString k, QString v);
 
   long _convertLon(double lon);
 
@@ -245,17 +245,17 @@ private:
   /**
    * Writes a node using the non-dense format.
    */
-  void _writeNode(const shared_ptr<const hoot::Node>& n);
+  void _writeNode(const boost::shared_ptr<const hoot::Node>& n);
 
-  void _writeNodeDense(const shared_ptr<const hoot::Node>& n);
+  void _writeNodeDense(const boost::shared_ptr<const hoot::Node>& n);
 
   void _writeOsmHeader(bool includeBounds = true, bool sorted = true);
 
   void _writePrimitiveBlock();
 
-  void _writeRelation(const shared_ptr<const hoot::Relation>& r);
+  void _writeRelation(const boost::shared_ptr<const hoot::Relation>& r);
 
-  void _writeWay(const shared_ptr<const hoot::Way>& w);
+  void _writeWay(const boost::shared_ptr<const hoot::Way>& w);
 };
 
 }

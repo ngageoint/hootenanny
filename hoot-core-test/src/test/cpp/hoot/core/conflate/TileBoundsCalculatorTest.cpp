@@ -58,16 +58,16 @@ class TileBoundsCalculatorTest : public CppUnit::TestFixture
 
 public:
 
-  void addEnvelope(shared_ptr<OsmMap> map, Envelope& e, int tx, int ty)
+  void addEnvelope(boost::shared_ptr<OsmMap> map, Envelope& e, int tx, int ty)
   {
-    shared_ptr<Way> w(new Way(Status::Unknown1, map->createNextWayId(), 10.0));
-    shared_ptr<Node> n1(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(),
+    boost::shared_ptr<Way> w(new Way(Status::Unknown1, map->createNextWayId(), 10.0));
+    boost::shared_ptr<Node> n1(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMinY(),
                                  10.0));
-    shared_ptr<Node> n2(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(),
+    boost::shared_ptr<Node> n2(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMinY(),
                                  10.0));
-    shared_ptr<Node> n3(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(),
+    boost::shared_ptr<Node> n3(new Node(Status::Unknown1, map->createNextNodeId(), e.getMinX(), e.getMaxY(),
                                  10.0));
-    shared_ptr<Node> n4(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(),
+    boost::shared_ptr<Node> n4(new Node(Status::Unknown1, map->createNextNodeId(), e.getMaxX(), e.getMaxY(),
                                  10.0));
 
     map->addNode(n1);
@@ -91,7 +91,7 @@ public:
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -105,7 +105,7 @@ public:
 
     vector< vector<Envelope> > e = uut.calculateTiles();
 
-    shared_ptr<OsmMap> bounds(new OsmMap());
+    boost::shared_ptr<OsmMap> bounds(new OsmMap());
 
     for (size_t tx = 0; tx < e.size(); tx++)
     {

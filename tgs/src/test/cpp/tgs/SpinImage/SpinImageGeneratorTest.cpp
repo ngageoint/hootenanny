@@ -236,7 +236,7 @@ for (unsigned int rai = 0; rai < ra.size(); rai++)
 for (unsigned int bi = 0; bi < b.size(); bi++)
 for (unsigned int si = 0; si < s.size(); si++)
 {
-      vector< shared_ptr<SpinImageStack> > stacks;
+      vector<boost::shared_ptr<SpinImageStack> > stacks;
 
       SpinImageGenerator gen;
       gen.setRelativeAngle(ra[rai]);
@@ -247,7 +247,7 @@ for (unsigned int si = 0; si < s.size(); si++)
       for (unsigned int i = 0; i < training.size(); i++)
       {
         cout << "Training " << training[i] << endl;
-        shared_ptr<SpinImageStack> stack(new SpinImageStack());
+       boost::shared_ptr<SpinImageStack> stack(new SpinImageStack());
         stacks.push_back(stack);
         PointCloud pc;
         pc.load(training[i]);
@@ -288,7 +288,7 @@ for (unsigned int si = 0; si < s.size(); si++)
             trainingStackIdx++)
           {
             std::vector<double> scores;
-            const shared_ptr<SpinImageStack> sig = stacks[trainingStackIdx];
+            const boost::shared_ptr<SpinImageStack> sig = stacks[trainingStackIdx];
             scores.reserve(sig->getSize());
   //           cout << " * comparing " << trainingType[trainingStackIdx];
             for (unsigned int imageIdx = 0; imageIdx < sig->getSize(); imageIdx++)

@@ -62,8 +62,8 @@ private:
   QMap<QString, double> _values;
 };
 
-typedef shared_ptr<State> StatePtr;
-typedef shared_ptr<const State> ConstStatePtr;
+typedef boost::shared_ptr<State> StatePtr;
+typedef boost::shared_ptr<const State> ConstStatePtr;
 
 inline uint qHash(const ConstStatePtr& s)
 {

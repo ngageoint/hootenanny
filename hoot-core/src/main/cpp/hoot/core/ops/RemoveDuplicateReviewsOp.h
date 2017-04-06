@@ -49,7 +49,7 @@ public:
 
   RemoveDuplicateReviewsOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual string getClassName() const { return className(); }
 
@@ -58,7 +58,7 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 };
 
 }

@@ -66,7 +66,7 @@ UnifyingConflator::UnifyingConflator() :
   _reset();
 }
 
-UnifyingConflator::UnifyingConflator(shared_ptr<MatchThreshold> matchThreshold) :
+UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance())
 {
@@ -116,7 +116,7 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
   }
 }
 
-void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
+void UnifyingConflator::apply(boost::shared_ptr<OsmMap>& map)
 {
   Timer timer;
   _reset();

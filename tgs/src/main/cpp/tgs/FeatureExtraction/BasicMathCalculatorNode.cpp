@@ -43,8 +43,8 @@ namespace Tgs
 
   double BinaryCalculatorNode::getOutput(const int uid) const
   {
-    shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
-    shared_ptr<CalculatorGenomeNode> v2 = getInput(V2());
+   boost::shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
+   boost::shared_ptr<CalculatorGenomeNode> v2 = getInput(V2());
     return _calculate(v1->getOutput(uid), v2->getOutput(uid));
   }
   
@@ -61,7 +61,7 @@ namespace Tgs
 
   double UnaryCalculatorNode::getOutput(const int uid) const
   {
-    shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
+   boost::shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
     return _calculate(v1->getOutput(uid));
   }
 

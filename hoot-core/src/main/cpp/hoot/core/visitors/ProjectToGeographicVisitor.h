@@ -46,14 +46,14 @@ public:
   ProjectToGeographicVisitor();
   ~ProjectToGeographicVisitor();
 
-  void initialize(shared_ptr<OGRSpatialReference>& projection);
+  void initialize(boost::shared_ptr<OGRSpatialReference>& projection);
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
 private:
 
   OGRCoordinateTransformation* _transform;
-  shared_ptr<ReprojectCoordinateFilter> _rcf;
+ boost::shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }

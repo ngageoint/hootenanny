@@ -63,13 +63,13 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-   // shared_ptr<const Way> w = _provider->getWay(e->getId());
-    shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
+   //boost::shared_ptr<const Way> w = _provider->getWay(e->getId());
+   boost::shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
     visit(w);
   }
 }
 
-void MultiLineStringVisitor::visit(const shared_ptr<const Way>& w)
+void MultiLineStringVisitor::visit(const boost::shared_ptr<const Way>& w)
 {
   if (w->getNodeCount() >= 2)
   {

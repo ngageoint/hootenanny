@@ -44,7 +44,7 @@ using namespace Tgs;
 #include <tgs/Statistics/Random.h>
 
 
-HilbertRTree::HilbertRTree(shared_ptr<PageStore> ps, int dimensions) :
+HilbertRTree::HilbertRTree(boost::shared_ptr<PageStore> ps, int dimensions) :
   RStarTree(ps, dimensions)
 {
   _hilbertCurve = new HilbertCurve(dimensions, 8);

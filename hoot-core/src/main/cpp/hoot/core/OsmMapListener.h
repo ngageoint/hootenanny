@@ -37,7 +37,7 @@ public:
 
   virtual ~OsmMapListener() {}
 
-  virtual shared_ptr<OsmMapListener> clone() const = 0;
+  virtual boost::shared_ptr<OsmMapListener> clone() const = 0;
 
   /**
    * Gets called before a node is replaced.

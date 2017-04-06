@@ -68,7 +68,7 @@ public:
 
     @see ElementVisitor
     */
-  virtual void visit(const shared_ptr<Element>& element);
+  virtual void visit(const boost::shared_ptr<Element>& element);
 
   /**
     @see RngConsumer
@@ -107,9 +107,9 @@ private:
   double _wayGeneralizeProbability;
   double _epsilon;
 
-  shared_ptr<RdpWayGeneralizer> _generalizer;
+ boost::shared_ptr<RdpWayGeneralizer> _generalizer;
 
-  void _generalize(const shared_ptr<Way>& way);
+  void _generalize(const boost::shared_ptr<Way>& way);
 
 };
 

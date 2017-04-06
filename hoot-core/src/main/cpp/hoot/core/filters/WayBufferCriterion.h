@@ -61,19 +61,19 @@ public:
    * @param circularError circular error of baseLine
    */
   WayBufferCriterion(ConstOsmMapPtr map,
-                     shared_ptr<LineString> baseLine,
+                     boost::shared_ptr<LineString> baseLine,
                      Meters buffer,
                      Meters circularError,
                      double matchPercent);
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   WayBufferCriterion* clone() { return new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent); }
 
 private:
   Meters _buffer;
-  mutable shared_ptr<Geometry> _baseBuffered;
-  shared_ptr<LineString> _baseLs;
+  mutable boost::shared_ptr<Geometry> _baseBuffered;
+  boost::shared_ptr<LineString> _baseLs;
 
   // Anything outside the given bounds cannot be within maxDistance
   mutable Envelope _boundsPlus;

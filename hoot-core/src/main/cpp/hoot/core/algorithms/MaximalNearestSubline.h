@@ -93,7 +93,7 @@ public:
    */
   const std::vector<WayLocation>& getInterval();
 
-  static shared_ptr<Way> getMaximalNearestSubline(const OsmMapPtr &map, ConstWayPtr a,
+  static boost::shared_ptr<Way> getMaximalNearestSubline(const OsmMapPtr &map, ConstWayPtr a,
     ConstWayPtr b, Meters minSplitSize, Meters maxRelevantDistance);
 
   /**
@@ -102,16 +102,16 @@ public:
    * The resulting ways will not be placed in map.
    * @param mnsIndex The index of way that is the MNS is placed in mnsIndex.
    */
-  vector< shared_ptr<Way> > splitWay(shared_ptr<OsmMap> map) { int a; return splitWay(map, a); }
-  vector< shared_ptr<Way> > splitWay(shared_ptr<OsmMap> map, int& mnsIndex);
+  vector< boost::shared_ptr<Way> > splitWay(boost::shared_ptr<OsmMap> map) { int a; return splitWay(map, a); }
+  vector< boost::shared_ptr<Way> > splitWay(boost::shared_ptr<OsmMap> map, int& mnsIndex);
 
 private:
 
   ConstWayPtr _a, _b;
   LocationOfPoint _aPtLocator;
   std::vector<WayLocation> _maxInterval;
-  shared_ptr<const Node> _endNode;
-  shared_ptr<const Node> _startNode;
+  boost::shared_ptr<const Node> _endNode;
+  boost::shared_ptr<const Node> _startNode;
   Meters _minSplitSize;
   ConstOsmMapPtr _map;
   Meters _maxRelevantDistance;
@@ -123,7 +123,7 @@ private:
    */
   WayLocation _searchStart;
 
-  std::vector< shared_ptr<Node> > _createdNodes;
+  std::vector< boost::shared_ptr<Node> > _createdNodes;
 
   Meters _calculateIntervalLength();
 
@@ -134,16 +134,16 @@ private:
   /**
    * Returns the end node in the MNS.
    */
-  shared_ptr<const Node> _getEndNode();
+  boost::shared_ptr<const Node> _getEndNode();
 
   const vector<WayLocation>& _getInterval();
 
   /**
    * Returns the start node in the MNS
    */
-  shared_ptr<const Node> _getStartNode();
+  boost::shared_ptr<const Node> _getStartNode();
 
-  bool _isInBounds(const WayLocation& wl, const shared_ptr<LineString>& ls);
+  bool _isInBounds(const WayLocation& wl, const boost::shared_ptr<LineString>& ls);
 
   bool _isOutsideInterval(int ia);
 };

@@ -59,7 +59,7 @@ namespace Tgs
     /**
      * This evaluator will be used to evaluate the fitness of a factor subset.
      */
-    virtual void setEvaluator(shared_ptr<FactorSubsetEvaluator> fe) = 0;
+    virtual void setEvaluator(boost::shared_ptr<FactorSubsetEvaluator> fe) = 0;
   };
 }
 

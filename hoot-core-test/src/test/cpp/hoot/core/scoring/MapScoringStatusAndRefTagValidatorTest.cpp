@@ -66,7 +66,7 @@ public:
     OsmMap::resetCounters();
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map1(new OsmMap());
+    boost::shared_ptr<OsmMap> map1(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(
       "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map1);
@@ -75,7 +75,7 @@ public:
       "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref2-tags-only.osm", map1);
     CPPUNIT_ASSERT(MapScoringStatusAndRefTagValidator::allTagsAreValid(map1));
 
-    shared_ptr<OsmMap> map2(new OsmMap());
+    boost::shared_ptr<OsmMap> map2(new OsmMap());
     reader.setDefaultStatus(Status::Unknown2);
     reader.read(
       "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map2);
@@ -84,7 +84,7 @@ public:
       "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref2-tags-only.osm", map2);
     CPPUNIT_ASSERT(!MapScoringStatusAndRefTagValidator::allTagsAreValid(map2));
 
-    shared_ptr<OsmMap> map3(new OsmMap());
+    boost::shared_ptr<OsmMap> map3(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(
       "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map3);
@@ -93,7 +93,7 @@ public:
       "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref1-tags-only.osm", map3);
     CPPUNIT_ASSERT(!MapScoringStatusAndRefTagValidator::allTagsAreValid(map3));
 
-    shared_ptr<OsmMap> map4(new OsmMap());
+    boost::shared_ptr<OsmMap> map4(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(
       "test-files/scoring/MapScoringStatusAndRefTagValidatorTest/has-ref2-tags-only.osm", map4);

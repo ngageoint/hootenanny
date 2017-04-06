@@ -59,7 +59,7 @@ class MultiLineStringLocation
      * @param wayLocation the location along the way at @a wayIndex where the multi-line string
      *        location resides
      */
-    MultiLineStringLocation(shared_ptr<const OsmMap> map, shared_ptr<const Relation> relation,
+    MultiLineStringLocation(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Relation> relation,
                             const int wayIndex, const WayLocation& wayLocation);
 
     /**

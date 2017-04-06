@@ -78,18 +78,18 @@ public:
    * path + "Polygon.shp"
    * path + "Line.shp"
    */
-  void write(shared_ptr<const OsmMap> map);
+  void write(boost::shared_ptr<const OsmMap> map);
 
   /**
    * @deprecated Use open and write instead.
    */
-  void write(shared_ptr<const OsmMap> map, QString path);
+  void write(boost::shared_ptr<const OsmMap> map, QString path);
 
-  void writeLines(shared_ptr<const OsmMap> map, const QString& path);
+  void writeLines(boost::shared_ptr<const OsmMap> map, const QString& path);
 
-  void writePoints(shared_ptr<const OsmMap> map, const QString& path);
+  void writePoints(boost::shared_ptr<const OsmMap> map, const QString& path);
 
-  void writePolygons(shared_ptr<const OsmMap> map, const QString& path);
+  void writePolygons(boost::shared_ptr<const OsmMap> map, const QString& path);
 
 protected:
   QStringList _columns;
@@ -100,10 +100,10 @@ protected:
 
   void _removeShapefile(QString path);
 
-  void _writeRelationPolygon(const ConstOsmMapPtr& map, const shared_ptr<Relation> &relation,
+  void _writeRelationPolygon(const ConstOsmMapPtr& map, const boost::shared_ptr<Relation> &relation,
     OGRLayer *poLayer, const QStringList &columns, const QStringList &shpColumns);
 
-  void _writeWayPolygon(const ConstOsmMapPtr& map, const shared_ptr<Way>& way, OGRLayer *poLayer,
+  void _writeWayPolygon(const ConstOsmMapPtr& map, const boost::shared_ptr<Way>& way, OGRLayer *poLayer,
     const QStringList& columns, const QStringList &shpColumns);
 };
 

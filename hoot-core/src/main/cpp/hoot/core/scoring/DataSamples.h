@@ -53,7 +53,7 @@ public:
 
   vector<string> getUniqueLabels() const;
 
-  shared_ptr<DataFrame> toDataFrame(double nullValue) const;
+ boost::shared_ptr<DataFrame> toDataFrame(double nullValue) const;
 
   const Sample& get(size_t i) const { return operator[](i); }
 

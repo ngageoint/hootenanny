@@ -69,7 +69,7 @@ public:
   void runMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+   boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);

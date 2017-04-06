@@ -233,12 +233,12 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
 
   // read the conflation status from the file.
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-  shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;
-  shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
   cso->apply(map);
   allStats.append(cso->getStats());
 

@@ -46,7 +46,7 @@ WayFeatureExtractor::WayFeatureExtractor(ValueAggregator *agg)
 }
 
 double WayFeatureExtractor::extract(const OsmMap& map,
-  const shared_ptr<const Element>& target, const shared_ptr<const Element>& candidate) const
+  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element>& candidate) const
 {
   vector<double> scores;
 

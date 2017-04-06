@@ -50,7 +50,7 @@ void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-    const shared_ptr<const Way> w = _map->getWay(e->getId());
+    const boost::shared_ptr<const Way> w = _map->getWay(e->getId());
     _total += ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
   }
 }

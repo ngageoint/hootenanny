@@ -51,7 +51,7 @@ public:
    * A new map is created and the eids specified in the constructor and their depedencies will be
    * copied into the new map. The @a map will be set to point to the new map.
    */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
 private:
   set<ElementId> _eids;

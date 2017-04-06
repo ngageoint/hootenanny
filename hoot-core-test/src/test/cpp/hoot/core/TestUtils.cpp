@@ -50,7 +50,7 @@
 namespace hoot
 {
 
-shared_ptr<TestUtils> TestUtils::_theInstance;
+boost::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 TestUtils::TestUtils()
 {
@@ -63,14 +63,14 @@ bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 
-  shared_ptr<OsmMap> ref(new OsmMap());
-  shared_ptr<OsmMap> test(new OsmMap());
+  boost::shared_ptr<OsmMap> ref(new OsmMap());
+  boost::shared_ptr<OsmMap> test(new OsmMap());
   reader.read(refPath, ref);
   reader.read(testPath, test);
   return compareMaps(ref, test);
 }
 
-bool TestUtils::compareMaps(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test)
+bool TestUtils::compareMaps(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)
 {
   return MapComparator().isMatch(ref, test);
 }
@@ -172,7 +172,7 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
-shared_ptr<TestUtils> TestUtils::getInstance()
+boost::shared_ptr<TestUtils> TestUtils::getInstance()
 {
   if (!_theInstance)
   {

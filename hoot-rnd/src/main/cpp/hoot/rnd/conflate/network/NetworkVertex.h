@@ -64,8 +64,8 @@ private:
   static int uidCount;
 };
 
-typedef shared_ptr<NetworkVertex> NetworkVertexPtr;
-typedef shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
+typedef boost::shared_ptr<NetworkVertex> NetworkVertexPtr;
+typedef boost::shared_ptr<const NetworkVertex> ConstNetworkVertexPtr;
 
 inline bool operator<(const NetworkVertexPtr& v1, const NetworkVertexPtr& v2)
 {

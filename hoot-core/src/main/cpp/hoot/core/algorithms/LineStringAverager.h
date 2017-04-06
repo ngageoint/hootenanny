@@ -41,15 +41,15 @@ namespace hoot
 class LineStringAverager
 {
 public:
-  LineStringAverager(shared_ptr<LineString> l1, shared_ptr<LineString> l2);
+  LineStringAverager(boost::shared_ptr<LineString> l1, boost::shared_ptr<LineString> l2);
 
-  shared_ptr<LineString> average();
+  boost::shared_ptr<LineString> average();
 
-  static shared_ptr<LineString> average(shared_ptr<LineString> l1, shared_ptr<LineString> l2);
+  static boost::shared_ptr<LineString> average(boost::shared_ptr<LineString> l1, boost::shared_ptr<LineString> l2);
 
 protected:
-  shared_ptr<LineString> _l1;
-  shared_ptr<LineString> _l2;
+  boost::shared_ptr<LineString> _l1;
+  boost::shared_ptr<LineString> _l2;
 
   Coordinate _merge(const Coordinate& c1, const Coordinate& c2);
 

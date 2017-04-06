@@ -53,7 +53,7 @@ public:
 
   virtual ~NamedOp() {}
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual void setConfiguration(const Settings& conf);
 

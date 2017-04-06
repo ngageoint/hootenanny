@@ -55,9 +55,9 @@ class LocationOfPoint
 {
 public:
 
-  LocationOfPoint(const ConstOsmMapPtr& map, shared_ptr<const Way> way);
+  LocationOfPoint(const ConstOsmMapPtr& map, boost::shared_ptr<const Way> way);
 
-  static WayLocation locate(const ConstOsmMapPtr &map, shared_ptr<const Way> way,
+  static WayLocation locate(const ConstOsmMapPtr &map, boost::shared_ptr<const Way> way,
     const Coordinate &inputPt);
 
   /**
@@ -107,7 +107,7 @@ public:
 
 private:
   ConstOsmMapPtr _map;
-  shared_ptr<const Way> _way;
+  boost::shared_ptr<const Way> _way;
   mutable double _length;
 
 };

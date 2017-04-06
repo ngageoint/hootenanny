@@ -39,7 +39,7 @@ InWayNodeFilter::InWayNodeFilter(FilterType type, const OsmMap& map, const vecto
   _type = type;
   for (size_t i = 0; i < wids.size(); i++)
   {
-    shared_ptr<const Way> w = map.getWay(wids[i]);
+    boost::shared_ptr<const Way> w = map.getWay(wids[i]);
     const vector<long>& nids = w->getNodeIds();
 
     _nids.insert(nids.begin(), nids.end());

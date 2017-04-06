@@ -35,7 +35,7 @@ Schema::Schema()
 {
 }
 
-shared_ptr<const Layer> Schema::getLayer(QString name) const
+boost::shared_ptr<const Layer> Schema::getLayer(QString name) const
 {
   for (size_t i = 0; i < _layers.size(); i++)
   {

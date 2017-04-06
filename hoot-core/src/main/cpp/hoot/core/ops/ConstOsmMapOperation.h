@@ -46,13 +46,13 @@ public:
 
   virtual ~ConstOsmMapOperation() {}
 
-  virtual void apply(shared_ptr<OsmMap>& map) { apply((const shared_ptr<OsmMap>&)map); }
+  virtual void apply(boost::shared_ptr<OsmMap>& map) { apply((const boost::shared_ptr<OsmMap>&)map); }
 
   /**
    * This guarantees that we won't actually change the map pointer, although the map itself may
    * still be changed.
    */
-  virtual void apply(const shared_ptr<OsmMap>& map) = 0;
+  virtual void apply(const boost::shared_ptr<OsmMap>& map) = 0;
 
 };
 

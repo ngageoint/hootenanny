@@ -64,21 +64,21 @@ public:
    *
    * The default write function writes nodes, ways, then relations.
    */
-  virtual void writePartial(const shared_ptr<const Element>& e);
-  virtual void writePartial(const shared_ptr<const OsmMap>& map);
+  virtual void writePartial(const boost::shared_ptr<const Element>& e);
+  virtual void writePartial(const boost::shared_ptr<const OsmMap>& map);
   /**
    * These silly non-const overloads are here to placate the old compiler in RHEL 5.8.
    */
-  void writePartial(const shared_ptr<OsmMap>& map);
+  void writePartial(const boost::shared_ptr<OsmMap>& map);
 
-  virtual void writePartial(const shared_ptr<const Node>& n) = 0;
-  void writePartial(const shared_ptr<Node>& n) { writePartial((const shared_ptr<const Node>)n); }
+  virtual void writePartial(const boost::shared_ptr<const Node>& n) = 0;
+  void writePartial(const boost::shared_ptr<Node>& n) { writePartial((const boost::shared_ptr<const Node>)n); }
 
-  virtual void writePartial(const shared_ptr<const Way>& w) = 0;
-  void writePartial(const shared_ptr<Way>& w) { writePartial((const shared_ptr<const Way>)w); }
+  virtual void writePartial(const boost::shared_ptr<const Way>& w) = 0;
+  void writePartial(const boost::shared_ptr<Way>& w) { writePartial((const boost::shared_ptr<const Way>)w); }
 
-  virtual void writePartial(const shared_ptr<const Relation>& r) = 0;
-  void writePartial(const shared_ptr<Relation>& r);
+  virtual void writePartial(const boost::shared_ptr<const Relation>& r) = 0;
+  void writePartial(const boost::shared_ptr<Relation>& r);
 
   virtual void writeElement(ElementInputStream& in);
 

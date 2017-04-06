@@ -54,7 +54,7 @@ class MapMatchScoringUtils
       @param matchComparator a match comparator populated during scoring of conflation results
       @return a printable string with scoring results
       */
-    static QString getMatchScoringString(shared_ptr<const MatchComparator> matchComparator);
+    static QString getMatchScoringString(boost::shared_ptr<const MatchComparator> matchComparator);
 
 };
 

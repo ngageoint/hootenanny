@@ -53,7 +53,7 @@ namespace Tgs
      * Creates a new page w/ a new id and returns the page. All page shared pointers should be 
      * freed before the PageStore is destroyed.
      */
-    virtual shared_ptr<Page> createPage() = 0;
+    virtual boost::shared_ptr<Page> createPage() = 0;
 
     /**
      * Saves all dirty pages and frees all memory.
@@ -63,7 +63,7 @@ namespace Tgs
     /**
      * Returns the page with the given id.
      */
-    virtual shared_ptr<Page> getPage(int id) = 0;
+    virtual boost::shared_ptr<Page> getPage(int id) = 0;
 
     /**
      * Returns the number of pages in this page store

@@ -118,15 +118,15 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   {
     unsigned long startingNodeId;
     unsigned long currentNodeId;
-    shared_ptr<BigMap<long, unsigned long> > nodeIdMap;
+    boost::shared_ptr<BigMap<long, unsigned long> > nodeIdMap;
 
     unsigned long startingWayId;
     unsigned long currentWayId;
-    shared_ptr<BigMap<long, unsigned long> > wayIdMap;
+    boost::shared_ptr<BigMap<long, unsigned long> > wayIdMap;
 
     unsigned long startingRelationId;
     unsigned long currentRelationId;
-    shared_ptr<BigMap<long, unsigned long> > relationIdMap;
+    boost::shared_ptr<BigMap<long, unsigned long> > relationIdMap;
   };
 
   struct ChangesetData
@@ -149,7 +149,7 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   struct UnresolvedReferences
   {
     //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
-    shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
+    boost::shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
 
 public:
@@ -222,7 +222,7 @@ private:
   QString _outputFilesCopyLocation;
   QString _outputUrl;
   QString _outputDelimiter;
-  shared_ptr<QFile> _sqlOutputCombinedFile;
+  boost::shared_ptr<QFile> _sqlOutputCombinedFile;
   bool _reserveRecordIdsBeforeWritingData;
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
@@ -231,12 +231,12 @@ private:
   QMap<QString, QString> _outputFormatStrings;
 
   //ended up not going with temp files here, since the file outputs aren't always temporary
-  map<QString, pair<shared_ptr<QFile>, shared_ptr<QTextStream> > > _outputSections;
+  map<QString, pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
 
-  shared_ptr<QElapsedTimer> _timer;
+  boost::shared_ptr<QElapsedTimer> _timer;
 
   unsigned int _convertDegreesToNanodegrees(const double degrees) const;
   QString _formatPotentiallyLargeNumber(const unsigned long number);
@@ -283,8 +283,8 @@ private:
   void _writeWayNodesToStream(const unsigned long wayId, const vector<long>& wayNodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
-                          const unsigned long dbId, shared_ptr<QTextStream>& currentTable,
-                          shared_ptr<QTextStream>& historicalTable);
+                          const unsigned long dbId, boost::shared_ptr<QTextStream>& currentTable,
+                          boost::shared_ptr<QTextStream>& historicalTable);
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();

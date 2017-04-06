@@ -48,7 +48,7 @@ using namespace geos::operation::distance;
 namespace hoot
 {
 
-WayAverager::WayAverager(OsmMapPtr map, shared_ptr<Way> w1, shared_ptr<Way> w2) :
+WayAverager::WayAverager(OsmMapPtr map, boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2) :
     _map(*map)
 {
   if (w1->getStatus() == Status::Unknown2 && w2->getStatus() == Status::Unknown1)
@@ -63,7 +63,7 @@ WayAverager::WayAverager(OsmMapPtr map, shared_ptr<Way> w1, shared_ptr<Way> w2) 
   }
 }
 
-shared_ptr<Way> WayAverager::average()
+boost::shared_ptr<Way> WayAverager::average()
 {
   _sumMovement1 = 0.0;
   _sumMovement2 = 0.0;
@@ -84,9 +84,9 @@ shared_ptr<Way> WayAverager::average()
     }
   }
 
-  shared_ptr<const LineString> ls1 = ElementConverter(_map.shared_from_this()).
+  boost::shared_ptr<const LineString> ls1 = ElementConverter(_map.shared_from_this()).
       convertToLineString(_w1);
-  shared_ptr<const LineString> ls2 = ElementConverter(_map.shared_from_this()).
+  boost::shared_ptr<const LineString> ls2 = ElementConverter(_map.shared_from_this()).
       convertToLineString(_w2);
 
   // All of the fancy stats here are compliments of Mike Porter.
@@ -103,7 +103,7 @@ shared_ptr<Way> WayAverager::average()
 
   Meters newAcc = 2.0 * sqrt(weight1 * weight1 * v1 + weight2 * weight2 * v2);
 
-  shared_ptr<Way> result(new Way(_w1->getStatus(), _map.createNextWayId(),
+  boost::shared_ptr<Way> result(new Way(_w1->getStatus(), _map.createNextWayId(),
                                  newAcc));
 
   _map.addWay(result);
@@ -165,7 +165,7 @@ shared_ptr<Way> WayAverager::average()
   return result;
 }
 
-shared_ptr<Way> WayAverager::average(OsmMapPtr map, shared_ptr<Way> w1, shared_ptr<Way> w2)
+boost::shared_ptr<Way> WayAverager::average(OsmMapPtr map, boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2)
 {
   WayAverager wa(map, w1, w2);
   return wa.average();
@@ -173,8 +173,8 @@ shared_ptr<Way> WayAverager::average(OsmMapPtr map, shared_ptr<Way> w1, shared_p
 
 long WayAverager::_merge(long ni1, double weight1, long ni2, double weight2)
 {
-  shared_ptr<Node> n1 = _map.getNode(ni1);
-  shared_ptr<Node> n2 = _map.getNode(ni2);
+  boost::shared_ptr<Node> n1 = _map.getNode(ni1);
+  boost::shared_ptr<Node> n2 = _map.getNode(ni2);
 
   Meters d = n1->toCoordinate().distance(n2->toCoordinate());
 
@@ -186,7 +186,7 @@ long WayAverager::_merge(long ni1, double weight1, long ni2, double weight2)
   _moveCount2++;
   _maxMovement2 = max(_maxMovement2, d * weight1);
 
-  shared_ptr<Node> node(new Node(Status::Conflated, _map.createNextNodeId(),
+  boost::shared_ptr<Node> node(new Node(Status::Conflated, _map.createNextNodeId(),
                                  n1->getX() * weight1 + n2->getX() * weight2,
                                  n1->getY() * weight1 + n2->getY() * weight2,
                                  std::min(n1->getCircularError(), n2->getCircularError())));
@@ -202,7 +202,7 @@ long WayAverager::_merge(long ni1, double weight1, long ni2, double weight2)
 long WayAverager::_moveToLine(long ni, double nWeight, const LineString* ls, double lWeight,
   int w1OrW2)
 {
-  shared_ptr<Node> n = _map.getNode(ni);
+  boost::shared_ptr<Node> n = _map.getNode(ni);
   Coordinate c = _moveToLineAsCoordinate(ni, nWeight, ls, lWeight);
 
   Meters d = c.distance(n->toCoordinate());
@@ -229,7 +229,7 @@ long WayAverager::_moveToLine(long ni, double nWeight, const LineString* ls, dou
 Coordinate WayAverager::_moveToLineAsCoordinate(long ni, double nWeight, const LineString* ls,
                                                 double lWeight)
 {
-  shared_ptr<Node> n = _map.getNode(ni);
+  boost::shared_ptr<Node> n = _map.getNode(ni);
   Point* point(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 
   // find the two closest points

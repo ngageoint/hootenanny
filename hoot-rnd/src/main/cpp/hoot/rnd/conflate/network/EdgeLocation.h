@@ -77,7 +77,7 @@ public:
 
   bool isValid() const { return _portion >= 0.0 && _portion <= 1.0; }
 
-  shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
+ boost::shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
 
   QString toString() const;
 
@@ -88,8 +88,8 @@ private:
 
 };
 
-typedef shared_ptr<EdgeLocation> EdgeLocationPtr;
-typedef shared_ptr<const EdgeLocation> ConstEdgeLocationPtr;
+typedef boost::shared_ptr<EdgeLocation> EdgeLocationPtr;
+typedef boost::shared_ptr<const EdgeLocation> ConstEdgeLocationPtr;
 
 inline bool operator==(const ConstEdgeLocationPtr& a, const ConstEdgeLocationPtr& b)
 {

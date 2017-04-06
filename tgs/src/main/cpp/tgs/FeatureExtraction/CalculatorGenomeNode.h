@@ -44,7 +44,7 @@ namespace Tgs
   public:
     virtual ~CalculatorGenomeNodeFactory() {}
 
-    virtual shared_ptr<CalculatorGenomeNode> createNode(const std::string& id) const = 0;
+    virtual boost::shared_ptr<CalculatorGenomeNode> createNode(const std::string& id) const = 0;
   };
 
   class TGS_EXPORT CalculatorGenomeNode : public TreeGenomeNode
@@ -58,11 +58,11 @@ namespace Tgs
 
     virtual void clearCache() {}
 
-    virtual shared_ptr<TreeGenomeNode> clone() const;
+    virtual boost::shared_ptr<TreeGenomeNode> clone() const;
 
     virtual void copy(const TreeGenomeNode& from);
 
-    std::string findInput(shared_ptr<CalculatorGenomeNode> node);
+    std::string findInput(boost::shared_ptr<CalculatorGenomeNode> node);
 
     virtual std::string getClassName() const;
 
@@ -76,7 +76,7 @@ namespace Tgs
 
     std::string getId() const { return _id; }
 
-    shared_ptr<CalculatorGenomeNode> getInput(const std::string& name) const;
+   boost::shared_ptr<CalculatorGenomeNode> getInput(const std::string& name) const;
 
     /**
      * Gets the output for the specified unique identifier. Typically this will call getOutput
@@ -89,7 +89,7 @@ namespace Tgs
     virtual void save(std::ostream& s, const std::string indent = "");
 
     virtual void setInput(const std::string& name, CalculatorGenomeNode* node);
-    virtual void setInput(const std::string& name, shared_ptr<CalculatorGenomeNode> node);
+    virtual void setInput(const std::string& name,boost::shared_ptr<CalculatorGenomeNode> node);
 
     virtual void setId(const std::string& id) { _id = id; }
 
@@ -117,7 +117,7 @@ namespace Tgs
     virtual std::string _toLabel() const = 0;
 
   private:
-    std::map<std::string, shared_ptr<CalculatorGenomeNode> > _inputs;
+    std::map<std::string,boost::shared_ptr<CalculatorGenomeNode> > _inputs;
     std::string _id;
   };
 }

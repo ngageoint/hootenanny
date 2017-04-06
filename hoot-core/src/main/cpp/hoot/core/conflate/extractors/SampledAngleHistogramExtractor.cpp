@@ -60,7 +60,7 @@ public:
 
   }
 
-  virtual void visit(const shared_ptr<const Element>& e)
+  virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     if (e->getElementType() == ElementType::Way)
     {

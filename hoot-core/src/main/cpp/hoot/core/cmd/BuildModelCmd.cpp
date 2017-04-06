@@ -95,13 +95,13 @@ public:
       {
         mc->setArguments(args);
       }
-      mfe.addMatchCreator(shared_ptr<MatchCreator>(mc));
+      mfe.addMatchCreator(boost::shared_ptr<MatchCreator>(mc));
     }
 
     for (int i = 0; i < args.size() - 1; i+=2)
     {
       LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
 
       loadMap(map, args[i], false, Status::Unknown1);
       loadMap(map, args[i + 1], false, Status::Unknown2);
@@ -120,7 +120,7 @@ public:
 
     // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
     // ideally we'll circle back and update RF to use null values.
-    shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
+    boost::shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
 
     Tgs::Random::instance()->seed(0);
     RandomForest rf;

@@ -48,7 +48,7 @@ RemoveElementOp::RemoveElementOp(ElementId eId, bool doCheck):
 {
 }
 
-void RemoveElementOp::apply(shared_ptr<OsmMap>& map)
+void RemoveElementOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   if (ElementType::Node == _eIdToRemove.getType().getEnum())
   {

@@ -54,12 +54,12 @@ public:
 
   DuplicateWayRemover();
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Remove parts of ways that are duplicates.
    */
-  static void removeDuplicates(shared_ptr<OsmMap> map);
+  static void removeDuplicates(boost::shared_ptr<OsmMap> map);
 
   /**
    * see duplicate.way.remover.strict.tag.matching
@@ -76,16 +76,16 @@ public:
 
 protected:
 
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
   bool _isCandidateWay(const ConstWayPtr& w) const;
 
-  void _removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2);
+  void _removeDuplicateNodes(boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
 
-  void _removeNodes(shared_ptr<const Way> w, int start, int length);
+  void _removeNodes(boost::shared_ptr<const Way> w, int start, int length);
 
-  void _replaceMultiple(const shared_ptr<const Way>& oldWay,
-    const shared_ptr<Way>& newWay1, const shared_ptr<Way>& newWay2);
+  void _replaceMultiple(const boost::shared_ptr<const Way>& oldWay,
+    const boost::shared_ptr<Way>& newWay1, const boost::shared_ptr<Way>& newWay2);
 
  private:
 

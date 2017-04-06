@@ -50,13 +50,13 @@ ProjectToGeographicVisitor::~ProjectToGeographicVisitor()
     OGRCoordinateTransformation::DestroyCT(_transform);
 }
 
-void ProjectToGeographicVisitor::initialize(shared_ptr<OGRSpatialReference>& projection)
+void ProjectToGeographicVisitor::initialize(boost::shared_ptr<OGRSpatialReference>& projection)
 {
   _transform = OGRCreateCoordinateTransformation(projection.get(), MapProjector::createWgs84Projection().get());
-  _rcf = shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
+  _rcf =boost::shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
 }
 
-void ProjectToGeographicVisitor::visit(const shared_ptr<Element>& e)
+void ProjectToGeographicVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getElementType().getEnum() == ElementType::Node)
   {

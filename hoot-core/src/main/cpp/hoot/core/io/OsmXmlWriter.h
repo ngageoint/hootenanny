@@ -119,9 +119,9 @@ private:
   static QString _typeName(ElementType e);
 
   void _writeMetadata(QXmlStreamWriter& writer, const Element* e);
-  void _writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
-  void _writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
-  void _writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
+  void _writeNodes(boost::shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
+  void _writeWays(boost::shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
+  void _writeRelations(boost::shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
 };
 
 } // hoot

@@ -46,7 +46,7 @@ using namespace std;
 
 namespace Tgs
 {
-  CfsFitnessFunction::CfsFitnessFunction(shared_ptr<DataFrame> df, const std::vector<int>& uids)
+  CfsFitnessFunction::CfsFitnessFunction(boost::shared_ptr<DataFrame> df, const std::vector<int>& uids)
   {
     _baseCopy.reset(new DataFrame());
     std::vector<std::string> factorLabels;
@@ -84,9 +84,9 @@ namespace Tgs
 
   }
 
-  shared_ptr<DataFrame> CfsFitnessFunction::_addOneFactor(shared_ptr<DataFrame> df)
+ boost::shared_ptr<DataFrame> CfsFitnessFunction::_addOneFactor(boost::shared_ptr<DataFrame> df)
   {
-    shared_ptr<DataFrame> result(new DataFrame());
+   boost::shared_ptr<DataFrame> result(new DataFrame());
     std::vector<std::string> factorLabels = df->getFactorLabels();
     stringstream strm;
     strm << "f" << factorLabels.size();
@@ -103,9 +103,9 @@ namespace Tgs
     return result;
   }
 
-  void CfsFitnessFunction::addFeature(shared_ptr<Genome> genome)
+  void CfsFitnessFunction::addFeature(boost::shared_ptr<Genome> genome)
   {
-    shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
+   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
     _baseScore = calculateFitness(*cg);
     _loadGenome(*cg);
     _baseCopy = _addOneFactor(_baseCopy);

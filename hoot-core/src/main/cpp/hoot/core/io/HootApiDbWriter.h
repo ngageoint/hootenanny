@@ -81,11 +81,11 @@ public:
 
   void setUserEmail(QString email) { _userEmail = email; }
 
-  virtual void writePartial(const shared_ptr<const Node>& n);
+  virtual void writePartial(const boost::shared_ptr<const Node>& n);
 
-  virtual void writePartial(const shared_ptr<const Way>& w);
+  virtual void writePartial(const boost::shared_ptr<const Way>& w);
 
-  virtual void writePartial(const shared_ptr<const Relation>& r);
+  virtual void writePartial(const boost::shared_ptr<const Relation>& r);
 
 protected:
 
@@ -101,7 +101,7 @@ protected:
 
   virtual vector<long> _remapNodes(const vector<long>& nids);
 
-  void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
+  void _addElementTags(const boost::shared_ptr<const Element>& e, Tags& t);
 
   /**
    * Counts the change and if necessary closes the old changeset and starts a new one.

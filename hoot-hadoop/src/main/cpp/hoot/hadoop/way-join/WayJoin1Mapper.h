@@ -55,7 +55,7 @@ public:
 
 protected:
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
 
 };
 

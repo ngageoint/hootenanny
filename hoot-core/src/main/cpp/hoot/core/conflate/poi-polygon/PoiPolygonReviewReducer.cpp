@@ -89,12 +89,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   DisableLog dl(Log::Warn);
 
   ElementConverter elementConverter(_map);
-  shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+  boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
   if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
   {
     throw geos::util::TopologyException();
   }
-  shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+  boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
   //The rules below are roughly ordered by increasing processing expense and by decreasing
   //likelihood of occurrence.
@@ -280,7 +280,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
     ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
     if (polyNeighbor->getElementId() != poly->getElementId())
     {
-      shared_ptr<Geometry> polyNeighborGeom;
+      boost::shared_ptr<Geometry> polyNeighborGeom;
       try
       {
         polyNeighborGeom = ElementConverter(_map).convertToGeometry(polyNeighbor);
@@ -333,12 +333,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                   //Calcing distance to the poly itself will always return 0 when the poi is in the
                   //poly.
                   ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
-                  shared_ptr<const LineString> polyLineStr =
+                  boost::shared_ptr<const LineString> polyLineStr =
                       dynamic_pointer_cast<const LineString>(
                         ElementConverter(_map).convertToLineString(polyWay));
                   poiToPolyNodeDist = polyLineStr->distance(poiGeom.get());
                   ConstWayPtr polyNeighborWay = dynamic_pointer_cast<const Way>(polyNeighbor);
-                  shared_ptr<const LineString> polyNeighborLineStr =
+                  boost::shared_ptr<const LineString> polyNeighborLineStr =
                       dynamic_pointer_cast<const LineString>(
                         ElementConverter(_map).convertToLineString(polyNeighborWay));
                   poiToOtherParkPolyNodeDist = polyNeighborLineStr->distance(poiGeom.get());

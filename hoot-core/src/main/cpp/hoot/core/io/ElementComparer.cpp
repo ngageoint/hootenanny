@@ -84,21 +84,21 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
   }
 }
 
-bool ElementComparer::_compareNode(const shared_ptr<const Element>& re,
-                                   const shared_ptr<const Element>& e)
+bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
+                                   const boost::shared_ptr<const Element>& e)
 {
-  shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
-  shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
+  boost::shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
+  boost::shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
 
   LOG_VART(GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()));
   return (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) <= _threshold);
 }
 
-bool ElementComparer::_compareWay(const shared_ptr<const Element>& re,
-                                  const shared_ptr<const Element>& e)
+bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,
+                                  const boost::shared_ptr<const Element>& e)
 {
-  shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
-  shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
+  boost::shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
+  boost::shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
 
   if (rw->getNodeIds().size() != w->getNodeIds().size())
   {
@@ -115,11 +115,11 @@ bool ElementComparer::_compareWay(const shared_ptr<const Element>& re,
   return true;
 }
 
-bool ElementComparer::_compareRelation(const shared_ptr<const Element>& re,
-                                       const shared_ptr<const Element>& e)
+bool ElementComparer::_compareRelation(const boost::shared_ptr<const Element>& re,
+                                       const boost::shared_ptr<const Element>& e)
 {
-  shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
-  shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
+  boost::shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
+  boost::shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
 
   if (rr->getType() != r->getType() ||
       rr->getMembers().size() != r->getMembers().size())

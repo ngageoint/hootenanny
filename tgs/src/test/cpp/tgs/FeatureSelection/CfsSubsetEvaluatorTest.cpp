@@ -130,7 +130,7 @@ namespace Tgs
       generatedData20(df);
 
       GreedyStepwiseSearch uut;
-      shared_ptr<CfsSubsetEvaluator> evaluator(new CfsSubsetEvaluator());
+     boost::shared_ptr<CfsSubsetEvaluator> evaluator(new CfsSubsetEvaluator());
       uut.setEvaluator(evaluator);
 
       // this has been validated against weka
@@ -151,7 +151,7 @@ namespace Tgs
       generatedData1000(df);
 
       GreedyStepwiseSearch uut;
-      shared_ptr<CfsSubsetEvaluator> evaluator(new CfsSubsetEvaluator());
+     boost::shared_ptr<CfsSubsetEvaluator> evaluator(new CfsSubsetEvaluator());
       uut.setEvaluator(evaluator);
 
       // this has been validated against weka

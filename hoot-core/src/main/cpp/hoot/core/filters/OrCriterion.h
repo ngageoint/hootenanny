@@ -47,7 +47,7 @@ public:
   {
   }
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone()
   { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }

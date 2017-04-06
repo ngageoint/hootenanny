@@ -36,18 +36,18 @@ PartialOsmMapReader::PartialOsmMapReader()
   _elementsRead = 0;
 }
 
-void PartialOsmMapReader::read(shared_ptr<OsmMap> map)
+void PartialOsmMapReader::read(boost::shared_ptr<OsmMap> map)
 {
   readPartial(map);
   finalizePartial();
 }
 
-void PartialOsmMapReader::readPartial(shared_ptr<OsmMap> map)
+void PartialOsmMapReader::readPartial(boost::shared_ptr<OsmMap> map)
 {
   _partialMap = map;
   while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))
   {
-    shared_ptr<Element> element = readNextElement();
+    boost::shared_ptr<Element> element = readNextElement();
     _partialMap->addElement(element);
   }
   _elementsRead = 0;

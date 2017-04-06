@@ -65,46 +65,46 @@ public:
 
   DualWaySplitter();
 
-  DualWaySplitter(shared_ptr<const OsmMap> map, DrivingSide drivingSide, Meters splitSize);
+  DualWaySplitter(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide, Meters splitSize);
 
-  shared_ptr<OsmMap> splitAll();
+  boost::shared_ptr<OsmMap> splitAll();
 
-  static shared_ptr<OsmMap> splitAll(shared_ptr<const OsmMap> map, DrivingSide drivingSide,
+  static boost::shared_ptr<OsmMap> splitAll(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
                                      Meters defaultSplitSize);
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
 private:
   Meters _defaultSplitSize;
   DrivingSide _drivingSide;
-  shared_ptr<const OsmMap> _map;
-  shared_ptr<OsmMap> _result;
+  boost::shared_ptr<const OsmMap> _map;
+  boost::shared_ptr<OsmMap> _result;
 
   // temporary variables for convenience
-  shared_ptr<Way> _left, _right;
-  shared_ptr<const Way> _working;
+  boost::shared_ptr<Way> _left, _right;
+  boost::shared_ptr<const Way> _working;
   Meters _splitSize;
 
   void _addConnector(long nodeId);
 
-  shared_ptr<Way> _createOneWay(shared_ptr<const Way> w, Meters bufferSize, bool left);
+  boost::shared_ptr<Way> _createOneWay(boost::shared_ptr<const Way> w, Meters bufferSize, bool left);
 
-  void _createStub(shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
+  void _createStub(boost::shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
 
   double _dotProduct(const Coordinate& c1, const Coordinate& c2) const;
 
-  void _fixLanes(shared_ptr<Way> w);
+  void _fixLanes(boost::shared_ptr<Way> w);
 
   /**
    * Returns the node id of the nearest node to nid on w
    */
-  long _nearestNode(long nid, shared_ptr<const Way> w);
+  long _nearestNode(long nid, boost::shared_ptr<const Way> w);
 
   Coordinate _normalizedVector(long nid1, long nid2);
 
-  bool _onRight(long intersectionId, shared_ptr<Way> inbound, long leftNn, long rightNn);
+  bool _onRight(long intersectionId, boost::shared_ptr<Way> inbound, long leftNn, long rightNn);
 
-  void _reconnectEnd(long centerNodeId, shared_ptr<Way> edge);
+  void _reconnectEnd(long centerNodeId, boost::shared_ptr<Way> edge);
 
   void _splitIntersectingWays(long nid);
 

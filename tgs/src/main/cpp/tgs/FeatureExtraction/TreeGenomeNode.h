@@ -40,7 +40,7 @@ namespace Tgs
 
     virtual ~TreeGenomeNode() {};
 
-    virtual shared_ptr<TreeGenomeNode> clone() const = 0;
+    virtual boost::shared_ptr<TreeGenomeNode> clone() const = 0;
 
     /**
      * Copies the specified genome and all of its children into this one.

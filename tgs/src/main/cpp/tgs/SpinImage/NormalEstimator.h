@@ -99,11 +99,11 @@ namespace Tgs
     // white box testing
     friend class NormalEstimatorTest;
 
-    shared_ptr<Tgs::HilbertRTree> _rtree;
+   boost::shared_ptr<Tgs::HilbertRTree> _rtree;
     PointCloud* _pc;
     std::vector<int> _nearestNeighbors;
     std::vector<double> _nnDistances;
-    shared_ptr<KnnIteratorNd> _it;
+   boost::shared_ptr<KnnIteratorNd> _it;
     std::vector<double> _nnTmp;
     int _k;
     

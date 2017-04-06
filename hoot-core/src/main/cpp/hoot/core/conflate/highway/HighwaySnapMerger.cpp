@@ -60,7 +60,7 @@ unsigned int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger(Meters minSplitSize,
   const set< pair<ElementId, ElementId> >& pairs,
-  const shared_ptr<SublineStringMatcher> &sublineMatcher) :
+  const boost::shared_ptr<SublineStringMatcher> &sublineMatcher) :
   _minSplitSize(minSplitSize),
   _pairs(pairs),
   _sublineMatcher(sublineMatcher)
@@ -154,9 +154,9 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map,
 
 }
 
-bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, shared_ptr<Way> w) const
+bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, boost::shared_ptr<Way> w) const
 {
-  shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
 
   CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
     create(2, 2);
@@ -165,8 +165,8 @@ bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, shared_ptr<Way
   cs->setAt(map->getNode(w->getLastNodeId())->toCoordinate(), 1);
 
   // create a straight line and buffer it
-  shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(cs));
-  shared_ptr<Geometry> g(straight->buffer(w->getCircularError()));
+  boost::shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(cs));
+  boost::shared_ptr<Geometry> g(straight->buffer(w->getCircularError()));
 
   // is the way in question completely contained in the buffer?
   return g->contains(ls.get());
@@ -210,7 +210,7 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId> > &replaced) const
 {
-  shared_ptr<OsmMap> result = map;
+  boost::shared_ptr<OsmMap> result = map;
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
@@ -303,7 +303,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
 }
 
-void HighwaySnapMerger::_removeSpans(shared_ptr<OsmMap> map, const ElementPtr& e1,
+void HighwaySnapMerger::_removeSpans(boost::shared_ptr<OsmMap> map, const ElementPtr& e1,
   const ElementPtr& e2) const
 {
   if (e1->getElementType() != e2->getElementType())
@@ -340,10 +340,10 @@ void HighwaySnapMerger::_removeSpans(shared_ptr<OsmMap> map, const ElementPtr& e
   }
 }
 
-void HighwaySnapMerger::_removeSpans(shared_ptr<OsmMap> map, const WayPtr& w1, const WayPtr& w2)
+void HighwaySnapMerger::_removeSpans(boost::shared_ptr<OsmMap> map, const WayPtr& w1, const WayPtr& w2)
   const
 {
-  shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
   // find all the ways that connect to the beginning or end of w1. There shouldn't be any that
   // connect in the middle.
@@ -406,7 +406,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
       return result;
     }
 
-    virtual void visit(const shared_ptr<Element>& e)
+    virtual void visit(const boost::shared_ptr<Element>& e)
     {
       if (e->getElementType() == ElementType::Way)
       {
@@ -426,7 +426,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
 
   assert(snapToWays.size() == snapeeWays.size());
 
-  shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
   for (size_t i = 0; i < snapeeWays.size(); i++)
   {

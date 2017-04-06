@@ -58,7 +58,7 @@ public:
 
 private:
   string _path;
-  shared_ptr<ostream> _out;
+ boost::shared_ptr<ostream> _out;
   CppSeqFile::Writer* _writer;
 };
 

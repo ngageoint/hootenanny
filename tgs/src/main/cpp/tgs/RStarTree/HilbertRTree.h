@@ -43,7 +43,7 @@ namespace Tgs
   {
   public:
 
-    HilbertRTree(shared_ptr<PageStore> ps, int dimensions);
+    HilbertRTree(boost::shared_ptr<PageStore> ps, int dimensions);
 
     virtual ~HilbertRTree();
 
@@ -114,8 +114,8 @@ namespace Tgs
     double _swapGrandChildNodes(int parentId, const std::vector<double>& overlaps);
   };
 
-  typedef shared_ptr<HilbertRTree> HilbertRTreePtr;
-  typedef shared_ptr<const HilbertRTree> ConstHilbertRTreePtr;
+  typedef boost::shared_ptr<HilbertRTree> HilbertRTreePtr;
+  typedef boost::shared_ptr<const HilbertRTree> ConstHilbertRTreePtr;
 }
 
 

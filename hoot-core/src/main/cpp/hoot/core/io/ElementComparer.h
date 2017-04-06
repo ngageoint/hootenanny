@@ -50,11 +50,11 @@ public:
 
 private:
 
-  bool _compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+  bool _compareNode(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e);
 
-  bool _compareWay(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+  bool _compareWay(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e);
 
-  bool _compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e);
+  bool _compareRelation(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e);
 
   Meters _threshold;
 

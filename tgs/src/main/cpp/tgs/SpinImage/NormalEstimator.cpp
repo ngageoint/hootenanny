@@ -308,7 +308,7 @@ namespace Tgs
   {
     const std::vector<CloudPoint>& points = pc.getPoints();
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
     _rtree.reset(new HilbertRTree(mps, 3));
     _nnTmp.resize(3);
     _it.reset(new KnnIteratorNd(_rtree.get(), _nnTmp));

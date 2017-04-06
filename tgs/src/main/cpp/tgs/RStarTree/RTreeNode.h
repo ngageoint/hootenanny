@@ -255,7 +255,7 @@ namespace Tgs
       char* getBox() { return ((char*)&id) + 4; }
     };
 
-    RTreeNode(int dimensions, shared_ptr<Page> page);
+    RTreeNode(int dimensions,boost::shared_ptr<Page> page);
     /**
      * Return the start of the child's data. This includes the box (BoxInternalData) and the 
      * index.
@@ -282,7 +282,7 @@ namespace Tgs
 
     int _maxChildCount;
     int _dimensions;
-    mutable shared_ptr<Page> _pageSp;
+    mutable boost::shared_ptr<Page> _pageSp;
     /// pointer to the same thing as above, only faster. Zoom zoom!
     mutable Page* _page;
     int _id;

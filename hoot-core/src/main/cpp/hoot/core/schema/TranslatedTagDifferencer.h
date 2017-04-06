@@ -76,7 +76,7 @@ public:
 private:
   QSet<QString> _ignoreList;
   QString _script;
-  mutable shared_ptr<ScriptToOgrTranslator> _translator;
+  mutable boost::shared_ptr<ScriptToOgrTranslator> _translator;
 
   class Comparison
   {
@@ -95,7 +95,7 @@ private:
    * Does a lazy load of the translator to avoid initializing configuration options that aren't
    * being used.
    */
-  shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
+ boost::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
 
   /**
    * Converts to tags if not-null otherwise returns an empty set of tags.

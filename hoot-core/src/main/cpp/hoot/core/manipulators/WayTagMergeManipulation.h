@@ -40,13 +40,13 @@ class WayTagMergeManipulation : public WayMergeManipulation
 {
 public:
 
-  WayTagMergeManipulation(long leftId, long rightId, shared_ptr<const OsmMap> map,
+  WayTagMergeManipulation(long leftId, long rightId, boost::shared_ptr<const OsmMap> map,
     Meters minSplitSize);
 
-  virtual void applyManipulation(shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
+  virtual void applyManipulation(boost::shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
     set<ElementId>& newElements) const;
 
-  virtual const set<long>& getImpactedWayIds(shared_ptr<const OsmMap> map) const;
+  virtual const set<long>& getImpactedWayIds(boost::shared_ptr<const OsmMap> map) const;
 
 };
 

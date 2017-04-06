@@ -58,7 +58,7 @@ public:
   /**
    * Find the subline in a based on b
    */
-  WaySplitter(const OsmMapPtr& map, shared_ptr<Way> a);
+  WaySplitter(const OsmMapPtr& map, boost::shared_ptr<Way> a);
 
   /**
    * Creates a split for each way location (+1) and returns the new ways. The first result in the
@@ -84,7 +84,7 @@ public:
    * an array. The old way will be removed from the source map and the two new ones will be added.
    * No nodes will be removed or replaced, but a new node may be added.
    */
-  vector< shared_ptr<Way> > split(WayLocation& splitPoint);
+  vector< boost::shared_ptr<Way> > split(WayLocation& splitPoint);
 
   /**
    * Splits way into smaller ways no bigger than maxSize. If a is smaller than maxSize already
@@ -93,17 +93,17 @@ public:
    * @param w The way to split.
    * @param maxSize the maximum size of the way in map units.
    */
-  static void split(const OsmMapPtr& map, const shared_ptr<Way>& w, double maxSize);
+  static void split(const OsmMapPtr& map, const boost::shared_ptr<Way>& w, double maxSize);
 
-  static vector< shared_ptr<Way> > split(const OsmMapPtr& map, shared_ptr<Way> a,
+  static vector< boost::shared_ptr<Way> > split(const OsmMapPtr& map, boost::shared_ptr<Way> a,
     WayLocation& splitPoint);
 
 private:
   OsmMapPtr _map;
-  shared_ptr<Way> _a;
+  boost::shared_ptr<Way> _a;
   auto_ptr<FindNodesInWayFactory> _nf;
 
-  shared_ptr<Node> _createNode(const Coordinate& c);
+  boost::shared_ptr<Node> _createNode(const Coordinate& c);
 };
 
 }

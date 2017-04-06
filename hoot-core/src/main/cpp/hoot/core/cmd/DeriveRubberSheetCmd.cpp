@@ -59,7 +59,7 @@ public:
       throw HootException(QString("%1 takes three to five parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     bool ref = false;
     if (args[0] == "--ref")
     {

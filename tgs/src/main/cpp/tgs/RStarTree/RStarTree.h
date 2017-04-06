@@ -70,7 +70,7 @@ namespace Tgs
   {
   public:
     
-    RStarTree(shared_ptr<PageStore> ps, int dimensions);
+    RStarTree(boost::shared_ptr<PageStore> ps, int dimensions);
 
     virtual ~RStarTree();
 
@@ -239,7 +239,7 @@ namespace Tgs
     double _p;
     RTreeNodeStore _store;
     Header* _headerStruct;
-    shared_ptr<Page> _header;
+   boost::shared_ptr<Page> _header;
     /// Levels that have been treated for overflow during this insert.
     std::set<int> _overflowedLevels;
 

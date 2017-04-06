@@ -51,16 +51,16 @@ namespace Tgs
   {
   public:
 
-    MimicGa(shared_ptr<Genome> seed, shared_ptr<FitnessFunction> fitness);
+    MimicGa(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness);
 
     virtual ~MimicGa();
 
     void setParameters(const std::map<std::string, Parameter>& params);
 
   protected:
-    virtual void _initializeGenome(shared_ptr<Genome> genome);
+    virtual void _initializeGenome(boost::shared_ptr<Genome> genome);
 
-    virtual void _mutate(shared_ptr<Genome> genome);
+    virtual void _mutate(boost::shared_ptr<Genome> genome);
 
     virtual void _updateScores();
 
@@ -83,9 +83,9 @@ namespace Tgs
 
     void _normalize(WeightMap& wm);
 
-    void _setGenomeWeights(shared_ptr<CalculatorGenome> genome);
+    void _setGenomeWeights(boost::shared_ptr<CalculatorGenome> genome);
 
-    void _populateWeights(const shared_ptr<CalculatorGenomeNode> node);
+    void _populateWeights(const boost::shared_ptr<CalculatorGenomeNode> node);
   };
 }
 

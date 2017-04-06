@@ -78,7 +78,7 @@ public:
     QString translation = args[a++];
     QString output = args[a++];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OgrReader reader;
     reader.setLimit(limit);
     reader.setTranslationFile(translation);

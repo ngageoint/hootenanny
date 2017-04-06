@@ -63,7 +63,7 @@ using namespace Tgs;
 
 unsigned int ScriptMatch::logWarnCount = 0;
 
-ScriptMatch::ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),

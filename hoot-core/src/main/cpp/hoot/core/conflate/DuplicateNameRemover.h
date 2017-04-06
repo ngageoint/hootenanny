@@ -53,18 +53,18 @@ public:
 
   DuplicateNameRemover();
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Remove alternate names that are duplicates.
    */
-  static void removeDuplicates(shared_ptr<OsmMap> map);
+  static void removeDuplicates(boost::shared_ptr<OsmMap> map);
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
 protected:
 
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
   QString _getBestName(QString n1, QString n2);
 

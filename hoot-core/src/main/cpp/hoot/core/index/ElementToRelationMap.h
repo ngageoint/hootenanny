@@ -60,7 +60,7 @@ public:
   /**
    * Recursively traverses the relation and adds all child elements to the reference.
    */
-  void addRelation(const OsmMap& map, const shared_ptr<const Relation>& r);
+  void addRelation(const OsmMap& map, const boost::shared_ptr<const Relation>& r);
 
   /**
    * Returns a set of relation ids that have the specified element as a member, explicity or
@@ -69,14 +69,14 @@ public:
    * (ElementType::Way, 3) you will get both the multipolygon and the building relation.
    */
   const set<long>& getRelationByElement(ElementId eid) const;
-  const set<long>& getRelationByElement(const shared_ptr<const Element>& e) const;
+  const set<long>& getRelationByElement(const boost::shared_ptr<const Element>& e) const;
   const set<long>& getRelationByElement(const Element* e) const;
 
   /**
    * This function assumes that the elements that make up the relation haven't changed since it was
    * last added.
    */
-  void removeRelation(const OsmMap &map, const shared_ptr<const Relation> &r);
+  void removeRelation(const OsmMap &map, const boost::shared_ptr<const Relation> &r);
 
   /**
    * Checks to make sure the index is consistent with the specified map. All inconsistencies are

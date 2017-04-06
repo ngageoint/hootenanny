@@ -45,19 +45,19 @@ namespace hoot
 class ParallelWayFilter : public WayFilter
 {
 public:
-  ParallelWayFilter(const ConstOsmMapPtr& map, shared_ptr<const Way> baseWay,
+  ParallelWayFilter(const ConstOsmMapPtr& map, boost::shared_ptr<const Way> baseWay,
     bool filterUnparallel = true);
 
   virtual ~ParallelWayFilter();
 
-  Radians calculateDifference(const shared_ptr<const Way>& w) const;
+  Radians calculateDifference(const boost::shared_ptr<const Way>& w) const;
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isFiltered(const shared_ptr<const Way>& w) const;
+  virtual bool isFiltered(const boost::shared_ptr<const Way>& w) const;
 
 private:
-  shared_ptr<const Way> _baseWay;
+  boost::shared_ptr<const Way> _baseWay;
   bool _filterUnparallel;
   // heading of baseWay at each coord
   std::vector<Radians> _headings;

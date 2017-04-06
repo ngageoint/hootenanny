@@ -46,7 +46,7 @@ public:
   ScriptTestSuite(QString dir, bool printDiff);
 
 private:
-  vector< shared_ptr<ScriptTest> > _tests;
+  vector<boost::shared_ptr<ScriptTest> > _tests;
 };
 
 }

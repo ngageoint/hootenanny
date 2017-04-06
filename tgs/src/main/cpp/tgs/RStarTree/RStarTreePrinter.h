@@ -41,16 +41,16 @@ namespace Tgs
 class RStarTreePrinter
 {
 public:
-  RStarTreePrinter(shared_ptr<const RStarTree> tree);
+  RStarTreePrinter(boost::shared_ptr<const RStarTree> tree);
 
-  static void print(shared_ptr<const RStarTree> tree);
+  static void print(boost::shared_ptr<const RStarTree> tree);
 
   void print();
 
   void print(const RTreeNode* node, int indent);
 
 private:
-  shared_ptr<const RStarTree> _tree;
+ boost::shared_ptr<const RStarTree> _tree;
 
   int _indent;
 

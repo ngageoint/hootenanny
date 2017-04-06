@@ -44,7 +44,7 @@
 namespace Tgs
 {
 
-shared_ptr<Stxxl> Stxxl::_theInstance;
+boost::shared_ptr<Stxxl> Stxxl::_theInstance;
 
 Stxxl::Stxxl()
 {

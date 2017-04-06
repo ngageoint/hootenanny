@@ -73,7 +73,7 @@ QString BaseCommand::_getHelpPath() const
   return result;
 }
 
-void BaseCommand::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
+void BaseCommand::loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
                           Status defaultStatus)
 {
   OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
@@ -117,7 +117,7 @@ int BaseCommand::run(char* argv[], int argc)
   return runSimple(args);
 }
 
-void BaseCommand::saveMap(shared_ptr<const OsmMap> map, QString path)
+void BaseCommand::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
 {
   OsmMapWriterFactory::write(map, path);
 }

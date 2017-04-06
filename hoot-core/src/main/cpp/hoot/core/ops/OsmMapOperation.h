@@ -63,7 +63,7 @@ public:
    * assigning the new map to the shared pointer. The only guarantee is that the "map" parameter
    * will point to a valid OsmMap upon completion.
    */
-  virtual void apply(shared_ptr<OsmMap>& map) = 0;
+  virtual void apply(boost::shared_ptr<OsmMap>& map) = 0;
 
   /**
    * Allows for returning the result of some calculation done as a result of the map operation.

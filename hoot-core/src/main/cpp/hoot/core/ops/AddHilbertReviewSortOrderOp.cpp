@@ -62,7 +62,7 @@ AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 {
 }
 
-void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
+void AddHilbertReviewSortOrderOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   if (!ConfigOptions().getConflateAddReviewDetail())
   {

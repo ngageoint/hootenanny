@@ -58,12 +58,12 @@ class KernelEstimationInterpolatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
-  shared_ptr<KernelEstimationInterpolator> buildRandom()
+ boost::shared_ptr<KernelEstimationInterpolator> buildRandom()
   {
-    shared_ptr<KernelEstimationInterpolator> result(new KernelEstimationInterpolator());
+   boost::shared_ptr<KernelEstimationInterpolator> result(new KernelEstimationInterpolator());
     KernelEstimationInterpolator& uut = *result;
 
-    shared_ptr<DataFrame> dfPtr(new DataFrame());
+   boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");
@@ -102,7 +102,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-    shared_ptr<KernelEstimationInterpolator> di = buildRandom();
+   boost::shared_ptr<KernelEstimationInterpolator> di = buildRandom();
     KernelEstimationInterpolator& uut = *di;
     uut.setStopDelta(0.0001);
     uut.setSigma(-1);
@@ -148,7 +148,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-    shared_ptr<KernelEstimationInterpolator> di = buildRandom();
+   boost::shared_ptr<KernelEstimationInterpolator> di = buildRandom();
     KernelEstimationInterpolator& uut = *di;
     uut.setStopDelta(0.0001);
     uut.setSigma(0.3);
@@ -177,7 +177,7 @@ public:
     Tgs::Random::instance()->seed(0);
     KernelEstimationInterpolator uut(.1);
 
-    shared_ptr<DataFrame> dfPtr(new DataFrame());
+   boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");

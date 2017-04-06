@@ -49,7 +49,7 @@ void FileInputFormat::_addFile(const string& path)
 
   for (long pos = 0; pos < len; pos += blockSize)
   {
-    shared_ptr<FileInputSplit> fis(new FileInputSplit());
+   boost::shared_ptr<FileInputSplit> fis(new FileInputSplit());
     fis->setStart(pos);
     fis->setLength(std::min(blockSize, len - pos));
     fis->setPath(path);

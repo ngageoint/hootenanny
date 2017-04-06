@@ -45,7 +45,7 @@ public:
   virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
     const;
 
-  static shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const set<ElementId>& eids);
+  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const set<ElementId>& eids);
 
   virtual QString toString() const;
 
@@ -56,8 +56,8 @@ protected:
 private:
   set< pair<ElementId, ElementId> > _pairs;
 
-  shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
-  shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
+  boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
+  boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
 };
 
 }

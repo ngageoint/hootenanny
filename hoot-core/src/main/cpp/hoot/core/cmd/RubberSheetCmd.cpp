@@ -56,7 +56,7 @@ public:
       throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, args[0], false, Status::Unknown1);
     loadMap(map, args[1], false, Status::Unknown2);
 

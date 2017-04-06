@@ -56,7 +56,7 @@ namespace Tgs
     /**
      * Make an exact copy of this genome and return it.
      */
-    virtual shared_ptr<Genome> clone() const = 0;
+    virtual boost::shared_ptr<Genome> clone() const = 0;
 
     /**
      * Initialize with random values.
@@ -73,7 +73,7 @@ namespace Tgs
      * Mate the two specified genomes to create two new offspring.
      */
     virtual void crossoverSexually(const Genome& father, const Genome& mother, 
-      shared_ptr<Genome>& brother, shared_ptr<Genome>& sister) = 0;
+     boost::shared_ptr<Genome>& brother,boost::shared_ptr<Genome>& sister) = 0;
 
     double getScore() const { return _score; }
 

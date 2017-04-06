@@ -129,26 +129,26 @@ public:
     }
   }
 
-  void verifyFullReadOutput(shared_ptr<OsmMap> map)
+  void verifyFullReadOutput(boost::shared_ptr<OsmMap> map)
   {
     //nodes
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     HOOT_STR_EQUALS(true, map->containsNode(1));
-    shared_ptr<Node> node = map->getNode(1);
+    boost::shared_ptr<Node> node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
     CPPUNIT_ASSERT_EQUAL(15.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
 
-    shared_ptr<Node> node1 = map->getNode(2);
+    boost::shared_ptr<Node> node1 = map->getNode(2);
     CPPUNIT_ASSERT_EQUAL((long)2, node1->getId());
     CPPUNIT_ASSERT_EQUAL(38.0, node1->getY());
     CPPUNIT_ASSERT_EQUAL(-104.0, node1->getX());
 
     //ways
     HOOT_STR_EQUALS(true, map->containsWay(1));
-    shared_ptr<Way> way = map->getWay(1);
+    boost::shared_ptr<Way> way = map->getWay(1);
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
@@ -158,7 +158,7 @@ public:
 
     //relations
     HOOT_STR_EQUALS(true, map->containsRelation(1));
-    shared_ptr<Relation> relation = map->getRelation(1);
+    boost::shared_ptr<Relation> relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     vector<RelationData::Entry> relationData = relation->getMembers();
     CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
@@ -170,7 +170,7 @@ public:
   void runReadOsmApiTest()
   {
     OsmApiDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     insertData();
 
@@ -192,7 +192,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     OsmApiDbReader reader;
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     reader.setBoundingBox(
       "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");

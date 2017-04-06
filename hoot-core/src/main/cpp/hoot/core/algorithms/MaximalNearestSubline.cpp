@@ -104,7 +104,7 @@ void MaximalNearestSubline::_findNearestOnA(const geos::geom::Coordinate& bPt)
   }
 }
 
-shared_ptr<Way> MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
+boost::shared_ptr<Way> MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
     ConstWayPtr a, ConstWayPtr b, Meters minSplitSize, Meters maxRelevantDistance)
 {
   MaximalNearestSubline mns(map, a, b, minSplitSize, maxRelevantDistance/*, _headingDelta*/);
@@ -117,7 +117,7 @@ shared_ptr<Way> MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr&
   }
   else
   {
-    return shared_ptr<Way>();
+    return boost::shared_ptr<Way>();
   }
 }
 
@@ -168,7 +168,7 @@ const std::vector<WayLocation>& MaximalNearestSubline::getInterval()
   // sort the locations
   sort(testPoints.begin(), testPoints.end());
 
-  shared_ptr<LineString> bls = ElementConverter(_map).convertToLineString(_b);
+  boost::shared_ptr<LineString> bls = ElementConverter(_map).convertToLineString(_b);
   double bestLength = -1;
   std::vector<WayLocation> bestInterval;
   bestInterval.resize(2);
@@ -287,10 +287,10 @@ const std::vector<WayLocation>& MaximalNearestSubline::_getInterval()
   return _maxInterval;
 }
 
-bool MaximalNearestSubline::_isInBounds(const WayLocation& wl, const shared_ptr<LineString>& ls)
+bool MaximalNearestSubline::_isInBounds(const WayLocation& wl, const boost::shared_ptr<LineString>& ls)
 {
   // calculate the distance from the test point to b
-  shared_ptr<Point> tp(GeometryFactory::getDefaultInstance()->createPoint(
+  boost::shared_ptr<Point> tp(GeometryFactory::getDefaultInstance()->createPoint(
       wl.getCoordinate()));
 
   geos::operation::distance::DistanceOp dop(tp.get(), ls.get());
@@ -333,9 +333,9 @@ bool MaximalNearestSubline::_isOutsideInterval(int ia)
   return false;
 }
 
-vector< shared_ptr<Way> > MaximalNearestSubline::splitWay(shared_ptr<OsmMap> map, int& mnsIndex)
+vector< boost::shared_ptr<Way> > MaximalNearestSubline::splitWay(boost::shared_ptr<OsmMap> map, int& mnsIndex)
 {
-  vector< shared_ptr<Way> > result;
+  vector< boost::shared_ptr<Way> > result;
   _map = map;
 
   std::vector<WayLocation> interval = getInterval();
@@ -362,7 +362,7 @@ vector< shared_ptr<Way> > MaximalNearestSubline::splitWay(shared_ptr<OsmMap> map
   if (start.getSegmentIndex() != 0 || start.getSegmentFraction() > 0.0)
   {
     WayLocation wl(map, _a, 0, 0.0);
-    shared_ptr<Way> way1 = WaySubline(wl, start).toWay(map, nf.get());
+    boost::shared_ptr<Way> way1 = WaySubline(wl, start).toWay(map, nf.get());
 
     double l = ElementConverter(map).convertToLineString(way1)->getLength();
     // if the way is too short, round to the first way.
@@ -379,7 +379,7 @@ vector< shared_ptr<Way> > MaximalNearestSubline::splitWay(shared_ptr<OsmMap> map
   // if this is a or b
   if (end.getSegmentIndex() < (int)_a->getNodeCount() - 1 || end.getSegmentFraction() < 1.0)
   {
-    shared_ptr<Way> way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).
+    boost::shared_ptr<Way> way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).
       toWay(map, nf.get());
 
     double l = ElementConverter(map).convertToLineString(way3)->getLength();
@@ -395,7 +395,7 @@ vector< shared_ptr<Way> > MaximalNearestSubline::splitWay(shared_ptr<OsmMap> map
   }
 
   // in all cases we add the middle line.
-  shared_ptr<Way> way2 = WaySubline(start, end).toWay(map, nf.get());
+  boost::shared_ptr<Way> way2 = WaySubline(start, end).toWay(map, nf.get());
   double l = ElementConverter(map).convertToLineString(way2)->getLength();
   // if the way is big enough then add it on.
   if (l > _minSplitSize)

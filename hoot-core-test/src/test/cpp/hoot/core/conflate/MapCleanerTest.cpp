@@ -71,7 +71,7 @@ public:
       OsmXmlReader reader;
       OsmMap::resetCounters();
       OsmSchema::getInstance().loadDefault();
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcTigerRoads.osm", map);
 

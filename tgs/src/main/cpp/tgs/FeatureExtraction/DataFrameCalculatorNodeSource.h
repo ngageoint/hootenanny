@@ -39,7 +39,7 @@ namespace Tgs
   public:
     DataFrameCalculatorNodeSource();
 
-    DataFrameCalculatorNodeSource(shared_ptr<DataFrame> source, int factor);
+    DataFrameCalculatorNodeSource(boost::shared_ptr<DataFrame> source, int factor);
 
     virtual ~DataFrameCalculatorNodeSource() {}
 
@@ -51,7 +51,7 @@ namespace Tgs
     virtual void mutate(double /*p*/) {};
 
   protected:
-    shared_ptr<DataFrame> _source;
+   boost::shared_ptr<DataFrame> _source;
     int _factor;
 
     void _copyInternalData(const CalculatorGenomeNode& node);

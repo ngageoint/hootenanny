@@ -76,7 +76,7 @@ private:
 
 };
 
-typedef shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
+typedef boost::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;
 
 }
 

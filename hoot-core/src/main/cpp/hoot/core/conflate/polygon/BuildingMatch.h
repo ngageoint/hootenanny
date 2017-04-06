@@ -56,13 +56,13 @@ class BuildingRfClassifier;
 class BuildingMatch : public Match, public MatchDetails
 {
 public:
-  BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const BuildingRfClassifier> rf,
+  BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
                 const ElementId& eid1, const ElementId& eid2,
                 ConstMatchThresholdPtr mt);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
+  virtual map<QString, double> getFeatures(const boost::shared_ptr<const OsmMap>& m) const;
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Polygon; }
 
@@ -89,7 +89,7 @@ private:
   ElementId _eid1, _eid2;
   static QString _matchName;
   MatchClassification _p;
-  shared_ptr<const BuildingRfClassifier> _rf;
+  boost::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
   void _calculateClassification(const ConstOsmMapPtr& map);

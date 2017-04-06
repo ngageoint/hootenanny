@@ -71,7 +71,7 @@ public:
 
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
@@ -92,7 +92,7 @@ public:
     FilteredVisitor v(filter, uuid);
     map->visitRw(v);
 
-    shared_ptr<OsmMap> copy(new OsmMap(map));
+    boost::shared_ptr<OsmMap> copy(new OsmMap(map));
 
     UnifyingConflator conflator;
     conflator.apply(copy);

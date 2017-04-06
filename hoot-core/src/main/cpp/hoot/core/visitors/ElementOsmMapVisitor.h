@@ -53,7 +53,7 @@ public:
   virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException(); }
 
   virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const shared_ptr<Element>& e) = 0;
+  virtual void visit(const boost::shared_ptr<Element>& e) = 0;
 
 protected:
   OsmMap* _map;

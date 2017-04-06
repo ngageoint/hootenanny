@@ -57,7 +57,7 @@ public:
   virtual QString toString() const = 0;
 };
 
-typedef shared_ptr<ValueAggregator> ValueAggregatorPtr;
+typedef boost::shared_ptr<ValueAggregator> ValueAggregatorPtr;
 
 }
 

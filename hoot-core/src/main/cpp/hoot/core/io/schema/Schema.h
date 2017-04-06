@@ -45,16 +45,16 @@ class Schema
 public:
   Schema();
 
-  void addLayer(shared_ptr<Layer> l) { _layers.push_back(l); }
+  void addLayer(boost::shared_ptr<Layer> l) { _layers.push_back(l); }
 
-  shared_ptr<const Layer> getLayer(size_t i) const { return _layers[i]; }
+  boost::shared_ptr<const Layer> getLayer(size_t i) const { return _layers[i]; }
 
-  shared_ptr<const Layer> getLayer(QString name) const;
+  boost::shared_ptr<const Layer> getLayer(QString name) const;
 
   size_t getLayerCount() const { return _layers.size(); }
 
 private:
-  vector< shared_ptr<Layer> > _layers;
+  vector< boost::shared_ptr<Layer> > _layers;
 };
 
 }

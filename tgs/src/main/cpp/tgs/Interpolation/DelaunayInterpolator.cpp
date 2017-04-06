@@ -121,8 +121,8 @@ void DelaunayInterpolator::_buildModel()
 
 double DelaunayInterpolator::_calculateFoldError(int fold, const vector<size_t> indexes) const
 {
-  shared_ptr<const DataFrame> originalDf = _df;
-  shared_ptr<DataFrame> copiedDf(new DataFrame());
+ boost::shared_ptr<const DataFrame> originalDf = _df;
+ boost::shared_ptr<DataFrame> copiedDf(new DataFrame());
 
   copiedDf->setFactorLabels(_df->getFactorLabels());
   copiedDf->setFactorTypes(_df->getFactorTypes());

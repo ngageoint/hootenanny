@@ -40,7 +40,7 @@ ReprojectToPlanarOp::ReprojectToPlanarOp()
 {
 }
 
-void ReprojectToPlanarOp::apply(shared_ptr<OsmMap>& map)
+void ReprojectToPlanarOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   if (MapProjector::isGeographic(map))
   {

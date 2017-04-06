@@ -46,16 +46,16 @@ public:
    * v1 & v2.
    * @param threshold Error threshold of the input data in meters.
    */
-  WayMergeManipulation(long leftId, long rightId, shared_ptr<const OsmMap> map, Meters minSplitSize);
+  WayMergeManipulation(long leftId, long rightId, boost::shared_ptr<const OsmMap> map, Meters minSplitSize);
 
   virtual void addBogusReviewTags(const OsmMapPtr& map) const;
 
-  virtual void applyManipulation(shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
+  virtual void applyManipulation(boost::shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
     set<ElementId>& newElements) const;
 
-  virtual double calculateProbability(shared_ptr<const OsmMap> map) const;
+  virtual double calculateProbability(boost::shared_ptr<const OsmMap> map) const;
 
-  virtual double calculateScore(shared_ptr<const OsmMap> map) const;
+  virtual double calculateScore(boost::shared_ptr<const OsmMap> map) const;
 
   virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
@@ -69,7 +69,7 @@ public:
 
   virtual double getScoreEstimate() const { return _estimate; }
 
-  virtual bool isValid(shared_ptr<const OsmMap> map) const;
+  virtual bool isValid(boost::shared_ptr<const OsmMap> map) const;
 
   virtual QString toString() const;
 
@@ -80,21 +80,21 @@ protected:
   mutable double _p;
   Meters _minSplitSize;
 
-  virtual double _calculateExpertProbability(shared_ptr<const OsmMap> map) const;
+  virtual double _calculateExpertProbability(boost::shared_ptr<const OsmMap> map) const;
 
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See ticket #951 for details.
    */
-  bool _directConnect(const OsmMapPtr& map, shared_ptr<Way> w) const;
+  bool _directConnect(const OsmMapPtr& map, boost::shared_ptr<Way> w) const;
 
-  void _removeSpans(shared_ptr<OsmMap> map, set<ElementId> &ids) const;
+  void _removeSpans(boost::shared_ptr<OsmMap> map, set<ElementId> &ids) const;
 
   /**
    * Calculates the MNS for left and right and updates the map accordingly. The new left and
-   * right are put into the appropriate shared_ptr.
+   * right are put into the appropriate boost::shared_ptr.
    */
-  void _splitWays(shared_ptr<OsmMap> map, shared_ptr<Way>& left, shared_ptr<Way>& right) const;
+  void _splitWays(boost::shared_ptr<OsmMap> map, boost::shared_ptr<Way>& left, boost::shared_ptr<Way>& right) const;
 
 };
 

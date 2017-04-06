@@ -99,7 +99,7 @@ public:
     }
     else
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
 
       // This keeps the status and the tags.
       conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
@@ -135,22 +135,22 @@ public:
   {
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
-    shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
+    boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);
-    shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-    shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
+    boost::shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+    boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
     writer->open(out);
-    shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+    boost::shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
-    shared_ptr<PartialOsmMapReader> partialReader =
+    boost::shared_ptr<PartialOsmMapReader> partialReader =
       dynamic_pointer_cast<PartialOsmMapReader>(reader);
     if (partialReader.get())
     {
       partialReader->finalizePartial();
     }
-    shared_ptr<PartialOsmMapWriter> partialWriter =
+    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
       dynamic_pointer_cast<PartialOsmMapWriter>(writer);
     if (partialWriter.get())
     {

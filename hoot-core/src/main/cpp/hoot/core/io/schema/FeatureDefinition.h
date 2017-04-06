@@ -47,17 +47,17 @@ class FeatureDefinition
 public:
   FeatureDefinition();
 
-  void addField(shared_ptr<FieldDefinition> fd) { _fields.push_back(fd); }
+  void addField(boost::shared_ptr<FieldDefinition> fd) { _fields.push_back(fd); }
 
   bool hasField(const QString& name) const;
 
   size_t getFieldCount() const { return _fields.size(); }
 
-  shared_ptr<const FieldDefinition> getFieldDefinition(size_t i) const { return _fields[i]; }
+  boost::shared_ptr<const FieldDefinition> getFieldDefinition(size_t i) const { return _fields[i]; }
 
 private:
 
-  vector< shared_ptr<FieldDefinition> > _fields;
+  vector< boost::shared_ptr<FieldDefinition> > _fields;
 };
 
 }

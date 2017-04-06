@@ -48,7 +48,7 @@ RemoveWayOp::RemoveWayOp(long wId, bool removeFully):
 {
 }
 
-void RemoveWayOp::_removeWay(shared_ptr<OsmMap> &map, long wId)
+void RemoveWayOp::_removeWay(boost::shared_ptr<OsmMap> &map, long wId)
 {
   if (map->_ways.find(wId) != map->_ways.end())
   {
@@ -57,7 +57,7 @@ void RemoveWayOp::_removeWay(shared_ptr<OsmMap> &map, long wId)
   }
 }
 
-void RemoveWayOp::_removeWayFully(shared_ptr<OsmMap> &map, long wId)
+void RemoveWayOp::_removeWayFully(boost::shared_ptr<OsmMap> &map, long wId)
 {
   // copy the set because we may modify it later.
   set<long> rid = map->_index->getElementToRelationMap()->
@@ -71,7 +71,7 @@ void RemoveWayOp::_removeWayFully(shared_ptr<OsmMap> &map, long wId)
   VALIDATE(map->validate());
 }
 
-void RemoveWayOp::apply(shared_ptr<OsmMap>& map)
+void RemoveWayOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   if (_removeFully)
     _removeWayFully(map, _wayIdToRemove);

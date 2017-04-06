@@ -91,7 +91,7 @@ public:
   void runSimpleIntersectionTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -106,7 +106,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -126,7 +126,7 @@ public:
   void runSimpleOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -141,7 +141,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -161,7 +161,7 @@ public:
   void runSmallOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -176,7 +176,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));

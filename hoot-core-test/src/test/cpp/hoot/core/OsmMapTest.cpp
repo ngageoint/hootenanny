@@ -85,16 +85,16 @@ class OsmMapTest : public CppUnit::TestFixture
 
 public:
 
-  void _checkKnnWayIterator(shared_ptr<OsmMap> map)
+  void _checkKnnWayIterator(boost::shared_ptr<OsmMap> map)
   {
-    shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+    boost::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
     ElementConverter ec(map);
     const WayMap& ways = map->getWays();
     for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); itw++)
     {
-      const shared_ptr<Way>& w = itw->second;
-      shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+      const boost::shared_ptr<Way>& w = itw->second;
+      boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
       KnnWayIterator it(*map, w, tree.get(), map->getIndex().getTreeIdToWidMap());
 
       int count = 0;
@@ -124,7 +124,7 @@ public:
 
   OsmMapPtr createMapForCopyTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setDefaultStatus(Status::Unknown1);
@@ -173,11 +173,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    shared_ptr<OsmMap> mapA(new OsmMap());
+    boost::shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    shared_ptr<OsmMap> mapB(new OsmMap());
+    boost::shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
     mapA->append(mapB);
@@ -196,11 +196,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    shared_ptr<OsmMap> mapA(new OsmMap());
+    boost::shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    shared_ptr<OsmMap> mapB(new OsmMap());
+    boost::shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
     NodePtr duplicateNode(
@@ -224,11 +224,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    shared_ptr<OsmMap> mapA(new OsmMap());
+    boost::shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    shared_ptr<OsmMap> mapB(new OsmMap());
+    boost::shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
     //the duplicated way only needs to have the same ID...the rest doesn't matter
@@ -263,11 +263,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    shared_ptr<OsmMap> mapA(new OsmMap());
+    boost::shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    shared_ptr<OsmMap> mapB(new OsmMap());
+    boost::shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
     RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
@@ -295,7 +295,7 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    shared_ptr<OsmMap> mapA(new OsmMap());
+    boost::shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
     const char* exceptionMsg = "<wrong>";
@@ -316,11 +316,11 @@ public:
     reader.setUseDataSourceIds(true);
 
     reader.setDefaultStatus(Status::Unknown1);
-    shared_ptr<OsmMap> mapA(new OsmMap());
+    boost::shared_ptr<OsmMap> mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
     reader.setDefaultStatus(Status::Unknown2);
-    shared_ptr<OsmMap> mapB(new OsmMap());
+    boost::shared_ptr<OsmMap> mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
 
     MapProjector::projectToPlanar(mapB);
@@ -346,7 +346,7 @@ public:
 
     LOG_INFO("Reading file...");
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -375,7 +375,7 @@ public:
     int i = 0;
     for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
     {
-      const shared_ptr<Way>& w = itw->second;
+      const boost::shared_ptr<Way>& w = itw->second;
 
       std::vector<long> wids = map->getIndex().findWayNeighbors(w, 30.0);
       //LOG_WARN("wid count: " << wids.size());
@@ -389,7 +389,7 @@ public:
     i = 0;
     for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
     {
-      shared_ptr<Way> w = itw->second;
+      boost::shared_ptr<Way> w = itw->second;
 
       std::vector<long> wids = map->getIndex().findWayNeighborsBruteForce(w, 30.0);
       //LOG_WARN("wid count: " << wids.size());
@@ -405,13 +405,13 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
     MapProjector::projectToOrthographic(map);
 
-    shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
+    boost::shared_ptr<const HilbertRTree> tree = map->getIndex().getWayTree();
 
     for (int i = 0; i < 10; i++)
     {
@@ -434,7 +434,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -461,7 +461,7 @@ public:
    */
   void runReplaceListTest1()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
@@ -499,7 +499,7 @@ public:
    */
   void runReplaceListTest2()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
     NodePtr n2(new Node(Status::Unknown1, 2, 0, 0, 15));
@@ -528,7 +528,7 @@ public:
    */
   void runReplaceListTest3()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
     NodePtr n1(new Node(Status::Unknown1, 1, 0, 0, 15));
@@ -572,7 +572,7 @@ public:
     //    before yours? Reset the IDs back to the beginning. :)
     OsmMap::resetCounters();
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
@@ -581,7 +581,7 @@ public:
     for ( OsmMap::NodeMap::const_iterator nodeIter = displayNodes.constBegin();
           nodeIter != displayNodes.constEnd(); ++nodeIter )
     {
-      const shared_ptr<const Node> n = nodeIter.value();
+      const boost::shared_ptr<const Node> n = nodeIter.value();
       //LOG_DEBUG(n->toString());
       //LOG_WARN("Test map has node " << n->getId());
     }
@@ -622,7 +622,7 @@ public:
     for ( NodeMap::const_iterator nodeIter = nodes.begin();
           nodeIter != nodes.end(); ++nodeIter )
     {
-      const shared_ptr<const Node> n = nodeIter->second;
+      const boost::shared_ptr<const Node> n = nodeIter->second;
       //LOG_DEBUG("Node: " << n->getId());
       CPPUNIT_ASSERT( (n->getId() >= -36) && (n->getId() <= -1) );
 

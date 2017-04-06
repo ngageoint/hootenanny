@@ -71,7 +71,7 @@ public:
 
       for (int i = 0; i < 100; i++)
       {
-        shared_ptr<Page> p = uut.getPage(_ids[i]);
+       boost::shared_ptr<Page> p = uut.getPage(_ids[i]);
         verifyPage(p);
       }
     }
@@ -86,7 +86,7 @@ public:
     testPageStore(uut);
   }
 
-  void populatePage(shared_ptr<Page> p)
+  void populatePage(boost::shared_ptr<Page> p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)
@@ -101,7 +101,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getPageCount());
     int pageSize = uut.getPageSize();
 
-    shared_ptr<Page> p = uut.createPage();
+   boost::shared_ptr<Page> p = uut.createPage();
     CPPUNIT_ASSERT_EQUAL(pageSize, p->getDataSize());
 
     populatePage(p);
@@ -142,7 +142,7 @@ public:
     }
   }
 
-  void verifyPage(shared_ptr<Page> p)
+  void verifyPage(boost::shared_ptr<Page> p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)

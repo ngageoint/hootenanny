@@ -118,7 +118,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   return result;
 }
 
-map<QString, double> HighwayExpertClassifier::getFeatures(const shared_ptr<const OsmMap>& /*m*/,
+map<QString, double> HighwayExpertClassifier::getFeatures(const boost::shared_ptr<const OsmMap>& /*m*/,
   ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString& /*match*/) const
 {
   return map<QString, double>();

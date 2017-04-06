@@ -59,7 +59,7 @@ public:
 
 private:
   std::string _path;
-  vector< shared_ptr<FileInputSplit> > _splits;
+  vector<boost::shared_ptr<FileInputSplit> > _splits;
 
   void _addFile(const string& path);
 

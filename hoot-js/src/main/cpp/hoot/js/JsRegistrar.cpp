@@ -68,7 +68,7 @@ void JsRegistrar::initAll(Handle<Object> exports)
   }
 }
 
-void JsRegistrar::registerInitializer(shared_ptr<ClassInitializer> ci)
+void JsRegistrar::registerInitializer(boost::shared_ptr<ClassInitializer> ci)
 {
   _initializers.push_back(ci);
 }

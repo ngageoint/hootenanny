@@ -66,7 +66,7 @@ public:
   void runBasicTest()
   {
     QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
-    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
+    boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -89,7 +89,7 @@ public:
   void runSplitTest()
   {
     QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
-    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
+    boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());

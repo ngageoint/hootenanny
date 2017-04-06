@@ -47,7 +47,7 @@ using namespace hoot::elements;
 namespace hoot
 {
 
-deque< pair< const WorkingMap*, shared_ptr<OsmMap> > > WorkingMap::_mapCache;
+deque< pair< const WorkingMap*, boost::shared_ptr<OsmMap> > > WorkingMap::_mapCache;
 
 WorkingMap::WorkingMap(const WorkingMap& map)
 {
@@ -55,8 +55,8 @@ WorkingMap::WorkingMap(const WorkingMap& map)
   _map.reset(new OsmMap(map.getMap()));
 }
 
-WorkingMap::WorkingMap(shared_ptr<const WorkingMap> baseWorking,
-                       shared_ptr<const Manipulation> manipulation)
+WorkingMap::WorkingMap(boost::shared_ptr<const WorkingMap> baseWorking,
+                       boost::shared_ptr<const Manipulation> manipulation)
 {
   _score = baseWorking->getScore() + manipulation->getScoreEstimate();
   _baseWorking = baseWorking;
@@ -80,9 +80,9 @@ double WorkingMap::calculatePotential() const
   return std::max(_sumWayLengths(Status::Unknown1), _sumWayLengths(Status::Unknown2));
 }
 
-shared_ptr<const OsmMap> WorkingMap::getMap() const
+boost::shared_ptr<const OsmMap> WorkingMap::getMap() const
 {
-  shared_ptr<OsmMap> result;
+  boost::shared_ptr<OsmMap> result;
 
   if (_map)
   {
@@ -106,7 +106,7 @@ shared_ptr<const OsmMap> WorkingMap::getMap() const
         {
           _mapCache.pop_back();
         }
-        _mapCache.push_front(pair< const WorkingMap*, shared_ptr<OsmMap> >(this, result));
+        _mapCache.push_front(pair< const WorkingMap*, boost::shared_ptr<OsmMap> >(this, result));
       }
     }
     _map = result;
@@ -164,7 +164,7 @@ int WorkingMap::_countIntersections(Status status) const
   WayMap::const_iterator it2 = ways.begin();
   while (it2 != ways.end())
   {
-    const shared_ptr<Way>& way = it2->second;
+    const boost::shared_ptr<Way>& way = it2->second;
     if (way->getStatus() == status)
     {
       for (size_t j = 0; j < way->getNodeCount(); j++)
@@ -188,9 +188,9 @@ int WorkingMap::_countIntersections(Status status) const
   return result;
 }
 
-shared_ptr<OsmMap> WorkingMap::takeMap() const
+boost::shared_ptr<OsmMap> WorkingMap::takeMap() const
 {
-  shared_ptr<OsmMap> result = _map;
+  boost::shared_ptr<OsmMap> result = _map;
   _map.reset();
   return result;
 }

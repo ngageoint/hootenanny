@@ -74,11 +74,11 @@ protected:
   const OsmMap* _map;
   bool _complete;
 
-  bool _isComplete(const shared_ptr<const Element>& e);
+  bool _isComplete(const boost::shared_ptr<const Element>& e);
 
-  void _visit(const shared_ptr<const Way>& w);
+  void _visit(const boost::shared_ptr<const Way>& w);
 
-  void _visit(const shared_ptr<const Relation>& r);
+  void _visit(const boost::shared_ptr<const Relation>& r);
 };
 
 }

@@ -87,14 +87,14 @@ public:
     TestUtils::resetEnvironment();
   }
 
-  void addEndNode(shared_ptr<OsmMap> map, Coordinate c, QString note)
+  void addEndNode(boost::shared_ptr<OsmMap> map, Coordinate c, QString note)
   {
-    shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
+    boost::shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
     n->getTags()["note"] = note;
     map->addNode(n);
   }
 
-  void addEndNodes(shared_ptr<OsmMap> map, vector<WaySublineMatch>& m)
+  void addEndNodes(boost::shared_ptr<OsmMap> map, vector<WaySublineMatch>& m)
   {
     for (size_t i = 0; i < m.size(); i++)
     {
@@ -107,7 +107,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
@@ -125,7 +125,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
 
@@ -163,7 +163,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/MaximalSublineTestIn.osm", map);
@@ -174,8 +174,8 @@ public:
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
 
-    shared_ptr<Way> w1 = map->getWay(wids[0]);
-    shared_ptr<Way> w2 = map->getWay(wids[1]);
+    boost::shared_ptr<Way> w1 = map->getWay(wids[0]);
+    boost::shared_ptr<Way> w2 = map->getWay(wids[1]);
 
     double score;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -409,7 +409,7 @@ public:
   void runToyTest()
   {
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
       OsmXmlReader reader;
       OsmMap::resetCounters();
       reader.setDefaultStatus(Status::Unknown1);
@@ -525,16 +525,16 @@ public:
   {
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(15.0, M_PI / 4.0), 15);
 
-    shared_ptr<Way> w1 = map->getWay(wid1);
-    shared_ptr<Way> w2 = map->getWay(wid2);
+    boost::shared_ptr<Way> w1 = map->getWay(wid1);
+    boost::shared_ptr<Way> w2 = map->getWay(wid2);
 
     vector<WayLocation> wl1, wl2;
     bool found = uut.findMaximalSubline(map, w1, w2, wl1, wl2);
     double result = 0.0;
     if (found)
     {
-      shared_ptr<Way> ws1 = WaySubline(wl1[0], wl1[1]).toWay(map);
-      shared_ptr<Way> ws2 = WaySubline(wl2[0], wl2[1]).toWay(map);
+      boost::shared_ptr<Way> ws1 = WaySubline(wl1[0], wl1[1]).toWay(map);
+      boost::shared_ptr<Way> ws2 = WaySubline(wl2[0], wl2[1]).toWay(map);
 
       map->addWay(ws1);
       map->addWay(ws2);

@@ -48,11 +48,11 @@ namespace Tgs
 
     virtual ~MemoryPageStore();
 
-    virtual shared_ptr<Page> createPage();
+    virtual boost::shared_ptr<Page> createPage();
 
     virtual void flush() {};
 
-    virtual shared_ptr<Page> getPage(int id);
+    virtual boost::shared_ptr<Page> getPage(int id);
 
     virtual int getPageCount() const { return (int)_pages.size(); }
 
@@ -63,7 +63,7 @@ namespace Tgs
   private:
 
     int _pageSize;
-    std::vector< shared_ptr<Page> > _pages;
+    std::vector<boost::shared_ptr<Page> > _pages;
 
     virtual void _savePage(int, char *) {};
 

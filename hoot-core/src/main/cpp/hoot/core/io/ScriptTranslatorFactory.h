@@ -59,7 +59,7 @@ public:
 
 private:
 
-  static shared_ptr<ScriptTranslatorFactory> _theInstance;
+  static boost::shared_ptr<ScriptTranslatorFactory> _theInstance;
 
   ScriptTranslatorFactory();
 

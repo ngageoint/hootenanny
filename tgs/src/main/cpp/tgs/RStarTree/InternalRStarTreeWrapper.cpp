@@ -42,9 +42,9 @@ namespace Tgs
   InternalRStarTreeWrapper::InternalRStarTreeWrapper(unsigned int pageSize, unsigned int dimensions) : 
   _dimensions(dimensions)
   {
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore((int)pageSize));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore((int)pageSize));
 
-    _tree = shared_ptr<HilbertRTree>(new HilbertRTree(mps, dimensions));
+    _tree =boost::shared_ptr<HilbertRTree>(new HilbertRTree(mps, dimensions));
   }
 
   InternalRStarTreeWrapper::~InternalRStarTreeWrapper()
@@ -77,7 +77,7 @@ namespace Tgs
   void InternalRStarTreeWrapper::getIntersectingObjects(const std::vector<double> minBounds, 
     const std::vector<double> maxBounds, std::vector<int> & objIds)
   {
-    shared_ptr<IntersectionIterator> interItr = shared_ptr<IntersectionIterator>(new IntersectionIterator(_tree.get(), minBounds, maxBounds));
+   boost::shared_ptr<IntersectionIterator> interItr =boost::shared_ptr<IntersectionIterator>(new IntersectionIterator(_tree.get(), minBounds, maxBounds));
     
     while(interItr->next())
     {
@@ -87,7 +87,7 @@ namespace Tgs
 
   void InternalRStarTreeWrapper::getObjectsWithinRange(std::vector<double> point, double radius, std::vector<int> & objIds)
   {
-    shared_ptr<DistanceIterator> distItr = shared_ptr<DistanceIterator>(new DistanceIterator(_tree.get(), point, radius));
+   boost::shared_ptr<DistanceIterator> distItr =boost::shared_ptr<DistanceIterator>(new DistanceIterator(_tree.get(), point, radius));
 
     while(distItr->next())
     {

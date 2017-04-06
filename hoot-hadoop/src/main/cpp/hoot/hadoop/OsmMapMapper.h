@@ -40,14 +40,14 @@ public:
   void map(HadoopPipes::MapContext& context);
 
   void emitRecord(HadoopPipes::MapContext& context, const string& k,
-    const shared_ptr<const OsmMap>& m)
+    const boost::shared_ptr<const OsmMap>& m)
   {
     stringstream ss(stringstream::out);
     _OsmPbfWriter.writePb(m, &ss);
     context.emit(k, ss.str());
   }
 
-  void emitRecord(HadoopPipes::MapContext& context, const string& k, const shared_ptr<const Way>& w)
+  void emitRecord(HadoopPipes::MapContext& context, const string& k, const boost::shared_ptr<const Way>& w)
   {
     stringstream ss(stringstream::out);
     _OsmPbfWriter.writePb(w, &ss);
@@ -55,7 +55,7 @@ public:
   }
 
   void emitRecord(HadoopPipes::MapContext& context, const string& k,
-    const shared_ptr<const Node>& n)
+    const boost::shared_ptr<const Node>& n)
   {
     stringstream ss(stringstream::out);
     _OsmPbfWriter.writePb(n, &ss);
@@ -68,9 +68,9 @@ protected:
   OsmPbfWriter _OsmPbfWriter;
   HadoopPipes::MapContext* _context;
 
-  void _loadMap(shared_ptr<OsmMap>& map);
+  void _loadMap(boost::shared_ptr<OsmMap>& map);
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context) = 0;
+  virtual void _map(boost::shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context) = 0;
 
 };
 

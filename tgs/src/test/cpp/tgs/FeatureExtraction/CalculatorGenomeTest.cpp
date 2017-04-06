@@ -136,18 +136,18 @@ namespace Tgs
 
       for (unsigned int i = 0; i < 10; i++)
       {
-        shared_ptr<CalculatorGenome> father(new CalculatorGenome());
+       boost::shared_ptr<CalculatorGenome> father(new CalculatorGenome());
         father->addBasicMathNodeTypes();
         father->addNodeType(new VectorCalculatorNodeSource(v), "VectorCalculatorNodeSource", 1.0);
         father->initialize();
         cout << "dad: " << father->toString() << endl;
 
-        shared_ptr<CalculatorGenome> mother =
+       boost::shared_ptr<CalculatorGenome> mother =
           dynamic_pointer_cast<CalculatorGenome>(father->clone());
         mother->initialize();
         cout << "mom: " << mother->toString() << endl;
 
-        shared_ptr<Genome> brother, sister;
+       boost::shared_ptr<Genome> brother, sister;
         father->crossoverSexually(*father, *mother, brother, sister);
 
         cout << "bro: " << brother->toString() << endl;
@@ -285,9 +285,9 @@ namespace Tgs
 
       double vweight = 1.0 / (VARIABLE_SIZE + 2) * (params.find("variableWeight")->second.value);
 
-      shared_ptr<SimpleFitness> fitness(new SimpleFitness(v1, v2));
+     boost::shared_ptr<SimpleFitness> fitness(new SimpleFitness(v1, v2));
 
-      shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
+     boost::shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
       genome->addBasicMathNodeTypes();
       VectorCalculatorNodeSource* good1 = new VectorCalculatorNodeSource(v1);
       good1->setLabel("v1[]");
@@ -299,7 +299,7 @@ namespace Tgs
 
       genome->setWeight("class Tgs::ConstantCalculatorNodeSource", vweight * .5);
 
-      std::vector< shared_ptr<VectorCalculatorNodeSource> > badGenome;
+      std::vector<boost::shared_ptr<VectorCalculatorNodeSource> > badGenome;
       for (int j = 0; j < VARIABLE_SIZE; j++)
       {
         stringstream strm;
@@ -309,7 +309,7 @@ namespace Tgs
         {
           bad.push_back(Tgs::Random::instance()->generateInt());
         }
-        shared_ptr<VectorCalculatorNodeSource> src(new VectorCalculatorNodeSource(bad));
+       boost::shared_ptr<VectorCalculatorNodeSource> src(new VectorCalculatorNodeSource(bad));
         src->setLabel(strm.str() + "[]");
         genome->addNodeType(src, strm.str(), vweight);
         badGenome.push_back(src);
@@ -347,7 +347,7 @@ namespace Tgs
 
         ga.step();
         c+= ga.getPopulation().size();
-        shared_ptr<CalculatorGenome> best =
+       boost::shared_ptr<CalculatorGenome> best =
           dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
         score = best->getScore();
         //cout << "individuals: " << c << "\r";
@@ -388,14 +388,14 @@ namespace Tgs
     {
       for (unsigned int i = 0; i < 10; i++)
       {
-        shared_ptr<CalculatorGenome> father(new CalculatorGenome());
+       boost::shared_ptr<CalculatorGenome> father(new CalculatorGenome());
         father->addBasicMathNodeTypes();
         father->initialize();
 
         stringstream strm;
         father->save(strm);
 
-        shared_ptr<CalculatorGenome> loader(new CalculatorGenome());
+       boost::shared_ptr<CalculatorGenome> loader(new CalculatorGenome());
         //stringstream strm2(strm.str());
         loader->addBasicMathNodeTypes();
         loader->load(strm);

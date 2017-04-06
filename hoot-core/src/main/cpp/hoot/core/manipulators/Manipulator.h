@@ -54,11 +54,11 @@ public:
 
   static std::string className() { return "hoot::Manipulator"; }
 
-  virtual const vector< shared_ptr<Manipulation> >& findAllManipulations(
-          shared_ptr<const OsmMap> map) = 0;
+  virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+          boost::shared_ptr<const OsmMap> map) = 0;
 
-  virtual const vector< shared_ptr<Manipulation> >& findManipulations(
-      shared_ptr<const OsmMap> map, const vector<ElementId>& ids) = 0;
+  virtual const vector< boost::shared_ptr<Manipulation> >& findManipulations(
+      boost::shared_ptr<const OsmMap> map, const vector<ElementId>& ids) = 0;
 
 };
 

@@ -101,9 +101,9 @@ protected:
    */
   QString _markupString(const QString& str);
 
-  void _writeNodes(shared_ptr<const OsmMap> map);
-  void _writeWays(shared_ptr<const OsmMap> map);
-  void _writeRelations(shared_ptr<const OsmMap> map);
+  void _writeNodes(boost::shared_ptr<const OsmMap> map);
+  void _writeWays(boost::shared_ptr<const OsmMap> map);
+  void _writeRelations(boost::shared_ptr<const OsmMap> map);
   void _write(const QString& str) { _write(str, _pretty); }
   void _write(const QString& str, bool newLine);
   void _writeLn(const QString& str) { _write(str, true); }

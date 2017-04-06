@@ -63,7 +63,7 @@ public:
    * @brief apply Peform the remove operation
    * @param map Map to operate on
    */
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * @brief setRelationId Set the ID of the relation to remove

@@ -56,10 +56,10 @@ class PaintNodesCmd : public BaseCommand
 
     virtual QString getName() const { return "paint-nodes"; }
 
-    Envelope getEnvelope(shared_ptr<OsmMapReader> reader)
+    Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
     {
-      shared_ptr<EnvelopeProvider> ep = dynamic_pointer_cast<EnvelopeProvider>(reader);
-      shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      boost::shared_ptr<EnvelopeProvider> ep = dynamic_pointer_cast<EnvelopeProvider>(reader);
+      boost::shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
       if (ep)
       {
@@ -78,7 +78,7 @@ class PaintNodesCmd : public BaseCommand
           if (e.get() && e->getElementType() == ElementType::Node)
           {
             nodeCount++;
-            shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+            boost::shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
             if (result.isNull())
             {
               result = Envelope(n->getX(), n->getX(), n->getY(), n->getY());
@@ -102,9 +102,9 @@ class PaintNodesCmd : public BaseCommand
       }
     }
 
-    cv::Mat calculateDensity(Envelope envelope, double pixelSize, shared_ptr<OsmMapReader> reader)
+    cv::Mat calculateDensity(Envelope envelope, double pixelSize, boost::shared_ptr<OsmMapReader> reader)
     {
-      shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      boost::shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
       r->setUseDataSourceIds(true);
       //r->initializePartial();
 
@@ -120,7 +120,7 @@ class PaintNodesCmd : public BaseCommand
 
         if (e->getElementType() == ElementType::Node)
         {
-          shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+          boost::shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);
           int py = int((n->getY() - envelope.getMinY()) / pixelSize);
           px = std::min(width - 1, std::max(0, px));
@@ -201,7 +201,7 @@ class PaintNodesCmd : public BaseCommand
         colorMultiplier[3] = toColorPortion(bs[3]);
       }
 
-      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input,
+      boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input,
         true);
       reader->open(input);
       Envelope e = getEnvelope(reader);

@@ -52,26 +52,26 @@ public:
 
   void tagRenameKeyTest()
   {
-    shared_ptr<OsmMap> map = _loadMap();
+    boost::shared_ptr<OsmMap> map = _loadMap();
 
     TagRenameKeyVisitor visitor("source", "source_modified");
     map->visitRw(visitor);
 
-    shared_ptr<TagKeyCountVisitor> keyCountVisitor1(new TagKeyCountVisitor("source"));
+    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor1(new TagKeyCountVisitor("source"));
     map->visitRo(*keyCountVisitor1);
     CPPUNIT_ASSERT_EQUAL((long)0, (long)keyCountVisitor1->getStat());
 
-    shared_ptr<TagKeyCountVisitor> keyCountVisitor2(new TagKeyCountVisitor("source_modified"));
+    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor2(new TagKeyCountVisitor("source_modified"));
     map->visitRo(*keyCountVisitor2);
     CPPUNIT_ASSERT_EQUAL((long)6, (long)keyCountVisitor2->getStat());
   }
 
 private:
 
-  shared_ptr<OsmMap> _loadMap()
+  boost::shared_ptr<OsmMap> _loadMap()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/TagRenameKeyVisitorTest.osm", map);

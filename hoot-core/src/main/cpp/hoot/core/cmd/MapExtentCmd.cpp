@@ -54,7 +54,7 @@ public:
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, args[0], true, Status::Invalid);
 
     cout << "Map extent (minx,miny,maxx,maxy): " <<

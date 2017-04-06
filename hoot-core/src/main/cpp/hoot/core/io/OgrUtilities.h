@@ -68,7 +68,7 @@ class OgrUtilities
 public:
   OgrUtilities();
 
-  shared_ptr<GDALDataset> createDataSource(const QString& url);
+  boost::shared_ptr<GDALDataset> createDataSource(const QString& url);
 
   static OgrUtilities& getInstance();
 
@@ -78,7 +78,7 @@ public:
    */
   bool isReasonableUrl(const QString& url);
 
-  shared_ptr<GDALDataset> openDataSource(const QString& url);
+  boost::shared_ptr<GDALDataset> openDataSource(const QString& url);
 
   OgrDriverInfo getDriverInfo(const QString& url);
 
@@ -89,7 +89,7 @@ private:
    */
   void loadDriverInfo();
 
-  static shared_ptr<OgrUtilities> _theInstance;
+  static boost::shared_ptr<OgrUtilities> _theInstance;
   std::vector<OgrDriverInfo> _drivers;
 };
 

@@ -77,7 +77,7 @@ private:
 
 };
 
-typedef shared_ptr<ElementSorter> ElementSorterPtr;
+typedef boost::shared_ptr<ElementSorter> ElementSorterPtr;
 
 }
 

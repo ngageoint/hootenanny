@@ -55,12 +55,12 @@ public:
   void runBasicTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "strange test";
     map->addNode(n1);
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    boost::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w1->setTag("highway", "road");
     map->addWay(w1);
 

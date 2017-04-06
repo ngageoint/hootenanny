@@ -91,7 +91,7 @@ public:
   class NodeFactory
   {
   public:
-    virtual shared_ptr<Node> createNode(const shared_ptr<OsmMap>& map, const Coordinate& c,
+    virtual boost::shared_ptr<Node> createNode(const boost::shared_ptr<OsmMap>& map, const Coordinate& c,
       Status s, double circularError) = 0;
   };
 
@@ -101,7 +101,7 @@ public:
    * geometry in the collection then convertGeometryToElement will be called for that geometry.
    * If there are no geometries in the collection then a null point is returned.
    */
-  shared_ptr<Element> convertGeometryCollection(const GeometryCollection* gc,
+ boost::shared_ptr<Element> convertGeometryCollection(const GeometryCollection* gc,
     Status s, double circularError);
 
   /**
@@ -118,45 +118,45 @@ public:
    * @param status The status to assign to the newly created elements.
    * @param circularError The circular error to assign to the newly created elements.
    */
-  shared_ptr<Element> convertGeometryToElement(const Geometry* g, Status s, double circularError);
+ boost::shared_ptr<Element> convertGeometryToElement(const Geometry* g, Status s, double circularError);
 
-  shared_ptr<Way> convertLineStringToWay(const LineString* ls, const shared_ptr<OsmMap>& map,
+ boost::shared_ptr<Way> convertLineStringToWay(const LineString* ls, const boost::shared_ptr<OsmMap>& map,
     Status s, double circularError);
 
   /**
    * If the MultiLineString contains multiple lines a multilinestring relation is returned. If the
    * multilinestring contains just one LineString a single Way is returned.
    */
-  shared_ptr<Element> convertMultiLineStringToElement(const MultiLineString* mls,
-    const shared_ptr<OsmMap>& map, Status s, double circularError);
+ boost::shared_ptr<Element> convertMultiLineStringToElement(const MultiLineString* mls,
+    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
 
-  shared_ptr<Relation> convertMultiPolygonToRelation(const MultiPolygon* mp,
-    const shared_ptr<OsmMap>& map, Status s, double circularError);
+ boost::shared_ptr<Relation> convertMultiPolygonToRelation(const MultiPolygon* mp,
+    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
 
   /**
    * Converts the provided polygon into an element. If the polygon contains holes then a multi
    * polygon relation will be created. If the polygon doesn't contain holes then a closed way will
    * be created and the area=yes tag will be set.
    */
-  shared_ptr<Element> convertPolygonToElement(const Polygon* polygon,
-    const shared_ptr<OsmMap>& map, Status s, double circularError);
+ boost::shared_ptr<Element> convertPolygonToElement(const Polygon* polygon,
+    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
 
-  shared_ptr<Relation> convertPolygonToRelation(const Polygon* polygon,
-    const shared_ptr<OsmMap>& map, Status s, double circularError);
+ boost::shared_ptr<Relation> convertPolygonToRelation(const Polygon* polygon,
+    const boost::shared_ptr<OsmMap>& map, Status s, double circularError);
 
   void convertPolygonToRelation(const Polygon* polygon,
-    const shared_ptr<OsmMap>& map, const shared_ptr<Relation>& r, Status s, double circularError);
+    const boost::shared_ptr<OsmMap>& map, const boost::shared_ptr<Relation>& r, Status s, double circularError);
 
-  void convertPolygonToWays(const Polygon* polygon, const shared_ptr<OsmMap>& map,
+  void convertPolygonToWays(const Polygon* polygon, const boost::shared_ptr<OsmMap>& map,
     Status s, double circularError);
 
-  void setNodeFactory(shared_ptr<NodeFactory> nf) { _nf = nf; }
+  void setNodeFactory(boost::shared_ptr<NodeFactory> nf) { _nf = nf; }
 
 protected:
-  shared_ptr<Node> _createNode(const shared_ptr<OsmMap>& map, const Coordinate& c, Status s,
+ boost::shared_ptr<Node> _createNode(const boost::shared_ptr<OsmMap>& map, const Coordinate& c, Status s,
     double circularError);
 
-  shared_ptr<NodeFactory> _nf;
+ boost::shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;
   OsmMapPtr _map;
   int _logCount;

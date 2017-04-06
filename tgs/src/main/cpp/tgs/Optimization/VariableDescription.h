@@ -68,8 +68,8 @@ private:
   VariableType _type;
 };
 
-typedef shared_ptr<VariableDescription> VariableDescriptionPtr;
-typedef shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
+typedef boost::shared_ptr<VariableDescription> VariableDescriptionPtr;
+typedef boost::shared_ptr<const VariableDescription> ConstVariableDescriptionPtr;
 
 }
 

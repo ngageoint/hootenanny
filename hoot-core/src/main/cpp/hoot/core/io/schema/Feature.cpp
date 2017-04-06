@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-Feature::Feature(const shared_ptr<const FeatureDefinition>& d) : _definition(d)
+Feature::Feature(const boost::shared_ptr<const FeatureDefinition>& d) : _definition(d)
 {
 }
 
@@ -66,7 +66,7 @@ void Feature::validate(StrictChecking strict)
   for (size_t i = 0; i < _definition->getFieldCount(); ++i)
   {
     // is
-    shared_ptr<const FieldDefinition> d = _definition->getFieldDefinition(i);
+    boost::shared_ptr<const FieldDefinition> d = _definition->getFieldDefinition(i);
     if (_values.contains(d->getName()) == false)
     {
       if (d->hasDefaultValue() == false)

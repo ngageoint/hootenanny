@@ -49,10 +49,10 @@ public:
 
     void runTest()
     {
-      shared_ptr<OsmMap> map1(new OsmMap());
+      boost::shared_ptr<OsmMap> map1(new OsmMap());
       OsmMapReaderFactory::read(map1, "test-files/io/ChangesetDeriverTest/Map1.osm", true);
 
-      shared_ptr<OsmMap> map2(new OsmMap());
+      boost::shared_ptr<OsmMap> map2(new OsmMap());
       OsmMapReaderFactory::read(map2, "test-files/io/ChangesetDeriverTest/Map2.osm", true);
 
       ElementSorterPtr map1SortedElements(new ElementSorter(map1));

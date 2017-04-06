@@ -35,8 +35,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ChainCriterion)
 
-ChainCriterion::ChainCriterion(shared_ptr<ElementCriterion> child1,
-                               shared_ptr<ElementCriterion> child2)
+ChainCriterion::ChainCriterion(boost::shared_ptr<ElementCriterion> child1,
+                               boost::shared_ptr<ElementCriterion> child2)
 {
   _filters.push_back(child1);
   _filters.push_back(child2);
@@ -44,28 +44,28 @@ ChainCriterion::ChainCriterion(shared_ptr<ElementCriterion> child1,
 
 ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child2)
 {
-  _filters.push_back(shared_ptr<ElementCriterion>(child1));
-  _filters.push_back(shared_ptr<ElementCriterion>(child2));
+  _filters.push_back(boost::shared_ptr<ElementCriterion>(child1));
+  _filters.push_back(boost::shared_ptr<ElementCriterion>(child2));
 }
 
 ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2)
 {
-  _filters.push_back(shared_ptr<ElementCriterion>(child1));
+  _filters.push_back(boost::shared_ptr<ElementCriterion>(child1));
   _filters.push_back(child2);
 }
 
 ChainCriterion::ChainCriterion(ElementCriterion* child1, ElementCriterion* child2,
                                ElementCriterion* child3)
 {
-  _filters.push_back(shared_ptr<ElementCriterion>(child1));
-  _filters.push_back(shared_ptr<ElementCriterion>(child2));
-  _filters.push_back(shared_ptr<ElementCriterion>(child3));
+  _filters.push_back(boost::shared_ptr<ElementCriterion>(child1));
+  _filters.push_back(boost::shared_ptr<ElementCriterion>(child2));
+  _filters.push_back(boost::shared_ptr<ElementCriterion>(child3));
 }
 
-ChainCriterion::ChainCriterion(vector< shared_ptr<ElementCriterion> > filters)
+ChainCriterion::ChainCriterion(vector< boost::shared_ptr<ElementCriterion> > filters)
 {
   for (size_t i = 0; i < filters.size(); i++)
-    _filters.push_back(shared_ptr<ElementCriterion>(filters[i]->clone()));
+    _filters.push_back(boost::shared_ptr<ElementCriterion>(filters[i]->clone()));
 }
 
 void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
@@ -73,7 +73,7 @@ void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
   _filters.push_back(e);
 }
 
-bool ChainCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool ChainCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   for (size_t i = 0; i < _filters.size(); i++)
   {

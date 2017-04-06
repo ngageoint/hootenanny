@@ -81,7 +81,7 @@ public:
       relationCacheSize = args[a++].toLong();
     }
 
-    shared_ptr<OgrWriter> writer(new OgrWriter());
+    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
     if (nodeCacheSize > 0 && wayCacheSize > 0 && relationCacheSize > 0)
     {
       writer->setCacheCapacity(nodeCacheSize, wayCacheSize, relationCacheSize);
@@ -93,12 +93,12 @@ public:
     if (readerFactory.hasElementInputStream(input) &&
       ConfigOptions().getOsm2ogrOps().size() == 0)
     {
-      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
+      boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
       reader->open(input);
-      shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-      shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+      boost::shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+      boost::shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
-      shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+      boost::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
       ProjectToGeographicVisitor visitor;
       bool notGeographic = !projection->IsGeographic();
 
@@ -115,7 +115,7 @@ public:
     }
     else
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
 
       loadMap(map, input, true);
 

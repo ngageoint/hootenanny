@@ -74,7 +74,7 @@ public:
    * @brief apply Peform the op on the given map
    * @param map map upon which to operate
    */
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * @brief setNodeId Sets the ID of the node to remove
@@ -110,9 +110,9 @@ private:
   bool _doCheck;
   bool _removeFully;
 
-  void _removeNodeNoCheck(shared_ptr<OsmMap>& map, long nId);
-  void _removeNode(shared_ptr<OsmMap>& map, long nId);
-  void _removeNodeFully(shared_ptr<OsmMap>& map, long nId);
+  void _removeNodeNoCheck(boost::shared_ptr<OsmMap>& map, long nId);
+  void _removeNode(boost::shared_ptr<OsmMap>& map, long nId);
+  void _removeNodeFully(boost::shared_ptr<OsmMap>& map, long nId);
 
 };
 

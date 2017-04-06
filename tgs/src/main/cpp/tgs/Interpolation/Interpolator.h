@@ -65,7 +65,7 @@ public:
   /**
    * Set the data frame to be used by this interpolator.
    */
-  virtual void setData(const shared_ptr<const DataFrame>& df) = 0;
+  virtual void setData(const boost::shared_ptr<const DataFrame>& df) = 0;
 
   /**
    * Sets a list of columns that represent the data to be interpolated. Each column is interpolated

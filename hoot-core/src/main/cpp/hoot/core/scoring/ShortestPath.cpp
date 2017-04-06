@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-ShortestPath::ShortestPath(shared_ptr<const DirectedGraph> graph)
+ShortestPath::ShortestPath(boost::shared_ptr<const DirectedGraph> graph)
 {
   _graph = graph;
 }

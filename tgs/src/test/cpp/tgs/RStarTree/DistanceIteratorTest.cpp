@@ -70,7 +70,7 @@ public:
 
 //   void benchmark(int dimensions, int size, int iterations, int pageSize)
 //   {
-//     shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
+//    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
 //     RStarTree uut(mps, dimensions);
 //
 //     Box b(dimensions);
@@ -211,7 +211,7 @@ public:
 //   {
 //     int dimensions = 2;
 //     int pointCount = 3000;
-//     shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+//    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
 //     RStarTree uut(mps, dimensions);
 //
 //     std::vector<Box> boxes;

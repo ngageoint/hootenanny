@@ -41,7 +41,7 @@ using namespace std;
 
 namespace Tgs
 {
-  MimicGa::MimicGa(shared_ptr<Genome> seed, shared_ptr<FitnessFunction> fitness) :
+  MimicGa::MimicGa(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness) :
     GeneticAlgorithm(seed, fitness)
   {
     _thetaPercentile = .5;
@@ -54,17 +54,17 @@ namespace Tgs
   {
   }
 
-  void MimicGa::_initializeGenome(shared_ptr<Genome> genome)
+  void MimicGa::_initializeGenome(boost::shared_ptr<Genome> genome)
   {
-    shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
+   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
     assert(cg);
     _setGenomeWeights(cg);
     genome->initialize();
   }
 
-  void MimicGa::_mutate(shared_ptr<Genome> genome)
+  void MimicGa::_mutate(boost::shared_ptr<Genome> genome)
   {
-    shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
+   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
     assert(cg);
     _setGenomeWeights(cg);
     genome->mutate(1.0);
@@ -96,19 +96,19 @@ namespace Tgs
     }
   }
 
-  void MimicGa::_populateWeights(const shared_ptr<CalculatorGenomeNode> node)
+  void MimicGa::_populateWeights(const boost::shared_ptr<CalculatorGenomeNode> node)
   {
     _weights[node->getId()]++;
     const std::map<std::string, std::string>& inputs = node->getInputs();
     for (std::map<std::string, std::string>::const_iterator it = inputs.begin(); 
       it != inputs.end(); ++it)
     {
-      shared_ptr<CalculatorGenomeNode> child = node->getInput(it->first);
+     boost::shared_ptr<CalculatorGenomeNode> child = node->getInput(it->first);
       _populateWeights(child);
     }
   }
 
-  void MimicGa::_setGenomeWeights(shared_ptr<CalculatorGenome> genome)
+  void MimicGa::_setGenomeWeights(boost::shared_ptr<CalculatorGenome> genome)
   {
     if (_weights.size() > 0)
     {
@@ -153,7 +153,7 @@ namespace Tgs
 //       _normalize(oldWeights);
 //     }
 
-    shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(_population[0]);
+   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(_population[0]);
 
     const CalculatorGenome::AvailableNodeMap& anm = cg->getAvailableNodes();
     for (CalculatorGenome::AvailableNodeMap::const_iterator it = anm.begin(); it != anm.end(); 

@@ -43,9 +43,9 @@ using namespace boost;
 class Feature
 {
 public:
-  Feature(const shared_ptr<const FeatureDefinition>& d);
+  Feature(const boost::shared_ptr<const FeatureDefinition>& d);
 
-  const shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
+  const boost::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 
   const QVariantMap& getValues() const { return _values; }
 
@@ -60,7 +60,7 @@ public:
   QString toString() const;
 
 private:
-  const shared_ptr<const FeatureDefinition>& _definition;
+  const boost::shared_ptr<const FeatureDefinition>& _definition;
   QVariantMap _values;
 };
 

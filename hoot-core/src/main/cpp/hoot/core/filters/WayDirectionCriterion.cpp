@@ -32,7 +32,7 @@ namespace hoot
 {
 
 WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
-                                             shared_ptr<const Way> baseWay,
+                                             boost::shared_ptr<const Way> baseWay,
                                              bool similarDirection) :
   _map(map),
   _baseWay(baseWay),
@@ -41,7 +41,7 @@ WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
   // Blank
 }
 
-bool WayDirectionCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool WayDirectionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   if (e->getElementType() != ElementType::Way)
     return false;

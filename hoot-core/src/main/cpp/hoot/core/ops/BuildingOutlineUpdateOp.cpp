@@ -80,7 +80,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const shared_ptr<Way>& w = _map.getWay(e->getId());
+      const boost::shared_ptr<Way>& w = _map.getWay(e->getId());
       std::vector<long> oldNodes = w->getNodeIds();
       std::vector<long> newNodes = w->getNodeIds();
 
@@ -116,7 +116,7 @@ BuildingOutlineUpdateOp::BuildingOutlineUpdateOp()
 {
 }
 
-void BuildingOutlineUpdateOp::apply(shared_ptr<OsmMap>& map)
+void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -124,7 +124,7 @@ void BuildingOutlineUpdateOp::apply(shared_ptr<OsmMap>& map)
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
   {
-    const shared_ptr<Relation>& r = it->second;
+    const boost::shared_ptr<Relation>& r = it->second;
     // add the relation to a building group if appropriate
     if (OsmSchema::getInstance().isBuilding(r->getTags(), r->getElementType()))
     {
@@ -134,10 +134,10 @@ void BuildingOutlineUpdateOp::apply(shared_ptr<OsmMap>& map)
 }
 
 void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
-                                            shared_ptr<Geometry> outline,
+                                            boost::shared_ptr<Geometry> outline,
                                             ElementPtr buildingMember)
 {
-  shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(buildingMember);
+  boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(buildingMember);
   try
   {
     outline.reset(outline->Union(g.get()));
@@ -172,11 +172,11 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
   }
 }
 
-void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& building)
+void BuildingOutlineUpdateOp::_createOutline(const boost::shared_ptr<Relation>& building)
 {
   LOG_VART(building->toString());
 
-  shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+  boost::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
@@ -192,10 +192,10 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
         {
-          shared_ptr<Way> way = _map->getWay(entries[i].getElementId().getId());
+          boost::shared_ptr<Way> way = _map->getWay(entries[i].getElementId().getId());
           if (way->getNodeCount() >= 4)
           {
-            shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(way);
+            boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(way);
             try
             {
               outline.reset(outline->Union(g.get()));
@@ -243,11 +243,11 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
       }
       else if (entries[i].getElementId().getType() == ElementType::Relation)
       {
-        shared_ptr<Relation> relation = _map->getRelation(entries[i].getElementId().getId());
+        boost::shared_ptr<Relation> relation = _map->getRelation(entries[i].getElementId().getId());
         if (relation->isMultiPolygon())
         {
           {
-            shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(relation);
+            boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(relation);
             try
             {
               outline.reset(outline->Union(g.get()));
@@ -308,7 +308,7 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
   if (outline->isEmpty() == false)
   {
     LOG_TRACE("Processing outline...");
-    const shared_ptr<Element> outlineElement =
+    const boost::shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());
     _mergeNodes(outlineElement, building);
@@ -319,8 +319,8 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
   }
 }
 
-void BuildingOutlineUpdateOp::_mergeNodes(const shared_ptr<Element>& changed,
-  const shared_ptr<Relation>& reference)
+void BuildingOutlineUpdateOp::_mergeNodes(const boost::shared_ptr<Element>& changed,
+  const boost::shared_ptr<Relation>& reference)
 {
   set<long> changedNodes;
   set<long> referenceNodes;
@@ -339,10 +339,10 @@ void BuildingOutlineUpdateOp::_mergeNodes(const shared_ptr<Element>& changed,
     double bestDistance = epsilon;
     // should never be used uninitialized
     long bestMatch = -9999;
-    const shared_ptr<Node>& cn = _map->getNode(*ci);
+    const boost::shared_ptr<Node>& cn = _map->getNode(*ci);
     for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ri++)
     {
-      const shared_ptr<Node>& rn = _map->getNode(*ri);
+      const boost::shared_ptr<Node>& rn = _map->getNode(*ri);
       double distance = cn->toCoordinate().distance(rn->toCoordinate());
       if (distance < bestDistance)
       {

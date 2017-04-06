@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
 
-bool OrCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool OrCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   for (size_t i = 0; i < _filters.size(); i++)
   {

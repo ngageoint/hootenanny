@@ -43,9 +43,9 @@ LongBox::LongBox(vector<long int> min, vector<long int> max)
   setMax(max);
 }
 
-shared_ptr<LongBox> LongBox::copy()
+boost::shared_ptr<LongBox> LongBox::copy()
 {
-  shared_ptr<LongBox> box = shared_ptr<LongBox>(new LongBox(getMin(), getMax()));
+  boost::shared_ptr<LongBox> box = boost::shared_ptr<LongBox>(new LongBox(getMin(), getMax()));
   return box;
 }
 

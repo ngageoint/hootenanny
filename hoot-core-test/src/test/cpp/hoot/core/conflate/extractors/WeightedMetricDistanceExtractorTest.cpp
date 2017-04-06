@@ -53,11 +53,11 @@ class WeightedMetricDistanceExtractorTest : public CppUnit::TestFixture
 
 public:
 
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
-  shared_ptr<Node> createNode(double x, double y)
+  boost::shared_ptr<Node> createNode(double x, double y)
   {
-    shared_ptr<Node> n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
+    boost::shared_ptr<Node> n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
     _map->addNode(n);
     return n;
   }
@@ -65,24 +65,24 @@ public:
   void runTest()
   {
     //test highway (linestring)
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     _map = map;
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    boost::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w1->setTag("highway", "track");
     w1->setTag("name", "w1");
     w1->addNode(createNode(-104.9, 38.855)->getId());
     w1->addNode(createNode(-104.899, 38.8549)->getId());
     _map->addWay(w1);
 
-    shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    boost::shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w2->setTag("highway", "road");
     w2->setTag("name", "w2");
     w2->addNode(createNode(-104.9, 38.8545)->getId());
     w2->addNode(createNode(-104.8988, 38.8555)->getId());
      _map->addWay(w2);
 
-    shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    boost::shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w3->setTag("highway", "track");
     w3->setTag("name", "w1");
     w3->addNode(createNode(-104.9, 38.855)->getId());

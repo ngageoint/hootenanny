@@ -42,7 +42,7 @@
 namespace hoot
 {
 
-shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
+boost::shared_ptr<OgrUtilities> OgrUtilities::_theInstance;
 
 void OgrUtilities::loadDriverInfo()
 {
@@ -105,7 +105,7 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url)
 }
 
 
-shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
+boost::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {
   QString source = url;
   OgrDriverInfo driverInfo = getDriverInfo(url);
@@ -119,7 +119,7 @@ shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
   if (url.toLower().endsWith(".shp"))
     source = url.mid(0, url.length() - 4);
 
-  shared_ptr<GDALDataset> result(driver->Create(source.toAscii(), 0, 0, 0, GDT_Unknown, NULL));
+  boost::shared_ptr<GDALDataset> result(driver->Create(source.toAscii(), 0, 0, 0, GDT_Unknown, NULL));
   if (result == NULL)
   {
     throw HootException("Unable to create data source: " + source +
@@ -134,7 +134,7 @@ bool OgrUtilities::isReasonableUrl(const QString& url)
   return getDriverInfo(url)._driverName != NULL;
 }
 
-shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url)
+boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url)
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
@@ -142,7 +142,7 @@ shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url)
    */
   OgrDriverInfo driverInfo = getDriverInfo(url);
   const char* drivers[2] = { driverInfo._driverName, NULL };
-  shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(),
+  boost::shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(),
     driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL));
 
   if (!result)

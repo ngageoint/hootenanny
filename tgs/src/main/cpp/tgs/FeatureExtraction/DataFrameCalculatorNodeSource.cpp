@@ -36,7 +36,7 @@ namespace Tgs
     _factor = -1;
   }
 
-  DataFrameCalculatorNodeSource::DataFrameCalculatorNodeSource(shared_ptr<DataFrame> source, 
+  DataFrameCalculatorNodeSource::DataFrameCalculatorNodeSource(boost::shared_ptr<DataFrame> source, 
     int factor)
   {
     _source = source;

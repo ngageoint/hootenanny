@@ -43,8 +43,8 @@ public:
   virtual double f(const ConstStatePtr& s) const = 0;
 };
 
-typedef shared_ptr<FitnessFunction> FitnessFunctionPtr;
-typedef shared_ptr<const FitnessFunction> ConstFitnessFunctionPtr;
+typedef boost::shared_ptr<FitnessFunction> FitnessFunctionPtr;
+typedef boost::shared_ptr<const FitnessFunction> ConstFitnessFunctionPtr;
 
 }
 

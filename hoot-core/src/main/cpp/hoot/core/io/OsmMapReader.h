@@ -59,7 +59,7 @@ public:
   /**
    * Reads the specified map. When this method is complete the input will likely be closed.
    */
-  virtual void read(shared_ptr<OsmMap> map) = 0;
+  virtual void read(boost::shared_ptr<OsmMap> map) = 0;
 
   /**
    * Determines the reader's default element status

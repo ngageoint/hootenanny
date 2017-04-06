@@ -67,10 +67,10 @@ class RdpWayGeneralizerTest : public CppUnit::TestFixture
 
 public:
 
-  QMap<QString, QList<shared_ptr<const Node> > > _inputPointsCache;
+  QMap<QString, QList<boost::shared_ptr<const Node> > > _inputPointsCache;
   QMap<QString, QList<Coordinate> > _inputCoordsCache;
 
-  QList<shared_ptr<const Node> > readPoints(const QString filePath)
+  QList<boost::shared_ptr<const Node> > readPoints(const QString filePath)
   {
     OsmMap::resetCounters();
 
@@ -86,12 +86,12 @@ public:
     }
 
     QTextStream textStream(&file);
-    QList<shared_ptr<const Node> > points;
-    shared_ptr<OsmMap> map(new OsmMap());
+    QList<boost::shared_ptr<const Node> > points;
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     while (!textStream.atEnd())
     {
       QStringList pointParts = textStream.readLine().split(",");
-      shared_ptr<const Node> node(
+      boost::shared_ptr<const Node> node(
         new Node(
           Status::Unknown1,
           map->createNextNodeId(),
@@ -135,7 +135,7 @@ public:
     return coordinates;
   }
 
-  QString writeMap(shared_ptr<OsmMap> map, const QString outDir, const QString outFileName)
+  QString writeMap(boost::shared_ptr<OsmMap> map, const QString outDir, const QString outFileName)
   {
     QDir().mkpath(outDir);
     OsmXmlWriter writer;
@@ -146,14 +146,14 @@ public:
     return outFile;
   }
 
-  QString writePointOutput(const QList<shared_ptr<const Node> >& points, const QString outDir,
+  QString writePointOutput(const QList<boost::shared_ptr<const Node> >& points, const QString outDir,
                            const QString outFileName)
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     //points will be empty for the generalize calls with way inputs instead of points
-    for (QList<shared_ptr<const Node> >::const_iterator it = points.constBegin();
+    for (QList<boost::shared_ptr<const Node> >::const_iterator it = points.constBegin();
          it != points.constEnd(); ++it)
     {
       NodePtr nodeCopy(new Node(*(*it).get()));
@@ -165,7 +165,7 @@ public:
 
   void runPerpendicularDistanceTest()
   {
-    const QList<shared_ptr<const Node> >& inputPoints =
+    const QList<boost::shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
@@ -179,12 +179,12 @@ public:
 
   void runCalcPointsInput1aTest()
   {
-    const QList<shared_ptr<const Node> >& inputPoints =
+    const QList<boost::shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
     RdpWayGeneralizer generalizer(0.1);
-    const QList<shared_ptr<const Node> >& outputPoints =
+    const QList<boost::shared_ptr<const Node> >& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(148, outputPoints.size());
     QString outFile =
@@ -197,12 +197,12 @@ public:
 
   void runCalcPointsInput1bTest()
   {
-    const QList<shared_ptr<const Node> >& inputPoints =
+    const QList<boost::shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
     RdpWayGeneralizer generalizer(5.9);
-    const QList<shared_ptr<const Node> >& outputPoints =
+    const QList<boost::shared_ptr<const Node> >& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(22, outputPoints.size());
     QString outFile =
@@ -215,12 +215,12 @@ public:
 
   void runCalcPointsInput2aTest()
   {
-    const QList<shared_ptr<const Node> >& inputPoints =
+    const QList<boost::shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset2.txt");
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
 
     RdpWayGeneralizer generalizer(0.1);
-    const QList<shared_ptr<const Node> >& outputPoints =
+    const QList<boost::shared_ptr<const Node> >& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(48, outputPoints.size());
     QString outFile =
@@ -233,12 +233,12 @@ public:
 
   void runCalcPointsInput2bTest()
   {
-    const QList<shared_ptr<const Node> >& inputPoints =
+    const QList<boost::shared_ptr<const Node> >& inputPoints =
       readPoints("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset2.txt");
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
 
     RdpWayGeneralizer generalizer(5.9);
-    const QList<shared_ptr<const Node> >& outputPoints =
+    const QList<boost::shared_ptr<const Node> >& outputPoints =
       generalizer.getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(4, outputPoints.size());
     QString outFile =
@@ -252,7 +252,7 @@ public:
   void runGeneralizeWayInput1NoInformationNodesTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     QList<Coordinate> inputCoords =
       readCoords("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());
@@ -276,7 +276,7 @@ public:
   void runGeneralizeWayInput1WithInformationNodesTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     QList<Coordinate> inputCoords =
       readCoords("test-files/algorithms/RdpWayGeneralizerTest/RdpWayGeneralizerTestDataset1.txt");
     CPPUNIT_ASSERT_EQUAL(197, inputCoords.size());

@@ -61,9 +61,9 @@ vector<string> DataSamples::getUniqueLabels() const
   return labels;
 }
 
-shared_ptr<DataFrame> DataSamples::toDataFrame(double nullValue) const
+boost::shared_ptr<DataFrame> DataSamples::toDataFrame(double nullValue) const
 {
-  shared_ptr<DataFrame> result(new DataFrame);
+ boost::shared_ptr<DataFrame> result(new DataFrame);
   vector<string> labels = getUniqueLabels();
   result->setFactorLabels(labels);
 

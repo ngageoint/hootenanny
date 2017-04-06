@@ -50,12 +50,12 @@ public:
 
 private:
 
-  vector< shared_ptr<const FeatureExtractor> > _extractors;
+  vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
 
   void _createExtractors();
 };
 
-typedef shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
+typedef boost::shared_ptr<PoiPolygonRfClassifier> PoiPolygonRfClassifierPtr;
 
 }
 

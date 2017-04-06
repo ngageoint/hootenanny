@@ -89,7 +89,7 @@ public:
     OsmMap::resetCounters();
     OsmPbfReader uut(false);
     fstream input("test-files/io/SmallSplits.pbf", ios::in | ios::binary);
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     vector<OsmPbfReader::BlobLocation> v = uut.loadOsmDataBlobOffsets(input);
 
@@ -165,7 +165,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
@@ -199,7 +199,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
@@ -232,7 +232,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
@@ -266,7 +266,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
@@ -290,7 +290,7 @@ public:
 
     OsmPbfReader uut(false);
     fstream input("test-files/ToyTestA.osm.pbf", ios::in | ios::binary);
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     uut.parse(&input, map);
 
     QDir().mkpath("test-output/io/");
@@ -309,7 +309,7 @@ public:
 
     OsmPbfReader uut(false);
     fstream input("test-files/io/OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     uut.parse(&input, map);
 
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
@@ -398,7 +398,7 @@ public:
     OsmMap::resetCounters();
 
     OsmPbfReader reader(false);
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.open("test-files/ToyTestA.osm.pbf");
     reader.read(map);
     reader.close();
@@ -416,7 +416,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm.pbf", false, Status::Unknown1);
 
     QDir().mkpath("test-output/io/");
@@ -451,7 +451,7 @@ public:
     int ctr = 0;
     while (reader.hasMoreElements())
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
       reader.readPartial(map);
       CPPUNIT_ASSERT_EQUAL(
         chunkSize,
@@ -495,7 +495,7 @@ public:
     int ctr = 0;
     while (reader.hasMoreElements())
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
       reader.readPartial(map);
 
       //some of these before the last one don't read out the full buffer size..not sure why
@@ -562,7 +562,7 @@ public:
     OsmMap::resetCounters();
 
     //This pbf file contains Sort.Type_then_ID in the header. Test to read it.
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmPbfReader reader(true);
     reader.open("test-files/OsmPbfPartialReaderTest4_with_sorttype.osm.pbf");
     reader.read(map);
@@ -577,7 +577,7 @@ public:
     //The test is for #161 - OsmPbfReader should be more permissive when the file is unsorted
     //This file doesn't have Sort.Type_then_ID in the header. Before changes, when permissive
     //set to false, the nodes count with ways are all zeros. Now the ways contain valid nodes.
-    shared_ptr<OsmMap> map1(new OsmMap());
+    boost::shared_ptr<OsmMap> map1(new OsmMap());
     OsmPbfReader reader1(true);
     reader1.open("test-files/OsmPbfPartialReaderTest4_without_sorttype.osm.pbf");
     reader1.setPermissive(false);
@@ -598,7 +598,7 @@ public:
 
 
     //test the pbf file that the sorted flag isn't set and values are out of order
-    shared_ptr<OsmMap> map2(new OsmMap());
+    boost::shared_ptr<OsmMap> map2(new OsmMap());
     OsmPbfReader reader2(true);
     reader2.open("test-files/OsmPbfTest_withoursoretype_unsorted.osm.pbf");
     reader2.setPermissive(false);

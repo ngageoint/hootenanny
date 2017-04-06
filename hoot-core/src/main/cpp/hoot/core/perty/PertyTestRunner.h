@@ -65,7 +65,7 @@ public:
       @param referenceMapInputPath Path to the input OSM map file to run PERTY against
       @param outputPath Output path for file and results
     */
-  QList<shared_ptr<const PertyTestRunResult> > runTest(const QString referenceMapInputPath,
+  QList<boost::shared_ptr<const PertyTestRunResult> > runTest(const QString referenceMapInputPath,
                                                        const QString outputPath);
 
   virtual void setConfiguration(const Settings &conf) { _settings = conf; }
@@ -193,11 +193,11 @@ private:
 
   Settings _settings;
 
-  shared_ptr<PertyMatchScorer> _matchScorer;
+ boost::shared_ptr<PertyMatchScorer> _matchScorer;
 
   void _writeStatsForOutputFiles(const QString& inputMapPath, QString sep);
   void _writePlotFile(const QString outputPath,
-                      const QList<shared_ptr<const PertyTestRunResult> >& testRunResults);
+                      const QList<boost::shared_ptr<const PertyTestRunResult> >& testRunResults);
 
   //for testing purposes only
   friend class PertyTestRunnerTest;

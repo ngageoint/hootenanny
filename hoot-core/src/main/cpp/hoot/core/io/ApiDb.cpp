@@ -291,7 +291,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
   return result;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
+boost::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
 {
   if (!_selectNodeIdsForWay)
   {
@@ -424,7 +424,7 @@ long ApiDb::round(double x)
   return (long)(x + 0.5);
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
+boost::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
 {
   LOG_VARD(bounds);
   const vector<Range> tileRanges = _getTileRanges(bounds);
@@ -472,7 +472,7 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
   return _selectNodesByBounds;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
+boost::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
 {
   if (nodeIds.size() == 0)
   {
@@ -501,7 +501,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeI
   return _selectWayIdsByWayNodeIds;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
+boost::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                            const TableType& tableType)
 {
   if (elementIds.size() == 0)
@@ -532,7 +532,7 @@ shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& 
   return _selectElementsByElementIdList;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
+boost::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
 {
   if (wayIds.size() == 0)
   {
@@ -561,7 +561,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayId
   return _selectWayNodeIdsByWayIds;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+boost::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                           const ElementType& memberElementType)
 {
   if (memberIds.size() == 0)
@@ -648,7 +648,7 @@ QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
   return sql;
 }
 
-shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
+boost::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
   LOG_VARD(timeStr);
   if (!_selectChangesetsCreatedAfterTime)

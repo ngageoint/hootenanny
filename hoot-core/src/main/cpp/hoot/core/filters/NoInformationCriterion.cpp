@@ -38,7 +38,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
 
-bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool NoInformationCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   const int informationCount = e->getTags().getInformationCount();
   LOG_VART(e->getElementId());

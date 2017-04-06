@@ -54,14 +54,14 @@ public:
   static const unsigned int REVIEW_EVIDENCE_THRESHOLD;
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf);
+    ConstMatchThresholdPtr threshold, boost::shared_ptr<const PoiPolygonRfClassifier> rf);
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
+    ConstMatchThresholdPtr threshold, boost::shared_ptr<const PoiPolygonRfClassifier> rf,
     const set<ElementId>& polyNeighborIds, const set<ElementId>& poiNeighborIds);
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
+    ConstMatchThresholdPtr threshold, boost::shared_ptr<const PoiPolygonRfClassifier> rf,
     double matchDistance, double reviewDistance, double nameScoreThreshold,
     double typeScoreThreshold, double addressScoreThreshold);
 
@@ -82,7 +82,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
+  virtual map<QString, double> getFeatures(const boost::shared_ptr<const OsmMap>& m) const;
 
   /**
    * Determines criteria for a feature to be considered a polygon for matching by
@@ -141,8 +141,8 @@ private:
   ElementId _eid2;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
-  shared_ptr<Geometry> _poiGeom;
-  shared_ptr<Geometry> _polyGeom;
+  boost::shared_ptr<Geometry> _poiGeom;
+  boost::shared_ptr<Geometry> _polyGeom;
   bool _e1IsPoi;
 
   //measured distance between the two elements
@@ -170,7 +170,7 @@ private:
 
   MatchClassification _class;
 
-  shared_ptr<const PoiPolygonRfClassifier> _rf;
+  boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
   void _calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);

@@ -82,9 +82,9 @@ public:
 
   virtual void open(QString url);
 
-  virtual void read(shared_ptr<OsmMap> map);
+  virtual void read(boost::shared_ptr<OsmMap> map);
 
-  void readFromString(QString xml, shared_ptr<OsmMap> map);
+  void readFromString(QString xml, boost::shared_ptr<OsmMap> map);
 
   void read(const QString& path, boost::shared_ptr<OsmMap> map);
 

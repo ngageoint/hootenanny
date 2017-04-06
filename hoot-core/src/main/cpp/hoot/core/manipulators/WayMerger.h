@@ -63,22 +63,22 @@ public:
 
   virtual ~WayMerger() {}
 
-  virtual const vector< shared_ptr<Manipulation> >& findAllManipulations(
-          shared_ptr<const OsmMap> map);
+  virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+          boost::shared_ptr<const OsmMap> map);
 
-  virtual const vector< shared_ptr<Manipulation> >& findWayManipulations(
-          shared_ptr<const OsmMap> map, const vector<long>& wids);
+  virtual const vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
+          boost::shared_ptr<const OsmMap> map, const vector<long>& wids);
 
 protected:
   /**
    * Creates a new manipulation and returns it. This may be delegated to a subclass.
    */
   virtual Manipulation* _createManipulation(long leftId, long rightId,
-    shared_ptr<const OsmMap> map, Meters minSplitSize);
+    boost::shared_ptr<const OsmMap> map, Meters minSplitSize);
 
 private:
 
-  vector< shared_ptr<Manipulation> > _result;
+  vector< boost::shared_ptr<Manipulation> > _result;
   boost::shared_ptr<const OsmMap> _map;
 
   Meters _minSplitSize;
@@ -86,7 +86,7 @@ private:
   /**
    * Find all parallel ways that are potential matches for the given way.
    */
-  vector<long> _findOtherWays(shared_ptr<const Way> way);
+  vector<long> _findOtherWays(boost::shared_ptr<const Way> way);
 
   void _findMatches(long baseWayId);
 

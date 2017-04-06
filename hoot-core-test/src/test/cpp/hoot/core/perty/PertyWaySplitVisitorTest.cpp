@@ -72,7 +72,7 @@ public:
 
     OsmMap::resetCounters();
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-1.osm", map);
@@ -115,7 +115,7 @@ public:
 
     OsmMap::resetCounters();
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-2.osm", map);

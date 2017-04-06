@@ -47,7 +47,7 @@ using namespace geos::geom;
  * self-referencing or loops of OpLists will result in undefined behaviour. E.g.
  *
  * // bad!
- * shared_ptr<OpList> a(new OpList());
+ * boost::shared_ptr<OpList> a(new OpList());
  * a->addOp(a);
  */
 class OpList : public OsmMapOperation, public Serializable, public Boundable
@@ -58,13 +58,13 @@ public:
 
   OpList();
 
-  void addOp(shared_ptr<OsmMapOperation> op) { _ops.push_back(op); }
+  void addOp(boost::shared_ptr<OsmMapOperation> op) { _ops.push_back(op); }
 
   /**
    * Applies the operations in the order they were added. If there are no operations then nothing
    * is done.
    */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual string getClassName() const { return className(); }
 
@@ -76,7 +76,7 @@ public:
 
 private:
 
-  vector< shared_ptr<OsmMapOperation> > _ops;
+  vector< boost::shared_ptr<OsmMapOperation> > _ops;
 };
 
 }

@@ -53,12 +53,12 @@ public:
     _f = f;
   }
 
-  explicit ArbitraryCriterion(boost::function<bool (const shared_ptr<const Element> &e)> f)
+  explicit ArbitraryCriterion(boost::function<bool (const boost::shared_ptr<const Element> &e)> f)
   {
     _f = f;
   }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     return _f(e);
   }
@@ -66,7 +66,7 @@ public:
   virtual ElementCriterion* clone() { return new ArbitraryCriterion(_f); }
 
 private:
-  boost::function<bool (const shared_ptr<const Element> &e)> _f;
+  boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
 };
 
 }

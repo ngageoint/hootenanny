@@ -129,7 +129,7 @@ ZCurveRanger::ZCurveRanger(const ZValue& zv)
   _slop = 5;
 }
 
-vector<shared_ptr<LongBox> > ZCurveRanger::breakBox(shared_ptr<LongBox> box)
+vector<boost::shared_ptr<LongBox> > ZCurveRanger::breakBox(boost::shared_ptr<LongBox> box)
 {
   int bestMaxBit = 0;
   int bestD = 0;
@@ -154,7 +154,7 @@ vector<shared_ptr<LongBox> > ZCurveRanger::breakBox(shared_ptr<LongBox> box)
    long int splitPoint = getSplitValue(box->getMin()[bestD], box->getMax()[bestD]);
 
    // if there aren't any good splits
-   vector<shared_ptr<LongBox> > result;
+   vector<boost::shared_ptr<LongBox> > result;
    if (splitPoint == -1)
    {
      result.push_back(box->copy());
@@ -175,18 +175,18 @@ vector<shared_ptr<LongBox> > ZCurveRanger::breakBox(shared_ptr<LongBox> box)
    return result;
 }
 
-long int ZCurveRanger::calculateExcess(shared_ptr<LongBox> box)
+long int ZCurveRanger::calculateExcess(boost::shared_ptr<LongBox> box)
 {
   long int startSize = _toRange(box).calculateSize();
   return startSize - box->calculateVolume();
 }
 
-vector<shared_ptr<LongBox> > ZCurveRanger::decomposeBox(shared_ptr<LongBox> box, int level)
+vector<boost::shared_ptr<LongBox> > ZCurveRanger::decomposeBox(boost::shared_ptr<LongBox> box, int level)
 {
-  vector<shared_ptr<LongBox> > result;
+  vector<boost::shared_ptr<LongBox> > result;
 
   // break the input box on major z-curve boundaries
-  vector<shared_ptr<LongBox> > children = breakBox(box);
+  vector<boost::shared_ptr<LongBox> > children = breakBox(box);
 
   // if there is only one child we're done.
   if (children.size() == 1)
@@ -201,7 +201,7 @@ vector<shared_ptr<LongBox> > ZCurveRanger::decomposeBox(shared_ptr<LongBox> box,
   else {
     for (uint i = 0; i < children.size(); i++)
     {
-      vector<shared_ptr<LongBox> > aChildren = decomposeBox(children[i], level - 1);
+      vector<boost::shared_ptr<LongBox> > aChildren = decomposeBox(children[i], level - 1);
       result.insert(result.end(),aChildren.begin(),aChildren.end());
     }
   }
@@ -257,7 +257,7 @@ vector<Range> ZCurveRanger::decomposeRange(BBox box, int levels)
 
 vector<Range> ZCurveRanger::decomposeRange(LongBox box, int levels)
 {
-  vector<shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(_clipBox(box)), levels);
+  vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(_clipBox(box)), levels);
 
   vector<Range> result;
   result.reserve((boxes.size()));
@@ -299,17 +299,17 @@ bool ZCurveRanger::rangeCoversIdentity(Range r)
 
 vector<Range> ZCurveRanger::_decomposeRange(LongBox box, LongBox focusBox, int levels)
 {
-  vector<shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(box), levels/2);
+  vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(box), levels/2);
 
   for (int i = 0; i < (levels * 2); i++)
   {
-    vector<shared_ptr<LongBox> > newBoxes;
+    vector<boost::shared_ptr<LongBox> > newBoxes;
     for (uint j = 0; j < boxes.size(); j++)
     {
-      shared_ptr<LongBox> b = boxes[i];
+      boost::shared_ptr<LongBox> b = boxes[i];
       if (b->intersects(focusBox) && (calculateExcess(b) > 0))
       {
-        vector<shared_ptr<LongBox> > rv = decomposeBox(b, 0);
+        vector<boost::shared_ptr<LongBox> > rv = decomposeBox(b, 0);
         newBoxes.insert(newBoxes.end(), rv.begin(), rv.end());
       }
       else
@@ -347,7 +347,7 @@ vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
     }
     else
     {
-      vector<shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(lbc.getBox()), 0);
+      vector<boost::shared_ptr<LongBox> > boxes = decomposeBox(make_shared<LongBox>(lbc.getBox()), 0);
 
       if (boxes.size() == 1)
       {
@@ -413,7 +413,7 @@ vector<Range> ZCurveRanger::_condenseRanges(vector<Range>& r)
   return result;
 }
 
-Range ZCurveRanger::_toRange(shared_ptr<LongBox> box)
+Range ZCurveRanger::_toRange(boost::shared_ptr<LongBox> box)
 {
   vector<long int> scratch;
   scratch.reserve(_zv.getDimensions());

@@ -44,7 +44,7 @@ public:
 
   void setOsmMap(const OsmMap* map) { _map = map; }
 
-  void visit(const shared_ptr<const Element>& e);
+  void visit(const boost::shared_ptr<const Element>& e);
 
   vector<long> getIds() { return _wayIds; }
 
@@ -53,7 +53,7 @@ public:
 
   static vector<long> findWays(const ConstOsmMapPtr& map,
                                ElementCriterion* pCrit,
-                               shared_ptr<const Way> refWay,
+                              boost::shared_ptr<const Way> refWay,
                                Meters maxDistance,
                                bool addError);
 

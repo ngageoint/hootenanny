@@ -62,10 +62,10 @@ public:
     {
         OsmXmlReader reader;
 
-        shared_ptr<OsmMap> map(new OsmMap());
+        boost::shared_ptr<OsmMap> map(new OsmMap());
         reader.read("test-files/ToyTestA.osm", map);
 
-        shared_ptr<OsmMap> map2(new OsmMap());
+        boost::shared_ptr<OsmMap> map2(new OsmMap());
         reader.read("test-files/ToyTestB.osm", map2);
 
         RasterComparator uut(map, map2);

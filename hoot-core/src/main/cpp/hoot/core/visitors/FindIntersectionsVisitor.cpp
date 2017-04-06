@@ -37,7 +37,7 @@ namespace hoot
 
 void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+ boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);
@@ -46,7 +46,7 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
   set<long> hwids;
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
-    shared_ptr<Way> w = _map->getWay(*it);
+   boost::shared_ptr<Way> w = _map->getWay(*it);
 
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()))
     {

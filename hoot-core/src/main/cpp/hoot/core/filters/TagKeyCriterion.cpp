@@ -63,7 +63,7 @@ void TagKeyCriterion::addKey(QString key)
   _keys.append(key);
 }
 
-bool TagKeyCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool TagKeyCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   for (int i = 0; i < _keys.size(); i++)
   {

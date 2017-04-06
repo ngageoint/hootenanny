@@ -83,12 +83,12 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
 
   if (type == ElementType::Way)
   {
-    shared_ptr<const Way> w = _map->getWay(id);
+   boost::shared_ptr<const Way> w = _map->getWay(id);
     _visit(w);
   }
   else if (type == ElementType::Relation)
   {
-    shared_ptr<const Relation> r = _map->getRelation(id);
+   boost::shared_ptr<const Relation> r = _map->getRelation(id);
     _visit(r);
   }
   else if (type != ElementType::Node)
@@ -97,7 +97,7 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Way>& w)
+void CompletelyContainedByMapElementVisitor::_visit(const boost::shared_ptr<const Way>& w)
 {
   const std::vector<long>& nids = w->getNodeIds();
   for (size_t i = 0; i < nids.size(); i++)
@@ -110,7 +110,7 @@ void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Way>&
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Relation>& r)
+void CompletelyContainedByMapElementVisitor::_visit(const boost::shared_ptr<const Relation>& r)
 {
   const vector<RelationData::Entry>& m = r->getMembers();
 

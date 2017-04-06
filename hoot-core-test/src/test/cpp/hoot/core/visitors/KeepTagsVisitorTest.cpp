@@ -52,7 +52,7 @@ public:
 
   void runTest()
   {
-    shared_ptr<OsmMap> map = _loadMap();
+    boost::shared_ptr<OsmMap> map = _loadMap();
 
     QStringList keysToKeep;
     keysToKeep.append("highway");
@@ -60,7 +60,7 @@ public:
     KeepTagsVisitor visitor(keysToKeep);
     map->visitRw(visitor);
 
-    shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
+    boost::shared_ptr<TagKeyCountVisitor> keyCountVisitor(new TagKeyCountVisitor("source"));
     map->visitRo(*keyCountVisitor);
     HOOT_STR_EQUALS("0", keyCountVisitor->getStat());
 
@@ -75,10 +75,10 @@ public:
 
 private:
 
-  shared_ptr<OsmMap> _loadMap()
+  boost::shared_ptr<OsmMap> _loadMap()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/TagRenameKeyVisitorTest.osm", map);

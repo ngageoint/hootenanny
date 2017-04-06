@@ -55,7 +55,7 @@ public:
 
   LongBox(vector<long int> min, vector<long int> max);
 
-  shared_ptr<LongBox> copy();
+  boost::shared_ptr<LongBox> copy();
 
   virtual ~LongBox();
 

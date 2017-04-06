@@ -54,7 +54,7 @@ public:
   virtual QString compose(QList<QList<SingleStat> >& stats, const QStringList& names);
 
 private:
-  shared_ptr<PluginContext> _script;
+ boost::shared_ptr<PluginContext> _script;
   QString _format;
   QString _outputPath;
   QString _path;

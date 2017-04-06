@@ -50,8 +50,8 @@ private:
 
 };
 
-typedef shared_ptr<StateDescription> StateDescriptionPtr;
-typedef shared_ptr<const StateDescription> ConstStateDescriptionPtr;
+typedef boost::shared_ptr<StateDescription> StateDescriptionPtr;
+typedef boost::shared_ptr<const StateDescription> ConstStateDescriptionPtr;
 
 }
 
