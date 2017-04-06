@@ -40,6 +40,9 @@ using namespace geos::geom;
 #include "WriteOsmSqlStatementsDriver.h"
 #include "SqlStatementLineRecordWriter.h"
 
+#include <pqxx/pqxx>
+using namespace pqxx;
+
 namespace hoot
 {
 
@@ -94,6 +97,8 @@ void WriteOsmSqlStatementsDriver::close()
 
   if (_destinationIsDatabase(_output))
   {
+    //now re-enable the constraints to make sure the db is valid before reading from it
+    _database.enableConstraints();
     _database.close();
   }
 
@@ -116,41 +121,78 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
   fs.mkdirs(hdfsOutput.toStdString());
   const QString sqlFile = _getSqlFileOutputLocation(hdfsOutput, _output);
 
+  if (_destinationIsDatabase(_output))
+  {
+    _database.open(_output);
+    //We have to turn off constraints before writing the sql file to the db, since the table
+    //copy commands are out of dependency order and will violate ref integrity.
+    _database.disableConstraints();
+  }
+
   _runElementSqlStatementsWriteJob(
     fs.getAbsolutePath(inputMapFile.toStdString()), hdfsOutput.toStdString());
 
-  //merge all the output files into one and copy back to the local file system; how expensive
-  //is this going to be for a ton of big files?
-  LOG_INFO("Merging temporary output files into one SQL file...");
-  HadoopPipesUtils::mergeFilesToLocalFileSystem(hdfsOutput.toStdString(), sqlFile.toStdString());
+  if (!_destinationIsDatabase(_output) || !_outputFileCopyLocation.isEmpty())
+  {
+    //merge all the output files into one and copy back to the local file system; how expensive
+    //is this going to be for a ton of big files?
+    LOG_INFO("Merging temporary output files into one SQL file...");
+    HadoopPipesUtils::mergeFilesToLocalFileSystem(hdfsOutput.toStdString(), sqlFile.toStdString());
 
-  //append the single changeset entry to the file
-  _writeChangesetToSqlFile(sqlFile);
+    //append the single changeset entry to the file
+    _writeChangesetToSqlFile(sqlFile);
+  }
 
   if (_destinationIsDatabase(_output))
-  {
-    //TODO: add file name and record count to this message
-    LOG_INFO("Executing element SQL...");
-    OsmApiDb database;
-    try
+  { 
+    if (!_execSqlWithMapreduce)
     {
-      database.open(_output);
-      //We have to turn off constraints before writing the sql file to the db, since the table
-      //copy commands are out of dependency order and will violate ref integrity.
-      database.disableConstraints();
-
-      //write the sql file
+      //TODO: add file name and record count to this message
+      LOG_INFO("Executing element SQL...");
       ApiDb::execSqlFile(_output, sqlFile);
-
-      //now re-enable the constraints to make sure the db is valid before reading from it
-      database.enableConstraints();
-      database.close();
     }
-    catch (const HootException& e)
+    else
     {
-      database.enableConstraints();
-      database.close();
-      throw e;
+      connection conn(ApiDb::getPqxxString(_output).toStdString());
+      if (!conn.is_open())
+      {
+        throw HootException("Connection not open.");
+      }
+      work txn(conn);
+      const QString tableName = "changesets";
+      const QStringList columnNamesTemp =
+        _sqlFormatter->getChangesetSqlHeaderString().split("(")[1].split(")")[0].split(",");
+      vector<string> columnNames;
+      for (int i = 0; i < columnNamesTemp.size(); i++)
+      {
+        columnNames.push_back(columnNamesTemp[i].toStdString());
+      }
+      tablewriter tw(txn, tableName.toStdString(), columnNames.begin(), columnNames.end(), "\\N");
+      Envelope bounds;
+      bounds.init();
+      const QString changesetSqlStr =
+        _sqlFormatter->changesetToSqlString(1, _changesetUserId, 1, bounds);
+      QStringList valuesTemp = changesetSqlStr.split("\t");
+      vector<string> values;
+      for (int i = 0; i < valuesTemp.size(); i++)
+      {
+        QString valueTemp = valuesTemp[i];
+        LOG_VART(valueTemp);
+        values.push_back(valueTemp.toStdString());
+      }
+      tw.insert(values);
+      tw.complete();
+      try
+      {
+        txn.commit();
+      }
+      catch (const std::exception& e)
+      {
+        txn.abort();
+        conn.disconnect();
+        throw HootException(e.what());
+      }
+      conn.disconnect();
     }
   }
 }
@@ -219,10 +261,16 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
 
   job.getConfiguration().setLong("changesetUserId", _changesetUserId);
   job.getConfiguration().setLong("writeBufferSize", _fileOutputElementBufferSize);
-  //job.getConfiguration().setInt("execSqlWithMapreduce", QString::number(_execSqlWithMapreduce));
+  LOG_VARD(_execSqlWithMapreduce);
+  if (_execSqlWithMapreduce)
+  {
+    job.getConfiguration().set("dbConnUrl", _output.toStdString());
+  }
+  const bool retainSqlFile = !_destinationIsDatabase(_output) || !_outputFileCopyLocation.isEmpty();
+  job.getConfiguration().set("retainSqlFile", QString::number(retainSqlFile).toStdString());
   if (_numReduceTasks != -1)
   {
-      job.getConfiguration().setInt("mapred.reduce.tasks", _numReduceTasks);
+    job.getConfiguration().setInt("mapred.reduce.tasks", _numReduceTasks);
   }
 
   LOG_DEBUG(job.getJobTracker());
@@ -236,13 +284,13 @@ void WriteOsmSqlStatementsDriver::setConfiguration(const Settings& conf)
   setOutputFilesCopyLocation(confOptions.getOsmapidbBulkWriterOutputFilesCopyLocation().trimmed());
   setFileOutputElementBufferSize(confOptions.getOsmapidbBulkWriterFileOutputElementBufferSize());
   setChangesetUserId(confOptions.getChangesetUserId());
-  //setExecSqlWithMapreduce(confOptions.getBigConvertExecSqlWithMapreduce());
+  setExecSqlWithMapreduce(confOptions.getBigConvertExecSqlWithMapreduce());
   setNumReduceTasks(confOptions.getBigConvertNumReduceTasks());
 
   LOG_VART(_outputFileCopyLocation);
   LOG_VART(_fileOutputElementBufferSize);
   LOG_VART(_changesetUserId);
-  //LOG_VART(_execSqlWithMapreduce);
+  LOG_VART(_execSqlWithMapreduce);
   LOG_VART(_numReduceTasks);
 }
 

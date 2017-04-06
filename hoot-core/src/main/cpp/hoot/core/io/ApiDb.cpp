@@ -714,8 +714,25 @@ void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
   LOG_DEBUG(cmd);
   if (system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Failed executing SQL write against the database.");
+    throw HootException("Failed executing SQL file against the database.");
   }
+}
+
+QString ApiDb::getPqxxString(const QString url)
+{
+  /*
+   * "dbname=simran user=simran password=cohondob \
+      hostaddr=127.0.0.1 port=5432"
+   */
+  const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
+  QString hostAddr = dbUrlParts["host"];
+  if (hostAddr == "localhost")
+  {
+    hostAddr = "127.0.0.1";
+  }
+  return
+    "dbname=" + dbUrlParts["database"] + " user=" + dbUrlParts["user"] + " password=" +
+    dbUrlParts["password"] + " hostaddr=" + hostAddr + " port=" + dbUrlParts["port"];
 }
 
 }

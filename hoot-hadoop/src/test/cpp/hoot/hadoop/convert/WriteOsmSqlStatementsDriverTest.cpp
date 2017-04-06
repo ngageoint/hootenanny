@@ -41,6 +41,7 @@ class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
   CPPUNIT_TEST(testDatabaseOutputNoBuffering);
   CPPUNIT_TEST(testSqlFileOutputWithBuffering);
   CPPUNIT_TEST(testDatabaseOutputWithBuffering);
+  CPPUNIT_TEST(testDatabaseOutputExecSqlWithMapreduce);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -237,6 +238,28 @@ public:
     //let's write some new records just to make sure we didn't mess the constraints up; only
     //checking for errors here and not reading back this data after its written
     writeAdditionalNewRecords();
+  }
+
+  void testDatabaseOutputExecSqlWithMapreduce()
+  {
+    const string outDir =
+      "test-output/hadoop/convert/WriteOsmSqlStatementsDriverTest-testDatabaseOutput-exec-sql-with-mapreduce";
+    const QString outFile = QString::fromStdString(outDir) + "/output.sql";
+    init(outDir, outFile);
+
+    WriteOsmSqlStatementsDriver driver;
+    driver.setFileOutputElementBufferSize(10);
+    driver.setChangesetUserId(1);
+    driver.setOutputFilesCopyLocation(outFile);
+    driver.setExecSqlWithMapreduce(true);
+    driver.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
+    driver.close();
+
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
+      "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-with-buffering.sql",
+      outFile);
+    verifyDatabaseOutput();
   }
 };
 

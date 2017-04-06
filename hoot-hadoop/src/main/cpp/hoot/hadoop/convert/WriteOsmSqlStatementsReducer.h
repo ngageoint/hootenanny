@@ -17,6 +17,9 @@
 #ifndef WRITEOSMSQLSTATEMENTSREDUCER_H
 #define WRITEOSMSQLSTATEMENTSREDUCER_H
 
+// Hoot
+//#include <hoot/core/io/OsmApiDb.h>
+
 // Pretty Pipes
 #include <pp/mapreduce/Reducer.h>
 
@@ -39,6 +42,7 @@ public:
   static string className() { return "hoot::WriteOsmSqlStatementsReducer"; }
 
   WriteOsmSqlStatementsReducer();
+  virtual ~WriteOsmSqlStatementsReducer();
 
   virtual void reduce(HadoopPipes::ReduceContext& context);
 
@@ -48,6 +52,10 @@ private:
   QString _tableHeader;
   QString _sqlStatements;
   long _sqlStatementBufferSize;
+  //bool _execSqlWithMapreduce;
+  bool _retainSqlFile;
+  //OsmApiDb _database;
+  QString _dbConnStr;
 
   void _flush();
 
