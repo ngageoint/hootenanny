@@ -58,6 +58,7 @@ private:
   PGresult* _pqQueryResult;
 
   void _flush();
+  void _flushToDb();
 
 };
 

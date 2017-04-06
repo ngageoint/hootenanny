@@ -58,10 +58,12 @@ WriteOsmSqlStatementsReducer::~WriteOsmSqlStatementsReducer()
     if (_pqQueryResult != NULL)
     {
       PQclear(_pqQueryResult);
+      _pqQueryResult = NULL;
     }
     if (_pqConn != NULL)
     {
       PQfinish(_pqConn);
+      _pqConn = NULL;
     }
   }
 }
@@ -83,59 +85,53 @@ void WriteOsmSqlStatementsReducer::_flush()
 
   if (!_dbConnStr.isEmpty())
   {
-    LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to database...");
-
-    const char* header = _tableHeader.toLatin1().data();
-    LOG_VART(header);
-    _pqQueryResult = PQexec(_pqConn, header);
-    const char* statements = _sqlStatements.toLatin1().data();
-    LOG_VART(statements);
-    if (PQresultStatus(_pqQueryResult) != PGRES_COPY_IN)
-    {
-      throw HootException("copy in not ok");
-    }
-    else
-    {
-      if (PQputCopyData(_pqConn, statements, strlen(statements)) == 1)
-      {
-        if (PQputCopyEnd(_pqConn, NULL) == 1)
-        {
-          int flushStatus = 1;
-          int numTries = 0;  //safety feature
-          while (flushStatus == 1 && numTries < 10)
-          {
-            flushStatus = PQflush(_pqConn);
-            numTries++;
-          }
-
-          PQclear(_pqQueryResult);
-          _pqQueryResult = PQgetResult(_pqConn);
-          if (PQresultStatus(_pqQueryResult) == PGRES_COMMAND_OK)
-          {
-            LOG_INFO("done");
-          }
-          else
-          {
-            throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
-          }
-        }
-        else
-        {
-          throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
-        }
-      }
-      else
-      {
-        throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
-      }
-    }
-
-    PQclear(_pqQueryResult);
-    _pqQueryResult = NULL;
+    _flushToDb();
   }
 
   _sqlStatements = "";
   _sqlStatementBufferSize = 0;
+}
+
+void WriteOsmSqlStatementsReducer::_flushToDb()
+{
+  LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to database...");
+
+  _pqQueryResult = PQexec(_pqConn, _tableHeader.toLatin1().data());
+  const char* statements = _sqlStatements.toLatin1().data();
+  if (PQresultStatus(_pqQueryResult) != PGRES_COPY_IN)
+  {
+    throw HootException("Error writing copy header to database.");
+  }
+  else
+  {
+    if (PQputCopyData(_pqConn, statements, strlen(statements)) == 1 &&
+        PQputCopyEnd(_pqConn, NULL) == 1)
+    {
+      int flushStatus = 1;
+      int numTries = 0;  //safety feature
+      LOG_TRACE("Flushing pq data...");
+      while (flushStatus == 1 && numTries < 10)
+      {
+        flushStatus = PQflush(_pqConn);
+        numTries++;
+        LOG_VART(numTries);
+      }
+    }
+    else
+    {
+      throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
+    }
+
+    PQclear(_pqQueryResult);
+    _pqQueryResult = PQgetResult(_pqConn);
+    if (PQresultStatus(_pqQueryResult) != PGRES_COMMAND_OK)
+    {
+      throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
+    }
+  }
+
+  PQclear(_pqQueryResult);
+  _pqQueryResult = NULL;
 }
 
 void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
