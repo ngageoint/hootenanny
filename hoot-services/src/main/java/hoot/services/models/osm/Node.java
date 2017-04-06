@@ -125,7 +125,7 @@ public class Node extends Element {
         // set these props at the very beginning, b/c they will be needed
         // regardless of whether following checks fail
         nodeRecord.setChangesetId(parseChangesetId(xmlAttributes));
-        nodeRecord.setVersion(parseVersion());
+        nodeRecord.setVersion(incrementVersion(xmlAttributes));
         nodeRecord.setTimestamp(parseTimestamp(xmlAttributes));
         nodeRecord.setVisible(true);
 

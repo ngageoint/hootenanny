@@ -22,45 +22,52 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BIGMAPSTL_H
-#define BIGMAPSTL_H
+#ifndef LONGINTEGERFIELDDEFINITION_H
+#define LONGINTEGERFIELDDEFINITION_H
 
 // Standard
-#include <stdlib.h>
-#include <map>
+#include <set>
 
-namespace Tgs
+#include "FieldDefinition.h"
+
+namespace hoot
 {
+using namespace std;
 
-#warning "Using STL implementation of big map. It works, but not on very large data sets."
-
-template <typename K, typename V>
-class BigMap
+class LongIntegerFieldDefinition : public FieldDefinition
 {
 public:
-  BigMap() {}
+  LongIntegerFieldDefinition();
 
-  //constructor to appease --without-stxxl; input parameter is ignored
-  BigMap(size_t maxEntriesInRam) {}
+  void addEnumeratedValue(long long v) { _enumeratedValues.insert(v); }
 
-  const V& at(const K& k) const { return _map.at(k); }
+  virtual QVariant getDefaultValue() const;
 
-  bool contains(const K& k) const { return count(k) > 0; }
+  virtual QVariant::Type getType() const { return QVariant::LongLong; }
 
-  size_t count(const K& k) const { return _map.count(k); }
+  virtual bool hasDefaultValue() const;
 
-  void insert(const K& k, const V& v) { _map[k] = v; }
+  bool hasEnumeratedValue(long long v) { return _enumeratedValues.find(v) != _enumeratedValues.end(); }
 
-  V& operator[](const K& k) { return _map[k]; }
+  void setDefaultValue(long long v) { _defaultValue = v; }
 
-  void clear() { _map.clear(); }
+  void setMaxValue(long long max) { _max = max; }
+
+  void setMinValue(long long min) { _min = min; }
+
+  virtual QString toString() const;
+
+  virtual void validate(const QVariant& v, StrictChecking strict) const;
 
 private:
-  std::map<K,V> _map;
+  long long _min;
+  long long _max;
+  long long _defaultValue;
+  set<long long> _enumeratedValues;
 };
 
 }
 
-#endif // BIGMAPSTL_H
+#endif // LONGINTEGERFIELDDEFINITION_H

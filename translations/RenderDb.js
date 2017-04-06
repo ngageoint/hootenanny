@@ -179,7 +179,7 @@ function getDbSchema()
         { name:'office',desc:'office',type:'String',defValue:'' },
         { name:'oneway',desc:'oneway',type:'String',defValue:'' },
         { name:'operator',desc:'operator',type:'String',defValue:'' },
-        { name:'osm_id',desc:'osm_id',type:'Integer',defValue:'-999999' },
+        { name:'osm_id',desc:'osm_id',type:'Long Integer',defValue:'-999999' },
         { name:'place',desc:'place',type:'String',defValue:'' },
         { name:'population',desc:'population',type:'String',defValue:'' },
         { name:'power',desc:'power',type:'String',defValue:'' },

@@ -361,21 +361,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     }
 
     /*
-     * If a new element is being created, it always gets a newly assigned
-     * version = 1. Otherwise, the version passed in the changeset request must
-     * match the existing version the server to ensure data integrity.
+     * Increment the version
      */
-    long parseVersion() {
-        long version = 1;
-
-        // version passed in the request can be ignored if it is a create
-        // request, since we've already
-        // done version error checking at this point
-        if (entityChangeType != EntityChangeType.CREATE) {
-            version++;
-        }
-
-        return version;
+    long incrementVersion(NamedNodeMap xmlAttributes) {
+        long version = Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
+        return ++version;
     }
 
     // is this timestamp even actually honored from the xml in the rails
