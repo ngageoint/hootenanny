@@ -88,7 +88,7 @@ public:
    * Write the map out to a string and return it. This is handy for debugging, but has obvious
    * memory limitations with real data.
    */
-  static QString toString(const ConstOsmMapPtr& map);
+  static QString toString(const ConstOsmMapPtrR map);
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()

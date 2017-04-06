@@ -59,7 +59,7 @@ OGREnvelope CalculateMapBoundsVisitor::getBounds(const OsmMapPtr& map)
   return v.getBounds();
 }
 
-OGREnvelope CalculateMapBoundsVisitor::getBounds(const ConstOsmMapPtr& map)
+OGREnvelope CalculateMapBoundsVisitor::getBounds(const ConstOsmMapPtrR map)
 {
   CalculateMapBoundsVisitor v;
   map->visitNodesRo(v);
@@ -73,7 +73,7 @@ geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const OsmMapPtr& m
   return *e;
 }
 
-geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const ConstOsmMapPtr& map)
+geos::geom::Envelope CalculateMapBoundsVisitor::getGeosBounds(const ConstOsmMapPtrR map)
 {
   OGREnvelope envelope = getBounds(map);
   auto_ptr<geos::geom::Envelope> e(GeometryUtils::toEnvelope(envelope));

@@ -286,7 +286,7 @@ void OsmPbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
   _writeOsmHeader(includeBounds, sorted);
 }
 
-void OsmPbfWriter::writePb(const ConstOsmMapPtr& m, ostream* strm)
+void OsmPbfWriter::writePb(const ConstOsmMapPtrR m, ostream* strm)
 {
   _initBlob();
 
@@ -579,7 +579,7 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
 }
 
-void OsmPbfWriter::writePartial(const ConstOsmMapPtr& map)
+void OsmPbfWriter::writePartial(const ConstOsmMapPtrR map)
 {
   _map = map;
   _writeMap();

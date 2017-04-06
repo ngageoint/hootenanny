@@ -154,7 +154,7 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map,
 
 }
 
-bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
+bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtrR map, WayPtr w) const
 {
   boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
 

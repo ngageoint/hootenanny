@@ -42,7 +42,7 @@ public:
 
   virtual set<ElementId> getImpactedElementIds() const;
 
-  virtual bool isValid(const ConstOsmMapPtr& map) const;
+  virtual bool isValid(const ConstOsmMapPtrR map) const;
 
   virtual void replace(ElementId oldEid, ElementId newEid);
 

@@ -64,7 +64,7 @@ Handle<Value> TagDifferencerJs::diff(const Arguments& args) {
   {
     TagDifferencerJs* op = ObjectWrap::Unwrap<TagDifferencerJs>(args.This());
 
-    ConstOsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getConstMap();
+    ConstOsmMapPtrR map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getConstMap();
     ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
     ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject())->getConstElement();
 

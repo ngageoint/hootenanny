@@ -405,7 +405,7 @@ double CalculateStatsOp::_applyVisitor(ConstOsmMapPtr &map, const FilteredVisito
   return ss->getStat();
 }
 
-void CalculateStatsOp::_applyVisitor(ConstOsmMapPtr& map, ElementVisitor *v)
+void CalculateStatsOp::_applyVisitor(ConstOsmMapPtrR map, ElementVisitor *v)
 {
   auto_ptr<FilteredVisitor> critFv;
   if (_criterion)

@@ -119,7 +119,7 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   }
 }
 
-bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
+bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtrR /*map*/) const
 {
   set< pair<ElementId, ElementId> > s = other.getMatchPairs();
 

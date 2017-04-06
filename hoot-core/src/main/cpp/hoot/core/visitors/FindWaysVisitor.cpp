@@ -54,14 +54,14 @@ void FindWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
 
 
 // Convenience method for finding ways that match the given criterion
-vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit)
+vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtrR map, ElementCriterion* pCrit)
 {
   FindWaysVisitor v(pCrit);
   map->visitWaysRo(v);
   return v.getIds();
 }
 
-vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
+vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtrR map,
                                        ElementCriterion* pCrit,
                                       ConstWayPtr refWay,
                                        Meters maxDistance,
@@ -81,7 +81,7 @@ vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
 }
 
 // Convenience method for finding ways that contain the given node
-vector<long> FindWaysVisitor::findWaysByNode(const ConstOsmMapPtr& map, long nodeId)
+vector<long> FindWaysVisitor::findWaysByNode(const ConstOsmMapPtrR map, long nodeId)
 {
   ContainsNodeCriterion crit(nodeId);
   FindWaysVisitor v(&crit);
@@ -90,7 +90,7 @@ vector<long> FindWaysVisitor::findWaysByNode(const ConstOsmMapPtr& map, long nod
 }
 
 // Convenience method for finding ways that contain the given tag
-vector<long> FindWaysVisitor::findWaysByTag(const ConstOsmMapPtr& map,
+vector<long> FindWaysVisitor::findWaysByTag(const ConstOsmMapPtrR map,
                                   const QString& key,
                                   const QString& value)
 {

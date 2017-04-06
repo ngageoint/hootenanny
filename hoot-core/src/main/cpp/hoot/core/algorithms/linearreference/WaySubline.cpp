@@ -49,7 +49,7 @@ WaySubline::WaySubline(const WaySubline& from) :
 
 }
 
-WaySubline::WaySubline(const WaySubline& from, const ConstOsmMapPtr& newMap)
+WaySubline::WaySubline(const WaySubline& from, const ConstOsmMapPtrR newMap)
 {
   if (from.isValid())
   {

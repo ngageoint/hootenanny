@@ -40,7 +40,7 @@ public:
 
   MaximalNearestSublineMatcher();
 
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
+  virtual WaySublineMatchString findMatch(const ConstOsmMapPtrR map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const;
 
   virtual void setMaxRelevantAngle(Radians r) { _maxRelevantAngle = r; }

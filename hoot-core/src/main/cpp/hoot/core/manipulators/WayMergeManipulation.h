@@ -57,9 +57,9 @@ public:
 
   virtual double calculateScore(ConstOsmMapPtr map) const;
 
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
+  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtrR map) const;
 
-  virtual const set<long>& getImpactedWayIds(const ConstOsmMapPtr& map) const;
+  virtual const set<long>& getImpactedWayIds(const ConstOsmMapPtrR map) const;
 
   virtual set<ElementId> getMatchedElements() const;
 

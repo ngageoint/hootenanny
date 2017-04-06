@@ -53,7 +53,7 @@ QString PoiPolygonMatch::_matchName = "POI to Polygon";
 const unsigned int PoiPolygonMatch::MATCH_EVIDENCE_THRESHOLD = 3;
 const unsigned int PoiPolygonMatch::REVIEW_EVIDENCE_THRESHOLD = 1;
 
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtrR map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf) :
 Match(threshold),
@@ -75,7 +75,7 @@ _rf(rf)
   //_calculateMatchWeka(eid1, eid2);
 }
 
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtrR map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  const set<ElementId>& polyNeighborIds = set<ElementId>(),
@@ -101,7 +101,7 @@ _rf(rf)
   //_calculateMatchWeka(eid1, eid2);
 }
 
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
+PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtrR map, const ElementId& eid1,
                                  const ElementId& eid2, ConstMatchThresholdPtr threshold,
                                  boost::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  double matchDistanceThreshold, double reviewDistanceThreshold,
@@ -500,7 +500,7 @@ set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
   return result;
 }
 
-map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
+map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtrR m) const
 {
   return _rf->getFeatures(m, _eid1, _eid2);
 }

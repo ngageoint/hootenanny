@@ -96,7 +96,7 @@ vector<MergerCreator::Description> HighwaySnapMergerCreator::getAllCreators() co
   return result;
 }
 
-bool HighwaySnapMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
+bool HighwaySnapMergerCreator::isConflicting(const ConstOsmMapPtrR map, const Match* m1,
   const Match* m2) const
 {
   const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1);

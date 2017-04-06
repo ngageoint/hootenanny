@@ -68,7 +68,7 @@ public:
 
   TranslatedTagDifferencer();
 
-  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+  virtual double diff(const ConstOsmMapPtrR map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const;
 
   virtual void setConfiguration(const Settings& conf);
@@ -88,7 +88,7 @@ private:
 
   Comparison _compare(const Tags& t1, const Tags& t2) const;
 
-  vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
+  vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtrR map,
     const ConstElementPtr& in) const;
 
   /**

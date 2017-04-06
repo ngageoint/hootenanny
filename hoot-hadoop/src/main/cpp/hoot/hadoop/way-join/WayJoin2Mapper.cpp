@@ -82,7 +82,7 @@ void WayJoin2Mapper::_flushNodes()
     dos.writeByte(PbfData);
     OsmPbfWriter writer;
     // RHEL calls this ambiguous.
-    const ConstOsmMapPtr& co = _nodeMap;
+    const ConstOsmMapPtrR co = _nodeMap;
     writer.writePb(co, &ss);
     _context->emit(_keyStr, ss.str());
     _nodeMap->clear();

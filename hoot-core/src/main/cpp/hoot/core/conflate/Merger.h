@@ -64,7 +64,7 @@ public:
   /**
    * Returns true if this merge can be applied to the specified map.
    */
-  virtual bool isValid(const ConstOsmMapPtr& map) const = 0;
+  virtual bool isValid(const ConstOsmMapPtrR map) const = 0;
 
   /**
    * Replaces an old element id with a new element id. This is sometimes required as other mergers

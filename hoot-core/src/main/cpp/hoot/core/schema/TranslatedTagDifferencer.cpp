@@ -90,7 +90,7 @@ TranslatedTagDifferencer::Comparison TranslatedTagDifferencer::_compare(const Ta
   return result;
 }
 
-double TranslatedTagDifferencer::diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
+double TranslatedTagDifferencer::diff(const ConstOsmMapPtrR map, const ConstElementPtr& e1,
   const ConstElementPtr& e2) const
 {
   // translate the tags for comparison
@@ -196,7 +196,7 @@ Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrTranslator::TranslatedFe
 }
 
 vector<ScriptToOgrTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(
-  const ConstOsmMapPtr& map, const ConstElementPtr& e) const
+  const ConstOsmMapPtrR map, const ConstElementPtr& e) const
 {
  boost::shared_ptr<Geometry> g = ElementConverter(map).convertToGeometry(e);
   Tags t = e->getTags();

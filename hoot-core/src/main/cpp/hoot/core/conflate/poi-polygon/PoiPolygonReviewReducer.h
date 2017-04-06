@@ -44,7 +44,7 @@ class PoiPolygonReviewReducer
 
 public:
 
-  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
+  PoiPolygonReviewReducer(const ConstOsmMapPtrR map, const set<ElementId>& polyNeighborIds,
                           const set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
                           double typeScore, bool typeMatch, double matchDistanceThreshold);

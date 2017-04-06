@@ -63,7 +63,7 @@ namespace hoot
 
 QString BuildingMatch::_matchName = "Building";
 
-BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
+BuildingMatch::BuildingMatch(const ConstOsmMapPtrR map, boost::shared_ptr<const BuildingRfClassifier> rf,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),
   _eid1(eid1),
@@ -118,7 +118,7 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const 
   LOG_VART(toString());
 }
 
-map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
+map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtrR m) const
 {
   return _rf->getFeatures(m, _eid1, _eid2);
 }
@@ -135,7 +135,7 @@ double BuildingMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool BuildingMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
+bool BuildingMatch::isConflicting(const Match& other, const ConstOsmMapPtrR /*map*/) const
 {
   const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(&other);
   if (bm == 0)

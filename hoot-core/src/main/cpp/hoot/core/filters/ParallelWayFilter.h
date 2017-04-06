@@ -45,7 +45,7 @@ namespace hoot
 class ParallelWayFilter : public WayFilter
 {
 public:
-  ParallelWayFilter(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
+  ParallelWayFilter(const ConstOsmMapPtrR map, ConstWayPtr baseWay,
     bool filterUnparallel = true);
 
   virtual ~ParallelWayFilter();

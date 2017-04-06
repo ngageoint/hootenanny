@@ -86,7 +86,7 @@ public:
   /**
    * see class description
    */
-  GeometryConverter(const ConstOsmMapPtr& map) : _constMap(map) { assert(map.get()); }
+  GeometryConverter(const ConstOsmMapPtrR map) : _constMap(map) { assert(map.get()); }
 
   class NodeFactory
   {

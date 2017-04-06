@@ -66,7 +66,7 @@ public:
    *  map will not be modified.
    * @return Percent of correct matches (tp / (tp + fp + fn))
    */
-  virtual double evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPtr& conflated);
+  virtual double evaluateMatches(const ConstOsmMapPtrR in, const OsmMapPtr& conflated);
 
   /**
    * Returns the percentage of records correctly classified (true positive rate)
@@ -149,23 +149,23 @@ private:
   void _createMatches(const set<QString>& uuids1, const set<QString>& uuids2, set<UuidPair>& matches,
     Tgs::DisjointSetMap<QString>& groups);
 
-  bool _debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
-    const ConstOsmMapPtr& conflated);
+  bool _debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtrR in,
+    const ConstOsmMapPtrR conflated);
 
-  void _findActualMatches(const ConstOsmMapPtr& in, const ConstOsmMapPtr& conflated);
-  void _findExpectedMatches(const ConstOsmMapPtr& in);
+  void _findActualMatches(const ConstOsmMapPtrR in, const ConstOsmMapPtrR conflated);
+  void _findExpectedMatches(const ConstOsmMapPtrR in);
 
   /**
    * Returns true if both these uuids are marked with needs review.
    */
-  bool _isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtr& conflated);
+  bool _isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtrR conflated);
 
   void _tagError(const OsmMapPtr& map, const QString &uuid, const QString& value);
   void _tagWrong(const OsmMapPtr &map, const QString &uuid);
   void _tagTestOutcome(const OsmMapPtr& map, const QString uuid, const QString expected,
                        const QString actual);
-  void _setElementWrongCounts(const ConstOsmMapPtr& map);
-  void _setElementWrongCount(const ConstOsmMapPtr& map, const ElementType::Type& elementType);
+  void _setElementWrongCounts(const ConstOsmMapPtrR map);
+  void _setElementWrongCount(const ConstOsmMapPtrR map, const ElementType::Type& elementType);
 };
 
 }

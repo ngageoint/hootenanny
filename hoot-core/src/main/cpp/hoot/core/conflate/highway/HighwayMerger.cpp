@@ -44,7 +44,7 @@ set<ElementId> HighwayMerger::getImpactedElementIds() const
   return set<ElementId>();
 }
 
-bool HighwayMerger::isValid(const ConstOsmMapPtr& /*map*/) const
+bool HighwayMerger::isValid(const ConstOsmMapPtrR /*map*/) const
 {
   return false;
 }

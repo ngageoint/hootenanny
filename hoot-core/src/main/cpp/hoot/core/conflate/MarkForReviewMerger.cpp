@@ -104,7 +104,7 @@ set<ElementId> MarkForReviewMerger::getImpactedElementIds() const
   return result;
 }
 
-bool MarkForReviewMerger::isValid(const ConstOsmMapPtr& /*map*/) const
+bool MarkForReviewMerger::isValid(const ConstOsmMapPtrR /*map*/) const
 {
   return true;
 }

@@ -55,9 +55,9 @@ public:
 
   // Convenient way to get bounds
   static OGREnvelope getBounds(const OsmMapPtr& map);
-  static OGREnvelope getBounds(const ConstOsmMapPtr& map);
+  static OGREnvelope getBounds(const ConstOsmMapPtrR map);
   static geos::geom::Envelope getGeosBounds(const OsmMapPtr& map);
-  static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtr& map);
+  static geos::geom::Envelope getGeosBounds(const ConstOsmMapPtrR map);
 
 private:
 

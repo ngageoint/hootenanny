@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
+WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtrR map,
                                              ConstWayPtr baseWay,
                                              bool similarDirection) :
   _map(map),

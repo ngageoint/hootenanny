@@ -61,7 +61,7 @@ public:
    */
   static double EPSILON;
 
-  ConstrainedMatches(const ConstOsmMapPtr& map);
+  ConstrainedMatches(const ConstOsmMapPtrR map);
 
   /**
    * Add matches to the list of matches to consider.
@@ -86,7 +86,7 @@ public:
   void setTimeLimit(double limit) { _timeLimit = limit; }
 
 protected:
-  const ConstOsmMapPtr& _map;
+  const ConstOsmMapPtrR _map;
   vector<const Match*> _matches;
 
   MatchConflicts::ConflictMap _conflicts;

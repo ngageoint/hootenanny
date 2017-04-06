@@ -125,7 +125,7 @@ void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
   _includeCompatibilityTags = includeCompatibility;
 }
 
-QString OsmXmlWriter::toString(const ConstOsmMapPtr& map)
+QString OsmXmlWriter::toString(const ConstOsmMapPtrR map)
 {
   OsmXmlWriter writer;
   // this will be deleted by the _fp auto_ptr

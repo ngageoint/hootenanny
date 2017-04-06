@@ -117,7 +117,7 @@ public:
   static const Coordinate pointAlongSegmentByFraction(const Coordinate& p0, const Coordinate& p1,
                                                       double frac);
 
-  const ConstOsmMapPtr& getMap() const { return _map; }
+  const ConstOsmMapPtrR getMap() const { return _map; }
 
   const ConstWayPtr& getWay() const { return _way; }
 

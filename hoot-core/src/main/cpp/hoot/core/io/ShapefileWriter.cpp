@@ -466,7 +466,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
   GDALClose(poDS);
 }
 
-void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
+void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtrR map,
   const RelationPtr &relation, OGRLayer *poLayer, const QStringList& columns,
   const QStringList &shpColumns)
 {

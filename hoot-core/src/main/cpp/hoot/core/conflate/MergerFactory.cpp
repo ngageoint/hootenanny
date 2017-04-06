@@ -123,7 +123,7 @@ MergerFactory &MergerFactory::getInstance()
   return *_theInstance;
 }
 
-bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2)
+bool MergerFactory::isConflicting(const ConstOsmMapPtrR map, const Match* m1, const Match* m2)
   const
 {
   // if any creator considers a match conflicting then it is a conflict

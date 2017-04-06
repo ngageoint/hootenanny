@@ -56,7 +56,7 @@ QString HighwayMatch::_matchName = "Highway";
 
 HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
   const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
-  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+  const ConstOsmMapPtrR map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),
   _classifier(classifier),
@@ -126,7 +126,7 @@ QString HighwayMatch::explain() const
   return _explainText;
 }
 
-map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
+map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtrR m) const
 {
   map<QString, double> result;
   if (_sublineMatch.isValid())
@@ -148,7 +148,7 @@ double HighwayMatch::getProbability() const
   return _c.getMatchP();
 }
 
-bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) const
+bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtrR map) const
 {
   const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(&other);
   // if the other match isn't a highway match then this is a conflict.
@@ -234,7 +234,7 @@ bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) 
   }
 }
 
-bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
+bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtrR map, ElementId sharedEid,
   ElementId other1, ElementId other2) const
 {
   set<ElementId> eids;

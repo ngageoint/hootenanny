@@ -52,7 +52,7 @@ public:
 
   virtual vector<Description> getAllCreators() const;
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
+  virtual bool isConflicting(const ConstOsmMapPtrR map, const Match* m1, const Match* m2) const;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
@@ -60,7 +60,7 @@ private:
 
   const OsmMap* _map;
 
-  Match* _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
+  Match* _createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2) const;
 
   /**
    * Returns true if one or more matches are conflicting matches.

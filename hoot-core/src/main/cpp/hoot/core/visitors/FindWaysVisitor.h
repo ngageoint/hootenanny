@@ -49,19 +49,19 @@ public:
   vector<long> getIds() { return _wayIds; }
 
   // Convenience method for finding ways that match the given criterion
-  static vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
+  static vector<long> findWays(const ConstOsmMapPtrR map, ElementCriterion* pCrit);
 
-  static vector<long> findWays(const ConstOsmMapPtr& map,
+  static vector<long> findWays(const ConstOsmMapPtrR map,
                                ElementCriterion* pCrit,
                               ConstWayPtr refWay,
                                Meters maxDistance,
                                bool addError);
 
   // Convenience method for finding ways that contain the given node
-  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
+  static vector<long> findWaysByNode(const ConstOsmMapPtrR map, long nodeId);
 
   // Convenience method for finding ways that contain the given tag
-  static vector<long> findWaysByTag(const ConstOsmMapPtr& map,
+  static vector<long> findWaysByTag(const ConstOsmMapPtrR map,
                                     const QString& key,
                                     const QString& value);
 

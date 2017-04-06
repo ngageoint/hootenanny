@@ -126,7 +126,7 @@ public:
   /**
    * Alternative constructor. If this is used operations that modify the map will fail.
    */
-  WayMatchStringMerger(const ConstOsmMapPtr& map, WayMatchStringMappingPtr mapping);
+  WayMatchStringMerger(const ConstOsmMapPtrR map, WayMatchStringMappingPtr mapping);
 
   /**
    * Create a subline match string. This is useful if calling a highway classifier.

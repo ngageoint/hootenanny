@@ -51,7 +51,7 @@ PoiPolygonMergerCreator::PoiPolygonMergerCreator()
   _map = 0;
 }
 
-Match* PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, ElementId eid1,
+Match* PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtrR map, ElementId eid1,
   ElementId eid2) const
 {
   return MatchFactory::getInstance().createMatch(map, eid1, eid2);
@@ -130,7 +130,7 @@ vector<MergerCreator::Description> PoiPolygonMergerCreator::getAllCreators() con
   return result;
 }
 
-bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
+bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtrR map, const Match* m1,
   const Match* m2) const
 {
   bool foundAPoi = false;

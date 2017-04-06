@@ -49,9 +49,9 @@ public:
 
   BuildingMatchCreator();
 
-  virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
+  virtual Match* createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2);
 
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
   virtual vector<Description> getAllCreators() const;
@@ -63,7 +63,7 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR map);
 
   virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 

@@ -96,17 +96,17 @@ private:
                                            const QString &matchCreatorName,
                                            MatchCreator::BaseFeatureType &featureType);
 
-  double _applyVisitor(ConstOsmMapPtr& map, const hoot::FilteredVisitor &v);
+  double _applyVisitor(ConstOsmMapPtrR map, const hoot::FilteredVisitor &v);
 
-  double _applyVisitor(ConstOsmMapPtr& map, const hoot::FilteredVisitor &v,
+  double _applyVisitor(ConstOsmMapPtrR map, const hoot::FilteredVisitor &v,
                        any& visitorData);
 
-  void _applyVisitor(ConstOsmMapPtr& map, ElementVisitor *v);
+  void _applyVisitor(ConstOsmMapPtrR map, ElementVisitor *v);
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
 
-  void _generateFeatureStats(ConstOsmMapPtr& map, QString description,
+  void _generateFeatureStats(ConstOsmMapPtrR map, QString description,
                              float conflatableCount, MatchCreator::FeatureCalcType type,
                              ElementCriterion* criterion);
 };

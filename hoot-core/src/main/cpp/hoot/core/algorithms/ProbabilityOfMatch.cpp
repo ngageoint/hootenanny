@@ -66,7 +66,7 @@ ProbabilityOfMatch::ProbabilityOfMatch()
   _parallelExp = ConfigOptions().getMatchParallelExponent();
 }
 
-double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
+double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtrR map,
   const ConstWayPtr& w1, const ConstWayPtr& w2)
 {
   double score = 1.0;
@@ -104,13 +104,13 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
   return score;
 }
 
-double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtrR map, const ConstWayPtr& w1,
                                          const ConstWayPtr& w2)
 {
   return distanceScore(map, w1, ElementConverter(map).convertToLineString(w2), w2->getCircularError());
 }
 
-double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtrR map, const ConstWayPtr& w1,
   const boost::shared_ptr<const LineString>& ls2, Meters circularError)
 {
   Meters distanceSum = 0.0;
@@ -179,7 +179,7 @@ double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr &map, const ConstWay
   return 0.2 + ((mean / (mean + 20)) * 0.8);
 }
 
-double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtrR map, const ConstWayPtr& w1,
                                          const ConstWayPtr& w2)
 {
   ParallelWayFilter pwf(map, w1, true);
@@ -188,7 +188,7 @@ double ProbabilityOfMatch::parallelScore(const ConstOsmMapPtr& map, const ConstW
   return pow(cos(delta), _parallelExp);
 }
 
-double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
+double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtrR map, const ConstWayPtr& w1,
                                              const ConstWayPtr& w2)
 {
   double ds = distanceScore(map, w1, w2);

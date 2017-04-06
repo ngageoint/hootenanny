@@ -48,7 +48,7 @@ public:
   static string className() { return "hoot::ParallelWayCriterion"; }
 
   ParallelWayCriterion() {}
-  ParallelWayCriterion(const ConstOsmMapPtr& map,
+  ParallelWayCriterion(const ConstOsmMapPtrR map,
                        ConstWayPtr baseWay,
                        bool isParallel = true);
 

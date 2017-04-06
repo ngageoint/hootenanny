@@ -66,7 +66,7 @@ NetworkMatchCreator::NetworkMatchCreator()
   _userCriterion.reset(new HighwayCriterion());
 }
 
-Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
+Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtrR /*map*/, ElementId /*eid1*/,
   ElementId /*eid2*/)
 {
   Match* result = 0;
@@ -80,7 +80,7 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
   return new NetworkMatch(map, e->getEdgeMatch(), e->getScore(), mt);
 }
 
-void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+void NetworkMatchCreator::createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
   LOG_INFO("Extracting networks...");
@@ -160,7 +160,7 @@ vector<MatchCreator::Description> NetworkMatchCreator::getAllCreators() const
   return result;
 }
 
-bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR /*map*/)
 {
   return _userCriterion->isSatisfied(element);
 }

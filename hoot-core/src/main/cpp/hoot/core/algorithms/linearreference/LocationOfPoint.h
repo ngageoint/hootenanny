@@ -55,7 +55,7 @@ class LocationOfPoint
 {
 public:
 
-  LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way);
+  LocationOfPoint(const ConstOsmMapPtrR map, ConstWayPtr way);
 
   static WayLocation locate(const ConstOsmMapPtr &map, ConstWayPtr way,
     const Coordinate &inputPt);

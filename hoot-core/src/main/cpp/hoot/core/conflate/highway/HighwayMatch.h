@@ -62,14 +62,14 @@ class HighwayMatch : public Match, public MatchDetails
 public:
   HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
                const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
-               const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+               const ConstOsmMapPtrR map, const ElementId& eid1, const ElementId& eid2,
                ConstMatchThresholdPtr mt);
 
   virtual QString explain() const;
 
   virtual const MatchClassification& getClassification() const { return _c; }
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtrR m) const;
 
   virtual QString getMatchName() const { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return _matchName; }
@@ -80,7 +80,7 @@ public:
 
   const boost::shared_ptr<SublineStringMatcher>& getSublineMatcher() const { return _sublineMatcher; }
 
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
+  virtual bool isConflicting(const Match& other, const ConstOsmMapPtrR map) const;
 
   /**
    * Simply returns the two elements that were matched.
@@ -105,9 +105,9 @@ private:
   static QString _matchName;
   static QString _noMatchingSubline;
 
-  double _calculateExpertProbability(const ConstOsmMapPtr& map) const;
+  double _calculateExpertProbability(const ConstOsmMapPtrR map) const;
 
-  bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
+  bool _isOrderedConflicting(const ConstOsmMapPtrR map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
 
 };

@@ -61,7 +61,7 @@ class WayDiscretizer
 {
 public:
 
-  WayDiscretizer(const ConstOsmMapPtr& map, boost::shared_ptr<const hoot::Way> way);
+  WayDiscretizer(const ConstOsmMapPtrR map, boost::shared_ptr<const hoot::Way> way);
 
   /**
    * Given an input way, discretize the way out into discrete coordinates. The first and last nodes

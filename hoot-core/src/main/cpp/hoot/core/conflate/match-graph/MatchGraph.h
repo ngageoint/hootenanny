@@ -66,7 +66,7 @@ public:
    * @return Returns a collection of sets of Matches. The outer level set is the set of subgraphs.
    *    The inner set contains the matches in each subgraph.
    */
-  MatchSetVector findSubgraphs(const ConstOsmMapPtr& map) const;
+  MatchSetVector findSubgraphs(const ConstOsmMapPtrR map) const;
 
   /**
    * Given an iterator, add all the values that are in use by the iterator. STL style. The

@@ -43,7 +43,7 @@ namespace hoot
 class OptimalConstrainedMatches : public ConstrainedMatches
 {
 public:
-  OptimalConstrainedMatches(const ConstOsmMapPtr& map);
+  OptimalConstrainedMatches(const ConstOsmMapPtrR map);
 
   /**
    * Calculate a consistent subset of matches while attempting to maximizing the sum of match

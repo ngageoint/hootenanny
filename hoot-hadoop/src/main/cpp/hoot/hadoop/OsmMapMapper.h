@@ -40,7 +40,7 @@ public:
   void map(HadoopPipes::MapContext& context);
 
   void emitRecord(HadoopPipes::MapContext& context, const string& k,
-    const ConstOsmMapPtr& m)
+    const ConstOsmMapPtrR m)
   {
     stringstream ss(stringstream::out);
     _OsmPbfWriter.writePb(m, &ss);

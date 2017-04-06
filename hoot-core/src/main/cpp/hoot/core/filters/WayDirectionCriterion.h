@@ -46,7 +46,7 @@ namespace hoot
 class WayDirectionCriterion : public ElementCriterion
 {
 public:
-  WayDirectionCriterion(const ConstOsmMapPtr& map,
+  WayDirectionCriterion(const ConstOsmMapPtrR map,
                         ConstWayPtr baseWay,
                         bool similarDirection = true);
 

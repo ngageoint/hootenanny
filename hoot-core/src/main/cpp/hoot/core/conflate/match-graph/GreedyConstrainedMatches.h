@@ -43,7 +43,7 @@ namespace hoot
 class GreedyConstrainedMatches : public ConstrainedMatches
 {
 public:
-  GreedyConstrainedMatches(const ConstOsmMapPtr& map);
+  GreedyConstrainedMatches(const ConstOsmMapPtrR map);
 
   virtual vector<const Match*> calculateSubset();
 

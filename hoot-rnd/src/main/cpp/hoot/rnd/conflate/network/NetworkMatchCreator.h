@@ -46,17 +46,17 @@ public:
 
   NetworkMatchCreator();
 
-  virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
+  virtual Match* createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2);
 
   /**
    * Search the provided map for network matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
                              ConstMatchThresholdPtr threshold);
 
   virtual vector<Description> getAllCreators() const;
 
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR map);
 
   virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 

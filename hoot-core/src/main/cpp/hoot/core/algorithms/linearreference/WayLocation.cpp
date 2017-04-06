@@ -211,7 +211,7 @@ int WayLocation::compareTo(const WayLocation& other) const
   return 0;
 }
 
-WayLocation WayLocation::createAtEndOfWay(const ConstOsmMapPtr& map, const ConstWayPtr way)
+WayLocation WayLocation::createAtEndOfWay(const ConstOsmMapPtrR map, const ConstWayPtr way)
 {
   return WayLocation(map, way, way->getNodeCount() - 1, 0.0);
 }

@@ -52,7 +52,7 @@ public:
   static unsigned int logWarnCount;
 
   ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
-              const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
+              const ConstOsmMapPtrR map, const ElementId& eid1, const ElementId& eid2,
               ConstMatchThresholdPtr mt);
 
   virtual const MatchClassification& getClassification() const { return _p; }
@@ -66,7 +66,7 @@ public:
   /**
    *
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
+  virtual bool isConflicting(const Match& other, const ConstOsmMapPtrR map) const;
 
   virtual bool isWholeGroup() const { return _isWholeGroup; }
 
@@ -81,7 +81,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtrR map) const;
 
 private:
 
@@ -97,12 +97,12 @@ private:
 
   friend class ScriptMatchTest;
 
-  void _calculateClassification(const ConstOsmMapPtr& map, Handle<Object> plugin);
-  Handle<Value> _call(const ConstOsmMapPtr& map, Handle<Object> plugin);
+  void _calculateClassification(const ConstOsmMapPtrR map, Handle<Object> plugin);
+  Handle<Value> _call(const ConstOsmMapPtrR map, Handle<Object> plugin);
   ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
-  bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
+  bool _isOrderedConflicting(const ConstOsmMapPtrR map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
-  Handle<Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
+  Handle<Value> _callGetMatchFeatureDetails(const ConstOsmMapPtrR map) const;
 
 };
 

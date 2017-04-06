@@ -74,7 +74,7 @@ class WayCleaner
      * @param map the map owning the way to be examined
      * @return true if the way is of zero length; false otherwise
      */
-    static bool isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtr& map);
+    static bool isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtrR map);
 
     /**
      * Removes duplicate nodes and coordinates from a way
@@ -82,7 +82,7 @@ class WayCleaner
      * @param way the way to be cleaned
      * @param map the map owning the way to be cleaned
      */
-    static void cleanWay(WayPtr way, const ConstOsmMapPtr& map);
+    static void cleanWay(WayPtr way, const ConstOsmMapPtrR map);
 
     /**
      * Cleans an unmodifiable way by removing duplicate nodes and coordinate from a copy of it
@@ -93,7 +93,7 @@ class WayCleaner
      * @return an unmodifiable cleaned way
      * @see cleanWay
      */
-    static ConstWayPtr cleanWay(ConstWayPtr way, const ConstOsmMapPtr& map);
+    static ConstWayPtr cleanWay(ConstWayPtr way, const ConstOsmMapPtrR map);
 
     /**
      * Cleans unmodifiable ways by removing duplicate nodes and coordinate from copies of them and
@@ -106,7 +106,7 @@ class WayCleaner
      * @param map the map owning the ways to be cleaned
      * @return a collection of unmodifiable cleaned ways
      */
-    static vector<ConstWayPtr> cleanWays(const vector<ConstWayPtr>& ways, const ConstOsmMapPtr& map);
+    static vector<ConstWayPtr> cleanWays(const vector<ConstWayPtr>& ways, const ConstOsmMapPtrR map);
 };
 
 }

@@ -48,7 +48,7 @@ MatchFactory::MatchFactory()
 {
 }
 
-Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
+Match* MatchFactory::createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2) const
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   {
@@ -63,7 +63,7 @@ Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, Elem
   return 0;
 }
 
-void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+void MatchFactory::createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
   const Envelope& bounds, boost::shared_ptr<const MatchThreshold> threshold) const
 {
   for (size_t i = 0; i < _creators.size(); ++i)

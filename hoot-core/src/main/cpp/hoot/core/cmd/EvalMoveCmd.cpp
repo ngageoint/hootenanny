@@ -84,7 +84,7 @@ public:
     }
   };
 
-  ConstNodePtr getNode(const ConstOsmMapPtr& a, QString k, QString v)
+  ConstNodePtr getNode(const ConstOsmMapPtrR a, QString k, QString v)
   {
     for (NodeMap::const_iterator it = a->getNodes().begin();
       it != a->getNodes().end(); ++it)
@@ -98,7 +98,7 @@ public:
     throw HootException("The expected node was not found.");
   }
 
-  Comparison compareMaps(const ConstOsmMapPtr& ref, const ConstOsmMapPtr& test, int pointCount)
+  Comparison compareMaps(const ConstOsmMapPtrR ref, const ConstOsmMapPtrR test, int pointCount)
   {
     Comparison result;
     result.errorCount = 0;

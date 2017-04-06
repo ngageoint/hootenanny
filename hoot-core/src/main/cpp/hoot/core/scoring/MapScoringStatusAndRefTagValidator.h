@@ -50,7 +50,7 @@ public:
    * @param map the map to be examined
    * @return true if the tags meet the required conditions; false otherwise
    */
-  static bool allTagsAreValid(const ConstOsmMapPtr& map);
+  static bool allTagsAreValid(const ConstOsmMapPtrR map);
 };
 
 }

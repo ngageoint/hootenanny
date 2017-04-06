@@ -79,9 +79,9 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
-                        const ConstOsmMapPtr& map);
+                        const ConstOsmMapPtrR map);
   static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
-                        const ConstOsmMapPtr& map, const ElementPtr& element);
+                        const ConstOsmMapPtrR map, const ElementPtr& element);
 
 private:
 

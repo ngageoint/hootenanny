@@ -172,12 +172,12 @@ bool WayCleaner::hasDuplicateNodes(ConstWayPtr way, const bool logDetails)
   return found;
 }
 
-bool WayCleaner::isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtr& map)
+bool WayCleaner::isZeroLengthWay(ConstWayPtr way, const ConstOsmMapPtrR map)
 {
   return way->getNodeCount() == 2 && (hasDuplicateNodes(way) || hasDuplicateCoords(way, *map));
 }
 
-void WayCleaner::cleanWay(WayPtr way, const ConstOsmMapPtr& map)
+void WayCleaner::cleanWay(WayPtr way, const ConstOsmMapPtrR map)
 {
   const vector<long> nodeIds = way->getNodeIds();
 
@@ -235,14 +235,14 @@ void WayCleaner::cleanWay(WayPtr way, const ConstOsmMapPtr& map)
   way->setNodes(modifiedNodeIds.toVector().toStdVector());
 }
 
-ConstWayPtr WayCleaner::cleanWay(ConstWayPtr way, const ConstOsmMapPtr& map)
+ConstWayPtr WayCleaner::cleanWay(ConstWayPtr way, const ConstOsmMapPtrR map)
 {
   WayPtr cleanedWay(new Way(*way.get()));
   WayCleaner::cleanWay(cleanedWay, map);
   return cleanedWay;
 }
 
-vector<ConstWayPtr> WayCleaner::cleanWays(const vector<ConstWayPtr>& ways, const ConstOsmMapPtr& map)
+vector<ConstWayPtr> WayCleaner::cleanWays(const vector<ConstWayPtr>& ways, const ConstOsmMapPtrR map)
 {
   vector<ConstWayPtr> cleanedWays;
   for (vector<ConstWayPtr>::const_iterator it = ways.begin(); it != ways.end(); ++it)

@@ -18,7 +18,7 @@ void Debug::_init()
 }
 
 #ifdef DEBUG
-bool Debug::printTroubled(const ConstOsmMapPtr& map)
+bool Debug::printTroubled(const ConstOsmMapPtrR map)
 {
   bool result = false;
   const NodeMap& nm = map->getNodes();

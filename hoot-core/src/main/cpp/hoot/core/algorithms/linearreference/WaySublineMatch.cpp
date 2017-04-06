@@ -36,7 +36,7 @@ WaySublineMatch::WaySublineMatch()
   _reversed = false;
 }
 
-WaySublineMatch::WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr& newMap)
+WaySublineMatch::WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtrR newMap)
 {
   _ws1 = WaySubline(other.getSubline1(), newMap);
   _ws2 = WaySubline(other.getSubline2(), newMap);

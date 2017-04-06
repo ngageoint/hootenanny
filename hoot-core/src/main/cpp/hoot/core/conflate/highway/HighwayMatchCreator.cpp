@@ -75,7 +75,7 @@ public:
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
-  HighwayMatchVisitor(const ConstOsmMapPtr& map,
+  HighwayMatchVisitor(const ConstOsmMapPtrR map,
     vector<const Match*>& result,boost::shared_ptr<HighwayClassifier> c,
    boost::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
     ConstMatchThresholdPtr threshold,
@@ -136,7 +136,7 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  static HighwayMatch* createMatch(const ConstOsmMapPtr& map,
+  static HighwayMatch* createMatch(const ConstOsmMapPtrR map,
    boost::shared_ptr<HighwayClassifier> classifier,
    boost::shared_ptr<SublineStringMatcher> sublineMatcher,
     ConstMatchThresholdPtr threshold,
@@ -225,7 +225,7 @@ public:
 
 private:
 
-  const ConstOsmMapPtr& _map;
+  const ConstOsmMapPtrR _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
  boost::shared_ptr<HighwayClassifier> _c;
@@ -262,13 +262,13 @@ HighwayMatchCreator::HighwayMatchCreator()
   _sublineMatcher->setConfiguration(settings);
 }
 
-Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2)
 {
   return HighwayMatchVisitor::createMatch(map, _classifier, _sublineMatcher, getMatchThreshold(),
     _tagAncestorDiff, map->getElement(eid1), map->getElement(eid2));
 }
 
-void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
+void HighwayMatchCreator::createMatches(const ConstOsmMapPtrR map, vector<const Match *> &matches,
   ConstMatchThresholdPtr threshold)
 {
   LOG_INFO("Creating matches with: " << className() << "...");
@@ -285,7 +285,7 @@ vector<MatchCreator::Description> HighwayMatchCreator::getAllCreators() const
   return result;
 }
 
-bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
+bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR /*map*/)
 {
   return HighwayMatchVisitor::isMatchCandidate(element);
 }

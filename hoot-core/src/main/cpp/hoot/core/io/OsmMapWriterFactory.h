@@ -53,7 +53,7 @@ public:
 
   bool hasElementOutputStream(QString url);
 
-  static void write(const ConstOsmMapPtr& map, QString url);
+  static void write(const ConstOsmMapPtrR map, QString url);
 
 private:
 

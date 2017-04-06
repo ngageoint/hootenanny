@@ -101,7 +101,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-void OsmMapWriterFactory::write(const ConstOsmMapPtr& map, QString url)
+void OsmMapWriterFactory::write(const ConstOsmMapPtrR map, QString url)
 {
   LOG_INFO("Writing map to " << url << "...");
   boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);

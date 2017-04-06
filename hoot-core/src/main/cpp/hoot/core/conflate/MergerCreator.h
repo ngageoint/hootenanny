@@ -94,7 +94,7 @@ public:
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two
    * input matches then false is returned.
    */
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const = 0;
+  virtual bool isConflicting(const ConstOsmMapPtrR map, const Match* m1, const Match* m2) const = 0;
 
   virtual void setArguments(QStringList /*args*/) { throw IllegalArgumentException(); }
 };
