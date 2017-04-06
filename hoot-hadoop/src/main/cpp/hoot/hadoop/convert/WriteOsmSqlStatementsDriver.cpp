@@ -21,6 +21,7 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
@@ -32,6 +33,7 @@ using namespace pp;
 #include <QFileInfo>
 #include <QTextStream>
 
+// geos
 #include <geos/geom/Envelope.h>
 using namespace geos::geom;
 
@@ -39,8 +41,6 @@ using namespace geos::geom;
 #include "WriteOsmSqlStatementsReducer.h"
 #include "WriteOsmSqlStatementsDriver.h"
 #include "SqlStatementLineRecordWriter.h"
-
-#include <postgresql/libpq-fe.h>
 
 namespace hoot
 {
@@ -55,15 +55,8 @@ _outputDelimiter("\t")
 
 WriteOsmSqlStatementsDriver::~WriteOsmSqlStatementsDriver()
 {
-
+  close();
 }
-
-//void WriteOsmSqlStatementsDriver::_reset()
-//{
-//  _output = "";
-//  _changesetUserId = -1;
-//  _outputFileCopyLocation = "";
-//}
 
 bool WriteOsmSqlStatementsDriver::_destinationIsDatabase(const QString output) const
 {
@@ -81,6 +74,8 @@ bool WriteOsmSqlStatementsDriver::isSupported(QString urlStr)
 
 void WriteOsmSqlStatementsDriver::open(QString url)
 {
+  LOG_DEBUG("Opening writer...");
+
   _output = url;
 
   // Make sure we're not already open and the URL is valid
@@ -88,21 +83,23 @@ void WriteOsmSqlStatementsDriver::open(QString url)
   {
     throw HootException(QString("Could not open URL ") + url);
   }
+
+  if (_destinationIsDatabase(_output))
+  {
+    _database.open(_output);
+  }
 }
 
 void WriteOsmSqlStatementsDriver::close()
 {
   LOG_DEBUG("Closing writer...");
 
-  if (_destinationIsDatabase(_output))
+  if (_destinationIsDatabase(_output) && _database.getDB().isOpen())
   {
     //now re-enable the constraints to make sure the db is valid before reading from it
     _database.enableConstraints();
     _database.close();
   }
-
-  //_reset();
-  //setConfiguration(conf());
 }
 
 void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
@@ -122,7 +119,6 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
 
   if (_destinationIsDatabase(_output))
   {
-    _database.open(_output);
     //We have to turn off constraints before writing the sql file to the db, since the table
     //copy commands are out of dependency order and will violate ref integrity.
     _database.disableConstraints();
@@ -152,64 +148,17 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
     }
     else
     {
-      const char* conninfo = ApiDb::getPqString(_output).toLatin1().data();
-      PGconn* conn = PQconnectdb(conninfo);
-      if (PQstatus(conn) != CONNECTION_OK)
-      {
-        throw HootException("Connection not open.");
-      }
-
-      PGresult* res;
-      const char* header = _sqlFormatter->getChangesetSqlHeaderString().toLatin1().data();
-      LOG_VART(header);
-      res = PQexec(conn, header);
-      Envelope bounds;
-      bounds.init();
-      const QString changesetSqlStr =
-        _sqlFormatter->changesetToSqlString(1, _changesetUserId, 1, bounds);
-      const char* statement = changesetSqlStr.toLatin1().data();
-      LOG_VART(statement);
-      if (PQresultStatus(res) != PGRES_COPY_IN)
-      {
-        throw HootException("copy in not ok");
-      }
-      else
-      {
-        if (PQputCopyData(conn, statement, strlen(statement)) == 1)
-        {
-          if (PQputCopyEnd(conn, NULL) == 1)
-          {
-            int flushStatus = 1;
-            int numTries = 0;  //safety feature
-            while (flushStatus == 1 && numTries < 10)
-            {
-              flushStatus = PQflush(conn);
-              numTries++;
-            }
-
-            res = PQgetResult(conn);
-            if (PQresultStatus(res) == PGRES_COMMAND_OK)
-            {
-              LOG_INFO("done");
-            }
-            else
-            {
-              throw HootException(QString::fromAscii(PQerrorMessage(conn)));
-            }
-          }
-          else
-          {
-            throw HootException(QString::fromAscii(PQerrorMessage(conn)));
-          }
-        }
-        else
-        {
-          throw HootException(QString::fromAscii(PQerrorMessage(conn)));
-        }
-      }
-
-      PQclear(res);
-      PQfinish(conn);
+      LOG_INFO("Writing changeset record to database...");
+      DbUtils::execNoPrepare(
+        _database.getDB(),
+        QString("INSERT INTO %1 (id, user_id, created_at, closed_at, num_changes) VALUES "
+                "(%2, %3, %4, %4, %5);")
+          .arg(ApiDb::getChangesetsTableName())
+          .arg(1)
+          .arg(_changesetUserId)
+          .arg(OsmApiDb::TIMESTAMP_FUNCTION)
+          .arg(1)
+          .toUtf8());
     }
   }
 }

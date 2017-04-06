@@ -44,7 +44,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  //The OsmMapWriter interface doesn't really fit here, due to the write(OsmMapPtr) method it has,
+  //The OsmMapWriter interface doesn't really fit here, due to the write method it has,
   //but we'll go ahead and partially mimic it with open and isSupported.
   bool isSupported(QString urlStr);
   void open(QString url);

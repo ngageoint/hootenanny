@@ -26,6 +26,9 @@
 // Qt
 #include <QString>
 
+// libpq
+#include <postgresql/libpq-fe.h>
+
 namespace hoot
 {
 
@@ -51,6 +54,8 @@ private:
   long _sqlStatementBufferSize;
   bool _retainSqlFile;
   QString _dbConnStr;
+  PGconn* _pqConn;
+  PGresult* _pqQueryResult;
 
   void _flush();
 

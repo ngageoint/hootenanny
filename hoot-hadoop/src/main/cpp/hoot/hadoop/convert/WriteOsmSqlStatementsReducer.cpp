@@ -33,11 +33,6 @@ using namespace pp;
 #include <QMap>
 #include <QStringBuilder>
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <postgresql/libpq-fe.h>
-
 using namespace std;
 
 namespace hoot
@@ -52,10 +47,23 @@ _sqlStatementBufferSize(0),
 _retainSqlFile(false)
 {
   _context = NULL;
+  _pqConn = NULL;
+  _pqQueryResult = NULL;
 }
 
 WriteOsmSqlStatementsReducer::~WriteOsmSqlStatementsReducer()
 {
+  if (!_dbConnStr.isEmpty())
+  {
+    if (_pqQueryResult != NULL)
+    {
+      PQclear(_pqQueryResult);
+    }
+    if (_pqConn != NULL)
+    {
+      PQfinish(_pqConn);
+    }
+  }
 }
 
 void WriteOsmSqlStatementsReducer::_flush()
@@ -77,60 +85,53 @@ void WriteOsmSqlStatementsReducer::_flush()
   {
     LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to database...");
 
-    const char* conninfo = ApiDb::getPqString(_dbConnStr).toLatin1().data();
-    PGconn* conn = PQconnectdb(conninfo);
-    if (PQstatus(conn) != CONNECTION_OK)
-    {
-      throw HootException("Connection not open.");
-    }
-
-    PGresult* res;
     const char* header = _tableHeader.toLatin1().data();
     LOG_VART(header);
-    res = PQexec(conn, header);
+    _pqQueryResult = PQexec(_pqConn, header);
     const char* statements = _sqlStatements.toLatin1().data();
     LOG_VART(statements);
-    if (PQresultStatus(res) != PGRES_COPY_IN)
+    if (PQresultStatus(_pqQueryResult) != PGRES_COPY_IN)
     {
       throw HootException("copy in not ok");
     }
     else
     {
-      if (PQputCopyData(conn, statements, strlen(statements)) == 1)
+      if (PQputCopyData(_pqConn, statements, strlen(statements)) == 1)
       {
-        if (PQputCopyEnd(conn, NULL) == 1)
+        if (PQputCopyEnd(_pqConn, NULL) == 1)
         {
           int flushStatus = 1;
           int numTries = 0;  //safety feature
           while (flushStatus == 1 && numTries < 10)
           {
-            flushStatus = PQflush(conn);
+            flushStatus = PQflush(_pqConn);
             numTries++;
           }
 
-          res = PQgetResult(conn);
-          if (PQresultStatus(res) == PGRES_COMMAND_OK)
+          PQclear(_pqQueryResult);
+          _pqQueryResult = PQgetResult(_pqConn);
+          if (PQresultStatus(_pqQueryResult) == PGRES_COMMAND_OK)
           {
             LOG_INFO("done");
           }
           else
           {
-            throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+            throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
           }
         }
         else
         {
-          throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+          throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
         }
       }
       else
       {
-        throw HootException(QString::fromAscii(PQerrorMessage(conn)));
+        throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
       }
     }
 
-    PQclear(res);
-    PQfinish(conn);
+    PQclear(_pqQueryResult);
+    _pqQueryResult = NULL;
   }
 
   _sqlStatements = "";
@@ -151,8 +152,17 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   if (config->hasKey("dbConnUrl"))
   {
     _dbConnStr = QString::fromStdString(config->get("dbConnUrl"));
+    if (_pqConn == NULL)
+    {
+      const char* conninfo = ApiDb::getPqString(_dbConnStr).toLatin1().data();
+      _pqConn = PQconnectdb(conninfo);
+      if (PQstatus(_pqConn) != CONNECTION_OK)
+      {
+        throw HootException("Unable to open pq database connection.");
+      }
+    }
   }
-  //LOG_VART(_execSqlWithMapreduce);
+
   LOG_VART(_dbConnStr);
   _retainSqlFile = config->get("retainSqlFile") == "1" ? true : false;
   LOG_VART(_retainSqlFile);

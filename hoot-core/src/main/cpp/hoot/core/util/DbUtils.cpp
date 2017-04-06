@@ -91,7 +91,6 @@ QStringList DbUtils::getConstraintsForTable(const QSqlDatabase& database, const 
   QStringList constraints;
 
   const QString sql =
-    //QString("SELECT n.nspname as schema_name, t.relname as table_name, c.conname as constraint_name ") +
     QString("SELECT c.conname as constraint_name ") +
     QString("FROM pg_constraint c ") +
     QString("JOIN pg_class t on c.conrelid = t.oid ") +
@@ -129,6 +128,8 @@ void DbUtils::enableTableConstraints(QSqlDatabase& database, const QString table
 void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tableName,
                                       const bool disable)
 {
+  LOG_VART(database.isOpen());
+
   //TODO: do we want to do the style that checks constraints at the end here instead?
   QString operation = "DISABLE";
   if (!disable)
@@ -146,8 +147,12 @@ void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tabl
   QSqlQuery query(database);
   if (!query.exec(sql))
   {
+    QString operationStr = operation.toLower();
+    operationStr.chop(1);
+    operationStr += "ing";
     throw HootException(
-      QString("Error modifying constraints: %1 (%2)")
+      QString("Error %1 constraints: %2 (%3)")
+        .arg(operationStr)
         .arg(query.lastError().text())
         .arg(tableName));
   }
