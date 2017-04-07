@@ -385,16 +385,23 @@ void UnifyingConflator::_reset()
 {
   if (_mergerFactory == 0)
   {
+    LOG_DEBUG("About to setup MergerFactory");
     _mergerFactory.reset(new MergerFactory());
     // register the mark for review merger first so all reviews get tagged before another merger
     // gets a chance.
+    LOG_DEBUG("About to Add MarkForReviewMerger");
     _mergerFactory->registerCreator(new MarkForReviewMergerCreator());
+    LOG_DEBUG("About to Add DefaultCreators");
     _mergerFactory->registerDefaultCreators();
   }
 
+  LOG_DEBUG("About to clear _e2m");
   _e2m.clear();
+  LOG_DEBUG("About to clear _matches");
   _deleteAll(_matches);
+  LOG_DEBUG("About to clear _mergers");
   _deleteAll(_mergers);
+  LOG_DEBUG("Done");
 }
 
 void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtrR map,

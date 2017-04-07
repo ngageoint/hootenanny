@@ -88,7 +88,7 @@ public:
      */
     virtual void maximalNearestSubline(LineSegment &a, LineSegment &b) const;
 
-    virtual void setWays(const ConstOsmMapPtrR map, const ConstWayPtr& w1, const ConstWayPtr& w2)
+    virtual void setWays(const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2)
     { _map = map; _w1 = w1; _w2 = w2; }
 
   protected:
@@ -240,11 +240,11 @@ private:
   void _calculateSnapStarts(const WaySublineMatch& rawSublineMatch, const int matchIndex,
                             const vector<double>& splits,
                             const vector< pair<WayLocation, WayLocation> >& pairs,
-                            const ConstOsmMapPtrR map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                            const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
                             WayLocation& w1Start, WayLocation& w2Start);
   void _calculateSnapEnds(const int matchIndex, const vector<double>& splits,
                           const vector< pair<WayLocation, WayLocation> >& pairs,
-                          const ConstOsmMapPtrR map, const ConstWayPtr& w1, const ConstWayPtr& w2,
+                          const ConstOsmMapPtr& map, const ConstWayPtr& w1, const ConstWayPtr& w2,
                           WayLocation& w1End, WayLocation& w2End);
   void _calculatePointPairMatches(const double way1CircularError, const double way2CircularError,
                                   const vector<WaySublineMatch>& rawSublineMatches,

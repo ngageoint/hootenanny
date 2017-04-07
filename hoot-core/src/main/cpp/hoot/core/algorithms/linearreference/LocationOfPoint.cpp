@@ -43,7 +43,7 @@
 
 namespace hoot {
 
-LocationOfPoint::LocationOfPoint(const ConstOsmMapPtrR map, ConstWayPtr way) :
+LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way) :
   _map(map),
   _way(way)
 {
@@ -98,7 +98,7 @@ Coordinate LocationOfPoint::locate(double d)
   return result;
 }
 
-WayLocation LocationOfPoint::locate(const ConstOsmMapPtrR map, ConstWayPtr way,
+WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way,
   const Coordinate& inputPt)
 {
   LocationOfPoint locater(map, way);

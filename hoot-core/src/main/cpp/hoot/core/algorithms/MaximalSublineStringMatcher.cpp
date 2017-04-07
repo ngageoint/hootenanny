@@ -82,7 +82,7 @@ void MaximalSublineStringMatcher::_configureSublineMatcher()
   _sublineMatcher->setHeadingDelta(_headingDelta);
 }
 
-WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtrR map,
+WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstElementPtr& e1, const ConstElementPtr& e2, Meters maxRelevantDistance) const
 {
   assert(_maxAngle >= 0);
@@ -219,7 +219,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
 }
 
 MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestMatch(
-  const ConstOsmMapPtrR map, Meters maxDistance, vector<ConstWayPtr>& ways1,
+  const ConstOsmMapPtr& map, Meters maxDistance, vector<ConstWayPtr>& ways1,
   vector<ConstWayPtr> &ways2, vector<bool>& reversed1, vector<bool> &reversed2, size_t i, size_t j)
   const
 {
@@ -334,7 +334,7 @@ void MaximalSublineStringMatcher::setSublineMatcher(boost::shared_ptr<SublineMat
   _configureSublineMatcher();
 }
 
-void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtrR map, ElementId eid) const
+void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, ElementId eid) const
 {
   ConstElementPtr e = map->getElement(eid);
 

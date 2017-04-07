@@ -48,7 +48,7 @@ public:
   typedef QMultiHash<size_t, size_t> ConflictMap;
   typedef multimap<ElementId, size_t> EidIndexMap;
 
-  MatchConflicts(const ConstOsmMapPtrR map);
+  MatchConflicts(const ConstOsmMapPtr& map);
 
   EidIndexMap calculateEidIndexMap(const vector<const Match*>& matches) const;
 
@@ -62,7 +62,7 @@ public:
                                 const vector<int>& matchSet);
 
 private:
-  const ConstOsmMapPtrR _map;
+  const ConstOsmMapPtr& _map;
 
 };
 

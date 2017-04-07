@@ -83,7 +83,7 @@ class ElementId;
  *    and OsmData class. The OsmMap class maintains pointers to OsmData and an OsmIndex
  *    where neither directly references the other. (?)
  */
-class OsmMap : public enable_shared_from_this<OsmMap>, public ElementProvider
+class OsmMap : public boost::enable_shared_from_this<OsmMap>, public ElementProvider
 {
   // Friend classes that need to modify private elements
   friend class RemoveNodeOp;

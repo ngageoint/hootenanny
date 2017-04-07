@@ -30,6 +30,9 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 
+// Qt
+#include <qnumeric.h>
+
 // Standard
 #include <string>
 
@@ -73,7 +76,7 @@ public:
    */
   virtual DataFrame::NullTreatment getNullTreatment() const = 0;
 
-  static bool isNull(double v) { return v == nullValue() || isnan(v); }
+  static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 
 };
 

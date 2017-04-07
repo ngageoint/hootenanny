@@ -51,7 +51,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtrR map, ConstWayPtr w1, ConstWayPtr w2)
+bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr w1, ConstWayPtr w2)
 {
   WayDiscretizer wd1(map, w1);
   WayDiscretizer wd2(map, w2);

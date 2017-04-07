@@ -111,7 +111,7 @@ public:
 
   virtual double getProbability() const { return _p; }
 
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtrR /*map*/) const
+  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
   {
     // this isn't a good way to do this since it relies on pointers, but it works for the unit test.
     if (_conflicts.find(&other) == _conflicts.end())
@@ -169,7 +169,7 @@ public:
     return false;
   }
 
-  virtual bool isConflicting(const ConstOsmMapPtrR map, const Match* m1, const Match* m2) const
+  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const
   {
     const ConstrainedFakeMatch* cfm1 = dynamic_cast<const ConstrainedFakeMatch*>(m1);
     const ConstrainedFakeMatch* cfm2 = dynamic_cast<const ConstrainedFakeMatch*>(m2);

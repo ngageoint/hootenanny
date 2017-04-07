@@ -56,7 +56,7 @@ public:
    * @throws NeedsReviewException If the multilinestring situation is too complex to handle with
    *  a reasonable set of rules.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtrR map, const ConstElementPtr& e1,
+  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const;
 
   virtual void setConfiguration(const Settings& s);
@@ -114,7 +114,7 @@ private:
     const vector<ConstWayPtr>& ways1, const vector<ConstWayPtr>& ways2,
     const vector<bool>& reversed1, const vector<bool>& reversed2) const;
 
-  vector<ConstWayPtr> _extractWays(const ConstOsmMapPtrR map, const ConstElementPtr& e) const;
+  vector<ConstWayPtr> _extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e) const;
 
   ScoredMatch _findBestMatch(const ConstOsmMapPtr &map, Meters maxDistance,
     vector<ConstWayPtr>& ways1, vector<ConstWayPtr> &ways2, vector<bool>& reversed1,
@@ -130,7 +130,7 @@ private:
 
   void _configureSublineMatcher();
 
-  void _validateElement(const ConstOsmMapPtrR map, ElementId eid) const;
+  void _validateElement(const ConstOsmMapPtr& map, ElementId eid) const;
 };
 
 }

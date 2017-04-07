@@ -47,6 +47,7 @@
 
 // Qt
 #include <QFileInfo>
+#include <qnumeric.h>
 
 // Boost
 #include <boost/bind.hpp>
@@ -178,7 +179,7 @@ public:
     if (obj->Has(cdtKey))
     {
       Local<Value> v = obj->Get(cdtKey);
-      if (v->IsNumber() == false || isnan(v->NumberValue()))
+      if (v->IsNumber() == false || ::qIsNaN(v->NumberValue()))
       {
         throw IllegalArgumentException("Expected " + key + " to be a number.");
       }
@@ -371,7 +372,7 @@ public:
 private:
 
   // don't hold on to the map.
-  weak_ptr<const OsmMap> _map;
+  boost::weak_ptr<const OsmMap> _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;

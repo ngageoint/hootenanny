@@ -51,6 +51,9 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 
+// Qt
+#include <qnumeric.h>
+
 // Standard
 #include <sstream>
 
@@ -388,7 +391,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtrR map) co
     {
       double d = it.value().toDouble();
       result[it.key()] = d;
-      if (isnan(result[it.key()]))
+      if (::qIsNaN(result[it.key()]))
       {
         if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {

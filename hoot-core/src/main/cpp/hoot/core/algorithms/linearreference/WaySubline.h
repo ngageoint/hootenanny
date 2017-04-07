@@ -84,7 +84,7 @@ public:
 
   Meters getLength() const;
 
-  const ConstOsmMapPtrR getMap() const { return _start.getMap(); }
+  const ConstOsmMapPtr& getMap() const { return _start.getMap(); }
 
   /**
    * Returns the way location that is closer to the end of the way regardless of the
