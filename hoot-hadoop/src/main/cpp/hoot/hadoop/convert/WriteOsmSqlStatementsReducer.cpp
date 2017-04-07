@@ -39,8 +39,6 @@ namespace hoot
 PP_FACTORY_REGISTER(pp::Reducer, WriteOsmSqlStatementsReducer)
 
 WriteOsmSqlStatementsReducer::WriteOsmSqlStatementsReducer() :
-_tableHeader(""),
-_sqlStatements(""),
 _sqlStatementBufferSize(0),
 _retainSqlFile(false),
 _localJobTracker(false)
@@ -51,13 +49,10 @@ _localJobTracker(false)
 
 WriteOsmSqlStatementsReducer::~WriteOsmSqlStatementsReducer()
 {
-  if (!_dbConnStr.isEmpty())
+  if (!_dbConnStr.isEmpty() && _pqConn != NULL)
   {
-    if (_pqConn != NULL)
-    {
-      PQfinish(_pqConn);
-      _pqConn = NULL;
-    }
+    PQfinish(_pqConn);
+    _pqConn = NULL;
   }
 }
 
@@ -65,8 +60,6 @@ void WriteOsmSqlStatementsReducer::_flush()
 {
   assert(_sqlStatementBufferSize > 0);
   assert(!_sqlStatements.isEmpty());
-
-  //_sqlStatements += "\\.\n";
 
   //Even though if our target is a database and we're not actually going to execute a sql file,
   //we'll write the file out here if requested.
@@ -76,7 +69,7 @@ void WriteOsmSqlStatementsReducer::_flush()
     LOG_VART(_tableHeader);
     const QString fileSqlStatements = _sqlStatements + "\\.\n";
     LOG_VART(fileSqlStatements);
-    _context->emit(_tableHeader.toStdString(), /*_sqlStatements*/fileSqlStatements.toStdString());
+    _context->emit(_tableHeader.toStdString(), fileSqlStatements.toStdString());
   }
 
   if (!_dbConnStr.isEmpty())
@@ -103,7 +96,7 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
 
   if (_pqConn == NULL)
   {
-    _pqConn = PQconnectdb(ApiDb::getPqString(_dbConnStr)./*toUtf8()*/toLatin1().data());
+    _pqConn = PQconnectdb(ApiDb::getPqString(_dbConnStr).toLatin1().data());
     //PQsetClientEncoding(_pqConn, "UTF8");
     LOG_TRACE(pg_encoding_to_char(PQclientEncoding(_pqConn)));
     PQsetErrorVerbosity(_pqConn, PQERRORS_VERBOSE);
@@ -273,8 +266,6 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   LOG_VART(_dbConnStr);
   _retainSqlFile = config->get("retainSqlFile") == "1" ? true : false;
   LOG_VART(_retainSqlFile);
-  _sqlStatementBufferSize = 0;
-  _sqlStatements = "";
 
   //I wanted to track the counts with hadoop counters instead, but pipes won't let you retrieve
   //counter values, so doing it this way.
