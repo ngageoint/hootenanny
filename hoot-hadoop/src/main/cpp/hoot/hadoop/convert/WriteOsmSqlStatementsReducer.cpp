@@ -47,18 +47,12 @@ _localJobTracker(false)
 {
   _context = NULL;
   _pqConn = NULL;
-  _pqQueryResult = NULL;
 }
 
 WriteOsmSqlStatementsReducer::~WriteOsmSqlStatementsReducer()
 {
   if (!_dbConnStr.isEmpty())
   {
-    if (_pqQueryResult != NULL)
-    {
-      PQclear(_pqQueryResult);
-      _pqQueryResult = NULL;
-    }
     if (_pqConn != NULL)
     {
       PQfinish(_pqConn);
@@ -72,14 +66,17 @@ void WriteOsmSqlStatementsReducer::_flush()
   assert(_sqlStatementBufferSize > 0);
   assert(!_sqlStatements.isEmpty());
 
-  LOG_VART(_tableHeader);
+  //_sqlStatements += "\\.\n";
 
-  _sqlStatements += "\\.\n";
-
+  //Even though if our target is a database and we're not actually going to execute a sql file,
+  //we'll write the file out here if requested.
   if (_retainSqlFile)
   {
     LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to disk...");
-    _context->emit(_tableHeader.toStdString(), _sqlStatements.toStdString());
+    LOG_VART(_tableHeader);
+    const QString fileSqlStatements = _sqlStatements + "\\.\n";
+    LOG_VART(fileSqlStatements);
+    _context->emit(_tableHeader.toStdString(), /*_sqlStatements*/fileSqlStatements.toStdString());
   }
 
   if (!_dbConnStr.isEmpty())
@@ -89,8 +86,6 @@ void WriteOsmSqlStatementsReducer::_flush()
 
   if (!_localJobTracker)
   {
-    //Get a different number here than what comes from the mapper, which must be due to mapper
-    //extra mapper jobs which start but get cancelled early.
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "tables"), 1);
   }
 
@@ -104,61 +99,79 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
 
   assert(!_dbConnStr.isEmpty());
 
+  //There's no way to stream a table copy with QSqlQuery, so we're using libpq here instead.
+
   if (_pqConn == NULL)
   {
-    _pqConn = PQconnectdb(ApiDb::getPqString(_dbConnStr).toLatin1().data());
+    _pqConn = PQconnectdb(ApiDb::getPqString(_dbConnStr)./*toUtf8()*/toLatin1().data());
+    //PQsetClientEncoding(_pqConn, "UTF8");
+    LOG_TRACE(pg_encoding_to_char(PQclientEncoding(_pqConn)));
+    PQsetErrorVerbosity(_pqConn, PQERRORS_VERBOSE);
   }
   else if (PQstatus(_pqConn) != CONNECTION_OK)
   {
     PQreset(_pqConn);
+    LOG_TRACE("Reset pq connection.");
   }
   if (PQstatus(_pqConn) != CONNECTION_OK)
   {
     throw HootException("Unable to open pq database connection.");
   }
-
-  _pqQueryResult = PQexec(_pqConn, _tableHeader.toLatin1().data());
-  const char* statements = _sqlStatements.toLatin1().data();
-  if (PQresultStatus(_pqQueryResult) != PGRES_COPY_IN)
+  if (PQisnonblocking(_pqConn))
   {
-    throw HootException("Error writing copy header to database.");
+    throw HootException("Non-blocking connection.");
   }
-  else
+
+  PGresult* tableHeaderCopyResult = NULL;
+  PGresult* statementsCopyResult = NULL;
+  try
   {
-    if (PQputCopyData(_pqConn, statements, strlen(statements)) == 1 &&
-        PQputCopyEnd(_pqConn, NULL) == 1)
+    //write the header
+    tableHeaderCopyResult = PQexec(_pqConn, _tableHeader.toUtf8().data());
+
+    //write the data; We have to get rid of the UTF null here, or postgres will choke.
+    QByteArray sqlStatementsBytes = _sqlStatements.toUtf8();
+    sqlStatementsBytes.replace("\\x00", " ");
+    const int size = sqlStatementsBytes.size();
+
+    if (PQresultStatus(tableHeaderCopyResult) != PGRES_COPY_IN)
     {
-      int flushStatus = 1;
-      int numTries = 0;  //safety feature
-      LOG_TRACE("Flushing pq data...");
-      while (flushStatus == 1 && numTries < 10)
+      throw HootException("Error writing copy header to database.");
+    }
+    else
+    {
+      if (PQputCopyData(_pqConn, sqlStatementsBytes.data(), size) != 1 ||
+          PQputCopyEnd(_pqConn, NULL) != 1)
       {
-        flushStatus = PQflush(_pqConn);
-        numTries++;
-        LOG_VART(numTries);
+        throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
+      }
+
+      statementsCopyResult = PQgetResult(_pqConn);
+      if (PQresultStatus(statementsCopyResult) != PGRES_COMMAND_OK)
+      {
+        throw HootException(
+          QString("Error writing data: ") + QString::fromAscii(PQerrorMessage(_pqConn)));
+      }
+      else
+      {
+        _context->incrementCounter(
+          _context->getCounter("WriteOsmSqlStatements", "table copies executed"), 1);
       }
     }
-    else
-    {
-      throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
-    }
-
-    PQclear(_pqQueryResult);
-    _pqQueryResult = PQgetResult(_pqConn);
-    if (PQresultStatus(_pqQueryResult) != PGRES_COMMAND_OK)
-    {
-      throw HootException(
-        QString("Error writing data.  ") + QString::fromAscii(PQerrorMessage(_pqConn)));
-    }
-    else
-    {
-      _context->incrementCounter(
-        _context->getCounter("WriteOsmSqlStatements", "table copies executed"), 1);
-    }
   }
-
-  PQclear(_pqQueryResult);
-  _pqQueryResult = NULL;
+  catch (const std::exception& e)
+  {
+    LOG_ERROR(e.what());
+    if (tableHeaderCopyResult != NULL)
+    {
+      PQclear(tableHeaderCopyResult);
+    }
+    if (statementsCopyResult != NULL)
+    {
+      PQclear(statementsCopyResult);
+    }
+    throw e;
+  }
 }
 
 void WriteOsmSqlStatementsReducer::_updateElementCounts()

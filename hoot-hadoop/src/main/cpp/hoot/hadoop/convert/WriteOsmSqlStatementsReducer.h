@@ -56,7 +56,6 @@ private:
   bool _retainSqlFile;
   QString _dbConnStr;
   PGconn* _pqConn;
-  PGresult* _pqQueryResult;
   QMap<QString, long> _elementCounts;
   bool _localJobTracker;
 

@@ -319,6 +319,7 @@ QString OsmApiDbSqlStatementFormatter::_escapeCopyToData(const QString stringToO
   escapedString.replace(QChar(11), QString("\\v"));
   escapedString.replace(QChar(12), QString("\\f"));
   escapedString.replace(QChar(13), QString("\\r"));
+  //escapedString.replace("\\x00", " ");
   return escapedString;
 }
 
