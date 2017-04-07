@@ -260,6 +260,9 @@ public:
       "test-files/hadoop/convert/WriteOsmSqlStatementsDriverTest/output-with-buffering.sql",
       outFile);
     verifyDatabaseOutput();
+    //let's write some new records just to make sure we didn't mess the constraints up; only
+    //checking for errors here and not reading back this data after its written
+    writeAdditionalNewRecords();
   }
 };
 

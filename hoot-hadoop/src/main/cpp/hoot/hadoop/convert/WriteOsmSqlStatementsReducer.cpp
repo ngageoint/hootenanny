@@ -95,6 +95,15 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
 {
   LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to database...");
 
+  if (PQstatus(_pqConn) != CONNECTION_OK)
+  {
+    PQreset(_pqConn);
+    if (PQstatus(_pqConn) != CONNECTION_OK)
+    {
+      throw HootException("Unable to open pq database connection.");
+    }
+  }
+
   _pqQueryResult = PQexec(_pqConn, _tableHeader.toLatin1().data());
   const char* statements = _sqlStatements.toLatin1().data();
   if (PQresultStatus(_pqQueryResult) != PGRES_COPY_IN)
@@ -241,7 +250,7 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     if (!_localJobTracker && !value.trimmed().isEmpty() && value.trimmed() != "\\.")
     {
       //Get a different number here than what comes from the mapper, which must be due to mapper
-      //extra mapper jobs which start but get cancelled early (?)
+      //extra mapper jobs which start but get cancelled early.
       _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
     }
 
