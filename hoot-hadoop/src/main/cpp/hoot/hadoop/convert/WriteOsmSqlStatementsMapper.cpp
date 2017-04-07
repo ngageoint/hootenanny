@@ -53,8 +53,10 @@ void WriteOsmSqlStatementsMapper::_writeElementAndTagsSqlStatements(const ConstE
 {
   const QStringList elementSqlStatements =
     _sqlFormatter->elementToSqlStrings(element, elementId, 1);
-  _statementsBuffer->append(QPair<QString, QString>(elementSqlHeaders[0], elementSqlStatements[0]));
-  _statementsBuffer->append(QPair<QString, QString>(elementSqlHeaders[1], elementSqlStatements[1]));
+  QString recordId = QString::number(elementId) % ";" % elementSqlHeaders[0];
+  _statementsBuffer->append(QPair<QString, QString>(recordId, elementSqlStatements[0]));
+  recordId = QString::number(elementId) % ";" % elementSqlHeaders[1];
+  _statementsBuffer->append(QPair<QString, QString>(recordId, elementSqlStatements[1]));
   const QString elementTypeStr = element->getElementType().toString().toLower() % "s";
   //the pretty pipes version of the local job runner doesn't support counters
   if (!_localJobTracker)
@@ -69,10 +71,11 @@ void WriteOsmSqlStatementsMapper::_writeElementAndTagsSqlStatements(const ConstE
     const QStringList elementTagSqlStatements =
       _sqlFormatter->tagToSqlStrings(
         elementId, element->getElementId().getType(), it.key(), it.value());
-    _statementsBuffer->append(
-      QPair<QString, QString>(elementTagSqlHeaders[0], elementTagSqlStatements[0]));
-    _statementsBuffer->append(
-      QPair<QString, QString>(elementTagSqlHeaders[1], elementTagSqlStatements[1]));
+    //this id will be unique and will ensure the spreading out of records among the reducers
+    QString recordId = QString::number(elementId) % ";" % elementTagSqlHeaders[0];
+    _statementsBuffer->append(QPair<QString, QString>(recordId, elementTagSqlStatements[0]));
+    recordId = QString::number(elementId) % ";" % elementTagSqlHeaders[1];
+    _statementsBuffer->append(QPair<QString, QString>(recordId, elementTagSqlStatements[1]));
     if (!_localJobTracker)
     {
       QString elementTagsTypeStr = elementTypeStr;
@@ -97,9 +100,10 @@ void WriteOsmSqlStatementsMapper::_flush()
   {
     QPair<QString, QString> statementPair = *it;
     LOG_TRACE(statementPair.first << " " << statementPair.second);
-    _context->emit(statementPair.first.toStdString(), statementPair.second.toStdString());
-    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
+    _context->emit(statementPair.first.toStdString(), statementPair.second.toStdString()); 
   }
+  _context->incrementCounter(
+    _context->getCounter("WriteOsmSqlStatements", "SQL statements"), _statementsBuffer->size());
   _statementsBuffer->clear();
 }
 
@@ -159,10 +163,12 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 
       const QStringList wayNodeSqlStatements =
         _sqlFormatter->wayNodeToSqlStrings(elementId, wayNodeId, wayNodeIndex);
-      _statementsBuffer->append(
-        QPair<QString, QString>(wayNodeSqlHeaders[0], wayNodeSqlStatements[0]));
-      _statementsBuffer->append(
-        QPair<QString, QString>(wayNodeSqlHeaders[1], wayNodeSqlStatements[1]));
+      QString recordId =
+        QString::number(elementId) % ";" + QString::number(wayNodeId) % ";" % wayNodeSqlHeaders[0];
+      _statementsBuffer->append(QPair<QString, QString>(recordId, wayNodeSqlStatements[0]));
+      recordId =
+        QString::number(elementId) % ";" + QString::number(wayNodeId) % ";" % wayNodeSqlHeaders[1];
+      _statementsBuffer->append(QPair<QString, QString>(recordId, wayNodeSqlStatements[1]));
       wayNodeIndex++;
       if (!_localJobTracker)
       {
@@ -201,15 +207,19 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       const RelationData::Entry member = *it;
 
       assert(member.getElementId().getId() != 0);
-      const long memberId = abs(member.getElementId().getId());
+      const unsigned long memberId = abs(member.getElementId().getId());
 
       const QStringList relationMemberSqlStatements =
         _sqlFormatter->relationMemberToSqlStrings(
           elementId, memberId, member, memberSequenceIndex);
-      _statementsBuffer->append(
-        QPair<QString, QString>(relationMemberSqlHeaders[0], relationMemberSqlStatements[0]));
-      _statementsBuffer->append(
-        QPair<QString, QString>(relationMemberSqlHeaders[1], relationMemberSqlStatements[1]));
+      QString recordId =
+        QString::number(elementId) % ";" + QString::number(memberId) % ";" %
+        relationMemberSqlHeaders[0];
+      _statementsBuffer->append(QPair<QString, QString>(recordId, relationMemberSqlStatements[0]));
+      recordId =
+        QString::number(elementId) % ";" + QString::number(memberId) % ";" %
+        relationMemberSqlHeaders[1];
+      _statementsBuffer->append(QPair<QString, QString>(recordId, relationMemberSqlStatements[1]));
       memberSequenceIndex++;
       if (!_localJobTracker)
       {

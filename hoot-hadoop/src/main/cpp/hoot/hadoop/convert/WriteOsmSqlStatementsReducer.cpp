@@ -21,10 +21,12 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/UuidHelper.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
+#include <pp/Hdfs.h>
 using namespace pp;
 
 // Qt
@@ -45,6 +47,13 @@ _localJobTracker(false)
 {
   _context = NULL;
   _pqConn = NULL;
+
+  //We need the element counts so that the driver can write the setval statements after the job is
+  //finished.  I wanted to track the element counts with hadoop counters, but pipes won't
+  //let you retrieve counter values, so doing it this way instead.
+  _elementCounts["nodes"] = 0;
+  _elementCounts["ways"] = 0;
+  _elementCounts["relations"] = 0;
 }
 
 WriteOsmSqlStatementsReducer::~WriteOsmSqlStatementsReducer()
@@ -56,39 +65,69 @@ WriteOsmSqlStatementsReducer::~WriteOsmSqlStatementsReducer()
   }
 }
 
+void WriteOsmSqlStatementsReducer::close()
+{
+  if (_sqlStatementBufferSize > 0)
+  {
+    _flush();
+  }
+}
+
 void WriteOsmSqlStatementsReducer::_flush()
 {
   assert(_sqlStatementBufferSize > 0);
-  assert(!_sqlStatements.isEmpty());
+  //max number of possible header keys = number of db table types
+  assert(_sqlStatementBuffer.size() <= 17);
+  LOG_VART(_sqlStatementBufferSize);
+  LOG_VART(_sqlStatementBuffer.size());
+  LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records...");
 
-  //Even though if our target is a database and we're not actually going to execute a sql file,
-  //we'll write the file out here if requested.
-  if (_retainSqlFile)
+  for (QMap<QString, QString>::const_iterator it = _sqlStatementBuffer.constBegin();
+       it != _sqlStatementBuffer.constEnd(); ++it)
   {
-    LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to disk...");
-    LOG_VART(_tableHeader);
-    const QString fileSqlStatements = _sqlStatements + "\\.\n";
-    LOG_VART(fileSqlStatements);
-    _context->emit(_tableHeader.toStdString(), fileSqlStatements.toStdString());
+    const QString tableHeader = it.key();
+    LOG_VART(tableHeader);
+    const QString data = it.value();
+    LOG_VART(data);
+
+    //Even though if our target is a database and we're not actually going to execute a sql file,
+    //we'll write the file out here if requested.
+    if (_retainSqlFile)
+    {
+      LOG_TRACE("Flushing records to file for table " << tableHeader << "...");
+      LOG_VART(tableHeader);
+      const QString fileSqlStatements = data + "\\.\n";
+      LOG_VART(fileSqlStatements);
+      _context->emit(tableHeader.toStdString(), fileSqlStatements.toStdString());
+    }
+
+    if (!_dbConnStr.isEmpty())
+    {
+      _flushToDb(tableHeader, data);
+    }
+
+    if (!_localJobTracker)
+    {
+      _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "tables"), 1);
+    }
   }
 
-  if (!_dbConnStr.isEmpty())
-  {
-    _flushToDb();
-  }
+  //write the element counts to a separate auxiliary file
+  _writeElementCounts();
 
-  if (!_localJobTracker)
-  {
-    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "tables"), 1);
-  }
-
-  _sqlStatements = "";
+  _sqlStatementBuffer.clear();
   _sqlStatementBufferSize = 0;
 }
 
-void WriteOsmSqlStatementsReducer::_flushToDb()
+QString WriteOsmSqlStatementsReducer::_tableHeaderToTableName(const QString tableHeader) const
 {
-  LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to database...");
+  return tableHeader.split(" ")[1];
+}
+
+void WriteOsmSqlStatementsReducer::_flushToDb(const QString tableHeader, const QString tableData)
+{
+  LOG_TRACE(
+    "Flushing records to database for table: " << _tableHeaderToTableName(tableHeader) << "...");
 
   assert(!_dbConnStr.isEmpty());
 
@@ -120,10 +159,10 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
   try
   {
     //write the header
-    tableHeaderCopyResult = PQexec(_pqConn, _tableHeader.toUtf8().data());
+    tableHeaderCopyResult = PQexec(_pqConn, tableHeader.toUtf8().data());
 
     //write the data; We have to get rid of the UTF null here, or postgres will choke.
-    QByteArray sqlStatementsBytes = _sqlStatements.toUtf8();
+    QByteArray sqlStatementsBytes = tableData.toUtf8();
     sqlStatementsBytes.replace("\\x00", " ");
     const int size = sqlStatementsBytes.size();
 
@@ -167,84 +206,81 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
   }
 }
 
-void WriteOsmSqlStatementsReducer::_updateElementCounts()
+void WriteOsmSqlStatementsReducer::_updateElementCounts(const QString tableHeader)
 {
-  if (_tableHeader.contains("current_nodes"))
+  if (tableHeader.contains("current_nodes"))
   {
     _elementCounts["nodes"] = _elementCounts["nodes"] + 1;
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "nodes"), 1);
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
   }
-  else if (_tableHeader.contains("current_node_tags"))
+  else if (tableHeader.contains("current_node_tags"))
   {
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "node tags"), 1);
   }
-  else if (_tableHeader.contains("current_ways"))
+  else if (tableHeader.contains("current_ways"))
   {
     _elementCounts["ways"] = _elementCounts["ways"] + 1;
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "ways"), 1);
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
   }
-  else if (_tableHeader.contains("current_way_tags"))
+  else if (tableHeader.contains("current_way_tags"))
   {
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "way tags"), 1);
   }
-  else if (_tableHeader.contains("current_way_nodes"))
+  else if (tableHeader.contains("current_way_nodes"))
   {
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "way nodes"), 1);
   }
-  else if (_tableHeader.contains("current_relations"))
+  else if (tableHeader.contains("current_relations"))
   {
     _elementCounts["relations"] = _elementCounts["relations"] + 1;
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "relations"), 1);
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
   }
-  else if (_tableHeader.contains("current_relation_tags"))
+  else if (tableHeader.contains("current_relation_tags"))
   {
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "relation tags"), 1);
   }
-  else if (_tableHeader.contains("current_relation_members"))
+  else if (tableHeader.contains("current_relation_members"))
   {
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "relation members"), 1);
   }
 }
 
-void WriteOsmSqlStatementsReducer::_writeSequenceUpdateStatements()
+void WriteOsmSqlStatementsReducer::_writeElementCounts()
 {
-  QString sequenceUpdateStatement;
-  if (_elementCounts["nodes"] > 0)
+  shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(_context->getJobConf()));
+  //if it doesn't already exist, add a dir under our main output dir
+  Hdfs fs;
+  const string mainOutputDir = config->get("mapred.output.dir");
+  const string auxDir = mainOutputDir + "/elementCounts";
+  if (!fs.exists(auxDir))
   {
-    sequenceUpdateStatement =
-      "SELECT pg_catalog.setval('current_nodes_id_seq', " +
-      QString::number(_elementCounts["nodes"]) + ");";
-    _context->emit("/* nodes */\n", sequenceUpdateStatement.toStdString());
-    if (!_localJobTracker)
-    {
-      _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
-    }
+    fs.mkdirs(auxDir);
   }
-  if (_elementCounts["ways"] > 0)
+  const string outputFile =
+    auxDir + "/elementCount-" + UuidHelper::createUuid().toString().toStdString();
+  shared_ptr<ostream> out(fs.create(outputFile));
+  if (!out->good())
   {
-    sequenceUpdateStatement =
-      "SELECT pg_catalog.setval('current_ways_id_seq', " +
-      QString::number(_elementCounts["ways"]) + ");";
-    _context->emit("/* ways */\n", sequenceUpdateStatement.toStdString());
-    if (!_localJobTracker)
-    {
-      _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
-    }
+    throw Exception("output stream is not good.");
   }
-  if (_elementCounts["relations"] > 0)
-  {
-    sequenceUpdateStatement =
-      "SELECT pg_catalog.setval('current_relations_id_seq', " +
-      QString::number(_elementCounts["relations"]) + ");";
-    _context->emit("/* relations */\n", sequenceUpdateStatement.toStdString());
-    if (!_localJobTracker)
-    {
-      _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
-    }
-  }
+
+  //write out the element counts to be manually summed up later by the driver
+  LOG_VART(_elementCounts["nodes"]);
+  const QString nodeCntStr = "nodes;" + QString::number(_elementCounts["nodes"]) + "\n";
+  out->write(nodeCntStr.toLatin1().data(), nodeCntStr.toLatin1().size());
+  LOG_VART(_elementCounts["ways"]);
+  const QString wayCntStr = "ways;" + QString::number(_elementCounts["ways"]) + "\n";
+  out->write(wayCntStr.toLatin1().data(), wayCntStr.toLatin1().size());
+  LOG_VART(_elementCounts["relations"]);
+  const QString relationCntStr = "relations;" + QString::number(_elementCounts["relations"]) + "\n";
+  out->write(relationCntStr.toLatin1().data(), relationCntStr.toLatin1().size());
+
+  _elementCounts["nodes"] = 0;
+  _elementCounts["ways"] = 0;
+  _elementCounts["relations"] = 0;
 }
 
 void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
@@ -254,57 +290,46 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     _context = &context;
   }
 
-  shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(_context->getJobConf()));
   //LOG_VARD(config->getInt("mapred.reduce.tasks"));
   _localJobTracker = config->get("mapred.job.tracker") == "local";
   const long writeBufferSize = config->getLong("writeBufferSize");
+  LOG_VART(writeBufferSize);
   if (config->hasKey("dbConnUrl"))
   {
     _dbConnStr = QString::fromStdString(config->get("dbConnUrl"));
+    LOG_VART(_dbConnStr);
   }
-
-  LOG_VART(_dbConnStr);
   _retainSqlFile = config->get("retainSqlFile") == "1" ? true : false;
   LOG_VART(_retainSqlFile);
 
-  //I wanted to track the counts with hadoop counters instead, but pipes won't let you retrieve
-  //counter values, so doing it this way.
-  _elementCounts["nodes"] = 0;
-  _elementCounts["ways"] = 0;
-  _elementCounts["relations"] = 0;
-
-  _tableHeader = QString::fromStdString(context.getInputKey());
+  //<element id>;<table header> OR <element id>;<member id>;<table header>
+  const QStringList keyParts = QString::fromStdString(context.getInputKey()).split(";");
+  const QString tableHeader = keyParts[keyParts.size() - 2] + ";\n";
+  LOG_VART(tableHeader);
   while (context.nextValue())
   {
-    const QString value = QString::fromStdString(context.getInputValue());
+    _updateElementCounts(tableHeader);
 
-    _updateElementCounts();
-
-    _sqlStatements = _sqlStatements % value;
+    const QString newValue = QString::fromStdString(context.getInputValue());
+    LOG_VART(newValue);
+    _sqlStatementBuffer[tableHeader] = _sqlStatementBuffer[tableHeader] % newValue;
+    LOG_VART(_sqlStatementBuffer[tableHeader]);
     _sqlStatementBufferSize++;
 
-    if (!_localJobTracker && !value.trimmed().isEmpty() && value.trimmed() != "\\.")
+    if (!_localJobTracker)
     {
-      //Get a different number here than what comes from the mapper, which must be due to mapper
-      //extra mapper jobs which start but get cancelled early.
-      _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
+      _context->incrementCounter(
+        _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
     }
 
     //this flush can cause the same table to be written to the file twice, each time with a
     //different set of sql records...but that's ok.
-    if (_sqlStatementBufferSize >= writeBufferSize && !_sqlStatements.isEmpty())
+    if (_sqlStatementBufferSize >= writeBufferSize)
     {
       _flush();
     }
   }
-  if (_sqlStatementBufferSize > 0 && !_sqlStatements.isEmpty())
-  {
-    _flush();
-  }
-
-  //write the sequence id update sql statements - I believe this will work since all keys of the
-  //same type will be sent to each reducer
-  _writeSequenceUpdateStatements();
 }
 
 }

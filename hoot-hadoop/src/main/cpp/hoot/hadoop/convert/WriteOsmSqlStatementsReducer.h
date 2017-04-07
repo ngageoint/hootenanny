@@ -46,12 +46,12 @@ public:
   virtual ~WriteOsmSqlStatementsReducer();
 
   virtual void reduce(HadoopPipes::ReduceContext& context);
+  virtual void close();
 
 private:
 
   HadoopPipes::ReduceContext* _context;
-  QString _tableHeader;
-  QString _sqlStatements;
+  QMap<QString, QString> _sqlStatementBuffer;
   long _sqlStatementBufferSize;
   bool _retainSqlFile;
   QString _dbConnStr;
@@ -60,9 +60,11 @@ private:
   bool _localJobTracker;
 
   void _flush();
-  void _flushToDb();
-  void _updateElementCounts();
-  void _writeSequenceUpdateStatements();
+  void _flushToDb(const QString tableHeader, const QString tableData);
+  void _updateElementCounts(const QString tableHeader);
+  void _writeElementCounts();
+  bool _bufferFull() const;
+  QString _tableHeaderToTableName(const QString tableHeader) const;
 };
 
 }

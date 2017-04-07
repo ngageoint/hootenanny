@@ -73,6 +73,8 @@ private:
                                     const QString userSpecifiedOutput) const;
   void _writeChangesetToSqlFile(const QString sqlFileLocation);
   bool _destinationIsDatabase(const QString output) const;
+  void _writeSequenceUpdateStatements(const QString elementCountsDir,
+                                      const QString sqlFileLocation);
 };
 
 }

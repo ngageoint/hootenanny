@@ -22,6 +22,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
@@ -32,6 +33,7 @@ using namespace pp;
 // Qt
 #include <QFileInfo>
 #include <QTextStream>
+#include <QDir>
 
 // geos
 #include <geos/geom/Envelope.h>
@@ -111,7 +113,7 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
 
   Hdfs fs;
   LOG_DEBUG("Creating work directory...");
-  QString hdfsOutput =
+  const QString hdfsOutput =
     "tmp/" + UuidHelper::createUuid().toString().replace("{", "").replace("}", "") +
     "-WriteOsmSqlStatementsDriver/";
   fs.mkdirs(hdfsOutput.toStdString());
@@ -161,6 +163,103 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
           .toUtf8());
     }
   }
+
+  _writeSequenceUpdateStatements(hdfsOutput + "/elementCounts", sqlFile);
+}
+
+void WriteOsmSqlStatementsDriver::_writeSequenceUpdateStatements(const QString elementCountsDir,
+                                                                 const QString sqlFileLocation)
+{
+  LOG_INFO("Merging element count files into one file...");
+  const QString mergedElementCountFileTempPath =
+    QDir::tempPath() + "/WriteOsmSqlStatementsDriver-" + QUuid::createUuid().toString();
+  HadoopPipesUtils::mergeFilesToLocalFileSystem(
+    elementCountsDir.toStdString(), mergedElementCountFileTempPath.toStdString());
+
+  LOG_INFO("Determining total element counts from element count files...");
+  QMap<ElementType::Type, long> elementCounts;
+  elementCounts[ElementType::Node] = 0;
+  elementCounts[ElementType::Way] = 0;
+  elementCounts[ElementType::Relation] = 0;
+  const QStringList elementCountsStrList =
+    FileUtils::fileToString(mergedElementCountFileTempPath).split("\n");
+  for (int i = 0; i < elementCountsStrList.size(); i++)
+  {
+    const QString line = elementCountsStrList.at(i);
+    if (!line.trimmed().isEmpty())
+    {
+      LOG_VART(line);
+      const QStringList elementCountParts = line.split(";");
+      assert(elementCountParts.size() == 2);
+      ElementType elementType;
+      if (elementCountParts[0] == "nodes")
+      {
+        elementType = ElementType::Node;
+      }
+      else if (elementCountParts[0] == "ways")
+      {
+        elementType = ElementType::Way;
+      }
+      else if (elementCountParts[0] == "relations")
+      {
+        elementType = ElementType::Relation;
+      }
+      else
+      {
+        throw HootException("Unsupported element type: " + elementCountParts[0]);
+      }
+      elementCounts[elementType.getEnum()] =
+        elementCounts[elementType.getEnum()] + elementCountParts[1].toLong();
+    }
+  }
+  if (elementCounts[ElementType::Way] == 0)
+  {
+    elementCounts[ElementType::Way] = 1;
+  }
+  if (elementCounts[ElementType::Relation] == 0)
+  {
+    elementCounts[ElementType::Relation] = 1;
+  }
+  LOG_VART(elementCounts[ElementType::Node]);
+  LOG_VART(elementCounts[ElementType::Way]);
+  LOG_VART(elementCounts[ElementType::Relation]);
+
+  QStringList setValStatements;
+  setValStatements.append(
+    "SELECT pg_catalog.setval('current_nodes_id_seq', " +
+    QString::number(elementCounts[ElementType::Node]) + ");\n");
+  setValStatements.append(
+    "SELECT pg_catalog.setval('current_ways_id_seq', " +
+    QString::number(elementCounts[ElementType::Way]) + ");\n");
+  setValStatements.append(
+    "SELECT pg_catalog.setval('current_relations_id_seq', " +
+    QString::number(elementCounts[ElementType::Relation]) + ");");
+  if (!_destinationIsDatabase(_output) || !_outputFileCopyLocation.isEmpty())
+  {
+    LOG_INFO("Writing setval SQL statements to SQL file...");
+    QFile outputSqlFile(sqlFileLocation);
+    if (!outputSqlFile.open(QIODevice::Append))
+    {
+      throw HootException("Could not open SQL output file: " + sqlFileLocation);
+    }
+    QTextStream outStream(&outputSqlFile);
+    for (int i = 0; i < setValStatements.size(); i++)
+    {
+      outStream << setValStatements.at(i);
+    }
+    outStream.flush();
+    outputSqlFile.close();
+  }
+  else
+  {
+    LOG_INFO("Writing setval updates to database...");
+    QString sql = "";
+    for (int i = 0; i < setValStatements.size(); i++)
+    {
+      sql += setValStatements.at(i);
+    }
+    DbUtils::execNoPrepare(_database.getDB(), sql);
+  }
 }
 
 void WriteOsmSqlStatementsDriver::_writeChangesetToSqlFile(const QString sqlFileLocation)
@@ -179,6 +278,7 @@ void WriteOsmSqlStatementsDriver::_writeChangesetToSqlFile(const QString sqlFile
   QTextStream outStream(&outputSqlFile);
   outStream << changesetHeader;
   outStream << changesetStr;
+  outStream << "\\.\n\n";
   outStream.flush();
   outputSqlFile.close();
 }

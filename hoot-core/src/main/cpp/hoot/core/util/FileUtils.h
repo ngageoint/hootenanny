@@ -50,6 +50,8 @@ public:
    * @return
    */
   static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
+
+  static QString fileToString(const QString path);
 };
 
 }

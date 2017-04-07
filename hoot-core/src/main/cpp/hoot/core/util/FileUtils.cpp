@@ -100,4 +100,17 @@ QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString filePath)
   return tokens;
 }
 
+QString FileUtils::fileToString(const QString path)
+{
+  QFile file(path);
+  if (file.open(QIODevice::ReadOnly))
+  {
+    return file.readAll();
+  }
+  else
+  {
+    throw HootException("Unable to read file at: " + path);
+  }
+}
+
 }
