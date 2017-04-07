@@ -72,7 +72,7 @@ import hoot.services.command.InternalCommand;
 import hoot.services.command.InternalCommandManager;
 import hoot.services.command.common.DeleteFolderCommand;
 import hoot.services.command.common.UnZIPFileCommand;
-import hoot.services.controllers.ExportRenderDBCommandFactory;
+import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.MultipartSerializer;

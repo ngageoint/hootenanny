@@ -134,15 +134,15 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             commandResult.setJobId(jobId);
             commandResult.setWorkingDir(workingDir);
 
+            if (trackable) {
+                updateDatabase(commandResult);
+            }
+
             if (commandResult.failed()) {
                 logger.error("FAILURE of: {}", commandResult, exception);
             }
             else {
                 logger.debug("SUCCESS of: {}", commandResult);
-            }
-
-            if (trackable) {
-                updateDatabase(commandResult);
             }
 
             return commandResult;
@@ -170,8 +170,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         cl.setSubstitutionMap(substitutionMap);
         for (int i = 1; i < tokens.length; i++) {
             String token = tokens[i].trim();
-            boolean handleQuoting = StringUtils.isQuoted(token);
-            if (handleQuoting) {
+            if (StringUtils.isQuoted(token)) {
                 // extract & expand the contents between '...'
                 token = expandToken(token.substring(1, token.length() - 1), substitutionMap);
                 cl.addArgument(token, false);

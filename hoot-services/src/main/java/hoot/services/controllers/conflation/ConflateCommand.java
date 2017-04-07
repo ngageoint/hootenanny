@@ -29,11 +29,11 @@ package hoot.services.controllers.conflation;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
@@ -143,15 +143,20 @@ class ConflateCommand extends ExternalCommand {
         //HOOT_OPTS+= -D api.db.email=test@test.com
 
         List<String> options = new LinkedList<>();
-        options.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("-D conflate.add.score.tags=yes");
-        options.add("-D hootapi.db.writer.overwrite.map=true");
-        options.add("-D hootapi.db.writer.create.user=true");
-        options.add("-D api.db.email=test@test.com");
+        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("conflate.add.score.tags=yes");
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
 
         //HOOT_OPTS+= $(ADV_OPTIONS)
         if (params.getAdvancedOptions() != null) {
-            options.add(params.getAdvancedOptions());
+            String[] advOptions = params.getAdvancedOptions().trim().split("-D ");
+            Arrays.stream(advOptions).forEach((option) -> {
+                if (!option.isEmpty()) {
+                    options.add(option.trim());
+                };
+            });
         }
 
         /*
@@ -194,11 +199,11 @@ class ConflateCommand extends ExternalCommand {
         if (referenceLayer.equalsIgnoreCase("1")) {
             if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
                 input1 = OSMAPI_DB_URL;
-                options.add("-D convert.bounding.box=" + aoi);
-                options.add("-D conflate.use.data.source.ids=true");
-                options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
-                options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("-D osmapidb.id.aware.url=" + OSMAPI_DB_URL);
+                options.add("convert.bounding.box=" + aoi);
+                options.add("conflate.use.data.source.ids=true");
+                options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
+                options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
+                options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
             }
         }
 
@@ -215,14 +220,14 @@ class ConflateCommand extends ExternalCommand {
           endif
          */
         else if (referenceLayer.equalsIgnoreCase("2")) {
-            options.add("-D tag.merger.default=hoot::OverwriteTag1Merger");
+            options.add("tag.merger.default=hoot::OverwriteTag1Merger");
             if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
                 input2 = OSMAPI_DB_URL;
-                options.add("-D convert.bounding.box=" + aoi);
-                options.add("-D conflate.use.data.source.ids=true");
-                options.add("-D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
-                options.add("-D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("-D osmapidb.id.aware.url=" + OSMAPI_DB_URL);
+                options.add("convert.bounding.box=" + aoi);
+                options.add("conflate.use.data.source.ids=true");
+                options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
+                options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
+                options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
             }
         }
 
@@ -244,7 +249,7 @@ class ConflateCommand extends ExternalCommand {
             stats = "--stats";
         }
 
-        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        String hootOptions = hootOptionsToString(options);
 
         Map<String, String> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);

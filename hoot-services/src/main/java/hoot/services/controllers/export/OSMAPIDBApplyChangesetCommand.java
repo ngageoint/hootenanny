@@ -29,9 +29,7 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 class OSMAPIDBApplyChangesetCommand extends ExportCommand {
@@ -39,8 +37,7 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
     OSMAPIDBApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params, debugLevel, caller);
 
-        List<String> options = super.getCommonExportHootOptions();
-        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        String hootOptions = hootOptionsToString(super.getCommonExportHootOptions());
 
         String mapName = params.getInput();
         hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);

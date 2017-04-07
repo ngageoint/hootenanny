@@ -59,7 +59,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
 import hoot.services.command.InternalCommandManager;
-import hoot.services.controllers.ExportRenderDBCommandFactory;
+import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;

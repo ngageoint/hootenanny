@@ -29,7 +29,9 @@ package hoot.services.command;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 
@@ -66,5 +68,9 @@ public class ExternalCommand extends JSONObject {
 
     protected static String quote(String commandOption) {
         return "\"" + commandOption + "\"";
+    }
+
+    protected static String hootOptionsToString(List<String> hootOptions) {
+        return hootOptions.stream().map(option -> "-D " + option).collect(Collectors.joining(" "));
     }
 }

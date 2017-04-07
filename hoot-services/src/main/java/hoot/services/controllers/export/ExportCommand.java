@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -152,7 +151,7 @@ class ExportCommand extends ExternalCommand {
         this.jobId = jobId;
         this.params = params;
 
-        String hootOptions = this.getCommonExportHootOptions().stream().collect(Collectors.joining(" "));
+        String hootOptions = hootOptionsToString(this.getCommonExportHootOptions());
 
         java.util.Map<String, String> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
@@ -173,17 +172,17 @@ class ExportCommand extends ExternalCommand {
         //HOOT_OPTS+= -D hootapi.db.writer.create.user=true
         //HOOT_OPTS+= -D api.db.email=test@test.com
         List<String> options = new LinkedList<>();
-        options.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("-D hootapi.db.writer.overwrite.map=true");
-        options.add("-D hootapi.db.writer.create.user=true");
-        options.add("-D api.db.email=test@test.com");
+        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
 
         //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
         //ifeq "$(textstatus)" "true"
         //    HOOT_OPTS+= -D writer.text.status=true
         //endif
         if (params.getTextStatus()) {
-            options.add("-D writer.text.status=true");
+            options.add("writer.text.status=true");
         }
 
         //# Add the option to append
@@ -191,7 +190,7 @@ class ExportCommand extends ExternalCommand {
         //    HOOT_OPTS+= -D ogr.append.data=true
         //endif
         if (params.getAppend()) {
-            options.add("-D ogr.append.data=true");
+            options.add("ogr.append.data=true");
         }
 
         return options;

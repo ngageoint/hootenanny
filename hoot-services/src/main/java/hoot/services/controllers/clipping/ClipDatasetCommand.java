@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 
@@ -63,10 +62,10 @@ class ClipDatasetCommand extends ExternalCommand {
 
     ClipDatasetCommand(ClipDatasetParams params, String debugLevel, Class<?> caller) {
         List<String> options = new LinkedList<>();
-        options.add("-D hootapi.db.writer.overwrite.map=true");
-        options.add("-D hootapi.db.writer.create.user=true");
-        options.add("-D api.db.email=test@test.com");
-        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
+        String hootOptions = hootOptionsToString(options);
 
         //The input OSM data path
         Map<String, String> substitutionMap = new HashMap<>();

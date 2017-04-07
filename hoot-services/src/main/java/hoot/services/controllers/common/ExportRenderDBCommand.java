@@ -22,11 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers;
+package hoot.services.controllers.common;
 
 import static hoot.services.HootProperties.*;
+import static hoot.services.models.db.QMaps.maps;
 
 import java.io.File;
 import java.util.HashMap;
@@ -36,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.command.ExternalCommand;
-import hoot.services.models.db.QMaps;
 import hoot.services.utils.DbUtils;
 
 
@@ -44,7 +44,7 @@ class ExportRenderDBCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportRenderDBCommand.class);
 
     ExportRenderDBCommand(String name, Class<?> caller) {
-        long mapId = DbUtils.getRecordIdForInputString(name, QMaps.maps, QMaps.maps.id, QMaps.maps.displayName);
+        long mapId = DbUtils.getRecordIdForInputString(name, maps, maps.id, maps.displayName);
         String script = new File(CORE_SCRIPT_PATH, EXPORT_RENDERDB_SCRIPT).getAbsolutePath();
 
         Map<String, String> substitutionMap = new HashMap<>();

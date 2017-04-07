@@ -32,7 +32,6 @@ import static hoot.services.HootProperties.OSMAPI_DB_URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import hoot.services.geo.BoundingBox;
 
@@ -46,9 +45,9 @@ class ExportOSCCommand extends ExportCommand {
         String outputPath = super.getOutputPath();
 
         List<String> options = super.getCommonExportHootOptions();
-        options.add("-D convert.bounding.box=" + aoi);
-        options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
-        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        options.add("convert.bounding.box=" + aoi);
+        options.add("osm.changeset.sql.file.writer.generate.new.ids=false");
+        String hootOptions = hootOptionsToString(options);
 
         Map<String, String> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);

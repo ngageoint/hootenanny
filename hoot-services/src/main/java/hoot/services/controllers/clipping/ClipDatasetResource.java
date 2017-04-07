@@ -47,7 +47,7 @@ import org.springframework.stereotype.Controller;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.controllers.ExportRenderDBCommandFactory;
+import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 

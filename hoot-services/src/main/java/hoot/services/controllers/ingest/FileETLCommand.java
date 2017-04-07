@@ -117,10 +117,10 @@ class FileETLCommand extends ExternalCommand {
         //HOOT_OPTS+= -D api.db.email=test@test.com
 
         List<String> options = new LinkedList<>();
-        options.add("-D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("-D hootapi.db.writer.overwrite.map=true");
-        options.add("-D hootapi.db.writer.create.user=true");
-        options.add("-D api.db.email=test@test.com");
+        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
 
         //ifeq "$(INPUT_TYPE)" "GEONAMES"
         //    HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
@@ -130,8 +130,8 @@ class FileETLCommand extends ExternalCommand {
         // OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
 
         if (inputType.equalsIgnoreCase("GEONAMES")) {
-            options.add("-D convert.ops=hoot::TranslationOp");
-            options.add("-D translation.script=" + quote(translationPath));
+            options.add("convert.ops=hoot::TranslationOp");
+            options.add(quote("translation.script=" + translationPath));
         }
 
         //ifeq "$(INPUT_TYPE)" "OSM"
@@ -142,8 +142,8 @@ class FileETLCommand extends ExternalCommand {
         //endif
 
         if (inputType.equalsIgnoreCase("OSM") && !isNoneTranslation) {
-            options.add("-D convert.ops=hoot::TranslationOp");
-            options.add("-D translation.script=" + quote(translationPath));
+            options.add("convert.ops=hoot::TranslationOp");
+            options.add(quote("translation.script=" + translationPath));
         }
 
         //# This replaces semicolon with vsizip and path
@@ -180,7 +180,7 @@ class FileETLCommand extends ExternalCommand {
         //    cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
         //endif
 
-        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        String hootOptions = hootOptionsToString(options);
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
         String command = null;
 
@@ -191,10 +191,16 @@ class FileETLCommand extends ExternalCommand {
         substitutionMap.put("INPUTS", inputs);
 
         if ("OGR".equalsIgnoreCase(inputType) || "FGDB".equalsIgnoreCase(inputType) || "ZIP".equalsIgnoreCase(inputType)) {
-            substitutionMap.put("TRANSLATION_PATH", translationPath);
+            if (!isNoneTranslation) {
+                substitutionMap.put("TRANSLATION_PATH", translationPath);
 
-            // '' around ${} signifies that quoting is needed
-            command = "hoot ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${TRANSLATION_PATH}' '${INPUT_NAME}' ${INPUTS}";
+                // '' around ${} signifies that quoting is needed
+                command = "hoot ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${TRANSLATION_PATH}' '${INPUT_NAME}' ${INPUTS}";
+            }
+            else {
+                // '' around ${} signifies that quoting is needed
+                command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} '${INPUT_NAME}'";
+            }
         }
         else if ("OSM".equals(inputType) || "GEONAMES".equals(inputType)) {
             // '' around ${} signifies that quoting is needed

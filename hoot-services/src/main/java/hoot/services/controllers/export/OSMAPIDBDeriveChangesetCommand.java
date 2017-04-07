@@ -30,7 +30,6 @@ import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import hoot.services.models.osm.Map;
 
@@ -47,17 +46,17 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
         String userId = params.getUserId();
 
         List<String> options = super.getCommonExportHootOptions();
-        options.add("-D convert.bounding.box=" + aoi);
-        options.add("-D osm.changeset.sql.file.writer.generate.new.ids=false");
+        options.add("convert.bounding.box=" + aoi);
+        options.add("osm.changeset.sql.file.writer.generate.new.ids=false");
 
         if (userId != null) {
-            options.add("-D changeset.user.id=" + userId);
+            options.add("changeset.user.id=" + userId);
         }
         else {
             throw new RuntimeException("changeset.user.id cannot be null.  Please provide a valid user ID!");
         }
 
-        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        String hootOptions = hootOptionsToString(options);
 
         java.util.Map<String, String> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);

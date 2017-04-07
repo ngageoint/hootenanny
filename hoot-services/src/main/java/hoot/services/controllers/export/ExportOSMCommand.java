@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 class ExportOSMCommand extends ExportCommand {
@@ -41,8 +40,8 @@ class ExportOSMCommand extends ExportCommand {
         //# Options for osm & osm.pbf export
         // OSM_OPTS=-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com
         List<String> options = new LinkedList<>();
-        options.add("-D hootapi.db.writer.create.user=true");
-        options.add("-D api.db.email=test@test.com");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
 
         //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
         //ifeq "$(textstatus)" "true"
@@ -50,10 +49,10 @@ class ExportOSMCommand extends ExportCommand {
         //endif
 
         if (params.getTextStatus()) {
-            options.add("-D writer.text.status=true");
+            options.add("writer.text.status=true");
         }
 
-        String hootOptions = options.stream().collect(Collectors.joining(" "));
+        String hootOptions = hootOptionsToString(options);
         String input = super.getInput();
         String outputPath = super.getOutputPath();
 
