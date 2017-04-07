@@ -62,7 +62,7 @@ private:
 
   void _flush();
   void _flushToDb();
-  void _updateElementCounts(const QString tableHeader);
+  void _updateElementCounts();
   void _writeSequenceUpdateStatements();
 };
 

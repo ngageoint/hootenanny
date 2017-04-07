@@ -61,8 +61,6 @@ void WriteOsmSqlStatementsMapper::_writeElementAndTagsSqlStatements(const ConstE
   {
     _context->incrementCounter(
       _context->getCounter("WriteOsmSqlStatements", elementTypeStr.toStdString()), 1);
-    //x2 due to one statement for the current table and one for the historical table
-    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
   }
 
   const Tags& tags = element->getTags();
@@ -82,15 +80,12 @@ void WriteOsmSqlStatementsMapper::_writeElementAndTagsSqlStatements(const ConstE
       elementTagsTypeStr = elementTagsTypeStr % " tags";
       _context->incrementCounter(
         _context->getCounter("WriteOsmSqlStatements", elementTagsTypeStr.toStdString()), 1);
-      _context->incrementCounter(
-        _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
     }
   }
 
   if (!_localJobTracker)
   {
     _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
-    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
   }
 }
 
@@ -103,6 +98,7 @@ void WriteOsmSqlStatementsMapper::_flush()
     QPair<QString, QString> statementPair = *it;
     LOG_TRACE(statementPair.first << " " << statementPair.second);
     _context->emit(statementPair.first.toStdString(), statementPair.second.toStdString());
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
   }
   _statementsBuffer->clear();
 }
@@ -172,8 +168,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       {
         _context->incrementCounter(
           _context->getCounter("WriteOsmSqlStatements", "way nodes"), 1);
-        _context->incrementCounter(
-          _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 
@@ -221,8 +215,6 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
       {
         _context->incrementCounter(
           _context->getCounter("WriteOsmSqlStatements", "relation members"), 1);
-        _context->incrementCounter(
-          _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 2);
       }
     }
 

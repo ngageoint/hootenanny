@@ -87,6 +87,13 @@ void WriteOsmSqlStatementsReducer::_flush()
     _flushToDb();
   }
 
+  if (!_localJobTracker)
+  {
+    //Get a different number here than what comes from the mapper, which must be due to mapper
+    //extra mapper jobs which start but get cancelled early.
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "tables"), 1);
+  }
+
   _sqlStatements = "";
   _sqlStatementBufferSize = 0;
 }
@@ -95,13 +102,19 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
 {
   LOG_TRACE("Flushing " << _sqlStatementBufferSize << " records to database...");
 
-  if (PQstatus(_pqConn) != CONNECTION_OK)
+  assert(!_dbConnStr.isEmpty());
+
+  if (_pqConn == NULL)
+  {
+    _pqConn = PQconnectdb(ApiDb::getPqString(_dbConnStr).toLatin1().data());
+  }
+  else if (PQstatus(_pqConn) != CONNECTION_OK)
   {
     PQreset(_pqConn);
-    if (PQstatus(_pqConn) != CONNECTION_OK)
-    {
-      throw HootException("Unable to open pq database connection.");
-    }
+  }
+  if (PQstatus(_pqConn) != CONNECTION_OK)
+  {
+    throw HootException("Unable to open pq database connection.");
   }
 
   _pqQueryResult = PQexec(_pqConn, _tableHeader.toLatin1().data());
@@ -134,7 +147,8 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
     _pqQueryResult = PQgetResult(_pqConn);
     if (PQresultStatus(_pqQueryResult) != PGRES_COMMAND_OK)
     {
-      throw HootException(QString::fromAscii(PQerrorMessage(_pqConn)));
+      throw HootException(
+        QString("Error writing data.  ") + QString::fromAscii(PQerrorMessage(_pqConn)));
     }
     else
     {
@@ -147,19 +161,45 @@ void WriteOsmSqlStatementsReducer::_flushToDb()
   _pqQueryResult = NULL;
 }
 
-void WriteOsmSqlStatementsReducer::_updateElementCounts(const QString tableHeader)
+void WriteOsmSqlStatementsReducer::_updateElementCounts()
 {
   if (_tableHeader.contains("current_nodes"))
   {
     _elementCounts["nodes"] = _elementCounts["nodes"] + 1;
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "nodes"), 1);
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
+  }
+  else if (_tableHeader.contains("current_node_tags"))
+  {
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "node tags"), 1);
   }
   else if (_tableHeader.contains("current_ways"))
   {
     _elementCounts["ways"] = _elementCounts["ways"] + 1;
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "ways"), 1);
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
+  }
+  else if (_tableHeader.contains("current_way_tags"))
+  {
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "way tags"), 1);
+  }
+  else if (_tableHeader.contains("current_way_nodes"))
+  {
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "way nodes"), 1);
   }
   else if (_tableHeader.contains("current_relations"))
   {
     _elementCounts["relations"] = _elementCounts["relations"] + 1;
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "relations"), 1);
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "elements"), 1);
+  }
+  else if (_tableHeader.contains("current_relation_tags"))
+  {
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "relation tags"), 1);
+  }
+  else if (_tableHeader.contains("current_relation_members"))
+  {
+    _context->incrementCounter(_context->getCounter("WriteOsmSqlStatements", "relation members"), 1);
   }
 }
 
@@ -215,14 +255,6 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   if (config->hasKey("dbConnUrl"))
   {
     _dbConnStr = QString::fromStdString(config->get("dbConnUrl"));
-    if (_pqConn == NULL)
-    {
-      _pqConn = PQconnectdb(ApiDb::getPqString(_dbConnStr).toLatin1().data());
-      if (PQstatus(_pqConn) != CONNECTION_OK)
-      {
-        throw HootException("Unable to open pq database connection.");
-      }
-    }
   }
 
   LOG_VART(_dbConnStr);
@@ -242,7 +274,7 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   {
     const QString value = QString::fromStdString(context.getInputValue());
 
-    _updateElementCounts(_tableHeader);
+    _updateElementCounts();
 
     _sqlStatements = _sqlStatements % value;
     _sqlStatementBufferSize++;
