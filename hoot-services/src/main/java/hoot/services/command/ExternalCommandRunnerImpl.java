@@ -38,6 +38,8 @@ import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +55,7 @@ import org.apache.commons.exec.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.HootProperties;
 import hoot.services.models.db.CommandStatus;
 
 
@@ -66,10 +69,10 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     private OutputStream stdout;
     private OutputStream stderr;
 
-    public ExternalCommandRunnerImpl() {}
+    ExternalCommandRunnerImpl() {}
 
     @Override
-    public CommandResult exec(String commandTemplate, Map<String, String> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable) {
+    public CommandResult exec(String commandTemplate, Map<String, ?> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable) {
         String obfuscatedCommand = commandTemplate;
 
         try (OutputStream stdout = new ByteArrayOutputStream();
@@ -105,8 +108,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             try {
                 start = LocalDateTime.now();
 
-                logger.info("Actual Command = {} ", actualCommand);
-                logger.debug("Command {} started at: {}", obfuscatedCommand, start);
+                logger.debug("Command {} started at: [{}]", obfuscatedCommand, start);
 
                 exitCode = executor.execute(cmdLine);
             }
@@ -159,69 +161,74 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
      * @return array of arguments with the ones with spaces having quotes around them
      */
     private static String[] quoteArgsWithSpaces(String[] args) {
-        return Arrays.stream(args).map(s -> s.contains(" ") ? ("\"" + s + "\"") : s).toArray(String[]::new);
+        return Arrays.stream(args).map(s -> "\"" + s + "\"").toArray(String[]::new);
     }
 
-    private static CommandLine parse(String commandTemplate, Map<String, String> substitutionMap) {
+    private static CommandLine parse(String commandTemplate, Map<String, ?> substitutionMap) {
         String[] tokens = commandTemplate.split(" ");
 
-        CommandLine cl = new CommandLine(tokens[0]);
+        CommandLine cl = new CommandLine((String) expandToken(tokens[0].trim(), substitutionMap));
 
-        cl.setSubstitutionMap(substitutionMap);
         for (int i = 1; i < tokens.length; i++) {
-            String token = tokens[i].trim();
-            if (StringUtils.isQuoted(token)) {
-                // extract & expand the contents between '...'
-                token = expandToken(token.substring(1, token.length() - 1), substitutionMap);
-                cl.addArgument(token, false);
+            Object token = expandToken(tokens[i].trim(), substitutionMap);
+            if (token instanceof String) {
+                String arg = (String) token;
+                addArgument(cl, arg);
+            }
+            else if (token instanceof Collection) {
+                Collection<String> args = (Collection<String>) token;
+                args.forEach(arg -> addArgument(cl, arg));
             }
             else {
-                token = expandToken(token, substitutionMap);
-                if (!org.apache.commons.lang3.StringUtils.isBlank(token)) {
-                    String[] args = token.split(" ");
-                    for (String arg : args) {
-                        if (StringUtils.isQuoted(arg)) {
-                            cl.addArgument(arg.substring(1, arg.length() - 1), false);
-                        }
-                        else {
-                            cl.addArgument(arg, false);
-                        }
-                    }
-                }
+                throw new RuntimeException("No substitute provided for : ${" + token + "}");
             }
         }
 
         return cl;
     }
 
-    private static String expandToken(String token, Map<String, String> substitutionMap) {
+    private static void addArgument(CommandLine cl, String arg) {
+        if (!org.apache.commons.lang3.StringUtils.isBlank(arg)) {
+            cl.addArgument(arg, StringUtils.isQuoted(arg));
+        }
+    }
+
+    private static Object expandToken(String token, Map<String, ?> substitutionMap) {
         Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}"); // matches ${} pattern
         Matcher matcher = pattern.matcher(token);
 
-        StringBuilder result = new StringBuilder();
-        int i = 0;
-        while (matcher.find()) {
+        if (matcher.find()) {
             String key = matcher.group(1);
-            String replacement = substitutionMap.get(key);
+            Object replacement = substitutionMap.get(key);
             if (replacement == null) {
                 throw new RuntimeException("Could not expand: " + token + ".  No substitute provided!");
             }
+            else if (replacement instanceof Collection) {
+                return replacement;
+            }
             else {
-                result.append(token.substring(i, matcher.start()));
-                result.append(replacement);
-                i = matcher.end();
+                return token.substring(0, matcher.start()) + replacement + token.substring(matcher.end(), token.length());
+            }
+        }
+        else {
+            return token;
+        }
+    }
+
+    private static Map<String, ?> expandSensitiveProperties(Map<String, ?> substituteMap) {
+        Map<String, Object> newMap = new HashMap<>();
+
+        for (Map.Entry<String, ?> entry : substituteMap.entrySet()) {
+            if (entry.getValue() instanceof String) {
+                newMap.put(entry.getKey(), replaceSensitiveData((String) entry.getValue()));
+            }
+            else {
+                Collection<String> values = (Collection<String>) entry.getValue();
+                newMap.put(entry.getKey(), values.stream().map(HootProperties::replaceSensitiveData).collect(Collectors.toList()));
             }
         }
 
-        result.append(token.substring(i, token.length()));
-
-        return result.toString();
-    }
-
-
-    private static Map<String, String> expandSensitiveProperties(Map<String, String> substituteMap) {
-        return substituteMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> replaceSensitiveData(entry.getValue())));
+        return newMap;
     }
 
     private static void updateDatabase(CommandResult commandResult) {

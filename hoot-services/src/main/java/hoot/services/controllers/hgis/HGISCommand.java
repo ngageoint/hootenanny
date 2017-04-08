@@ -33,34 +33,27 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hoot.services.command.ExternalCommand;
 
 
 class HGISCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(HGISCommand.class);
 
     HGISCommand(String sourceMap, String outputMap, String scriptName, Class<?> caller) {
-        String source = generateDbMapParam(sourceMap);
-        String output = generateDbMapParam(outputMap);
+        String source = HOOTAPI_DB_URL + "/" + sourceMap;
+        String output = HOOTAPI_DB_URL + "/" + outputMap;
         String script = new File(CORE_SCRIPT_PATH, scriptName).getAbsolutePath();
 
-        Map<String, String> substituionMap = new HashMap<>();
-        substituionMap.put("SCRIPT", script);
-        substituionMap.put("SOURCE", source);
-        substituionMap.put("OUTPUT", output);
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("SCRIPT", script);
+        substitutionMap.put("SOURCE", source);
+        substitutionMap.put("OUTPUT", output);
 
-        // '' around ${} signifies that quoting is needed
-        String command = "${SCRIPT} '${SOURCE}' '${OUTPUT}'";
+        String command = "${SCRIPT} ${SOURCE} ${OUTPUT}";
 
-        super.configureCommand(command, substituionMap, caller);
-    }
-
-    /**
-     * Creates DB conection string
-     *
-     * @param mapName
-     * @return output looks like: postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
-     */
-    private static String generateDbMapParam(String mapName) {
-        return HOOTAPI_DB_URL + "/" + mapName;
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

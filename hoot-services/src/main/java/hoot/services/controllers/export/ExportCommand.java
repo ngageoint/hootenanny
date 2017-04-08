@@ -42,104 +42,6 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
 
-/*
-#
-#  Export Make file
-#
-
-# Options for most exports
-HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
-HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-HOOT_OPTS+= -D api.db.email=test@test.com
-
-# Add the option to append
-ifeq "$(append)" "true"
-HOOT_OPTS+= -D ogr.append.data=true
-endif
-
-
-# Options for osm & osm.pbf export
-OSM_OPTS=-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com
-
-# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
-ifeq "$(textstatus)" "true"
-HOOT_OPTS+= -D writer.text.status=true
-OSM_OPTS+=  -D writer.text.status=true
-endif
-
-#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
-OP_PG_URL=PG:"$(PG_URL)"
-
-
-OP_TRANSLATION=$(HOOT_HOME)/$(translation)
-OP_OUTPUT_FILE=$(outputname).$(outputtype)
-OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
-ZIP_OUTPUT=$(outputname).zip
-INPUT_PATH=$(DB_URL)/$(input)
-REMOVE_REVIEW=-C RemoveReview2Pre.conf
-OP_ZIP=cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
-
-
-# Hardcoded. There should be a better location for these
-TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
-TDS61_TEMPLATE=$(TEMPLATE_PATH)/tds61.tgz
-TDS40_TEMPLATE=$(TEMPLATE_PATH)/tds40.tgz
-
-
-ifeq "$(outputtype)" "shp"
-    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
-endif
-
-ifeq "$(inputtype)" "file"
-    INPUT_PATH=$(input)
-endif
-
-#####
-
-###
-# Osm2Ogr
-###
-step1:
-    ifeq ("$(outputtype)","osm")
-        mkdir -p "$(outputfolder)"
-        hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-        cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
-    else ifeq ("$(outputtype)","osm.pbf")
-        mkdir -p "$(outputfolder)"
-        hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
-    else ifeq ("$(outputtype)","osm_api_db")
-        hoot derive-changeset $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
-        hoot apply-changeset $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
-    else ifeq ("$(outputtype)","osc")
-        mkdir -p "$(outputfolder)"
-        hoot derive-changeset $(HOOT_OPTS) -D convert.bounding.box=$(aoi) -D osm.changeset.sql.file.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
-    else
-        mkdir -p "$(outputfolder)"
-        ifeq "$(append)" "true"
-            ifeq "$(translation)" "translations/TDSv61.js"
-                ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
-                    mkdir -p $(OP_OUTPUT)
-                    tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
-                endif # Template Path
-            else
-            ifeq "$(translation)" "translations/TDSv40.js"
-                ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
-                    mkdir -p $(OP_OUTPUT)
-                    tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
-                endif # Template Path
-            endif # Translations TDSv40
-        endif # Else
-
-        #TODO: What about MGCP schema??  Ask Matt Jasckson
-
-    endif # Append
-
-    hoot osm2ogr $(REMOVE_REVIEW) $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(INPUT_PATH)" "$(OP_OUTPUT)"
-    $(OP_ZIP)
-
-endif # Shape/FGDB
-
- */
 
 class ExportCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
@@ -151,26 +53,21 @@ class ExportCommand extends ExternalCommand {
         this.jobId = jobId;
         this.params = params;
 
-        String hootOptions = hootOptionsToString(this.getCommonExportHootOptions());
+        List<String> hootOptions = toHootOptions(this.getCommonExportHootOptions());
 
-        java.util.Map<String, String> substitutionMap = new HashMap<>();
+        java.util.Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
-        // '' around ${} signifies that quoting is needed
-        String command = "hoot osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} '${TRANSLATION_PATH}' '${INPUT_PATH}' '${OUTPUT_PATH}'";
+        String command = "hoot osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
 
     List<String> getCommonExportHootOptions() {
-        //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
-        //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true
-        //HOOT_OPTS+= -D hootapi.db.writer.create.user=true
-        //HOOT_OPTS+= -D api.db.email=test@test.com
         List<String> options = new LinkedList<>();
         options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");

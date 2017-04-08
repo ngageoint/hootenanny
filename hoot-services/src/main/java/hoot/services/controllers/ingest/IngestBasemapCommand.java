@@ -34,55 +34,27 @@ import org.apache.commons.lang3.StringUtils;
 
 import hoot.services.command.ExternalCommand;
 
-/*
-    make -f $HOOT_HOME/scripts/services/submakebasemaprastertotiles INPUT="$1" INPUT_NAME="$2" RASTER_OUTPUT_DIR="$3" PROJECTION="$4" JOB_PROCESSOR_DIR="$5" jobid="$6"
-    if [ $? -eq 0 ]; then
-        mv -f "$5/$2.processing" "$5/$2.disabled"
-        exit 0
-    else
-        mv -f "$5/$2.processing" "$5/$2.failed"
-        exit 10
-    fi
-*/
-
-/*
-    DQT="\""
-    GDAL2TILES=/usr/local/bin/gdal2tiles.py
-    OP_INPUT=$(INPUT)
-    OP_TILE_OUTPUT_DIR=$(RASTER_OUTPUT_DIR)/$(INPUT_NAME)
-    OP_JOB_PROCESSOR=$(JOB_PROCESSOR_DIR)/$(INPUT_NAME)
-    OP_PROJECTION=
-
-    ifneq "$(PROJECTION)" "auto"
-        OP_PROJECTION=-s $(PROJECTION)
-    endif
-
-    OP_INFO={
-    OP_INFO+=$(DQT)jobid$(DQT):$(DQT)$(jobid)$(DQT),
-    OP_INFO+=$(DQT)path$(DQT):$(DQT)$(OP_TILE_OUTPUT_DIR)$(DQT)
-    OP_INFO+=}
-
-    step1:
-        mkdir -p "$(OP_TILE_OUTPUT_DIR)"
-        mkdir -p "$(JOB_PROCESSOR_DIR)"
-        echo "$(OP_INFO)" > "$(OP_JOB_PROCESSOR).processing"
-
-        "$(GDAL2TILES)" $(OP_PROJECTION)  -w none -t "$(OP_INPUT)" -z '0-20' "$(OP_INPUT)" "$(OP_TILE_OUTPUT_DIR)"
-*/
 
 class IngestBasemapCommand extends ExternalCommand {
 
     IngestBasemapCommand(File inputFile, String projection, File tileOutputDir, boolean verboseOutput, Class<?> caller) {
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("VERBOSE", verboseOutput ? "-v" : "");
-        substitutionMap.put("PROJECTION", !StringUtils.isBlank(projection) ? ("-s " + projection) : "");
-        substitutionMap.put("WEBVIEWER", "-w none");
+        substitutionMap.put("WEBVIEWER", "none");
         substitutionMap.put("INPUT_FILE", inputFile.getAbsolutePath());
-        substitutionMap.put("ZOOM", "-z '0-20'");
+        substitutionMap.put("ZOOM", "0-20");
         substitutionMap.put("TILE_OUTPUT_DIR", tileOutputDir.getAbsolutePath());
-        substitutionMap.put("TITLE", "-t " + quote(inputFile.getAbsolutePath()));
+        substitutionMap.put("TITLE", inputFile.getAbsolutePath());
 
-        String command = "/usr/local/bin/gdal2tiles.py ${VERBOSE} ${PROJECTION} ${WEBVIEWER} ${TITLE} ${ZOOM} '${INPUT_FILE}' '${TILE_OUTPUT_DIR}'";
+        String command;
+
+        if (!StringUtils.isBlank(projection)) {
+            substitutionMap.put("PROJECTION", projection);
+            command = "/usr/local/bin/gdal2tiles.py ${VERBOSE} -s ${PROJECTION} -w ${WEBVIEWER} -t ${TITLE} -z ${ZOOM} ${INPUT_FILE} ${TILE_OUTPUT_DIR}";
+        }
+        else {
+            command = "/usr/local/bin/gdal2tiles.py ${VERBOSE} -w ${WEBVIEWER} -t ${TITLE} -z ${ZOOM} ${INPUT_FILE} ${TILE_OUTPUT_DIR}";
+        }
 
         super.configureCommand(command, substitutionMap, caller);
     }

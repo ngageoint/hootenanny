@@ -31,39 +31,36 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 class ExportOSMCommand extends ExportCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ExportOSMCommand.class);
 
     ExportOSMCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params, debugLevel, caller);
 
-        //# Options for osm & osm.pbf export
-        // OSM_OPTS=-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
-
-        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
-        //ifeq "$(textstatus)" "true"
-        //    OSM_OPTS+= -D writer.text.status=true
-        //endif
 
         if (params.getTextStatus()) {
             options.add("writer.text.status=true");
         }
 
-        String hootOptions = hootOptionsToString(options);
+        List<String> hootOptions = toHootOptions(options);
+
         String input = super.getInput();
         String outputPath = super.getOutputPath();
 
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("INPUT", input);
         substitutionMap.put("OUTPUT_PATH", outputPath);
 
-        // '' around ${} signifies that quoting is needed
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${INPUT}' '${OUTPUT_PATH}'";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT_PATH}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

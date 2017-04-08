@@ -44,7 +44,7 @@ public class ZIPFileCommand extends ExternalCommand {
      * @param caller class that identifies caller of the command
      */
     public ZIPFileCommand(File targetZIP, File workDir, String file, Class<?> caller) {
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("TARGET_ZIP_FILE", targetZIP.getAbsolutePath());
         substitutionMap.put("FILE_TO_ZIP", file);
 

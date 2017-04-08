@@ -47,13 +47,12 @@ class ExportRenderDBCommand extends ExternalCommand {
         long mapId = DbUtils.getRecordIdForInputString(name, maps, maps.id, maps.displayName);
         String script = new File(CORE_SCRIPT_PATH, EXPORT_RENDERDB_SCRIPT).getAbsolutePath();
 
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("SCRIPT", script);
         substitutionMap.put("MAP_ID", Long.toString(mapId));
         substitutionMap.put("HOOTAPI_DB_URL", HOOTAPI_DB_URL);
 
-        // '' around ${} signifies that quoting is needed
-        String command = "${SCRIPT} '${MAP_ID}' '${HOOTAPI_DB_URL}'";
+        String command = "${SCRIPT} ${MAP_ID} ${HOOTAPI_DB_URL}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

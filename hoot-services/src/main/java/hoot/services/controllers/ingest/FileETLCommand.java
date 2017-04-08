@@ -37,84 +37,13 @@ import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 
-/*
-    #
-    #  ETL Make file
-    #
-
-    HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
-    HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-    HOOT_OPTS+= -D api.db.email=test@test.com
-
-    OP_INPUT=$(INPUT)
-    OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
-    OP_INPUT_PATH=$(INPUT_PATH)
-
-    # This replaces semicolon with vsizip and path
-    ifeq "$(INPUT_TYPE)" "ZIP"
-        #OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
-        OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
-    endif
-
-    ifeq "$(INPUT_TYPE)" "GEONAMES"
-        HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
-        HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
-    endif
-
-    ifeq "$(INPUT_TYPE)" "OSM"
-        ifneq "$(NONE_TRANSLATION)" "true"
-            HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
-            HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
-        endif
-    endif
-
-    ###
-    # Transform and load data
-    ###
-    step1:
-
-    # Unzip when semicolon separated lists are provided
-    ifneq ($(strip $(UNZIP_LIST)), )
-        bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(UNZIP_LIST)" "$(OP_INPUT_PATH)"
-    endif
-
-    ifeq "$(INPUT_TYPE)" "OGR"
-        cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-    endif
-
-    ifeq "$(INPUT_TYPE)" "OSM"
-        cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
-    endif
-
-    ifeq "$(INPUT_TYPE)" "ZIP"
-        cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-    endif
-
-    ifeq "$(INPUT_TYPE)" "FGDB"
-        cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-    endif
-
-    ifeq "$(INPUT_TYPE)" "GEONAMES"
-        cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
-    endif
-
-    rm -rf "$(OP_INPUT_PATH)"
-*/
 
 class FileETLCommand extends ExternalCommand {
 
     FileETLCommand(List<Map<String, String>> requests, List<File> zips, String translationPath, String etlName,
                    Boolean isNoneTranslation, String debugLevel, String inputType, Class<?> caller) {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Map<String,String> request : requests) {
-            stringBuilder.append(quote(request.get("name"))).append(" ");
-        }
-        String inputs = stringBuilder.toString().trim();
-
-        //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor
-        //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-        //HOOT_OPTS+= -D api.db.email=test@test.com
+        List<String> inputs = requests.stream().map(request -> request.get("name")).collect(Collectors.toList());
 
         List<String> options = new LinkedList<>();
         options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
@@ -122,89 +51,63 @@ class FileETLCommand extends ExternalCommand {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
 
-        //ifeq "$(INPUT_TYPE)" "GEONAMES"
-        //    HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
-        //    HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
-        //endif
+        List<String> hootOptions = toHootOptions(options);
 
-        // OP_TRANSLATION=$(HOOT_HOME)/$(TRANSLATION)
-
-        if (inputType.equalsIgnoreCase("GEONAMES")) {
-            options.add("convert.ops=hoot::TranslationOp");
-            options.add(quote("translation.script=" + translationPath));
-        }
-
-        //ifeq "$(INPUT_TYPE)" "OSM"
-        //    ifneq "$(NONE_TRANSLATION)" "true"
-        //        HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
-        //       HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
-        //    endif
-        //endif
-
-        if (inputType.equalsIgnoreCase("OSM") && !isNoneTranslation) {
-            options.add("convert.ops=hoot::TranslationOp");
-            options.add(quote("translation.script=" + translationPath));
-        }
-
-        //# This replaces semicolon with vsizip and path
-        //ifeq "$(INPUT_TYPE)" "ZIP"
-        //   #OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
-        //   OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
-        //endif
-
-        if (!zips.isEmpty()) {
-            //Reading a GDAL dataset in a .gz file or a .zip archive
-            // OP_INPUT_PATH (INPUT_PATH)
-            inputs = zips.stream()
-                    .map(zip -> "/vsizip/" + zip.getAbsolutePath())
-                    .collect(Collectors.joining(" "));
-        }
-
-        //ifeq "$(INPUT_TYPE)" "OGR"
-        //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-        //endif
-
-        //ifeq "$(INPUT_TYPE)" "FGDB"
-        //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-        //endif
-
-        //ifeq "$(INPUT_TYPE)" "ZIP"
-        //    cd "$(OP_INPUT_PATH)" && hoot ogr2osm $(HOOT_OPTS) "$(OP_TRANSLATION)" "$(DB_URL)/$(INPUT_NAME)" $(OP_INPUT)
-        //endif
-
-        //ifeq "$(INPUT_TYPE)" "OSM"
-        //    cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
-        //endif
-
-        //ifeq "$(INPUT_TYPE)" "GEONAMES"
-        //    cd "$(OP_INPUT_PATH)" && hoot convert $(HOOT_OPTS) $(OP_INPUT) "$(DB_URL)/$(INPUT_NAME)"
-        //endif
-
-        String hootOptions = hootOptionsToString(options);
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
-        String command = null;
 
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
+        String command = null;
         if ("OGR".equalsIgnoreCase(inputType) || "FGDB".equalsIgnoreCase(inputType) || "ZIP".equalsIgnoreCase(inputType)) {
+            //# This replaces semicolon with vsizip and path
+            //ifeq "$(INPUT_TYPE)" "ZIP"
+            //   #OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
+            //   OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
+            //endif
+            if ("ZIP".equalsIgnoreCase(inputType) && !zips.isEmpty()) {
+                //Reading a GDAL dataset in a .gz file or a .zip archive
+                inputs = zips.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
+                substitutionMap.put("INPUTS", inputs);
+            }
+
             if (!isNoneTranslation) {
                 substitutionMap.put("TRANSLATION_PATH", translationPath);
-
-                // '' around ${} signifies that quoting is needed
-                command = "hoot ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${TRANSLATION_PATH}' '${INPUT_NAME}' ${INPUTS}";
+                command = "hoot ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
             }
             else {
-                // '' around ${} signifies that quoting is needed
-                command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} '${INPUT_NAME}'";
+                command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
             }
         }
-        else if ("OSM".equals(inputType) || "GEONAMES".equals(inputType)) {
-            // '' around ${} signifies that quoting is needed
-            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} '${INPUT_NAME}'";
+        else if ("OSM".equalsIgnoreCase(inputType)) {
+
+            //ifeq "$(INPUT_TYPE)" "OSM"
+            //    ifneq "$(NONE_TRANSLATION)" "true"
+            //        HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+            //       HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+            //    endif
+            //endif
+
+            if (!isNoneTranslation) {
+                options.add("convert.ops=hoot::TranslationOp");
+                options.add("translation.script=" + translationPath);
+            }
+
+            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        }
+        else if ("GEONAMES".equalsIgnoreCase(inputType)) {
+            //ifeq "$(INPUT_TYPE)" "GEONAMES"
+            //    HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
+            //    HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
+            //endif
+
+            options.add("convert.ops=hoot::TranslationOp");
+            options.add("translation.script=" + translationPath);
+
+            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
         }
 
         super.configureCommand(command, substitutionMap, caller);

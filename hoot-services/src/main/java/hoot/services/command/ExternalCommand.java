@@ -29,9 +29,9 @@ package hoot.services.command;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 
@@ -66,11 +66,9 @@ public class ExternalCommand extends JSONObject {
         this.put("trackable", trackable);
     }
 
-    protected static String quote(String commandOption) {
-        return "\"" + commandOption + "\"";
-    }
-
-    protected static String hootOptionsToString(List<String> hootOptions) {
-        return hootOptions.stream().map(option -> "-D " + option).collect(Collectors.joining(" "));
+    protected static List<String> toHootOptions(List<String> options) {
+        List<String> hootOptions = new LinkedList<>();
+        options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });
+        return hootOptions;
     }
 }

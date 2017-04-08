@@ -34,30 +34,13 @@ import java.util.stream.Collectors;
 
 import hoot.services.command.ExternalCommand;
 
-/*
-    #
-    #  GetOrgAttrib Make file
-    #
 
-    OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
-    OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
-
-    ###
-    # Transform and load data
-    ###
-    step1:
-        bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
-        cd "$(OP_INPUT)" && hoot attribute-count --error $(INPUT_FILES) >> "$(OP_OUTPUT)"
-        cd .. && rm -rf "$(OP_INPUT)"
- */
 class GetAttributesCommand extends ExternalCommand {
 
     GetAttributesCommand(List<File> files, String debugLevel, Class<?> caller) {
-        String inputFiles = files.stream()
-                .map((file) -> quote(file.getAbsolutePath()))
-                .collect(Collectors.joining(" "));
+        List<String> inputFiles = files.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("INPUT_FILES", inputFiles);
 

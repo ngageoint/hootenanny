@@ -33,10 +33,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hoot.services.geo.BoundingBox;
 
 
 class ExportOSCCommand extends ExportCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ExportOSCCommand.class);
 
     ExportOSCCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params, debugLevel, caller);
@@ -47,17 +51,17 @@ class ExportOSCCommand extends ExportCommand {
         List<String> options = super.getCommonExportHootOptions();
         options.add("convert.bounding.box=" + aoi);
         options.add("osm.changeset.sql.file.writer.generate.new.ids=false");
-        String hootOptions = hootOptionsToString(options);
 
-        Map<String, String> substitutionMap = new HashMap<>();
+        List<String> hootOptions = toHootOptions(options);
+
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("INPUT1", OSMAPI_DB_URL);
         substitutionMap.put("INPUT2", HOOTAPI_DB_URL + "/" + params.getInput());
         substitutionMap.put("OUTPUT_PATH", outputPath);
 
-        // '' around ${} signifies that quoting is needed
-        String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${INPUT1}' '${INPUT2}' '${OUTPUT_PATH}'";
+        String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT_PATH}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

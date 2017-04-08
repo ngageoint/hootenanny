@@ -33,42 +33,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hoot.services.command.ExternalCommand;
 
 
-/*
-#
-#  Clip Dataset Make file
-#
--include $(HOOT_HOME)/HOOT_VERSION_FILE
-
-#HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D add.review.tags=yes
-HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-HOOT_OPTS+= -D api.db.email=test@test.com
-
-#DB_URL=hootapidb://hoot:hoottest@localhost:5432/hoot
-#OUTPUT_DIR=$(HOOT_HOME)/test-out/$(jobid)
-
-# Clip
-# crop-map (input) (output) (bounds)
-OP_INPUT=$(DB_URL)/$(INPUT_NAME)
-OP_OUTPUT=$(DB_URL)/$(OUTPUT_NAME)
-
-step1:
-    hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
- */
-
 class ClipDatasetCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ClipDatasetCommand.class);
 
     ClipDatasetCommand(ClipDatasetParams params, String debugLevel, Class<?> caller) {
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
-        String hootOptions = hootOptionsToString(options);
+
+        List<String> hootOptions = toHootOptions(options);
 
         //The input OSM data path
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
 
@@ -81,8 +64,7 @@ class ClipDatasetCommand extends ExternalCommand {
         //Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
         substitutionMap.put("BOUNDS", params.getBounds());
 
-        // '' around ${} signifies that quoting is needed
-        String command = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} '${INPUT}' '${OUTPUT}' '${BOUNDS}'";
+        String command = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

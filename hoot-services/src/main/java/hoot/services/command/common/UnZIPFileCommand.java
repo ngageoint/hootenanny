@@ -44,11 +44,11 @@ public class UnZIPFileCommand extends ExternalCommand {
      * @param caller class that identifies caller of the command
      */
     public UnZIPFileCommand(File sourceZIP, File targetFolder, Class<?> caller) {
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("SOURCE_ZIP_FILE", sourceZIP.getAbsolutePath());
         substitutionMap.put("TARGET_FOLDER", targetFolder.getAbsolutePath());
 
-        String command = "unzip '${SOURCE_ZIP_FILE}' -d '${TARGET_FOLDER}'";
+        String command = "unzip ${SOURCE_ZIP_FILE} -d ${TARGET_FOLDER}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

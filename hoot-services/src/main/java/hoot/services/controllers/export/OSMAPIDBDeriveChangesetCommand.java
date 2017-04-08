@@ -31,10 +31,14 @@ import static hoot.services.HootProperties.OSMAPI_DB_URL;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hoot.services.models.osm.Map;
 
 
 class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
+    private static final Logger logger = LoggerFactory.getLogger(OSMAPIDBDeriveChangesetCommand.class);
 
     OSMAPIDBDeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params, debugLevel, caller);
@@ -43,12 +47,12 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
         Map conflatedMap = getConflatedMap(mapName);
 
         String aoi = getAOI(params, conflatedMap);
-        String userId = params.getUserId();
 
         List<String> options = super.getCommonExportHootOptions();
         options.add("convert.bounding.box=" + aoi);
         options.add("osm.changeset.sql.file.writer.generate.new.ids=false");
 
+        String userId = params.getUserId();
         if (userId != null) {
             options.add("changeset.user.id=" + userId);
         }
@@ -56,18 +60,17 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
             throw new RuntimeException("changeset.user.id cannot be null.  Please provide a valid user ID!");
         }
 
-        String hootOptions = hootOptionsToString(options);
+        List<String> hootOptions = toHootOptions(options);
 
-        java.util.Map<String, String> substitutionMap = new HashMap<>();
+        java.util.Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("OSMAPI_DB_URL", OSMAPI_DB_URL);
         substitutionMap.put("INPUT", super.getInput());
         substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getSQLChangesetPath());
 
-        // '' around ${} signifies that quoting is needed
-        String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
-                "'${OSMAPI_DB_URL}' '${INPUT}' '${CHANGESET_OUTPUT_PATH}' '${OSMAPI_DB_URL}'";
+        String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} " +
+                "${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

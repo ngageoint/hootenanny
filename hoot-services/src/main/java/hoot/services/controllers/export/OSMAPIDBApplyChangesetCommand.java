@@ -29,15 +29,20 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 class OSMAPIDBApplyChangesetCommand extends ExportCommand {
+    private static final Logger logger = LoggerFactory.getLogger(OSMAPIDBApplyChangesetCommand.class);
 
     OSMAPIDBApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params, debugLevel, caller);
 
-        String hootOptions = hootOptionsToString(super.getCommonExportHootOptions());
+        List<String> hootOptions = toHootOptions(super.getCommonExportHootOptions());
 
         String mapName = params.getInput();
         hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
@@ -51,7 +56,7 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
         // Services currently always write changeset with sql
         String sqlChangesetPath = super.getSQLChangesetPath();
 
-        Map<String, String> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("SQL_CHANGESET_PATH", sqlChangesetPath);
@@ -59,9 +64,8 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
         substitutionMap.put("CONFLICT_AOI", conflictAOI);
         substitutionMap.put("CONFLICT_TIMESTAMP", conflictTimestamp);
 
-        // '' around ${} signifies that quoting is needed
         String command = "hoot apply-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} " +
-                "'${SQL_CHANGESET_PATH}' '${TARGET_DATABASE_URL}' '${CONFLICT_AOI}' '${CONFLICT_TIMESTAMP}'";
+                "${SQL_CHANGESET_PATH} ${TARGET_DATABASE_URL} ${CONFLICT_AOI} ${CONFLICT_TIMESTAMP}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
