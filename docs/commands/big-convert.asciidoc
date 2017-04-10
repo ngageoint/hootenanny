@@ -2,7 +2,7 @@
 
 === Description
 
-The +big-convert+ command uses a cluster of machines to convert from one input format to another.  
+The +big-convert+ command uses a mapreduce cluster to convert from one input format to another.  
 This does not perform any translation, only conversion.  Use this command instead of
 +convert+ when working with very large amounts of data.  
 
@@ -28,8 +28,8 @@ The supported output formats are:
 ==== Converting to SQL File or OSM API Database
 
 * The input must be a .pbf file and it must reside on HDFS.
-* The output can only be written to an offline database (no other writers) and all table constraints must be disabled
-on the database.
+* The output should only be written to an offline database (no other writers).  The writer will disable the database
+constraints before writing and re-enable them when writing is completed.
 * All elements in the output belong to a single changeset.
 * No OSM validation is done on the output.
 

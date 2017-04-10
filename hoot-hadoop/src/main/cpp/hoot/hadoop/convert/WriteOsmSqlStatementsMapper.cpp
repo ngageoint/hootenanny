@@ -121,8 +121,8 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 
   //nodes
 
-  const QStringList nodeSqlHeaders = _sqlFormatter->getNodeSqlHeaderStrings();
-  const QStringList nodeTagSqlHeaders = _sqlFormatter->getNodeTagSqlHeaderStrings();
+  const QStringList nodeSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeSqlHeaderStrings();
+  const QStringList nodeTagSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeTagSqlHeaderStrings();
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
@@ -141,9 +141,9 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 
   //ways
 
-  const QStringList waySqlHeaders = _sqlFormatter->getWaySqlHeaderStrings();
-  const QStringList wayNodeSqlHeaders = _sqlFormatter->getWayNodeSqlHeaderStrings();
-  const QStringList wayTagSqlHeaders = _sqlFormatter->getWayTagSqlHeaderStrings();
+  const QStringList waySqlHeaders = OsmApiDbSqlStatementFormatter::getWaySqlHeaderStrings();
+  const QStringList wayNodeSqlHeaders = OsmApiDbSqlStatementFormatter::getWayNodeSqlHeaderStrings();
+  const QStringList wayTagSqlHeaders = OsmApiDbSqlStatementFormatter::getWayTagSqlHeaderStrings();
   const WayMap& wm = map->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
@@ -185,9 +185,12 @@ void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::Map
 
   //relations
 
-  const QStringList relationSqlHeaders = _sqlFormatter->getRelationSqlHeaderStrings();
-  const QStringList relationMemberSqlHeaders = _sqlFormatter->getRelationMemberSqlHeaderStrings();
-  const QStringList relationTagSqlHeaders = _sqlFormatter->getRelationTagSqlHeaderStrings();
+  const QStringList relationSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationSqlHeaderStrings();
+  const QStringList relationMemberSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationMemberSqlHeaderStrings();
+  const QStringList relationTagSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationTagSqlHeaderStrings();
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {

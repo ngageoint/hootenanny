@@ -31,6 +31,10 @@ namespace hoot
 class OsmMap;
 class OsmApiDbSqlStatementFormatter;
 
+/**
+ * Mapreduce map task for converting OSM map data into executable OSM API database SQL statements.
+ * Every entity is given a unique ID for the highest level of parallelism in the reducers.
+ */
 class WriteOsmSqlStatementsMapper : public OsmMapMapper
 {
 public:
@@ -38,7 +42,6 @@ public:
   static std::string className() { return "hoot::WriteOsmSqlStatementsMapper"; }
 
   WriteOsmSqlStatementsMapper();
-
   virtual ~WriteOsmSqlStatementsMapper() {}
 
 protected:

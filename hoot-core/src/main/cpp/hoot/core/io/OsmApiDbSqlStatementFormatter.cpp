@@ -31,7 +31,6 @@
 #include <hoot/core/io/OsmApiDb.h>
 
 // Qt
-#include <QStringList>
 #include <QDateTime>
 
 namespace hoot
@@ -319,94 +318,7 @@ QString OsmApiDbSqlStatementFormatter::_escapeCopyToData(const QString stringToO
   escapedString.replace(QChar(11), QString("\\v"));
   escapedString.replace(QChar(12), QString("\\f"));
   escapedString.replace(QChar(13), QString("\\r"));
-  //escapedString.replace("\\x00", " ");
   return escapedString;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getNodeSqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append("COPY " + ApiDb::getCurrentNodesTableName() +
-                 " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) " +
-                 "FROM stdin;\n");
-  sqlStrs.append("COPY " + ApiDb::getNodesTableName() +
-                 " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, " +
-                 "redaction_id) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getWaySqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append("COPY " + ApiDb::getCurrentWaysTableName() +
-                 " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-  sqlStrs.append("COPY " + ApiDb::getWaysTableName() +
-                 " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getWayNodeSqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append("COPY " + ApiDb::getCurrentWayNodesTableName() +
-                 " (way_id, node_id, sequence_id) FROM stdin;\n");
-  sqlStrs.append("COPY " + ApiDb::getWayNodesTableName() +
-                 " (way_id, node_id, version, sequence_id) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getRelationSqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append("COPY " + ApiDb::getCurrentRelationsTableName() +
-                 " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-  sqlStrs.append("COPY " + ApiDb::getRelationsTableName() +
-                 " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getRelationMemberSqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append("COPY " + ApiDb::getCurrentRelationMembersTableName() +
-                 " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n");
-  sqlStrs.append("COPY " + ApiDb::getRelationMembersTableName() +
-                 " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getNodeTagSqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append("COPY " + ApiDb::getCurrentNodeTagsTableName() + " (node_id, k, v) FROM stdin;\n");
-  //yes, this one is different than the others...see explanation in header file
-  sqlStrs.append("COPY " + ApiDb::getNodeTagsTableName() + " (node_id, version, k, v) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getWayTagSqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append("COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n");
-  sqlStrs.append("COPY " + ApiDb::getWayTagsTableName() + " (way_id, k, v, version) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getRelationTagSqlHeaderStrings() const
-{
-  QStringList sqlStrs;
-  sqlStrs.append(
-    "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n");
-  sqlStrs.append(
-    "COPY " + ApiDb::getRelationTagsTableName() + " (relation_id, k, v, version) FROM stdin;\n");
-  return sqlStrs;
-}
-
-QString OsmApiDbSqlStatementFormatter::getChangesetSqlHeaderString() const
-{
-  return "COPY " + ApiDb::getChangesetsTableName() +
-          " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
-          "FROM stdin;\n";
 }
 
 QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElementPtr& element,
@@ -423,25 +335,6 @@ QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElemen
 
     case ElementType::Relation:
       return relationToSqlStrings(elementId, changesetId);
-
-    default:
-      throw HootException("Unsupported element member type.");
-  }
-  return QStringList();
-}
-
-QStringList OsmApiDbSqlStatementFormatter::getElementSqlHeaderStrings(const ElementType& elementType) const
-{
-  switch (elementType.getEnum())
-  {
-    case ElementType::Node:
-      return getNodeSqlHeaderStrings();
-
-    case ElementType::Way:
-      return getWaySqlHeaderStrings();
-
-    case ElementType::Relation:
-      return getRelationSqlHeaderStrings();
 
     default:
       throw HootException("Unsupported element member type.");

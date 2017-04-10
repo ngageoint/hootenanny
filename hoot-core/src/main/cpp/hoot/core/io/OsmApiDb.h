@@ -156,12 +156,35 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
+  //TODO: two methods below may be able to be combined
+
+  /**
+   * Converts a table type to a OSM API database table name
+   *
+   * @param tableType table type enum to convert
+   * @return a database table name string
+   */
   virtual QString tableTypeToTableName(const TableType& tableType) const;
 
+  /**
+   * Returns an OSM API database table name
+   *
+   * @param elementType type of the element
+   * @param historical whether the requested table is current or historical
+   * @param tags if true; returns the corresponding element tag table name
+   * @return a database table name string
+   */
   static QString elementTypeToElementTableName(const ElementType& elementType,
                                                const bool historical, const bool tags);
 
+  /**
+   * Disables all OSM table constraints
+   */
   void disableConstraints();
+
+  /**
+   * Enables all OSM table constraints
+   */
   void enableConstraints();
 
 protected:
@@ -188,8 +211,8 @@ private:
   long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
   long _getIdFromSequence(const QString tableName, const QString sequenceType);
 
-  static QStringList _getContraintsTableOrdering(const bool disable = true);
-  void _modifyConstraints(const QStringList tableNames, const bool disable = true);
+  static QStringList _getTables();
+  void _modifyConstraints(const QStringList tableNames, const bool disable);
 };
 
 }

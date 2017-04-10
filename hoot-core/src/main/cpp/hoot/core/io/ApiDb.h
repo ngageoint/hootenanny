@@ -307,9 +307,36 @@ public:
   inline static QString getMapsSequenceName()                   { return getMapsTableName() + getSequenceId(); }
   inline static QString getUsersSequenceName()                  { return getUsersTableName() + getSequenceId(); }
 
+  /**
+   * Decomposes an API database URL up into parts
+   *
+   * @param url URL to decompose
+   * @return a collection of URL parts mapped by name
+   */
   static QMap<QString, QString> getDbUrlParts(const QString url);
+
+  /**
+   * Converts an API database URL into the format needed by PSQL
+   *
+   * @param url URL to convert
+   * @return a PSQL command string
+   */
   static QString getPsqlString(const QString url);
+
+  /**
+   * Executes a SQL file using PSQL
+   *
+   * @param dbUrl URL of the target database
+   * @param sqlFile path to the file containing SQL statements to execute
+   */
   static void execSqlFile(const QString dbUrl, const QString sqlFile);
+
+  /**
+   * Converts an API database URL into the format needed by libpq
+   *
+   * @param url URL to convert
+   * @return a libpq command string
+   */
   static QString getPqString(const QString url);
 
 protected:

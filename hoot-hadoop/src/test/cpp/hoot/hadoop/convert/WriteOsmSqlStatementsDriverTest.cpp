@@ -184,6 +184,7 @@ public:
     driver.setFileOutputElementBufferSize(10000);
     driver.setChangesetUserId(1);
     driver.setOutputFilesCopyLocation(outFile);
+    driver.setExecSqlWithMapreduce(false);
     driver.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
     driver.close();
@@ -206,6 +207,7 @@ public:
     WriteOsmSqlStatementsDriver driver;
     driver.setFileOutputElementBufferSize(10);
     driver.setChangesetUserId(1);
+    driver.setExecSqlWithMapreduce(false);
     driver.open(outFile);
     driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
     driver.close();
@@ -227,6 +229,7 @@ public:
     driver.setFileOutputElementBufferSize(10);
     driver.setChangesetUserId(1);
     driver.setOutputFilesCopyLocation(outFile);
+    driver.setExecSqlWithMapreduce(false);
     driver.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     driver.write(QString::fromStdString(outDir) + "/input.osm.pbf");
     driver.close();

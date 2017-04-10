@@ -35,6 +35,14 @@ namespace hoot
 
 using namespace std;
 
+/**
+ * Mapreduce reduce task for writing OSM API database SQL statements to both file and a database.
+ *
+ *  If the output destination is a database and the option to retain the SQL file is chosen, the
+ * resulting logic is a little misleading, b/c the mapreduce job doesn't actually execute the
+ * output SQL file against the database.  It performs streaming table copies instead.  In that
+ * situation, the output SQL file is more for reference purposes.
+ */
 class WriteOsmSqlStatementsReducer : public pp::Reducer
 {
 

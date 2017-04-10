@@ -161,7 +161,7 @@ void WriteOsmSqlStatementsReducer::_flushToDb(const QString tableHeader, const Q
     //write the header
     tableHeaderCopyResult = PQexec(_pqConn, tableHeader.toUtf8().data());
 
-    //write the data; We have to get rid of the UTF null here, or postgres will choke.
+    //write the data; We have to get rid of the UTF null here, or postgres will choke on it.
     QByteArray sqlStatementsBytes = tableData.toUtf8();
     sqlStatementsBytes.replace("\\x00", " ");
     const int size = sqlStatementsBytes.size();
@@ -251,7 +251,8 @@ void WriteOsmSqlStatementsReducer::_updateElementCounts(const QString tableHeade
 void WriteOsmSqlStatementsReducer::_writeElementCounts()
 {
   shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(_context->getJobConf()));
-  //if it doesn't already exist, add a dir under our main output dir
+  //if it doesn't already exist, add a dir under our main output dir to store the aux element count
+  //files in
   Hdfs fs;
   const string mainOutputDir = config->get("mapred.output.dir");
   const string auxDir = mainOutputDir + "/elementCounts";
@@ -264,10 +265,10 @@ void WriteOsmSqlStatementsReducer::_writeElementCounts()
   shared_ptr<ostream> out(fs.create(outputFile));
   if (!out->good())
   {
-    throw Exception("output stream is not good.");
+    throw Exception("Output stream is not good.");
   }
 
-  //write out the element counts to be manually summed up later by the driver
+  //write out the element counts for this reduce task to be manually summed up by the driver
   LOG_VART(_elementCounts["nodes"]);
   const QString nodeCntStr = "nodes;" + QString::number(_elementCounts["nodes"]) + "\n";
   out->write(nodeCntStr.toLatin1().data(), nodeCntStr.toLatin1().size());
@@ -303,7 +304,7 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
   _retainSqlFile = config->get("retainSqlFile") == "1" ? true : false;
   LOG_VART(_retainSqlFile);
 
-  //<element id>;<table header> OR <element id>;<member id>;<table header>
+  //key syntax: <element id>;<table header> OR <element id>;<member id>;<table header>
   const QStringList keyParts = QString::fromStdString(context.getInputKey()).split(";");
   const QString tableHeader = keyParts[keyParts.size() - 2] + ";\n";
   LOG_VART(tableHeader);
@@ -323,8 +324,8 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
         _context->getCounter("WriteOsmSqlStatements", "SQL statements"), 1);
     }
 
-    //this flush can cause the same table to be written to the file twice, each time with a
-    //different set of sql records...but that's ok.
+    //this flush will cause the same table to be written to the file twice, each time with a
+    //different set of sql records...but that's ok...SQL is still valid
     if (_sqlStatementBufferSize >= writeBufferSize)
     {
       _flush();

@@ -80,7 +80,7 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 === big.convert.exec.sql.with.mapreduce
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If set to true, when writing to an OSM API database from a PBF file using the big-convert command
 the writer will execute the OSM SQL statements using mapreduce.  If set to false, the writer will

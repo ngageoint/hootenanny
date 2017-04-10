@@ -98,7 +98,7 @@ void WriteOsmSqlStatementsDriver::close()
 
   if (_destinationIsDatabase(_output) && _database.getDB().isOpen())
   {
-    //now re-enable the constraints to make sure the db is valid before reading from it
+    //now re-enable the constraints to make sure the db is valid now that we're done with it
     _database.enableConstraints();
     _database.close();
   }
@@ -131,8 +131,7 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
 
   if (!_destinationIsDatabase(_output) || !_outputFileCopyLocation.isEmpty())
   {
-    //merge all the output files into one and copy back to the local file system; how expensive
-    //is this going to be for a ton of big files?
+    //merge all the output files into one and copy it back from hdfs to the local file system
     LOG_INFO("Merging temporary output files into one SQL file...");
     HadoopPipesUtils::mergeFilesToLocalFileSystem(hdfsOutput.toStdString(), sqlFile.toStdString());
 
@@ -144,12 +143,14 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
   { 
     if (!_execSqlWithMapreduce)
     {
-      //TODO: add file name and record count to this message
+      //we didn't write to the db in the reducer, so exec the whole sql file now with psql
       LOG_INFO("Executing element SQL...");
       ApiDb::execSqlFile(_output, sqlFile);
     }
     else
     {
+      //we already wrote the data to the db in the reducer, so all we need to write here is the
+      //changeset; the num changes here will not be accurate
       LOG_INFO("Writing changeset record to database...");
       DbUtils::execNoPrepare(
         _database.getDB(),
@@ -170,6 +171,9 @@ void WriteOsmSqlStatementsDriver::write(const QString inputMapFile)
 void WriteOsmSqlStatementsDriver::_writeSequenceUpdateStatements(const QString elementCountsDir,
                                                                  const QString sqlFileLocation)
 {
+  //This should at most be 3 element count entries per reduce task, so the number entries to parse
+  //shouldn't be prohibitively large.
+
   LOG_INFO("Merging element count files into one file...");
   const QString mergedElementCountFileTempPath =
     QDir::tempPath() + "/WriteOsmSqlStatementsDriver-" + QUuid::createUuid().toString();
@@ -268,7 +272,7 @@ void WriteOsmSqlStatementsDriver::_writeChangesetToSqlFile(const QString sqlFile
   const QString changesetHeader = _sqlFormatter->getChangesetSqlHeaderString();
   Envelope bounds;
   bounds.init();
-  //TODO: fix num changes?...how?
+  //the num changes here will not be accurate
   const QString changesetStr = _sqlFormatter->changesetToSqlString(1, _changesetUserId, 1, bounds);
   QFile outputSqlFile(sqlFileLocation);
   if (!outputSqlFile.open(QIODevice::Append))
@@ -323,12 +327,10 @@ void WriteOsmSqlStatementsDriver::_runElementSqlStatementsWriteJob(const string&
   job.addPlugin(getenv("HOOT_HOME") + string("/lib/libHootHadoop.so.1"));
   _addDefaultJobSettings(job);
 
-  //job.getConfiguration().setInt("mapred.map.tasks", 8);
-
   job.getConfiguration().setLong("changesetUserId", _changesetUserId);
   job.getConfiguration().setLong("writeBufferSize", _fileOutputElementBufferSize);
   LOG_VARD(_execSqlWithMapreduce);
-  if (_execSqlWithMapreduce)
+  if (_execSqlWithMapreduce && _destinationIsDatabase(_output))
   {
     job.getConfiguration().set("dbConnUrl", _output.toStdString());
   }

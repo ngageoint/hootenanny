@@ -60,7 +60,20 @@ public:
 
   static QStringList getConstraintsForTable(const QSqlDatabase& database, const QString tableName);
 
+  /**
+   * Disables all existing database constraints on the specified table
+   *
+   * @param database database to modify
+   * @param tableName table to modify
+   */
   static void disableTableConstraints(QSqlDatabase& database, const QString tableName);
+
+  /**
+   * Enables all existing database constraints on the specified table
+   *
+   * @param database database to modify
+   * @param tableName table to modify
+   */
   static void enableTableConstraints(QSqlDatabase& database, const QString tableName);
 
 private:

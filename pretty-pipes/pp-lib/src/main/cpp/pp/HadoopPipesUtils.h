@@ -57,7 +57,14 @@ public:
 
   static HadoopPipes::RecordWriter* getRecordWriter(HadoopPipes::TaskContext* context);
 
-  static void mergeFilesToLocalFileSystem(const string& filesDir, const string& mergeFileLocation);
+  /**
+   * Merges all files in the specified HDFS dir into a single file on the local file system.
+   *
+   * @param filesDir HDFS directory containing the files to merge
+   * @param mergedFileOutputLocation single output file
+   */
+  static void mergeFilesToLocalFileSystem(const string& filesDir,
+                                          const string& mergedFileOutputLocation);
 };
 
 }

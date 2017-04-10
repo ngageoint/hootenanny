@@ -998,8 +998,8 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
 
 void OsmApiDbBulkWriter::_createNodeOutputFiles()
 {
-  const QStringList nodeSqlHeaders = _sqlFormatter->getNodeSqlHeaderStrings();
-  const QStringList nodeTagSqlHeaders = _sqlFormatter->getNodeTagSqlHeaderStrings();
+  const QStringList nodeSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeSqlHeaderStrings();
+  const QStringList nodeTagSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeTagSqlHeaderStrings();
 
   _createOutputFile(ApiDb::getCurrentNodesTableName(), nodeSqlHeaders[0]);
   _createOutputFile(ApiDb::getCurrentNodeTagsTableName(), nodeTagSqlHeaders[0]);
@@ -1140,9 +1140,9 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType:
 
 void OsmApiDbBulkWriter::_createWayOutputFiles()
 {
-  const QStringList waySqlHeaders = _sqlFormatter->getWaySqlHeaderStrings();
-  const QStringList wayTagSqlHeaders = _sqlFormatter->getWayTagSqlHeaderStrings();
-  const QStringList wayNodeSqlHeaders = _sqlFormatter->getWayNodeSqlHeaderStrings();
+  const QStringList waySqlHeaders = OsmApiDbSqlStatementFormatter::getWaySqlHeaderStrings();
+  const QStringList wayTagSqlHeaders = OsmApiDbSqlStatementFormatter::getWayTagSqlHeaderStrings();
+  const QStringList wayNodeSqlHeaders = OsmApiDbSqlStatementFormatter::getWayNodeSqlHeaderStrings();
 
   _createOutputFile(ApiDb::getCurrentWaysTableName(), waySqlHeaders[0]);
   _createOutputFile(ApiDb::getCurrentWayTagsTableName(), wayTagSqlHeaders[0]);
@@ -1198,9 +1198,12 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
 
 void OsmApiDbBulkWriter::_createRelationOutputFiles()
 {
-  const QStringList relationSqlHeaders = _sqlFormatter->getRelationSqlHeaderStrings();
-  const QStringList relationTagSqlHeaders = _sqlFormatter->getRelationTagSqlHeaderStrings();
-  const QStringList relationMemberSqlHeaders = _sqlFormatter->getRelationMemberSqlHeaderStrings();
+  const QStringList relationSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationSqlHeaderStrings();
+  const QStringList relationTagSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationTagSqlHeaderStrings();
+  const QStringList relationMemberSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationMemberSqlHeaderStrings();
 
   _createOutputFile(ApiDb::getCurrentRelationsTableName(), relationSqlHeaders[0]);
   _createOutputFile(ApiDb::getCurrentRelationTagsTableName(), relationTagSqlHeaders[0]);

@@ -29,6 +29,9 @@ namespace hoot
 
 using namespace std;
 
+/**
+ * Identical to LineRecordWriter except for not outputting a tab between the key and value pair
+ */
 class SqlStatementLineRecordWriter : public LineRecordWriter
 {
 

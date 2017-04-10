@@ -99,12 +99,12 @@ HadoopPipes::RecordWriter* HadoopPipesUtils::getRecordWriter(HadoopPipes::TaskCo
 }
 
 void HadoopPipesUtils::mergeFilesToLocalFileSystem(const string& filesDir,
-                                                   const string& mergeFileLocation)
+                                                   const string& mergedFileOutputLocation)
 {
-  const string cmd = "hadoop fs -getmerge " + filesDir + " " + mergeFileLocation;
+  const string cmd = "hadoop fs -getmerge " + filesDir + " " + mergedFileOutputLocation;
   if (system(cmd.c_str()) != 0)
   {
-    throw Exception("Failed merging files into single file: " + mergeFileLocation);
+    throw Exception("Failed merging files into single file: " + mergedFileOutputLocation);
   }
 }
 

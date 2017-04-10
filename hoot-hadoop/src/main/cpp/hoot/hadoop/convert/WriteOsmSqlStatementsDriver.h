@@ -32,6 +32,10 @@ using namespace std;
 
 class OsmApiDbSqlStatementFormatter;
 
+/**
+ * The driver that launches the Hadoop job for writing OSM API database SQL statements, both
+ * to a file and to a database.  See big-convert documentation for more details.
+ */
 class WriteOsmSqlStatementsDriver : public Driver, public Configurable
 {
 public:
@@ -39,15 +43,14 @@ public:
   WriteOsmSqlStatementsDriver();
   ~WriteOsmSqlStatementsDriver();
 
-  void write(const QString inputMapFile);
-  void close();
-
   virtual void setConfiguration(const Settings& conf);
 
   //The OsmMapWriter interface doesn't really fit here, due to the write method it has,
-  //but we'll go ahead and partially mimic it with open and isSupported.
+  //but we'll go ahead and mimic it with some of the same mehods.
   bool isSupported(QString urlStr);
   void open(QString url);
+  void write(const QString inputMapFile);
+  void close();
 
   void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setOutputFilesCopyLocation(QString loc) { _outputFileCopyLocation = loc; }
@@ -64,15 +67,34 @@ private:
   QString _outputDelimiter;
   long _changesetUserId;
   QString _output;
+  //Leaving this optional in case there end up being scalability problems writing to the db, but
+  //if there aren't, then this setting can be removed;
   bool _execSqlWithMapreduce;
+  //mostly for performance experimenting purposes; may not be needed forever
   int _numReduceTasks;
 
+  /*
+   * launches the hadoop job
+   */
   void _runElementSqlStatementsWriteJob(const string& input, const string& output);
-  void _runChangesetSqlStatementsWriteJob(const string& input, const string& output);
+  /*
+   * determines where the output sql file will go based on whether the output sql file is to be
+   * retained or not
+   */
   QString _getSqlFileOutputLocation(const QString hdfsOutput,
                                     const QString userSpecifiedOutput) const;
+  /*
+   * appends a single changeset ref'd by all the output elements to the output sql file
+   */
   void _writeChangesetToSqlFile(const QString sqlFileLocation);
   bool _destinationIsDatabase(const QString output) const;
+  /*
+   * parses aux output files written during the sql statements job that have entries for element
+   * counts encountered by type, sums them, and then appends db sequence id update statements to
+   * the output sql file if the final output is a sql file or the sql file is to be retained OR
+   * execs the sequence id updates against the database if the final output destination is a
+   * database
+   */
   void _writeSequenceUpdateStatements(const QString elementCountsDir,
                                       const QString sqlFileLocation);
 };

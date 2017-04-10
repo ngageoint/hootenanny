@@ -36,7 +36,9 @@ namespace hoot
 
 class FileUtils
 {
+
 public:
+
   /**
    * Delete a directory along with all of its contents.
    * @param dirName Path of directory to remove.
@@ -51,6 +53,12 @@ public:
    */
   static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
 
+  /**
+   * Reads an entire file to string
+   *
+   * @param path file path
+   * @return a string
+   */
   static QString fileToString(const QString path);
 };
 

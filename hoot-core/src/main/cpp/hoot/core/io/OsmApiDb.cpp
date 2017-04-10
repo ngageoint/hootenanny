@@ -672,8 +672,12 @@ double OsmApiDb::fromOsmApiDbCoord(const long x)
   return (double)x / COORDINATE_SCALE;
 }
 
-QStringList OsmApiDb::_getContraintsTableOrdering(const bool disable)
+QStringList OsmApiDb::_getTables()
 {
+  //The table ordering doesn't matter for constraint enabling/disabling.  It would, however,
+  //matter for constraint adding/removing (would need to reverse this ordering for dropping,
+  //I think).
+
   QStringList tableNames;
 
   tableNames.append(ApiDb::getCurrentRelationMembersTableName());
@@ -700,27 +704,17 @@ QStringList OsmApiDb::_getContraintsTableOrdering(const bool disable)
   tableNames.append(ApiDb::getChangesetTagsTableName());
   tableNames.append(ApiDb::getChangesetsTableName());
 
-  if (!disable)
-  {
-    list<QString> tableNamesStd = tableNames.toStdList();
-    std::reverse(tableNamesStd.begin(), tableNamesStd.end());
-    tableNames = QStringList::fromStdList(tableNamesStd);
-  }
-
   return tableNames;
 }
 
-//TODO: the table ordering actually doesn't matter for enabling/disabling, only for
-//adding/dropping, so rework this
-
 void OsmApiDb::disableConstraints()
 {
-  _modifyConstraints(_getContraintsTableOrdering(true), true);
+  _modifyConstraints(_getTables(), true);
 }
 
 void OsmApiDb::enableConstraints()
 {
-  _modifyConstraints(_getContraintsTableOrdering(false), false);
+  _modifyConstraints(_getTables(), false);
 }
 
 void OsmApiDb::_modifyConstraints(const QStringList tableNames, const bool disable)
