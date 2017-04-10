@@ -65,6 +65,7 @@ import hoot.services.IntegrationTest;
 import hoot.services.UnitTest;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
+import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.XmlDocumentBuilder;
@@ -73,7 +74,7 @@ import hoot.services.utils.XmlDocumentBuilder;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
-public class ExportResourceTest {
+public class ExportResourceTest extends OSMResourceTestAbstract {
 
     private static String originalTEMP_OUTPUT_PATH;
 
@@ -90,6 +91,19 @@ public class ExportResourceTest {
     public static void afterClass() throws Exception {
         HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", originalTEMP_OUTPUT_PATH);
     }
+
+//    @Test
+//    @Category(UnitTest.class)
+//    public void testExportResource() throws Exception {
+//        ExportParams exportParams = new ExportParams();
+//        exportParams.setOutputType("osm");
+//
+//        String responseData = target("export/execute")
+//                .request(MediaType.APPLICATION_JSON)
+//                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
+//
+//        assertNotNull(responseData);
+//    }
 
     @Test
     @Category(UnitTest.class)
@@ -188,7 +202,7 @@ public class ExportResourceTest {
         FileUtils.writeStringToFile(changesetFile, changesetText, "UTF-8");
 
         ExportResource spy = Mockito.spy(new ExportResource());
-        Response response = spy.getXmlOutput(jobId, true, "osc");
+        Response response = spy.getXmlOutput(jobId,  "osc");
         DOMSource test = (DOMSource) response.getEntity();
 
         // parse out the returned xml and verify its what was originally written
@@ -210,7 +224,7 @@ public class ExportResourceTest {
         try {
             // try to retrieve a changeset file with a non-existent changeset
             // id; should fail with a 404
-            (new ExportResource()).getXmlOutput("blah", true, "osc");
+            (new ExportResource()).getXmlOutput("blah", "osc");
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());
@@ -246,7 +260,7 @@ public class ExportResourceTest {
             FileUtils.writeStringToFile(changesetFile2, changesetText, "UTF-8");
 
             ExportResource spy = Mockito.spy(new ExportResource());
-            /* Response response = */spy.getXmlOutput(jobId, true, "osc");
+            /* Response response = */spy.getXmlOutput(jobId, "osc");
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.NOT_FOUND.getStatusCode(), e.getResponse().getStatus());

@@ -29,12 +29,16 @@ package hoot.services.controllers.conflation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mockito.Mockito;
@@ -43,7 +47,19 @@ import hoot.services.UnitTest;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
 
+@Ignore
 public class ConflationResourceTest {
+
+    @Test
+    @Category(UnitTest.class)
+    public void testDateFormatter() {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
+        String text = now.format(formatter);
+        System.out.println("Formatted UTC date & time: " + text);
+        //LocalDateTime parsedDate = LocalDateTime.parse(text, formatter);
+    }
+
 
     // An OSM API DB input must always be a reference layer. Default ref layer = 1.
 
@@ -52,6 +68,14 @@ public class ConflationResourceTest {
     public void testOsmApiDbInputAsSecondary() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+            ConflateParams conflateParams = new ConflateParams();
+            conflateParams.setInputType1("DB");
+            conflateParams.setInput1("1");
+            conflateParams.setInputType2("OSM_API_DB");
+            conflateParams.setInputType2("-1");
+            conflateParams.setOutputName("OutputLayer");
+            conflateParams.setCollectStats(false);
+            conflateParams.setAdvancedOptions("-D convert.bounding.box=0,0,0,0");
 
             String inputParams = "{" +
                     "\"INPUT1_TYPE\":\"DB\"," +
@@ -59,16 +83,11 @@ public class ConflationResourceTest {
                     "\"INPUT2_TYPE\":\"OSM_API_DB\"," +
                     "\"INPUT2\":\"-1\"," +
                     "\"OUTPUT_NAME\":\"OutputLayer\"," +
-                    "\"CONFLATION_TYPE\":\"Reference\"," +
-                    "\"MATCH_THRESHOLD\":\"0.6\"," +
-                    "\"MISS_THRESHOLD\":\"0.6\"," +
-                    "\"USER_EMAIL\":\"test@test.com\"," +
                     "\"COLLECT_STATS\":\"false\"," +
-                    "\"ADV_OPTIONS\":\"-D \\\"convert.bounding.box=0,0,0,0\\\"\"" +
-                    "}";
+                    "\"ADV_OPTIONS\":\"-D \\\"convert.bounding.box=0,0,0,0\\\"\"" + "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            spy.conflate(inputParams, "error");
+            spy.conflate(conflateParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -85,6 +104,7 @@ public class ConflationResourceTest {
     public void testOsmApiDbInputAsSecondary2() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+            ConflateParams conflateParams = new ConflateParams();
 
             String inputParams = "{" +
                        "\"REFERENCE_LAYER\":\"2\"," +
@@ -102,7 +122,7 @@ public class ConflationResourceTest {
                     "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            spy.conflate(inputParams, "error");
+            spy.conflate(conflateParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
@@ -119,6 +139,7 @@ public class ConflationResourceTest {
     public void testConflateOsmApiDbMissingMap() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.TRUE);
+            ConflateParams conflateParams = new ConflateParams();
 
             String inputParams = "{" +
                         "\"INPUT1_TYPE\":\"OSM_API_DB\"," +
@@ -135,7 +156,7 @@ public class ConflationResourceTest {
                     "}";
 
             ConflationResource spy = Mockito.spy(new ConflationResource());
-            spy.conflate(inputParams, "error");
+            spy.conflate(conflateParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());
@@ -152,6 +173,7 @@ public class ConflationResourceTest {
     public void testConflateOsmApiDbNotEnabled() throws Exception {
         try {
             HootCustomPropertiesSetter.setProperty("OSM_API_DB_ENABLED", Boolean.FALSE);
+            ConflateParams conflateParams = new ConflateParams();
 
             String inputParams = "{" +
                        "\"INPUT1_TYPE\":\"OSM_API_DB\"," +
@@ -172,7 +194,7 @@ public class ConflationResourceTest {
             List<Long> mapIds = new ArrayList<>();
             mapIds.add(1L);
 
-            spy.conflate(inputParams, "error");
+            spy.conflate(conflateParams, "error");
         }
         catch (WebApplicationException e) {
             assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getResponse().getStatus());

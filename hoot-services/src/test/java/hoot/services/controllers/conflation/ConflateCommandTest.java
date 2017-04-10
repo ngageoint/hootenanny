@@ -26,7 +26,32 @@
  */
 package hoot.services.controllers.conflation;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import hoot.services.UnitTest;
+
+
 public class ConflateCommandTest {
+
+    @Test
+    @Category(UnitTest.class)
+    public void test() {
+        String params = " -D dima -D inta -D alina -D katrina".trim();
+
+        List<String> options = new LinkedList<>();
+
+        String[] advOptions = params.split("-D ");
+        Arrays.stream(advOptions).forEach((option) -> {
+                if (!option.isEmpty()) {
+                    options.add(option.trim());
+                };
+        });
+    }
 
 /*
     @Test

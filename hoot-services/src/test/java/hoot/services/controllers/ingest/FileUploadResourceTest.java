@@ -122,16 +122,16 @@ public class FileUploadResourceTest {
         Map<String, Integer> zipStat = new HashMap<>();
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         assertEquals(2, results.size());
 
         for (Map<String, String> request : results) {
             if (request.get("type").equalsIgnoreCase("FGDB_ZIP")) {
-                assertEquals("fgdb_ogr/DcGisRoads.gdb", request.get("name"));
+                assertEquals(workingDir.getAbsoluteFile() + "/DcGisRoads.gdb", request.get("name"));
             }
             else if (request.get("type").equalsIgnoreCase("OGR_ZIP")) {
-                assertEquals("fgdb_ogr/jakarta_raya_coastline.shp", request.get("name"));
+                assertEquals(workingDir.getAbsoluteFile() + "/fgdb_ogr/jakarta_raya_coastline.shp", request.get("name"));
             }
         }
 
@@ -195,7 +195,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -216,8 +216,8 @@ public class FileUploadResourceTest {
 
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "fgdb_ogr",
-                Boolean.FALSE, null, "error", inputType, this.getClass());
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", "fgdb_ogr",
+                Boolean.FALSE, "error", inputType, this.getClass());
 /*
         JSONArray params = (JSONArray) command.get("params");
         int nP = 0;
@@ -275,7 +275,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         List<String> zipList = new ArrayList<>();
 
@@ -377,7 +377,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -399,7 +399,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat, workingDir, "FILE"));
 
         int shpCnt = zipStat.get("shpcnt");
         int fgdbCnt = zipStat.get("fgdbcnt");
@@ -409,8 +409,8 @@ public class FileUploadResourceTest {
         String inputType = "";
 
         // Test zip containing fgdb + shp
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "osm",
-                Boolean.FALSE, null, "error", inputType, this.getClass());
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", "osm",
+                Boolean.FALSE, "error", inputType, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -470,7 +470,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -492,7 +492,7 @@ public class FileUploadResourceTest {
 
         inputsList.add("zip1");
 
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         shpZipCnt += zipStat.get("shpzipcnt");
         fgdbZipCnt += zipStat.get("fgdbzipcnt");
@@ -510,8 +510,8 @@ public class FileUploadResourceTest {
         String inputType = "";
 
         FileETLCommand command = new FileETLCommand(results, zipList,
-                "TDSv61.js", jobId, "ogr", Boolean.FALSE,
-                null, "error", inputType, this.getClass());
+                "TDSv61.js", "ogr", Boolean.FALSE,
+                "error", inputType, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -566,7 +566,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -585,7 +585,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat, workingDir, "FILE"));
 
         shpCnt += zipStat.get("shpcnt");
         fgdbCnt += zipStat.get("fgdbcnt");
@@ -598,9 +598,9 @@ public class FileUploadResourceTest {
         int fgdbZipCnt = 0;
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId,
-                "ogr", Boolean.FALSE, "error", null,
-                inputType, this.getClass());
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js",
+                         "ogr", Boolean.FALSE, "error",
+                                  inputType, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -653,7 +653,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -672,7 +672,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat, workingDir, "FILE"));
 
         shpCnt += zipStat.get("shpcnt");
         fgdbCnt += zipStat.get("fgdbcnt");
@@ -686,8 +686,8 @@ public class FileUploadResourceTest {
         int geonamesZipCnt = 0;
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId,
-                                            "osm", Boolean.FALSE, null,
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js",
+                                            "osm", Boolean.FALSE,
                                           "error", inputType, this.getClass());
 
 /*
@@ -742,7 +742,7 @@ public class FileUploadResourceTest {
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "gdb", destDir, zipStat));
+        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "gdb", destDir, zipStat, workingDir, "DIR"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -759,8 +759,8 @@ public class FileUploadResourceTest {
 
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", jobId, "fgdb",
-                Boolean.FALSE, null, "error", inputType, this.getClass());
+        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", "fgdb",
+                Boolean.FALSE, "error", inputType, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -862,7 +862,7 @@ public class FileUploadResourceTest {
 
     private static Method getAnalyzeUploadedFileMethod() throws NoSuchMethodException {
         Method analyzeUploadedFileMethod = FileUploadResource.class
-                .getDeclaredMethod("handleUploadedFile", String.class, File.class, Map.class);
+                .getDeclaredMethod("handleUploadedFile", String.class, File.class, Map.class, File.class, String.class);
         analyzeUploadedFileMethod.setAccessible(true);
         return analyzeUploadedFileMethod;
     }

@@ -124,10 +124,10 @@ public class JobResourceTest extends HootServicesJerseyTestAbstract {
 
             String expectedResult =
                     "{\"jobId\":\"" + jobId + "\"," +
-                            "\"lasttext\":\"FINISHED SUCCESSFULLY\"," +
-                            "\"percentcomplete\":100.0," +
+                            "\"status\":\"complete\"," +
                             "\"statusDetail\":\"FINISHED SUCCESSFULLY\"," +
-                            "\"status\":\"complete\"}";
+                            "\"percentcomplete\":100.0," +
+                            "\"lasttext\":\"FINISHED SUCCESSFULLY\"}";
 
             String actualResult = response.readEntity(String.class);
 

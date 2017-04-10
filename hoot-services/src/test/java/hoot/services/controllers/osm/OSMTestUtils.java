@@ -103,7 +103,7 @@ import hoot.services.utils.XmlUtils;
 public class OSMTestUtils {
     private static long mapId = -1;
     private static long userId = -1;
-    private static DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
+    private static DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
 
     /*
      * Creates a starting geo bounds for all the tests; simulates a bounds that

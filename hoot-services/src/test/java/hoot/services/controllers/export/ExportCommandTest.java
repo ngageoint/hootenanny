@@ -115,8 +115,9 @@ public class ExportCommandTest {
             paramMap.put("TASK_BBOX", "0.0,0.0,0.0,0.0");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+            ExportParams params = new ExportParams();
 
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", ExportOSMCommand.class, this.getClass());
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", ExportOSMCommand.class, this.getClass());
 
             String actualCaller = exportCommand.get("caller").toString();
             String expectedCaller = this.getClass().getName();
@@ -177,8 +178,9 @@ public class ExportCommandTest {
         paramMap.put("TASK_BBOX", "10.1,10.1,10.1,10.1");
 
         ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
+        ExportParams params = new ExportParams();
 
-        ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", ExportOSCCommand.class, this.getClass());
+        ExportCommand exportCommand = exportCommandFactory.build(jobId, params, "error", ExportOSCCommand.class, this.getClass());
 
         String actualCaller = exportCommand.get("caller").toString();
         String expectedCaller = this.getClass().getName();
@@ -433,7 +435,8 @@ public class ExportCommandTest {
             paramMap.put("USER_ID", "test_user");
 
             ExportCommandFactory exportCommandFactory = new ExportCommandFactory();
-            ExportCommand exportCommand = exportCommandFactory.build(jobId, paramMap, "error", ExportOSCCommand.class, this.getClass());
+            ExportParams exportParams = new ExportParams();
+            ExportCommand exportCommand = exportCommandFactory.build(jobId, exportParams, "error", ExportOSCCommand.class, this.getClass());
         }
         catch (WebApplicationException e) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
