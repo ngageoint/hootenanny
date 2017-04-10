@@ -29,6 +29,7 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -217,7 +218,13 @@ public class ExportResource {
                             () -> {
                                 //OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
                                 //tar -zxf $(TDS_TEMPLATE) -C $(OP_OUTPUT)
-                                File outputDir = new File(workDir, outputName + "." + outputType);
+                                File outputDir = new File(workDir, outputName + "."     + outputType.toLowerCase());
+                                try {
+                                    FileUtils.forceMkdir(outputDir);
+                                }
+                                catch (IOException ioe) {
+                                    throw new RuntimeException("Error creating directory: " + outputDir.getAbsolutePath(), ioe);
+                                }
                                 ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplatePath, outputDir, this.getClass());
                                 return externalCommandManager.exec(jobId, untarFileCommand);
                             }
