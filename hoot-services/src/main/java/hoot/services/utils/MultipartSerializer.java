@@ -31,13 +31,10 @@ import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.slf4j.Logger;
@@ -52,17 +49,17 @@ public final class MultipartSerializer {
     /**
      * Serializes uploaded multipart data into files. It can handle file or folder type.
      *
-     * @param inputType
-     *            = ["FILE" | "DIR"] where DIR type is treated as FGDB
      * @param multiPart
      *            = The request object that holds post data
+     *
      * @param destinationDir
      *            = Directory where to store uploaded files
+     *
+     * @return list of uploaded files
      */
-    public static Map<File, String> serializeUpload(String inputType, FormDataMultiPart multiPart, File destinationDir) {
-        Map<File, String> uploadedFiles = new HashMap<>();
+    public static List<File> serializeUpload(FormDataMultiPart multiPart, File destinationDir) {
+        List<File> uploadedFiles = new LinkedList<>();
 
-        List<String> supportedExtensions = Arrays.asList("OSM", "GEONAMES", "SHP", "ZIP", "PBF", "TXT");
         List<BodyPart> bodyParts = multiPart.getBodyParts();
 
         for (BodyPart fileItem : bodyParts) {
@@ -83,22 +80,9 @@ public final class MultipartSerializer {
                 throw new RuntimeException("Error saving file to disk: " + uploadedFile, ioe);
             }
 
-            String extension = FilenameUtils.getExtension(fileName).toUpperCase();
+            uploadedFiles.add(uploadedFile);
 
-            if (inputType.equalsIgnoreCase("DIR")) {
-                //If user request type is DIR then treat it as FGDB folder
-                extension = "GDB";
-                uploadedFiles.put(uploadedFile, extension);
-            }
-            else {
-                if (supportedExtensions.contains(extension)) {
-                    uploadedFiles.put(uploadedFile, extension);
-                    logger.debug("Successfully uploaded file: {}", uploadedFile.getAbsolutePath());
-                }
-                else {
-                    logger.info("Skipping upload of {} file.  Extension {} not supported!", fileName, extension);
-                }
-            }
+            logger.debug("Successfully uploaded file : {}", uploadedFile.getAbsolutePath());
         }
 
         return uploadedFiles;

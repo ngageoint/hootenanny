@@ -141,7 +141,7 @@ public class FileUploadResource {
             String jobId = UUID.randomUUID().toString();
             File workDir = new File(UPLOAD_FOLDER, jobId);
 
-            Map<File, String> uploadedFiles = MultipartSerializer.serializeUpload(inputType, multiPart, workDir);
+            List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
             int shpCnt = 0;
             int osmCnt = 0;
@@ -158,11 +158,10 @@ public class FileUploadResource {
             List<File> zipList = new ArrayList<>();
             String etlName = inputName;
 
-            for (Map.Entry<File, String> pairs : uploadedFiles.entrySet()) {
-                File uploadedFile = pairs.getKey();
-                String uploadedFileName = pairs.getKey().getName();
+            for (File uploadedFile : uploadedFiles) {
+                String uploadedFileName = uploadedFile.getName();
                 String uploadedFileBasename = FilenameUtils.getBaseName(uploadedFileName);
-                String preliminaryUploadedFileType = pairs.getValue();
+                String uploadedFileExtension = FilenameUtils.getExtension(uploadedFileName);
 
                 if (StringUtils.isBlank(etlName)) {
                     etlName = uploadedFileBasename;
@@ -178,9 +177,9 @@ public class FileUploadResource {
 
                 Map<String, Integer> zipStat = new HashMap<>();
 
-                etlRequests.addAll(handleUploadedFile(preliminaryUploadedFileType, uploadedFile, zipStat, workDir));
+                etlRequests.addAll(handleUploadedFile(uploadedFileExtension, uploadedFile, zipStat, workDir, inputType));
 
-                if (preliminaryUploadedFileType.equalsIgnoreCase("ZIP")) {
+                if (uploadedFileExtension.equalsIgnoreCase("ZIP")) {
                     zipList.add(uploadedFile);
                     zipCnt++;
                 }
@@ -196,7 +195,7 @@ public class FileUploadResource {
                 geonamesZipCnt += zipStat.get("geonameszipcnt");
 
                 if (inputType.equalsIgnoreCase("GEONAMES") &&
-                        preliminaryUploadedFileType.equalsIgnoreCase("TXT") && (geonamesCnt == 1)) {
+                        uploadedFileExtension.equalsIgnoreCase("TXT") && (geonamesCnt == 1)) {
                     uploadedFileName = uploadedFileBasename + "." + "geonames";
                     File srcFile = new File(workDir, inputsList.get(0));
                     File destFile = new File(workDir, uploadedFileName);
@@ -208,7 +207,7 @@ public class FileUploadResource {
 
                     etlRequests.clear();
 
-                    etlRequests.addAll(handleUploadedFile("GEONAMES", destFile, zipStat, workDir));
+                    etlRequests.addAll(handleUploadedFile("GEONAMES", destFile, zipStat, workDir, inputType));
                 }
             }
 
@@ -246,8 +245,7 @@ public class FileUploadResource {
                         inputsList.clear();
 
                         Map<String, Integer> zipStat = new HashMap<>();
-
-                        etlRequests.addAll(handleUploadedFile("OSM", file, zipStat, workDir));
+                        etlRequests.addAll(handleUploadedFile("OSM", file, zipStat, workDir, inputType));
 
                         zipEntry = zis.getNextEntry();
                     }
@@ -259,8 +257,9 @@ public class FileUploadResource {
                 osmCnt = 1;
             }
 
-            String uploadedFileClassification = classifyUploadedFile(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt,
-                                                                     shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+            String uploadedFileClassification = classifyUploadedFile(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                                                                     geonamesZipCnt, shpCnt, fgdbCnt, osmCnt,
+                                                                     geonamesCnt);
 
             String finalETLName = etlName;
 
@@ -385,7 +384,8 @@ public class FileUploadResource {
         return classification;
     }
 
-    private static List<Map<String, String>> handleUploadedFile(String ext, File inputFile, Map<String, Integer> zipStat, File workDir) throws IOException {
+    private static List<Map<String, String>> handleUploadedFile(String ext, File inputFile, Map<String, Integer> zipStat, File workDir, String inputType)
+            throws IOException {
         List<Map<String, String>> etlRequests = new LinkedList<>();
 
         int osmZipCnt = zipStat.getOrDefault("osmzipcnt", 0);
@@ -432,10 +432,10 @@ public class FileUploadResource {
                 throw new IllegalArgumentException("Zip should not contain both osm and ogr types.");
             }
         }
-        else if (ext.equalsIgnoreCase("GDB")) {
+        else if (inputFile.getName().equalsIgnoreCase("GDB") && inputType.equalsIgnoreCase("DIR")) {
             Map<String, String> etlRequest = new HashMap<>();
             etlRequest.put("type", "FGDB");
-            etlRequest.put("name", inputFile.getAbsolutePath());
+            etlRequest.put("name", inputFile.getParentFile().getAbsolutePath());
             etlRequests.add(etlRequest);
             fgdbCnt++;
         }

@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -118,7 +117,7 @@ public class OGRAttributesResource {
             List<File> fileList = new ArrayList<>();
             List<File> zipList = new ArrayList<>();
 
-            processFormDataMultiPart(fileList, zipList, inputType, multiPart, workFolder);
+            processFormDataMultiPart(fileList, zipList, multiPart, workFolder);
 
             List<Command> workflow = new LinkedList<>();
 
@@ -211,14 +210,13 @@ public class OGRAttributesResource {
     }
 
     private static void processFormDataMultiPart(List<File> fileList, List<File> zipList,
-                                                 String inputType, FormDataMultiPart multiPart, File workFolder)
+                                                 FormDataMultiPart multiPart, File workFolder)
             throws IOException {
-        Map<File, String> uploadedFiles = MultipartSerializer.serializeUpload(inputType, multiPart, workFolder);
+        List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workFolder);
 
-        for (Map.Entry<File, String> pairs : uploadedFiles.entrySet()) {
-            File inputFile = pairs.getKey();
+        for (File inputFile : uploadedFiles) {
             String baseName = FilenameUtils.getBaseName(inputFile.getName());
-            String extension = pairs.getValue();
+            String extension = FilenameUtils.getExtension(inputFile.getName());
 
             // If it is zip file then we crack open to see if it contains FGDB.
             // If so then we add the folder location and desired output name which is fgdb name in the zip.
