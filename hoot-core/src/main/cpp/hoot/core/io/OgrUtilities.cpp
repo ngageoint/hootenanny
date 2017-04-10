@@ -97,15 +97,13 @@ OgrUtilities& OgrUtilities::getInstance()
   return *_theInstance;
 }
 
-OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool read)
+OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
 {
   for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); it++)
   {
     if (((it->_is_ext && url.endsWith(it->_indicator)) || (!it->_is_ext && url.startsWith(it->_indicator))) &&
-        (read || it->_is_rw))
+        (readonly || it->_is_rw))
     {
-//      if (QString("FileGDB").compare(it->_driverName) == 0 || QString("OpenFileGDB").compare(it->_driverName) == 0)
-//        LOG_ERROR("OGR Driver Name: " << it->_driverName);
         return *it;
     }
   }
@@ -113,10 +111,10 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool read)
 }
 
 
-shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url, bool read)
+shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {
   QString source = url;
-  OgrDriverInfo driverInfo = getDriverInfo(url, read);
+  OgrDriverInfo driverInfo = getDriverInfo(url, false);
   if (driverInfo._driverName == NULL)
     throw HootException("Error getting driver info for: " + url);
   GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverInfo._driverName);
@@ -142,13 +140,13 @@ bool OgrUtilities::isReasonableUrl(const QString& url)
   return getDriverInfo(url, true)._driverName != NULL;
 }
 
-shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool read)
+shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
 {
   /* Check for the correct driver name, if unknown try all drivers.
    * This can be an issue because drivers are tried in the order that they are
    * loaded which has been known to cause issues.
    */
-  OgrDriverInfo driverInfo = getDriverInfo(url, read);
+  OgrDriverInfo driverInfo = getDriverInfo(url, readonly);
   const char* drivers[2] = { driverInfo._driverName, NULL };
   shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(),
     driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL));

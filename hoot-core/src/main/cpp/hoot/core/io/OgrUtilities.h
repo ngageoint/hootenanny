@@ -71,8 +71,6 @@ class OgrUtilities
 public:
   OgrUtilities();
 
-  shared_ptr<GDALDataset> createDataSource(const QString& url, bool read);
-
   static OgrUtilities& getInstance();
 
   /**
@@ -81,9 +79,28 @@ public:
    */
   bool isReasonableUrl(const QString& url);
 
-  shared_ptr<GDALDataset> openDataSource(const QString& url, bool read);
+  /**
+   * @brief createDataSource - Create an OGR datasource from the url to write to
+   * @param url - Location of the datasource to create, pathname or API URL
+   * @return pointer to the datasource created
+   */
+  shared_ptr<GDALDataset> createDataSource(const QString& url);
 
-  OgrDriverInfo getDriverInfo(const QString& url, bool read);
+  /**
+   * @brief openDataSource - Open an OGR datasource from the url
+   * @param url - Location of the datasource to open, pathname or API URL
+   * @param readonly - Indicate if the datasource is read/write or read-only
+   * @return pointer to the datasource opened
+   */
+  shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly);
+
+  /**
+   * @brief getDriverInfo - Select the GDAL driver to use to open/create the datasource
+   * @param url - Location of the datasource to open/create, pathname or API URL
+   * @param readonly - Indicate if the datasource is read/write or read-only
+   * @return OGR driver information based on the URL and read-only flag
+   */
+  OgrDriverInfo getDriverInfo(const QString& url, bool readonly);
 
 private:
   /**
