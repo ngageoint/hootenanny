@@ -31,9 +31,7 @@ import static hoot.services.HootProperties.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -55,7 +53,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.glassfish.jersey.media.multipart.BodyPart;
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -76,6 +74,7 @@ import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.JsonUtils;
+import hoot.services.utils.MultipartSerializer;
 
 
 @Controller
@@ -124,46 +123,29 @@ public class BasemapResource {
             File workingDir = new File(UPLOAD_FOLDER, jobId);
             FileUtils.forceMkdir(workingDir);
 
-            Map<String, String> uploadedFiles = new HashMap<>();
-            Map<String, String> uploadedFilesPaths = new HashMap<>();
-            List<BodyPart> fileItems = multiPart.getBodyParts();
+            List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workingDir);
 
-            for (BodyPart fileItem : fileItems) {
-                String fileName = fileItem.getContentDisposition().getFileName();
-
-                try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
-                    File file = new File(workingDir, fileName);
-                    FileUtils.copyInputStreamToFile(fileStream, file);
-                }
-
-                String extension = FilenameUtils.getExtension(fileName).toLowerCase();
+            for (File uploadedFile : uploadedFiles) {
+                String fileName = uploadedFile.getName();
                 String baseName = FilenameUtils.getBaseName(fileName);
+                String extension = FilenameUtils.getExtension(fileName);
 
-                if (BASEMAP_RASTER_EXTENSIONS.contains(extension)) {
-                    uploadedFiles.put(baseName, extension);
-                    uploadedFilesPaths.put(baseName, fileName);
-                    logger.debug("Saving uploaded:{}", fileName);
-                }
-                else {
+                if (!BASEMAP_RASTER_EXTENSIONS.contains(extension)) {
                     logger.warn("Extension {} is not supported.  Skipping upload of {} file", extension, baseName);
+                    continue;
                 }
-            }
-
-            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-                String fileName = pairs.getKey();
 
                 logger.debug("Preparing Basemap Ingest for :{}", fileName);
 
-                String basemapName = ((inputName == null) || (inputName.isEmpty())) ? fileName : inputName;
-                String inputFileName = uploadedFilesPaths.get(fileName);
+                String basemapName = (StringUtils.isBlank(inputName)) ? fileName : inputName;
 
                 File tileOutputDir = new File(BASEMAPS_TILES_FOLDER, basemapName);
                 FileUtils.forceMkdir(tileOutputDir);
 
                 Command[] workflow = {
                     () -> {
-                        String extension = ".processing";
-                        File file = new File(BASEMAPS_FOLDER, basemapName + extension);
+                        String ext = ".processing";
+                        File file = new File(BASEMAPS_FOLDER, basemapName + ext);
 
                         try {
                             JSONObject json = new JSONObject();
@@ -176,15 +158,13 @@ public class BasemapResource {
                             throw new RuntimeException("Error creating " + file, ioe);
                         }
 
-                        File inputFile = new File(workingDir, inputFileName);
-
-                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(inputFile,
+                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(uploadedFile,
                                 projection, tileOutputDir, verboseOutput, this.getClass());
 
                         CommandResult commandResult = externalCommandManager.exec(jobId, ingestBasemapCommand);
 
-                        extension = (commandResult.failed() ? ".failed" : ".disabled");
-                        File newFileName = new File(BASEMAPS_FOLDER, basemapName + extension);
+                        ext = (commandResult.failed() ? ".failed" : ".disabled");
+                        File newFileName = new File(BASEMAPS_FOLDER, basemapName + ext);
 
                         try {
                             FileUtils.moveFile(file, newFileName);

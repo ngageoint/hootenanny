@@ -48,10 +48,6 @@ class ConflateCommand extends ExternalCommand {
             aoi = bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
         }
 
-        //HOOT_OPTS+= -D osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor -D conflate.add.score.tags=yes
-        //HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-        //HOOT_OPTS+= -D api.db.email=test@test.com
-
         List<String> options = new LinkedList<>();
         options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("conflate.add.score.tags=yes");
@@ -59,52 +55,12 @@ class ConflateCommand extends ExternalCommand {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
 
-        //HOOT_OPTS+= $(ADV_OPTIONS)
-        if (params.getAdvancedOptions() != null) {
-            String[] advOptions = params.getAdvancedOptions().trim().split("-D ");
-            Arrays.stream(advOptions).forEach((option) -> {
-                if (!option.isEmpty()) {
-                    options.add(option.trim());
-                };
-            });
-        }
-
-        /*
-            ifeq "$(INPUT1_TYPE)" "DB"
-                OP_INPUT1=$(DB_URL)/$(INPUT1)
-            endif
-
-            ifeq "$(INPUT2_TYPE)" "DB"
-                OP_INPUT2=$(DB_URL)/$(INPUT2)
-            endif
-         */
-        String input1;
         String input1Type = params.getInputType1();
-        if (input1Type.equalsIgnoreCase("DB")) {
-            input1 = HOOTAPI_DB_URL + "/" + params.getInput1();
-        }
-        else {
-            input1 = params.getInput1();
-        }
+        String input1 = input1Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput1()) : params.getInput1();
 
-        String input2;
         String input2Type = params.getInputType2();
-        if (input2Type.equalsIgnoreCase("DB")) {
-            input2 = HOOTAPI_DB_URL + "/" + params.getInput2();
-        }
-        else {
-            input2 = params.getInput2();
-        }
+        String input2 = input2Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput2()) : params.getInput2();
 
-        /*
-           # This is also depending on some extra input validation present in ConflationResource.
-          ifeq "$(REFERENCE_LAYER)" "1"
-              ifeq "$(INPUT1_TYPE)" "OSM_API_DB"
-                  OP_INPUT1=$(OSM_API_DB_URL)
-                  HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
-              endif
-          endif
-         */
         String referenceLayer = params.getReferenceLayer();
         if (referenceLayer.equalsIgnoreCase("1")) {
             if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
@@ -116,19 +72,6 @@ class ConflateCommand extends ExternalCommand {
                 options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
             }
         }
-
-        /*
-          ifeq "$(REFERENCE_LAYER)" "2"
-              HOOT_OPTS+= -D tag.merger.default=hoot::OverwriteTag1Merger
-          endif
-
-          ifeq "$(REFERENCE_LAYER)" "2"
-              ifeq "$(INPUT2_TYPE)" "OSM_API_DB"
-                  OP_INPUT2=$(OSM_API_DB_URL)
-                  HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
-              endif
-          endif
-         */
         else if (referenceLayer.equalsIgnoreCase("2")) {
             options.add("tag.merger.default=hoot::OverwriteTag1Merger");
             if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
@@ -141,25 +84,27 @@ class ConflateCommand extends ExternalCommand {
             }
         }
 
-        /*
-          ifeq "$(COLLECT_STATS)" "true"
-              OP_STAT= --stats > $(HOOT_HOME)/userfiles/reports/$(OUTPUT_NAME)-stats.csv
-              # don't include non-error log messages in stdout because we are redirecting to file
-              HOOT_OPTS+= --error
-          endif
-         */
-        String outputName = params.getOutputName();
-        String output = HOOTAPI_DB_URL + "/" + outputName;
+        String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
 
-        //Hootenanny map statistics such as node and way count
+        if (params.getAdvancedOptions() != null) {
+            String[] advOptions = params.getAdvancedOptions().trim().split("-D ");
+            Arrays.stream(advOptions).forEach((option) -> {
+                if (!option.isEmpty()) {
+                    options.add(option.trim());
+                };
+            });
+        }
+
+        List<String> hootOptions = toHootOptions(options);
+
         String stats = "";
         if (params.getCollectStats()) {
             // Don't include non-error log messages in stdout because we are redirecting to file
             debugLevel = "error";
+
+            //Hootenanny map statistics such as node and way count
             stats = "--stats";
         }
-
-        List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);

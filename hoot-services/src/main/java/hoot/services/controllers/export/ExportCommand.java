@@ -75,17 +75,11 @@ class ExportCommand extends ExternalCommand {
         options.add("api.db.email=test@test.com");
 
         //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
-        //ifeq "$(textstatus)" "true"
-        //    HOOT_OPTS+= -D writer.text.status=true
-        //endif
         if (params.getTextStatus()) {
             options.add("writer.text.status=true");
         }
 
         //# Add the option to append
-        //ifeq "$(append)" "true"
-        //    HOOT_OPTS+= -D ogr.append.data=true
-        //endif
         if (params.getAppend()) {
             options.add("ogr.append.data=true");
         }

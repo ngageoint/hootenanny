@@ -63,11 +63,6 @@ class FileETLCommand extends ExternalCommand {
 
         String command = null;
         if ("OGR".equalsIgnoreCase(inputType) || "FGDB".equalsIgnoreCase(inputType) || "ZIP".equalsIgnoreCase(inputType)) {
-            //# This replaces semicolon with vsizip and path
-            //ifeq "$(INPUT_TYPE)" "ZIP"
-            //   #OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;,/" "/vsizip/$(OP_INPUT_PATH)/,$(INPUT))/"
-            //   OP_INPUT="/vsizip/$(OP_INPUT_PATH)/$(subst ;," "/vsizip/$(OP_INPUT_PATH),$(INPUT))"
-            //endif
             if ("ZIP".equalsIgnoreCase(inputType) && !zips.isEmpty()) {
                 //Reading a GDAL dataset in a .gz file or a .zip archive
                 inputs = zips.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
@@ -83,14 +78,6 @@ class FileETLCommand extends ExternalCommand {
             }
         }
         else if ("OSM".equalsIgnoreCase(inputType)) {
-
-            //ifeq "$(INPUT_TYPE)" "OSM"
-            //    ifneq "$(NONE_TRANSLATION)" "true"
-            //        HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
-            //       HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
-            //    endif
-            //endif
-
             if (!isNoneTranslation) {
                 options.add("convert.ops=hoot::TranslationOp");
                 options.add("translation.script=" + translationPath);
@@ -99,11 +86,6 @@ class FileETLCommand extends ExternalCommand {
             command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
         }
         else if ("GEONAMES".equalsIgnoreCase(inputType)) {
-            //ifeq "$(INPUT_TYPE)" "GEONAMES"
-            //    HOOT_OPTS+= -D convert.ops=hoot::TranslationOp
-            //    HOOT_OPTS+= -D translation.script="$(OP_TRANSLATION)"
-            //endif
-
             options.add("convert.ops=hoot::TranslationOp");
             options.add("translation.script=" + translationPath);
 
