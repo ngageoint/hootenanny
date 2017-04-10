@@ -234,7 +234,9 @@ public class ExportResource {
                 );
 
                 Command zipCommand = getZIPCommand(jobId, workDir, outputName, outputType);
-                workflow.add(zipCommand);
+                if (zipCommand != null) {
+                    workflow.add(zipCommand);
+                }
             }
 
             jobProcessor.process(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
@@ -384,28 +386,25 @@ public class ExportResource {
     }
 
     private Command getZIPCommand(String jobId, File workDir, String outputName, String outputType) {
+        // ZIP_OUTPUT = $(outputname).zip
+        File targetZIP = new File(workDir, outputName + ".zip");
+
         //ifeq "$(outputtype)" "shp"
         //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
         //endif
-        if (outputType.equalsIgnoreCase("shp")) {
+        if (outputType.equalsIgnoreCase("SHP")) {
             return () -> {
                 // pwd = present working directory during execution of ZIPDirectoryContentsCommand
                 File pwd = new File(workDir, outputName);
-
-                // ZIP_OUTPUT = $(outputname).zip
-                File targetZIP = new File(workDir, outputName + ".zip");
 
                 ExternalCommand zipDirectoryCommand = new ZIPDirectoryContentsCommand(targetZIP, pwd, this.getClass());
                 return externalCommandManager.exec(jobId, zipDirectoryCommand);
             };
         }
-        else {
+        else if (outputType.equalsIgnoreCase("OSM")) {
             return () -> {
                 // pwd = present working directory during execution of ZIPFileCommand
                 File pwd = workDir;
-
-                // ZIP_OUTPUT = $(outputname).zip
-                File targetZIP = new File(workDir, outputName + ".zip");
 
                 // OP_OUTPUT_FILE=$(outputname).$(outputtype)
                 String fileToCompress = outputName + "." + outputType;
@@ -414,6 +413,19 @@ public class ExportResource {
                 ExternalCommand zipFileCommand = new ZIPFileCommand(targetZIP, pwd, fileToCompress, this.getClass());
                 return externalCommandManager.exec(jobId, zipFileCommand);
             };
+        }
+        else if (outputType.equalsIgnoreCase("GDB")) {
+            return () -> {
+                // pwd = present working directory during execution of ZIPDirectoryContentsCommand
+                File pwd = workDir;
+
+                // cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
+                ExternalCommand zipDirectoryCommand = new ZIPDirectoryContentsCommand(targetZIP, pwd, this.getClass());
+                return externalCommandManager.exec(jobId, zipDirectoryCommand);
+            };
+        }
+        else {
+            return null;
         }
     }
 
