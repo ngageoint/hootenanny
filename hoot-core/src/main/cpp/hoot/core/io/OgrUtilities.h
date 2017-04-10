@@ -52,14 +52,17 @@ public:
    *        (i.e. .shp for ESRI Shapefile)
    * @param driverName Text name of the driver
    * @param is_ext Value is true if the indcator is a file extension, false for prefix
+   * @param is_rw Value is true if the driver is able to read and write, false for readonly
    * @param driverType GDAL_OF_VECTOR or GDAL_OF_ALL open flags
    */
-  OgrDriverInfo(const char* indicator = NULL, const char* driverName = NULL, bool is_ext = false, unsigned int driverType = GDAL_OF_ALL)
-   : _indicator(indicator), _driverName(driverName), _is_ext(is_ext), _driverType(driverType)
+  OgrDriverInfo(const char* indicator = NULL, const char* driverName = NULL, bool is_ext = false,
+                bool is_rw = true, unsigned int driverType = GDAL_OF_ALL)
+   : _indicator(indicator), _driverName(driverName), _is_ext(is_ext), _is_rw(is_rw), _driverType(driverType)
   {}
   const char* _indicator;
   const char* _driverName;
   bool _is_ext;
+  bool _is_rw;
   unsigned int _driverType;
 };
 
@@ -68,7 +71,7 @@ class OgrUtilities
 public:
   OgrUtilities();
 
-  shared_ptr<GDALDataset> createDataSource(const QString& url);
+  shared_ptr<GDALDataset> createDataSource(const QString& url, bool read);
 
   static OgrUtilities& getInstance();
 
@@ -78,9 +81,9 @@ public:
    */
   bool isReasonableUrl(const QString& url);
 
-  shared_ptr<GDALDataset> openDataSource(const QString& url);
+  shared_ptr<GDALDataset> openDataSource(const QString& url, bool read);
 
-  OgrDriverInfo getDriverInfo(const QString& url);
+  OgrDriverInfo getDriverInfo(const QString& url, bool read);
 
 private:
   /**
