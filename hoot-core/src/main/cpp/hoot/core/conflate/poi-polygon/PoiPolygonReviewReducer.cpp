@@ -48,7 +48,7 @@
 namespace hoot
 {
 
-PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtrR map,
+PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
                                                  const set<ElementId>& polyNeighborIds,
                                                  const set<ElementId>& poiNeighborIds,
                                                  double distance, double nameScoreThreshold,

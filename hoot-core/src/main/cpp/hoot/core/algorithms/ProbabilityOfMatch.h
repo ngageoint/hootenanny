@@ -53,16 +53,16 @@ public:
   double attributeScore(const ConstOsmMapPtr &map, const ConstWayPtr& w1,
     const ConstWayPtr &w2);
 
-  double distanceScore(const ConstOsmMapPtrR map, const ConstWayPtr& w1,
+  double distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);
 
   double distanceScore(const hoot::ConstOsmMapPtr &map, const ConstWayPtr &w1,
     const boost::shared_ptr<const LineString> &ls2, Meters circularError);
 
-  double lengthScore(const ConstOsmMapPtrR map, const ConstWayPtr& w1,
+  double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);
 
-  double parallelScore(const ConstOsmMapPtrR map, const ConstWayPtr& w1,
+  double parallelScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);
 
   double expertProbability(const ConstOsmMapPtr &map, const ConstWayPtr& w1,

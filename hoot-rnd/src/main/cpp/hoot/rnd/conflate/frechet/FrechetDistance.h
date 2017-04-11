@@ -63,7 +63,7 @@ public:
    * @param way1 - pointer to the first way to be compared
    * @param way2 - pointer to the second way to be compared
    */
-  FrechetDistance(const ConstOsmMapPtrR map, const ConstWayPtr& way1, const ConstWayPtr& way2, Radians maxAngle = M_PI);
+  FrechetDistance(const ConstOsmMapPtr& map, const ConstWayPtr& way1, const ConstWayPtr& way2, Radians maxAngle = M_PI);
 
   /**
    * @brief distance - calculate the Frechet distance between the two ways, _w1 and _w2

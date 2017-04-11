@@ -50,7 +50,7 @@ public:
 
   virtual vector<Description> getAllCreators() const;
 
-  virtual bool isConflicting(const ConstOsmMapPtrR map, const Match* m1, const Match* m2) const;
+  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 
 };
 

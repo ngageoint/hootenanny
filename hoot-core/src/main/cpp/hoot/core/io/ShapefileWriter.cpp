@@ -466,7 +466,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
   GDALClose(poDS);
 }
 
-void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtrR map,
+void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
   const RelationPtr &relation, OGRLayer *poLayer, const QStringList& columns,
   const QStringList &shpColumns)
 {
@@ -488,7 +488,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtrR map,
   }
 
   // convert the geometry.
-  const ConstRelationPtrR r = relation;
+  const ConstRelationPtr& r = relation;
   std::string wkt = ElementConverter(map).convertToGeometry(r)->toString();
   char* t = (char*)wkt.data();
   OGRGeometry* geom;

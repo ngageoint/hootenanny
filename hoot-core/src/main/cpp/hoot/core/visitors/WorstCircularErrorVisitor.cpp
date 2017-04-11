@@ -47,7 +47,7 @@ Meters WorstCircularErrorVisitor::getWorstCircularError(const OsmMapPtr& map)
   return v.getWorstCircularError();
 }
 
-Meters WorstCircularErrorVisitor::getWorstCircularError(const ConstOsmMapPtrR map)
+Meters WorstCircularErrorVisitor::getWorstCircularError(const ConstOsmMapPtr& map)
 {
   WorstCircularErrorVisitor v;
   map->visitNodesRo(v);

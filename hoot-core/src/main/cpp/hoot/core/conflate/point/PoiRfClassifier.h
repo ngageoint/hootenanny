@@ -49,7 +49,7 @@ public:
 
   PoiRfClassifier();
 
-  virtual MatchClassification classify(const ConstOsmMapPtrR map,
+  virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2);
 
   virtual map<QString, double> getFeatures(const ConstOsmMapPtr &m,

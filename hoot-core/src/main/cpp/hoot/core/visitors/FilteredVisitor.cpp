@@ -107,7 +107,7 @@ void FilteredVisitor::visit(const ConstElementPtr& e)
 }
 
 double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
-                                const ConstOsmMapPtrR map)
+                                const ConstOsmMapPtr& map)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
   SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
@@ -121,7 +121,7 @@ double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* vis
 }
 
 double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
-                                const ConstOsmMapPtrR map, const ElementPtr& element)
+                                const ConstOsmMapPtr& map, const ElementPtr& element)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
   SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());

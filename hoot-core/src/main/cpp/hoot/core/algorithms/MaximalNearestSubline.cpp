@@ -48,7 +48,7 @@ namespace hoot
 
 Meters MaximalNearestSubline::_headingDelta = -1;
 
-MaximalNearestSubline::MaximalNearestSubline(const ConstOsmMapPtrR map,
+MaximalNearestSubline::MaximalNearestSubline(const ConstOsmMapPtr& map,
                                              ConstWayPtr a,
                                              ConstWayPtr b, Meters minSplitSize,
                                              Meters maxRelevantDistance,

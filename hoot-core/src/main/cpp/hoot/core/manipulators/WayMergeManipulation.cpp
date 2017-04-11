@@ -246,7 +246,7 @@ bool WayMergeManipulation::isValid(ConstOsmMapPtr map) const
   return result;
 }
 
-const set<ElementId>& WayMergeManipulation::getImpactedElementIds(const ConstOsmMapPtrR map) const
+const set<ElementId>& WayMergeManipulation::getImpactedElementIds(const ConstOsmMapPtr& map) const
 {
   _impactedElements.clear();
   const set<long>& wids = getImpactedWayIds(map);
@@ -259,7 +259,7 @@ const set<ElementId>& WayMergeManipulation::getImpactedElementIds(const ConstOsm
   return _impactedElements;
 }
 
-const set<long>& WayMergeManipulation::getImpactedWayIds(const ConstOsmMapPtrR map) const
+const set<long>& WayMergeManipulation::getImpactedWayIds(const ConstOsmMapPtr& map) const
 {
   _impactedWays.clear();
   _impactedWays.insert(_left);

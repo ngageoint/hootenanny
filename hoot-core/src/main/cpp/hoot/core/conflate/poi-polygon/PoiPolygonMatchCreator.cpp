@@ -69,7 +69,7 @@ class PoiPolygonMatchVisitor : public ElementVisitor
 
 public:
 
-  PoiPolygonMatchVisitor(const ConstOsmMapPtrR map, vector<const Match*>& result,
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
                          ConstMatchThresholdPtr threshold, boost::shared_ptr<PoiPolygonRfClassifier> rf) :
     _map(map),
     _result(result),
@@ -289,7 +289,7 @@ public:
 
 private:
 
-  const ConstOsmMapPtrR _map;
+  const ConstOsmMapPtr& _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;
@@ -314,7 +314,7 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 {
 }
 
-Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtrR map, ElementId eid1,
+Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                            ElementId eid2)
 {
   Match* result = 0;
@@ -335,7 +335,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtrR map, ElementId 
   return result;
 }
 
-void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
+void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
   LOG_INFO("Creating matches with: " << className() << "...");
@@ -363,7 +363,7 @@ vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const
 }
 
 bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
-                                              const ConstOsmMapPtrR /*map*/)
+                                              const ConstOsmMapPtr& /*map*/)
 {
   return PoiPolygonMatchVisitor::isMatchCandidate(element);
 }

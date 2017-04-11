@@ -74,13 +74,13 @@ private:
   ElementId _exempt;
 };
 
-CopySubsetOp::CopySubsetOp(const ConstOsmMapPtrR from, const set<ElementId>& eids) :
+CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
   _eids(eids),
   _from(from)
 {
 }
 
-CopySubsetOp::CopySubsetOp(const ConstOsmMapPtrR from, const vector<long>& wayIds) :
+CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds) :
   _from(from)
 {
   // Need to get ElementIds from our vector of longs
@@ -93,7 +93,7 @@ CopySubsetOp::CopySubsetOp(const ConstOsmMapPtrR from, const vector<long>& wayId
   }
 }
 
-CopySubsetOp::CopySubsetOp(const ConstOsmMapPtrR from, ElementId eid1, ElementId eid2) :
+CopySubsetOp::CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
   _from(from)
 {
   _eids.insert(eid1);

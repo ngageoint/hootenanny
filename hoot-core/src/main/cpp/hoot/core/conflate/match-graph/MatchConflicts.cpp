@@ -39,7 +39,7 @@ namespace hoot
 {
 using namespace std;
 
-MatchConflicts::MatchConflicts(const ConstOsmMapPtrR map) :
+MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
   _map(map)
 {
 }

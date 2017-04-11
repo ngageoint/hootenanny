@@ -62,7 +62,7 @@ public:
 
   virtual double calculateScore(ConstOsmMapPtr map) const;
 
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtrR map) const;
+  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
   virtual double getProbabilityEstimate() const { return _p; }
 

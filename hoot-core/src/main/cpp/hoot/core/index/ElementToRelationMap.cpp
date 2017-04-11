@@ -161,7 +161,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       _good = true;
     }
 
-    bool containsRecursive(ConstRelationPtrR r, ElementId eid)
+    bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
     {
       ContainsElementVisitor v(_map, eid);
       r->visitRo(_map, v);

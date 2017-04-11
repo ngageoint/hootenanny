@@ -48,7 +48,7 @@ class PoiPolygonAdvancedMatcher
 
 public:
 
-  PoiPolygonAdvancedMatcher(const ConstOsmMapPtrR map, const set<ElementId>& polyNeighborIds,
+  PoiPolygonAdvancedMatcher(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
                             const set<ElementId>& poiNeighborIds, double distance);
 
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);

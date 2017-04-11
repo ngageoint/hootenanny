@@ -79,7 +79,7 @@ public:
   /**
    * Find the subline in a based on b
    */
-  MaximalNearestSubline(const ConstOsmMapPtrR map, ConstWayPtr a, ConstWayPtr b,
+  MaximalNearestSubline(const ConstOsmMapPtr& map, ConstWayPtr a, ConstWayPtr b,
                         Meters minSplitSize, Meters maxRelevantDistance,
                         Radians maxRelevantAngle = -1,
                         Meters headingDelta = ConfigOptions().getWayMatcherHeadingDelta());

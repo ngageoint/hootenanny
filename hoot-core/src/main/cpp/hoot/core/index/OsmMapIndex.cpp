@@ -84,7 +84,7 @@ void OsmMapIndex::addWay(ConstWayPtr w)
   _pendingWayRemoval.erase(w->getId());
 }
 
-void OsmMapIndex::addRelation(const ConstRelationPtrR r)
+void OsmMapIndex::addRelation(const ConstRelationPtr& r)
 {
   if (_elementToRelationMap != 0)
   {
@@ -496,7 +496,7 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
     }
     // the map should contain all the relations returned by the index.
     assert(_map.containsRelation(*it));
-    const ConstRelationPtrR r = _map.getRelation(*it);
+    const ConstRelationPtr& r = _map.getRelation(*it);
 
     if (r->contains(eid))
     {
@@ -627,7 +627,7 @@ void OsmMapIndex::removeNode(ConstNodePtr n)
   }
 }
 
-void OsmMapIndex::removeRelation(const ConstRelationPtrR r)
+void OsmMapIndex::removeRelation(const ConstRelationPtr& r)
 {
   if (_elementToRelationMap != 0)
   {

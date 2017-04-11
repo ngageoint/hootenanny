@@ -52,16 +52,16 @@ public:
   // Get matching IDs
   vector<long> getIds() { return _nodeIds; }
 
-  static vector<long> findNodes(const ConstOsmMapPtrR map,
+  static vector<long> findNodes(const ConstOsmMapPtr& map,
                                 ElementCriterion* pCrit);
 
-  static vector<long> findNodes(const ConstOsmMapPtrR map,
+  static vector<long> findNodes(const ConstOsmMapPtr& map,
                                 ElementCriterion* pCrit,
                                 const Coordinate& refCoord,
                                 Meters maxDistance);
 
   // Convenience method for finding nodes that contain the given tag
-  static vector<long> findNodesByTag(const ConstOsmMapPtrR map,
+  static vector<long> findNodesByTag(const ConstOsmMapPtr& map,
                                      const QString& key,
                                      const QString& value);
 

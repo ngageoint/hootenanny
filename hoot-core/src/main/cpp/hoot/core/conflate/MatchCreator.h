@@ -110,12 +110,12 @@ public:
    * Given two elements, create a match if it is appropriate. If it is not appropriate then return
    * null.
    */
-  virtual Match* createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2) = 0;
+  virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) = 0;
 
   /**
    * Search the provided map for building matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold) = 0;
 
   /**
@@ -131,7 +131,7 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR map) = 0;
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) = 0;
 
   virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() = 0;
 

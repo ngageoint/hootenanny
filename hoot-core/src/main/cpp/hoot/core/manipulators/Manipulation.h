@@ -94,7 +94,7 @@ public:
    * Returns all the elements that are significantly impacted by this manipulation. If the way is
    * simply connected to the endpoint then it is not considered significant in most cases.
    */
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtrR map) const = 0;
+  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const = 0;
 
   /**
    * Returns the estimated probability that this manipulation is correct.

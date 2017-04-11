@@ -53,14 +53,14 @@ public:
   static const unsigned int MATCH_EVIDENCE_THRESHOLD;
   static const unsigned int REVIEW_EVIDENCE_THRESHOLD;
 
-  PoiPolygonMatch(const ConstOsmMapPtrR map, const ElementId& eid1, const ElementId& eid2,
+  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, boost::shared_ptr<const PoiPolygonRfClassifier> rf);
 
-  PoiPolygonMatch(const ConstOsmMapPtrR map, const ElementId& eid1, const ElementId& eid2,
+  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, boost::shared_ptr<const PoiPolygonRfClassifier> rf,
     const set<ElementId>& polyNeighborIds, const set<ElementId>& poiNeighborIds);
 
-  PoiPolygonMatch(const ConstOsmMapPtrR map, const ElementId& eid1, const ElementId& eid2,
+  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, boost::shared_ptr<const PoiPolygonRfClassifier> rf,
     double matchDistance, double reviewDistance, double nameScoreThreshold,
     double typeScoreThreshold, double addressScoreThreshold);
@@ -75,14 +75,14 @@ public:
 
   virtual double getProbability() const { return _class.getMatchP(); }
 
-  virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtrR /*map*/) const
+  virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const
   { return false; }
 
   virtual bool isWholeGroup() const { return true; }
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtrR m) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   /**
    * Determines criteria for a feature to be considered a polygon for matching by

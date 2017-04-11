@@ -326,8 +326,6 @@ protected:
 
 typedef boost::shared_ptr<OsmMap> OsmMapPtr;
 typedef boost::shared_ptr<const OsmMap> ConstOsmMapPtr;
-// ConstOsmMapPtrR - The R is for reference.
-typedef const ConstOsmMapPtr& ConstOsmMapPtrR;
 
 template<class T>
 void addElements(T it, T end)

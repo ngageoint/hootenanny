@@ -76,7 +76,7 @@ HighwayRfClassifier::HighwayRfClassifier()
   // we do a lazy initialization
 }
 
-MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtrR map,
+MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match)
 {
   _init();
@@ -223,7 +223,7 @@ void HighwayRfClassifier::_createTestExtractors() const
 
 }
 
-map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtrR m,
+map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
   ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const
 {
   _init();

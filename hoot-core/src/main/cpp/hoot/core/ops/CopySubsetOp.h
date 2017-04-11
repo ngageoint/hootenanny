@@ -41,11 +41,11 @@ namespace hoot
 class CopySubsetOp : public OsmMapOperation
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtrR from, const set<ElementId>& eids);
+  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
 
-  CopySubsetOp(const ConstOsmMapPtrR from, const vector<long>& ids);
+  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
 
-  CopySubsetOp(const ConstOsmMapPtrR from, ElementId eid1, ElementId eid2);
+  CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
 
   /**
    * A new map is created and the eids specified in the constructor and their depedencies will be
@@ -55,7 +55,7 @@ public:
 
 private:
   set<ElementId> _eids;
-  const ConstOsmMapPtrR _from;
+  const ConstOsmMapPtr& _from;
 };
 
 }

@@ -40,7 +40,7 @@ public:
 
   TagFilteredDifferencer();
 
-  virtual double diff(const ConstOsmMapPtrR map, const ConstElementPtr& e1,
+  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const;
 
 protected:

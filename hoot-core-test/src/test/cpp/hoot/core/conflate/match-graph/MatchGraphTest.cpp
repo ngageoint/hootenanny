@@ -98,7 +98,7 @@ public:
 
   virtual double getProbability() const { return _p; }
 
-  virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtrR /*map*/) const
+  virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const
   {
     return false;
   }

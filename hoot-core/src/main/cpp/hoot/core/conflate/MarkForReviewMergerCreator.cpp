@@ -99,7 +99,7 @@ vector<MergerCreator::Description> MarkForReviewMergerCreator::getAllCreators() 
   return vector<Description>();
 }
 
-bool MarkForReviewMergerCreator::isConflicting(const ConstOsmMapPtrR, const Match*, const Match*)
+bool MarkForReviewMergerCreator::isConflicting(const ConstOsmMapPtr&, const Match*, const Match*)
   const
 {
   return false;

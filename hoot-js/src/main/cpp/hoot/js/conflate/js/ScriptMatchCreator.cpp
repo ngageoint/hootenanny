@@ -77,7 +77,7 @@ class ScriptMatchVisitor : public ElementVisitor
 
 public:
 
-  ScriptMatchVisitor(const ConstOsmMapPtrR map, vector<const Match*>& result,
+  ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
     ConstMatchThresholdPtr mt,boost::shared_ptr<PluginContext> script) :
     _map(map),
     _result(result),
@@ -425,7 +425,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   LOG_DEBUG("Set arguments for: " << className() << " - rules: " << scriptFileInfo.fileName());
 }
 
-Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2)
+Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
   {
@@ -439,7 +439,7 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtrR map, ElementId eid1
   }
 }
 
-void ScriptMatchCreator::createMatches(const ConstOsmMapPtrR map, vector<const Match *> &matches,
+void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
                                        ConstMatchThresholdPtr threshold)
 {
   if (!_script)
@@ -530,7 +530,7 @@ MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path
   return result;
 }
 
-bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR map)
+bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
   if (!_script)
   {

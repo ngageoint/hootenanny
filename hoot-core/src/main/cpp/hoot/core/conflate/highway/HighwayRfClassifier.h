@@ -47,10 +47,10 @@ public:
 
   HighwayRfClassifier();
 
-  virtual MatchClassification classify(const ConstOsmMapPtrR map,
+  virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtrR m,
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 
 private:

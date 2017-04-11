@@ -53,7 +53,7 @@ public:
 
   void addNode(ConstNodePtr n);
 
-  void addRelation(const ConstRelationPtrR r);
+  void addRelation(const ConstRelationPtr& r);
 
   void addWay(ConstWayPtr w);
 
@@ -129,7 +129,7 @@ public:
 
   void removeNode(ConstNodePtr n);
 
-  void removeRelation(const ConstRelationPtrR r);
+  void removeRelation(const ConstRelationPtr& r);
 
   void removeWay(ConstWayPtr w);
 

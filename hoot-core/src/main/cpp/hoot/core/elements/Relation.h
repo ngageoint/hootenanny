@@ -191,7 +191,6 @@ void Relation::replaceElements(RelationData::Entry old, IT start, IT end)
 
 typedef boost::shared_ptr<Relation> RelationPtr;
 typedef boost::shared_ptr<const Relation> ConstRelationPtr;
-typedef const boost::shared_ptr<const Relation>& ConstRelationPtrR;
 
 }
 

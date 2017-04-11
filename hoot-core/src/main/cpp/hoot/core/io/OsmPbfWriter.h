@@ -139,7 +139,7 @@ public:
    * Write out a map in chunks. This may be called multiple times and must be precceded with a
    * call to intializePartial and finalized with a call to finalizePartial.
    */
-  void writePartial(const ConstOsmMapPtrR map);
+  void writePartial(const ConstOsmMapPtr& map);
   /**
    * These silly non-const overloads are here to placate the old compiler in RHEL 5.8.
    */
@@ -151,13 +151,13 @@ public:
   void writePartial(const ConstWayPtr& w);
   void writePartial(const WayPtr& w) { writePartial((const ConstWayPtr)w); }
 
-  void writePartial(const ConstRelationPtrR r);
+  void writePartial(const ConstRelationPtr& r);
 
   /**
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const ConstOsmMapPtrR map, ostream* strm);
+  void writePb(const ConstOsmMapPtr& map, ostream* strm);
   void writePb(const OsmMapPtr& map, ostream* strm) { writePb((const ConstOsmMapPtr)map, strm); }
 
   /**
@@ -178,7 +178,7 @@ public:
    * Write a single way out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const ConstRelationPtrR r, ostream* strm);
+  void writePb(const ConstRelationPtr& r, ostream* strm);
   void writePb(const RelationPtr& r, ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
 
 private:

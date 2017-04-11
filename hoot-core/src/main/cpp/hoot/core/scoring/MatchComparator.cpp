@@ -202,8 +202,8 @@ void MatchComparator::_clearCache()
   _elementWrongCounts.clear();
 }
 
-bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtrR in,
-  const ConstOsmMapPtrR /*conflated*/)
+bool MatchComparator::_debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,
+  const ConstOsmMapPtr& /*conflated*/)
 {
   TagContainsFilter tcf(Filter::KeepMatches, "uuid", uuid1);
   tcf.addPair("uuid", uuid2);
@@ -264,7 +264,7 @@ double MatchComparator::getPertyScore() const
   return pertyScore;
 }
 
-double MatchComparator::evaluateMatches(const ConstOsmMapPtrR in, const OsmMapPtr& conflated)
+double MatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPtr& conflated)
 {
   _clearCache();
   // determine the pairwise UUID expected matches
@@ -409,7 +409,7 @@ void MatchComparator::_createMatches(const set<QString>& uuids1, const set<QStri
   }
 }
 
-void MatchComparator::_findActualMatches(const ConstOsmMapPtrR in, const ConstOsmMapPtrR conflated)
+void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOsmMapPtr& conflated)
 {
   UuidToEidVisitor uuidToEidVisitor;
   conflated->visitRo(uuidToEidVisitor);
@@ -538,7 +538,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtrR in, const ConstOs
   }
 }
 
-void MatchComparator::_findExpectedMatches(const ConstOsmMapPtrR in)
+void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
 {
   // extract all of the REF2 values in in2
   GetRefUuidVisitor ref1(MetadataTags::Ref1());
@@ -612,7 +612,7 @@ int MatchComparator::getTotalCount() const
   return result;
 }
 
-bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtrR conflated)
+bool MatchComparator::_isNeedsReview(QString uuid1, QString uuid2, const ConstOsmMapPtr& conflated)
 {
   QList<ElementId> eid1s = _actualUuidToEid.values(uuid1);
   QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);
@@ -702,14 +702,14 @@ void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
   }
 }
 
-void MatchComparator::_setElementWrongCounts(const ConstOsmMapPtrR map)
+void MatchComparator::_setElementWrongCounts(const ConstOsmMapPtr& map)
 {
   _setElementWrongCount(map, ElementType::Node);
   _setElementWrongCount(map, ElementType::Way);
   _setElementWrongCount(map, ElementType::Relation);
 }
 
-void MatchComparator::_setElementWrongCount(const ConstOsmMapPtrR map,
+void MatchComparator::_setElementWrongCount(const ConstOsmMapPtr& map,
                                             const ElementType::Type& elementType)
 {
   _elementWrongCounts[elementType] =

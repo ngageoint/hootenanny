@@ -249,7 +249,7 @@ bool DividedHighwayManipulation::isValid(ConstOsmMapPtr map) const
   return result;
 }
 
-const set<ElementId>& DividedHighwayManipulation::getImpactedElementIds(const ConstOsmMapPtrR) const
+const set<ElementId>& DividedHighwayManipulation::getImpactedElementIds(const ConstOsmMapPtr&) const
 {
   return _impactedElements;
 }

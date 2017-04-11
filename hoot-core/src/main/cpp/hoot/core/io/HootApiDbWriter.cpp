@@ -398,7 +398,7 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
   _waysWritten++;
 }
 
-void HootApiDbWriter::writePartial(const ConstRelationPtrR r)
+void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
   long relationId;
 

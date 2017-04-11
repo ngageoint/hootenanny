@@ -54,7 +54,7 @@ public:
    * be either multilinestrings or simple ways. The output collection of sublines matches must not
    * overlap.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtrR map, const ConstElementPtr& e1,
+  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2, Meters maxRelevantDistance = -1) const = 0;
 
   virtual void setConfiguration(const Settings& s) = 0;

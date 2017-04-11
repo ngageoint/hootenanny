@@ -286,7 +286,7 @@ void OsmPbfWriter::writeHeader(ostream* strm, bool includeBounds, bool sorted)
   _writeOsmHeader(includeBounds, sorted);
 }
 
-void OsmPbfWriter::writePb(const ConstOsmMapPtrR m, ostream* strm)
+void OsmPbfWriter::writePb(const ConstOsmMapPtr& m, ostream* strm)
 {
   _initBlob();
 
@@ -321,7 +321,7 @@ void OsmPbfWriter::writePb(const ConstWayPtr& w, ostream* strm)
   _d->primitiveBlock.SerializePartialToOstream(strm);
 }
 
-void OsmPbfWriter::writePb(const ConstRelationPtrR r, ostream* strm)
+void OsmPbfWriter::writePb(const ConstRelationPtr& r, ostream* strm)
 {
   _initBlob();
 
@@ -411,14 +411,14 @@ void OsmPbfWriter::_writeMap()
 
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    const ConstRelationPtrR r = it->second;
+    const ConstRelationPtr& r = it->second;
     rids.push_back(r->getId());
   }
   sort(rids.begin(), rids.end());
 
   for (size_t i = 0; i < rids.size(); i++)
   {
-    const ConstRelationPtrR r = _map->getRelation(rids[i]);
+    const ConstRelationPtr& r = _map->getRelation(rids[i]);
     _writeRelation(r);
 
     if (_enablePbFlushing && _tick++ % 10000 == 0 && _d->primitiveBlock.ByteSize() > _minBlobTarget)
@@ -579,7 +579,7 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   _writeBlob(_buffer.data(), size, PBF_OSM_HEADER);
 }
 
-void OsmPbfWriter::writePartial(const ConstOsmMapPtrR map)
+void OsmPbfWriter::writePartial(const ConstOsmMapPtr& map)
 {
   _map = map;
   _writeMap();
@@ -606,7 +606,7 @@ void OsmPbfWriter::writePartial(const ConstWayPtr& w)
   }
 }
 
-void OsmPbfWriter::writePartial(const ConstRelationPtrR r)
+void OsmPbfWriter::writePartial(const ConstRelationPtr& r)
 {
   _writeRelation(r);
 

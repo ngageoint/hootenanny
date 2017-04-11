@@ -77,7 +77,7 @@ void ConflateMapper::_addNode(const NodePtr& n)
   _writers[key]->writePartial(n);
 }
 
-void ConflateMapper::_addWay(ConstOsmMapPtrR map, const WayPtr &w)
+void ConflateMapper::_addWay(const ConstOsmMapPtr& map, const WayPtr &w)
 {
   long key = -1;
 

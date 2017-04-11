@@ -35,7 +35,7 @@ TagFilteredDifferencer::TagFilteredDifferencer()
 {
 }
 
-double TagFilteredDifferencer::diff(const ConstOsmMapPtrR, const ConstElementPtr& e1,
+double TagFilteredDifferencer::diff(const ConstOsmMapPtr&, const ConstElementPtr& e1,
   const ConstElementPtr& e2) const
 {
   OsmSchema& schema = OsmSchema::getInstance();

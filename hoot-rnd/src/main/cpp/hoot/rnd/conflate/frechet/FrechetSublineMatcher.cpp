@@ -44,7 +44,7 @@ FrechetSublineMatcher::FrechetSublineMatcher()
 {
 }
 
-WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtrR map, const ConstWayPtr& way1,
+WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
   const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {
   score = 0;

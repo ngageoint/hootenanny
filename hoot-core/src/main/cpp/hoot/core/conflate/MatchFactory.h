@@ -60,13 +60,13 @@ public:
    * a match by any MatchCreator a null is returned. Not all MatchCreators are guaranteed to support
    * this mechanism (e.g. a road that matches two one way streets).
    */
-  Match* createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2) const;
+  Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 
   /**
    * Goes through all registered MatchCreators and calls createMatches in the order the creators
    * were registered.
    */
-  void createMatches(const ConstOsmMapPtrR map, vector<const Match *> &matches,
+  void createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
     const Envelope &bounds,
     boost::shared_ptr<const MatchThreshold> threshold = boost::shared_ptr<MatchThreshold>()) const;
 
@@ -94,7 +94,7 @@ public:
    *
    * @return the match candidate count
    */
-  long getMatchCandidateCount(const ConstOsmMapPtrR map, const Envelope& bounds);
+  long getMatchCandidateCount(const ConstOsmMapPtr& map, const Envelope& bounds);
 
 private:
 
