@@ -176,26 +176,6 @@ public class ExportResource {
             }
             else { //else Shape/FGDB
 
-                //TEMPLATE_PATH=$(HOOT_HOME)/translations-local/template
-                //TDS61_TEMPLATE=$(TEMPLATE_PATH)/tds61.tgz
-                //TDS40_TEMPLATE=$(TEMPLATE_PATH)/tds40.tgz
-
-                // ifeq "$(append)" "true"
-                //     ifeq "$(translation)" "translations/TDSv61.js"
-                //         ifneq ("$(wildcard $(TDS61_TEMPLATE))","")
-                //             mkdir -p $(OP_OUTPUT)
-                //             tar -zxf $(TDS61_TEMPLATE) -C $(OP_OUTPUT)
-                //         endif # Template Path
-                //    else
-                //       ifeq "$(translation)" "translations/TDSv40.js"
-                //           ifneq ("$(wildcard $(TDS40_TEMPLATE))","")
-                //               mkdir -p $(OP_OUTPUT)
-                //               tar -zxf $(TDS40_TEMPLATE) -C $(OP_OUTPUT)
-                //           endif # Template Path
-                //       endif # Translations TDSv40
-                //    endif # Else
-                // endif # Append
-
                 if (params.getAppend()) {
                     //Appends data to a blank fgdb. The template is stored with the fouo translations.
 
@@ -216,8 +196,6 @@ public class ExportResource {
                         File tdsTemplatePath = tdsTemplate;
                         workflow.add(
                             () -> {
-                                //OP_OUTPUT=$(outputfolder)/$(outputname).$(outputtype)
-                                //tar -zxf $(TDS_TEMPLATE) -C $(OP_OUTPUT)
                                 File outputDir = new File(workDir, outputName + "."     + outputType.toLowerCase());
                                 try {
                                     FileUtils.forceMkdir(outputDir);
@@ -393,12 +371,8 @@ public class ExportResource {
     }
 
     private Command getZIPCommand(String jobId, File workDir, String outputName, String outputType) {
-        // ZIP_OUTPUT = $(outputname).zip
         File targetZIP = new File(workDir, outputName + ".zip");
 
-        //ifeq "$(outputtype)" "shp"
-        //    OP_ZIP=cd "$(outputfolder)/$(outputname)" && zip -r "$(outputfolder)/$(ZIP_OUTPUT)" *
-        //endif
         if (outputType.equalsIgnoreCase("SHP")) {
             return () -> {
                 // pwd = present working directory during execution of ZIPDirectoryContentsCommand
@@ -413,10 +387,8 @@ public class ExportResource {
                 // pwd = present working directory during execution of ZIPFileCommand
                 File pwd = workDir;
 
-                // OP_OUTPUT_FILE=$(outputname).$(outputtype)
                 String fileToCompress = outputName + "." + outputType;
 
-                // cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
                 ExternalCommand zipFileCommand = new ZIPFileCommand(targetZIP, pwd, fileToCompress, this.getClass());
                 return externalCommandManager.exec(jobId, zipFileCommand);
             };
@@ -426,7 +398,6 @@ public class ExportResource {
                 // pwd = present working directory during execution of ZIPDirectoryContentsCommand
                 File pwd = workDir;
 
-                // cd "$(outputfolder)" && zip -r "$(ZIP_OUTPUT)" "$(OP_OUTPUT_FILE)"
                 ExternalCommand zipDirectoryCommand = new ZIPDirectoryContentsCommand(targetZIP, pwd, this.getClass());
                 return externalCommandManager.exec(jobId, zipDirectoryCommand);
             };

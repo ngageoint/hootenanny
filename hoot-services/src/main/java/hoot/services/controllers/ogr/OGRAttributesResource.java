@@ -124,8 +124,6 @@ public class OGRAttributesResource {
             for (File zip : zipList) {
                 workflow.add(
                     () -> {
-                        // OP_INPUT=$(HOOT_HOME)/userfiles/tmp/upload/$(jobid)
-                        // bash $(HOOT_HOME)/scripts/util/unzipfiles.sh "$(INPUT_ZIPS)" "$(OP_INPUT)"
                         File targetFolder = new File(workFolder, FilenameUtils.getBaseName(zip.getName()));
                         ExternalCommand unZIPFileCommand = new UnZIPFileCommand(zip, targetFolder, this.getClass());
                         return externalCommandManager.exec(jobId, unZIPFileCommand);
@@ -135,8 +133,6 @@ public class OGRAttributesResource {
 
             workflow.add(
                 () -> {
-                    // OP_OUTPUT=$(HOOT_HOME)/userfiles/tmp/$(jobid).out
-                    //File outputFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
                     ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(fileList, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
 
@@ -154,7 +150,6 @@ public class OGRAttributesResource {
 
             workflow.add(
                 () -> {
-                    // cd .. && rm -rf "$(OP_INPUT)"
                     InternalCommand deleteFolderCommand = new DeleteFolderCommand(jobId, workFolder);
                     return internalCommandManager.exec(jobId, deleteFolderCommand);
                 }
