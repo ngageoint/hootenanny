@@ -42,7 +42,8 @@ class PoiPolygonTypeScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
-  //hack to get around constness of extract method
+  //hacks to get around constness of extract method
+
   //best type kvp match for the poi
   static QString poiBestKvp;
   //best type kvp match for the poly

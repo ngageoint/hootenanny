@@ -60,6 +60,7 @@ Match(threshold),
 _map(map),
 _eid1(eid1),
 _eid2(eid2),
+_settings(conf()),
 _distance(-1.0),
 _matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
 _reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
@@ -84,6 +85,7 @@ Match(threshold),
 _map(map),
 _eid1(eid1),
 _eid2(eid2),
+_settings(conf()),
 _distance(-1.0),
 _matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
 _reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
@@ -106,17 +108,20 @@ PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid
                                  shared_ptr<const PoiPolygonRfClassifier> rf,
                                  double matchDistanceThreshold, double reviewDistanceThreshold,
                                  double nameScoreThreshold, double typeScoreThreshold,
+                                 const QStringList& reviewIfMatchedTypes,
                                  double addressScoreThreshold) :
 Match(threshold),
 _map(map),
 _eid1(eid1),
 _eid2(eid2),
+_settings(conf()),
 _distance(-1.0),
 _matchDistanceThreshold(matchDistanceThreshold),
 _reviewDistanceThreshold(reviewDistanceThreshold),
 _closeMatch(false),
 _typeScore(-1.0),
 _typeScoreThreshold(typeScoreThreshold),
+_reviewIfMatchedTypes(reviewIfMatchedTypes),
 _nameScore(-1.0),
 _nameScoreThreshold(nameScoreThreshold),
 _addressScore(-1.0),
@@ -274,11 +279,35 @@ void PoiPolygonMatch::_calculateMatchWeka(const ElementId& /*eid1*/, const Eleme
 //  LOG_TRACE("**************************");
 }
 
-void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
+bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) const
 {
+  if (_reviewIfMatchedTypes.isEmpty())
+  {
+    return false;
+  }
+
+  const Tags& tags = element->getTags();
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  {
+    if (_reviewIfMatchedTypes.contains(it.key() + "=" + it.value()))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
+{  
   _class.setMiss();
 
   _categorizeElementsByGeometryType(eid1, eid2);
+
+  //allow for auto marking features with certain types for review if they get matched
+  const bool foundReviewIfMatchedType =
+    _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
+  LOG_VART(foundReviewIfMatchedType);
+
   unsigned int evidence = _calculateEvidence(_poi, _poly);
 
   //no point in trying to reduce reviews if we're still at a miss here
@@ -296,7 +325,14 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
 
   if (evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
-    _class.setMatch();
+    if (!foundReviewIfMatchedType)
+    {
+      _class.setMatch();
+    }
+    else
+    {
+      _class.setReview();
+    }
   }
   else if (evidence >= REVIEW_EVIDENCE_THRESHOLD)
   {
@@ -379,6 +415,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 {
   PoiPolygonTypeScoreExtractor typeScorer;
   typeScorer.setFeatureDistance(_distance);
+  typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
   _typeScore = typeScorer.extract(*_map, poi, poly);
   //if (poi->getTags().get("historic") == "monument")
   //{
@@ -395,7 +432,9 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
-  _nameScore = PoiPolygonNameScoreExtractor().extract(*_map, poi, poly);
+  PoiPolygonNameScoreExtractor nameScorer;
+  nameScorer.setNameScoreThreshold(_nameScoreThreshold);
+  _nameScore = nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
   LOG_VART(nameMatch);
   return nameMatch ? 1 : 0;
@@ -424,7 +463,8 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getNameEvidence(poi, poly);
   //if we already have a match, no point in doing more calculations
-  if (evidence >= MATCH_EVIDENCE_THRESHOLD)
+  if (_settings.getList("poi.polygon.review.if.matched.types").isEmpty() &&
+      evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     return evidence;
   }

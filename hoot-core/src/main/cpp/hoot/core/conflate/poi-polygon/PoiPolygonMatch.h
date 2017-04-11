@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchDetails.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/MatchClassification.h>
 
 #include "PoiPolygonRfClassifier.h"
@@ -63,7 +62,8 @@ public:
   PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
     ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
     double matchDistance, double reviewDistance, double nameScoreThreshold,
-    double typeScoreThreshold, double addressScoreThreshold);
+    double typeScoreThreshold, const QStringList& reviewIfMatchedTypes,
+    double addressScoreThreshold);
 
   virtual const MatchClassification& getClassification() const { return _class; }
 
@@ -121,16 +121,6 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  double getDistance() const { return _distance; }
-  double getMatchDistanceThreshold() const { return _matchDistanceThreshold; }
-  double getReviewDistanceThreshold() const { return _reviewDistanceThreshold; }
-  bool getCloseMatch() const { return _closeMatch; }
-  double getTypeScore() const { return _typeScore; }
-  double getTypeScoreThreshold() const { return _typeScoreThreshold; }
-  double getNameScore() const { return _nameScore; }
-  double getNameScoreThreshold() const { return _nameScoreThreshold; }
-  double getAddressScore() const { return _addressScore; }
-
 private:
 
   static QString _matchName;
@@ -145,6 +135,8 @@ private:
   shared_ptr<Geometry> _polyGeom;
   bool _e1IsPoi;
 
+  Settings _settings;
+
   //measured distance between the two elements
   double _distance;
   //max distance allowed between the elements where they can be considered a distance match
@@ -157,6 +149,7 @@ private:
 
   double _typeScore;
   double _typeScoreThreshold;
+  QStringList _reviewIfMatchedTypes;
 
   double _nameScore;
   double _nameScoreThreshold;
@@ -184,6 +177,7 @@ private:
   unsigned int _getNameEvidence(ConstElementPtr poi, ConstElementPtr poly);
   unsigned int _getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly);
 
+  bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 };
 
 }
