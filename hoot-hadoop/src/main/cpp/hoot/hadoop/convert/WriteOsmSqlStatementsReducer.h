@@ -28,14 +28,7 @@
 #include <QMap>
 
 // libpq
-//using the gcc version as a surrogate to check pg include file locs on ubuntu vs centos...
-//probably won't be very resistant to os upgrades going forward
-//#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-//#if GCC_VERSION < 40800
 #include <libpq-fe.h>
-//#else
-//#include <postgresql/libpq-fe.h>
-//#endif
 
 namespace hoot
 {
