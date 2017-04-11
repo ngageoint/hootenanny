@@ -53,83 +53,32 @@ QString PoiPolygonMatch::_matchName = "POI to Polygon";
 const unsigned int PoiPolygonMatch::MATCH_EVIDENCE_THRESHOLD = 3;
 const unsigned int PoiPolygonMatch::REVIEW_EVIDENCE_THRESHOLD = 1;
 
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
-                                 const ElementId& eid2, ConstMatchThresholdPtr threshold,
-                                 shared_ptr<const PoiPolygonRfClassifier> rf) :
-Match(threshold),
-_map(map),
-_eid1(eid1),
-_eid2(eid2),
-_settings(conf()),
-_distance(-1.0),
-_matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
-_reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
-_closeMatch(false),
-_typeScore(-1.0),
-_typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
-_nameScore(-1.0),
-_nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
-_addressScore(-1.0),
-_rf(rf)
-{
-  _calculateMatch(eid1, eid2);
-  //_calculateMatchWeka(eid1, eid2);
-}
-
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
-                                 const ElementId& eid2, ConstMatchThresholdPtr threshold,
+PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 const set<ElementId>& polyNeighborIds = set<ElementId>(),
-                                 const set<ElementId>& poiNeighborIds = set<ElementId>()) :
+                                 const set<ElementId>& polyNeighborIds,
+                                 const set<ElementId>& poiNeighborIds) :
 Match(threshold),
 _map(map),
-_eid1(eid1),
-_eid2(eid2),
-_settings(conf()),
-_distance(-1.0),
-_matchDistanceThreshold(ConfigOptions().getPoiPolygonMatchDistanceThreshold()),
-_reviewDistanceThreshold(ConfigOptions().getPoiPolygonReviewDistanceThreshold()),
 _closeMatch(false),
 _typeScore(-1.0),
-_typeScoreThreshold(ConfigOptions().getPoiPolygonTypeScoreThreshold()),
 _nameScore(-1.0),
-_nameScoreThreshold(ConfigOptions().getPoiPolygonNameScoreThreshold()),
 _addressScore(-1.0),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _rf(rf)
 {
-  _calculateMatch(eid1, eid2);
-  //_calculateMatchWeka(eid1, eid2);
 }
 
-PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1,
-                                 const ElementId& eid2, ConstMatchThresholdPtr threshold,
-                                 shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 double matchDistanceThreshold, double reviewDistanceThreshold,
-                                 double nameScoreThreshold, double typeScoreThreshold,
-                                 const QStringList& reviewIfMatchedTypes,
-                                 double addressScoreThreshold) :
-Match(threshold),
-_map(map),
-_eid1(eid1),
-_eid2(eid2),
-_settings(conf()),
-_distance(-1.0),
-_matchDistanceThreshold(matchDistanceThreshold),
-_reviewDistanceThreshold(reviewDistanceThreshold),
-_closeMatch(false),
-_typeScore(-1.0),
-_typeScoreThreshold(typeScoreThreshold),
-_reviewIfMatchedTypes(reviewIfMatchedTypes),
-_nameScore(-1.0),
-_nameScoreThreshold(nameScoreThreshold),
-_addressScore(-1.0),
-_addressScoreThreshold(addressScoreThreshold),
-_rf(rf)
+void PoiPolygonMatch::setConfiguration(const Settings& conf)
 {
-  _calculateMatch(eid1, eid2);
-  //_calculateMatchWeka(eid1, eid2);
+  ConfigOptions config = ConfigOptions(conf);
+  setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
+  setReviewDistanceThreshold(config.getPoiPolygonReviewDistanceThreshold());
+  setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
+  setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
+  setReviewIfMatchedTypes(config.getPoiPolygonReviewIfMatchedTypes());
+  setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
+  setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
 }
 
 bool PoiPolygonMatch::isPoly(const Element& e)
@@ -222,7 +171,7 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType(const ElementId& eid1,
 
 //Weka didn't help any with improving this matching.  Leaving this method here in case anyone
 //wants to explore in weka with this again.
-void PoiPolygonMatch::_calculateMatchWeka(const ElementId& /*eid1*/, const ElementId& /*eid2*/)
+void PoiPolygonMatch::calculateMatchWeka(const ElementId& /*eid1*/, const ElementId& /*eid2*/)
 {
 //  _class.setMiss();
 
@@ -297,7 +246,7 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
   return false;
 }
 
-void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& eid2)
+void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid2)
 {  
   _class.setMiss();
 
@@ -311,7 +260,7 @@ void PoiPolygonMatch::_calculateMatch(const ElementId& eid1, const ElementId& ei
   unsigned int evidence = _calculateEvidence(_poi, _poly);
 
   //no point in trying to reduce reviews if we're still at a miss here
-  if (ConfigOptions().getPoiPolygonEnableReviewReduction() && evidence >= REVIEW_EVIDENCE_THRESHOLD)
+  if (_enableReviewReduction && evidence >= REVIEW_EVIDENCE_THRESHOLD)
   {
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold,
@@ -463,8 +412,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   evidence += _getNameEvidence(poi, poly);
   //if we already have a match, no point in doing more calculations
-  if (_settings.getList("poi.polygon.review.if.matched.types").isEmpty() &&
-      evidence >= MATCH_EVIDENCE_THRESHOLD)
+  if (_reviewIfMatchedTypes.isEmpty() && evidence >= MATCH_EVIDENCE_THRESHOLD)
   {
     return evidence;
   }
@@ -509,7 +457,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   }*/
 
   //no point in trying to increase evidence if we're already at a match
-  if (ConfigOptions().getPoiPolygonEnableAdvancedMatching() && evidence < MATCH_EVIDENCE_THRESHOLD)
+  if (_enableAdvancedMatching && evidence < MATCH_EVIDENCE_THRESHOLD)
   {
     PoiPolygonAdvancedMatcher advancedMatcher(
       _map, _polyNeighborIds, _poiNeighborIds, _distance);

@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/MatchDetails.h>
 #include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/util/Configurable.h>
 
 #include "PoiPolygonRfClassifier.h"
 
@@ -44,7 +45,7 @@ namespace hoot
  * This is a additive, rule based mechanism for matching POIs to polygons. See "POI to
  * Polygon Conflation" in the Hootenanny Algorithms document for more details.
  */
-class PoiPolygonMatch : public Match, public MatchDetails
+class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 {
 
 public:
@@ -52,18 +53,15 @@ public:
   static const unsigned int MATCH_EVIDENCE_THRESHOLD;
   static const unsigned int REVIEW_EVIDENCE_THRESHOLD;
 
-  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf);
+  PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
+    shared_ptr<const PoiPolygonRfClassifier> rf,
+    const set<ElementId>& polyNeighborIds = set<ElementId>(),
+    const set<ElementId>& poiNeighborIds = set<ElementId>());
 
-  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
-    const set<ElementId>& polyNeighborIds, const set<ElementId>& poiNeighborIds);
+  virtual void setConfiguration(const Settings& conf);
 
-  PoiPolygonMatch(const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-    ConstMatchThresholdPtr threshold, shared_ptr<const PoiPolygonRfClassifier> rf,
-    double matchDistance, double reviewDistance, double nameScoreThreshold,
-    double typeScoreThreshold, const QStringList& reviewIfMatchedTypes,
-    double addressScoreThreshold);
+  void calculateMatch(const ElementId& eid1, const ElementId& eid2);
+  void calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);
 
   virtual const MatchClassification& getClassification() const { return _class; }
 
@@ -121,6 +119,14 @@ public:
    */
   static void resetMatchDistanceInfo();
 
+  void setMatchDistanceThreshold(double distance) { _matchDistanceThreshold = distance; }
+  void setReviewDistanceThreshold(double distance) { _reviewDistanceThreshold = distance; }
+  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
+  void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
+  void setReviewIfMatchedTypes(const QStringList& types) { _reviewIfMatchedTypes = types; }
+  void setEnableAdvancedMatching(bool enabled) { _enableAdvancedMatching = enabled; }
+  void setEnableReviewReduction(bool enabled) { _enableReviewReduction = enabled; }
+
 private:
 
   static QString _matchName;
@@ -135,7 +141,7 @@ private:
   shared_ptr<Geometry> _polyGeom;
   bool _e1IsPoi;
 
-  Settings _settings;
+  //Settings _settings;
 
   //measured distance between the two elements
   double _distance;
@@ -155,7 +161,6 @@ private:
   double _nameScoreThreshold;
 
   double _addressScore;
-  double _addressScoreThreshold;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
   set<ElementId> _polyNeighborIds;
@@ -163,10 +168,10 @@ private:
 
   MatchClassification _class;
 
-  shared_ptr<const PoiPolygonRfClassifier> _rf;
+  bool _enableAdvancedMatching;
+  bool _enableReviewReduction;
 
-  void _calculateMatch(const ElementId& eid1, const ElementId& eid2);
-  void _calculateMatchWeka(const ElementId& eid1, const ElementId& eid2);
+  shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 
