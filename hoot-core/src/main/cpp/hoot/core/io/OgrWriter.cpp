@@ -412,7 +412,7 @@ void OgrWriter::open(QString url)
 
   try
   {
-    _ds = OgrUtilities::getInstance().openDataSource(url);
+    _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
   catch(HootException& openException)
   {

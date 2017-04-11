@@ -111,7 +111,9 @@ public:
           // score each candidate and push it on the result vector
           PoiPolygonMatch* m =
             new PoiPolygonMatch(
-              _map, from, *it, _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
+              _map, /*from, *it,*/ _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
+          m->setConfiguration(conf());
+          m->calculateMatch(from, *it);
 
           // if we're confident this is a miss
           if (m->getType() == MatchType::Miss)
@@ -317,18 +319,20 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                            ElementId eid2)
 {
-  Match* result = 0;
+  PoiPolygonMatch* result = 0;
 
   if (eid1.getType() != eid2.getType())
   {
     ConstElementPtr e1 = map->getElement(eid1);
     ConstElementPtr e2 = map->getElement(eid2);
-    bool foundPoi = PoiPolygonMatch::isPoi(*e1) || PoiPolygonMatch::isPoi(*e2);
-    bool foundPoly = PoiPolygonMatch::isPoly(*e1) || PoiPolygonMatch::isPoly(*e2);
+    const bool foundPoi = PoiPolygonMatch::isPoi(*e1) || PoiPolygonMatch::isPoi(*e2);
+    const bool foundPoly = PoiPolygonMatch::isPoly(*e1) || PoiPolygonMatch::isPoly(*e2);
 
     if (foundPoi && foundPoly)
     {
-      result = new PoiPolygonMatch(map, eid1, eid2, getMatchThreshold(), _getRf());
+      result = new PoiPolygonMatch(map, /*eid1, eid2,*/ getMatchThreshold(), _getRf());
+      result->setConfiguration(conf());
+      result->calculateMatch(eid1, eid2);
     }
   }
 
@@ -346,7 +350,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<con
   PoiPolygonMatchVisitor v(map, matches, threshold, _getRf());
   map->visitRo(v);
 
-  if (ConfigOptions().getPoiPolygonPrintMatchDistanceTruth())
+  if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {
     PoiPolygonMatch::printMatchDistanceInfo();
   }

@@ -515,7 +515,7 @@ OgrReaderInternal::~OgrReaderInternal()
 QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
 {
   QStringList result;
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
+  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -894,7 +894,7 @@ void OgrReaderInternal::open(QString path, QString layer)
   _initTranslate();
 
   _path = path;
-  _dataSource = OgrUtilities::getInstance().openDataSource(path);
+  _dataSource = OgrUtilities::getInstance().openDataSource(path, true);
   if (layer.isEmpty() == false)
   {
     _pendingLayers.append(layer);
