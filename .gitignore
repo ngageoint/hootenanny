@@ -169,3 +169,5 @@ hoot-services/src/main/resources/db/*.properties
 compile
 VagrantfileLocal
 config.rpath
+0
+tbs/0

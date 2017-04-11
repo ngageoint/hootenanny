@@ -1730,6 +1730,16 @@ If true, POI to polygon conflation will attempt to reduce unnecessary reviews wi
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
 
+=== poi.polygon.review.if.matched.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of key value pairs (key=value) for features to always review if marked as matches with POI to
+polygon conflation.  When specifying the list from the command line, delimit the types with ';'
+and surround the entire value string in double quotes.
+
 === poi.polygon.match.threshold
 
 * Data Type: double
