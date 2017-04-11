@@ -671,6 +671,31 @@ details.",
 
 The size of a pixel when calculating node density. See User Manual for details.
 
+=== hootapi.db.writer.create.user
+
+* Data Type: bool
+* Default Value: `false`
+
+Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
+This is most useful when debugging and testing.
+
+=== hootapi.db.writer.output.id.mappings
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set to a non-empty string, the system will attempt to open a file with the
+specified name and output all the ID mappings (source to destination) used for nodes, ways, and
+relations that were written to the database.
+
+=== hootapi.db.writer.overwrite.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true then if there is already a map with the specified name then it will be removed before
+a new map is written.
+
 === id.generator
 
 * Data Type: string
@@ -1329,6 +1354,15 @@ loading data that was previously validated in another OSM API database, all elem
 unique in the data you are loading, and the IDs will not conflict with any existing data in the
 destination database.
 
+=== osmapidb.id.aware.url
+
+* Data Type: string
+* Default Value: ``
+
+This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter
+It forces database reading/writing use the specified OSM API database as master for determining the
+sequencing of element ID's.
+
 === osm.changeset.sql.file.writer.generate.new.ids
 
 * Data Type: bool
@@ -1673,6 +1707,14 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 A list of scripts to include before loading the user's plugin script. The path will be search as:
 current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
+=== poi.ignore.type.if.name.present
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI conflation will ignore the types of the features being compared completely as long as
+those being compared have a populated name field.
+
 === poi.match.threshold
 
 * Data Type: double
@@ -1955,40 +1997,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
-
-=== hootapi.db.writer.create.user
-
-* Data Type: bool
-* Default Value: `false`
-
-Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
-This is most useful when debugging and testing.
-
-=== hootapi.db.writer.output.id.mappings
-
-* Data Type: string
-* Default Value: ``
-
-If this value is set to a non-empty string, the system will attempt to open a file with the
-specified name and output all the ID mappings (source to destination) used for nodes, ways, and
-relations that were written to the database.
-
-=== hootapi.db.writer.overwrite.map
-
-* Data Type: bool
-* Default Value: `false`
-
-If set to true then if there is already a map with the specified name then it will be removed before
-a new map is written.
-
-=== osmapidb.id.aware.url
-
-* Data Type: string
-* Default Value: ``
-
-This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter 
-It forces database reading/writing use the specified OSM API database as master for determining the 
-sequencing of element ID's.
 
 === remove.attribute.visitor.types
 

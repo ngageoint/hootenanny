@@ -61,14 +61,6 @@ public:
                          const ConstElementPtr& poly) const;
 
   /**
-   * Returns true if the input element has a populated name tag
-   *
-   * @param element the element to examine
-   * @return true if the element has a name tag; false otherwie
-   */
-  static bool elementHasName(ConstElementPtr element);
-
-  /**
    * Returns an element's name
    *
    * @param element the element to examine
