@@ -28,7 +28,14 @@
 #include <QMap>
 
 // libpq
+//using the gcc version as a surrogate to check pg include file locs on ubuntu vs centos...
+//probably won't be very resistant to os upgrades going forward
+#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION < 40800
+#include <libpq-fe.h>
+#else
 #include <postgresql/libpq-fe.h>
+#endif
 
 namespace hoot
 {
@@ -38,7 +45,7 @@ using namespace std;
 /**
  * Mapreduce reduce task for writing OSM API database SQL statements to both file and a database.
  *
- *  If the output destination is a database and the option to retain the SQL file is chosen, the
+ * If the output destination is a database and the option to retain the SQL file is chosen, the
  * resulting logic is a little misleading, b/c the mapreduce job doesn't actually execute the
  * output SQL file against the database.  It performs streaming table copies instead.  In that
  * situation, the output SQL file is more for reference purposes.
