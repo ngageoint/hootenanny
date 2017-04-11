@@ -40,7 +40,8 @@ using namespace geos::geom;
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 
-
+// Qt
+#include <qnumeric.h>
 
 namespace hoot
 {
