@@ -69,9 +69,10 @@ public:
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
-    PoiPolygonMatch match1(
-      map, w1->getElementId(), n1->getElementId(), boost::shared_ptr<MatchThreshold>(),
-      boost::shared_ptr<PoiPolygonRfClassifier>());
+    PoiPolygonMatch match1(map, boost::shared_ptr<MatchThreshold>(),
+                           boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    match1.calculateMatch(w1->getElementId(), n1->getElementId());
 
     MatchSet matches;
     matches.insert(&match1);

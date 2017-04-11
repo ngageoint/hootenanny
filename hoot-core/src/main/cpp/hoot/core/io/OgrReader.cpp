@@ -358,7 +358,7 @@ boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& 
 QStringList OgrReader::getLayerNames(QString path)
 {
   QStringList result;
-  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
+  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
