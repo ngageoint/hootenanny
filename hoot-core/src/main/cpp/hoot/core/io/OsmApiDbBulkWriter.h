@@ -86,15 +86,29 @@ static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\
  *   up by configuring the writer with the appropriate options.  See the user documentation for
  *   details on the two workflows and examples of how to use them.
  *
- * * allows for directly writing to a target database or an generating output SQL file that can be
- *   manually written to a database
+ * * gives the option of two underlying database writer applications: psql and pg_bulkload;
+ *   currently, pg_bulkload is considered experimental (in the future it may be possible to
+ *   discontinue use of psql and use pg_bulkload exclusively)
+ *
+ * * allows for directly writing to a target database or generating output files that can be
+ *   manually written to a database; SQL files are written for the psql writer and CSV files are
+ *   written for the pg_bulkload writer
  *
  * * has the ability to guarantee element ID uniqueness against a live database if the record ID
  *   reservation option is used.
  *
- * * is transaction safe
+ * * is transaction safe when using the psql writer but not transaction safe with the pg_bulkload
+ *   writer
  *
- * * requires two passes over the input data *before* writing it to the database
+ * * requires two passes over the input data *before* writing it to the database if the psql writer
+ *   is used OR the record ID reservation option is selected; only one pass over the data beforehand
+ *   otherwise
+ *
+ * Originally, the psql and pg_bulkload sets of logic were separated into two classes
+ * (pg_bulkload subclassing the psql logic).  In some ways, this resulted in cleaner code but in
+ * other ways the code was harder to maintain.  The decision was made to collapse the logic into
+ * the same class.  However, separating them again at some point may make sense if the two logic
+ * paths end up being permanent
  */
 class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 {
@@ -177,6 +191,12 @@ public:
   void setOutputFilesCopyLocation(QString location) { _outputFilesCopyLocation = location; }
   void setChangesetUserId(long id) { _changesetData.changesetUserId = id; }
   void setMaxChangesetSize(long size) { _maxChangesetSize = size; }
+  void setDisableWriteAheadLogging(bool disable) { _disableWriteAheadLogging = disable; }
+  void setWriteMultithreaded(bool multithreaded) { _writeMultiThreaded = multithreaded; }
+  void setDisableConstraints(bool disable) { _disableConstraints = disable; }
+  void setPgBulkloadLogPath(QString path) { _pgBulkLogPath = path; }
+  void setPgBulkloadBadRecordsLogPath(QString path) { _pgBulkBadRecordsLogPath = path; }
+  void setWriterApp(QString app) { _writerApp = app; }
   void setReserveRecordIdsBeforeWritingData(bool reserve)
   { _reserveRecordIdsBeforeWritingData = reserve; }
   void setStartingNodeId(long id)
@@ -220,9 +240,15 @@ private:
   long _statusUpdateInterval;
   long _maxChangesetSize;
   QString _outputFilesCopyLocation;
+  bool _disableWriteAheadLogging;
+  bool _writeMultiThreaded;
   QString _outputUrl;
+  bool _disableConstraints;
   QString _outputDelimiter;
   shared_ptr<QFile> _sqlOutputCombinedFile;
+  QString _pgBulkLogPath;
+  QString _pgBulkBadRecordsLogPath;
+  QString _writerApp;
   bool _reserveRecordIdsBeforeWritingData;
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
@@ -251,6 +277,7 @@ private:
   void _logStats(const bool debug = false);
   unsigned long _getTotalRecordsWritten() const;
   void _verifyDependencies();
+  void _verifyApp();
   void _verifyOutputCopySettings();
   void _verifyStartingIds();
   void _verifyFileOutputs();
@@ -266,6 +293,8 @@ private:
                          const bool addByteOrderMarker = false);
   QString _getCombinedSqlFileName() const;
   QString _getTableOutputFileName(const QString tableName) const;
+  QString _getUpdatedCsvFileName(const QString tableName) const;
+  QString _getSequenceIdSqlFileName() const;
   void _initOutputFormatStrings();
 
   void _writeSequenceUpdatesToStream(unsigned long changesetId, const unsigned long nodeId,
@@ -296,9 +325,13 @@ private:
   void _checkUnresolvedReferences(const ConstElementPtr& element, const unsigned long elementDbId);
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _writeCombinedSqlFile();
+  void _updateRecordLinesWithIdOffsetInCsvFiles();
   void _reserveIdsInDb();
   void _writeDataToDb();
+  void _writeDataToDbPgBulk();
   void _writeDataToDbPsql();
+  void _writeSequenceIdUpdateSqlFile();
+  void _execSqlFile(const QString fileName);
 };
 
 }

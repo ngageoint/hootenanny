@@ -16,7 +16,7 @@ If you are using Hootenanny from the command line no configuration is required, 
 
 === Creating an OSM API Database
 
-If you do not already have an OSM API database available, you can run the following:
+If you do not already have an OSM API database, you can run the following:
 
 ----------------------------
 $HOOT_HOME/scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -32,64 +32,106 @@ Hootenanny's 'hoot convert' command uses optimized SQL routines to write large a
 has two possible workflows: online and offline.  The offline mode is meant for the fastest performance writing against offline
 databases (no other writers present), while the online mode sacrifices some performance but is safe for writing against online databases (other writers present).
 
+Hootenanny supports two underlying applications for writing OSM API database data: psql and pg_bulkload.  pg_bulkload provides extra options beyond what is available with psql and is currently used experimentally within Hootenanny.  psql is the default
+writer application.  When using psql, a SQL file is created with the option of executing its statements against a databse.  When pg_bulkload is used, data is converted to multiple CSV files that can be loaded into the database.
+
+IMPORTANT: To use the pg_bulkload writer application, the pg_bulkload Postgres extension must be installed on the database being
+written to.
+
 Its easiest to demonstrate the two workflows with some examples:
 
 ==== Use Case #1 (offline) ==== 
 
 Write to a SQL file or CSV files and handle all record ID updates outside of Hootenanny:
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 myOsmDataInput.osm.pbf myOsmDataOutput.sql
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf myOsmDataOutput.csv
 -----------------
 
 Write directly to a database and handle all record ID updates outside of Hootenanny:
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
-Write directly to a database, handle all record ID updates outside of Hootenanny, and retain the SQL output file:
+Write directly to a database, handle all record ID updates outside of Hootenanny, and retain the SQL/CSV output file(s):
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.csv -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
 ==== Use Case #2 (offline) ==== 
 
 Write to a SQL file or CSV files and manually specify record starting IDs with Hootenanny:
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 myOsmDataInput.osm.pbf myOsmDataOutput.sql
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf myOsmDataOutput.csv
 -----------------
 
 Write directly to a database and manually specify record starting IDs with Hootenanny:
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
-Write directly to a database, manually specify record starting IDs with Hootenanny, and retain the SQL output file:
+Write directly to a database, manually specify record starting IDs with Hootenanny, and retain the SQL/CSV output file(s):
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.starting.node.id=10 -D osmapidb.bulk.writer.starting.way.id=10 -D osmapidb.bulk.writer.starting.relation.id=10 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.csv -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
 ==== Use Case #3 (online) ==== 
 
-Write to a SQL file and reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely:
+Write to a SQL file or CSV files and reserve a range of record IDs so that you can execute the SQL or load the CSV files at a later time against a live database safely:
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true myOsmDataInput.osm.pbf myOsmDataOutput.sql
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf myOsmDataOutput.csv
 -----------------
 
-Write directly to a database and reserve a range of record IDs so that you can execute the SQL at a later time against a live database safely:
+Write directly to a database and reserve a range of record IDs so that you can write to the live database safely:
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
-Write directly to a database, eserve a range of record IDs so that you can execute the SQL at a later time against a live database safely, and retain the SQL output file:
+Write directly to a database, reserve a range of record IDs so that you can write to the live database safely, and retain the SQL/CSV output file(s):
 -----------------
+#psql
 hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+
+#pg_bulkload
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.app=pg_bulkload -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.csv -D osmapidb.bulk.writer.disable.constraints=true -D osmapidb.bulk.writer.disable.write.ahead.logging=true -D osmapidb.bulk.writer.multithreaded=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
 When 'osmapidb.bulk.writer.reserve.record.ids.before.writing.data' is set to true, the data write operation is completely 
 record ID safe, meaning that it can be used while other concurrent users are writing to the target database without fear of 
 record ID conflicts.
 
-If you are writing extreme amounts of data and have adequate memory available, you may be able to improve the performance of the write operation with additional tweaks.  The configuration option, 'osmapidb.bulk.writer.file.output.buffer.max.line.size', determines how many file lines are held in memory before they are flushed out to disk when generating the output files.  The default setting is fairly large, but you may be able to improve write performance by increasing it (conversely, if your memory is limited, you may need to decrease this setting).  This optimization deals *only* with the output file generation, however, and does nothing to increase the performance of the SQL execution against the target database (database tuning may help there).
+If you are writing extreme amounts of data and have adequate memory available, you may be able to improve the performance of the write operation with additional tweaks.  The configuration option, 'osmapidb.bulk.writer.file.output.buffer.max.line.size', determines how many file lines are held in memory before they are flushed out to disk when generating the output files.  The default setting is fairly large, but you may be able to improve write performance by increasing it (conversely, if your memory is limited, you may need to decrease this setting).  This optimization deals *only* with the output file generation, however, and does nothing to increase the performance of the SQL execution or CSV data writing against the target database (database tuning may help there).
 
 The configuration option, 'osmapidb.bulk.writer.file.output.status.update.interval', simply determines how often you see progress updates when generating the output files.  The default value is fairly large, but for very large amounts of data you may wish to increase the value of this option to avoid too frequent of progress update messages.
 

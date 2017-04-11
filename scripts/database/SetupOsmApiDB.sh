@@ -69,5 +69,7 @@ if [ "$do_create" = "true" ]; then
   createdb $AUTH $DB_NAME_OSMAPI
 
   psql $AUTH -d $DB_NAME_OSMAPI -f $HOOT_HOME/scripts/database/blank_osmapidb.sql >& /tmp/osmapidb.log
+  # extension need by osm api db offline mode writing
+  sudo -u postgres psql -d $DB_NAME_OSMAPI -c 'create extension pg_bulkload;'
 fi
 

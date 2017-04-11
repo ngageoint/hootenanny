@@ -1231,6 +1231,41 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
+=== osmapidb.bulk.writer.app
+
+* Data Type: string
+* Default Value: `psql`
+
+Valid values are "psql" or "pg_bulkload".  This option is ignored if the output destination is a
+SQL file or set of CSV files.  The pg_bulkload writer application provides options for increased
+database write performance, some of which are not safe for using against a live database (other
+writers exist).  To use the pg_bulkload writer application the pg_bulkload extension must be
+installed on the destination database.  See the user documentation for details.
+
+=== osmapidb.bulk.writer.disable.constraints
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, OSM API database writes will bypass Postgres database constraint checks, which are a
+safety feature to ensure data integrity.  This will increase database writing performance but will
+possibly require extra database maintenance after the data is loaded if the data has integrity
+issues.  The option "osmapidb.bulk.writer.app" must be set to "pg_bulkload" to enable this option.
+IMPORTANT: Hootenanny does basic constraint checking for OSM data during loading, but this option
+should still only be enabled when there is high confidence in the integrity of the data being
+written.
+
+=== osmapidb.bulk.writer.disable.write.ahead.logging
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, OSM API database writes will bypass Postgres Write-Ahead Logging (WAL), which is a
+safety feature to ensure data integrity.  This will increase database writing performance but will
+require additional database maintenance after the data is loaded.  The option
+"osmapidb.bulk.writer.app" must be set to "pg_bulkload" to enable this option.  IMPORTANT:  This
+should only be enabled the database has previously been taken offline (you are the only writer).
+
 === osmapidb.bulk.writer.file.output.element.buffer.size
 
 * Data Type: long
@@ -1252,17 +1287,45 @@ files.  e.g. With a value of 100, you will see a load status update message logg
 elements parsed or file lines written.  This setting will have a negative impact on performance
 if set to a very low value.
 
+=== osmapidb.bulk.writer.multithreaded
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, OSM API database writes will be performed with multiple threads.  This will increase
+database writing performance but may degrade database performance for other database users.  The
+option "osmapidb.bulk.writer.app" must be set to "pg_bulkload" to enable this option.
+
 === osmapidb.bulk.writer.output.files.copy.location
 
 * Data Type: string
 * Default Value: ``
 
 Use this option if you wish to retain the file data generated during an OSM API database write.
-This option is not needed and will be ignored if writing OSM data to a SQL file that will be
-applied/written to an OSM API database at a later time.  If this option is populated, any file data
-files generated as a result of executing the hoot convert command with an OSM API database target
-are copied to the specified location.  This option should be set to a full file path to a SQL
-file (.sql).
+This option is not needed and will be ignored if writing OSM data to a SQL file or set of CSV
+files that will be applied/written to an OSM API database at a later time.  If this option is
+populated, any file data files generated as a result of executing the hoot convert command
+with an OSM API database target are copied to the specified location.  If "osmapidb.bulk.writer.app"
+is set to "psql", this option should be set to a full file path to a SQL file (.sql).  If
+"osmapidb.bulk.writer.app" is set to "pg_bulkload", this should be set to a directory path where
+a set of CSV data files will be written.
+
+=== osmapidb.bulk.writer.pgbulkload.bad.records.log.path
+
+* Data Type: string
+* Default Value: ``
+
+Optional path to the log the pg_bulkload utility writes any bad records it encounters to.  This
+option is ignored if the option "osmapidb.bulk.writer.app" is set to anything other than
+"pg_bulkload".
+
+=== osmapidb.bulk.writer.pgbulkload.log.path
+
+* Data Type: string
+* Default Value: ``
+
+Optional path to the log the pg_bulkload utility writes to.  This option is ignored if the option
+"osmapidb.bulk.writer.app" is set to anything other than "pg_bulkload".
 
 === osmapidb.bulk.writer.reserve.record.ids.before.writing.data
 
@@ -1275,7 +1338,9 @@ always be enabled in online environments (other writers present).  If it is not 
 environments, the risk of record ID conflicts will be present in the database.  The output
 destination must be an OSM API database or this setting will always be treated as being "false".
 If the output destination is a SQL file, the SQL statements to update the record IDs will be
-written to the SQL output for later execution.
+written to the SQL output along with the other record data.  If the output destination is a
+CSV file, the SQL statements to update the record IDs will be written to a separate SQL file in the
+same location as the CSV files.
 
 === osmapidb.bulk.writer.starting.node.id
 
@@ -1996,8 +2061,8 @@ a new map is written.
 * Data Type: string
 * Default Value: ``
 
-This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter 
-It forces database reading/writing use the specified OSM API database as master for determining the 
+This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter
+It forces database reading/writing use the specified OSM API database as master for determining the
 sequencing of element ID's.
 
 === remove.attribute.visitor.types

@@ -51,7 +51,7 @@ namespace hoot
 /*
  * TODO: need tests for:
  *
- * - unresolved way node members
+ * - unresolved way nodes
  * - unresolved relation members
  * - config options error handling
  */
@@ -64,6 +64,10 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runPsqlDbOnlineTest);
   CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runSqlFileOutputTest);
+  CPPUNIT_TEST(runPgBulkDbOfflineTest);
+  CPPUNIT_TEST(runPgBulkDbOnlineTest);
+  CPPUNIT_TEST(runPgBulkCustomStartingIdsDbOfflineTest);
+  CPPUNIT_TEST(runCsvFilesOutputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -167,12 +171,42 @@ public:
   {
     LOG_VART(stdFilePath);
     LOG_VART(outFilePath);
+    assert(stdFilePath.endsWith(".sql"));
+    assert(outFilePath.endsWith(".sql"));
     const QStringList stdSqlTokens = tokenizeOutputFileWithoutDates(stdFilePath);
     const QStringList outputSqlTokens = tokenizeOutputFileWithoutDates(outFilePath);
     CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
     for (int i = 0; i < stdSqlTokens.size(); i++)
     {
       HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
+    }
+  }
+
+  void verifyCsvOutput(const QString stdDirPath, const QString outDirPath,
+                       const QString stdFileNameExclude)
+  {
+    QDir outputDir(outDirPath);
+    const QStringList outputDirContents = outputDir.entryList(QDir::Files, QDir::Name);
+    for (int i = 0; i < outputDirContents.size(); i++)
+    {
+      LOG_VART(outputDirContents.at(i));
+      if (outputDirContents.at(i).toLower().endsWith("csv"))
+      {
+        const QString dirContent = outputDirContents.at(i);
+        QString stdFileName = dirContent;
+        stdFileName.replace(stdFileNameExclude, "");
+        QString stdFilePath = stdDirPath + "/" + stdFileName;
+        LOG_VART(stdFilePath)
+        const QStringList stdCsvTokens = tokenizeOutputFileWithoutDates(stdFilePath);
+        const QString outFilePath = outDirPath + "/" + dirContent;
+        LOG_VART(outFilePath)
+        const QStringList outputCsvTokens = tokenizeOutputFileWithoutDates(outFilePath);
+        CPPUNIT_ASSERT_EQUAL(stdCsvTokens.size(), outputCsvTokens.size());
+        for (int i = 0; i < stdCsvTokens.size(); i++)
+        {
+          HOOT_STR_EQUALS(stdCsvTokens.at(i), outputCsvTokens.at(i));
+        }
+      }
     }
   }
 
@@ -234,12 +268,11 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
-//    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
-//    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
-//    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
-//    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -370,12 +403,11 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
-//    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
-//    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
-//    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Relation));
-//    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
+    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
+    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Relation));
+    CPPUNIT_ASSERT_EQUAL((long)5, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -511,6 +543,7 @@ public:
     OsmApiDbBulkWriter writer;
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-out.sql";
+    writer.setWriterApp("psql");
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -598,6 +631,7 @@ public:
     OsmApiDbBulkWriter writer;
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-online-out.sql";
+    writer.setWriterApp("psql");
     writer.setReserveRecordIdsBeforeWritingData(true);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -632,6 +666,7 @@ public:
     OsmApiDbBulkWriter writer;
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-starting-ids-out.sql";
+    writer.setWriterApp("psql");
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setOutputFilesCopyLocation(outFile);
     writer.setStatusUpdateInterval(1);
@@ -653,6 +688,132 @@ public:
     verifyDatabaseOutputOfflineWithCustomStartingIds();
   }
 
+  void runPgBulkDbOfflineTest()
+  {
+    const QString prefix = "PgBulkOffline";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
+    QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    writer.setWriterApp("pg_bulkload");
+    writer.setReserveRecordIdsBeforeWritingData(false);;
+    writer.setOutputFilesCopyLocation(outputPath);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    writer.setDisableWriteAheadLogging(true);
+    writer.setDisableConstraints(true);
+    writer.setWriteMultithreaded(false);
+    //for debugging
+    //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
+    //writer.setPgBulkloadBadRecordsLogPath(
+    //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(createTestMap());
+    writer.close();
+
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/" + prefix + "/" + prefix + ".sql",
+      outputDirPath + "/" + prefix + ".sql");
+    verifyCsvOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath, prefix + "-");
+    verifyDatabaseOutputOffline();
+  }
+
+  void runPgBulkDbOnlineTest()
+  {
+    const QString prefix = "PgBulkOnline";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
+    QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    writer.setWriterApp("pg_bulkload");
+    writer.setReserveRecordIdsBeforeWritingData(true);
+    writer.setOutputFilesCopyLocation(outputPath);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    writer.setDisableWriteAheadLogging(false);
+    writer.setDisableConstraints(false);
+    writer.setWriteMultithreaded(false);
+    //for debugging
+    //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
+    //writer.setPgBulkloadBadRecordsLogPath(
+    //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+
+    //write some data from somewhere else while before our writer starts writing data
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql"); //1 changeset
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql"); //2 nodes
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql"); //1 way
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql"); //1 relation
+
+    writer.write(createTestMap());
+    writer.close();
+
+    verifyCsvOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOnline", outputDirPath, prefix + "-");
+    verifyDatabaseOutputOnline();
+  }
+
+  void runPgBulkCustomStartingIdsDbOfflineTest()
+  {
+    const QString prefix = "PgBulkOffline-custom-starting-ids";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
+    QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    writer.setWriterApp("pg_bulkload");
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setOutputFilesCopyLocation(outputPath);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    writer.setDisableWriteAheadLogging(true);
+    writer.setDisableConstraints(true);
+    //deciding not to enable this for fear of build machine issues...maybe will if I get brave later
+    writer.setWriteMultithreaded(false);
+    //for debugging
+    //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
+    //writer.setPgBulkloadBadRecordsLogPath(
+    //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
+    writer.setStartingNodeId(3);
+    writer.setStartingWayId(4);
+    writer.setStartingRelationId(5);
+
+    writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+    writer.write(createTestMap());
+    writer.close();
+
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/" + prefix + "/" + prefix + ".sql",
+      outputDirPath + "/" + prefix + ".sql");
+    verifyCsvOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline-custom-starting-ids", outputDirPath,
+      prefix + "-");
+    verifyDatabaseOutputOfflineWithCustomStartingIds();
+  }
+
   void runSqlFileOutputTest()
   {
     QDir().mkpath("test-output/io/OsmApiDbBulkWriterTest/");
@@ -664,6 +825,7 @@ public:
     OsmApiDbBulkWriter writer;
     const QString outFile =
       "test-output/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-sql-file-out.sql";
+    writer.setWriterApp("psql");
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setStatusUpdateInterval(1);
     writer.setChangesetUserId(1);
@@ -676,6 +838,46 @@ public:
 
     verifySqlOutput(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
+    verifyDatabaseEmpty();
+  }
+
+  void runCsvFilesOutputTest()
+  {
+    const QString prefix = "CsvFilesOut";
+    const QString outputDirPath = "test-output/io/OsmApiDbBulkWriterTest/" + prefix;
+    QDir().mkpath(outputDirPath);
+    const QString outputPath = outputDirPath + "/" + prefix + ".csv";
+
+    //init db
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+
+    OsmApiDbBulkWriter writer;
+    writer.setWriterApp("pg_bulkload");
+    writer.setReserveRecordIdsBeforeWritingData(false);
+    writer.setStatusUpdateInterval(1);
+    writer.setChangesetUserId(1);
+    writer.setMaxChangesetSize(5);
+    writer.setFileOutputElementBufferSize(3);
+    writer.setDisableWriteAheadLogging(true);
+    writer.setDisableConstraints(true);
+    writer.setWriteMultithreaded(false);
+    //for debugging
+    //writer.setPgBulkloadLogPath(outputDirPath + "/OsmApiDbBulkWriterTestPgBulkload.log");
+    //writer.setPgBulkloadBadRecordsLogPath(
+    //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
+
+    writer.open(outputPath);
+    writer.write(createTestMap());
+    writer.close();
+
+    verifySqlOutput(
+      "test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline/PgBulkOffline.sql",
+      outputDirPath + "/" + prefix + ".sql");
+    //writer outputs a directory named the same as the base file name specified as the output path;
+    //the directory contains a collections of csv files
+    verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath,
+                    prefix + "-");
     verifyDatabaseEmpty();
   }
 };

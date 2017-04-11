@@ -55,7 +55,6 @@ _fileDataPassCtr(0)
 {
   _reset();
   _sectionNames = _createSectionNameList();
-  _initOutputFormatStrings();
   setConfiguration(conf());
 }
 
@@ -68,9 +67,11 @@ bool OsmApiDbBulkWriter::isSupported(QString urlStr)
 {
   LOG_VARD(urlStr);
   QUrl url(urlStr);
-  //if we ever want any other writers that the convert command invokes to output sql, then
+  //if we ever want any other writers that the convert command invokes to output sql or csv, then
   //this will have to be made more specific
-  return urlStr.toLower().endsWith(".sql") || _database.isSupported(url);
+  return
+    urlStr.toLower().endsWith(".sql") || urlStr.toLower().endsWith(".csv") ||
+    _database.isSupported(url);
 }
 
 void OsmApiDbBulkWriter::open(QString url)
@@ -84,6 +85,7 @@ void OsmApiDbBulkWriter::open(QString url)
   }
 
   _verifyStartingIds();
+  _verifyApp();
   _verifyOutputCopySettings();
   //early test to make sure we can write to file output locations, so we don't get a nasty
   //surprise after taking a long amount of time to write a huge output file
@@ -169,10 +171,68 @@ void OsmApiDbBulkWriter::_verifyStartingIds()
 
 void OsmApiDbBulkWriter::_verifyDependencies()
 {
-  if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
+  if (system(QString(_writerApp + " --version > /dev/null").toStdString().c_str()) != 0)
   {
-    throw HootException("Unable to access the psql application.  Is Postgres installed?");
+    throw HootException(
+      "Unable to access the " + _writerApp + " application.  Is " + _writerApp + " installed?");
   }
+
+  if (_writerApp == "pg_bulkload" && _destinationIsDatabase())
+  {
+    //need psql to execute sequence id sql file if using pgbulk, not reserving ids beforehand, and
+    //the destination is a database
+    if (!_reserveRecordIdsBeforeWritingData &&
+        system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
+    {
+      throw HootException("Unable to access the psql application.  Is psql installed?");
+    }
+
+    if (!_database.hasExtension(_writerApp))
+    {
+      throw HootException(
+        QString("The " + _writerApp + " application was selected for database writing. ") +
+        QString("To use this writer application, the database being written to must have the ") +
+        QString(_writerApp + " extension installed."));
+    }
+  }
+}
+
+void OsmApiDbBulkWriter::_verifyApp()
+{
+  if (_writerApp != "psql" && _writerApp != "pg_bulkload")
+  {
+    throw HootException("Invalid OSM API database writer application: " + _writerApp);
+  }
+  else if (_writerApp == "psql" &&
+           (_disableWriteAheadLogging || _writeMultiThreaded || _disableConstraints))
+  {
+    throw HootException(
+      QString("OSM API database writer app is 'psql'.  The following options may only be ") +
+      QString("enabled with the 'pg_bulkload' writer application: disabling write ahead ") +
+      QString("logging, multi-threaded writes, disabling table constraint checks."));
+  }
+  else if (_writerApp == "psql" && _outputUrl.endsWith(".csv"))
+  {
+    throw HootException(
+      QString("When using the 'psql' writer application, the only valid output formats are ") +
+      QString("SQL file (.sql) or OSM API database (osmapidb://)."));
+  }
+  else if (_writerApp == "pg_bulkload" && _outputUrl.endsWith(".sql"))
+  {
+    throw HootException(
+      QString("When using the 'pg_bulkload' writer application, the only valid output ") +
+      QString("formats are CSV file (.csv) or OSM API database (osmapidb://)."));
+  }
+
+  if (_writerApp == "psql")
+  {
+    _outputDelimiter = "\t";
+  }
+  else
+  {
+    _outputDelimiter = ",";
+  }
+  _initOutputFormatStrings();
 }
 
 void OsmApiDbBulkWriter::_verifyOutputCopySettings()
@@ -180,7 +240,16 @@ void OsmApiDbBulkWriter::_verifyOutputCopySettings()
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
     QFileInfo outputCopyLocationInfo(_outputFilesCopyLocation);
-    if (!outputCopyLocationInfo.completeSuffix().toLower().endsWith("sql"))
+    if (_writerApp == "pg_bulkload" &&
+        !outputCopyLocationInfo.completeSuffix().toLower().endsWith("csv"))
+    {
+      throw HootException(
+        QString("Output file copy location should be set to a CSV file (.csv) when using the ") +
+        QString("'pg_bulkload' writer application.  Location specified: ") +
+        _outputFilesCopyLocation);
+    }
+    else if (_writerApp == "psql" &&
+             !outputCopyLocationInfo.completeSuffix().toLower().endsWith("sql"))
     {
       throw HootException(
         QString("Output file copy location should be set to a SQL file (.sql) when using the ") +
@@ -281,15 +350,160 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
 
 unsigned int OsmApiDbBulkWriter::_numberOfFileDataPasses() const
 {
-  //using psql always requires a minimum of two passes due to having to combine all the temp
-  //sql files into one
-  unsigned int numPasses = 2;
+  unsigned int numPasses = 1;
   if (_destinationIsDatabase())
   {
     //writing to the database is another pass over the data
     numPasses++;
   }
+  if (_writerApp == "psql")
+  {
+    //using psql always requires a minimum of two passes due to having to combine all the temp
+    //sql files into one
+    numPasses++;
+  }
+  else if (_writerApp != "psql" && _destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
+  {
+    //pgbulk only adds an extra pass if the record id offsets have to be updated
+    numPasses++;
+  }
   return numPasses;
+}
+
+QString OsmApiDbBulkWriter::_getUpdatedCsvFileName(const QString tableName) const
+{
+  QString dest;
+  if (!_destinationIsDatabase())
+  {
+    QFileInfo outputInfo(_outputUrl);
+    dest = outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+  }
+  else if (!_outputFilesCopyLocation.isEmpty())
+  {
+    QFileInfo outputInfo(_outputFilesCopyLocation);
+    dest = outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+  }
+  else
+  {
+    dest = QDir::tempPath() + "/" + tableName + "-" + QUuid::createUuid().toString() + ".csv";
+  }
+  return dest;
+}
+
+void OsmApiDbBulkWriter::_updateRecordLinesWithIdOffsetInCsvFiles()
+{
+  _timer->restart();
+  _fileDataPassCtr++;
+  LOG_INFO(
+    "Updating record IDs for CSV files .  (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << ")...");
+  LOG_VART(_sectionNames.size());
+  LOG_VART(_outputSections.size());
+
+  long progressLineCtr = 0;
+  for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
+  {
+    if (_outputSections.find(*it) == _outputSections.end())
+    {
+      LOG_DEBUG("No data for table " + *it);
+      continue;
+    }
+
+    // Write updated IDs to a new copy of each file
+
+    QFile tempInputFile(_outputSections[*it].first->fileName());
+    shared_ptr<QFile> newCsvFile;
+    try
+    {
+      QString dest = _getUpdatedCsvFileName(*it);
+      LOG_VART(dest);
+      QFile outputFile(dest);
+      if (outputFile.exists())
+      {
+        outputFile.remove();
+      }
+      newCsvFile.reset(new QFile(dest));
+      if (!newCsvFile->open(QIODevice::Append))
+      {
+        throw HootException("Could not open new CSV file for updated ID output: " + dest);
+      }
+      QTextStream outStream(newCsvFile.get());
+
+      LOG_DEBUG("Opening temp file: " << _outputSections[*it].first->fileName());
+      if (tempInputFile.open(QIODevice::ReadOnly))
+      {
+        LOG_DEBUG("Parsing temp file for table: " << *it << "...");
+        QTextStream inStream(&tempInputFile);
+        QString line;
+        long lineCtr = 0;
+        do
+        {
+          line = inStream.readLine();
+          LOG_VART(line.left(100));
+
+          if (!line.isEmpty())
+          {
+            _updateRecordLineWithIdOffset(*it, line);
+            progressLineCtr++;
+            outStream << line << "\n";
+            lineCtr++;
+          }
+
+          if (lineCtr == _fileOutputElementBufferSize)
+          {
+            LOG_TRACE("Flushing records to combined file " << newCsvFile->fileName() << "...");
+            outStream.flush();
+            lineCtr = 0;
+          }
+
+          if (progressLineCtr > 0 && (progressLineCtr % _statusUpdateInterval == 0))
+          {
+            PROGRESS_INFO(
+              "Parsed " <<
+              _formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
+              _formatPotentiallyLargeNumber(
+                _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
+              " CSV file lines.");
+          }
+        }
+        while (!line.isNull());
+        outStream.flush();
+
+        tempInputFile.close();
+        LOG_DEBUG("Closing and removing old temp file and adding updated one for " << *it << "...");
+        _outputSections[*it].first->close();
+        _outputSections[*it].first->remove();
+        if (!newCsvFile->flush())
+        {
+          throw HootException("Could not flush file for table " + *it);
+        }
+        newCsvFile->close();
+        _outputSections[*it] =
+          pair<shared_ptr<QFile>, shared_ptr<QTextStream> >(newCsvFile, shared_ptr<QTextStream>());
+
+        QFileInfo outputInfo(_outputSections[*it].first->fileName());
+        LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
+      }
+      else
+      {
+        throw HootException("Unable to open temp input file: " + tempInputFile.fileName());
+      }
+    }
+    catch (const Exception& e)
+    {
+      tempInputFile.close();
+      newCsvFile->close();
+      throw e;
+    }
+
+    LOG_DEBUG("Wrote contents of section " << *it);
+  }
+
+  LOG_INFO(
+    "CSV ID update write complete.  (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+  LOG_DEBUG(
+    "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total CSV file lines.");
 }
 
 void OsmApiDbBulkWriter::_flushStreams(const bool writeClosingMark)
@@ -303,7 +517,7 @@ void OsmApiDbBulkWriter::_flushStreams(const bool writeClosingMark)
     }
 
     LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it].first->fileName());
-    if (writeClosingMark && *it != "byte_order_mark")
+    if (writeClosingMark && _writerApp != "pg_bulkload" && *it != "byte_order_mark")
     {
       LOG_TRACE("Writing closing byte order mark to stream...");
       *(_outputSections[*it].second) << QString("\\.\n\n\n");
@@ -385,13 +599,30 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_DEBUG("Skipping record ID reservation in database due to configuration or output type...");
   }
 
-  // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
-  _createOutputFile("byte_order_mark", "\n", true);
+  if (_writerApp == "psql")
+  {
+    // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
+    _createOutputFile("byte_order_mark", "\n", true);
 
-  //combine all the element/changeset files that were written during partial streaming into
-  //one file and update the ids in the SQL file according to the id sequences previously reserved
-  //out
-  _writeCombinedSqlFile();
+    //combine all the element/changeset files that were written during partial streaming into
+    //one file and update the ids in the SQL file according to the id sequences previously reserved
+    //out
+    _writeCombinedSqlFile();
+  }
+  else
+  {
+    if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
+    {
+      //update the ids in the CSV file according to the id sequences previously reserved
+      _updateRecordLinesWithIdOffsetInCsvFiles();
+    }
+    else if (!_reserveRecordIdsBeforeWritingData)
+    {
+      //We're not reserving the ID ranges in the database, so we'll write the appropriate setval
+      //statements to a sql file here for applying at a later time.
+      _writeSequenceIdUpdateSqlFile();
+    }
+  }
 
   LOG_INFO("File write stats:");
   _logStats();
@@ -407,6 +638,68 @@ void OsmApiDbBulkWriter::finalizePartial()
     LOG_INFO("Final file write stats:");
   }
   _logStats();
+}
+
+QString OsmApiDbBulkWriter::_getSequenceIdSqlFileName() const
+{
+  if (!_destinationIsDatabase())
+  {
+    QFileInfo outputInfo(_outputUrl);
+    return outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + ".sql";
+  }
+  else if (!_outputFilesCopyLocation.isEmpty())
+  {
+    QFileInfo outputInfo(_outputFilesCopyLocation);
+    return outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + ".sql";
+  }
+  else
+  {
+    assert(false);
+  }
+}
+
+void OsmApiDbBulkWriter::_writeSequenceIdUpdateSqlFile()
+{
+  LOG_TRACE("Writing separate sequence ID update file...");
+
+  shared_ptr<QFile> outputFile;
+  try
+  {
+    QString reserveElementIdsSql;
+    _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
+                                  _idMappings.currentNodeId - 1,
+                                  _idMappings.currentWayId - 1,
+                                  _idMappings.currentRelationId - 1,
+                                  reserveElementIdsSql);
+    LOG_VART(reserveElementIdsSql);
+    QFileInfo outputInfo(_outputUrl);
+    const QString dest = _getSequenceIdSqlFileName();
+    LOG_VART(dest);
+    outputFile.reset(new QFile(dest));
+    if (outputFile->exists())
+    {
+      outputFile->remove();
+    }
+    if (!outputFile->open(QIODevice::Append))
+    {
+      throw HootException(
+        "Could not open file at: " + outputFile->fileName() +
+        " for contents of SQL sequence ID output.");
+    }
+    QTextStream outStream(outputFile.get());
+    outStream << reserveElementIdsSql;
+    outStream.flush();
+    outputFile->flush();
+    outputFile->close();
+  }
+  catch (const Exception& e)
+  {
+    if (outputFile)
+    {
+      outputFile->close();
+    }
+    throw e;
+  }
 }
 
 bool OsmApiDbBulkWriter::_destinationIsDatabase() const
@@ -429,29 +722,190 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
   //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
   //applying it to a QSqlQuery.
+  _execSqlFile(_sqlOutputCombinedFile->fileName());
+
+  LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+}
+
+void OsmApiDbBulkWriter::_execSqlFile(const QString fileName)
+{
+  //this assumes a database destination
   const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
   QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
   if (!(Log::getInstance().getLevel() <= Log::Info))
   {
     cmd += " --quiet";
   }
-  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputCombinedFile->fileName();
+  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + fileName;
   if (!(Log::getInstance().getLevel() <= Log::Info))
   {
     cmd += " > /dev/null";
   }
   LOG_DEBUG(cmd);
+  LOG_INFO("Executing SQL file: " << fileName);
   if (system(cmd.toStdString().c_str()) != 0)
   {
-    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
+    throw HootException(
+      "Failed executing write against the OSM API database of SQL file: " + fileName);
+  }
+}
+
+void OsmApiDbBulkWriter::_writeDataToDbPgBulk()
+{
+  _timer->restart();
+  _fileDataPassCtr++;
+  bool someDataNotLoaded = false;
+  LOG_INFO(
+    "Writing CSV data for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    " records (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
+    ")." << _outputSections.size() - 1 << " CSV files will be written to the database...");
+
+  //Do we want to remove these every time?
+  if (!_pgBulkLogPath.isEmpty())
+  {
+    QFile pgBulkOutputLog(_pgBulkLogPath);
+    if (pgBulkOutputLog.exists())
+    {
+      pgBulkOutputLog.remove();
+    }
+  }
+  if (!_pgBulkBadRecordsLogPath.isEmpty())
+  {
+    QFile pgBulkBadRecordsOutputLog(_pgBulkBadRecordsLogPath);
+    if (pgBulkBadRecordsOutputLog.exists())
+    {
+      pgBulkBadRecordsOutputLog.remove();
+    }
+  }
+
+  //if we're writing this data offline, write the sequence id updates to the db first with psql,
+  //using the sql file that was earlier output to the same dir as the csv files; doing this to
+  //stay consistent with the fact that when using psql sequence id update statements are always
+  //written to the output sql file if ids aren't reserved
+  if (!_reserveRecordIdsBeforeWritingData)
+  {
+    _execSqlFile(_getSequenceIdSqlFileName());
+  }
+
+  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
+       sectionNamesItr != _sectionNames.end(); sectionNamesItr++)
+  {
+    if (*sectionNamesItr != "byte_order_mark" && _outputSections[*sectionNamesItr].first)
+    {
+      LOG_DEBUG("Closing file for " << *sectionNamesItr << "...");
+      _outputSections[*sectionNamesItr].second.reset();
+      if (!_outputSections[*sectionNamesItr].first->exists())
+      {
+        throw HootException(
+          "File " + _outputSections[*sectionNamesItr].first->fileName() + " does not exist.");
+      }
+
+      const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
+
+      QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + ";";
+      cmd += " export PGDATABASE=" + dbUrlParts["database"] + ";";
+      cmd += " export PGHOST=" + dbUrlParts["host"] + ";";
+      cmd += " export PGPORT=" + dbUrlParts["port"] + ";";
+      cmd += " export PGUSER=" + dbUrlParts["user"] + ";";
+      cmd +=
+        " pg_bulkload -d " + dbUrlParts["database"] + " -O " + *sectionNamesItr + " -i " +
+         (_outputSections[*sectionNamesItr]).first->fileName();
+
+      if (!_pgBulkLogPath.isEmpty())
+      {
+        cmd += " -l " + _pgBulkLogPath;
+      }
+      if (!_pgBulkBadRecordsLogPath.isEmpty())
+      {
+        cmd += " -P " + _pgBulkBadRecordsLogPath;
+      }
+      if (!_disableConstraints)
+      {
+        cmd += " -o \"CHECK_CONSTRAINTS=YES\"";
+      }
+      if (!_disableWriteAheadLogging)
+      {
+        cmd += " -o \"WRITER=BUFFERED\"";
+      }
+      if (_writeMultiThreaded)
+      {
+        cmd += " -o \"MULTI_PROCESS=YES\"";
+      }
+      if (Log::getInstance().getLevel() <= Log::Trace)
+      {
+        cmd += " -o \"VERBOSE=YES\"";
+      }
+      switch (Log::getInstance().getLevel())
+      {
+        case Log::Trace:
+          cmd += " -E DEBUG";
+          break;
+        case Log::Debug:
+          cmd += " -E DEBUG";
+          break;
+        case Log::Info:
+          //info is the default
+          break;
+        case Log::Warn:
+          cmd += " -E WARNING";
+          break;
+        case Log::Error:
+          cmd += " -E ERROR";
+          break;
+        default:
+          throw HootException("Unsupported log level.");
+      }
+      if (!(Log::getInstance().getLevel() <= Log::Info))
+      {
+        cmd += " > /dev/null";
+      }
+      LOG_DEBUG(cmd);
+
+      LOG_INFO("Writing CSV data for " << *sectionNamesItr << "...");
+      const int status = system(cmd.toStdString().c_str());
+      if (status != 0)
+      {
+        if (status == 3)
+        {
+          LOG_WARN("Some data could not be loaded.");
+          someDataNotLoaded = true;
+        }
+        else
+        {
+          throw HootException(
+            "Failed executing record write for table " + *sectionNamesItr +
+            " against the OSM API database: " + _outputUrl + ".  Error code: " +
+            QString::number(status));
+        }
+      }
+      LOG_DEBUG("Wrote CSV data for " << *sectionNamesItr << ".");
+
+      if (_destinationIsDatabase() && _outputFilesCopyLocation.isEmpty())
+      {
+        LOG_DEBUG("Removing file for " << *sectionNamesItr << "...");
+        _outputSections[*sectionNamesItr].first->remove();
+        _outputSections[*sectionNamesItr].first.reset();
+      }
+    }
   }
 
   LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+  if (someDataNotLoaded)
+  {
+    LOG_WARN("Some data was not loaded.");
+  }
 }
 
 void OsmApiDbBulkWriter::_writeDataToDb()
 {
-  _writeDataToDbPsql();
+  if (_writerApp == "psql")
+  {
+    _writeDataToDbPsql();
+  }
+  else
+  {
+    _writeDataToDbPgBulk();
+  }
 }
 
 QString OsmApiDbBulkWriter::_getCombinedSqlFileName() const
@@ -961,11 +1415,18 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
+  setDisableWriteAheadLogging(confOptions.getOsmapidbBulkWriterDisableWriteAheadLogging());
+  setWriteMultithreaded(confOptions.getOsmapidbBulkWriterMultithreaded());
+  setDisableConstraints(confOptions.getOsmapidbBulkWriterDisableConstraints());
   setOutputFilesCopyLocation(confOptions.getOsmapidbBulkWriterOutputFilesCopyLocation().trimmed());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setFileOutputElementBufferSize(confOptions.getOsmapidbBulkWriterFileOutputElementBufferSize());
   setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
+  setPgBulkloadLogPath(confOptions.getOsmapidbBulkWriterPgbulkloadLogPath().trimmed());
+  setPgBulkloadBadRecordsLogPath(
+    confOptions.getOsmapidbBulkWriterPgbulkloadBadRecordsLogPath().trimmed());
+  setWriterApp(confOptions.getOsmapidbBulkWriterApp().toLower().trimmed());
   setReserveRecordIdsBeforeWritingData(
     confOptions.getOsmapidbBulkWriterReserveRecordIdsBeforeWritingData());
   setStartingNodeId(confOptions.getOsmapidbBulkWriterStartingNodeId());
@@ -979,8 +1440,14 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   LOG_VART(_statusUpdateInterval);
   LOG_VART(_maxChangesetSize);
   LOG_VART(_outputFilesCopyLocation);
+  LOG_VART(_disableWriteAheadLogging);
+  LOG_VART(_writeMultiThreaded);
   LOG_VART(_outputUrl);
+  LOG_VART(_disableConstraints);
   LOG_VART(_outputDelimiter);
+  LOG_VART(_pgBulkLogPath);
+  LOG_VART(_pgBulkBadRecordsLogPath);
+  LOG_VART(_writerApp);
   LOG_VART(_reserveRecordIdsBeforeWritingData);
   LOG_VART(_idMappings.startingNodeId);
   LOG_VART(_idMappings.startingWayId);
@@ -991,6 +1458,8 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
 
 void OsmApiDbBulkWriter::_initOutputFormatStrings()
 {
+  _outputFormatStrings.clear();
+
   QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getChangesetsTableName()] =
     formatString.replace("\t", _outputDelimiter);
@@ -1000,12 +1469,20 @@ void OsmApiDbBulkWriter::_initOutputFormatStrings()
   formatString = HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getNodesTableName()] =
     formatString.replace("\t", _outputDelimiter);
+  if (_writerApp == "pg_bulkload")
+  {
+    _outputFormatStrings[ApiDb::getNodesTableName()].replace("\\N", "");
+  }
   formatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWaysTableName()] =
     formatString.replace("\t", _outputDelimiter);
   formatString = HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getWaysTableName()] =
     formatString.replace("\t", _outputDelimiter);
+  if (_writerApp == "pg_bulkload")
+  {
+    _outputFormatStrings[ApiDb::getWaysTableName()].replace("\\N", "");
+  }
   formatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] =
     formatString.replace("\t", _outputDelimiter);
@@ -1018,6 +1495,10 @@ void OsmApiDbBulkWriter::_initOutputFormatStrings()
   formatString = HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getRelationsTableName()] =
     formatString.replace("\t", _outputDelimiter);
+  if (_writerApp == "pg_bulkload")
+  {
+    _outputFormatStrings[ApiDb::getRelationsTableName()].replace("\\N", "");
+  }
   formatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] =
     formatString.replace("\t", _outputDelimiter);
@@ -1067,24 +1548,35 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
 
 void OsmApiDbBulkWriter::_createNodeOutputFiles()
 {
-  _createOutputFile(
-    ApiDb::getCurrentNodesTableName(),
-    "COPY " + ApiDb::getCurrentNodesTableName() +
-    " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) " +
-    "FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentNodeTagsTableName(),
-    "COPY " + ApiDb::getCurrentNodeTagsTableName() + " (node_id, k, v) FROM stdin;\n");
+  if (_writerApp == "psql")
+  {
+    _createOutputFile(
+      ApiDb::getCurrentNodesTableName(),
+      "COPY " + ApiDb::getCurrentNodesTableName() +
+      " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) " +
+      "FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getCurrentNodeTagsTableName(),
+      "COPY " + ApiDb::getCurrentNodeTagsTableName() + " (node_id, k, v) FROM stdin;\n");
 
-  _createOutputFile(
-    ApiDb::getNodesTableName(),
-    "COPY " + ApiDb::getNodesTableName() +
-    " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, " +
-    "redaction_id) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getNodeTagsTableName(),
-    //yes, this one is different than the others...see explanation in header file
-    "COPY " + ApiDb::getNodeTagsTableName() + " (node_id, version, k, v) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getNodesTableName(),
+      "COPY " + ApiDb::getNodesTableName() +
+      " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, " +
+      "redaction_id) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getNodeTagsTableName(),
+      //yes, this one is different than the others...see explanation in header file
+      "COPY " + ApiDb::getNodeTagsTableName() + " (node_id, version, k, v) FROM stdin;\n");
+  }
+  else
+  {
+    _createOutputFile(ApiDb::getCurrentNodesTableName());
+    _createOutputFile(ApiDb::getCurrentNodeTagsTableName());
+
+    _createOutputFile(ApiDb::getNodesTableName());
+    _createOutputFile(ApiDb::getNodeTagsTableName());
+  }
 }
 
 void OsmApiDbBulkWriter::_reset()
@@ -1290,30 +1782,45 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType:
 
 void OsmApiDbBulkWriter::_createWayOutputFiles()
 {
-  _createOutputFile(
-    ApiDb::getCurrentWaysTableName(),
-    "COPY " + ApiDb::getCurrentWaysTableName() +
-    " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentWayTagsTableName(),
-    "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentWayNodesTableName(),
-    "COPY " + ApiDb::getCurrentWayNodesTableName() +
-    " (way_id, node_id, sequence_id) FROM stdin;\n");
+  if (_writerApp == "psql")
+  {
+    _createOutputFile(
+      ApiDb::getCurrentWaysTableName(),
+      "COPY " + ApiDb::getCurrentWaysTableName() +
+      " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getCurrentWayTagsTableName(),
+      "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getCurrentWayNodesTableName(),
+      "COPY " + ApiDb::getCurrentWayNodesTableName() +
+      " (way_id, node_id, sequence_id) FROM stdin;\n");
 
-  _createOutputFile(
-    ApiDb::getWaysTableName(),
-    "COPY " + ApiDb::getWaysTableName() +
-    " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getWayTagsTableName(),
-    "COPY " + ApiDb::getWayTagsTableName() +
-    " (way_id, k, v, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getWayNodesTableName(),
-    "COPY " + ApiDb::getWayNodesTableName() +
-    " (way_id, node_id, version, sequence_id) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getWaysTableName(),
+      "COPY " + ApiDb::getWaysTableName() +
+      " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getWayTagsTableName(),
+      "COPY " + ApiDb::getWayTagsTableName() +
+      " (way_id, k, v, version) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getWayNodesTableName(),
+      "COPY " + ApiDb::getWayNodesTableName() +
+      " (way_id, node_id, version, sequence_id) FROM stdin;\n");
+  }
+  else
+  {
+    //we're writing csv data (not sql), so no table headers needed
+
+    _createOutputFile(ApiDb::getCurrentWaysTableName());
+    _createOutputFile(ApiDb::getCurrentWayTagsTableName());
+    _createOutputFile(ApiDb::getCurrentWayNodesTableName());
+
+    _createOutputFile(ApiDb::getWaysTableName());
+    _createOutputFile(ApiDb::getWayTagsTableName());
+    _createOutputFile(ApiDb::getWayNodesTableName());
+  }
 }
 
 void OsmApiDbBulkWriter::_writeWayToStream(const unsigned long wayDbId)
@@ -1379,30 +1886,45 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
 
 void OsmApiDbBulkWriter::_createRelationOutputFiles()
 {
-  _createOutputFile(
-    ApiDb::getCurrentRelationsTableName(),
-    "COPY " + ApiDb::getCurrentRelationsTableName() +
-    " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentRelationTagsTableName(),
-    "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentRelationMembersTableName(),
-    "COPY " + ApiDb::getCurrentRelationMembersTableName() +
-    " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n");
+  if (_writerApp == "psql")
+  {
+    _createOutputFile(
+      ApiDb::getCurrentRelationsTableName(),
+      "COPY " + ApiDb::getCurrentRelationsTableName() +
+      " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getCurrentRelationTagsTableName(),
+      "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getCurrentRelationMembersTableName(),
+      "COPY " + ApiDb::getCurrentRelationMembersTableName() +
+      " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n");
 
-  _createOutputFile(
-    ApiDb::getRelationsTableName(),
-    "COPY " + ApiDb::getRelationsTableName() +
-    " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getRelationTagsTableName(),
-    "COPY " + ApiDb::getRelationTagsTableName() +
-    " (relation_id, k, v, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getRelationMembersTableName(),
-    "COPY " + ApiDb::getRelationMembersTableName() +
-    " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getRelationsTableName(),
+      "COPY " + ApiDb::getRelationsTableName() +
+      " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getRelationTagsTableName(),
+      "COPY " + ApiDb::getRelationTagsTableName() +
+      " (relation_id, k, v, version) FROM stdin;\n");
+    _createOutputFile(
+      ApiDb::getRelationMembersTableName(),
+      "COPY " + ApiDb::getRelationMembersTableName() +
+      " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
+  }
+  else
+  {
+    //we're writing csv data (not sql), so no table headers needed
+
+    _createOutputFile(ApiDb::getCurrentRelationsTableName());
+    _createOutputFile(ApiDb::getCurrentRelationTagsTableName());
+    _createOutputFile(ApiDb::getCurrentRelationMembersTableName());
+
+    _createOutputFile(ApiDb::getRelationsTableName());
+    _createOutputFile(ApiDb::getRelationTagsTableName());
+    _createOutputFile(ApiDb::getRelationMembersTableName());
+  }
 }
 
 void OsmApiDbBulkWriter::_writeRelationToStream(const unsigned long relationDbId)
@@ -1526,7 +2048,7 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const unsigned long source
   const QString memberRefIdString(QString::number(memberDbId));
   const QString memberSequenceString(QString::number(memberSequenceIndex));
   QString memberRole = _escapeCopyToData(memberEntry.getRole());
-  //handle empty data
+  //pg_bulkload doesn't seem to be handling empty data
   if (memberRole.trimmed().isEmpty())
   {
     memberRole = "<no role>";
@@ -1544,7 +2066,36 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const unsigned long source
 
 QString OsmApiDbBulkWriter::_getTableOutputFileName(const QString tableName) const
 {
-  return QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".sql";
+  QString dest;
+  if (_writerApp == "psql")
+  {
+    dest = QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".sql";
+  }
+  else
+  {
+    if (_reserveRecordIdsBeforeWritingData && _destinationIsDatabase())
+    {
+      dest =
+        QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".csv";
+    }
+    else if (!_destinationIsDatabase())
+    {
+      QFileInfo outputInfo(_outputUrl);
+      dest =
+        outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+    }
+    else if (!_outputFilesCopyLocation.isEmpty())
+    {
+      QFileInfo outputInfo(_outputFilesCopyLocation);
+      dest =
+        outputInfo.absoluteDir().path() + "/" + outputInfo.baseName() + "-" + tableName + ".csv";
+    }
+    else
+    {
+      assert(false);
+    }
+  }
+  return dest;
 }
 
 void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QString header,
@@ -1653,6 +2204,11 @@ QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) cons
   escapedString.replace(QChar(11), QString("\\v"));
   escapedString.replace(QChar(12), QString("\\f"));
   escapedString.replace(QChar(13), QString("\\r"));
+  //pg_bulkload data comes from csv, so need a different delimiter than a comma
+  if (_writerApp == "pg_bulkload")
+  {
+    escapedString.replace(QChar(44), QString(";"));
+  }
   return escapedString;
 }
 
@@ -1669,11 +2225,18 @@ void OsmApiDbBulkWriter::_writeChangesetToStream()
 
   if (!_outputSections[ApiDb::getChangesetsTableName()].second)
   {
-    _createOutputFile(
-      ApiDb::getChangesetsTableName(),
-      "COPY " + ApiDb::getChangesetsTableName() +
-      " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
-      "FROM stdin;\n");
+    if (_writerApp == "psql")
+    {
+      _createOutputFile(
+        ApiDb::getChangesetsTableName(),
+        "COPY " + ApiDb::getChangesetsTableName() +
+        " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
+        "FROM stdin;\n");
+    }
+    else
+    {
+      _createOutputFile(ApiDb::getChangesetsTableName(), "");
+    }
   }
 
   const QString datestring =

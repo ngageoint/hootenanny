@@ -98,6 +98,7 @@ void ApiDb::_resetQueries()
   _selectWayNodeIdsByWayIds.reset();
   _selectRelationIdsByMemberIds.reset();
   _selectChangesetsCreatedAfterTime.reset();
+  _hasExtension.reset();
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -696,6 +697,37 @@ QString ApiDb::getPsqlString(const QString url)
   return
     "-h " + dbUrlParts["host"] + " -p " + dbUrlParts["port"] +
     " -U " + dbUrlParts["user"] + " -d " + dbUrlParts["database"];
+}
+
+bool ApiDb::hasExtension(const QString extensionName)
+{
+  if (!_hasExtension)
+  {
+    _hasExtension.reset(new QSqlQuery(_db));
+    _hasExtension->setForwardOnly(true);
+    _hasExtension->prepare("SELECT COUNT(*) FROM pg_extension WHERE extName = :extName");
+  }
+
+  _hasExtension->bindValue(":extName", extensionName);
+  if (_hasExtension->exec() == false)
+  {
+    throw HootException(
+      "Error checking for extension" + extensionName +
+      " Error: " + _hasExtension->lastError().text());
+  }
+
+  long result = -1;
+  if (_hasExtension->next())
+  {
+    bool ok;
+    result = _hasExtension->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Error checking for extension" + extensionName + ".");
+    }
+  }
+  _hasExtension->finish();
+  return result > 0;
 }
 
 }
