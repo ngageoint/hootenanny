@@ -37,6 +37,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 
 #include <tgs/System/SystemInfo.h>
 
@@ -55,8 +56,8 @@ _fileDataPassCtr(0)
 {
   _reset();
   _sectionNames = _createSectionNameList();
-  _initOutputFormatStrings();
   setConfiguration(conf());
+  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
 }
 
 OsmApiDbBulkWriter::~OsmApiDbBulkWriter()
@@ -429,22 +430,7 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
   //exec element sql against the db; Using psql here b/c it is doing buffered reads against the
   //sql file, so no need doing the extra work to handle buffering the sql read manually and
   //applying it to a QSqlQuery.
-  const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(_outputUrl);
-  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
-  if (!(Log::getInstance().getLevel() <= Log::Info))
-  {
-    cmd += " --quiet";
-  }
-  cmd += " " + ApiDb::getPsqlString(_outputUrl) + " -f " + _sqlOutputCombinedFile->fileName();
-  if (!(Log::getInstance().getLevel() <= Log::Info))
-  {
-    cmd += " > /dev/null";
-  }
-  LOG_DEBUG(cmd);
-  if (system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Failed executing bulk element SQL write against the OSM API database.");
-  }
+  ApiDb::execSqlFile(_outputUrl, _sqlOutputCombinedFile->fileName());
 
   LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
 }
@@ -795,14 +781,13 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   //_changesetData.changesetBounds.expandToInclude(node->getX(), node->getY());
   //LOG_VART(_changesetData.changesetBounds.toString());
 
-  unsigned long nodeDbId;
   // Do we already know about this node?
   if (_validateData && _idMappings.nodeIdMap->contains(node->getId()))
   {
     throw NotImplementedException("Writer class does not support update operations.");
   }
   // Have to establish new mapping
-  nodeDbId = _establishNewIdMapping(node->getElementId());
+  const unsigned long nodeDbId = _establishNewIdMapping(node->getElementId());
   LOG_VART(nodeDbId);
 
   _writeNodeToStream(node, nodeDbId);
@@ -866,14 +851,13 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
     _idMappings.wayIdMap.reset(new BigMap<long, unsigned long>(_stxxlMapMinSize));
   }
 
-  unsigned long wayDbId;
   // Do we already know about this way?
   if (_validateData && _idMappings.wayIdMap->contains(way->getId()))
   {
     throw NotImplementedException("Writer class does not support update operations");
   }
   // Have to establish new mapping
-  wayDbId = _establishNewIdMapping(way->getElementId());
+  const unsigned long wayDbId = _establishNewIdMapping(way->getElementId());
   LOG_VART(wayDbId);
 
   _writeWayToStream(wayDbId);
@@ -916,14 +900,13 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
     _idMappings.relationIdMap.reset(new BigMap<long, unsigned long>(_stxxlMapMinSize));
   }
 
-  unsigned long relationDbId;
   // Do we already know about this node?
   if (_validateData && _idMappings.relationIdMap->contains(relation->getId()))
   {
     throw NotImplementedException("Writer class does not support update operations");
   }
   // Have to establish new mapping
-  relationDbId = _establishNewIdMapping(relation->getElementId());
+  const unsigned long relationDbId = _establishNewIdMapping(relation->getElementId());
   LOG_VART(relationDbId);
 
   _writeRelationToStream(relationDbId);
@@ -989,62 +972,10 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   LOG_VART(_validateData);
 }
 
-void OsmApiDbBulkWriter::_initOutputFormatStrings()
-{
-  QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getChangesetsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentWaysTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWaysTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWayNodesTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentRelationsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getRelationsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getRelationMembersTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  _outputFormatStrings[ApiDb::getCurrentWayTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  _outputFormatStrings[ApiDb::getCurrentRelationTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getWayTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  _outputFormatStrings[ApiDb::getRelationTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-  formatString = HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
-  _outputFormatStrings[ApiDb::getNodeTagsTableName()] =
-    formatString.replace("\t", _outputDelimiter);
-}
-
 QStringList OsmApiDbBulkWriter::_createSectionNameList()
 {
   QStringList sections;
-  sections.push_back(QString("byte_order_mark"));
+  sections.push_back("byte_order_mark");
   sections.push_back(ApiDb::getChangesetsTableName());
   sections.push_back(ApiDb::getCurrentNodesTableName());
   sections.push_back(ApiDb::getCurrentNodeTagsTableName());
@@ -1067,24 +998,14 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
 
 void OsmApiDbBulkWriter::_createNodeOutputFiles()
 {
-  _createOutputFile(
-    ApiDb::getCurrentNodesTableName(),
-    "COPY " + ApiDb::getCurrentNodesTableName() +
-    " (id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version) " +
-    "FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentNodeTagsTableName(),
-    "COPY " + ApiDb::getCurrentNodeTagsTableName() + " (node_id, k, v) FROM stdin;\n");
+  const QStringList nodeSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeSqlHeaderStrings();
+  const QStringList nodeTagSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeTagSqlHeaderStrings();
 
-  _createOutputFile(
-    ApiDb::getNodesTableName(),
-    "COPY " + ApiDb::getNodesTableName() +
-    " (node_id, latitude, longitude, changeset_id, visible, \"timestamp\", tile, version, " +
-    "redaction_id) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getNodeTagsTableName(),
-    //yes, this one is different than the others...see explanation in header file
-    "COPY " + ApiDb::getNodeTagsTableName() + " (node_id, version, k, v) FROM stdin;\n");
+  _createOutputFile(ApiDb::getCurrentNodesTableName(), nodeSqlHeaders[0]);
+  _createOutputFile(ApiDb::getCurrentNodeTagsTableName(), nodeTagSqlHeaders[0]);
+
+  _createOutputFile(ApiDb::getNodesTableName(), nodeSqlHeaders[1]);
+  _createOutputFile(ApiDb::getNodeTagsTableName(), nodeTagSqlHeaders[1]);
 }
 
 void OsmApiDbBulkWriter::_reset()
@@ -1122,7 +1043,6 @@ void OsmApiDbBulkWriter::_reset()
 
   _outputSections.clear();
   _sectionNames.clear();
-  _outputFormatStrings.clear();
 }
 
 unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& sourceId)
@@ -1196,55 +1116,10 @@ unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& source
 void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId)
 {
   LOG_TRACE("Writing node to stream...");
-
-  const double nodeY = node->getY();
-  const double nodeX = node->getX();
-  //TODO: should be able to use OsmApiDb::toOsmApiDbCoord here instead
-  //const long nodeYNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeY);
-  //const long nodeXNanodegrees = OsmApiDb::toOsmApiDbCoord(nodeX);
-  const int nodeYNanodegrees = _convertDegreesToNanodegrees(nodeY);
-  const int nodeXNanodegrees = _convertDegreesToNanodegrees(nodeX);
-  if ((nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000))
-  {
-    throw HootException(
-      QString("Invalid latitude conversion, Y = %1 to %2").arg(
-        QString::number(nodeY), QString::number(nodeYNanodegrees)));
-  }
-  if ((nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000))
-  {
-    throw HootException(
-      QString("Invalid longitude conversion, X = %1 to %2").arg(
-        QString::number(nodeX), QString::number(nodeXNanodegrees)));
-  }
-  const int changesetId = _changesetData.currentChangesetId;
-  const QString datestring =
-    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
-  const QString tileNumberString(QString::number(ApiDb::tileForPoint(nodeY, nodeX)));
-
-  QString outputLine =
-    _outputFormatStrings[ApiDb::getCurrentNodesTableName()].arg(
-      QString::number(nodeDbId),
-      QString::number(nodeYNanodegrees),
-      QString::number(nodeXNanodegrees),
-      QString::number(changesetId),
-      datestring,
-      tileNumberString);
-  *(_outputSections[ApiDb::getCurrentNodesTableName()].second) << outputLine;
-
-  outputLine =
-    _outputFormatStrings[ApiDb::getNodesTableName()].arg(
-      QString::number(nodeDbId),
-      QString::number(nodeYNanodegrees),
-      QString::number(nodeXNanodegrees),
-      QString::number(changesetId),
-      datestring,
-      tileNumberString);
-  *(_outputSections[ApiDb::getNodesTableName()].second) << outputLine;
-}
-
-unsigned int OsmApiDbBulkWriter::_convertDegreesToNanodegrees(const double degrees) const
-{
-  return round(degrees * ApiDb::COORDINATE_SCALE);
+  const QStringList nodeSqlStrs =
+    _sqlFormatter->nodeToSqlStrings(node, nodeDbId, _changesetData.currentChangesetId);
+  *(_outputSections[ApiDb::getCurrentNodesTableName()].second) << nodeSqlStrs[0];
+  *(_outputSections[ApiDb::getNodesTableName()].second) << nodeSqlStrs[1];
 }
 
 void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
@@ -1254,89 +1129,38 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType:
 {
   LOG_TRACE("Writing tags to stream...");
 
-  const QString dbIdString(QString::number(dbId));
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    QString key = _escapeCopyToData(it.key());
-    //pg_bulkload doesn't seem to be tolerating the empty data
-    if (key.trimmed().isEmpty())
-    {
-      key = "<empty>";
-    }
-    LOG_VART(key);
-    QString value = _escapeCopyToData(it.value());
-    LOG_VART(value);
-    if (value.trimmed().isEmpty())
-    {
-      value = "<empty>";
-    }
-
-    //all three of them are the same for current
-    *currentTable <<
-      _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()]
-        .arg(dbIdString, key, value);
-    //all three of them are not the same for historical
-    QString historicalFormatString = _outputFormatStrings[ApiDb::getWayTagsTableName()];
-    if (elementType == ElementType::Node)
-    {
-      //see explanation for this silliness in the header file
-      historicalFormatString = _outputFormatStrings[ApiDb::getNodeTagsTableName()];
-    }
-    *historicalTable <<
-      historicalFormatString
-        .arg(dbIdString, key, value);
+    const QStringList tagSqlStrs =
+      _sqlFormatter->tagToSqlStrings(dbId, elementType, it.key(), it.value());
+    *currentTable << tagSqlStrs[0];
+    *historicalTable << tagSqlStrs[1];
   }
 }
 
 void OsmApiDbBulkWriter::_createWayOutputFiles()
 {
-  _createOutputFile(
-    ApiDb::getCurrentWaysTableName(),
-    "COPY " + ApiDb::getCurrentWaysTableName() +
-    " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentWayTagsTableName(),
-    "COPY " + ApiDb::getCurrentWayTagsTableName() + " (way_id, k, v) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentWayNodesTableName(),
-    "COPY " + ApiDb::getCurrentWayNodesTableName() +
-    " (way_id, node_id, sequence_id) FROM stdin;\n");
+  const QStringList waySqlHeaders = OsmApiDbSqlStatementFormatter::getWaySqlHeaderStrings();
+  const QStringList wayTagSqlHeaders = OsmApiDbSqlStatementFormatter::getWayTagSqlHeaderStrings();
+  const QStringList wayNodeSqlHeaders = OsmApiDbSqlStatementFormatter::getWayNodeSqlHeaderStrings();
 
-  _createOutputFile(
-    ApiDb::getWaysTableName(),
-    "COPY " + ApiDb::getWaysTableName() +
-    " (way_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getWayTagsTableName(),
-    "COPY " + ApiDb::getWayTagsTableName() +
-    " (way_id, k, v, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getWayNodesTableName(),
-    "COPY " + ApiDb::getWayNodesTableName() +
-    " (way_id, node_id, version, sequence_id) FROM stdin;\n");
+  _createOutputFile(ApiDb::getCurrentWaysTableName(), waySqlHeaders[0]);
+  _createOutputFile(ApiDb::getCurrentWayTagsTableName(), wayTagSqlHeaders[0]);
+  _createOutputFile(ApiDb::getCurrentWayNodesTableName(), wayNodeSqlHeaders[0]);
+
+  _createOutputFile(ApiDb::getWaysTableName(), waySqlHeaders[1]);
+  _createOutputFile(ApiDb::getWayTagsTableName(), wayTagSqlHeaders[1]);
+  _createOutputFile(ApiDb::getWayNodesTableName(), wayNodeSqlHeaders[1]);
 }
 
 void OsmApiDbBulkWriter::_writeWayToStream(const unsigned long wayDbId)
 {
   LOG_TRACE("Writing way to stream...");
 
-  const int changesetId = _changesetData.currentChangesetId;
-  const QString datestring =
-    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
-
-  QString outputLine =
-    _outputFormatStrings[ApiDb::getCurrentWaysTableName()]
-      .arg(wayDbId)
-      .arg(changesetId)
-      .arg(datestring);
-  *(_outputSections[ApiDb::getCurrentWaysTableName()].second) << outputLine;
-
-  outputLine =
-    _outputFormatStrings[ApiDb::getWaysTableName()]
-      .arg(wayDbId)
-      .arg(changesetId)
-      .arg(datestring);
-  *(_outputSections[ApiDb::getWaysTableName()].second) << outputLine;
+  const QStringList waySqlStrs =
+    _sqlFormatter->wayToSqlStrings(wayDbId, _changesetData.currentChangesetId);
+  *(_outputSections[ApiDb::getCurrentWaysTableName()].second) << waySqlStrs[0];
+  *(_outputSections[ApiDb::getWaysTableName()].second) << waySqlStrs[1];
 }
 
 void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
@@ -1344,8 +1168,7 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
 {
   LOG_TRACE("Writing way nodes to stream...");
 
-  unsigned int nodeIndex = 1;
-  const QString dbWayIdString( QString::number(dbWayId));
+  unsigned int wayNodeIndex = 1;
   for (vector<long>::const_iterator it = wayNodeIds.begin(); it != wayNodeIds.end(); ++it)
   {
     unsigned long wayNodeIdVal;
@@ -1364,68 +1187,41 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
         QString("Way %1 has reference to unknown node ID %2").arg(dbWayId, *it));
     }
 
-    const QString dbNodeIdString = QString::number(wayNodeIdVal);
-    const QString nodeIndexString(QString::number(nodeIndex));
-    *_outputSections[ApiDb::getCurrentWayNodesTableName()].second <<
-      _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()]
-        .arg(dbWayIdString, dbNodeIdString, nodeIndexString);
-    *_outputSections[ApiDb::getWayNodesTableName()].second <<
-      _outputFormatStrings[ApiDb::getWayNodesTableName()]
-        .arg(dbWayIdString, dbNodeIdString, nodeIndexString);
+    const QStringList wayNodeSqlStrs =
+      _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex);
+    *_outputSections[ApiDb::getCurrentWayNodesTableName()].second << wayNodeSqlStrs[0];
+    *_outputSections[ApiDb::getWayNodesTableName()].second << wayNodeSqlStrs[1];
 
-    ++nodeIndex;
+    ++wayNodeIndex;
   }
 }
 
 void OsmApiDbBulkWriter::_createRelationOutputFiles()
 {
-  _createOutputFile(
-    ApiDb::getCurrentRelationsTableName(),
-    "COPY " + ApiDb::getCurrentRelationsTableName() +
-    " (id, changeset_id, \"timestamp\", visible, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentRelationTagsTableName(),
-    "COPY " + ApiDb::getCurrentRelationTagsTableName() + " (relation_id, k, v) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getCurrentRelationMembersTableName(),
-    "COPY " + ApiDb::getCurrentRelationMembersTableName() +
-    " (relation_id, member_type, member_id, member_role, sequence_id) FROM stdin;\n");
+  const QStringList relationSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationSqlHeaderStrings();
+  const QStringList relationTagSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationTagSqlHeaderStrings();
+  const QStringList relationMemberSqlHeaders =
+    OsmApiDbSqlStatementFormatter::getRelationMemberSqlHeaderStrings();
 
-  _createOutputFile(
-    ApiDb::getRelationsTableName(),
-    "COPY " + ApiDb::getRelationsTableName() +
-    " (relation_id, changeset_id, \"timestamp\", version, visible, redaction_id) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getRelationTagsTableName(),
-    "COPY " + ApiDb::getRelationTagsTableName() +
-    " (relation_id, k, v, version) FROM stdin;\n");
-  _createOutputFile(
-    ApiDb::getRelationMembersTableName(),
-    "COPY " + ApiDb::getRelationMembersTableName() +
-    " (relation_id, member_type, member_id, member_role, version, sequence_id) FROM stdin;\n");
+  _createOutputFile(ApiDb::getCurrentRelationsTableName(), relationSqlHeaders[0]);
+  _createOutputFile(ApiDb::getCurrentRelationTagsTableName(), relationTagSqlHeaders[0]);
+  _createOutputFile(ApiDb::getCurrentRelationMembersTableName(), relationMemberSqlHeaders[0]);
+
+  _createOutputFile(ApiDb::getRelationsTableName(), relationSqlHeaders[1]);
+  _createOutputFile(ApiDb::getRelationTagsTableName(), relationTagSqlHeaders[1]);
+  _createOutputFile(ApiDb::getRelationMembersTableName(),relationMemberSqlHeaders[1]);
 }
 
 void OsmApiDbBulkWriter::_writeRelationToStream(const unsigned long relationDbId)
 {
   LOG_TRACE("Writing relation to stream...");
 
-  const int changesetId = _changesetData.currentChangesetId;
-  const QString datestring =
-  QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
-
-  QString outputLine =
-    _outputFormatStrings[ApiDb::getCurrentRelationsTableName()]
-      .arg(relationDbId)
-      .arg(changesetId)
-      .arg(datestring);
-  *(_outputSections[ApiDb::getCurrentRelationsTableName()].second) << outputLine;
-
-  outputLine =
-    _outputFormatStrings[ApiDb::getRelationsTableName()]
-      .arg(relationDbId)
-      .arg(changesetId)
-      .arg(datestring);
-  *(_outputSections[ApiDb::getRelationsTableName()].second) << outputLine;
+  const QStringList relationSqlStrs =
+    _sqlFormatter->relationToSqlStrings(relationDbId, _changesetData.currentChangesetId);
+  *(_outputSections[ApiDb::getCurrentRelationsTableName()].second) << relationSqlStrs[0];
+  *(_outputSections[ApiDb::getRelationsTableName()].second) << relationSqlStrs[1];
 }
 
 void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& relation,
@@ -1466,15 +1262,7 @@ void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& r
 
     if (!_validateData)
     {
-      unsigned long memberIdVal;
-      if (memberElementId.getId() < 0)
-      {
-        memberIdVal = memberElementId.getId() * -1;
-      }
-      else
-      {
-        memberIdVal = memberElementId.getId();
-      }
+      unsigned long memberIdVal = abs(memberElementId.getId());
       _writeRelationMemberToStream(dbRelationId, *it, memberIdVal, memberSequenceIndex);
     }
     else if (knownElementMap && knownElementMap->contains(memberElementId.getId()))
@@ -1500,45 +1288,15 @@ void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& r
 }
 
 void OsmApiDbBulkWriter::_writeRelationMemberToStream(const unsigned long sourceRelationDbId,
-                                                      const RelationData::Entry& memberEntry,
+                                                      const RelationData::Entry& member,
                                                       const unsigned long memberDbId,
                                                       const unsigned int memberSequenceIndex)
 {
-  QString memberType;
-  const ElementId memberElementId = memberEntry.getElementId();
-
-  switch (memberElementId.getType().getEnum())
-  {
-  case ElementType::Node:
-    memberType = "Node";
-    break;
-  case ElementType::Way:
-    memberType = "Way";
-    break;
-  case ElementType::Relation:
-    memberType = "Relation";
-    break;
-  default:
-    throw HootException("Unsupported element member type: " + memberType);
-  }
-
-  const QString dbRelationIdString(QString::number(sourceRelationDbId));
-  const QString memberRefIdString(QString::number(memberDbId));
-  const QString memberSequenceString(QString::number(memberSequenceIndex));
-  QString memberRole = _escapeCopyToData(memberEntry.getRole());
-  //handle empty data
-  if (memberRole.trimmed().isEmpty())
-  {
-    memberRole = "<no role>";
-  }
-
-  *_outputSections[ApiDb::getCurrentRelationMembersTableName()].second <<
-    _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()]
-      .arg(dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
-  *_outputSections[ApiDb::getRelationMembersTableName()].second <<
-    _outputFormatStrings[ApiDb::getRelationMembersTableName()]
-      .arg(dbRelationIdString, memberType, memberRefIdString, memberRole, memberSequenceString);
-
+  const QStringList relationMemberSqlStrs =
+    _sqlFormatter->relationMemberToSqlStrings(
+      sourceRelationDbId, memberDbId, member, memberSequenceIndex);
+  *_outputSections[ApiDb::getCurrentRelationMembersTableName()].second << relationMemberSqlStrs[0];
+  *_outputSections[ApiDb::getRelationMembersTableName()].second << relationMemberSqlStrs[1];
   _writeStats.relationMembersWritten++;
 }
 
@@ -1641,21 +1399,6 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
   }
 }
 
-QString OsmApiDbBulkWriter::_escapeCopyToData(const QString stringToOutput) const
-{
-  QString escapedString(stringToOutput);
-  // Escape any special characters as required by
-  //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
-  escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
-  escapedString.replace(QChar(8), QString("\\b"));
-  escapedString.replace(QChar(9), QString("\\t"));
-  escapedString.replace(QChar(10), QString("\\n"));
-  escapedString.replace(QChar(11), QString("\\v"));
-  escapedString.replace(QChar(12), QString("\\f"));
-  escapedString.replace(QChar(13), QString("\\r"));
-  return escapedString;
-}
-
 void OsmApiDbBulkWriter::_writeChangesetToStream()
 {
   LOG_VART(_changesetData.changesetUserId);
@@ -1670,34 +1413,18 @@ void OsmApiDbBulkWriter::_writeChangesetToStream()
   if (!_outputSections[ApiDb::getChangesetsTableName()].second)
   {
     _createOutputFile(
-      ApiDb::getChangesetsTableName(),
-      "COPY " + ApiDb::getChangesetsTableName() +
-      " (id, user_id, created_at, min_lat, max_lat, min_lon, max_lon, closed_at, num_changes) " +
-      "FROM stdin;\n");
+      ApiDb::getChangesetsTableName(), _sqlFormatter->getChangesetSqlHeaderString());
   }
 
-  const QString datestring =
-    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
-
   *_outputSections[ApiDb::getChangesetsTableName()].second <<
-    _outputFormatStrings[ApiDb::getChangesetsTableName()]
-      .arg(
-        QString::number(_changesetData.currentChangesetId),
-        QString::number(_changesetData.changesetUserId),
-        datestring,
-        QString::number(
-          (qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMinY())),
-        QString::number(
-          (qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMaxY())),
-        QString::number(
-          (qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMinX())),
-        QString::number(
-          (qlonglong)OsmApiDb::toOsmApiDbCoord(_changesetData.changesetBounds.getMaxX())),
-        datestring,
-        QString::number(_changesetData.changesInChangeset));
+    _sqlFormatter->changesetToSqlString(
+      _changesetData.currentChangesetId,
+      _changesetData.changesetUserId,
+      _changesetData.changesInChangeset,
+      _changesetData.changesetBounds);
 }
 
-void OsmApiDbBulkWriter::_writeSequenceUpdatesToStream(unsigned long changesetId,
+void OsmApiDbBulkWriter::_writeSequenceUpdatesToStream(long changesetId,
                                                        const unsigned long nodeId,
                                                        const unsigned long wayId,
                                                        const unsigned long relationId,

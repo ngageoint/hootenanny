@@ -36,6 +36,9 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+// Qt
+#include <qnumeric.h>
+
 #include "../TestUtils.h"
 
 namespace hoot
@@ -187,7 +190,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
-      isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
+      int(::qIsNaN(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent"))), 1);
   }
 
   void runStatsTestWithReviews()
@@ -306,7 +309,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
-      isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
+      int(::qIsNaN(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent"))), 1);
   }
 
 private:

@@ -53,6 +53,10 @@ SOURCES += \
     src/test/cpp/hoot/hadoop/stats/MapStatsDriverTest.cpp \
     src/test/cpp/hoot/hadoop/HadoopTileWorker2Test.cpp \
     src/test/cpp/hoot/hadoop/stats/MapStatsTest.cpp
+
+# These tests only succeed if the database has been populated by the java code.
+services:SOURCES += \
+    src/test/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsDriverTest.cpp
 }
 
 HEADERS += \
@@ -89,7 +93,11 @@ HEADERS += \
     src/main/cpp/hoot/hadoop/fourpass/TileOpDriver.h \
     src/main/cpp/hoot/hadoop/fourpass/TileOpMapper.h \
     src/main/cpp/hoot/hadoop/fourpass/TileOpReducer.h \
-    src/main/cpp/hoot/hadoop/Driver.h
+    src/main/cpp/hoot/hadoop/Driver.h \
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h \
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsMapper.h \
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsReducer.h \
+    src/main/cpp/hoot/hadoop/convert/SqlStatementLineRecordWriter.h
 
 SOURCES += \
     src/main/cpp/hoot/hadoop/pbf/PbfInputFormat.cpp \
@@ -131,4 +139,9 @@ SOURCES += \
     src/main/cpp/hoot/hadoop/cmd/BigPertyCmd.cpp \
     src/main/cpp/hoot/hadoop/cmd/BigUnifyCmd.cpp \
     src/main/cpp/hoot/hadoop/cmd/BigPaintNodesCmd.cpp \
-    src/main/cpp/hoot/hadoop/Driver.cpp
+    src/main/cpp/hoot/hadoop/Driver.cpp \
+    src/main/cpp/hoot/hadoop/cmd/BigConvertCmd.cpp \
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsDriver.cpp \
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsMapper.cpp \
+    src/main/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsReducer.cpp \
+    src/main/cpp/hoot/hadoop/convert/SqlStatementLineRecordWriter.cpp

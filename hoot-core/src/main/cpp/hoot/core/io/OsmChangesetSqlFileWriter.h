@@ -38,7 +38,7 @@
 // Qt
 #include <QUrl>
 #include <QFile>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 #include <QString>
 #include <QSet>
 
