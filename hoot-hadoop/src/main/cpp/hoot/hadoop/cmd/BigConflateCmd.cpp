@@ -85,7 +85,7 @@ public:
       pp::Job::setDefaultJobTracker("local");
     }
 
-    shared_ptr<TileWorker> worker(new HadoopTileWorker());
+   boost::shared_ptr<TileWorker> worker(new HadoopTileWorker());
     TileConflator uut(worker);
     // ~240m
     uut.setBuffer(pixelSize);

@@ -65,7 +65,7 @@ public:
 
 protected:
 
-  shared_ptr<ostream> _out;
+  boost::shared_ptr<ostream> _out;
 
 private:
 

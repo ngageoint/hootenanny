@@ -119,7 +119,7 @@ public:
 
   const ConstOsmMapPtr& getMap() const { return _map; }
 
-  const shared_ptr<const Way>& getWay() const { return _way; }
+  const ConstWayPtr& getWay() const { return _way; }
 
   /**
    * Returns the node at this WayLocation. If isNode() returns false this will thrown an exception.
@@ -202,8 +202,8 @@ inline uint qHash(const WayLocation& wl)
   return qHash(wl.toString());
 }
 
-typedef shared_ptr<WayLocation> WayLocationPtr;
-typedef shared_ptr<const WayLocation> ConstWayLocationPtr;
+typedef boost::shared_ptr<WayLocation> WayLocationPtr;
+typedef boost::shared_ptr<const WayLocation> ConstWayLocationPtr;
 
 }
 

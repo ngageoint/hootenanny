@@ -63,7 +63,7 @@ public:
     map->addNode(n1);
 
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -79,7 +79,7 @@ public:
     n1->getTags().set("name", "foo");
 
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -111,7 +111,7 @@ public:
     n1->getTags().set("poi", true);
 
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -127,7 +127,7 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-8);
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -159,7 +159,7 @@ public:
     n1->getTags().set("poi", true);
 
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -174,7 +174,7 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-5);
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -189,7 +189,7 @@ public:
     n1->getTags().set("name", "foo");
     n1->setX(-7);
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -224,7 +224,7 @@ public:
     map->addNode(n1);
 
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -241,7 +241,7 @@ public:
     }
 
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
@@ -258,7 +258,7 @@ public:
     }
 
     {
-      PoiPolygonMatch uut(map, shared_ptr<MatchThreshold>(), shared_ptr<PoiPolygonRfClassifier>());
+      PoiPolygonMatch uut(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
       uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);

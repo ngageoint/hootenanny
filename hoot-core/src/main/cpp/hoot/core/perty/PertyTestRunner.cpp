@@ -68,7 +68,7 @@ void PertyTestRunner::_writeStatsForOutputFiles(const QString& inputMapPath, QSt
   MapStatsWriter().writeStats(inputMapPath, statsOutputPath, sep);
 }
 
-QList<shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(const QString referenceMapInputPath,
+QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(const QString referenceMapInputPath,
                                                                       const QString outputPath)
 {
   if (_expectedScores.size() != _numTestRuns)
@@ -99,7 +99,7 @@ QList<shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(const QStr
     resultsFile.remove();
   }
 
-  QList<shared_ptr<const PertyTestRunResult> > testRunResults;
+  QList<boost::shared_ptr<const PertyTestRunResult> > testRunResults;
   double dynamicVariableValue = _dynamicVariableStartValue;
   _matchScorer.reset(new PertyMatchScorer());
   int testScoreCtr = 0;
@@ -129,7 +129,7 @@ QList<shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(const QStr
       {
         const QString testRunOutputPath =
           outputPath + "/test-" + QString::number(i + 1) + "-" + QString::number(j + 1);
-        shared_ptr<const MatchComparator> matchComparator =
+       boost::shared_ptr<const MatchComparator> matchComparator =
           _matchScorer->scoreMatches(referenceMapInputPath, testRunOutputPath);
         const double score = matchComparator->getPertyScore();
         simulationScores.append(score);
@@ -157,7 +157,7 @@ QList<shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(const QStr
     const double scoreVariance = abs(_expectedScores[i] - avgScore);
     LOG_VARD(scoreVariance);
 
-    shared_ptr<const PertyTestRunResult> testRunResult(
+   boost::shared_ptr<const PertyTestRunResult> testRunResult(
       new PertyTestRunResult(
          referenceMapInputPath, outputPath, i + 1, simulationScores, avgScore, _expectedScores[i],
           scoreVariance, _allowedScoreVariance, _failOnBetterScore, _dynamicVariables,
@@ -196,7 +196,7 @@ QList<shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(const QStr
 }
 
 void PertyTestRunner::_writePlotFile(const QString outputPath,
-                                     const QList<shared_ptr<const PertyTestRunResult> >& testRunResults)
+                                     const QList<boost::shared_ptr<const PertyTestRunResult> >& testRunResults)
 {
   QFile plotFile(outputPath + "/results-plot.dat");
   if (plotFile.exists())
@@ -206,10 +206,10 @@ void PertyTestRunner::_writePlotFile(const QString outputPath,
 
   QString outStr = "";
   double dynamicVariableValue = _dynamicVariableStartValue;
-  for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = testRunResults.begin();
+  for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = testRunResults.begin();
        it != testRunResults.end(); it++)
   {
-    shared_ptr<const PertyTestRunResult> result = *it;
+   boost::shared_ptr<const PertyTestRunResult> result = *it;
     outStr += QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
     dynamicVariableValue += _dynamicVariableIncrement;
   }

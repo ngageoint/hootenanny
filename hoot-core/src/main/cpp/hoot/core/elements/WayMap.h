@@ -35,7 +35,7 @@
 namespace hoot
 {
   class Way;
-  typedef HashMap<long, boost::shared_ptr<Way> > WayMap;
+  typedef HashMap<long, WayPtr > WayMap;
 }
 
 #endif // WAYMAP_H

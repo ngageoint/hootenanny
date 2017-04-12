@@ -42,7 +42,7 @@ bool ElementIterator::hasNext()
   return _pending.empty() == false;
 }
 
-const shared_ptr<Element>& ElementIterator::next()
+const boost::shared_ptr<Element>& ElementIterator::next()
 {
   if (_pending.empty())
   {

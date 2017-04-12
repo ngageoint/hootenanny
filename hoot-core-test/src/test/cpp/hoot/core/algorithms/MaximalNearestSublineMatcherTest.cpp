@@ -90,7 +90,7 @@ public:
   void runSimpleTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -105,7 +105,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
+    boost::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 
     double score;
     WaySublineMatchString match = matcher->findMatch(map, w1, w2, score, 10.0);
@@ -129,7 +129,7 @@ public:
   void runNoOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -144,7 +144,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
+    boost::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 
     double score;
     WaySublineMatchString match = matcher->findMatch(map, w1, w2, score, 10.0);

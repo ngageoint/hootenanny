@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FileInputFormat.h"
@@ -49,7 +49,7 @@ void FileInputFormat::_addFile(const string& path)
 
   for (long pos = 0; pos < len; pos += blockSize)
   {
-    shared_ptr<FileInputSplit> fis(new FileInputSplit());
+   boost::shared_ptr<FileInputSplit> fis(new FileInputSplit());
     fis->setStart(pos);
     fis->setLength(std::min(blockSize, len - pos));
     fis->setPath(path);

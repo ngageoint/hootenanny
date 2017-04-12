@@ -53,7 +53,7 @@ bool TransliterateNameVisitor::isLatin(const QString& s)
   return true;
 }
 
-void TransliterateNameVisitor::visit(const shared_ptr<Element>& e)
+void TransliterateNameVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   QStringList names = e->getTags().getNames();
 

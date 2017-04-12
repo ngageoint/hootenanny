@@ -206,7 +206,7 @@ public:
     }
     else if (ecc != 0)
     {
-      shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
+     boost::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
       ecp->addFunction(func);
       ecc->addCriterion(ecp);
     }

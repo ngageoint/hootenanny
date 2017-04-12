@@ -104,17 +104,17 @@ public:
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
 
-  virtual const boost::shared_ptr<const Node> getNode(long id) const;
+  virtual const ConstNodePtr getNode(long id) const;
 
-  virtual const boost::shared_ptr<Node> getNode(long id);
+  virtual const NodePtr getNode(long id);
 
-  virtual const boost::shared_ptr<const Relation> getRelation(long id) const;
+  virtual const ConstRelationPtr getRelation(long id) const;
 
-  virtual const boost::shared_ptr<Relation> getRelation(long id);
+  virtual const RelationPtr getRelation(long id);
 
-  virtual const boost::shared_ptr<const Way> getWay(long id) const;
+  virtual const ConstWayPtr getWay(long id) const;
 
-  virtual const boost::shared_ptr<Way> getWay(long id);
+  virtual const WayPtr getWay(long id);
 
   virtual bool containsNode(long id) const;
 

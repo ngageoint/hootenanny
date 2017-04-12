@@ -67,11 +67,11 @@ public:
     TestUtils::resetEnvironment();
   }
 
-  shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
 
-  shared_ptr<Node> createNode(double x, double y)
+  NodePtr createNode(double x, double y)
   {
-    shared_ptr<Node> n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
+    NodePtr n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
     _map->addNode(n);
     return n;
   }
@@ -79,17 +79,17 @@ public:
   void runRoadsTest()
   {
     //test highway (linestring)
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     _map = map;
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w1->setTag("highway", "track");
     w1->setTag("name", "w1");
     w1->addNode(createNode(0, 0)->getId());
     w1->addNode(createNode(10, 0)->getId());
     _map->addWay(w1);
 
-    shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w2->setTag("highway", "road");
     w2->setTag("name", "w2");
     w2->addNode(createNode(-1, 1)->getId());

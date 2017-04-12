@@ -76,7 +76,7 @@ public:
   /**
    * Use this instead of a constructor.
    */
-  static shared_ptr<SingleSidedNetworkMatcher> create();
+  static boost::shared_ptr<SingleSidedNetworkMatcher> create();
 
   void iterate();
 
@@ -113,7 +113,7 @@ private:
     double score;
   };
 
-  typedef shared_ptr<EdgeLinkScore> EdgeLinkScorePtr;
+  typedef boost::shared_ptr<EdgeLinkScore> EdgeLinkScorePtr;
 
   typedef SingleAssignmentProblemSolver<ConstNetworkEdgePtr, ConstNetworkEdgePtr> Saps;
 
@@ -151,8 +151,8 @@ private:
 
 };
 
-typedef shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcherPtr;
-typedef shared_ptr<const SingleSidedNetworkMatcher> ConstSingleSidedNetworkMatcherPtr;
+typedef boost::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcherPtr;
+typedef boost::shared_ptr<const SingleSidedNetworkMatcher> ConstSingleSidedNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstSingleSidedNetworkMatcherPtr, ConstSingleSidedNetworkMatcherPtr);

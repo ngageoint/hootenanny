@@ -41,7 +41,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {
   bool result = false;
 
-  const shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
+  const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
   const set<long>& parents = e2r->getRelationByElement(eid);
   for (set<long>::const_iterator it = parents.begin(); it != parents.end() && result == false;
     it++)
@@ -60,7 +60,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
   return result;
 }
 
-bool BuildingCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool BuildingCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   bool result = false;
 

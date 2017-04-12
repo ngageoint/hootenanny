@@ -47,7 +47,7 @@ public:
 
   virtual ~RemoveUnknown1Visitor() {}
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 };
 
 }

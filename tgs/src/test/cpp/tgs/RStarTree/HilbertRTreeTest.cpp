@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -124,7 +124,7 @@ public:
 
   void test1()
   {
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
     // @todo fix me.
     RStarTree uut(mps, 2);
     int maxChildCount = uut.getRoot()->getMaxChildCount();
@@ -185,7 +185,7 @@ public:
   {
     int testSize = 1000;
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
     HilbertRTree uut(mps, 2);
 
     std::vector<Box> boxes;
@@ -201,7 +201,7 @@ public:
   {
     int testSize = 1000;
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
     HilbertRTree uut(mps, 2);
     
     std::vector<Box> boxes;
@@ -221,7 +221,7 @@ public:
   {
     int testSize = 1000;
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
     HilbertRTree uut(mps, 2);
 
     std::vector<Box> boxes;
@@ -237,8 +237,8 @@ public:
     int testSize = 300;
     int sampleSize = 40;
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
     _testTreeDistance(uut, testSize, sampleSize, false);
   }
 
@@ -247,8 +247,8 @@ public:
     int testSize = 500;
     int sampleSize = 50;
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
     _testTreeDistance(uut, testSize, sampleSize, true);
   }
 
@@ -260,8 +260,8 @@ public:
     std::vector<int> fids;
     _createRandomTestData(testSize, boxes, fids);
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<HilbertRTree> uut(new HilbertRTree(mps, 2));
     std::vector<Box> firstBoxes = boxes;
     std::vector<int> firstFids = fids;
     firstBoxes.resize(testSize / 2);
@@ -279,7 +279,7 @@ public:
   {
     int testSize = 1000;
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(128));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(128));
     HilbertRTree uut(mps, 2);
 
     std::vector<Box> boxes;
@@ -326,19 +326,19 @@ public:
     int testSize = 300;
     int sampleSize = 40;
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-    shared_ptr<RStarTree> uut(new RStarTree(mps, 2));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<RStarTree> uut(new RStarTree(mps, 2));
     _testTreeDistance(uut, testSize, sampleSize, false);
   }
 
-  void _testTreeDistance(shared_ptr<RStarTree> uut, int testSize, int sampleSize, bool bulkLoad)
+  void _testTreeDistance(boost::shared_ptr<RStarTree> uut, int testSize, int sampleSize, bool bulkLoad)
   {
     std::vector<Box> boxes;
     std::vector<int> fids;
     _createRandomTestData(testSize, boxes, fids);
     if (bulkLoad)
     {
-      shared_ptr<HilbertRTree> hrt = boost::dynamic_pointer_cast<HilbertRTree>(uut);
+     boost::shared_ptr<HilbertRTree> hrt = boost::dynamic_pointer_cast<HilbertRTree>(uut);
       hrt->bulkInsert(boxes, fids);
     }
     else
@@ -351,7 +351,7 @@ public:
     _testTreeDistance(uut, testSize, sampleSize);
   }
 
-  void _testTreeDistance(shared_ptr<RStarTree> uut, int testSize, int sampleSize)
+  void _testTreeDistance(boost::shared_ptr<RStarTree> uut, int testSize, int sampleSize)
   {
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -393,7 +393,7 @@ public:
     }
   }
 
-  void benchmarkTree(shared_ptr<RStarTree> rst, int testSize, int sampleSize, bool bulkLoad)
+  void benchmarkTree(boost::shared_ptr<RStarTree> rst, int testSize, int sampleSize, bool bulkLoad)
   {
     std::vector<Box> boxes;
     std::vector<int> fids;
@@ -401,7 +401,7 @@ public:
     
     if (bulkLoad == true)
     {
-      shared_ptr<HilbertRTree> hrt = boost::dynamic_pointer_cast<HilbertRTree>(rst);
+     boost::shared_ptr<HilbertRTree> hrt = boost::dynamic_pointer_cast<HilbertRTree>(rst);
       hrt->bulkInsert(boxes, fids);
     }
     else
@@ -433,21 +433,21 @@ public:
     {
       printf("%d\t%d\t", testSize, pageSize);
       {
-        shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
-        shared_ptr<HilbertRTree> hrt(new HilbertRTree(mps, 2));
+       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
+       boost::shared_ptr<HilbertRTree> hrt(new HilbertRTree(mps, 2));
         printf("%d\t", hrt->getRoot()->getMaxChildCount());
         benchmarkTree(hrt, testSize, sampleSize, false);
       }
 
       {
-        shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
-        shared_ptr<HilbertRTree> hrt(new HilbertRTree(mps, 2));
+       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
+       boost::shared_ptr<HilbertRTree> hrt(new HilbertRTree(mps, 2));
         benchmarkTree(hrt, testSize, sampleSize, true);
       }
 
       {
-        shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
-        shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
+       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(pageSize));
+       boost::shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
         benchmarkTree(rst, testSize, sampleSize, false);
       }
       printf("\n");

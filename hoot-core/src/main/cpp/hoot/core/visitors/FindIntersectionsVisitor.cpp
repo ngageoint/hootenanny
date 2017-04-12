@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindIntersectionsVisitor.h"
 
@@ -37,7 +37,7 @@ namespace hoot
 
 void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+ boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);
@@ -46,7 +46,7 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
   set<long> hwids;
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
-    shared_ptr<Way> w = _map->getWay(*it);
+   WayPtr w = _map->getWay(*it);
 
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()))
     {

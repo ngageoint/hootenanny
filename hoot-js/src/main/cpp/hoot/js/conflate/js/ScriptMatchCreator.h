@@ -74,18 +74,18 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 
-  virtual shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 
 private:
 
-  shared_ptr<PluginContext> _script;
+ boost::shared_ptr<PluginContext> _script;
   QString _scriptPath;
 
   Description _getScriptDescription(QString path) const;
 
-  shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
+ boost::shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
   double _worstCircularError;
-  shared_ptr<MatchThreshold> _matchThreshold;
+ boost::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
 };
 

@@ -45,7 +45,7 @@ public:
 
   static string className() { return "hoot::UnknownCriterion"; }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   UnknownCriterion* clone() { return new UnknownCriterion(); }
 };

@@ -55,7 +55,7 @@ namespace hoot
 {
 using namespace geos::geom;
 
-TileConflator::TileConflator(shared_ptr<TileWorker> worker)
+TileConflator::TileConflator(boost::shared_ptr<TileWorker> worker)
 {
   _worker = worker;
   // set the buffer to ~5km.

@@ -29,7 +29,7 @@
 namespace hoot
 {
 
-void ExtractWaysVisitor::visit(const shared_ptr<const Element>& e)
+void ExtractWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Way)
   {

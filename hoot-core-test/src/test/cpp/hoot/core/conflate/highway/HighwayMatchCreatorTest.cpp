@@ -65,7 +65,7 @@ public:
     HighwayMatchCreator uut;
 
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);

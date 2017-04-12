@@ -108,12 +108,12 @@ public:
    */
   ConstEdgeLocationPtr calculateNearestLocation(ConstEdgeLocationPtr el) const;
 
-  shared_ptr<EdgeString> clone() const;
+ boost::shared_ptr<EdgeString> clone() const;
 
   /**
    * Returns true if the entire string in other is contained by this.
    */
-  bool contains(const shared_ptr<const EdgeString> other) const;
+  bool contains(const boost::shared_ptr<const EdgeString> other) const;
 
   /**
    * Returns true if the specified edge is in this string.
@@ -192,7 +192,7 @@ public:
    */
   bool isValid() const;
 
-  bool overlaps(shared_ptr<const EdgeString> other) const;
+  bool overlaps(boost::shared_ptr<const EdgeString> other) const;
 
   bool overlaps(const ConstEdgeSublinePtr& es) const;
 
@@ -218,7 +218,7 @@ public:
   QString toString() const;
 
   bool touches(const ConstEdgeSublinePtr& es) const;
-  bool touches(const shared_ptr<const EdgeString>& es) const;
+  bool touches(const boost::shared_ptr<const EdgeString>& es) const;
 
   /**
    * Trim this String to a new start/end location.
@@ -236,8 +236,8 @@ private:
   QList<EdgeEntry> _edges;
 };
 
-typedef shared_ptr<EdgeString> EdgeStringPtr;
-typedef shared_ptr<const EdgeString> ConstEdgeStringPtr;
+typedef boost::shared_ptr<EdgeString> EdgeStringPtr;
+typedef boost::shared_ptr<const EdgeString> ConstEdgeStringPtr;
 
 // not implemented
 bool operator<(ConstEdgeStringPtr, ConstEdgeStringPtr);

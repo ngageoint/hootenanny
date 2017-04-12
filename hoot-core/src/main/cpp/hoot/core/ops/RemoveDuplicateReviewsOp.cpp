@@ -43,7 +43,7 @@ RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
 {
 }
 
-void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
+void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
@@ -84,7 +84,7 @@ void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
       ElementId beid = *eids.begin();
       ElementId eeid = *eids.rbegin();
 
-      OsmMapPtr copy(new OsmMap());
+      boost::shared_ptr<OsmMap> copy(new OsmMap());
       CopySubsetOp(map, beid, eeid).apply(copy);
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);

@@ -76,7 +76,7 @@ void GeoNamesReader::close()
   _fp.close();
 }
 
-shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
+boost::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
 {
   if (!_wgs84)
   {
@@ -147,7 +147,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  shared_ptr<Node> n(new Node(_status, id, x, y, _circularError));
+  NodePtr n(new Node(_status, id, x, y, _circularError));
 
   if (_columns.size() != fields.size())
   {

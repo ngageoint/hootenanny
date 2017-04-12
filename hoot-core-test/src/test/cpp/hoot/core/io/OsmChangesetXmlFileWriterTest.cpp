@@ -56,7 +56,7 @@ public:
 
   void runSimpleTest()
   {
-    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     QDir().mkpath("test-output/io/OsmChangesetXmlFileWriterTest");
     OsmChangesetXmlFileWriter().write(
       "test-output/io/OsmChangesetXmlFileWriterTest/changeset.osc", changesetProvider);
@@ -68,7 +68,7 @@ public:
 
   void runSplitTest()
   {
-    shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
+    boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     QDir().mkpath("test-output/io/OsmChangesetXmlWriterTest");
     OsmChangesetXmlFileWriter writer;
     Settings testSettings = conf();

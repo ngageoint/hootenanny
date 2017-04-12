@@ -63,7 +63,7 @@ private:
   OsmApiDb _database;
   long _fileOutputElementBufferSize;
   QString _outputFileCopyLocation;
-  shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
   QString _outputDelimiter;
   long _changesetUserId;
   QString _output;

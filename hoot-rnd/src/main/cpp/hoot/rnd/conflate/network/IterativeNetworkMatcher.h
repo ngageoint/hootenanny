@@ -67,7 +67,7 @@ public:
   /**
    * Use this instead of a constructor.
    */
-  static shared_ptr<IterativeNetworkMatcher> create();
+  static boost::shared_ptr<IterativeNetworkMatcher> create();
 
   void iterate();
 
@@ -185,8 +185,8 @@ private:
 
 };
 
-typedef shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
-typedef shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
+typedef boost::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
+typedef boost::shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);
