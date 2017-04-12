@@ -51,7 +51,8 @@ WriteOsmSqlStatementsDriver::WriteOsmSqlStatementsDriver() :
 _outputFileCopyLocation(""),
 _outputDelimiter("\t")
 {
-  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
+  //we don't support pgbulk yet
+  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter, "\\N"));
   setConfiguration(conf());
 }
 

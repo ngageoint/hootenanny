@@ -58,16 +58,16 @@ namespace hoot
 class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbBulkWriterTest);
+  CPPUNIT_TEST(runSqlFileOutputTest);
   CPPUNIT_TEST(runPsqlDbOfflineTest);
+  CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runPsqlDbOfflineValidateOffTest);
   CPPUNIT_TEST(runPsqlDbOfflineStxxlTest);
   CPPUNIT_TEST(runPsqlDbOnlineTest);
-  CPPUNIT_TEST(runPsqlCustomStartingIdsDbOfflineTest);
-  CPPUNIT_TEST(runSqlFileOutputTest);
-  CPPUNIT_TEST(runPgBulkDbOfflineTest);
-  CPPUNIT_TEST(runPgBulkDbOnlineTest);
-  CPPUNIT_TEST(runPgBulkCustomStartingIdsDbOfflineTest);
   CPPUNIT_TEST(runCsvFilesOutputTest);
+  CPPUNIT_TEST(runPgBulkDbOfflineTest);
+  CPPUNIT_TEST(runPgBulkCustomStartingIdsDbOfflineTest);
+  CPPUNIT_TEST(runPgBulkDbOnlineTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -86,11 +86,12 @@ public:
         QString stdFileName = dirContent;
         stdFileName.replace(stdFileNameExclude, "");
         QString stdFilePath = stdDirPath + "/" + stdFileName;
-        LOG_VART(stdFilePath)
-        const QStringList stdCsvTokens = tokenizeOutputFileWithoutDates(stdFilePath);
+        LOG_VART(stdFilePath);
+
+        const QStringList stdCsvTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
         const QString outFilePath = outDirPath + "/" + dirContent;
-        LOG_VART(outFilePath)
-        const QStringList outputCsvTokens = tokenizeOutputFileWithoutDates(outFilePath);
+        LOG_VART(outFilePath);
+        const QStringList outputCsvTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
         CPPUNIT_ASSERT_EQUAL(stdCsvTokens.size(), outputCsvTokens.size());
         for (int i = 0; i < stdCsvTokens.size(); i++)
         {
@@ -554,7 +555,7 @@ public:
     //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
@@ -600,7 +601,7 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql"); //1 way
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql"); //1 relation
 
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
     verifyCsvOutput(
@@ -640,7 +641,7 @@ public:
     writer.setStartingRelationId(5);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
@@ -706,7 +707,7 @@ public:
     //  outputDirPath + "/OsmApiDbBulkWriterTestPgBulkloadBadRecords.log");
 
     writer.open(outputPath);
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
     TestUtils::verifyStdMatchesOutputIgnoreDate(
@@ -716,7 +717,7 @@ public:
     //the directory contains a collections of csv files
     verifyCsvOutput("test-files/io/OsmApiDbBulkWriterTest/PgBulkOffline", outputDirPath,
                     prefix + "-");
-    verifyDatabaseEmpty();
+    ServicesDbTestUtils::verifyTestDatabaseEmpty();
   }
 };
 

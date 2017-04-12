@@ -57,7 +57,6 @@ _fileDataPassCtr(0)
   _reset();
   _sectionNames = _createSectionNameList();
   setConfiguration(conf());
-  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
 }
 
 OsmApiDbBulkWriter::~OsmApiDbBulkWriter()
@@ -226,15 +225,18 @@ void OsmApiDbBulkWriter::_verifyApp()
       QString("formats are CSV file (.csv) or OSM API database (osmapidb://)."));
   }
 
+  QString nullString;
   if (_writerApp == "psql")
   {
     _outputDelimiter = "\t";
+    nullString = "\\N";
   }
   else
   {
     _outputDelimiter = ",";
+    nullString = "";
   }
-  _initOutputFormatStrings();
+  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter, nullString));
 }
 
 void OsmApiDbBulkWriter::_verifyOutputCopySettings()

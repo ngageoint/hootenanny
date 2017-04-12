@@ -41,7 +41,8 @@ WriteOsmSqlStatementsMapper::WriteOsmSqlStatementsMapper() :
 _outputDelimiter("\t"),
 _localJobTracker(false)
 {
-  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
+  //we don't support pgbulk yet
+  _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter, "\\N"));
   _statementsBuffer.reset(new QVector<QPair<QString, QString> >());
   _context = NULL;
 }

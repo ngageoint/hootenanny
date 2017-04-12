@@ -36,9 +36,10 @@
 namespace hoot
 {
 
-OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString delimiter)
+OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString delimiter,
+                                                             const QString nullString)
 {
-  _initOutputFormatStrings(delimiter);
+  _initOutputFormatStrings(delimiter, nullString);
 }
 
 unsigned int OsmApiDbSqlStatementFormatter::_convertDegreesToNanodegrees(const double degrees)
@@ -46,70 +47,71 @@ unsigned int OsmApiDbSqlStatementFormatter::_convertDegreesToNanodegrees(const d
   return round(degrees * ApiDb::COORDINATE_SCALE);
 }
 
-void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter)
+void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter,
+                                                             const QString nullString)
 {
   QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getChangesetsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentNodesTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getNodesTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWaysTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getWaysTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getWayNodesTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentRelationsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getRelationsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getRelationMembersTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   _outputFormatStrings[ApiDb::getCurrentWayTagsTableName()] =
     formatString.replace("\t", delimiter);
   _outputFormatStrings[ApiDb::getCurrentRelationTagsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getWayTagsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
   _outputFormatStrings[ApiDb::getRelationTagsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 
   formatString = HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT;
   _outputFormatStrings[ApiDb::getNodeTagsTableName()] =
-    formatString.replace("\t", delimiter);
+    formatString.replace("\t", delimiter).replace("\\N", nullString);
 }
 
 QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& node,

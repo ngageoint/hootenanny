@@ -70,7 +70,7 @@ class OsmApiDbSqlStatementFormatter
 
 public:
 
-  OsmApiDbSqlStatementFormatter(const QString delimiter);
+  OsmApiDbSqlStatementFormatter(const QString delimiter, const QString nullString);
 
   QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId);
   QStringList wayToSqlStrings(const long wayId, const long changesetId);
@@ -196,7 +196,7 @@ private:
 
   QMap<QString, QString> _outputFormatStrings;
 
-  void _initOutputFormatStrings(const QString delimiter);
+  void _initOutputFormatStrings(const QString delimiter, const QString nullString);
   static unsigned int _convertDegreesToNanodegrees(const double degrees);
   static QString _escapeCopyToData(const QString stringToOutput);
 };
