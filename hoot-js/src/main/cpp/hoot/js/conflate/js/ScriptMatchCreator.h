@@ -53,12 +53,12 @@ public:
   /**
    * Not implemented.
    */
-  virtual Match* createMatch(const ConstOsmMapPtrR, ElementId, ElementId);
+  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId, ElementId);
 
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
   virtual vector<Description> getAllCreators() const;
@@ -72,7 +72,7 @@ public:
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
    */
-  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR map);
+  virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 
   virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 

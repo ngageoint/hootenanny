@@ -80,7 +80,7 @@ void PbfRecordWriter::emitRecord(OsmMapPtr map)
   else
   {
     // RHEL complains about this being ambiguous
-    const ConstOsmMapPtrR co = map;
+    const ConstOsmMapPtr& co = map;
     _OsmPbfWriter->writePartial(co);
   }
 }

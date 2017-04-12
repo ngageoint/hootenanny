@@ -54,10 +54,10 @@ public:
   /**
    * Classifies the match type of a building pair and returns the results.
    */
-  virtual MatchClassification classify(const ConstOsmMapPtrR map,
+  virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2) const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtrR m,
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2) const;
 
   void import(QDomElement& docRoot);

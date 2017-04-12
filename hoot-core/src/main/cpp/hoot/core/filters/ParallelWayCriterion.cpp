@@ -50,7 +50,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ParallelWayCriterion)
 
-ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtrR map,
+ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map,
                                            ConstWayPtr baseWay,
                                            bool isParallel) :
   _map(map),

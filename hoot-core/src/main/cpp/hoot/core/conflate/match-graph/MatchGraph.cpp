@@ -148,7 +148,7 @@ public:
     }
   }
 
-  MatchSetVector findSubgraphs(const ConstOsmMapPtrR map, bool checkForConflicts) const
+  MatchSetVector findSubgraphs(const ConstOsmMapPtr& map, bool checkForConflicts) const
   {
     DisjointSetMap<ElementId> dsm;
     MatchSetVector result;
@@ -298,7 +298,7 @@ void MatchGraph::_resetGraph()
   _d->build();
 }
 
-MatchSetVector MatchGraph::findSubgraphs(const ConstOsmMapPtrR map) const
+MatchSetVector MatchGraph::findSubgraphs(const ConstOsmMapPtr& map) const
 {
   return _d->findSubgraphs(map, _checkForConflicts);
 }

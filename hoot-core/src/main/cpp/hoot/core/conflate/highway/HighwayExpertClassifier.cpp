@@ -43,7 +43,7 @@ HighwayExpertClassifier::HighwayExpertClassifier()
 {
 }
 
-MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtrR map,
+MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString &match)
 {
   // calculate the average classification. Is there a better approach? Max, min, mean? Dunno.
@@ -68,7 +68,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtrR map,
   return result;
 }
 
-MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtrR map,
+MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   const WaySublineMatch& match)
 {
   MatchClassification result;
@@ -118,7 +118,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtrR map,
   return result;
 }
 
-map<QString, double> HighwayExpertClassifier::getFeatures(const ConstOsmMapPtrR /*m*/,
+map<QString, double> HighwayExpertClassifier::getFeatures(const ConstOsmMapPtr& /*m*/,
   ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString& /*match*/) const
 {
   return map<QString, double>();

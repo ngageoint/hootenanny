@@ -168,7 +168,7 @@ public:
   virtual void finalizePartial();
   virtual void writePartial(const ConstNodePtr& node);
   virtual void writePartial(const ConstWayPtr& way);
-  virtual void writePartial(const ConstRelationPtrR relation);
+  virtual void writePartial(const ConstRelationPtr& relation);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -273,7 +273,7 @@ private:
                                      const unsigned long relationId, QString& outputStr);
   void _writeChangesetToStream();
   void _writeRelationToStream(const unsigned long relationDbId);
-  void _writeRelationMembersToStream(const ConstRelationPtrR relation,
+  void _writeRelationMembersToStream(const ConstRelationPtr& relation,
                                      const unsigned long dbRelationId);
   void _writeRelationMemberToStream(const unsigned long sourceRelationDbId,
                                     const RelationData::Entry& memberEntry,

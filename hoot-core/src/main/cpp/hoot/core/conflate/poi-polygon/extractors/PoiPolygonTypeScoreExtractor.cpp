@@ -122,10 +122,13 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
   const QStringList poiTagList = _getRelatedTags(poi->getTags());
   const QStringList polyTagList = _getRelatedTags(poly->getTags());
+  LOG_VART(poiTagList);
+  LOG_VART(polyTagList);
 
   QStringList excludeKvps;
   excludeKvps.append("building=yes");
   excludeKvps.append("poi=yes");
+  LOG_VART(excludeKvps);
 
   for (int i = 0; i < poiTagList.size(); i++)
   {
@@ -133,6 +136,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
     {
       const QString poiKvp = poiTagList.at(i).toLower();
       const QString polyKvp = polyTagList.at(j).toLower();
+
       const double score = OsmSchema::getInstance().score(poiKvp, polyKvp);
       if (score >= result)
       {

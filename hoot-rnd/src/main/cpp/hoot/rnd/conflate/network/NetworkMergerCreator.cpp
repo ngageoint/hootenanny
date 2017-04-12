@@ -204,7 +204,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
   return largest;
 }
 
-bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtrR map, const Match* m1,
+bool NetworkMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
   const Match* m2) const
 {
   bool result = false;

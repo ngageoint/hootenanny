@@ -42,13 +42,13 @@ public:
 
   HighwayExpertClassifier();
 
-  virtual MatchClassification classify(const ConstOsmMapPtrR map,
+  virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
 
-  MatchClassification classify(const ConstOsmMapPtrR map,
+  MatchClassification classify(const ConstOsmMapPtr& map,
     const WaySublineMatch& match);
 
-  map<QString, double> getFeatures(const ConstOsmMapPtrR m,
+  map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 };
 

@@ -45,7 +45,7 @@ public:
 
   PoiPolygonRfClassifier();
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtrR m, ElementId eid1,
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m, ElementId eid1,
                                            ElementId eid2) const;
 
 private:

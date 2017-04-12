@@ -97,7 +97,7 @@ public:
    * Two matches can only be conflicting if they contain the same ElementIds in getMatchPairs().
    *
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtrR map) const = 0;
+  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const = 0;
 
   /**
    * If the match should _not_ be optimized into a group of non-conflicting matches, then this

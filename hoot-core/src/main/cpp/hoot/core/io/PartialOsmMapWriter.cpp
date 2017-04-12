@@ -44,7 +44,7 @@ void PartialOsmMapWriter::write(ConstOsmMapPtr map)
   finalizePartial();
 }
 
-void PartialOsmMapWriter::writePartial(const ConstOsmMapPtrR map)
+void PartialOsmMapWriter::writePartial(const ConstOsmMapPtr& map)
 {
   const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)

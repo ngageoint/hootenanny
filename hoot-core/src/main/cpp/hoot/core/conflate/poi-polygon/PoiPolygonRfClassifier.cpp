@@ -218,7 +218,7 @@ void PoiPolygonRfClassifier::_createExtractors()
    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new SampledAngleHistogramExtractor()));*/
 }
 
-map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtrR m,
+map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m,
   ElementId eid1, ElementId eid2) const
 {
   map<QString, double> result;

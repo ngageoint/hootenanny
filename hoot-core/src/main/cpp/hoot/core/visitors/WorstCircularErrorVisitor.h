@@ -57,7 +57,7 @@ public:
   static Meters getWorstCircularError(const OsmMapPtr& map);
 
   // Handle const pointers to const
-  static Meters getWorstCircularError(const ConstOsmMapPtrR map);
+  static Meters getWorstCircularError(const ConstOsmMapPtr& map);
 
 private:
 

@@ -67,7 +67,7 @@ using namespace Tgs;
 unsigned int ScriptMatch::logWarnCount = 0;
 
 ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
-  const ConstOsmMapPtrR map, const ElementId& eid1, const ElementId& eid2,
+  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),
   _eid1(eid1),
@@ -79,7 +79,7 @@ ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Obj
   _calculateClassification(map, plugin);
 }
 
-void ScriptMatch::_calculateClassification(const ConstOsmMapPtrR map, Handle<Object> plugin)
+void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> plugin)
 {
   Context::Scope context_scope(_script->getContext());
   HandleScope handleScope;
@@ -146,7 +146,7 @@ double ScriptMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtrR map) const
+bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) const
 {
   bool conflicting = true;
 
@@ -234,7 +234,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtrR map) c
   return conflicting;
 }
 
-bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtrR map, ElementId sharedEid,
+bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
   ElementId other1, ElementId other2) const
 {
   set<ElementId> eids;
@@ -306,7 +306,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtrR map, ElementId sha
   return conflicting;
 }
 
-Handle<Value> ScriptMatch::_call(const ConstOsmMapPtrR map, Handle<Object> plugin)
+Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> plugin)
 {
   HandleScope handleScope;
   Context::Scope context_scope(_script->getContext());
@@ -336,7 +336,7 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtrR map, Handle<Object> plugi
   return handleScope.Close(result);
 }
 
-Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtrR map) const
+Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const
 {
   HandleScope handleScope;
   Context::Scope context_scope(_script->getContext());
@@ -366,7 +366,7 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtrR map
   return handleScope.Close(result);
 }
 
-std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtrR map) const
+std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) const
 {
   Context::Scope context_scope(_script->getContext());
   HandleScope handleScope;

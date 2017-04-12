@@ -77,7 +77,7 @@ private:
    * member connects to the second, connects to the third, etc. We could be more liberal, but we
    * can let that be use case driven.
    */
-  bool _isContiguous(const ConstRelationPtrR r);
+  bool _isContiguous(const ConstRelationPtr& r);
 
   bool _isValidElement(const ConstElementPtr& e);
 

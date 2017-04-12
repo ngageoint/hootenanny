@@ -97,7 +97,7 @@ public:
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
                                                      const bool statsFlag=false) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtrR r,
+ boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r,
                                                      bool throwError,
                                                      const bool statsFlag=false) const;
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;

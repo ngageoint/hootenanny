@@ -404,7 +404,7 @@ void UnifyingConflator::_reset()
   LOG_DEBUG("Done");
 }
 
-void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtrR map,
+void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtr& map,
                                                 vector<const Match*> matches)
 {
   for (size_t i = 0; i < matches.size(); i++)

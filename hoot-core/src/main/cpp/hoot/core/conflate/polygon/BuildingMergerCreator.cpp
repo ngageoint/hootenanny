@@ -89,7 +89,7 @@ vector<MergerCreator::Description> BuildingMergerCreator::getAllCreators() const
   return result;
 }
 
-bool BuildingMergerCreator::isConflicting(const ConstOsmMapPtrR map, const Match* m1,
+bool BuildingMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
   const Match* m2) const
 {
   const BuildingMatch* bm1 = dynamic_cast<const BuildingMatch*>(m1);

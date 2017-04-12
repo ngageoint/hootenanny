@@ -44,7 +44,7 @@
 namespace hoot
 {
 
-PoiPolygonAdvancedMatcher::PoiPolygonAdvancedMatcher(const ConstOsmMapPtrR map,
+PoiPolygonAdvancedMatcher::PoiPolygonAdvancedMatcher(const ConstOsmMapPtr& map,
                                                      const set<ElementId>& polyNeighborIds,
                                                      const set<ElementId>& poiNeighborIds,
                                                      double distance) :

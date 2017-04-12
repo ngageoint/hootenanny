@@ -69,9 +69,11 @@ public:
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
-    PoiPolygonMatch match1(
-      map, w1->getElementId(), n1->getElementId(), boost::shared_ptr<MatchThreshold>(),
-      boost::shared_ptr<PoiPolygonRfClassifier>());
+    PoiPolygonMatch match1(map, boost::shared_ptr<MatchThreshold>(),
+                           boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    match1.calculateMatch(w1->getElementId(), n1->getElementId());
+
     MatchSet matches;
     matches.insert(&match1);
     vector<Merger*> mergers;
@@ -113,14 +115,15 @@ public:
     map->addNode(n1);
 
     vector<const Match*> matchesV;
-    PoiPolygonMatch match1(map, w1->getElementId(), n1->getElementId(), boost::shared_ptr<MatchThreshold>(),
-                           boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    PoiPolygonMatch match1(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+    match1.calculateMatch(w1->getElementId(), n1->getElementId());
     matchesV.push_back(&match1);
     boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
-    PoiPolygonMatch match2(map, w2->getElementId(), n1->getElementId(), boost::shared_ptr<MatchThreshold>(),
-                           boost::shared_ptr<PoiPolygonRfClassifier>());
+    PoiPolygonMatch match2(map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+    match2.calculateMatch(w2->getElementId(), n1->getElementId());
     LOG_VAR(match2);
 
     MatchSet matches;

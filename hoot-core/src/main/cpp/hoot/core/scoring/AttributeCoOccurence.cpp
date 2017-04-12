@@ -230,7 +230,7 @@ private:
 
 AttributeCoOccurence::AttributeCoOccurence() {}
 
-void AttributeCoOccurence::addToMatrix(const ConstOsmMapPtrR in)
+void AttributeCoOccurence::addToMatrix(const ConstOsmMapPtr& in)
 
 {
   RefToEidVisitor ref2(MetadataTags::Ref2());

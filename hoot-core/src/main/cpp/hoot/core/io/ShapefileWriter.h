@@ -100,10 +100,10 @@ protected:
 
   void _removeShapefile(QString path);
 
-  void _writeRelationPolygon(const ConstOsmMapPtrR map, const RelationPtr &relation,
+  void _writeRelationPolygon(const ConstOsmMapPtr& map, const RelationPtr &relation,
     OGRLayer *poLayer, const QStringList &columns, const QStringList &shpColumns);
 
-  void _writeWayPolygon(const ConstOsmMapPtrR map, const WayPtr& way, OGRLayer *poLayer,
+  void _writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& way, OGRLayer *poLayer,
     const QStringList& columns, const QStringList &shpColumns);
 };
 

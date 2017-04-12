@@ -123,7 +123,7 @@ bool DanglerRemoverManipulation::isValid(ConstOsmMapPtr map) const
   return map->containsWay(_wayId);
 }
 
-const set<ElementId>& DanglerRemoverManipulation::getImpactedElementIds(const ConstOsmMapPtrR map)
+const set<ElementId>& DanglerRemoverManipulation::getImpactedElementIds(const ConstOsmMapPtr& map)
   const
 {
   _impactedElements.clear();

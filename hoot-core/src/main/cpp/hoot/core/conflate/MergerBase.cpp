@@ -45,7 +45,7 @@ set<ElementId> MergerBase::getImpactedElementIds() const
   return result;
 }
 
-bool MergerBase::isValid(const ConstOsmMapPtrR map) const
+bool MergerBase::isValid(const ConstOsmMapPtr& map) const
 {
   bool result = true;
 

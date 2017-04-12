@@ -520,7 +520,7 @@ bool OsmMap::validate(bool strict) const
   const RelationMap& allRelations = getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
-    const ConstRelationPtrR relation = it->second;
+    const ConstRelationPtr& relation = it->second;
 
     const vector<RelationData::Entry>& members = relation->getMembers();
     vector<RelationData::Entry> missingElements;

@@ -95,7 +95,7 @@ void ReportMissingElementsVisitor::_visitRo(ElementType type, long id)
   }
   else if (type == ElementType::Relation)
   {
-    const ConstRelationPtrR r = _map->getRelation(id);
+    const ConstRelationPtr& r = _map->getRelation(id);
     for (size_t i = 0; i < r->getMembers().size(); i++)
     {
       const RelationData::Entry& e = r->getMembers()[i];

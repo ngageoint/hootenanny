@@ -46,7 +46,7 @@ using namespace geos::operation::distance;
 namespace hoot
 {
 
-ParallelWayFilter::ParallelWayFilter(const ConstOsmMapPtrR map, ConstWayPtr baseWay,
+ParallelWayFilter::ParallelWayFilter(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
   bool filterUnparallel) :
   _map(map)
 {

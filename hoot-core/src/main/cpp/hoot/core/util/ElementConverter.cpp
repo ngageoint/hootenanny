@@ -139,7 +139,7 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPt
   }
 }
 
-boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtrR e,
+boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
                                                          bool throwError,
                                                          const bool statsFlag) const
 {

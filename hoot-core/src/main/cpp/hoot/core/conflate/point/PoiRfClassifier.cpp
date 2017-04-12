@@ -136,7 +136,7 @@ PoiRfClassifier::PoiRfClassifier()
   }
 }
 
-MatchClassification PoiRfClassifier::classify(const ConstOsmMapPtrR map,
+MatchClassification PoiRfClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2)
 {
   MatchClassification p;
@@ -262,7 +262,7 @@ void PoiRfClassifier::_createTestExtractors()
 
 }
 
-map<QString, double> PoiRfClassifier::getFeatures(const ConstOsmMapPtrR m,
+map<QString, double> PoiRfClassifier::getFeatures(const ConstOsmMapPtr& m,
   ElementId eid1, ElementId eid2) const
 {
   map<QString, double> result;

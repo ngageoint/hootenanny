@@ -98,8 +98,10 @@ public:
     PoiPolygonMatchCreator uut;
 
     OsmMapPtr map = getTestMap1();
-    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
+    CPPUNIT_ASSERT(
+      uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
+    CPPUNIT_ASSERT(
+      !uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
 
     OsmXmlReader reader;
     OsmMap::resetCounters();
@@ -107,7 +109,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
+    CPPUNIT_ASSERT(
+      !uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
   }
 };
 

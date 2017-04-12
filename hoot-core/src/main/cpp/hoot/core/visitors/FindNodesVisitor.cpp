@@ -51,7 +51,7 @@ void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
 }
 
 // Convenience method for finding ways that match the given criterion
-vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtrR map,
+vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
                                          ElementCriterion* pCrit)
 {
   FindNodesVisitor v(pCrit);
@@ -59,7 +59,7 @@ vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtrR map,
   return v.getIds();
 }
 
-vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtrR map,
+vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
                                          ElementCriterion* pCrit,
                                          const Coordinate& refCoord,
                                          Meters maxDistance)
@@ -78,7 +78,7 @@ vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtrR map,
 }
 
 // Convenience method for finding nodes that contain the given tag
-vector<long> FindNodesVisitor::findNodesByTag(const ConstOsmMapPtrR map,
+vector<long> FindNodesVisitor::findNodesByTag(const ConstOsmMapPtr& map,
                                               const QString& key,
                                               const QString& value)
 {

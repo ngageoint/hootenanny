@@ -44,7 +44,7 @@ public:
 
   AttributeCoOccurence();
 
-  void addToMatrix(const ConstOsmMapPtrR in);
+  void addToMatrix(const ConstOsmMapPtr& in);
 
   QString printTable();
 

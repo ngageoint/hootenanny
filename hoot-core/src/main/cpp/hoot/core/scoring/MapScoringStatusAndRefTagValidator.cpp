@@ -41,7 +41,7 @@ MapScoringStatusAndRefTagValidator::MapScoringStatusAndRefTagValidator()
 {
 }
 
-bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtrR map)
+bool MapScoringStatusAndRefTagValidator::allTagsAreValid(const ConstOsmMapPtr& map)
 {
   //if first map has any element with a hoot::status = Unknown1 tag and a tag with key = REF2,
   //then fail

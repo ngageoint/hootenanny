@@ -50,7 +50,7 @@ public:
    *  based on the CE of the inputs. If set to -1 then the value is derived based on the CE of the
    *  input ways.
    */
-  virtual WaySublineMatchString findMatch(const ConstOsmMapPtrR map, const ConstWayPtr& way1,
+  virtual WaySublineMatchString findMatch(const ConstOsmMapPtr& map, const ConstWayPtr& way1,
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const;
 
   virtual void setMaxRelevantAngle(Radians angle) { _maxAngle = angle; }

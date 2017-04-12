@@ -47,7 +47,7 @@ RfExtractorClassifier::RfExtractorClassifier()
 {
 }
 
-MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtrR map,
+MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   ElementId eid1, ElementId eid2) const
 {
   MatchClassification result;
@@ -80,7 +80,7 @@ const vector< boost::shared_ptr<const FeatureExtractor> >& RfExtractorClassifier
   return _extractors;
 }
 
-map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtrR m,
+map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m,
   ElementId eid1, ElementId eid2) const
 {
   map<QString, double> result;

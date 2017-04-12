@@ -65,7 +65,7 @@ protected:
 
   void _addNode(const NodePtr& n);
 
-  void _addWay(ConstOsmMapPtrR map, const WayPtr &w);
+  void _addWay(const ConstOsmMapPtr& map, const WayPtr &w);
 
   /**
    * After each input OsmMap, emit all the data thus far. This reduce memory usage.

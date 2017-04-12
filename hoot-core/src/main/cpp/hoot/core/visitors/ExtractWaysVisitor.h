@@ -43,7 +43,7 @@ public:
   /**
    * Convenience method.
    */
-  static vector<ConstWayPtr> extractWays(const ConstOsmMapPtrR map, const ConstElementPtr& e);
+  static vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
 private:
 

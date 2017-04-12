@@ -180,7 +180,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& w)
   _waysWritten++;
 }
 
-void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtrR r)
+void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
   Tags tags = r->getTags();
   _addElementTags(r, tags);

@@ -74,7 +74,7 @@ public:
   /**
    * Returns true if any of the elements in this are also in other's match pairs.
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtrR map) const;
+  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
 
   /**
    * Returns true if either of the matched strings contains a non-whole edge.

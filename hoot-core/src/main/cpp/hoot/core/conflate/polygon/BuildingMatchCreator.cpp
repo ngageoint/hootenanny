@@ -73,7 +73,7 @@ public:
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
-  BuildingMatchVisitor(const ConstOsmMapPtrR map,
+  BuildingMatchVisitor(const ConstOsmMapPtr& map,
     vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
     ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid) :
     _map(map),
@@ -205,7 +205,7 @@ public:
   ConstOsmMapPtr getMap() { return _map; }
 
 private:
-  const ConstOsmMapPtrR _map;
+  const ConstOsmMapPtr& _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
   boost::shared_ptr<BuildingRfClassifier> _rf;
@@ -227,7 +227,7 @@ BuildingMatchCreator::BuildingMatchCreator()
 {
 }
 
-Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtrR map, ElementId eid1, ElementId eid2)
+Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   BuildingMatch* result = 0;
 
@@ -246,7 +246,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtrR map, ElementId ei
   return result;
 }
 
-void BuildingMatchCreator::createMatches(const ConstOsmMapPtrR map, vector<const Match*>& matches,
+void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
   LOG_INFO("Creating matches with: " << className() << "...");
@@ -293,7 +293,7 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
   return _rf;
 }
 
-bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtrR /*map*/)
+bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
   return BuildingMatchVisitor::isMatchCandidate(element);
 }
