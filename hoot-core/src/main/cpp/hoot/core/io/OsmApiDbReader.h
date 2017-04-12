@@ -85,6 +85,8 @@ private:
 
   //for white box testing
   friend class ServiceOsmApiDbBulkWriterTest;
+  friend class ServicesDbTestUtils;
+  friend class WriteOsmSqlStatementsDriverTest;
 
   boost::shared_ptr<OsmApiDb> _database;
   boost::shared_ptr<QSqlQuery> _elementResultIterator;

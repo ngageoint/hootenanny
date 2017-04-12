@@ -27,9 +27,6 @@
 #include "OsmApiDb.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
@@ -100,7 +97,6 @@ void OsmApiDb::close()
 
 void OsmApiDb::deleteData()
 {
-  // delete ways data first
   DbUtils::execNoPrepare(
     _db,
     "DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
@@ -116,7 +112,6 @@ void OsmApiDb::deleteData()
     _db, "DELETE FROM " + ApiDb::getRelationTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getRelationsTableName() + " CASCADE");
 
-  // delete relations data 2nd
   DbUtils::execNoPrepare(
     _db, "DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " CASCADE");
   DbUtils::execNoPrepare(
@@ -129,7 +124,6 @@ void OsmApiDb::deleteData()
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWayTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWaysTableName() + " CASCADE");
 
-  // delete nodes data 3rd
   DbUtils::execNoPrepare(
     _db, "DELETE FROM " + ApiDb::getCurrentNodeTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(
@@ -139,7 +133,6 @@ void OsmApiDb::deleteData()
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodeTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodesTableName() + " CASCADE");
 
-  // delete changesets
   DbUtils::execNoPrepare(
     _db, "DELETE FROM " + ApiDb::getChangesetsSubscribersTableName() + " CASCADE");
   DbUtils::execNoPrepare(
@@ -677,6 +670,66 @@ long OsmApiDb::toOsmApiDbCoord(const double x)
 double OsmApiDb::fromOsmApiDbCoord(const long x)
 {
   return (double)x / COORDINATE_SCALE;
+}
+
+QStringList OsmApiDb::_getTables()
+{
+  //The table ordering doesn't matter for constraint enabling/disabling.  It would, however,
+  //matter for constraint adding/removing (would need to reverse this ordering for dropping,
+  //I think).
+
+  QStringList tableNames;
+
+  tableNames.append(ApiDb::getCurrentRelationMembersTableName());
+  tableNames.append(ApiDb::getCurrentRelationTagsTableName());
+  tableNames.append(ApiDb::getCurrentRelationsTableName());
+  tableNames.append(ApiDb::getRelationMembersTableName());
+  tableNames.append(ApiDb::getRelationTagsTableName());
+  tableNames.append(ApiDb::getRelationsTableName());
+
+  tableNames.append(ApiDb::getCurrentWayNodesTableName());
+  tableNames.append(ApiDb::getCurrentWayTagsTableName());
+  tableNames.append(ApiDb::getCurrentWaysTableName());
+  tableNames.append(ApiDb::getWayNodesTableName());
+  tableNames.append(ApiDb::getWayTagsTableName());
+  tableNames.append(ApiDb::getWaysTableName());
+
+  tableNames.append(ApiDb::getCurrentNodeTagsTableName());
+  tableNames.append(ApiDb::getCurrentNodesTableName());
+  tableNames.append(ApiDb::getNodeTagsTableName());
+  tableNames.append(ApiDb::getNodesTableName());
+
+  tableNames.append(ApiDb::getChangesetCommentsTableName());
+  tableNames.append(ApiDb::getChangesetsSubscribersTableName());
+  tableNames.append(ApiDb::getChangesetTagsTableName());
+  tableNames.append(ApiDb::getChangesetsTableName());
+
+  return tableNames;
+}
+
+void OsmApiDb::disableConstraints()
+{
+  _modifyConstraints(_getTables(), true);
+}
+
+void OsmApiDb::enableConstraints()
+{
+  _modifyConstraints(_getTables(), false);
+}
+
+void OsmApiDb::_modifyConstraints(const QStringList tableNames, const bool disable)
+{
+  for (int i = 0; i < tableNames.size(); i++)
+  {
+    if (disable)
+    {
+      DbUtils::disableTableConstraints(getDB(), tableNames.at(i));
+    }
+    else
+    {
+      DbUtils::enableTableConstraints(getDB(), tableNames.at(i));
+    }
+  }
 }
 
 }

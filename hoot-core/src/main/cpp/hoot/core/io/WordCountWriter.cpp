@@ -36,7 +36,7 @@
 // Qt
 #include <QtAlgorithms>
 #include <QFile>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 

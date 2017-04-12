@@ -155,6 +155,8 @@ public:
    */
   static QString toQuotedString(QString str);
 
+  static void verifyStdMatchesOutputIgnoreDate(const QString stdFilePath, const QString outFilePath);
+
 private:
   QList<RegisteredReset*> _resets;
 
