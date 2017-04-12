@@ -300,6 +300,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         {
           if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
           {
+            //TODO: should this be OsmSchema::elementHasName instead?
             otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
             otherParkPolyNameScore = nameScorer.extract(*_map, poi, polyNeighbor);
             otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;

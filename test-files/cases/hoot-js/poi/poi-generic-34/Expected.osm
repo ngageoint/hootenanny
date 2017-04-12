@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1330000000000098" lon="11.6926500000000004">
+        <tag k="REF2" v="013e59"/>
+        <tag k="addr:language" v="GER"/>
+        <tag k="addr:street" v="WILLY-BRANDT-PLATZ"/>
+        <tag k="brand" v="NOVOTEL"/>
+        <tag k="access" v="yes"/>
+        <tag k="phone" v="89-994000"/>
+        <tag k="addr:housenumber" v="1"/>
+        <tag k="language" v="GER"/>
+        <tag k="source" v="navteq"/>
+        <tag k="uuid" v="{a063031e-dadb-56bf-b772-bd3a88fba577}"/>
+        <tag k="name" v="DORINT NOVOTEL MÜNCHEN MESSE"/>
+        <tag k="tourism" v="hotel"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1328669999999974" lon="11.6921555999999995">
+        <tag k="REF1" v="013e59"/>
+        <tag k="website" v="http://www.novotel.com/gb/hotel-5563-novotel-muenchen-messe/index.shtml"/>
+        <tag k="email" v="h5563@accor.com"/>
+        <tag k="internet_access" v="yes"/>
+        <tag k="uuid" v="{74924da5-f54b-5469-bf03-62eb1c09baa2}"/>
+        <tag k="name" v="Novotel München Messe"/>
+        <tag k="tourism" v="hotel"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>
