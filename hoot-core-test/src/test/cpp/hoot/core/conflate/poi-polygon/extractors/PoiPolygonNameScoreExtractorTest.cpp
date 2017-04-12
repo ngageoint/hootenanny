@@ -29,6 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/schema/OsmSchema.h>
 using namespace hoot;
 
 // CPP Unit
@@ -46,7 +47,6 @@ class PoiPolygonNameScoreExtractorTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(PoiPolygonNameScoreExtractorTest);
   CPPUNIT_TEST(scoreTest);
-  CPPUNIT_TEST(elementHasNameTest);
   CPPUNIT_TEST(elementNameTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -66,17 +66,6 @@ public:
     WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
     way2->getTags().set("name", "dfghdgf");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.10669, uut.extract(*map, node1, way2), 0.001);
-  }
-
-  void elementHasNameTest()
-  {
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set("name", "blah");
-    CPPUNIT_ASSERT(PoiPolygonNameScoreExtractor::elementHasName(node1));
-
-    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set("blah", "blah");
-    CPPUNIT_ASSERT(!PoiPolygonNameScoreExtractor::elementHasName(node2));
   }
 
   void elementNameTest()

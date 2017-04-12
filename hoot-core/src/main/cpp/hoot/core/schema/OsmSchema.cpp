@@ -1005,12 +1005,12 @@ private:
                             distance_compare(comparer));
 
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-    LOG_TRACE("Scores for: " << _graph[vd].name.toStdString());
+    //LOG_TRACE("Scores for: " << _graph[vd].name.toStdString());
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       pair<VertexId, VertexId> key = pair<VertexId, VertexId>(vd, *vi);
       _cachedScores[key] = d[*vi];
-      LOG_TRACE("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
+      //LOG_TRACE("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
 
       // cache the score between vd and vi in another structure that is more efficient for other
       // query types.
@@ -1801,6 +1801,19 @@ bool OsmSchema::isOneWay(const Element& e) const
     result = true;
   }
   return result;
+}
+
+bool OsmSchema::hasName(const Element& element) const
+{
+  const QStringList names = element.getTags().getNames();
+  for (int i = 0; i < names.size(); i++)
+  {
+    if (!element.getTags().get("name").trimmed().isEmpty())
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 bool OsmSchema::isPoi(const Element& e)

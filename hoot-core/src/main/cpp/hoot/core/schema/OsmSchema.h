@@ -406,6 +406,14 @@ public:
   bool isPoi(const Element& e);
 
   /**
+   * Determines whether an element has a name
+   *
+   * @param element the element to examine
+   * @return true if the element has a name tag; false otherwie
+   */
+  bool hasName(const Element& element) const;
+
+  /**
    * Returns true if this is a reversed unidirectional way. (E.g. oneway=reverse)
    */
   bool isReversed(const Element& e) const;

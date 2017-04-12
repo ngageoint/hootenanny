@@ -64,7 +64,7 @@ private:
   static v8::Handle<v8::Value> isLinearHighway(const v8::Arguments& args);
   static v8::Handle<v8::Value> score(const v8::Arguments& args);
   static v8::Handle<v8::Value> scoreOneWay(const v8::Arguments& args);
-
+  static v8::Handle<v8::Value> hasName(const v8::Arguments& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
