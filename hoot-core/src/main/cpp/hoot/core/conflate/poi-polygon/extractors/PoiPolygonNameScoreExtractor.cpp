@@ -63,19 +63,6 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
   return nameScore;
 }
 
-bool PoiPolygonNameScoreExtractor::elementHasName(ConstElementPtr element)
-{
-  const QStringList names = element->getTags().getNames();
-  for (int i = 0; i < names.size(); i++)
-  {
-    if (!element->getTags().get("name").trimmed().isEmpty())
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 QString PoiPolygonNameScoreExtractor::getElementName(ConstElementPtr element)
 {
   QString name = element->getTags().get("name").toLower().trimmed();
