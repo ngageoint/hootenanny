@@ -117,7 +117,7 @@ public:
       settings.set("uuid.helper.repeatable", "true");
       settings.set("writer.include.debug", "true");
       settings.set("network.matcher", "hoot::ConflictsNetworkMatcher");
-      settings.set("conflate.add.review.detail", "false");
+      settings.set("writer.include.conflate.review.detail.tags", "false");
       settings.set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
       settings.set("way.subline.matcher", "hoot::MaximalSublineMatcher");
 

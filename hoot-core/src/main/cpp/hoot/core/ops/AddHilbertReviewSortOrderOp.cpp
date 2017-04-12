@@ -64,9 +64,11 @@ AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 
 void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
 {
-  if (!ConfigOptions().getConflateAddReviewDetail())
+  if (!ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    LOG_DEBUG("AddHilbertReviewSortOrderOp disabled due to conflate.add.review.detail=false.");
+    LOG_DEBUG(
+      "AddHilbertReviewSortOrderOp disabled due to " <<
+      ConfigOptions::getWriterIncludeConflateReviewDetailTagsKey() << "=false.");
     return;
   }
 

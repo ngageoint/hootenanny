@@ -307,9 +307,9 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(configOptions.getApiDbEmail());
   setCreateUser(configOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
-  setIncludeDebug(configOptions.getWriterIncludeDebug());
+  setIncludeDebug(configOptions.getWriterIncludeDebugTags());
   setTextStatus(configOptions.getWriterTextStatus());
-  setIncludeCircularError(configOptions.getWriterIncludeCircularError());
+  setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
 }
 
 void HootApiDbWriter::_startNewChangeSet()

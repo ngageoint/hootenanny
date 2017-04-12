@@ -169,7 +169,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getConflateAddReviewDetail())
+  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
     r->getTags().set(MetadataTags::HootReviewScore(), score);
@@ -204,7 +204,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getConflateAddReviewDetail())
+  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
     r->getTags().set(MetadataTags::HootReviewScore(), score);
@@ -244,7 +244,7 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
   RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getConflateAddReviewDetail())
+  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
     r->getTags().set(MetadataTags::HootReviewScore(), score);
