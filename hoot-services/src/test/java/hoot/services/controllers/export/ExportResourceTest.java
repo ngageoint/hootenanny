@@ -160,12 +160,9 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
             hootCommand.put("outputtype", "osc");
             outputFile = new File(hootCommand.get("outputfolder") + "/" + hootCommand.get("outputname") + "." + hootCommand.get("outputtype"));
             commandArgs.add (hootCommand);
-            
-            command.put("exectype", "make");
-            command.put("exec", "EXPORT_SCRIPT");
-            command.put("caller", this.getClass().getSimpleName());
-            command.put("params", commandArgs);
-            command.put("workingDir", new File(TEMP_OUTPUT_PATH));
+
+            command.setCaller(this.getClass().getSimpleName());
+            command.setWorkDir(new File(TEMP_OUTPUT_PATH));
 
             this.externalCommandInterface.exec(null, command);
             

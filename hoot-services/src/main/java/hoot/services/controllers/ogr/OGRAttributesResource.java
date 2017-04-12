@@ -30,16 +30,13 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -55,6 +52,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -66,9 +66,6 @@ import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.command.InternalCommand;
-import hoot.services.command.InternalCommandManager;
-import hoot.services.command.common.DeleteFolderCommand;
 import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
@@ -87,9 +84,6 @@ public class OGRAttributesResource {
     private ExternalCommandManager externalCommandManager;
 
     @Autowired
-    private InternalCommandManager internalCommandManager;
-
-    @Autowired
     private GetAttributesCommandFactory getAttributesCommandFactory;
 
 
@@ -97,9 +91,9 @@ public class OGRAttributesResource {
      * This REST endpoint uploads multipart data from UI and then generates attribute output.
      *
      * @param inputType
-     *            : [FILE | DIR] where FILE type should represents zip,shp or OMS and DIR represents FGDB
+     *            : [FILE | DIR] where FILE type should represents ZIP, SHP or OMS and DIR represents FGDB.
      * @param debugLevel
-     *            debug level of some of the commands that are executed during the method's execution
+     *            debug level that can be configured for some of the commands that support it.
      */
     @POST
     @Path("/upload")
@@ -111,25 +105,12 @@ public class OGRAttributesResource {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            File workFolder = new File(UPLOAD_FOLDER, jobId);
-            FileUtils.forceMkdir(workFolder);
+            File workDir = new File(UPLOAD_FOLDER, jobId);
+            FileUtils.forceMkdir(workDir);
 
-            List<File> fileList = new ArrayList<>();
-            List<File> zipList = new ArrayList<>();
-
-            processFormDataMultiPart(fileList, zipList, multiPart, workFolder);
+            List<File> fileList = processFormDataMultiPart(multiPart, workDir, jobId, inputType);
 
             List<Command> workflow = new LinkedList<>();
-
-            for (File zip : zipList) {
-                workflow.add(
-                    () -> {
-                        File targetFolder = new File(workFolder, FilenameUtils.getBaseName(zip.getName()));
-                        ExternalCommand unZIPFileCommand = new UnZIPFileCommand(zip, targetFolder, this.getClass());
-                        return externalCommandManager.exec(jobId, unZIPFileCommand);
-                    }
-                );
-            }
 
             workflow.add(
                 () -> {
@@ -144,14 +125,14 @@ public class OGRAttributesResource {
                         throw new RuntimeException("Error writing attributes to: " + outputFile.getAbsolutePath(), ioe);
                     }
 
-                    return commandResult;
-                }
-            );
+                    try {
+                        FileUtils.forceDelete(workDir);
+                    }
+                    catch (IOException ioe) {
+                        logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
+                    }
 
-            workflow.add(
-                () -> {
-                    InternalCommand deleteFolderCommand = new DeleteFolderCommand(jobId, workFolder);
-                    return internalCommandManager.exec(jobId, deleteFolderCommand);
+                    return commandResult;
                 }
             );
 
@@ -204,52 +185,59 @@ public class OGRAttributesResource {
         return Response.ok(json).build();
     }
 
-    private static void processFormDataMultiPart(List<File> fileList, List<File> zipList,
-                                                 FormDataMultiPart multiPart, File workFolder)
-            throws IOException {
-        List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workFolder);
+    private List<File> processFormDataMultiPart(FormDataMultiPart multiPart, File workDir, String jobId, String inputType) {
+        List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
-        for (File inputFile : uploadedFiles) {
-            String baseName = FilenameUtils.getBaseName(inputFile.getName());
-            String extension = FilenameUtils.getExtension(inputFile.getName());
+        List<File> fileList = new LinkedList<>();
 
-            // If it is zip file then we crack open to see if it contains FGDB.
-            // If so then we add the folder location and desired output name which is fgdb name in the zip.
-            if (extension.equalsIgnoreCase("ZIP")) {
-                File zipFile = inputFile;
-                zipList.add(zipFile);
+        if (!uploadedFiles.isEmpty()) {
+            if (inputType.equalsIgnoreCase("DIR")) {
+                // Assumption: all of the uploaded files are under the same folder in this case
+                fileList.addAll(processFolder(uploadedFiles.get(0).getParentFile()));
+            }
+            else {
+                for (File uploadedFile : uploadedFiles) {
+                    String filename = uploadedFile.getName();
+                    String extension = FilenameUtils.getExtension(filename);
+                    String basename = FilenameUtils.getBaseName(filename);
 
-                try (FileInputStream fin = new FileInputStream(zipFile)) {
-                    try (ZipInputStream zis = new ZipInputStream(fin)) {
-                        ZipEntry zipEntry = zis.getNextEntry();
-                        while (zipEntry != null) {
-                            String zipEntryName = zipEntry.getName();
+                    //files can be one or more shapefiles, consisting of .shp, .shx, and .dbf components at a minimum;
+                    //or a zip file containing one or more shapefiles, or a folder that is a file geodatabase
+                    if (extension.equalsIgnoreCase("zip")) {
+                        File folderWithUnzippedContents = new File(workDir, basename);
 
-                            if (zipEntry.isDirectory()) {
-                                if (zipEntryName.toLowerCase().endsWith(".gdb/")
-                                        || zipEntryName.toLowerCase(Locale.ENGLISH).endsWith(".gdb")) {
-                                    String fgdbZipName = zipEntryName;
-                                    if (zipEntryName.toLowerCase(Locale.ENGLISH).endsWith(".gdb/")) {
-                                        fgdbZipName = zipEntryName.substring(0, zipEntryName.length() - 1);
-                                    }
-                                    fileList.add(new File(new File(workFolder, fgdbZipName), fgdbZipName));
-                                }
-                            }
-                            else {
-                                if (zipEntryName.toLowerCase(Locale.ENGLISH).endsWith(".shp")) {
-                                    fileList.add(new File(new File(workFolder, baseName), zipEntryName));
-                                }
-                            }
+                        ExternalCommand unZIPFileCommand = new UnZIPFileCommand(uploadedFile, folderWithUnzippedContents, this.getClass());
+                        unZIPFileCommand.setTrackable(Boolean.FALSE);
+                        externalCommandManager.exec(jobId, unZIPFileCommand);
 
-                            zipEntry = zis.getNextEntry();
-                        }
+                        fileList.addAll(processFolder(folderWithUnzippedContents));
+                    }
+                    else {
+                        fileList.add(uploadedFile);
                     }
                 }
             }
-            else {
-                fileList.add(inputFile);
-            }
         }
+
+        return fileList;
+    }
+
+    private static Collection<File> processFolder(File folder) {
+        // Check if the folder represents an FGDB.
+        IOFileFilter fileFilter = FileFilterUtils.nameFileFilter("gdb");
+        Collection<File> gdbFiles = FileUtils.listFiles(folder, fileFilter, TrueFileFilter.INSTANCE);
+        if (!gdbFiles.isEmpty()) {
+            return Collections.singletonList(gdbFiles.iterator().next().getParentFile());
+        }
+
+        // Could be just a folder full of SHP files with their support files: .dbx and .shx
+        fileFilter = FileFilterUtils.suffixFileFilter("shp");
+        Collection<File> shpFiles = FileUtils.listFiles(folder, fileFilter, TrueFileFilter.INSTANCE);
+        if (!shpFiles.isEmpty()) {
+            return shpFiles;
+        }
+
+        return Collections.emptyList();
     }
 
     private static File getAttributesOutputFile(String jobId) {

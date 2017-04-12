@@ -29,9 +29,6 @@ package hoot.services.controllers.conflation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,17 +46,6 @@ import hoot.services.utils.HootCustomPropertiesSetter;
 
 @Ignore
 public class ConflationResourceTest {
-
-    @Test
-    @Category(UnitTest.class)
-    public void testDateFormatter() {
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
-        String text = now.format(formatter);
-        System.out.println("Formatted UTC date & time: " + text);
-        //LocalDateTime parsedDate = LocalDateTime.parse(text, formatter);
-    }
-
 
     // An OSM API DB input must always be a reference layer. Default ref layer = 1.
 

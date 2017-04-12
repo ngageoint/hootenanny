@@ -33,42 +33,97 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
-
 import hoot.services.HootProperties;
 
 
-public class ExternalCommand extends JSONObject {
+public class ExternalCommand {
+
+    private String caller;
+    private String command;
+    private Map<String, ?> substitutionMap;
+    private File workDir;
+    private Boolean trackable;
 
     protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller) {
-        this.put("caller", caller.getName());
-        this.put("command", command);
-        this.put("substitutionMap", substitutionMap);
-        this.put("workDir", new File(HootProperties.TEMP_OUTPUT_PATH));
-        this.put("trackable", Boolean.TRUE);
+        this.caller = caller.getName();
+        this.command = command;
+        this.substitutionMap = substitutionMap;
+        this.workDir = new File(HootProperties.TEMP_OUTPUT_PATH);
+        this.trackable = Boolean.TRUE;
     }
 
     protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller, File workDir) {
-        this.put("caller", caller.getName());
-        this.put("command", command);
-        this.put("substitutionMap", substitutionMap);
-        this.put("workDir", workDir);
-        this.put("trackable", Boolean.TRUE);
+        this.caller = caller.getName();
+        this.command = command;
+        this.substitutionMap = substitutionMap;
+        this.workDir = workDir;
+        this.trackable = Boolean.TRUE;
     }
 
     protected void configureCommand(String command, Class<?> caller, Boolean trackable) {
         this.configureCommand(command, new HashMap<>(), caller);
-        this.put("trackable", trackable);
+        this.trackable = trackable;
     }
 
     protected void configureCommand(String command, Class<?> caller, File workDir, Boolean trackable) {
         this.configureCommand(command, new HashMap<>(), caller, workDir);
-        this.put("trackable", trackable);
+        this.trackable = trackable;
     }
 
     protected static List<String> toHootOptions(List<String> options) {
         List<String> hootOptions = new LinkedList<>();
         options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });
         return hootOptions;
+    }
+
+    public String getCaller() {
+        return caller;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public Map<String, ?> getSubstitutionMap() {
+        return substitutionMap;
+    }
+
+    public File getWorkDir() {
+        return workDir;
+    }
+
+    public Boolean getTrackable() {
+        return trackable;
+    }
+
+    public void setCaller(String caller) {
+        this.caller = caller;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public void setSubstitutionMap(Map<String, ?> substitutionMap) {
+        this.substitutionMap = substitutionMap;
+    }
+
+    public void setWorkDir(File workDir) {
+        this.workDir = workDir;
+    }
+
+    public void setTrackable(Boolean trackable) {
+        this.trackable = trackable;
+    }
+
+    @Override
+    public String toString() {
+        return "ExternalCommand{" +
+                "caller='" + caller + '\'' +
+                ", command='" + command + '\'' +
+                ", substitutionMap=" + substitutionMap +
+                ", workDir=" + workDir +
+                ", trackable=" + trackable +
+                '}';
     }
 }
