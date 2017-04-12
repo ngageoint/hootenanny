@@ -87,8 +87,11 @@ public class ClipDatasetResource {
      * }
      *
      * @param params
-     *            JSON input params; see description above
-
+     *      JSON input params; see description above
+     *
+     * @param debugLevel
+     *      debug level
+     *
      * @return a job id
      */
     @POST

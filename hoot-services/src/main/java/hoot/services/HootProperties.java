@@ -66,8 +66,6 @@ public final class HootProperties {
     public static final String CORE_SCRIPT_PATH;
     public static final String ERROR_LOG_PATH;
     public static final String TEMP_OUTPUT_PATH;
-    public static final String WFS_STORE_CONN_NAME;
-    public static final String WFS_STORE_DB;
     public static final String ELEMENT_MERGE_SERVER_PORT;
     public static final String ELEMENT_MERGE_SERVER_THREAD_COUNT;
     public static final String ELEMENT_MERGE_SERVER_SCRIPT;
@@ -110,7 +108,6 @@ public final class HootProperties {
     public static final String INTERNAL_JOB_THREAD_SIZE;
     public static final String TRANSLATION_SCRIPT_PATH;
     public static final String UPLOAD_FOLDER;
-    public static final String DERIVE_CHANGESET_SCRIPT;
     public static final String HOOTAPI_DB_URL;
     public static final String OSMAPI_DB_URL;
 
@@ -173,8 +170,6 @@ public final class HootProperties {
         DEFAULT_FOUO_TRANSLATIONS_CONFIG = getProperty("defaultFOUOTranslationsConfig");
         CORE_SCRIPT_PATH = getProperty("coreScriptPath");
         ERROR_LOG_PATH = getProperty("ErrorLogPath");
-        WFS_STORE_CONN_NAME = getProperty("wfsStoreConnName");
-        WFS_STORE_DB = getProperty("wfsStoreDb");
         ELEMENT_MERGE_SERVER_PORT = getProperty("ElementMergeServerPort");
         ELEMENT_MERGE_SERVER_THREAD_COUNT = getProperty("ElementMergeServerThreadCount");
         ELEMENT_MERGE_SERVER_SCRIPT = getProperty("ElementMergeServerScript");
@@ -210,7 +205,6 @@ public final class HootProperties {
         SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
-        DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";

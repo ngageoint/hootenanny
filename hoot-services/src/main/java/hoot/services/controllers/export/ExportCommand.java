@@ -102,9 +102,6 @@ class ExportCommand extends ExternalCommand {
     }
 
     String getInput() {
-        //ifeq "$(inputtype)" "file"
-        //    INPUT_PATH=$(input)
-        //endif
         if (! params.getInputType().equalsIgnoreCase("file")) {
             return HOOTAPI_DB_URL + "/" + params.getInput();
         }

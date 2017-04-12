@@ -48,9 +48,6 @@ testChangesetAutoClose=false
 # the folder location of the make file script for some endpoints
 coreScriptPath=$(homeFolder)/scripts/services
 
-# Conflate make file script
-ConflateMakefilePath=makeconflate
-
 # Translation header used for just function scanning
 dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 
@@ -58,12 +55,6 @@ dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 translationScriptPath=$(homeFolder)/translations
 
 exportRenderDBScript=exportrenderdb.sh
-
-# WFS Store Connection Name
-wfsStoreConnName=WFS_Connection
-
-# WFS Store db name
-wfsStoreDb=${WFS_DB_NAME}
 
 # Enable access to a single OSM API database configured by DatabaseConfig.sh.
 osmApiDbEnabled=true
