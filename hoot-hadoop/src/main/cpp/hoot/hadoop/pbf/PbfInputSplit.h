@@ -30,7 +30,7 @@ using namespace std;
 
 /**
  * Due to the complexities of hadoop I'm not testing this class directly. There are indirect
- * test in place that excersize the class. Writing a unit test specific to this class that actually
+ * test in place that exercise the class. Writing a unit test specific to this class that actually
  * excersizes all the complexities in Hadoop is hard to jusitify.
  */
 class PbfInputSplit : public pp::InputSplit

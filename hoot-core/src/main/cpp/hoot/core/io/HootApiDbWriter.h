@@ -67,6 +67,12 @@ public:
 
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
 
+  void setIncludeDebug(bool includeDebug) { _includeDebug = includeDebug; }
+
+  void setTextStatus(bool textStatus) { _textStatus = textStatus; }
+
+  void setIncludeCircularError(bool includeCircularError) { _includeCircularError = includeCircularError; }
+
   /**
    * If set to true (the default) then all IDs are remapped into new IDs. This is appropriate if
    * any of the input IDs are non-positive.
@@ -126,6 +132,10 @@ private:
   bool _createUserIfNotFound;
   bool _overwriteMap;
   QString _userEmail;
+  bool _includeDebug;
+  bool _includeIds;
+  bool _textStatus;
+  bool _includeCircularError;
 
   bool _open;
 

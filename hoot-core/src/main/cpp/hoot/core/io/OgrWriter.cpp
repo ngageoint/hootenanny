@@ -53,6 +53,7 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -82,7 +83,8 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
   case QVariant::Int:
     return OFTInteger;
   case QVariant::LongLong:
-    throw HootException("LongLong is not supported by OGR");
+    return OFTInteger64;
+//    throw HootException("LongLong is not supported by OGR");
   case QVariant::String:
     return OFTString;
   case QVariant::Double:
@@ -138,6 +140,9 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
       break;
     case QVariant::Int:
       poFeature->SetField(ba.constData(), v.toInt());
+      break;
+    case QVariant::LongLong:
+      poFeature->SetField(ba.constData(), v.toLongLong());
       break;
     case QVariant::Double:
       poFeature->SetField(ba.constData(), v.toDouble());
@@ -407,7 +412,7 @@ void OgrWriter::open(QString url)
 
   try
   {
-    _ds = OgrUtilities::getInstance().openDataSource(url);
+    _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
   catch(HootException& openException)
   {

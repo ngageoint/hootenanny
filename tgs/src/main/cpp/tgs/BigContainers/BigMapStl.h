@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BIGMAPSTL_H
 #define BIGMAPSTL_H
@@ -42,6 +42,9 @@ class BigMap
 public:
   BigMap() {}
 
+  //constructor to appease --without-stxxl; input parameter is ignored
+  BigMap(size_t maxEntriesInRam) {}
+
   const V& at(const K& k) const { return _map.at(k); }
 
   bool contains(const K& k) const { return count(k) > 0; }
@@ -51,6 +54,8 @@ public:
   void insert(const K& k, const V& v) { _map[k] = v; }
 
   V& operator[](const K& k) { return _map[k]; }
+
+  void clear() { _map.clear(); }
 
 private:
   std::map<K,V> _map;

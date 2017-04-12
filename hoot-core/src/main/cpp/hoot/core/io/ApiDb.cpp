@@ -730,4 +730,37 @@ bool ApiDb::hasExtension(const QString extensionName)
   return result > 0;
 }
 
+void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
+{
+  const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(dbUrl);
+  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
+  if (!(Log::getInstance().getLevel() <= Log::Info))
+  {
+    cmd += " --quiet";
+  }
+  cmd += " " + getPsqlString(dbUrl) + " -f " + sqlFile;
+  if (!(Log::getInstance().getLevel() <= Log::Info))
+  {
+    cmd += " > /dev/null";
+  }
+  LOG_DEBUG(cmd);
+  if (system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Failed executing SQL file against the database.");
+  }
+}
+
+QString ApiDb::getPqString(const QString url)
+{
+  const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
+  QString hostAddr = dbUrlParts["host"];
+  if (hostAddr == "localhost")
+  {
+    hostAddr = "127.0.0.1";
+  }
+  return
+    "dbname=" + dbUrlParts["database"] + " user=" + dbUrlParts["user"] + " password=" +
+    dbUrlParts["password"] + " hostaddr=" + hostAddr + " port=" + dbUrlParts["port"];
+}
+
 }

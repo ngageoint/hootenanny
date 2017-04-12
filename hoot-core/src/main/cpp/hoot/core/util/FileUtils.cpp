@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FileUtils.h"
@@ -32,6 +32,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
+#include <QTextStream>
 
 // Hoot
 #include <hoot/core/util/HootException.h>
@@ -67,6 +68,48 @@ void FileUtils::removeDir(const QString& dirName)
     {
       throw HootException(QString("Failed to remove %1").arg(dirName));
     }
+  }
+}
+
+QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString filePath)
+{
+  QStringList tokens;
+
+  //parse all the string tokens, except those containing dates, which we can't directly compare
+  const QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
+  const QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
+
+  QFile file(filePath);
+  if (file.open(QIODevice::ReadOnly))
+  {
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+      QString line = in.readLine();
+      line = line.remove(reDate);
+      line = line.remove(reTime);
+      tokens << line;
+    }
+    file.close();
+  }
+  else
+  {
+    throw HootException("Unable to open file " + filePath + ".");
+  }
+
+  return tokens;
+}
+
+QString FileUtils::fileToString(const QString path)
+{
+  QFile file(path);
+  if (file.open(QIODevice::ReadOnly))
+  {
+    return file.readAll();
+  }
+  else
+  {
+    throw HootException("Unable to read file at: " + path);
   }
 }
 

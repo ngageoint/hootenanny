@@ -288,6 +288,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/schema/StringFieldDefinition.cpp \
     src/main/cpp/hoot/core/io/schema/DoubleFieldDefinition.cpp \
     src/main/cpp/hoot/core/io/schema/IntegerFieldDefinition.cpp \
+    src/main/cpp/hoot/core/io/schema/LongIntegerFieldDefinition.cpp \
     src/main/cpp/hoot/core/io/schema/FieldDefinition.cpp \
     src/main/cpp/hoot/core/cmd/Osm2OgrCmd.cpp \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.cpp \
@@ -539,7 +540,8 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.cpp \
     src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.cpp \
-    src/main/cpp/hoot/core/util/DbUtils.cpp
+    src/main/cpp/hoot/core/util/DbUtils.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbSqlStatementFormatter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1065,5 +1067,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.h \
     src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.h \
     src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.h \
-    src/main/cpp/hoot/core/util/DbUtils.h
+    src/main/cpp/hoot/core/util/DbUtils.h \
+    src/main/cpp/hoot/core/io/OsmApiDbSqlStatementFormatter.h \
+    src/main/cpp/hoot/core/io/schema/LongIntegerFieldDefinition.h
 
