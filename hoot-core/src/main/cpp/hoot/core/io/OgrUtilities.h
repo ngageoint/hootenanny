@@ -84,7 +84,7 @@ public:
    * @param url - Location of the datasource to create, pathname or API URL
    * @return pointer to the datasource created
    */
-  shared_ptr<GDALDataset> createDataSource(const QString& url);
+  boost::shared_ptr<GDALDataset> createDataSource(const QString& url);
 
   /**
    * @brief openDataSource - Open an OGR datasource from the url
