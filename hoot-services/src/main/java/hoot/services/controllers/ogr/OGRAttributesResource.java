@@ -108,13 +108,13 @@ public class OGRAttributesResource {
             File workDir = new File(UPLOAD_FOLDER, jobId);
             FileUtils.forceMkdir(workDir);
 
-            List<File> fileList = processFormDataMultiPart(multiPart, workDir, jobId, inputType);
+            List<File> files = processFormDataMultiPart(multiPart, workDir, jobId, inputType);
 
             List<Command> workflow = new LinkedList<>();
 
             workflow.add(
                 () -> {
-                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(fileList, debugLevel, this.getClass());
+                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(files, debugLevel, this.getClass());
                     CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
 
                     File outputFile = getAttributesOutputFile(jobId);
@@ -165,14 +165,15 @@ public class OGRAttributesResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAttributes(@PathParam("id") String jobId, @QueryParam("deleteoutput") String doDelete) {
+    public Response getAttributes(@PathParam("id") String jobId,
+                                  @QueryParam("deleteoutput") @DefaultValue("false") Boolean doDelete) {
         String json = null;
         try {
             File fileWithAttributes = getAttributesOutputFile(jobId);
             if (fileWithAttributes.exists()) {
                 json = FileUtils.readFileToString(fileWithAttributes, "UTF-8");
 
-                if (Boolean.valueOf(doDelete)) {
+                if (doDelete) {
                     FileUtils.deleteQuietly(fileWithAttributes);
                 }
             }
@@ -188,12 +189,12 @@ public class OGRAttributesResource {
     private List<File> processFormDataMultiPart(FormDataMultiPart multiPart, File workDir, String jobId, String inputType) {
         List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
-        List<File> fileList = new LinkedList<>();
+        List<File> files = new LinkedList<>();
 
         if (!uploadedFiles.isEmpty()) {
             if (inputType.equalsIgnoreCase("DIR")) {
                 // Assumption: all of the uploaded files are under the same folder in this case
-                fileList.addAll(processFolder(uploadedFiles.get(0).getParentFile()));
+                files.addAll(processFolder(uploadedFiles.get(0).getParentFile()));
             }
             else {
                 for (File uploadedFile : uploadedFiles) {
@@ -210,16 +211,16 @@ public class OGRAttributesResource {
                         unZIPFileCommand.setTrackable(Boolean.FALSE);
                         externalCommandManager.exec(jobId, unZIPFileCommand);
 
-                        fileList.addAll(processFolder(folderWithUnzippedContents));
+                        files.addAll(processFolder(folderWithUnzippedContents));
                     }
                     else {
-                        fileList.add(uploadedFile);
+                        files.add(uploadedFile);
                     }
                 }
             }
         }
 
-        return fileList;
+        return files;
     }
 
     private static Collection<File> processFolder(File folder) {
