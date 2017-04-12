@@ -213,7 +213,7 @@ private:
   QStringList _sectionNames;
 
   OsmApiDb _database;
-  shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
 
   boost::shared_ptr<QElapsedTimer> _timer;
 

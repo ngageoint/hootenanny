@@ -250,7 +250,7 @@ void WriteOsmSqlStatementsReducer::_updateElementCounts(const QString tableHeade
 
 void WriteOsmSqlStatementsReducer::_writeElementCounts()
 {
-  shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(_context->getJobConf()));
+  boost::shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(_context->getJobConf()));
   //if it doesn't already exist, add a dir under our main output dir to store the aux element count
   //files in
   Hdfs fs;
@@ -262,7 +262,7 @@ void WriteOsmSqlStatementsReducer::_writeElementCounts()
   }
   const string outputFile =
     auxDir + "/elementCount-" + UuidHelper::createUuid().toString().toStdString();
-  shared_ptr<ostream> out(fs.create(outputFile));
+  boost::shared_ptr<ostream> out(fs.create(outputFile));
   if (!out->good())
   {
     throw Exception("Output stream is not good.");
@@ -291,7 +291,7 @@ void WriteOsmSqlStatementsReducer::reduce(HadoopPipes::ReduceContext& context)
     _context = &context;
   }
 
-  shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(_context->getJobConf()));
+  boost::shared_ptr<Configuration> config(HadoopPipesUtils::toConfiguration(_context->getJobConf()));
   //LOG_VARD(config->getInt("mapred.reduce.tasks"));
   _localJobTracker = config->get("mapred.job.tracker") == "local";
   const long writeBufferSize = config->getLong("writeBufferSize");
