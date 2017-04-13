@@ -51,6 +51,9 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 
+// Qt
+#include <qnumeric.h>
+
 // Standard
 #include <sstream>
 
@@ -63,7 +66,7 @@ using namespace Tgs;
 
 unsigned int ScriptMatch::logWarnCount = 0;
 
-ScriptMatch::ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),
@@ -388,7 +391,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
     {
       double d = it.value().toDouble();
       result[it.key()] = d;
-      if (isnan(result[it.key()]))
+      if (::qIsNaN(result[it.key()]))
       {
         if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {

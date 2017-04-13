@@ -53,7 +53,7 @@ public:
 
   void expandEnvelope(const Envelope& e);
 
-  void expandNodeRange(const shared_ptr<const Node>& n);
+  void expandNodeRange(const boost::shared_ptr<const Node>& n);
 
   void expandNodeRange(long nid);
 

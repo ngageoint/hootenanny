@@ -68,7 +68,7 @@ public:
    */
   void createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
     const Envelope &bounds,
-    shared_ptr<const MatchThreshold> threshold = shared_ptr<MatchThreshold>()) const;
+    boost::shared_ptr<const MatchThreshold> threshold = boost::shared_ptr<MatchThreshold>()) const;
 
   /**
    * @brief Returns a description of all available match creators.
@@ -80,12 +80,12 @@ public:
    *
    * @return
    */
-  vector< shared_ptr<MatchCreator> > getCreators() const { return _creators; }
+  vector< boost::shared_ptr<MatchCreator> > getCreators() const { return _creators; }
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
-  void registerCreator(shared_ptr<MatchCreator> creator) { _creators.push_back(creator); }
+  void registerCreator(boost::shared_ptr<MatchCreator> creator) { _creators.push_back(creator); }
 
   void reset() { _creators.clear(); }
 
@@ -98,13 +98,13 @@ public:
 
 private:
 
-  void _checkMatchCreatorBoundable(shared_ptr<MatchCreator> matchCreator,
+  void _checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
                                    const Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
 
-  static shared_ptr<MatchFactory> _theInstance;
+  static boost::shared_ptr<MatchFactory> _theInstance;
 
-  vector< shared_ptr<MatchCreator> > _creators;
+  vector< boost::shared_ptr<MatchCreator> > _creators;
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

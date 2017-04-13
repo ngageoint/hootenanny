@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__CALCULATOR_GENOME_H__
@@ -48,7 +48,7 @@ namespace Tgs
     public:
       AvailableNode() { weight = -1; }
 
-      AvailableNode(shared_ptr<CalculatorGenomeNode> node, double weight)
+      AvailableNode(boost::shared_ptr<CalculatorGenomeNode> node, double weight)
       {
         this->node = node;
         this->weight = weight;
@@ -60,7 +60,7 @@ namespace Tgs
         weight = an.weight;
       }
 
-      shared_ptr<CalculatorGenomeNode> node;
+     boost::shared_ptr<CalculatorGenomeNode> node;
       double weight;
     };
 
@@ -74,7 +74,7 @@ namespace Tgs
      * A typical weight (e.g. addition) is 1.
      */
     void addNodeType(CalculatorGenomeNode* node, const std::string& label, double weight);
-    void addNodeType(shared_ptr<CalculatorGenomeNode> node, const std::string& label,
+    void addNodeType(boost::shared_ptr<CalculatorGenomeNode> node, const std::string& label,
       double weight);
 
     void addBasicMathNodeTypes();
@@ -88,20 +88,20 @@ namespace Tgs
 
     virtual void clearCache() { _root->clearCache(); }
 
-    virtual shared_ptr<Genome> clone() const;
+    virtual boost::shared_ptr<Genome> clone() const;
 
     int countNodes() const;
 
-    shared_ptr<CalculatorGenomeNode> createNode(const std::string& id) const;
+   boost::shared_ptr<CalculatorGenomeNode> createNode(const std::string& id) const;
 
     virtual void crossoverSexually(const Genome& father, const Genome& mother, 
-      shared_ptr<Genome>& brother, shared_ptr<Genome>& sister);
+     boost::shared_ptr<Genome>& brother,boost::shared_ptr<Genome>& sister);
 
     const AvailableNodeMap& getAvailableNodes() const { return _availableNodes; }
 
     int getNodeTypeCount() const { return _availableNodes.size(); }
 
-    const shared_ptr<CalculatorGenomeNode> getRoot() const { return _root; }
+    const boost::shared_ptr<CalculatorGenomeNode> getRoot() const { return _root; }
 
     virtual void initialize();
 
@@ -129,37 +129,37 @@ namespace Tgs
   private:
     AvailableNodeMap _availableNodes;
     
-    shared_ptr<CalculatorGenomeNode> _root;
+   boost::shared_ptr<CalculatorGenomeNode> _root;
 
     double _totalWeight, _sourceWeight;
     int _depth;
 
     void _calculateWeights();
 
-    shared_ptr<CalculatorGenomeNode> _chooseRandomNode();
+   boost::shared_ptr<CalculatorGenomeNode> _chooseRandomNode();
 
     /**
      * Returns the total number of nodes in this tree.
      */
-    int _countNodes(const shared_ptr<CalculatorGenomeNode> node) const;
+    int _countNodes(const boost::shared_ptr<CalculatorGenomeNode> node) const;
 
-    shared_ptr<CalculatorGenomeNode> _createNewNode(bool sourceOnly) const;
+   boost::shared_ptr<CalculatorGenomeNode> _createNewNode(bool sourceOnly) const;
 
-    shared_ptr<CalculatorGenomeNode> _createNewTree(int maxDepth) const;
+   boost::shared_ptr<CalculatorGenomeNode> _createNewTree(int maxDepth) const;
 
     /**
      * I realize this is inefficient, but it makes maintenance and creation of the 
      * CalculatorGenomeNode much easier. Also, compared to the other computations that will be
      * occurring, this is small potatoes.
      */
-    shared_ptr<CalculatorGenomeNode> _findParent(shared_ptr<CalculatorGenomeNode> node) const;
+   boost::shared_ptr<CalculatorGenomeNode> _findParent(boost::shared_ptr<CalculatorGenomeNode> node) const;
 
-    shared_ptr<CalculatorGenomeNode> _findParent(shared_ptr<CalculatorGenomeNode> node, 
-      shared_ptr<CalculatorGenomeNode> current) const;
+   boost::shared_ptr<CalculatorGenomeNode> _findParent(boost::shared_ptr<CalculatorGenomeNode> node, 
+     boost::shared_ptr<CalculatorGenomeNode> current) const;
 
-    shared_ptr<CalculatorGenomeNode> _findNode(int index) const;
+   boost::shared_ptr<CalculatorGenomeNode> _findNode(int index) const;
 
-    void _mutate(double p, shared_ptr<CalculatorGenomeNode> node);
+    void _mutate(double p,boost::shared_ptr<CalculatorGenomeNode> node);
   };
 
   TGS_EXPORT std::ostream& operator<<(std::ostream& s, const CalculatorGenome& df);

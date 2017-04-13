@@ -56,7 +56,7 @@ public:
 
   void totalTagCountTest()
   {
-    shared_ptr<const OsmMap> constMap = _loadMap();
+    ConstOsmMapPtr constMap = _loadMap();
 
     TagCountVisitor tagCountVisitor;
     constMap->visitRo(tagCountVisitor);
@@ -66,7 +66,7 @@ public:
 
   void informationTagCountTest()
   {
-    shared_ptr<const OsmMap> constMap = _loadMap();
+    ConstOsmMapPtr constMap = _loadMap();
 
     TagCountVisitor tagCountVisitor;
     constMap->visitRo(tagCountVisitor);
@@ -76,14 +76,14 @@ public:
 
 private:
 
-  shared_ptr<const OsmMap> _loadMap()
+  ConstOsmMapPtr _loadMap()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/TagCountVisitorTest.osm", map);
-    shared_ptr<const OsmMap> constMap = map;
+    ConstOsmMapPtr constMap = map;
     return constMap;
   }
 

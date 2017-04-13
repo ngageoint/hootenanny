@@ -49,23 +49,23 @@ public:
 
   ParallelWayCriterion() {}
   ParallelWayCriterion(const ConstOsmMapPtr& map,
-                       shared_ptr<const Way> baseWay,
+                       ConstWayPtr baseWay,
                        bool isParallel = true);
 
   virtual ~ParallelWayCriterion();
 
-  Radians calculateDifference(const shared_ptr<const Way>& w) const;
+  Radians calculateDifference(const ConstWayPtr& w) const;
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   ParallelWayCriterion* clone() { return new ParallelWayCriterion(_map, _baseWay, _isParallel); }
 
 private:
 
   ConstOsmMapPtr _map;
-  shared_ptr<const Way> _baseWay;
+  ConstWayPtr _baseWay;
   bool _isParallel;
 
   // heading of baseWay at each coord

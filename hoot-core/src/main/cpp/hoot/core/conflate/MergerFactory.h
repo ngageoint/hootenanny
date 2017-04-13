@@ -99,7 +99,7 @@ public:
   void reset() { _creators.clear(); }
 
 private:
-  static shared_ptr<MergerFactory> _theInstance;
+  static boost::shared_ptr<MergerFactory> _theInstance;
 
   vector<MergerCreator*> _creators;
 };

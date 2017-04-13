@@ -40,6 +40,9 @@ using namespace geos::geom;
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 
+// Qt
+#include <qnumeric.h>
+
 namespace hoot
 {
 
@@ -60,7 +63,7 @@ public:
 
   }
 
-  virtual void visit(const shared_ptr<const Element>& e)
+  virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -84,7 +87,7 @@ public:
         const double distance = currentLoc.getCoordinate().distance(lastLoc.getCoordinate());
         //calculate the heading using some distance around the way
         const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
-        if (!isnan(theta))
+        if (! ::qIsNaN(theta))
         {
           _angleHistogram.addAngle(theta, distance);
         }

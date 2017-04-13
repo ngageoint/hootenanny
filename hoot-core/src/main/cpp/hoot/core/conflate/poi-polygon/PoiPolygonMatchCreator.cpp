@@ -70,7 +70,7 @@ class PoiPolygonMatchVisitor : public ElementVisitor
 public:
 
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
-                         ConstMatchThresholdPtr threshold, shared_ptr<PoiPolygonRfClassifier> rf) :
+                         ConstMatchThresholdPtr threshold, boost::shared_ptr<PoiPolygonRfClassifier> rf) :
     _map(map),
     _result(result),
     _threshold(threshold),
@@ -85,7 +85,7 @@ public:
   {
   }
 
-  void checkForMatch(const shared_ptr<const Element>& e)
+  void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     auto_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
@@ -104,7 +104,7 @@ public:
     {
       if (from != *it)
       {
-        const shared_ptr<const Element>& n = _map->getElement(*it);
+        const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
         if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
         {
@@ -133,7 +133,7 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  void collectSurroundingPolyIds(const shared_ptr<const Element>& e)
+  void collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e)
   {
     _surroundingPolyIds.clear();
     auto_ptr<Envelope> env(e->getEnvelope(_map));
@@ -150,7 +150,7 @@ public:
     {
       if (from != *it)
       {
-        const shared_ptr<const Element>& n = _map->getElement(*it);
+        const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
         if (n->isUnknown() && PoiPolygonMatch::isPoly(*n))
         {
@@ -160,7 +160,7 @@ public:
     }
   }
 
-  void collectSurroundingPoiIds(const shared_ptr<const Element>& e)
+  void collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e)
   {
     _surroundingPoiIds.clear();
     auto_ptr<Envelope> env(e->getEnvelope(_map));
@@ -177,7 +177,7 @@ public:
     {
       if (from != *it)
       {
-        const shared_ptr<const Element>& n = _map->getElement(*it);
+        const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
         if (n->isUnknown() && PoiPolygonMatch::isPoi(*n))
         {
@@ -187,7 +187,7 @@ public:
     }
   }
 
-  Meters getSearchRadius(const shared_ptr<const Element>& e) const
+  Meters getSearchRadius(const boost::shared_ptr<const Element>& e) const
   {
     const Meters searchRadius =
       e->getCircularError() + ConfigOptions().getPoiPolygonReviewDistanceThreshold();
@@ -216,16 +216,16 @@ public:
     return element->isUnknown() && PoiPolygonMatch::isPoi(*element);
   }
 
-  shared_ptr<HilbertRTree>& getIndex()
+  boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368
-      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
+      boost::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
@@ -242,14 +242,14 @@ public:
     return _index;
   }
 
-  shared_ptr<HilbertRTree>& getPolyIndex()
+  boost::shared_ptr<HilbertRTree>& getPolyIndex()
   {
     if (!_polyIndex)
     {
-      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _polyIndex.reset(new HilbertRTree(mps, 2));
 
-      shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
+      boost::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
       IndexElementsVisitor v(_polyIndex,
                              _polyIndexToEid,
@@ -265,14 +265,14 @@ public:
     return _polyIndex;
   }
 
-  shared_ptr<HilbertRTree>& getPoiIndex()
+  boost::shared_ptr<HilbertRTree>& getPoiIndex()
   {
     if (!_poiIndex)
     {
-      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _poiIndex.reset(new HilbertRTree(mps, 2));
 
-      shared_ptr<PoiPolygonPoiCriterion> crit(new PoiPolygonPoiCriterion());
+      boost::shared_ptr<PoiPolygonPoiCriterion> crit(new PoiPolygonPoiCriterion());
 
       IndexElementsVisitor v(_poiIndex,
                              _poiIndexToEid,
@@ -300,16 +300,16 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
 
-  shared_ptr<HilbertRTree> _index; // Used for finding neighbors
+  boost::shared_ptr<HilbertRTree> _index; // Used for finding neighbors
   deque<ElementId> _indexToEid;
-  shared_ptr<HilbertRTree> _polyIndex; // used for finding surrounding polys
+  boost::shared_ptr<HilbertRTree> _polyIndex; // used for finding surrounding polys
   deque<ElementId> _polyIndexToEid;
   set<ElementId> _surroundingPolyIds;
-  shared_ptr<HilbertRTree> _poiIndex; // used for finding surrounding poi's
+  boost::shared_ptr<HilbertRTree> _poiIndex; // used for finding surrounding poi's
   deque<ElementId> _poiIndexToEid;
   set<ElementId> _surroundingPoiIds;
 
-  shared_ptr<PoiPolygonRfClassifier> _rf;
+  boost::shared_ptr<PoiPolygonRfClassifier> _rf;
 };
 
 PoiPolygonMatchCreator::PoiPolygonMatchCreator()
@@ -372,7 +372,7 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
   return PoiPolygonMatchVisitor::isMatchCandidate(element);
 }
 
-shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
+boost::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
@@ -384,7 +384,7 @@ shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
   return _matchThreshold;
 }
 
-shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
+boost::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 {
   if (!_rf)
   {

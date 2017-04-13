@@ -57,7 +57,7 @@ public:
     w->getTags()["building"] = "yes";
 
     ElementConverter uut(map);
-    shared_ptr<Geometry> g = uut.convertToGeometry(w);
+    boost::shared_ptr<Geometry> g = uut.convertToGeometry(w);
 
     CPPUNIT_ASSERT_EQUAL(true, g->isEmpty());
   }

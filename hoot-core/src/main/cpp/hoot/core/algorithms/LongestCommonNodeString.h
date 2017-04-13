@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LONGESTCOMMONNODESTRING_H
@@ -41,7 +41,7 @@ namespace hoot
 class LongestCommonNodeString
 {
 public:
-  LongestCommonNodeString(shared_ptr<Way> w1, shared_ptr<Way> w2);
+  LongestCommonNodeString(boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
 
   /**
    * Returns the length of the common substring. Zero if no common substring was found.
@@ -59,7 +59,7 @@ public:
   int getW2Index() { return _i2; }
 
 private:
-  shared_ptr<Way> _w1, _w2;
+  boost::shared_ptr<Way> _w1, _w2;
   size_t _i1, _i2;
 };
 

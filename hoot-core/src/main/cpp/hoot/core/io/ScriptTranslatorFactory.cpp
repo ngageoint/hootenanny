@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
+boost::shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
 
 ScriptTranslatorFactory::ScriptTranslatorFactory()
 {

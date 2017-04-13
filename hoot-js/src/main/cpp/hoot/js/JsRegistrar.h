@@ -87,11 +87,11 @@ public:
 
   void initAll(Handle<Object> exports);
 
-  void registerInitializer(shared_ptr<ClassInitializer> ci);
+  void registerInitializer(boost::shared_ptr<ClassInitializer> ci);
 
 private:
 
-  vector< shared_ptr<ClassInitializer> > _initializers;
+  vector<boost::shared_ptr<ClassInitializer> > _initializers;
   static JsRegistrar* _theInstance;
 };
 
@@ -104,7 +104,7 @@ public:
    */
   AutoJsRegister()
   {
-    shared_ptr< ClassInitializerTemplate<T> > p(new ClassInitializerTemplate<T>());
+   boost::shared_ptr< ClassInitializerTemplate<T> > p(new ClassInitializerTemplate<T>());
     JsRegistrar::getInstance().registerInitializer(p);
   }
 };

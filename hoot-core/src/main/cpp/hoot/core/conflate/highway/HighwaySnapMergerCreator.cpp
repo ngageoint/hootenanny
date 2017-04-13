@@ -53,7 +53,7 @@ bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Mer
 
   set< pair<ElementId, ElementId> > eids;
 
-  shared_ptr<SublineStringMatcher> sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> sublineMatcher;
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {

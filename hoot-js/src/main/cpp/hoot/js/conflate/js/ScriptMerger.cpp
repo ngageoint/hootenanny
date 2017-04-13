@@ -43,7 +43,7 @@ namespace hoot
 {
 using namespace node;
 
-ScriptMerger::ScriptMerger(shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
                            const set<pair<ElementId, ElementId> > &pairs) :
   _pairs(pairs),
   _plugin(plugin),

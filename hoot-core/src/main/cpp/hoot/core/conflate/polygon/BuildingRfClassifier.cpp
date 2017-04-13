@@ -71,107 +71,107 @@ void BuildingRfClassifier::_createAllExtractors() const
   {
     FeatureExtractor* fe = Factory::getInstance().constructObject<FeatureExtractor>(
       extractorNames[i]);
-    _extractors.push_back(shared_ptr<FeatureExtractor>(fe));
+    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(fe));
   }
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new ExactStringDistance())));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MaxWordSetDistance(new ExactStringDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MeanWordSetDistance(new ExactStringDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new ExactStringDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MaxWordSetDistance(new ExactStringDistance())))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance())))));
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new LevenshteinDistance())));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MaxWordSetDistance(new LevenshteinDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MeanWordSetDistance(new LevenshteinDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new LevenshteinDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MaxWordSetDistance(new LevenshteinDistance())))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance())))));
 
   for (double b = -0.3; b < 0.0; b += 0.1)
   {
-    _extractors.push_back(shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
+    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
   }
 
   for (double b = 0.1; b < 0.5; b += 0.1)
   {
-    _extractors.push_back(shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
+    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new BufferedOverlapExtractor(b)));
   }
 
   for (double a = 1.0; a < 1.8; a += 0.05)
   {
-    _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
       new MeanWordSetDistance(new LevenshteinDistance(a)))));
-    _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
       new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(a))))));
   }
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(new Soundex())));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(new Soundex())));
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MaxWordSetDistance(new Soundex()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MeanWordSetDistance(new Soundex()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new Soundex()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MaxWordSetDistance(new Soundex())))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MeanWordSetDistance(new Soundex())))));
 
   // checking to see if averaging the top portion of word helps. It doesn't appear to make
   // any difference.
 //    for (double p = 0.0; p < 1.0; p += 0.2)
 //    {
-//      _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+//      _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
 //        new TranslateStringDistance(new MeanWordSetDistance(new ExactStringDistance(), p)))));
-//      _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+//      _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
 //        new MeanWordSetDistance(new ExactStringDistance(), p))));
 
-//      _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+//      _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
 //        new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(), p)))));
-//      _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+//      _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
 //        new MeanWordSetDistance(new LevenshteinDistance(), p))));
 //    }
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
     new EdgeDistanceExtractor(new MeanAggregator())));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
     new EdgeDistanceExtractor(new RmseAggregator())));
 
   for (double q = 0; q < 1.0; q += 0.05)
   {
-    _extractors.push_back(shared_ptr<FeatureExtractor>(
+    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
       new EdgeDistanceExtractor(new QuantileAggregator(q))));
   }
 
   for (double r = 0.0; r <= 1.0; r += 0.05)
   {
-    _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(r)));
+    _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(r)));
   }
 
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new KskipBigramDistance())));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MaxWordSetDistance(new KskipBigramDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new MeanWordSetDistance(new KskipBigramDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new KskipBigramDistance()))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MaxWordSetDistance(new KskipBigramDistance())))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MeanWordSetDistance(new KskipBigramDistance())))));
 }
 
@@ -180,13 +180,13 @@ void BuildingRfClassifier::_createBestExtractors() const
   _extractors.clear();
 
   // this set was determined with experimentation using the Jakarta building data and weka.
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.0)));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.3)));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new CompactnessExtractor()));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new SmallerOverlapExtractor()));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(new NameExtractor(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.0)));
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new AngleHistogramExtractor(0.3)));
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new CompactnessExtractor()));
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new SmallerOverlapExtractor()));
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(new NameExtractor(
     new TranslateStringDistance(new MeanWordSetDistance(new LevenshteinDistance(1.45))))));
-  _extractors.push_back(shared_ptr<FeatureExtractor>(
+  _extractors.push_back(boost::shared_ptr<FeatureExtractor>(
     new EdgeDistanceExtractor(new QuantileAggregator(0.4))));
 }
 

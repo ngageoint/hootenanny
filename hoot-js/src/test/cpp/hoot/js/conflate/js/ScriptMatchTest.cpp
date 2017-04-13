@@ -68,7 +68,7 @@ public:
     // create the test scenario in ScriptMatchTest
     // call ScriptMatch is consistent repeatedly.
 
-    shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
+   boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
 
     ScriptMatchCreator smc;
     smc.setArguments(QStringList() << "LineStringGenericTest.js");

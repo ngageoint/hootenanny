@@ -54,7 +54,7 @@ _caseSensitive(true)
   setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
-void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)
+void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
   _map = map;
 
@@ -62,7 +62,7 @@ void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)
   // go through each way
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
   {
-    const shared_ptr<Way>& w = it->second;
+    const WayPtr& w = it->second;
 
     QStringList list = w->getTags().getNames();
     // put all the alt_name values in a set, this will remove duplicates.
@@ -160,7 +160,7 @@ QString DuplicateNameRemover::_getBestName(QString n1, QString n2)
   }
 }
 
-void DuplicateNameRemover::removeDuplicates(shared_ptr<OsmMap> map)
+void DuplicateNameRemover::removeDuplicates(boost::shared_ptr<OsmMap> map)
 {
   DuplicateNameRemover a;
   a.apply(map);

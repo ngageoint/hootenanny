@@ -49,12 +49,12 @@ IntersectionSplitter::IntersectionSplitter()
 
 }
 
-IntersectionSplitter::IntersectionSplitter(shared_ptr<OsmMap> map)
+IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map)
 {
   _map = map;
 }
 
-void IntersectionSplitter::_mapNodesToWay(shared_ptr<Way> way)
+void IntersectionSplitter::_mapNodesToWay(boost::shared_ptr<Way> way)
 {
   long wId = way->getId();
 
@@ -77,7 +77,7 @@ void IntersectionSplitter::_mapNodesToWays()
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    shared_ptr<Way> w = it->second;
+    boost::shared_ptr<Way> w = it->second;
 
     bool isNetworkType = false;
 
@@ -111,7 +111,7 @@ void IntersectionSplitter::_mapNodesToWays()
   }
 }
 
-void IntersectionSplitter::_removeWayFromMap(shared_ptr<Way> way)
+void IntersectionSplitter::_removeWayFromMap(boost::shared_ptr<Way> way)
 {
   long wId = way->getId();
 
@@ -122,7 +122,7 @@ void IntersectionSplitter::_removeWayFromMap(shared_ptr<Way> way)
   }
 }
 
-void IntersectionSplitter::splitIntersections(shared_ptr<OsmMap> map)
+void IntersectionSplitter::splitIntersections(boost::shared_ptr<OsmMap> map)
 {
   IntersectionSplitter is(map);
   return is.splitIntersections();
@@ -167,7 +167,7 @@ void IntersectionSplitter::splitIntersections()
 
 void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 {
-  shared_ptr<Way> way = _map->getWay(wayId);
+  boost::shared_ptr<Way> way = _map->getWay(wayId);
   if (way == 0)
   {
     LOG_TRACE("way at " << wayId << " does not exist.");
@@ -201,7 +201,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         continue;
 
       //  Get the way info to make the comparison
-      WayPtr comp = _map->getWay(*it);
+      boost::shared_ptr<Way> comp = _map->getWay(*it);
       const std::vector<long>& compIds = comp->getNodeIds();
       long idx = comp->getNodeIndex(nodeId);
 
@@ -221,13 +221,13 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);
-      vector< shared_ptr<Way> > splits = WaySplitter::split(_map, way, wl);
+      vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, way, wl);
 
       // if a split occurred.
       if (splits.size() > 1)
       {
         QList<ElementPtr> newWays;
-        foreach (const WayPtr& w, splits)
+        foreach (const boost::shared_ptr<Way>& w, splits)
         {
           newWays.append(w);
         }
@@ -249,7 +249,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
   }
 }
 
-void IntersectionSplitter::apply(shared_ptr<OsmMap>& map)
+void IntersectionSplitter::apply(boost::shared_ptr<OsmMap> &map)
 {
   splitIntersections(map);
 }

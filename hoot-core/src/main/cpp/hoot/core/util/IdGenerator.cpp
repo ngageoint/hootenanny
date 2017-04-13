@@ -33,9 +33,9 @@
 namespace hoot
 {
 
-shared_ptr<IdGenerator> IdGenerator::_theInstance;
+boost::shared_ptr<IdGenerator> IdGenerator::_theInstance;
 
-shared_ptr<IdGenerator> IdGenerator::getInstance()
+boost::shared_ptr<IdGenerator> IdGenerator::getInstance()
 {
   if (!_theInstance)
   {

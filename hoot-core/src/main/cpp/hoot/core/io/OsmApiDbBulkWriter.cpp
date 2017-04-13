@@ -1124,8 +1124,8 @@ void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const unsi
 
 void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
                                             const unsigned long dbId,
-                                            shared_ptr<QTextStream>& currentTable,
-                                            shared_ptr<QTextStream>& historicalTable)
+                                            boost::shared_ptr<QTextStream>& currentTable,
+                                            boost::shared_ptr<QTextStream>& historicalTable)
 {
   LOG_TRACE("Writing tags to stream...");
 
@@ -1232,7 +1232,7 @@ void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& r
   unsigned int memberSequenceIndex = 1;
   const long relationId = relation->getId();
   const vector<RelationData::Entry> relationMembers = relation->getMembers();
-  shared_ptr<BigMap<long, unsigned long> > knownElementMap;
+  boost::shared_ptr<BigMap<long, unsigned long> > knownElementMap;
 
   for (vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
        it != relationMembers.end(); ++it)
@@ -1323,15 +1323,15 @@ void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QStrin
   {
     outputFile.remove();
   }
-  shared_ptr<QFile> file(new QFile(dest));
+  boost::shared_ptr<QFile> file(new QFile(dest));
   if (!file->open(QFile::WriteOnly | QFile::Truncate | QIODevice::Append))
   {
     throw HootException(
       "Could not open file at: " + file->fileName() + " for contents of table: " + tableName);
   }
   _outputSections[tableName] =
-    pair<shared_ptr<QFile>, shared_ptr<QTextStream> >(
-      file, shared_ptr<QTextStream>(new QTextStream(file.get())));
+    pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> >(
+      file, boost::shared_ptr<QTextStream>(new QTextStream(file.get())));
 
   // Database is encoded in UTF-8, so force encoding as otherwise file is in local
   //    Western encoding which goes poorly for a lot of countries
@@ -1437,7 +1437,7 @@ void OsmApiDbBulkWriter::_writeSequenceUpdatesToStream(long changesetId,
     changesetId = 1;
   }
 
-  shared_ptr<QTextStream> sequenceUpdatesStream(new QTextStream(&outputStr));
+  boost::shared_ptr<QTextStream> sequenceUpdatesStream(new QTextStream(&outputStr));
   const QString sequenceUpdateFormat("SELECT pg_catalog.setval('%1', %2);\n");
 
   //At least one changeset and some nodes should always be written by a write operation; ways

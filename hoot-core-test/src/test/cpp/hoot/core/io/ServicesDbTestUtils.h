@@ -88,14 +88,14 @@ public:
 
   static void verifyTestDatabaseEmpty();
 
-  static shared_ptr<OsmMap> createTestMap1();
+  static boost::shared_ptr<OsmMap> createTestMap1();
 
 private:
 
   static Settings _readDbConfig();
   static void _readDbConfig(Settings& settings, QString config_path);
 
-  static shared_ptr<Node> _createNode(double x, double y, OsmMapPtr map);
+  static boost::shared_ptr<Node> _createNode(double x, double y, OsmMapPtr map);
 };
 
 }

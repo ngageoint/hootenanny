@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
-bool HighwayCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool HighwayCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   return OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType());
 }

@@ -67,13 +67,13 @@ public:
    * Sets the operation that will be applied to the map. This operation must also implement
    * serialiazable.
    */
-  void setOperation(shared_ptr<OsmMapOperation> op);
+  void setOperation(boost::shared_ptr<OsmMapOperation> op);
 
 private:
 
   string _toString(const vector<Envelope>& e);
 
-  shared_ptr<OsmMapOperation> _op;
+ boost::shared_ptr<OsmMapOperation> _op;
 };
 
 }

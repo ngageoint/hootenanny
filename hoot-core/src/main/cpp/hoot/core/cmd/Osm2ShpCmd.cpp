@@ -62,7 +62,7 @@ public:
     QStringList columnsArr = columns.split(",", QString::SkipEmptyParts);
 
     // open up both OSM files.
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, input, true);
 
     ShapefileWriter writer;

@@ -70,12 +70,12 @@ SmallWayMerger::SmallWayMerger(Meters threshold)
     ConfigOptions().getSmallWayMergerDiff()));
 }
 
-void SmallWayMerger::apply(shared_ptr<OsmMap>& map)
+void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
   // create a map from nodes to ways
-  shared_ptr<NodeToWayMap> n2wp = _map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2wp = _map->getIndex().getNodeToWayMap();
   _n2w = n2wp.get();
 
   // make a copy so we can make changes.
@@ -86,7 +86,7 @@ void SmallWayMerger::apply(shared_ptr<OsmMap>& map)
     // if we haven't already merged the way
     if (_map->containsWay(it->first))
     {
-      shared_ptr<Way> w = it->second;
+      boost::shared_ptr<Way> w = it->second;
 
       // if the way is smaller than the threshold
       if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) &&
@@ -98,7 +98,7 @@ void SmallWayMerger::apply(shared_ptr<OsmMap>& map)
   }
 }
 
-void SmallWayMerger::_mergeNeighbors(shared_ptr<Way> w)
+void SmallWayMerger::_mergeNeighbors(boost::shared_ptr<Way> w)
 {
   NodeToWayMap& n2w = *_n2w;
 
@@ -123,8 +123,8 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   assert(ids.size() == 2);
 
   set<long>::iterator it = ids.begin();
-  shared_ptr<Way> w1 = _map->getWay(*it);
-  shared_ptr<Way> w2 = _map->getWay(*(++it));
+  boost::shared_ptr<Way> w1 = _map->getWay(*it);
+  boost::shared_ptr<Way> w2 = _map->getWay(*(++it));
 
   // if either way is not a highway
   if (OsmSchema::getInstance().isLinearHighway(w1->getTags(), w1->getElementType()) == false ||
@@ -151,7 +151,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     }
 
     // Line the ways up so they're end to head and assign them to first and next.
-    shared_ptr<Way> first, next;
+    boost::shared_ptr<Way> first, next;
     if (w1->getLastNodeId() == w2->getNodeId(0))
     {
       first = w1;
@@ -208,7 +208,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   }
 }
 
-void SmallWayMerger::mergeWays(shared_ptr<OsmMap> map, Meters threshold)
+void SmallWayMerger::mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold)
 {
   SmallWayMerger a(threshold);
   a.apply(map);

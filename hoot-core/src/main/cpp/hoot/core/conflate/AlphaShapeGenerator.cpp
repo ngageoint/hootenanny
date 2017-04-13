@@ -46,7 +46,7 @@ _buffer(buffer)
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
-  shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
+  boost::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
     if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -60,7 +60,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     logWarnCount++;
   }
 
-  shared_ptr<OsmMap> result;
+  OsmMapPtr result;
 
   result.reset(new OsmMap(inputMap->getProjection()));
   // add the resulting alpha shape for debugging.
@@ -76,7 +76,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   return result;
 }
 
-shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
+boost::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
   MapProjector::projectToPlanar(inputMap);
 
@@ -93,7 +93,7 @@ shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
   }
 
   // create a complex geometry representing the alpha shape
-  shared_ptr<Geometry> cutterShape;
+  boost::shared_ptr<Geometry> cutterShape;
   {
     AlphaShape alphaShape(_alpha);
     alphaShape.insert(points);

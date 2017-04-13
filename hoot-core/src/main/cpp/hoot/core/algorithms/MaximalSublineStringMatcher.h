@@ -70,7 +70,7 @@ public:
 
   virtual void setHeadingDelta(Meters headingDelta);
 
-  virtual void setSublineMatcher(shared_ptr<SublineMatcher> sm);
+  virtual void setSublineMatcher(boost::shared_ptr<SublineMatcher> sm);
 
 private:
 
@@ -80,7 +80,7 @@ private:
   Radians _maxAngle;
   Meters _minSplitsize;
   Meters _headingDelta;
-  shared_ptr<SublineMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineMatcher> _sublineMatcher;
 
   class ScoredMatch
   {

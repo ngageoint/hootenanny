@@ -82,11 +82,11 @@ public:
       }
     }
 
-    shared_ptr<OsmMap> cutterShapeMap(new OsmMap());
+    OsmMapPtr cutterShapeMap(new OsmMap());
     loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
 
     // load up the "dough"
-    shared_ptr<OsmMap> doughMap(new OsmMap());
+    OsmMapPtr doughMap(new OsmMap());
     loadMap(doughMap, doughPath, true, Status::Unknown1);
     CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
     OsmMapPtr result = doughMap;

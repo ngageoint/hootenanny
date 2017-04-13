@@ -53,7 +53,7 @@ private:
   auto_ptr<istream> _in;
   auto_ptr<OsmPbfReader> _reader;
   vector<OsmPbfReader::BlobLocation> _blobs;
-  shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   int _blobIndex;
 
   void _init(istream* in);

@@ -69,7 +69,7 @@ void Node::clear()
   _nodeData.clear();
 }
 
-Envelope* Node::getEnvelope(const shared_ptr<const ElementProvider> &/*ep*/) const
+Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider> &/*ep*/) const
 {
   return new Envelope(getX(), getX(), getY(), getY());
 }
@@ -84,11 +84,11 @@ void Node::setY(double y)
   _nodeData.setY(y);
 }
 
-shared_ptr<geos::geom::Point> Node::toPoint() const
+boost::shared_ptr<geos::geom::Point> Node::toPoint() const
 {
   Coordinate c(getX(), getY());
 
-  shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
+  boost::shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
 
   return result;
 }

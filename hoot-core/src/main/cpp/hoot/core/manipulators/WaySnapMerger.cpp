@@ -41,7 +41,7 @@ WaySnapMerger::WaySnapMerger()
 }
 
 Manipulation* WaySnapMerger::_createManipulation(long leftId, long rightId,
-  shared_ptr<const OsmMap> map, Meters minSplitSize)
+  ConstOsmMapPtr map, Meters minSplitSize)
 {
   return new WaySnapMergeManipulation(leftId, rightId, map, minSplitSize);
 }

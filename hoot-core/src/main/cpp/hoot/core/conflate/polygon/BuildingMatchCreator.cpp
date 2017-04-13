@@ -74,7 +74,7 @@ public:
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
-    vector<const Match*>& result, shared_ptr<BuildingRfClassifier> rf,
+    vector<const Match*>& result, boost::shared_ptr<BuildingRfClassifier> rf,
     ConstMatchThresholdPtr threshold, Status matchStatus = Status::Invalid) :
     _map(map),
     _result(result),
@@ -94,7 +94,7 @@ public:
              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  void checkForMatch(const shared_ptr<const Element>& e)
+  void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     auto_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(e->getCircularError());
@@ -113,7 +113,7 @@ public:
     {
       if (from != *it)
       {
-        const shared_ptr<const Element>& n = _map->getElement(*it);
+        const boost::shared_ptr<const Element>& n = _map->getElement(*it);
         if (isRelated(n, e))
         {
           // score each candidate and push it on the result vector
@@ -156,7 +156,7 @@ public:
     }
   }
 
-  Meters getSearchRadius(const shared_ptr<const Element>& e) const
+  Meters getSearchRadius(const boost::shared_ptr<const Element>& e) const
   {
     LOG_VART(e->getCircularError());
     return e->getCircularError();
@@ -175,18 +175,18 @@ public:
     return OsmSchema::getInstance().isBuilding(element->getTags(), element->getElementType());
   }
 
-  shared_ptr<HilbertRTree>& getIndex()
+  boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368
-      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that isMatchCandidate(e)
       boost::function<bool (ConstElementPtr e)> f = boost::bind(&BuildingMatchVisitor::isMatchCandidate, _1);
-      shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+      boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
@@ -208,7 +208,7 @@ private:
   const ConstOsmMapPtr& _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
-  shared_ptr<BuildingRfClassifier> _rf;
+  boost::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
   Status _matchStatus;
   int _neighborCountMax;
@@ -219,7 +219,7 @@ private:
   double _rejectScore;
 
   // Used for finding neighbors
-  shared_ptr<HilbertRTree> _index;
+  boost::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 };
 
@@ -264,7 +264,7 @@ vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
   return result;
 }
 
-shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
+boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 {
   if (!_rf)
   {
@@ -298,7 +298,7 @@ bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const Const
   return BuildingMatchVisitor::isMatchCandidate(element);
 }
 
-shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
+boost::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {

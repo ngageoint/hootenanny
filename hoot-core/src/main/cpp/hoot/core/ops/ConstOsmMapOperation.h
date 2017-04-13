@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONSTOSMMAPOPERATION_H
 #define CONSTOSMMAPOPERATION_H
@@ -46,13 +46,13 @@ public:
 
   virtual ~ConstOsmMapOperation() {}
 
-  virtual void apply(shared_ptr<OsmMap>& map) { apply((const shared_ptr<OsmMap>&)map); }
+  virtual void apply(boost::shared_ptr<OsmMap>& map) { apply((const boost::shared_ptr<OsmMap>&)map); }
 
   /**
    * This guarantees that we won't actually change the map pointer, although the map itself may
    * still be changed.
    */
-  virtual void apply(const shared_ptr<OsmMap>& map) = 0;
+  virtual void apply(const boost::shared_ptr<OsmMap>& map) = 0;
 
 };
 
