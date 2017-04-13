@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_PROVIDER_H__
 #define __ELEMENT_PROVIDER_H__
@@ -52,17 +52,17 @@ public:
 
   virtual ConstElementPtr getElement(const ElementId& id) const = 0;
 
-  virtual const boost::shared_ptr<const Node> getNode(long id) const = 0;
+  virtual const ConstNodePtr getNode(long id) const = 0;
 
-  virtual const boost::shared_ptr<Node> getNode(long id) = 0;
+  virtual const NodePtr getNode(long id) = 0;
 
-  virtual const boost::shared_ptr<const Relation> getRelation(long id) const = 0;
+  virtual const ConstRelationPtr getRelation(long id) const = 0;
 
-  virtual const boost::shared_ptr<Relation> getRelation(long id) = 0;
+  virtual const RelationPtr getRelation(long id) = 0;
 
-  virtual const boost::shared_ptr<const Way> getWay(long id) const = 0;
+  virtual const ConstWayPtr getWay(long id) const = 0;
 
-  virtual const boost::shared_ptr<Way> getWay(long id) = 0;
+  virtual const WayPtr getWay(long id) = 0;
 
   virtual bool containsNode(long id) const = 0;
 

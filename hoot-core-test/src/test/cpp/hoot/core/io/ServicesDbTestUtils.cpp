@@ -270,7 +270,7 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
     DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
   //verify sequences
-  shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+  boost::shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Node));
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Way));
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));
@@ -279,22 +279,22 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
   reader.close();
 }
 
-shared_ptr<Node> ServicesDbTestUtils::_createNode(double x, double y, OsmMapPtr map)
+boost::shared_ptr<Node> ServicesDbTestUtils::_createNode(double x, double y, OsmMapPtr map)
 {
-  shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), x, y, 10.0));
+  boost::shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), x, y, 10.0));
   map->addNode(n);
   return n;
 }
 
-shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
+boost::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
 {
-  shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
-  shared_ptr<Node> n1 = _createNode(-77.0, 38.0, map);
+  boost::shared_ptr<Node> n1 = _createNode(-77.0, 38.0, map);
   n1->setTag("building", "yes");
   n1->setTag("name", "n1");
 
-  shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  boost::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
   w1->setTag("area", "yes");
   w1->setTag("building", "yes");
   w1->setTag("name", "w1");
@@ -304,35 +304,35 @@ shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
   w1->addNode(w1->getNodeId(0));
   map->addWay(w1);
 
-  shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  boost::shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
   w2->setTag("highway", "track");
   w2->setTag("name", "w2");
   w2->addNode(_createNode(-77.3, 38.0, map)->getId());
   w2->addNode(_createNode(-77.3, 38.1, map)->getId());
   map->addWay(w2);
 
-  shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  boost::shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
   w3->setTag("highway", "road");
   w3->setTag("name", "w3");
   w3->addNode(_createNode(-77.4, 38.0, map)->getId());
   w3->addNode(_createNode(-77.4, 38.1, map)->getId());
   map->addWay(w3);
 
-  shared_ptr<Way> w4(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  boost::shared_ptr<Way> w4(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
   w4->addNode(_createNode(-77.5, 38.0, map)->getId());
   w4->addNode(_createNode(-77.7, 38.0, map)->getId());
   w4->addNode(_createNode(-77.6, 38.1, map)->getId());
   w4->addNode(w4->getNodeId(0));
   map->addWay(w4);
 
-  shared_ptr<Way> w5(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  boost::shared_ptr<Way> w5(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
   w5->addNode(_createNode(-77.55, 38.01, map)->getId());
   w5->addNode(_createNode(-77.65, 38.01, map)->getId());
   w5->addNode(_createNode(-77.6, 38.05, map)->getId());
   w5->addNode(w5->getNodeId(0));
   map->addWay(w5);
 
-  shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "multipolygon"));
+  boost::shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "multipolygon"));
   r1->setTag("building", "yes");
   r1->setTag("name", "r1");
   r1->addElement("outer", w4->getElementId());

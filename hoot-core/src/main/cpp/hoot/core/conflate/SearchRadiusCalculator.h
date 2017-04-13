@@ -54,7 +54,7 @@ public:
 
   SearchRadiusCalculator();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual any getResult() { any result = _result; return result; }
 

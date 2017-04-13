@@ -75,16 +75,16 @@ public:
 
     FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
 
-    shared_ptr<TileWorker2> worker(new LocalTileWorker2());
+    boost::shared_ptr<TileWorker2> worker(new LocalTileWorker2());
     FourPassManager uut(worker);
     // ~240m
     uut.setBuffer(8.0 / 3600.0);
     uut.setMaxNodesPerBox(5000);
     Envelope env(-77.039, -77.033, 38.892, 38.896);
-    shared_ptr<OpList> op(new OpList());
-    op->addOp(shared_ptr<OsmMapOperation>(new MapCropper(env)));
-    op->addOp(shared_ptr<OsmMapOperation>(new SuperfluousNodeRemover()));
-    op->addOp(shared_ptr<OsmMapOperation>(new MergeNearbyNodes(10)));
+    boost::shared_ptr<OpList> op(new OpList());
+    op->addOp(boost::shared_ptr<OsmMapOperation>(new MapCropper(env)));
+    op->addOp(boost::shared_ptr<OsmMapOperation>(new SuperfluousNodeRemover()));
+    op->addOp(boost::shared_ptr<OsmMapOperation>(new MergeNearbyNodes(10)));
     uut.setOperation(op);
 
     uut.setSources("test-files/DcGisRoads.osm", "test-files/DcTigerRoads.osm");

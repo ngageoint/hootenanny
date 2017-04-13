@@ -54,7 +54,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
 private:
-  shared_ptr<ReportMissingElementsVisitor> _v;
+ boost::shared_ptr<ReportMissingElementsVisitor> _v;
 };
 
 }

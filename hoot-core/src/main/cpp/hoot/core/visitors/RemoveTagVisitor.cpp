@@ -68,7 +68,7 @@ void RemoveTagVisitor::addKey(QString key)
   _keys.append(key);
 }
 
-void RemoveTagVisitor::visit(const shared_ptr<Element>& e)
+void RemoveTagVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _keys.size(); i++)
   {

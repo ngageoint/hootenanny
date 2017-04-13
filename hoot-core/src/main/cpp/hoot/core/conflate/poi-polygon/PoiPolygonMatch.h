@@ -54,7 +54,7 @@ public:
   static const unsigned int REVIEW_EVIDENCE_THRESHOLD;
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-    shared_ptr<const PoiPolygonRfClassifier> rf,
+    boost::shared_ptr<const PoiPolygonRfClassifier> rf,
     const set<ElementId>& polyNeighborIds = set<ElementId>(),
     const set<ElementId>& poiNeighborIds = set<ElementId>());
 
@@ -80,7 +80,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
+  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   /**
    * Determines criteria for a feature to be considered a polygon for matching by
@@ -137,8 +137,8 @@ private:
   ElementId _eid2;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
-  shared_ptr<Geometry> _poiGeom;
-  shared_ptr<Geometry> _polyGeom;
+  boost::shared_ptr<Geometry> _poiGeom;
+  boost::shared_ptr<Geometry> _polyGeom;
   bool _e1IsPoi;
 
   //Settings _settings;
@@ -171,7 +171,7 @@ private:
   bool _enableAdvancedMatching;
   bool _enableReviewReduction;
 
-  shared_ptr<const PoiPolygonRfClassifier> _rf;
+  boost::shared_ptr<const PoiPolygonRfClassifier> _rf;
 
   void _categorizeElementsByGeometryType(const ElementId& eid1, const ElementId& eid2);
 

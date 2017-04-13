@@ -47,7 +47,7 @@ public:
 
   void setOsmMap(const OsmMap* map) { _map = map; }
 
-  void visit(const shared_ptr<const Element>& e);
+  void visit(const boost::shared_ptr<const Element>& e);
 
   // Get matching IDs
   vector<long> getIds() { return _nodeIds; }

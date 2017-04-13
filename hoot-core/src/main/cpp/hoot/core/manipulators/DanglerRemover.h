@@ -66,16 +66,16 @@ public:
 
   virtual ~DanglerRemover() {}
 
-  virtual const vector< shared_ptr<Manipulation> >& findAllManipulations(
-          shared_ptr<const OsmMap> map);
+  virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+          ConstOsmMapPtr map);
 
-  virtual const vector< shared_ptr<Manipulation> >& findWayManipulations(
-          shared_ptr<const OsmMap> map, const vector<long>& wids);
+  virtual const vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
+          ConstOsmMapPtr map, const vector<long>& wids);
 
 private:
 
-  vector< shared_ptr<Manipulation> > _result;
-  boost::shared_ptr<const OsmMap> _map;
+  vector< boost::shared_ptr<Manipulation> > _result;
+  ConstOsmMapPtr _map;
 
   double _errorPlus;
 

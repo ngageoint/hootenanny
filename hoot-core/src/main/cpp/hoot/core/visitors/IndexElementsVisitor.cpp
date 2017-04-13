@@ -40,9 +40,9 @@
 namespace hoot
 {
 
-IndexElementsVisitor::IndexElementsVisitor(shared_ptr<HilbertRTree>& index,
+IndexElementsVisitor::IndexElementsVisitor(boost::shared_ptr<HilbertRTree>& index,
                                            deque<ElementId>& indexToEid,
-                                           const shared_ptr<ElementCriterion>& filter,
+                                           const boost::shared_ptr<ElementCriterion>& filter,
                                            boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                                            ConstOsmMapPtr pMap):
   _pMap(pMap),
@@ -84,7 +84,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
 }
 
 set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
-                                                   const shared_ptr<Tgs::HilbertRTree>& index,
+                                                   const boost::shared_ptr<Tgs::HilbertRTree>& index,
                                                    const deque<ElementId>& indexToEid,
                                                    ConstOsmMapPtr pMap)
 {

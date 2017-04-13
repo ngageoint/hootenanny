@@ -59,7 +59,7 @@ public:
    * Writes the specified map out. When this method is complete the output will likely be closed
    * and all data is guaranteed to be flushed.
    */
-  virtual void write(boost::shared_ptr<const OsmMap> map) = 0;
+  virtual void write(ConstOsmMapPtr map) = 0;
 
 };
 

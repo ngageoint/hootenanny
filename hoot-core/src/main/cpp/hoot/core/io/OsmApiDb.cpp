@@ -200,7 +200,7 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
-  for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
     itr.value().reset();
@@ -399,7 +399,7 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
 {
   QString sql =  QString("SELECT node_id, latitude, longitude FROM %1 INNER JOIN %2 ON "
                          "%1.node_id=%2.id AND way_id = :wayId ORDER BY sequence_id")
@@ -461,7 +461,7 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   return result;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
 {
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
@@ -484,7 +484,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
 {
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
@@ -510,7 +510,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   return _selectElementsForMap;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
 {
   if (!_selectTagsForRelation)
   {
@@ -534,7 +534,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
   return _selectTagsForRelation;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
 {
   if (!_selectTagsForWay)
   {
@@ -556,7 +556,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
   return _selectTagsForWay;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
 {
   if (!_selectTagsForNode)
   {
@@ -579,7 +579,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   return _selectTagsForNode;
 }
 
-QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type type)
+QString OsmApiDb::extractTagFromRow(boost::shared_ptr<QSqlQuery> row, const ElementType::Type type)
 {
   QString tag = "";
   int pos = -1;
@@ -636,7 +636,7 @@ long OsmApiDb::_getIdFromSequence(const QString tableName, const QString sequenc
     _seqQueries[tableName]->prepare(sql);
   }
 
-  shared_ptr<QSqlQuery> query = _seqQueries[tableName];
+  boost::shared_ptr<QSqlQuery> query = _seqQueries[tableName];
   if (query->exec() == false)
   {
     throw HootException("Error reserving IDs. type: " +

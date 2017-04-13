@@ -50,7 +50,7 @@ public:
   TagCriterion();
   TagCriterion(const QString& k, const QString& v) : _k(k), _v(v) {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   void setConfiguration(const Settings& s);
 

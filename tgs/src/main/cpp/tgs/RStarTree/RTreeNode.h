@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -255,7 +255,7 @@ namespace Tgs
       char* getBox() { return ((char*)&id) + 4; }
     };
 
-    RTreeNode(int dimensions, shared_ptr<Page> page);
+    RTreeNode(int dimensions,boost::shared_ptr<Page> page);
     /**
      * Return the start of the child's data. This includes the box (BoxInternalData) and the 
      * index.
@@ -282,7 +282,7 @@ namespace Tgs
 
     int _maxChildCount;
     int _dimensions;
-    mutable shared_ptr<Page> _pageSp;
+    mutable boost::shared_ptr<Page> _pageSp;
     /// pointer to the same thing as above, only faster. Zoom zoom!
     mutable Page* _page;
     int _id;

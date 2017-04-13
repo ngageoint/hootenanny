@@ -65,7 +65,7 @@ class PertyWayGeneralizeVisitorTest : public CppUnit::TestFixture
 
 public:
 
-  QMap<QString, shared_ptr<OsmMap> > _inputMapCache;
+  QMap<QString, OsmMapPtr > _inputMapCache;
 
   void runTest(const QString inputFile, const int randomNumberGeneratorSeed,
                const double generalizeProbability, const double epsilon, const QString outputFile,
@@ -78,7 +78,7 @@ public:
     }
 
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     if (_inputMapCache.contains(inputFile))
     {
       map.reset(new OsmMap(_inputMapCache[inputFile]));
@@ -91,7 +91,7 @@ public:
       reader.read(inputFile, map);
       if (!_inputMapCache.contains(inputFile))
       {
-        shared_ptr<OsmMap> newMap(new OsmMap(map));
+        OsmMapPtr newMap(new OsmMap(map));
         _inputMapCache[inputFile] = newMap;
       }
     }

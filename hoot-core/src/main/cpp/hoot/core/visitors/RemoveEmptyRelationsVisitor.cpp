@@ -41,7 +41,7 @@ RemoveEmptyRelationsVisitor::RemoveEmptyRelationsVisitor()
 {
 }
 
-void RemoveEmptyRelationsVisitor::visit(const shared_ptr<Element>& e)
+void RemoveEmptyRelationsVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {

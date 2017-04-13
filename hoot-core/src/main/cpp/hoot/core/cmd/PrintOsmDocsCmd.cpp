@@ -66,7 +66,7 @@ public:
     }
 
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(printScript));
+    boost::shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(printScript));
 
     if (!uut)
     {

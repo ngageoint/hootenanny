@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBAWAREHOOTAPIDBWRITER_H
 #define OSMAPIDBAWAREHOOTAPIDBWRITER_H
@@ -49,11 +49,11 @@ public:
 
   virtual void open(QString urlStr);
 
-  virtual void writePartial(const shared_ptr<const Node>& n);
+  virtual void writePartial(const ConstNodePtr& n);
 
-  virtual void writePartial(const shared_ptr<const Way>& w);
+  virtual void writePartial(const ConstWayPtr& w);
 
-  virtual void writePartial(const shared_ptr<const Relation>& r);
+  virtual void writePartial(const ConstRelationPtr& r);
 
 protected:
 

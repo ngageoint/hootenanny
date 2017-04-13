@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMERGE_H
 #define BUILDINGMERGE_H
@@ -45,7 +45,7 @@ public:
   virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
     const;
 
-  static shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const set<ElementId>& eids);
+  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const set<ElementId>& eids);
 
   virtual QString toString() const;
 
@@ -56,8 +56,8 @@ protected:
 private:
   set< pair<ElementId, ElementId> > _pairs;
 
-  shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
-  shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
+  boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
+  boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
 };
 
 }

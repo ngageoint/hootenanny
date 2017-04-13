@@ -63,11 +63,11 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
   setRubberSheetMinTies(config.getRubberSheetMinimumTies());
 }
 
-void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
+void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
 {
   //make a copy of the map with previously conflated data removed, as the rubber sheeting can't
   //use it
-  OsmMapPtr mapWithOnlyUnknown1And2(new OsmMap(map));
+  boost::shared_ptr<OsmMap> mapWithOnlyUnknown1And2(new OsmMap(map));
   RemoveElementsVisitor elementRemover1(ElementCriterionPtr(new StatusCriterion(Status::Conflated)));
   elementRemover1.setRecursive(true);
   mapWithOnlyUnknown1And2->visitRw(elementRemover1);
@@ -92,7 +92,7 @@ void SearchRadiusCalculator::apply(shared_ptr<OsmMap>& map)
     return;
   }
 
-  shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
+  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
   rubberSheet->setReference(_rubberSheetRef);
   rubberSheet->setMinimumTies(_minTies);
   try

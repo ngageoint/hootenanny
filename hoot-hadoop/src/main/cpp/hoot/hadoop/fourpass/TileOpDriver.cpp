@@ -153,7 +153,7 @@ void TileOpDriver::apply(QString in, vector<Envelope> envelopes, double buffer,
   job.run();
 }
 
-void TileOpDriver::setOperation(shared_ptr<OsmMapOperation> op)
+void TileOpDriver::setOperation(boost::shared_ptr<OsmMapOperation> op)
 {
   _op = op;
 }

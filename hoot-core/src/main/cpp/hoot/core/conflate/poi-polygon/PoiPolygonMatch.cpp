@@ -54,7 +54,7 @@ const unsigned int PoiPolygonMatch::MATCH_EVIDENCE_THRESHOLD = 3;
 const unsigned int PoiPolygonMatch::REVIEW_EVIDENCE_THRESHOLD = 1;
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
-                                 shared_ptr<const PoiPolygonRfClassifier> rf,
+                                 boost::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  const set<ElementId>& polyNeighborIds,
                                  const set<ElementId>& poiNeighborIds) :
 Match(threshold),
@@ -488,7 +488,7 @@ set< pair<ElementId, ElementId> > PoiPolygonMatch::getMatchPairs() const
   return result;
 }
 
-map<QString, double> PoiPolygonMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
+map<QString, double> PoiPolygonMatch::getFeatures(const ConstOsmMapPtr& m) const
 {
   return _rf->getFeatures(m, _eid1, _eid2);
 }

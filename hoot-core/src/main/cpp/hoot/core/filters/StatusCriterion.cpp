@@ -34,7 +34,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, StatusCriterion)
 
-bool StatusCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool StatusCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   return _status == e->getStatus();
 }

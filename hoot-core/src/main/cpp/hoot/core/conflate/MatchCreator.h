@@ -133,7 +133,7 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) = 0;
 
-  virtual shared_ptr<MatchThreshold> getMatchThreshold() = 0;
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold() = 0;
 
   /**
    * Arguments are passed in by the MatchFactory.

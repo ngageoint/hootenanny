@@ -317,7 +317,7 @@ std::ostream& operator<<(std::ostream& o, const std::set<T, C>& s)
 }
 
 template <class T>
-std::ostream& operator<<(std::ostream & o, const shared_ptr<T>& v)
+std::ostream& operator<<(std::ostream & o, const boost::shared_ptr<T>& v)
 {
   if (v == 0)
   {
@@ -332,7 +332,7 @@ std::ostream& operator<<(std::ostream & o, const shared_ptr<T>& v)
 }
 
 template <class T>
-std::ostream& operator<<(std::ostream & o, const shared_ptr<const T>& v)
+std::ostream& operator<<(std::ostream & o, const boost::shared_ptr<const T>& v)
 {
   if (v.get() == 0)
   {

@@ -37,7 +37,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ContainsNodeCriterion)
 
-bool ContainsNodeCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool ContainsNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   if (e->getElementType() == ElementType::Way)
   {

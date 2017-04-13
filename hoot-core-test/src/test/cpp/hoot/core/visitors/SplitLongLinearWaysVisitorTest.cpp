@@ -51,7 +51,7 @@ private:
     // Make sure way in question does not already exist in map
     CPPUNIT_ASSERT_EQUAL(_map->containsWay(wayId), false );
 
-    boost::shared_ptr<Way>newWay(new Way(Status::Unknown1, wayId, 1.0));
+    WayPtr newWay(new Way(Status::Unknown1, wayId, 1.0));
 
     // Make sure there are nodes to add
     if ( startNodeId <= endNodeId )

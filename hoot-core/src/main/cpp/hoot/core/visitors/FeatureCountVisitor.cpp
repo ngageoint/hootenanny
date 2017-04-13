@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-void FeatureCountVisitor::visit(const shared_ptr<const Element>& e)
+void FeatureCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {

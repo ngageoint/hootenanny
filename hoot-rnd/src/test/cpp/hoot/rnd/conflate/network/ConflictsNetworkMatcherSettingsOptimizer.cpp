@@ -228,7 +228,7 @@ public:
         //VariableDescription::Real, 0.01, 100.0));  //min/max??
         //VariableDescription::Real, 0.5, 50.0));
 
-    shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
+   boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
     sa.setPickFromBestScores(true);
     sa.iterate(50);

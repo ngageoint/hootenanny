@@ -76,10 +76,10 @@ public:
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
-    vector<const Match*>& result, shared_ptr<HighwayClassifier> c,
-    shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
+    vector<const Match*>& result,boost::shared_ptr<HighwayClassifier> c,
+   boost::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
     ConstMatchThresholdPtr threshold,
-    shared_ptr<TagAncestorDifferencer> tagAncestorDiff):
+   boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff):
     _map(map),
     _result(result),
     _c(c),
@@ -100,7 +100,7 @@ public:
              (double)_neighborCountSum / (double)_elementsEvaluated);
   }
 
-  void checkForMatch(const shared_ptr<const Element>& e)
+  void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     auto_ptr<Envelope> env(e->getEnvelope(_map));
     env->expandBy(getSearchRadius(e));
@@ -119,7 +119,7 @@ public:
     {
       if (from != *it)
       {
-        const shared_ptr<const Element>& n = _map->getElement(*it);
+        const boost::shared_ptr<const Element>& n = _map->getElement(*it);
 
         // score each candidate and push it on the result vector
         HighwayMatch* m = createMatch(_map, _c, _sublineMatcher, _threshold, _tagAncestorDiff, e, n);
@@ -137,10 +137,10 @@ public:
   }
 
   static HighwayMatch* createMatch(const ConstOsmMapPtr& map,
-    shared_ptr<HighwayClassifier> classifier,
-    shared_ptr<SublineStringMatcher> sublineMatcher,
+   boost::shared_ptr<HighwayClassifier> classifier,
+   boost::shared_ptr<SublineStringMatcher> sublineMatcher,
     ConstMatchThresholdPtr threshold,
-    shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
+   boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ConstElementPtr e1, ConstElementPtr e2)
   {
     HighwayMatch* result = 0;
@@ -166,7 +166,7 @@ public:
     return result;
   }
 
-  Meters getSearchRadius(const shared_ptr<const Element>& e) const
+  Meters getSearchRadius(const boost::shared_ptr<const Element>& e) const
   {
     Meters searchRadius;
     if (_searchRadius >= 0)
@@ -194,18 +194,18 @@ public:
     return OsmSchema::getInstance().isLinearHighway(element->getTags(), element->getElementType());
   }
 
-  shared_ptr<HilbertRTree>& getIndex()
+ boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368
-      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+     boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements satisfy isMatchCandidate(e)
       boost::function<bool (ConstElementPtr e)> f = boost::bind(&HighwayMatchVisitor::isMatchCandidate, _1);
-      shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+     boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
@@ -228,8 +228,8 @@ private:
   const ConstOsmMapPtr& _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
-  shared_ptr<HighwayClassifier> _c;
-  shared_ptr<SublineStringMatcher> _sublineMatcher;
+ boost::shared_ptr<HighwayClassifier> _c;
+ boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   Status _matchStatus;
   int _neighborCountMax;
   int _neighborCountSum;
@@ -237,10 +237,10 @@ private:
   size_t _maxGroupSize;
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
-  shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+ boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 
   // Used for finding neighbors
-  shared_ptr<HilbertRTree> _index;
+ boost::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 };
 
@@ -253,7 +253,7 @@ HighwayMatchCreator::HighwayMatchCreator()
     Factory::getInstance().constructObject<SublineStringMatcher>(
       ConfigOptions().getHighwaySublineStringMatcher()));
 
-  _tagAncestorDiff = shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
+  _tagAncestorDiff =boost::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
 
   Settings settings = conf();
   settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());
@@ -290,7 +290,7 @@ bool HighwayMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstO
   return HighwayMatchVisitor::isMatchCandidate(element);
 }
 
-shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
+boost::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {

@@ -77,9 +77,9 @@ using namespace Tgs;
 class FakeMatch : public Match
 {
 public:
-  FakeMatch() : Match(shared_ptr<MatchThreshold>()) {}
+  FakeMatch() : Match(boost::shared_ptr<MatchThreshold>()) {}
 
-  FakeMatch(ElementId eid1, ElementId eid2, double p, const shared_ptr<const MatchThreshold> mt) :
+  FakeMatch(ElementId eid1, ElementId eid2, double p, const boost::shared_ptr<const MatchThreshold> mt) :
     Match(mt),
     _eid1(eid1),
     _eid2(eid2),
@@ -133,7 +133,7 @@ private:
   mutable MatchClassification _c;
   ElementId _eid1, _eid2;
   double _p;
-  shared_ptr<const MatchThreshold> _threshold;
+  boost::shared_ptr<const MatchThreshold> _threshold;
 };
 
 class MatchGraphTest : public CppUnit::TestFixture
@@ -153,7 +153,7 @@ public:
     ElementId e = ElementId::way(5);
     ElementId f = ElementId::way(6);
     vector<const Match*> matches;
-    shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
+    boost::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
 
     // force the pointers to be in order which forces the set to be consistent between runs.
     FakeMatch* fm = new FakeMatch[7];

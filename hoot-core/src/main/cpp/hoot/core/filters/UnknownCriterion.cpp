@@ -34,7 +34,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, UnknownCriterion)
 
-bool UnknownCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool UnknownCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   return e->isUnknown();
 }

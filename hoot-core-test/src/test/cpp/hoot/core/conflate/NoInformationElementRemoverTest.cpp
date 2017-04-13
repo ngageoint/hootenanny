@@ -66,7 +66,7 @@ public:
   void runWayWithInfoOneNodeWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -96,7 +96,7 @@ public:
   void runStandAloneNodesWithAndWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node1->getTags().appendValue("hoot:test", "test1");
@@ -112,7 +112,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
 
-    shared_ptr<const Node> parsedNode1 = map->getNode(node1->getElementId().getId());
+    ConstNodePtr parsedNode1 = map->getNode(node1->getElementId().getId());
     const Tags& node1Tags = parsedNode1->getTags();
     CPPUNIT_ASSERT_EQUAL(2, node1Tags.size());
     CPPUNIT_ASSERT_EQUAL(QString("test1"), node1Tags.get("hoot:test"));
@@ -124,7 +124,7 @@ public:
   void runWayWithoutInfoOneNodeWithInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -150,7 +150,7 @@ public:
   void runWayWithoutInfoAllNodesWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -174,7 +174,7 @@ public:
   void runRelationWithInfoOneElementWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 
@@ -216,7 +216,7 @@ public:
   void runRelationWithoutInfoOneNodeElementWithInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 
@@ -255,7 +255,7 @@ public:
   void runRelationWithoutInfoOneWayElementWithInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 
@@ -294,7 +294,7 @@ public:
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 

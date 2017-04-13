@@ -46,14 +46,14 @@ public:
 
 protected:
 
-  virtual void _map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context);
+  virtual void _map(boost::shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context);
 
 private:
 
   HadoopPipes::MapContext* _context;
-  shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
+  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
   QString _outputDelimiter;
-  shared_ptr<QVector<QPair<QString, QString> > > _statementsBuffer;
+  boost::shared_ptr<QVector<QPair<QString, QString> > > _statementsBuffer;
   bool _localJobTracker;
 
   void _writeElementAndTagsSqlStatements(const ConstElementPtr& element,

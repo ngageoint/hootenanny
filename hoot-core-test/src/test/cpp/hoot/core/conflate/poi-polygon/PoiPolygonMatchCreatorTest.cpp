@@ -83,7 +83,7 @@ public:
     {
       PoiPolygonMatchCreator uut;
       vector<const Match*> matches;
-      shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
+      boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
       uut.createMatches(map, matches, threshold);
       HOOT_STR_EQUALS(2, matches.size());
       HOOT_STR_EQUALS("PoiPolygonMatch Node:1 Way:-1 P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: -1, name score: 1, address score: -1",

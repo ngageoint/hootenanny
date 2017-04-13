@@ -140,7 +140,7 @@ public:
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
-    shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
+    boost::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
 
     // check if db active or not
     assert(nodeResultIterator->isActive());
@@ -204,7 +204,7 @@ public:
 
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql");
 
-    shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
+    boost::shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
 
     // check again if db active or not
     assert(wayResultIterator->isActive());
@@ -271,7 +271,7 @@ public:
 
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql");
 
-    shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
+    boost::shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
 
     // check again if db active or not
     assert(relationResultIterator->isActive());

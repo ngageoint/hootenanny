@@ -52,7 +52,7 @@ public:
 
   void runTest()
   {
-    shared_ptr<OsmMap> inputMap(new OsmMap());
+    OsmMapPtr inputMap(new OsmMap());
     OsmMapReaderFactory::read(inputMap, "test-files/MultipolygonTest.osm", true);
 
     ElementSorter elementSorter(inputMap);

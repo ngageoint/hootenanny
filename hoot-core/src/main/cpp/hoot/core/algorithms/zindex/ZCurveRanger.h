@@ -58,14 +58,14 @@ public:
   /* Find a good break point for the given box based on major z-value breaks
   * and break the box into two children.
   */
-  vector<shared_ptr<LongBox> > breakBox(shared_ptr<LongBox> box);
+  vector<boost::shared_ptr<LongBox> > breakBox(boost::shared_ptr<LongBox> box);
 
-  long int calculateExcess(shared_ptr<LongBox> box);
+  long int calculateExcess(boost::shared_ptr<LongBox> box);
 
   /**
   * Recursively decompose a box over level iterations.
   */
-  vector<shared_ptr<LongBox> > decomposeBox(shared_ptr<LongBox> box, int level);
+  vector<boost::shared_ptr<LongBox> > decomposeBox(boost::shared_ptr<LongBox> box, int level);
 
   static int getMaxBitColumn(long int v);
 
@@ -107,7 +107,7 @@ private:
   */
   vector<Range> _condenseRanges(vector<Range>& r);
 
-  Range _toRange(shared_ptr<LongBox> box);
+  Range _toRange(boost::shared_ptr<LongBox> box);
 
   LongBox _toLongBox(BBox box);
 

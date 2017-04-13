@@ -61,7 +61,7 @@ public:
     double buffer = args[i++].toDouble();
     QString outputPath = args[i++];
 
-    shared_ptr<OsmMap> pointsMap(new OsmMap());
+    OsmMapPtr pointsMap(new OsmMap());
     loadMap(pointsMap, pointsPath, false, Status::Unknown1);
     OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generateMap(pointsMap);
 

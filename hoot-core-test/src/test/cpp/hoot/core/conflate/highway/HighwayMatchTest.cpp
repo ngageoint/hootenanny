@@ -100,7 +100,7 @@ public:
   void runMajorOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -119,8 +119,8 @@ public:
     WayPtr w3 = createWay(map, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.6));
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -150,7 +150,7 @@ public:
   void runPartialMatchTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -170,8 +170,8 @@ public:
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.9));
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -201,7 +201,7 @@ public:
   void runPartialOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -220,8 +220,8 @@ public:
     WayPtr w3 = createWay(map, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.95));
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -249,7 +249,7 @@ public:
   void runSimpleConflictTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -268,8 +268,8 @@ public:
     WayPtr w3 = createWay(map, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.1, 0.6));
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -298,12 +298,12 @@ public:
   void runRealWorld1Test()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld1Test.osm",
       false);
     MapProjector::projectToOrthographic(map);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -326,7 +326,7 @@ public:
   void runRealWorld2Test()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld2Test.osm",
       false);
     MapProjector::projectToOrthographic(map);
@@ -334,8 +334,8 @@ public:
     Settings conf;
     conf.set(ConfigOptions::getWaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setConfiguration(conf);
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));

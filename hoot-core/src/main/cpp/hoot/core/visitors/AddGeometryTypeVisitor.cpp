@@ -42,7 +42,7 @@ AddGeometryTypeVisitor::AddGeometryTypeVisitor()
 {
 }
 
-void AddGeometryTypeVisitor::visit(const shared_ptr<Element>& e)
+void AddGeometryTypeVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getTags().getNonDebugCount() > 0)
   {
