@@ -91,7 +91,7 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
 
 void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const Match*>& matches)
 {
-  if (ConfigOptions(_settings).getConflateAddScoreTags())
+  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
   {
     for (size_t i = 0; i < matches.size(); i++)
     {

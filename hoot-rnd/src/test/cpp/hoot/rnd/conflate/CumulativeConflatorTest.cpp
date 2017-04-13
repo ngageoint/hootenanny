@@ -48,7 +48,7 @@ public:
   {
     TestUtils::resetEnvironment();
     OsmMap::resetCounters();
-    Settings::getInstance().set(ConfigOptions::getReviewTagsTreatAsMetadataKey(), false);
+    Settings::getInstance().set(ConfigOptions::getWriterCleanReviewTagsKey(), false);
     Settings::getInstance().set(
       ConfigOptions::getTagMergerDefaultKey(), "hoot::ProvenanceAwareOverwriteTagMerger");
 

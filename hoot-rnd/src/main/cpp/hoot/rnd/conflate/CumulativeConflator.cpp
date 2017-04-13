@@ -47,11 +47,11 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
   assert(inputs.size() >= 3);
 
   //for NoInformationElementRemover
-  if (ConfigOptions().getReviewTagsTreatAsMetadata())
+  if (ConfigOptions().getWriterCleanReviewTags())
   {
     throw HootException(
-      "Multi-conflation must be run with " + ConfigOptions::getReviewTagsTreatAsMetadataKey() +
-      "=false");
+      "Multi-conflation must be run with " +
+      ConfigOptions::getWriterCleanReviewTagsKey() + "=false");
   }
 
   //for TagMergerFactory

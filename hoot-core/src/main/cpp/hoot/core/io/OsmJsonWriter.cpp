@@ -56,7 +56,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
 OsmJsonWriter::OsmJsonWriter(int precision)
 {
-  _includeDebug = ConfigOptions().getWriterIncludeDebug();
+  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
   _precision = precision;
   _out = 0;
   _pretty = false;

@@ -166,27 +166,6 @@ The user ID used by certain changeset writers when writing to an OSM API databas
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
 
-=== conflate.add.review.detail
-
-* Data Type: bool
-* Default Value: `true`
-
-Add detailed review tags to review relations during conflation.  This setting allows for
-partitioning the level of detail in the review relation tags into two groups.  Turning this setting
-off can be useful during debugging in situations where you are comparing map outputs and want to
-see reviews in the output but are not concerned with a higher level of review detail.  Disabling
-this setting will also disable AddHilbertReviewSortOrderOp, the output of which is depended upon
-by the Hootenanny user interface.  So, this setting should only be disabled in debugging
-environments.
-
-=== conflate.add.score.tags
-
-* Data Type: bool
-* Default Value: `false`
-
-Add match/miss/review score values to elements with matches during Unifying Conflation. This is
-useful for debugging.
-
 === conflate.enable.old.roads
 
 * Data Type: bool
@@ -1908,6 +1887,15 @@ By default should a reader use the file status from the file. Not honored by all
 If reader.use.file.status is true, the default action is to drop the status tag from the file during reading.
 Setting reader.keep.file.status to true preserves the status tag. Not honored by all readers.
 
+=== remove.attribute.visitor.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
+valid values.
+
 === remove.duplicate.areas.diff
 
 * Data Type: string
@@ -1937,14 +1925,6 @@ Should the element remover remove the elements recursively?
 ** ``
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
-
-=== review.tags.treat.as.metadata
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, Hootenanny review tags are treated as metadata tags and will be removed by the
-NoInformationElementRemover cleaning operation.
 
 === rubber.sheet.debug
 
@@ -2025,15 +2005,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
-=== remove.attribute.visitor.types
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
-valid values.
-
 === script.test.max.exec.time
 
 * Data Type: int
@@ -2083,13 +2054,6 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
-
-=== stats.class
-
-* Data Type: string
-* Default Value: `hoot::ScriptStatsComposer`
-
-Class to instantiate from the factory for statistics writing.
 
 === status.criterion.status
 
@@ -2546,19 +2510,49 @@ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 The weight used will be `1.0 / (w ^ p)` where w is the frequency. Valid values are >= 0, but
 generally it should be `1 >= p >= 0`.
 
-=== writer.include.circular.error
+=== writer.include.circular.error.tags
 
 * Data Type: bool
 * Default Value: `true`
 
 When true, writers will include circular error information. Not honored by all writers.
 
-=== writer.include.debug
+=== writer.include.conflate.review.detail.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+Add detailed review tags to review relations during conflation.  Turning this setting off is
+generally only done in debugging environments.  This setting allows for partitioning the level of
+detail in the review relation tags into two groups.  Turning this setting off can be useful during
+debugging in situations where you are comparing map outputs and want to see reviews in the output
+but are not concerned with a higher level of review detail.  Disabling this setting will also
+disable AddHilbertReviewSortOrderOp, the output of which is depended upon by the Hootenanny user
+interface.
+
+=== writer.include.conflate.score.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-When true, writers will include debug information (e.g. status). Not honored by all writers.
+Add match/miss/review score values to elements with matches during Unifying Conflation. This is
+useful for debugging.
+
+=== writer.include.debug.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When true, writers will include debug information (hoot::* tags; e.g. status). Not honored by all
+writers.
+
+=== writer.clean.review.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Hootenanny review tags are treated as metadata tags and will be removed by the
+NoInformationElementRemover cleaning operation.
 
 === writer.precision
 

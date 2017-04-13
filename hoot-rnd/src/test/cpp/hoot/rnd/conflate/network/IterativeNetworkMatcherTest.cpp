@@ -58,7 +58,7 @@ public:
       uut.getAllVertexScores());
 
     MapProjector::projectToWgs84(copy);
-    conf().set(ConfigOptions().getWriterIncludeDebugKey(), true);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
     OsmMapWriterFactory::getInstance().write(copy, QString("tmp/dum-%1.osm").arg(index, 3, 10,
       QLatin1Char('0')));
   }
