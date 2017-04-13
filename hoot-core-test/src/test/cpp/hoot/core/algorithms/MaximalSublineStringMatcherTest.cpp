@@ -357,7 +357,6 @@ public:
 
   ConstRelationPtr toRelation(OsmMapPtr map, QString note)
   {
-    vector<ConstRelationPtr> result;
     const RelationMap& relations = map->getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {

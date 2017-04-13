@@ -53,12 +53,11 @@ namespace Tgs
         std::string className = trainItr->first;
 
         double startPercent = 0;
-        double endPercent = 1;
 
         for(unsigned int i = 0; i < splitPercentages.size(); i++)
         {
 
-          endPercent = splitPercentages[i];
+          double endPercent = splitPercentages[i];
 
           if(i == splitPercentages.size() - 1 && endPercent != 1.0)
           {

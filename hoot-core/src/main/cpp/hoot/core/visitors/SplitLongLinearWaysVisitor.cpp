@@ -135,8 +135,6 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
 
   unsigned int nodesRemaining = way->getNodeCount();
 
-  std::vector< boost::shared_ptr< Way > > newWays;
-
   unsigned int masterNodeIndex = 0;
   while ( nodesRemaining > 0 )
   {

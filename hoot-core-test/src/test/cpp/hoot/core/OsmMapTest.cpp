@@ -376,10 +376,7 @@ public:
     for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       const shared_ptr<Way>& w = itw->second;
-
-      std::vector<long> wids = map->getIndex().findWayNeighbors(w, 30.0);
-      //LOG_WARN("wid count: " << wids.size());
-
+      map->getIndex().findWayNeighbors(w, 30.0);
       i++;
     }
 
@@ -390,10 +387,7 @@ public:
     for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       shared_ptr<Way> w = itw->second;
-
-      std::vector<long> wids = map->getIndex().findWayNeighborsBruteForce(w, 30.0);
-      //LOG_WARN("wid count: " << wids.size());
-
+      map->getIndex().findWayNeighborsBruteForce(w, 30.0);
       i++;
     }
 

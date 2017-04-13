@@ -197,11 +197,10 @@ public:
      std::cout << "Searching..." << std::endl;
 //      t.restart();
 
-     double x, y;
      for (int i = 0; i < 2000; i++)
      {
-       x = Tgs::Random::instance()->generateInt(20000) - 5000;
-       y = Tgs::Random::instance()->generateInt(20000) - 5000;
+       double x = Tgs::Random::instance()->generateInt(20000) - 5000;
+       double y = Tgs::Random::instance()->generateInt(20000) - 5000;
        KnnIterator it(rst.get(), x, y);
        it.next();
 //        if (i % 1000 == 0)
