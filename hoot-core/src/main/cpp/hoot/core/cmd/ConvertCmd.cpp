@@ -84,15 +84,13 @@ public:
     timer.start();
     LOG_INFO("Converting " << args[0] << " to " << args[1] << "...");
 
-    OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
-    OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
-
     // This keeps the status and the tags.
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
-    if (readerFactory.hasElementInputStream(args[0]) &&
-        writerFactory.hasElementOutputStream(args[1]) &&
+    if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
+        OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
+        //TODO: Why can't we use convert ops with streaming?
         ConfigOptions().getConvertOps().size() == 0)
     {
       streamElements(args[0], args[1]);
@@ -100,10 +98,6 @@ public:
     else
     {
       OsmMapPtr map(new OsmMap());
-
-      // This keeps the status and the tags.
-      conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-      conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
       loadMap(map, args[0], true, Status::Unknown1);
 
@@ -137,10 +131,12 @@ public:
 
     boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);
-    boost::shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+    boost::shared_ptr<ElementInputStream> streamReader =
+      dynamic_pointer_cast<ElementInputStream>(reader);
     boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
     writer->open(out);
-    boost::shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+    boost::shared_ptr<ElementOutputStream> streamWriter =
+      dynamic_pointer_cast<ElementOutputStream>(writer);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 

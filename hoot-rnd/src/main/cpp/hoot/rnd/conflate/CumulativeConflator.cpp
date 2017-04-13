@@ -70,7 +70,8 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
     if (i == 0)
     {
       OsmMapReaderFactory::read(
-        cumulativeMap, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
+        cumulativeMap, inputs[i], ConfigOptions().getReaderConflateUseDataSourceIds(),
+        Status::Unknown1);
 
       //keep a source tag history on the data for provenance; append to any existing source values
       //(this shouldn't be added to any review relations)
@@ -94,7 +95,8 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
 
       OsmMapPtr unknown2Map(new OsmMap());
       OsmMapReaderFactory::read(
-        unknown2Map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+        unknown2Map, inputs[i], ConfigOptions().getReaderConflateUseDataSourceIds(),
+        Status::Unknown2);
       MapProjector::projectToWgs84(unknown2Map);
 
       //Same as above, but do this before combining the cumulative map with the unknown2 map to

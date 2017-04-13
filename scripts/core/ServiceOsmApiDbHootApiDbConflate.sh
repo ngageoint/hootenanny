@@ -24,7 +24,7 @@ echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 echo "TEST_NAME: " $TEST_NAME
 
-RUN_DEBUG_STEPS=false
+RUN_DEBUG_STEPS=true
 
 # set to false for testing only
 LOAD_REF_DATA=true
@@ -36,7 +36,7 @@ export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NA
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-export HOOT_OPTS="--warn -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true"
+export HOOT_OPTS="--trace -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D writer.include.debug.tags=true -D writer.clean.review.tags=false -D map.cleaner.transforms=hoot::ReprojectToPlanarOp -D conflate.post.ops=hoot::AddHilbertReviewSortOrderOp -D conflate.pre.ops=hoot::MapCleaner -D ogr2osm.ops='' -D unify.post.ops=''"
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
@@ -109,7 +109,7 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   echo ""
   # We're writing the output to the hoot api db first here, rather than directly to the osm api db, b/c if there are reviews 
   # we want to give the user a chance to review them.  That can only happen when the output is stored in a hoot api db.
-  hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then

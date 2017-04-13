@@ -277,14 +277,6 @@ See also:
 The string that lists the types of conflation used in the user interface.  The possible values
 are: reference, cookieCutter, average, and advancedConflation.
 
-=== conflate.use.data.source.ids
-
-* Data Type: bool
-* Default Value: `false`
-
-Determines whether the conflate command will use the element ID's specified by the input datasets
-(true) or use internal ID management for the inputs (false).
-
 === conflator.manipulators
 
 * Data Type: list
@@ -1862,7 +1854,24 @@ reported.
 * Data Type: bool
 * Default Value: `true`
 
-By default add the `source:datetime` stamp when reading files. This is not honored by all readers.
+By default add the `source:datetime` stamp when reading files.  Not honored by all readers.
+
+=== reader.conflate.use.data.source.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command will use the element ID's specified
+by the input datasets (true) or use internal ID management for the inputs (false).
+
+=== reader.keep.file.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If reader.use.file.status is true, the default action is to drop the status tag from the file
+during reading.  Setting reader.keep.file.status to true preserves the status tag.  Not honored by
+all readers.
 
 === reader.preserve.all.tags
 
@@ -1878,14 +1887,6 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 * Default Value: `false`
 
 By default should a reader use the file status from the file. Not honored by all readers.
-
-=== reader.keep.file.status
-
-* Data Type: bool
-* Default Value: `false`
-
-If reader.use.file.status is true, the default action is to drop the status tag from the file during reading.
-Setting reader.keep.file.status to true preserves the status tag. Not honored by all readers.
 
 === remove.attribute.visitor.types
 

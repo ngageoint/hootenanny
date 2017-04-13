@@ -47,13 +47,13 @@ endif
 ifeq "$(REFERENCE_LAYER)" "1"
 	ifeq "$(INPUT1_TYPE)" "OSM_API_DB"
     OP_INPUT1=$(OSM_API_DB_URL)
-		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
+		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D reader.conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
 	endif
 endif
 ifeq "$(REFERENCE_LAYER)" "2"
 	ifeq "$(INPUT2_TYPE)" "OSM_API_DB"
     OP_INPUT2=$(OSM_API_DB_URL)
-		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
+		HOOT_OPTS+= -D convert.bounding.box=$(conflateaoi) -D reader.conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url="$(OSM_API_DB_URL)"
 	endif
 endif
 
