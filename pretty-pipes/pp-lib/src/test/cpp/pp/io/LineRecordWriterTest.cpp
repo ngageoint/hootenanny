@@ -77,7 +77,7 @@ public:
       uut.emitRecord(key.data(), key.size(), value.data(), value.size());
     }
 
-    shared_ptr<istream> is(fs.open("test-output/LineRecordWriterTest/output/part-00000.txt"));
+   boost::shared_ptr<istream> is(fs.open("test-output/LineRecordWriterTest/output/part-00000.txt"));
     char buffer[1000] = { '\0' };
     is->read(buffer, 1000);
     string output(buffer);

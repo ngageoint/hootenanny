@@ -81,7 +81,7 @@ public:
   /**
    * Defaults to 5cm threshold
    */
-  CompareVisitor(shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+  CompareVisitor(boost::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
   {
     _ref = ref;
     _threshold = threshold;
@@ -93,11 +93,11 @@ public:
 
   bool isMatch() { return _matches; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
+  virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     CHECK_MSG(_ref->containsElement(e->getElementId()), "Did not find element: " <<
               e->getElementId());
-    const shared_ptr<const Element>& re = _ref->getElement(e->getElementId());
+    const boost::shared_ptr<const Element>& re = _ref->getElement(e->getElementId());
 
     Tags in1 = re->getTags();
     Tags in2 = e->getTags();
@@ -165,10 +165,10 @@ public:
     }
   }
 
-  void compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
+  void compareNode(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-    shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
-    shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
+   ConstNodePtr rn = dynamic_pointer_cast<const Node>(re);
+   ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
 
     if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
     {
@@ -182,10 +182,10 @@ public:
     }
   }
 
-  void compareWay(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
+  void compareWay(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-    shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
-    shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
+   ConstWayPtr rw = dynamic_pointer_cast<const Way>(re);
+   ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
 
     CHECK_MSG(rw->getNodeIds().size() == w->getNodeIds().size(),
               "Node count does not match.");
@@ -198,10 +198,10 @@ public:
     }
   }
 
-  void compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
+  void compareRelation(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-    shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
-    shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
+   ConstRelationPtr rr = dynamic_pointer_cast<const Relation>(re);
+   ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
 
     QString relationStr = QString("%1 vs. %2").arg(hoot::toString(rr)).arg(hoot::toString(r));
 
@@ -218,7 +218,7 @@ public:
   }
 
 private:
-  shared_ptr<OsmMap> _ref;
+ boost::shared_ptr<OsmMap> _ref;
   Meters _threshold;
   Degrees _thresholdDeg;
   bool _matches;
@@ -233,7 +233,7 @@ MapComparator::MapComparator()
   _useDateTime = false;
 }
 
-bool MapComparator::isMatch(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test)
+bool MapComparator::isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)
 {
   if (ref->getNodes().size() != test->getNodes().size() ||
       ref->getWays().size() != test->getWays().size() ||

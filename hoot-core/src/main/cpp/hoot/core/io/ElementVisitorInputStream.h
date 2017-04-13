@@ -43,8 +43,8 @@ public:
    * @param elementSource The stream used to read elements from
    * @param visitor The operation that should be performed on elements that are read from the input source before being returned
    */
-  ElementVisitorInputStream(const shared_ptr<ElementInputStream>& elementSource,
-                            const shared_ptr<ElementVisitor>& visitor);
+  ElementVisitorInputStream(const boost::shared_ptr<ElementInputStream>& elementSource,
+                            const boost::shared_ptr<ElementVisitor>& visitor);
 
   /**
    * @brief close
@@ -67,8 +67,8 @@ public:
 
 
 private:
-  shared_ptr<ElementInputStream> _elementSource;
-  shared_ptr<ElementVisitor> _visitor;
+  boost::shared_ptr<ElementInputStream> _elementSource;
+  boost::shared_ptr<ElementVisitor> _visitor;
 };
 
 }

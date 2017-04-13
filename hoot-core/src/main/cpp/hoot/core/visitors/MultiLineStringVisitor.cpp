@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringVisitor.h"
 
@@ -63,13 +63,13 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-   // shared_ptr<const Way> w = _provider->getWay(e->getId());
-    shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
+   //ConstWayPtr w = _provider->getWay(e->getId());
+   ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
     visit(w);
   }
 }
 
-void MultiLineStringVisitor::visit(const shared_ptr<const Way>& w)
+void MultiLineStringVisitor::visit(const ConstWayPtr& w)
 {
   if (w->getNodeCount() >= 2)
   {

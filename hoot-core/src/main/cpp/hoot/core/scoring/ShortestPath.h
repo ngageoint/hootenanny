@@ -47,7 +47,7 @@ using namespace std;
 class ShortestPath
 {
 public:
-  ShortestPath(shared_ptr<const DirectedGraph> graph);
+  ShortestPath(boost::shared_ptr<const DirectedGraph> graph);
 
   void calculateCost();
 
@@ -89,7 +89,7 @@ private:
   };
 
 
-  shared_ptr<const DirectedGraph> _graph;
+ boost::shared_ptr<const DirectedGraph> _graph;
 
   QHash<long, double> _cost;
   priority_queue<Node, std::deque<Node>, LesserNode> _queue;

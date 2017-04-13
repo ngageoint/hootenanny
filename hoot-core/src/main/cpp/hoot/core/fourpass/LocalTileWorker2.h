@@ -56,7 +56,7 @@ class LocalTileWorker2 : public TileWorker2
 public:
   LocalTileWorker2();
 
-  virtual void applyOp(shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
+  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
                        QString mapIn, QString mapOut);
 
   virtual void breakWays(QString out);
@@ -88,7 +88,7 @@ private:
   /**
    * Read all the part files from the specified directory into a single map.
    */
-  shared_ptr<OsmMap> _readAllParts(QString dir);
+  boost::shared_ptr<OsmMap> _readAllParts(QString dir);
 
   /**
    * Reads node replacements from the specified input directory. The result is a map that maps
@@ -96,9 +96,9 @@ private:
    */
   HashMap<long, long> _readNodeReplacements(QString inputDir);
 
-  shared_ptr<OsmMap> _readTile(QString input, const Envelope& e, double buffer);
+  boost::shared_ptr<OsmMap> _readTile(QString input, const Envelope& e, double buffer);
 
-  void _replaceNodes(shared_ptr<OsmMap> map, const HashMap<long, long>& replacements);
+  void _replaceNodes(boost::shared_ptr<OsmMap> map, const HashMap<long, long>& replacements);
 
   void _simplifyNodeReplacements(HashMap<long, long>& r);
 
@@ -106,7 +106,7 @@ private:
    * Stores the specified map as a file in the specified directory. The file will not overlap with
    * other existing files in the directory.
    */
-  void _storeMapPart(shared_ptr<OsmMap> map, QString dir);
+  void _storeMapPart(boost::shared_ptr<OsmMap> map, QString dir);
 
   void _writeNodeReplacements(QString dir, size_t i,
     NodeReplacements& replacements);

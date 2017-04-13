@@ -83,7 +83,7 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
 
     for (size_t i = 1; i < way->getNodeCount(); i++)
     {
-      shared_ptr<const Node> n = _map->getNode(_way->getNodeId(i));
+      ConstNodePtr n = _map->getNode(_way->getNodeId(i));
       Coordinate next = n->toCoordinate();
       double delta = next.distance(last);
       last = next;
@@ -153,7 +153,7 @@ Meters WayLocation::calculateDistanceOnWay() const
   Coordinate last = _map->getNode(_way->getNodeId(0))->toCoordinate();
   for (int i = 1; i < (int)_way->getNodeCount() && i <= _segmentIndex; i++)
   {
-    shared_ptr<const Node> n = _map->getNode(_way->getNodeId(i));
+    ConstNodePtr n = _map->getNode(_way->getNodeId(i));
     Coordinate next = n->toCoordinate();
     result += next.distance(last);
     last = next;
@@ -161,7 +161,7 @@ Meters WayLocation::calculateDistanceOnWay() const
 
   if (_segmentIndex < (int)_way->getNodeCount() - 1)
   {
-    shared_ptr<const Node> n = _map->getNode(_way->getNodeId(_segmentIndex + 1));
+    ConstNodePtr n = _map->getNode(_way->getNodeId(_segmentIndex + 1));
     Coordinate next = n->toCoordinate();
     Meters d = next.distance(last);
     result += d * _segmentFraction;
@@ -218,14 +218,14 @@ WayLocation WayLocation::createAtEndOfWay(const ConstOsmMapPtr& map, const Const
 
 const Coordinate WayLocation::getCoordinate() const
 {
-  shared_ptr<const Node> p0 = _map->getNode(_way->getNodeId(_segmentIndex));
+  ConstNodePtr p0 = _map->getNode(_way->getNodeId(_segmentIndex));
   if (_segmentFraction <= 0.0)
   {
     return p0->toCoordinate();
   }
   else
   {
-    shared_ptr<const Node> p1 = _map->getNode(_way->getNodeId(_segmentIndex + 1));
+    ConstNodePtr p1 = _map->getNode(_way->getNodeId(_segmentIndex + 1));
     return pointAlongSegmentByFraction(p0->toCoordinate(), p1->toCoordinate(), _segmentFraction);
   }
 }
@@ -277,7 +277,7 @@ WayLocation WayLocation::move(Meters distance) const
       return result;
     }
 
-    shared_ptr<const Node> n = _map->getNode(_way->getNodeId(result.getSegmentIndex() + 1));
+    ConstNodePtr n = _map->getNode(_way->getNodeId(result.getSegmentIndex() + 1));
     Coordinate next = n->toCoordinate();
 
     double delta = last.distance(next);

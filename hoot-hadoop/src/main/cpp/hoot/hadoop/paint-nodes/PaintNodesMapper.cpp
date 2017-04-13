@@ -74,7 +74,7 @@ void PaintNodesMapper::flush()
 void PaintNodesMapper::_init(HadoopPipes::MapContext& context)
 {
   _context = &context;
-  shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+ boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _envelope = Envelope(c->get("hoot.envelope"));
   LOG_INFO("_envelope: " << _envelope.toString());
   _pixelSize = c->getDouble("hoot.pixel.size");
@@ -84,7 +84,7 @@ void PaintNodesMapper::_init(HadoopPipes::MapContext& context)
   _nd.reset(_width, _height);
 }
 
-void PaintNodesMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
+void PaintNodesMapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
   if (_context == NULL)
   {
@@ -95,7 +95,7 @@ void PaintNodesMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& cont
   LOG_INFO("Processing map. Node count: " << nm.size());
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<const Node>& n = it->second;
+    const ConstNodePtr& n = it->second;
 
     int px = int((n->getX() - _envelope.getMinX()) / _pixelSize);
     int py = int((n->getY() - _envelope.getMinY()) / _pixelSize);

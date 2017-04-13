@@ -53,10 +53,10 @@ class HootExceptionJs : public node::ObjectWrap
 public:
   static void Init(Handle<Object> target);
 
-  static Handle<Object> create(const HootException& e) { return create(shared_ptr<HootException>(e.clone())); }
-  static Handle<Object> create(shared_ptr<HootException> e);
+  static Handle<Object> create(const HootException& e) { return create(boost::shared_ptr<HootException>(e.clone())); }
+  static Handle<Object> create(boost::shared_ptr<HootException> e);
 
-  shared_ptr<HootException> getException() const { return _e; }
+ boost::shared_ptr<HootException> getException() const { return _e; }
 
   static bool isHootException(Handle<Value> v);
 
@@ -79,7 +79,7 @@ public:
 private:
   HootExceptionJs();
 
-  shared_ptr<HootException> _e;
+ boost::shared_ptr<HootException> _e;
   QString _className;
   static Persistent<Function> _constructor;
 
@@ -89,7 +89,7 @@ private:
 
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, shared_ptr<HootException>& e)
+inline void toCpp(v8::Handle<v8::Value> v,boost::shared_ptr<HootException>& e)
 {
   if (HootExceptionJs::isHootException(v))
   {

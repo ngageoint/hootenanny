@@ -108,11 +108,11 @@ public:
           // Added this so the output is roughly the same as Ogr2OsmCmp.cpp
           LOG_INFO("Reading: " + input + " " + layers[i]);
 
-          shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
+          boost::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
 
           while(iterator->hasNext())
           {
-              shared_ptr<Element> e = iterator->next();
+              boost::shared_ptr<Element> e = iterator->next();
 
               //        // Interesting problem: If there are no elements in the file, e == 0
               //        // Need to look at the ElementIterator.cpp file to fix this.
@@ -122,8 +122,8 @@ public:
               //          break;
               //        }
 
-              shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-              shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+              WayPtr w = dynamic_pointer_cast<Way>(e);
+              NodePtr n = dynamic_pointer_cast<Node>(e);
 
               if (w != 0)
               {

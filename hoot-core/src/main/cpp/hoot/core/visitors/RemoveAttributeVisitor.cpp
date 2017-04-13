@@ -62,7 +62,7 @@ void RemoveAttributeVisitor::setTypes(const QStringList& types)
   }
 }
 
-void RemoveAttributeVisitor::visit(const shared_ptr<Element>& e)
+void RemoveAttributeVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   //see extensibility issue comments in ElementAttributeType
   for (int i = 0; i < _types.length(); i++)

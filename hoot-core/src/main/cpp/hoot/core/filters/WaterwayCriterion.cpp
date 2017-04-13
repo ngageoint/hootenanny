@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, WaterwayCriterion)
 
-bool WaterwayCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool WaterwayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   // if it is a linear waterway
   return OsmSchema::getInstance().isLinearWaterway(*e.get());

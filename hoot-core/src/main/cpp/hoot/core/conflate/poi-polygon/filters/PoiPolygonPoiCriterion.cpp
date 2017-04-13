@@ -39,7 +39,7 @@ PoiPolygonPoiCriterion::PoiPolygonPoiCriterion()
 {
 }
 
-bool PoiPolygonPoiCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool PoiPolygonPoiCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   return PoiPolygonMatch::isPoi(*e);
 }

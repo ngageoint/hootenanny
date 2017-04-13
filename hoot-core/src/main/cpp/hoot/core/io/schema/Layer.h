@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LAYER_H
 #define LAYER_H
@@ -50,13 +50,13 @@ class Layer
 public:
   Layer();
 
-  const shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
+  const boost::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 
   GeometryTypeId getGeometryType() const { return _geometryType; }
 
   QString getName() const { return _name; }
 
-  void setFeatureDefinition(shared_ptr<FeatureDefinition> fd) { _definition = fd; }
+  void setFeatureDefinition(boost::shared_ptr<FeatureDefinition> fd) { _definition = fd; }
 
   void setGeometryType(GeometryTypeId geometryType) { _geometryType = geometryType; }
 
@@ -67,7 +67,7 @@ public:
   void setFdName(QString name) { _fdname = name; }
 
 private:
-  shared_ptr<const FeatureDefinition> _definition;
+  boost::shared_ptr<const FeatureDefinition> _definition;
   geos::geom::GeometryTypeId _geometryType;
   QString _name;
   QString _fdname;

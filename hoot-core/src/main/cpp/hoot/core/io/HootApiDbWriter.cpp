@@ -61,7 +61,7 @@ HootApiDbWriter::~HootApiDbWriter()
   close();
 }
 
-void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& t)
+void HootApiDbWriter::_addElementTags(const boost::shared_ptr<const Element> &e, Tags& t)
 {
   if (!t.contains(MetadataTags::HootStatus()))
   {
@@ -321,7 +321,7 @@ void HootApiDbWriter::_startNewChangeSet()
   _hootdb.beginChangeset(tags);
 }
 
-void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
+void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   Tags t = n->getTags();
   _addElementTags(n, t);
@@ -354,7 +354,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   _nodesWritten++;
 }
 
-void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
+void HootApiDbWriter::writePartial(const ConstWayPtr& w)
 {
   long wayId;
 
@@ -398,7 +398,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
   _waysWritten++;
 }
 
-void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
+void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
   long relationId;
 

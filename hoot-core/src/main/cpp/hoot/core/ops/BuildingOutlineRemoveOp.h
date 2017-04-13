@@ -51,7 +51,7 @@ public:
 
   BuildingOutlineRemoveOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap> &map);
 
   virtual string getClassName() const { return className(); }
 
@@ -60,9 +60,9 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
-  void _removeOutline(const shared_ptr<Relation>& building);
+  void _removeOutline(const boost::shared_ptr<Relation>& building);
 
 };
 

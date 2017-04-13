@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 
-bool OneWayCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool OneWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   return OsmSchema::getInstance().isOneWay(*e) == _isOneWay;
 }

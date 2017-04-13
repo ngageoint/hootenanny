@@ -67,7 +67,7 @@ class NodeReplacements;
 class TileConflator
 {
 public:
-  TileConflator(shared_ptr<TileWorker> worker);
+  TileConflator(boost::shared_ptr<TileWorker> worker);
 
   virtual ~TileConflator();
 
@@ -105,7 +105,7 @@ private:
   int _nodeReplacementPart;
   int _iteration;
 
-  shared_ptr<TileWorker> _worker;
+  boost::shared_ptr<TileWorker> _worker;
 
   /**
    * The tile conflation works by creating and removing temporary copies of the input data. This

@@ -43,7 +43,7 @@ DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance)
   // Blank
 }
 
-bool DistanceNodeCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool DistanceNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   if (e->getElementType() != ElementType::Node)
     return false;

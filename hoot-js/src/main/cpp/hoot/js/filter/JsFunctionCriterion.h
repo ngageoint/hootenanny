@@ -49,7 +49,7 @@ public:
 
   virtual void addFunction(Persistent<Function> func) { _func = Persistent<Function>(func); }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new JsFunctionCriterion(_func); }
 

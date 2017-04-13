@@ -107,14 +107,14 @@ void WriteOsmSqlStatementsMapper::_flush()
   _statementsBuffer->clear();
 }
 
-void WriteOsmSqlStatementsMapper::_map(shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context)
+void WriteOsmSqlStatementsMapper::_map(boost::shared_ptr<OsmMap>& map, HadoopPipes::MapContext& context)
 {
   if (_context == NULL)
   {
     _context = &context;
   }
 
-  shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  boost::shared_ptr<pp::Configuration> config(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   //LOG_VARD(config->getInt("mapred.map.tasks"));
   _localJobTracker = config->get("mapred.job.tracker") == "local";
   const long writeBufferSize = config->getLong("writeBufferSize");

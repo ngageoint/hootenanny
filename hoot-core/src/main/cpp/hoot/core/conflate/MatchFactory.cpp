@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-shared_ptr<MatchFactory> MatchFactory::_theInstance;
+boost::shared_ptr<MatchFactory> MatchFactory::_theInstance;
 
 MatchFactory::~MatchFactory()
 {
@@ -64,11 +64,11 @@ Match* MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, Elem
 }
 
 void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
-  const Envelope& bounds, shared_ptr<const MatchThreshold> threshold) const
+  const Envelope& bounds, boost::shared_ptr<const MatchThreshold> threshold) const
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   {
-    shared_ptr<MatchCreator> matchCreator = _creators[i];
+    boost::shared_ptr<MatchCreator> matchCreator = _creators[i];
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())
     {
@@ -81,12 +81,12 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>
   }
 }
 
-void MatchFactory::_checkMatchCreatorBoundable(shared_ptr<MatchCreator> matchCreator,
+void MatchFactory::_checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
                                                const Envelope& bounds) const
 {
   if (bounds.isNull() == false)
   {
-    shared_ptr<Boundable> boundable = dynamic_pointer_cast<Boundable>(matchCreator);
+    boost::shared_ptr<Boundable> boundable = dynamic_pointer_cast<Boundable>(matchCreator);
     if (boundable == 0)
     {
       throw HootException("One or more match creators is not boundable and cannot be used with "
@@ -129,7 +129,7 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
     if (className.length() > 0)
     {
       args.removeFirst();
-      shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
+      boost::shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
       _theInstance->registerCreator(mc);
 
       if (args.size() > 0)

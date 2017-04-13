@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FilePageStore.h"
@@ -72,7 +72,7 @@ namespace Tgs
     fclose(_pageFile);
   }
 
-  shared_ptr<Page> FilePageStore::createPage()
+ boost::shared_ptr<Page> FilePageStore::createPage()
   {
     if (_readOnly == true)
     {
@@ -81,7 +81,7 @@ namespace Tgs
     // first create in file
     char * pData = Page::allocateAligned(_pageSize);
     _writePage(_pageCount, pData);
-    shared_ptr<Page> newPage(_createPage(this, _pageCount, pData, 
+   boost::shared_ptr<Page> newPage(_createPage(this, _pageCount, pData, 
       _pageSize));
 
     _pagesMap[_pageCount] = newPage;
@@ -105,7 +105,7 @@ namespace Tgs
     return 0;
   }
 
-  shared_ptr<Page> FilePageStore::getPage(int id)
+ boost::shared_ptr<Page> FilePageStore::getPage(int id)
   {
     // If the page does not resides in memory then get it from file and call createPage()
 
@@ -119,7 +119,7 @@ namespace Tgs
 
     char * pData = Page::allocateAligned(_pageSize);
     _readPage(id, pData);
-    shared_ptr<Page> newPage(_createPage(this, id, pData, _pageSize));
+   boost::shared_ptr<Page> newPage(_createPage(this, id, pData, _pageSize));
     _pagesMap[id] = newPage;
     return newPage;
   }

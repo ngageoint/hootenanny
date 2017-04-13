@@ -82,11 +82,11 @@ public:
 
   virtual void open(QString url);
 
-  virtual void read(shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
-  void readFromString(QString xml, shared_ptr<OsmMap> map);
+  void readFromString(QString xml, OsmMapPtr map);
 
-  void read(const QString& path, boost::shared_ptr<OsmMap> map);
+  void read(const QString& path, OsmMapPtr map);
 
   virtual void setDefaultStatus(Status s) { _status = s; }
 
@@ -110,7 +110,7 @@ protected:
   QHash<long, long> _wayIdMap;
   hoot::Tags _tags;
   QString _errorString;
-  boost::shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   boost::shared_ptr<Element> _element;
   Status _status;
   Meters _circularError;

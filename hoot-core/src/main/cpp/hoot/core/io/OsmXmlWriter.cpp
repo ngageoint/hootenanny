@@ -154,13 +154,13 @@ QString OsmXmlWriter::_typeName(ElementType e)
   }
 }
 
-void OsmXmlWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
+void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmXmlWriter::write(boost::shared_ptr<const OsmMap> map)
+void OsmXmlWriter::write(ConstOsmMapPtr map)
 {
   if (!_fp.get() || _fp->isWritable() == false)
   {
@@ -251,7 +251,7 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   }
 }
 
-void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> nids;
   NodeMap::const_iterator it = map->getNodes().begin();
@@ -346,7 +346,7 @@ void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& w
   }
 }
 
-void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> wids;
   WayMap::const_iterator it = map->getWays().begin();
@@ -374,7 +374,7 @@ void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& wr
       writer.writeAttribute("ref", QString::number(w->getNodeId(j)));
       if (_includePointInWays)
       {
-        shared_ptr<const Node> n = map->getNode(nid);
+        ConstNodePtr n = map->getNode(nid);
         writer.writeAttribute("x", QString::number(n->getX(), 'g', _precision));
         writer.writeAttribute("y", QString::number(n->getY(), 'g', _precision));
       }
@@ -449,7 +449,7 @@ void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& wr
   }
 }
 
-void OsmXmlWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> rids;
   RelationMap::const_iterator it = map->getRelations().begin();
@@ -463,7 +463,7 @@ void OsmXmlWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWrite
   qSort(rids.begin(), rids.end(), qLess<long>());
   for (int i = 0; i < rids.size(); i++)
   {
-    const shared_ptr<const Relation> r = map->getRelation(rids[i]);
+    const ConstRelationPtr r = map->getRelation(rids[i]);
     writer.writeStartElement("relation");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(r->getId()));

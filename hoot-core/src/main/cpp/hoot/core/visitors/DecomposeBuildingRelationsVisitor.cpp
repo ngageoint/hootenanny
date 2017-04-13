@@ -47,7 +47,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    const shared_ptr<Relation>& r = _map->getRelation(e->getId());
+    const boost::shared_ptr<Relation>& r = _map->getRelation(e->getId());
     if (r->getType() == "building")
     {
       _decomposeBuilding(r);
@@ -55,7 +55,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Relation>& r)
+void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_ptr<Relation> &r)
 {
   Tags baseTags = r->getTags();
 
@@ -97,7 +97,7 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Rela
     }
 
     // ok, we've got a building part. Recompose it as a building.
-    shared_ptr<Element> e = _map->getElement(members[i].getElementId());
+   boost::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
 
     Tags t = baseTags;
     t.addTags(e->getTags());

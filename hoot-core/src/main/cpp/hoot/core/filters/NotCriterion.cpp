@@ -44,7 +44,7 @@ void NotCriterion::addCriterion(const ElementCriterionPtr& e)
 /**
  * Returns true if the element satisfies the criterion.
  */
-bool NotCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool NotCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   assert(_child.get());
   return !_child->isSatisfied(e);

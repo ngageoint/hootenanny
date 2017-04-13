@@ -84,7 +84,7 @@ public:
    * @param url - Location of the datasource to create, pathname or API URL
    * @return pointer to the datasource created
    */
-  shared_ptr<GDALDataset> createDataSource(const QString& url);
+  boost::shared_ptr<GDALDataset> createDataSource(const QString& url);
 
   /**
    * @brief openDataSource - Open an OGR datasource from the url
@@ -92,7 +92,7 @@ public:
    * @param readonly - Indicate if the datasource is read/write or read-only
    * @return pointer to the datasource opened
    */
-  shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly);
+  boost::shared_ptr<GDALDataset> openDataSource(const QString& url, bool readonly);
 
   /**
    * @brief getDriverInfo - Select the GDAL driver to use to open/create the datasource
@@ -109,7 +109,7 @@ private:
    */
   void loadDriverInfo();
 
-  static shared_ptr<OgrUtilities> _theInstance;
+  static boost::shared_ptr<OgrUtilities> _theInstance;
   std::vector<OgrDriverInfo> _drivers;
 };
 

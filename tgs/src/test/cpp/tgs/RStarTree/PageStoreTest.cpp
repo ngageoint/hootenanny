@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <tgs/RStarTree/FilePageStore.h>
@@ -71,7 +71,7 @@ public:
 
       for (int i = 0; i < 100; i++)
       {
-        shared_ptr<Page> p = uut.getPage(_ids[i]);
+       boost::shared_ptr<Page> p = uut.getPage(_ids[i]);
         verifyPage(p);
       }
     }
@@ -86,7 +86,7 @@ public:
     testPageStore(uut);
   }
 
-  void populatePage(shared_ptr<Page> p)
+  void populatePage(boost::shared_ptr<Page> p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)
@@ -101,7 +101,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getPageCount());
     int pageSize = uut.getPageSize();
 
-    shared_ptr<Page> p = uut.createPage();
+   boost::shared_ptr<Page> p = uut.createPage();
     CPPUNIT_ASSERT_EQUAL(pageSize, p->getDataSize());
 
     populatePage(p);
@@ -142,7 +142,7 @@ public:
     }
   }
 
-  void verifyPage(shared_ptr<Page> p)
+  void verifyPage(boost::shared_ptr<Page> p)
   {
     char* data = p->getData();
     for (int i = 0; i < p->getDataSize(); i++)

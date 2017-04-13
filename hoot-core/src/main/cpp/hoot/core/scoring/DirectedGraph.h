@@ -71,16 +71,16 @@ public:
    * The input map must be in a planar projection with a unit of meters. It is also assumed that
    * IntersectionSplitter has been run on the map.
    */
-  void deriveEdges(shared_ptr<const OsmMap> map);
+  void deriveEdges(boost::shared_ptr<const OsmMap> map);
 
   const QMultiHash<long, Edge>& getEdges() const { return _edges; }
 
   /**
    * Determine the cost of a way in cost per meter.
    */
-  virtual double determineCost(shared_ptr<Way> way);
+  virtual double determineCost(boost::shared_ptr<Way> way);
 
-  virtual bool isOneWay(shared_ptr<Way> way);
+  virtual bool isOneWay(boost::shared_ptr<Way> way);
 
 protected:
 

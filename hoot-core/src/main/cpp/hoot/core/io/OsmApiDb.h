@@ -72,7 +72,7 @@ public:
   /**
    * Returns a results iterator to all OSM elements for a given element type in the database.
    */
-  virtual shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -82,7 +82,7 @@ public:
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  virtual shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
+  virtual boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -92,7 +92,7 @@ public:
   /**
    * Returns a results iterator to a node for a given node id.
    */
-  shared_ptr<QSqlQuery> selectNodeById(const long elementId);
+  boost::shared_ptr<QSqlQuery> selectNodeById(const long elementId);
 
   /**
     * Deletes data in the Osm Api db
@@ -111,13 +111,13 @@ public:
    * @param Type
    * @return
    */
-  QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
+  QString extractTagFromRow(boost::shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
-  shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
+  boost::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 
-  shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
+  boost::shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
 
-  shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
+  boost::shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
   /**
    * Increment the sequence ID for the given sequence and return it
@@ -195,14 +195,14 @@ private:
 
   bool _inTransaction;
 
-  shared_ptr<QSqlQuery> _selectElementsForMap;
-  shared_ptr<QSqlQuery> _selectTagsForNode;
-  shared_ptr<QSqlQuery> _selectTagsForWay;
-  shared_ptr<QSqlQuery> _selectTagsForRelation;
-  shared_ptr<QSqlQuery> _selectMembersForRelation;
-  shared_ptr<QSqlQuery> _selectNodeById;
+  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
+  boost::shared_ptr<QSqlQuery> _selectTagsForNode;
+  boost::shared_ptr<QSqlQuery> _selectTagsForWay;
+  boost::shared_ptr<QSqlQuery> _selectTagsForRelation;
+  boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
+  boost::shared_ptr<QSqlQuery> _selectNodeById;
 
-  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _seqQueries;
 
   void _init();
 

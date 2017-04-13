@@ -67,10 +67,10 @@ public:
     OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
-    shared_ptr<OsmMap> doughMap(new OsmMap());
+    OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    shared_ptr<OsmMap> cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap(new OsmMap());
     reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false).cut(cutShapeMap, doughMap);
@@ -92,10 +92,10 @@ public:
     OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
-    shared_ptr<OsmMap> doughMap(new OsmMap());
+    OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    shared_ptr<OsmMap> cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap(new OsmMap());
     reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true).cut(cutShapeMap, doughMap);
@@ -117,10 +117,10 @@ public:
     OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
-    shared_ptr<OsmMap> doughMap(new OsmMap());
+    OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    shared_ptr<OsmMap> cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap(new OsmMap());
     reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, 100.0).cut(cutShapeMap, doughMap);
@@ -142,10 +142,10 @@ public:
     OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
-    shared_ptr<OsmMap> doughMap(new OsmMap());
+    OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    shared_ptr<OsmMap> cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap(new OsmMap());
     reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, -100.0).cut(cutShapeMap, doughMap);
@@ -167,10 +167,10 @@ public:
     OsmXmlReader reader;
     OsmMap::resetCounters();
     OsmSchema::getInstance().loadDefault();
-    shared_ptr<OsmMap> doughMap(new OsmMap());
+    OsmMapPtr doughMap(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
-    shared_ptr<OsmMap> cutShapeMap(new OsmMap());
+    OsmMapPtr cutShapeMap(new OsmMap());
     reader.read("test-files/conflate/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true, 100.0).cut(cutShapeMap, doughMap);
