@@ -202,13 +202,10 @@ namespace Tgs
   {
     bool bRet = false;
     char * buffer = new char[_pageSize];
-    size_t result;
-
-
     __int64 i64 = ((__int64)id)*((__int64)_pageSize);
     if(_fseeki64(_pageFile, i64, SEEK_SET) == 0)
     {
-      result = fread(buffer, 1, _pageSize, _pageFile);
+      size_t result = fread(buffer, 1, _pageSize, _pageFile);
       if(result == _pageSize)
       {
         memcpy(data, buffer,_pageSize);

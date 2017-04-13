@@ -350,7 +350,6 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
     pt::ptree::const_iterator nodeIt = nodes.begin();
     while (nodeIt != nodes.end())
     {
-      string k = nodeIt->first;
       long v = nodeIt->second.get_value<long>();
       pWay->addNode(v);
       ++nodeIt;

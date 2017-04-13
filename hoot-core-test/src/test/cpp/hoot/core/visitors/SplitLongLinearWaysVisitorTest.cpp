@@ -346,7 +346,6 @@ private:
 
     // Sanity checks on split
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
-    startNode += numNodes;
   }
 
   void _sanityCheckSplit(SplitLongLinearWaysVisitor& /*splitVisitor*/, const int startNode,

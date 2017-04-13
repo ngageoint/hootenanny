@@ -54,7 +54,6 @@ namespace Tgs
     _classes = &classes;
     _entropyCacheDown.resize(classes.size());
     _entropyCacheUp.resize(classes.size());
-    SplitPoints result;
 
     _result.clear();
     _calculateSplits(0, classes.size());

@@ -787,8 +787,6 @@ namespace Tgs
           dataIndices[i] = i;
         }
 
-        std::map<std::string, int> populations;
-
         std::map<std::string, std::vector<unsigned int> > idxSortedByClass;
         std::map<std::string, std::vector<unsigned int> >::iterator itr;
 
@@ -876,11 +874,6 @@ namespace Tgs
         std::fill(selectedPos.begin(), selectedPos.end(), false);
         std::fill(selectedNeg.begin(), selectedNeg.end(), false);
 
-
-        std::map<std::string, int> populations;
-
-        std::map<std::string, std::vector<unsigned int> >::iterator itr;
-
         unsigned int picksPerClass =  (unsigned int)((double)(posIndices.size() +
           negIndices.size()) / 2.0);
 
@@ -888,17 +881,14 @@ namespace Tgs
         //Create bootstrap set with replacement
         bootstrap.resize(picksPerClass * 2);
 
-        double r;
         unsigned int pickCtr = 0;
-        unsigned int rndIdx;
-
 
         //std::cout << "Boot Strap size " << bootstrap.size() << std::endl;
         while(pickCtr < bootstrap.size())
         {
           //Pick a positive training example
-          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
-          rndIdx = (unsigned int)(r * (double)posIndices.size());
+          double r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
+          unsigned int rndIdx = (unsigned int)(r * (double)posIndices.size());
           bootstrap[pickCtr] = posIndices[rndIdx];
           selectedPos[rndIdx] = true;
           //std::cout << "Pos Idx " << posIndices[rndIdx] << std::endl;
@@ -949,8 +939,6 @@ namespace Tgs
     {
       if(!_data.empty())
       {
-        double r;
-
         std::vector<bool> selectedVectors; //Tracks which vectors have been added to bootstrap
 
         selectedVectors.resize(_data.size());
@@ -967,7 +955,7 @@ namespace Tgs
 
         for(unsigned int j = 0; j < bootstrap.size(); j++)
         {
-          r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
+          double r = ((double)Tgs::Random::instance()->generateInt() / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)_data.size());
           bootstrap[j] = rndIdx;
@@ -1100,12 +1088,10 @@ namespace Tgs
           candidateFactors[i] = _activeFactorIndices[i];
         }
 
-        double r;
-
         for(unsigned int k = 0; k < numFactors; k++)
         {
           double rr = (double)Tgs::Random::instance()->generateInt();
-          r = (rr / ((double)(RAND_MAX)+(double)(1)));
+          double r = (rr / ((double)(RAND_MAX)+(double)(1)));
 
           unsigned int rndIdx = (unsigned int)(r * (double)candidateFactors.size());
           fIndices[k] = candidateFactors[rndIdx];

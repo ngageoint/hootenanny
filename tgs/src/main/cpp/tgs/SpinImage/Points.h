@@ -172,12 +172,11 @@ namespace Tgs
     {
       std::fstream ins(fn.c_str(), std::fstream::in);
 
-      char inLine[512];
-
       if(ins.is_open())
       {
         while(!ins.eof())
         {
+          char inLine[512];
           Tgs::CloudPoint cp;
           ins.getline(inLine, 512);
           std::stringstream ss;

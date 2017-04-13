@@ -1338,10 +1338,9 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
 {
   if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
   {
-    long timestamp = 0;
     if (info.has_timestamp())
     {
-      timestamp = info.timestamp() * _dateGranularity;
+      long timestamp = info.timestamp() * _dateGranularity;
 
       if (timestamp != 0)
       {

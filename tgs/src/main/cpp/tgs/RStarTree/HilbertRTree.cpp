@@ -123,7 +123,6 @@ void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
 double HilbertRTree::_calculateArea(int parentId)
 {
   const RTreeNode* parent = _getNode(parentId);
-  std::vector<double> tmp;
   double result = 0.0;
   for (int i = 0; i < parent->getChildCount(); i++)
   {
@@ -278,7 +277,6 @@ void HilbertRTree::_greedyShuffle(int parentId)
   // swap children two levels down
   if (parent->getChildCount() >= 2)
   {
-    std::vector<double> tmp;
     double netImprovement = 0.0;
     // randomly choose child based on overlap weight
     for (int i = 0; i < _shuffleSize; i++)

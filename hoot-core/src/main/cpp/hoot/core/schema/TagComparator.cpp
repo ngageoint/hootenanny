@@ -520,10 +520,10 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result)
   Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
   {
-    bool keepIt = false;
     Tags::const_iterator it2 = t2.find(it1.key());
     if (it2 != t2.end())
     {
+      bool keepIt = false;
       if (schema.isList(it1.key(), it1.value()))
       {
         // treat the inputs as unordered lists

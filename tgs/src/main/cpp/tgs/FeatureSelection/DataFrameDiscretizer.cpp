@@ -119,18 +119,15 @@ namespace Tgs
     assert(splits.size() == 0 || splits[splits.size() - 1] < (int)indices.size() - 1);
     splits.push_back(indices.size() - 1);
 
-    string upper, lower;
     int lowerIndex = 0;
-    int upperIndex;
     for (unsigned int i = 0; i < splits.size(); i++)
     {
-      upperIndex = splits[i];
+      int upperIndex = splits[i];
       for (int j = lowerIndex; j <= upperIndex; j++)
       {
         // add one, we're reserving zero for null values
         df.setDataElement(indices[j], column, i + 1);
       }
-      lower = upper;
       lowerIndex = upperIndex + 1;
     }
   }

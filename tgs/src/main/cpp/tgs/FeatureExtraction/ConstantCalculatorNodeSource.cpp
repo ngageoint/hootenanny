@@ -53,7 +53,7 @@ namespace Tgs
   void ConstantCalculatorNodeSource::_loadInternals(std::istream& s)
   {
     std::string buffer;
-    std::string str, tag, value;
+    std::string tag, value;
 
     std::getline(s, buffer);
     XmlHelper::parseTagValue(buffer, tag, value);

@@ -78,15 +78,15 @@ namespace Tgs
       double score = _fse->evaluateSubset(columns);
       bestScore = score;
       bestSolution = columns;
-//       printf("score: %.3f size: %d\n", score, columns.size());
+//      printf("score: %.3f size: %d\n", score, columns.size());
       do
       {
         score = _removeWorst(columns);
 
-//         printf("score: %.3f size: %d\n", score, columns.size());
+//        printf("score: %.3f size: %d\n", score, columns.size());
         for (unsigned int i = 0; i < columns.size(); i++)
         {
-          string s = df.getFactorLabelFromIndex(columns[i]);
+          df.getFactorLabelFromIndex(columns[i]);
         }
         if (score >= bestScore)
         {

@@ -624,7 +624,6 @@ namespace Tgs
             fileStream << tabDepth + "\t<ClassName>\t" << node->classLabel << "\t</ClassName>" <<
               std::endl;
             fileStream << tabDepth + "\t<Data>\t" << node->nodeId;
-            std::set<unsigned int>::iterator itr;
 
             for(unsigned int i = 0; i < node->dataList.size(); i++)
             {
@@ -774,7 +773,6 @@ namespace Tgs
       //std::cout << "F" << buffer << std::endl;
       std::stringstream ss(buffer);
       std::string firstStr;
-      std::string nextStr;
 
       ss >> firstStr;
 
@@ -1058,7 +1056,6 @@ namespace Tgs
         std::stringstream ss(buffer);
         std::string firstStr;
         std::string nextStr;
-        unsigned int idx;
         ss >> firstStr;
 
         if(firstStr == "<OobSet>")
@@ -1067,6 +1064,7 @@ namespace Tgs
 
           while(nextStr != "</OobSet>")
           {
+            unsigned int idx;
             std::stringstream ss2(nextStr);
             ss2 >> idx;
             _oobSet.push_back(idx);
