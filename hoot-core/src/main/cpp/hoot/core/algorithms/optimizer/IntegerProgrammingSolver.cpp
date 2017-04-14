@@ -26,6 +26,8 @@
  */
 #include "IntegerProgrammingSolver.h"
 
+#include <hoot/core/util/SignalCatcher.h>
+
 namespace hoot
 {
 
@@ -39,5 +41,130 @@ IntegerProgrammingSolver::~IntegerProgrammingSolver()
 {
   glp_delete_prob(_lp);
 }
+
+double IntegerProgrammingSolver::getColumnPrimalValue(int j) const
+{
+  if (isIntegerProblem())
+  {
+    return glp_mip_col_val(_lp, j);
+  }
+  else
+  {
+    return glp_get_col_prim(_lp, j);
+  }
+}
+
+double IntegerProgrammingSolver::getObjectiveValue() const
+{
+  if (isIntegerProblem())
+  {
+    return glp_mip_obj_val(_lp);
+  }
+  else
+  {
+    return glp_get_obj_val(_lp);
+  }
+}
+
+void IntegerProgrammingSolver::solve()
+{
+  if (isIntegerProblem())
+  {
+    solveBranchAndCut();
+  }
+  else
+  {
+    solveSimplex();
+  }
+}
+
+void IntegerProgrammingSolver::solveBranchAndCut()
+{
+  glp_iocp iocp;
+  glp_init_iocp(&iocp);
+  iocp.presolve = GLP_ON;
+  iocp.binarize = GLP_ON;
+  if (_timeLimit > 0)
+  {
+    iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
+  }
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    iocp.msg_lev = GLP_MSG_ON;
+  }
+  else if (Log::getInstance().getLevel() <= Log::Warn)
+  {
+    iocp.msg_lev = GLP_MSG_ERR;
+  }
+  else
+  {
+    iocp.msg_lev = GLP_MSG_OFF;
+  }
+
+  int result = 0;
+  try
+  {
+    //  Register a new SIGABRT signal handler to ignore it for this call only
+    SignalCatcher::getInstance()->registerHandler(SIGABRT, SIG_IGN);
+    //  This function can intermittently throw an exception that is heretofore unhandled
+    result = glp_intopt(_lp, &iocp);
+    //  Unregister the SIGABRT signal handler and use the hoot default
+    SignalCatcher::getInstance()->unregisterHandler(SIGABRT);
+  }
+  catch (...)
+  {
+    throw Exception(QString("Error solving integer programming problem in glp_intopt()."));
+  }
+
+  // if there was an error and the error was not a timeout or iteration limit error.
+  if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
+  {
+    throw Exception(QString("Error solving integer programming problem. %1").arg(result));
+  }
+}
+
+void IntegerProgrammingSolver::solveSimplex()
+{
+  glp_smcp smcp;
+  glp_init_smcp(&smcp);
+  if (_timeLimit > 0)
+  {
+    smcp.tm_lim = _timeLimit * 1000.0 + 0.5;
+  }
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    smcp.msg_lev = GLP_MSG_ON;
+  }
+  else if (Log::getInstance().getLevel() <= Log::Warn)
+  {
+    smcp.msg_lev = GLP_MSG_ERR;
+  }
+  else
+  {
+    smcp.msg_lev = GLP_MSG_OFF;
+  }
+
+  int result = 0;
+  try
+  {
+    //  Register a new SIGABRT signal handler to ignore it for this call only
+    SignalCatcher::getInstance()->registerHandler(SIGABRT, SIG_IGN);
+    //  This function can potentially throw an exception that is heretofore unhandled
+    result = glp_simplex(_lp, &smcp);
+    //  Unregister the SIGABRT signal handler and use the hoot default
+    SignalCatcher::getInstance()->unregisterHandler(SIGABRT);
+  }
+  catch (...)
+  {
+    throw Exception(QString("Error solving integer programming problem in glp_simplex()."));
+  }
+
+  // if there was an error and the error was not a timeout or iteration limit error.
+  if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
+  {
+    throw Exception(QString("Error solving integer programming problem. %1").arg(result));
+  }
+}
+
 
 }
