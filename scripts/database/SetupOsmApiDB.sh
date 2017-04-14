@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-set -x
-
 # We want to check to see if the $DB_NAME_OSMAPI exists. If it does not exist,
 # we create it. If it already exists, we check its creation date against its
 # sql definition file. If the date on the file is newer than the date the db

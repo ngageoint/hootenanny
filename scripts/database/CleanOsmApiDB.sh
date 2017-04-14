@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 # setup db, user, and password to avoid password prompt
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
