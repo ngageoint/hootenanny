@@ -137,6 +137,14 @@ boost::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url
 
 bool OgrUtilities::isReasonableUrl(const QString& url)
 {
+  // Not a pretty way to sort out the /vsizip/ driver problem
+  // We are searching for "/vsi" which will match /vsizip, /vsigzip, /vsitar, /vsicurl
+  // I am not sure if matching this many things is a good idea.
+  if (url.startsWith("/vsi"))
+  {
+    return true;
+  }
+
   return getDriverInfo(url, true)._driverName != NULL;
 }
 
