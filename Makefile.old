@@ -54,6 +54,7 @@ clean: Makefile.qmake services-clean clean-coverage
 	cd docs; $(MAKE) clean
 ifeq ($(BUILD_SERVICES),services)
 	scripts/database/CleanOsmApiDB.sh
+	rm -f scripts/database/blank_osmapidb.sql
 endif
 ifeq ($(BUILD_UI_TESTS),uitests)
 	cd $$HOOT_HOME/test-files/ui && $(MAKE) -f Makefile clean
