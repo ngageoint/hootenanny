@@ -5,11 +5,11 @@ mkdir -p test-output/cmd/csr
 
 # PRE TEST FILE GENERATION 
 
-hoot conflate -D writer.include.debug=true -D stats.class="hoot::ScriptStatsComposer" -D  stats.script=./report/csr-default.js -D stats.format=asciidoc -D stats.output=test-output/cmd/csr/csr ./test-files/conflate/unified/AllDataTypesA.osm ./test-files/conflate/unified/AllDataTypesB.osm test-output/cmd/csr/csr.osm --stats >& /dev/null
+hoot conflate -D writer.include.debug.tags=true -D stats.script=./report/csr-default.js -D stats.format=asciidoc -D stats.output=test-output/cmd/csr/csr ./test-files/conflate/unified/AllDataTypesA.osm ./test-files/conflate/unified/AllDataTypesB.osm test-output/cmd/csr/csr.osm --stats >& /dev/null
 
 # TEST 1: integrity check of the output osm file when enabling Report Generation and stats
 #  - will produce difference which will make different from baseline
-hoot conflate -D writer.include.debug=true -D stats.class="hoot::ScriptStatsComposer" -D  stats.script=./report/csr-default.js -D stats.format=html -D stats.output=test-output/cmd/csr/csr ./test-files/ToyTestA.osm ./test-files/ToyTestB.osm test-output/cmd/csr/csr2.osm --stats >& /dev/null
+hoot conflate -D writer.include.debug.tags=true -D stats.script=./report/csr-default.js -D stats.format=html -D stats.output=test-output/cmd/csr/csr ./test-files/ToyTestA.osm ./test-files/ToyTestB.osm test-output/cmd/csr/csr2.osm --stats >& /dev/null
 hoot --is-match test-output/cmd/csr/csr.osm test-files/cmd/slow/csr/csr.osm || diff test-output/cmd/csr/csr.osm test-files/cmd/slow/csr/csr.osm 
 echo "completed test 1"
 
@@ -30,7 +30,7 @@ else
 fi
 
 # TEST 4: simple file test to make sure pdf created
-hoot conflate -D writer.include.debug=true -D stats.class="hoot::ScriptStatsComposer" -D  stats.script=./report/csr-default.js -D stats.format=pdf -D stats.output=test-output/cmd/csr/csr ./test-files/ToyTestA.osm ./test-files/ToyTestB.osm test-output/cmd/csr/csr2.osm --stats >& test-output/cmd/csr/csrStats.txt
+hoot conflate -D writer.include.debug.tags=true -D stats.script=./report/csr-default.js -D stats.format=pdf -D stats.output=test-output/cmd/csr/csr ./test-files/ToyTestA.osm ./test-files/ToyTestB.osm test-output/cmd/csr/csr2.osm --stats >& test-output/cmd/csr/csrStats.txt
 FILE_PDF=test-output/cmd/csr/csr.pdf
 if [ ! -f $FILE_PDF ]; then
   echo "ConflationStatsReportTest: pdf file not generated"
