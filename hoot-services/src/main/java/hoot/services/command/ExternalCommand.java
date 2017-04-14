@@ -33,16 +33,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import hoot.services.ApplicationContextUtils;
 import hoot.services.HootProperties;
 
 
-public class ExternalCommand {
+public abstract class ExternalCommand implements Command {
 
     private String caller;
     private String command;
     private Map<String, ?> substitutionMap;
     private File workDir;
     private Boolean trackable;
+
+    private String jobId;
+
+    protected ExternalCommand() {}
+
+    protected ExternalCommand(String jobId) {
+        this.jobId = jobId;
+    }
 
     protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller) {
         this.caller = caller.getName();
@@ -58,6 +67,16 @@ public class ExternalCommand {
         this.substitutionMap = substitutionMap;
         this.workDir = workDir;
         this.trackable = Boolean.TRUE;
+    }
+
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller, Boolean trackable) {
+        this.configureCommand(command, substitutionMap, caller);
+        this.trackable = trackable;
+    }
+
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller, File workDir, Boolean trackable) {
+        this.configureCommand(command, substitutionMap, caller, workDir);
+        this.trackable = trackable;
     }
 
     protected void configureCommand(String command, Class<?> caller, Boolean trackable) {
@@ -117,6 +136,31 @@ public class ExternalCommand {
     }
 
     @Override
+    public CommandResult execute() {
+        ExternalCommandManager externalCommandManager =
+                ApplicationContextUtils.getApplicationContext().getBean(ExternalCommandManager.class);
+
+        if (externalCommandManager == null) {
+            throw new IllegalStateException("Could not find bean: " + ExternalCommandManager.class.getName());
+        }
+
+        if (this.getJobId() != null) {
+            return externalCommandManager.exec(getJobId(),this);
+        }
+        else {
+            return externalCommandManager.exec(this);
+        }
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    @Override
     public String toString() {
         return "ExternalCommand{" +
                 "caller='" + caller + '\'' +
@@ -124,6 +168,7 @@ public class ExternalCommand {
                 ", substitutionMap=" + substitutionMap +
                 ", workDir=" + workDir +
                 ", trackable=" + trackable +
+                ", jobId='" + jobId + '\'' +
                 '}';
     }
 }

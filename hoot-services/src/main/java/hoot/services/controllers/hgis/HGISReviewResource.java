@@ -44,9 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.InternalCommand;
-import hoot.services.command.InternalCommandManager;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 
@@ -59,12 +57,6 @@ public class HGISReviewResource extends HGISResource {
 
     @Autowired
     private JobProcessor jobProcessor;
-
-    @Autowired
-    private ExternalCommandManager externalCommandManager;
-
-    @Autowired
-    private InternalCommandManager internalCommandManager;
 
     @Autowired
     private HGISPrepareForValidationCommandFactory hgisPrepareForValidationCommandFactory;
@@ -93,34 +85,31 @@ public class HGISReviewResource extends HGISResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public PrepareForValidationResponse prepareItemsForValidationReview(PrepareForValidationRequest request) {
-        PrepareForValidationResponse response = new PrepareForValidationResponse();
-
         checkHGISCommandParams(request.getSourceMap(), request.getOutputMap());
 
         try {
             String jobId = UUID.randomUUID().toString();
+            String sourceMap = request.getSourceMap();
+            String outputMap = request.getOutputMap();
 
-            Command[] workflow = {
-                    () -> {
-                        ExternalCommand validationCommand = hgisPrepareForValidationCommandFactory.build(
-                                request.getSourceMap(), request.getOutputMap(), this.getClass());
-                        return externalCommandManager.exec(jobId, validationCommand);
-                    },
-                    () -> {
-                        InternalCommand updateMapTagsCommand = updateMapTagsCommandFactory.build(jobId, request.getOutputMap(), this.getClass());
-                        return internalCommandManager.exec(jobId, updateMapTagsCommand);
-                    }
-            };
+            ExternalCommand validationCommand = hgisPrepareForValidationCommandFactory.build(jobId, sourceMap, outputMap, this.getClass());
+            InternalCommand updateMapTagsCommand = updateMapTagsCommandFactory.build(jobId, outputMap, this.getClass());
 
-            jobProcessor.process(new Job(jobId, workflow));
+            Command[] workflow = { validationCommand, updateMapTagsCommand };
 
+            jobProcessor.submitAsync(new Job(jobId, workflow));
+
+            PrepareForValidationResponse response = new PrepareForValidationResponse();
             response.setJobId(jobId);
+
+            return response;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception ex) {
-            String msg = ex.getMessage();
+            String msg = "Error preparing for validation";
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
-
-        return response;
     }
 }

@@ -50,6 +50,6 @@ public class UnZIPFileCommand extends ExternalCommand {
 
         String command = "unzip ${SOURCE_ZIP_FILE} -d ${TARGET_FOLDER}";
 
-        super.configureCommand(command, substitutionMap, caller);
+        super.configureCommand(command, substitutionMap, caller, false);
     }
 }

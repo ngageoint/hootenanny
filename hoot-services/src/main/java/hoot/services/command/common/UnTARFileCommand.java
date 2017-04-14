@@ -49,6 +49,6 @@ public class UnTARFileCommand extends ExternalCommand {
 
         String command = "tar -zxf ${SOURCE_TAR_FILE} -C ${TARGET_FOLDER}";
 
-        super.configureCommand(command, substitutionMap, caller);
+        super.configureCommand(command, substitutionMap, caller, false);
     }
 }

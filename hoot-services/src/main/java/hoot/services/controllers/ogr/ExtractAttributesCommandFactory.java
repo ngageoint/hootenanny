@@ -24,22 +24,19 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.ingest;
+package hoot.services.controllers.ogr;
 
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 
 @Component
-class FileETLCommandFactory {
+class ExtractAttributesCommandFactory {
 
-    FileETLCommand build(List<Map<String, String>> requests, List<File> zips, String translationPath,
-                         String etlName, Boolean isNoneTranslation, String debugLevel,
-                         String inputType, Class<?> caller) {
-        return new FileETLCommand(requests, zips, translationPath, etlName, isNoneTranslation, debugLevel, inputType, caller);
+    ExtractAttributesCommand build(String jobId, File workDir, List<File> fileList, String debugLevel, Class<?> caller) {
+        return new ExtractAttributesCommand(jobId, workDir, fileList, debugLevel, caller);
     }
 }

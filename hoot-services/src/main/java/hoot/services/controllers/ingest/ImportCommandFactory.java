@@ -28,14 +28,18 @@ package hoot.services.controllers.ingest;
 
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 
 @Component
-class IngestBasemapCommandFactory {
+class ImportCommandFactory {
 
-    IngestBasemapCommand build(File inputFile, String projection, File tileOutputDir, boolean verboseOutput, Class<?> caller) {
-        return new IngestBasemapCommand(inputFile, projection, tileOutputDir, verboseOutput, caller);
+    ImportCommand build(String jobId, File workDir, List<Map<String, String>> requests,
+                         List<File> zips, String translation, String etlName, Boolean isNoneTranslation,
+                         String debugLevel, String inputType, Class<?> caller) {
+        return new ImportCommand(jobId, workDir, requests, zips, translation, etlName, isNoneTranslation, debugLevel, inputType, caller);
     }
 }

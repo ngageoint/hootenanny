@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExportRenderDBCommandFactory {
 
-    public ExportRenderDBCommand build(String name, Class<?> caller) {
-        return new ExportRenderDBCommand(name, caller);
+    public ExportRenderDBCommand build(String jobId, String name, Class<?> caller) {
+        return new ExportRenderDBCommand(jobId, name, caller);
     }
 }

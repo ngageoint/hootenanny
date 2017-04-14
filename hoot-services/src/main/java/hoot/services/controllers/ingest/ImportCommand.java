@@ -26,22 +26,43 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 
 
-class FileETLCommand extends ExternalCommand {
+class ImportCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ImportCommand.class);
 
-    FileETLCommand(List<Map<String, String>> requests, List<File> zips, String translationPath, String etlName,
-                   Boolean isNoneTranslation, String debugLevel, String inputType, Class<?> caller) {
+    private final File workDir;
+
+    ImportCommand(String jobId, File workDir, List<Map<String, String>> requests, List<File> zips, String translation,
+                   String etlName, Boolean isNoneTranslation, String debugLevel, String inputType, Class<?> caller) {
+        super(jobId);
+        this.workDir = workDir;
+
+        // TODO: Reconcile this logic with the UI.  Passing of translation script's name appears to be inconsistent!
+        String translationPath;
+        if (translation.startsWith("translations/")) {
+            translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
+        }
+        else {
+            translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
+        }
 
         List<String> inputs = requests.stream().map(request -> request.get("name")).collect(Collectors.toList());
 
@@ -93,5 +114,19 @@ class FileETLCommand extends ExternalCommand {
         }
 
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    @Override
+    public CommandResult execute() {
+        CommandResult commandResult = super.execute();
+
+        try {
+            FileUtils.forceDelete(workDir);
+        }
+        catch (IOException ioe) {
+            logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
+        }
+
+        return commandResult;
     }
 }

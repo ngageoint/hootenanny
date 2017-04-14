@@ -79,7 +79,7 @@ class UpdateMapTagsCommand implements InternalCommand {
 
         // osm api db related input params have already been validated by
         // this point, so just check to see if any osm api db input is present
-        if (ConflationResource.isAtLeastOneLayerOsmApiDb(params) && OSM_API_DB_ENABLED) {
+        if (ConflateUtils.isAtLeastOneLayerOsmApiDb(params) && OSM_API_DB_ENABLED) {
             // write a timestamp representing the time the osm api db data was queried out
             // from the source; to be used conflict detection during export of conflated
             // data back into the osm api db at a later time; timestamp must be 24 hour utc
@@ -89,9 +89,6 @@ class UpdateMapTagsCommand implements InternalCommand {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
             String osmAPIDBExportTime = now.format(formatter);
             tags.put("osm_api_db_export_time", osmAPIDBExportTime);
-
-            //String now = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss.zzz").withZone(DateTimeZone.UTC).print(new DateTime());
-
         }
     }
 

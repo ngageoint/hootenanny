@@ -22,17 +22,21 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.hgis;
+package hoot.services.controllers.ogr;
 
 
-import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+
+import java.io.File;
 
 
-class FilterNonHGISPOIsCommand extends HGISCommand {
+final class ExtractAttributesUtils {
 
-    FilterNonHGISPOIsCommand(String jobId, String sourceMap, String outputMap, Class<?> caller) {
-        super(jobId, sourceMap, outputMap, HGIS_FILTER_SCRIPT, caller);
+    private ExtractAttributesUtils() {}
+
+    static File getAttributesOutputFile(String jobId) {
+        return new File(TEMP_OUTPUT_PATH, jobId + ".out");
     }
 }

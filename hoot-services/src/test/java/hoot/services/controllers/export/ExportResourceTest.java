@@ -146,7 +146,7 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
             //mock the command sent by DeriveChangesetResource to ProcessStreamInterface
             JSONArray commandArgs = new JSONArray();
             JSONObject hootCommand = new JSONObject();
-            ExternalCommand command = new ExternalCommand();
+            ExternalCommand command = null; //new ExternalCommand();
             
             String jobId = UUID.randomUUID().toString();
             hootCommand.put("jobid", jobId);

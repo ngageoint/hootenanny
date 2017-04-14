@@ -27,17 +27,30 @@
 package hoot.services.controllers.ogr;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 
 
-class GetAttributesCommand extends ExternalCommand {
+class ExtractAttributesCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ExtractAttributesCommand.class);
 
-    GetAttributesCommand(List<File> files, String debugLevel, Class<?> caller) {
+    private final File workDir;
+
+    ExtractAttributesCommand(String jobId, File workDir, List<File> files, String debugLevel, Class<?> caller) {
+        super(jobId);
+        this.workDir = workDir;
+
         List<String> inputFiles = files.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
         Map<String, Object> substitutionMap = new HashMap<>();
@@ -47,5 +60,27 @@ class GetAttributesCommand extends ExternalCommand {
         String command = "hoot attribute-count --${DEBUG_LEVEL} ${INPUT_FILES}";
 
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    @Override
+    public CommandResult execute() {
+        CommandResult commandResult = super.execute();
+
+        File outputFile = ExtractAttributesUtils.getAttributesOutputFile(super.getJobId());
+        try {
+            FileUtils.write(outputFile, commandResult.getStdout(), Charset.defaultCharset());
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error writing attributes to: " + outputFile.getAbsolutePath(), ioe);
+        }
+
+        try {
+            FileUtils.forceDelete(this.workDir);
+        }
+        catch (IOException ioe) {
+            logger.error("Error deleting folder: {} ", this.workDir.getAbsolutePath(), ioe);
+        }
+
+        return commandResult;
     }
 }

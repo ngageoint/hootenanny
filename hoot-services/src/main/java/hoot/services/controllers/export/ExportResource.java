@@ -29,7 +29,6 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -61,8 +60,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.ExternalCommandManager;
-import hoot.services.command.common.UnTARFileCommand;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
 import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.job.Job;
@@ -78,9 +75,6 @@ public class ExportResource {
 
     @Autowired
     private JobProcessor jobProcessor;
-
-    @Autowired
-    private ExternalCommandManager externalCommandManager;
 
     @Autowired
     private ExportCommandFactory exportCommandFactory;
@@ -130,104 +124,57 @@ public class ExportResource {
             FileUtils.forceMkdir(workDir);
 
             List<Command> workflow = new LinkedList<>();
-
             if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
-                workflow.add(
-                    () -> {
-                        ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params,
-                                debugLevel, ExportOSMCommand.class, this.getClass());
-                        return externalCommandManager.exec(jobId, exportOSMCommand);
-                    }
-                );
+                ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params, debugLevel,
+                        ExportOSMCommand.class, this.getClass());
+
+                workflow.add(exportOSMCommand);
 
                 if (outputType.equalsIgnoreCase("osm")) {
-                    Command zipCommand = getZIPCommand(jobId, workDir, outputName, outputType);
-                    workflow.add(zipCommand);
+                    Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                    if (zipCommand != null) {
+                        workflow.add(zipCommand);
+                    }
                 }
             }
             // As of 04/03/2017, OSC support is not fully implemented yet.  This REST controller might not
             // even be the right place to host it.
             else if (outputType.equalsIgnoreCase("osc")) {
-                workflow.add(
-                    () -> {
-                        ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, params,
-                                debugLevel, ExportOSCCommand.class, this.getClass());
-                        return externalCommandManager.exec(jobId, exportOSCCommand);
-                    }
-                );
+                ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, ExportOSCCommand.class, this.getClass());
+
+                workflow.add(exportOSCCommand);
             }
             //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
-                workflow.add(
-                    () -> {
-                        ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, params,
-                                debugLevel, OSMAPIDBDeriveChangesetCommand.class, this.getClass());
-                        return externalCommandManager.exec(jobId, osmAPIDBDeriveChangesetCommand);
-                    }
-                );
+                ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, OSMAPIDBDeriveChangesetCommand.class, this.getClass());
 
-                workflow.add(
-                    () -> {
-                        ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, params,
-                                debugLevel, OSMAPIDBApplyChangesetCommand.class, this.getClass());
-                        return externalCommandManager.exec(jobId, osmAPIDBApplyChangesetCommand);
-                    }
-                );
+                ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, OSMAPIDBApplyChangesetCommand.class, this.getClass());
+
+                workflow.add(osmAPIDBDeriveChangesetCommand);
+                workflow.add(osmAPIDBApplyChangesetCommand);
             }
             else { //else Shape/FGDB
+                ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, ExportCommand.class, this.getClass());
 
-                if (params.getAppend()) {
-                    //Appends data to a blank fgdb. The template is stored with the fouo translations.
+                workflow.add(exportCommand);
 
-                    //$(HOOT_HOME)/translations-local/template
-                    File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
-
-                    String translation = params.getTranslation();
-                    File tdsTemplate = null;
-
-                    if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
-                        tdsTemplate = new File(templateHome, "tds61.tgz");
-                    }
-                    else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
-                        tdsTemplate = new File(templateHome, "tds40.tgz");
-                    }
-
-                    if ((tdsTemplate != null) && tdsTemplate.exists()) {
-                        File tdsTemplatePath = tdsTemplate;
-                        workflow.add(
-                            () -> {
-                                File outputDir = new File(workDir, outputName + "."     + outputType.toLowerCase());
-                                try {
-                                    FileUtils.forceMkdir(outputDir);
-                                }
-                                catch (IOException ioe) {
-                                    throw new RuntimeException("Error creating directory: " + outputDir.getAbsolutePath(), ioe);
-                                }
-                                ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplatePath, outputDir, this.getClass());
-                                return externalCommandManager.exec(jobId, untarFileCommand);
-                            }
-                        );
-                    }
-                }
-
-                workflow.add(
-                    () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,
-                                debugLevel, ExportCommand.class, this.getClass());
-                        return externalCommandManager.exec(jobId, exportCommand);
-                    }
-                );
-
-                Command zipCommand = getZIPCommand(jobId, workDir, outputName, outputType);
+                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
                 if (zipCommand != null) {
                     workflow.add(zipCommand);
                 }
             }
 
-            jobProcessor.process(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
         catch (WebApplicationException wae) {
             throw wae;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
             String msg = "Error exporting data!  Params: " + params;
@@ -370,37 +317,18 @@ public class ExportResource {
         return Response.ok(exportResources.toJSONString()).build();
     }
 
-    private Command getZIPCommand(String jobId, File workDir, String outputName, String outputType) {
+    private Command getZIPCommand(File workDir, String outputName, String outputType) {
         File targetZIP = new File(workDir, outputName + ".zip");
 
         if (outputType.equalsIgnoreCase("SHP")) {
-            return () -> {
-                // pwd = present working directory during execution of ZIPDirectoryContentsCommand
-                File pwd = new File(workDir, outputName);
-
-                ExternalCommand zipDirectoryCommand = new ZIPDirectoryContentsCommand(targetZIP, pwd, this.getClass());
-                return externalCommandManager.exec(jobId, zipDirectoryCommand);
-            };
+            return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName), this.getClass());
         }
         else if (outputType.equalsIgnoreCase("OSM")) {
-            return () -> {
-                // pwd = present working directory during execution of ZIPFileCommand
-                File pwd = workDir;
-
-                String fileToCompress = outputName + "." + outputType;
-
-                ExternalCommand zipFileCommand = new ZIPFileCommand(targetZIP, pwd, fileToCompress, this.getClass());
-                return externalCommandManager.exec(jobId, zipFileCommand);
-            };
+            String fileToCompress = outputName + "." + outputType;
+            return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
         }
         else if (outputType.equalsIgnoreCase("GDB")) {
-            return () -> {
-                // pwd = present working directory during execution of ZIPDirectoryContentsCommand
-                File pwd = workDir;
-
-                ExternalCommand zipDirectoryCommand = new ZIPDirectoryContentsCommand(targetZIP, pwd, this.getClass());
-                return externalCommandManager.exec(jobId, zipDirectoryCommand);
-            };
+            return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
         }
         else {
             return null;

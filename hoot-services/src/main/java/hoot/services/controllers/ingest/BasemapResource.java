@@ -68,9 +68,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import hoot.services.command.Command;
-import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 import hoot.services.utils.JsonUtils;
@@ -87,10 +85,7 @@ public class BasemapResource {
     private JobProcessor jobProcessor;
 
     @Autowired
-    private ExternalCommandManager externalCommandManager;
-
-    @Autowired
-    private IngestBasemapCommandFactory ingestBasemapCommandFactory;
+    private BasemapCommandFactory ingestBasemapCommandFactory;
 
 
     /**
@@ -119,11 +114,11 @@ public class BasemapResource {
         JSONArray jobsArr = new JSONArray();
 
         try {
-            String jobId = UUID.randomUUID().toString();
-            File workingDir = new File(UPLOAD_FOLDER, jobId);
-            FileUtils.forceMkdir(workingDir);
+            String workDirUUID = UUID.randomUUID().toString();
+            File workDir = new File(UPLOAD_FOLDER, workDirUUID);
+            FileUtils.forceMkdir(workDir);
 
-            List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workingDir);
+            List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
             for (File uploadedFile : uploadedFiles) {
                 String fileName = uploadedFile.getName();
@@ -135,53 +130,24 @@ public class BasemapResource {
                     continue;
                 }
 
-                logger.debug("Preparing Basemap Ingest for :{}", fileName);
-
                 String basemapName = (StringUtils.isBlank(inputName)) ? fileName : inputName;
 
                 File tileOutputDir = new File(BASEMAPS_TILES_FOLDER, basemapName);
                 FileUtils.forceMkdir(tileOutputDir);
 
-                Command[] workflow = {
-                    () -> {
-                        String ext = ".processing";
-                        File file = new File(BASEMAPS_FOLDER, basemapName + ext);
+                String jobId = UUID.randomUUID().toString();
 
-                        try {
-                            JSONObject json = new JSONObject();
-                            json.put("jobid", jobId);
-                            json.put("path", tileOutputDir.getAbsolutePath());
+                ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(jobId, basemapName, uploadedFile,
+                        projection, tileOutputDir, verboseOutput, this.getClass());
 
-                            FileUtils.writeStringToFile(file, json.toJSONString(), Charset.defaultCharset());
-                        }
-                        catch (IOException ioe) {
-                            throw new RuntimeException("Error creating " + file, ioe);
-                        }
+                Command[] workflow = { ingestBasemapCommand };
 
-                        ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(uploadedFile,
-                                projection, tileOutputDir, verboseOutput, this.getClass());
-
-                        CommandResult commandResult = externalCommandManager.exec(jobId, ingestBasemapCommand);
-
-                        ext = (commandResult.failed() ? ".failed" : ".disabled");
-                        File newFileName = new File(BASEMAPS_FOLDER, basemapName + ext);
-
-                        try {
-                            FileUtils.moveFile(file, newFileName);
-                        }
-                        catch (IOException ioe) {
-                            throw new RuntimeException("Error moving " + file + " to " + newFileName.getAbsolutePath(), ioe);
-                        }
-
-                        return commandResult;
-                    }
-                };
-
-                jobProcessor.process(new Job(jobId, workflow));
+                jobProcessor.submitAsync(new Job(jobId, workflow));
 
                 JSONObject response = new JSONObject();
                 response.put("jobid", jobId);
                 response.put("name", basemapName);
+                response.put("workDirUUID", workDirUUID);
 
                 jobsArr.add(response);
             }

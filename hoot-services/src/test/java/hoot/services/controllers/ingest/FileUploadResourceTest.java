@@ -118,7 +118,7 @@ public class FileUploadResourceTest {
         FileUtils.copyFile(srcFile, destFile);
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Let's test zip
         List<Map<String, String>> results = new LinkedList<>();
@@ -156,7 +156,7 @@ public class FileUploadResourceTest {
         FileUtils.copyFile(srcFile, destFile);
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Let's test zip
         JSONArray results = new JSONArray();
@@ -189,7 +189,7 @@ public class FileUploadResourceTest {
         FileUtils.copyFile(srcFile, destFile);
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Let's test zip
         List<Map<String, String>> results = new LinkedList<>();
@@ -219,7 +219,7 @@ public class FileUploadResourceTest {
 
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", "fgdb_ogr",
+        ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js", "fgdb_ogr",
                 Boolean.FALSE, "error", inputType, this.getClass());
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -269,7 +269,7 @@ public class FileUploadResourceTest {
         FileUtils.copyFile(srcFile, destFile);
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Let's test zip
         List<Map<String, String>> results = new LinkedList<>();
@@ -371,7 +371,7 @@ public class FileUploadResourceTest {
 
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Let's test zip
         List<Map<String, String>> results = new LinkedList<>();
@@ -412,7 +412,7 @@ public class FileUploadResourceTest {
         String inputType = "";
 
         // Test zip containing fgdb + shp
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", "osm",
+        ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js", "osm",
                 Boolean.FALSE, "error", inputType, this.getClass());
 
 /*
@@ -464,7 +464,7 @@ public class FileUploadResourceTest {
         FileUtils.copyFile(srcFile, destFile);
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Let's test zip
         List<Map<String, String>> results = new LinkedList<>();
@@ -512,7 +512,7 @@ public class FileUploadResourceTest {
 
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList,
+        ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList,
                 "TDSv61.js", "ogr", Boolean.FALSE,
                 "error", inputType, this.getClass());
 
@@ -560,7 +560,7 @@ public class FileUploadResourceTest {
         FileUtils.copyFile(srcFile, destFile);
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Shape 1
         List<Map<String, String>> results = new LinkedList<>();
@@ -601,7 +601,7 @@ public class FileUploadResourceTest {
         int fgdbZipCnt = 0;
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js",
+        ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js",
                          "ogr", Boolean.FALSE, "error",
                                   inputType, this.getClass());
 
@@ -647,7 +647,7 @@ public class FileUploadResourceTest {
         FileUtils.copyFile(srcFile, destFile);
         assertTrue(destFile.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Shape 1
         JSONArray results = new JSONArray();
@@ -689,7 +689,7 @@ public class FileUploadResourceTest {
         int geonamesZipCnt = 0;
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js",
+        ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js",
                                             "osm", Boolean.FALSE,
                                           "error", inputType, this.getClass());
 
@@ -736,7 +736,7 @@ public class FileUploadResourceTest {
         FileUtils.copyDirectory(srcDir, destDir);
         assertTrue(destDir.exists());
 
-        FileUploadResource res = new FileUploadResource();
+        ImportResource res = new ImportResource();
 
         // Shape 1
         List<Map<String, String>> results = new LinkedList<>();
@@ -762,7 +762,7 @@ public class FileUploadResourceTest {
 
         String inputType = "";
 
-        FileETLCommand command = new FileETLCommand(results, zipList, "TDSv61.js", "fgdb",
+        ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js", "fgdb",
                 Boolean.FALSE, "error", inputType, this.getClass());
 
 /*
@@ -796,7 +796,7 @@ public class FileUploadResourceTest {
     @Test
     @Category(UnitTest.class)
     public void TestserializeFGDB() throws Exception {
-        new FileUploadResource();
+        new ImportResource();
 
         // homeFolder + "/upload/" + jobId + "/" + relPath;
         // Create dummy FGDB
@@ -831,7 +831,7 @@ public class FileUploadResourceTest {
     @Test
     @Category(UnitTest.class)
     public void TestserializeUploadedFiles() throws Exception {
-        new FileUploadResource();
+        new ImportResource();
 
         // homeFolder + "/upload/" + jobId + "/" + relPath;
         // Create dummy FGDB
@@ -864,7 +864,7 @@ public class FileUploadResourceTest {
     }
 
     private static Method getAnalyzeUploadedFileMethod() throws NoSuchMethodException {
-        Method analyzeUploadedFileMethod = FileUploadResource.class
+        Method analyzeUploadedFileMethod = ImportResource.class
                 .getDeclaredMethod("handleUploadedFile", String.class, File.class, Map.class, File.class, String.class, String.class);
         analyzeUploadedFileMethod.setAccessible(true);
         return analyzeUploadedFileMethod;

@@ -50,6 +50,6 @@ public class ZIPFileCommand extends ExternalCommand {
 
         String command = "zip ${TARGET_ZIP_FILE} ${FILE_TO_ZIP}";
 
-        super.configureCommand(command, substitutionMap, caller, workDir);
+        super.configureCommand(command, substitutionMap, caller, workDir, false);
     }
 }

@@ -36,6 +36,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.utils.DbUtils;
 
@@ -43,7 +44,26 @@ import hoot.services.utils.DbUtils;
 class ExportRenderDBCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportRenderDBCommand.class);
 
-    ExportRenderDBCommand(String name, Class<?> caller) {
+    private final String name;
+    private final Class<?> caller;
+
+    ExportRenderDBCommand(String jobId, String name, Class<?> caller) {
+        super(jobId);
+        this.name = name;
+        this.caller = caller;
+    }
+
+    @Override
+    public CommandResult execute() {
+        // Note: Here we have to delay command configuration binding until actual execution time since
+        // some information, specifically map info defined by the name, may not be available
+        // at the time of the instantiation.
+        this.performLateConfigurationBinding();
+
+        return super.execute();
+    }
+
+    private void performLateConfigurationBinding() {
         long mapId = DbUtils.getRecordIdForInputString(name, maps, maps.id, maps.displayName);
         String script = new File(CORE_SCRIPT_PATH, EXPORT_RENDERDB_SCRIPT).getAbsolutePath();
 

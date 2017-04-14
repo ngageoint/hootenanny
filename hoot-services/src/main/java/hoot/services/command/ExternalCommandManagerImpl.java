@@ -92,4 +92,9 @@ public class ExternalCommandManagerImpl implements ExternalCommandManager {
 
         return commandResult;
     }
+
+    @Override
+    public CommandResult exec(ExternalCommand externalCommand) {
+        return exec(null, externalCommand);
+    }
 }

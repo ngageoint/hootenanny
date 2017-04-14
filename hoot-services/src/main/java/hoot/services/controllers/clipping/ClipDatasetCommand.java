@@ -42,7 +42,9 @@ import hoot.services.command.ExternalCommand;
 class ClipDatasetCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ClipDatasetCommand.class);
 
-    ClipDatasetCommand(ClipDatasetParams params, String debugLevel, Class<?> caller) {
+    ClipDatasetCommand(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller) {
+        super(jobId);
+
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");

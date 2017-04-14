@@ -684,7 +684,7 @@ public class MapResource {
                 }
             };
 
-            jobProcessor.process(new Job(jobId, workflow));
+            jobProcessor.submitAsync(new Job(jobId, workflow));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;

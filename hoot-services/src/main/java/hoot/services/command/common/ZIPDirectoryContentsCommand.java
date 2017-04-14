@@ -49,6 +49,6 @@ public class ZIPDirectoryContentsCommand extends ExternalCommand {
 
         String command = "zip -r ${TARGET_ZIP_FILE} .";
 
-        super.configureCommand(command, substitutionMap, caller, workDir);
+        super.configureCommand(command, substitutionMap, caller, workDir, false);
     }
 }

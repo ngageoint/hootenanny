@@ -42,7 +42,9 @@ import hoot.services.command.ExternalCommand;
 class HGISCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(HGISCommand.class);
 
-    HGISCommand(String sourceMap, String outputMap, String scriptName, Class<?> caller) {
+    HGISCommand(String jobId, String sourceMap, String outputMap, String scriptName, Class<?> caller) {
+        super(jobId);
+
         String source = HOOTAPI_DB_URL + "/" + sourceMap;
         String output = HOOTAPI_DB_URL + "/" + outputMap;
         String script = new File(CORE_SCRIPT_PATH, scriptName).getAbsolutePath();

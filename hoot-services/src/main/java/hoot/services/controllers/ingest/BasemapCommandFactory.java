@@ -24,19 +24,18 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.ogr;
+package hoot.services.controllers.ingest;
 
 
 import java.io.File;
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 
 @Component
-class GetAttributesCommandFactory {
+class BasemapCommandFactory {
 
-    GetAttributesCommand build(List<File> fileList, String debugLevel, Class<?> caller) {
-        return new GetAttributesCommand(fileList, debugLevel, caller);
+    BasemapCommand build(String jobId, String basemapName, File inputFile, String projection, File tileOutputDir, boolean verboseOutput, Class<?> caller) {
+        return new BasemapCommand(jobId, basemapName, inputFile, projection, tileOutputDir, verboseOutput, caller);
     }
 }

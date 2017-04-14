@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.clipping;
+package hoot.services.controllers.conflation;
 
 import java.util.UUID;
 
@@ -43,67 +43,85 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.InternalCommand;
 import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 
 
 @Controller
-@Path("/clipdataset")
-public class ClipDatasetResource {
-    private static final Logger logger = LoggerFactory.getLogger(ClipDatasetResource.class);
+@Path("/conflation")
+@Transactional
+public class ConflateResource {
+    private static final Logger logger = LoggerFactory.getLogger(ConflateResource.class);
 
     @Autowired
     private JobProcessor jobProcessor;
 
     @Autowired
-    private ClipDatasetCommandFactory clipDatasetCommandFactory;
+    private ConflateCommandFactory conflateCommandFactory;
 
     @Autowired
     private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
 
+    @Autowired
+    private UpdateTagsCommandFactory updateTagsCommandFactory;
+
 
     /**
-     * This service will clip a dataset to a bounding box and create a new output dataset within those dimensions.
+     * Conflate service operates like a standard ETL service. The conflate
+     * service specifies the input files, conflation type, match threshold, miss
+     * threshold, and output file name. The conflation type can be specified as
+     * the average of the two input datasets or based on a single input file
+     * that is intended to be the reference dataset. It has two fronts, WPS and
+     * standard rest end point.
      *
-     * POST hoot-services/job/clipdataset/execute
+     * that is intended to be the reference dataset.
      *
-     * {
-     *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
-     *   "BBOX" : "{"LR":[-77.04813267598544,38.89292259454q727],"UL":[-77.04315011486628,38.89958152667718]}",
-     *
-     *   //The name of the dataset to be clipped
-     *   "INPUT_NAME" : "DcRoads",
-     *
-     *   //The output name of the new dataset.
-     *   "OUTPUT_NAME" : "DcRoads_Clip"
-     * }
+     * POST hoot-services/conflation/execute
      *
      * @param params
-     *      JSON input params; see description above
+     *            parameters in json format :
      *
-     * @param debugLevel
-     *      debug level
+     *     INPUT1_TYPE: Conflation input type [OSM] | [OGR] | [DB] | [OSM_API_DB]
+     *     INPUT2_TYPE: Conflation input type [OSM] | [OGR] | [DB]
+     *     INPUT1: Conlfation input 1
+     *     INPUT2: Conlfation input 2
+     *     OUTPUT_NAME: Conflation operation output name
+     *     CONFLATION_TYPE: [Average] | [Reference]
+     *     REFERENCE_LAYER:
+     *         The reference layer which will be dominant tags. Default is 1 and if 2 selected, layer 2
+     *         tags will be dominant with layer 1 as geometry snap layer.
      *
-     * @return a job id
+     *     COLLECT_STATS: true to collect conflation statistics
+     *     ADV_OPTIONS: Advanced options list for hoot-core command
+     *
+     *     GENERATE_REPORT: Not used.  true to generate conflation report
+     *     TIME_STAMP: Not used   Time stamp used in generated report if GENERATE_REPORT is true
+     *     USER_EMAIL: Not used.  Email address of the user requesting the conflation job
+     *     AUTO_TUNNING: Not used. Always false
+     *
+     * @return Job ID
      */
     @POST
     @Path("/execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response clipDataset(ClipDatasetParams params,
-                                @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response conflate(ConflateParams params,
+                             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         String jobId = UUID.randomUUID().toString();
 
         try {
-            ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass());
+            ExternalCommand conflateCommand = conflateCommandFactory.build(jobId, params, debugLevel, this.getClass());
+            InternalCommand updateTagsCommand = updateTagsCommandFactory.build(jobId, params, this.getClass());
             ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
 
-            Command[] workflow = { clipCommand, exportRenderDBCommand };
+            Command[] workflow = { conflateCommand, updateTagsCommand, exportRenderDBCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
         }
@@ -111,7 +129,7 @@ public class ClipDatasetResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error processing dataset clipping request!  Params: " + params;
+            String msg = "Error during conflation!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

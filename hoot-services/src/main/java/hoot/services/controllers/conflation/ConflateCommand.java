@@ -26,22 +26,70 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static hoot.services.HootProperties.OSMAPI_DB_URL;
+import static hoot.services.HootProperties.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 
 
 class ConflateCommand extends ExternalCommand {
 
-    ConflateCommand(ConflateParams params, BoundingBox bounds, String debugLevel, Class<?> caller) {
+    private final ConflateParams conflateParams;
+
+    ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller) {
+        super(jobId);
+        this.conflateParams = params;
+
+        boolean conflatingOsmApiDbData = ConflateUtils.isAtLeastOneLayerOsmApiDb(params);
+
+        //Since we're not returning the osm api db layer to the hoot ui, this exception
+        //shouldn't actually ever occur, but will leave this check here anyway.
+        if (conflatingOsmApiDbData && !OSM_API_DB_ENABLED) {
+            throw new IllegalArgumentException("Attempted to conflate an OSM API database data source but OSM " +
+                    "API database support is disabled.");
+        }
+
+        BoundingBox bounds;
+
+        // osm api db related input params have already been validated by
+        // this point, so just check to see if any osm api db input is present
+        if (conflatingOsmApiDbData && OSM_API_DB_ENABLED) {
+            ConflateUtils.validateOsmApiDbConflateParams(params);
+
+            String secondaryParameterKey = ConflateUtils.isFirstLayerOsmApiDb(params) ? params.getInput2() : params.getInput1();
+
+            //Record the aoi of the conflation job (equal to that of the secondary layer), as
+            //we'll need it to detect conflicts at export time.
+            long secondaryMapId = Long.parseLong(secondaryParameterKey);
+            if (!hoot.services.models.osm.Map.mapExists(secondaryMapId)) {
+                String msg = "No secondary map exists with ID: " + secondaryMapId;
+                throw new IllegalArgumentException(msg);
+            }
+
+            if (params.getBounds() != null) {
+                bounds = new BoundingBox(params.getBounds());
+            }
+            else {
+                hoot.services.models.osm.Map secondaryMap = new hoot.services.models.osm.Map(secondaryMapId);
+                bounds = secondaryMap.getBounds();
+            }
+        }
+        else {
+            bounds = null;
+        }
+
         String aoi = null;
 
         if (bounds != null) {
@@ -117,5 +165,22 @@ class ConflateCommand extends ExternalCommand {
         String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
 
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    @Override
+    public CommandResult execute() {
+        CommandResult commandResult = super.execute();
+
+        if (conflateParams.getCollectStats()) {
+            File statsFile = new File(RPT_STORE_PATH, conflateParams.getOutputName() + "-stats.csv");
+            try {
+                FileUtils.write(statsFile, commandResult.getStdout(), Charset.defaultCharset());
+            }
+            catch (IOException ioe) {
+                throw new RuntimeException("Error writing to " + statsFile.getAbsolutePath(), ioe);
+            }
+        }
+
+        return commandResult;
     }
 }

@@ -26,18 +26,32 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.HootProperties.BASEMAPS_FOLDER;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONObject;
 
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 
 
-class IngestBasemapCommand extends ExternalCommand {
+class BasemapCommand extends ExternalCommand {
 
-    IngestBasemapCommand(File inputFile, String projection, File tileOutputDir, boolean verboseOutput, Class<?> caller) {
+    private final File tileOutputDir;
+    private final String basemapName;
+
+    BasemapCommand(String jobId, String basemapName, File inputFile, String projection, File tileOutputDir, boolean verboseOutput, Class<?> caller) {
+        super(jobId);
+        this.tileOutputDir = tileOutputDir;
+        this.basemapName = basemapName;
+
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("VERBOSE", verboseOutput ? "-v" : "");
         substitutionMap.put("WEBVIEWER", "none");
@@ -57,5 +71,36 @@ class IngestBasemapCommand extends ExternalCommand {
         }
 
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    @Override
+    public CommandResult execute() {
+        String ext = ".processing";
+        File file = new File(BASEMAPS_FOLDER, basemapName + ext);
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("jobid", getJobId());
+            json.put("path", tileOutputDir.getAbsolutePath());
+
+            FileUtils.writeStringToFile(file, json.toJSONString(), Charset.defaultCharset());
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error creating " + file, ioe);
+        }
+
+        CommandResult commandResult = super.execute();
+
+        ext = (commandResult.failed() ? ".failed" : ".disabled");
+        File newFileName = new File(BASEMAPS_FOLDER, basemapName + ext);
+
+        try {
+            FileUtils.moveFile(file, newFileName);
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error moving " + file + " to " + newFileName.getAbsolutePath(), ioe);
+        }
+
+        return commandResult;
     }
 }

@@ -26,11 +26,9 @@
  */
 package hoot.services.controllers.ingest;
 
-import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -64,10 +62,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
-import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.ExternalCommandManager;
-import hoot.services.command.InternalCommandManager;
 import hoot.services.command.common.UnZIPFileCommand;
 import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
@@ -78,20 +73,14 @@ import hoot.services.utils.MultipartSerializer;
 @Controller
 @Path("/ingest")
 @Transactional
-public class FileUploadResource {
-    private static final Logger logger = LoggerFactory.getLogger(FileUploadResource.class);
+public class ImportResource {
+    private static final Logger logger = LoggerFactory.getLogger(ImportResource.class);
 
     @Autowired
     private JobProcessor jobProcessor;
 
     @Autowired
-    private ExternalCommandManager externalCommandManager;
-
-    @Autowired
-    private InternalCommandManager internalCommandManager;
-
-    @Autowired
-    private FileETLCommandFactory fileETLCommandFactory;
+    private ImportCommandFactory fileETLCommandFactory;
 
     @Autowired
     private ExportRenderDBCommandFactory exportRenderDBCommandFactory;
@@ -165,7 +154,7 @@ public class FileUploadResource {
 
                 Map<String, Integer> zipStat = new HashMap<>();
 
-                etlRequests.addAll(handleUploadedFile(uploadedFileExtension, uploadedFile, zipStat, workDir, inputType, jobId));
+                etlRequests.addAll(handleUploadedFile(uploadedFileExtension, uploadedFile, zipStat, workDir, inputType));
 
                 if (uploadedFileExtension.equalsIgnoreCase("ZIP")) {
                     zipList.add(uploadedFile);
@@ -195,7 +184,7 @@ public class FileUploadResource {
 
                     etlRequests.clear();
 
-                    etlRequests.addAll(handleUploadedFile("GEONAMES", destFile, zipStat, workDir, inputType, jobId));
+                    etlRequests.addAll(handleUploadedFile("GEONAMES", destFile, zipStat, workDir, inputType));
                 }
             }
 
@@ -221,7 +210,7 @@ public class FileUploadResource {
 
                 Map<String, Integer> zipStat = new HashMap<>();
                 for (File osmFile : osmFiles) {
-                    etlRequests.addAll(handleUploadedFile("OSM", osmFile, zipStat, workDir, inputType, jobId));
+                    etlRequests.addAll(handleUploadedFile("OSM", osmFile, zipStat, workDir, inputType));
                 }
 
                 // massage some variables to make it look like an osm file was uploaded
@@ -240,53 +229,18 @@ public class FileUploadResource {
                                                                      geonamesZipCnt, shpCnt, fgdbCnt, osmCnt,
                                                                      geonamesCnt);
 
-            String finalETLName = etlName;
+            ExternalCommand etlCommand = fileETLCommandFactory.build(jobId, workDir, etlRequests, zipList, translation, etlName,
+                    noneTranslation, debugLevel, uploadedFileClassification, this.getClass());
 
-            List<Command> workflow = new LinkedList<>();
+            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, etlName, this.getClass());
 
-            workflow.add(() -> {
-                String translationPath;
+            Command[] workflow = { etlCommand, exportRenderDBCommand };
 
-                // TODO: Reconcile this logic with the UI.  Passing of translation script's name appears to be inconsistent!
-                if (translation.startsWith("translations/")) {
-                    // Example: @QueryParam("TRANSLATION") == "translations/GeoNames.js"
-                    translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
-                }
-                else {
-                    // Example: @QueryParam("TRANSLATION") == "GeoNames.js"
-                    translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
-                }
-
-                ExternalCommand etlCommand = fileETLCommandFactory.build(etlRequests, zipList, translationPath, finalETLName,
-                        noneTranslation, debugLevel, uploadedFileClassification, this.getClass());
-
-                CommandResult commandResult = externalCommandManager.exec(jobId, etlCommand);
-
-                try {
-                    FileUtils.forceDelete(workDir);
-                }
-                catch (IOException ioe) {
-                    logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
-                }
-
-                return commandResult;
-            });
-
-            String mapDisplayName = etlName;
-
-            workflow.add(
-                () -> {
-                    ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(mapDisplayName, this.getClass());
-                    return externalCommandManager.exec(jobId, exportRenderDBCommand);
-            });
-
-            jobProcessor.process(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
-
-            String mergedInputList = StringUtils.join(inputsList.toArray(), ';');
+            jobProcessor.submitAsync(new Job(jobId, workflow));
 
             JSONObject res = new JSONObject();
             res.put("jobid", jobId);
-            res.put("input", mergedInputList);
+            res.put("input", StringUtils.join(inputsList.toArray(), ';'));
             res.put("output", etlName);
             res.put("status", "success");
 
@@ -294,6 +248,9 @@ public class FileUploadResource {
         }
         catch (WebApplicationException wae) {
             throw wae;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception ex) {
             String msg = "Failed upload: " + ex.getMessage();
@@ -352,7 +309,7 @@ public class FileUploadResource {
         return classification;
     }
 
-    private List<Map<String, String>> handleUploadedFile(String ext, File inputFile, Map<String, Integer> stats, File workDir, String inputType, String jobId) {
+    private List<Map<String, String>> handleUploadedFile(String ext, File inputFile, Map<String, Integer> stats, File workDir, String inputType) {
         List<Map<String, String>> etlRequests = new LinkedList<>();
 
         int osmZipCnt = stats.getOrDefault("osmzipcnt", 0);
@@ -387,7 +344,7 @@ public class FileUploadResource {
         }
         else if (ext.equalsIgnoreCase("ZIP")) {
             // Check to see the type of zip (osm, ogr or fgdb)
-            Map<String, Integer> results = specialHandleWhenZIP(inputFile, etlRequests, workDir, jobId);
+            Map<String, Integer> results = specialHandleWhenZIP(inputFile, etlRequests, workDir);
 
             shpZipCnt += results.get("shpzipcnt");
             fgdbZipCnt += results.get("fgdbzipcnt");
@@ -421,13 +378,13 @@ public class FileUploadResource {
      * @param etlRequests
      * @return Map of counters after looking inside of the ZIP
      */
-    private Map<String, Integer> specialHandleWhenZIP(File zip, List<Map<String, String>> etlRequests, File workDir, String jobId) {
+    private Map<String, Integer> specialHandleWhenZIP(File zip, List<Map<String, String>> etlRequests, File workDir) {
         String basename = FilenameUtils.getBaseName(zip.getName());
 
         File targetFolder = new File(workDir, FilenameUtils.getBaseName(basename));
+
         ExternalCommand unZIPFileCommand = new UnZIPFileCommand(zip, targetFolder, this.getClass());
-        unZIPFileCommand.setTrackable(Boolean.FALSE);
-        externalCommandManager.exec(jobId, unZIPFileCommand);
+        unZIPFileCommand.execute();
 
         IOFileFilter fileFilter = FileFilterUtils.or(
                        FileFilterUtils.suffixFileFilter("shp"),

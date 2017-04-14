@@ -26,12 +26,9 @@
  */
 package hoot.services.controllers.ogr;
 
-import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -63,7 +60,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
-import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
 import hoot.services.command.common.UnZIPFileCommand;
@@ -74,17 +70,17 @@ import hoot.services.utils.MultipartSerializer;
 
 @Controller
 @Path("/info")
-public class OGRAttributesResource {
-    private static final Logger logger = LoggerFactory.getLogger(OGRAttributesResource.class);
+public class ExtractAttributesResource {
+    private static final Logger logger = LoggerFactory.getLogger(ExtractAttributesResource.class);
 
     @Autowired
     private JobProcessor jobProcessor;
 
     @Autowired
-    private ExternalCommandManager externalCommandManager;
+    private ExtractAttributesCommandFactory getAttributesCommandFactory;
 
     @Autowired
-    private GetAttributesCommandFactory getAttributesCommandFactory;
+    private ExternalCommandManager externalCommandManager;
 
 
     /**
@@ -110,33 +106,14 @@ public class OGRAttributesResource {
 
             List<File> files = processFormDataMultiPart(multiPart, workDir, jobId, inputType);
 
-            List<Command> workflow = new LinkedList<>();
+            ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(jobId, workDir, files, debugLevel, this.getClass());
 
-            workflow.add(
-                () -> {
-                    ExternalCommand getAttributesCommand = getAttributesCommandFactory.build(files, debugLevel, this.getClass());
-                    CommandResult commandResult = externalCommandManager.exec(jobId, getAttributesCommand);
+            Command[] workflow = { getAttributesCommand };
 
-                    File outputFile = getAttributesOutputFile(jobId);
-                    try {
-                        FileUtils.write(outputFile, commandResult.getStdout(), Charset.defaultCharset());
-                    }
-                    catch (IOException ioe) {
-                        throw new RuntimeException("Error writing attributes to: " + outputFile.getAbsolutePath(), ioe);
-                    }
-
-                    try {
-                        FileUtils.forceDelete(workDir);
-                    }
-                    catch (IOException ioe) {
-                        logger.error("Error deleting folder: {} ", workDir.getAbsolutePath(), ioe);
-                    }
-
-                    return commandResult;
-                }
-            );
-
-            jobProcessor.process(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
+            jobProcessor.submitAsync(new Job(jobId, workflow));
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
             String msg = "Upload failed for job with id = " + jobId + ".  Cause: " + e.getMessage();
@@ -169,7 +146,7 @@ public class OGRAttributesResource {
                                   @QueryParam("deleteoutput") @DefaultValue("false") Boolean doDelete) {
         String json = null;
         try {
-            File fileWithAttributes = getAttributesOutputFile(jobId);
+            File fileWithAttributes = ExtractAttributesUtils.getAttributesOutputFile(jobId);
             if (fileWithAttributes.exists()) {
                 json = FileUtils.readFileToString(fileWithAttributes, "UTF-8");
 
@@ -239,9 +216,5 @@ public class OGRAttributesResource {
         }
 
         return Collections.emptyList();
-    }
-
-    private static File getAttributesOutputFile(String jobId) {
-        return new File(TEMP_OUTPUT_PATH, jobId + ".out");
     }
 }

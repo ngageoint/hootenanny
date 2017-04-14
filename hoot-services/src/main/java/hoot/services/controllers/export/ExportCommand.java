@@ -29,15 +29,18 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.common.UnTARFileCommand;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
@@ -46,12 +49,41 @@ import hoot.services.utils.DbUtils;
 class ExportCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
 
-    private final String jobId;
     private final ExportParams params;
 
     ExportCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
-        this.jobId = jobId;
+        super(jobId);
         this.params = params;
+
+        if (params.getAppend()) {
+            //Appends data to a blank fgdb. The template is stored with the fouo translations.
+
+            //$(HOOT_HOME)/translations-local/template
+            File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
+
+            String translation = params.getTranslation();
+            File tdsTemplate = null;
+
+            if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
+                tdsTemplate = new File(templateHome, "tds61.tgz");
+            }
+            else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
+                tdsTemplate = new File(templateHome, "tds40.tgz");
+            }
+
+            if ((tdsTemplate != null) && tdsTemplate.exists()) {
+                File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "."     + params.getOutputType().toLowerCase());
+                try {
+                    FileUtils.forceMkdir(outputDir);
+                }
+                catch (IOException ioe) {
+                    throw new RuntimeException("Error creating directory: " + outputDir.getAbsolutePath(), ioe);
+                }
+
+                ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplate, outputDir, this.getClass());
+                untarFileCommand.execute();
+            }
+        }
 
         List<String> hootOptions = toHootOptions(this.getCommonExportHootOptions());
 
@@ -95,7 +127,7 @@ class ExportCommand extends ExternalCommand {
             outputFile = new File(outputFolder, params.getOutputName() + "." + params.getOutputType());
         }
         else {
-            outputFile = new File(outputFolder, jobId + "." + params.getOutputType());
+            outputFile = new File(outputFolder, getJobId() + "." + params.getOutputType());
         }
 
         return outputFile.getAbsolutePath();
@@ -139,10 +171,10 @@ class ExportCommand extends ExternalCommand {
 
     String getSQLChangesetPath() {
         // Services currently always write changeset with sql
-        return new File(this.getWorkFolder(), "changeset-" + jobId + ".osc.sql").getAbsolutePath();
+        return new File(this.getWorkFolder(), "changeset-" + getJobId() + ".osc.sql").getAbsolutePath();
     }
 
     private File getWorkFolder() {
-        return new File(TEMP_OUTPUT_PATH, jobId);
+        return new File(TEMP_OUTPUT_PATH, getJobId());
     }
 }

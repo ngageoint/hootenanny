@@ -49,7 +49,7 @@ public class JobProcessor {
     @Autowired
     private JobStatusManager jobStatusManager;
 
-    public void process(Job job) {
+    public void submitAsync(Job job) {
         logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
         Runnable work = new JobRunnable(job, jobStatusManager);
         jobThreadExecutor.execute(work);
