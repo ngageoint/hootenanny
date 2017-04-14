@@ -98,7 +98,7 @@ class ConflateCommand extends ExternalCommand {
 
         List<String> options = new LinkedList<>();
         options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("conflate.add.score.tags=yes");
+        options.add("writer.include.conflate.score.tags=true");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");

@@ -124,18 +124,23 @@ public class ExportResource {
             FileUtils.forceMkdir(workDir);
 
             List<Command> workflow = new LinkedList<>();
-            if (outputType.equalsIgnoreCase("osm") || outputType.equalsIgnoreCase("osm.pbf")) {
+
+            if (outputType.equalsIgnoreCase("osm")) {
                 ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params, debugLevel,
                         ExportOSMCommand.class, this.getClass());
 
                 workflow.add(exportOSMCommand);
 
-                if (outputType.equalsIgnoreCase("osm")) {
-                    Command zipCommand = getZIPCommand(workDir, outputName, outputType);
-                    if (zipCommand != null) {
-                        workflow.add(zipCommand);
-                    }
+                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                if (zipCommand != null) {
+                    workflow.add(zipCommand);
                 }
+            }
+            else if (outputType.equalsIgnoreCase("osm.pbf")) {
+                ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params, debugLevel,
+                        ExportOSMCommand.class, this.getClass());
+
+                workflow.add(exportOSMCommand);
             }
             // As of 04/03/2017, OSC support is not fully implemented yet.  This REST controller might not
             // even be the right place to host it.

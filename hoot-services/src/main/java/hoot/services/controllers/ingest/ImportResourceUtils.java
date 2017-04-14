@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,9 +43,9 @@ import org.apache.commons.lang3.StringUtils;
 import hoot.services.command.common.UnZIPFileCommand;
 
 
-final class ImportUtils {
+final class ImportResourceUtils {
 
-    private ImportUtils() {}
+    private ImportResourceUtils() {}
 
     static String classifyUploadedFile(int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
                                        int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt) {
@@ -232,5 +233,43 @@ final class ImportUtils {
         stats.put("geonameszipcnt", geonamesCnt);
 
         return stats;
+    }
+
+    static void handleOSMZip(File workDir, List<File> zipList, List<Map<String, String>> etlRequests, List<String> inputsList, String inputType) {
+        // we want to unzip the file and modify any necessary parameters
+        File zipFile = new File(workDir, inputsList.get(0));
+        File zipFolder = new File(workDir, FilenameUtils.getBaseName(zipFile.getName()));
+
+        zipList.clear();
+        etlRequests.clear();
+        inputsList.clear();
+
+        IOFileFilter fileFilter = FileFilterUtils.suffixFileFilter("osm");
+        Collection<File> osmFiles = FileUtils.listFiles(zipFolder, fileFilter, null);
+
+        Map<String, Integer> zipStat = new HashMap<>();
+        for (File osmFile : osmFiles) {
+            etlRequests.addAll(handleUploadedFile("OSM", osmFile, zipStat, workDir, inputType));
+        }
+    }
+
+    static void handleGEONAMESWithTxtExtension(File workDir, String uploadedFileBasename, List<String> inputsList,
+             List<Map<String, String>> etlRequests, String inputType, Map<String, Integer> zipStat) {
+        String uploadedFileName = uploadedFileBasename + "." + "geonames";
+        File srcFile = new File(workDir, inputsList.get(0));
+        File destFile = new File(workDir, uploadedFileName);
+
+        // we need to rename the file for hoot to ingest
+        try {
+            FileUtils.moveFile(srcFile, destFile);
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error trying to rename " + srcFile.getAbsolutePath() + " to " + destFile.getAbsolutePath(), ioe);
+        }
+
+        inputsList.set(0, uploadedFileName);
+
+        etlRequests.clear();
+        etlRequests.addAll(ImportResourceUtils.handleUploadedFile("GEONAMES", destFile, zipStat, workDir, inputType));
     }
 }
