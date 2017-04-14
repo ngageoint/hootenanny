@@ -109,48 +109,57 @@ public class BasemapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_NAME") String inputName,
                                   @QueryParam("PROJECTION") String projection,
-                                  @QueryParam("VERBOSE_OUTPUT") @DefaultValue("true") Boolean verboseOutput,
+                                  @QueryParam("VERBOSE_OUTPUT") @DefaultValue("false") Boolean verboseOutput,
                                   FormDataMultiPart multiPart) {
         JSONArray jobsArr = new JSONArray();
 
         try {
-            String workDirUUID = UUID.randomUUID().toString();
-            File workDir = new File(UPLOAD_FOLDER, workDirUUID);
+            String jobId = UUID.randomUUID().toString();
+            File workDir = new File(UPLOAD_FOLDER, jobId);
             FileUtils.forceMkdir(workDir);
 
             List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
-            for (File uploadedFile : uploadedFiles) {
-                String fileName = uploadedFile.getName();
-                String baseName = FilenameUtils.getBaseName(fileName);
-                String extension = FilenameUtils.getExtension(fileName);
-
-                if (!BASEMAP_RASTER_EXTENSIONS.contains(extension)) {
-                    logger.warn("Extension {} is not supported.  Skipping upload of {} file", extension, baseName);
-                    continue;
-                }
-
-                String basemapName = (StringUtils.isBlank(inputName)) ? fileName : inputName;
-
-                File tileOutputDir = new File(BASEMAPS_TILES_FOLDER, basemapName);
-                FileUtils.forceMkdir(tileOutputDir);
-
-                String jobId = UUID.randomUUID().toString();
-
-                ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(jobId, basemapName, uploadedFile,
-                        projection, tileOutputDir, verboseOutput, this.getClass());
-
-                Command[] workflow = { ingestBasemapCommand };
-
-                jobProcessor.submitAsync(new Job(jobId, workflow));
-
-                JSONObject response = new JSONObject();
-                response.put("jobid", jobId);
-                response.put("name", basemapName);
-                response.put("workDirUUID", workDirUUID);
-
-                jobsArr.add(response);
+            if (uploadedFiles.isEmpty()) {
+                throw new IllegalArgumentException("No basemap raster file provided!");
             }
+
+            if (uploadedFiles.size() > 1) {
+                throw new IllegalArgumentException("Exactly one basemap raster file expected!");
+            }
+
+            File uploadedFile = uploadedFiles.get(0);
+            String fileName = uploadedFile.getName();
+            String baseName = FilenameUtils.getBaseName(fileName);
+            String extension = FilenameUtils.getExtension(fileName);
+
+            if (!BASEMAP_RASTER_EXTENSIONS.contains(extension)) {
+                throw new RuntimeException("Extension " + extension + " is not supported! Filename:" + fileName);
+            }
+
+            String basemapName = (StringUtils.isBlank(inputName)) ? fileName : inputName;
+
+            File tileOutputDir = new File(BASEMAPS_TILES_FOLDER, basemapName);
+            FileUtils.forceMkdir(tileOutputDir);
+
+            ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(jobId, basemapName, uploadedFile,
+                    projection, tileOutputDir, verboseOutput, this.getClass());
+
+            Command[] workflow = { ingestBasemapCommand };
+
+            jobProcessor.submitAsync(new Job(jobId, workflow));
+
+            JSONObject response = new JSONObject();
+            response.put("jobid", jobId);
+            response.put("name", basemapName);
+
+            jobsArr.add(response);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
             String msg = "Error processing upload for: " + inputName + ".  Cause: " + e.getMessage();
