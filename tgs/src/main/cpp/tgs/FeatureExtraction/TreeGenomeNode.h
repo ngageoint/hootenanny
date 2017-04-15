@@ -53,5 +53,4 @@ namespace Tgs
   };
 }
 
-
 #endif

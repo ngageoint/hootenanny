@@ -54,7 +54,7 @@ void OsmUtils::printNodes(const QString nodeCollectionName,
     LOG_VARD(nodes.size());
     for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
-     boost::shared_ptr<const Node> node = *it;
+      boost::shared_ptr<const Node> node = *it;
       LOG_VARD(node->toString());
     }
   }
@@ -66,7 +66,7 @@ const QList<long> OsmUtils::nodesToNodeIds(const QList<boost::shared_ptr<const N
   for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.constBegin();
        it != nodes.constEnd(); ++it)
   {
-   boost::shared_ptr<const Node> node = *it;
+    boost::shared_ptr<const Node> node = *it;
     nodeIds.append(node->getElementId().getId());
   }
   return nodeIds;

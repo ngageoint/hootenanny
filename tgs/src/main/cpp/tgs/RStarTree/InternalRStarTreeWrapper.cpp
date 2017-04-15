@@ -34,9 +34,6 @@
 //Std Includes
 #include <cassert>
 
-
-
-
 namespace Tgs
 {
   InternalRStarTreeWrapper::InternalRStarTreeWrapper(unsigned int pageSize, unsigned int dimensions)

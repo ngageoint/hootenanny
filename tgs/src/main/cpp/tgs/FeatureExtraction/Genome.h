@@ -25,7 +25,6 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-
 #ifndef __TGS__GENOME_H__
 #define __TGS__GENOME_H__
 
@@ -90,6 +89,5 @@ namespace Tgs
     double _score;
   };
 }
-
 
 #endif

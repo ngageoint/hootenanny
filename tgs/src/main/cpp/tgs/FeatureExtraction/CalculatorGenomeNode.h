@@ -122,5 +122,4 @@ namespace Tgs
   };
 }
 
-
 #endif
