@@ -82,9 +82,5 @@ public class ExternalCommandRunnerImplTest {
 
         CommandResult result = runner.exec(command, substitutionMap, jobId,
                 this.getClass().getName(), FileUtils.getTempDirectory(), false);
-
-        System.out.println("STDOUT: " + result.getStdout());
-        System.out.println("-----------------------------");
-        System.out.println("STDERR: " + result.getStderr());
     }
 }

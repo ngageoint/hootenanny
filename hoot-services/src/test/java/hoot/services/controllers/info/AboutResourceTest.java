@@ -34,7 +34,6 @@ import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -77,7 +76,6 @@ public class AboutResourceTest extends HootServicesJerseyTestAbstract {
         assertEquals("testuser", responseData.getBuiltBy());
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void getCoreVersionInfo() throws Exception {
@@ -91,7 +89,6 @@ public class AboutResourceTest extends HootServicesJerseyTestAbstract {
         assertNotNull("vagrant", responseData.getBuiltBy());
     }
 
-    @Ignore
     @Test
     @Category(UnitTest.class)
     public void getCoreVersionDetail() throws IOException {
@@ -99,8 +96,6 @@ public class AboutResourceTest extends HootServicesJerseyTestAbstract {
 
         CoreDetail responseData =
                 target("/about/coreVersionDetail").request(MediaType.APPLICATION_JSON).get(CoreDetail.class);
-
-        System.out.println(responseData);
 
         // not a great way to test this, but haven't thought of anything better yet
         String firstEnvInfo = responseData.getEnvironmentInfo()[0];
