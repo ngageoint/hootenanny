@@ -296,8 +296,18 @@ if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER; then
     sudo -u postgres psql -c "alter user $DB_USER with password '$DB_PASSWORD';"
 fi
 
+# Check that the OsmApiDb user exists
+# NOTE:
+#  + The OsmAPI Db user _might_ be different to the Hoot Services Db user...
+#  + The SetupOsmApiDB.sh script expects that the DB_USER_OSMAPI account exists
+if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
+    sudo -u postgres createuser --superuser $DB_USER_OSMAPI
+    sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
+fi
+
+
 # Check for a hoot Db
-if ! sudo -u postgres psql -lqt | grep -i --quiet $DB_NAME; then
+if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
     echo "### Creating Services Database..."
     sudo -u postgres createdb $DB_NAME --owner=$DB_USER
     sudo -u postgres createdb wfsstoredb --owner=$DB_USER
