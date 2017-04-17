@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.controllers.info;
+package hoot.services.controllers.conflation;
 
 
 import static hoot.services.HootProperties.*;
@@ -57,8 +57,8 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("/advancedopts")
-public class AdvancedOptResource {
-    private static final Logger logger = LoggerFactory.getLogger(AdvancedOptResource.class);
+public class AdvancedConflationOptionsResource {
+    private static final Logger logger = LoggerFactory.getLogger(AdvancedConflationOptionsResource.class);
 
     private JSONObject doc;
     private JSONArray template;
@@ -69,7 +69,7 @@ public class AdvancedOptResource {
     private JSONObject horizontalOverride;
     private JSONObject averageOverride;
 
-    public AdvancedOptResource() {}
+    public AdvancedConflationOptionsResource() {}
 
     @GET
     @Path("/getoptions")
@@ -78,12 +78,9 @@ public class AdvancedOptResource {
         JSONArray template;
         try {
             // Force option should only be used to update options list by administrator
-            boolean doForce = false;
-            if (isForce != null) {
-                doForce = isForce.equalsIgnoreCase("true");
-            }
+            Boolean doForce = Boolean.valueOf(isForce);
 
-            getOverrides(isForce);
+            getOverrides(doForce);
 
             if ((doc == null) || doForce) {
                 doc = new JSONObject();
@@ -91,6 +88,7 @@ public class AdvancedOptResource {
             }
 
             JSONParser parser = new JSONParser();
+
             if (confType.equalsIgnoreCase("reference")) {
                 if ((referenceTemplate == null) || doForce) {
                     referenceTemplate = new JSONArray();
@@ -114,7 +112,7 @@ public class AdvancedOptResource {
             }
             else {
                 if ((this.template == null) || doForce) {
-                    try (FileReader fileReader = new FileReader(HOME_FOLDER + "/" + TEMPLATE_PATH)) {
+                    try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, TEMPLATE_PATH))) {
                         this.template = (JSONArray) parser.parse(fileReader);
                         generateRule(this.template, null);
                     }
@@ -130,25 +128,19 @@ public class AdvancedOptResource {
         return Response.ok(template.toJSONString()).build();
     }
 
-    private void getOverrides(String isForce) throws IOException, ParseException {
-        // Force option should only be used to update options list by administrator
-        boolean doForce = false;
-        if (isForce != null) {
-            doForce = isForce.equalsIgnoreCase("true");
-        }
-
+    private void getOverrides(Boolean doForce) throws IOException, ParseException {
         if ((horizontalOverride == null) || (referenceOverride == null) || doForce) {
             JSONParser parser = new JSONParser();
 
-            try (FileReader fileReader = new FileReader(HOME_FOLDER + File.separator + REF_OVERRIDE_PATH)){
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, REF_OVERRIDE_PATH))){
                 referenceOverride = (JSONObject) parser.parse(fileReader);
             }
 
-            try (FileReader fileReader = new FileReader(HOME_FOLDER + File.separator + HORZ_OVERRIDE_PATH)){
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HORZ_OVERRIDE_PATH))){
                 horizontalOverride = (JSONObject) parser.parse(fileReader);
             }
 
-            try (FileReader fileReader = new FileReader(HOME_FOLDER + File.separator + AVE_OVERRIDE_PATH)) {
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, AVE_OVERRIDE_PATH))) {
                 averageOverride = (JSONObject) parser.parse(fileReader);
             }
         }

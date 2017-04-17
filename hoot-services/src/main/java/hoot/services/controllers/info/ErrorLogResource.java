@@ -143,7 +143,6 @@ public class ErrorLogResource {
     }
 
     private String generateExportLog() throws IOException {
-        UUID uuid = UUID.randomUUID();
 
         VersionInfo versionInfo = this.aboutResource.getCoreVersionInfo();
         String data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
@@ -165,10 +164,11 @@ public class ErrorLogResource {
 
         String logStr = getErrorLog(maxSize);
 
-        String outputPath = TEMP_OUTPUT_PATH + File.separator + uuid;
-        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
+        UUID uuid = UUID.randomUUID();
+        File output = new File(TEMP_OUTPUT_PATH, uuid.toString());
+        try (RandomAccessFile raf = new RandomAccessFile(output, "rw")) {
             raf.writeBytes(data + System.lineSeparator() + logStr);
-            return outputPath;
+            return output.getAbsolutePath();
         }
     }
 }

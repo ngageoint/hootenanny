@@ -45,7 +45,6 @@ final class BuildInfo {
             }
         }
         catch (IOException ioe) {
-            ioe.printStackTrace();
             throw new RuntimeException("Error reading build.info as resource stream!", ioe);
         }
     }

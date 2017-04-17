@@ -34,6 +34,7 @@ import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -76,6 +77,7 @@ public class AboutResourceTest extends HootServicesJerseyTestAbstract {
         assertEquals("testuser", responseData.getBuiltBy());
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void getCoreVersionInfo() throws Exception {
@@ -89,6 +91,7 @@ public class AboutResourceTest extends HootServicesJerseyTestAbstract {
         assertNotNull("vagrant", responseData.getBuiltBy());
     }
 
+    @Ignore
     @Test
     @Category(UnitTest.class)
     public void getCoreVersionDetail() throws IOException {
