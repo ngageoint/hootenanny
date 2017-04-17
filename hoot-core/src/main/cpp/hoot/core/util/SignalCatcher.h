@@ -29,7 +29,14 @@
 #define SIGNALCATCHER_H
 
 #include <iostream>
+#include <csignal>
 #include <stdio.h>
+
+#include <map>
+#include <stack>
+
+// Tgs
+#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
@@ -42,14 +49,27 @@ class SignalCatcher
 {
 public:
 
-  static void handler(int sig);
+  static boost::shared_ptr<SignalCatcher> getInstance();
 
-  /** Print a demangled stack backtrace of the caller function to FILE* out. */
+  void registerDefaultHandlers();
+
+  void registerHandler(unsigned int sig, __sighandler_t handler);
+
+  void unregisterHandler(unsigned int sig);
+
+private:
+
+  SignalCatcher();
+
+  static void default_handler(int sig);
   static void print_stacktrace(FILE *out = stderr, unsigned int max_frames = 63);
-
-  static void registerHandlers();
-
   static void terminateHandler();
+
+  static boost::shared_ptr<SignalCatcher> _instance;
+
+  std::map<unsigned int, std::stack<__sighandler_t> > _handlers;
+
+  bool _defaultSet;
 
 };
 
