@@ -22,42 +22,52 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#include "NoInformationElementRemover.h"
-
-// Hoot
-#include <hoot/core/OsmMap.h>
+#include "CriterionCountVisitor.h"
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/visitors/CriterionCountVisitor.h>
-#include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/filters/ElementCriterion.h>
-#include <hoot/core/filters/NoInformationCriterion.h>
-#include <hoot/core/filters/UselessElementCriterion.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
-  using namespace std;
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, NoInformationElementRemover)
-
-NoInformationElementRemover::NoInformationElementRemover()
+CriterionCountVisitor::CriterionCountVisitor():
+  _map(NULL),
+  _count(0),
+  _visited(0),
+  _pCrit()
 {
-
+  setConfiguration(conf());
 }
 
-void NoInformationElementRemover::apply(shared_ptr<OsmMap>& map)
-{  
-  _map = map;
+CriterionCountVisitor::CriterionCountVisitor(const shared_ptr<ElementCriterion>& pCrit):
+  _map(NULL),
+  _count(0),
+  _visited(0),
+  _pCrit(pCrit)
+{
+  setConfiguration(conf());
+}
 
-  shared_ptr<NoInformationCriterion> pNoInfoCrit(new NoInformationCriterion());
-  shared_ptr<UselessElementCriterion> pUselessCrit(new UselessElementCriterion(map));
-  shared_ptr<ChainCriterion> pCrit(new ChainCriterion(pNoInfoCrit, pUselessCrit));
-  RemoveElementsVisitor removeElementsVisitor(pCrit);
-  removeElementsVisitor.setRecursive(false);
-  _map->visitRw(removeElementsVisitor);
+void CriterionCountVisitor::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  (void) configOptions; // Do nothing
+}
+
+void CriterionCountVisitor::visit(const ConstElementPtr& e)
+{
+  assert(_pCrit);
+  ElementType type = e->getElementType();
+  long id = e->getId();
+  const shared_ptr<const Element>& ee = _map->getElement(type, id);
+
+  if (_pCrit->isSatisfied(ee))
+  {
+    ++_count;
+  }
+  ++_visited;
 }
 
 }

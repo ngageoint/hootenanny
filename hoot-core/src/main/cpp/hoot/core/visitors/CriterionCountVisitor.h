@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEELEMENTSVISITOR_H
-#define REMOVEELEMENTSVISITOR_H
+#ifndef CRITERIONCOUNTVISITOR_H
+#define CRITERIONCOUNTVISITOR_H
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
@@ -37,9 +37,9 @@ namespace hoot
 {
 
 /**
- * Removes any elements where isFiltered() == true
+ * Counts the number of elements matching the criterion
  */
-class RemoveElementsVisitor :
+class CriterionCountVisitor :
     public ElementVisitor,
     public ConstOsmMapConsumer,
     public ElementCriterionConsumer,
@@ -47,45 +47,38 @@ class RemoveElementsVisitor :
 {
 public:
 
-  static std::string className() { return "hoot::RemoveElementsVisitor"; }
+  static std::string className() { return "hoot::CriterionCountVisitor"; }
 
-  /**
-   * Loads the filter from the config setting.
-   */
-  RemoveElementsVisitor();
+  CriterionCountVisitor();
+  CriterionCountVisitor(const ElementCriterionPtr& pCrit);
 
-  RemoveElementsVisitor(const shared_ptr<ElementCriterion>& filter);
-
-  virtual void addCriterion(const ElementCriterionPtr& e)
+  virtual void addCriterion(const ElementCriterionPtr& pCrit)
   {
-    assert(_filter.get() == 0);
-    _filter = e;
+    assert(_pCrit.get() == 0);
+    _pCrit = pCrit;
   }
+
+  virtual ~CriterionCountVisitor() {}
 
   virtual void visit(const ConstElementPtr& e);
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  virtual void setOsmMap(OsmMap* /*map*/) {  assert(false); }
 
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
+  virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  void setRecursive(bool recursive) { _recursive = recursive; }
-
-  static void removeWays(shared_ptr<OsmMap> pMap,
-                         const shared_ptr<ElementCriterion>& pCrit);
-
-  int getCount() { return _count; }
+  uint64_t getCount() const { return _count; }
+  uint64_t getTotal() const { return _visited; }
 
 private:
 
-  OsmMap* _map;
-  shared_ptr<ElementCriterion> _filter;
-  bool _recursive;
-  int _count;
+  const OsmMap* _map;
+  uint64_t _count;
+  uint64_t _visited;
+  shared_ptr<ElementCriterion> _pCrit;
 };
-
 
 }
 
-#endif // REMOVEELEMENTSVISITOR_H
+#endif // CRITERIONCOUNTVISITOR_H

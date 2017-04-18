@@ -42,12 +42,14 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
 RemoveElementsVisitor::RemoveElementsVisitor()
 {
   setConfiguration(conf());
+  _count = 0;
 }
 
 RemoveElementsVisitor::RemoveElementsVisitor(const shared_ptr<ElementCriterion>& filter) :
   _filter(filter),
   _recursive(false)
 {
+  _count = 0;
 }
 
 void RemoveElementsVisitor::setConfiguration(const Settings& conf)
@@ -71,6 +73,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 
   if (_filter->isSatisfied(ee))
   {
+    _count++;
     if (_recursive)
     {
       RecursiveElementRemover(ee->getElementId()).apply(_map->shared_from_this());

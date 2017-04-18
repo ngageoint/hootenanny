@@ -32,6 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementListener.h>
 #include <hoot/core/index/ElementToRelationMap.h>
+#include <hoot/core/conflate/NodeToWayMap.h>
 
 // STL
 #include <vector>
