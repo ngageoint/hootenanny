@@ -27,6 +27,52 @@
 package hoot.services.controllers.ogr;
 
 
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import hoot.services.UnitTest;
+
+
 public class ExtractAttributesCommandTest {
 
+    @Test
+    @Category(UnitTest.class)
+    public void testExtractAttributesCommand() {
+        String jobId = UUID.randomUUID().toString();
+        String debugLevel = "error";
+        Class<?> caller = this.getClass();
+        File workDir = new File(UPLOAD_FOLDER, jobId);
+
+        List<File> files = new LinkedList<>();
+        files.add(new File(FileUtils.getTempDirectory(), "file1"));
+        files.add(new File(FileUtils.getTempDirectory(), "file2"));
+        files.add(new File(FileUtils.getTempDirectory(), "file3"));
+
+        ExtractAttributesCommand extractAttributesCommand = new ExtractAttributesCommand(jobId, workDir, files, debugLevel, caller);
+
+        assertEquals(jobId, extractAttributesCommand.getJobId());
+        assertEquals(true, extractAttributesCommand.getTrackable());
+        assertNotNull(extractAttributesCommand.getSubstitutionMap());
+        assertNotNull(extractAttributesCommand.getWorkDir());
+        assertNotNull(extractAttributesCommand.getCommand());
+
+        String expectedCommand = "hoot attribute-count --${DEBUG_LEVEL} ${INPUT_FILES}";
+        assertEquals(expectedCommand, extractAttributesCommand.getCommand());
+
+        assertTrue(extractAttributesCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
+        assertEquals(debugLevel, extractAttributesCommand.getSubstitutionMap().get("DEBUG_LEVEL"));
+
+        List<String> expectedFiles = files.stream().map(File::getAbsolutePath).collect(Collectors.toList());
+        assertEquals(expectedFiles, extractAttributesCommand.getSubstitutionMap().get("INPUT_FILES"));
+    }
 }

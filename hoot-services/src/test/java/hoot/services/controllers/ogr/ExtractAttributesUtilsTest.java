@@ -26,6 +26,12 @@
  */
 package hoot.services.controllers.ogr;
 
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.util.UUID;
+
 import org.junit.Test;
 
 
@@ -33,5 +39,11 @@ public class ExtractAttributesUtilsTest {
 
     @Test
     public void getAttributesOutputFile() throws Exception {
+        String jobId = UUID.randomUUID().toString();
+
+        File expectedFile = new File(TEMP_OUTPUT_PATH, jobId + ".out");
+        File actualFile = ExtractAttributesUtils.getAttributesOutputFile(jobId);
+
+        assertEquals(expectedFile, actualFile);
     }
 }

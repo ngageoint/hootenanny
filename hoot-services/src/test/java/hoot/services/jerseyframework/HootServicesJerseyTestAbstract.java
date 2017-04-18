@@ -61,6 +61,7 @@ public class HootServicesJerseyTestAbstract extends JerseyTest {
         super.set(TestProperties.RECORD_LOG_LEVEL, Integer.MIN_VALUE);
         super.enable(TestProperties.LOG_TRAFFIC);
         super.enable(TestProperties.DUMP_ENTITY);
+
         return new HootServicesJerseyTestApplication(applicationContext);
     }
 
