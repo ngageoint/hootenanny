@@ -38,7 +38,7 @@ import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
 
 
-public class JobRunnable implements Runnable {
+class JobRunnable implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(JobRunnable.class);
 
     private final Job job;

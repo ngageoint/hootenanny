@@ -35,6 +35,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.AbstractEnvironment;
 
+import hoot.services.job.Job;
+import hoot.services.job.JobProcessorImplStub;
+
 
 public class HootServicesJerseyTestAbstract extends JerseyTest {
     protected static ApplicationContext applicationContext;
@@ -59,5 +62,11 @@ public class HootServicesJerseyTestAbstract extends JerseyTest {
         super.enable(TestProperties.LOG_TRAFFIC);
         super.enable(TestProperties.DUMP_ENTITY);
         return new HootServicesJerseyTestApplication(applicationContext);
+    }
+
+    protected Job getSubmittedJob() {
+        JobProcessorImplStub jobProcessorStub = applicationContext.getBean(JobProcessorImplStub.class);
+        Job job = jobProcessorStub.getJob();
+        return job;
     }
 }

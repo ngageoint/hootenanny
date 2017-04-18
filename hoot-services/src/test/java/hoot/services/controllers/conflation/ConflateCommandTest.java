@@ -26,8 +26,11 @@
  */
 package hoot.services.controllers.conflation;
 
+import static org.junit.Assert.*;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -41,29 +44,20 @@ public class ConflateCommandTest {
     @Test
     @Category(UnitTest.class)
     public void testCreateConflateCommand() {
+        String jobId = UUID.randomUUID().toString();
 
         ConflateParams conflateParams = new ConflateParams();
         conflateParams.setInputType1("DB");
         conflateParams.setInput1("DcGisRoads");
-        conflateParams.setInput2("DB");
+        conflateParams.setInputType2("DB");
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setUserEmail("test@test.com");
         conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
 
-        List<String> hootOptions = new LinkedList<>();
-        hootOptions.add("-D");
-        hootOptions.add("\"osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor\"");
-        hootOptions.add("-D");
-        hootOptions.add("\"conflate.add.score.tags=yes\"");
-        hootOptions.add("-D");
-        hootOptions.add("hootapi.db.writer.overwrite.map=true");
-        hootOptions.add("-D");
-        hootOptions.add("hootapi.db.writer.create.user=true");
-        hootOptions.add("-D");
-        hootOptions.add("api.db.email=test@test.com");
-        hootOptions.add("-D");
-        hootOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
+        List<String> advancedOptions = new LinkedList<>();
+        advancedOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                 "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
                 "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
                 "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
@@ -71,9 +65,40 @@ public class ConflateCommandTest {
                 "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
                 "hoot::NoInformationElementRemover\"");
 
-        conflateParams.setAdvancedOptions(hootOptions.stream().collect(Collectors.joining(" ")));
+        conflateParams.setAdvancedOptions(advancedOptions.stream().collect(Collectors.joining(" ")));
 
-        //ConflateCommand conflateCommand = new ConflateCommandFactory().build(conflateParams, null, "error", this.getClass());
+        String debugLevel = "error";
 
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        assertEquals(jobId, conflateCommand.getJobId());
+        assertEquals(true, conflateCommand.getTrackable());
+        assertNotNull(conflateCommand.getSubstitutionMap());
+        assertNotNull(conflateCommand.getWorkDir());
+        assertNotNull(conflateCommand.getCommand());
+
+        String expectedCommand = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
+        assertEquals(expectedCommand, conflateCommand.getCommand());
+
+        assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
+        assertEquals(debugLevel, conflateCommand.getSubstitutionMap().get("DEBUG_LEVEL"));
+
+        assertTrue(conflateCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
+        assertEquals("[-D, osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor, " +
+                              "-D, writer.include.conflate.score.tags=true, " +
+                              "-D, hootapi.db.writer.overwrite.map=true, " +
+                              "-D, hootapi.db.writer.create.user=true, " +
+                              "-D, api.db.email=test@test.com, " +
+                              "-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
+                                    "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
+                                    "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
+                                    "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
+                                    "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                                    "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                                    "hoot::NoInformationElementRemover\"]",
+                conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString());
+
+        assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
+        assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads", conflateCommand.getSubstitutionMap().get("INPUT2"));
     }
 }

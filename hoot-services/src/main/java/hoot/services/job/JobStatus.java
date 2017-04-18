@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,43 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-//
-// MGCP Conversion
-//
-
-hoot.require('config')
-hoot.require('mgcp')
-hoot.require('mgcp_schema')
-hoot.require('mgcp_rules')
-hoot.require('fcode_common')
-hoot.require('translate');
+package hoot.services.job;
 
 
-// Set up the Schema for export
-function getDbSchema()
-{
-    // return mgcp.schema.getDbSchema();
-    return mgcp.getDbSchema();
+public enum JobStatus {
+    RUNNING, COMPLETE, FAILED, CANCELLED, UNKNOWN;
+
+    public static JobStatus fromInteger(int value) {
+        if ((value >= 0) && (value < JobStatus.values().length)) {
+            return JobStatus.values()[value];
+        }
+        return UNKNOWN;
+    }
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }
-
-
-// IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateAttributes(attrs, layerName, geometryType)
-{
-    return mgcp.toOsm(attrs, layerName, geometryType);
-} // End of TranslateAttributes
-
-
-// EXPORT
-// translateToOgr - takes 'tags' + geometry and returns 'attrs' + layername
-function translateToOgr(tags, elementType, geometryType)
-{
-    return mgcp.toMgcp(tags, elementType, geometryType)
-
-} // End of translateToOgr
-
-

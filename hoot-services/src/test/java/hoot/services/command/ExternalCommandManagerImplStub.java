@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,52 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+package hoot.services.command;
 
-var __extension__ = "";
 
-var hoot = {};
-
-hoot.require = function(param)
-{
-}
-
-function require(param)
-{	
-
-}
-
-function __setupPackage__(param)
-{
-}
-
-function getHootConfig(param)
-{
-  return false;
-}
-
-function createUuid()
-{// temporary should be replaced by java code
-  /*  var s = [];
-    var hexDigits = "0123456789ABCDEF";
-    for (var i = 0; i < 32; i++) {
-        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+public class ExternalCommandManagerImplStub implements ExternalCommandManager {
+    @Override
+    public CommandResult exec(String jobId, ExternalCommand externalCommand) {
+        return null;
     }
-   
-    // bits 12-15 of the time_hi_and_version field to 0010
-    s[12] = "4"; 
-    // bits 6-7 of the clock_seq_hi_and_reserved to 01
-    s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1); 
-    var uuid = s.join("");
-    return uuid;*/
-  return "" + java.util.UUID.randomUUID().toString();
-}
 
-function logError(msg)
-{
-}
+    @Override
+    public CommandResult exec(ExternalCommand externalCommand) {
+        return null;
+    }
 
-function logWarn(msg)
-{
+    @Override
+    public String getProgress(String jobId) {
+        return null;
+    }
+
+    @Override
+    public void terminate(String jobId) {
+
+    }
 }

@@ -24,40 +24,35 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+package hoot.services.job;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import static hoot.services.HootProperties.INTERNAL_JOB_THREAD_SIZE;
 
-import hoot.services.HootProperties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
-public final class HootCustomPropertiesSetter {
+@Component
+public class JobProcessorImpl implements JobProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(JobProcessorImpl.class);
 
-    private HootCustomPropertiesSetter() {}
+    // Shared thread pool for job processing
+    private static final ExecutorService jobThreadExecutor =
+            Executors.newFixedThreadPool(Integer.parseInt(INTERNAL_JOB_THREAD_SIZE));
 
-    public static void setProperty(String key, Object value) {
-        try {
-            setProperty(key, value, HootProperties.class);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error setting " + key + " to " + value, e);
-        }
-    }
+    @Autowired
+    private JobStatusManager jobStatusManager;
 
-    public static void setProperty(String key, Object value, Class<?> clazz) {
-        try {
-            Field field = clazz.getDeclaredField(key);
-            field.setAccessible(true);
-
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-            field.set(null, value);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Error setting " + key + " to " + value + " for class " + clazz.getName(), e);
-        }
+    @Override
+    public void submitAsync(Job job) {
+        logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
+        Runnable work = new JobRunnable(job, jobStatusManager);
+        jobThreadExecutor.execute(work);
     }
 }

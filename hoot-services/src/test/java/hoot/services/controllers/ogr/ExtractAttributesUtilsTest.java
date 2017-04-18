@@ -30,8 +30,8 @@ import org.junit.Test;
 
 
 public class ExtractAttributesUtilsTest {
+
     @Test
     public void getAttributesOutputFile() throws Exception {
     }
-
 }

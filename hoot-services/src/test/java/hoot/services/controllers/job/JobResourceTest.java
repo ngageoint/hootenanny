@@ -27,7 +27,7 @@
 package hoot.services.controllers.job;
 
 
-import static hoot.services.job.JobStatusManager.JOB_STATUS.COMPLETE;
+import static hoot.services.job.JobStatus.COMPLETE;
 import static hoot.services.utils.DbUtils.createQuery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

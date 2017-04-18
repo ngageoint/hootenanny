@@ -26,26 +26,106 @@
  */
 package hoot.services.controllers.conflation;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 
 public class ConflateUtilsTest {
+
     @Test
-    public void isAtLeastOneLayerOsmApiDb() throws Exception {
+    public void isAtLeastOneLayerOsmApiDb() {
         ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("1");
+        conflateParams.setInputType2("OSM_API_DB");
+        conflateParams.setInput2("-1");
+        conflateParams.setOutputName("OutputLayer");
+        conflateParams.setCollectStats(false);
+        conflateParams.setAdvancedOptions("-D convert.bounding.box=0,0,0,0");
 
+        assertTrue(ConflateUtils.isAtLeastOneLayerOsmApiDb(conflateParams));
+
+        conflateParams.setInputType1("OSM_API_DB");
+        conflateParams.setInputType2("DB");
+
+        assertTrue(ConflateUtils.isAtLeastOneLayerOsmApiDb(conflateParams));
+
+        conflateParams.setInputType1("OSM_API_DB");
+        conflateParams.setInputType2("OSM_API_DB");
+
+        assertTrue(ConflateUtils.isAtLeastOneLayerOsmApiDb(conflateParams));
+
+        conflateParams.setInputType1("DB");
+        conflateParams.setInputType2("DB");
+
+        assertFalse(ConflateUtils.isAtLeastOneLayerOsmApiDb(conflateParams));
     }
 
     @Test
-    public void isFirstLayerOsmApiDb() throws Exception {
+    public void isFirstLayerOsmApiDb() {
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("1");
+        conflateParams.setInputType2("OSM_API_DB");
+        conflateParams.setInput2("-1");
+        conflateParams.setOutputName("OutputLayer");
+        conflateParams.setCollectStats(false);
+        conflateParams.setAdvancedOptions("-D convert.bounding.box=0,0,0,0");
+
+        assertFalse(ConflateUtils.isFirstLayerOsmApiDb(conflateParams));
+
+        conflateParams.setInputType1("OSM_API_DB");
+        conflateParams.setInputType2("DB");
+
+        assertTrue(ConflateUtils.isFirstLayerOsmApiDb(conflateParams));
     }
 
     @Test
-    public void isSecondLayerOsmApiDb() throws Exception {
+    public void isSecondLayerOsmApiDb() {
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("1");
+        conflateParams.setInputType2("OSM_API_DB");
+        conflateParams.setInput2("-1");
+        conflateParams.setOutputName("OutputLayer");
+        conflateParams.setCollectStats(false);
+        conflateParams.setAdvancedOptions("-D convert.bounding.box=0,0,0,0");
+
+        assertTrue(ConflateUtils.isSecondLayerOsmApiDb(conflateParams));
+
+        conflateParams.setInputType1("OSM_API_DB");
+        conflateParams.setInputType2("DB");
+
+        assertFalse(ConflateUtils.isSecondLayerOsmApiDb(conflateParams));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validateOsmApiDbConflateParamsWithException() {
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("1");
+        conflateParams.setInputType2("OSM_API_DB");
+        conflateParams.setInput2("-1");
+        conflateParams.setOutputName("OutputLayer");
+        conflateParams.setCollectStats(false);
+        conflateParams.setAdvancedOptions("-D convert.bounding.box=0,0,0,0");
+
+        ConflateUtils.validateOsmApiDbConflateParams(conflateParams);
     }
 
     @Test
-    public void validateOsmApiDbConflateParams() throws Exception {
-    }
+    public void validateOsmApiDbConflateParamsWithoutException() {
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("1");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("-1");
+        conflateParams.setOutputName("OutputLayer");
+        conflateParams.setCollectStats(false);
+        conflateParams.setAdvancedOptions("-D convert.bounding.box=0,0,0,0");
 
+        ConflateUtils.validateOsmApiDbConflateParams(conflateParams);
+    }
 }

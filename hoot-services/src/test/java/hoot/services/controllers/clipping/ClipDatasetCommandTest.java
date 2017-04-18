@@ -40,7 +40,7 @@ import org.junit.Test;
 public class ClipDatasetCommandTest {
 
     @Test
-    public void testClipDatasetBasic() {
+    public void testClipDatasetCommandBasic() {
         String jobId = UUID.randomUUID().toString();
         String debugLevel = "error";
         Class<?> caller = this.getClass();

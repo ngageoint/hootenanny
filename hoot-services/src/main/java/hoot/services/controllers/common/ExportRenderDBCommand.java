@@ -41,7 +41,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.utils.DbUtils;
 
 
-class ExportRenderDBCommand extends ExternalCommand {
+public class ExportRenderDBCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportRenderDBCommand.class);
 
     private final String name;

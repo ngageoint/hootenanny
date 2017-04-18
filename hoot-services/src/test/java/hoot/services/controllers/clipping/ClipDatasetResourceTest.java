@@ -26,13 +26,41 @@
  */
 package hoot.services.controllers.clipping;
 
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertEquals;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.junit.Test;
 
+import hoot.services.controllers.common.ExportRenderDBCommand;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.job.Job;
 
-public class ClipDatasetResourceTest {
+
+public class ClipDatasetResourceTest extends HootServicesJerseyTestAbstract {
 
     @Test
-    public void clipDataset() throws Exception {
+    public void testClipDataset() throws Exception {
+        ClipDatasetParams params = new ClipDatasetParams();
+        params.setBounds("8,-105,39,-104");
+        params.setInputName("test_input");
+        params.setOutputName("test_output");
 
+        Response response = target("clipdataset/execute")
+                .queryParam("DEBUG_LEVEL", "info")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(params), Response.class);
+
+        assertNotNull(response);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(2, job.getCommands().length);
+        assertEquals(ClipDatasetCommand.class, job.getCommands()[0].getClass());
+        assertEquals(ExportRenderDBCommand.class, job.getCommands()[1].getClass());
     }
 }

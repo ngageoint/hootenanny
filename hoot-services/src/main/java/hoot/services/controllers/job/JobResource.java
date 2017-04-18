@@ -44,10 +44,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
-import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.CommandStatus;
-import hoot.services.models.db.JobStatus;
 
 
 @Controller
@@ -83,11 +82,11 @@ public class JobResource {
         JobStatusResponse response = new JobStatusResponse();
 
         try {
-            JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
+            hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
             if (jobStatus != null) {
                 response.setJobId(jobId);
-                response.setStatus(JOB_STATUS.fromInteger(jobStatus.getStatus()).toString());
+                response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
                 response.setStatusDetail(jobStatus.getStatusDetail());
                 response.setPercentComplete(jobStatus.getPercentComplete());
                 response.setLastText(jobStatus.getStatusDetail());
@@ -99,7 +98,7 @@ public class JobResource {
             }
             else {
                 response.setJobId(jobId);
-                response.setStatus(JOB_STATUS.UNKNOWN.toString());
+                response.setStatus(JobStatus.UNKNOWN.toString());
             }
         }
         catch (Exception ex) {
