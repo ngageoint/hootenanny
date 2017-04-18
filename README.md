@@ -22,6 +22,7 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
+*
 
 # Supported Geodata Types
 Hootenanny can conflate:
