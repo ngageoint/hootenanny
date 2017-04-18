@@ -288,6 +288,7 @@ public class ElementResource {
         }
 
         org.w3c.dom.Element elementRootXml = OsmResponseHeaderGenerator.getOsmDataHeader(elementDoc);
+        elementRootXml.setAttribute("mapid", String.valueOf(mapId));
         elementDoc.appendChild(elementRootXml);
 
         for (Tuple elementRecord : elementRecords) {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ANGLE_HISTOGRAM_EXTRACTOR_H
 #define ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -73,8 +73,8 @@ public:
     return DataFrame::NullAsMissingValue;
   }
 
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const;
+  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const;
 
   void setSmoothing(Radians sigma) { _smoothing = sigma; }
 

@@ -133,7 +133,7 @@ public:
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
     ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
 
-    shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
+    boost::shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
     CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
 

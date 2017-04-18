@@ -145,6 +145,10 @@ CPPUNIT_INIT()
 m4_include([m4/glpk.m4])
 GLPK_INIT()
 
+# liqpq
+m4_include([m4/libpq.m4])
+LIBPQ_INIT()
+
 # Newmat
 m4_include([m4/newmat.m4])
 NEWMAT_INIT()

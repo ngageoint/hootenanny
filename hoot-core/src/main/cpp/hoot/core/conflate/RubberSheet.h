@@ -80,17 +80,17 @@ public:
 
   RubberSheet();
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Applies a perviously calculated or loaded transform to the specified map.
    */
-  void applyTransform(shared_ptr<OsmMap>& map);
+  void applyTransform(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Calculates an appropriate transform for the specified map, but does not change any data.
    */
-  void calculateTransform(shared_ptr<OsmMap>& map);
+  void calculateTransform(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Set this to true if Unknown1 is a reference dataset and Unknown2 should be moved toward it.
@@ -152,7 +152,7 @@ private:
       double dy() const { return c1.y - c2.y; }
   };
 
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
   // A map of nids to the list of matches.
   MatchList _matches;
@@ -160,10 +160,10 @@ private:
   bool _ref;
   int _minimumTies;
   vector<Tie> _ties;
-  shared_ptr<Interpolator> _interpolator1to2, _interpolator2to1;
+  boost::shared_ptr<Interpolator> _interpolator1to2, _interpolator2to1;
   // used as a temporary in interpolating.
   vector<double> _matchPoint;
-  shared_ptr<OGRSpatialReference> _projection;
+  boost::shared_ptr<OGRSpatialReference> _projection;
   string _interpolatorClassName;
 
   double _searchRadius;
@@ -177,17 +177,17 @@ private:
   /**
    * Build a data frame for use with interpolators.
    */
-  shared_ptr<DataFrame> _buildDataFrame(Status s) const;
+  boost::shared_ptr<DataFrame> _buildDataFrame(Status s) const;
 
-  shared_ptr<Interpolator> _buildInterpolator(Status s) const;
+  boost::shared_ptr<Interpolator> _buildInterpolator(Status s) const;
 
   const Match& _findMatch(long nid1, long nid2);
 
-  shared_ptr<Interpolator> _readInterpolator(QIODevice& is);
+  boost::shared_ptr<Interpolator> _readInterpolator(QIODevice& is);
 
   Coordinate _translate(const Coordinate& c, Status s);
 
-  void _writeInterpolator(shared_ptr<const Interpolator> interpolator, QIODevice& os) const;
+  void _writeInterpolator(boost::shared_ptr<const Interpolator> interpolator, QIODevice& os) const;
 
   friend class SearchRadiusCalculatorTest;
   friend class RubberSheetTest;

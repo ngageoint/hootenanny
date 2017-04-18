@@ -26,7 +26,7 @@
  */
 package hoot.services.controllers.ingest;
 
-import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -184,11 +184,12 @@ public class FileUploadResource {
                     geonamesCnt += (Integer) zipStat.get("geonamescnt");
                 }
 
-                if (inputType.equalsIgnoreCase("geonames") && ext.equalsIgnoreCase("txt") && (geonamesCnt == 1)) {
+                if (inputType.equalsIgnoreCase("geonames") &&
+                        ext.equalsIgnoreCase("txt") && (geonamesCnt == 1)) {
                     inputFileName = fName + ".geonames";
-                    String directory = HOME_FOLDER + "/upload/" + jobId;
+                    String directory = UPLOAD_FOLDER + File.separator + jobId;
                     // we need to rename the file for hoot to ingest
-                    new File(directory + File.separator + inputsList.get(0)).renameTo(new File(directory + File.separator + inputFileName));
+                    new File(directory, inputsList.get(0)).renameTo(new File(directory, inputFileName));
                     inputsList.set(0, inputFileName);
                     reqList = new JSONArray();
 
@@ -207,7 +208,7 @@ public class FileUploadResource {
 
             if ((osmZipCnt == 1) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
                 // we want to unzip the file and modify any necessary parameters for the ensuing makefile
-                String zipFilePath = HOME_FOLDER + "/upload/" + jobId + File.separator + inputsList.get(0);
+                String zipFilePath = UPLOAD_FOLDER + File.separator + jobId + File.separator + inputsList.get(0);
 
                 try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
                     ZipEntry ze = zis.getNextEntry();
@@ -215,7 +216,7 @@ public class FileUploadResource {
                     byte[] buffer = new byte[2048];
                     while (ze != null) {
                         String entryName = ze.getName();
-                        File file = new File(HOME_FOLDER + "/upload/" + jobId + File.separator + entryName);
+                        File file = new File(new File(UPLOAD_FOLDER, jobId), entryName);
                         // for now assuming no subdirectories
                         try (FileOutputStream fOutput = new FileOutputStream(file)) {
                             int count = 0;
@@ -350,7 +351,7 @@ public class FileUploadResource {
         }
         else if (ext.equalsIgnoreCase("zip")) {
             // Check to see the type of zip (osm, ogr or fgdb)
-            String zipFilePath = HOME_FOLDER + "/upload/" + jobId + "/" + inputFileName;
+            String zipFilePath = UPLOAD_FOLDER + File.separator + jobId + File.separator + inputFileName;
 
             JSONObject res = getZipContentType(zipFilePath, reqList, fName);
 
@@ -425,7 +426,7 @@ public class FileUploadResource {
                             if (ext.equals("gdb")) {
                                 JSONObject contentType = new JSONObject();
                                 contentType.put("type", "FGDB_ZIP");
-                                contentType.put("name", fName + "/" + zipName);
+                                contentType.put("name", fName + File.separator + zipName);
                                 contentTypes.add(contentType);
                                 fgdbCnt++;
                             }
@@ -439,7 +440,7 @@ public class FileUploadResource {
                                 case "shp": {
                                     JSONObject contentType = new JSONObject();
                                     contentType.put("type", "OGR_ZIP");
-                                    contentType.put("name", fName + "/" + zipName);
+                                    contentType.put("name", fName + File.separator + zipName);
                                     contentTypes.add(contentType);
                                     shpCnt++;
                                     break;
@@ -447,7 +448,7 @@ public class FileUploadResource {
                                 case "osm": {
                                     JSONObject contentType = new JSONObject();
                                     contentType.put("type", "OSM_ZIP");
-                                    contentType.put("name", fName + "/" + zipName);
+                                    contentType.put("name", fName + File.separator + zipName);
                                     contentTypes.add(contentType);
                                     osmCnt++;
                                     break;
@@ -455,7 +456,7 @@ public class FileUploadResource {
                                 case "geonames": {
                                     JSONObject contentType = new JSONObject();
                                     contentType.put("type", "GEONAMES_ZIP");
-                                    contentType.put("name", fName + "/" + zipName);
+                                    contentType.put("name", fName + File.separator + zipName);
                                     contentTypes.add(contentType);
                                     geonamesCnt++;
                                     break;

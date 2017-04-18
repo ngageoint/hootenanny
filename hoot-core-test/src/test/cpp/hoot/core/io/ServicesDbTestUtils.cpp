@@ -35,6 +35,8 @@
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/io/OsmApiDbReader.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QFile>
@@ -75,6 +77,14 @@ void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant
   {
     CPPUNIT_ASSERT_EQUAL(expected.toStdString(), result.toStdString());
   }
+}
+
+void ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase()
+{
+  OsmApiDb database;
+  database.open(getOsmApiDbUrl().toString());
+  database.deleteData();
+  database.close();
 }
 
 void ServicesDbTestUtils::execOsmApiDbSqlTestScript(const QString scriptName)
@@ -214,6 +224,122 @@ void ServicesDbTestUtils::_readDbConfig(Settings& settings, QString config_path)
       settings.set(key, value);
     }
   }
+}
+
+void ServicesDbTestUtils::verifyTestDatabaseEmpty()
+{
+  OsmApiDbReader reader;
+  OsmMapPtr map(new OsmMap());
+  reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
+  reader.read(map);
+
+  //verify current elements
+  CPPUNIT_ASSERT_EQUAL((size_t)0, map->getNodes().size());
+  CPPUNIT_ASSERT_EQUAL((size_t)0, map->getWays().size());
+  CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
+
+  //verify historical element table sizes
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
+
+  //verify changeset table size
+  CPPUNIT_ASSERT_EQUAL(
+    (long)0,
+    DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
+
+  //verify sequences
+  boost::shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+  CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Node));
+  CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Way));
+  CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));
+  CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
+
+  reader.close();
+}
+
+boost::shared_ptr<Node> ServicesDbTestUtils::_createNode(double x, double y, OsmMapPtr map)
+{
+  boost::shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), x, y, 10.0));
+  map->addNode(n);
+  return n;
+}
+
+boost::shared_ptr<OsmMap> ServicesDbTestUtils::createTestMap1()
+{
+  boost::shared_ptr<OsmMap> map(new OsmMap());
+
+  boost::shared_ptr<Node> n1 = _createNode(-77.0, 38.0, map);
+  n1->setTag("building", "yes");
+  n1->setTag("name", "n1");
+
+  boost::shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  w1->setTag("area", "yes");
+  w1->setTag("building", "yes");
+  w1->setTag("name", "w1");
+  w1->addNode(_createNode(-77.1, 38.0, map)->getId());
+  w1->addNode(_createNode(-77.2, 38.0, map)->getId());
+  w1->addNode(_createNode(-77.2, 38.1, map)->getId());
+  w1->addNode(w1->getNodeId(0));
+  map->addWay(w1);
+
+  boost::shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  w2->setTag("highway", "track");
+  w2->setTag("name", "w2");
+  w2->addNode(_createNode(-77.3, 38.0, map)->getId());
+  w2->addNode(_createNode(-77.3, 38.1, map)->getId());
+  map->addWay(w2);
+
+  boost::shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  w3->setTag("highway", "road");
+  w3->setTag("name", "w3");
+  w3->addNode(_createNode(-77.4, 38.0, map)->getId());
+  w3->addNode(_createNode(-77.4, 38.1, map)->getId());
+  map->addWay(w3);
+
+  boost::shared_ptr<Way> w4(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  w4->addNode(_createNode(-77.5, 38.0, map)->getId());
+  w4->addNode(_createNode(-77.7, 38.0, map)->getId());
+  w4->addNode(_createNode(-77.6, 38.1, map)->getId());
+  w4->addNode(w4->getNodeId(0));
+  map->addWay(w4);
+
+  boost::shared_ptr<Way> w5(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+  w5->addNode(_createNode(-77.55, 38.01, map)->getId());
+  w5->addNode(_createNode(-77.65, 38.01, map)->getId());
+  w5->addNode(_createNode(-77.6, 38.05, map)->getId());
+  w5->addNode(w5->getNodeId(0));
+  map->addWay(w5);
+
+  boost::shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "multipolygon"));
+  r1->setTag("building", "yes");
+  r1->setTag("name", "r1");
+  r1->addElement("outer", w4->getElementId());
+  r1->addElement("inner", w5->getElementId());
+  map->addRelation(r1);
+
+  return map;
 }
 
 }

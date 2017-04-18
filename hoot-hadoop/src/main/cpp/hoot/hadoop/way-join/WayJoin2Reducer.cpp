@@ -29,7 +29,7 @@
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
@@ -63,7 +63,7 @@ void WayJoin2Reducer::close()
         arg(QString::fromStdString(_workDir)).
         arg(_partition, 5, 10, QChar('0'));
 
-    shared_ptr<ostream> os(fs.create(path.toStdString()));
+   boost::shared_ptr<ostream> os(fs.create(path.toStdString()));
 
     _stats.expandNodeRange(_idGen->getMaxNodeId());
     _stats.expandWayRange(_idGen->getMaxWayId());
@@ -94,7 +94,7 @@ void WayJoin2Reducer::reduce(HadoopPipes::ReduceContext& context)
     }
 
     // read out the maximum way size from the context.
-    shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+   boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
     _stats.read(*c);
 
     _nodeIdDelta = c->getLong(WayJoin2Mapper::nodeIdDeltaKey());
@@ -152,7 +152,7 @@ void WayJoin2Reducer::_writeNodes(HadoopPipes::ReduceContext& context)
     Debug::printTroubled(_map);
 
     LOG_INFO("map data size: " << context.getInputValue().size());
-    LOG_INFO("Writing nodes: " << _map->getNodeMap().size());
+    LOG_INFO("Writing nodes: " << _map->getNodes().size());
     _writer->emitRecord(_map);
     LOG_INFO("Wrote nodes.");
   }
@@ -160,7 +160,7 @@ void WayJoin2Reducer::_writeNodes(HadoopPipes::ReduceContext& context)
 
 void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
 {
-  shared_ptr<Way> w;
+ WayPtr w;
   Envelope env;
 
   _map->clear();
@@ -196,7 +196,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
       long nid = v->rawWay.nodeId;
       rawNodes.insert(nid);
       // create an invalid placeholder node. We'll remove it later.
-      shared_ptr<Node> n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
+     NodePtr n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
       _map->addNode(n);
       env.expandToInclude(v->rawWay.x, v->rawWay.y);
       LOG_TRACE("Got node: " << n->toString());
@@ -222,11 +222,11 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
   const vector<long>& nids = w->getNodeIds();
   nodeIds.insert(nids.begin(), nids.end());
   // if the way has all the intended nodes.
-  if (_map->getNodeMap().size() == nodeIds.size())
+  if (_map->getNodes().size() == nodeIds.size())
   {
     QList<long> tempNodes;
-    for (NodeMap::const_iterator it = _map->getNodeMap().begin();
-      it != _map->getNodeMap().end(); ++it)
+    for (NodeMap::const_iterator it = _map->getNodes().begin();
+      it != _map->getNodes().end(); ++it)
     {
       tempNodes.append(it->first);
     }
@@ -240,7 +240,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
     const WayMap& wm = _map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
-      const shared_ptr<Way>& way = it->second;
+      const WayPtr& way = it->second;
 
       if (way->getId() != w->getId() && Debug::isTroubledWay(way->getId()))
       {

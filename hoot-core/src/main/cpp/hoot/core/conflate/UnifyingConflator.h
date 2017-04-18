@@ -72,7 +72,7 @@ public:
 
   UnifyingConflator();
 
-  UnifyingConflator(shared_ptr<MatchThreshold> matchThreshold);
+  UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold);
 
   ~UnifyingConflator();
 
@@ -80,7 +80,7 @@ public:
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
    * map is not reprojected back to the original projection when conflation is complete.
    */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual string getClassName() const { return className(); }
 
@@ -98,8 +98,8 @@ private:
 
   Envelope _bounds;
   const MatchFactory& _matchFactory;
-  shared_ptr<MatchThreshold> _matchThreshold;
-  shared_ptr<MergerFactory> _mergerFactory;
+  boost::shared_ptr<MatchThreshold> _matchThreshold;
+  boost::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
   HashMap<ElementId, vector<Merger*> > _e2m;
   vector<const Match*> _matches;

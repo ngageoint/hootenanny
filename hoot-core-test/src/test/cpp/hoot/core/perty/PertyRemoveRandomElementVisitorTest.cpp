@@ -62,7 +62,7 @@ public:
 
   void runBasicTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -83,7 +83,7 @@ public:
     v.setRng(rng);
     map->visitRw(v);
 
-    CPPUNIT_ASSERT_EQUAL(96, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(96, (int)map->getNodes().size());
   }
 
 };

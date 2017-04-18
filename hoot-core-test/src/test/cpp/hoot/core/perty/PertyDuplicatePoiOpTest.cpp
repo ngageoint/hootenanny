@@ -62,7 +62,7 @@ public:
 
   void runBasicTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MaxX = 1;
@@ -88,8 +88,8 @@ public:
     uut.apply(map);
 
     QSet<long> nids;
-    NodeMap::const_iterator it = map->getNodeMap().begin();
-    while (it != map->getNodeMap().end()) {
+    NodeMap::const_iterator it = map->getNodes().begin();
+    while (it != map->getNodes().end()) {
       nids.insert(it->first);
       it++;
     }

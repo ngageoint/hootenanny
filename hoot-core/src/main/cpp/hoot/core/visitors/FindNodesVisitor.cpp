@@ -38,7 +38,7 @@ FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
   // This space intentionally left blank
 }
 
-void FindNodesVisitor::visit(const shared_ptr<const Element>& e)
+void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
@@ -69,7 +69,7 @@ vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
 
   for (size_t i = 0; i < close.size(); i++)
   {
-    const shared_ptr<const Node>& n = map->getNode(close[i]);
+    const ConstNodePtr& n = map->getNode(close[i]);
     if (pCrit->isSatisfied(n))
       result.push_back(n->getId());
   }

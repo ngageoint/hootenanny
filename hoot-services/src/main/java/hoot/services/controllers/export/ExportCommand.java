@@ -151,14 +151,11 @@ class ExportCommand extends ExternalCommand {
         // ignoring outputname, since we're only going to have a single mapedit
         // connection configured in the core for now
         JSONObject arg = new JSONObject();
-        File tempOutputDir = new File(TEMP_OUTPUT_PATH);
-        if (!tempOutputDir.exists()) {
-            tempOutputDir.mkdir();
-        }
 
         // services currently always write changeset with sql
         File tempFile = null;
         try {
+            File tempOutputDir = new File(TEMP_OUTPUT_PATH);
             tempFile = Files.createFile(new File(tempOutputDir, "changeset-" + jobId + ".osc.sql").toPath()).toFile();
             //tempFile = File.createTempFile("changeset-", ".osc.sql", tempOutputDir);
         }

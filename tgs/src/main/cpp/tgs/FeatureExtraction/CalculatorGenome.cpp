@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CalculatorGenome.h"
@@ -64,14 +64,14 @@ namespace Tgs
   void CalculatorGenome::addNodeType(CalculatorGenomeNode* node, const std::string& label,
     double weight)
   {
-    addNodeType(shared_ptr<CalculatorGenomeNode>(node), label, weight);
+    addNodeType(boost::shared_ptr<CalculatorGenomeNode>(node), label, weight);
   }
 
-  void CalculatorGenome::addNodeType(shared_ptr<CalculatorGenomeNode> node,
+  void CalculatorGenome::addNodeType(boost::shared_ptr<CalculatorGenomeNode> node,
     const std::string& label, double weight)
   {
     node->setId(label);
-    AvailableNode an(shared_ptr<CalculatorGenomeNode>(node), weight);
+    AvailableNode an(boost::shared_ptr<CalculatorGenomeNode>(node), weight);
     _availableNodes[label] = an;
 
     // recalculate the whole weight just in case an entry was replaced in the map
@@ -116,16 +116,16 @@ namespace Tgs
     }
   }
 
-  shared_ptr<CalculatorGenomeNode> CalculatorGenome::_chooseRandomNode()
+ boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::_chooseRandomNode()
   {
     int count = _countNodes(_root);
     int nodeIndex = Tgs::Random::instance()->generateInt(count);
     return _findNode(nodeIndex);
   }
 
-  shared_ptr<Genome> CalculatorGenome::clone() const
+ boost::shared_ptr<Genome> CalculatorGenome::clone() const
   {
-    shared_ptr<CalculatorGenome> result(new CalculatorGenome());
+   boost::shared_ptr<CalculatorGenome> result(new CalculatorGenome());
     result->_availableNodes = _availableNodes;
     result->_totalWeight = _totalWeight;
     result->_sourceWeight = _sourceWeight;
@@ -142,7 +142,7 @@ namespace Tgs
     return _countNodes(_root);
   }
 
-  int CalculatorGenome::_countNodes(const shared_ptr<CalculatorGenomeNode> node) const
+  int CalculatorGenome::_countNodes(const boost::shared_ptr<CalculatorGenomeNode> node) const
   {
     if (node == NULL)
     {
@@ -157,7 +157,7 @@ namespace Tgs
     return result;
   }
 
-  shared_ptr<CalculatorGenomeNode> CalculatorGenome::_createNewNode(bool sourceOnly) const
+ boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::_createNewNode(bool sourceOnly) const
   {
     double weight = _totalWeight;
     if (sourceOnly)
@@ -184,10 +184,10 @@ namespace Tgs
     throw Exception("CalculatorGenome::_createNewNode() Shouldn't get here.");
   }
 
-  shared_ptr<CalculatorGenomeNode> CalculatorGenome::_createNewTree(int maxDepth) const
+ boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::_createNewTree(int maxDepth) const
   {
     bool sourceOnly = (maxDepth == 1);
-    shared_ptr<CalculatorGenomeNode> newNode = _createNewNode(sourceOnly);
+   boost::shared_ptr<CalculatorGenomeNode> newNode = _createNewNode(sourceOnly);
     const map<string, string>& inputs = newNode->getInputs();
     for (map<string, string>::const_iterator it = inputs.begin(); it != inputs.end(); ++it)
     {
@@ -196,7 +196,7 @@ namespace Tgs
     return newNode;
   }
 
-  shared_ptr<CalculatorGenomeNode> CalculatorGenome::createNode(const std::string& id) const
+ boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::createNode(const std::string& id) const
   {
     map<string, AvailableNode>::const_iterator it = _availableNodes.find(id);
     if (it == _availableNodes.end())
@@ -210,22 +210,22 @@ namespace Tgs
       strm << "Error finding CalculatorGenomeNode. (" << id << ")";
       throw Tgs::Exception(strm.str());
     }
-    shared_ptr<CalculatorGenomeNode> node = it->second.node;
+   boost::shared_ptr<CalculatorGenomeNode> node = it->second.node;
     return dynamic_pointer_cast<CalculatorGenomeNode>(node->clone());
   }
 
   void CalculatorGenome::crossoverSexually(const Genome& father, const Genome& mother, 
-    shared_ptr<Genome>& brother, shared_ptr<Genome>& sister)
+   boost::shared_ptr<Genome>& brother,boost::shared_ptr<Genome>& sister)
   {
-    shared_ptr<CalculatorGenome> bro = dynamic_pointer_cast<CalculatorGenome>(father.clone());
-    shared_ptr<CalculatorGenome> sis = dynamic_pointer_cast<CalculatorGenome>(mother.clone());
+   boost::shared_ptr<CalculatorGenome> bro = dynamic_pointer_cast<CalculatorGenome>(father.clone());
+   boost::shared_ptr<CalculatorGenome> sis = dynamic_pointer_cast<CalculatorGenome>(mother.clone());
 
     // find the cut points
-    shared_ptr<CalculatorGenomeNode> broSubtree = bro->_chooseRandomNode();
-    shared_ptr<CalculatorGenomeNode> sisSubtree = sis->_chooseRandomNode();
+   boost::shared_ptr<CalculatorGenomeNode> broSubtree = bro->_chooseRandomNode();
+   boost::shared_ptr<CalculatorGenomeNode> sisSubtree = sis->_chooseRandomNode();
 
-    shared_ptr<CalculatorGenomeNode> broSubtreeParent = bro->_findParent(broSubtree);
-    shared_ptr<CalculatorGenomeNode> sisSubtreeParent = sis->_findParent(sisSubtree);
+   boost::shared_ptr<CalculatorGenomeNode> broSubtreeParent = bro->_findParent(broSubtree);
+   boost::shared_ptr<CalculatorGenomeNode> sisSubtreeParent = sis->_findParent(sisSubtree);
 
     // move the sister subtree over to the bro
     if (broSubtreeParent == NULL)
@@ -255,14 +255,14 @@ namespace Tgs
     sister->setScore(-1);
   }
 
-  shared_ptr<CalculatorGenomeNode> CalculatorGenome::_findParent(
-    shared_ptr<CalculatorGenomeNode> node) const
+ boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::_findParent(
+   boost::shared_ptr<CalculatorGenomeNode> node) const
   {
     return _findParent(node, _root);
   }
 
-  shared_ptr<CalculatorGenomeNode> CalculatorGenome::_findParent(
-    shared_ptr<CalculatorGenomeNode> node, shared_ptr<CalculatorGenomeNode> current) const
+ boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::_findParent(
+   boost::shared_ptr<CalculatorGenomeNode> node,boost::shared_ptr<CalculatorGenomeNode> current) const
   {
     if (current == NULL)
     {
@@ -270,13 +270,13 @@ namespace Tgs
     }
     if (node == _root)
     {
-      return shared_ptr<CalculatorGenomeNode>();
+      return boost::shared_ptr<CalculatorGenomeNode>();
     }
-    shared_ptr<CalculatorGenomeNode> result;
+   boost::shared_ptr<CalculatorGenomeNode> result;
     const map<string, string>& inputs = current->getInputs();
     for (map<string, string>::const_iterator it = inputs.begin(); it != inputs.end(); ++it)
     {
-      shared_ptr<CalculatorGenomeNode> child = current->getInput(it->first);
+     boost::shared_ptr<CalculatorGenomeNode> child = current->getInput(it->first);
       if (node == child)
       {
         return current;
@@ -290,11 +290,11 @@ namespace Tgs
     return result;
   }
 
-  shared_ptr<CalculatorGenomeNode> CalculatorGenome::_findNode(int index) const
+ boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::_findNode(int index) const
   {
     int count = -1;
-    shared_ptr<CalculatorGenomeNode> node;
-    list< shared_ptr<CalculatorGenomeNode> > pending;
+   boost::shared_ptr<CalculatorGenomeNode> node;
+    list<boost::shared_ptr<CalculatorGenomeNode> > pending;
     pending.push_back(_root);
     // does a breadth first search for the index'th item
     while (count < index && pending.size() > 0)
@@ -304,7 +304,7 @@ namespace Tgs
       const map<string, string>& inputs = node->getInputs();
       for (map<string, string>::const_iterator it = inputs.begin(); it != inputs.end(); ++it)
       {
-        shared_ptr<CalculatorGenomeNode> child = node->getInput(it->first);
+       boost::shared_ptr<CalculatorGenomeNode> child = node->getInput(it->first);
         if (child != NULL)
         {
           pending.push_back(child);
@@ -340,7 +340,7 @@ namespace Tgs
     if(firstStr == "<CalculatorGenomeNode")
     {
       string id = Tgs::XmlHelper::parseAttributes(buffer)["id"];
-      shared_ptr<Tgs::CalculatorGenomeNode> cgn(createNode(id));
+     boost::shared_ptr<Tgs::CalculatorGenomeNode> cgn(createNode(id));
       cgn->load(s, *this);
       _root = cgn;
     }
@@ -354,8 +354,8 @@ namespace Tgs
 
   void CalculatorGenome::mutate(double p)
   {
-    shared_ptr<CalculatorGenomeNode> node = _chooseRandomNode();
-    shared_ptr<CalculatorGenomeNode> parent = _findParent(node);
+   boost::shared_ptr<CalculatorGenomeNode> node = _chooseRandomNode();
+   boost::shared_ptr<CalculatorGenomeNode> parent = _findParent(node);
     if (parent)
     {
       std::string nodeLabel = parent->findInput(node);
@@ -371,7 +371,7 @@ namespace Tgs
     setInvalidScore();
   }
 
-  void CalculatorGenome::_mutate(double p, shared_ptr<CalculatorGenomeNode> node)
+  void CalculatorGenome::_mutate(double p,boost::shared_ptr<CalculatorGenomeNode> node)
   {
     double r = Tgs::Random::instance()->generateUniform();
 

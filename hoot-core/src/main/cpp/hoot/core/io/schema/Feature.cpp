@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Feature.h"
 
@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-Feature::Feature(const shared_ptr<const FeatureDefinition>& d) : _definition(d)
+Feature::Feature(const boost::shared_ptr<const FeatureDefinition>& d) : _definition(d)
 {
 }
 
@@ -66,7 +66,7 @@ void Feature::validate(StrictChecking strict)
   for (size_t i = 0; i < _definition->getFieldCount(); ++i)
   {
     // is
-    shared_ptr<const FieldDefinition> d = _definition->getFieldDefinition(i);
+    boost::shared_ptr<const FieldDefinition> d = _definition->getFieldDefinition(i);
     if (_values.contains(d->getName()) == false)
     {
       if (d->hasDefaultValue() == false)

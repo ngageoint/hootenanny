@@ -414,32 +414,32 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
   return returnPtr;
 }
 
-const boost::shared_ptr<const Node> ElementCacheLRU::getNode(long id) const
+const ConstNodePtr ElementCacheLRU::getNode(long id) const
 {
   return _nodes.find(id)->second.first;
 }
 
-const boost::shared_ptr<Node> ElementCacheLRU::getNode(long id)
+const NodePtr ElementCacheLRU::getNode(long id)
 {
   return boost::const_pointer_cast<Node>(_nodes.find(id)->second.first);
 }
 
-const boost::shared_ptr<const Relation> ElementCacheLRU::getRelation(long id) const
+const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
 {
   return _relations.find(id)->second.first;
 }
 
-const boost::shared_ptr<Relation> ElementCacheLRU::getRelation(long id)
+const RelationPtr ElementCacheLRU::getRelation(long id)
 {
   return boost::const_pointer_cast<Relation>(_relations.find(id)->second.first);
 }
 
-const boost::shared_ptr<const Way> ElementCacheLRU::getWay(long id) const
+const ConstWayPtr ElementCacheLRU::getWay(long id) const
 {
   return _ways.find(id)->second.first;
 }
 
-const boost::shared_ptr<Way> ElementCacheLRU::getWay(long id)
+const WayPtr ElementCacheLRU::getWay(long id)
 {
   return boost::const_pointer_cast<Way>(_ways.find(id)->second.first);
 }

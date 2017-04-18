@@ -36,8 +36,10 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/visitors/CountNodesVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
 
 namespace hoot
 {
@@ -94,24 +96,27 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   }
   if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
   {
-    QString note = "Merging multiple buildings from each data source is error prone and requires a human eye.";
+    QString note =
+      "Merging multiple buildings from each data source is error prone and requires a human eye.";
     ReviewMarker::mark(map, combined, note, "Building", 1);
   }
   else
   {
     // use node count as a surrogate for complexity of the geometry.
-    CountNodesVisitor count1;
-    shared_ptr<Element> e1 = _buildBuilding1(map);
-    e1->visitRo(*map, count1);
+    boost::shared_ptr<Element> e1 = _buildBuilding1(map);
+    const int nodeCount1 =
+      (int)FilteredVisitor::getStat(
+        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
 
-    CountNodesVisitor count2;
-    shared_ptr<Element> e2 = _buildBuilding2(map);
-    e2->visitRo(*map, count2);
+    boost::shared_ptr<Element> e2 = _buildBuilding2(map);
+    const int nodeCount2 =
+      (int)FilteredVisitor::getStat(
+        new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
 
-    shared_ptr<Element> keeper;
-    shared_ptr<Element> scrap;
+    boost::shared_ptr<Element> keeper;
+    boost::shared_ptr<Element> scrap;
     // keep the more complex building geometry.
-    if (count1.getCount() >= count2.getCount())
+    if (nodeCount1 >= nodeCount2)
     {
       keeper = e1;
       scrap = e2;
@@ -172,7 +177,7 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   }
 }
 
-shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)
+boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)
 {
   assert(eid.size() > 0);
 
@@ -182,16 +187,16 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
   }
   else
   {
-    vector< shared_ptr<Element> > parts;
+    vector< boost::shared_ptr<Element> > parts;
     vector< ElementId > toRemove;
     parts.reserve(eid.size());
     for (set<ElementId>::const_iterator it = eid.begin(); it != eid.end(); ++it)
     {
-      shared_ptr<Element> e = map->getElement(*it);
+      boost::shared_ptr<Element> e = map->getElement(*it);
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
       {
-        shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        RelationPtr r = dynamic_pointer_cast<Relation>(e);
         if (r->getType() == "building")
         {
           isBuilding = true;
@@ -205,7 +210,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
           {
             if (m[i].getRole() == "part")
             {
-              shared_ptr<Element> em = map->getElement(m[i].getElementId());
+              boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
               // push any non-conflicing tags in the parent relation down into the building part.
               em->setTags(OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(),
                 em->getElementType()));
@@ -223,7 +228,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
       }
     }
 
-    shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
+    boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
 
     DeletableBuildingPart filter;
 
@@ -244,7 +249,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
   }
 }
 
-shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
+boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
 {
   set<ElementId> e;
 
@@ -257,7 +262,7 @@ shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
   return buildBuilding(map, e);
 }
 
-shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
+boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
 {
   set<ElementId> e;
 

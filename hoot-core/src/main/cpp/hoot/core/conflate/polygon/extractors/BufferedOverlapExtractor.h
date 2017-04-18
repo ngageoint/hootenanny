@@ -71,8 +71,8 @@ public:
     return DataFrame::NullAsMissingValue;
   }
 
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const;
+  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const;
 
 private:
   double _bufferPortion;

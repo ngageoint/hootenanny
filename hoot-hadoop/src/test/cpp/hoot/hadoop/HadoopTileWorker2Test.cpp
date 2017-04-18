@@ -37,8 +37,8 @@ using namespace pp;
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/hadoop/PbfInputFormat.h>
-#include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
 
@@ -66,7 +66,7 @@ public:
     fs.copyFromLocal("test-files/DcTigerRoads.pbf", outDir + "in1.pbf/DcTigerRoads.pbf");
     fs.copyFromLocal("test-files/DcGisRoads.pbf", outDir + "in2.pbf/DcGisRoads.pbf");
 
-    shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
+   boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
     FourPassManager uut(worker);
     // ~240m
     uut.setBuffer(8.0 / 3600.0);
@@ -76,14 +76,14 @@ public:
                    QString::fromStdString(outDir) + "in2.pbf");
 
     Envelope env(-77.039, -77.033, 38.892, 38.896);
-    shared_ptr<OpList> op(new OpList());
-    op->addOp(shared_ptr<OsmMapOperation>(new MapCropper(env)));
-    op->addOp(shared_ptr<OsmMapOperation>(new MergeNearbyNodes(10)));
+   boost::shared_ptr<OpList> op(new OpList());
+    op->addOp(boost::shared_ptr<OsmMapOperation>(new MapCropper(env)));
+    op->addOp(boost::shared_ptr<OsmMapOperation>(new MergeNearbyNodes(10)));
 
     uut.setOperation(op);
     uut.apply(QString::fromStdString(outDir) + "HadoopTileWorker2Test.pbf");
 
-    shared_ptr<OsmMap> map(new OsmMap);
+   OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorker2Test.pbf");
@@ -93,7 +93,7 @@ public:
       LOG_INFO(path);
       if (QString::fromStdString(path).endsWith(".pbf"))
       {
-        shared_ptr<istream> is(fs.open(path));
+       boost::shared_ptr<istream> is(fs.open(path));
         reader.parse(is.get(), map);
       }
     }

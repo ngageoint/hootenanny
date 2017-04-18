@@ -127,7 +127,7 @@ public class BasemapResource {
         JSONArray jobsArr = new JSONArray();
 
         try {
-            String repFolderPath = UPLOAD_FOLDER + "/" + groupId;
+            String repFolderPath = UPLOAD_FOLDER + File.separator + groupId;
             File dir = new File(repFolderPath);
             if (!dir.exists()) {
                 if (!dir.mkdir()) {
@@ -143,7 +143,7 @@ public class BasemapResource {
                 String fileName = fileItem.getContentDisposition().getFileName();
 
                 try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
-                    String uploadedPath = repFolderPath + "/" + fileName;
+                    String uploadedPath = repFolderPath + File.separator + fileName;
                     File file = new File(uploadedPath);
                     FileUtils.copyInputStreamToFile(fileStream, file);
                 }
@@ -301,11 +301,11 @@ public class BasemapResource {
         }
 
         // We first verify that file exits in the folder first and then try to get the source file
-        File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(INGEST_STAGING_PATH + "/BASEMAP/", bmName, fileExt);
+        File sourceFile = new File(BASEMAPS_FOLDER, bmName + "." + fileExt);
 
         if ((sourceFile != null) && sourceFile.exists()) {
             // if the source file exist then just swap the extension
-            boolean renamed = sourceFile.renameTo(new File(INGEST_STAGING_PATH + "/BASEMAP/", bmName + targetExt));
+            boolean renamed = sourceFile.renameTo(new File(BASEMAPS_FOLDER, bmName + targetExt));
 
             if (!renamed) {
                 throw new IOException("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
@@ -317,13 +317,12 @@ public class BasemapResource {
     }
 
     private static void deleteBaseMapHelper(String bmName) throws IOException {
-        File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);
-        if ((tileDir != null) && tileDir.exists()) {
+        File tileDir = new File(BASEMAPS_TILES_FOLDER, bmName);
+        if (tileDir.exists()) {
             FileUtils.forceDelete(tileDir);
         }
 
-        String controlFolder = INGEST_STAGING_PATH + "/BASEMAP/";
-        File dir = new File(controlFolder);
+        File dir = new File(BASEMAPS_FOLDER);
         FileFilter fileFilter = new WildcardFileFilter(bmName + ".*");
         File[] files = dir.listFiles(fileFilter);
         if (files != null) {
@@ -335,7 +334,7 @@ public class BasemapResource {
 
     private static JSONArray getBasemapListHelper() throws IOException, ParseException {
         JSONArray filesList = new JSONArray();
-        File basmapDir = new File(INGEST_STAGING_PATH + "/BASEMAP");
+        File basmapDir = new File(BASEMAPS_FOLDER);
 
         if (basmapDir.exists()) {
             String[] exts = {"processing", "enabled", "disabled", "failed"};
@@ -356,7 +355,7 @@ public class BasemapResource {
                     // Check for tilemapresource.xml in processed folder
                     JSONObject jsonExtent = new JSONObject();
 
-                    String XmlPath = TILE_SERVER_PATH + "/BASEMAP/" + name + "/tilemapresource.xml";
+                    String XmlPath = BASEMAPS_TILES_FOLDER  + File.separator + name + File.separator + "tilemapresource.xml";
                     File fXmlFile = new File(XmlPath);
                     if (fXmlFile.exists()) {
                         try {

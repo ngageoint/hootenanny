@@ -21,8 +21,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/hadoop/PbfInputSplit.h>
-#include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/hadoop/pbf/PbfInputSplit.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 
 // Pretty Pipes
 #include <pp/DataInputStream.h>
@@ -37,7 +37,7 @@ using namespace pp;
 
 PP_FACTORY_REGISTER(pp::RecordReader, WayJoin2RecordReader)
 
-shared_ptr<OsmMap> WayJoin2RecordReader::getMap()
+boost::shared_ptr<OsmMap> WayJoin2RecordReader::getMap()
 {
   return _OsmPbfReader->getMap();
 }

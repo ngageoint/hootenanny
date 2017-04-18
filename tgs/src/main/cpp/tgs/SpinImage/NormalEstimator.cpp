@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NormalEstimator.h"
@@ -308,7 +308,7 @@ namespace Tgs
   {
     const std::vector<CloudPoint>& points = pc.getPoints();
 
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
     _rtree.reset(new HilbertRTree(mps, 3));
     _nnTmp.resize(3);
     _it.reset(new KnnIteratorNd(_rtree.get(), _nnTmp));

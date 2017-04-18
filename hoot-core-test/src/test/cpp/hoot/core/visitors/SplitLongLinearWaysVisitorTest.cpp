@@ -51,7 +51,7 @@ private:
     // Make sure way in question does not already exist in map
     CPPUNIT_ASSERT_EQUAL(_map->containsWay(wayId), false );
 
-    boost::shared_ptr<Way>newWay(new Way(Status::Unknown1, wayId, 1.0));
+    WayPtr newWay(new Way(Status::Unknown1, wayId, 1.0));
 
     // Make sure there are nodes to add
     if ( startNodeId <= endNodeId )
@@ -357,11 +357,11 @@ private:
     CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(numWays), ways.size() );
 
     // Pull out nodes
-    NodeMap nodes = _map->getNodeMap();
+    NodeMap nodes = _map->getNodes();
     CPPUNIT_ASSERT_EQUAL( numNodes, (int)nodes.size() );
 
     // Make sure no relations
-    RelationMap relations = _map->getRelationMap();
+    RelationMap relations = _map->getRelations();
     CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), relations.size() );
 
     unsigned int nodesLeftToFind = numNodes;

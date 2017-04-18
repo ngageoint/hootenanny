@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ARBITRARYCRITERION_H
 #define ARBITRARYCRITERION_H
@@ -53,12 +53,12 @@ public:
     _f = f;
   }
 
-  explicit ArbitraryCriterion(boost::function<bool (const shared_ptr<const Element> &e)> f)
+  explicit ArbitraryCriterion(boost::function<bool (const boost::shared_ptr<const Element> &e)> f)
   {
     _f = f;
   }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     return _f(e);
   }
@@ -66,7 +66,7 @@ public:
   virtual ElementCriterion* clone() { return new ArbitraryCriterion(_f); }
 
 private:
-  boost::function<bool (const shared_ptr<const Element> &e)> _f;
+  boost::function<bool (const boost::shared_ptr<const Element> &e)> _f;
 };
 
 }

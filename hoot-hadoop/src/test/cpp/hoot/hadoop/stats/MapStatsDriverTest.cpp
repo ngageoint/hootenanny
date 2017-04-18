@@ -29,7 +29,7 @@ using namespace pp;
 
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
 
 #include "../MapReduceTestFixture.h"

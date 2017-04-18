@@ -66,10 +66,10 @@ public:
 
     Tgs::Random::instance()->seed(0);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.read("test-files/DcGisRoads.osm", map);
 
-    shared_ptr<OsmMap> map2(new OsmMap());
+    OsmMapPtr map2(new OsmMap());
     reader.read("test-files/DcTigerRoads.osm", map2);
 
     AttributeComparator uut(map, map2);

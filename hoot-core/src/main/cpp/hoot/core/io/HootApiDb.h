@@ -58,7 +58,7 @@ public:
 
   virtual QString getDbVersion();
 
-  virtual bool isSupported(QUrl url);
+  virtual bool isSupported(const QUrl& url);
 
   virtual void open(const QUrl& url);
 
@@ -74,7 +74,7 @@ public:
    * Returns a results iterator to all OSM elements for a given map and element type in the services
    * database.
    */
-  virtual shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -84,7 +84,7 @@ public:
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
+  boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
 
   /**
    * Returns a vector with all the relation members for a given relation
@@ -290,44 +290,44 @@ protected:
 private:
 
   bool _inTransaction;
-  shared_ptr<QSqlQuery> _closeChangeSet;
-  shared_ptr<QSqlQuery> _insertChangeSet;
-  shared_ptr<QSqlQuery> _insertChangeSetTag;
-  shared_ptr<QSqlQuery> _insertMap;
-  shared_ptr<QSqlQuery> _insertRelationMembers;
-  shared_ptr<QSqlQuery> _insertWayNodes;
-  shared_ptr<QSqlQuery> _selectDbVersion;
-  shared_ptr<QSqlQuery> _mapExists;
-  shared_ptr<QSqlQuery> _changesetExists;
-  shared_ptr<QSqlQuery> _numTypeElementsForMap;
-  shared_ptr<QSqlQuery> _selectReserveNodeIds;
-  shared_ptr<QSqlQuery> _selectElementsForMap;
-  shared_ptr<QSqlQuery> _selectMapIds;
-  shared_ptr<QSqlQuery> _selectMembersForRelation;
-  shared_ptr<QSqlQuery> _updateNode;
-  shared_ptr<QSqlQuery> _updateRelation;
-  shared_ptr<QSqlQuery> _updateWay;
-  shared_ptr<QSqlQuery> _updateJobStatus;
-  shared_ptr<QSqlQuery> _insertJobStatus;
-  shared_ptr<QSqlQuery> _jobStatusExists;
+  boost::shared_ptr<QSqlQuery> _closeChangeSet;
+  boost::shared_ptr<QSqlQuery> _insertChangeSet;
+  boost::shared_ptr<QSqlQuery> _insertChangeSetTag;
+  boost::shared_ptr<QSqlQuery> _insertMap;
+  boost::shared_ptr<QSqlQuery> _insertRelationMembers;
+  boost::shared_ptr<QSqlQuery> _insertWayNodes;
+  boost::shared_ptr<QSqlQuery> _selectDbVersion;
+  boost::shared_ptr<QSqlQuery> _mapExists;
+  boost::shared_ptr<QSqlQuery> _changesetExists;
+  boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
+  boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
+  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
+  boost::shared_ptr<QSqlQuery> _selectMapIds;
+  boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
+  boost::shared_ptr<QSqlQuery> _updateNode;
+  boost::shared_ptr<QSqlQuery> _updateRelation;
+  boost::shared_ptr<QSqlQuery> _updateWay;
+  boost::shared_ptr<QSqlQuery> _updateJobStatus;
+  boost::shared_ptr<QSqlQuery> _insertJobStatus;
+  boost::shared_ptr<QSqlQuery> _jobStatusExists;
 
-  shared_ptr<BulkInsert> _nodeBulkInsert;
+  boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
   double _nodesInsertElapsed;
-  shared_ptr<InternalIdReserver> _nodeIdReserver;
+  boost::shared_ptr<InternalIdReserver> _nodeIdReserver;
 
-  shared_ptr<BulkInsert> _wayBulkInsert;
+  boost::shared_ptr<BulkInsert> _wayBulkInsert;
   long _waysPerBulkInsert;
   double _wayInsertElapsed;
-  shared_ptr<InternalIdReserver> _wayIdReserver;
+  boost::shared_ptr<InternalIdReserver> _wayIdReserver;
 
-  shared_ptr<BulkInsert> _wayNodeBulkInsert;
+  boost::shared_ptr<BulkInsert> _wayNodeBulkInsert;
   long _wayNodesPerBulkInsert;
   double _wayNodesInsertElapsed;
 
-  shared_ptr<BulkInsert> _relationBulkInsert;
+  boost::shared_ptr<BulkInsert> _relationBulkInsert;
   long _relationsPerBulkInsert;
-  shared_ptr<InternalIdReserver> _relationIdReserver;
+  boost::shared_ptr<InternalIdReserver> _relationIdReserver;
 
   /// A vector of map ids that are pending index creation
   QVector<long> _pendingMapIndexes;
@@ -385,12 +385,6 @@ private:
    * Executes the insert, performs error checking and returns the new ID.
    */
   long _insertRecord(QSqlQuery& query);
-
-  // Flushes all elements
-  void _flushElementCacheToDb();
-
-  // Only flushes specified type
-  void _flushElementCacheToDb(const ElementType::Type type);
 
   void _updateChangesetEnvelope( const ConstNodePtr node );
 

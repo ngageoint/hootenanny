@@ -56,7 +56,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
 OsmJsonWriter::OsmJsonWriter(int precision)
 {
-  _includeDebug = ConfigOptions().getWriterIncludeDebug();
+  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
   _precision = precision;
   _out = 0;
   _pretty = false;
@@ -83,7 +83,7 @@ void OsmJsonWriter::open(QString url)
   _out = &_fp;
 }
 
-QString OsmJsonWriter::toString(boost::shared_ptr<const OsmMap> map)
+QString OsmJsonWriter::toString(ConstOsmMapPtr map)
 {
   QBuffer b;
   b.open(QBuffer::WriteOnly);
@@ -108,13 +108,13 @@ QString OsmJsonWriter::_typeName(ElementType e)
   }
 }
 
-void OsmJsonWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
+void OsmJsonWriter::write(ConstOsmMapPtr map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmJsonWriter::write(boost::shared_ptr<const OsmMap> map)
+void OsmJsonWriter::write(ConstOsmMapPtr map)
 {
   if (_out->isWritable() == false)
   {
@@ -150,11 +150,11 @@ void OsmJsonWriter::_writeKvp(const QString& key, double value)
   _write(_markupString(key) % ":" % QString::number(value, 'g', _precision), false);
 }
 
-void OsmJsonWriter::_writeNodes(shared_ptr<const OsmMap> map)
+void OsmJsonWriter::_writeNodes(ConstOsmMapPtr map)
 {
   QList<long> nids;
-  NodeMap::const_iterator it = map->getNodeMap().begin();
-  while (it != map->getNodeMap().end()) {
+  NodeMap::const_iterator it = map->getNodes().begin();
+  while (it != map->getNodes().end()) {
     nids.append(it->first);
     it++;
   }
@@ -232,7 +232,7 @@ void OsmJsonWriter::_writeTags(ConstElementPtr e)
   }
 }
 
-void OsmJsonWriter::_writeWays(shared_ptr<const OsmMap> map)
+void OsmJsonWriter::_writeWays(ConstOsmMapPtr map)
 {
   WayMap::const_iterator it = map->getWays().begin();
   while (it != map->getWays().end())
@@ -260,10 +260,10 @@ void OsmJsonWriter::_writeWays(shared_ptr<const OsmMap> map)
   }
 }
 
-void OsmJsonWriter::_writeRelations(shared_ptr<const OsmMap> map)
+void OsmJsonWriter::_writeRelations(ConstOsmMapPtr map)
 {
-  RelationMap::const_iterator it = map->getRelationMap().begin();
-  while (it != map->getRelationMap().end())
+  RelationMap::const_iterator it = map->getRelations().begin();
+  while (it != map->getRelations().end())
   {
     if (!_firstElement) _write(",", true);
     _firstElement = false;

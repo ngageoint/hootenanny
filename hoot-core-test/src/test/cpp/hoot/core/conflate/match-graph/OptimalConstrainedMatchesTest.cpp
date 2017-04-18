@@ -83,7 +83,7 @@ using namespace Tgs;
 class ConstrainedFakeMatch : public Match
 {
 public:
-  ConstrainedFakeMatch() : Match(shared_ptr<MatchThreshold>()) {}
+  ConstrainedFakeMatch() : Match(boost::shared_ptr<MatchThreshold>()) {}
 
   ConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
     ConstMatchThresholdPtr threshold) :
@@ -156,7 +156,7 @@ private:
   ElementId _eid1, _eid2;
   double _p;
   MatchSet _conflicts;
-  shared_ptr<const MatchThreshold> _threshold;
+  boost::shared_ptr<const MatchThreshold> _threshold;
 };
 
 class ConstrainedFakeCreator : public MergerCreator
@@ -209,7 +209,7 @@ public:
 
     // force the pointers to be in order which forces the set to be consistent between runs.
     ConstrainedFakeMatch* fm = new ConstrainedFakeMatch[4];
-    shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
+    boost::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
 
     matches.push_back(fm[0].init(a1, b1, 0.8, mt)->addConflict(&fm[1]));
     matches.push_back(fm[1].init(a2, b1, 1, mt)->addConflict(&fm[2]));

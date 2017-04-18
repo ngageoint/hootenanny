@@ -210,7 +210,6 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/BuildModelCmd.cpp \
     src/main/cpp/hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.cpp \
     src/main/cpp/hoot/core/visitors/GetElementIdsVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/CountNodesVisitor.cpp \
     src/main/cpp/hoot/core/conflate/match-graph/MatchGraph.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMerger.cpp \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMergerCreator.cpp \
@@ -289,6 +288,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/schema/StringFieldDefinition.cpp \
     src/main/cpp/hoot/core/io/schema/DoubleFieldDefinition.cpp \
     src/main/cpp/hoot/core/io/schema/IntegerFieldDefinition.cpp \
+    src/main/cpp/hoot/core/io/schema/LongIntegerFieldDefinition.cpp \
     src/main/cpp/hoot/core/io/schema/FieldDefinition.cpp \
     src/main/cpp/hoot/core/cmd/Osm2OgrCmd.cpp \
     src/main/cpp/hoot/core/index/metric-hybrid/FqTree.cpp \
@@ -435,7 +435,7 @@ SOURCES += \
     src/main/cpp/hoot/core/conflate/AlphaShapeGenerator.cpp \
     src/main/cpp/hoot/core/conflate/CookieCutter.cpp \
     src/main/cpp/hoot/core/visitors/SplitLongLinearWaysVisitor.cpp \
-    src/main/cpp/hoot/core/io/OsmPostgresqlDumpfileWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbBulkWriter.cpp \
     src/main/cpp/hoot/core/ops/ReplaceElementOp.cpp \
     src/main/cpp/hoot/core/filters/NeedsReviewCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CountUniqueReviewsVisitor.cpp \
@@ -532,14 +532,16 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmXmlWriter.cpp \
     src/main/cpp/hoot/core/io/OsmPbfReader.cpp \
     src/main/cpp/hoot/core/io/OsmPbfWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.cpp \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.cpp \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.cpp \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.cpp \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.cpp \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.cpp \
     src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.cpp \
-    src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.cpp
+    src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.cpp \
+    src/main/cpp/hoot/core/util/DbUtils.cpp \
+    src/main/cpp/hoot/core/io/OsmApiDbSqlStatementFormatter.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -701,7 +703,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/polygon/extractors/BufferedOverlapExtractor.h \
     src/main/cpp/hoot/core/conflate/polygon/extractors/SmallerOverlapExtractor.h \
     src/main/cpp/hoot/core/visitors/GetElementIdsVisitor.h \
-    src/main/cpp/hoot/core/visitors/CountNodesVisitor.h \
     src/main/cpp/hoot/core/conflate/match-graph/MatchGraph.h \
     src/main/cpp/hoot/core/conflate/Match.h \
     src/main/cpp/hoot/core/conflate/polygon/BuildingMatch.h \
@@ -1025,7 +1026,7 @@ HEADERS += \
     src/main/cpp/hoot/core/filters/WayBufferCriterion.h \
     src/main/cpp/hoot/core/filters/WayDirectionCriterion.h \
     src/main/cpp/hoot/core/filters/DistanceNodeCriterion.h \
-    src/main/cpp/hoot/core/io/OsmPostgresqlDumpfileWriter.h \
+    src/main/cpp/hoot/core/io/OsmApiDbBulkWriter.h \
     src/main/cpp/hoot/core/ops/RemoveElementOp.h \
     src/main/cpp/hoot/core/ops/RemoveNodeOp.h \
     src/main/cpp/hoot/core/ops/RemoveRelationOp.h \
@@ -1058,12 +1059,15 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmXmlWriter.h \
     src/main/cpp/hoot/core/io/OsmPbfReader.h \
     src/main/cpp/hoot/core/io/OsmPbfWriter.h \
-    src/main/cpp/hoot/core/io/OsmChangesetXmlWriter.h \
-    src/main/cpp/hoot/core/io/OsmChangesetSqlWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangesetXmlFileWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangesetSqlFileWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbChangesetSqlWriter.h \
     src/main/cpp/hoot/core/visitors/ElementCountVisitor.h \
     src/main/cpp/hoot/core/visitors/ElementIdSetVisitor.h \
     src/main/cpp/hoot/core/filters/TagKeyCriterion.h \
     src/main/cpp/hoot/core/visitors/CompletelyContainedByMapElementVisitor.h \
-    src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.h
+    src/main/cpp/hoot/core/visitors/CalculateMapBoundsVisitor.h \
+    src/main/cpp/hoot/core/util/DbUtils.h \
+    src/main/cpp/hoot/core/io/OsmApiDbSqlStatementFormatter.h \
+    src/main/cpp/hoot/core/io/schema/LongIntegerFieldDefinition.h
 

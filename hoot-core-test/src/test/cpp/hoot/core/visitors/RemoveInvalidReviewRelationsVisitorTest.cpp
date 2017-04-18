@@ -51,7 +51,7 @@ public:
   {
     //add some nodes to a map
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
@@ -65,7 +65,7 @@ public:
     ReviewMarker reviewMarker;
     reviewMarker.mark(map, n1, n2, "note 1", "test 1");
     reviewMarker.mark(map, n3, n4, "note 2", "test 2");
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelations().size());
     CPPUNIT_ASSERT(reviewMarker.isNeedsReview(map, n1, n2));
     CPPUNIT_ASSERT(reviewMarker.isNeedsReview(map, n3, n4));
 
@@ -90,7 +90,7 @@ public:
     map->visitRw(v);
 
     //the empty review relation should have been removed
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     CPPUNIT_ASSERT(map->containsElement(r1Id));
     CPPUNIT_ASSERT(!map->containsElement(r2Id));
   }
@@ -99,7 +99,7 @@ public:
   {
     //add some nodes to a map
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     ElementPtr n1(new Node(Status::Unknown1, 1, 0, 0, 0));
     ElementPtr n2(new Node(Status::Unknown2, 2, 0, 0, 0));
     ElementPtr n3(new Node(Status::Unknown1, 3, 0, 0, 0));
@@ -113,7 +113,7 @@ public:
     ReviewMarker reviewMarker;
     reviewMarker.mark(map, n1, n2, "note 1", "test 1");
     reviewMarker.mark(map, n3, n4, "note 2", "test 2");
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getRelations().size());
     CPPUNIT_ASSERT(reviewMarker.isNeedsReview(map, n1, n2));
     CPPUNIT_ASSERT(reviewMarker.isNeedsReview(map, n3, n4));
 
@@ -142,7 +142,7 @@ public:
     map->visitRw(v);
 
     //the empty review relation should have been removed
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     CPPUNIT_ASSERT(map->containsElement(r1Id));
     CPPUNIT_ASSERT(!map->containsElement(r2Id));
   }

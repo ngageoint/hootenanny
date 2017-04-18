@@ -44,7 +44,7 @@ public:
 
   HighwaySnapMerger(Meters minSplitSize,
     const set< pair<ElementId, ElementId> >& pairs,
-    const shared_ptr<SublineStringMatcher>& sublineMatcher);
+    const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
 
   virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
     const;
@@ -60,7 +60,7 @@ private:
 
   double _minSplitSize;
   set< pair<ElementId, ElementId> > _pairs;
-  shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   void _addScrapsToMap(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced,
     ElementId originalId, vector<WayPtr>& scraps) const;
@@ -69,7 +69,7 @@ private:
    * Returns true if the way directly connects the left and right ways. There is some tolerance
    * for "directly". See ticket #951 for details.
    */
-  bool _directConnect(const ConstOsmMapPtr &map, shared_ptr<Way> w) const;
+  bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
 
   void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
                         QString reviewType) const;
@@ -77,8 +77,8 @@ private:
   void _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                    vector< pair<ElementId, ElementId> >& replaced) const;
 
-  void _removeSpans(shared_ptr<OsmMap> map, const ElementPtr& w1, const ElementPtr& w2) const;
-  void _removeSpans(shared_ptr<OsmMap> map, const WayPtr& w1, const WayPtr& w2) const;
+  void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
+  void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;
 
   /**
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.

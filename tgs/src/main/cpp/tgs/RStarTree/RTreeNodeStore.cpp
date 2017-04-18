@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RTreeNodeStore.h"
@@ -34,7 +34,7 @@ namespace Tgs
 {
   const int MAX_NODE_COUNT = 100000;
 
-  RTreeNodeStore::RTreeNodeStore(int dimensions, shared_ptr<PageStore> ps)
+  RTreeNodeStore::RTreeNodeStore(int dimensions,boost::shared_ptr<PageStore> ps)
   {
     _dimensions = dimensions;
     _storeSp = ps;
@@ -60,7 +60,7 @@ namespace Tgs
 
   RTreeNode* RTreeNodeStore::createNode()
   {
-    shared_ptr<Page> page = _store->createPage();
+   boost::shared_ptr<Page> page = _store->createPage();
     page->setDirty();
     RTreeNode* node = new RTreeNode(_dimensions, page);
     node->clear();
@@ -83,7 +83,7 @@ namespace Tgs
     if (it == _availableNodes.end())
     {
       RTreeNodeStore* me = const_cast<RTreeNodeStore*>(this);
-      shared_ptr<Page> page = me->_store->getPage(id);
+     boost::shared_ptr<Page> page = me->_store->getPage(id);
       node = new RTreeNode(_dimensions, page);
       RecItem * item = new RecItem();
       item->pNode = node;
@@ -115,7 +115,7 @@ namespace Tgs
     }
     else
     {
-      shared_ptr<Page> page = _store->getPage(id);
+     boost::shared_ptr<Page> page = _store->getPage(id);
       node = new RTreeNode(_dimensions, page);
       RecItem * item = new RecItem();
       item->pNode = node;

@@ -232,6 +232,14 @@ function isPoi(e)
 }
 
 /**
+ * Returns true if the specified element has a name
+ */
+function hasName(e)
+{
+    return hoot.OsmSchema.hasName(e);
+}
+
+/**
  * Log a string using Hootenanny's logging mechanism. By default this will
  * print the script location and the JSON version of the argument.
  *

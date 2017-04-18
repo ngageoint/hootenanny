@@ -99,15 +99,16 @@ public:
     // populate the database.
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    shared_ptr<Node> n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
+    NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1',\n");
-    shared_ptr<Node> n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
     n2->setTag("note", "n2\"");
-    shared_ptr<Node> n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
     n3->setTag("note", "n3\\");
     map->addNode(n1);
     map->addNode(n2);
@@ -119,9 +120,9 @@ public:
 
     compareRecords("SELECT tags FROM " + HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
-                   "\"note\"=>\"n1',\n\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                   "\"note\"=>\"n2\\\\\\\"\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
-                   "\"note\"=>\"n3\\\\\\\\\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
+                   "\"note\"=>\"n1',\n\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                   "\"note\"=>\"n2\\\\\\\"\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
+                   "\"note\"=>\"n3\\\\\\\\\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
                    (qlonglong)mapId);
   }
 
@@ -131,32 +132,33 @@ public:
     HootApiDbWriter writer;
     writer.setRemap(false);
     writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    shared_ptr<Node> n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
-    shared_ptr<Node> n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
     n2->setTag("note", "n2");
-    shared_ptr<Node> n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
     map->addNode(n3);
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, 1, 13.0));
+    WayPtr w1(new Way(Status::Unknown1, 1, 13.0));
     w1->addNode(1);
     w1->addNode(2);
     w1->setTag("note", "w1");
-    shared_ptr<Way> w2(new Way(Status::Unknown2, 2, 14.0));
+    WayPtr w2(new Way(Status::Unknown2, 2, 14.0));
     w2->addNode(2);
     w2->addNode(3);
     w2->setTag("note", "w2");
     map->addWay(w1);
     map->addWay(w2);
 
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "collection"));
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15.0, "collection"));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
@@ -174,16 +176,16 @@ public:
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
                    HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
-                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
-                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
+                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
+                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT id, visible, version, tags FROM " +
                    HootApiDb::getCurrentWaysTableName(mapId) +
                    " ORDER BY id",
-                   "1;true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"\n"
-                   "2;true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"",
+                   "1;true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"\n"
+                   "2;true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT way_id, node_id, sequence_id FROM " +
@@ -197,7 +199,7 @@ public:
 
     compareRecords("SELECT id, visible, version, tags FROM " +
                    HootApiDb::getCurrentRelationsTableName(mapId),
-                   "1;true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
+                   "1;true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT relation_id, member_type, member_id, member_role, sequence_id "
@@ -235,38 +237,39 @@ public:
     // populate the database.
     HootApiDbWriter writer;
     writer.setUserEmail(userEmail());
+    writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl().toString());
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    shared_ptr<Node> n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
+    NodePtr n1(new Node(Status::Unknown1, -1, 0.0, 0.0, 10.0));
     n1->setTag("note", "n1");
-    shared_ptr<Node> n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
+    NodePtr n2(new Node(Status::Unknown2, -2, 0.1, 0.0, 11.0));
     n2->setTag("note", "n2");
-    shared_ptr<Node> n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
+    NodePtr n3(new Node(Status::Conflated, -3, 0.2, 0.0, 12.0));
     n3->setTag("note", "n3");
     map->addNode(n1);
     map->addNode(n2);
     map->addNode(n3);
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, -1, 13.0));
+    WayPtr w1(new Way(Status::Unknown1, -1, 13.0));
     w1->addNode(-1);
     w1->addNode(-2);
     w1->setTag("note", "w1");
-    shared_ptr<Way> w2(new Way(Status::Unknown2, -2, 14.0));
+    WayPtr w2(new Way(Status::Unknown2, -2, 14.0));
     w2->addNode(-2);
     w2->addNode(-3);
     w2->setTag("note", "w2");
     map->addWay(w1);
     map->addWay(w2);
 
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, -1, 15.0, "collection"));
+    RelationPtr r1(new Relation(Status::Unknown1, -1, 15.0, "collection"));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
     map->addRelation(r1);
 
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, -2, 15.0, "collection"));
+    RelationPtr r2(new Relation(Status::Unknown1, -2, 15.0, "collection"));
     r2->addElement("r1", r1->getElementId());
     r2->setTag("note", "r2");
     map->addRelation(r2);
@@ -282,16 +285,16 @@ public:
     compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
                    HootApiDb::getCurrentNodesTableName(mapId) +
                    " ORDER BY longitude",
-                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
-                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
+                   "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                   "0;0.1;true;3221225992;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"11\"\n"
+                   "0;0.2;true;3221227552;1;\"note\"=>\"n3\", \"" + MetadataTags::HootId() + "\"=>\"-3\", \"" + MetadataTags::HootStatus() + "\"=>\"3\", \"" + MetadataTags::ErrorCircular() + "\"=>\"12\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT visible, version, tags FROM " +
                    HootApiDb::getCurrentWaysTableName(mapId) +
                    " ORDER BY id",
-                   "true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"\n"
-                   "true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"",
+                   "true;1;\"note\"=>\"w2\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"2\", \"" + MetadataTags::ErrorCircular() + "\"=>\"14\"\n"
+                   "true;1;\"note\"=>\"w1\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"13\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT sequence_id FROM " +
@@ -306,8 +309,8 @@ public:
     compareRecords("SELECT visible, version, tags FROM " +
                    HootApiDb::getCurrentRelationsTableName(mapId) +
                    " ORDER BY id",
-                   "true;1;\"note\"=>\"r2\", \"type\"=>\"collection\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"\n"
-                   "true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
+                   "true;1;\"note\"=>\"r2\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"\n"
+                   "true;1;\"note\"=>\"r1\", \"type\"=>\"collection\", \"" + MetadataTags::HootId() + "\"=>\"-1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\"",
                    (qlonglong)mapId);
 
     compareRecords("SELECT member_type, member_role, sequence_id "

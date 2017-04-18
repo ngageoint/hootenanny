@@ -66,10 +66,10 @@ sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-d
  automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
  libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc curl npm libxerces-c28 \
  libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
- texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
+ w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 >> Ubuntu_upgrade.txt 2>&1
+ libpango-1.0-0 libappindicator1 valgrind >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -248,13 +248,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
         tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
+    if [ ! -f FileGDB_API_1_5_64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/FileGDB_API_1_5_64.tar.gz
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
@@ -284,14 +284,34 @@ if ! mocha --version &>/dev/null; then
     sudo rm -rf $HOME/tmp
 fi
 
+
+# Get the configuration for the Database
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
+
 # NOTE: These have been changed to pg9.5
-if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
+# See if we already have a dB user
+if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER; then
+    echo "### Adding a Services Database user..."
+    sudo -u postgres createuser --superuser $DB_USER
+    sudo -u postgres psql -c "alter user $DB_USER with password '$DB_PASSWORD';"
+fi
+
+# Check that the OsmApiDb user exists
+# NOTE:
+#  + The OsmAPI Db user _might_ be different to the Hoot Services Db user...
+#  + The SetupOsmApiDB.sh script expects that the DB_USER_OSMAPI account exists
+if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
+    sudo -u postgres createuser --superuser $DB_USER_OSMAPI
+    sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
+fi
+
+
+# Check for a hoot Db
+if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
     echo "### Creating Services Database..."
-    sudo -u postgres createuser --superuser hoot
-    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
-    sudo -u postgres createdb hoot --owner=hoot
-    sudo -u postgres createdb wfsstoredb --owner=hoot
-    sudo -u postgres psql -d hoot -c 'create extension hstore;'
+    sudo -u postgres createdb $DB_NAME --owner=$DB_USER
+    sudo -u postgres createdb wfsstoredb --owner=$DB_USER
+    sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
     sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
 fi
@@ -380,7 +400,7 @@ fi
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
 # so purposefully not installing hoot from the repos.
-if ! which hadoop > /dev/null ; then
+if ! hash hadoop >/dev/null 2>&1 ; then
   echo "Installing Hadoop..."
   if [ ! -f hadoop-0.20.2.tar.gz ]; then
     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
@@ -552,12 +572,6 @@ rm -rf $HOME/tmp
 
 cd $HOOT_HOME
 
-rm -rf $HOOT_HOME/ingest
-mkdir -p $HOOT_HOME/ingest/processed
-
-rm -rf $HOOT_HOME/upload
-mkdir -p $HOOT_HOME/upload
-
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -567,3 +581,33 @@ touch Vagrant.marker
 # switch to auto mode and use the highest priority installed alternatives for Java.
 sudo update-alternatives --auto java
 sudo update-alternatives --auto javac
+
+
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+    mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
+
+# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
+rm -rf $HOOT_HOME/upload
+rm -rf $HOOT_HOME/tmp
+
+if [ -d "$HOOT_HOME/data/reports" ]; then
+    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/data/reports
+fi
+
+if [ -d "$HOOT_HOME/customscript" ]; then
+    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/customscript
+fi
+
+if [ -d "$HOOT_HOME/ingest" ]; then
+    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/ingest
+fi
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+rm -rf $HOOT_HOME/userfiles/tmp

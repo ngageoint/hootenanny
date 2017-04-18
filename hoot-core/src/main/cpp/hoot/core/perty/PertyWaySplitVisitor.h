@@ -76,7 +76,7 @@ public:
 
     @see ElementVisitor
     */
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
   /**
     @see RngConsumer
@@ -124,15 +124,15 @@ private:
   int _splitRecursionLevel;
 
   vector<ElementPtr> _split(ElementPtr element);
-  WayLocation _calcSplitPoint(shared_ptr<const Way> way) const;
-  MultiLineStringLocation _calcSplitPoint(shared_ptr<const Relation> relation, ElementId& wayId) const;
+  WayLocation _calcSplitPoint(ConstWayPtr way) const;
+  MultiLineStringLocation _calcSplitPoint(ConstRelationPtr relation, ElementId& wayId) const;
 
-  shared_ptr<Node> _getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
+ NodePtr _getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
                                         const vector<ElementPtr>& newElementsAfterSplit) const;
 
-  void _updateNewNodeProperties(shared_ptr<Node> newNode,
-                                shared_ptr<const Node> firstSplitBetweenNode,
-                                shared_ptr<const Node> lastSplitBetweenNode);
+  void _updateNewNodeProperties(NodePtr newNode,
+                               ConstNodePtr firstSplitBetweenNode,
+                               ConstNodePtr lastSplitBetweenNode);
 };
 
 }

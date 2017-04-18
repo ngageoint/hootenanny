@@ -57,11 +57,11 @@ WayJoin2Mapper::WayJoin2Mapper()
   Tgs::Random::instance()->seed(time(NULL));
 }
 
-void WayJoin2Mapper::_emitNode(const shared_ptr<Node>& n)
+void WayJoin2Mapper::_emitNode(const boost::shared_ptr<Node> &n)
 {
   _nodeMap->addNode(n);
 
-  if (_nodeMap->getNodeMap().size() >= 100000)
+  if (_nodeMap->getNodes().size() >= 100000)
   {
     _flushNodes();
   }
@@ -71,9 +71,9 @@ void WayJoin2Mapper::_flushNodes()
 {
   // this map should only contain nodes.
   assert(_nodeMap->getWays().size() == 0);
-  if (_nodeMap->getNodeMap().size() > 0)
+  if (_nodeMap->getNodes().size() > 0)
   {
-    LOG_INFO("Flushing nodes. " << _nodeMap->getNodeMap().size());
+    LOG_INFO("Flushing nodes. " << _nodeMap->getNodes().size());
     _key->elementType = NodesType;
     _key->id = Tgs::Random::instance()->generateInt();
     stringstream ss(stringstream::out);
@@ -82,7 +82,7 @@ void WayJoin2Mapper::_flushNodes()
     dos.writeByte(PbfData);
     OsmPbfWriter writer;
     // RHEL calls this ambiguous.
-    const shared_ptr<const OsmMap>& co = _nodeMap;
+    const boost::shared_ptr<const OsmMap>& co = _nodeMap;
     writer.writePb(co, &ss);
     _context->emit(_keyStr, ss.str());
     _nodeMap->clear();
@@ -130,23 +130,23 @@ void WayJoin2Mapper::map(HadoopPipes::MapContext& context)
   }
 }
 
-void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
+void WayJoin2Mapper::mapOsmMap(boost::shared_ptr<OsmMap> m)
 {
   // The first byte on the value says if it is a PBF/WayJoin1Reducer::Value
   OsmPbfWriter writer;
 
   // Remove all non-roads.
-  shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
+ boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
   RemoveElementsVisitor::removeWays(m, pCrit);
 
   _key->elementType = NodesType;
   // Go through all the nodes
-  const NodeMap& nm = m->getNodeMap();
+  const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     // add this node onto a map. Since the nodes aren't very important at this stage we'll just
     // ship a bunch at a time in one big record.
-    _emitNode(NodePtr((Node*)it->second->clone()));
+    _emitNode(boost::shared_ptr<Node>((Node*)it->second->clone()));
   }
 
   _key->elementType = WayType;
@@ -154,7 +154,7 @@ void WayJoin2Mapper::mapOsmMap(shared_ptr<OsmMap> m)
   const WayMap& wm = m->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<const Way>& w = it->second;
+    const ConstWayPtr& w = it->second;
 
     _key->id = w->getId();
     stringstream ss(stringstream::out);

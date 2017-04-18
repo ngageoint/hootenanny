@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-shared_ptr<OsmMapReaderFactory> OsmMapReaderFactory::_theInstance;
+boost::shared_ptr<OsmMapReaderFactory> OsmMapReaderFactory::_theInstance;
 
 OsmMapReaderFactory::OsmMapReaderFactory()
 {
@@ -52,27 +52,11 @@ OsmMapReaderFactory& OsmMapReaderFactory::getInstance()
   return *_theInstance;
 }
 
-bool OsmMapReaderFactory::hasReader(QString url)
-{
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
-  bool result = false;
-  for (size_t i = 0; i < names.size() && !result; ++i)
-  {
-    shared_ptr<OsmMapReader> reader(Factory::getInstance().constructObject<OsmMapReader>(names[i]));
-    if (reader->isSupported(url))
-    {
-      result = true;
-    }
-  }
-  return result;
-}
-
 bool OsmMapReaderFactory::hasElementInputStream(QString url)
 {
   bool result = false;
-  shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  shared_ptr<ElementInputStream> eis = dynamic_pointer_cast<ElementInputStream>(reader);
+  boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
+  boost::shared_ptr<ElementInputStream> eis = dynamic_pointer_cast<ElementInputStream>(reader);
   if (eis)
   {
     result = true;
@@ -84,8 +68,8 @@ bool OsmMapReaderFactory::hasElementInputStream(QString url)
 bool OsmMapReaderFactory::hasPartialReader(QString url)
 {
   bool result = false;
-  shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  shared_ptr<PartialOsmMapReader> pr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
+  boost::shared_ptr<PartialOsmMapReader> pr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
   if (pr)
   {
     result = true;
@@ -94,7 +78,7 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
   return result;
 }
 
-shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool useDataSourceIds,
+boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool useDataSourceIds,
                                                            Status defaultStatus)
 {
   LOG_VART(url);
@@ -111,7 +95,7 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
     readerOverride = "";
   }
 
-  shared_ptr<OsmMapReader> reader;
+  boost::shared_ptr<OsmMapReader> reader;
   if (readerOverride != "")
   {
     reader.reset(Factory::getInstance().constructObject<OsmMapReader>(readerOverride));
@@ -145,11 +129,11 @@ shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool use
   return reader;
 }
 
-void OsmMapReaderFactory::read(shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
+void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,
                                Status defaultStatus)
 {
-  LOG_INFO("Loading map from " << url << " ...");
-  shared_ptr<OsmMapReader> reader =
+  LOG_INFO("Loading map from " << url << "...");
+  boost::shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
   reader->open(url);
   reader->read(map);

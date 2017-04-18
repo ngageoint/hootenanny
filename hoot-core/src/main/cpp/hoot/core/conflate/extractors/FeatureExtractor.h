@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,13 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTOR_H
 #define FEATUREEXTRACTOR_H
 
 // hoot
 #include <hoot/core/elements/Element.h>
+
+// Qt
+#include <qnumeric.h>
 
 // Standard
 #include <string>
@@ -56,8 +59,8 @@ public:
    * Extracts a feature from a given pair of elements. The feature may be something like the
    * distance between colors, the overlap of two polygons, etc.
    */
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const = 0;
+  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const = 0;
 
   virtual string getClassName() const = 0;
 
@@ -73,7 +76,7 @@ public:
    */
   virtual DataFrame::NullTreatment getNullTreatment() const = 0;
 
-  static bool isNull(double v) { return v == nullValue() || isnan(v); }
+  static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 
 };
 

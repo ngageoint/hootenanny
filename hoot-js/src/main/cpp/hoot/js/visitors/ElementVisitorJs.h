@@ -50,7 +50,7 @@ class ElementVisitorJs : public node::ObjectWrap
 public:
   static void Init(v8::Handle<v8::Object> target);
 
-  shared_ptr<ElementVisitor> getVisitor() { return _v; }
+ boost::shared_ptr<ElementVisitor> getVisitor() { return _v; }
 
 private:
   ElementVisitorJs(ElementVisitor* v) : _v(v) {}
@@ -60,7 +60,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  shared_ptr<ElementVisitor> _v;
+ boost::shared_ptr<ElementVisitor> _v;
 };
 
 }

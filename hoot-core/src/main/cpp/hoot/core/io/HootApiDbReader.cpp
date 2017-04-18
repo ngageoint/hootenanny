@@ -136,7 +136,7 @@ void  HootApiDbReader::initializePartial()
   _elementsRead = 0;
 }
 
-void HootApiDbReader::read(shared_ptr<OsmMap> map)
+void HootApiDbReader::read(OsmMapPtr map)
 {
   if (!_hasBounds())
   {
@@ -164,19 +164,19 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
 
 //TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
 //this read performs better for some reason
-void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
+void HootApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
   long elementCount = 0; //TODO: break this out by element type
 
   // contact the DB and select all
-  shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
+  boost::shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end, unfortunately (see comments in
   //HootApiDb::resultToElement)
   while (elementResultsIterator->isActive())
   {
-    shared_ptr<Element> element =
+    boost::shared_ptr<Element> element =
       _resultToElement(*elementResultsIterator, elementType, *map );
     //this check is necessary due to an inefficiency in HootApiDb::resultToElement
     if (element.get())
@@ -189,16 +189,16 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
 
   LOG_DEBUG(
     "Select all query read " << elementCount << " " << elementType.toString() << " elements.");
-  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());
-  LOG_VARD(map->getRelationMap().size());
+  LOG_VARD(map->getRelations().size());
 }
 
-shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
+boost::shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
 {
   if (_selectElementType == ElementType::Unknown)
   {
-    return shared_ptr<Element>();
+    return boost::shared_ptr<Element>();
   }
 
   //see if another result is available
@@ -209,7 +209,7 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
   }
 
   //results still available, so keep parsing through them
-  shared_ptr<Element> element =
+  boost::shared_ptr<Element> element =
     _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
 
   //QSqlQuery::next() in HootApiDbReader::_resultToElement will return null
@@ -229,11 +229,11 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
   return element;
 }
 
-shared_ptr<Element> HootApiDbReader::readNextElement()
+boost::shared_ptr<Element> HootApiDbReader::readNextElement()
 {
   if (hasMoreElements())
   {
-    shared_ptr<Element> result = _nextElement;
+    boost::shared_ptr<Element> result = _nextElement;
     _nextElement.reset();
     _elementsRead++;
     return result;
@@ -265,7 +265,7 @@ void HootApiDbReader::close()
 }
 
 //TODO: this method could probably be moved up to the parent class
-shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
+boost::shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
                                                       const ElementType& elementType, OsmMap& map)
 {
   assert(resultIterator.isActive());
@@ -277,7 +277,7 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
   //calling resultIterator->next() and also should check for the null element.
   if (resultIterator.next())
   {
-    shared_ptr<Element> element;
+    boost::shared_ptr<Element> element;
     switch (elementType.getEnum())
     {
       case ElementType::Node:
@@ -307,7 +307,7 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
   else
   {
     resultIterator.finish();
-    return shared_ptr<Element>();
+    return boost::shared_ptr<Element>();
   }
 }
 
@@ -316,13 +316,13 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
   LOG_TRACE("Reading node with ID: " << nodeId);
 
-  shared_ptr<Node> node(
+  NodePtr node(
     new Node(
       _status,
       nodeId,
       resultIterator.value(ApiDb::NODES_LONGITUDE).toDouble(),
       resultIterator.value(ApiDb::NODES_LATITUDE).toDouble(),
-      ConfigOptions().getCircularErrorDefaultValue(),
+      -1,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -345,11 +345,11 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
   LOG_TRACE("Reading way with ID: " << wayId);
 
-  shared_ptr<Way> way(
+  WayPtr way(
     new Way(
       _status,
       newWayId,
-      ConfigOptions().getCircularErrorDefaultValue(),
+      -1,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -378,11 +378,11 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
   LOG_TRACE("Reading relation with ID: " << relationId);
 
-  shared_ptr<Relation> relation(
+  RelationPtr relation(
     new Relation(
       _status,
       newRelationId,
-      ConfigOptions().getCircularErrorDefaultValue(),
+      -1,
       "",/*"collection"*/ //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),

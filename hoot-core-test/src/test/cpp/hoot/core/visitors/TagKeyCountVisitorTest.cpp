@@ -51,9 +51,9 @@ public:
 
   void tagKeyCountTest()
   {
-    shared_ptr<OsmMap> map = _loadMap();
+    OsmMapPtr map = _loadMap();
 
-    shared_ptr<TagKeyCountVisitor> visitor(new TagKeyCountVisitor("source"));
+    boost::shared_ptr<TagKeyCountVisitor> visitor(new TagKeyCountVisitor("source"));
     map->visitRo(*visitor);
 
     CPPUNIT_ASSERT_EQUAL((long)6, (long)visitor->getStat());
@@ -61,10 +61,10 @@ public:
 
 private:
 
-  shared_ptr<OsmMap> _loadMap()
+  OsmMapPtr _loadMap()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/TagKeyCountVisitorTest.osm", map);

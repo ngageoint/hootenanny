@@ -78,7 +78,7 @@ public:
     QString translation = args[a++];
     QString output = args[a++];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OgrReader reader;
     reader.setLimit(limit);
     reader.setTranslationFile(translation);
@@ -173,7 +173,7 @@ public:
       }
     }
 
-    if (map->getNodeMap().size() == 0)
+    if (map->getNodes().size() == 0)
     {
       progress.set(1.0, "Failed", true, "After translation the map is empty.  Aborting.");
       throw HootException("After translation the map is empty. Aborting.");

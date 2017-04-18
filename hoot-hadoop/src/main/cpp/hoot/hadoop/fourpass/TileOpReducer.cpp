@@ -31,7 +31,7 @@
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 #include <hoot/core/OsmMap.h>
 
 // Pretty Pipes
@@ -57,9 +57,9 @@ class ReplacedNodeListener : public OsmMapListener
 public:
   ReplacedNodeListener(HashMap<long, long>& m) : _map(m) {}
 
-  virtual shared_ptr<OsmMapListener> clone() const
+  virtual boost::shared_ptr<OsmMapListener> clone() const
   {
-    return shared_ptr<OsmMapListener>(new ReplacedNodeListener(_map));
+    return boost::shared_ptr<OsmMapListener>(new ReplacedNodeListener(_map));
   }
 
   void replaceNodePre(long oldId, long newId) { _map[oldId] = newId; }
@@ -84,7 +84,7 @@ void TileOpReducer::close()
         arg(_partition, 5, 10, QChar('0'));
 
     pp::Hdfs fs;
-    shared_ptr<ostream> os(fs.create(path.toStdString()));
+   boost::shared_ptr<ostream> os(fs.create(path.toStdString()));
     _nr.write(*os);
     os.reset();
 
@@ -96,7 +96,7 @@ void TileOpReducer::close()
         arg(QString::fromStdString(_workDir)).
         arg(_partition, 5, 10, QChar('0'));
 
-    shared_ptr<ostream> osStats(fs.create(path.toStdString()));
+   boost::shared_ptr<ostream> osStats(fs.create(path.toStdString()));
 
     _stats.write(*osStats);
   }
@@ -110,7 +110,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 
   LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
 
-  shared_ptr<OsmMap> map(new OsmMap());
+ boost::shared_ptr<OsmMap> map(new OsmMap());
   map->setIdGenerator(_idGen);
 
 //#warning remove temporary map.
@@ -119,7 +119,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 //  LOG_INFO("Writing input map out to temporary: " << tmp);
 //  OsmPbfWriter writer;
 //  pp::Hdfs fs;
-//  shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
+// boost::shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
 //  writer.write(map, strm.get());
 //  strm->flush();
 //  strm.reset();
@@ -133,7 +133,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
   }
-  LOG_INFO("Got map. Node count: " << map->getNodeMap().size() << " way count: " <<
+  LOG_INFO("Got map. Node count: " << map->getNodes().size() << " way count: " <<
     map->getWays().size());
   Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   LOG_INFO("Map envelope: " << e->toString());
@@ -148,7 +148,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   }
 
   // keep track of all the nodes that get replaced.
-  shared_ptr<ReplacedNodeListener> rnl(new ReplacedNodeListener(_nr.getReplacements()));
+ boost::shared_ptr<ReplacedNodeListener> rnl(new ReplacedNodeListener(_nr.getReplacements()));
   map->registerListener(rnl);
 
   Boundable* b = dynamic_cast<Boundable*>(_op.get());
@@ -177,7 +177,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     }
   }
 
-  LOG_INFO("Result before way splitting. Node count: " << map->getNodeMap().size() <<
+  LOG_INFO("Result before way splitting. Node count: " << map->getNodes().size() <<
            " way count: " << map->getWays().size());
 
   MapProjector::projectToWgs84(map);
@@ -186,7 +186,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   const WayMap wm = map->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<Way>& w = map->getWay(it->first);
+    const boost::shared_ptr<Way>& w = map->getWay(it->first);
     WaySplitter::split(map, w, _maxWaySize);
   }
 
@@ -197,7 +197,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     const WayMap& wm2 = map->getWays();
     for (WayMap::const_iterator it = wm2.begin(); it != wm2.end(); ++it)
     {
-      const shared_ptr<const Way>& w = it->second;
+      const boost::shared_ptr<const Way>& w = it->second;
 
       const Envelope e = w->getEnvelopeInternal(map);
 
@@ -208,7 +208,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
     }
 # endif
 
-  LOG_INFO("Result map. Node count: " << map->getNodeMap().size() << " way count: " <<
+  LOG_INFO("Result map. Node count: " << map->getNodes().size() << " way count: " <<
     map->getWays().size());
 
   _emitMap(map);
@@ -216,7 +216,7 @@ void TileOpReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
 }
 
-void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
+void TileOpReducer::_emitMap(boost::shared_ptr<OsmMap> map)
 {
   Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
@@ -226,9 +226,9 @@ void TileOpReducer::_emitMap(shared_ptr<OsmMap> map)
   LOG_DEBUG(Tgs::SystemInfo::getMemoryUsageString());
 }
 
-const Envelope& TileOpReducer::_getContainingEnvelope(const shared_ptr<OsmMap>& map)
+const Envelope& TileOpReducer::_getContainingEnvelope(const boost::shared_ptr<OsmMap>& map)
 {
-  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
+ boost::shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
@@ -251,7 +251,7 @@ void TileOpReducer::_init(HadoopPipes::ReduceContext& context)
     throw InternalErrorException("Error getting RecordWriter.");
   }
 
-  shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+ boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _stats.read(*c);
 
   LOG_DEBUG("Serialized settings: " << c->get(TileOpDriver::settingsConfKey().toStdString(), "{}"));
@@ -285,17 +285,17 @@ void TileOpReducer::_init(HadoopPipes::ReduceContext& context)
   _initialized = true;
 }
 
-shared_ptr<OsmMap> TileOpReducer::_readMap(const string& value)
+boost::shared_ptr<OsmMap> TileOpReducer::_readMap(const string& value)
 {
   // read the map from the given string.
-  shared_ptr<OsmMap> result(new OsmMap());
+ boost::shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
   OsmPbfReader reader(true);
   reader.setUseFileStatus(true);
   reader.parse(&ss, result);
 //  LOG_INFO("Read map. value size: " << value.size() << " node count: " <<
-//    result->getNodeMap().size() << " way count: " << result->getWays().size());
+//    result->getNodes().size() << " way count: " << result->getWays().size());
 
   return result;
 }
@@ -320,15 +320,15 @@ void TileOpReducer::reduce(HadoopPipes::ReduceContext& context)
     // emit all the data right out to disk.
     while (context.nextValue())
     {
-      shared_ptr<OsmMap> map = _readMap(context.getInputValue());
-      LOG_INFO("Passing dregs. Node Count: " << map->getNodeMap().size() << " Way Count: " <<
+     boost::shared_ptr<OsmMap> map = _readMap(context.getInputValue());
+      LOG_INFO("Passing dregs. Node Count: " << map->getNodes().size() << " Way Count: " <<
                map->getWays().size());
       _emitMap(map);
     }
   }
 }
 
-void TileOpReducer::_validate(const shared_ptr<OsmMap>& map)
+void TileOpReducer::_validate(const boost::shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Validating map.");
   Debug::printTroubled(map);

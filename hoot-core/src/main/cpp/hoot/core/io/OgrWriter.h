@@ -60,7 +60,6 @@ class OsmMap;
 class ScriptTranslator;
 class ScriptToOgrTranslator;
 class ElementInputStream;
-class ElementOutputStream;
 class ElementProvider;
 
 /**
@@ -119,7 +118,7 @@ public:
 
   void setScriptPath(const QString& path) { _scriptPath = path; }
 
-  virtual void write(boost::shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   virtual void finalizePartial();
 
@@ -142,28 +141,28 @@ protected:
   bool _createAllLayers;
   bool _appendData;
   QString _scriptPath;
-  mutable shared_ptr<ScriptToOgrTranslator> _translator;
-  shared_ptr<GDALDataset> _ds;
+  mutable boost::shared_ptr<ScriptToOgrTranslator> _translator;
+  boost::shared_ptr<GDALDataset> _ds;
   QHash<QString, OGRLayer*> _layers;
   QString _prependLayerName;
-  shared_ptr<const Schema> _schema;
+  boost::shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
   bool _textStatus;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
-  void _addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<Geometry> g);
+  void _addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<Geometry> g);
 
-  void _addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const Geometry* g,
+  void _addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f, const Geometry* g,
                           OGRFeature* poFeature);
 
-  void _createLayer(shared_ptr<const Layer> layer);
+  void _createLayer(boost::shared_ptr<const Layer> layer);
 
   OGRLayer* _getLayer(const QString layerName);
 
   OGRLayer* _getLayerByName(const QString layerName);
 
-  shared_ptr<Geometry> _toMulti(shared_ptr<Geometry> from);
+  boost::shared_ptr<Geometry> _toMulti(boost::shared_ptr<Geometry> from);
 
   void strictError(QString warning);
 

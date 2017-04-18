@@ -73,9 +73,8 @@ public:
   void write(QString basePath, QVector<WordCount> words);
 
 private:
-  long _maxFrequent;
 
-  void _exec(QSqlDatabase& db, QString sql);
+  long _maxFrequent;
 
   void _writeFile(QString path, long totalCount, QVector<WordCount> words, long maxSize);
 };

@@ -44,7 +44,7 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_rubber_sheeting_options_label"
         And I should see "General Conflation Options"
         Then I click on "#hoot_general_conflation_options_label"
-        And I should see element "#unify_optimizer_time_limit" with no value and placeholder "30"
+        And I should see element "#unify_optimizer_time_limit" with no value and placeholder "60"
         And I should see checkbox "OGR Split O2S" unchecked
         And I should see checkbox "OGR TDS Add FCSubtype" checked
         And I should see checkbox "OGR TDS Structure" checked

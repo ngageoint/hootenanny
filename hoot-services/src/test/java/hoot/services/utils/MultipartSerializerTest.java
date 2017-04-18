@@ -27,6 +27,7 @@
 package hoot.services.utils;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.UPLOAD_FOLDER;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -45,27 +46,31 @@ import hoot.services.UnitTest;
 public class MultipartSerializerTest {
     private static File homefolder;
     private static String original_HOME_FOLDER;
+    private static String original_UPLOAD_FOLDER;
 
     @BeforeClass
     public static void oneTimeSetup() throws Exception {
         original_HOME_FOLDER = HOME_FOLDER;
+        original_UPLOAD_FOLDER = UPLOAD_FOLDER;
         homefolder = new File(FileUtils.getTempDirectory(), "MultipartSerializerTest");
         FileUtils.forceMkdir(homefolder);
         Assert.assertTrue(homefolder.exists());
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homefolder.getAbsolutePath());
+        HootCustomPropertiesSetter.setProperty("UPLOAD_FOLDER", homefolder.getAbsolutePath() + "/" + "upload");
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteDirectory(homefolder);
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
+        HootCustomPropertiesSetter.setProperty("UPLOAD_FOLDER", original_UPLOAD_FOLDER);
     }
 
     @Test
     @Category(UnitTest.class)
     public void testSerializeFGDB() throws Exception {
         String jobId = UUID.randomUUID().toString();
-        File workingDir = new File(HOME_FOLDER + "/upload/" + jobId);
+        File workingDir = new File(UPLOAD_FOLDER + File.separator + jobId);
         FileUtils.forceMkdir(workingDir);
         Assert.assertTrue(workingDir.exists());
 
@@ -213,7 +218,7 @@ public class MultipartSerializerTest {
     @Category(UnitTest.class)
     public void testSerializeUploadedFiles() throws Exception {
         String jobId = UUID.randomUUID().toString();
-        File workingDir = new File(HOME_FOLDER + "/upload/" + jobId);
+        File workingDir = new File(UPLOAD_FOLDER + File.separator + jobId);
         FileUtils.forceMkdir(workingDir);
         Assert.assertTrue(workingDir.exists());
 

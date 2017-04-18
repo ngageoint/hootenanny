@@ -18,7 +18,7 @@
 #define WAYJOINREDUCER_H
 
 // Hoot
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 
 // Pretty Pipes
 #include <pp/io/RecordWriter.h>

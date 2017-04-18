@@ -33,12 +33,14 @@
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -97,7 +99,7 @@ public:
     }
     else
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
 
       // This keeps the status and the tags.
       conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
@@ -113,7 +115,7 @@ public:
       saveMap(map, args[1]);
     }
 
-    LOG_INFO("Convert operation complete.");
+    LOG_DEBUG("Convert operation complete.");
     QString msg = "Convert operation took ";
     const qint64 timeElapsed = timer.elapsed();
     if (timeElapsed > 60000)
@@ -131,16 +133,29 @@ public:
 
   void streamElements(QString in, QString out)
   {
-    LOG_DEBUG("Streaming data conversion...");
+    LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
-    shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
+    boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);
-    shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-    shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
+    boost::shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+    boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
     writer->open(out);
-    shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+    boost::shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+
+    boost::shared_ptr<PartialOsmMapReader> partialReader =
+      dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    if (partialReader.get())
+    {
+      partialReader->finalizePartial();
+    }
+    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
+      dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    if (partialWriter.get())
+    {
+      partialWriter->finalizePartial();
+    }
   }
 
 };

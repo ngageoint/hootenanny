@@ -47,11 +47,11 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
   assert(inputs.size() >= 3);
 
   //for NoInformationElementRemover
-  if (ConfigOptions().getReviewTagsTreatAsMetadata())
+  if (ConfigOptions().getWriterCleanReviewTags())
   {
     throw HootException(
-      "Multi-conflation must be run with " + ConfigOptions::getReviewTagsTreatAsMetadataKey() +
-      "=false");
+      "Multi-conflation must be run with " +
+      ConfigOptions::getWriterCleanReviewTagsKey() + "=false");
   }
 
   //for TagMergerFactory
@@ -115,7 +115,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
       if (reviewCache.get() && reviewCache->getElementCount() > 0)
       {
         LOG_DEBUG("Adding previous reviews...");
-        const RelationMap& reviews = reviewCache->getRelationMap();
+        const RelationMap& reviews = reviewCache->getRelations();
         for (RelationMap::const_iterator it = reviews.begin(); it != reviews.end(); ++it)
         {
           RelationPtr review = it->second;
@@ -140,7 +140,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
         //features.
         LOG_DEBUG("Setting status tags for map " << QString::number(i + 1) << "...");
         SetTagVisitor statusTagVisitor(
-          "hoot:status", QString("%1").arg(Status(Status::Unknown1).getEnum()));
+          MetadataTags::HootStatus(), QString("%1").arg(Status(Status::Unknown1).getEnum()));
         cumulativeMap->visitRw(statusTagVisitor);
       }
 

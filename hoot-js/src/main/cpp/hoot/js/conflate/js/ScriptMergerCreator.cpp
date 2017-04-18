@@ -52,7 +52,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
 
   set< pair<ElementId, ElementId> > eids;
 
-  shared_ptr<PluginContext> script;
+ boost::shared_ptr<PluginContext> script;
   Persistent<Object> plugin;
   QStringList matchType;
 

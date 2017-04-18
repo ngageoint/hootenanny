@@ -69,7 +69,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
@@ -139,7 +139,7 @@ public:
     relation->addElement("", way1->getElementId());
     map->addElement(relation);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getWays().size());
 
     MultiLineStringLocation multiLineStringLocation(map, relation, 0,
@@ -149,7 +149,7 @@ public:
     MultiLineStringSplitter().split(map, multiLineStringLocation, match);
     //LOG_VAR(match->getElementId());
 
-    CPPUNIT_ASSERT_EQUAL((size_t)3, map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)2, map->getWays().size());
 
     HOOT_STR_EQUALS("Way:-2", match->getElementId());

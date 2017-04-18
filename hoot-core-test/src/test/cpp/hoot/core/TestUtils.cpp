@@ -40,6 +40,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetElementIdsVisitor.h>
+#include <hoot/core/util/FileUtils.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -50,7 +51,7 @@
 namespace hoot
 {
 
-shared_ptr<TestUtils> TestUtils::_theInstance;
+boost::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 TestUtils::TestUtils()
 {
@@ -63,14 +64,14 @@ bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 
-  shared_ptr<OsmMap> ref(new OsmMap());
-  shared_ptr<OsmMap> test(new OsmMap());
+  OsmMapPtr ref(new OsmMap());
+  OsmMapPtr test(new OsmMap());
   reader.read(refPath, ref);
   reader.read(testPath, test);
   return compareMaps(ref, test);
 }
 
-bool TestUtils::compareMaps(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test)
+bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
 {
   return MapComparator().isMatch(ref, test);
 }
@@ -172,7 +173,7 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
-shared_ptr<TestUtils> TestUtils::getInstance()
+boost::shared_ptr<TestUtils> TestUtils::getInstance()
 {
   if (!_theInstance)
   {
@@ -234,6 +235,20 @@ QString TestUtils::toQuotedString(QString str)
     }
   }
   return result;
+}
+
+void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString stdFilePath,
+                                                 const QString outFilePath)
+{
+  LOG_VART(stdFilePath);
+  LOG_VART(outFilePath);
+  const QStringList stdTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
+  const QStringList outputTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
+  CPPUNIT_ASSERT_EQUAL(stdTokens.size(), outputTokens.size());
+  for (int i = 0; i < stdTokens.size(); i++)
+  {
+    HOOT_STR_EQUALS(stdTokens.at(i), outputTokens.at(i));
+  }
 }
 
 }

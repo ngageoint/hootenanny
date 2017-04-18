@@ -105,7 +105,7 @@ public:
 
   static std::string readFile(QString f1);
 
-  static bool compareMaps(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  static bool compareMaps(OsmMapPtr map1, OsmMapPtr map2);
 
   static bool compareMaps(const QString& map1, const QString map2);
 
@@ -137,7 +137,7 @@ public:
   /**
    * Return the singleton instance.
    */
-  static shared_ptr<TestUtils> getInstance();
+  static boost::shared_ptr<TestUtils> getInstance();
 
   /**
    * Register a way to reset the environment. This is most useful in plugins to avoid circular
@@ -155,10 +155,12 @@ public:
    */
   static QString toQuotedString(QString str);
 
+  static void verifyStdMatchesOutputIgnoreDate(const QString stdFilePath, const QString outFilePath);
+
 private:
   QList<RegisteredReset*> _resets;
 
-  static shared_ptr<TestUtils> _theInstance;
+  static boost::shared_ptr<TestUtils> _theInstance;
 };
 
 /**

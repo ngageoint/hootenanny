@@ -56,7 +56,7 @@ public:
     DataSamples samples;
 
     ArffReader uut("test-files/io/ArffReaderTest/runBasic.arff");
-    shared_ptr<DataSamples> ds = uut.read();
+    boost::shared_ptr<DataSamples> ds = uut.read();
 
     // check for consistency with previous versions.
     HOOT_STR_EQUALS(
@@ -69,7 +69,7 @@ public:
     DataSamples samples;
 
     ArffReader uut("test-files/io/ArffReaderTest/runBz2.arff.bz2");
-    shared_ptr<DataSamples> ds = uut.read();
+    boost::shared_ptr<DataSamples> ds = uut.read();
 
     // check for consistency with previous versions.
     HOOT_STR_EQUALS(

@@ -63,7 +63,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DividedHighway.osm", map);
@@ -80,7 +80,7 @@ public:
     qDebug() << uut.getScoreEstimate();
     qDebug() << uut.calculateScore(map);
     set<ElementId> ignored1, ignored2;
-    shared_ptr<OsmMap> after(new OsmMap(map));
+    OsmMapPtr after(new OsmMap(map));
     uut.applyManipulation(after, ignored1, ignored2);
 
     left  = FindWaysVisitor::findWaysByTag(map, "note", "3")[0];

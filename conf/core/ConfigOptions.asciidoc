@@ -77,6 +77,23 @@ The maximum number of values returned for each attribute by the attribute-count 
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
+=== big.convert.exec.sql.with.mapreduce
+
+* Data Type: bool
+* Default Value: `true`
+
+If set to true, when writing to an OSM API database from a PBF file using the big-convert command
+the writer will execute the OSM SQL statements using mapreduce.  If set to false, the writer will
+execute the OSM SQL statements in a single thread from a single Hootenanny instance.
+
+=== big.convert.num.reduce.tasks
+
+* Data Type: int
+* Default Value: `-1`
+
+Sets the number of reduce tasks spawned by big-convert command writer.  If set to -1, then Hadoop
+determines the number of tasks.  This setting is for testing purposes only.
+
 === big.perty.op.max.distance
 
 * Data Type: double
@@ -136,11 +153,10 @@ The maximum allowed element size of an OSM changeset written to an OSM API datab
 
 === changeset.user.id
 
-* Data Type: double
-* Default Value: `1`
+* Data Type: long
+* Default Value: `-1`
 
-The user ID used when writing to an OSM API database used by changeset writers and the
-PostgresqlDumpFileWriter.
+The user ID used by certain changeset writers when writing to an OSM API database.
 
 === circular.error.default.value
 
@@ -149,27 +165,6 @@ PostgresqlDumpFileWriter.
 
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
-
-=== conflate.add.review.detail
-
-* Data Type: bool
-* Default Value: `true`
-
-Add detailed review tags to review relations during conflation.  This setting allows for
-partitioning the level of detail in the review relation tags into two groups.  Turning this setting
-off can be useful during debugging in situations where you are comparing map outputs and want to
-see reviews in the output but are not concerned with a higher level of review detail.  Disabling
-this setting will also disable AddHilbertReviewSortOrderOp, the output of which is depended upon
-by the Hootenanny user interface.  So, this setting should only be disabled in debugging
-environments.
-
-=== conflate.add.score.tags
-
-* Data Type: bool
-* Default Value: `false`
-
-Add match/miss/review score values to elements with matches during Unifying Conflation. This is
-useful for debugging.
 
 === conflate.enable.old.roads
 
@@ -671,6 +666,31 @@ details.",
 * Default Value: `0.01`
 
 The size of a pixel when calculating node density. See User Manual for details.
+
+=== hootapi.db.writer.create.user
+
+* Data Type: bool
+* Default Value: `false`
+
+Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
+This is most useful when debugging and testing.
+
+=== hootapi.db.writer.output.id.mappings
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set to a non-empty string, the system will attempt to open a file with the
+specified name and output all the ID mappings (source to destination) used for nodes, ways, and
+relations that were written to the database.
+
+=== hootapi.db.writer.overwrite.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true then if there is already a map with the specified name then it will be removed before
+a new map is written.
 
 === id.generator
 
@@ -1232,7 +1252,114 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osm.changeset.sql.writer.generate.new.ids
+=== osmapidb.bulk.writer.file.output.element.buffer.size
+
+* Data Type: long
+* Default Value: `10000`
+
+Maximum number of elements to keep in memory when serializing input elements to a file output
+before they are written to an OSM API database.  If you have enough memory available and the
+dataset you are writing is significantly larger than the value of this setting, you may be able to
+increase the input file parsing performance by raising this value.  This setting has no impact on
+the performance of writing records to a database, only on the input data parsing done beforehand.
+
+=== osmapidb.bulk.writer.file.output.status.update.interval
+
+* Data Type: long
+* Default Value: `1000000`
+
+Count at which the parse status of each element type should be logged when writing to them to
+files.  e.g. With a value of 100, you will see a load status update message logged for every 100
+elements parsed or file lines written.  This setting will have a negative impact on performance
+if set to a very low value.
+
+=== osmapidb.bulk.writer.output.files.copy.location
+
+* Data Type: string
+* Default Value: ``
+
+Use this option if you wish to retain the file data generated during an OSM API database write.
+This option is not needed and will be ignored if writing OSM data to a SQL file that will be
+applied/written to an OSM API database at a later time.  If this option is populated, any file data
+files generated as a result of executing the hoot convert command with an OSM API database target
+are copied to the specified location.  This option should be set to a full file path to a SQL
+file (.sql).
+
+=== osmapidb.bulk.writer.reserve.record.ids.before.writing.data
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writer will update the database to reserve the range of record IDs
+parsed from the input data *before* writing the data to output.  IMPORTANT:  This option should
+always be enabled in online environments (other writers present).  If it is not enabled in online
+environments, the risk of record ID conflicts will be present in the database.  The output
+destination must be an OSM API database or this setting will always be treated as being "false".
+If the output destination is a SQL file, the SQL statements to update the record IDs will be
+written to the SQL output for later execution.
+
+=== osmapidb.bulk.writer.starting.node.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Must
+be a positive number.  Use this when working with an offline database and know the ID range you
+want to assign to node records.  This option is ignored if
+"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
+
+=== osmapidb.bulk.writer.starting.way.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written ways when writing to an OSM API database or SQL file.  Must
+be a positive number.  Use this when working with an offline database and know the ID range you
+want to assign to way records.  This option is ignored if
+"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
+
+=== osmapidb.bulk.writer.starting.relation.id
+
+* Data Type: long
+* Default Value: `1`
+
+First record ID to assign to written relations when writing to an OSM API database or SQL file.
+Must be a positive number.  Use this when working with an offline database and know the ID range
+you want to assign to relation records.  This option is ignored if
+"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
+
+=== osmapidb.bulk.writer.stxxl.map.min.size
+
+* Data Type: long
+* Default Value: `10000000`
+
+Size at which the ID mappings storage for the OSM API database bulk writer switches from a std::map
+to an stxxl::map, which is a container optimized for very large amounts of data.  For debugging
+purposes only.
+
+=== osmapidb.bulk.writer.validate.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the OSM API database bulk writer will create new element ID mappings, check for duplicate
+element IDs, invalid way node references, and invalid relation member references.  Only duplicate
+element IDs and invalid way node references will cause a failure.  Invalid relation members will
+cause a warning to be logged.  You should only set this to false as an optimization if you are
+loading data that was previously validated in another OSM API database, all element IDs are
+unique in the data you are loading, and the IDs will not conflict with any existing data in the
+destination database.
+
+=== osmapidb.id.aware.url
+
+* Data Type: string
+* Default Value: ``
+
+This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter
+It forces database reading/writing use the specified OSM API database as master for determining the
+sequencing of element ID's.
+
+=== osm.changeset.sql.file.writer.generate.new.ids
 
 * Data Type: bool
 * Default Value: `true`
@@ -1576,6 +1703,14 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 A list of scripts to include before loading the user's plugin script. The path will be search as:
 current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
+=== poi.ignore.type.if.name.present
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI conflation will ignore the types of the features being compared completely as long as
+those being compared have a populated name field.
+
 === poi.match.threshold
 
 * Data Type: double
@@ -1615,6 +1750,16 @@ expensive when enabled.
 If true, POI to polygon conflation will attempt to reduce unnecessary reviews without increasing
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
+
+=== poi.polygon.review.if.matched.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of key value pairs (key=value) for features to always review if marked as matches with POI to
+polygon conflation.  When specifying the list from the command line, delimit the types with ';'
+and surround the entire value string in double quotes.
 
 === poi.polygon.match.threshold
 
@@ -1703,74 +1848,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== postgresql.dumpfile.writer.auto.calc.ids
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, then the OSM API database ingest operation will check the ID sequences of the target
-database (one time only) to determine the starting changeset and element ID's to use for the entire
-write operation.  Enabling this setting precludes a user from having to specify the
-"postgresql.dumpfile.writer.start.id.*" configuration options (it overrides them).  This setting
-must be used in conjunction with the "osmapidb.id.aware.url" setting.  IMPORTANT: This setting
-should only be enabled in situations where a single user is writing to the target OSM API database
-(database is offline).  Since the command does not continually check for the next available ID
-(for performance reasons), ID conflict errors may occur if multiple users are writing to the
-database simultaneously when this option is enabled.
-
-=== postgresql.dumpfile.writer.element.status.count.interval
-
-* Data Type: long
-* Default Value: `100000`
-
-Count at which the load status of each element type should be logged by the PostgresqlDumpfileWriter.
-e.g. With a value of 100000, you will see a element load status update message for every 100000
-elements parsed.
-
-=== postgresql.dumpfile.writer.start.id.changeset
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for changesets created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.node
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for nodes created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.relation
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for relations created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.start.id.way
-
-* Data Type: long
-* Default Value: `1`
-
-Starting ID value for ways created in a PostgreSQL dumpfile.
-
-=== postgresql.dumpfile.writer.user.email
-
-* Data Type: string
-* Default Value: ``
-
-If this value is set, the generated dumpfile will insert statements that add a user with the
-specified email address to the database.
-
-=== postgresql.dumpfile.writer.user.id
-
-* Data Type: int
-* Default Value: `1`
-
-If the `postgresql.dumpfile.writer.user.email` field is set, the user that is added to the
-database will be assigned the user id set by this field.
-
 === progress.reporting.format
 
 * Data Type: string
@@ -1810,6 +1887,15 @@ By default should a reader use the file status from the file. Not honored by all
 If reader.use.file.status is true, the default action is to drop the status tag from the file during reading.
 Setting reader.keep.file.status to true preserves the status tag. Not honored by all readers.
 
+=== remove.attribute.visitor.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
+valid values.
+
 === remove.duplicate.areas.diff
 
 * Data Type: string
@@ -1839,14 +1925,6 @@ Should the element remover remove the elements recursively?
 ** ``
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
-
-=== review.tags.treat.as.metadata
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, Hootenanny review tags are treated as metadata tags and will be removed by the
-NoInformationElementRemover cleaning operation.
 
 === rubber.sheet.debug
 
@@ -1927,50 +2005,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
-=== hootapi.db.writer.create.user
-
-* Data Type: bool
-* Default Value: `false`
-
-Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
-This is most useful when debugging and testing.
-
-=== hootapi.db.writer.output.id.mappings
-
-* Data Type: string
-* Default Value: ``
-
-If this value is set to a non-empty string, the system will attempt to open a file with the
-specified name and output all the ID mappings (source to destination) used for nodes, ways, and
-relations that were written to the database.
-
-=== hootapi.db.writer.overwrite.map
-
-* Data Type: bool
-* Default Value: `false`
-
-If set to true then if there is already a map with the specified name then it will be removed before
-a new map is written.
-
-=== osmapidb.id.aware.url
-
-* Data Type: string
-* Default Value: ``
-
-This is required when using either the OsmApiDbAwareHootApiDbReader, OsmApiDbAwareHootApiDbWriter,
-or PostgresqlDumpfileWriter with the postgresql.dumpfile.writer.auto.calc.ids=true setting.  It
-forces database reading/writing use the specified OSM API database as master for determining the
-sequencing of element ID's.
-
-=== remove.attribute.visitor.types
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
-valid values.
-
 === script.test.max.exec.time
 
 * Data Type: int
@@ -2020,13 +2054,6 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
-
-=== stats.class
-
-* Data Type: string
-* Default Value: `hoot::ScriptStatsComposer`
-
-Class to instantiate from the factory for statistics writing.
 
 === status.criterion.status
 
@@ -2251,7 +2278,7 @@ Hootenanny will only use Greedy Constrained Matches.
 === unify.optimizer.time.limit
 
 * Data Type: double
-* Default Value: `30`
+* Default Value: `60`
 
 The maximum amount of time in seconds to wait for the optimizer to complete. A value of -1 makes
 the wait time limit unlimited.
@@ -2483,19 +2510,49 @@ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 The weight used will be `1.0 / (w ^ p)` where w is the frequency. Valid values are >= 0, but
 generally it should be `1 >= p >= 0`.
 
-=== writer.include.circular.error
+=== writer.include.circular.error.tags
 
 * Data Type: bool
 * Default Value: `true`
 
 When true, writers will include circular error information. Not honored by all writers.
 
-=== writer.include.debug
+=== writer.include.conflate.review.detail.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+Add detailed review tags to review relations during conflation.  Turning this setting off is
+generally only done in debugging environments.  This setting allows for partitioning the level of
+detail in the review relation tags into two groups.  Turning this setting off can be useful during
+debugging in situations where you are comparing map outputs and want to see reviews in the output
+but are not concerned with a higher level of review detail.  Disabling this setting will also
+disable AddHilbertReviewSortOrderOp, the output of which is depended upon by the Hootenanny user
+interface.
+
+=== writer.include.conflate.score.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-When true, writers will include debug information (e.g. status). Not honored by all writers.
+Add match/miss/review score values to elements with matches during Unifying Conflation. This is
+useful for debugging.
+
+=== writer.include.debug.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When true, writers will include debug information (hoot::* tags; e.g. status). Not honored by all
+writers.
+
+=== writer.clean.review.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Hootenanny review tags are treated as metadata tags and will be removed by the
+NoInformationElementRemover cleaning operation.
 
 === writer.precision
 

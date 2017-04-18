@@ -34,7 +34,6 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/ElementInputStream.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -52,6 +51,7 @@ HootApiDbWriter::HootApiDbWriter()
   _nodesWritten = 0;
   _waysWritten = 0;
   _relationsWritten = 0;
+  _includeIds = false;
 
   setConfiguration(conf());
 }
@@ -61,13 +61,19 @@ HootApiDbWriter::~HootApiDbWriter()
   close();
 }
 
-void HootApiDbWriter::_addElementTags(const shared_ptr<const Element> &e, Tags& t)
+void HootApiDbWriter::_addElementTags(const boost::shared_ptr<const Element> &e, Tags& t)
 {
-  if (e->getCircularError() >= 0.0)
+  if (!t.contains(MetadataTags::HootStatus()))
   {
-    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+    if ((_textStatus && t.getNonDebugCount() > 0) || (_includeDebug && _textStatus))
+      t[MetadataTags::HootStatus()] = e->getStatus().toTextStatus();
+    else if (_includeDebug && !_textStatus)
+      t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
   }
-  t[MetadataTags::HootStatus()] = QString::number(e->getStatus().getEnum());
+  if (e->hasCircularError() && _includeCircularError)
+    t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+  if (_includeDebug || _includeIds)
+    t[MetadataTags::HootId()] = QString("%1").arg(e->getId());
 }
 
 void HootApiDbWriter::close()
@@ -301,6 +307,9 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setUserEmail(configOptions.getApiDbEmail());
   setCreateUser(configOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(configOptions.getHootapiDbWriterOverwriteMap());
+  setIncludeDebug(configOptions.getWriterIncludeDebugTags());
+  setTextStatus(configOptions.getWriterTextStatus());
+  setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
 }
 
 void HootApiDbWriter::_startNewChangeSet()
@@ -312,7 +321,7 @@ void HootApiDbWriter::_startNewChangeSet()
   _hootdb.beginChangeset(tags);
 }
 
-void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
+void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
   Tags t = n->getTags();
   _addElementTags(n, t);
@@ -345,7 +354,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Node>& n)
   _nodesWritten++;
 }
 
-void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
+void HootApiDbWriter::writePartial(const ConstWayPtr& w)
 {
   long wayId;
 
@@ -389,7 +398,7 @@ void HootApiDbWriter::writePartial(const shared_ptr<const Way>& w)
   _waysWritten++;
 }
 
-void HootApiDbWriter::writePartial(const shared_ptr<const Relation>& r)
+void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
   long relationId;
 

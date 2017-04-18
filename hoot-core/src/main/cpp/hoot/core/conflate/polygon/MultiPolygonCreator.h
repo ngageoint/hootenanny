@@ -82,7 +82,7 @@ public:
    * geometry will be returned. Otherwise, a best effort will be made to return a reasonable
    * polygon.
    */
-  shared_ptr<Geometry> createMultipolygon() const;
+  boost::shared_ptr<Geometry> createMultipolygon() const;
 
 private:
 

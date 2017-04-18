@@ -78,9 +78,9 @@ QList<NetworkVertexScorePtr> ConflictsNetworkMatcher::getAllVertexScores() const
   return QList<NetworkVertexScorePtr>();
 }
 
-shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
+boost::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcher::create()
 {
-  return shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
+  return boost::shared_ptr<ConflictsNetworkMatcher>(new ConflictsNetworkMatcher());
 }
 
 void ConflictsNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)

@@ -66,7 +66,9 @@ void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList n
   ConfigOptions configOptions;
   QString statsFormat = configOptions.getStatsFormat();
   QString statsOutput = configOptions.getStatsOutput();
-  QString statsClassName = configOptions.getStatsClass();
+  //no point in making this class configurable unless there ends up being more than one
+  //implementation available
+  QString statsClassName = "hoot::ScriptStatsComposer";
   QString statsScript = configOptions.getStatsScript();
   LOG_DEBUG("stats format = " << statsFormat << endl);
   LOG_DEBUG("stats outfile= " << statsOutput << endl);
@@ -233,12 +235,12 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
 
   // read the conflation status from the file.
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-  shared_ptr<OsmMap> map(new OsmMap());
+  OsmMapPtr map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;
-  shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
   cso->apply(map);
   allStats.append(cso->getStats());
 

@@ -127,7 +127,7 @@ public:
   void runCircleTest()
   {
     Settings s;
-    shared_ptr<OsmMap> map(new OsmMap());
+   OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmXmlReader reader;
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);

@@ -62,18 +62,20 @@ AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 {
 }
 
-void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
+void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 {
-  if (!ConfigOptions().getConflateAddReviewDetail())
+  if (!ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    LOG_DEBUG("AddHilbertReviewSortOrderOp disabled due to conflate.add.review.detail=false.");
+    LOG_DEBUG(
+      "AddHilbertReviewSortOrderOp disabled due to " <<
+      ConfigOptions::getWriterIncludeConflateReviewDetailTagsKey() << "=false.");
     return;
   }
 
   _mapEnvelope.reset();
   MapProjector::projectToPlanar(map);
 
-  const RelationMap& relations = map->getRelationMap();
+  const RelationMap& relations = map->getRelations();
 
   vector< pair<ElementId, int64_t> > reviewOrder;
   // reserves at least as much as we need.

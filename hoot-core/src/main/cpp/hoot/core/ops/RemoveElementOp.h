@@ -76,7 +76,7 @@ public:
    * @brief apply performs the removal operation
    * @param map to operate on
    */
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * @brief getClassName gest the name of the class

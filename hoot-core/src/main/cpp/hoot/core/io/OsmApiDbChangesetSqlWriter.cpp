@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -94,8 +95,8 @@ void OsmApiDbChangesetSqlWriter::write(const QString sql)
 
         //had problems here when trying to prepare these queries (should they be?); the changeset
         //writing needs to be done before the element writing, hence the separate queries
-        _execNoPrepare(changesetInsertStatement);
-        _execNoPrepare(elementSqlStatements);
+        DbUtils::execNoPrepare(_db.getDB(), changesetInsertStatement);
+        DbUtils::execNoPrepare(_db.getDB(), elementSqlStatements);
 
         changesetInsertStatement = "";
         elementSqlStatements = "";
@@ -120,7 +121,7 @@ void OsmApiDbChangesetSqlWriter::write(const QString sql)
       }
       else if (sqlStatement.contains("UPDATE " + ApiDb::getChangesetsTableName()))
       {
-        //some tight coupling here to OsmChangesetSqlWriter
+        //some tight coupling here to OsmChangesetSqlFileWriter
         changesetStatType = "";
         _changesetDetailsStr = sqlStatement.split("SET")[1].split("WHERE")[0].trimmed();
         //need to do some extra processing here to convert the coords in the string from ints to
@@ -161,8 +162,8 @@ void OsmApiDbChangesetSqlWriter::write(const QString sql)
       throw HootException("No element SQL statements changeset.");
     }
 
-    _execNoPrepare(changesetInsertStatement);
-    _execNoPrepare(elementSqlStatements);
+    DbUtils::execNoPrepare(_db.getDB(), changesetInsertStatement);
+    DbUtils::execNoPrepare(_db.getDB(), elementSqlStatements);
 
     changesetInsertStatement = "";
     elementSqlStatements = "";
@@ -225,7 +226,7 @@ bool OsmApiDbChangesetSqlWriter::conflictExistsInTarget(const QString boundsStr,
       "Invalid timestamp: " + time.toString() + ".  Should be of the form " + OsmApiDb::TIME_FORMAT);
   }
 
-  shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
+  boost::shared_ptr<QSqlQuery> changesetItr = _db.getChangesetsCreatedAfterTime(timeStr);
   while (changesetItr->next())
   {
     LOG_VARD(changesetItr->value(0).toLongLong());
@@ -250,18 +251,6 @@ bool OsmApiDbChangesetSqlWriter::conflictExistsInTarget(const QString boundsStr,
   }
   LOG_DEBUG("No conflicts exist for input bounds " << boundsStr << " and input time " << timeStr);
   return false;
-}
-
-void OsmApiDbChangesetSqlWriter::_execNoPrepare(const QString sql)
-{
-  QSqlQuery q(_db.getDB());
-  LOG_VARD(sql);
-  if (q.exec(sql) == false)
-  {
-    throw HootException(
-      QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
-  }
-  LOG_VARD(q.numRowsAffected());
 }
 
 }

@@ -17,7 +17,7 @@
 #include "WayJoin2InputSplit.h"
 
 // Hoot
-#include <hoot/hadoop/PbfInputSplit.h>
+#include <hoot/hadoop/pbf/PbfInputSplit.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
@@ -88,7 +88,7 @@ void WayJoin2InputSplit::readFields(char* byteArray, long len)
   _childSplit->readFields(childData.data(), size);
 }
 
-void WayJoin2InputSplit::setSplit(shared_ptr<InputSplit> split)
+void WayJoin2InputSplit::setSplit(boost::shared_ptr<InputSplit> split)
 {
   if (dynamic_cast<PbfInputSplit*>(split.get()) != NULL)
   {

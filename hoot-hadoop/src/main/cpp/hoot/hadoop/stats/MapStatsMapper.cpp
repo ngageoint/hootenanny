@@ -41,14 +41,14 @@ void MapStatsMapper::close()
   _writeStats(*_context, _stats);
 }
 
-void MapStatsMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
+void MapStatsMapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
   _context = &context;
 
-  const NodeMap& nm = m->getNodeMap();
+  const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<const Node>& n = it->second;
+    const ConstNodePtr& n = it->second;
 
     _stats.expandNodeRange(n);
     _nodeCount++;
@@ -57,7 +57,7 @@ void MapStatsMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
   const WayMap& wm = m->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<const Way>& w = it->second;
+    const ConstWayPtr& w = it->second;
     _stats.expandWayRange(w->getId());
     _wayCount++;
   }
@@ -80,7 +80,7 @@ void MapStatsMapper::_writeStats(HadoopPipes::MapContext& context, const MapStat
         arg(partition, 5, 10, QChar('0'));
 
     LOG_INFO("Writing to: " << path);
-    shared_ptr<ostream> osStats(fs.create(path.toStdString()));
+   boost::shared_ptr<ostream> osStats(fs.create(path.toStdString()));
 
     stats.write(*osStats);
   }

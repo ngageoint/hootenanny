@@ -174,6 +174,15 @@ function additiveScore(map, e1, e2) {
 
     var reason = result.reasons;
 
+    var ignoreType = false;
+    hoot.trace("hasName(e1): " + hasName(e1));
+    hoot.trace("hasName(e2): " + hasName(e2));
+    if (hoot.get("poi.ignore.type.if.name.present") == 'true' && hasName(e1) && hasName(e2))
+    {
+      ignoreType = true;
+    }
+    hoot.trace("ignoreType: " + ignoreType);
+
     var t1 = e1.getTags().toDict();
     var t2 = e2.getTags().toDict();
 
@@ -214,10 +223,17 @@ function additiveScore(map, e1, e2) {
     var mean = translateMeanWordSetLevenshtein_1_5.extract(map, e1, e2);
     var weightedWordDistanceScore = weightedWordDistance.extract(map, e1, e2);
     var weightedPlusMean = mean + weightedWordDistanceScore;
-    var poiDistance = getTagCategoryDistance("poi", map, e1, e2);
-    var artworkTypeDistance = getTagAncestorDistance("artwork_type", map, e1, e2);
-    var cuisineDistance = getTagAncestorDistance("cuisine", map, e1, e2);
-    var sportDistance = getTagAncestorDistance("sport", map, e1, e2);
+    var poiDistance = 1.0;
+    var artworkTypeDistance = 1.0;
+    var cuisineDistance = 1.0;
+    var sportDistance = 1.0;
+    if (!ignoreType)
+    {
+      poiDistance = getTagCategoryDistance("poi", map, e1, e2);
+      artworkTypeDistance = getTagAncestorDistance("artwork_type", map, e1, e2);
+      cuisineDistance = getTagAncestorDistance("cuisine", map, e1, e2);
+      sportDistance = getTagAncestorDistance("sport", map, e1, e2);
+    }
 
     var score = 0;
 
@@ -268,7 +284,12 @@ function additiveScore(map, e1, e2) {
     // we're unlikely to get more evidence than the fact that it is a tower
     // or pole. If the power tag matches exactly, give it 2 points of evidence
     // if not, just give it one.
-    var powerDistance = getTagDistance("power", e1, e2);
+    var powerDistance = 1.0;
+    if (!ignoreType)
+    {
+      powerDistance = getTagDistance("power", e1, e2);
+    }
+
     if (powerDistance == 0) {
         typeScore += 2;
         reason.push("same power (electrical) type");
@@ -279,8 +300,11 @@ function additiveScore(map, e1, e2) {
 
 
     // if at least one feature contains a place
-    var placeCount = getTagsByAncestor("place", t1).length +
-        getTagsByAncestor("place", t2).length;
+    var placeCount = 0;
+    if (!ignoreType)
+    {
+      placeCount = getTagsByAncestor("place", t1).length + getTagsByAncestor("place", t2).length;
+    }
 
     // if at least one of the points has a place and neither of them are
     // generic poi types

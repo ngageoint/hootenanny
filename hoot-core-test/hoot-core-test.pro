@@ -193,10 +193,10 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.cpp \
     src/test/cpp/hoot/core/io/ServiceHootApiDbReaderTest.cpp \
     src/test/cpp/hoot/core/io/ServiceHootApiDbWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmPostgresqlDumpfileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbBulkWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmChangesetSqlWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmChangesetSqlFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlWriterTest.cpp
 
 HEADERS += \
@@ -246,7 +246,7 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetXmlWriterTest.cpp
+    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \

@@ -48,7 +48,6 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
-
 namespace hoot
 {
 
@@ -65,13 +64,8 @@ public:
 
   void setUp()
   {
-    _deleteData();
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
   }
-
-//  void tearDown()
-//  {
-//    _deleteData();
-//  }
 
   void insertData()
   {
@@ -135,26 +129,26 @@ public:
     }
   }
 
-  void verifyFullReadOutput(shared_ptr<OsmMap> map)
+  void verifyFullReadOutput(OsmMapPtr map)
   {
     //nodes
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     HOOT_STR_EQUALS(true, map->containsNode(1));
-    shared_ptr<Node> node = map->getNode(1);
+    NodePtr node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(38.4, node->getY());
     CPPUNIT_ASSERT_EQUAL(-106.5, node->getX());
     CPPUNIT_ASSERT_EQUAL(15.0, node->getCircularError());
     CPPUNIT_ASSERT_EQUAL(2, node->getTags().size());
 
-    shared_ptr<Node> node1 = map->getNode(2);
+    NodePtr node1 = map->getNode(2);
     CPPUNIT_ASSERT_EQUAL((long)2, node1->getId());
     CPPUNIT_ASSERT_EQUAL(38.0, node1->getY());
     CPPUNIT_ASSERT_EQUAL(-104.0, node1->getX());
 
     //ways
     HOOT_STR_EQUALS(true, map->containsWay(1));
-    shared_ptr<Way> way = map->getWay(1);
+    WayPtr way = map->getWay(1);
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT_EQUAL(2, (int)way->getNodeCount());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getNodeId(0));
@@ -164,7 +158,7 @@ public:
 
     //relations
     HOOT_STR_EQUALS(true, map->containsRelation(1));
-    shared_ptr<Relation> relation = map->getRelation(1);
+    RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     vector<RelationData::Entry> relationData = relation->getMembers();
     CPPUNIT_ASSERT_EQUAL(2, (int)relation->getMembers().size());
@@ -176,7 +170,7 @@ public:
   void runReadOsmApiTest()
   {
     OsmApiDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     insertData();
 
@@ -198,7 +192,7 @@ public:
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     OsmApiDbReader reader;
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     reader.setBoundingBox(
       "-78.02265434416296,38.90089748801109,-77.9224564416296,39.00085678801109");
@@ -210,13 +204,13 @@ public:
     //requested bounds, but one of them is referenced by a way within the bounds and the other by a
     //relation within the bounds.  The node not returned is outside of the requested bounds and not
     //reference by any other element.
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
     //All but one of the five ways should be returned.  The way not returned contains all nodes
     //that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
     //All but one of the six relations should be returned.  The relation not returned contains all
     //members that are out of bounds.
-    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(5, (int)map->getRelations().size());
 
     QDir().mkpath("test-output/io/ServiceOsmApiDbReaderTest");
     MapProjector::projectToWgs84(map);
@@ -232,21 +226,11 @@ public:
     map.reset(new OsmMap());
     reader.read(map);
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();
-  }
-
-private:
-
-  void _deleteData()
-  {
-    OsmApiDb database;
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    database.deleteData();
-    database.close();
   }
 };
 

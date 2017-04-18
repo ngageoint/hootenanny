@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGESUBLINE_H
 #define EDGESUBLINE_H
@@ -48,15 +48,15 @@ public:
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
-  shared_ptr<EdgeSubline> clone() const;
+ boost::shared_ptr<EdgeSubline> clone() const;
 
   bool contains(ConstNetworkVertexPtr v) const;
 
-  bool contains(shared_ptr<const EdgeSubline> es) const;
+  bool contains(boost::shared_ptr<const EdgeSubline> es) const;
 
   bool contains(ConstEdgeLocationPtr el) const;
 
-  static shared_ptr<EdgeSubline> createFullSubline(ConstNetworkEdgePtr e);
+  static boost::shared_ptr<EdgeSubline> createFullSubline(ConstNetworkEdgePtr e);
 
   const ConstNetworkEdgePtr& getEdge() const { return _start->getEdge(); }
 
@@ -79,14 +79,14 @@ public:
   /**
    * Returns true if the sublines share any points.
    */
-  bool intersects(shared_ptr<const EdgeSubline> other) const;
+  bool intersects(boost::shared_ptr<const EdgeSubline> other) const;
   bool intersects(ConstEdgeLocationPtr el) const;
 
   /**
    * Returns true if the other subline goes in the same dirction as this subline. Only
    * a valid test if sublines belong to the same edge.
    */
-  bool isSameDirection(shared_ptr<const EdgeSubline> other) const;
+  bool isSameDirection(boost::shared_ptr<const EdgeSubline> other) const;
 
   bool isBackwards() const { return _end < _start; }
 
@@ -98,7 +98,7 @@ public:
    * Returns true if other overlaps (a subline in common). If they only touch at a point it is not
    * considered overlapping.
    */
-  bool overlaps(shared_ptr<const EdgeSubline> other) const;
+  bool overlaps(boost::shared_ptr<const EdgeSubline> other) const;
 
   /**
    * swap start and end.
@@ -111,14 +111,14 @@ public:
    * Returns a new subline that combines this and other. This and other must touch. If they are
    * going in different directions then the direction of this will be maintained.
    */
-  shared_ptr<EdgeSubline> unionSubline(shared_ptr<const EdgeSubline> other) const;
+ boost::shared_ptr<EdgeSubline> unionSubline(boost::shared_ptr<const EdgeSubline> other) const;
 
 private:
   ConstEdgeLocationPtr _start, _end;
 };
 
-typedef shared_ptr<EdgeSubline> EdgeSublinePtr;
-typedef shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
+typedef boost::shared_ptr<EdgeSubline> EdgeSublinePtr;
+typedef boost::shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
 
 bool operator==(ConstEdgeSublinePtr, ConstEdgeSublinePtr);
 inline bool operator!=(ConstEdgeSublinePtr es1, ConstEdgeSublinePtr es2)

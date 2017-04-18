@@ -34,7 +34,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/algorithms/zindex/ZValue.h>
 #include <hoot/core/algorithms/zindex/ZCurveRanger.h>
@@ -123,7 +122,7 @@ void ApiDb::open(const QUrl& url)
   }
   else
   {
-    _db =  QSqlDatabase::database(connectionName);
+    _db = QSqlDatabase::database(connectionName);
   }
 
   if (_db.isOpen() == false)
@@ -160,7 +159,7 @@ void ApiDb::open(const QUrl& url)
     LOG_WARN("Error disabling Postgresql INFO messages.");
   }
 
-  LOG_DEBUG("Successfully opened _db: " << url.toString());
+  LOG_DEBUG("Successfully opened db: " << url.toString());
 }
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
@@ -292,7 +291,7 @@ vector<long> ApiDb::selectNodeIdsForWay(long wayId, const QString sql)
   return result;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
+boost::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString sql)
 {
   if (!_selectNodeIdsForWay)
   {
@@ -420,28 +419,12 @@ unsigned int ApiDb::tileForPoint(double lat, double lon)
   return tile;
 }
 
-QSqlQuery ApiDb::_execNoPrepare(const QString sql) const
-{
-  // inserting strings in this fashion is safe b/c it is private and we closely control the table
-  // names.
-  QSqlQuery q(_db);
-  LOG_VARD(sql);
-
-  if (q.exec(sql) == false)
-  {
-    throw HootException(QString("Error executing query: %1 (%2)").arg(q.lastError().text()).arg(sql));
-  }
-  LOG_VARD(q.numRowsAffected());
-
-  return q;
-}
-
 long ApiDb::round(double x)
 {
   return (long)(x + 0.5);
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
+boost::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
 {
   LOG_VARD(bounds);
   const vector<Range> tileRanges = _getTileRanges(bounds);
@@ -489,7 +472,7 @@ shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
   return _selectNodesByBounds;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
+boost::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
 {
   if (nodeIds.size() == 0)
   {
@@ -518,7 +501,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeI
   return _selectWayIdsByWayNodeIds;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
+boost::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                            const TableType& tableType)
 {
   if (elementIds.size() == 0)
@@ -549,7 +532,7 @@ shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& 
   return _selectElementsByElementIdList;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
+boost::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
 {
   if (wayIds.size() == 0)
   {
@@ -578,7 +561,7 @@ shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayId
   return _selectWayNodeIdsByWayIds;
 }
 
-shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+boost::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                           const ElementType& memberElementType)
 {
   if (memberIds.size() == 0)
@@ -665,7 +648,7 @@ QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
   return sql;
 }
 
-shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
+boost::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr)
 {
   LOG_VARD(timeStr);
   if (!_selectChangesetsCreatedAfterTime)
@@ -683,12 +666,69 @@ shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString timeStr
     LOG_ERROR(_selectChangesetsCreatedAfterTime->executedQuery());
     LOG_ERROR(_selectChangesetsCreatedAfterTime->lastError().text());
     throw HootException(
-      "Could not execute changesets query: " + _selectChangesetsCreatedAfterTime->lastError().text());
+      "Could not execute changesets query: " +
+      _selectChangesetsCreatedAfterTime->lastError().text());
   }
   LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
   LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
 
   return _selectChangesetsCreatedAfterTime;
+}
+
+QMap<QString, QString> ApiDb::getDbUrlParts(const QString url)
+{
+  QMap<QString, QString> dbUrlParts;
+
+  QStringList dbUrlPartsList = url.split("/");
+  dbUrlParts["database"] = dbUrlPartsList[dbUrlPartsList.size() - 1];
+  QStringList userParts = dbUrlPartsList[dbUrlPartsList.size() - 2].split(":");
+  dbUrlParts["user"] = userParts[0];
+  dbUrlParts["password"] = userParts[1].split("@")[0];
+  dbUrlParts["host"] = userParts[1].split("@")[1];
+  dbUrlParts["port"] = userParts[2];
+
+  return dbUrlParts;
+}
+
+QString ApiDb::getPsqlString(const QString url)
+{
+  const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
+  return
+    "-h " + dbUrlParts["host"] + " -p " + dbUrlParts["port"] +
+    " -U " + dbUrlParts["user"] + " -d " + dbUrlParts["database"];
+}
+
+void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
+{
+  const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(dbUrl);
+  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
+  if (!(Log::getInstance().getLevel() <= Log::Info))
+  {
+    cmd += " --quiet";
+  }
+  cmd += " " + getPsqlString(dbUrl) + " -f " + sqlFile;
+  if (!(Log::getInstance().getLevel() <= Log::Info))
+  {
+    cmd += " > /dev/null";
+  }
+  LOG_DEBUG(cmd);
+  if (system(cmd.toStdString().c_str()) != 0)
+  {
+    throw HootException("Failed executing SQL file against the database.");
+  }
+}
+
+QString ApiDb::getPqString(const QString url)
+{
+  const QMap<QString, QString> dbUrlParts = getDbUrlParts(url);
+  QString hostAddr = dbUrlParts["host"];
+  if (hostAddr == "localhost")
+  {
+    hostAddr = "127.0.0.1";
+  }
+  return
+    "dbname=" + dbUrlParts["database"] + " user=" + dbUrlParts["user"] + " password=" +
+    dbUrlParts["password"] + " hostaddr=" + hostAddr + " port=" + dbUrlParts["port"];
 }
 
 }

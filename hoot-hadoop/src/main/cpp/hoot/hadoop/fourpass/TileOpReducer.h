@@ -19,7 +19,7 @@
 
 // Hoot
 #include <hoot/core/conflate/NodeReplacements.h>
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Reducer.h>
@@ -60,27 +60,27 @@ private:
   NodeReplacements _nr;
 
   MapStats _stats;
-  shared_ptr<HadoopIdGenerator> _idGen;
+ boost::shared_ptr<HadoopIdGenerator> _idGen;
   int _partition;
   std::string _workDir;
   PbfRecordWriter* _writer;
-  shared_ptr<OsmMapOperation> _op;
+ boost::shared_ptr<OsmMapOperation> _op;
 
   void _conflate(int key, HadoopPipes::ReduceContext& context);
 
-  void _emitMap(shared_ptr<OsmMap> map);
+  void _emitMap(boost::shared_ptr<OsmMap> map);
 
-  const Envelope& _getContainingEnvelope(const shared_ptr<OsmMap>& map);
+  const Envelope& _getContainingEnvelope(const boost::shared_ptr<OsmMap>& map);
 
   void _init(HadoopPipes::ReduceContext& context);
 
-  shared_ptr<OsmMap> _readMap(const string& value);
+ boost::shared_ptr<OsmMap> _readMap(const string& value);
 
-  void _removeReplacedNodes(shared_ptr<OsmMap>& map);
+  void _removeReplacedNodes(boost::shared_ptr<OsmMap>& map);
 
-  void _splitWay(shared_ptr<Way> w);
+  void _splitWay(boost::shared_ptr<Way> w);
 
-  void _validate(const shared_ptr<OsmMap>& map);
+  void _validate(const boost::shared_ptr<OsmMap>& map);
 
   void _writeNodes(HadoopPipes::ReduceContext& context);
   void _writeWay(HadoopPipes::ReduceContext& context);

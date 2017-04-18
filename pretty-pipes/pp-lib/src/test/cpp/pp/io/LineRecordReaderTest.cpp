@@ -70,7 +70,7 @@ public:
       hdfs.remove(fn);
     }
 
-    shared_ptr<ostream> osPtr(hdfs.create(fn));
+   boost::shared_ptr<ostream> osPtr(hdfs.create(fn));
     ostream& os = *osPtr;
 
     int count = 5000;

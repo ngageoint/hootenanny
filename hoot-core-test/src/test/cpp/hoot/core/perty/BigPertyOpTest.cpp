@@ -62,7 +62,7 @@ public:
   void runBasicTest()
   {
     TestUtils::resetEnvironment();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -88,8 +88,8 @@ public:
     // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
     ////
     QSet<long> nids;
-    NodeMap::const_iterator it = map->getNodeMap().begin();
-    while (it != map->getNodeMap().end()) {
+    NodeMap::const_iterator it = map->getNodes().begin();
+    while (it != map->getNodes().end()) {
       nids.insert(it->first);
       it++;
     }
@@ -191,7 +191,7 @@ public:
 
   void runMaxDistanceTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;

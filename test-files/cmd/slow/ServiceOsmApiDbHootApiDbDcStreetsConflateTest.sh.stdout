@@ -13,26 +13,6 @@ STEP 1: Cleaning out the osm api db and initializing it for use...
 
 STEP 2: Writing the complete reference dataset to the osm api db...
 
- setval 
---------
-      2
-(1 row)
-
- setval 
---------
-   4325
-(1 row)
-
- setval 
---------
-    375
-(1 row)
-
- setval 
---------
-      1
-(1 row)
-
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
@@ -59,5 +39,5 @@ Relation(s) Deleted: 0
 
 STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
 
-17:06:07.505 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-files/cmd/slow/ServiceOsmApiDbHootApiDbDcStreetsConflateTest/output.osm ...
-17:06:07.590 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map from test-output/cmd/slow/ServiceOsmApiDbHootApiDbDcStreetsConflateTest/14-complete-output-PulledFromOsmApiDb.osm ...
+17:33:16.449 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-files/cmd/slow/ServiceOsmApiDbHootApiDbDcStreetsConflateTest/output.osm ...
+17:33:16.547 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-output/cmd/slow/ServiceOsmApiDbHootApiDbDcStreetsConflateTest/14-complete-output-PulledFromOsmApiDb.osm ...

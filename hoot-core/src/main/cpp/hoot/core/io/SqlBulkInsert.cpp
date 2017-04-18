@@ -31,7 +31,7 @@
 #include <hoot/core/util/Log.h>
 
 // Qt
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 #include <QSqlError>
 #include <QStringList>
 #include <QStringBuilder>

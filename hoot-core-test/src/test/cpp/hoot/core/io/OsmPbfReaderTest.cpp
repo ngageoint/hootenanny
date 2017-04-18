@@ -89,7 +89,7 @@ public:
     OsmMap::resetCounters();
     OsmPbfReader uut(false);
     fstream input("test-files/io/SmallSplits.pbf", ios::in | ios::binary);
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     vector<OsmPbfReader::BlobLocation> v = uut.loadOsmDataBlobOffsets(input);
 
@@ -132,7 +132,7 @@ public:
     }
 
     // sanity check that it actually read the data.
-    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
   }
 
@@ -165,14 +165,14 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     reader.parse(&ss, map);
 
     string expected("note = test tag\nhello = world\nhighway = road\n");
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(expected, map->getWay(42)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWay(42)->getNodeCount());
@@ -199,14 +199,14 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
     reader.parseElements(&ss, map);
 
     string expected("note = test tag\nhello = world\n");
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(expected, map->getNode(72)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(42.0, map->getNode(72)->getX(), 0.0001);
@@ -232,7 +232,7 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
@@ -266,14 +266,14 @@ public:
     memcpy((char*)s.data(), data, dataSize);
     stringstream ss(s, stringstream::in);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     OsmPbfReader reader(true);
     reader.setPermissive(true);
     reader.parseElements(&ss, map);
 
     string expected("note = test tag\nhello = world\nhighway = road\n");
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(expected, map->getWay(42)->getTags().toString().toStdString());
     CPPUNIT_ASSERT_EQUAL((size_t)5, map->getWay(42)->getNodeCount());
@@ -290,7 +290,7 @@ public:
 
     OsmPbfReader uut(false);
     fstream input("test-files/ToyTestA.osm.pbf", ios::in | ios::binary);
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     uut.parse(&input, map);
 
     QDir().mkpath("test-output/io/");
@@ -309,7 +309,7 @@ public:
 
     OsmPbfReader uut(false);
     fstream input("test-files/io/OsmPbfRelationTest.osm.pbf", ios::in | ios::binary);
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     uut.parse(&input, map);
 
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
@@ -398,7 +398,7 @@ public:
     OsmMap::resetCounters();
 
     OsmPbfReader reader(false);
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.open("test-files/ToyTestA.osm.pbf");
     reader.read(map);
     reader.close();
@@ -416,7 +416,7 @@ public:
   {
     OsmMap::resetCounters();
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm.pbf", false, Status::Unknown1);
 
     QDir().mkpath("test-output/io/");
@@ -451,11 +451,11 @@ public:
     int ctr = 0;
     while (reader.hasMoreElements())
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       reader.readPartial(map);
       CPPUNIT_ASSERT_EQUAL(
         chunkSize,
-        (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()));
+        (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()));
 
       QString outputFile(
         "test-output/io/OsmPbfPartialReaderTest" + QString::number(ctr + 1) + ".osm");
@@ -495,12 +495,12 @@ public:
     int ctr = 0;
     while (reader.hasMoreElements())
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       reader.readPartial(map);
 
       //some of these before the last one don't read out the full buffer size..not sure why
       CPPUNIT_ASSERT(
-        (int)(map->getNodeMap().size() + map->getWays().size() + map->getRelationMap().size()) <=
+        (int)(map->getNodes().size() + map->getWays().size() + map->getRelations().size()) <=
         chunkSize);
 
       QString outputFile(
@@ -562,13 +562,13 @@ public:
     OsmMap::resetCounters();
 
     //This pbf file contains Sort.Type_then_ID in the header. Test to read it.
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmPbfReader reader(true);
     reader.open("test-files/OsmPbfPartialReaderTest4_with_sorttype.osm.pbf");
     reader.read(map);
 
     CPPUNIT_ASSERT_EQUAL(true, reader.getSortedTypeThenId());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWay(-2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWay(-3)->getNodeCount());
@@ -577,7 +577,7 @@ public:
     //The test is for #161 - OsmPbfReader should be more permissive when the file is unsorted
     //This file doesn't have Sort.Type_then_ID in the header. Before changes, when permissive
     //set to false, the nodes count with ways are all zeros. Now the ways contain valid nodes.
-    shared_ptr<OsmMap> map1(new OsmMap());
+    OsmMapPtr map1(new OsmMap());
     OsmPbfReader reader1(true);
     reader1.open("test-files/OsmPbfPartialReaderTest4_without_sorttype.osm.pbf");
     reader1.setPermissive(false);
@@ -590,7 +590,7 @@ public:
     reader1.read(map1);
 
     CPPUNIT_ASSERT_EQUAL(false, reader1.getSortedTypeThenId());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map1->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map1->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map1->getWay(-2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map1->getWay(-3)->getNodeCount());
@@ -598,7 +598,7 @@ public:
 
 
     //test the pbf file that the sorted flag isn't set and values are out of order
-    shared_ptr<OsmMap> map2(new OsmMap());
+    OsmMapPtr map2(new OsmMap());
     OsmPbfReader reader2(true);
     reader2.open("test-files/OsmPbfTest_withoursoretype_unsorted.osm.pbf");
     reader2.setPermissive(false);
@@ -607,7 +607,7 @@ public:
     Log::getInstance().setLevel(loglLevel);
 
     CPPUNIT_ASSERT_EQUAL(false, reader2.getSortedTypeThenId());
-    CPPUNIT_ASSERT_EQUAL(6, (int)map2->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(6, (int)map2->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-1)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(3, (int)map2->getWay(-2)->getNodeCount());
     CPPUNIT_ASSERT_EQUAL(1, (int)map2->getWay(-3)->getNodeCount());

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTOSMMAPVISITOR_H
 #define ELEMENTOSMMAPVISITOR_H
@@ -53,7 +53,7 @@ public:
   virtual void setOsmMap(const OsmMap* /*map*/) { throw NotImplementedException(); }
 
   virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const shared_ptr<Element>& e) = 0;
+  virtual void visit(const boost::shared_ptr<Element>& e) = 0;
 
 protected:
   OsmMap* _map;

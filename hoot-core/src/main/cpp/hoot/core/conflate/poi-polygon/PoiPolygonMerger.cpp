@@ -245,8 +245,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   int poiCount = 0;
   ElementId poiElementId;
   Status poiStatus;
-  NodeMap::const_iterator nodeItr = map->getNodeMap().begin();
-  while (nodeItr != map->getNodeMap().end())
+  NodeMap::const_iterator nodeItr = map->getNodes().begin();
+  while (nodeItr != map->getNodes().end())
   {
     const int nodeId = nodeItr->first;
     NodePtr node = map->getNode(nodeId);
@@ -301,8 +301,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   }
   if (polyElementId.isNull())
   {
-    RelationMap::const_iterator relItr = map->getRelationMap().begin();
-    while (relItr != map->getRelationMap().end())
+    RelationMap::const_iterator relItr = map->getRelations().begin();
+    while (relItr != map->getRelations().end())
     {
       const int relationId = relItr->first;
       RelationPtr relation = map->getRelation(relationId);

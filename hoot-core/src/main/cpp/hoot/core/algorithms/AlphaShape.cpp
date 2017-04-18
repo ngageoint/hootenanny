@@ -103,7 +103,7 @@ public:
     _size = other._size;
   }
 
-  bool operator()(const shared_ptr<Geometry>& p1, const shared_ptr<Geometry>& p2)
+  bool operator()(const boost::shared_ptr<Geometry>& p1, const boost::shared_ptr<Geometry>& p2)
   {
     const Envelope* e1 = p1->getEnvelopeInternal();
     const Envelope* e2 = p2->getEnvelopeInternal();
@@ -139,7 +139,7 @@ private:
   ComparePolygon& operator=(ComparePolygon& other);
 
   Envelope _e;
-  shared_ptr<HilbertCurve> _curve;
+  boost::shared_ptr<HilbertCurve> _curve;
   double _size;
 };
 
@@ -154,21 +154,21 @@ AlphaShape::AlphaShape(double alpha)
   _dt.reset(new Tgs::DelaunayTriangulation);
 }
 
-shared_ptr<Way> AlphaShape::_addFaceAsWay(const Face* face, shared_ptr<OsmMap> map)
+WayPtr AlphaShape::_addFaceAsWay(const Face* face, boost::shared_ptr<OsmMap> map)
 {
   Edge e = face->getEdge(0);
   e.getOriginX();
-  shared_ptr<Node> start(new Node(Status::Unknown1, map->createNextNodeId(), e.getOriginX(), e.getOriginY(),
+  NodePtr start(new Node(Status::Unknown1, map->createNextNodeId(), e.getOriginX(), e.getOriginY(),
     -1));
   map->addNode(start);
-//  shared_ptr<Way> way(new Way(Unknown1, map->createNextWayId(), -1));
-    shared_ptr<Way> way;
+//  WayPtr way(new Way(Unknown1, map->createNextWayId(), -1));
+    WayPtr way;
 //  way->addNode(start->getId());
 
   for (int i = 2; i < 6; i+=2)
   {
     e = face->getEdge(i);
-    shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), e.getOriginX(),
+    NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), e.getOriginX(),
       e.getOriginY(), -1));
     map->addNode(n);
 //    way->addNode(n->getId());
@@ -184,9 +184,9 @@ shared_ptr<Way> AlphaShape::_addFaceAsWay(const Face* face, shared_ptr<OsmMap> m
   return way;
 }
 
-shared_ptr<Polygon> AlphaShape::_convertFaceToPolygon(const Face& face) const
+boost::shared_ptr<Polygon> AlphaShape::_convertFaceToPolygon(const Face& face) const
 {
-  shared_ptr<Polygon> result;
+  boost::shared_ptr<Polygon> result;
   CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
                            create(4, 2);
   LinearRing* lr;
@@ -340,13 +340,13 @@ void AlphaShape::insert(const vector< pair<double, double> >& points)
   }
 }
 
-shared_ptr<OsmMap> AlphaShape::toOsmMap()
+boost::shared_ptr<OsmMap> AlphaShape::toOsmMap()
 {
-  shared_ptr<OsmMap> result(new OsmMap());
+  boost::shared_ptr<OsmMap> result(new OsmMap());
 
   GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
 
-  const RelationMap& rm = result->getRelationMap();
+  const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();
@@ -356,11 +356,11 @@ shared_ptr<OsmMap> AlphaShape::toOsmMap()
   return result;
 }
 
-shared_ptr<Geometry> AlphaShape::toGeometry()
+boost::shared_ptr<Geometry> AlphaShape::toGeometry()
 {
   LOG_DEBUG("Traversing faces");
   // create a vector of all faces
-  vector< shared_ptr<Geometry> > tmp, tmp2;
+  vector< boost::shared_ptr<Geometry> > tmp, tmp2;
   Envelope e;
   double preUnionArea = 0.0;
   int i = 0;
@@ -370,7 +370,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
     i++;
     if (_isInside(f))
     {
-      shared_ptr<Polygon> p = _convertFaceToPolygon(f);
+      boost::shared_ptr<Polygon> p = _convertFaceToPolygon(f);
       tmp.push_back(p);
       e.expandToInclude(p->getEnvelopeInternal());
       preUnionArea += p->getArea();
@@ -381,7 +381,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
   // if the result is an empty geometry.
   if (tmp.size() == 0)
   {
-    return shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    return boost::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
 
   LOG_DEBUG("Joining faces");
@@ -400,7 +400,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
     // merge pairs at a time. This makes the join faster.
     for (size_t i = 0; i < tmp.size() - 1; i += 2)
     {
-      shared_ptr<Geometry> g;
+      boost::shared_ptr<Geometry> g;
       // sometimes GEOS gives results that are incorrect. In those cases we try cleaning the
       // geometries and attempting it again.
       bool cleanAndRetry = false;
@@ -449,7 +449,7 @@ shared_ptr<Geometry> AlphaShape::toGeometry()
     tmp = tmp2;
   }
 
-  shared_ptr<Geometry> result;
+  boost::shared_ptr<Geometry> result;
 
   LOG_DEBUG("Converting geometry to map.");
   if (tmp.size() == 1)

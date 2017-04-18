@@ -56,7 +56,7 @@ public:
 
   virtual ~PertyDuplicatePoiOp() {}
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   void duplicateNode(const NodePtr& n, const OsmMapPtr& map);
 

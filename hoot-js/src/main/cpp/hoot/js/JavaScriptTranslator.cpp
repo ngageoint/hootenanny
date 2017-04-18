@@ -36,6 +36,7 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/DoubleFieldDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
 #include <hoot/core/io/schema/Schema.h>
@@ -111,7 +112,7 @@ vector<JavaScriptTranslator::TranslatedFeature> JavaScriptTranslator::_createAll
   return result;
 }
 
-shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, QString &tableName)
+boost::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, QString &tableName)
 {
   if (vm.contains("attrs") == false)
   {
@@ -125,11 +126,11 @@ shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, QString
   tableName = vm["tableName"].toString();
 
   // figure out which layer this feature belongs in.
-  shared_ptr<const Layer> layer;
+ boost::shared_ptr<const Layer> layer;
 
   for (size_t i = 0; i < _schema->getLayerCount(); ++i)
   {
-    shared_ptr<const Layer> l = _schema->getLayer(i);
+   boost::shared_ptr<const Layer> l = _schema->getLayer(i);
 
     if (l->getName() == tableName)
     {
@@ -150,7 +151,7 @@ shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, QString
 
   QVariantMap attrs = vm["attrs"].toMap();
 
-  shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
+ boost::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
 
 
   for (QVariantMap::const_iterator it = attrs.begin(); it != attrs.end(); ++it)
@@ -365,7 +366,7 @@ void JavaScriptTranslator::_featureWarn(QString message, QString fileName, QStri
                          functionName.toStdString(), lineNumber);
 }
 
-shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
+boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
 {
   LOG_TRACE("Started getOgrOutputSchema");
 
@@ -392,7 +393,7 @@ shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
     if (schemaJs->IsArray())
     {
 
-      shared_ptr<Schema> schema(new Schema());
+     boost::shared_ptr<Schema> schema(new Schema());
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
       for (int i = 0; i < schemaV.size(); ++i)
@@ -453,7 +454,7 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
   }
 }
 
-void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVariant& enumerations)
+void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition *fd, QVariant& enumerations)
   const
 {
   if (enumerations.canConvert(QVariant::List) == false)
@@ -495,9 +496,51 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition* fd, QVaria
   }
 }
 
-shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant fieldV) const
+void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations)
+  const
 {
-  shared_ptr<FieldDefinition> result;
+  if (enumerations.canConvert(QVariant::List) == false)
+  {
+    throw HootException("Expected enumerations to be an array of maps.");
+  }
+  QVariantList vl = enumerations.toList();
+
+  for (int i = 0; i < vl.size(); i++)
+  {
+    if (vl[i].canConvert(QVariant::Map) == false)
+    {
+      throw HootException("Expected enumerations to be an array of maps.");
+    }
+    QVariantMap vm = vl[i].toMap();
+
+    if (vm["value"].canConvert(QVariant::LongLong) == false)
+    {
+      throw HootException("Expected each enumeration map to contain a valid value.");
+    }
+    int v = vm["value"].toLongLong();
+
+    if (fd->hasEnumeratedValue(v))
+    {
+      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN("Enumerated value repeated in enumerations table: " << v);
+      }
+      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+    }
+    else
+    {
+      fd->addEnumeratedValue(v);
+    }
+  }
+}
+
+boost::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant fieldV) const
+{
+ boost::shared_ptr<FieldDefinition> result;
 
   if (fieldV.canConvert(QVariant::Map) == false)
   {
@@ -511,6 +554,7 @@ shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant
     throw HootException("Error parsing type in column.");
   }
   QString type = map["type"].toString().toLower();
+
   if (type == "string")
   {
     StringFieldDefinition* fd = new StringFieldDefinition();
@@ -562,7 +606,7 @@ shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant
       _parseEnumerations(fd, map["enumerations"]);
     }
   }
-  else if (type == "enumeration" || type == "long integer" || type == "integer")
+  else if (type == "enumeration" || type == "integer")
   {
     IntegerFieldDefinition* fd = new IntegerFieldDefinition();
     result.reset(fd);
@@ -587,6 +631,35 @@ shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant
       fd->setMinValue(_toInt32(map["minimum"]));
     }
 
+    if (map.contains("enumerations"))
+    {
+      _parseEnumerations(fd, map["enumerations"]);
+    }
+  }
+  else if (type == "long integer")
+  {
+    LongIntegerFieldDefinition* fd = new LongIntegerFieldDefinition();
+    result.reset(fd);
+
+    if (map.contains("defValue"))
+    {
+      if (map["defValue"].isValid() == false)
+      {
+        fd->setDefaultIsNull(true);
+      }
+      else
+      {
+        fd->setDefaultValue(_toInt64(map["defValue"]));
+      }
+    }
+    if (map.contains("maximum"))
+    {
+      fd->setMaxValue(_toInt64(map["maximum"]));
+    }
+    if (map.contains("minimum"))
+    {
+      fd->setMinValue(_toInt64(map["minimum"]));
+    }
     if (map.contains("enumerations"))
     {
       _parseEnumerations(fd, map["enumerations"]);
@@ -622,9 +695,9 @@ shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant
   return result;
 }
 
-shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
+boost::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
 {
-  shared_ptr<Layer> newLayer(new Layer());
+ boost::shared_ptr<Layer> newLayer(new Layer());
 
   if (layer.canConvert(QVariant::Map) == false)
   {
@@ -678,10 +751,10 @@ shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
   }
   set<QString> names;
   QVariantList columns = columnsV.toList();
-  shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
+ boost::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
   for (int i = 0; i < columns.size(); i++)
   {
-    shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
+   boost::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
     if (names.find(fd->getName()) != names.end())
     {
       throw HootException("Found multiple fields with the same name. (" + fd->getName() + ")");
