@@ -26,34 +26,44 @@
  */
 package hoot.services.controllers.hgis;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.UUID;
+
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import hoot.services.UnitTest;
+
+
 public class FilterNonHGISPOIsCommandTest {
 
-/*
     @Test
     @Category(UnitTest.class)
     public void testFilterNonHgisPoisCommand() throws Exception {
-        FilterNonHGISPOIsCommandFactory filterNonHGISPOIsCommandFactory = new FilterNonHGISPOIsCommandFactory();
-        FilterNonHGISPOIsCommand command = filterNonHGISPOIsCommandFactory.build("testSrc1", "out1", this.getClass());
+        String jobId = UUID.randomUUID().toString();
+        String srcMap = "testSrc1";
+        String outputMap = "testOutput1";
 
-        String actualCaller = (String) command.get("caller");
-        String expectedCaller = this.getClass().getName();
-        assertEquals(expectedCaller, actualCaller);
+        FilterNonHGISPOIsCommand filterNonHGISPOIsCommand = new FilterNonHGISPOIsCommand(jobId, srcMap, outputMap, this.getClass());
 
-        String actualExec = (String) command.get("exec");
-        String expectedExec = HOME_FOLDER + "/scripts/services/" + HGIS_FILTER_SCRIPT;
-        assertEquals(expectedExec, actualExec);
+        assertEquals(jobId, filterNonHGISPOIsCommand.getJobId());
+        assertEquals(true, filterNonHGISPOIsCommand.getTrackable());
+        assertNotNull(filterNonHGISPOIsCommand.getSubstitutionMap());
+        assertNotNull(filterNonHGISPOIsCommand.getWorkDir());
+        assertNotNull(filterNonHGISPOIsCommand.getCommand());
 
-        String actualExectype = (String) command.get("exectype");
-        String expectedExectype = "";
-        assertEquals(expectedExectype, actualExectype);
+        String expectedCommand = "${SCRIPT} ${SOURCE} ${OUTPUT}";
+        assertEquals(expectedCommand, filterNonHGISPOIsCommand.getCommand());
 
-        String expectedCommandArgs =
-                "[{\"SOURCE\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\\/testSrc1\"}," +
-                 "{\"OUTPUT\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\\/out1\"}]";
+        String expectedOutput = "hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/testOutput1";
+        assertEquals(expectedOutput, filterNonHGISPOIsCommand.getSubstitutionMap().get("OUTPUT"));
 
-        String actualCommandArgs = command.get("params").toString();
+        String expectedSource = "hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/testSrc1";
+        assertEquals(expectedSource, filterNonHGISPOIsCommand.getSubstitutionMap().get("SOURCE"));
 
-        assertEquals(expectedCommandArgs, actualCommandArgs);
+        assertTrue(filterNonHGISPOIsCommand.getSubstitutionMap().get("SCRIPT").toString().endsWith("RemoveNonHgisPois.js"));
     }
-*/
 }

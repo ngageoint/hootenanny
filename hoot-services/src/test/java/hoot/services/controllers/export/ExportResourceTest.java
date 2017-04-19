@@ -27,14 +27,18 @@
 package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -42,13 +46,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.xpath.XPathAPI;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -58,23 +58,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
 
 import hoot.services.HootProperties;
-import hoot.services.IntegrationTest;
 import hoot.services.UnitTest;
-import hoot.services.command.ExternalCommand;
 import hoot.services.command.ExternalCommandManager;
-import hoot.services.controllers.osm.OSMResourceTestAbstract;
+import hoot.services.command.common.ZIPDirectoryContentsCommand;
+import hoot.services.command.common.ZIPFileCommand;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
+import hoot.services.job.Job;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.utils.MapUtils;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
-public class ExportResourceTest extends OSMResourceTestAbstract {
+public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
     private static String originalTEMP_OUTPUT_PATH;
 
@@ -92,18 +93,167 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         HootCustomPropertiesSetter.setProperty("TEMP_OUTPUT_PATH", originalTEMP_OUTPUT_PATH);
     }
 
-//    @Test
-//    @Category(UnitTest.class)
-//    public void testExportResource() throws Exception {
-//        ExportParams exportParams = new ExportParams();
-//        exportParams.setOutputType("osm");
-//
-//        String responseData = target("export/execute")
-//                .request(MediaType.APPLICATION_JSON)
-//                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
-//
-//        assertNotNull(responseData);
-//    }
+    @Test
+    @Category(UnitTest.class)
+    public void testExportOSMResource() throws Exception {
+        ExportParams exportParams = new ExportParams();
+        exportParams.setOutputType("osm");
+        exportParams.setInput("input");
+        exportParams.setOutputName("output");
+        exportParams.setTextStatus(true);
+        exportParams.setInputType("file");
+
+        String responseData = target("export/execute")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
+
+        assertNotNull(responseData);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(2, job.getCommands().length);
+        assertSame(ExportOSMCommand.class, job.getCommands()[0].getClass());
+        assertSame(ZIPFileCommand.class, job.getCommands()[1].getClass());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testExportOSMPBFResource() throws Exception {
+        ExportParams exportParams = new ExportParams();
+        exportParams.setOutputType("osm.pbf");
+        exportParams.setInput("input");
+        exportParams.setOutputName("output");
+        exportParams.setTextStatus(true);
+        exportParams.setInputType("file");
+
+        String responseData = target("export/execute")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
+
+        assertNotNull(responseData);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(1, job.getCommands().length);
+        assertSame(ExportOSMCommand.class, job.getCommands()[0].getClass());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testExportOSCResource() throws Exception {
+        ExportParams exportParams = new ExportParams();
+        exportParams.setOutputType("osc");
+        exportParams.setInput("input");
+        exportParams.setOutputName("output");
+        exportParams.setAppend(false);
+        exportParams.setTextStatus(false);
+        exportParams.setInputType("file");
+
+        String aoi = "-104.8192,38.8162,-104.6926,38.9181";
+        exportParams.setBounds(aoi);
+
+        String responseData = target("export/execute")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
+
+        assertNotNull(responseData);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(1, job.getCommands().length);
+        assertSame(ExportOSCCommand.class, job.getCommands()[0].getClass());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testExportOSMAPIDBResource() throws Exception {
+        long userId = MapUtils.insertUser();
+        long mapId = MapUtils.insertMap(userId);
+        String aoi = "-104.8192,38.8162,-104.6926,38.9181";
+
+        ExportParams exportParams = new ExportParams();
+        exportParams.setOutputType("osm_api_db");
+        exportParams.setInput("map-with-id-" + mapId);
+        exportParams.setOutputName("output");
+        exportParams.setAppend(false);
+        exportParams.setTextStatus(false);
+        exportParams.setInputType("file");
+        exportParams.setBounds(aoi);
+        exportParams.setUserId(String.valueOf(userId));
+
+        String conflictTimestamp = "2017-04-18 14:00:01.234";
+        Map<String, String> tags = new HashMap<>();
+        tags.put("osm_api_db_export_time", conflictTimestamp);
+        DbUtils.updateMapsTableTags(tags, mapId);
+
+        String responseData = target("export/execute")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
+
+        assertNotNull(responseData);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(2, job.getCommands().length);
+        assertSame(OSMAPIDBDeriveChangesetCommand.class, job.getCommands()[0].getClass());
+        assertSame(OSMAPIDBApplyChangesetCommand.class, job.getCommands()[1].getClass());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testExportShapeResource() throws Exception {
+        ExportParams exportParams = new ExportParams();
+        exportParams.setOutputType("shp");
+        exportParams.setTranslation("translations/TDSv40.js");
+        exportParams.setInput("input");
+        exportParams.setOutputName("output");
+        exportParams.setAppend(false);
+        exportParams.setTextStatus(false);
+        exportParams.setInputType("file");
+
+        String responseData = target("export/execute")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
+
+        assertNotNull(responseData);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(2, job.getCommands().length);
+        assertSame(ExportCommand.class, job.getCommands()[0].getClass());
+        assertSame(ZIPDirectoryContentsCommand.class, job.getCommands()[1].getClass());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testExportFGDBResource() throws Exception {
+        ExportParams exportParams = new ExportParams();
+        exportParams.setOutputType("gdb");
+        exportParams.setTranslation("translations/TDSv40.js");
+        exportParams.setInput("input");
+        exportParams.setOutputName("output");
+        exportParams.setAppend(false);
+        exportParams.setTextStatus(false);
+        exportParams.setInputType("file");
+
+        String responseData = target("export/execute")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(exportParams, MediaType.APPLICATION_JSON), String.class);
+
+        assertNotNull(responseData);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(2, job.getCommands().length);
+        assertSame(ExportCommand.class, job.getCommands()[0].getClass());
+        assertSame(ZIPDirectoryContentsCommand.class, job.getCommands()[1].getClass());
+    }
 
     @Test
     @Category(UnitTest.class)
@@ -130,57 +280,6 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
 
         JSONParser parser = new JSONParser();
         assertEquals(parser.parse(expected), parser.parse(result));
-    }
-
-    /*
-     * This tests the export make script that the changeset derivation export uses.  This technically doesn't
-     * test ExportJobResource at all but will leave it in this test class for lack of a better
-     * place to put it.
-     */
-    @Ignore
-    @Test
-    @Category(IntegrationTest.class)
-    public void testExportToChangesetScript() throws Exception {
-        File outputFile = null;
-        try {
-            //mock the command sent by DeriveChangesetResource to ProcessStreamInterface
-            JSONArray commandArgs = new JSONArray();
-            JSONObject hootCommand = new JSONObject();
-            ExternalCommand command = null; //new ExternalCommand();
-            
-            String jobId = UUID.randomUUID().toString();
-            hootCommand.put("jobid", jobId);
-            //don't want an integration with the database here, so just testing file inputs instead
-            hootCommand.put("input1", HOME_FOLDER + "/hoot-services/src/test/resources/hoot/services/controllers/export/AllDataTypesA.osm");
-            hootCommand.put("input2", HOME_FOLDER + "/hoot-services/src/test/resources/hoot/services/controllers/export/ExportJobResourceTestAdtConflated.osm");
-            hootCommand.put("aoi", "-104.8192,38.8162,-104.6926,38.9181");
-            //mimic the way ExportJobResource sets up the output path
-            hootCommand.put("outputfolder", TEMP_OUTPUT_PATH + "/" + jobId);
-            hootCommand.put("outputname", jobId);
-            hootCommand.put("outputtype", "osc");
-            outputFile = new File(hootCommand.get("outputfolder") + "/" + hootCommand.get("outputname") + "." + hootCommand.get("outputtype"));
-            commandArgs.add (hootCommand);
-
-            command.setCaller(this.getClass().getSimpleName());
-            command.setWorkDir(new File(TEMP_OUTPUT_PATH));
-
-            this.externalCommandInterface.exec(null, command);
-            
-            //verify output file - we're not going to do an exact diff on it to avoid a dependency on 
-            //core changeset generation logic which may change in the future.  just going to check for 
-            //non-zero element counts on create/delete, which is good enough indication that the 
-            //changeset generated without a failure
-            Document actualChangesetDoc = XmlDocumentBuilder.parse(FileUtils.readFileToString(outputFile, "UTF-8"));
-            assert(XPathAPI.selectNodeList(actualChangesetDoc, "//osmChange").getLength() == 1);
-            assert(XPathAPI.selectNodeList(actualChangesetDoc, "//osmChange/create").getLength() > 0);
-            assert(XPathAPI.selectNodeList(actualChangesetDoc, "//osmChange/delete").getLength() > 0);
-        }
-        finally {
-            FileUtils.deleteQuietly(outputFile);
-            if (outputFile != null) {
-                assertTrue(!outputFile.exists());
-            }
-        }
     }
 
     @Test

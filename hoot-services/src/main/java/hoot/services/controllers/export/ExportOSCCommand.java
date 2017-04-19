@@ -26,9 +26,6 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static hoot.services.HootProperties.OSMAPI_DB_URL;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +40,7 @@ class ExportOSCCommand extends ExportCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportOSCCommand.class);
 
     ExportOSCCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
-        super(jobId, params, debugLevel, caller);
+        super(jobId, params);
 
         String aoi = getBoundingBox(params);
         String outputPath = super.getOutputPath();
@@ -57,8 +54,8 @@ class ExportOSCCommand extends ExportCommand {
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("INPUT1", OSMAPI_DB_URL);
-        substitutionMap.put("INPUT2", HOOTAPI_DB_URL + "/" + params.getInput());
+        substitutionMap.put("INPUT1", params.getInput1());
+        substitutionMap.put("INPUT2", params.getInput2());
         substitutionMap.put("OUTPUT_PATH", outputPath);
 
         String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT_PATH}";
@@ -67,7 +64,7 @@ class ExportOSCCommand extends ExportCommand {
     }
 
     private static String getBoundingBox(ExportParams params) {
-        if (params.getBounds() != null) {
+        if (params.getBounds() == null) {
             throw new IllegalArgumentException("When exporting to a changeset, bounds must be specified.");
         }
 

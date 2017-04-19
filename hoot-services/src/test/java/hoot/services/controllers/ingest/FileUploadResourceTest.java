@@ -71,7 +71,6 @@ public class FileUploadResourceTest {
         }
     }
 
-
     @BeforeClass
     public static void beforeClass() throws Exception {
         try {

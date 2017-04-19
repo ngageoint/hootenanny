@@ -40,7 +40,7 @@ class OSMAPIDBApplyChangesetCommand extends ExportCommand {
     private static final Logger logger = LoggerFactory.getLogger(OSMAPIDBApplyChangesetCommand.class);
 
     OSMAPIDBApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
-        super(jobId, params, debugLevel, caller);
+        super(jobId, params);
 
         List<String> hootOptions = toHootOptions(super.getCommonExportHootOptions());
 

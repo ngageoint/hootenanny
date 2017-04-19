@@ -69,7 +69,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     private OutputStream stdout;
     private OutputStream stderr;
 
-    ExternalCommandRunnerImpl() {}
+    public ExternalCommandRunnerImpl() {}
 
     @Override
     public CommandResult exec(String commandTemplate, Map<String, ?> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable) {

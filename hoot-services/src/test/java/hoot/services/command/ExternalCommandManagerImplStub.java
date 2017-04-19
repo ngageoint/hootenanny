@@ -28,6 +28,7 @@ package hoot.services.command;
 
 
 public class ExternalCommandManagerImplStub implements ExternalCommandManager {
+
     @Override
     public CommandResult exec(String jobId, ExternalCommand externalCommand) {
         return null;
@@ -44,7 +45,5 @@ public class ExternalCommandManagerImplStub implements ExternalCommandManager {
     }
 
     @Override
-    public void terminate(String jobId) {
-
-    }
+    public void terminate(String jobId) {}
 }

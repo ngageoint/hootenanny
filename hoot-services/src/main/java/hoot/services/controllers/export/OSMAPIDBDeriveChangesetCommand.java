@@ -41,7 +41,7 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
     private static final Logger logger = LoggerFactory.getLogger(OSMAPIDBDeriveChangesetCommand.class);
 
     OSMAPIDBDeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
-        super(jobId, params, debugLevel, caller);
+        super(jobId, params);
 
         String mapName = params.getInput();
         Map conflatedMap = getConflatedMap(mapName);

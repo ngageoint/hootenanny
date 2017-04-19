@@ -30,20 +30,8 @@ import org.junit.Test;
 
 
 public class ExternalCommandManagerImplTest {
-    @Test
-    public void getProgress() throws Exception {
-    }
-
-    @Test
-    public void terminate() throws Exception {
-    }
 
     @Test
     public void exec() throws Exception {
     }
-
-    @Test
-    public void exec1() throws Exception {
-    }
-
 }

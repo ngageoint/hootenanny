@@ -51,38 +51,16 @@ class ExportCommand extends ExternalCommand {
 
     private final ExportParams params;
 
-    ExportCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    ExportCommand(String jobId, ExportParams exportParams) {
         super(jobId);
-        this.params = params;
+        this.params = exportParams;
+    }
+
+    ExportCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+        this(jobId, params);
 
         if (params.getAppend()) {
-            //Appends data to a blank fgdb. The template is stored with the fouo translations.
-
-            //$(HOOT_HOME)/translations-local/template
-            File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
-
-            String translation = params.getTranslation();
-            File tdsTemplate = null;
-
-            if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
-                tdsTemplate = new File(templateHome, "tds61.tgz");
-            }
-            else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
-                tdsTemplate = new File(templateHome, "tds40.tgz");
-            }
-
-            if ((tdsTemplate != null) && tdsTemplate.exists()) {
-                File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "."     + params.getOutputType().toLowerCase());
-                try {
-                    FileUtils.forceMkdir(outputDir);
-                }
-                catch (IOException ioe) {
-                    throw new RuntimeException("Error creating directory: " + outputDir.getAbsolutePath(), ioe);
-                }
-
-                ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplate, outputDir, this.getClass());
-                untarFileCommand.execute();
-            }
+            appendToFGDB();
         }
 
         List<String> hootOptions = toHootOptions(this.getCommonExportHootOptions());
@@ -97,6 +75,36 @@ class ExportCommand extends ExternalCommand {
         String command = "hoot osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH}";
 
         super.configureCommand(command, substitutionMap, caller);
+    }
+
+    private void appendToFGDB() {
+        //Appends data to a blank fgdb. The template is stored with the fouo translations.
+
+        //$(HOOT_HOME)/translations-local/template
+        File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
+
+        String translation = params.getTranslation();
+        File tdsTemplate = null;
+
+        if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
+            tdsTemplate = new File(templateHome, "tds61.tgz");
+        }
+        else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
+            tdsTemplate = new File(templateHome, "tds40.tgz");
+        }
+
+        if ((tdsTemplate != null) && tdsTemplate.exists()) {
+            File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "."     + params.getOutputType().toLowerCase());
+            try {
+                FileUtils.forceMkdir(outputDir);
+            }
+            catch (IOException ioe) {
+                throw new RuntimeException("Error creating directory: " + outputDir.getAbsolutePath(), ioe);
+            }
+
+            ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplate, outputDir, this.getClass());
+            untarFileCommand.execute();
+        }
     }
 
     List<String> getCommonExportHootOptions() {

@@ -29,4 +29,5 @@ package hoot.services.controllers.conflation;
 
 public class UpdateMapTagsCommandTest {
 
+    // TODO: Add tests
 }

@@ -39,7 +39,7 @@ class ExportOSMCommand extends ExportCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExportOSMCommand.class);
 
     ExportOSMCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
-        super(jobId, params, debugLevel, caller);
+        super(jobId, params);
 
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.create.user=true");

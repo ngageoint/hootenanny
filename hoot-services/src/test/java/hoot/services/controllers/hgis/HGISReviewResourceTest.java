@@ -26,19 +26,36 @@
  */
 package hoot.services.controllers.hgis;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.jerseyframework.HootServicesSpringTestConfig;
+import hoot.services.job.Job;
+import hoot.services.utils.MapUtils;
 
 
-public class HGISReviewResourceTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
+public class HGISReviewResourceTest extends HootServicesJerseyTestAbstract {
 
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
@@ -96,5 +113,28 @@ public class HGISReviewResourceTest {
         request.setOutputMap("");
 
         spy.prepareItemsForValidationReview(request);
+    }
+
+    @Test
+    public void testPrepareForValidation() throws Exception {
+        long userId = MapUtils.insertUser();
+        long mapId = MapUtils.insertMap(userId);
+
+        PrepareForValidationRequest prepareForValidationRequest = new PrepareForValidationRequest();
+        prepareForValidationRequest.setSourceMap(String.valueOf(mapId));
+        prepareForValidationRequest.setOutputMap("output_of_" + String.valueOf(mapId));
+
+        Response response = target("/review/custom/HGIS/preparevalidation")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(prepareForValidationRequest), Response.class);
+
+        assertNotNull(response);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(2, job.getCommands().length);
+        assertSame(HGISPrepareForValidationCommand.class, job.getCommands()[0].getClass());
+        assertSame(UpdateMapTagsCommand.class, job.getCommands()[1].getClass());
     }
 }

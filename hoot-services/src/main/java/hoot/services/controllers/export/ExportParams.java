@@ -62,6 +62,11 @@ public class ExportParams {
     @JsonProperty("append")
     private Boolean append;
 
+    @JsonProperty("input1")
+    private String input1;
+
+    @JsonProperty("input2")
+    private String input2;
 
     public String getOutputType() {
         return outputType;
@@ -143,6 +148,22 @@ public class ExportParams {
         this.userEmail = userEmail;
     }
 
+    public String getInput1() {
+        return input1;
+    }
+
+    public void setInput1(String input1) {
+        this.input1 = input1;
+    }
+
+    public String getInput2() {
+        return input2;
+    }
+
+    public void setInput2(String input2) {
+        this.input2 = input2;
+    }
+
     @Override
     public String toString() {
         return "ExportParams{" +
@@ -156,6 +177,8 @@ public class ExportParams {
                 ", input='" + input + '\'' +
                 ", translation='" + translation + '\'' +
                 ", append=" + append +
+                ", input1='" + input1 + '\'' +
+                ", input2='" + input2 + '\'' +
                 '}';
     }
 }
