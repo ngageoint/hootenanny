@@ -42,7 +42,6 @@ using namespace std;
 MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
   _map(map)
 {
-  LOG_DEBUG("Start MatchConflicts");
 }
 
 MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
@@ -68,7 +67,6 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
   ConflictMap &conflicts)
 {
   conflicts.clear();
-
   // go through all the matches and map from eid to the match index.
   EidIndexMap eidToMatches = calculateEidIndexMap(matches);
 
@@ -76,7 +74,6 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
   ElementId lastEid;
   // the set of indexes to all the matches that use a common ElementId
   vector<int> matchSet;
-
   for (EidIndexMap::iterator it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
   {
     // if we got a new Eid.
