@@ -677,7 +677,7 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
   else
   {
     shared_ptr<Relation> r(new Relation(_status, _map->createNextRelationId(), circularError,
-      Relation::MULTIPOLYGON));
+      MetadataTags::RelationMultiPolygon()));
     r->setTags(t);
 
     for (int i = 0; i < nParts; i++)
@@ -720,7 +720,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   else
   {
     shared_ptr<Relation> r(new Relation(_status, _map->createNextRelationId(), circularError,
-      Relation::MULTIPOLYGON));
+      MetadataTags::RelationMultiPolygon()));
     if (OsmSchema::getInstance().isArea(t, ElementType::Relation) == false)
     {
       t.setArea(true);
@@ -735,13 +735,13 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, shared_ptr<Relation> r, Meter
 {
   shared_ptr<Way> outer = _createWay(p->getExteriorRing(), circularError);
   _map->addWay(outer);
-  r->addElement(Relation::OUTER, outer);
+  r->addElement(MetadataTags::RoleOuter(), outer);
 
   for (int i = 0; i < p->getNumInteriorRings(); i++)
   {
     shared_ptr<Way> inner = _createWay(p->getInteriorRing(i), circularError);
     _map->addWay(inner);
-    r->addElement(Relation::INNER, inner);
+    r->addElement(MetadataTags::RoleInner(), inner);
   }
 }
 

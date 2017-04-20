@@ -296,7 +296,7 @@ public:
     w3->getTags()["highway"] = "path";
     w3->getTags()["uuid"] = "w3";
 
-    RelationPtr r(new Relation(Status::Unknown1, 0, 15, Relation::MULTILINESTRING));
+    RelationPtr r(new Relation(Status::Unknown1, 0, 15, MetadataTags::RelationMultilineString()));
     r->addElement("", w1);
     r->addElement("", w2);
     r->setTag("uuid", "r");
@@ -436,7 +436,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = createWay(map, w2c, Status::Unknown2);
 
-    RelationPtr r(new Relation(Status::Unknown2, 0, 15, Relation::MULTILINESTRING));
+    RelationPtr r(new Relation(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString()));
     r->addElement("", w2);
     r->setTag("uuid", "r");
     r->setTag("highway", "footway");

@@ -181,12 +181,12 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
   {
-    if (entries[i].role == "outline")
+    if (entries[i].role == MetadataTags::RoleOutline())
     {
       LOG_TRACE("Removing outline from building: " << entries[i].getElementId() << "...");
       building->removeElement(entries[i].role, entries[i].getElementId());
     }
-    else if (entries[i].role == "part")
+    else if (entries[i].role == MetadataTags::RolePart())
     {
       LOG_TRACE("Processing building part: " << entries[i].getElementId() << "...");
       if (entries[i].getElementId().getType() == ElementType::Way)
@@ -315,7 +315,7 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
     outlineElement->setTags(building->getTags());
     // we don't need the relation "type" tag.
     outlineElement->getTags().remove("type");
-    building->addElement("outline", outlineElement);
+    building->addElement(MetadataTags::RoleOutline(), outlineElement);
   }
 }
 

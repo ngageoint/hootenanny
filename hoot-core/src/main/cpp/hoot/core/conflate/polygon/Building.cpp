@@ -56,7 +56,7 @@ shared_ptr<Geometry> Building::buildOutline() const
     const vector<RelationData::Entry> entries = r->getMembers();
     for (size_t i = 0; i < entries.size(); i++)
     {
-      if (entries[i].role == "part")
+      if (entries[i].role == MetadataTags::RolePart())
       {
         shared_ptr<Geometry> g = ec.convertToGeometry(_map.getElement(entries[i].getElementId()));
         result.reset(result->Union(g.get()));

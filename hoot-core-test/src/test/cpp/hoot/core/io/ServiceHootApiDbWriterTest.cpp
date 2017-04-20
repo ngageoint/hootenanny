@@ -156,7 +156,7 @@ public:
     map->addWay(w1);
     map->addWay(w2);
 
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "collection"));
+    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, MetadataTags::RelationCollection()));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
@@ -260,13 +260,13 @@ public:
     map->addWay(w1);
     map->addWay(w2);
 
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, -1, 15.0, "collection"));
+    shared_ptr<Relation> r1(new Relation(Status::Unknown1, -1, 15.0, MetadataTags::RelationCollection()));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
     map->addRelation(r1);
 
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, -2, 15.0, "collection"));
+    shared_ptr<Relation> r2(new Relation(Status::Unknown1, -2, 15.0, MetadataTags::RelationCollection()));
     r2->addElement("r1", r1->getElementId());
     r2->setTag("note", "r2");
     map->addRelation(r2);

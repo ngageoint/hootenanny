@@ -122,11 +122,11 @@ public:
     w5->addNode(w5->getNodeId(0));
     map->addWay(w5);
 
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "multipolygon"));
+    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon()));
     r1->setTag("building", "yes");
     r1->setTag("name", "r1");
-    r1->addElement("outer", w4->getElementId());
-    r1->addElement("inner", w5->getElementId());
+    r1->addElement(MetadataTags::RoleOuter(), w4->getElementId());
+    r1->addElement(MetadataTags::RoleInner(), w5->getElementId());
     map->addRelation(r1);
 
     return map;
