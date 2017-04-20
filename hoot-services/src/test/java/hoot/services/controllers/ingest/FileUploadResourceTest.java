@@ -28,6 +28,7 @@ package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
+import static hoot.services.controllers.ingest.UploadClassification.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -56,6 +57,8 @@ import org.junit.experimental.categories.Category;
 import hoot.services.UnitTest;
 import hoot.services.utils.HootCustomPropertiesSetter;
 
+
+//TODO: This class needs to be completely refactored!
 
 @Ignore
 public class FileUploadResourceTest {
@@ -191,13 +194,13 @@ public class FileUploadResourceTest {
         ImportResource res = new ImportResource();
 
         // Let's test zip
-        List<Map<String, String>> results = new LinkedList<>();
+        List<File> results = new LinkedList<>();
         Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE", jobId));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE", jobId));
 
         List<File> zipList = new ArrayList<>();
 
@@ -219,7 +222,7 @@ public class FileUploadResourceTest {
         String inputType = "";
 
         ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js", "fgdb_ogr",
-                Boolean.FALSE, "error", inputType, this.getClass());
+                Boolean.FALSE, "error", FGDB, this.getClass());
 /*
         JSONArray params = (JSONArray) command.get("params");
         int nP = 0;
@@ -373,13 +376,13 @@ public class FileUploadResourceTest {
         ImportResource res = new ImportResource();
 
         // Let's test zip
-        List<Map<String, String>> results = new LinkedList<>();
+        List<File> results = new LinkedList<>();
         Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -401,7 +404,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat, workingDir, "FILE"));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "osm", destFile, zipStat, workingDir, "FILE"));
 
         int shpCnt = zipStat.get("shpcnt");
         int fgdbCnt = zipStat.get("fgdbcnt");
@@ -412,7 +415,7 @@ public class FileUploadResourceTest {
 
         // Test zip containing fgdb + shp
         ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js", "osm",
-                Boolean.FALSE, "error", inputType, this.getClass());
+                Boolean.FALSE, "error", OSM, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -466,13 +469,13 @@ public class FileUploadResourceTest {
         ImportResource res = new ImportResource();
 
         // Let's test zip
-        List<Map<String, String>> results = new LinkedList<>();
+        List<File> results = new LinkedList<>();
         Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -494,7 +497,7 @@ public class FileUploadResourceTest {
 
         inputsList.add("zip1");
 
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "zip", destFile, zipStat, workingDir, "FILE"));
 
         shpZipCnt += zipStat.get("shpzipcnt");
         fgdbZipCnt += zipStat.get("fgdbzipcnt");
@@ -513,7 +516,7 @@ public class FileUploadResourceTest {
 
         ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList,
                 "TDSv61.js", "ogr", Boolean.FALSE,
-                "error", inputType, this.getClass());
+                "error", ZIP, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -562,13 +565,13 @@ public class FileUploadResourceTest {
         ImportResource res = new ImportResource();
 
         // Shape 1
-        List<Map<String, String>> results = new LinkedList<>();
+        List<File> results = new LinkedList<>();
         Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat, workingDir, "FILE"));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat, workingDir, "FILE"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -587,7 +590,7 @@ public class FileUploadResourceTest {
 
         inputsList.add(input);
 
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat, workingDir, "FILE"));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "shp", destFile, zipStat, workingDir, "FILE"));
 
         shpCnt += zipStat.get("shpcnt");
         fgdbCnt += zipStat.get("fgdbcnt");
@@ -602,7 +605,7 @@ public class FileUploadResourceTest {
 
         ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js",
                          "ogr", Boolean.FALSE, "error",
-                                  inputType, this.getClass());
+                                  SHP, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -690,7 +693,7 @@ public class FileUploadResourceTest {
 
         ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js",
                                             "osm", Boolean.FALSE,
-                                          "error", inputType, this.getClass());
+                                          "error", OSM, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");
@@ -738,13 +741,13 @@ public class FileUploadResourceTest {
         ImportResource res = new ImportResource();
 
         // Shape 1
-        List<Map<String, String>> results = new LinkedList<>();
+        List<File> results = new LinkedList<>();
         Map<String, Integer> zipStat = new HashMap<>();
         List<String> inputsList = new ArrayList<>();
         inputsList.add(input);
 
         Method analyzeUploadedFileMethod = getAnalyzeUploadedFileMethod();
-        results.addAll((List<Map<String, String>>) analyzeUploadedFileMethod.invoke(res, "gdb", destDir, zipStat, workingDir, "DIR"));
+        results.addAll((List<File>) analyzeUploadedFileMethod.invoke(res, "gdb", destDir, zipStat, workingDir, "DIR"));
 
         List<File> zipList = new ArrayList<>();
 
@@ -762,7 +765,7 @@ public class FileUploadResourceTest {
         String inputType = "";
 
         ImportCommand command = new ImportCommand(jobId, workingDir, results, zipList, "TDSv61.js", "fgdb",
-                Boolean.FALSE, "error", inputType, this.getClass());
+                Boolean.FALSE, "error", FGDB, this.getClass());
 
 /*
         JSONArray params = (JSONArray) command.get("params");

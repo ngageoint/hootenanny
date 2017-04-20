@@ -27,6 +27,62 @@
 package hoot.services.controllers.ingest;
 
 
+import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.controllers.ingest.UploadClassification.SHP;
+
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.Test;
+
+
 public class ImportCommandTest {
 
+
+    @Test
+    public void testImportOGRCommand() {
+        String jobId = UUID.randomUUID().toString();
+        String debugLevel = "error";
+        Class<?> caller = this.getClass();
+        File workDir = new File(TEMP_OUTPUT_PATH);
+        List<File> requests = new LinkedList<>();
+
+        List<File> zips = new LinkedList<>();
+        zips.add(new File("file.zip"));
+
+        String translation = "";
+        String etlName = "ogrImport";
+        Boolean isNoneTranslation = false;
+
+        List<String> options = new LinkedList<>();
+        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
+
+        ImportCommand importCommand = new ImportCommand(jobId, workDir, requests, zips, translation,
+                etlName, isNoneTranslation, debugLevel, SHP, caller);
+    }
+
+    @Test
+    public void testImportFGDBCommand() {
+
+    }
+
+    @Test
+    public void testImportZIPCommand() {
+
+    }
+
+    @Test
+    public void testImportOSMCommand() {
+
+    }
+
+    @Test
+    public void testImportGEONAMESCommand() {
+
+    }
 }

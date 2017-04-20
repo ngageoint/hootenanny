@@ -26,28 +26,76 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.controllers.ingest.UploadClassification.*;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 
 public class ImportResourceUtilsTest {
+
     @Test
-    public void classifyUploadedFile() throws Exception {
+    public void testClassifyUploadedFile() throws Exception {
+        int zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt;
+
+        shpCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = fgdbCnt = osmCnt = geonamesCnt = 0;
+        UploadClassification classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                                        geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(SHP, classification);
+
+        osmCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = fgdbCnt = geonamesCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                                            geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(OSM, classification);
+
+        fgdbCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = osmCnt = geonamesCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(FGDB, classification);
+
+        geonamesCnt = 1; zipCnt = shpZipCnt = fgdbZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(GEONAMES, classification);
+
+        zipCnt = 1; fgdbZipCnt = 1; shpZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbCnt = geonamesCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(FGDB, classification);
+
+        zipCnt = 1; shpCnt = 1; shpZipCnt = osmZipCnt = geonamesZipCnt = osmCnt = fgdbZipCnt = fgdbCnt = geonamesCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(SHP, classification);
+
+        zipCnt = 1; osmCnt = 1; shpZipCnt = osmZipCnt = geonamesZipCnt = shpCnt = fgdbZipCnt = fgdbCnt = geonamesCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(OSM, classification);
+
+        zipCnt = 1; osmZipCnt = 1; shpZipCnt = geonamesCnt = geonamesZipCnt = shpCnt = osmCnt = fgdbZipCnt = fgdbCnt = 0;
+        classification = ImportResourceUtils.finalizeUploadClassification(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
+                geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+        assertEquals(ZIP, classification);
     }
 
     @Test
-    public void handleUploadedFile() throws Exception {
+    public void testHandleUploadedFile() throws Exception {
+        //ImportResourceUtils.handleUploadedFile();
     }
 
     @Test
-    public void specialHandleWhenZIP() throws Exception {
+    public void testSpecialHandleWhenZIP() throws Exception {
+        //ImportResourceUtils.specialHandleWhenZIP();
     }
 
     @Test
-    public void handleOSMZip() throws Exception {
+    public void testHandleOSMZip() throws Exception {
+        //ImportResourceUtils.handleOSMZip();
     }
 
     @Test
-    public void handleGEONAMESWithTxtExtension() throws Exception {
+    public void testHandleGEONAMESWithTxtExtension() throws Exception {
+        //ImportResourceUtils.handleGEONAMESWithTxtExtension();
     }
-
 }
