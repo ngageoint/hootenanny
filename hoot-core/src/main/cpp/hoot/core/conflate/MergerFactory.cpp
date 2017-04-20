@@ -126,18 +126,14 @@ MergerFactory &MergerFactory::getInstance()
 bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2)
   const
 {
-  LOG_DEBUG("Start isConflicting: " + _creators.size());
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {
-    LOG_DEBUG("check isConflicting");
     if (_creators[i]->isConflicting(map, m1, m2))
     {
-      LOG_DEBUG("Return True");
       return true;
     }
   }
-  LOG_DEBUG("Return False");
   return false;
 }
 
@@ -153,16 +149,12 @@ void MergerFactory::registerDefaultCreators()
     QString className = args[0];
     args.removeFirst();
 
-    LOG_DEBUG("Start: " + className);
     MergerCreator* mc = Factory::getInstance().constructObject<MergerCreator>(
       className);
-    LOG_DEBUG("Register: " + className);
     registerCreator(mc);
-    LOG_DEBUG("Registered: " + className);
 
     if (args.size() > 0)
     {
-      LOG_DEBUG("Set Arguments: " + className);
       mc->setArguments(args);
     }
   }

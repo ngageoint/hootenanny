@@ -67,10 +67,8 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
 void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches,
   ConflictMap &conflicts)
 {
-  LOG_DEBUG("clear conflicts");
   conflicts.clear();
 
-  LOG_DEBUG("eid to matches");
   // go through all the matches and map from eid to the match index.
   EidIndexMap eidToMatches = calculateEidIndexMap(matches);
 
@@ -79,31 +77,22 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
   // the set of indexes to all the matches that use a common ElementId
   vector<int> matchSet;
 
-  LOG_DEBUG("Loop through EidIndex");
   for (EidIndexMap::iterator it = eidToMatches.begin(); it != eidToMatches.end(); ++it)
   {
     // if we got a new Eid.
     if (it->first != lastEid)
     {
-      LOG_DEBUG("f neq last: calc subset");
       calculateSubsetConflicts(matches, conflicts, matchSet);
 
       // start over with a new match set
-      LOG_DEBUG("f neq last: Clear Matchset");
       matchSet.clear();
-      LOG_DEBUG("f neq last: End");
     }
 
-    LOG_DEBUG("matchset pushback");
     matchSet.push_back(it->second);
-    LOG_DEBUG("lastEid=first");
     lastEid = it->first;
-    LOG_DEBUG("End Loop");
   }
 
-  LOG_DEBUG("Calculate SubSetConflicts");
   calculateSubsetConflicts(matches, conflicts, matchSet);
-  LOG_DEBUG("Done");
 }
 
 void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &matches, ConflictMap& conflicts,
@@ -116,7 +105,6 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
     for (size_t j = i + 1; j < matchSet.size(); j++)
     {
       size_t m2 = matchSet[j];
-      LOG_DEBUG("if m1 neq m2");
       // if these aren't the same match and it is conflicting in one direction or the other
       if (m1 != m2 &&
           (MergerFactory::getInstance().isConflicting(_map, matches[m1], matches[m2]) ||
@@ -125,10 +113,8 @@ void MatchConflicts::calculateSubsetConflicts(const vector<const Match *> &match
         // make sure we're consistent and put the smaller one first.
         if (m2 < m1)
         {
-          LOG_DEBUG("Swap");
           swap(m1, m2);
         }
-        LOG_DEBUG("Conflict Insert");
         conflicts.insert(m1, m2);
       }
     }
