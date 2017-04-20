@@ -314,7 +314,8 @@ boost::shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIt
 NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-  LOG_TRACE("Reading node with ID: " << nodeId);
+  //TODO: change back to trace
+  LOG_VARD(ElementId(ElementType::Node, nodeId));
 
   NodePtr node(
     new Node(
@@ -336,6 +337,9 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
 //    if (_status != Status::Invalid) { node->setStatus(_status); }
   if (! ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid) { node->setStatus(_status); }
 
+  //TODO: change back to trace
+  LOG_VARD(node->getVersion());
+
   return node;
 }
 
@@ -343,7 +347,8 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
-  LOG_TRACE("Reading way with ID: " << wayId);
+  //TODO: change back to trace
+  LOG_VARD(ElementId(ElementType::Way, wayId));
 
   WayPtr way(
     new Way(
@@ -376,7 +381,8 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-  LOG_TRACE("Reading relation with ID: " << relationId);
+  //TODO: change back to trace
+  LOG_VARD(ElementId(ElementType::Relation, relationId));
 
   RelationPtr relation(
     new Relation(

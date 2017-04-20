@@ -126,7 +126,8 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
-  LOG_TRACE("Remapped ID from " << eid << " to " << ElementId(eid.getType(), retVal));
+  //TODO: change back to trace
+  LOG_DEBUG("Remapped ID from " << eid << " to " << ElementId(eid.getType(), retVal));
 
   return retVal;
 }
@@ -137,8 +138,9 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
   _addElementTags(n, t);
 
   long nodeId;
-  LOG_VART(n->getId());
-  LOG_VART(n->getStatus());
+  //TODO: change back to trace
+  LOG_VARD(n->getId());
+  LOG_VARD(n->getStatus());
   if (n->getStatus() == Status::Unknown1 && n->getId() > 0)
   {
     nodeId = n->getId();
@@ -148,15 +150,23 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
   {
     nodeId =  _getRemappedElementId(n->getElementId());
   }
+  //TODO: change back to trace
+  LOG_VARD(nodeId);
   const bool alreadyThere = _nodeRemap.count(nodeId) != 0;
   if (alreadyThere)
   {
     _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
+
+    //TODO: change back to trace
+    LOG_VARD(n->getVersion() + 1);
   }
   else
   {
     _hootdb.insertNode(nodeId, n->getY(), n->getX(), t);
     _nodeRemap[nodeId] = nodeId;
+
+    //TODO: change back to trace
+    LOG_DEBUG("version=1");
   }
 
   _countChange();

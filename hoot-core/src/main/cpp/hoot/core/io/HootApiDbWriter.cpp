@@ -330,6 +330,8 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
     long nodeId = _getRemappedElementId(n->getElementId());
+    //TODO: change back to trace
+    LOG_VARD(nodeId);
     if (alreadyThere)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
@@ -347,8 +349,13 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
                           "HootApiDbWriter.");
     }
 
+    //TODO: change back to trace
+    LOG_VARD(n->getId());
     _hootdb.insertNode(n->getId(), n->getY(), n->getX(), t);
   }
+
+  //TODO: change back to trace
+  LOG_VARD(n->getVersion());
 
   _countChange();
   _nodesWritten++;

@@ -267,9 +267,11 @@ void OsmApiDbReader::close()
 NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long rawId = resultIterator.value(0).toLongLong();
-  LOG_TRACE("raw ID: " << rawId);
+  //TODO: change back to trace
+  LOG_DEBUG("raw ID: " << rawId);
   const long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
-  LOG_VART(nodeId);
+  //TODO: change back to trace
+  LOG_VARD(nodeId);
   const double lat =
     resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
   const double lon =
@@ -290,6 +292,9 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   _updateMetadataOnElement(node);
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { node->setStatus(_status); }
+
+  //TODO: change back to trace
+  LOG_VARD(node->getVersion());
 
   return node;
 }
