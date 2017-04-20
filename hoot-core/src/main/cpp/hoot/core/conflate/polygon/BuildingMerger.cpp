@@ -197,7 +197,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, c
       if (e && e->getElementType() == ElementType::Relation)
       {
         RelationPtr r = dynamic_pointer_cast<Relation>(e);
-        if (r->getType() == "building")
+        if (r->getType() == MetadataTags::RelationBuilding())
         {
           isBuilding = true;
 
@@ -208,7 +208,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, c
           vector<RelationData::Entry> m = r->getMembers();
           for (size_t i = 0; i < m.size(); ++i)
           {
-            if (m[i].getRole() == "part")
+            if (m[i].getRole() == MetadataTags::RolePart())
             {
               boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
               // push any non-conflicing tags in the parent relation down into the building part.

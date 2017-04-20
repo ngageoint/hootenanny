@@ -32,7 +32,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
-//#include <hoot-rnd/src/main/cpp/hoot/rnd/conflate/frechet/FrechetDistance.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 
 namespace hoot
 {
@@ -45,59 +45,71 @@ RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersV
 
 void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr &e)
 {
-  const double expansion = 15.0;
+  //  Only look for relations
   if (e->getElementType() == ElementType::Relation)
   {
     Relation* r = dynamic_cast<Relation*>(e.get());
     assert(r != 0);
-
-    bool removeRelation = false;
-    if (r->getType() == Relation::MULTILINESTRING)
+    //  Only multilinestring relations
+    if (r->getType() == MetadataTags::RelationMultilineString())
     {
-      OsmMapPtr map(_map->shared_from_this());
-      //  Remove members that are within the threshold distance from each other
-      if (r->getMembers().size() > 1)
+      vector<RelationData::Entry> multi_members = r->getMembers();
+      Tags& tags = r->getTags();
+      for (vector<RelationData::Entry>::iterator it = multi_members.begin(); it != multi_members.end(); ++it)
       {
-        vector<ElementId> removeIds;
-        vector<RelationData::Entry> members = r->getMembers();
-        for (vector<RelationData::Entry>::iterator i = members.begin(); i != members.end(); i++)
-        {
-          bool keepElement1 = false;
-          ElementId id1 = i->getElementId();
-          ElementPtr element1 = _map->getElement(id1);
-          Envelope* env1 = element1->getEnvelope(map);
-          env1->expandBy(expansion);
-          for (vector<RelationData::Entry>::iterator j = members.begin(); j != members.end(); j++)
-          {
-            if (i == j)
-              continue;
-            ElementId id2 = j->getElementId();
-            ElementPtr element2 = _map->getElement(id2);
-            Envelope* env2 = element2->getEnvelope(map);
-            env2->expandBy(expansion);
-            if (element1->getElementType() == ElementType::Way && element2->getElementType() == ElementType::Way)
-            {
-              if (env1->contains(env2))
-                keepElement1 = true;
-            }
-          }
-          if (!keepElement1)
-            removeIds.push_back(id1);
-        }
-        //  Remove all elements from relation that need to be removed
-        for (vector<ElementId>::iterator it = removeIds.begin(); it != removeIds.end(); it++)
-          r->removeElement(*it);
+        if (_map->getElement(it->getElementId())->getTags().getInformationCount() > 0)
+          return;
       }
-      //  Remove multilinestring relations with only one member, above operation could
-      //  remove members and bring the count down to below two
-      if (r->getMembers().size() < 2)
-        removeRelation = true;
-    }
-
-    if (removeRelation)
-    {
-      LOG_TRACE("Removing multilinestring relation with ID: " << r->getId());
-      RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+      const double expansion = r->getCircularError();
+      OsmMapPtr map(_map->shared_from_this());
+      //  Multiline strings that are a part of a review relation are what we are targetting for replacement
+      set<ElementId> parents = map->getParents(r->getElementId());
+      for (set<ElementId>::iterator it = parents.begin(); it != parents.end(); ++it)
+      {
+        ElementPtr p = map->getElement(*it);
+        if (p->getElementType() == ElementType::Relation)
+        {
+          Relation* rev = dynamic_cast<Relation*>(p.get());
+          if (rev->getType() == MetadataTags::RelationReview())
+          {
+            vector<RelationData::Entry> members = rev->getMembers();
+            //  Iterate all of the members of the review looking for non-relation entities
+            for (vector<RelationData::Entry>::iterator i = members.begin(); i != members.end(); i++)
+            {
+              ElementId id1 = i->getElementId();
+              if (id1.getType() == ElementType::Relation)
+                continue;
+              //  Found a non-relation entity to test against
+              ElementPtr element1 = map->getElement(id1);
+              Envelope* env1 = element1->getEnvelope(map);
+              env1->expandBy(expansion);
+              for (vector<RelationData::Entry>::iterator j = multi_members.begin(); j != multi_members.end(); j++)
+              {
+                ElementId id2 = j->getElementId();
+                ElementPtr element2 = _map->getElement(id2);
+                Envelope* env2 = element2->getEnvelope(map);
+                env2->expandBy(expansion);
+                //  Add the element to the review if the two envelopes intersect
+                if (env1->intersects(env2))
+                  rev->addElement(MetadataTags::RoleReviewee(), id2);
+              }
+            }
+            rev->removeElement(r->getElementId());
+          }
+        }
+      }
+      //  Copy tags from the multiline string tags to the children and remove from relation
+      vector<RelationData::Entry> members = r->getMembers();
+      TagMergerFactory& merger = TagMergerFactory::getInstance();
+      for (vector<RelationData::Entry>::iterator i = members.begin(); i != members.end(); i++)
+      {
+        ElementId id = i->getElementId();
+        ElementPtr element = _map->getElement(id);
+        Tags merged = merger.mergeTags(element->getTags(), tags, id.getType());
+        element->setTags(merged);
+        r->removeElement(id);
+      }
+      RemoveRelationOp::removeRelation(map, r->getId());
     }
   }
 }

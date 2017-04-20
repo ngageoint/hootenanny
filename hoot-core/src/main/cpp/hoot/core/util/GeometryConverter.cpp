@@ -141,7 +141,7 @@ boost::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(co
   if (mls->getNumGeometries() > 1)
   {
    RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
-      Relation::MULTILINESTRING));
+      MetadataTags::RelationMultilineString()));
     for (size_t i = 0; i < mls->getNumGeometries(); i++)
     {
      WayPtr w = convertLineStringToWay(
@@ -162,7 +162,7 @@ RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon*
   const OsmMapPtr& map, Status s, double circularError)
 {
  RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
-    Relation::MULTIPOLYGON));
+    MetadataTags::RelationMultiPolygon()));
   for (size_t i = 0; i < mp->getNumGeometries(); i++)
   {
     convertPolygonToRelation(dynamic_cast<const Polygon*>(mp->getGeometryN(i)), map, r, s,
@@ -196,7 +196,7 @@ RelationPtr GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
   const OsmMapPtr& map, Status s, double circularError)
 {
  RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
-    Relation::MULTIPOLYGON));
+    MetadataTags::RelationMultiPolygon()));
   convertPolygonToRelation(polygon, map, r, s, circularError);
   map->addRelation(r);
 
@@ -209,11 +209,11 @@ void GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
  WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
   if (outer != NULL)
   {
-    r->addElement(Relation::OUTER, outer);
+    r->addElement(MetadataTags::RoleOuter(), outer);
     for (size_t i = 0; i < polygon->getNumInteriorRing(); i++)
     {
      WayPtr inner = convertLineStringToWay(polygon->getInteriorRingN(i), map, s, circularError);
-      r->addElement(Relation::INNER, inner);
+      r->addElement(MetadataTags::RoleInner(), inner);
     }
   }
 }

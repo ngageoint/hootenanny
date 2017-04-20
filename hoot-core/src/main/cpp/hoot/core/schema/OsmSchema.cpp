@@ -1670,11 +1670,11 @@ bool OsmSchema::isCollection(const Element& e) const
     const Relation& r = dynamic_cast<const Relation&>(e);
 
     // This list could get HUGE.
-    if (r.getType() == "waterway" ||
-        r.getType() == "network" ||
-        r.getType() == "route_master" ||
-        r.getType() == "superroute" ||
-        r.getType() == "route")
+    if (r.getType() == MetadataTags::RelationWaterway() ||
+        r.getType() == MetadataTags::RelationNetwork() ||
+        r.getType() == MetadataTags::RelationRouteMaster() ||
+        r.getType() == MetadataTags::RelationSuperRoute() ||
+        r.getType() == MetadataTags::RelationRoute())
     {
       result = true;
     }
@@ -1735,8 +1735,8 @@ bool OsmSchema::isLinear(const Element &e)
   if (e.getElementType() == ElementType::Relation)
   {
     const Relation& r = dynamic_cast<const Relation&>(e);
-    result |= r.getType() == "multilinestring";
-    result |= r.getType() == "route";
+    result |= r.getType() == MetadataTags::RelationMultilineString();
+    result |= r.getType() == MetadataTags::RelationRoute();
   }
 
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
@@ -1789,7 +1789,7 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
 
 bool OsmSchema::isMultiLineString(const Relation& r) const
 {
-  return r.getType() == "multilinestring";
+  return r.getType() == MetadataTags::RelationMultilineString();
 }
 
 bool OsmSchema::isOneWay(const Element& e) const

@@ -486,7 +486,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     {
       LOG_TRACE("multilinestring: scrap relation");
       r.reset(new Relation(splitee->getStatus(), map->createNextRelationId(),
-                           splitee->getCircularError(), Relation::MULTILINESTRING));
+                           splitee->getCircularError(), MetadataTags::RelationMultilineString()));
       if (scrap)
       {
         r->addElement("", scrap);
@@ -538,7 +538,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       // create a new relation to contain this single way (footway relation)
       LOG_TRACE("multilinestring: footway relation");
       RelationPtr r(new Relation(splitee->getStatus(), map->createNextRelationId(),
-        splitee->getCircularError(), Relation::MULTILINESTRING));
+        splitee->getCircularError(), MetadataTags::RelationMultilineString()));
       r->addElement("", scrap->getElementId());
       scrap = r;
       map->addElement(r);
