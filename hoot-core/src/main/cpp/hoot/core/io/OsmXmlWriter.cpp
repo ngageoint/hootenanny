@@ -58,7 +58,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 OsmXmlWriter::OsmXmlWriter() :
 _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
 _includeIds(false),
-_includeDebug(ConfigOptions().getWriterIncludeDebug()),
+_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
 _includePointInWays(false),
 _includeCompatibilityTags(true),
 _textStatus(ConfigOptions().getWriterTextStatus()),
@@ -327,7 +327,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 
     // turn this on when we start using node circularError.
     if (n->hasCircularError() && tags.getNonDebugCount() > 0 &&
-        ConfigOptions().getWriterIncludeCircularError())
+        ConfigOptions().getWriterIncludeCircularErrorTags())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", MetadataTags::ErrorCircular());
@@ -429,7 +429,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       }
     }
 
-    if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
+    if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", MetadataTags::ErrorCircular());
@@ -519,7 +519,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       writer.writeEndElement();
     }
 
-    if (r->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
+    if (r->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", MetadataTags::ErrorCircular());

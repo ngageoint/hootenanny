@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-2477478' action='modify' visible='true' lat='48.133' lon='11.69265'>
+    <tag k='REF2' v='013e59' />
+    <tag k='access' v='yes' />
+    <tag k='addr:housenumber' v='1' />
+    <tag k='addr:language' v='GER' />
+    <tag k='addr:street' v='WILLY-BRANDT-PLATZ' />
+    <tag k='brand' v='NOVOTEL' />
+    <tag k='error:circular' v='15' />
+    <tag k='language' v='GER' />
+    <tag k='name' v='DORINT NOVOTEL MÜNCHEN MESSE' />
+    <tag k='phone' v='89-994000' />
+    <tag k='source' v='navteq' />
+    <tag k='tourism' v='hotel' />
+    <tag k='uuid' v='{a063031e-dadb-56bf-b772-bd3a88fba577}' />
+  </node>
+</osm>

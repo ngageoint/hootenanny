@@ -40,6 +40,7 @@
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetElementIdsVisitor.h>
+#include <hoot/core/util/FileUtils.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -234,6 +235,20 @@ QString TestUtils::toQuotedString(QString str)
     }
   }
   return result;
+}
+
+void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString stdFilePath,
+                                                 const QString outFilePath)
+{
+  LOG_VART(stdFilePath);
+  LOG_VART(outFilePath);
+  const QStringList stdTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
+  const QStringList outputTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
+  CPPUNIT_ASSERT_EQUAL(stdTokens.size(), outputTokens.size());
+  for (int i = 0; i < stdTokens.size(); i++)
+  {
+    HOOT_STR_EQUALS(stdTokens.at(i), outputTokens.at(i));
+  }
 }
 
 }
