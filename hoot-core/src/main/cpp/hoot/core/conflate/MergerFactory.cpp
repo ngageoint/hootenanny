@@ -148,7 +148,6 @@ void MergerFactory::registerDefaultCreators()
     QStringList args = c.split(",");
     QString className = args[0];
     args.removeFirst();
-
     MergerCreator* mc = Factory::getInstance().constructObject<MergerCreator>(
       className);
     registerCreator(mc);
