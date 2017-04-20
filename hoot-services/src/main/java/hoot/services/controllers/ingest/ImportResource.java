@@ -27,10 +27,11 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
+import static hoot.services.controllers.ingest.UploadClassification.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -121,55 +122,55 @@ public class ImportResource {
 
             List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
-            int shpCnt = 0;
-            int osmCnt = 0;
-            int fgdbCnt = 0;
-            int geonamesCnt = 0;
-            int zipCnt = 0;
-            int shpZipCnt = 0;
-            int osmZipCnt = 0;
-            int geonamesZipCnt = 0;
-            int fgdbZipCnt = 0;
+            int shpCnt = 0, osmCnt = 0, fgdbCnt = 0, geonamesCnt = 0, zipCnt = 0;
+            int shpZipCnt = 0, osmZipCnt = 0, geonamesZipCnt = 0, fgdbZipCnt = 0;
 
-            List<Map<String, String>> etlRequests = new LinkedList<>();
-            List<String> inputsList = new ArrayList<>();
-            List<File> zipList = new ArrayList<>();
+            List<File> filesToImport = new LinkedList<>();
+            List<String> fileNames = new ArrayList<>();
+            List<File> zipsToImport = new ArrayList<>();
             String etlName = inputName;
 
             for (File uploadedFile : uploadedFiles) {
                 String uploadedFileName = uploadedFile.getName();
                 String uploadedFileBasename = FilenameUtils.getBaseName(uploadedFileName);
                 String uploadedFileExtension = FilenameUtils.getExtension(uploadedFileName);
+                UploadClassification initialUploadClassification;
+
+                try {
+                    initialUploadClassification = UploadClassification.valueOf(uploadedFileExtension.toUpperCase());
+                }
+                catch (IllegalArgumentException iea) {
+                    initialUploadClassification = OTHER;
+                }
 
                 if (StringUtils.isBlank(etlName)) {
                     etlName = uploadedFileBasename;
                 }
 
-                inputsList.add(uploadedFileName);
+                fileNames.add(uploadedFileName);
 
-                Map<String, Integer> zipStat = new HashMap<>();
+                Map<UploadClassification, Integer> counts = new EnumMap<>(UploadClassification.class);
 
-                etlRequests.addAll(ImportResourceUtils.handleUploadedFile(uploadedFileExtension, uploadedFile, zipStat, workDir, inputType));
+                filesToImport.addAll(ImportResourceUtils.handleUploadedFile(initialUploadClassification, uploadedFile,
+                        counts, workDir, inputType));
 
-                if (uploadedFileExtension.equalsIgnoreCase("ZIP")) {
-                    zipList.add(uploadedFile);
+                if (initialUploadClassification == ZIP) {
+                    zipsToImport.add(uploadedFile);
                     zipCnt++;
                 }
 
-                // Update the counters
-                shpCnt += zipStat.get("shpcnt");
-                fgdbCnt += zipStat.get("fgdbcnt");
-                osmCnt += zipStat.get("osmcnt");
-                geonamesCnt += zipStat.get("geonamescnt");
-                shpZipCnt += zipStat.get("shpzipcnt");
-                fgdbZipCnt += zipStat.get("fgdbzipcnt");
-                osmZipCnt += zipStat.get("osmzipcnt");
-                geonamesZipCnt += zipStat.get("geonameszipcnt");
+                // Update the counts
+                shpCnt += counts.get(SHP);
+                fgdbCnt += counts.get(FGDB);
+                osmCnt += counts.get(OSM);
+                geonamesCnt += counts.get(GEONAMES);
+                shpZipCnt += counts.get(SHAPE_ZIP);
+                fgdbZipCnt += counts.get(FGDB_ZIP);
+                osmZipCnt += counts.get(OSM_ZIP);
+                geonamesZipCnt += counts.get(GEONAMES_ZIP);
 
-                if (inputType.equalsIgnoreCase("GEONAMES") &&
-                        uploadedFileExtension.equalsIgnoreCase("TXT") && (geonamesCnt == 1)) {
-                    ImportResourceUtils.handleGEONAMESWithTxtExtension(workDir, uploadedFileBasename, inputsList,
-                            etlRequests, inputType, zipStat);
+                if ((geonamesCnt == 1) && (initialUploadClassification == TXT)) {
+                    ImportResourceUtils.handleGEONAMESWithTxtExtension(workDir, uploadedFile, fileNames, filesToImport);
                 }
             }
 
@@ -182,35 +183,28 @@ public class ImportResource {
             }
 
             if ((osmZipCnt == 1) && ((shpZipCnt + fgdbZipCnt + shpCnt + fgdbCnt + osmCnt) == 0)) {
-                ImportResourceUtils.handleOSMZip(workDir, zipList, etlRequests, inputsList, inputType);
+                ImportResourceUtils.handleOSMZip(workDir, zipsToImport, filesToImport, fileNames);
 
                 // massage some variables to make it look like an osm file was uploaded
                 osmCnt = 1;
-                shpCnt = 0;
-                fgdbCnt = 0;
-                geonamesCnt = 0;
-                shpZipCnt = 0;
-                geonamesZipCnt = 0;
-                fgdbZipCnt = 0;
-                zipCnt = 0;
-                osmZipCnt = 0;
+                shpCnt = fgdbCnt = geonamesCnt = shpZipCnt = geonamesZipCnt = fgdbZipCnt = zipCnt = osmZipCnt = 0;
             }
 
-            String classification = ImportResourceUtils.classifyUploadedFile(zipCnt, shpZipCnt, fgdbZipCnt, osmZipCnt,
-                    geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
+            UploadClassification finalUploadClassification = ImportResourceUtils.finalizeUploadClassification(zipCnt,
+                    shpZipCnt, fgdbZipCnt, osmZipCnt, geonamesZipCnt, shpCnt, fgdbCnt, osmCnt, geonamesCnt);
 
-            ExternalCommand etlCommand = fileETLCommandFactory.build(jobId, workDir, etlRequests, zipList, translation, etlName,
-                    noneTranslation, debugLevel, classification, this.getClass());
+            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
+                    etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass());
 
             ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, etlName, this.getClass());
 
-            Command[] workflow = { etlCommand, exportRenderDBCommand };
+            Command[] workflow = { importCommand, exportRenderDBCommand };
 
             jobProcessor.submitAsync(new Job(jobId, workflow));
 
             JSONObject res = new JSONObject();
             res.put("jobid", jobId);
-            res.put("input", StringUtils.join(inputsList.toArray(), ';'));
+            res.put("input", StringUtils.join(fileNames.toArray(), ';'));
             res.put("output", etlName);
             res.put("status", "success");
 

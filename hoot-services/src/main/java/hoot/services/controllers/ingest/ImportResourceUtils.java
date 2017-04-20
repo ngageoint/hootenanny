@@ -26,10 +26,12 @@
  */
 package hoot.services.controllers.ingest;
 
+import static hoot.services.controllers.ingest.UploadClassification.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,46 +49,47 @@ final class ImportResourceUtils {
 
     private ImportResourceUtils() {}
 
-    static String classifyUploadedFile(int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
-                                       int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geonamesCnt) {
+    static UploadClassification finalizeUploadClassification(int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
+                                                             int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt,
+                                                             int geonamesCnt) {
         // if fgdb zip > 0 then all becomes fgdb so it can be uzipped first
         // if fgdb zip == 0 and shp zip > then it is standard zip.
         // if fgdb zip == 0 and shp zip == 0 and osm zip > 0 then it is osm zip
-        String classification;
+        UploadClassification classification;
 
         if (zipCnt > 0) {
             if (fgdbZipCnt > 0) {
-                classification = "OGR";
+                classification = FGDB;
             }
             else {
                 // Mix of shape and zip then we will unzip and treat it like OGR
                 if (shpCnt > 0) { // One or more all ogr zip + shape
-                    classification = "OGR";
+                    classification = SHP;
                 }
                 else if (osmCnt > 0) { // Mix of One or more all osm zip + osm
-                    classification = "OSM";
+                    classification = OSM;
                 }
                 else if (geonamesCnt > 0) { // Mix of One or more all osm zip + osm
-                    classification = "GEONAMES";
+                    classification = GEONAMES;
                 }
                 else {
                     // One or more zip (all ogr) || One or more zip (all osm)
                     // If contains zip of just shape or osm then we will etl zip directly
-                    classification = "ZIP";
+                    classification = ZIP;
                 }
             }
         }
         else if (shpCnt > 0) {
-            classification = "OGR";
+            classification = SHP;
         }
         else if (osmCnt > 0) {
-            classification = "OSM";
+            classification = OSM;
         }
         else if (fgdbCnt > 0) {
-            classification = "FGDB";
+            classification = FGDB;
         }
         else if (geonamesCnt > 0) {
-            classification = "GEONAMES";
+            classification = GEONAMES;
         }
         else {
             throw new RuntimeException("Error during classification: unable to classify uploaded file!");
@@ -95,168 +98,142 @@ final class ImportResourceUtils {
         return classification;
     }
 
-    static List<Map<String, String>> handleUploadedFile(String ext, File inputFile, Map<String, Integer> stats, File workDir, String inputType) {
-        List<Map<String, String>> etlRequests = new LinkedList<>();
+    static List<File> handleUploadedFile(UploadClassification uploadClassification, File uploadedFile,
+                                         Map<UploadClassification, Integer> counts,
+                                         File workDir, String uploadType) {
+        List<File> filesToImport = new LinkedList<>();
 
-        int osmZipCnt = stats.getOrDefault("osmzipcnt", 0);
-        int shpZipCnt = stats.getOrDefault("shpzipcnt", 0);
-        int fgdbZipCnt = stats.getOrDefault("fgdbzipcnt", 0);
-        int geonamesZipCnt = stats.getOrDefault("geonameszipcnt", 0);
-        int osmCnt = stats.getOrDefault("osmcnt", 0);
-        int shpCnt = stats.getOrDefault("shpcnt", 0);
-        int fgdbCnt = stats.getOrDefault("fgdbcnt", 0);
-        int geonamesCnt = stats.getOrDefault("geonamescnt", 0);
+        int osmZipCnt = counts.getOrDefault(OSM_ZIP, 0);
+        int shpZipCnt = counts.getOrDefault(SHAPE_ZIP, 0);
+        int fgdbZipCnt = counts.getOrDefault(FGDB_ZIP, 0);
+        int geonamesZipCnt = counts.getOrDefault(GEONAMES_ZIP, 0);
+        int osmCnt = counts.getOrDefault(OSM, 0);
+        int shpCnt = counts.getOrDefault(SHP, 0);
+        int fgdbCnt = counts.getOrDefault(FGDB, 0);
+        int geonamesCnt = counts.getOrDefault(GEONAMES, 0);
 
-        if (ext.equalsIgnoreCase("OSM") || ext.equalsIgnoreCase("PBF")) {
-            Map<String, String> etlRequest = new HashMap<>();
-            etlRequest.put("type", "OSM");
-            etlRequest.put("name", inputFile.getAbsolutePath());
-            etlRequests.add(etlRequest);
+        if ((uploadClassification == OSM) || (uploadClassification == PBF)) {
+            filesToImport.add(uploadedFile);
             osmCnt++;
         }
-        else if (ext.equalsIgnoreCase("GEONAMES") || ext.equalsIgnoreCase("TXT")) {
-            Map<String, String> etlRequest = new HashMap<>();
-            etlRequest.put("type", "GEONAMES");
-            etlRequest.put("name", inputFile.getAbsolutePath());
-            etlRequests.add(etlRequest);
+        else if ((uploadClassification == GEONAMES) || (uploadClassification == TXT)) {
+            filesToImport.add(uploadedFile);
             geonamesCnt++;
         }
-        else if (ext.equalsIgnoreCase("SHP")) {
-            Map<String, String> etlRequest = new HashMap<>();
-            etlRequest.put("type", "OGR");
-            etlRequest.put("name", inputFile.getAbsolutePath());
-            etlRequests.add(etlRequest);
+        else if (uploadClassification == SHP) {
+            filesToImport.add(uploadedFile);
             shpCnt++;
         }
-        else if (ext.equalsIgnoreCase("ZIP")) {
+        else if (uploadClassification == ZIP) {
             // Check to see the type of zip (osm, ogr or fgdb)
-            Map<String, Integer> results = specialHandleWhenZIP(inputFile, etlRequests, workDir);
+            Map<UploadClassification, Integer> zipCounts = specialHandleWhenZIP(uploadedFile, filesToImport, workDir);
 
-            shpZipCnt += results.get("shpzipcnt");
-            fgdbZipCnt += results.get("fgdbzipcnt");
-            osmZipCnt += results.get("osmzipcnt");
-            geonamesZipCnt += results.get("geonameszipcnt");
+            shpZipCnt += zipCounts.get(SHAPE_ZIP);
+            fgdbZipCnt += zipCounts.get(FGDB_ZIP);
+            osmZipCnt += zipCounts.get(OSM_ZIP);
+            geonamesZipCnt += zipCounts.get(GEONAMES_ZIP);
         }
-        else if (inputFile.getName().equalsIgnoreCase("GDB") && inputType.equalsIgnoreCase("DIR")) {
-            Map<String, String> etlRequest = new HashMap<>();
-            etlRequest.put("type", "FGDB");
-            etlRequest.put("name", inputFile.getParentFile().getAbsolutePath());
-            etlRequests.add(etlRequest);
-            fgdbCnt++;
+        else if (uploadedFile.getName().equalsIgnoreCase("gdb")) {
+            if (uploadType.equalsIgnoreCase("DIR")) {
+                filesToImport.add(uploadedFile.getParentFile());
+                fgdbCnt++;
+            }
         }
 
-        stats.put("shpzipcnt", shpZipCnt);
-        stats.put("fgdbzipcnt", fgdbZipCnt);
-        stats.put("osmzipcnt", osmZipCnt);
-        stats.put("geonameszipcnt", geonamesZipCnt);
-        stats.put("shpcnt", shpCnt);
-        stats.put("fgdbcnt", fgdbCnt);
-        stats.put("osmcnt", osmCnt);
-        stats.put("geonamescnt", geonamesCnt);
+        counts.put(SHAPE_ZIP, shpZipCnt);
+        counts.put(FGDB_ZIP, fgdbZipCnt);
+        counts.put(OSM_ZIP, osmZipCnt);
+        counts.put(GEONAMES_ZIP, geonamesZipCnt);
+        counts.put(SHP, shpCnt);
+        counts.put(FGDB, fgdbCnt);
+        counts.put(OSM, osmCnt);
+        counts.put(GEONAMES, geonamesCnt);
 
-        return etlRequests;
+        return filesToImport;
     }
 
     /**
      * Look inside of the zip and decide how to classify what's inside.
      *
-     * @param zip archive to analyse
-     * @param etlRequests
+     * @param zipToImport archive to analyse
+     * @param filesToImport
      * @return Map of counters after looking inside of the ZIP
      */
-    static Map<String, Integer> specialHandleWhenZIP(File zip, List<Map<String, String>> etlRequests, File workDir) {
-        String basename = FilenameUtils.getBaseName(zip.getName());
+    static Map<UploadClassification, Integer> specialHandleWhenZIP(File zipToImport, List<File> filesToImport, File workDir) {
+        String basename = FilenameUtils.getBaseName(zipToImport.getName());
 
         File targetFolder = new File(workDir, FilenameUtils.getBaseName(basename));
 
         // Uncompress the zip file
-        new UnZIPFileCommand(zip, targetFolder, ImportResource.class).execute();
+        new UnZIPFileCommand(zipToImport, targetFolder, ImportResource.class).execute();
 
         IOFileFilter fileFilter = FileFilterUtils.or(
-                FileFilterUtils.suffixFileFilter("shp"),
-                FileFilterUtils.suffixFileFilter("osm"),
-                FileFilterUtils.suffixFileFilter("geonames"),
-                FileFilterUtils.suffixFileFilter("pbf"),
+                FileFilterUtils.suffixFileFilter(SHP.toString().toLowerCase()),
+                FileFilterUtils.suffixFileFilter(OSM.toString().toLowerCase()),
+                FileFilterUtils.suffixFileFilter(GEONAMES.toString().toLowerCase()),
+                FileFilterUtils.suffixFileFilter(PBF.toString().toLowerCase()),
                 FileFilterUtils.nameFileFilter("gdb"));
 
         Collection<File> files = FileUtils.listFiles(targetFolder, fileFilter, null);
 
-        int shpCnt = 0;
-        int osmCnt = 0;
-        int geonamesCnt = 0;
-        int fgdbCnt = 0;
+        int shpCnt = 0, osmCnt = 0, geonamesCnt = 0, fgdbCnt = 0;
 
         for (File file : files) {
             String ext = FilenameUtils.getExtension(file.getName());
+            UploadClassification uploadedFileType = UploadClassification.valueOf(ext.toUpperCase());
 
-            if (file.getName().equalsIgnoreCase("GDB") && StringUtils.isBlank(ext) &&
-                    FilenameUtils.getExtension(targetFolder.getName()).equalsIgnoreCase("GDB")) {
-                Map<String, String> contentType = new HashMap<>();
-                contentType.put("type", "FGDB_ZIP");
-                contentType.put("name", file.getParentFile().getAbsolutePath());
-                etlRequests.add(contentType);
+            if (file.getName().equalsIgnoreCase("gdb") && StringUtils.isBlank(ext) &&
+                    FilenameUtils.getExtension(targetFolder.getName()).equalsIgnoreCase("gdb")) {
+                filesToImport.add(file.getParentFile());
                 fgdbCnt++;
             }
-            else if (ext.equalsIgnoreCase("SHP")) {
-                Map<String, String> contentType = new HashMap<>();
-                contentType.put("type", "OGR_ZIP");
-                contentType.put("name", file.getAbsolutePath());
-                etlRequests.add(contentType);
+            else if (uploadedFileType == SHP) {
+                filesToImport.add(file);
                 shpCnt++;
             }
-            else if (ext.equalsIgnoreCase("OSM")) {
-                Map<String, String> contentType = new HashMap<>();
-                contentType.put("type", "OSM_ZIP");
-                contentType.put("name", file.getAbsolutePath());
-                etlRequests.add(contentType);
+            else if (uploadedFileType == OSM) {
+                filesToImport.add(file);
                 osmCnt++;
             }
-            else if (ext.equalsIgnoreCase("GEONAMES")) {
-                Map<String, String> contentType = new HashMap<>();
-                contentType.put("type", "GEONAMES_ZIP");
-                contentType.put("name", file.getAbsolutePath());
-                etlRequests.add(contentType);
+            else if (uploadedFileType == GEONAMES) {
+                filesToImport.add(file);
                 geonamesCnt++;
             }
         }
 
         // We do not allow mix of ogr and osm in zip
         if (((shpCnt + fgdbCnt) > 0) && (osmCnt > 0)) {
-            throw new IllegalArgumentException(zip.getAbsolutePath() + " cannot contain both OSM and OGR types.");
+            throw new IllegalArgumentException(zipToImport.getAbsolutePath() + " cannot contain both OSM and OGR types.");
         }
 
-        Map<String, Integer> stats = new HashMap<>();
+        Map<UploadClassification, Integer> stats = new EnumMap<>(UploadClassification.class);
 
-        stats.put("shpzipcnt", shpCnt);
-        stats.put("fgdbzipcnt", fgdbCnt);
-        stats.put("osmzipcnt", osmCnt);
-        stats.put("geonameszipcnt", geonamesCnt);
+        stats.put(SHAPE_ZIP, shpCnt);
+        stats.put(FGDB_ZIP, fgdbCnt);
+        stats.put(OSM_ZIP, osmCnt);
+        stats.put(GEONAMES_ZIP, geonamesCnt);
 
         return stats;
     }
 
-    static void handleOSMZip(File workDir, List<File> zipList, List<Map<String, String>> etlRequests, List<String> inputsList, String inputType) {
+    static void handleOSMZip(File workDir, List<File> zipsToImport, List<File> filesToImport, List<String> fileNames) {
         // we want to unzip the file and modify any necessary parameters
-        File zipFile = new File(workDir, inputsList.get(0));
+        File zipFile = new File(workDir, fileNames.get(0));
         File zipFolder = new File(workDir, FilenameUtils.getBaseName(zipFile.getName()));
 
-        zipList.clear();
-        etlRequests.clear();
-        inputsList.clear();
+        zipsToImport.clear();
+        filesToImport.clear();
+        fileNames.clear();
 
         IOFileFilter fileFilter = FileFilterUtils.suffixFileFilter("osm");
         Collection<File> osmFiles = FileUtils.listFiles(zipFolder, fileFilter, null);
 
-        Map<String, Integer> zipStat = new HashMap<>();
-        for (File osmFile : osmFiles) {
-            etlRequests.addAll(handleUploadedFile("OSM", osmFile, zipStat, workDir, inputType));
-        }
+        filesToImport.addAll(osmFiles);
     }
 
-    static void handleGEONAMESWithTxtExtension(File workDir, String uploadedFileBasename, List<String> inputsList,
-             List<Map<String, String>> etlRequests, String inputType, Map<String, Integer> zipStat) {
-        String uploadedFileName = uploadedFileBasename + "." + "geonames";
-        File srcFile = new File(workDir, inputsList.get(0));
+    static void handleGEONAMESWithTxtExtension(File workDir, File geonamesFiles, List<String> fileNames, List<File> filesToImport) {
+        String uploadedFileName = FilenameUtils.getBaseName(geonamesFiles.getName()) + "." + "geonames";
+        File srcFile = new File(workDir, geonamesFiles.getName());
         File destFile = new File(workDir, uploadedFileName);
 
         // we need to rename the file for hoot to ingest
@@ -267,9 +244,9 @@ final class ImportResourceUtils {
             throw new RuntimeException("Error trying to rename " + srcFile.getAbsolutePath() + " to " + destFile.getAbsolutePath(), ioe);
         }
 
-        inputsList.set(0, uploadedFileName);
+        fileNames.set(0, uploadedFileName);
 
-        etlRequests.clear();
-        etlRequests.addAll(ImportResourceUtils.handleUploadedFile("GEONAMES", destFile, zipStat, workDir, inputType));
+        filesToImport.clear();
+        filesToImport.add(destFile);
     }
 }

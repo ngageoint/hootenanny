@@ -28,6 +28,7 @@ package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.controllers.ingest.UploadClassification.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,8 +51,9 @@ class ImportCommand extends ExternalCommand {
 
     private final File workDir;
 
-    ImportCommand(String jobId, File workDir, List<Map<String, String>> requests, List<File> zips, String translation,
-                   String etlName, Boolean isNoneTranslation, String debugLevel, String inputType, Class<?> caller) {
+    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation,
+                  String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
+                  Class<?> caller) {
         super(jobId);
         this.workDir = workDir;
 
@@ -64,7 +66,7 @@ class ImportCommand extends ExternalCommand {
             translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
         }
 
-        List<String> inputs = requests.stream().map(request -> request.get("name")).collect(Collectors.toList());
+        List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
         List<String> options = new LinkedList<>();
         options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
@@ -82,35 +84,38 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootOGR2OSMCommand = "hoot ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
+
         String command = null;
-        if ("OGR".equalsIgnoreCase(inputType) || "FGDB".equalsIgnoreCase(inputType) || "ZIP".equalsIgnoreCase(inputType)) {
-            if ("ZIP".equalsIgnoreCase(inputType) && !zips.isEmpty()) {
+        if ((classification == SHP) || (classification == FGDB) || (classification == ZIP)) {
+            if ((classification == ZIP) && !zipsToImport.isEmpty()) {
                 //Reading a GDAL dataset in a .gz file or a .zip archive
-                inputs = zips.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
+                inputs = zipsToImport.stream().map(zip -> "/vsizip/" + zip.getAbsolutePath()).collect(Collectors.toList());
                 substitutionMap.put("INPUTS", inputs);
             }
 
             if (!isNoneTranslation) {
                 substitutionMap.put("TRANSLATION_PATH", translationPath);
-                command = "hoot ogr2osm --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_NAME} ${INPUTS}";
+                command = hootOGR2OSMCommand;
             }
             else {
-                command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+                command = hootConvertCommand;
             }
         }
-        else if ("OSM".equalsIgnoreCase(inputType)) {
+        else if (classification == OSM) {
             if (!isNoneTranslation) {
                 options.add("convert.ops=hoot::TranslationOp");
                 options.add("translation.script=" + translationPath);
             }
 
-            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+            command = hootConvertCommand;
         }
-        else if ("GEONAMES".equalsIgnoreCase(inputType)) {
+        else if (classification == GEONAMES) {
             options.add("convert.ops=hoot::TranslationOp");
             options.add("translation.script=" + translationPath);
 
-            command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+            command = hootConvertCommand;
         }
 
         super.configureCommand(command, substitutionMap, caller);

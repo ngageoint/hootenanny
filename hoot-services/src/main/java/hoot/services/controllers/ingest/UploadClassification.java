@@ -22,24 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
 
-import java.io.File;
-import java.util.List;
+enum UploadClassification {
+    // Compressed file types
+    OSM_ZIP, SHAPE_ZIP, FGDB_ZIP, GEONAMES_ZIP, ZIP,
 
-import org.springframework.stereotype.Component;
+    // Single file types
+    OSM, SHP, FGDB, GEONAMES, PBF, TXT,
 
-
-@Component
-class ImportCommandFactory {
-
-    ImportCommand build(String jobId, File workDir, List<File> filesToImport,
-                         List<File> zipsToImport, String translation, String etlName, Boolean isNoneTranslation,
-                         String debugLevel, UploadClassification uploadClassification, Class<?> caller) {
-        return new ImportCommand(jobId, workDir, filesToImport, zipsToImport, translation, etlName, isNoneTranslation,
-                                 debugLevel, uploadClassification, caller);
-    }
+    OTHER
 }
