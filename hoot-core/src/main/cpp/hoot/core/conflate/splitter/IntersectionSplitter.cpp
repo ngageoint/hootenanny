@@ -174,7 +174,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     return;
   }
 
-  LOG_TRACE("Splitting way: " << way->getId() << " at node: " << nodeId);
+  LOG_TRACE("Splitting way: " << way->getElementId() << " at node: " << ElementId(ElementType::Node, nodeId));
 
   // find the first index of the split node that isn't an endpoint.
   int firstIndex = -1;

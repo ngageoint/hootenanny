@@ -788,7 +788,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   }
   // Have to establish new mapping
   const unsigned long nodeDbId = _establishNewIdMapping(node->getElementId());
-  LOG_VART(nodeDbId);
+  LOG_VART(ElementId(ElementType::Node, nodeDbId));
 
   _writeNodeToStream(node, nodeDbId);
   _writeTagsToStream(node->getTags(), ElementType::Node, nodeDbId,
@@ -858,7 +858,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   }
   // Have to establish new mapping
   const unsigned long wayDbId = _establishNewIdMapping(way->getElementId());
-  LOG_VART(wayDbId);
+  LOG_VART(ElementId(ElementType::Way, wayDbId));
 
   _writeWayToStream(wayDbId);
   _writeWayNodesToStream(wayDbId, way->getNodeIds());
@@ -907,7 +907,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   }
   // Have to establish new mapping
   const unsigned long relationDbId = _establishNewIdMapping(relation->getElementId());
-  LOG_VART(relationDbId);
+  LOG_VART(ElementId(ElementType::Relation, relationDbId));
 
   _writeRelationToStream(relationDbId);
   _writeRelationMembersToStream(relation, relationDbId);

@@ -133,12 +133,13 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   if (Log::getInstance().isDebugEnabled())
   {
-    LOG_DEBUG("Writing debug map...");
-    OsmMapPtr debug(new OsmMap(map));
-    MapProjector::projectToWgs84(debug);
-    OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
+    //TODO: tie this to a config opt instead
+//    LOG_DEBUG("Writing debug map...");
+//    OsmMapPtr debug(new OsmMap(map));
+//    MapProjector::projectToWgs84(debug);
+//    OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
 
-    _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
+//    _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
   }
 
   // find all the matches in this map

@@ -709,8 +709,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
-  LOG_TRACE("Inserted node with ID: " << QString::number(id));
-  LOG_VART(QString::number(lat, 'g', 15));
+  LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
+  LOG_VART(QString::number(lat, 'g', 15))
   LOG_VART(QString::number(lon, 'g', 15));
 
   return true;
@@ -750,7 +750,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_TRACE("Inserted relation with ID: " << QString::number(relationId));
+  LOG_TRACE("Inserted relation: " << ElementId(ElementType::Relation, relationId));
 
   return true;
 }
@@ -1219,7 +1219,7 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 }
 
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
-                            const Tags& tags)
+                           const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -1253,7 +1253,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
 
   _updateNode->finish();
 
-  LOG_DEBUG("Updated node with ID: " << QString::number(id));
+  LOG_TRACE("Updated node: " << ElementId(ElementType::Node, id));
 }
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
@@ -1285,7 +1285,7 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
 
   _updateRelation->finish();
 
-  LOG_DEBUG("Updated relation with ID: " << QString::number(id));
+  LOG_TRACE("Updated relation: " << ElementId(ElementType::Relation, id));
 }
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
@@ -1317,7 +1317,7 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
 
   _updateWay->finish();
 
-  LOG_DEBUG("Updated way with ID: " << QString::number(id));
+  LOG_TRACE("Updated way: " << ElementId(ElementType::Way, id));
 }
 
 bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
@@ -1359,7 +1359,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_TRACE("Inserted way with ID: " << QString::number(wayId));
+  LOG_TRACE("Inserted way: " << ElementId(ElementType::Way, wayId));
 
   return true;
 }

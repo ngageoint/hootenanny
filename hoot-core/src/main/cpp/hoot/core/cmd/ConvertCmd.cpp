@@ -99,7 +99,7 @@ public:
     {
       OsmMapPtr map(new OsmMap());
 
-      loadMap(map, args[0], true, Status::Unknown1);
+      loadMap(map, args[0], true, Status::fromString(ConfigOptions().getReaderSetStatus()));
 
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);

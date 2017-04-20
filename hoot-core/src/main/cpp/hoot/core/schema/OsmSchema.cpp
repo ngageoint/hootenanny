@@ -1480,7 +1480,7 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    LOG_TRACE(_theInstance->toGraphvizString());
+    //LOG_TRACE(_theInstance->toGraphvizString());
   }
   return *_theInstance;
 }
