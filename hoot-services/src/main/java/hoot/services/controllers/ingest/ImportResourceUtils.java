@@ -217,23 +217,25 @@ final class ImportResourceUtils {
     }
 
     static void handleOSMZip(File workDir, List<File> zipsToImport, List<File> filesToImport, List<String> fileNames) {
-        // we want to unzip the file and modify any necessary parameters
-        File zipFile = new File(workDir, fileNames.get(0));
-        File zipFolder = new File(workDir, FilenameUtils.getBaseName(zipFile.getName()));
-
-        zipsToImport.clear();
-        filesToImport.clear();
-        fileNames.clear();
+        File zipFolder = new File(workDir, FilenameUtils.getBaseName(zipsToImport.get(0).getName()));
 
         IOFileFilter fileFilter = FileFilterUtils.suffixFileFilter("osm");
         Collection<File> osmFiles = FileUtils.listFiles(zipFolder, fileFilter, null);
 
-        filesToImport.addAll(osmFiles);
+        // reset
+        zipsToImport.clear();
+        filesToImport.clear();
+        fileNames.clear();
+
+        for (File osmFile: osmFiles) {
+            filesToImport.add(osmFile);
+            fileNames.add(osmFile.getName());
+        }
     }
 
-    static void handleGEONAMESWithTxtExtension(File workDir, File geonamesFiles, List<String> fileNames, List<File> filesToImport) {
-        String uploadedFileName = FilenameUtils.getBaseName(geonamesFiles.getName()) + "." + "geonames";
-        File srcFile = new File(workDir, geonamesFiles.getName());
+    static void handleGEONAMESWithTxtExtension(File workDir, File geonamesFile, List<String> fileNames, List<File> filesToImport) {
+        String uploadedFileName = FilenameUtils.getBaseName(geonamesFile.getName()) + "." + "geonames";
+        File srcFile = new File(workDir, geonamesFile.getName());
         File destFile = new File(workDir, uploadedFileName);
 
         // we need to rename the file for hoot to ingest
