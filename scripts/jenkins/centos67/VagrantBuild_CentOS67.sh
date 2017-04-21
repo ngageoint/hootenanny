@@ -13,6 +13,9 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/pgsql-9.2/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/pgsql-9.2/lib
+
 aclocal && autoconf && autoheader && automake --add-missing && ./configure --quiet --with-rnd --with-services
 
 echo "Building Hoot... "
