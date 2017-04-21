@@ -74,6 +74,11 @@ class ImportCommand extends ExternalCommand {
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
 
+        if (((classification == OSM) && !isNoneTranslation) || (classification == GEONAMES)) {
+            options.add("convert.ops=hoot::TranslationOp");
+            options.add("translation.script=" + translationPath);
+        }
+
         List<String> hootOptions = toHootOptions(options);
 
         String inputName = HOOTAPI_DB_URL + "/" + etlName;
@@ -103,18 +108,7 @@ class ImportCommand extends ExternalCommand {
                 command = hootConvertCommand;
             }
         }
-        else if (classification == OSM) {
-            if (!isNoneTranslation) {
-                options.add("convert.ops=hoot::TranslationOp");
-                options.add("translation.script=" + translationPath);
-            }
-
-            command = hootConvertCommand;
-        }
-        else if (classification == GEONAMES) {
-            options.add("convert.ops=hoot::TranslationOp");
-            options.add("translation.script=" + translationPath);
-
+        else if ((classification == OSM) || (classification == GEONAMES)) {
             command = hootConvertCommand;
         }
 

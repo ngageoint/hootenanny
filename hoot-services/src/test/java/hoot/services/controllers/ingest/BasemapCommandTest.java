@@ -34,29 +34,6 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-/*
-    BasemapCommand(String jobId, String basemapName, File inputFile, String projection, File tileOutputDir, boolean verboseOutput, Class<?> caller) {
-        super(jobId);
-        this.tileOutputDir = tileOutputDir;
-        this.basemapName = basemapName;
-
-        Map<String, Object> substitutionMap = new HashMap<>();
-        substitutionMap.put("VERBOSE", verboseOutput ? "-v" : "");
-        substitutionMap.put("WEBVIEWER", "none");
-        substitutionMap.put("INPUT_FILE", inputFile.getAbsolutePath());
-        substitutionMap.put("ZOOM", "0-20");
-        substitutionMap.put("TILE_OUTPUT_DIR", tileOutputDir.getAbsolutePath());
-        substitutionMap.put("TITLE", inputFile.getAbsolutePath());
-
-        String command;
-
-        if (!StringUtils.isBlank(projection)) {
-            substitutionMap.put("PROJECTION", projection);
-            command = "/usr/local/bin/gdal2tiles.py ${VERBOSE} -s ${PROJECTION} -w ${WEBVIEWER} -t ${TITLE} -z ${ZOOM} ${INPUT_FILE} ${TILE_OUTPUT_DIR}";
-        }
-    }
-
- */
 
 public class BasemapCommandTest {
 
