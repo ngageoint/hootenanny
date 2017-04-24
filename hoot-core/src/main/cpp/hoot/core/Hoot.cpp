@@ -79,13 +79,13 @@ void Hoot::_init()
   LOG_TRACE("Hoot instance init...");
 
 # ifdef TGS_HAVE_LIBSTXXL
-    // initialize the environment variable for loading STXXL configuration. If the environment
-    // variable has already been set then don't overwrite it (that is the 0 at the end).
-    QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/core/stxxl.conf";
-    Tgs::Stxxl::getInstance().setConfig(stxxlConf);
+  // initialize the environment variable for loading STXXL configuration. If the environment
+  // variable has already been set then don't overwrite it (that is the 0 at the end).
+  QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/core/stxxl.conf";
+  Tgs::Stxxl::getInstance().setConfig(stxxlConf);
 # endif
 
-  SignalCatcher::registerHandlers();
+  SignalCatcher::getInstance()->registerDefaultHandlers();
 
   Log::getInstance().setLevel(Log::Info);
 
@@ -110,19 +110,16 @@ void Hoot::_init()
 
   // force load hoot hadoop if it is available.
 # ifdef HOOT_HAVE_HADOOP
-    loadLibrary("HootHadoop");
+  loadLibrary("HootHadoop");
 # endif
 # ifdef HOOT_HAVE_RND
-    loadLibrary("HootRnd");
+  loadLibrary("HootRnd");
 # endif
 # ifdef HOOT_HAVE_NODEJS
-    // sometimes HootJs is loaded by node.js before we get to init.
-    if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
-    {
-      loadLibrary("HootJs");
-    }
+  // sometimes HootJs is loaded by node.js before we get to init.
+  if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
+    loadLibrary("HootJs");
 # endif
-
 }
 
 void Hoot::loadLibrary(QString name)
@@ -134,10 +131,10 @@ void Hoot::loadLibrary(QString name)
     // if the file doesn't exist, then we aren't too concerned.
     if (lib.errorString().contains("No such file or directory"))
     {
-      // no biggie.
-      LOG_WARN(lib.errorString());
-    // if the file does exist.
-    } else {
+      LOG_WARN(lib.errorString());  // no biggie.
+    }
+    else
+    {
       throw HootException("Error loading libary: " + lib.errorString());
     }
   }

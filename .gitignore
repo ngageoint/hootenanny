@@ -164,6 +164,7 @@ hoot-services/src/main/resources/build.info
 hoot-services/src/main/resources/db/spring-database.xml
 hoot-services/src/main/resources/conf/hoot-services.conf
 hoot-services/src/main/resources/db/*.properties
+scripts/database/blank_osmapidb.sql
 ######
 
 compile
