@@ -69,6 +69,9 @@ public:
   T* readObject();
 
 private:
+  //  Don't allow copy constructor
+  ObjectInputStream(const ObjectInputStream&) { }
+
   istream* _istream;
   auto_ptr<StdIoDevice> _stdIoDevice;
   auto_ptr<QDataStream> _streamDelete;

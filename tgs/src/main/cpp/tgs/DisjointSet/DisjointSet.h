@@ -54,6 +54,9 @@ public:
   int num_sets() const { return num; }
 
 private:
+  //  Don't allow copy constructor
+  DisjointSet(const DisjointSet&) { }
+
   uni_elt *elts;
   int num;
 };
