@@ -2,11 +2,9 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <node visible="true" id="-89019" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9011885000000035" lon="-77.0296232882599554"/>
     <node visible="true" id="-89018" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025219999999834" lon="-77.0299044000000066"/>
-    <node visible="true" id="-89017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025219999999834" lon="-77.0299044000000066"/>
     <node visible="true" id="-89016" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013329480378687" lon="-77.0299044000000066"/>
     <node visible="true" id="-89001" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013315145630401" lon="-77.0280999999999949"/>
     <node visible="true" id="-88992" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025183345070502" lon="-77.0280999999999949"/>
-    <node visible="true" id="-88967" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025183345070502" lon="-77.0280999999999949"/>
     <node visible="true" id="-88961" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0296251769041760"/>
     <node visible="true" id="-70452" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013329999999797" lon="-77.0298659999999842"/>
     <node visible="true" id="-70451" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013299999999305" lon="-77.0293429999999972"/>
@@ -29,7 +27,7 @@
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5048" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88967"/>
+        <nd ref="-88992"/>
         <nd ref="-38667"/>
         <nd ref="-38668"/>
         <nd ref="-27654"/>
@@ -43,7 +41,7 @@
         <nd ref="-38667"/>
         <nd ref="-38668"/>
         <nd ref="-27654"/>
-        <nd ref="-89017"/>
+        <nd ref="-89018"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="highway" v="secondary"/>
         <tag k="error:circular" v="5"/>
