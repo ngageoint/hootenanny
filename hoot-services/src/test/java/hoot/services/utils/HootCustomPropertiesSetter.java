@@ -36,18 +36,28 @@ public final class HootCustomPropertiesSetter {
 
     private HootCustomPropertiesSetter() {}
 
-    public static void setProperty(String key, Object value) throws Exception {
-        setProperty(key, value, HootProperties.class);
+    public static void setProperty(String key, Object value) {
+        try {
+            setProperty(key, value, HootProperties.class);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error setting " + key + " to " + value, e);
+        }
     }
 
-    public static void setProperty(String key, Object value, Class<?> clazz) throws Exception {
-        Field field = clazz.getDeclaredField(key);
-        field.setAccessible(true);
+    public static void setProperty(String key, Object value, Class<?> clazz) {
+        try {
+            Field field = clazz.getDeclaredField(key);
+            field.setAccessible(true);
 
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
-        field.set(null, value);
+            field.set(null, value);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Error setting " + key + " to " + value + " for class " + clazz.getName(), e);
+        }
     }
 }

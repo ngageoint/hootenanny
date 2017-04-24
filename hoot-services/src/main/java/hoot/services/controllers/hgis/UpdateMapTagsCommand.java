@@ -45,10 +45,12 @@ final class UpdateMapTagsCommand implements InternalCommand {
 
     private final String jobId;
     private final String mapName;
+    private final Class<?> caller;
 
-    UpdateMapTagsCommand(String jobId, String mapName) {
+    UpdateMapTagsCommand(String jobId, String mapName, Class<?> caller) {
         this.jobId = jobId;
         this.mapName = mapName;
+        this.caller = caller;
     }
 
     @Override
@@ -62,6 +64,7 @@ final class UpdateMapTagsCommand implements InternalCommand {
 
         commandResult.setExitCode(CommandResult.SUCCESS);
         commandResult.setFinish(LocalDateTime.now());
+        commandResult.setCaller(this.caller.getName());
 
         return commandResult;
     }

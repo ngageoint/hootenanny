@@ -38,18 +38,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
-import hoot.services.job.JobStatusManager.JOB_STATUS;
 import hoot.services.models.db.CommandStatus;
-import hoot.services.models.db.JobStatus;
 
 
 @Controller
@@ -80,42 +77,28 @@ public class JobResource {
     @GET
     @Path("/status/{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobStatus(@PathParam("jobId") String jobId,
-                                 @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
-        JSONObject response = new JSONObject();
+    public JobStatusResponse getJobStatus(@PathParam("jobId") String jobId,
+                                          @QueryParam("includeCommandDetail") @DefaultValue("false") Boolean includeCommandDetail) {
+        JobStatusResponse response = new JobStatusResponse();
 
         try {
-            JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
+            hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
 
             if (jobStatus != null) {
-                response.put("jobId", jobId);
-                response.put("status", JOB_STATUS.fromInteger(jobStatus.getStatus()).toString());
-                response.put("statusDetail", jobStatus.getStatusDetail());
-                response.put("percentcomplete", jobStatus.getPercentComplete());
-                response.put("lasttext", jobStatus.getStatusDetail());
+                response.setJobId(jobId);
+                response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
+                response.setStatusDetail(jobStatus.getStatusDetail());
+                response.setPercentComplete(jobStatus.getPercentComplete());
+                response.setLastText(jobStatus.getStatusDetail());
 
                 if (includeCommandDetail) {
                     List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId);
-                    JSONArray commands = new JSONArray();
-                    for (CommandStatus commandStatus : commandDetail) {
-                        JSONObject command = new JSONObject();
-                        command.put("command", commandStatus.getCommand());
-                        command.put("exitCode", commandStatus.getExitCode());
-                        command.put("jobId", commandStatus.getJobId());
-                        command.put("startTime", commandStatus.getStart());
-                        command.put("finishTime", commandStatus.getFinish());
-                        command.put("stderr", commandStatus.getStderr());
-                        command.put("stdout", commandStatus.getStdout());
-                        command.put("id", commandStatus.getId());
-                        commands.add(command);
-                    }
-
-                    response.put("commandDetail", commands.toJSONString());
+                    response.setCommandDetail(commandDetail);
                 }
             }
             else {
-                response.put("jobId", jobId);
-                response.put("status", JOB_STATUS.UNKNOWN.toString());
+                response.setJobId(jobId);
+                response.setStatus(JobStatus.UNKNOWN.toString());
             }
         }
         catch (Exception ex) {
@@ -123,6 +106,6 @@ public class JobResource {
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
 
-        return Response.ok(response.toJSONString()).build();
+        return response;
     }
 }

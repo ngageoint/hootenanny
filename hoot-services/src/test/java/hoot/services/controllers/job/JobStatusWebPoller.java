@@ -41,8 +41,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.springframework.beans.BeansException;
 
-import hoot.services.job.JobStatusManager.JOB_STATUS;
-import hoot.services.models.db.JobStatus;
+import hoot.services.job.JobStatus;
 import hoot.services.models.db.QJobStatus;
 
 
@@ -77,11 +76,11 @@ public class JobStatusWebPoller {
      * @return a hoot job status
      * @throws ParseException
      */
-    private JOB_STATUS pollJobStatus(String jobId) throws ParseException {
+    private JobStatus pollJobStatus(String jobId) throws ParseException {
         String response = webTarget.path("status/" + jobId).request(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject responseObj = (JSONObject) (new JSONParser()).parse(response);
         assert (responseObj.get("jobId").equals(jobId));
-        return JOB_STATUS.valueOf(((String) responseObj.get("status")).toUpperCase());
+        return JobStatus.valueOf(((String) responseObj.get("status")).toUpperCase());
     }
 
     /**
@@ -112,14 +111,14 @@ public class JobStatusWebPoller {
      * @throws BeansException
      */
     public void pollJobStatusUntilCompleteOrFail(String jobId, boolean jobShouldFail) throws Exception {
-        JOB_STATUS jobStatus = JOB_STATUS.UNKNOWN;
-        while ((jobStatus == JOB_STATUS.UNKNOWN) || (jobStatus == JOB_STATUS.RUNNING)) {
+        JobStatus jobStatus = JobStatus.UNKNOWN;
+        while ((jobStatus == JobStatus.UNKNOWN) || (jobStatus == JobStatus.RUNNING)) {
             Thread.sleep(jobStatusPollDelayMs);
             JSONObject jobStatusObj = pollJobStatusObj(jobId);
-            jobStatus = JOB_STATUS.valueOf(((String) jobStatusObj.get("status")).toUpperCase());
-            if (jobStatus == JOB_STATUS.FAILED) {
+            jobStatus = JobStatus.valueOf(((String) jobStatusObj.get("status")).toUpperCase());
+            if (jobStatus == JobStatus.FAILED) {
                 if (jobShouldFail) {
-                    verifyJobStatusInDb(jobId, JOB_STATUS.FAILED);
+                    verifyJobStatusInDb(jobId, JobStatus.FAILED);
                 }
                 else {
                     Assert.fail("Job failed: " + jobStatusObj.get("statusDetail"));
@@ -127,8 +126,8 @@ public class JobStatusWebPoller {
             }
         }
         if (!jobShouldFail) {
-            Assert.assertEquals(JOB_STATUS.COMPLETE, jobStatus);
-            verifyJobStatusInDb(jobId, JOB_STATUS.COMPLETE);
+            Assert.assertEquals(JobStatus.COMPLETE, jobStatus);
+            verifyJobStatusInDb(jobId, JobStatus.COMPLETE);
         }
     }
 
@@ -144,9 +143,9 @@ public class JobStatusWebPoller {
      * @param status
      *            status the job should have in the database
      */
-    private void verifyJobStatusInDb(String jobId, JOB_STATUS status) {
+    private void verifyJobStatusInDb(String jobId, JobStatus status) {
         QJobStatus jobStatus = QJobStatus.jobStatus;
-        JobStatus finalJobStatus = createQuery()
+        hoot.services.models.db.JobStatus finalJobStatus = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
                 .where(jobStatus.jobId.eq(jobId))

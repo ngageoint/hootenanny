@@ -33,9 +33,7 @@ import java.sql.Timestamp;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
@@ -62,13 +60,6 @@ public abstract class OSMResourceTestAbstract extends HootServicesJerseyTestAbst
     }
 
     public OSMResourceTestAbstract(String... controllerGroup) {}
-
-
-    @BeforeClass
-    public static void beforeClass() {}
-
-    @AfterClass
-    public static void afterClass() {}
 
     @Before
     public void beforeTest() throws Exception {

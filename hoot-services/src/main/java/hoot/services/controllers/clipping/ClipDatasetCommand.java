@@ -26,34 +26,49 @@
  */
 package hoot.services.controllers.clipping;
 
-import static hoot.services.HootProperties.CLIP_DATASET_MAKEFILE_PATH;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import hoot.services.command.ExternalCommand;
-import hoot.services.utils.JsonUtils;
 
 
 class ClipDatasetCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ClipDatasetCommand.class);
 
-    ClipDatasetCommand(String params, Class<?> caller) {
-        JSONArray commandArgs;
+    ClipDatasetCommand(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller) {
+        super(jobId);
 
-        try {
-            // scripts/makeclipdataset: hoot crop-map $(HOOT_OPTS) "$(OP_INPUT)" "$(OP_OUTPUT)" "$(BBOX)"
-            commandArgs = JsonUtils.parseParams(params);
-        }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
-        }
+        List<String> options = new LinkedList<>();
+        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
 
-        JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
-        commandArgs.add(hootDBURL);
+        List<String> hootOptions = toHootOptions(options);
 
-        super.configureAsMakeCommand(CLIP_DATASET_MAKEFILE_PATH, caller, commandArgs);
+        //The input OSM data path
+        Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+
+        //The input OSM data path
+        substitutionMap.put("INPUT", HOOTAPI_DB_URL + "/" + params.getInputName());
+
+        //The output - The output OSM data path.
+        substitutionMap.put("OUTPUT", HOOTAPI_DB_URL + "/" + params.getOutputName());
+
+        //Comma delimited bounds. minx,miny,maxx,maxy e.g.38,-105,39,-104
+        substitutionMap.put("BOUNDS", params.getBounds());
+
+        String command = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
+
+        super.configureCommand(command, substitutionMap, caller);
     }
 }

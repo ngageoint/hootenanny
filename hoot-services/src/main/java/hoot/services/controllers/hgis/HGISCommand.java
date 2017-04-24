@@ -26,39 +26,36 @@
  */
 package hoot.services.controllers.hgis;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import static hoot.services.HootProperties.CORE_SCRIPT_PATH;
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
-import hoot.services.HootProperties;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hoot.services.command.ExternalCommand;
 
 
 class HGISCommand extends ExternalCommand {
+    private static final Logger logger = LoggerFactory.getLogger(HGISCommand.class);
 
-    HGISCommand(String sourceMap, String outputMap, String scriptName, Class<?> caller) {
-        JSONArray commandArgs = new JSONArray();
+    HGISCommand(String jobId, String sourceMap, String outputMap, String scriptName, Class<?> caller) {
+        super(jobId);
 
-        // $1
-        JSONObject arg = new JSONObject();
-        arg.put("SOURCE", generateDbMapParam(sourceMap));
-        commandArgs.add(arg);
+        String source = HOOTAPI_DB_URL + "/" + sourceMap;
+        String output = HOOTAPI_DB_URL + "/" + outputMap;
+        String script = new File(CORE_SCRIPT_PATH, scriptName).getAbsolutePath();
 
-        // $2
-        arg = new JSONObject();
-        arg.put("OUTPUT", generateDbMapParam(outputMap));
-        commandArgs.add(arg);
+        Map<String, String> substitutionMap = new HashMap<>();
+        substitutionMap.put("SCRIPT", script);
+        substitutionMap.put("SOURCE", source);
+        substitutionMap.put("OUTPUT", output);
 
-        super.configureAsBashCommand(scriptName, caller, commandArgs);
-    }
+        String command = "${SCRIPT} ${SOURCE} ${OUTPUT}";
 
-    /**
-     * Creates db conection string based on config settings in
-     * hoot-services.conf
-     *
-     * @param mapName
-     * @return output looks like: postgresql://hoot:hoottest@localhost:5432/hoot1/BrazilOsmPois
-     */
-    private static String generateDbMapParam(String mapName) {
-        return HootProperties.HOOTAPI_DB_URL + "/" + mapName;
+        super.configureCommand(command, substitutionMap, caller);
     }
 }
