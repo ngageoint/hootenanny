@@ -5,13 +5,11 @@
     <node visible="true" id="-89021" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8873931592356712" lon="-77.0363669999999985"/>
     <node visible="true" id="-89020" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8880225999999993" lon="-77.0336445934425882"/>
     <node visible="true" id="-89019" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8868575962733090" lon="-77.0363669999999985"/>
-    <node visible="true" id="-89018" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8880225999999993" lon="-77.0336445934425882"/>
     <node visible="true" id="-89017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8876437891156641" lon="-77.0363669999999985"/>
     <node visible="true" id="-89016" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8878479898989724" lon="-77.0334919999999954"/>
     <node visible="true" id="-89003" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0339044639175512"/>
     <node visible="true" id="-88985" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0337256804123598"/>
     <node visible="true" id="-88984" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0336523333333218"/>
-    <node visible="true" id="-88971" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0337256804123598"/>
     <node visible="true" id="-70828" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845369999999804" lon="-77.0339510000000018"/>
     <node visible="true" id="-70827" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8846110000000067" lon="-77.0340410000000020"/>
     <node visible="true" id="-70826" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8846739999999826" lon="-77.0341149999999999"/>
@@ -153,6 +151,45 @@
     <node visible="true" id="-15146" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869800000000367" lon="-77.0359629999999953"/>
     <node visible="true" id="-15145" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869689999999935" lon="-77.0360819999999933"/>
     <node visible="true" id="-15144" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869520000000435" lon="-77.0363209999999867"/>
+    <way visible="true" id="-5054" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39109"/>
+        <nd ref="-39108"/>
+        <nd ref="-39107"/>
+        <nd ref="-39106"/>
+        <nd ref="-39105"/>
+        <tag k="alt_name" v="Raoul Wallenberg Pl;Raoul Wallenberg Pl SW"/>
+        <tag k="name" v="15th St SW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5053" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-89020"/>
+        <nd ref="-50196"/>
+        <nd ref="-50197"/>
+        <nd ref="-50198"/>
+        <nd ref="-39433"/>
+        <nd ref="-50199"/>
+        <nd ref="-50200"/>
+        <nd ref="-15170"/>
+        <nd ref="-50201"/>
+        <nd ref="-50202"/>
+        <nd ref="-50203"/>
+        <nd ref="-50204"/>
+        <nd ref="-50205"/>
+        <nd ref="-39105"/>
+        <tag k="alt_name" v="Raoul Wallenberg Pl SW"/>
+        <tag k="name" v="15th St SW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5052" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88985"/>
+        <nd ref="-39109"/>
+        <tag k="alt_name" v="Raoul Wallenberg Pl;Raoul Wallenberg Pl SW"/>
+        <tag k="name" v="15th St SW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="error:circular" v="5"/>
+    </way>
     <way visible="true" id="-5051" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89022"/>
         <nd ref="-15144"/>
@@ -233,30 +270,6 @@
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5049" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-89020"/>
-        <nd ref="-50196"/>
-        <nd ref="-50197"/>
-        <nd ref="-50198"/>
-        <nd ref="-39433"/>
-        <nd ref="-50199"/>
-        <nd ref="-50200"/>
-        <nd ref="-15170"/>
-        <nd ref="-50201"/>
-        <nd ref="-50202"/>
-        <nd ref="-50203"/>
-        <nd ref="-50204"/>
-        <nd ref="-50205"/>
-        <nd ref="-39105"/>
-        <nd ref="-39106"/>
-        <nd ref="-39107"/>
-        <nd ref="-39108"/>
-        <nd ref="-39109"/>
-        <nd ref="-88985"/>
-        <tag k="name" v="15th St SW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-5048" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89019"/>
         <nd ref="-70797"/>
@@ -296,29 +309,6 @@
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5047" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39109"/>
-        <nd ref="-39108"/>
-        <nd ref="-39107"/>
-        <nd ref="-39106"/>
-        <nd ref="-39105"/>
-        <nd ref="-50205"/>
-        <nd ref="-50204"/>
-        <nd ref="-50203"/>
-        <nd ref="-50202"/>
-        <nd ref="-50201"/>
-        <nd ref="-15170"/>
-        <nd ref="-50200"/>
-        <nd ref="-50199"/>
-        <nd ref="-39433"/>
-        <nd ref="-50198"/>
-        <nd ref="-50197"/>
-        <nd ref="-50196"/>
-        <nd ref="-89018"/>
-        <tag k="name" v="Raoul Wallenberg Pl SW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-5046" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89016"/>
         <nd ref="-39433"/>
@@ -343,17 +333,6 @@
         <nd ref="-39452"/>
         <nd ref="-89017"/>
         <tag k="name" v="Independence Ave SW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5002" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39105"/>
-        <nd ref="-39106"/>
-        <nd ref="-39107"/>
-        <nd ref="-39108"/>
-        <nd ref="-39109"/>
-        <nd ref="-88971"/>
-        <tag k="name" v="Raoul Wallenberg Pl"/>
         <tag k="highway" v="unclassified"/>
         <tag k="error:circular" v="5"/>
     </way>

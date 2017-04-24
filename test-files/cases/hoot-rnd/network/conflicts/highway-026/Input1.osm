@@ -138,7 +138,6 @@
     <node visible="true" id="-126372" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8846114321487732" lon="-77.0340409443454490"/>
     <node visible="true" id="-126371" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845742405210473" lon="-77.0339963221376109"/>
     <node visible="true" id="-126370" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845374093453273" lon="-77.0339512391199008"/>
-    <node visible="true" id="-126369" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845008485038832" lon="-77.0339058105066101"/>
     <node visible="true" id="-119100" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8878305668384172" lon="-77.0336782550725019"/>
     <node visible="true" id="-119099" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8879620076064825" lon="-77.0336603923599341"/>
     <node visible="true" id="-119098" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8879810379879416" lon="-77.0336578057704742"/>
@@ -211,7 +210,6 @@
     <node visible="true" id="-83547" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8877730175023686" lon="-77.0336875756699868"/>
     <way visible="true" id="-13540" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170846"/>
-        <nd ref="-126369"/>
         <nd ref="-126370"/>
         <nd ref="-126371"/>
         <nd ref="-126372"/>
