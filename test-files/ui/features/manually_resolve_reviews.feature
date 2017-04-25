@@ -37,6 +37,11 @@ Feature: Manually resolve reviews feature
         | name | Test Name |
     #Edit a review feature
     When I select a node map feature with class "activeReviewFeature"
+
+    #Make sure feature has a hoot:status of 1
+    Then I wait 3 "seconds" to see css "div.key-wrap input.key[title='hoot:status']"
+    Then I wait 3 "seconds" to see css "div.input-wrap-position input.value[title='1']"
+
     And I type "Edit Name" in input "preset-input-name"
     Then I wait 2 "seconds" to see "div.tag-table td.f1" element with text "Edit Name"
 
