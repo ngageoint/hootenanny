@@ -27,7 +27,6 @@
 #include "ChangesetDeriver.h"
 
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/io/ElementComparer.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 
@@ -114,9 +113,9 @@ Change ChangesetDeriver::_nextChange()
   }
   else
   {
-    // while the elements are exactly the same there is nothing to do.
+    // while the elements are exactly the same, there is nothing to do.
     while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
-           ElementComparer().isSame(_fromE, _toE))
+           _elementComparer.isSame(_fromE, _toE))
     {
       //TODO: change back to trace
       LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
@@ -166,7 +165,7 @@ Change ChangesetDeriver::_nextChange()
                 _toE->getElementId() << " modifying 'to' element: ");
 
       _toE = _to->readNextElement();
-      _fromE = _from->readNextElement();
+      _fromE = _from->readNextElement(); //TODO: this line probably needs more testing
     }
     else if (_fromE->getElementId() < _toE->getElementId())
     {

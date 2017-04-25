@@ -41,7 +41,7 @@ _threshold(threshold)
 
 }
 
-bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
+bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
   if (e1->getElementId() != e2->getElementId() ||
       !(e1->getTags() == e2->getTags()) ||
@@ -85,7 +85,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2)
 }
 
 bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
-                                   const boost::shared_ptr<const Element>& e)
+                                   const boost::shared_ptr<const Element>& e) const
 {
   ConstNodePtr rn = dynamic_pointer_cast<const Node>(re);
   ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
@@ -95,7 +95,7 @@ bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
 }
 
 bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,
-                                  const boost::shared_ptr<const Element>& e)
+                                  const boost::shared_ptr<const Element>& e) const
 {
   ConstWayPtr rw = dynamic_pointer_cast<const Way>(re);
   ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
@@ -116,7 +116,7 @@ bool ElementComparer::_compareWay(const boost::shared_ptr<const Element>& re,
 }
 
 bool ElementComparer::_compareRelation(const boost::shared_ptr<const Element>& re,
-                                       const boost::shared_ptr<const Element>& e)
+                                       const boost::shared_ptr<const Element>& e) const
 {
   ConstRelationPtr rr = dynamic_pointer_cast<const Relation>(re);
   ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);

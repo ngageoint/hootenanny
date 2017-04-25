@@ -46,17 +46,18 @@ public:
    */
   ElementComparer(Meters threshold = 0.05);
 
-  bool isSame(ElementPtr e1, ElementPtr e2);
+  bool isSame(ElementPtr e1, ElementPtr e2) const;
 
 private:
 
-  bool _compareNode(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e);
-
-  bool _compareWay(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e);
-
-  bool _compareRelation(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e);
-
   Meters _threshold;
+
+  bool _compareNode(const boost::shared_ptr<const Element>& re,
+                    const boost::shared_ptr<const Element>& e) const;
+  bool _compareWay(const boost::shared_ptr<const Element>& re,
+                   const boost::shared_ptr<const Element>& e) const;
+  bool _compareRelation(const boost::shared_ptr<const Element>& re,
+                        const boost::shared_ptr<const Element>& e) const;
 
 };
 

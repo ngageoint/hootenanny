@@ -29,12 +29,14 @@
 
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/ElementComparer.h>
 
 namespace hoot
 {
 
 /**
- * Calculates the changeset difference between a source and target map
+ * Calculates the changeset difference between a source and target map.  This logic was derived
+ * from that used in Osmosis.
  */
 class ChangesetDeriver : public ChangeSetProvider
 {
@@ -73,6 +75,7 @@ private:
   ElementInputStreamPtr _to;
   Change _next;
   ElementPtr _fromE, _toE;
+  ElementComparer _elementComparer;
 
 };
 
