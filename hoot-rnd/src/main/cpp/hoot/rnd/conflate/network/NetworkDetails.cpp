@@ -644,9 +644,9 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     else
     {
       RelationPtr r1(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
-      r1->setType("multilinestring");
+      r1->setType(MetadataTags::RelationMultilineString());
       RelationPtr r2(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
-      r2->setType("multilinestring");
+      r2->setType(MetadataTags::RelationMultilineString());
 
       // create a set of all the way IDs
       set<long> widSet;

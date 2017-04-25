@@ -26,16 +26,35 @@
  */
 package hoot.services.controllers.hgis;
 
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.UnitTest;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.jerseyframework.HootServicesSpringTestConfig;
+import hoot.services.job.Job;
+import hoot.services.utils.MapUtils;
 
 
-public class HGISFilterResourceTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
+public class HGISFilterResourceTest extends HootServicesJerseyTestAbstract {
 
     @Test(expected = WebApplicationException.class)
     @Category(UnitTest.class)
@@ -81,5 +100,27 @@ public class HGISFilterResourceTest {
         request.setOutput("");
 
         spy.filterNonHgisPois(request);
+    }
+
+    @Test
+    public void testFilterNonHgisPois() throws Exception {
+        long userId = MapUtils.insertUser();
+        long mapId = MapUtils.insertMap(userId);
+
+        FilterNonHgisPoisRequest filterNonHgisPoisRequest = new FilterNonHgisPoisRequest();
+        filterNonHgisPoisRequest.setSource(String.valueOf(mapId));
+        filterNonHgisPoisRequest.setOutput("output_of_" + String.valueOf(mapId));
+
+        Response response = target("/filter/custom/HGIS/filternonhgispois")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(filterNonHgisPoisRequest), Response.class);
+
+        assertNotNull(response);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(1, job.getCommands().length);
+        assertSame(FilterNonHGISPOIsCommand.class, job.getCommands()[0].getClass());
     }
 }

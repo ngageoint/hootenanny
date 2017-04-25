@@ -27,6 +27,7 @@
 package hoot.services.command;
 
 
+import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -44,6 +45,8 @@ public class CommandResult {
     private LocalDateTime start;
     private LocalDateTime finish;
     private String jobId;
+    private String caller;
+    private File workingDir;
 
     public CommandResult() {}
 
@@ -119,12 +122,30 @@ public class CommandResult {
         this.id = id;
     }
 
+    public String getCaller() {
+        return caller;
+    }
+
+    public void setCaller(String caller) {
+        this.caller = caller;
+    }
+
+    public File getWorkingDir() {
+        return workingDir;
+    }
+
+    public void setWorkingDir(File workingDir) {
+        this.workingDir = workingDir;
+    }
+
     @Override
     public String toString() {
         return "CommandResult{" +
-                "command=" + command.replace(",", "") +
+                "command=[" + command + "]" +
                 ", jobId=[" + jobId + ']' +
                 ", command_id=[" + id + ']' +
+                ", caller=[" + caller + ']' +
+                ", workingDir=[" + workingDir.getAbsolutePath() + ']' +
                 ", start=[" + start + ']' +
                 ", finish=[" + finish + ']' +
                 ", duration=[" + getDuration() + "]" +

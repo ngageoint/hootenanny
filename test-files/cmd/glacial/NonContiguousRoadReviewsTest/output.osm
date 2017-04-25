@@ -26368,7 +26368,20 @@
         <nd ref="-3704"/>
         <nd ref="-3703"/>
         <nd ref="-21"/>
-        <tag k="source:datetime" v="2016-04-11T14:26:36Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.775Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="width:minimum_traveled_way" v="2"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="uuid" v="{340B01E5-488E-4365-87B4-5685B9ADFC49}"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:36Z;2010-01-01T00:00:00Z"/>
+        <tag k="highway" v="track"/>
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-51" timestamp="2016-04-11T14:26:36Z" version="1" changeset="10">
@@ -26506,7 +26519,20 @@
         <nd ref="-3572"/>
         <nd ref="-3571"/>
         <nd ref="-1631"/>
-        <tag k="source:datetime" v="2016-04-11T14:26:36Z"/>
+        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.775Z"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="width:minimum_traveled_way" v="2"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
+        <tag k="uuid" v="{340B01E5-488E-4365-87B4-5685B9ADFC49}"/>
+        <tag k="source" v="mgcp"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:datetime" v="2016-04-11T14:26:36Z;2010-01-01T00:00:00Z"/>
+        <tag k="highway" v="track"/>
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-50" timestamp="2016-04-11T14:26:36Z" version="1" changeset="10">
@@ -28845,25 +28871,5 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:sort_order" v="3"/>
         <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1" timestamp="2016-04-11T14:26:36Z" version="1" changeset="10">
-        <member type="way" ref="-52" role=""/>
-        <member type="way" ref="-51" role=""/>
-        <tag k="source:ingest:datetime" v="2016-04-11T17:50:37.775Z"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="width:minimum_traveled_way" v="2"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="seasonal" v="fair"/>
-        <tag k="source:copyright" v="Copyright 2013 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="source:commercial_distribution_restriction" v="Unrestricted.  For Public Release."/>
-        <tag k="uuid" v="{340B01E5-488E-4365-87B4-5685B9ADFC49}"/>
-        <tag k="source" v="mgcp"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="source:datetime" v="2010-01-01T00:00:00Z"/>
-        <tag k="highway" v="track"/>
-        <tag k="type" v="multilinestring"/>
-        <tag k="error:circular" v="28.65"/>
     </relation>
 </osm>

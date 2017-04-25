@@ -134,7 +134,7 @@ public:
     //LOG_VAR(way1->getElementId());
     //LOG_VAR(way1->getNodeIds());
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), Relation::MULTILINESTRING));
+      way1->getCircularError(), MetadataTags::RelationMultilineString()));
     //LOG_VAR(relation->getElementId());
     relation->addElement("", way1->getElementId());
     map->addElement(relation);

@@ -30,9 +30,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class UpdateMapTagsCommandFactory {
+class UpdateMapTagsCommandFactory {
 
-    UpdateMapTagsCommand build(String jobId, String mapName) {
-        return new UpdateMapTagsCommand(jobId, mapName);
+    UpdateMapTagsCommand build(String jobId, String mapName, Class<?> caller) {
+        return new UpdateMapTagsCommand(jobId, mapName, caller);
     }
 }

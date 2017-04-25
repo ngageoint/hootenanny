@@ -27,27 +27,13 @@
 package hoot.services.controllers.info;
 
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import hoot.services.command.ExternalCommand;
 
 
 class HootVersionCommand extends ExternalCommand {
 
     HootVersionCommand(boolean withDetails, Class<?> caller) {
-        super.put("exectype", "hoot");
-        super.put("exec", "version");
-
-        JSONArray params = new JSONArray();
-
-        if (withDetails) {
-            JSONObject param = new JSONObject();
-            param.put("", "--debug");
-            params.add(param);
-        }
-
-        super.put("params", params);
-        super.put("caller", caller.getName());
+        String command = withDetails ? "hoot version --debug" : "hoot version";
+        super.configureCommand(command, caller, false);
     }
 }

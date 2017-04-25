@@ -29,15 +29,16 @@ package hoot.services.controllers.clipping;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,7 @@ import org.springframework.stereotype.Controller;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.ExternalCommandManager;
-import hoot.services.controllers.ExportRenderDBCommandFactory;
+import hoot.services.controllers.common.ExportRenderDBCommandFactory;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 
@@ -58,9 +58,6 @@ public class ClipDatasetResource {
 
     @Autowired
     private JobProcessor jobProcessor;
-
-    @Autowired
-    private ExternalCommandManager externalCommandManager;
 
     @Autowired
     private ClipDatasetCommandFactory clipDatasetCommandFactory;
@@ -86,40 +83,35 @@ public class ClipDatasetResource {
      * }
      *
      * @param params
-     *            JSON input params; see description above
-
+     *      JSON input params; see description above
+     *
+     * @param debugLevel
+     *      debug level
+     *
      * @return a job id
      */
     @POST
     @Path("/execute")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response clipDataset(String params) {
+    public Response clipDataset(ClipDatasetParams params,
+                                @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
         String jobId = UUID.randomUUID().toString();
 
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject arguments = (JSONObject) parser.parse(params);
-            String newDatasetOutputName = arguments.get("OUTPUT_NAME").toString();
+            ExternalCommand clipCommand = clipDatasetCommandFactory.build(jobId, params, debugLevel, this.getClass());
+            ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(jobId, params.getOutputName(), this.getClass());
 
-            Command[] commands = {
+            Command[] workflow = { clipCommand, exportRenderDBCommand };
 
-                // Clip to a bounding box
-                () -> {
-                    ExternalCommand clipCommand = clipDatasetCommandFactory.build(params, this.getClass());
-                    return externalCommandManager.exec(jobId, clipCommand);
-                },
-
-                () -> {
-                    ExternalCommand exportRenderDBCommand = exportRenderDBCommandFactory.build(newDatasetOutputName, this.getClass());
-                    return externalCommandManager.exec(jobId, exportRenderDBCommand);
-                }
-            };
-
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.submitAsync(new Job(jobId, workflow));
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error processing dataset clipping request!";
+            String msg = "Error processing dataset clipping request!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

@@ -59,12 +59,6 @@ class Relation : public Element
 {
 public:
 
-  static QString INNER;
-  static QString MULTILINESTRING;
-  static QString MULTIPOLYGON;
-  static QString OUTER;
-  static QString REVIEW;
-
   static string className() { return "hoot::Relation"; }
 
   static unsigned int logWarnCount;
@@ -109,12 +103,12 @@ public:
    * Returns true if this is a multipolygon type. No checking is done to determine if the geometry
    * is valid.
    */
-  bool isMultiPolygon() const { return _relationData->getType() == MULTIPOLYGON; }
+  bool isMultiPolygon() const { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
 
   /**
    * Returns true if this is a review.
    */
-  bool isReview() const { return _relationData->getType() == REVIEW; }
+  bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
 
 
   /**

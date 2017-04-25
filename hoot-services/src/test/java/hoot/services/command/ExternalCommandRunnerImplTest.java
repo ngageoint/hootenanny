@@ -22,39 +22,64 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 
 
 public class ExternalCommandRunnerImplTest {
 
-    @Ignore
     @Test
     public void exec() throws Exception {
-        throw new NotImplementedException();
-    }
+        ExternalCommandRunner runner = new ExternalCommandRunnerImpl();
 
-    @Ignore
-    @Test
-    public void getStdout() throws Exception {
-        throw new NotImplementedException();
-    }
+        List<String> hootOptions = new LinkedList<>();
+        hootOptions.add("-D");
+        hootOptions.add("\"osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor\"");
+        hootOptions.add("-D");
+        hootOptions.add("\"conflate.add.score.tags=yes\"");
+        hootOptions.add("-D");
+        hootOptions.add("hootapi.db.writer.overwrite.map=true");
+        hootOptions.add("-D");
+        hootOptions.add("hootapi.db.writer.create.user=true");
+        hootOptions.add("-D");
+        hootOptions.add("api.db.email=test@test.com");
+        hootOptions.add("-D");
+        hootOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
+                          "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
+                          "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
+                          "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
+                          "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                          "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                          "hoot::NoInformationElementRemover\"");
 
-    @Ignore
-    @Test
-    public void getStderr() throws Exception {
-        throw new NotImplementedException();
-    }
+        String input1 = "osmapidb://hoot:hoottest@localhost:5432/osmapi test";
+        String input2 = "hootapidb://hoot:hoottest@localhost:5432/hoot/394";
+        String output = "hootapidb://hoot:hoottest@localhost:5432/hoot/osmapi_test_AllDataTypesACucumber";
 
-    @Ignore
-    @Test
-    public void terminate() throws Exception {
-        throw new NotImplementedException();
+        Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", "info");
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT1", input1);
+        substitutionMap.put("INPUT2", input2);
+        substitutionMap.put("OUTPUT", output);
+        substitutionMap.put("TIMESTAMP", "2017-04-06 01:07:26.980");
+
+        String jobId = UUID.randomUUID().toString();
+
+        String command = "/tmp/hoot.sh conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} " +
+                "${INPUT2} ${OUTPUT} ${TIMESTAMP}";
+
+        CommandResult result = runner.exec(command, substitutionMap, jobId,
+                this.getClass().getName(), FileUtils.getTempDirectory(), false);
     }
 }

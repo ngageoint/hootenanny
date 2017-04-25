@@ -49,9 +49,11 @@ public class DeleteMapResourcesCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(DeleteMapResourcesCommand.class);
 
     private final String mapName;
+    private final Class<?> caller;
 
-    public DeleteMapResourcesCommand(String mapName) {
+    DeleteMapResourcesCommand(String mapName, Class<?> caller) {
         this.mapName = mapName;
+        this.caller = caller;
     }
 
     @Override
@@ -71,6 +73,7 @@ public class DeleteMapResourcesCommand implements InternalCommand {
         commandResult.setExitCode(CommandResult.SUCCESS);
         commandResult.setFinish(LocalDateTime.now());
         commandResult.setJobId(UUID.randomUUID().toString());
+        commandResult.setCaller(this.caller.getName());
 
         return commandResult;
     }

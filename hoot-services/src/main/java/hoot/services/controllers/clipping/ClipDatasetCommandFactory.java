@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Component
 class ClipDatasetCommandFactory {
 
-    ClipDatasetCommand build(String params, Class<?> caller) {
-        return new ClipDatasetCommand(params, caller);
+    ClipDatasetCommand build(String jobId, ClipDatasetParams params, String debugLevel, Class<?> caller) {
+        return new ClipDatasetCommand(jobId, params, debugLevel, caller);
     }
 }

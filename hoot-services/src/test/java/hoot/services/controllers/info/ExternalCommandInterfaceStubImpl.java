@@ -54,6 +54,11 @@ public class ExternalCommandInterfaceStubImpl implements ExternalCommandManager 
     }
 
     @Override
+    public CommandResult exec(ExternalCommand externalCommand) {
+        return null;
+    }
+
+    @Override
     public String getProgress(String jobId) {
         return null;
     }
