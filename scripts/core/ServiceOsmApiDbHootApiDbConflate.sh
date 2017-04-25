@@ -38,8 +38,8 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 #export HOOT_OPTS="--trace -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D writer.include.debug.tags=true -D writer.clean.review.tags=false -D map.cleaner.transforms=hoot::ReprojectToPlanarOp -D conflate.post.ops=hoot::AddHilbertReviewSortOrderOp -D conflate.pre.ops=hoot::MapCleaner -D ogr2osm.ops='' -D unify.post.ops=''"
 #export HOOT_OPTS="--debug -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher -D map.cleaner.transforms= -D conflate.post.ops= -D conflate.pre.ops= -D ogr2osm.ops= -D unify.post.ops="
-#export HOOT_OPTS="--debug -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher"
-export HOOT_OPTS="--debug -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true"
+#export HOOT_OPTS="--debug -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true"
+export HOOT_OPTS="--debug -C Network.conf -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true"
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
@@ -134,8 +134,9 @@ fi
 echo ""
 echo "STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-#hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box.osm.api.database=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
-hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box.osm.api.database=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+#hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+#hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OSM_API_DB_URL $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
 echo "STEP 12: Executing the changeset SQL on the osm api db..."
@@ -152,7 +153,7 @@ fi
 echo ""
 echo "STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
 echo ""
-hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot convert $HOOT_OPTS -D writer.include.debug.tags=true -D writer.clean.review.tags=false -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 hoot is-match test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 
 
