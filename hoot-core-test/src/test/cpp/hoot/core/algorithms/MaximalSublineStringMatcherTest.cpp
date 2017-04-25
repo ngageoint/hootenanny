@@ -207,7 +207,7 @@ public:
     WayPtr wg2b = createWay(map, Status::Unknown2, cg2b, 15.0, "g2");
 
     RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-      "multilinestring"));
+      MetadataTags::RelationMultilineString()));
     r->getTags()["note"] = "rg2";
     r->addElement("", wg2a);
     r->addElement("", wg2b);
@@ -238,7 +238,7 @@ public:
     WayPtr wh2b = createWay(map, Status::Unknown2, ch2b, ce, "h2");
 
     RelationPtr rh2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      "multilinestring"));
+      MetadataTags::RelationMultilineString()));
     rh2->getTags()["note"] = "rh2";
     rh2->addElement("", wh2a);
     rh2->addElement("", wh2b);
@@ -269,7 +269,7 @@ public:
     WayPtr wi2b = createWay(map, Status::Unknown2, ci2b, ce, "i2");
 
     RelationPtr ri2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      "multilinestring"));
+      MetadataTags::RelationMultilineString()));
     ri2->getTags()["note"] = "ri2";
     ri2->addElement("", wi2a);
     ri2->addElement("", wi2b);
@@ -551,7 +551,7 @@ public:
     // test the simplest case
     {
       RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-        "multilinestring"));
+        MetadataTags::RelationMultilineString()));
       r->addElement("", toWay(map, "a1"));
       map->addElement(r);
 
