@@ -70,10 +70,6 @@ public final class DbUtils {
 
     private static final SQLTemplates templates = PostgreSQLTemplates.builder().quote().build();
 
-    public static final String TIMESTAMP_DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
-    public static final String OSM_API_TIMESTAMP_FORMAT = "YYYY-MM-dd HH:mm:ss.SSS";
-    public static final String TIME_STAMP_REGEX = "\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d+";
-
 
     private DbUtils() {}
 

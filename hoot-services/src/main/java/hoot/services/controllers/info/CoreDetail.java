@@ -26,10 +26,12 @@
  */
 package hoot.services.controllers.info;
 
+import java.util.Arrays;
+
+
 /**
  * Represents details about the core environment
  */
-
 public class CoreDetail {
     private String[] environmentInfo;
 
@@ -41,5 +43,12 @@ public class CoreDetail {
 
     public void setEnvironmentInfo(String[] environmentInfo) {
         this.environmentInfo = environmentInfo;
+    }
+
+    @Override
+    public String toString() {
+        return "CoreDetail{" +
+                "environmentInfo=" + Arrays.toString(environmentInfo) +
+                '}';
     }
 }

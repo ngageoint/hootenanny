@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @Component
 class FilterNonHGISPOIsCommandFactory {
 
-    FilterNonHGISPOIsCommand build(String sourceMap, String outputMap, Class<?> caller) {
-        return new FilterNonHGISPOIsCommand(sourceMap, outputMap, caller);
+    FilterNonHGISPOIsCommand build(String jobId, String sourceMap, String outputMap, Class<?> caller) {
+        return new FilterNonHGISPOIsCommand(jobId, sourceMap, outputMap, caller);
     }
 }

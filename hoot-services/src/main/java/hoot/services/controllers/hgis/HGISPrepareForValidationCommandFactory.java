@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @Component
 class HGISPrepareForValidationCommandFactory {
 
-    HGISPrepareForValidationCommand build(String sourceMap, String outputMap, Class<?> caller) {
-        return new HGISPrepareForValidationCommand(sourceMap, outputMap, caller);
+    HGISPrepareForValidationCommand build(String jobId, String sourceMap, String outputMap, Class<?> caller) {
+        return new HGISPrepareForValidationCommand(jobId, sourceMap, outputMap, caller);
     }
 }

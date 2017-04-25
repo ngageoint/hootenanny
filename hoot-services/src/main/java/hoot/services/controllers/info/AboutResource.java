@@ -39,11 +39,9 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommandManager;
 
 
 /**
@@ -53,9 +51,6 @@ import hoot.services.command.ExternalCommandManager;
 @Path("/about")
 public class AboutResource {
     private static final Logger logger = LoggerFactory.getLogger(AboutResource.class);
-
-    @Autowired
-    private ExternalCommandManager externalCommandInterface;
 
     public AboutResource() {}
 
@@ -200,7 +195,7 @@ public class AboutResource {
     private String getCoreInfo(boolean withDetails) {
         HootVersionCommand hootVersionCommand = new HootVersionCommand(withDetails, this.getClass());
 
-        CommandResult commandResult = this.externalCommandInterface.exec(null, hootVersionCommand);
+        CommandResult commandResult = hootVersionCommand.execute();
         String output = commandResult.getStdout();
 
         return parseCoreVersionOutOf(output, withDetails);
