@@ -144,7 +144,8 @@ void MarkForReviewMerger::replace(ElementId oldEid, ElementId newEid)
 
 QString MarkForReviewMerger::toString() const
 {
-  return QString("MarkForReviewMerger");
+  //return QString("MarkForReviewMerger");
+  return QString("MarkForReviewMerger, pairs: ") + hoot::toString(_pairs);
 }
 
 }

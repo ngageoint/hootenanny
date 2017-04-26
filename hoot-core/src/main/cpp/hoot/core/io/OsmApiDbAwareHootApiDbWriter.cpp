@@ -141,7 +141,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
   //TODO: change back to trace
   LOG_VARD(n->getId());
   LOG_VARD(n->getStatus());
-  if (n->getStatus() == Status::Unknown1 && n->getId() > 0)
+  if ((n->getStatus() == Status::Unknown1 || n->getStatus() == Status::Conflated) && n->getId() > 0)
   {
     nodeId = n->getId();
     //_nodeRemap[nodeId] = nodeId;
@@ -179,9 +179,10 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& w)
   _addElementTags(w, tags);
 
   long wayId;
-  LOG_VART(w->getId());
-  LOG_VART(w->getStatus());
-  if (w->getStatus() == Status::Unknown1 && w->getId() > 0)
+   //TODO: change back to trace
+  LOG_VARD(w->getElementId());
+  LOG_VARD(w->getStatus());
+  if ((w->getStatus() == Status::Unknown1 || w->getStatus() == Status::Conflated) && w->getId() > 0)
   {
     wayId = w->getId();
     //_wayRemap[wayId] = wayId;
@@ -226,7 +227,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& r)
   long relationId;
   LOG_VART(r->getId());
   LOG_VART(r->getStatus());
-  if (r->getStatus() == Status::Unknown1 && r->getId() > 0)
+  if ((r->getStatus() == Status::Unknown1 || r->getStatus() == Status::Conflated) && r->getId() > 0)
   {
     relationId = r->getId();
     //_relationRemap[relationId] = relationId;

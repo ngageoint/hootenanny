@@ -258,6 +258,16 @@ unify.pre.ops (if using Unifying Conflation).
 
 See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
+=== conflate.preserve.reference.element.id.when.merging.features
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the element ID of reference features will preserved when merging features during
+conflation.  If false, the merged feature will be given a new, unique element ID.  This is useful
+when writing conflated data output back to a reference data store where modifying existing features
+is preferred over replacing them.  Not honored by all conflation mergers.
+
 === conflate.review.threshold.default
 
 * Data Type: double

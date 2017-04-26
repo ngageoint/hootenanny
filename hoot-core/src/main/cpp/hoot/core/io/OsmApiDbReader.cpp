@@ -273,9 +273,9 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   //TODO: change back to trace
   LOG_VARD(nodeId);
   const double lat =
-    resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+    resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
   const double lon =
-    resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+    resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
 
   NodePtr node(
     new Node(

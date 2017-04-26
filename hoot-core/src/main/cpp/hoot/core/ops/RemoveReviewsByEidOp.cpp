@@ -64,9 +64,12 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
     throw IllegalArgumentException("You must specify a valid element ID.");
   }
 
+  LOG_TRACE("Removing reviews for " << _eid << " from map...");
+
   // if from isn't in the map, there is nothing to do.
   if (map->containsElement(_eid) == false)
   {
+    LOG_TRACE(_eid << " doesn't exist in map.");
     return;
   }
 

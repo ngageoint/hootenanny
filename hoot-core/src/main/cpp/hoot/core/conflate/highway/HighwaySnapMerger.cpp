@@ -277,6 +277,13 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
 
+  LOG_VART(eid1);
+  LOG_VART(e1Match->getElementId());
+  if (scraps1)
+  {
+    LOG_VART(scraps1->getElementId());
+  }
+
   // remove the old way that was split and snapped
   if (e1 != e1Match && scraps1)
   {
@@ -288,12 +295,74 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
 
+  if (ConfigOptions().getConflatePreserveReferenceElementIdWhenMergingFeatures())
+  {
+    if (scraps1 && eid1.getType() == scraps1->getElementId().getType() &&
+        scraps1->getElementId().getType() != ElementType::Relation &&
+        map->containsElement(scraps1->getElementId()))
+    {
+      LOG_TRACE("Setting " << eid1.getId() << " on " << scraps1->getElementId() << "...");
+      //map->getElement(scraps1->getElementId())->setId(eid1.getId());
+      ElementPtr modifiedElement(map->getElement(scraps1->getElementId())->clone());
+      modifiedElement->setId(eid1.getId());
+      //map->removeElement(scraps1->getElementId());
+      //map->addElement(elementToChange);
+      map->replace(map->getElement(scraps1->getElementId()), modifiedElement);
+    }
+    else if (e1Match && eid1.getType() == e1Match->getElementId().getType() &&
+             e1Match->getElementId().getType() != ElementType::Relation &&
+             map->containsElement(e1Match->getElementId()))
+    {
+      LOG_TRACE("Setting " << eid1.getId() << " on " << e1Match->getElementId() << "...");
+      ElementPtr modifiedElement(map->getElement(e1Match->getElementId())->clone());
+      modifiedElement->setId(eid1.getId());
+      map->replace(map->getElement(e1Match->getElementId()), modifiedElement);
+    }
+    else
+    {
+      LOG_TRACE("No ID preservation done.");
+    }
+    LOG_VART(map->containsElement(eid1));
+  }
+
+  LOG_VART(eid2);
+  LOG_VART(e2Match->getElementId());
+  if (scraps2)
+  {
+    LOG_VART(scraps2->getElementId());
+  }
+
   // if there is something left to review against
   if (scraps2)
   {
     map->addElement(scraps2);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
+
+//    if (ConfigOptions().getConflatePreserveReferenceElementIdWhenMergingFeatures() &&
+//        scraps2->getElementId().getType() == scraps2->getElementId().getType() &&
+//        scraps2->getElementId().getType() != ElementType::Relation)
+//    {
+//      if (map->containsElement(scraps2->getElementId()))
+//      {
+//        LOG_TRACE("Setting " << eid2.getId() << " on " << scraps2->getElementId() << "...");
+//        ElementPtr modifiedElement(map->getElement(scraps2->getElementId())->clone());
+//        modifiedElement->setId(eid2.getId());
+//        map->replace(map->getElement(scraps2->getElementId()), modifiedElement);
+//        LOG_VART(map->containsElement(eid2));
+//      }
+//    }
+//    if (ConfigOptions().getConflatePreserveReferenceElementIdWhenMergingFeatures() &&
+//        e2Match->getElementId().getType() == scraps2->getElementId().getType() &&
+//        e2Match->getElementId().getType() != ElementType::Relation)
+//    {
+//      if (result->containsElement(e2Match->getElementId()))
+//      {
+//        LOG_TRACE("Setting " << eid2.getId() << " on " << e2Match->getElementId() << "...");
+//        result->getElement(e2Match->getElementId())->setId(eid2.getId());
+//        LOG_VART(map->containsElement(eid2));
+//      }
+//    }
   }
   // if there is nothing to review against, drop the reviews.
   else
