@@ -1,23 +1,23 @@
-10:50:28.740 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-files/DcGisRoads.osm ...
-10:50:28.837 INFO  ...re/ops/FindIntersectionsOp.cpp(  67) 0 Relations found.
-10:50:28.838 INFO  ...re/ops/FindIntersectionsOp.cpp(  70) 0 Relations found, after removal
-Reprojecting 0 / 4324         Reprojecting 1000 / 4324         Reprojecting 2000 / 4324         Reprojecting 3000 / 4324         Reprojecting 4000 / 4324         
-10:50:28.901 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
-  Intersection splitter todo: 0       10:50:28.976 INFO  ...re/ops/FindIntersectionsOp.cpp(  87) Assuming drives on right.
-10:50:29.039 INFO  ...re/ops/FindIntersectionsOp.cpp( 105) 224 Intersections found.
-10:50:29.044 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
-10:50:29.044 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-10:50:29.045 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+09:54:04.176 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from /hoot-release-5/hoot/test-files/DcGisRoads.osm...
+09:54:04.239 INFO  ...re/ops/FindIntersectionsOp.cpp(  66) 0 Relations found.
+09:54:04.242 INFO  ...re/ops/FindIntersectionsOp.cpp(  69) 0 Relations found, after removal
+Reprojecting 0 / 4318         Reprojecting 1000 / 4318         Reprojecting 2000 / 4318         Reprojecting 3000 / 4318         Reprojecting 4000 / 4318         
+09:54:04.300 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+09:54:04.475 INFO  ...re/ops/FindIntersectionsOp.cpp(  86) Assuming drives on right.
+09:54:04.554 INFO  ...re/ops/FindIntersectionsOp.cpp( 104) 206 Intersections found.
+09:54:04.570 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+09:54:04.570 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+09:54:04.571 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+09:54:04.571 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+09:54:04.571 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+09:54:04.571 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+09:54:04.571 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+09:54:04.572 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+09:54:04.572 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+09:54:04.572 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+09:54:04.572 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+09:54:04.572 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
 Reprojecting 0 / 206         
-10:50:29.048 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to /home/bwitham/hoot/test-output/cmd/quick/FindIntersectionsCmdTest/out.osm
-10:50:29.191 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-files/cmd/quick/FindIntersectionsCmdTest/out.osm ...
-10:50:29.199 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from /home/bwitham/hoot/test-output/cmd/quick/FindIntersectionsCmdTest/out.osm ...
+09:54:04.576 INFO  ...ore/io/OsmMapWriterFactory.cpp( 106) Writing map to /hoot-release-5/hoot/test-output/cmd/quick/FindIntersectionsCmdTest/out.osm...
+09:54:04.686 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from /hoot-release-5/hoot/test-files/cmd/quick/FindIntersectionsCmdTest/out.osm...
+09:54:04.695 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from /hoot-release-5/hoot/test-output/cmd/quick/FindIntersectionsCmdTest/out.osm...
