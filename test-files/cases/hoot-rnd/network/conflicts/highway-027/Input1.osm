@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-94075" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904126048400016" lon="-77.0319620010299957"/>
+    <node visible="true" id="-94059" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920932092299978" lon="-77.0319638389200065"/>
+    <node visible="true" id="-94057" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904606771800019" lon="-77.0281865822399965"/>
+    <node visible="true" id="-94055" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8905943682100030" lon="-77.0281888683500000"/>
+    <node visible="true" id="-94053" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8906262639199980" lon="-77.0281894140599945"/>
+    <node visible="true" id="-94051" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8907878743800026" lon="-77.0281884405099930"/>
+    <node visible="true" id="-94049" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8909742575499990" lon="-77.0281887446899987"/>
+    <node visible="true" id="-94047" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8911421740899996" lon="-77.0281868514800010"/>
+    <node visible="true" id="-94045" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8913385565699983" lon="-77.0281870443400010"/>
+    <node visible="true" id="-94043" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915325968700003" lon="-77.0281872362700000"/>
+    <node visible="true" id="-94041" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8916726493400020" lon="-77.0281877735699965"/>
+    <node visible="true" id="-94039" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8917001524400021" lon="-77.0281878788100016"/>
+    <node visible="true" id="-94037" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8919111287999968" lon="-77.0281866942100066"/>
+    <node visible="true" id="-94035" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920853946800023" lon="-77.0281374134600014"/>
+    <node visible="true" id="-94033" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8936430017500001" lon="-77.0281297440800046"/>
+    <node visible="true" id="-94031" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8937357896599991" lon="-77.0281226323800041"/>
+    <node visible="true" id="-94029" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8941890923900004" lon="-77.0281158947200026"/>
+    <node visible="true" id="-94027" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8946623042100015" lon="-77.0281065135300054"/>
+    <node visible="true" id="-94025" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920854311799999" lon="-77.0281004185600011"/>
+    <node visible="true" id="-94023" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920853525300032" lon="-77.0281791552800001"/>
+    <node visible="true" id="-94021" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920849549700023" lon="-77.0283330394299952"/>
+    <node visible="true" id="-94019" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920845555200003" lon="-77.0284938397300039"/>
+    <node visible="true" id="-94017" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920846688699982" lon="-77.0287664513000010"/>
+    <node visible="true" id="-94015" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920864839399982" lon="-77.0290761802300068"/>
+    <node visible="true" id="-94013" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920862258599982" lon="-77.0293875220900048"/>
+    <node visible="true" id="-94011" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920859999199990" lon="-77.0296688298600003"/>
+    <node visible="true" id="-94009" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920859627599995" lon="-77.0297153474299989"/>
+    <node visible="true" id="-94007" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920874285700009" lon="-77.0299699775899995"/>
+    <node visible="true" id="-94005" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920877740400002" lon="-77.0300300329599992"/>
+    <node visible="true" id="-94003" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920886792000005" lon="-77.0303617779599961"/>
+    <node visible="true" id="-94001" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920886313700009" lon="-77.0304179666100026"/>
+    <node visible="true" id="-93999" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920884195700012" lon="-77.0306659731400032"/>
+    <node visible="true" id="-93997" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920881471900017" lon="-77.0310152385499975"/>
+    <node visible="true" id="-93995" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920872433100016" lon="-77.0313640426000035"/>
+    <node visible="true" id="-93993" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920889516200035" lon="-77.0317098508100031"/>
+    <node visible="true" id="-93991" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920896091900019" lon="-77.0317473128500012"/>
+    <node visible="true" id="-93989" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904617227300022" lon="-77.0283145551399997"/>
+    <node visible="true" id="-93987" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904645459899996" lon="-77.0286322041500000"/>
+    <node visible="true" id="-93985" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904592197700012" lon="-77.0290427813500003"/>
+    <node visible="true" id="-93983" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904534397699990" lon="-77.0294609658899958"/>
+    <node visible="true" id="-93981" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904499456699995" lon="-77.0297408315200016"/>
+    <node visible="true" id="-93979" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904468576499980" lon="-77.0299692884299958"/>
+    <node visible="true" id="-93977" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904448953500008" lon="-77.0301144081199993"/>
+    <node visible="true" id="-93975" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904417558400013" lon="-77.0304102958800030"/>
+    <node visible="true" id="-93973" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904367282200027" lon="-77.0306894691500048"/>
+    <node visible="true" id="-93971" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904312116199975" lon="-77.0311112268099976"/>
+    <node visible="true" id="-93969" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904290645999993" lon="-77.0313918997200062"/>
+    <node visible="true" id="-93967" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904250306799995" lon="-77.0316521696200027"/>
+    <node visible="true" id="-93965" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904218427500012" lon="-77.0317458892100007"/>
+    <node visible="true" id="-93963" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904204902500013" lon="-77.0317856461699932"/>
+    <node visible="true" id="-93941" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8947685255499991" lon="-77.0280999999999949"/>
+    <node visible="true" id="-93939" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920047637500019" lon="-77.0280999999999949"/>
+    <node visible="true" id="-93935" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904645246900031" lon="-77.0280999999999949"/>
+    <way visible="true" id="-94097" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-94057"/>
+        <nd ref="-93989"/>
+        <nd ref="-93987"/>
+        <nd ref="-93985"/>
+        <nd ref="-93983"/>
+        <nd ref="-93981"/>
+        <nd ref="-93979"/>
+        <nd ref="-93977"/>
+        <nd ref="-93975"/>
+        <nd ref="-93973"/>
+        <nd ref="-93971"/>
+        <nd ref="-93969"/>
+        <nd ref="-93967"/>
+        <nd ref="-93965"/>
+        <nd ref="-93963"/>
+        <nd ref="-94075"/>
+        <tag k="name" v="MADISON DR NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-94095" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-94035"/>
+        <nd ref="-94023"/>
+        <nd ref="-94021"/>
+        <nd ref="-94019"/>
+        <nd ref="-94017"/>
+        <nd ref="-94015"/>
+        <nd ref="-94013"/>
+        <nd ref="-94011"/>
+        <nd ref="-94009"/>
+        <nd ref="-94007"/>
+        <nd ref="-94005"/>
+        <nd ref="-94003"/>
+        <nd ref="-94001"/>
+        <nd ref="-93999"/>
+        <nd ref="-93997"/>
+        <nd ref="-93995"/>
+        <nd ref="-93993"/>
+        <nd ref="-93991"/>
+        <nd ref="-94059"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-94093" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-94057"/>
+        <nd ref="-94055"/>
+        <nd ref="-94053"/>
+        <nd ref="-94051"/>
+        <nd ref="-94049"/>
+        <nd ref="-94047"/>
+        <nd ref="-94045"/>
+        <nd ref="-94043"/>
+        <nd ref="-94041"/>
+        <nd ref="-94039"/>
+        <nd ref="-94037"/>
+        <nd ref="-94035"/>
+        <tag k="name" v="12TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-94089" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-94035"/>
+        <nd ref="-94033"/>
+        <nd ref="-94031"/>
+        <nd ref="-94029"/>
+        <nd ref="-94027"/>
+        <nd ref="-93941"/>
+        <tag k="name" v="12TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-94087" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-93939"/>
+        <nd ref="-94035"/>
+        <tag k="name" v="12TH ST EXPY NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-94085" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-94025"/>
+        <nd ref="-94035"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-94083" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-93935"/>
+        <nd ref="-94057"/>
+        <tag k="name" v="MADISON DR NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+</osm>
