@@ -106,10 +106,15 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
 }
 
 double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, boost::shared_ptr<Way> w1,
-                                                 boost::shared_ptr<Way> w2)
+                                                   boost::shared_ptr<Way> w2)
 {
   // pressume it is a valid intersection
   double p = 1.0;
+
+  LOG_VART(w1.get());
+  LOG_VART(w1->getElementId());
+  LOG_VART(w2.get());
+  LOG_VART(w2->getElementId());
 
   int i1 = w1->getNodeIndex(intersectingNode);
   int i2 = w2->getNodeIndex(intersectingNode);

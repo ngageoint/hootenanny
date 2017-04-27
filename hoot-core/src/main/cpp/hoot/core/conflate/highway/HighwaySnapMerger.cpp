@@ -295,13 +295,13 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
 
-  if (ConfigOptions().getConflatePreserveReferenceElementIdWhenMergingFeatures())
+  if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
   {
     //With this option enabled, we want to retain the element ID of the original modified
     //unknown1 way for provenance purposes.  So, we'll replace the ID on the scraps way with the
     //unknown1 ID.
 
-    bool elementReplaced = false;
+    bool unknown1IdRetained = false;
     if (scraps1 && eid1.getType() == scraps1->getElementId().getType() &&
         scraps1->getElementId().getType() != ElementType::Relation &&
         map->containsElement(scraps1->getElementId()))
@@ -310,9 +310,9 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       ElementPtr newScraps1Element(map->getElement(scraps1->getElementId())->clone());
       newScraps1Element->setId(eid1.getId());
       map->replace(map->getElement(scraps1->getElementId()), newScraps1Element);
-      elementReplaced = true;
+      unknown1IdRetained = true;
     }
-    //this else if could possibly become an else
+    //this 'else if' could possibly become an 'else'
     else if (e1Match && eid1.getType() == e1Match->getElementId().getType() &&
              e1Match->getElementId().getType() != ElementType::Relation &&
              map->containsElement(e1Match->getElementId()))
@@ -321,9 +321,9 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       ElementPtr newE1MatchElement(map->getElement(e1Match->getElementId())->clone());
       newE1MatchElement->setId(eid1.getId());
       map->replace(map->getElement(e1Match->getElementId()), newE1MatchElement);
-      elementReplaced = true;
+      unknown1IdRetained = true;
     }
-    if (elementReplaced)
+    if (unknown1IdRetained)
     {
       assert(map->containsElement(eid1));
     }

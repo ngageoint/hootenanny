@@ -174,7 +174,9 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     return;
   }
 
-  LOG_TRACE("Splitting way: " << way->getElementId() << " at node: " << ElementId(ElementType::Node, nodeId));
+  LOG_TRACE(
+    "Splitting way: " << way->getElementId() << " at node: " <<
+    ElementId(ElementType::Node, nodeId));
 
   // find the first index of the split node that isn't an endpoint.
   int firstIndex = -1;
@@ -226,6 +228,28 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       // if a split occurred.
       if (splits.size() > 1)
       {
+        LOG_VART(way->getElementId());
+        LOG_VART(way->getStatus());
+        LOG_VART(splits[0]->getElementId());
+
+        const ElementId splitWayId = way->getElementId();
+
+//        bool unknown1IdRetained = false;
+//        if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+//            way->getStatus() == Status::Unknown1)
+//        {
+//          //With this option enabled, we want to retain the element ID of the original modified
+//          unknown1 way for provenance purposes.  So, we'll arbitrarily replace the ID on the
+//          //first way in the split group with the unknown1 ID.
+
+//          LOG_TRACE(
+//            "Setting " << way->getElementId().getId() << " on " << splits[0]->getElementId() <<
+//            "...");
+//          splits[0]->setId(way->getElementId().getId());
+//          LOG_VART(splits[0]->getElementId());
+//          unknown1IdRetained = true;
+//        }
+
         QList<ElementPtr> newWays;
         foreach (const boost::shared_ptr<Way>& w, splits)
         {
@@ -236,6 +260,23 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // they're split.
         _map->replace(way, newWays);
 
+        bool unknown1IdRetained = false;
+        if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+            way->getStatus() == Status::Unknown1)
+        {
+          //With this option enabled, we want to retain the element ID of the original modified
+          //unknown1 way for provenance purposes.  So, we'll arbitrarily replace the ID on the
+          //first way in the split group with the unknown1 ID.
+
+          LOG_TRACE(
+            "Setting " << way->getElementId().getId() << " on " << splits[0]->getElementId() <<
+            "...");
+          ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
+          newWaySegment->setId(way->getElementId().getId());
+          _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
+          unknown1IdRetained = true;
+        }
+
         _removeWayFromMap(way);
 
         // go through all the resulting splits
@@ -243,6 +284,11 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         {
           // add the new ways nodes just in case the way was self intersecting.
           _mapNodesToWay(splits[i]);
+        }
+
+        if (unknown1IdRetained)
+        {
+          assert(_map->containsElement(splitWayId));
         }
       }
     }
