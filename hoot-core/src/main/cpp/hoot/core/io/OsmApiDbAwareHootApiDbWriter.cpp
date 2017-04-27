@@ -126,8 +126,7 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
-  //TODO: change back to trace
-  LOG_DEBUG("Remapped ID from " << eid << " to " << ElementId(eid.getType(), retVal));
+  LOG_TRACE("Remapped ID from " << eid << " to " << ElementId(eid.getType(), retVal));
 
   return retVal;
 }
@@ -138,35 +137,30 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
   _addElementTags(n, t);
 
   long nodeId;
-  //TODO: change back to trace
-  LOG_VARD(n->getId());
-  LOG_VARD(n->getStatus());
+  LOG_VART(n->getId());
+  LOG_VART(n->getStatus());
   if ((n->getStatus() == Status::Unknown1 || n->getStatus() == Status::Conflated) && n->getId() > 0)
   {
     nodeId = n->getId();
-    //_nodeRemap[nodeId] = nodeId;
   }
   else
   {
     nodeId =  _getRemappedElementId(n->getElementId());
   }
-  //TODO: change back to trace
-  LOG_VARD(nodeId);
+  LOG_VART(nodeId);
   const bool alreadyThere = _nodeRemap.count(nodeId) != 0;
   if (alreadyThere)
   {
     _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
 
-    //TODO: change back to trace
-    LOG_VARD(n->getVersion() + 1);
+    LOG_VART(n->getVersion() + 1);
   }
   else
   {
     _hootdb.insertNode(nodeId, n->getY(), n->getX(), t);
     _nodeRemap[nodeId] = nodeId;
 
-    //TODO: change back to trace
-    LOG_DEBUG("version=1");
+    LOG_TRACE("version=1");
   }
 
   _countChange();
@@ -179,13 +173,11 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& w)
   _addElementTags(w, tags);
 
   long wayId;
-   //TODO: change back to trace
-  LOG_VARD(w->getElementId());
-  LOG_VARD(w->getStatus());
+  LOG_VART(w->getElementId());
+  LOG_VART(w->getStatus());
   if ((w->getStatus() == Status::Unknown1 || w->getStatus() == Status::Conflated) && w->getId() > 0)
   {
     wayId = w->getId();
-    //_wayRemap[wayId] = wayId;
   }
   else
   {
@@ -230,7 +222,6 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& r)
   if ((r->getStatus() == Status::Unknown1 || r->getStatus() == Status::Conflated) && r->getId() > 0)
   {
     relationId = r->getId();
-    //_relationRemap[relationId] = relationId;
   }
   else
   {

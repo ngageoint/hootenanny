@@ -788,8 +788,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   }
   // Have to establish new mapping
   const unsigned long nodeDbId = _establishNewIdMapping(node->getElementId());
-  //TODO: change back to trace
-  LOG_VARD(ElementId(ElementType::Node, nodeDbId));
+  LOG_VART(ElementId(ElementType::Node, nodeDbId));
 
   _writeNodeToStream(node, nodeDbId);
   _writeTagsToStream(node->getTags(), ElementType::Node, nodeDbId,
@@ -819,8 +818,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
       "Parsed " << _formatPotentiallyLargeNumber(_writeStats.nodesWritten) << " nodes from input.");
   }
 
-  //TODO: change back to trace
-  LOG_VARD(node->getVersion());
+  LOG_VART(node->getVersion());
 }
 
 QString OsmApiDbBulkWriter::_secondsToDhms(const qint64 durationInMilliseconds) const

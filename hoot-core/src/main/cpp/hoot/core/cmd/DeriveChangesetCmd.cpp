@@ -107,21 +107,7 @@ public:
     loadMap(map2, input2, true, Status::Unknown1);
     //changeset derivation requires element sorting to work properly
     ElementSorterPtr sorted1(new ElementSorter(map1));
-    if (Log::getInstance().isDebugEnabled())
-    {
-      //TODO: tie this to a config opt instead
-      OsmMapPtr debug(new OsmMap(map1));
-      MapProjector::projectToWgs84(debug);
-      OsmMapWriterFactory::write(debug, "tmp/sorted1.osm");
-    }
     ElementSorterPtr sorted2(new ElementSorter(map2));
-    if (Log::getInstance().isDebugEnabled())
-    {
-      //TODO: tie this to a config opt instead
-      OsmMapPtr debug(new OsmMap(map2));
-      MapProjector::projectToWgs84(debug);
-      OsmMapWriterFactory::write(debug, "tmp/sorted2.osm");
-    }
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
     if (isXmlOutput)

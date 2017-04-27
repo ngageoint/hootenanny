@@ -76,15 +76,13 @@ Change ChangesetDeriver::_nextChange()
   if (!_fromE.get() && _from->hasMoreElements())
   {
     _fromE = _from->readNextElement();
-    //TODO: change back to trace
-    LOG_VARD(_fromE->getElementId());
+    LOG_VART(_fromE->getElementId());
   }
 
   if (!_toE.get() && _to->hasMoreElements())
   {
     _toE = _to->readNextElement();
-    //TODO: change back to trace
-    LOG_VARD(_toE->getElementId());
+    LOG_VART(_toE->getElementId());
   }
 
   // if we've run out of "from" elements, create all the remaining elements in "to"
@@ -93,8 +91,7 @@ Change ChangesetDeriver::_nextChange()
     result.type = Change::Create;
     result.e = _toE;
 
-    //TODO: change back to trace
-    LOG_DEBUG("run out of from elements; 'from' element null; 'to' element not null: " <<
+    LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
               _toE->getElementId() << "; creating 'to' element: ");
 
     _toE = _to->readNextElement();
@@ -105,8 +102,7 @@ Change ChangesetDeriver::_nextChange()
     result.type = Change::Delete;
     result.e = _fromE;
 
-    //TODO: change back to trace
-    LOG_DEBUG("run out of 'to' elements; to' element null; 'from' element not null: " <<
+    LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
               _fromE->getElementId() << "; deleting 'from' element: ");
 
     _fromE = _from->readNextElement();
@@ -117,8 +113,7 @@ Change ChangesetDeriver::_nextChange()
     while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
            _elementComparer.isSame(_fromE, _toE))
     {
-      //TODO: change back to trace
-      LOG_DEBUG("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
+      LOG_TRACE("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
                 " 'to' element: " << _toE->getElementId());
 
       _toE = _to->readNextElement();
@@ -128,8 +123,7 @@ Change ChangesetDeriver::_nextChange()
     if (!_fromE.get() && !_toE.get())
     {
       // pass
-      //TODO: change back to trace
-      LOG_DEBUG("both are null elements; skipping");
+      LOG_TRACE("both are null elements; skipping");
     }
     // if we've run out of "from" elements, create all the remaining elements in "to"
     else if (!_fromE.get() && _toE.get())
@@ -137,8 +131,7 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Create;
       result.e = _toE;
 
-      //TODO: change back to trace
-      LOG_DEBUG("run out of from elements; 'from' element null; 'to' element not null: " <<
+      LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
                 _toE->getElementId() << "; creating 'to' element: ");
 
       _toE = _to->readNextElement();
@@ -149,8 +142,7 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      //TODO: change back to trace
-      LOG_DEBUG("run out of 'to' elements; to' element null; 'from' element not null: " <<
+      LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
                 _fromE->getElementId() << "; deleting 'from' element: ");
 
       _fromE = _from->readNextElement();
@@ -160,8 +152,7 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Modify;
       result.e = _toE;
 
-      //TODO: change back to trace
-      LOG_DEBUG("'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
+      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
                 _toE->getElementId() << " modifying 'to' element: ");
 
       _toE = _to->readNextElement();
@@ -172,8 +163,7 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      //TODO: change back to trace
-      LOG_DEBUG("'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
+      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
                 _toE->getElementId() << " deleting 'from' element: ");
 
       _fromE = _from->readNextElement();
@@ -183,8 +173,7 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Create;
       result.e = _toE;
 
-      //TODO: change back to trace
-      LOG_DEBUG("'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
+      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
                 _toE->getElementId() << " creating 'to' element: ");
 
       _toE = _to->readNextElement();

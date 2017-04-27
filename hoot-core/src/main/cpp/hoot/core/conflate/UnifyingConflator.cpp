@@ -131,17 +131,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
 
-  if (Log::getInstance().isDebugEnabled())
-  {
-    //TODO: tie this to a config opt instead
-//    LOG_DEBUG("Writing debug map...");
-//    OsmMapPtr debug(new OsmMap(map));
-//    MapProjector::projectToWgs84(debug);
-//    OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
-
-//    _stats.append(SingleStat("Write Debug Map Time (sec)", timer.getElapsedAndRestart()));
-  }
-
   // find all the matches in this map
   if (_matchThreshold.get())
   {

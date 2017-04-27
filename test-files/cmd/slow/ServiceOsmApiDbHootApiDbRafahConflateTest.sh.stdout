@@ -1,0 +1,171 @@
+reference dataset:  tmp/rafah-cropped.osm
+secondary dataset:  tmp/tobeconflated.osm
+AOI:  34.04725915004996,31.17907522629906,34.05654176863703,31.18329523832873
+TEST_NAME:  ServiceOsmApiDbHootApiDbRafahConflateTest
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+17:27:38.111 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  85) Converting test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/2-ref-raw-complete.osm to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+17:27:38.124 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/2-ref-raw-complete.osm...
+17:27:38.133 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (505134642) in relation (3934458).
+17:27:38.133 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (330666964) in relation (3934458).
+17:27:38.134 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (2995490953) in relation (3934458).
+17:27:38.134 WARN  .../hoot/core/io/OsmXmlReader.cpp( 556) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+17:27:38.135 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:4103404 in Relation:1473947.
+17:27:38.135 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3824513 in Relation:1473947.
+17:27:38.135 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3061827 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3062185 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3726175 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3061826 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3062184 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3584607 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3726124 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  61) Missing Relation:3726170 in Relation:1473947.
+17:27:38.136 WARN  ...portMissingElementsVisitor.cpp(  67) Reached maximum number of missing reports. No longer reporting.
+17:27:38.137 INFO  ...ore/io/OsmMapWriterFactory.cpp( 106) Writing map to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+17:27:38.461 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 770) Streaming elements from input to file outputs.  (data pass #1 of 3)...
+17:27:38.468 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 350) Input records parsed (data pass #1 of 3).  Time elapsed: 00:00
+17:27:38.474 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 729) Writing sequence ID updates to database to reserve record IDs...
+17:27:38.479 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 481) Writing combined SQL output file to test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/2-ref-raw-complete.sql.  (data pass #2 of 3)...
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 620) SQL file write complete.  (data pass #2 of 3).  Time elapsed: 00:00
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 397) File write stats:
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Nodes: 40
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Node tags: 0
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Ways: 19
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Way nodes: 57
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Way tags: 61
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Relations: 2
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Relation members: 18
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Relation tags: 250
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Unresolved relation members: 0
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Changesets: 1
+17:27:38.487 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Changeset change size (each): 50,000
+17:27:38.488 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Executable SQL records: 895
+17:27:38.488 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 428) Executing element SQL for 895 records (data pass #3 of 3).  17 separate SQL COPY statements will be executed...
+BEGIN
+COPY 1
+COPY 40
+COPY 0
+COPY 40
+COPY 0
+COPY 19
+COPY 57
+COPY 61
+COPY 19
+COPY 57
+COPY 61
+COPY 2
+COPY 0
+COPY 250
+COPY 2
+COPY 0
+COPY 250
+COMMIT
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 435) SQL execution complete.  Time elapsed: 00:00
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 403) Final database write stats:
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Nodes: 40
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Node tags: 0
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Ways: 19
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Way nodes: 57
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Way tags: 61
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Relations: 2
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Relation members: 18
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Relation tags: 250
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Unresolved relation members: 0
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Changesets: 1
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Changeset change size (each): 50,000
+17:27:38.839 INFO  ...core/io/OsmApiDbBulkWriter.cpp( 278) 	Executable SQL records: 895
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+17:27:39.449 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  85) Converting test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/5-secondary-raw-complete.osm to hootapidb://hoot:hoottest@localhost:5432/hoot/5-secondary-complete-ServiceOsmApiDbHootApiDbRafahConflateTest...
+17:27:39.459 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/5-secondary-raw-complete.osm...
+17:27:39.465 INFO  ...ore/io/OsmMapWriterFactory.cpp( 106) Writing map to hootapidb://hoot:hoottest@localhost:5432/hoot/5-secondary-complete-ServiceOsmApiDbHootApiDbRafahConflateTest...
+
+STEP 8: Conflating the two datasets over the specified AOI...
+
+17:27:40.321 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 120) Conflating osmapidb://hoot:hoottest@localhost:5432/osmapi_test with hootapidb://hoot:hoottest@localhost:5432/hoot/5-secondary-complete-ServiceOsmApiDbHootApiDbRafahConflateTest and writing the output to hootapidb://hoot:hoottest@localhost:5432/hoot/8-conflated-ServiceOsmApiDbHootApiDbRafahConflateTest
+17:27:40.325 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+17:27:40.405 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from hootapidb://hoot:hoottest@localhost:5432/hoot/5-secondary-complete-ServiceOsmApiDbHootApiDbRafahConflateTest...
+17:27:40.479 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 163) Applying pre-conflation operations...
+17:27:40.480 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+17:27:40.480 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+17:27:40.480 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+Reprojecting 0 / 46         
+17:27:40.535 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+17:27:40.551 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+17:27:40.710 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+17:27:40.710 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+17:27:40.713 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+17:27:40.714 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+17:27:40.714 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+17:27:40.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+17:27:40.715 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+17:27:40.716 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+17:27:40.717 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+17:27:40.717 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+17:27:40.775 INFO  ...conflate/UnifyingConflator.cpp( 124) Applying pre-unifying conflation operations...
+17:27:40.776 INFO  ...lygon/BuildingMatchCreator.cpp( 252) Creating matches with: hoot::BuildingMatchCreator...
+17:27:41.315 INFO  ...late/js/ScriptMatchCreator.cpp( 458) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
+17:27:41.320 INFO  ...ighway/HighwayMatchCreator.cpp( 274) Creating matches with: hoot::HighwayMatchCreator...
+17:27:43.304 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+17:27:43.312 INFO  ...ate/SearchRadiusCalculator.cpp( 149) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+17:27:43.312 INFO  ...late/js/ScriptMatchCreator.cpp( 458) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
+17:27:43.318 INFO  ...gon/PoiPolygonMatchCreator.cpp( 345) Creating matches with: hoot::PoiPolygonMatchCreator...
+17:27:43.321 INFO  .../OptimalConstrainedMatches.cpp(  55) Calculating optimal match conflicts...
+17:27:43.342 INFO  ...h/GreedyConstrainedMatches.cpp(  68) Calculating greedy match conflicts...
+17:27:43.342 INFO  ...conflate/UnifyingConflator.cpp( 237) Match count: 9
+17:27:43.343 INFO  ...conflate/UnifyingConflator.cpp( 254) Creating mergers...
+17:27:43.343 INFO  ...conflate/UnifyingConflator.cpp( 271) Applying 2 mergers...
+17:27:43.363 INFO  ...conflate/UnifyingConflator.cpp( 297) Applying post-unifying conflation operations...
+17:27:43.363 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+Reprojecting 0 / 55         
+17:27:43.364 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+17:27:43.365 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 189) Applying post-conflation operations...
+17:27:43.365 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveMissingElementsVisitor
+17:27:43.365 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+17:27:43.366 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+17:27:43.366 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+17:27:43.366 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidMultilineStringMembersVisitor
+17:27:43.366 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+Reprojecting 0 / 47         
+17:27:43.367 INFO  ...ore/io/OsmMapWriterFactory.cpp( 106) Writing map to hootapidb://hoot:hoottest@localhost:5432/hoot/8-conflated-ServiceOsmApiDbHootApiDbRafahConflateTest...
+17:27:43.546 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 248) Conflation job completed.
+
+STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+17:27:44.129 INFO  ...ore/cmd/DeriveChangesetCmd.cpp( 101) Deriving changeset for inputs osmapidb://hoot:hoottest@localhost:5432/osmapi_test, hootapidb://hoot:hoottest@localhost:5432/hoot/8-conflated-ServiceOsmApiDbHootApiDbRafahConflateTest and writing output to test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql...
+17:27:44.131 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+17:27:44.225 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from hootapidb://hoot:hoottest@localhost:5432/hoot/8-conflated-ServiceOsmApiDbHootApiDbRafahConflateTest...
+
+STEP 12: Executing the changeset SQL on the osm api db...
+
+17:27:44.851 INFO  ...core/cmd/ApplyChangesetCmd.cpp(  60) Applying changeset test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql to osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+Changeset(s) Created: 1
+Changeset Details: min_lat=31.178000, max_lat=31.183295, min_lon=34.047259, max_lon=34.057000, num_changes=78
+Node(s) Created: 13
+Node(s) Modified: 34
+Node(s) Deleted: 0
+Way(s) Created: 12
+Way(s) Modified: 17
+Way(s) Deleted: 0
+Relation(s) Created: 2
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+
+17:27:45.615 INFO  ...p/hoot/core/cmd/ConvertCmd.cpp(  85) Converting osmapidb://hoot:hoottest@localhost:5432/osmapi_test to test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/14-complete-output-PulledFromOsmApiDb.osm...
+17:27:45.622 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+17:27:45.651 INFO  ...oot/core/io/OsmApiDbReader.cpp( 105) Executing OSM API read query...
+17:27:45.736 INFO  ...ore/io/OsmMapWriterFactory.cpp( 106) Writing map to test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/14-complete-output-PulledFromOsmApiDb.osm...
+17:27:46.378 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-files/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/output.osm...
+17:27:46.396 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-output/cmd/slow/ServiceOsmApiDbHootApiDbRafahConflateTest/14-complete-output-PulledFromOsmApiDb.osm...

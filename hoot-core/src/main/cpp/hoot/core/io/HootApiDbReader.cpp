@@ -314,8 +314,7 @@ boost::shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIt
 NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-  //TODO: change back to trace
-  LOG_VARD(ElementId(ElementType::Node, nodeId));
+  LOG_VART(ElementId(ElementType::Node, nodeId));
 
   NodePtr node(
     new Node(
@@ -334,11 +333,9 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
 
   // We want the reader's status to always override any existing status
   // Unless, we really want to keep the status.
-//    if (_status != Status::Invalid) { node->setStatus(_status); }
   if (! ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid) { node->setStatus(_status); }
 
-  //TODO: change back to trace
-  LOG_VARD(node->getVersion());
+  LOG_VART(node->getVersion());
 
   return node;
 }
@@ -347,8 +344,7 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
-  //TODO: change back to trace
-  LOG_VARD(ElementId(ElementType::Way, wayId));
+  LOG_VART(ElementId(ElementType::Way, wayId));
 
   WayPtr way(
     new Way(
@@ -381,8 +377,7 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-  //TODO: change back to trace
-  LOG_VARD(ElementId(ElementType::Relation, relationId));
+  LOG_VART(ElementId(ElementType::Relation, relationId));
 
   RelationPtr relation(
     new Relation(

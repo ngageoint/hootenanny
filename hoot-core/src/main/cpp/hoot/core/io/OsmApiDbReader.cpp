@@ -188,7 +188,6 @@ void OsmApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
       {
         if (tags.size() > 0)
         {
-          //LOG_VART(tags);
           element->setTags(ApiDb::unescapeTags(tags.join(", ")));
           _updateMetadataOnElement(element);
         }
@@ -267,11 +266,9 @@ void OsmApiDbReader::close()
 NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long rawId = resultIterator.value(0).toLongLong();
-  //TODO: change back to trace
-  LOG_DEBUG("raw ID: " << rawId);
+  LOG_TRACE("raw ID: " << rawId);
   const long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
-  //TODO: change back to trace
-  LOG_VARD(nodeId);
+  LOG_VART(nodeId);
   const double lat =
     resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
   const double lon =
@@ -293,8 +290,7 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   //we want the reader's status to always override any existing status
   if (_status != Status::Invalid) { node->setStatus(_status); }
 
-  //TODO: change back to trace
-  LOG_VARD(node->getVersion());
+  LOG_VART(node->getVersion());
 
   return node;
 }
