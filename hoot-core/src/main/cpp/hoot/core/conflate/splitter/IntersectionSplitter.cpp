@@ -234,22 +234,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 
         const ElementId splitWayId = way->getElementId();
 
-//        bool unknown1IdRetained = false;
-//        if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
-//            way->getStatus() == Status::Unknown1)
-//        {
-//          //With this option enabled, we want to retain the element ID of the original modified
-//          unknown1 way for provenance purposes.  So, we'll arbitrarily replace the ID on the
-//          //first way in the split group with the unknown1 ID.
-
-//          LOG_TRACE(
-//            "Setting " << way->getElementId().getId() << " on " << splits[0]->getElementId() <<
-//            "...");
-//          splits[0]->setId(way->getElementId().getId());
-//          LOG_VART(splits[0]->getElementId());
-//          unknown1IdRetained = true;
-//        }
-
         QList<ElementPtr> newWays;
         foreach (const boost::shared_ptr<Way>& w, splits)
         {
