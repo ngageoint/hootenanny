@@ -35,10 +35,11 @@ source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
-export HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
+HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # By using reader.preserve.all.tags=true, we're forcing the hoot xml file reader to preserve all tags here, such as 'accuracy', 
 # 'type', etc., to simulate the data that would likely be coming from an osm api db.
-export HOOT_OPTS="--info -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D preserve.unknown1.element.id.when.modifying.features=true -D writer.include.debug.tags=true -D writer.clean.review.tags=false"
+HOOT_OPTS="--info -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D preserve.unknown1.element.id.when.modifying.features=true -D writer.clean.review.tags=false"
+#HOOT_OPTS="--trace -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D preserve.unknown1.element.id.when.modifying.features=true -D writer.include.debug.tags=true -D writer.clean.review.tags=false"
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR

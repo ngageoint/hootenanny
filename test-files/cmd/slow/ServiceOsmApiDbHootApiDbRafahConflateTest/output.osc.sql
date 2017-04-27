@@ -1,365 +1,59 @@
 INSERT INTO changesets (id, user_id, created_at, closed_at) VALUES (3, 1, (now() at time zone 'utc'), (now() at time zone 'utc'));
 INSERT INTO changeset_tags (changeset_id, k, v) VALUES (3, 'written_by', 'Hootenanny');
-/* modify node 3*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (3, 311808283, 340508270, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311808283, longitude=340508270, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=3;
-DELETE FROM current_node_tags WHERE node_id = 3;
-DELETE FROM node_tags WHERE node_id = 3;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (3, 'hoot:id', '3');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (3, 'hoot:id', '3', 2);
-/* modify node 4*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (4, 311809540, 340508943, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311809540, longitude=340508943, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=4;
-DELETE FROM current_node_tags WHERE node_id = 4;
-DELETE FROM node_tags WHERE node_id = 4;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (4, 'hoot:id', '4');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (4, 'hoot:id', '4', 2);
-/* modify node 5*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (5, 311800699, 340525728, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311800699, longitude=340525728, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=5;
-DELETE FROM current_node_tags WHERE node_id = 5;
-DELETE FROM node_tags WHERE node_id = 5;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (5, 'hoot:id', '5');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (5, 'hoot:id', '5', 2);
-/* modify node 6*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (6, 311798141, 340510335, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311798141, longitude=340510335, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=6;
-DELETE FROM current_node_tags WHERE node_id = 6;
-DELETE FROM node_tags WHERE node_id = 6;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (6, 'hoot:id', '6');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (6, 'hoot:id', '6', 2);
-/* modify node 7*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (7, 311803795, 340549469, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311803795, longitude=340549469, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=7;
-DELETE FROM current_node_tags WHERE node_id = 7;
-DELETE FROM node_tags WHERE node_id = 7;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (7, 'hoot:id', '7');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (7, 'hoot:id', '7', 2);
-/* modify node 9*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (9, 311806712, 340545071, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311806712, longitude=340545071, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=9;
-DELETE FROM current_node_tags WHERE node_id = 9;
-DELETE FROM node_tags WHERE node_id = 9;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (9, 'hoot:id', '9');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (9, 'hoot:id', '9', 2);
-/* modify node 10*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (10, 311795717, 340550636, 3, true, (now() at time zone 'utc'), 3335527231, 2);
-UPDATE current_nodes SET latitude=311795717, longitude=340550636, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527231, version=2 WHERE id=10;
-DELETE FROM current_node_tags WHERE node_id = 10;
-DELETE FROM node_tags WHERE node_id = 10;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (10, 'hoot:id', '10');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (10, 'hoot:id', '10', 2);
-/* modify node 11*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (11, 311796570, 340506520, 3, true, (now() at time zone 'utc'), 3335527229, 2);
-UPDATE current_nodes SET latitude=311796570, longitude=340506520, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527229, version=2 WHERE id=11;
-DELETE FROM current_node_tags WHERE node_id = 11;
-DELETE FROM node_tags WHERE node_id = 11;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (11, 'hoot:id', '11');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (11, 'hoot:id', '11', 2);
-/* modify node 12*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (12, 311788043, 340520791, 3, true, (now() at time zone 'utc'), 3335527229, 2);
-UPDATE current_nodes SET latitude=311788043, longitude=340520791, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527229, version=2 WHERE id=12;
-DELETE FROM current_node_tags WHERE node_id = 12;
-DELETE FROM node_tags WHERE node_id = 12;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (12, 'hoot:id', '12');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (12, 'hoot:id', '12', 2);
-/* modify node 13*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (13, 311780000, 340487658, 3, true, (now() at time zone 'utc'), 3335527229, 2);
-UPDATE current_nodes SET latitude=311780000, longitude=340487658, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527229, version=2 WHERE id=13;
-DELETE FROM current_node_tags WHERE node_id = 13;
-DELETE FROM node_tags WHERE node_id = 13;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (13, 'hoot:id', '13');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (13, 'hoot:id', '13', 2);
-/* modify node 14*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (14, 311806982, 340548886, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311806982, longitude=340548886, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=14;
-DELETE FROM current_node_tags WHERE node_id = 14;
-DELETE FROM node_tags WHERE node_id = 14;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (14, 'hoot:id', '14');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (14, 'hoot:id', '14', 2);
-/* modify node 15*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (15, 311799512, 340570000, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311799512, longitude=340570000, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=15;
-DELETE FROM current_node_tags WHERE node_id = 15;
-DELETE FROM node_tags WHERE node_id = 15;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (15, 'hoot:id', '15');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (15, 'hoot:id', '15', 2);
-/* modify node 16*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (16, 311809551, 340570000, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311809551, longitude=340570000, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=16;
-DELETE FROM current_node_tags WHERE node_id = 16;
-DELETE FROM node_tags WHERE node_id = 16;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (16, 'hoot:id', '16');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (16, 'hoot:id', '16', 2);
-/* modify node 17*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (17, 311810000, 340509219, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311810000, longitude=340509219, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=17;
-DELETE FROM current_node_tags WHERE node_id = 17;
-DELETE FROM node_tags WHERE node_id = 17;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (17, 'hoot:id', '17');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (17, 'hoot:id', '17', 2);
-/* modify node 22*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (22, 311808193, 340552790, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311808193, longitude=340552790, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=22;
-DELETE FROM current_node_tags WHERE node_id = 22;
-DELETE FROM node_tags WHERE node_id = 22;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (22, 'hoot:id', '22');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (22, 'hoot:id', '22', 2);
-/* modify node 23*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (23, 311802987, 340508943, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311802987, longitude=340508943, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=23;
-DELETE FROM current_node_tags WHERE node_id = 23;
-DELETE FROM node_tags WHERE node_id = 23;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (23, 'hoot:id', '23');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (23, 'hoot:id', '23', 2);
-/* modify node 24*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (24, 311807969, 340497993, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311807969, longitude=340497993, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=24;
-DELETE FROM current_node_tags WHERE node_id = 24;
-DELETE FROM node_tags WHERE node_id = 24;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (24, 'hoot:id', '24');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (24, 'hoot:id', '24', 2);
-/* modify node 25*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (25, 311806084, 340508540, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311806084, longitude=340508540, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=25;
-DELETE FROM current_node_tags WHERE node_id = 25;
-DELETE FROM node_tags WHERE node_id = 25;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (25, 'hoot:id', '25');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (25, 'hoot:id', '25', 2);
-/* modify node 26*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (26, 311798527, 340563270, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311798527, longitude=340563270, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=26;
-DELETE FROM current_node_tags WHERE node_id = 26;
-DELETE FROM node_tags WHERE node_id = 26;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (26, 'hoot:id', '26');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (26, 'hoot:id', '26', 2);
-/* modify node 27*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (27, 311792710, 340537499, 3, true, (now() at time zone 'utc'), 3335527231, 2);
-UPDATE current_nodes SET latitude=311792710, longitude=340537499, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527231, version=2 WHERE id=27;
-DELETE FROM current_node_tags WHERE node_id = 27;
-DELETE FROM node_tags WHERE node_id = 27;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (27, 'hoot:id', '27');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (27, 'hoot:id', '27', 2);
-/* modify node 28*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (28, 311802404, 340531203, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311802404, longitude=340531203, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=28;
-DELETE FROM current_node_tags WHERE node_id = 28;
-DELETE FROM node_tags WHERE node_id = 28;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (28, 'hoot:id', '28');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (28, 'hoot:id', '28', 2);
-/* modify node 29*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (29, 311785812, 340513309, 3, true, (now() at time zone 'utc'), 3335527229, 2);
-UPDATE current_nodes SET latitude=311785812, longitude=340513309, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527229, version=2 WHERE id=29;
-DELETE FROM current_node_tags WHERE node_id = 29;
-DELETE FROM node_tags WHERE node_id = 29;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (29, 'hoot:id', '29');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (29, 'hoot:id', '29', 2);
-/* modify node 30*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (30, 311790107, 340528196, 3, true, (now() at time zone 'utc'), 3335527231, 2);
-UPDATE current_nodes SET latitude=311790107, longitude=340528196, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527231, version=2 WHERE id=30;
-DELETE FROM current_node_tags WHERE node_id = 30;
-DELETE FROM node_tags WHERE node_id = 30;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (30, 'hoot:id', '30');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (30, 'hoot:id', '30', 2);
-/* modify node 31*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (31, 311797692, 340559342, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311797692, longitude=340559342, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=31;
-DELETE FROM current_node_tags WHERE node_id = 31;
-DELETE FROM node_tags WHERE node_id = 31;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (31, 'hoot:id', '31');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (31, 'hoot:id', '31', 2);
-/* modify node 32*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (32, 311808956, 340562798, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311808956, longitude=340562798, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=32;
-DELETE FROM current_node_tags WHERE node_id = 32;
-DELETE FROM node_tags WHERE node_id = 32;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (32, 'hoot:id', '32');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (32, 'hoot:id', '32', 2);
-/* modify node 33*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (33, 311809226, 340503154, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311809226, longitude=340503154, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=33;
-DELETE FROM current_node_tags WHERE node_id = 33;
-DELETE FROM node_tags WHERE node_id = 33;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (33, 'hoot:id', '33');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (33, 'hoot:id', '33', 2);
-/* modify node 34*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (34, 311809719, 340506655, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311809719, longitude=340506655, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=34;
-DELETE FROM current_node_tags WHERE node_id = 34;
-DELETE FROM node_tags WHERE node_id = 34;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (34, 'hoot:id', '34');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (34, 'hoot:id', '34', 2);
-/* modify node 35*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (35, 311808732, 340554720, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311808732, longitude=340554720, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=35;
-DELETE FROM current_node_tags WHERE node_id = 35;
-DELETE FROM node_tags WHERE node_id = 35;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (35, 'hoot:id', '35');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (35, 'hoot:id', '35', 2);
-/* modify node 36*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (36, 311802853, 340543321, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311802853, longitude=340543321, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=36;
-DELETE FROM current_node_tags WHERE node_id = 36;
-DELETE FROM node_tags WHERE node_id = 36;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (36, 'hoot:id', '36');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (36, 'hoot:id', '36', 2);
-/* modify node 37*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (37, 311805097, 340554092, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311805097, longitude=340554092, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=37;
-DELETE FROM current_node_tags WHERE node_id = 37;
-DELETE FROM node_tags WHERE node_id = 37;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (37, 'hoot:id', '37');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (37, 'hoot:id', '37', 2);
-/* modify node 38*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (38, 311807386, 340515720, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311807386, longitude=340515720, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=38;
-DELETE FROM current_node_tags WHERE node_id = 38;
-DELETE FROM node_tags WHERE node_id = 38;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (38, 'hoot:id', '38');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (38, 'hoot:id', '38', 2);
-/* modify node 39*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (39, 311798141, 340513925, 3, true, (now() at time zone 'utc'), 3335527272, 2);
-UPDATE current_nodes SET latitude=311798141, longitude=340513925, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527272, version=2 WHERE id=39;
-DELETE FROM current_node_tags WHERE node_id = 39;
-DELETE FROM node_tags WHERE node_id = 39;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (39, 'hoot:id', '39');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (39, 'hoot:id', '39', 2);
-/* modify node 40*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (40, 311809271, 340560285, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311809271, longitude=340560285, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=40;
-DELETE FROM current_node_tags WHERE node_id = 40;
-DELETE FROM node_tags WHERE node_id = 40;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (40, 'hoot:id', '40');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (40, 'hoot:id', '40', 2);
-/* modify node 41*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (41, 311802987, 340534435, 3, true, (now() at time zone 'utc'), 3335527274, 2);
-UPDATE current_nodes SET latitude=311802987, longitude=340534435, changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), tile=3335527274, version=2 WHERE id=41;
-DELETE FROM current_node_tags WHERE node_id = 41;
-DELETE FROM node_tags WHERE node_id = 41;
-INSERT INTO current_node_tags (node_id, k, v) VALUES (41, 'hoot:id', '41');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (41, 'hoot:id', '41', 2);
 /* create node 54*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (54, 311806942, 340508435, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (54, 311806942, 340508435, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (54, 'hoot:id', '-83');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (54, 'hoot:id', '-83', 1);
 /* create node 55*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (55, 311815647, 340472592, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (55, 311815647, 340472592, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (55, 'hoot:id', '42');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (55, 'hoot:id', '42', 1);
 /* create node 56*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (56, 311816708, 340482519, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (56, 311816708, 340482519, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (56, 'hoot:id', '43');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (56, 'hoot:id', '43', 1);
 /* create node 57*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (57, 311832952, 340565418, 3, true, (now() at time zone 'utc'), 3335527275, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (57, 311832952, 340565418, 3, true, (now() at time zone 'utc'), 3335527275, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (57, 'hoot:id', '44');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (57, 'hoot:id', '44', 1);
 /* create node 58*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (58, 311821476, 340507316, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (58, 311821476, 340507316, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (58, 'hoot:id', '45');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (58, 'hoot:id', '45', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (58, 'hoot', 'blank');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (58, 'hoot', 'blank', 1);
 /* create node 59*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (59, 311811937, 340510083, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (59, 311811937, 340510083, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (59, 'hoot:id', '46');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (59, 'hoot:id', '46', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (59, 'hoot', 'blank');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (59, 'hoot', 'blank', 1);
 /* create node 60*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (60, 311806916, 340508148, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (60, 311806916, 340508148, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (60, 'hoot:id', '48');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (60, 'hoot:id', '48', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (60, 'hoot', 'blank');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (60, 'hoot', 'blank', 1);
 /* create node 61*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (61, 311801012, 340526027, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (61, 311801012, 340526027, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (61, 'hoot:id', '50');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (61, 'hoot:id', '50', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (61, 'hoot', 'blank');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (61, 'hoot', 'blank', 1);
 /* create node 62*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (62, 311790696, 340528372, 3, true, (now() at time zone 'utc'), 3335527231, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (62, 311790696, 340528372, 3, true, (now() at time zone 'utc'), 3335527231, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (62, 'hoot:id', '51');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (62, 'hoot:id', '51', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (62, 'hoot', 'blank');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (62, 'hoot', 'blank', 1);
 /* create node 63*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (63, 311798582, 340563643, 3, true, (now() at time zone 'utc'), 3335527274, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (63, 311798582, 340563643, 3, true, (now() at time zone 'utc'), 3335527274, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (63, 'hoot:id', '-103');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (63, 'hoot:id', '-103', 1);
 /* create node 64*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (64, 311798141, 340513880, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (64, 311798141, 340513880, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (64, 'hoot:id', '-97');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (64, 'hoot:id', '-97', 1);
 /* create node 65*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (65, 311790644, 340528071, 3, true, (now() at time zone 'utc'), 3335527231, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (65, 311790644, 340528071, 3, true, (now() at time zone 'utc'), 3335527231, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (65, 'hoot:id', '-91');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (65, 'hoot:id', '-91', 1);
 /* create node 66*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (66, 311800186, 340525847, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (66, 311800186, 340525847, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (66, 'hoot:id', '-90');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (66, 'hoot:id', '-90', 1);
-/* modify way 2*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (2, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=2;
-DELETE FROM current_way_tags WHERE way_id = 2;
-DELETE FROM way_tags WHERE way_id = 2;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (2, 'hoot:id', '2');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (2, 'hoot:id', '2', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (2, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (2, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (2, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (2, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (2, 'source:datetime', '2016-05-02T23:46:04Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (2, 'source:datetime', '2016-05-02T23:46:04Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 2;
-DELETE FROM way_nodes WHERE way_id = 2;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (2, 25, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (2, 25, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (2, 23, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (2, 23, 2);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (2, 6, 1, 3);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (2, 6, 3);
-/* modify way 3*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (3, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=3;
-DELETE FROM current_way_tags WHERE way_id = 3;
-DELETE FROM way_tags WHERE way_id = 3;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (3, 'hoot:id', '3');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (3, 'hoot:id', '3', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (3, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (3, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (3, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (3, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (3, 'source:datetime', '2016-05-02T23:46:04Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (3, 'source:datetime', '2016-05-02T23:46:04Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 3;
-DELETE FROM way_nodes WHERE way_id = 3;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (3, 25, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (3, 25, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (3, 38, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (3, 38, 2);
 /* modify way 4*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (4, 3, true, (now() at time zone 'utc'), 2);
 UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=4;
 DELETE FROM current_way_tags WHERE way_id = 4;
 DELETE FROM way_tags WHERE way_id = 4;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (4, 'hoot:id', '4');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (4, 'hoot:id', '4', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (4, 'source', 'digitalglobe');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (4, 'source', 'digitalglobe', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (4, 'highway', 'residential');
@@ -372,112 +66,11 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (4, 25, 1, 
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (4, 25, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (4, 54, 1, 2);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (4, 54, 2);
-/* modify way 5*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (5, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=5;
-DELETE FROM current_way_tags WHERE way_id = 5;
-DELETE FROM way_tags WHERE way_id = 5;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (5, 'hoot:id', '5');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (5, 'hoot:id', '5', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (5, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (5, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (5, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (5, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (5, 'source:datetime', '2016-05-02T23:46:05Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (5, 'source:datetime', '2016-05-02T23:46:05Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 5;
-DELETE FROM way_nodes WHERE way_id = 5;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (5, 24, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (5, 24, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (5, 33, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (5, 33, 2);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (5, 34, 1, 3);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (5, 34, 3);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (5, 4, 1, 4);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (5, 4, 4);
-/* modify way 6*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (6, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=6;
-DELETE FROM current_way_tags WHERE way_id = 6;
-DELETE FROM way_tags WHERE way_id = 6;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (6, 'hoot:id', '6');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (6, 'hoot:id', '6', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (6, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (6, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (6, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (6, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (6, 'source:datetime', '2016-05-02T23:46:05Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (6, 'source:datetime', '2016-05-02T23:46:05Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 6;
-DELETE FROM way_nodes WHERE way_id = 6;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (6, 22, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (6, 22, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (6, 37, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (6, 37, 2);
-/* modify way 7*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (7, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=7;
-DELETE FROM current_way_tags WHERE way_id = 7;
-DELETE FROM way_tags WHERE way_id = 7;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (7, 'hoot:id', '7');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (7, 'hoot:id', '7', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (7, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (7, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (7, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (7, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (7, 'source:datetime', '2016-05-02T23:46:05Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (7, 'source:datetime', '2016-05-02T23:46:05Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 7;
-DELETE FROM way_nodes WHERE way_id = 7;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (7, 22, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (7, 22, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (7, 14, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (7, 14, 2);
-/* modify way 8*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (8, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=8;
-DELETE FROM current_way_tags WHERE way_id = 8;
-DELETE FROM way_tags WHERE way_id = 8;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (8, 'hoot:id', '8');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (8, 'hoot:id', '8', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (8, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (8, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (8, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (8, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (8, 'source:datetime', '2016-05-02T23:46:07Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (8, 'source:datetime', '2016-05-02T23:46:07Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 8;
-DELETE FROM way_nodes WHERE way_id = 8;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (8, 11, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (8, 11, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (8, 6, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (8, 6, 2);
-/* modify way 9*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (9, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=9;
-DELETE FROM current_way_tags WHERE way_id = 9;
-DELETE FROM way_tags WHERE way_id = 9;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (9, 'hoot:id', '9');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (9, 'hoot:id', '9', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (9, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (9, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (9, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (9, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (9, 'source:datetime', '2016-05-02T23:46:08Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (9, 'source:datetime', '2016-05-02T23:46:08Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 9;
-DELETE FROM way_nodes WHERE way_id = 9;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (9, 9, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (9, 9, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (9, 14, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (9, 14, 2);
 /* modify way 10*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (10, 3, true, (now() at time zone 'utc'), 2);
 UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=10;
 DELETE FROM current_way_tags WHERE way_id = 10;
 DELETE FROM way_tags WHERE way_id = 10;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (10, 'hoot:id', '10');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (10, 'hoot:id', '10', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (10, 'source', 'Bing');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (10, 'source', 'Bing', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (10, 'highway', 'unclassified');
@@ -490,114 +83,11 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (10, 15, 1,
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (10, 15, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (10, 63, 1, 2);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (10, 63, 2);
-/* modify way 11*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (11, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=11;
-DELETE FROM current_way_tags WHERE way_id = 11;
-DELETE FROM way_tags WHERE way_id = 11;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (11, 'hoot:id', '11');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (11, 'hoot:id', '11', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (11, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (11, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (11, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (11, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (11, 'source:datetime', '2016-05-02T23:46:05Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (11, 'source:datetime', '2016-05-02T23:46:05Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 11;
-DELETE FROM way_nodes WHERE way_id = 11;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (11, 22, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (11, 22, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (11, 35, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (11, 35, 2);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (11, 40, 1, 3);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (11, 40, 3);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (11, 32, 1, 4);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (11, 32, 4);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (11, 16, 1, 5);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (11, 16, 5);
-/* modify way 12*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (12, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=12;
-DELETE FROM current_way_tags WHERE way_id = 12;
-DELETE FROM way_tags WHERE way_id = 12;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (12, 'hoot:id', '12');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (12, 'hoot:id', '12', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (12, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (12, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (12, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (12, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (12, 'source:datetime', '2016-05-02T23:46:02Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (12, 'source:datetime', '2016-05-02T23:46:02Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 12;
-DELETE FROM way_nodes WHERE way_id = 12;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (12, 17, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (12, 17, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (12, 4, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (12, 4, 2);
-/* modify way 14*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (14, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=14;
-DELETE FROM current_way_tags WHERE way_id = 14;
-DELETE FROM way_tags WHERE way_id = 14;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (14, 'hoot:id', '14');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (14, 'hoot:id', '14', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (14, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (14, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (14, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (14, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (14, 'source:datetime', '2016-05-02T23:46:09Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (14, 'source:datetime', '2016-05-02T23:46:09Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 14;
-DELETE FROM way_nodes WHERE way_id = 14;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (14, 10, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (14, 10, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (14, 7, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (14, 7, 2);
-/* modify way 16*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (16, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=16;
-DELETE FROM current_way_tags WHERE way_id = 16;
-DELETE FROM way_tags WHERE way_id = 16;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (16, 'hoot:id', '16');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (16, 'hoot:id', '16', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (16, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (16, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (16, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (16, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (16, 'source:datetime', '2016-05-02T23:46:09Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (16, 'source:datetime', '2016-05-02T23:46:09Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 16;
-DELETE FROM way_nodes WHERE way_id = 16;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (16, 7, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (16, 7, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (16, 14, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (16, 14, 2);
-/* modify way 17*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (17, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=17;
-DELETE FROM current_way_tags WHERE way_id = 17;
-DELETE FROM way_tags WHERE way_id = 17;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (17, 'hoot:id', '17');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (17, 'hoot:id', '17', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (17, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (17, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (17, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (17, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (17, 'source:datetime', '2016-05-02T23:46:09Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (17, 'source:datetime', '2016-05-02T23:46:09Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 17;
-DELETE FROM way_nodes WHERE way_id = 17;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (17, 7, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (17, 7, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (17, 36, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (17, 36, 2);
 /* modify way 18*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (18, 3, true, (now() at time zone 'utc'), 2);
 UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=18;
 DELETE FROM current_way_tags WHERE way_id = 18;
 DELETE FROM way_tags WHERE way_id = 18;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (18, 'hoot:id', '18');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (18, 'hoot:id', '18', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (18, 'source', 'digitalglobe');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (18, 'source', 'digitalglobe', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (18, 'highway', 'residential');
@@ -612,34 +102,11 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (18, 39, 1,
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (18, 39, 2);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (18, 5, 1, 3);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (18, 5, 3);
-/* modify way 19*/
-INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (19, 3, true, (now() at time zone 'utc'), 2);
-UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=19;
-DELETE FROM current_way_tags WHERE way_id = 19;
-DELETE FROM way_tags WHERE way_id = 19;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (19, 'hoot:id', '19');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (19, 'hoot:id', '19', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (19, 'source', 'digitalglobe');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (19, 'source', 'digitalglobe', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (19, 'highway', 'residential');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (19, 'highway', 'residential', 2);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (19, 'source:datetime', '2016-05-02T23:46:09Z');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (19, 'source:datetime', '2016-05-02T23:46:09Z', 2);
-DELETE FROM current_way_nodes WHERE way_id = 19;
-DELETE FROM way_nodes WHERE way_id = 19;
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (19, 5, 1, 1);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (19, 5, 1);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (19, 28, 1, 2);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (19, 28, 2);
-INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (19, 41, 1, 3);
-INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (19, 41, 3);
 /* modify way 20*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (20, 3, true, (now() at time zone 'utc'), 2);
 UPDATE current_ways SET changeset_id=3, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=20;
 DELETE FROM current_way_tags WHERE way_id = 20;
 DELETE FROM way_tags WHERE way_id = 20;
-INSERT INTO current_way_tags (way_id, k, v) VALUES (20, 'hoot:id', '20');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (20, 'hoot:id', '20', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (20, 'source', 'digitalglobe');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (20, 'source', 'digitalglobe', 2);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (20, 'highway', 'residential');
@@ -655,8 +122,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (20, 65, 2);
 /* create way 24*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (24, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (24, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (24, 'hoot:id', '-6');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (24, 'hoot:id', '-6', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (24, 'source', 'Bing');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (24, 'source', 'Bing', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (24, 'highway', 'unclassified');
@@ -674,8 +139,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (24, 13, 4);
 /* create way 25*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (25, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (25, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (25, 'hoot:id', '-197');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (25, 'hoot:id', '-197', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (25, 'source', 'Bing');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (25, 'source', 'Bing', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (25, 'highway', 'unclassified');
@@ -693,8 +156,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (25, 10, 4);
 /* create way 26*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (26, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (26, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (26, 'hoot:id', '-4');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (26, 'hoot:id', '-4', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (26, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (26, 'highway', 'road', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (26, 58, 1, 1);
@@ -704,8 +165,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (26, 57, 2);
 /* create way 27*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (27, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (27, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (27, 'hoot:id', '-3');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (27, 'hoot:id', '-3', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (27, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (27, 'highway', 'road', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (27, 55, 1, 1);
@@ -717,8 +176,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (27, 58, 3);
 /* create way 28*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (28, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (28, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (28, 'hoot:id', '-2');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (28, 'hoot:id', '-2', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (28, 'source', 'Bing');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (28, 'source', 'Bing', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (28, 'highway', 'unclassified');
@@ -734,8 +191,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (28, 30, 3);
 /* create way 29*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (29, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (29, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (29, 'hoot:id', '-192');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (29, 'hoot:id', '-192', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (29, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (29, 'highway', 'road', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (29, 64, 1, 1);
@@ -747,8 +202,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (29, 66, 3);
 /* create way 30*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (30, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (30, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (30, 'hoot:id', '-189');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (30, 'hoot:id', '-189', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (30, 'source', 'digitalglobe');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (30, 'source', 'digitalglobe', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (30, 'highway', 'residential');
@@ -762,8 +215,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (30, 64, 2);
 /* create way 31*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (31, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (31, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (31, 'hoot:id', '-181');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (31, 'hoot:id', '-181', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (31, 'source', 'digitalglobe');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (31, 'source', 'digitalglobe', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (31, 'highway', 'residential');
@@ -777,8 +228,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (31, 30, 2);
 /* create way 32*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (32, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (32, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (32, 'hoot:id', '-180');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (32, 'hoot:id', '-180', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (32, 'source', 'digitalglobe');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (32, 'source', 'digitalglobe', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (32, 'highway', 'residential');
@@ -792,8 +241,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (32, 66, 2);
 /* create way 33*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (33, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (33, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (33, 'hoot:id', '-175');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (33, 'hoot:id', '-175', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (33, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (33, 'highway', 'road', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (33, 54, 1, 1);
@@ -803,8 +250,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (33, 25, 2);
 /* create way 34*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (34, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (34, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (34, 'hoot:id', '-169');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (34, 'hoot:id', '-169', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (34, 'source', 'digitalglobe');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (34, 'source', 'digitalglobe', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (34, 'highway', 'residential');
@@ -820,8 +265,6 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (34, 4, 3);
 /* create way 35*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (35, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (35, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (35, 'hoot:id', '-165');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (35, 'hoot:id', '-165', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (35, 'highway', 'road');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (35, 'highway', 'road', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (35, 58, 1, 1);
@@ -839,8 +282,6 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (4, 'hoot:review:ne
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (4, 'hoot:review:needs', 'yes', 1);
 INSERT INTO current_relation_tags (relation_id, k, v) VALUES (4, 'hoot:review:members', '1');
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (4, 'hoot:review:members', '1', 1);
-INSERT INTO current_relation_tags (relation_id, k, v) VALUES (4, 'hoot:id', '-19');
-INSERT INTO relation_tags (relation_id, k, v, version) VALUES (4, 'hoot:id', '-19', 1);
 INSERT INTO current_relation_tags (relation_id, k, v) VALUES (4, 'hoot:review:score', '-1');
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (4, 'hoot:review:score', '-1', 1);
 INSERT INTO current_relation_tags (relation_id, k, v) VALUES (4, 'hoot:review:note', 'Missing match pair');
@@ -856,8 +297,6 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (5, 'hoot:review:ne
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (5, 'hoot:review:needs', 'yes', 1);
 INSERT INTO current_relation_tags (relation_id, k, v) VALUES (5, 'hoot:review:members', '2');
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (5, 'hoot:review:members', '2', 1);
-INSERT INTO current_relation_tags (relation_id, k, v) VALUES (5, 'hoot:id', '-16');
-INSERT INTO relation_tags (relation_id, k, v, version) VALUES (5, 'hoot:id', '-16', 1);
 INSERT INTO current_relation_tags (relation_id, k, v) VALUES (5, 'hoot:review:score', '0');
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (5, 'hoot:review:score', '0', 1);
 INSERT INTO current_relation_tags (relation_id, k, v) VALUES (5, 'hoot:review:note', 'Semi-similar highway orientation. Highway edges not very close to each other.');
@@ -870,4 +309,4 @@ INSERT INTO relation_members (relation_id, member_type, member_id, member_role, 
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (5, 'Way', 19, 'reviewee', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (5, 'Way', 29, 'reviewee', 1, 2);
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (5, 'Way', 29, 'reviewee', 2);
-UPDATE changesets SET min_lat=311780000, max_lat=311832952, min_lon=340472592, max_lon=340570000, num_changes=78 WHERE id=3;
+UPDATE changesets SET min_lat=311790644, max_lat=311832952, min_lon=340472592, max_lon=340565418, num_changes=31 WHERE id=3;
