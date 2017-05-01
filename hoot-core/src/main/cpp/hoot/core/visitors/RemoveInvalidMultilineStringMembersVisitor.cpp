@@ -60,7 +60,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr &e)
         if (_map->getElement(it->getElementId())->getTags().getInformationCount() > 0)
           return;
       }
-      const double expansion = r->getCircularError();
+      const double expansion = r->getCircularError() / 2.0;
       OsmMapPtr map(_map->shared_from_this());
       //  Multiline strings that are a part of a review relation are what we are targetting for replacement
       set<ElementId> parents = map->getParents(r->getElementId());
@@ -94,10 +94,20 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr &e)
                   rev->addElement(MetadataTags::RoleReviewee(), id2);
               }
             }
-            rev->removeElement(r->getElementId());
+            //  There is a one-to-one relation here, replace the multilinestring with the only way
+            if (rev->getMembers().size() == 1 && r->getMembers().size() == 1)
+              rev->addElement(MetadataTags::RoleReviewee(), r->getMembers()[0].getElementId());
+            //  Don't remove multilinestring relations that are members of a review relation
+            //  only contains one member that is the original multilinestring
+            if (rev->getMembers().size() > 1)
+              rev->removeElement(r->getElementId());
           }
         }
       }
+      //  Don't remove multilinestring relations that are members of a review relation
+      //  only contains one member that is the original multilinestring
+      if (map->getParents(r->getElementId()).size() > 0)
+        return;
       //  Copy tags from the multiline string tags to the children and remove from relation
       vector<RelationData::Entry> members = r->getMembers();
       TagMergerFactory& merger = TagMergerFactory::getInstance();
