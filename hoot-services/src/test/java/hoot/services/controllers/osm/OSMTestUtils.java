@@ -82,7 +82,6 @@ import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.RecordBatchType;
 import hoot.services.utils.GeoUtils;
 import hoot.services.utils.PostgresUtils;
-import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -104,7 +103,7 @@ import hoot.services.utils.XmlUtils;
 public class OSMTestUtils {
     private static long mapId = -1;
     private static long userId = -1;
-    private static DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
+    private static DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
 
     /*
      * Creates a starting geo bounds for all the tests; simulates a bounds that
@@ -1324,7 +1323,7 @@ public class OSMTestUtils {
                 .columns(currentNodes.id, currentNodes.latitude, currentNodes.longitude, currentNodes.changesetId,
                         currentNodes.visible, currentNodes.tile, currentNodes.version, currentNodes.tags)
                 .values(nodeId, latitude, longitude, changesetId,
-                        Boolean.TRUE, QuadTileCalculator.tileForPoint(latitude, longitude), 1L, tags)
+                        Boolean.TRUE, GeoUtils.tileForPoint(latitude, longitude), 1L, tags)
                 .execute();
     }
 

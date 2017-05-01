@@ -181,11 +181,11 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
 boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 {
   vector<LinearRing*> outers;
-  _createRings("outer", outers);
-  _createRings("part", outers);
+  _createRings(MetadataTags::RoleOuter(), outers);
+  _createRings(MetadataTags::RolePart(), outers);
 
   vector<LinearRing*> inners;
-  _createRings("inner", inners);
+  _createRings(MetadataTags::RoleInner(), inners);
 
   boost::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
@@ -194,7 +194,7 @@ boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
   {
     const RelationData::Entry& e = _r->getMembers()[i];
     if (e.getElementId().getType() == ElementType::Relation &&
-        (e.role == "outer" || e.role == "part"))
+        (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
     {
       ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r->isMultiPolygon() ||

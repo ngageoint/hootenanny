@@ -131,7 +131,7 @@ public:
     w3->addNode(2);
     map->addWay(w3);
 
-    RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, "collection"));
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection()));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
@@ -364,7 +364,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     CPPUNIT_ASSERT_EQUAL(18.1, relation->getCircularError());
-    HOOT_STR_EQUALS("collection", relation->getType());
+    HOOT_STR_EQUALS(MetadataTags::RelationCollection(), relation->getType());
     vector<RelationData::Entry> relationMembers = relation->getMembers();
     CPPUNIT_ASSERT_EQUAL(size_t(2), relationMembers.size());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
@@ -580,7 +580,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     CPPUNIT_ASSERT_EQUAL(18.1, relation->getCircularError());
-    HOOT_STR_EQUALS("collection", relation->getType());
+    HOOT_STR_EQUALS(MetadataTags::RelationCollection(), relation->getType());
     CPPUNIT_ASSERT_EQUAL(size_t(2), relation->getMembers().size());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));

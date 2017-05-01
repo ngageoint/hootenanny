@@ -43,7 +43,7 @@ import org.springframework.stereotype.Controller;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.utils.OsmResponseHeaderGenerator;
+import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
 

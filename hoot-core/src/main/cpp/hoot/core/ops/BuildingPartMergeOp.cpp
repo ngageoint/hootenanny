@@ -286,14 +286,14 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
       parts[0]->getStatus(),
       map->createNextRelationId(),
       -1,
-      "building"));
+      MetadataTags::RelationBuilding()));
 
   OsmSchema& schema = OsmSchema::getInstance();
   Tags& t = building->getTags();
 
   for (size_t i = 0; i < parts.size(); i++)
   {
-    building->addElement("part", parts[i]);
+    building->addElement(MetadataTags::RolePart(), parts[i]);
 
     Tags pt = parts[i]->getTags();
 

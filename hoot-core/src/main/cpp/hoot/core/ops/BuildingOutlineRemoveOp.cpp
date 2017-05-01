@@ -59,7 +59,7 @@ void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
   {
     const boost::shared_ptr<Relation>& r = it->second;
     // add the relation to a building group if appropriate
-    if (r->getType() == "building")
+    if (r->getType() == MetadataTags::RelationBuilding())
     {
       _removeOutline(r);
     }
@@ -71,7 +71,7 @@ void BuildingOutlineRemoveOp::_removeOutline(const boost::shared_ptr<Relation> &
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
   {
-    if (entries[i].role == "outline")
+    if (entries[i].role == MetadataTags::RoleOutline())
     {
       building->removeElement(entries[i].role, entries[i].getElementId());
       RecursiveElementRemover(entries[i].getElementId()).apply(_map);

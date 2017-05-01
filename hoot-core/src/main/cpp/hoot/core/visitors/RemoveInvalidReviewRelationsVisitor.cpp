@@ -51,7 +51,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
     assert(r != 0);
 
     LOG_VART(r->getId());
-    if (r->getType() == Relation::REVIEW)
+    if (r->getType() == MetadataTags::RelationReview())
     {
       bool invalidRelation = false;
       const bool hasMemberCountTag = r->getTags().contains(MetadataTags::HootReviewMembers());

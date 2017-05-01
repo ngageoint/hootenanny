@@ -32,7 +32,7 @@ import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
 
 class HGISPrepareForValidationCommand extends HGISCommand {
 
-    HGISPrepareForValidationCommand(String sourceMap, String outputMap, Class<?> caller) {
-        super(sourceMap, outputMap, HGIS_PREPARE_FOR_VALIDATION_SCRIPT, caller);
+    HGISPrepareForValidationCommand(String jobId, String sourceMap, String outputMap, Class<?> caller) {
+        super(jobId, sourceMap, outputMap, HGIS_PREPARE_FOR_VALIDATION_SCRIPT, caller);
     }
 }

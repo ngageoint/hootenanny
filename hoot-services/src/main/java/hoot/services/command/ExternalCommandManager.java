@@ -33,9 +33,16 @@ public interface ExternalCommandManager {
      * Performs external command execution.
      *
      * @param jobId id of the job this command belongs to
-     * @param command command to execute
+     * @param externalCommand command to execute
      */
-    CommandResult exec(String jobId, ExternalCommand command);
+    CommandResult exec(String jobId, ExternalCommand externalCommand);
+
+    /**
+     * Performs external command execution.
+     *
+     * @param externalCommand command to execute
+     */
+    CommandResult exec(ExternalCommand externalCommand);
 
     /**
      * Returns stdout of the currently executing command that belongs to the job defined by jobId.

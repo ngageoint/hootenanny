@@ -93,7 +93,7 @@ import hoot.services.models.osm.ElementFactory;
 import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.OsmResponseHeaderGenerator;
+import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -677,14 +677,14 @@ public class MapResource {
         String jobId = UUID.randomUUID().toString();
 
         try {
-            Command[] commands = {
+            Command[] workflow = {
                 () -> {
-                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId);
+                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId, this.getClass());
                     return mapResourcesCleaner.execute();
                 }
             };
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.submitAsync(new Job(jobId, workflow));
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;

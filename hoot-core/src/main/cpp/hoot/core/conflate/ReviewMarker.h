@@ -117,7 +117,6 @@ public:
 private:
   // don't use these keys directly, instead call the helper functions above.
   static QString _complexGeometryType;
-  static QString _revieweeKey;
 
   /**
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.

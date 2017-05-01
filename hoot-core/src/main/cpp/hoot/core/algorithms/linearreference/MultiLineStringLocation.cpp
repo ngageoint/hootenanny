@@ -47,7 +47,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map,
     throw HootException(
       "Feature splitting for multi-line string relations requires that the relation has way members.");
   }
-  if (relation->getType() != Relation::MULTILINESTRING)
+  if (relation->getType() != MetadataTags::RelationMultilineString())
   {
     throw HootException(
       "Invalid relation type: " + relation->getType() + " expected multiline string.");
