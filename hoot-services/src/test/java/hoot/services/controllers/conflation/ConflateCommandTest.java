@@ -88,6 +88,7 @@ public class ConflateCommandTest {
                               "-D, writer.include.conflate.score.tags=true, " +
                               "-D, hootapi.db.writer.overwrite.map=true, " +
                               "-D, hootapi.db.writer.create.user=true, " +
+                              "-D, writer.text.status=true, " +
                               "-D, api.db.email=test@test.com, " +
                               "-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
                                     "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
