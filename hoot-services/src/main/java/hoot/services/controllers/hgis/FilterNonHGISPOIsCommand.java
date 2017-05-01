@@ -32,7 +32,7 @@ import static hoot.services.HootProperties.HGIS_FILTER_SCRIPT;
 
 class FilterNonHGISPOIsCommand extends HGISCommand {
 
-    FilterNonHGISPOIsCommand(String sourceMap, String outputMap, Class<?> caller) {
-        super(sourceMap, outputMap, HGIS_FILTER_SCRIPT, caller);
+    FilterNonHGISPOIsCommand(String jobId, String sourceMap, String outputMap, Class<?> caller) {
+        super(jobId, sourceMap, outputMap, HGIS_FILTER_SCRIPT, caller);
     }
 }

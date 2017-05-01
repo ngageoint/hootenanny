@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo;
 
@@ -31,14 +31,14 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.utils.QuadTileCalculator;
+import hoot.services.utils.GeoUtils;
 
 
 public class QuadTileCalculatorTest {
     @Test
     @Category(UnitTest.class)
     public void testTileFromPoint() {
-        Assert.assertEquals(1329332431L, QuadTileCalculator.tileForPoint(38, -104));
-        Assert.assertEquals(3851856485L, QuadTileCalculator.tileForPoint(38, 104));
+        Assert.assertEquals(1329332431L, GeoUtils.tileForPoint(38, -104));
+        Assert.assertEquals(3851856485L, GeoUtils.tileForPoint(38, 104));
     }
 }

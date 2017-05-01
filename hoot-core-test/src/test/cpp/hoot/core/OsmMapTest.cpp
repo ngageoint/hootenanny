@@ -46,6 +46,8 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
+
+#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
 using namespace hoot;
 
 // Qt
@@ -119,7 +121,7 @@ public:
 
     map->getWay(-1669801)->addNode(-1669723);
 
-    map->getRelation(-1)->addElement("outer", ElementId::way(-1669797));
+    map->getRelation(-1)->addElement(MetadataTags::RoleOuter(), ElementId::way(-1669797));
   }
 
   OsmMapPtr createMapForCopyTest()
@@ -130,8 +132,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 
-    RelationPtr r(new Relation(Status::Unknown1, -1, 10, "multipolygon"));
-    r->addElement("outer", ElementId::way(-1669799));
+    RelationPtr r(new Relation(Status::Unknown1, -1, 10, MetadataTags::RelationMultiPolygon()));
+    r->addElement(MetadataTags::RoleOuter(), ElementId::way(-1669799));
     map->addRelation(r);
 
     return map;

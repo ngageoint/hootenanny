@@ -87,6 +87,7 @@ tgs/Makefile
 Makefile.in
 Makefile.inc
 Makefile.qmake
+missing
 Output.osm
 /output.osm
 /output.pgm

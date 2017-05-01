@@ -68,10 +68,10 @@ import hoot.services.models.db.CurrentRelations;
 import hoot.services.models.db.CurrentWayNodes;
 import hoot.services.models.db.CurrentWays;
 import hoot.services.models.osm.Changeset;
+import hoot.services.utils.GeoUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
-import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -656,7 +656,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
             assertEquals(new Double((updatedBounds.getMinLat())), nodeRecord.getLatitude());
             assertEquals(new Double((updatedBounds.getMinLon())), nodeRecord.getLongitude());
             assertEquals(nodeIdsArr[0], nodeRecord.getId());
-            assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+            assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                     nodeRecord.getTile());
             assertTrue(nodeRecord.getTimestamp().before(now));
             assertEquals(new Long(2), nodeRecord.getVersion());
@@ -674,7 +674,7 @@ public class ChangesetResourceCloseTest extends OSMResourceTestAbstract {
             assertEquals(new Double(updatedBounds.getMinLat()), nodeRecord.getLatitude());
             assertEquals(new Double(updatedBounds.getMaxLon()), nodeRecord.getLongitude());
             assertEquals(nodeIdsArr[1], nodeRecord.getId());
-            assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+            assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                     nodeRecord.getTile());
             assertTrue(nodeRecord.getTimestamp().before(now));
             assertEquals(new Long(2), nodeRecord.getVersion());

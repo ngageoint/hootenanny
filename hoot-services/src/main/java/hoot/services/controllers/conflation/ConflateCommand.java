@@ -28,40 +28,161 @@ package hoot.services.controllers.conflation;
 
 import static hoot.services.HootProperties.*;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
+import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
-import hoot.services.utils.JsonUtils;
 
 
 class ConflateCommand extends ExternalCommand {
 
-    ConflateCommand(String params, BoundingBox bounds, Class<?> caller) {
-        JSONArray commandArgs;
-        try {
-            commandArgs = JsonUtils.parseParams(params);
+    private final ConflateParams conflateParams;
+
+    ConflateCommand(String jobId, ConflateParams params, String debugLevel, Class<?> caller) {
+        super(jobId);
+        this.conflateParams = params;
+
+        boolean conflatingOsmApiDbData = ConflateUtils.isAtLeastOneLayerOsmApiDb(params);
+
+        //Since we're not returning the osm api db layer to the hoot ui, this exception
+        //shouldn't actually ever occur, but will leave this check here anyway.
+        if (conflatingOsmApiDbData && !OSM_API_DB_ENABLED) {
+            throw new IllegalArgumentException("Attempted to conflate an OSM API database data source but OSM " +
+                    "API database support is disabled.");
         }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
+
+        BoundingBox bounds;
+
+        // osm api db related input params have already been validated by
+        // this point, so just check to see if any osm api db input is present
+        if (conflatingOsmApiDbData && OSM_API_DB_ENABLED) {
+            ConflateUtils.validateOsmApiDbConflateParams(params);
+
+            String secondaryParameterKey = ConflateUtils.isFirstLayerOsmApiDb(params) ? params.getInput2() : params.getInput1();
+
+            //Record the aoi of the conflation job (equal to that of the secondary layer), as
+            //we'll need it to detect conflicts at export time.
+            long secondaryMapId = Long.parseLong(secondaryParameterKey);
+            if (!hoot.services.models.osm.Map.mapExists(secondaryMapId)) {
+                String msg = "No secondary map exists with ID: " + secondaryMapId;
+                throw new IllegalArgumentException(msg);
+            }
+
+            if (params.getBounds() != null) {
+                bounds = new BoundingBox(params.getBounds());
+            }
+            else {
+                hoot.services.models.osm.Map secondaryMap = new hoot.services.models.osm.Map(secondaryMapId);
+                bounds = secondaryMap.getBounds();
+            }
         }
+        else {
+            bounds = null;
+        }
+
+        String aoi = null;
 
         if (bounds != null) {
-            JSONObject conflateAOI = new JSONObject();
-            conflateAOI.put("conflateaoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
-            commandArgs.add(conflateAOI);
+            aoi = bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat();
         }
 
-        JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
-        commandArgs.add(hootDBURL);
+        List<String> options = new LinkedList<>();
+        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("writer.include.conflate.score.tags=true");
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        //options.add("writer.include.debug.tags=true");
+        options.add("writer.text.status=true");
+        options.add("api.db.email=test@test.com");
 
-        JSONObject osmAPIDBURL = new JSONObject();
-        osmAPIDBURL.put("OSM_API_DB_URL", OSMAPI_DB_URL);
-        commandArgs.add(osmAPIDBURL);
+        String input1Type = params.getInputType1();
+        String input1 = input1Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput1()) : params.getInput1();
 
-        super.configureAsMakeCommand(CONFLATE_MAKEFILE_PATH, caller, commandArgs);
+        String input2Type = params.getInputType2();
+        String input2 = input2Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput2()) : params.getInput2();
+
+        String referenceLayer = params.getReferenceLayer();
+        if (referenceLayer.equalsIgnoreCase("1")) {
+            if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
+                input1 = OSMAPI_DB_URL;
+                options.add("convert.bounding.box=" + aoi);
+                options.add("conflate.use.data.source.ids=true");
+                options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
+                options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
+                options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
+            }
+        }
+        else if (referenceLayer.equalsIgnoreCase("2")) {
+            options.add("tag.merger.default=hoot::OverwriteTag1Merger");
+            if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
+                input2 = OSMAPI_DB_URL;
+                options.add("convert.bounding.box=" + aoi);
+                options.add("conflate.use.data.source.ids=true");
+                options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
+                options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
+                options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
+            }
+        }
+
+        String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
+
+        if (params.getAdvancedOptions() != null) {
+            String[] advOptions = params.getAdvancedOptions().trim().split("-D ");
+            Arrays.stream(advOptions).forEach((option) -> {
+                if (!option.isEmpty()) {
+                    options.add(option.trim());
+                };
+            });
+        }
+
+        List<String> hootOptions = toHootOptions(options);
+
+        String stats = "";
+        if (params.getCollectStats()) {
+            // Don't include non-error log messages in stdout because we are redirecting to file
+            debugLevel = "error";
+
+            //Hootenanny map statistics such as node and way count
+            stats = "--stats";
+        }
+
+        Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("INPUT1", input1);
+        substitutionMap.put("INPUT2", input2);
+        substitutionMap.put("OUTPUT", output);
+        substitutionMap.put("STATS", stats);
+
+        String command = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
+
+        super.configureCommand(command, substitutionMap, caller);
+    }
+
+    @Override
+    public CommandResult execute() {
+        CommandResult commandResult = super.execute();
+
+        if (conflateParams.getCollectStats()) {
+            File statsFile = new File(RPT_STORE_PATH, conflateParams.getOutputName() + "-stats.csv");
+            try {
+                FileUtils.write(statsFile, commandResult.getStdout(), Charset.defaultCharset());
+            }
+            catch (IOException ioe) {
+                throw new RuntimeException("Error writing to " + statsFile.getAbsolutePath(), ioe);
+            }
+        }
+
+        return commandResult;
     }
 }

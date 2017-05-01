@@ -50,7 +50,6 @@ import hoot.services.models.db.CurrentNodes;
 import hoot.services.utils.DbUtils;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.GeoUtils;
-import hoot.services.utils.QuadTileCalculator;
 
 
 /**
@@ -146,7 +145,7 @@ public class Node extends Element {
 
         // no point in updating the tile if we're not deleting
         if (entityChangeType != EntityChangeType.DELETE) {
-            nodeRecord.setTile(QuadTileCalculator.tileForPoint(latitude, longitude));
+            nodeRecord.setTile(GeoUtils.tileForPoint(latitude, longitude));
             nodeRecord.setTags(parseTags(xml));
         }
 

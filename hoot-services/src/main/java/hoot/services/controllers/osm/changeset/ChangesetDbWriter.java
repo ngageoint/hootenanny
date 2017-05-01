@@ -78,7 +78,7 @@ import hoot.services.models.osm.OSMAPIPreconditionException;
 import hoot.services.models.osm.XmlSerializable;
 import hoot.services.utils.DbUtils.EntityChangeType;
 import hoot.services.utils.DbUtils.RecordBatchType;
-import hoot.services.utils.OsmResponseHeaderGenerator;
+import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
 

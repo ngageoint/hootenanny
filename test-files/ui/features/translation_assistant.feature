@@ -75,7 +75,7 @@ Feature: Translation Assistant
         When I choose "TDSv61" radio button
         Then I upload a zipped folder of shapefiles
         And I wait
-        And I should see element "[id='preset-input-layer']" with value "cali-test"
+        #And I should see element "[id='preset-input-layer']" with value "cali-test"
         Then I type "cali-fake" in input "preset-input-layer"
         Then I press tab in the "[id='preset-input-layer']" input
         And I should see element "[id='preset-input-layer']" with value "cali-fake-points"

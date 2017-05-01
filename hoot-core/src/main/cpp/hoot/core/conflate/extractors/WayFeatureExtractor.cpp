@@ -62,8 +62,8 @@ double WayFeatureExtractor::extract(const OsmMap& map,
     ConstRelationPtr r1 = dynamic_pointer_cast<const Relation>(target);
     ConstRelationPtr r2 = dynamic_pointer_cast<const Relation>(candidate);
 
-    if (r1->getType() == Relation::MULTILINESTRING &&
-        r2->getType() == Relation::MULTILINESTRING &&
+    if (r1->getType() == MetadataTags::RelationMultilineString() &&
+        r2->getType() == MetadataTags::RelationMultilineString() &&
         r1->getMembers().size() == r2->getMembers().size())
     {
       for (size_t i = 0; i < r1->getMembers().size(); i++)

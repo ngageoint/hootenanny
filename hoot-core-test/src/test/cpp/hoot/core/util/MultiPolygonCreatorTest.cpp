@@ -78,7 +78,7 @@ public:
   void runBadOuterRingsTest()
   {
     OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
     WayPtr w;
     // way #1
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
@@ -86,7 +86,7 @@ public:
     addPoint(map, w, 5, 6);
     addPoint(map, w, 8, 11);
     addPoint(map, w, 12, 9);
-    uut->addElement(Relation::OUTER, w);
+    uut->addElement(MetadataTags::RoleOuter(), w);
 
     // way #2
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
@@ -94,7 +94,7 @@ public:
     addPoint(map, w, 5, 6);
     addPoint(map, w, 8, 2);
     addPoint(map, w, 13, 5);
-    uut->addElement(Relation::OUTER, w);
+    uut->addElement(MetadataTags::RoleOuter(), w);
 
     boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
@@ -109,7 +109,7 @@ public:
   void runMultiPolygonExample1Test()
   {
     OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
     WayPtr w;
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -119,7 +119,7 @@ public:
     addPoint(map, w, 12, 9);
     addPoint(map, w, 13, 5);
     closeWay(w);
-    uut->addElement(Relation::OUTER, w);
+    uut->addElement(MetadataTags::RoleOuter(), w);
 
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -128,7 +128,7 @@ public:
     addPoint(map, w, 8, 8);
     addPoint(map, w, 10, 7);
     closeWay(w);
-    uut->addElement(Relation::INNER, w);
+    uut->addElement(MetadataTags::RoleInner(), w);
 
     boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
@@ -143,7 +143,7 @@ public:
   void runMultiPolygonExample7Test()
   {
     OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
     WayPtr w;
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -153,7 +153,7 @@ public:
     addPoint(map, w, 13, 11);
     addPoint(map, w, 14, 4);
     closeWay(w);
-    uut->addElement(Relation::OUTER, w);
+    uut->addElement(MetadataTags::RoleOuter(), w);
 
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -162,7 +162,7 @@ public:
     addPoint(map, w, 8, 11);
     addPoint(map, w, 12, 7);
     closeWay(w);
-    uut->addElement(Relation::INNER, w);
+    uut->addElement(MetadataTags::RoleInner(), w);
 
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
     map->addWay(w);
@@ -171,7 +171,7 @@ public:
     addPoint(map, w, 8, 7);
     addPoint(map, w, 10, 7);
     closeWay(w);
-    uut->addElement(Relation::OUTER, w);
+    uut->addElement(MetadataTags::RoleOuter(), w);
 
     boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
@@ -186,7 +186,7 @@ public:
   void runMultipleWaysFormingARing()
   {
     OsmMapPtr map(new OsmMap());
-    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, Relation::MULTIPOLYGON));
+    RelationPtr uut(new Relation(Status::Unknown1, 1, 10, MetadataTags::RelationMultiPolygon()));
     WayPtr w;
     // way #1
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
@@ -194,7 +194,7 @@ public:
     addPoint(map, w, 5, 6);
     addPoint(map, w, 8, 11);
     addPoint(map, w, 12, 9);
-    uut->addElement(Relation::OUTER, w);
+    uut->addElement(MetadataTags::RoleOuter(), w);
 
     // way #2
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
@@ -203,7 +203,7 @@ public:
     addPoint(map, w, 8, 2);
     addPoint(map, w, 13, 5);
     addPoint(map, w, 12, 9);
-    uut->addElement(Relation::OUTER, w);
+    uut->addElement(MetadataTags::RoleOuter(), w);
 
     // way #3
     w.reset(new Way(Status::Unknown1, map->createNextWayId(), 10));
@@ -213,7 +213,7 @@ public:
     addPoint(map, w, 10, 7);
     addPoint(map, w, 9, 5);
     closeWay(w);
-    uut->addElement(Relation::INNER, w);
+    uut->addElement(MetadataTags::RoleInner(), w);
 
     boost::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
 
