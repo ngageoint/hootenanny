@@ -34,7 +34,9 @@ cp -R ../../software.ubuntu1404 software
 # Error out on any warnings. This only applies to Ubuntu 14.04, not CentOS (yet)
 # See: https://github.com/ngageoint/hootenanny/issues/348
 cp LocalConfig.pri.orig LocalConfig.pri
-echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri
+
+# NOTE: When #1355 is done, this goes away
+echo "QMAKE_CXXFLAGS += -Werror -Wno-error=deprecated-declarations " >> LocalConfig.pri
 sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri                 
 sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri   
 
