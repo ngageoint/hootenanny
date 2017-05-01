@@ -10,7 +10,7 @@ Feature: OSM/TDS Switcher
         Then I wait 30 "seconds" to see "span.strong" element with text "DcGisRoadsCucumber"
 
     Scenario: I can select a feature and switch between attribute schemas
-        When I select a way map feature with OSM id "w309_1"
+        When I select a way map feature with OSM id "casing w308"
         Then I wait 10 "seconds" to see "Edit feature:"
         Then I should see element "#preset-input-name" with value "23RD ST NW"
         Then I select the "TDSv61" option labelled "Tag Schema"
