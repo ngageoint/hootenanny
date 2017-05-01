@@ -2,10 +2,20 @@ AC_DEFUN([LIBPQ_INIT],[
   AC_SUBST(HAS_LIBPQ) 
 
   CPPFLAGS="-I/usr/include/postgresql -I/usr/pgsql-9.2/include ${CPPFLAGS}"
-  LIBS="-lpq ${LIBS}"
+  LIBS="-lpq -L/usr/pgsql-9.2/lib ${LIBS}"
 
+  # pg 9.5 on ubuntu 14.04
+  # /usr/lib/x86_64-linux-gnu - picked up automatically
+  # pg 9.2 on centos 6.7 (PR job; patty)
+  # /usr/lib - picked up automatically
+  # pg 9.2 on centos 6.7 (RPM job)
+  # /usr/pgsql-9.2/lib
+  #AC_CHECK_LIB (library, function, [action-if-found], [action-if-not-found], [other-libraries])
   #AC_CHECK_LIB([libpq], [main], [], AC_MSG_FAILURE("liqpq is required."))
+  AC_CHECK_LIB(pq, PQconnectdb, [], AC_MSG_ERROR(libpq.so not found))
+  #AC_CHECK_HEADERS([libpq], [hootFoundLibpqHeaders=yes; break;])
 
+  #  (header-file, [action-if-found], [action-if-not-found], [includes])
   # pg 9.5 on ubuntu 14.04
   AC_CHECK_HEADERS([postgresql/libpq-fe.h], [hootFoundLibpqHeaders=yes; break;])
   # pg 9.2 on centos 6.7 (PR job; patty)
