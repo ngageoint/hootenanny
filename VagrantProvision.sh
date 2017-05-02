@@ -263,7 +263,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
+    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
     echo "GDAL: make"
     sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
