@@ -263,7 +263,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
     cd gdal-$GDAL_VERSION
     touch config.rpath
     echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python
+    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
     echo "GDAL: make"
     sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
     echo "GDAL: install"
@@ -290,27 +290,27 @@ source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 # NOTE: These have been changed to pg9.5
 # See if we already have a dB user
-if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER; then
+if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER; then
     echo "### Adding a Services Database user..."
-    sudo -u postgres createuser --superuser $DB_USER
-    sudo -u postgres psql -c "alter user $DB_USER with password '$DB_PASSWORD';"
+    sudo -u postgres createuser --superuser "$DB_USER"
+    sudo -u postgres psql -c "alter user \"$DB_USER\" with password '$DB_PASSWORD';"
 fi
 
 # Check that the OsmApiDb user exists
 # NOTE:
 #  + The OsmAPI Db user _might_ be different to the Hoot Services Db user...
 #  + The SetupOsmApiDB.sh script expects that the DB_USER_OSMAPI account exists
-if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
-    sudo -u postgres createuser --superuser $DB_USER_OSMAPI
-    sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
+if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER_OSMAPI; then
+    sudo -u postgres createuser --superuser "$DB_USER_OSMAPI"
+    sudo -u postgres psql -c "alter user \"$DB_USER_OSMAPI\" with password '$DB_PASSWORD_OSMAPI';"
 fi
 
 
 # Check for a hoot Db
-if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
+if ! sudo -u postgres psql -lqt | awk -F"|" '{print $1}' | grep -iw --quiet $DB_NAME; then
     echo "### Creating Services Database..."
-    sudo -u postgres createdb $DB_NAME --owner=$DB_USER
-    sudo -u postgres createdb wfsstoredb --owner=$DB_USER
+    sudo -u postgres createdb $DB_NAME --owner="$DB_USER"
+    sudo -u postgres createdb wfsstoredb --owner="$DB_USER"
     sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
     sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
