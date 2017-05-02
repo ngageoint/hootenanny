@@ -24,7 +24,7 @@ echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 echo "TEST_NAME: " $TEST_NAME
 
-RUN_DEBUG_STEPS=false
+RUN_DEBUG_STEPS=true
 
 # set to false for testing only
 LOAD_REF_DATA=true

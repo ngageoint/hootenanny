@@ -51,8 +51,7 @@ public:
    */
   PoiPolygonMerger(const set< pair<ElementId, ElementId> >& pairs);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced);
 
   /**
    * Merges a single POI with a single polygon, both as defined by PoiPolygonMerger

@@ -42,8 +42,7 @@ public:
    */
   BuildingMerger(const set< pair<ElementId, ElementId> >& pairs);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced);
 
   static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const set<ElementId>& eids);
 

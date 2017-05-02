@@ -43,7 +43,7 @@ public:
   ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
     const set<pair<ElementId, ElementId> > &pairs);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
+  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced);
 
   /**
    * Returns true if the plugin has a function with the specified name.

@@ -273,6 +273,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   {
     cout << endl;
   }
+
+  if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+  {
+    _mapUnknownIdsBackToModifiedElements(map);
+  }
+
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();
   // free up any used resources.
@@ -289,14 +295,39 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
 
+void UnifyingConflator::_mapUnknownIdsBackToModifiedElements(OsmMapPtr& map)
+{
+  for (size_t i = 0; i < _mergers.size(); ++i)
+  {
+    set< pair<ElementId, ElementId> > impactedUnknown1ElementIds =
+      _mergers[i]->getImpactedUnknown1ElementIds();
+    for (set< pair<ElementId, ElementId> >::const_iterator it = impactedUnknown1ElementIds.begin();
+         it != impactedUnknown1ElementIds.end(); ++it)
+    {
+      ElementId eid1 = it->first;
+      ElementId eid2 = it->second;
+      LOG_VARD(eid1);
+      LOG_VARD(eid2);
+
+      if (eid1.getType() == eid2.getType())
+      {
+        LOG_DEBUG("Setting " << eid1.getId() << " on " << eid2.getId() << "...");
+        ElementPtr replacementElement = map->getElement(eid2);
+        LOG_VARD(replacementElement->getElementId().getType());
+        ElementPtr newUnknown1Element(replacementElement->clone());
+        newUnknown1Element->setId(eid1.getId());
+        map->replace(replacementElement, newUnknown1Element);
+      }
+    }
+  }
+}
+
 void UnifyingConflator::_mapElementIdsToMergers()
 {
   _e2m.clear();
-
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
     set<ElementId> impacted = _mergers[i]->getImpactedElementIds();
-
     for (set<ElementId>::const_iterator it = impacted.begin(); it != impacted.end(); ++it)
     {
       _e2m[*it].push_back(_mergers[i]);

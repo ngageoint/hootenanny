@@ -144,6 +144,8 @@ private:
 
   void _printMatches(vector<const Match*> matches);
   void _printMatches(vector<const Match*> matches, const MatchType& typeFilter);
+
+  void _mapUnknownIdsBackToModifiedElements(OsmMapPtr& map);
 };
 
 }

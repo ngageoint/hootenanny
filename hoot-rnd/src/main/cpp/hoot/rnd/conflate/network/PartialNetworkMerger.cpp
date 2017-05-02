@@ -71,7 +71,7 @@ void PartialNetworkMerger::_appendSublineMappings(
 }
 
 void PartialNetworkMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+                                 vector< pair<ElementId, ElementId> >& replaced)
 {
   _mergerList.clear();
 

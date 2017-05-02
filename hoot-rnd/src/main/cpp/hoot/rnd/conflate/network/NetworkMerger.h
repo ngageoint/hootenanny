@@ -53,7 +53,7 @@ public:
   NetworkMerger(const set< pair<ElementId, ElementId> >& pairs, ConstEdgeMatchPtr edgeMatch,
     ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
+  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced);
 
   virtual QString toString() const;
 

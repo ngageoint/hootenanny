@@ -111,6 +111,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
   ScoredMatch scoredResult = _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1,
     reversed2);
+  LOG_VARD(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
   try
@@ -227,10 +228,12 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestM
 
   if ((i == ways1.size() || ways1.size() == 1) && j == ways2.size())
   {
+    LOG_DEBUG("test2");
     return _evaluateMatch(map, maxDistance, ways1, ways2, reversed1, reversed2);
   }
   else if (j == ways2.size())
   {
+    LOG_DEBUG("test3");
     reversed1[i] = true;
     ScoredMatch r1 = _findBestMatch(map, maxDistance, ways1, ways2, reversed1, reversed2, i + 1, j);
     reversed1[i] = false;
@@ -248,6 +251,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestM
   }
   else
   {
+    LOG_DEBUG("test4");
     reversed2[j] = true;
     ScoredMatch r1 = _findBestMatch(map, maxDistance, ways1, ways2, reversed1, reversed2, i, j + 1);
     reversed2[j] = false;

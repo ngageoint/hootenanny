@@ -53,7 +53,7 @@ public:
   PartialNetworkMerger(const set<pair<ElementId, ElementId> > &pairs,
     QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
+  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced);
 
   /**
    * Maps from a retired EID to its latest EID. If this EID has no mapping then the original EID

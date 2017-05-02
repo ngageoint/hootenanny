@@ -152,9 +152,8 @@ bool WaySublineMatchString::isValid() const
     for (size_t i = 0; i < _matches.size(); i++)
     {
       const WaySublineMatch& m = _matches[i];
-      //TODO: change back to trace
-      LOG_VARD(m.getSubline1());
-      LOG_VARD(m.getSubline2());
+      LOG_VART(m.getSubline1());
+      LOG_VART(m.getSubline2());
       if (m.getSubline1().isZeroLength() || m.getSubline2().isZeroLength())
       {
         return false;
