@@ -22,33 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
-import org.junit.Ignore;
 import org.junit.Test;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 public class ExternalCommandManagerImplTest {
 
-    @Ignore
-    @Test
-    public void getProgress() throws Exception {
-        throw new NotImplementedException();
-    }
-
-    @Ignore
-    @Test
-    public void terminate() throws Exception {
-        throw new NotImplementedException();
-    }
-
-    @Ignore
     @Test
     public void exec() throws Exception {
-        throw new NotImplementedException();
     }
 }

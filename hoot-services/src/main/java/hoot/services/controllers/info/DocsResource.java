@@ -59,8 +59,7 @@ public class DocsResource {
     @Path("/export")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response exportDoc() {
-        String documentPath = HOME_FOLDER + "/" + "docs" + "/" + DOC_NAME;
-        File out = new File(documentPath);
+        File out = new File(new File(HOME_FOLDER, "docs"), DOC_NAME);
 
         ResponseBuilder responseBuilder = Response.ok(out, "application/pdf");
         responseBuilder.header("Content-Disposition", "attachment; filename=" + DOC_NAME);

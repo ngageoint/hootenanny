@@ -26,8 +26,12 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.CONFLATE_MAKEFILE_PATH;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -40,50 +44,62 @@ public class ConflateCommandTest {
     @Test
     @Category(UnitTest.class)
     public void testCreateConflateCommand() {
-        String params = "{\"INPUT1_TYPE\":\"DB\"," +
-                "\"INPUT1\":\"DcGisRoads\"," +
-                "\"INPUT2_TYPE\":\"DB\"," +
-                "\"INPUT2\":\"DcTigerRoads\"," +
-                "\"OUTPUT_NAME\":\"Merged_Roads_e0d\"," +
-                "\"CONFLATION_TYPE\":\"Reference\"," +
-                "\"MATCH_THRESHOLD\":\"0.6\"," +
-                "\"MISS_THRESHOLD\":\"0.6\"," +
-                "\"USER_EMAIL\":\"test@test.com\"," +
-                "\"COLLECT_STATS\":\"false\"}";
+        String jobId = UUID.randomUUID().toString();
 
-        ConflateCommand conflateCommand = new ConflateCommandFactory().build(params, null, this.getClass());
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setUserEmail("test@test.com");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
 
-        String expectedCommandArgs =
-                "[{\"MISS_THRESHOLD\":\"0.6\"}," +
-                 "{\"INPUT1\":\"DcGisRoads\"}," +
-                 "{\"CONFLATION_TYPE\":\"Reference\"}," +
-                 "{\"USER_EMAIL\":\"test@test.com\"}," +
-                 "{\"OUTPUT_NAME\":\"Merged_Roads_e0d\"}," +
-                 "{\"MATCH_THRESHOLD\":\"0.6\"}," +
-                 "{\"INPUT2\":\"DcTigerRoads\"}," +
-                 "{\"COLLECT_STATS\":\"false\"}," +
-                 "{\"INPUT1_TYPE\":\"DB\"}," +
-                 "{\"INPUT2_TYPE\":\"DB\"}," +
-                 "{\"DB_URL\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\"}," +
-                 "{\"OSM_API_DB_URL\":\"osmapidb:\\/\\/${OSMAPI_DB_USER}:${OSMAPI_DB_PASSWORD}@${OSMAPI_DB_HOST}:${OSMAPI_DB_PORT}\\/${OSMAPI_DB_NAME}\"}]";
+        List<String> advancedOptions = new LinkedList<>();
+        advancedOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
+                "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
+                "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
+                "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
+                "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                "hoot::NoInformationElementRemover\"");
 
-        String actualCommandArgs = conflateCommand.get("params").toString();
+        conflateParams.setAdvancedOptions(advancedOptions.stream().collect(Collectors.joining(" ")));
 
-        assertEquals(expectedCommandArgs, actualCommandArgs);
+        String debugLevel = "error";
 
-        String actualCaller = (String) conflateCommand.get("caller");
-        String expectedCaller = this.getClass().getName();
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
 
-        assertEquals(expectedCaller, actualCaller);
+        assertEquals(jobId, conflateCommand.getJobId());
+        assertEquals(true, conflateCommand.getTrackable());
+        assertNotNull(conflateCommand.getSubstitutionMap());
+        assertNotNull(conflateCommand.getWorkDir());
+        assertNotNull(conflateCommand.getCommand());
 
-        String actualExecType = (String) conflateCommand.get("exectype");
-        String expectedExecType = "make";
+        String expectedCommand = "hoot conflate --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${STATS}";
+        assertEquals(expectedCommand, conflateCommand.getCommand());
 
-        assertEquals(expectedExecType, actualExecType);
+        assertTrue(conflateCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
+        assertEquals(debugLevel, conflateCommand.getSubstitutionMap().get("DEBUG_LEVEL"));
 
-        String actualScriptName = (String) conflateCommand.get("exec");
-        String expectedScriptName = CONFLATE_MAKEFILE_PATH;
+        assertTrue(conflateCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
+        assertEquals("[-D, osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor, " +
+                              "-D, writer.include.conflate.score.tags=true, " +
+                              "-D, hootapi.db.writer.overwrite.map=true, " +
+                              "-D, hootapi.db.writer.create.user=true, " +
+                              "-D, writer.text.status=true, " +
+                              "-D, api.db.email=test@test.com, " +
+                              "-D, \"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
+                                    "hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;" +
+                                    "hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;" +
+                                    "hoot::DualWaySplitter;hoot::ImpliedDividedMarker;" +
+                                    "hoot::DuplicateNameRemover;hoot::SmallWayMerger;" +
+                                    "hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;" +
+                                    "hoot::NoInformationElementRemover\"]",
+                conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString());
 
-        assertEquals(expectedScriptName, actualScriptName);
+        assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads", conflateCommand.getSubstitutionMap().get("INPUT1"));
+        assertEquals("hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads", conflateCommand.getSubstitutionMap().get("INPUT2"));
     }
 }
