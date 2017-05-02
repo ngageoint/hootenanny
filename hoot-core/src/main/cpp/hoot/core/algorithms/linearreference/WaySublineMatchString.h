@@ -121,18 +121,7 @@ public:
    */
   bool touches(const WaySublineMatchString& other) const;
 
-  QString toString() const
-  {
-    QString result;
-    result += QString("matches:\n");
-    QStringList l;
-    for (size_t i = 0; i < _matches.size(); i++)
-    {
-      l.append(_matches[i].toString());
-    }
-    result += l.join("\n");
-    return result;
-  }
+  QString toString() const;
 
 private:
   MatchCollection _matches;

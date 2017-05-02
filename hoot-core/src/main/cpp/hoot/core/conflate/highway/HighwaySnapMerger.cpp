@@ -210,6 +210,10 @@ void HighwaySnapMerger::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, El
 void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId> > &replaced) const
 {
+  //TODO: change back to trace
+  LOG_VARD(eid1);
+  LOG_VARD(eid2);
+
   OsmMapPtr result = map;
 
   ElementPtr e1 = result->getElement(eid1);
@@ -226,7 +230,16 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // this in the conflict code at this time, so we'll ignore the merge.
   if (!e1 || !e2)
   {
-    LOG_TRACE("Missing match pair");
+    //TODO: change back to trace
+    LOG_DEBUG("Missing match pair.");
+    if (!e1)
+    {
+      LOG_DEBUG(eid1 << " is missing.");
+    }
+    if (!e2)
+    {
+      LOG_DEBUG(eid2 << " is missing.");
+    }
     _markNeedsReview(result, e1, e2, "Missing match pair", HighwayMatch::getHighwayMatchName());
     return;
   }
@@ -251,11 +264,17 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     return;
   }
 
+  //TODO: change back to trace
+  LOG_VARD(match);
   if (!match.isValid())
   {
-    LOG_TRACE("Complex conflict causes an empty match");
-    _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
-                     HighwayMatch::getHighwayMatchName());
+    //TODO: this is probably bad
+    //if (!ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+    //{
+      LOG_DEBUG("Complex conflict causes an empty match");
+      _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
+                       HighwayMatch::getHighwayMatchName());
+    //}
     return;
   }
 
@@ -277,11 +296,11 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
 
-  LOG_VART(eid1);
-  LOG_VART(e1Match->getElementId());
+  //TODO: change back to trace
+  LOG_VARD(e1Match->getElementId());
   if (scraps1)
   {
-    LOG_VART(scraps1->getElementId());
+    LOG_VARD(scraps1->getElementId());
   }
 
   // remove the old way that was split and snapped
@@ -306,10 +325,19 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         scraps1->getElementId().getType() != ElementType::Relation &&
         map->containsElement(scraps1->getElementId()))
     {
-      LOG_TRACE("Setting " << eid1.getId() << " on " << scraps1->getElementId() << "...");
+      LOG_DEBUG("Setting " << eid1.getId() << " on " << scraps1->getElementId() << "...");
       ElementPtr newScraps1Element(map->getElement(scraps1->getElementId())->clone());
       newScraps1Element->setId(eid1.getId());
+      //replaced.push_back(pair<ElementId, ElementId>(splitee->getElementId(), scrap->getElementId()));
       map->replace(map->getElement(scraps1->getElementId()), newScraps1Element);
+      LOG_VARD(replaced.size());
+      if (replaced.size() > 0)
+      {
+        //LOG_VARD(replaced.end());
+        //LOG_VARD(replaced.at(replaced.size() - 2));
+        replaced.erase(replaced.end() - 1);
+      }
+      //replaced.push_back(pair<ElementId, ElementId>(eid1, eid1));
       unknown1IdRetained = true;
     }
     //this 'else if' could possibly become an 'else'
@@ -317,24 +345,31 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
              e1Match->getElementId().getType() != ElementType::Relation &&
              map->containsElement(e1Match->getElementId()))
     {
-      LOG_TRACE("Setting " << eid1.getId() << " on " << e1Match->getElementId() << "...");
+      LOG_DEBUG("Setting " << eid1.getId() << " on " << e1Match->getElementId() << "...");
       ElementPtr newE1MatchElement(map->getElement(e1Match->getElementId())->clone());
       newE1MatchElement->setId(eid1.getId());
       map->replace(map->getElement(e1Match->getElementId()), newE1MatchElement);
+      //LOG_VARD(replaced);
+      LOG_VARD(replaced.size());
+      if (replaced.size() > 0)
+      {
+        //LOG_VARD(replaced.end());
+        //LOG_VARD(replaced.at(replaced.size() - 2));
+        replaced.erase(replaced.end() - 1);
+      }
       unknown1IdRetained = true;
     }
     if (unknown1IdRetained)
     {
       assert(map->containsElement(eid1));
     }
-    LOG_VART(map->containsElement(eid1));
+    LOG_VARD(map->containsElement(eid1));
   }
 
-  LOG_VART(eid2);
-  LOG_VART(e2Match->getElementId());
+  LOG_VARD(e2Match->getElementId());
   if (scraps2)
   {
-    LOG_VART(scraps2->getElementId());
+    LOG_VARD(scraps2->getElementId());
   }
 
   // if there is something left to review against
