@@ -614,7 +614,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
      * x----x-w1;w2-x----x
      */
     else if (splitee->getElementType() == ElementType::Way &&
-        scrap->getElementType() == ElementType::Relation)
+             scrap->getElementType() == ElementType::Relation)
     {
       RelationPtr r = dynamic_pointer_cast<Relation>(scrap);
       // make sure none of the child ways have tags.

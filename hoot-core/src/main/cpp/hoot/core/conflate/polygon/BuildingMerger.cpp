@@ -160,7 +160,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 
     set< pair<ElementId, ElementId> > replacedSet;
     for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
-      it != _pairs.end(); ++it)
+         it != _pairs.end(); ++it)
     {
       // if we replaced the second group of buildings
       if (it->second != keeper->getElementId())

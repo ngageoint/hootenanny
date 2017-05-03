@@ -152,7 +152,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
   ////
-  // treat the map as read only while we determine building parts.
+  /// treat the map as read only while we determine building parts.
   ////
   _ds.clear();
   _map = map;
@@ -210,7 +210,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   }
 
   ////
-  // Time to start making changes to the map.
+  /// Time to start making changes to the map.
   ////
 
   // go through each of the grouped buildings

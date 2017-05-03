@@ -149,9 +149,9 @@ void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1,boost:
 
 void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 {
-  if(e->getElementType() != ElementType::Node)
+  if (e->getElementType() != ElementType::Node)
   {
-   boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
+    boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
     visit(ee);
   }
 }

@@ -71,7 +71,7 @@ public:
 
       HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);
       HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::Modify]);
-      HOOT_STR_EQUALS("[3]{-6, -4, -1}", changeTypeToIds[Change::Delete]);
+      HOOT_STR_EQUALS("[2]{-6, -1}", changeTypeToIds[Change::Delete]);
     }
 };
 

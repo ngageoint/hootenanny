@@ -90,7 +90,7 @@ void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
 
       // if the way is smaller than the threshold
       if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) &&
-        ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
+          ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
       {
         _mergeNeighbors(w);
       }
@@ -179,7 +179,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       LOG_TRACE("w1: " << w1->toString());
       LOG_TRACE("w2: " << w2->toString());
       throw HootException("The ends of the ways don't touch. "
-                    "Did you run the intersection splitter first?");
+                          "Did you run the intersection splitter first?");
     }
 
     // if the ways share both ends (circle) then this causes bad weird things to happen so

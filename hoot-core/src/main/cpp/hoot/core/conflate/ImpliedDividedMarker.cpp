@@ -127,7 +127,6 @@ boost::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
     }
   }
 
-
   _result.reset();
   return result;
 }
