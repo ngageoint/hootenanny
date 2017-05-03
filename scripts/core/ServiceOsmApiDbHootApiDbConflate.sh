@@ -66,14 +66,14 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 3: Reading the complete reference dataset out of the osm api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D writer.include.circular.error=false $OSM_API_DB_URL $OUTPUT_DIR/3-ref-complete-PulledFromOsmApiDb.osm
+  hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/3-ref-complete-PulledFromOsmApiDb.osm
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 4: Reading the subset AOI reference dataset out of the osm api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI -D writer.include.circular.error=false $OSM_API_DB_URL $OUTPUT_DIR/4-ref-subset-PulledFromOsmApiDb.osm
+  hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/4-ref-subset-PulledFromOsmApiDb.osm
 fi
 
 if [ "$LOAD_SEC_DATA" == "true" ]; then
@@ -116,15 +116,15 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 9: Reading the complete conflated dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D writer.include.circular.error=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/9-conflated-complete-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/9-conflated-complete-PulledFromHootApiDb.osm
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 10: Reading the subset AOI conflated dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  #hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI -D writer.include.circular.error=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-subset-PulledFromHootApiDb.osm
-  hoot convert $HOOT_OPTS -D writer.include.circular.error=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-subset-PulledFromHootApiDb.osm
+  #hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-subset-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-subset-PulledFromHootApiDb.osm
 fi
 
 echo ""
@@ -142,13 +142,13 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 13: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D writer.include.circular.error=false -D convert.bounding.box=$AOI $OSM_API_DB_URL $OUTPUT_DIR/13-subset-output-PulledFromOsmApiDb.osm
+  hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false -D convert.bounding.box=$AOI $OSM_API_DB_URL $OUTPUT_DIR/13-subset-output-PulledFromOsmApiDb.osm
 fi
 
 echo ""
 echo "STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying it..."
 echo ""
-hoot convert $HOOT_OPTS -D writer.include.circular.error=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 hoot is-match test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 
 

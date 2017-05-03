@@ -86,7 +86,7 @@ void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
   _generalizer.reset(new RdpWayGeneralizer(_map->shared_from_this(), _epsilon));
 }
 
-void PertyWayGeneralizeVisitor::visit(const shared_ptr<Element>& element)
+void PertyWayGeneralizeVisitor::visit(const boost::shared_ptr<Element>& element)
 {
   if (element->getElementType() == ElementType::Way)
   {

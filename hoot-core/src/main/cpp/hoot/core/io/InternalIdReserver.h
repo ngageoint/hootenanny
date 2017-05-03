@@ -28,7 +28,7 @@
 #define INTERNALIDRESERVER_H
 
 // Qt
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 
 namespace hoot
 {

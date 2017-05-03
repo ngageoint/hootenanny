@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NeedsReviewCriterion)
 
-bool NeedsReviewCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool NeedsReviewCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   bool review = ReviewMarker().isNeedsReview(_map, e);
   return review;

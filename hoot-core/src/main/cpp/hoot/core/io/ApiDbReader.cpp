@@ -146,16 +146,24 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      try
       {
-        LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-                 QString::number(element->getId()));
+        //  Try parsing the status in text form
+        element->setStatus(Status::fromString(statusStr));
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      catch (const HootException&)
       {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+                   QString::number(element->getId()));
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      logWarnCount++;
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
@@ -259,7 +267,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   long boundedRelationCount = 0;
 
   LOG_DEBUG("Retrieving node records within the query bounds...");
-  shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
+  boost::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
   QSet<QString> nodeIds;
   while (nodeItr->next())
   {
@@ -280,7 +288,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   {
     LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
     QSet<QString> wayIds;
-    shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
+    boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
     while (wayIdItr->next())
     {
       const QString wayId = QString::number((*wayIdItr).value(0).toLongLong());
@@ -292,7 +300,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     if (wayIds.size() > 0)
     {
       LOG_DEBUG("Retrieving ways by way ID...");
-      shared_ptr<QSqlQuery> wayItr =
+      boost::shared_ptr<QSqlQuery> wayItr =
         _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
       while (wayItr->next())
       {
@@ -307,7 +315,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
       LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
       QSet<QString> additionalWayNodeIds;
-      shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+      boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
         _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
       while (additionalWayNodeIdItr->next())
       {
@@ -327,7 +335,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         nodeIds.unite(additionalWayNodeIds);
         LOG_DEBUG(
           "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
-        shared_ptr<QSqlQuery> additionalWayNodeItr =
+        boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
           _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
         while (additionalWayNodeItr->next())
         {
@@ -342,7 +350,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
     QSet<QString> relationIds;
     assert(nodeIds.size() > 0);
-    shared_ptr<QSqlQuery> relationIdItr =
+    boost::shared_ptr<QSqlQuery> relationIdItr =
       _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
     while (relationIdItr->next())
     {
@@ -365,7 +373,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     if (relationIds.size() > 0)
     {
       LOG_DEBUG("Retrieving relations by relation ID...");
-      shared_ptr<QSqlQuery> relationItr =
+      boost::shared_ptr<QSqlQuery> relationItr =
         _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
       while (relationItr->next())
       {

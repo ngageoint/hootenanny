@@ -1310,6 +1310,38 @@ mgcp = {
             attrs.TEXT = JSON.stringify(tmpAttrs);
         }
 
+        // Add Weather Restrictions to transportation features
+        if (['AP010','AP030','AP050'].indexOf(attrs.FCODE > -1) && !attrs.WTC )
+        {
+            switch (tags.highway)
+            {
+                case 'motorway':
+                case 'motorway_link':
+                case 'trunk':
+                case 'trunk_link':
+                case 'primary':
+                case 'primary_link':
+                case 'secondary':
+                case 'secondary_link':
+                case 'tertiary':
+                case 'tertiary_link':
+                case 'residential':
+                case 'unclassified':
+                    attrs.WTC = '1'; // All weather
+                    break;
+
+                case 'path':
+                case 'track':
+                    attrs.WTC = '2'; // Fair weather
+                    break;
+            }
+
+            // Use the road surface to possibly override the classification.
+            // We are assumeing that unpaved roads are Fair Weather only
+            if (attrs.RST == '1') attrs.WTC = '1'; // Hard Paved surface
+            if (attrs.RST == '2') attrs.WTC = '2'; // Unpaved surface
+        }
+
         // Additional rules for particular FCODE's
         switch (attrs.F_CODE)
         {

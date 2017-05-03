@@ -83,7 +83,7 @@ public:
    */
   virtual void addElement(const ConstElementPtr& e);
 
-  virtual void apply(const shared_ptr<OsmMap>& map);
+  virtual void apply(const OsmMapPtr& map);
 
 private:
   ElementId _from, _to;

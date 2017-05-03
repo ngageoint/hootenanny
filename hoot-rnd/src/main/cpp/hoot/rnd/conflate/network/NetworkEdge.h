@@ -83,8 +83,8 @@ private:
   QList<ConstElementPtr> _members;
 };
 
-typedef shared_ptr<NetworkEdge> NetworkEdgePtr;
-typedef shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
+typedef boost::shared_ptr<NetworkEdge> NetworkEdgePtr;
+typedef boost::shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
 
 // not implemented
 bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);

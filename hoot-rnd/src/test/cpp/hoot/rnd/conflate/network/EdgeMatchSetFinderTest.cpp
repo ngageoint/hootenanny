@@ -57,7 +57,7 @@ public:
     OsmMapPtr copy(new OsmMap(map));
 
     MapProjector::projectToWgs84(copy);
-    conf().set(ConfigOptions().getWriterIncludeDebugKey(), true);
+    conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
     OsmMapWriterFactory::getInstance().write(copy, QString("tmp/dum.osm"));
   }
 

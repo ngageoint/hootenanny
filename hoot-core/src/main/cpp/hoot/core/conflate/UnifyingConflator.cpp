@@ -66,7 +66,7 @@ UnifyingConflator::UnifyingConflator() :
   _reset();
 }
 
-UnifyingConflator::UnifyingConflator(shared_ptr<MatchThreshold> matchThreshold) :
+UnifyingConflator::UnifyingConflator(boost::shared_ptr<MatchThreshold> matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance())
 {
@@ -91,7 +91,7 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
 
 void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const Match*>& matches)
 {
-  if (ConfigOptions(_settings).getConflateAddScoreTags())
+  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
   {
     for (size_t i = 0; i < matches.size(); i++)
     {
@@ -116,7 +116,7 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const 
   }
 }
 
-void UnifyingConflator::apply(shared_ptr<OsmMap>& map)
+void UnifyingConflator::apply(OsmMapPtr& map)
 {
   Timer timer;
   _reset();

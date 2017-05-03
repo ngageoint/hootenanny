@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MANIPULATION_H
@@ -76,19 +76,19 @@ public:
    * @param newElements Set of all substantive elements created by this manipulation. Nodes that
    *  make up a road don't need to be included.
    */
-  virtual void applyManipulation(shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
+  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
                                                set<ElementId>& newElements) const = 0;
 
   /**
    * Calculates an approximation of the probability of this being a valid match.
    */
-  virtual double calculateProbability(shared_ptr<const OsmMap> map) const = 0;
+  virtual double calculateProbability(ConstOsmMapPtr map) const = 0;
 
   /**
    * Returns the exact score delta for the given map. This should always be less than or equal to
    * the estimate.
    */
-  virtual double calculateScore(shared_ptr<const OsmMap> map) const = 0;
+  virtual double calculateScore(ConstOsmMapPtr map) const = 0;
 
   /**
    * Returns all the elements that are significantly impacted by this manipulation. If the way is
@@ -111,7 +111,7 @@ public:
   /**
    * Returns true if this manipulation is a valid option on the given input map.
    */
-  virtual bool isValid(shared_ptr<const OsmMap> map) const = 0;
+  virtual bool isValid(ConstOsmMapPtr map) const = 0;
 
   bool operator<(const Manipulation& other) const
   {
@@ -125,7 +125,7 @@ public:
 
   virtual QString toString() const { return QString(); }
 
-  virtual void updateEstimate(shared_ptr<const OsmMap> map) { _estimate = calculateScore(map); }
+  virtual void updateEstimate(ConstOsmMapPtr map) { _estimate = calculateScore(map); }
 
 protected:
   bool _addBogusReviewTags;
@@ -139,8 +139,8 @@ struct GreaterThanManipulation
     return a.getScoreEstimate() > b.getScoreEstimate();
   }
 
-  bool operator() (const shared_ptr<const Manipulation>& a,
-                   const shared_ptr<const Manipulation>& b)
+  bool operator() (const boost::shared_ptr<const Manipulation>& a,
+                   const boost::shared_ptr<const Manipulation>& b)
   {
     return a->getScoreEstimate() > b->getScoreEstimate();
   }
@@ -153,8 +153,8 @@ struct LessThanManipulation
     return a.getScoreEstimate() < b.getScoreEstimate();
   }
 
-  bool operator() (const shared_ptr<const Manipulation>& a,
-                   const shared_ptr<const Manipulation>& b)
+  bool operator() (const boost::shared_ptr<const Manipulation>& a,
+                   const boost::shared_ptr<const Manipulation>& b)
   {
     return a->getScoreEstimate() < b->getScoreEstimate();
   }
@@ -162,13 +162,13 @@ struct LessThanManipulation
 
 struct ManipulationHolder
 {
-  ManipulationHolder(shared_ptr<Manipulation> m, double score)
+  ManipulationHolder(boost::shared_ptr<Manipulation> m, double score)
   {
     this->m = m;
     this->score = score;
   }
 
-  shared_ptr<Manipulation> m;
+  boost::shared_ptr<Manipulation> m;
   double score;
 
   bool operator() (const ManipulationHolder& a, const ManipulationHolder& b)

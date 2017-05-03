@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMMAPINDEX_H
@@ -51,11 +51,11 @@ class OsmMapIndex : public ElementListener
 public:
   OsmMapIndex(const OsmMap& map);
 
-  void addNode(shared_ptr<const Node> n);
+  void addNode(ConstNodePtr n);
 
-  void addRelation(const shared_ptr<const Relation>& r);
+  void addRelation(const ConstRelationPtr& r);
 
-  void addWay(shared_ptr<const Way> w);
+  void addWay(ConstWayPtr w);
 
   /**
    * The relation index can be very expensive to maintain when the relations are large. If it
@@ -80,7 +80,7 @@ public:
    * Should run in approximately O(lg(n)).
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
-  std::vector<long> findWayNeighbors(const shared_ptr<const Way>& way, Meters buffer,
+  std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
                                      bool addError = false) const;
 
   /**
@@ -88,7 +88,7 @@ public:
    */
   std::vector<long> findWayNeighbors(Coordinate& from, Meters buffer) const;
 
-  std::vector<long> findWayNeighborsBruteForce(shared_ptr<const Way> way, Meters buffer) const;
+  std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**
    * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
@@ -98,17 +98,17 @@ public:
 
   Meters getIndexSlush() const { return _indexSlush; }
 
-  shared_ptr<NodeToWayMap> getNodeToWayMap() const;
+  boost::shared_ptr<NodeToWayMap> getNodeToWayMap() const;
 
   /**
    * Returns a map that can tell you which relations an element is part of.
    */
-  const shared_ptr<ElementToRelationMap>& getElementToRelationMap() const;
+  const boost::shared_ptr<ElementToRelationMap>& getElementToRelationMap() const;
 
   /**
    * Unlike the way tree the node tree has no approximations built in.
    */
-  shared_ptr<const HilbertRTree> getNodeTree() const;
+  boost::shared_ptr<const HilbertRTree> getNodeTree() const;
 
   /**
    * Get all the direct parents of a given element. This will not return grand parents, etc.
@@ -117,7 +117,7 @@ public:
 
   const vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
 
-  shared_ptr<const HilbertRTree> getWayTree() const;
+  boost::shared_ptr<const HilbertRTree> getWayTree() const;
 
   /**
    * This gets called before an element changes. Between this call and the call to
@@ -127,11 +127,11 @@ public:
 
   virtual void postGeometryChange(Element* element);
 
-  void removeNode(shared_ptr<const Node> n);
+  void removeNode(ConstNodePtr n);
 
-  void removeRelation(const shared_ptr<const Relation>& r);
+  void removeRelation(const ConstRelationPtr& r);
 
-  void removeWay(shared_ptr<const Way> w);
+  void removeWay(ConstWayPtr w);
 
   void reset();
 
@@ -154,11 +154,11 @@ private:
 
   mutable set<long> _pendingRelationChange;
 
-  mutable shared_ptr<HilbertRTree> _nodeTree;
-  mutable shared_ptr<HilbertRTree> _wayTree;
+  mutable boost::shared_ptr<HilbertRTree> _nodeTree;
+  mutable boost::shared_ptr<HilbertRTree> _wayTree;
 
-  mutable shared_ptr<NodeToWayMap> _nodeToWayMap;
-  mutable shared_ptr<ElementToRelationMap> _elementToRelationMap;
+  mutable boost::shared_ptr<NodeToWayMap> _nodeToWayMap;
+  mutable boost::shared_ptr<ElementToRelationMap> _elementToRelationMap;
 
   mutable vector<long> _treeIdToNid;
   mutable vector<long> _treeIdToWid;

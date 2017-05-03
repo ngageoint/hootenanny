@@ -93,9 +93,9 @@ public:
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void write(boost::shared_ptr<const OsmMap> map, const QString& path);
+  void write(ConstOsmMapPtr map, const QString& path);
 
-  virtual void write(boost::shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   /**
    * Remove any invalid characters from the string s and print an error if one is found.
@@ -119,9 +119,9 @@ private:
   static QString _typeName(ElementType e);
 
   void _writeMetadata(QXmlStreamWriter& writer, const Element* e);
-  void _writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
-  void _writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
-  void _writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
+  void _writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer);
+  void _writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer);
+  void _writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer);
 };
 
 } // hoot

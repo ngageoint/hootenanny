@@ -120,7 +120,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
 
     mapId = ids->at(0);
 
@@ -143,7 +143,7 @@ public:
     HOOT_STR_EQUALS(false, database.hasTable(HootApiDb::getCurrentWaysTableName(mapId)));
   }
 
-  const shared_ptr<QList<long> > insertTestMap1(HootApiDb& database)
+  const boost::shared_ptr<QList<long> > insertTestMap1(HootApiDb& database)
   {
     database.transaction();
 
@@ -183,10 +183,10 @@ public:
 
     database.commit();
 
-    return shared_ptr<QList<long> >(new QList<long>(ids));
+    return boost::shared_ptr<QList<long> >(new QList<long>(ids));
   }
 
-  const shared_ptr<QList<long> > insertTestMap2(HootApiDb& database)
+  const boost::shared_ptr<QList<long> > insertTestMap2(HootApiDb& database)
   {
     database.transaction();
 
@@ -239,10 +239,10 @@ public:
 
     database.commit();
 
-    return shared_ptr<QList<long> >(new QList<long>(ids));
+    return boost::shared_ptr<QList<long> >(new QList<long>(ids));
   }
 
-  const shared_ptr<QList<long> > insertTestMapWithCustomTags(HootApiDb& database)
+  const boost::shared_ptr<QList<long> > insertTestMapWithCustomTags(HootApiDb& database)
   {
     QList<long> ids;
     database.transaction();
@@ -270,7 +270,7 @@ public:
 
     database.commit();
 
-    return shared_ptr<QList<long> >(new QList<long>(ids));
+    return boost::shared_ptr<QList<long> >(new QList<long>(ids));
   }
 
   void runInsertTest()
@@ -285,7 +285,7 @@ public:
   {
     HootApiDb database;
     database.open(getDbUrl());
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
 
     mapId = ids->at(0);
     CPPUNIT_ASSERT(database.mapExists(mapId));
@@ -295,7 +295,7 @@ public:
   {
     HootApiDb database;
     database.open(getDbUrl());
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
 
     const long changesetId = ids->at(1);
     CPPUNIT_ASSERT(database.changesetExists(changesetId));
@@ -306,7 +306,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
 
     mapId = ids->at(0);
     CPPUNIT_ASSERT_EQUAL((long)1, database.numElements(ElementType::Node));
@@ -317,7 +317,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long wayId = ids->at(3);
@@ -330,7 +330,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long relationId = ids->at(4);
@@ -345,16 +345,16 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long nodeId = ids->at(2);
     const long wayId = ids->at(3);
     const long relationId = ids->at(4);
 
-    shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
+    boost::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
     int ctr = 0;
     while (nodeResultIterator->next())
     {
@@ -372,7 +372,7 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(1, ctr);
 
-    shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
+    boost::shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
     ctr = 0;
     while (wayResultIterator->next())
     {
@@ -386,7 +386,7 @@ public:
     }
     CPPUNIT_ASSERT_EQUAL(1, ctr);
 
-    shared_ptr<QSqlQuery> relationResultIterator =
+    boost::shared_ptr<QSqlQuery> relationResultIterator =
       database.selectElements(ElementType::Relation);
     ctr = 0;
     while (relationResultIterator->next())
@@ -408,15 +408,15 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    const shared_ptr<QList<long> > ids = insertTestMap2(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap2(database);
     CPPUNIT_ASSERT_EQUAL(8, ids->size());
     mapId = ids->at(0);
     const long nodeId1 = ids->at(2);
     const long nodeId2 = ids->at(3);
 
-    shared_ptr<QSqlQuery> nodeResultIterator =
+    boost::shared_ptr<QSqlQuery> nodeResultIterator =
       database.selectElements(ElementType::Node);
     int ctr = 0;
     while (nodeResultIterator->next())
@@ -445,16 +445,16 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    const shared_ptr<QList<long> > ids = insertTestMapWithCustomTags(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMapWithCustomTags(database);
     CPPUNIT_ASSERT_EQUAL(4, ids->size());
     mapId = ids->at(0);
     const long nodeId1 = ids->at(1);
     const long nodeId2 = ids->at(2);
     const long nodeId3 = ids->at(3);
 
-    shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
+    boost::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
     int ctr = 0;
     while (nodeResultIterator->next())
     {
@@ -507,7 +507,7 @@ public:
     HootApiDb database;
     database.open(getDbUrl());
 
-    const shared_ptr<QList<long> > ids = insertTestMap1(database);
+    const boost::shared_ptr<QList<long> > ids = insertTestMap1(database);
     CPPUNIT_ASSERT_EQUAL(5, ids->size());
     mapId = ids->at(0);
     const long nodeId = ids->at(2);
@@ -549,8 +549,8 @@ public:
     //  this example isn't a Latin string but a UTF-8 string, change the codec temporarily
     QTextCodec* oldCodec = QTextCodec::codecForCStrings();
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-    HOOT_STR_EQUALS("network = DB\nroute = train\nerror:circular = 15\ninterval = 120\nservice = high_speed\nvia = Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\noperator = DB Fernverkehr AG\nhoot:status = 1\nfrom = Berlin Ostbahnhof\nalt_name = ICE11 München\npublic_transport:version = 2\ntype = route\nto = München Hbf\nref = ICE11\nname = ICE 11: Berlin => Frankfurt => München\n",
-          HootApiDb::unescapeTags("\"to\"=>\"München Hbf\", \"ref\"=>\"ICE11\", \"via\"=>\"Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\", \"from\"=>\"Berlin Ostbahnhof\", \"name\"=>\"ICE 11: Berlin => Frankfurt => München\", \"type\"=>\"route\", \"route\"=>\"train\", \"network\"=>\"DB\", \"service\"=>\"high_speed\", \"alt_name\"=>\"ICE11 München\", \"interval\"=>\"120\", \"operator\"=>\"DB Fernverkehr AG\", \"hoot:status\"=>\"1\", \"error:circular\"=>\"15\", \"public_transport:version\"=>\"2\""));
+    HOOT_STR_EQUALS("network = DB\nroute = train\n" + MetadataTags::ErrorCircular() + " = 15\ninterval = 120\nservice = high_speed\nvia = Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\noperator = DB Fernverkehr AG\n" + MetadataTags::HootStatus() + " = 1\nfrom = Berlin Ostbahnhof\nalt_name = ICE11 München\npublic_transport:version = 2\ntype = route\nto = München Hbf\nref = ICE11\nname = ICE 11: Berlin => Frankfurt => München\n",
+          HootApiDb::unescapeTags("\"to\"=>\"München Hbf\", \"ref\"=>\"ICE11\", \"via\"=>\"Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\", \"from\"=>\"Berlin Ostbahnhof\", \"name\"=>\"ICE 11: Berlin => Frankfurt => München\", \"type\"=>\"route\", \"route\"=>\"train\", \"network\"=>\"DB\", \"service\"=>\"high_speed\", \"alt_name\"=>\"ICE11 München\", \"interval\"=>\"120\", \"operator\"=>\"DB Fernverkehr AG\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\", \"public_transport:version\"=>\"2\""));
     QTextCodec::setCodecForCStrings(oldCodec);
   }
 

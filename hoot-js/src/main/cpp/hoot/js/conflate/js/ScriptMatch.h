@@ -51,7 +51,7 @@ public:
 
   static unsigned int logWarnCount;
 
-  ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
+  ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
               const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
               ConstMatchThresholdPtr mt);
 
@@ -77,7 +77,7 @@ public:
 
   Persistent<Object> getPlugin() const { return _plugin; }
 
-  shared_ptr<PluginContext> getScript() const { return _script; }
+ boost::shared_ptr<PluginContext> getScript() const { return _script; }
 
   virtual QString toString() const;
 
@@ -90,7 +90,7 @@ private:
   QString _matchName;
   MatchClassification _p;
   Persistent<Object> _plugin;
-  shared_ptr<PluginContext> _script;
+ boost::shared_ptr<PluginContext> _script;
   QString _explainText;
   typedef pair<ElementId, ElementId> ConflictKey;
   mutable QHash<ConflictKey, bool> _conflicts;

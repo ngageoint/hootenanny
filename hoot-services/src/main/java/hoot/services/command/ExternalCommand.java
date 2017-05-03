@@ -27,23 +27,148 @@
 package hoot.services.command;
 
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import hoot.services.ApplicationContextUtils;
+import hoot.services.HootProperties;
 
 
-public class ExternalCommand extends JSONObject {
+public abstract class ExternalCommand implements Command {
 
-    protected void configureAsBashCommand(String scriptName, Class<?> caller, JSONArray commandArgs) {
-        this.put("exectype", "bash");
-        this.put("exec", scriptName);
-        this.put("caller", caller.getName());
-        this.put("params", commandArgs);
+    private String caller;
+    private String command;
+    private Map<String, ?> substitutionMap;
+    private File workDir;
+    private Boolean trackable;
+
+    private String jobId;
+
+    protected ExternalCommand() {}
+
+    protected ExternalCommand(String jobId) {
+        this.jobId = jobId;
     }
 
-    protected void configureAsMakeCommand(String scriptName, Class<?> caller, JSONArray commandArgs) {
-        this.put("exectype", "make");
-        this.put("exec", scriptName);
-        this.put("caller", caller.getName());
-        this.put("params", commandArgs);
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller) {
+        this.caller = caller.getName();
+        this.command = command;
+        this.substitutionMap = substitutionMap;
+        this.workDir = new File(HootProperties.TEMP_OUTPUT_PATH);
+        this.trackable = Boolean.TRUE;
+    }
+
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller, File workDir) {
+        this.caller = caller.getName();
+        this.command = command;
+        this.substitutionMap = substitutionMap;
+        this.workDir = workDir;
+        this.trackable = Boolean.TRUE;
+    }
+
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller, Boolean trackable) {
+        this.configureCommand(command, substitutionMap, caller);
+        this.trackable = trackable;
+    }
+
+    protected void configureCommand(String command, Map<String, ?> substitutionMap, Class<?> caller, File workDir, Boolean trackable) {
+        this.configureCommand(command, substitutionMap, caller, workDir);
+        this.trackable = trackable;
+    }
+
+    protected void configureCommand(String command, Class<?> caller, Boolean trackable) {
+        this.configureCommand(command, new HashMap<>(), caller);
+        this.trackable = trackable;
+    }
+
+    protected void configureCommand(String command, Class<?> caller, File workDir, Boolean trackable) {
+        this.configureCommand(command, new HashMap<>(), caller, workDir);
+        this.trackable = trackable;
+    }
+
+    protected static List<String> toHootOptions(List<String> options) {
+        List<String> hootOptions = new LinkedList<>();
+        options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });
+        return hootOptions;
+    }
+
+    public String getCaller() {
+        return caller;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public Map<String, ?> getSubstitutionMap() {
+        return substitutionMap;
+    }
+
+    public File getWorkDir() {
+        return workDir;
+    }
+
+    public Boolean getTrackable() {
+        return trackable;
+    }
+
+    public void setCaller(String caller) {
+        this.caller = caller;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public void setSubstitutionMap(Map<String, ?> substitutionMap) {
+        this.substitutionMap = substitutionMap;
+    }
+
+    public void setWorkDir(File workDir) {
+        this.workDir = workDir;
+    }
+
+    public void setTrackable(Boolean trackable) {
+        this.trackable = trackable;
+    }
+
+    @Override
+    public CommandResult execute() {
+        ExternalCommandManager externalCommandManager =
+                ApplicationContextUtils.getApplicationContext().getBean(ExternalCommandManager.class);
+
+        if (externalCommandManager == null) {
+            throw new IllegalStateException("Could not find bean: " + ExternalCommandManager.class.getName());
+        }
+
+        if (this.getJobId() != null) {
+            return externalCommandManager.exec(getJobId(),this);
+        }
+        else {
+            return externalCommandManager.exec(this);
+        }
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    @Override
+    public String toString() {
+        return "ExternalCommand{" +
+                "caller='" + caller + '\'' +
+                ", command='" + command + '\'' +
+                ", substitutionMap=" + substitutionMap +
+                ", workDir=" + workDir +
+                ", trackable=" + trackable +
+                ", jobId='" + jobId + '\'' +
+                '}';
     }
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALOSMMAPREADER_H
 #define PARTIALOSMMAPREADER_H
@@ -54,14 +54,14 @@ public:
   /**
    * The default reads the map and then calls finalizePartial();
    */
-  virtual void read(shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   /**
    * Reads all the entries in the OsmMap.
    *
    * The default read function reads nodes, ways, then relations.
    */
-  virtual void readPartial(shared_ptr<OsmMap> map);
+  virtual void readPartial(OsmMapPtr map);
 
   /**
    * Finalize the reading of partial data. Any connections/files should be closed when this is
@@ -77,7 +77,7 @@ protected:
 
   long _maxElementsPerMap;
   long _elementsRead;
-  shared_ptr<OsmMap> _partialMap;
+  OsmMapPtr _partialMap;
 
 };
 

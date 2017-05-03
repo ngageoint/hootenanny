@@ -61,7 +61,7 @@ public:
 
     // open up both OSM files.
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(args[0], map);
 
@@ -70,7 +70,7 @@ public:
     std::map<Meters, int> m;
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
     {
-      const shared_ptr<Way>& w = it->second;
+      const WayPtr& w = it->second;
       m[w->getCircularError()]++;
     }
 

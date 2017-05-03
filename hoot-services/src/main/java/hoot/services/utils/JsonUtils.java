@@ -28,19 +28,15 @@ package hoot.services.utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -48,65 +44,45 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Various JSON utilities
  */
 public final class JsonUtils {
-
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
 
-    private JsonUtils() {
-    }
+    private JsonUtils() {}
 
-    /**
-     * Converts a POJO to JSON
-     * 
-     * @param obj
-     *            POJO
-     * @return JSON string
-     * @throws IOException
-     */
-    public static String objectToJson(Object obj) throws IOException {
-        StringWriter writer = new StringWriter();
-        try (JsonGenerator jsonGenerator = new JsonFactory().createGenerator(writer)) {
-            jsonGenerator.setCodec(new ObjectMapper());
-            jsonGenerator.writeObject(obj);
+    public static Map<String, String> jsonToMap(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> map;
+        try {
+            map = mapper.readValue(json, new TypeReference<Map<String, String>>(){});
         }
-        return writer.toString();
-    }
-
-    /**
-     * Returns the value of the top level property in the specified JSON without
-     * "'s removed. Use this to return JSON string values.
-     * 
-     * @param fieldName
-     *            name of the value to retrieve
-     * @param json
-     *            JSON to parse
-     * @param retainQuotes
-     *            if true, "'s are left in the parse value; otherwise they are
-     *            removed
-     * @return string value
-     * @throws IOException
-     */
-    public static String getTopLevelValueAsString(String fieldName, String json, boolean retainQuotes)
-            throws IOException {
-        JsonNode root = (new ObjectMapper()).readTree(json).path(fieldName);
-        if (root != null) {
-            String value = root.toString();
-            if (!retainQuotes && (value != null)) {
-                value = value.replaceAll("\"", "");
-            }
-            return value;
+        catch (IOException ioe) {
+            throw new RuntimeException("Error converting JSON to POJO.  JSON: " + json, ioe);
         }
-        return null;
+
+        return map;
     }
 
-    /**
-     *
-     *
-     * @param input
-     * @return String
-     */
-    public static String escapeJson(String input) throws ParseException {
+    public static String pojoToJSON(Object pojo) {
+        ObjectMapper mapper = new ObjectMapper();
+        try (StringWriter stringWriter = new StringWriter()) {
+            mapper.writeValue(stringWriter, pojo);
+            return stringWriter.toString();
+        }
+        catch (IOException ioe) {
+            throw new RuntimeException("Error converting POJO to JSON:  POJO: " + pojo, ioe);
+        }
+    }
+
+    // TODO: re-examine this method's implementation.
+    public static String escapeJson(String input) {
         JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject) parser.parse(input);
+
+        JSONObject json;
+        try {
+            json = (JSONObject) parser.parse(input);
+        }
+        catch (ParseException pe) {
+            throw new RuntimeException("Error parsing JSON : " + input, pe);
+        }
 
         // Special handling of ADV_OPTIONS
         String key = "ADV_OPTIONS";
@@ -121,49 +97,16 @@ public final class JsonUtils {
             // wrap with curly braces and remove trailing comma
             cleanup = "{" + cleanup.substring(0, cleanup.length() - 1) + "}";
 
-            JSONObject obj = (JSONObject) parser.parse(cleanup);
+            JSONObject obj = null;
+            try {
+                obj = (JSONObject) parser.parse(cleanup);
+            }
+            catch (ParseException pe) {
+                throw new RuntimeException("Error parsing JSON: " + cleanup, pe);
+            }
             json.put(key, obj);
         }
 
         return JSONObject.escape(json.toString());
-    }
-
-    public static Map<String, String> paramsToMap(JSONObject command) {
-        JSONArray paramsList = (JSONArray) command.get("params");
-
-        Map<String, String> paramsMap = new HashMap<>();
-        for (Object aParamsList : paramsList) {
-            JSONObject o = (JSONObject) aParamsList;
-            for (Object o1 : o.entrySet()) {
-                Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o1;
-                String key = (String) mEntry.getKey();
-                String val = (String) mEntry.getValue();
-                paramsMap.put(key, val);
-            }
-        }
-
-        return paramsMap;
-    }
-
-    public static JSONArray parseParams(String params) throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONObject command = (JSONObject) parser.parse(params);
-        JSONArray commandArgs = new JSONArray();
-
-        for (Object o : command.entrySet()) {
-            Map.Entry<Object, Object> mEntry = (Map.Entry<Object, Object>) o;
-            String key = (String) mEntry.getKey();
-            String val = (String) mEntry.getValue();
-
-            JSONObject arg = new JSONObject();
-            arg.put(key, val);
-            commandArgs.add(arg);
-        }
-
-        return commandArgs;
-    }
-
-    public static String getParameterValue(String key, JSONObject jsonObject) {
-        return (jsonObject.get(key) != null) ? jsonObject.get(key).toString() : null;
     }
 }

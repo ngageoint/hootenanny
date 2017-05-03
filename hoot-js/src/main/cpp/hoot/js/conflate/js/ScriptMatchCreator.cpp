@@ -47,6 +47,7 @@
 
 // Qt
 #include <QFileInfo>
+#include <qnumeric.h>
 
 // Boost
 #include <boost/bind.hpp>
@@ -77,7 +78,7 @@ class ScriptMatchVisitor : public ElementVisitor
 public:
 
   ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
-    ConstMatchThresholdPtr mt, shared_ptr<PluginContext> script) :
+    ConstMatchThresholdPtr mt,boost::shared_ptr<PluginContext> script) :
     _map(map),
     _result(result),
     _mt(mt),
@@ -125,7 +126,7 @@ public:
   {
   }
 
-  void checkForMatch(const shared_ptr<const Element>& e)
+  void checkForMatch(const boost::shared_ptr<const Element>& e)
   {
     HandleScope handleScope;
     Context::Scope context_scope(_script->getContext());
@@ -178,7 +179,7 @@ public:
     if (obj->Has(cdtKey))
     {
       Local<Value> v = obj->Get(cdtKey);
-      if (v->IsNumber() == false || isnan(v->NumberValue()))
+      if (v->IsNumber() == false || ::qIsNaN(v->NumberValue()))
       {
         throw IllegalArgumentException("Expected " + key + " to be a number.");
       }
@@ -198,7 +199,7 @@ public:
     return getPlugin(_script);
   }
 
-  static Persistent<Object> getPlugin(shared_ptr<PluginContext> script)
+  static Persistent<Object> getPlugin(boost::shared_ptr<PluginContext> script)
   {
     Context::Scope context_scope(script->getContext());
     HandleScope handleScope;
@@ -294,21 +295,21 @@ public:
     LOG_DEBUG("Search radius calculation complete for " << scriptFileInfo.fileName());
   }
 
-  shared_ptr<HilbertRTree>& getIndex()
+ boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368
-      shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+     boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements that have Status::Unknown2 and
-      shared_ptr<StatusCriterion> pC1(new StatusCriterion(Status::Unknown2));
+     boost::shared_ptr<StatusCriterion> pC1(new StatusCriterion(Status::Unknown2));
       boost::function<bool (ConstElementPtr e)> f =
         boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-      shared_ptr<ArbitraryCriterion> pC2(new ArbitraryCriterion(f));
-      shared_ptr<ChainCriterion> pCC(new ChainCriterion());
+     boost::shared_ptr<ArbitraryCriterion> pC2(new ArbitraryCriterion(f));
+     boost::shared_ptr<ChainCriterion> pCC(new ChainCriterion());
       pCC->addCriterion(pC1);
       pCC->addCriterion(pC2);
 
@@ -371,7 +372,7 @@ public:
 private:
 
   // don't hold on to the map.
-  weak_ptr<const OsmMap> _map;
+  boost::weak_ptr<const OsmMap> _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;
@@ -380,11 +381,11 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
   Meters _worstCircularError;
-  shared_ptr<PluginContext> _script;
+ boost::shared_ptr<PluginContext> _script;
   Persistent<v8::Function> _getSearchRadius;
 
   // Used for finding neighbors
-  shared_ptr<HilbertRTree> _index;
+ boost::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 
   double _candidateDistanceSigma;
@@ -498,7 +499,7 @@ MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path
   MatchCreator::Description result;
   result.experimental = true;
 
-  shared_ptr<PluginContext> script(new PluginContext());
+ boost::shared_ptr<PluginContext> script(new PluginContext());
   HandleScope handleScope;
   Context::Scope context_scope(script->getContext());
   script->loadScript(path, "plugin");
@@ -571,7 +572,7 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
   return _matchCandidateChecker->isMatchCandidate(element);
 }
 
-shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
+boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
 {
   if (!_matchThreshold.get())
   {
@@ -598,12 +599,12 @@ shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
 
     if (matchThreshold != -1.0 && missThreshold != -1.0 && reviewThreshold != -1.0)
     {
-      return shared_ptr<MatchThreshold>(
+      return boost::shared_ptr<MatchThreshold>(
         new MatchThreshold(matchThreshold, missThreshold, reviewThreshold));
     }
     else
     {
-      return shared_ptr<MatchThreshold>(new MatchThreshold());
+      return boost::shared_ptr<MatchThreshold>(new MatchThreshold());
     }
   }
   return _matchThreshold;

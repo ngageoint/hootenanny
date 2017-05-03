@@ -52,8 +52,8 @@ public:
 
 protected:
 
-  QHash< int, shared_ptr<OsmPbfWriter> > _writers;
-  QHash< int, shared_ptr<stringstream> > _buffers;
+  QHash< int,boost::shared_ptr<OsmPbfWriter> > _writers;
+  QHash< int,boost::shared_ptr<stringstream> > _buffers;
   Degrees _tileBufferSize;
 
   vector<Envelope> _envelopes;
@@ -63,9 +63,9 @@ protected:
   string _replacmentsPath;
   int _reduceTaskCount;
 
-  void _addNode(const shared_ptr<Node>& n);
+  void _addNode(const NodePtr& n);
 
-  void _addWay(ConstOsmMapPtrR map, const shared_ptr<Way> &w);
+  void _addWay(const ConstOsmMapPtr& map, const WayPtr &w);
 
   /**
    * After each input OsmMap, emit all the data thus far. This reduce memory usage.
@@ -74,11 +74,11 @@ protected:
 
   void _init(HadoopPipes::MapContext& context);
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
-  void _replaceNodes(shared_ptr<OsmMap>& m);
+  void _replaceNodes(OsmMapPtr& m);
 
-  void _replaceNodes(shared_ptr<OsmMap>& m, istream& is);
+  void _replaceNodes(OsmMapPtr& m, istream& is);
 
 };
 

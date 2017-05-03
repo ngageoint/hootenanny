@@ -106,7 +106,7 @@ public:
 
     Envelope env(left, right, bottom, top);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, in, true);
 
     MapCropper::crop(map, env);

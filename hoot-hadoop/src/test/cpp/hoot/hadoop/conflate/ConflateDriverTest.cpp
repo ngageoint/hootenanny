@@ -89,7 +89,7 @@ public:
     uut.conflate(QString::fromStdString(outDir) + "step2.pbf", e, 0.002,
                  QString::fromStdString(outDir) + "result.pbf");
 
-    shared_ptr<OsmMap> map(new OsmMap);
+   OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "result.pbf");
@@ -99,7 +99,7 @@ public:
       LOG_INFO(path);
       if (QString::fromStdString(path).endsWith(".pbf"))
       {
-        shared_ptr<istream> is(fs.open(path));
+       boost::shared_ptr<istream> is(fs.open(path));
         reader.parse(is.get(), map);
       }
     }

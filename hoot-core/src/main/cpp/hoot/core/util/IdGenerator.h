@@ -60,12 +60,12 @@ public:
 
   virtual void ensureWayBounds(long wid) = 0;
 
-  static shared_ptr<IdGenerator> getInstance();
+  static boost::shared_ptr<IdGenerator> getInstance();
 
   virtual void reset() = 0;
 
 private:
-  static shared_ptr<IdGenerator> _theInstance;
+  static boost::shared_ptr<IdGenerator> _theInstance;
 };
 
 typedef boost::shared_ptr<IdGenerator> IdGeneratorPtr;

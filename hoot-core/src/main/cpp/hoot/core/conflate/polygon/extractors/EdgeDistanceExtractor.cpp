@@ -72,11 +72,11 @@ class LinesWaysVisitor : public ElementConstOsmMapVisitor
 public:
   LinesWaysVisitor(vector<Geometry*>& lines) : _lines(lines) {}
 
-  virtual void visit(const shared_ptr<const Element>& e)
+  virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     if (e->getElementType() == ElementType::Way)
     {
-      shared_ptr<const Way> w(dynamic_pointer_cast<const Way>(e));
+      ConstWayPtr w(dynamic_pointer_cast<const Way>(e));
 
       Geometry* ls = ElementConverter(_map->shared_from_this()).convertToLineString(w)->clone();
       _lines.push_back(ls);
@@ -98,7 +98,7 @@ EdgeDistanceExtractor::EdgeDistanceExtractor(ValueAggregator* a, Meters spacing)
 }
 
 vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
-  const shared_ptr<const Element>& e) const
+  const boost::shared_ptr<const Element>& e) const
 {
   vector<Coordinate> result;
 
@@ -110,7 +110,7 @@ vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
 }
 
 double EdgeDistanceExtractor::distance(const OsmMap &map,
-  const shared_ptr<const Element>& target, const shared_ptr<const Element> &candidate) const
+  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element> &candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
   double d2 = _oneDistance(map, candidate, target);
@@ -123,12 +123,12 @@ string EdgeDistanceExtractor::getName() const
   return (QString("EdgeDistance") + _aggregator->toString()).toStdString();
 }
 
-double EdgeDistanceExtractor::_oneDistance(const OsmMap& map, const shared_ptr<const Element>& e1,
-  const shared_ptr<const Element>& e2) const
+double EdgeDistanceExtractor::_oneDistance(const OsmMap& map, const boost::shared_ptr<const Element>& e1,
+  const boost::shared_ptr<const Element>& e2) const
 {
   vector<double> distances;
   vector<Coordinate> points = _discretize(map, e1);
-  shared_ptr<Geometry> g = _toLines(map, e2);
+  boost::shared_ptr<Geometry> g = _toLines(map, e2);
   distances.reserve(points.size());
 
   for (size_t i = 0; i < points.size(); i++)
@@ -145,10 +145,10 @@ double EdgeDistanceExtractor::_oneDistance(const OsmMap& map, const shared_ptr<c
   return _aggregator->aggregate(distances);
 }
 
-shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,
-  const shared_ptr<const Element>& e) const
+boost::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,
+  const boost::shared_ptr<const Element>& e) const
 {
-  shared_ptr<Geometry> result;
+  boost::shared_ptr<Geometry> result;
   vector<Geometry*> lines;
 
   if (e->getElementType() != ElementType::Node)

@@ -74,8 +74,8 @@ import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
 import hoot.services.models.osm.RelationMember;
 import hoot.services.utils.DbUtils;
+import hoot.services.utils.GeoUtils;
 import hoot.services.utils.PostgresUtils;
-import hoot.services.utils.QuadTileCalculator;
 import hoot.services.utils.XmlUtils;
 
 
@@ -139,7 +139,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -156,7 +156,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -170,7 +170,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -184,7 +184,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[4], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -525,7 +525,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -545,7 +545,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double((originalBounds.getMaxLon())), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -560,7 +560,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -580,7 +580,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[3], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -903,7 +903,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -919,7 +919,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -931,7 +931,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -943,7 +943,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[4], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -1263,7 +1263,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -1280,7 +1280,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -1292,7 +1292,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -1304,7 +1304,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLat()), nodeRecord.getLatitude());
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[4], nodeRecord.getId());
-        assertEquals(new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+        assertEquals(new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2133,7 +2133,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2567,7 +2567,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2587,7 +2587,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2602,7 +2602,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2617,7 +2617,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[3], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2635,7 +2635,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[4], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2823,7 +2823,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2843,7 +2843,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2858,7 +2858,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -2875,7 +2875,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[4], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -3072,7 +3072,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[0], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -3091,7 +3091,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMaxLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[1], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -3105,7 +3105,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[2], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());
@@ -3122,7 +3122,7 @@ public class ChangesetResourceUploadDeleteTest extends OSMResourceTestAbstract {
         assertEquals(new Double(originalBounds.getMinLon()), nodeRecord.getLongitude());
         assertEquals(nodeIdsArr[4], nodeRecord.getId());
         assertEquals(
-                new Long(QuadTileCalculator.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
+                new Long(GeoUtils.tileForPoint(nodeRecord.getLatitude(), nodeRecord.getLongitude())),
                 nodeRecord.getTile());
         assertTrue(nodeRecord.getTimestamp().before(now));
         assertEquals(new Long(1), nodeRecord.getVersion());

@@ -42,15 +42,15 @@ class Way;
 class WayAverager
 {
 public:
-  WayAverager(OsmMapPtr map, shared_ptr<Way> w1, shared_ptr<Way> w2);
+  WayAverager(OsmMapPtr map, WayPtr w1, WayPtr w2);
 
   /**
    * Averages the two input ways into a new output way. The two input ways are removed from their
    * containing map.
    */
-  shared_ptr<Way> average();
+  WayPtr average();
 
-  static shared_ptr<Way> average(OsmMapPtr map, shared_ptr<Way> w1, shared_ptr<Way> w2);
+  static WayPtr average(OsmMapPtr map, WayPtr w1, WayPtr w2);
 
   /**
    * Returns the maximum distance that w1 moved.
@@ -75,8 +75,8 @@ public:
   Meters getMeanMovement2() { return _meanMovement2; }
 
 protected:
-  shared_ptr<Way> _w1;
-  shared_ptr<Way> _w2;
+  WayPtr _w1;
+  WayPtr _w2;
   OsmMap& _map;
   Meters _meanMovement1, _meanMovement2;
   Meters _sumMovement1, _sumMovement2;

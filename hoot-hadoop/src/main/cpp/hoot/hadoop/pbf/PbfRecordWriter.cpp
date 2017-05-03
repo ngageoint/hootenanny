@@ -62,12 +62,12 @@ void PbfRecordWriter::emit(const string&, const string&)
   LOG_WARN("Emit is not supported with this record writer. Use emitRecord.");
 }
 
-void PbfRecordWriter::emitRecord(const shared_ptr<const Node>& n)
+void PbfRecordWriter::emitRecord(const ConstNodePtr& n)
 {
   _OsmPbfWriter->writePartial(n);
 }
 
-void PbfRecordWriter::emitRecord(shared_ptr<OsmMap> map)
+void PbfRecordWriter::emitRecord(OsmMapPtr map)
 {
   if (_out.get() == NULL)
   {
@@ -80,7 +80,7 @@ void PbfRecordWriter::emitRecord(shared_ptr<OsmMap> map)
   else
   {
     // RHEL complains about this being ambiguous
-    const shared_ptr<const OsmMap>& co = map;
+    const ConstOsmMapPtr& co = map;
     _OsmPbfWriter->writePartial(co);
   }
 }

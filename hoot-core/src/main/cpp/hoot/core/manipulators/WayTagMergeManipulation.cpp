@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayTagMergeManipulation.h"
@@ -36,12 +36,12 @@ namespace hoot
 {
 
 WayTagMergeManipulation::WayTagMergeManipulation(long leftId, long rightId,
-  shared_ptr<const OsmMap> map, Meters minSplitSize) :
+  ConstOsmMapPtr map, Meters minSplitSize) :
   WayMergeManipulation(leftId, rightId, map, minSplitSize)
 {
 }
 
-void WayTagMergeManipulation::applyManipulation(shared_ptr<OsmMap> wm,
+void WayTagMergeManipulation::applyManipulation(OsmMapPtr wm,
   set<ElementId>& impactedElements, set<ElementId>& newElements) const
 {
   impactedElements.clear();
@@ -50,8 +50,8 @@ void WayTagMergeManipulation::applyManipulation(shared_ptr<OsmMap> wm,
 
   newElements.clear();
 
-  shared_ptr<Way> w1 = wm->getWay(_left);
-  shared_ptr<Way> w2 = wm->getWay(_right);
+  WayPtr w1 = wm->getWay(_left);
+  WayPtr w2 = wm->getWay(_right);
 
   // make sure w1 is the Unknown1
   if (w1->getStatus() == Status::Unknown2)
@@ -65,7 +65,7 @@ void WayTagMergeManipulation::applyManipulation(shared_ptr<OsmMap> wm,
   RemoveWayOp::removeWay(wm, w2->getId());
 }
 
-const set<long>& WayTagMergeManipulation::getImpactedWayIds(shared_ptr<const OsmMap> /*map*/) const
+const set<long>& WayTagMergeManipulation::getImpactedWayIds(ConstOsmMapPtr /*map*/) const
 {
   _impactedWays.clear();
   _impactedWays.insert(_left);

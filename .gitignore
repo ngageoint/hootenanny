@@ -87,6 +87,7 @@ tgs/Makefile
 Makefile.in
 Makefile.inc
 Makefile.qmake
+missing
 Output.osm
 /output.osm
 /output.pgm
@@ -165,7 +166,11 @@ hoot-services/src/main/resources/build.info
 hoot-services/src/main/resources/db/spring-database.xml
 hoot-services/src/main/resources/conf/hoot-services.conf
 hoot-services/src/main/resources/db/*.properties
+scripts/database/blank_osmapidb.sql
 ######
 
 compile
 VagrantfileLocal
+config.rpath
+0
+tbs/0

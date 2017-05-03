@@ -56,7 +56,7 @@ import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.User;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.OsmResponseHeaderGenerator;
+import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.utils.XmlDocumentBuilder;
 
 

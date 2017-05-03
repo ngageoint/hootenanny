@@ -22,11 +22,70 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
 
+import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static org.junit.Assert.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.Test;
+
+
 public class ClipDatasetCommandTest {
 
+    @Test
+    public void testClipDatasetCommandBasic() {
+        String jobId = UUID.randomUUID().toString();
+        String debugLevel = "error";
+        Class<?> caller = this.getClass();
+
+        String input = "input";
+        String output = "output";
+        String bounds = "38,-105,39,-104";
+
+        ClipDatasetParams params = new ClipDatasetParams();
+        params.setInputName(input);
+        params.setOutputName(output);
+        params.setBounds(bounds);
+
+        ClipDatasetCommand clipDatasetCommand = new ClipDatasetCommand(jobId, params, debugLevel, caller);
+
+        List<String> options = new LinkedList<>();
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=test@test.com");
+
+        List<String> hootOptions = new LinkedList<>();
+        options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });
+
+        assertEquals(jobId, clipDatasetCommand.getJobId());
+        assertEquals(true, clipDatasetCommand.getTrackable());
+        assertNotNull(clipDatasetCommand.getSubstitutionMap());
+        assertNotNull(clipDatasetCommand.getWorkDir());
+        assertNotNull(clipDatasetCommand.getCommand());
+
+        String expectedCommand = "hoot crop-map --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT} ${BOUNDS}";
+        assertEquals(expectedCommand, clipDatasetCommand.getCommand());
+
+        assertTrue(clipDatasetCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
+        assertEquals(debugLevel, clipDatasetCommand.getSubstitutionMap().get("DEBUG_LEVEL"));
+
+        assertTrue(clipDatasetCommand.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
+        assertEquals(hootOptions, clipDatasetCommand.getSubstitutionMap().get("HOOT_OPTIONS"));
+
+        assertTrue(clipDatasetCommand.getSubstitutionMap().containsKey("INPUT"));
+        assertEquals(HOOTAPI_DB_URL + "/" + input, clipDatasetCommand.getSubstitutionMap().get("INPUT"));
+
+        assertTrue(clipDatasetCommand.getSubstitutionMap().containsKey("OUTPUT"));
+        assertEquals(HOOTAPI_DB_URL + "/" + output, clipDatasetCommand.getSubstitutionMap().get("OUTPUT"));
+
+        assertTrue(clipDatasetCommand.getSubstitutionMap().containsKey("BOUNDS"));
+        assertEquals(bounds, clipDatasetCommand.getSubstitutionMap().get("BOUNDS"));
+    }
 }

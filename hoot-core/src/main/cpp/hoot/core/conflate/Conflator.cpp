@@ -78,7 +78,7 @@ Conflator::Conflator()
   for (int i = 0; i < manipulatorNames.size(); i++)
   {
     Manipulator* m = Factory::getInstance().constructObject<Manipulator>(manipulatorNames[i]);
-    _manipulators.push_back(shared_ptr<Manipulator>(m));
+    _manipulators.push_back(boost::shared_ptr<Manipulator>(m));
   }
 
   _maxIterations = -1;
@@ -88,7 +88,7 @@ Conflator::Conflator()
 void Conflator::_applyManipulations()
 {
   // create the starting working map
-  shared_ptr<WorkingMap> start(new WorkingMap(_map));
+  boost::shared_ptr<WorkingMap> start(new WorkingMap(_map));
 
   if (_debug)
   {
@@ -110,7 +110,7 @@ void Conflator::_applyManipulations()
   LOG_INFO("Conflating map. Node count: " << _bestMap->getMap()->getNodes().size() <<
            " way count: " <<  _bestMap->getMap()->getWays().size());
 
-  shared_ptr<const WorkingMap> map = start;
+  boost::shared_ptr<const WorkingMap> map = start;
 
   QTime t;
   t.start();
@@ -131,7 +131,7 @@ void Conflator::_applyManipulations()
     noImprovement++;
 
     ManipulationHolder mh = _manipulationHeap.top();
-    shared_ptr<const Manipulation> m = mh.m;
+    boost::shared_ptr<const Manipulation> m = mh.m;
     _manipulationHeap.pop();
     // apply the manipulator to our candidate
     if (m->getProbabilityEstimate() > _minValidScore && m->getProbabilityEstimate() == mh.score &&
@@ -140,10 +140,10 @@ void Conflator::_applyManipulations()
       set<ElementId> impactedElements;
       set<ElementId> newElements;
 
-      shared_ptr<OsmMap> newMap = map->takeMap();
+      OsmMapPtr newMap = map->takeMap();
 
       m->applyManipulation(newMap, impactedElements, newElements);
-      shared_ptr<WorkingMap> newWm(new WorkingMap(newMap));
+      boost::shared_ptr<WorkingMap> newWm(new WorkingMap(newMap));
       newWm->setScore(map->getScore() + m->getScoreEstimate());
 
       _updateManipulationEstimates(newMap, impactedElements);
@@ -161,8 +161,8 @@ void Conflator::_applyManipulations()
     else if (_createBogusReviewTags && m->getProbabilityEstimate() == mh.score &&
              m->isValid(map->getMap()))
     {
-      shared_ptr<OsmMap> newMap = map->takeMap();
-      shared_ptr<WorkingMap> newWm(new WorkingMap(newMap));
+      OsmMapPtr newMap = map->takeMap();
+      boost::shared_ptr<WorkingMap> newWm(new WorkingMap(newMap));
       m->addBogusReviewTags(newMap);
       map = newWm;
       _bestMap = newWm;
@@ -185,7 +185,7 @@ void Conflator::_applyManipulations()
            " way count: " <<  _bestMap->getMap()->getWays().size());
 
   // remove unnecessary fluff before exporting.
-  shared_ptr<OsmMap> tmp = _bestMap->takeMap();
+  OsmMapPtr tmp = _bestMap->takeMap();
   SuperfluousWayRemover::removeWays(tmp);
 
   LOG_INFO("Conflating map. Node count: " << tmp->getNodes().size() <<
@@ -197,7 +197,7 @@ void Conflator::_applyManipulations()
 /**
  * Load the source data up into memory for later conflation.
  */
-void Conflator::loadSource(shared_ptr<OsmMap> map)
+void Conflator::loadSource(OsmMapPtr map)
 {
   LOG_DEBUG("Preprocessing inputs...");
 
@@ -230,7 +230,7 @@ void Conflator::conflate()
   _applyManipulations();
 }
 
-void Conflator::_createManipulations(shared_ptr<OsmMap> map, const set<ElementId>& eids)
+void Conflator::_createManipulations(OsmMapPtr map, const set<ElementId>& eids)
 {
   vector<ElementId> vwids(eids.size());
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
@@ -238,13 +238,13 @@ void Conflator::_createManipulations(shared_ptr<OsmMap> map, const set<ElementId
     vwids.push_back(*it);
   }
 
-  vector< shared_ptr<Manipulation> > newM;
+  vector< boost::shared_ptr<Manipulation> > newM;
 
   // go through all the manipulators
   for (size_t i = 0; i < _manipulators.size(); i++)
   {
     // initialize the manipulator
-    const vector< shared_ptr<Manipulation> >& m =
+    const vector< boost::shared_ptr<Manipulation> >& m =
         _manipulators[i]->findManipulations(map, vwids);
 
     if (_createBogusReviewTags)
@@ -286,7 +286,7 @@ void Conflator::_createManipulations()
     for (size_t i = 0; i < _manipulators.size(); i++)
     {
       // initialize the manipulator
-      const vector< shared_ptr<Manipulation> >& m =
+      const vector< boost::shared_ptr<Manipulation> >& m =
           _manipulators[i]->findAllManipulations(_map);
       _manipulations.insert(_manipulations.begin(), m.begin(), m.end());
     }
@@ -319,7 +319,7 @@ void Conflator::_saveMap(QString path)
 {
   LOG_DEBUG("Writing debug .osm file..." << path.toStdString());
 
-  shared_ptr<OsmMap> wgs84(new OsmMap(_map));
+  OsmMapPtr wgs84(new OsmMap(_map));
   MapProjector::projectToWgs84(wgs84);
   OsmXmlWriter writer;
   writer.setIncludeHootInfo(true);
@@ -327,26 +327,26 @@ void Conflator::_saveMap(QString path)
   writer.write(wgs84, path);
 }
 
-void Conflator::setSource(shared_ptr<OsmMap> map)
+void Conflator::setSource(OsmMapPtr map)
 {
   _bestScore = std::numeric_limits<double>::min();
 
   _map = map;
 }
 
-void Conflator::_updateManipulationEstimates(shared_ptr<const OsmMap> map,
+void Conflator::_updateManipulationEstimates(ConstOsmMapPtr map,
   const set<ElementId>& eids)
 {
-  set< shared_ptr<Manipulation>, LessThanManipulation > found;
+  set< boost::shared_ptr<Manipulation>, LessThanManipulation > found;
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); it++)
   {
-    const set< shared_ptr<Manipulation>, LessThanManipulation >& s = _impacted2Manipulation[*it];
+    const set< boost::shared_ptr<Manipulation>, LessThanManipulation >& s = _impacted2Manipulation[*it];
     found.insert(s.begin(), s.end());
   }
 
-  for (set< shared_ptr<Manipulation> >::iterator it = found.begin(); it != found.end(); it++)
+  for (set< boost::shared_ptr<Manipulation> >::iterator it = found.begin(); it != found.end(); it++)
   {
-    shared_ptr<Manipulation> m = *it;
+    boost::shared_ptr<Manipulation> m = *it;
     if (m->isValid(map))
     {
       double oldValue = m->getProbabilityEstimate();

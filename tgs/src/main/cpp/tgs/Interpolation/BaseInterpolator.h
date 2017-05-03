@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BASEINTERPOLATOR_H
 #define BASEINTERPOLATOR_H
@@ -47,7 +47,7 @@ public:
 
   virtual void readInterpolator(QIODevice& is);
 
-  virtual void setData(const shared_ptr<const DataFrame>& df);
+  virtual void setData(const boost::shared_ptr<const DataFrame>& df);
 
   virtual void setDependentColumns(const vector<string>& labels);
 
@@ -63,7 +63,7 @@ protected:
   vector<string> _depColumnsLabels;
   // A temp variable used to return the result of interpolate()
   mutable vector<double> _result;
-  shared_ptr<const DataFrame> _df;
+ boost::shared_ptr<const DataFrame> _df;
 
   virtual void _buildModel() = 0;
 

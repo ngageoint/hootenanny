@@ -206,7 +206,7 @@
         "description": "POI to Polygon",
         "name": "POI to Polygon",
         "onchange":"true",
-        "defaultvalue": "false",
+        "defaultvalue": "true",
         "members": [
           {
             "id": "poipolygon_match_creator",

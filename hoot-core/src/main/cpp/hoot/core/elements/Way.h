@@ -112,21 +112,21 @@ public:
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */
-  const Envelope& getApproximateEnvelope(shared_ptr<const ElementProvider> ep) const;
+  const Envelope& getApproximateEnvelope(boost::shared_ptr<const ElementProvider> ep) const;
 
   virtual ElementType getElementType() const { return ElementType::Way; }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const
+  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const
   { return new Envelope(getEnvelopeInternal(ep)); }
 
   /**
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const Envelope& getEnvelopeInternal(shared_ptr<const ElementProvider> ep) const;
+  const Envelope& getEnvelopeInternal(boost::shared_ptr<const ElementProvider> ep) const;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node

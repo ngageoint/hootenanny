@@ -53,6 +53,7 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -82,7 +83,8 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
   case QVariant::Int:
     return OFTInteger;
   case QVariant::LongLong:
-    throw HootException("LongLong is not supported by OGR");
+    return OFTInteger64;
+//    throw HootException("LongLong is not supported by OGR");
   case QVariant::String:
     return OFTString;
   case QVariant::Double:
@@ -113,7 +115,7 @@ OgrWriter::~OgrWriter()
 
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<Geometry> g)
+void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<Geometry> g)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
@@ -139,6 +141,9 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
     case QVariant::Int:
       poFeature->SetField(ba.constData(), v.toInt());
       break;
+    case QVariant::LongLong:
+      poFeature->SetField(ba.constData(), v.toLongLong());
+      break;
     case QVariant::Double:
       poFeature->SetField(ba.constData(), v.toDouble());
       break;
@@ -155,7 +160,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
   }
 
   // convert the geometry.
-  shared_ptr<GeometryCollection> gc = dynamic_pointer_cast<GeometryCollection>(g);
+  boost::shared_ptr<GeometryCollection> gc = dynamic_pointer_cast<GeometryCollection>(g);
   if (gc.get() != 0)
   {
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
@@ -172,7 +177,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void OgrWriter::_addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const Geometry* g,
+void OgrWriter::_addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f, const Geometry* g,
                                    OGRFeature* poFeature)
 {
   std::string wkt = g->toString();
@@ -209,7 +214,7 @@ void OgrWriter::close()
   _ds.reset();
 }
 
-void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
+void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
 {
   OGRLayer *poLayer;
 
@@ -278,10 +283,10 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
     // they don't exist
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 
-    shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+    boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
-      shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+      boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
 
       if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
       {
@@ -310,10 +315,10 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
     }
     _layers[layer->getName()] = poLayer;
 
-    shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+    boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
-      shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+      boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
       OGRFieldDefn oField(f->getName().toAscii(), toOgrFieldType(f->getType()));
       if (f->getWidth() > 0)
       {
@@ -391,7 +396,7 @@ void OgrWriter::open(QString url)
   if (_translator == 0)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
          _scriptPath));
     st->setErrorTreatment(_strictChecking);
     _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
@@ -407,7 +412,7 @@ void OgrWriter::open(QString url)
 
   try
   {
-    _ds = OgrUtilities::getInstance().openDataSource(url);
+    _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
   catch(HootException& openException)
   {
@@ -459,9 +464,9 @@ void OgrWriter::setConfiguration(const Settings& conf)
   }
 }
 
-shared_ptr<Geometry> OgrWriter::_toMulti(shared_ptr<Geometry> from)
+boost::shared_ptr<Geometry> OgrWriter::_toMulti(boost::shared_ptr<Geometry> from)
 {
-  shared_ptr<Geometry> result;
+  boost::shared_ptr<Geometry> result;
 
   switch (from->getGeometryTypeId())
   {
@@ -510,7 +515,7 @@ void OgrWriter::strictError(QString warning)
   }
 }
 
-void OgrWriter::write(shared_ptr<const OsmMap> map)
+void OgrWriter::write(ConstOsmMapPtr map)
 {
   ElementProviderPtr provider(boost::const_pointer_cast<ElementProvider>(
     boost::dynamic_pointer_cast<const ElementProvider>(map)));
@@ -560,7 +565,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
     // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
 
-    shared_ptr<Geometry> g;
+    boost::shared_ptr<Geometry> g;
 
     try
     {

@@ -27,4 +27,5 @@
 package hoot.services.command;
 
 
+@FunctionalInterface
 public interface InternalCommand extends Command {}

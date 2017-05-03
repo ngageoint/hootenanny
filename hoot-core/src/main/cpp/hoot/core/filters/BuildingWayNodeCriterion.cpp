@@ -46,7 +46,7 @@ _map(map)
 {
 }
 
-bool BuildingWayNodeCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   bool result = false;
 

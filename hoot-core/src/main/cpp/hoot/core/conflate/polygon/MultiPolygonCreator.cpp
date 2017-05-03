@@ -178,29 +178,29 @@ void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& c
   }
 }
 
-shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
+boost::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
 {
   vector<LinearRing*> outers;
-  _createRings("outer", outers);
-  _createRings("part", outers);
+  _createRings(MetadataTags::RoleOuter(), outers);
+  _createRings(MetadataTags::RolePart(), outers);
 
   vector<LinearRing*> inners;
-  _createRings("inner", inners);
+  _createRings(MetadataTags::RoleInner(), inners);
 
-  shared_ptr<Geometry> result(_addHoles(outers, inners));
+  boost::shared_ptr<Geometry> result(_addHoles(outers, inners));
 
   // recursively add any child relation multipolygons.
   for (size_t i = 0; i < _r->getMembers().size(); i++)
   {
     const RelationData::Entry& e = _r->getMembers()[i];
     if (e.getElementId().getType() == ElementType::Relation &&
-        (e.role == "outer" || e.role == "part"))
+        (e.role == MetadataTags::RoleOuter() || e.role == MetadataTags::RolePart()))
     {
-      shared_ptr<const Relation> r = _provider->getRelation(e.getElementId().getId());
+      ConstRelationPtr r = _provider->getRelation(e.getElementId().getId());
       if (r->isMultiPolygon() ||
         OsmSchema::getInstance().isArea(r->getTags(), ElementType::Relation))
       {
-        shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
+        boost::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
         try
         {
           result.reset(result->Union(child.get()));
@@ -228,7 +228,7 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing *>
     const RelationData::Entry& e = elements[i];
     if (e.getElementId().getType() == ElementType::Way && e.role == role)
     {
-      const shared_ptr<const Way>& w = _provider->getWay(e.getElementId().getId());
+      const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
 
       if (!w)
       {
@@ -421,19 +421,19 @@ LinearRing* MultiPolygonCreator::_toLinearRing(const ConstWayPtr& w) const
   size_t i = 0;
   for (; i < ids.size(); i++)
   {
-    shared_ptr<const Node> n = _provider->getNode(ids[i]);
+    ConstNodePtr n = _provider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
   {
-    shared_ptr<const Node> n = _provider->getNode(ids[0]);
+    ConstNodePtr n = _provider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i++);
   }
   else if (ids[0] != ids[ids.size() - 1])
   {
-    shared_ptr<const Node> n = _provider->getNode(ids[0]);
+    ConstNodePtr n = _provider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i++);
   }
 

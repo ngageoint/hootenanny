@@ -34,7 +34,7 @@ public:
 
   HadoopTileWorker2();
 
-  virtual void applyOp(shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles, QString mapIn,
+  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles, QString mapIn,
                        QString mapOut);
 
   virtual void breakWays(QString out);

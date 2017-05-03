@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 
-bool PoiCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool PoiCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   return OsmSchema::getInstance().isPoi(*e);
 }

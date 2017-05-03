@@ -44,7 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.ExternalCommandManager;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
 
@@ -57,9 +56,6 @@ public class HGISFilterResource extends HGISResource {
 
     @Autowired
     private JobProcessor jobProcessor;
-
-    @Autowired
-    private ExternalCommandManager externalCommandManager;
 
     @Autowired
     private FilterNonHGISPOIsCommandFactory filterNonHGISPOIsCommandFactory;
@@ -82,30 +78,31 @@ public class HGISFilterResource extends HGISResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public FilterNonHgisPoisResponse filterNonHgisPois(FilterNonHgisPoisRequest request) {
-        FilterNonHgisPoisResponse response = new FilterNonHgisPoisResponse();
 
         checkHGISCommandParams(request.getSource(), request.getOutput());
 
         try {
             String jobId = UUID.randomUUID().toString();
+            String source = request.getSource();
+            String output = request.getOutput();
 
-            Command[] commands = {
-                () -> {
-                    ExternalCommand filterNonHgisPoisCommand = filterNonHGISPOIsCommandFactory.build(
-                        request.getSource(), request.getOutput(), this.getClass());
-                    return externalCommandManager.exec(jobId, filterNonHgisPoisCommand);
-                }
-            };
+            ExternalCommand filterNonHgisPoisCommand = filterNonHGISPOIsCommandFactory.build(jobId, source, output, this.getClass());
 
-            jobProcessor.process(new Job(jobId, commands));
+            Command[] workflow = { filterNonHgisPoisCommand };
 
+            jobProcessor.submitAsync(new Job(jobId, workflow));
+
+            FilterNonHgisPoisResponse response = new FilterNonHgisPoisResponse();
             response.setJobId(jobId);
+
+            return response;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
             String msg = "Error while trying to filter non-HGIS POI's.  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
-
-        return response;
     }
 }

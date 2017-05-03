@@ -54,25 +54,25 @@ class OgrWriterTest : public CppUnit::TestFixture
 
 public:
 
-  shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
 
-  shared_ptr<Node> createNode(double x, double y)
+  NodePtr createNode(double x, double y)
   {
-    shared_ptr<Node> n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
+    NodePtr n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
     _map->addNode(n);
     return n;
   }
 
-  shared_ptr<OsmMap> createTestMap()
+  OsmMapPtr createTestMap()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     _map = map;
 
-    shared_ptr<Node> n1 = createNode(0.0, 0.0);
+    NodePtr n1 = createNode(0.0, 0.0);
     n1->setTag("building", "yes");
     n1->setTag("name", "n1");
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w1->setTag("area", "yes");
     w1->setTag("building", "yes");
     w1->setTag("name", "w1");
@@ -82,39 +82,39 @@ public:
     w1->addNode(w1->getNodeId(0));
     map->addWay(w1);
 
-    shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w2->setTag("highway", "track");
     w2->setTag("name", "w2");
     w2->addNode(createNode(0.3, 0.0)->getId());
     w2->addNode(createNode(0.3, 0.1)->getId());
     map->addWay(w2);
 
-    shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w3->setTag("highway", "road");
     w3->setTag("name", "w3");
     w3->addNode(createNode(0.4, 0.0)->getId());
     w3->addNode(createNode(0.4, 0.1)->getId());
     map->addWay(w3);
 
-    shared_ptr<Way> w4(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w4(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w4->addNode(createNode(0.5, 0.0)->getId());
     w4->addNode(createNode(0.7, 0.0)->getId());
     w4->addNode(createNode(0.6, 0.1)->getId());
     w4->addNode(w4->getNodeId(0));
     map->addWay(w4);
 
-    shared_ptr<Way> w5(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w5(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w5->addNode(createNode(0.55, 0.01)->getId());
     w5->addNode(createNode(0.65, 0.01)->getId());
     w5->addNode(createNode(0.6, 0.05)->getId());
     w5->addNode(w5->getNodeId(0));
     map->addWay(w5);
 
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "multipolygon"));
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15.0, MetadataTags::RelationMultiPolygon()));
     r1->setTag("building", "yes");
     r1->setTag("name", "r1");
-    r1->addElement("outer", w4->getElementId());
-    r1->addElement("inner", w5->getElementId());
+    r1->addElement(MetadataTags::RoleOuter(), w4->getElementId());
+    r1->addElement(MetadataTags::RoleInner(), w5->getElementId());
     map->addRelation(r1);
 
     return map;
@@ -157,11 +157,11 @@ public:
   {
     OsmMapPtr map = createTestMap();
 
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, 15.0, "multipolygon"));
+    RelationPtr r2(new Relation(Status::Unknown1, 2, 15.0, MetadataTags::RelationMultiPolygon()));
     r2->setTag("building", "yes");
     r2->setTag("name", "r2");
-    r2->addElement("outer", ElementId(ElementType::Way, 1));
-    r2->addElement("inner", ElementId(ElementType::Way, 2));
+    r2->addElement(MetadataTags::RoleOuter(), ElementId(ElementType::Way, 1));
+    r2->addElement(MetadataTags::RoleInner(), ElementId(ElementType::Way, 2));
     map->addRelation(r2);
 
     map->getRelation(1)->addElement("test", ElementId(ElementType::Relation, 2));

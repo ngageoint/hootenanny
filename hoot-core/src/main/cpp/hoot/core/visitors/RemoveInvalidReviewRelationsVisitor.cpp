@@ -52,7 +52,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
 
     LOG_VART(r->getId());
     bool invalidRelation = false;
-    if (r->getType() == Relation::REVIEW)
+    if (r->getType() == MetadataTags::RelationReview())
     {
       const bool hasMemberCountTag = r->getTags().contains(MetadataTags::HootReviewMembers());
       if (hasMemberCountTag &&

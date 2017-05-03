@@ -37,8 +37,8 @@
 namespace hoot
 {
 
-MultiLineStringLocation::MultiLineStringLocation(shared_ptr<const OsmMap> map,
-                                                 shared_ptr<const Relation> relation,
+MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map,
+                                                 ConstRelationPtr relation,
                                                  const int wayIndex,
                                                  const WayLocation& wayLocation)
 {
@@ -47,7 +47,7 @@ MultiLineStringLocation::MultiLineStringLocation(shared_ptr<const OsmMap> map,
     throw HootException(
       "Feature splitting for multi-line string relations requires that the relation has way members.");
   }
-  if (relation->getType() != Relation::MULTILINESTRING)
+  if (relation->getType() != MetadataTags::RelationMultilineString())
   {
     throw HootException(
       "Invalid relation type: " + relation->getType() + " expected multiline string.");
@@ -79,7 +79,7 @@ MultiLineStringLocation::MultiLineStringLocation(shared_ptr<const OsmMap> map,
       throw HootException(
         "Feature splitting for multi-line string relations may only occur on relations which contain only ways.");
     }
-    shared_ptr<const Way> way = dynamic_pointer_cast<const Way>(element);
+    ConstWayPtr way = dynamic_pointer_cast<const Way>(element);
     _waySublineString.addSubline(
       WaySubline(
         WayLocation(map, way, 0, 0.0),

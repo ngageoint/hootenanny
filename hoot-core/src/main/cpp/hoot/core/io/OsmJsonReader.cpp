@@ -167,7 +167,7 @@ void OsmJsonReader::close()
  * Reads the specified map. When this method is complete
  * the input will likely be closed.
  */
-void OsmJsonReader::read(shared_ptr<OsmMap> map)
+void OsmJsonReader::read(OsmMapPtr map)
 {
   if (_isFile)
   {

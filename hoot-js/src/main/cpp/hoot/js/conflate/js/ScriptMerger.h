@@ -40,7 +40,7 @@ namespace hoot
 class ScriptMerger : public MergerBase
 {
 public:
-  ScriptMerger(shared_ptr<PluginContext> script, Persistent<Object> plugin,
+  ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
     const set<pair<ElementId, ElementId> > &pairs);
 
   virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
@@ -55,7 +55,7 @@ public:
 protected:
   PairsSet _pairs;
   Persistent<Object> _plugin;
-  shared_ptr<PluginContext> _script;
+ boost::shared_ptr<PluginContext> _script;
   ElementId _eid1, _eid2;
 
   /**

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BasicMathCalculatorNode.h"
@@ -43,8 +43,8 @@ namespace Tgs
 
   double BinaryCalculatorNode::getOutput(const int uid) const
   {
-    shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
-    shared_ptr<CalculatorGenomeNode> v2 = getInput(V2());
+   boost::shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
+   boost::shared_ptr<CalculatorGenomeNode> v2 = getInput(V2());
     return _calculate(v1->getOutput(uid), v2->getOutput(uid));
   }
   
@@ -61,7 +61,7 @@ namespace Tgs
 
   double UnaryCalculatorNode::getOutput(const int uid) const
   {
-    shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
+   boost::shared_ptr<CalculatorGenomeNode> v1 = getInput(V1());
     return _calculate(v1->getOutput(uid));
   }
 

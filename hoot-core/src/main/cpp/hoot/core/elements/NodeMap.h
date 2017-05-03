@@ -35,7 +35,7 @@
 namespace hoot
 {
   class Node;
-  typedef HashMap<long, boost::shared_ptr<Node> > NodeMap;
+  typedef HashMap<long, NodePtr > NodeMap;
 }
 
 #endif // NODEMAP_H

@@ -134,11 +134,7 @@ public class ChangesetResource {
 
         long userId;
         try {
-            userId = createQuery()
-                    .select(maps.userId)
-                    .from(maps)
-                    .where(maps.id.eq(mapIdNum))
-                    .fetchOne();
+            userId = createQuery().select(maps.userId).from(maps).where(maps.id.eq(mapIdNum)).fetchOne();
         }
         catch (Exception ex) {
             String msg = "Error locating user associated with map for changeset data: "
@@ -258,7 +254,6 @@ public class ChangesetResource {
 
     // TODO: clean up these message...some are obsolete now
     private static void handleError(Exception e, long changesetId, String changesetDiffSnippet) {
-
         if (e instanceof WebApplicationException) {
             throw (WebApplicationException) e;
         }
@@ -301,8 +296,7 @@ public class ChangesetResource {
             }
         }
 
-        String msg = "Error uploading changeset with ID: " + changesetId + " - data: (" + message
-                + ") " + changesetDiffSnippet;
+        String msg = "Error uploading changeset with ID: " + changesetId + " - data: (" + message + ") " + changesetDiffSnippet;
         throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(msg).build());
     }
 }

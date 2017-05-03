@@ -58,7 +58,7 @@ void TagCriterion::setConfiguration(const Settings &s)
   }
 }
 
-bool TagCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool TagCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   assert(!_k.isEmpty());
   return e->getTags().get(_k) == _v;

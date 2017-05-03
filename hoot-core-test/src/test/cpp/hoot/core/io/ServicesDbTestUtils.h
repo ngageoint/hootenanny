@@ -34,6 +34,7 @@
 
 // Hoot
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/OsmMap.h>
 
 namespace hoot
 {
@@ -85,10 +86,16 @@ public:
 
   static void deleteDataFromOsmApiTestDatabase();
 
+  static void verifyTestDatabaseEmpty();
+
+  static boost::shared_ptr<OsmMap> createTestMap1();
+
 private:
 
   static Settings _readDbConfig();
   static void _readDbConfig(Settings& settings, QString config_path);
+
+  static boost::shared_ptr<Node> _createNode(double x, double y, OsmMapPtr map);
 };
 
 }
