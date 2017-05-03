@@ -36,9 +36,10 @@ export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NA
 export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
+# generic options applicable to multiple commands
 # By using reader.preserve.all.tags=true, we're forcing the hoot xml file reader to preserve all tags here, such as 'accuracy', 
 # 'type', etc., to simulate the data that would likely be coming from an osm api db.
-HOOT_OPTS="--info -D hootapi.db.writer.create.user=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D preserve.unknown1.element.id.when.modifying.features=true -D writer.include.debug.tags=true -D writer.clean.review.tags=false"
+HOOT_OPTS="--info -D reader.add.source.datetime=false -D uuid.helper.repeatable=true -D reader.preserve.all.tags=true -D writer.include.debug.tags=true -D writer.clean.review.tags=false"
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
@@ -59,7 +60,7 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   else
     cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   fi 
-  hoot convert $HOOT_OPTS -D osmapidb.bulk.writer.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
+  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -86,7 +87,7 @@ if [ "$LOAD_SEC_DATA" == "true" ]; then
   else
     cp $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
   fi
-  hoot convert $HOOT_OPTS -D reader.set.status=unknown2 -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D reader.set.status=unknown2 -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -109,7 +110,7 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   echo ""
   # We're writing the output to the hoot api db first here, rather than directly to the osm api db, b/c if there are reviews 
   # we want to give the user a chance to review them.  That can only happen when the output is stored in a hoot api db.
-  hoot conflate $HOOT_OPTS -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids=true -D preserve.unknown1.element.id.when.modifying.features=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -129,7 +130,7 @@ fi
 echo ""
 echo "STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-hoot derive-changeset $HOOT_OPTS -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+hoot derive-changeset $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 echo ""
 echo "STEP 12: Executing the changeset SQL on the osm api db..."
