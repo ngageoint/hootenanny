@@ -36,7 +36,10 @@
 #include <hoot/core/util/Configurable.h>
 
 // OpenCV
-#include <opencv/cv.h>
+// #include <opencv/cv.h>
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
 
 // Qt
 #include <QString>

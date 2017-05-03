@@ -33,7 +33,11 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/GeometryUtils.h>
+
+#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
+#undef int64
+
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt

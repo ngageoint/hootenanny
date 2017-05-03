@@ -150,6 +150,35 @@ sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 #####
 
 
+echo "### Configuring environment..."
+
+# Configure https alternative mirror for maven isntall, this can likely be removed once
+# we are using maven 3.2.3 or higher
+sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
+
+if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
+    echo "Adding hoot home to profile..."
+    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.bash_profile
+    echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
+    source ~/.bash_profile
+fi
+
+if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
+    echo "Adding Java home to profile..."
+    echo "export JAVA_HOME=/usr/java/jdk1.8.0_111" >> ~/.bash_profile
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
+    source ~/.bash_profile
+else
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_111' ~/.bash_profile
+fi
+
+if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
+    echo "Adding Hadoop home to profile..."
+    echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.bash_profile
+    echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.bash_profile
+    source ~/.bash_profile
+fi
+
 if ! ruby -v | grep --quiet 2.3.0; then
     # Ruby via rvm - from rvm.io
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
@@ -249,30 +278,114 @@ if [ ! -f bin/osmosis ]; then
     ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
 fi
 
-echo "### Configureing Postgres..."
 # Need to figure out a way to do this automagically
 #PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
 PG_VERSION=9.5
 
+if ! grep --quiet "psql-" ~/.bash_profile; then
+    echo "Adding PostGres path vars to profile..."
+    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin"
+    source ~/.bash_profile
+fi
+
+if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
+    sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
+    sudo ldconfig
+fi
+
+
+sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+
+
+# For convenience, set the version of GDAL to download and install
+GDAL_VERSION=2.1.3
+
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
+    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
+        echo "### Downloading GDAL $GDAL_VERSION source..."
+        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
+    fi
+    if [ ! -d gdal-$GDAL_VERSION ]; then
+        echo "### Extracting GDAL $GDAL_VERSION source..."
+        tar zxfp gdal-$GDAL_VERSION.tar.gz
+    fi
+
+    if [ ! -f FileGDB_API_1_5_64.tar.gz ]; then
+        echo "### Downloading FileGDB API source..."
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/FileGDB_API_1_5_64.tar.gz
+    fi
+
+    if [ ! -d /usr/local/FileGDB_API ]; then
+        echo "### Extracting FileGDB API source & installing lib..."
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
+    fi
+
+    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
+    export PATH=/usr/local/lib:/usr/local/bin:$PATH
+    cd gdal-$GDAL_VERSION
+    touch config.rpath
+    echo "GDAL: configure"
+    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
+    echo "GDAL: make"
+    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
+    echo "GDAL: install"
+    sudo make -s install >> GDAL_Build.txt 2>&1
+    cd swig/python
+    echo "GDAL: python build"
+    python setup.py build >> GDAL_Build.txt 2>&1
+    echo "GDAL: python install"
+    sudo python setup.py install >> GDAL_Build.txt 2>&1
+    sudo ldconfig
+    cd ~
+fi
+
+if ! mocha --version &>/dev/null; then
+    echo "### Installing mocha for plugins test..."
+    sudo npm install --silent -g mocha
+    # Clean up after the npm install
+    sudo rm -rf $HOME/tmp
+fi
+
+
+echo "### Configureing Postgres..."
+
 cd /tmp # Stop postgres "could not change directory to" warnings
 
+# NOTE: These have been changed to pg9.5
 # Postgresql startup
 sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
 sudo systemctl start postgresql-$PG_VERSION
 sudo systemctl enable postgresql-$PG_VERSION
 
-if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
+# Get the configuration for the Database
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
+
+# See if we already have a dB user
+if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER; then
+    echo "### Adding a Services Database user..."
+    sudo -u postgres createuser --superuser $DB_USER
+    sudo -u postgres psql -c "alter user $DB_USER with password '$DB_PASSWORD';"
+fi
+
+# Check that the OsmApiDb user exists
+# NOTE:
+#  + The OsmAPI Db user _might_ be different to the Hoot Services Db user...
+#  + The SetupOsmApiDB.sh script expects that the DB_USER_OSMAPI account exists
+if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
+    sudo -u postgres createuser --superuser $DB_USER_OSMAPI
+    sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
+fi
+
+
+# Check for a hoot Db
+if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
     echo "### Creating Services Database..."
-    sudo -u postgres createuser --superuser hoot
-    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
-    sudo -u postgres createdb hoot --owner=hoot
-    sudo -u postgres createdb wfsstoredb --owner=hoot
-    sudo -u postgres psql -d hoot -c 'create extension hstore;'
+    sudo -u postgres createdb $DB_NAME --owner=$DB_USER
+    sudo -u postgres createdb wfsstoredb --owner=$DB_USER
+    sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
     sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geometry_columns TO PUBLIC;"
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 fi
 
 # configure Postgres settings
@@ -318,72 +431,6 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
 fi
 sudo systemctl restart postgresql-$PG_VERSION
 
-
-# For convenience, set the version of GDAL to download and install
-GDAL_VERSION=2.1.3
-
-if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
-    if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
-        echo "### Downloading GDAL $GDAL_VERSION source..."
-        wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
-    fi
-    if [ ! -d gdal-$GDAL_VERSION ]; then
-        echo "### Extracting GDAL $GDAL_VERSION source..."
-        tar zxfp gdal-$GDAL_VERSION.tar.gz
-    fi
-
-    if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
-        echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
-    fi
-    if [ ! -d /usr/local/FileGDB_API ]; then
-        echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
-        sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
-    fi
-
-    echo "### Building GDAL $GDAL_VERSION w/ FileGDB..."
-    export PATH=/usr/local/lib:/usr/local/bin:$PATH
-    cd gdal-$GDAL_VERSION
-    touch config.rpath
-    echo "GDAL: configure"
-    sudo ./configure --quiet --with-fgdb=/usr/local/FileGDB_API --with-pg=/usr/pgsql-$PG_VERSION/bin/pg_config --with-python CFLAGS='-std=c11' CXXFLAGS='-std=c++11'
-    echo "GDAL: make"
-    sudo make -sj$(nproc) > GDAL_Build.txt 2>&1
-    echo "GDAL: install"
-    sudo make -s install >> GDAL_Build.txt 2>&1
-    cd swig/python
-    echo "GDAL: python build"
-    python setup.py build >> GDAL_Build.txt 2>&1
-    echo "GDAL: python install"
-    sudo python setup.py install >> GDAL_Build.txt 2>&1
-    sudo ldconfig
-    cd ~
-fi
-
-if ! mocha --version &>/dev/null; then
-    echo "### Installing mocha for plugins test..."
-    sudo npm install --silent -g mocha
-    # Clean up after the npm install
-    sudo rm -rf $HOME/tmp
-fi
-
-# # Configure Java
-# if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
-#     echo "Adding Java home to profile..."
-#     export JAVA_HOME=/usr/java/jdk1.8.0_111 >> ~/.bash_profile
-#     source ~/.bash_profile
-# fi
-
-# Configure qmake
-# if ! grep --quiet "export QMAKE" ~/.bash_profile; then
-#     echo "### Adding qmake to profile..."
-#     echo "export QMAKE=/usr/lib64/qt4/bin/qmake" >> ~/.bash_profile
-#     echo "export PATH=\$PATH:/usr/lib64/qt4/bin" >> ~/.bash_profile
-#     echo "export QTDIR=/usr/lib64/qt4/bin" >> ~/.bash_profile
-#     source ~/.bash_profile
-# fi
-
 cd $HOOT_HOME
 source ./SetupEnv.sh
 
@@ -411,6 +458,8 @@ fi
 #     sudo sed -i '/^export TOMCAT6_HOME/d' ~/.profile
 # fi
 
+exit
+
 echo "### Installing Tomcat8..."
 # NOTE: We could pull the RPM from the Hoot repo and install it instead of doing all of the manual steps.
 #sudo bash -c "cat >> /etc/yum.repos.d/hoot.repo" <<EOT
@@ -429,9 +478,14 @@ echo "### Installing Tomcat8..."
 sudo groupadd tomcat8
 sudo useradd -M -s /bin/nologin -g tomcat8 -d /var/lib/tomcat8 tomcat8
 
-if [ ! -f apache-tomcat-8.5.9.tar.gz ]; then
-    wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz
-fi
+# NOTE: This is UGLY.
+TOMCAT_VERSION=8.5.14
+
+if [ ! -f apache-tomcat-$TOMCAT_VERSION.tar.gz ]; then
+#     wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz
+    #wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.14/bin/apache-tomcat-8.5.14.tar.gz
+    wget http://www-us.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+    fi
 
 sudo mkdir /var/lib/tomcat8
 sudo tar xvf apache-tomcat-8*tar.gz -C /var/lib/tomcat8 --strip-components=1
@@ -467,7 +521,7 @@ RestartSec=10
 Restart=always
 
 [Install]
-WantedBy=multi-user.targetEOT
+WantedBy=multi-user.target
 EOT
 
 # Start Tomcat8
