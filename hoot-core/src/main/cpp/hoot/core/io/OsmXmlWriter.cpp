@@ -212,11 +212,8 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
 
 void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
-  //TODO: change back to debug
-  LOG_VARD(e->getElementId());
-
-  //TODO: change back to debug
-  LOG_VARD(e->getVersion());
+  LOG_VART(e->getElementId());
+  LOG_VART(e->getVersion());
   if (_includeCompatibilityTags)
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
@@ -226,8 +223,7 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
       version = 1;
     }
     writer.writeAttribute("version", QString::number(version));
-    //TODO: change back to debug
-    LOG_VARD(version);
+    LOG_VART(version);
   }
   else
   {

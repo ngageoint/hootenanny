@@ -1899,7 +1899,8 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 * Data Type: string
 * Default Value: `unknown1`
 
-Sets the status on data being read.  Not honored by all readers.
+Sets the status on data being read.  Valid values are "unknown1" and "unknown2".  Not honored by all
+readers.
 
 === reader.use.file.status
 

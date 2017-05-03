@@ -83,17 +83,6 @@ v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& ar
     polyElement->setStatus(Status(Status::Conflated));
     polyElement->getTags()[MetadataTags::HootStatus()] = "3";
 
-    if (Log::getInstance().isDebugEnabled())
-    {
-      //TODO: tie this to a config opt instead
-//      LOG_DEBUG("Writing debug map...");
-//      OsmMapPtr debug(new OsmMap(map));
-//      MapProjector::projectToWgs84(debug);
-//      //if you're testing this from the mocha test, you may need to put an absolute path here for
-//      //the output instead
-//      //OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
-    }
-
     v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
     return scope.Close(returnMap);
   }

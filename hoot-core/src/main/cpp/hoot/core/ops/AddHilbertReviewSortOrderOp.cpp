@@ -99,10 +99,8 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
       }
       else
       {
-          //TODO: change back
-//        throw HootException(
-//          "No review elements returned for relation with ID: " + r->getElementId().toString());
-          continue;
+        throw HootException(
+          "No review elements returned for relation with ID: " + r->getElementId().toString());
       }
     }
   }
