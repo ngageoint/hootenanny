@@ -64,10 +64,10 @@ class BasemapCommand extends ExternalCommand {
 
         if (!StringUtils.isBlank(projection)) {
             substitutionMap.put("PROJECTION", projection);
-            command = "/usr/local/bin/gdal2tiles.py ${VERBOSE} -s ${PROJECTION} -w ${WEBVIEWER} -t ${TITLE} -z ${ZOOM} ${INPUT_FILE} ${TILE_OUTPUT_DIR}";
+            command = "gdal2tiles.py ${VERBOSE} -s ${PROJECTION} -w ${WEBVIEWER} -t ${TITLE} -z ${ZOOM} ${INPUT_FILE} ${TILE_OUTPUT_DIR}";
         }
         else {
-            command = "/usr/local/bin/gdal2tiles.py ${VERBOSE} -w ${WEBVIEWER} -t ${TITLE} -z ${ZOOM} ${INPUT_FILE} ${TILE_OUTPUT_DIR}";
+            command = "gdal2tiles.py ${VERBOSE} -w ${WEBVIEWER} -t ${TITLE} -z ${ZOOM} ${INPUT_FILE} ${TILE_OUTPUT_DIR}";
         }
 
         super.configureCommand(command, substitutionMap, caller);
