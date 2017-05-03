@@ -10,10 +10,10 @@ AC_DEFUN([LIBPQ_INIT],[
   # /usr/lib - picked up automatically
   # pg 9.2 on centos 6.7 (RPM job)
   # /usr/pgsql-9.2/lib
-  #AC_CHECK_LIB (library, function, [action-if-found], [action-if-not-found], [other-libraries])
-  #AC_CHECK_LIB([libpq], [main], [], AC_MSG_FAILURE("liqpq is required."))
-  AC_CHECK_LIB(pq, PQconnectdb, [], AC_MSG_ERROR(libpq.so not found))
-  #AC_CHECK_HEADERS([libpq], [hootFoundLibpqHeaders=yes; break;])
+  # hoot uses this one
+  AC_CHECK_LIB(pq, PQconnectdb, [], AC_MSG_ERROR(libpq not found))
+  # this one guarantees us pg 9.x
+  AC_CHECK_LIB(pq, PQconnectdbParams, [], AC_MSG_ERROR(unsupported version of libpq))
 
   #  (header-file, [action-if-found], [action-if-not-found], [includes])
   # pg 9.5 on ubuntu 14.04
