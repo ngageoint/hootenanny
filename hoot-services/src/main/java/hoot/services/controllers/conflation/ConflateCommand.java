@@ -116,10 +116,11 @@ class ConflateCommand extends ExternalCommand {
             if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
                 input1 = OSMAPI_DB_URL;
                 options.add("convert.bounding.box=" + aoi);
-                options.add("conflate.use.data.source.ids=true");
+                options.add("reader.conflate.use.data.source.ids=true");
                 options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
                 options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
                 options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
+                options.add("preserve.unknown1.element.id.when.modifying.features=true");
             }
         }
         else if (referenceLayer.equalsIgnoreCase("2")) {
@@ -127,10 +128,11 @@ class ConflateCommand extends ExternalCommand {
             if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
                 input2 = OSMAPI_DB_URL;
                 options.add("convert.bounding.box=" + aoi);
-                options.add("conflate.use.data.source.ids=true");
+                options.add("reader.conflate.use.data.source.ids=true");
                 options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
                 options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
                 options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
+                options.add("preserve.unknown1.element.id.when.modifying.features=true");
             }
         }
 
