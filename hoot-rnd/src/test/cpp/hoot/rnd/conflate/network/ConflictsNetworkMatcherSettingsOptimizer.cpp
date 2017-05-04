@@ -262,7 +262,7 @@ public:
     SimulatedAnnealing sa(desc, ff);
     sa.setPickFromBestScores(true);
     const double bestScore = sa.iterate(100);
-    LOG_ERROR("Best score: " << bestScore);
+    LOG_ERROR("Best score: " << bestScore << " - (failures / num tests; lower is better)");
     if (bestScore == 0.0)
     {
       LOG_ERROR("***YOU FOUND A SOLUTION!***");
