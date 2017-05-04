@@ -217,10 +217,10 @@ public:
         VariableDescription::Real, 0.49, 0.69)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
-        VariableDescription::Real, 20.0, 20.0)); //original default
+        //VariableDescription::Real, 20.0, 20.0)); //original default
         //VariableDescription::Real, 20.0, 20.0)); //current default
         //VariableDescription::Real, 1.0, 100.0));  //min/max??
-        //VariableDescription::Real, 36.0, 100.0)); //test values
+        VariableDescription::Real, 15.0, 25.0)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
         //VariableDescription::Real, 0.15, 0.15)); //original default
@@ -261,11 +261,21 @@ public:
     boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
     sa.setPickFromBestScores(true);
-    sa.iterate(100);
-
+    const double bestScore = sa.iterate(100);
+    LOG_ERROR("Best score: " << bestScore);
+    if (bestScore == 0.0)
+    {
+      LOG_ERROR("***YOU FOUND A SOLUTION!***");
+    }
+    else
+    {
+      LOG_ERROR("No solution was found :-(");
+    }
+    LOG_ERROR("\nBest states:\n");
     foreach (ConstStatePtr state, sa.getBestStates())
     {
       LOG_VARE(state);
+      LOG_ERROR("");
     }
   }
 };
