@@ -43,7 +43,8 @@
 namespace hoot
 {
 
-// used for parameter tuning only and isn't a true test.
+// used for parameter tuning only and isn't a true test.  most of the time you want to run this
+// at the error log level to reduce log clutter
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
@@ -95,7 +96,7 @@ public:
     QString _name;
   };
 
-  //Things that could be better:
+  //Things that could be better here:
   //  - show the iteration number w/o having to temporarily add a cout statement to
   //    SimulatedAnnealing
   //  - modify fitness function to give variable failure based on the number of reviews
@@ -115,14 +116,14 @@ public:
       settings.set("match.creators", "hoot::NetworkMatchCreator");
       settings.set("merger.creators", "hoot::NetworkMergerCreator");
       settings.set("uuid.helper.repeatable", "true");
-      settings.set("writer.include.debug", "true");
+      settings.set("writer.include.debug.tags", "true");
       settings.set("network.matcher", "hoot::ConflictsNetworkMatcher");
       settings.set("writer.include.conflate.review.detail.tags", "false");
       settings.set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
       settings.set("way.subline.matcher", "hoot::MaximalSublineMatcher");
 
       TempFileName temp;
-      LOG_VARW(temp.getFileName());
+      //LOG_VARE(temp.getFileName());
       settings.storeJson(temp.getFileName());
 
       ConflateCaseTestSuite suite("test-files/cases/hoot-rnd/network/conflicts/");
@@ -132,7 +133,7 @@ public:
       {
         ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
         const QString testName = QString::fromStdString(test->getName());
-        //LOG_WARN("Running " << testName << "...");
+        //LOG_ERROR("Running " << testName << "...");
         test->addConfig(temp.getFileName());
         CppUnit::TestResult result;
         SimpleListener listener;
@@ -141,18 +142,18 @@ public:
 
         if (listener.isFailure())
         {
-          LOG_WARN("Failure: " << testName);
+          LOG_ERROR("Failure: " << testName);
           failures++;
         }
       }
 
-      LOG_WARN(failures << "/" << testCount << " tests failed");
+      LOG_ERROR(failures << "/" << testCount << " tests failed");
       if (failures == 0)
       {
         //This message will actually show if, by chance, the first selected random state
         //is successful.  However, that state won't be included in what's returned from sa...
         //so this logging this success message is a little misleading in that situation.
-        LOG_WARN("\n\n***BOOM GOES THE DYNAMITE!***\n");
+        LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
       }
 
       return (double)failures / (double)testCount;
@@ -164,74 +165,87 @@ public:
     StateDescriptionPtr desc(new StateDescription());
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
-        //VariableDescription::Real, 8.8, 8.8)); //default
+        //VariableDescription::Real, 4.4, 4.4)); //original default
+        //VariableDescription::Real, 8.8, 8.8)); //current default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 5.0, 9.7));
+        VariableDescription::Real, 3.4, 5.4)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
-        //VariableDescription::Real, 0.2, 0.2)); //default
+        //VariableDescription::Real, 0.2, 0.2)); //original default
+        //VariableDescription::Real, 0.2, 0.2)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.46));
+        VariableDescription::Real, 0.1, 0.3)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
-        //VariableDescription::Real, 1.7, 1.7)); //default
+        //VariableDescription::Real, 0.86, 0.86)); //original default
+        //VariableDescription::Real, 1.7, 1.7)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.56));
+        VariableDescription::Real, 0.76, 0.96)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
-        //VariableDescription::Real, 0.0, 0.0)); //default
+        //VariableDescription::Real, 0.0, 0.0)); //original default
+        //VariableDescription::Real, 0.0, 0.0)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.34, 1.49));
+        VariableDescription::Real, 0.0, 0.1)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
-        //VariableDescription::Real, 0.25, 0.25)); //default
+        //VariableDescription::Real, 0.0, 0.0)); //original default
+        //VariableDescription::Real, 0.25, 0.25)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.51));
+        VariableDescription::Real, 0.0, 0.1)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
-        //VariableDescription::Real, 0.5, 0.5)); //default
+        //VariableDescription::Real, 0.59, 0.59)); //original default
+        //VariableDescription::Real, 0.5, 0.5)); //current default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 6.5, 10.0));
+        VariableDescription::Real, 0.49, 0.69)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
-        //VariableDescription::Real, 20.0, 20.0)); //default
+        VariableDescription::Real, 20.0, 20.0)); //original default
+        //VariableDescription::Real, 20.0, 20.0)); //current default
         //VariableDescription::Real, 1.0, 100.0));  //min/max??
-        VariableDescription::Real, 36.0, 100.0));
+        //VariableDescription::Real, 36.0, 100.0)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
-        //VariableDescription::Real, 0.15, 0.15)); //default
+        //VariableDescription::Real, 0.15, 0.15)); //original default
+        //VariableDescription::Real, 0.15, 0.15)); //current default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.01, 0.39));
+        VariableDescription::Real, 0.05, 0.25)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMissThresholdKey(),
-        //VariableDescription::Real, 0.85, 0.85)); //default
+        //VariableDescription::Real, 0.85, 0.85)); //original default
+        //VariableDescription::Real, 0.85, 0.85)); //current default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.72, 0.99));
+        VariableDescription::Real, 0.75, 0.95)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkReviewThresholdKey(),
-        //VariableDescription::Real, 0.5, 0.5)); //default
+        //VariableDescription::Real, 0.5, 0.5)); //original default
+        //VariableDescription::Real, 0.5, 0.5)); //current default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.8, 0.99));
+        VariableDescription::Real, 0.4, 0.6)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getWayMergerMinSplitSizeKey(),
-        VariableDescription::Real, 5.0, 5.0)); //default
+        //VariableDescription::Real, 5.0, 5.0)); //original default
+        //VariableDescription::Real, 5.0, 5.0)); //current default
         //VariableDescription::Real, 0.01, 100.0));  //min/max??
-        //VariableDescription::Real, 0.5, 30.0));
+        VariableDescription::Real, 4.0, 6.0)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getWayMatcherMaxAngleKey(),
-        VariableDescription::Real, 60.0, 60.0)); //default
+        //VariableDescription::Real, 60.0, 60.0)); //original default
+        //VariableDescription::Real, 60.0, 60.0)); //current default
         //VariableDescription::Real, 0.01, 90.0));  //min/max
-        //VariableDescription::Real, 20.0, 75.0));
+        VariableDescription::Real, 50.0, 70.0)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getWayMatcherHeadingDeltaKey(),
-        VariableDescription::Real, 5.0, 5.0)); //default
+        //VariableDescription::Real, 5.0, 5.0)); //original default
+        //VariableDescription::Real, 5.0, 5.0)); //new default
         //VariableDescription::Real, 0.01, 100.0));  //min/max??
-        //VariableDescription::Real, 0.5, 50.0));
+        VariableDescription::Real, 4.0, 6.0)); //test values
 
-   boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
+    boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
     sa.setPickFromBestScores(true);
-    sa.iterate(50);
+    sa.iterate(100);
 
     foreach (ConstStatePtr state, sa.getBestStates())
     {
