@@ -43,9 +43,13 @@
 namespace hoot
 {
 
-// used for parameter tuning only and isn't actually a true test
-//
-// *most of the time you want to run this at the error log level to reduce log clutter*
+/*
+ * This is used for network conflation parameter tuning only and isn't actually a unit test.
+ *
+ * IMPORTANT: Most of the time you want to run this at the error log level to reduce log clutter.
+ *
+ * TODO: come up with a better way to control logging inside SimulatedAnnealing than cout
+ */
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
@@ -56,20 +60,23 @@ public:
 
   class SimpleListener : public CppUnit::TestListener
   {
+
   public:
+
     SimpleListener() : _failure(false) {}
 
     virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-
     bool isFailure() const { return _failure; }
 
   private:
+
     bool _failure;
   };
 
   class TempFileName
   {
   public:
+
     TempFileName()
     {
       do
@@ -94,6 +101,7 @@ public:
     QString getFileName() const { return _name; }
 
   private:
+
     QString _name;
   };
 
@@ -113,7 +121,7 @@ public:
       }
       //if you need to add any other temporary custom settings for this test that wouldn't
       //normally be used with the network conflation case tests, add those here
-      // settings.set("", "");
+      //settings.set("", "");
       LOG_VART(settings);
       TempFileName temp;
       LOG_VARD(temp.getFileName());
