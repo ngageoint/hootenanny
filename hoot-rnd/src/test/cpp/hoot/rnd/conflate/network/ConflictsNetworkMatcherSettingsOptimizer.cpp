@@ -48,7 +48,7 @@ namespace hoot
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
-  //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
+  CPPUNIT_TEST(optimizeAgainstCaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -256,7 +256,7 @@ public:
 
     foreach (ConstStatePtr state, sa.getBestStates())
     {
-      LOG_VARW(state);
+      LOG_VARE(state);
     }
   }
 };
