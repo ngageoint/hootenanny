@@ -76,7 +76,10 @@ Hoot& Hoot::getInstance()
 
 void Hoot::_init()
 {
-  LOG_TRACE("Hoot instance init...");
+  //lower this temporarily for debugging init issues
+  Log::getInstance().setLevel(Log::Info);
+
+  LOG_INFO("Hoot instance init...");
 
 # ifdef TGS_HAVE_LIBSTXXL
   // initialize the environment variable for loading STXXL configuration. If the environment
@@ -86,8 +89,6 @@ void Hoot::_init()
 # endif
 
   SignalCatcher::getInstance()->registerDefaultHandlers();
-
-  Log::getInstance().setLevel(Log::Info);
 
   // All streams will default to UTF-8. This makes supporting other scripts much easier.
   setlocale(LC_ALL, "en_US.UTF-8");
@@ -115,17 +116,22 @@ void Hoot::_init()
 # ifdef HOOT_HAVE_RND
   loadLibrary("HootRnd");
 # endif
+  //TODO: I don't think hoot can operate at all now without nodejs due to the schema loader, so
+  //this should be reworked.
 # ifdef HOOT_HAVE_NODEJS
   // sometimes HootJs is loaded by node.js before we get to init.
   if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
     loadLibrary("HootJs");
 # endif
+
+  Log::getInstance().setLevel(Log::Info);
 }
 
 void Hoot::loadLibrary(QString name)
 {
   // this library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);
+  LOG_DEBUG("Loading library " << name);
   if (lib.load() == false)
   {
     // if the file doesn't exist, then we aren't too concerned.
@@ -142,7 +148,7 @@ void Hoot::loadLibrary(QString name)
 
 void Hoot::reinit()
 {
-  LOG_TRACE("Hoot instance reinit...");
+  LOG_INFO("Hoot instance reinit...");
 
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)
@@ -152,7 +158,7 @@ void Hoot::reinit()
     rl.rlim_cur = max;
     setrlimit(RLIMIT_AS, &rl);
     getrlimit(RLIMIT_AS, &rl);
-    LOG_DEBUG("Set max memory usage to: " << rl.rlim_cur << "bytes.");
+    LOG_INFO("Set max memory usage to: " << rl.rlim_cur << "bytes.");
   }
 
   Log::getInstance().init();
