@@ -48,7 +48,7 @@ namespace hoot
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
-  //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
+  CPPUNIT_TEST(optimizeAgainstCaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -96,10 +96,7 @@ public:
     QString _name;
   };
 
-  //Things that could be better here:
-  //  - show the iteration number w/o having to temporarily add a cout statement to
-  //    SimulatedAnnealing
-  //  - modify fitness function to give variable failure based on the number of reviews
+  //TODO: modify fitness function to give variable failure based on the number of reviews
   class CaseFitnessFunction : public Tgs::FitnessFunction
   {
   public:
@@ -128,7 +125,7 @@ public:
 
       ConflateCaseTestSuite suite("test-files/cases/hoot-rnd/network/conflicts/");
       const int testCount = suite.getChildTestCount();
-      int failures = 0;
+      QStringList failedTests;
       for (int i = 0; i < testCount; ++i)
       {
         ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
@@ -142,21 +139,31 @@ public:
 
         if (listener.isFailure())
         {
-          LOG_ERROR("Failure: " << testName);
-          failures++;
+          //LOG_ERROR("Failure: " << testName);
+          failedTests.append(testName);
         }
       }
 
-      LOG_ERROR(failures << "/" << testCount << " tests failed");
-      if (failures == 0)
+      if (failedTests.size() == 0)
       {
         //This message will actually show if, by chance, the first selected random state
-        //is successful.  However, that state won't be included in what's returned from sa...
-        //so this logging this success message is a little misleading in that situation.
+        //is successful.  However, that state is just a starting point for the actual simulated
+        //annealing iterations.
         LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
       }
+      else
+      {
+        QString failureMsg =
+          QString::number(failedTests.size()) + "/" + QString::number(testCount) +
+          " tests failed:\n\n";
+        for (int i = 0; i < failedTests.size(); i++)
+        {
+          failureMsg += "\t" + failedTests[i] + "\n";
+        }
+        LOG_ERROR(failureMsg);
+      }
 
-      return (double)failures / (double)testCount;
+      return (double)failedTests.size() / (double)testCount;
     }
   };
 
