@@ -27,9 +27,11 @@
 package hoot.services.controllers.export;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ExportParams {
 
     @JsonProperty("outputtype")
@@ -50,9 +52,6 @@ public class ExportParams {
     @JsonProperty("USER_ID")
     private String userId;
 
-    @JsonProperty("USER_EMAIL")
-    private String userEmail;
-
     @JsonProperty("input")
     private String input;
 
@@ -62,11 +61,8 @@ public class ExportParams {
     @JsonProperty("append")
     private Boolean append;
 
-    @JsonProperty("input1")
-    private String input1;
-
-    @JsonProperty("input2")
-    private String input2;
+    @JsonProperty("USER_EMAIL")
+    private String userEmail;
 
     public String getOutputType() {
         return outputType;
@@ -141,27 +137,11 @@ public class ExportParams {
     }
 
     public String getUserEmail() {
-        return userEmail;
+        return (this.userEmail == null) ? "test@test.com" : userEmail;
     }
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
-    }
-
-    public String getInput1() {
-        return input1;
-    }
-
-    public void setInput1(String input1) {
-        this.input1 = input1;
-    }
-
-    public String getInput2() {
-        return input2;
-    }
-
-    public void setInput2(String input2) {
-        this.input2 = input2;
     }
 
     @Override
@@ -173,12 +153,10 @@ public class ExportParams {
                 ", inputType='" + inputType + '\'' +
                 ", bounds='" + bounds + '\'' +
                 ", userId='" + userId + '\'' +
-                ", userEmail='" + userEmail + '\'' +
                 ", input='" + input + '\'' +
                 ", translation='" + translation + '\'' +
                 ", append=" + append +
-                ", input1='" + input1 + '\'' +
-                ", input2='" + input2 + '\'' +
+                ", userEmail='" + userEmail + '\'' +
                 '}';
     }
 }

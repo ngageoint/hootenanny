@@ -30,21 +30,20 @@ import static hoot.services.HootProperties.OSMAPI_DB_URL;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hoot.services.models.osm.Map;
 
+class DeriveChangesetCommand extends ExportCommand {
+    private static final Logger logger = LoggerFactory.getLogger(DeriveChangesetCommand.class);
 
-class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
-    private static final Logger logger = LoggerFactory.getLogger(OSMAPIDBDeriveChangesetCommand.class);
-
-    OSMAPIDBDeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    DeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
 
         String mapName = params.getInput();
-        Map conflatedMap = getConflatedMap(mapName);
+        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
 
         String aoi = getAOI(params, conflatedMap);
 
@@ -62,15 +61,24 @@ class OSMAPIDBDeriveChangesetCommand extends ExportCommand {
 
         List<String> hootOptions = toHootOptions(options);
 
-        java.util.Map<String, Object> substitutionMap = new HashMap<>();
+        Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("OSMAPI_DB_URL", OSMAPI_DB_URL);
         substitutionMap.put("INPUT", super.getInput());
-        substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getSQLChangesetPath());
 
-        String command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} " +
-                "${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
+        String command;
+
+        if (params.getOutputType().equalsIgnoreCase("osc")) {
+            // Just derive without apply (Will return .osc to the REST caller)
+            substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getOutputPath());
+            command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH}";
+        }
+        else {
+            // Derive changeset and apply to a remote database (The actual apply command is issues in a different class)
+            substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getSQLChangesetPath()); //"changeset-" + getJobId() + ".osc.sql"
+            command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
+        }
 
         super.configureCommand(command, substitutionMap, caller);
     }

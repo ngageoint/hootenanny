@@ -53,7 +53,7 @@ import hoot.services.utils.MapUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
-public class OSMAPIDBApplyChangesetCommandTest {
+public class ApplyChangesetCommandTest {
 
     @Test
     public void testOSMAPIDBApplyChangesetCommand() {
@@ -80,7 +80,7 @@ public class OSMAPIDBApplyChangesetCommandTest {
         tags.put("osm_api_db_export_time", conflictTimestamp);
         DbUtils.updateMapsTableTags(tags, mapId);
 
-        OSMAPIDBApplyChangesetCommand exportCommand = new OSMAPIDBApplyChangesetCommand(jobId, exportParams, debugLevel, caller);
+        ApplyChangesetCommand exportCommand = new ApplyChangesetCommand(jobId, exportParams, debugLevel, caller);
 
         List<String> options = exportCommand.getCommonExportHootOptions();
         List<String> hootOptions = new LinkedList<>();
