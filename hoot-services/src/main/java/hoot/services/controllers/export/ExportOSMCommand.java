@@ -43,7 +43,7 @@ class ExportOSMCommand extends ExportCommand {
 
         List<String> options = new LinkedList<>();
         options.add("hootapi.db.writer.create.user=true");
-        options.add("api.db.email=test@test.com");
+        options.add("api.db.email=" + params.getUserEmail());
 
         if (params.getTextStatus()) {
             options.add("writer.text.status=true");

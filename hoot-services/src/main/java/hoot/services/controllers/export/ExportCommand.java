@@ -112,7 +112,7 @@ class ExportCommand extends ExternalCommand {
         options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
-        options.add("api.db.email=test@test.com");
+        options.add("api.db.email=" + params.getUserEmail());
 
         //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
         if (params.getTextStatus()) {
