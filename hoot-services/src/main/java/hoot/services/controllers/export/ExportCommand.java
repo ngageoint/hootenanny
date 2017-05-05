@@ -149,17 +149,9 @@ class ExportCommand extends ExternalCommand {
         return params.getInput();
     }
 
-    static Map getConflatedMap(String mapName) {
-        Long mapId = DbUtils.getMapIdByName(mapName);
-
-        if (mapId == null) {
-            throw new IllegalStateException("Error exporting data.  No map exists with name: " + mapName);
-        }
-
+    static Map getConflatedMap(Long mapId) {
         Map conflatedMap = new Map(mapId);
-        conflatedMap.setDisplayName(mapName);
         conflatedMap.setTags(DbUtils.getMapsTableTags(mapId));
-
         return conflatedMap;
     }
 
