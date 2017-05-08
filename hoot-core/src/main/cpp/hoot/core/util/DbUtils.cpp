@@ -158,4 +158,34 @@ void DbUtils::_modifyTableConstraints(QSqlDatabase& database, const QString tabl
   }
 }
 
+QString DbUtils::getPostgresDbVersion(const QSqlDatabase& database)
+{
+  QString version;
+
+  QSqlQuery query(database);
+  if (!query.exec("SELECT version()"))
+  {
+    throw HootException(
+      QString("Error executing version query: %1")
+        .arg(query.lastError().text()));
+  }
+
+  if (query.next())
+  {
+    version = query.value(0).toString();
+    if (version.trimmed().isEmpty())
+    {
+      throw HootException("Error retrieving version.");
+    }
+  }
+  else
+  {
+    throw HootException(
+      "Error retrieving version. Error: " + query.lastError().text());
+  }
+  query.finish();
+
+  return version;
+}
+
 }

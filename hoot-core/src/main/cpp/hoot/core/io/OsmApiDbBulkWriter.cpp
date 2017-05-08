@@ -101,6 +101,7 @@ void OsmApiDbBulkWriter::open(QString url)
   if (_destinationIsDatabase())
   {
     _database.open(_outputUrl);
+    LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database.getDB()));
   }
   _verifyDependencies();
 }

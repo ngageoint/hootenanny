@@ -478,29 +478,29 @@ void HootApiDb::_flushBulkInserts()
   }
 }
 
-bool HootApiDb::isCorrectDbVersion()
+bool HootApiDb::isCorrectHootDbVersion()
 {
-  return getDbVersion() == ApiDb::expectedDbVersion();
+  return getHootDbVersion() == ApiDb::expectedHootDbVersion();
 }
 
-QString HootApiDb::getDbVersion()
+QString HootApiDb::getHootDbVersion()
 {
-  if (_selectDbVersion == 0)
+  if (_selectHootDbVersion == 0)
   {
-    _selectDbVersion.reset(new QSqlQuery(_db));
-    _selectDbVersion->prepare("SELECT id || ':' || author AS version_id FROM databasechangelog "
-                             "ORDER BY dateexecuted DESC LIMIT 1");
+    _selectHootDbVersion.reset(new QSqlQuery(_db));
+    _selectHootDbVersion->prepare("SELECT id || ':' || author AS version_id FROM databasechangelog "
+                                  "ORDER BY dateexecuted DESC LIMIT 1");
   }
 
-  if (_selectDbVersion->exec() == false)
+  if (_selectHootDbVersion->exec() == false)
   {
-    throw HootException(_selectDbVersion->lastError().text());
+    throw HootException(_selectHootDbVersion->lastError().text());
   }
 
   QString result;
-  if (_selectDbVersion->next())
+  if (_selectHootDbVersion->next())
   {
-    result = _selectDbVersion->value(0).toString();
+    result = _selectHootDbVersion->value(0).toString();
   }
   else
   {
@@ -925,11 +925,11 @@ void HootApiDb::open(const QUrl& url)
 
   ApiDb::open(url);
 
-  if (isCorrectDbVersion() == false)
+  if (isCorrectHootDbVersion() == false)
   {
-    const QString msg = "Running against an unexpected DB version.";
-    LOG_DEBUG("Expected: " << expectedDbVersion());
-    LOG_DEBUG("Actual: " << getDbVersion());
+    const QString msg = "Running against an unexpected Hootenanny DB version.";
+    LOG_DEBUG("Expected: " << expectedHootDbVersion());
+    LOG_DEBUG("Actual: " << getHootDbVersion());
     throw HootException(msg);
   }
 }
@@ -944,7 +944,7 @@ void HootApiDb::_resetQueries()
   _insertMap.reset();
   _insertWayNodes.reset();
   _insertRelationMembers.reset();
-  _selectDbVersion.reset();
+  _selectHootDbVersion.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
   _mapExists.reset();
