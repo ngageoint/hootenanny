@@ -76,6 +76,13 @@ public:
    */
   static void enableTableConstraints(QSqlDatabase& database, const QString tableName);
 
+  /**
+   * Returns the version of the Postgres database used
+   *
+   * @return a database version string
+   */
+  static QString getPostgresDbVersion(const QSqlDatabase& database);
+
 private:
 
   static void _modifyTableConstraints(QSqlDatabase& database, const QString tableName,

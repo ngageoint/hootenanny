@@ -54,9 +54,9 @@ public:
 
   virtual void close();
 
-  virtual bool isCorrectDbVersion();
+  virtual bool isCorrectHootDbVersion();
 
-  virtual QString getDbVersion();
+  virtual QString getHootDbVersion();
 
   virtual bool isSupported(const QUrl& url);
 
@@ -296,7 +296,7 @@ private:
   boost::shared_ptr<QSqlQuery> _insertMap;
   boost::shared_ptr<QSqlQuery> _insertRelationMembers;
   boost::shared_ptr<QSqlQuery> _insertWayNodes;
-  boost::shared_ptr<QSqlQuery> _selectDbVersion;
+  boost::shared_ptr<QSqlQuery> _selectHootDbVersion;
   boost::shared_ptr<QSqlQuery> _mapExists;
   boost::shared_ptr<QSqlQuery> _changesetExists;
   boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;

@@ -89,6 +89,7 @@ void WriteOsmSqlStatementsDriver::open(QString url)
   if (_destinationIsDatabase(_output))
   {
     _database.open(_output);
+    LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database.getDB()));
   }
 }
 
