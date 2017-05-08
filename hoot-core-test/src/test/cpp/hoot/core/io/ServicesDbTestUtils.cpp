@@ -100,8 +100,14 @@ void ServicesDbTestUtils::execOsmApiDbSqlTestScript(const QString scriptName)
   QString dbPort = userParts[2];
   const QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
 
-  const QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-    psql "+auth+" -v ON_ERROR_STOP=1 -f ${HOOT_HOME}/test-files/servicesdb/"+scriptName+" > /dev/null 2>&1";
+  QString cmd =
+    "export PGPASSWORD=" + dbPassword + "; export PGUSER=" + dbUser + "; export PGDATABASE=" +
+    dbName + "; psql " + auth + " -v ON_ERROR_STOP=1 -f ${HOOT_HOME}/test-files/servicesdb/" +
+    scriptName;
+  if (Log::getInstance().getLevel() > Log::Debug)
+  {
+    cmd += " > /dev/null 2>&1";
+  }
   LOG_VARD(cmd);
   if (std::system(cmd.toStdString().c_str()) != 0)
   {

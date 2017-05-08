@@ -41,6 +41,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/algorithms/zindex/Range.h>
 #include <hoot/core/io/TableType.h>
+#include <hoot/core/util/DbUtils.h>
 
 // qt
 #include <QStringList>
@@ -160,6 +161,7 @@ void ApiDb::open(const QUrl& url)
   }
 
   LOG_DEBUG("Successfully opened db: " << url.toString());
+  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_db));
 }
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
