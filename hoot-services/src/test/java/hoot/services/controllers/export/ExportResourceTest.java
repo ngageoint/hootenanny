@@ -149,7 +149,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("osc");
-        exportParams.setInput("map-with-id-" + mapId);
+        exportParams.setInput(Long.toString(mapId));
         exportParams.setOutputName("output");
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);
@@ -179,7 +179,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("osm_api_db");
-        exportParams.setInput("map-with-id-" + mapId);
+        exportParams.setInput(Long.toString(mapId));
         exportParams.setOutputName("output");
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);

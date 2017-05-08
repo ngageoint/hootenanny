@@ -42,8 +42,8 @@ class DeriveChangesetCommand extends ExportCommand {
     DeriveChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
 
-        String mapName = params.getInput();
-        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
+        Long mapId = Long.parseLong(params.getInput());
+        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapId);
 
         String aoi = getAOI(params, conflatedMap);
 
@@ -70,12 +70,12 @@ class DeriveChangesetCommand extends ExportCommand {
         String command;
 
         if (params.getOutputType().equalsIgnoreCase("osc")) {
-            // Just derive without apply (Will return .osc to the REST caller)
+            // Just derive without apply (Will return .osc file to the REST caller)
             substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getOutputPath());
             command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH}";
         }
         else {
-            // Derive changeset and apply to a remote database (The actual apply command is issues in a different class)
+            // Derive changeset here.  The actual apply command is issued via ApplyChangesetCommand from another class.
             substitutionMap.put("CHANGESET_OUTPUT_PATH", super.getSQLChangesetPath()); //"changeset-" + getJobId() + ".osc.sql"
             command = "hoot derive-changeset --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSMAPI_DB_URL} ${INPUT} ${CHANGESET_OUTPUT_PATH} ${OSMAPI_DB_URL}";
         }

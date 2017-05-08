@@ -44,8 +44,8 @@ class ApplyChangesetCommand extends ExportCommand {
 
         List<String> hootOptions = toHootOptions(super.getCommonExportHootOptions());
 
-        String mapName = params.getInput();
-        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
+        Long mapId = Long.parseLong(params.getInput());
+        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapId);
 
         // AOI = Area of Interest
         String conflictAOI = getAOI(params, conflatedMap);
