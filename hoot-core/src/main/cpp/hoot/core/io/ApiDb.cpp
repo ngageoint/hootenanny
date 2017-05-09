@@ -703,11 +703,11 @@ QString ApiDb::getPsqlString(const QString url)
 void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
 {
   const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(dbUrl);
-  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
-  if (Log::getInstance().getLevel() > Log::Debug)
-  {
-    cmd += " --quiet";
-  }
+  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql -v ON_ERROR_STOP=1";
+//  if (Log::getInstance().getLevel() > Log::Debug)
+//  {
+//    cmd += " --quiet";
+//  }
   cmd += " " + getPsqlString(dbUrl) + " -f " + sqlFile;
   if (Log::getInstance().getLevel() > Log::Debug)
   {
@@ -718,7 +718,7 @@ void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
   if (retval != 0)
   {
     throw HootException(
-       "Failed executing SQL file against the database.  Status: " + QString::number(retval));
+      "Failed executing SQL file against the database.  Status: " + QString::number(retval));
   }
 }
 
