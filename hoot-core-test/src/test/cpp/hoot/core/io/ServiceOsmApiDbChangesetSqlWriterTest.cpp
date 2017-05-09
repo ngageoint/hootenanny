@@ -130,14 +130,16 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql");
 
     boost::shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
     CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
 
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql");
 
     nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
@@ -186,7 +188,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //grab the current time
     const QDateTime startTime = now();
@@ -209,7 +212,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //grab the current time
     const QDateTime startTime = now();
@@ -231,7 +235,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //define an aoi
     const QString aoi = "-10,-10,10,10";

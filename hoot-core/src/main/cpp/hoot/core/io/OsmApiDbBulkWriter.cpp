@@ -724,7 +724,7 @@ void OsmApiDbBulkWriter::_reserveIdsInDb()
                                 _idMappings.currentNodeId + _writeStats.nodesWritten,
                                 _idMappings.currentWayId + _writeStats.waysWritten,
                                 _idMappings.currentRelationId + _writeStats.relationsWritten,
-                                 reserveElementIdsSql);
+                                reserveElementIdsSql);
   LOG_VART(reserveElementIdsSql);
 
   LOG_INFO("Writing sequence ID updates to database to reserve record IDs...");

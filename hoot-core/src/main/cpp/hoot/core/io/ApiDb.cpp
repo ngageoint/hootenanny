@@ -41,6 +41,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/algorithms/zindex/Range.h>
 #include <hoot/core/io/TableType.h>
+#include <hoot/core/util/DbUtils.h>
 
 // qt
 #include <QStringList>
@@ -160,6 +161,7 @@ void ApiDb::open(const QUrl& url)
   }
 
   LOG_DEBUG("Successfully opened db: " << url.toString());
+  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_db));
 }
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
@@ -701,20 +703,22 @@ QString ApiDb::getPsqlString(const QString url)
 void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
 {
   const QMap<QString, QString> dbUrlParts = ApiDb::getDbUrlParts(dbUrl);
-  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql";
-  if (!(Log::getInstance().getLevel() <= Log::Info))
-  {
-    cmd += " --quiet";
-  }
+  QString cmd = "export PGPASSWORD=" + dbUrlParts["password"] + "; psql -v ON_ERROR_STOP=1";
+//  if (Log::getInstance().getLevel() > Log::Debug)
+//  {
+//    cmd += " --quiet";
+//  }
   cmd += " " + getPsqlString(dbUrl) + " -f " + sqlFile;
-  if (!(Log::getInstance().getLevel() <= Log::Info))
+  if (Log::getInstance().getLevel() > Log::Debug)
   {
     cmd += " > /dev/null";
   }
   LOG_DEBUG(cmd);
-  if (system(cmd.toStdString().c_str()) != 0)
+  const int retval = system(cmd.toStdString().c_str());
+  if (retval != 0)
   {
-    throw HootException("Failed executing SQL file against the database.");
+    throw HootException(
+      "Failed executing SQL file against the database.  Status: " + QString::number(retval));
   }
 }
 
