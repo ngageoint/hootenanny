@@ -74,7 +74,7 @@ public:
 protected:
   /// The number of folds in cross validation
   int _kFold;
-  auto_ptr<DelaunayTriangulation> _dt;
+  std::auto_ptr<DelaunayTriangulation> _dt;
   map<Point2d, int> _pointToIndex;
   double _minX, _minY, _maxX, _maxY;
 

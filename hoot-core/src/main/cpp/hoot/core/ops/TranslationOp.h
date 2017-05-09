@@ -61,7 +61,7 @@ public:
   void setPath(QString path);
 
 private:
-  auto_ptr<ScriptTranslator> _translator;
+  std::auto_ptr<ScriptTranslator> _translator;
   bool _toOgr;
 };
 

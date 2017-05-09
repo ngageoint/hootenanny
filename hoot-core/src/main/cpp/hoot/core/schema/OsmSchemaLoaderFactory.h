@@ -53,7 +53,7 @@ public:
  boost::shared_ptr<OsmSchemaLoader> createLoader(QString url);
 
 private:
-  static auto_ptr<OsmSchemaLoaderFactory> _theInstance;
+  static std::auto_ptr<OsmSchemaLoaderFactory> _theInstance;
 };
 
 }

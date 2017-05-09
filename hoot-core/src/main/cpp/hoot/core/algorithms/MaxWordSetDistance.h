@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Returns the max (best) pairwise word comparison within two sets of words.

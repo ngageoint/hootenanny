@@ -33,7 +33,6 @@
 #include <hoot/core/elements/Status.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 

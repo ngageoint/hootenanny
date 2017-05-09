@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Implements Soundex as described on Wikipedia on 5/16/2013 [1].

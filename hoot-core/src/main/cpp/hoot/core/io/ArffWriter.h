@@ -72,7 +72,7 @@ public:
   void write(const vector<Sample>& samples);
 
 private:
-  auto_ptr<fstream> _autoStrm;
+  std::auto_ptr<fstream> _autoStrm;
   ostream* _strm;
   bool _useNulls;
 

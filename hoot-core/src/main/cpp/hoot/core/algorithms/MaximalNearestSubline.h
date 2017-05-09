@@ -55,10 +55,8 @@
 
 namespace hoot
 {
-  // Standard
-  using namespace std;
 
-  class Way;
+class Way;
 
 /**
  * Computes the Maximal Nearest Subline of a given linestring relative
@@ -102,8 +100,8 @@ public:
    * The resulting ways will not be placed in map.
    * @param mnsIndex The index of way that is the MNS is placed in mnsIndex.
    */
-  vector< WayPtr > splitWay(OsmMapPtr map) { int a; return splitWay(map, a); }
-  vector< WayPtr > splitWay(OsmMapPtr map, int& mnsIndex);
+  std::vector< WayPtr > splitWay(OsmMapPtr map) { int a; return splitWay(map, a); }
+  std::vector< WayPtr > splitWay(OsmMapPtr map, int& mnsIndex);
 
 private:
 
@@ -136,7 +134,7 @@ private:
    */
   ConstNodePtr _getEndNode();
 
-  const vector<WayLocation>& _getInterval();
+  const std::vector<WayLocation>& _getInterval();
 
   /**
    * Returns the start node in the MNS

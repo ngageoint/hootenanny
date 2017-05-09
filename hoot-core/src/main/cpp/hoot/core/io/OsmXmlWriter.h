@@ -113,7 +113,7 @@ private:
   QString _osmSchema;
   QString _timestamp;
   int _precision;
-  auto_ptr<QIODevice> _fp;
+  std::auto_ptr<QIODevice> _fp;
   int _encodingErrorCount;
 
   static QString _typeName(ElementType e);

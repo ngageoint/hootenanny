@@ -71,8 +71,8 @@ public:
 
 private:
 
-  auto_ptr<fstream> _autoStrm;
-  auto_ptr<boost::iostreams::filtering_istream> _bstrm;
+  std::auto_ptr<fstream> _autoStrm;
+  std::auto_ptr<boost::iostreams::filtering_istream> _bstrm;
   istream* _strm;
   char _buffer[2048];
 

@@ -70,8 +70,8 @@ public:
 
 private:
   istream* _istream;
-  auto_ptr<StdIoDevice> _stdIoDevice;
-  auto_ptr<QDataStream> _streamDelete;
+  std::auto_ptr<StdIoDevice> _stdIoDevice;
+  std::auto_ptr<QDataStream> _streamDelete;
   QDataStream* _stream;
 };
 

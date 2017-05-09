@@ -54,7 +54,6 @@ namespace hoot {
 namespace hoot
 {
 using namespace boost;
-using namespace std;
 using namespace geos::geom;
 
 class WayDiscretizer

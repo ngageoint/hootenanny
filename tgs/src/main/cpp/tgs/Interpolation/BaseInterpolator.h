@@ -58,7 +58,7 @@ public:
 protected:
   vector<int> _indColumns;
   vector<string> _indColumnsLabels;
-  mutable auto_ptr<HilbertRTree> _index;
+  mutable std::auto_ptr<HilbertRTree> _index;
   vector<int> _depColumns;
   vector<string> _depColumnsLabels;
   // A temp variable used to return the result of interpolate()

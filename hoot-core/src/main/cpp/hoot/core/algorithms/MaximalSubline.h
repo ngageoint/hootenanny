@@ -165,7 +165,7 @@ public:
     vector<WayLocation>& wl1, vector<WayLocation> &wl2);
 
 private:
-  auto_ptr<MatchCriteria> _criteria;
+  std::auto_ptr<MatchCriteria> _criteria;
   Meters _spacing;
   Meters _minSplitSize;
 

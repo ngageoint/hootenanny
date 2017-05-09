@@ -82,8 +82,8 @@ public:
 
 public:
   QDataStream* _stream;
-  auto_ptr<QDataStream> _stream2Delete;
-  auto_ptr<QByteArray> _array;
+  std::auto_ptr<QDataStream> _stream2Delete;
+  std::auto_ptr<QByteArray> _array;
   ostream* _ostream;
 };
 

@@ -61,7 +61,7 @@ inline QString toQString(const std::string& s)
 
 #define HOOT_STR_EQUALS(v1, v2) \
 { \
-  stringstream ss1, ss2; \
+  std::stringstream ss1, ss2; \
   ss1 << v1; \
   ss2 << v2; \
   CPPUNIT_ASSERT_EQUAL(ss1.str(), ss2.str()); \
@@ -88,7 +88,6 @@ inline QString toQString(const std::string& s)
 
 namespace hoot
 {
-using namespace std;
 
 class TestUtils
 {

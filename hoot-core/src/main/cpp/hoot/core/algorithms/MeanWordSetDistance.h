@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Calculates the mean distance between two sets of words. The mean distance is calculate by first

@@ -40,6 +40,8 @@
 #include <hoot/core/util/FindNodesInWayFactory.h>
 #include "linearreference/WayLocation.h"
 
+using namespace std;
+
 namespace hoot
 {
 

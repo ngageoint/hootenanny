@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Returns 1 if the strings match exactly (ignoring case) and 0 otherwise.

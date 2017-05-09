@@ -39,7 +39,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(StringDistance, Soundex);
+HOOT_FACTORY_REGISTER(StringDistance, Soundex)
 
 Soundex::Soundex()
 {

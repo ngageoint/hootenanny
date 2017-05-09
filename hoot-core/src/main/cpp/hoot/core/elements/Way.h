@@ -58,7 +58,6 @@ class Node;
 
 using namespace boost;
 using namespace geos::geom;
-using namespace std;
 
 class Way : public Element
 {
@@ -144,7 +143,7 @@ public:
 
   const std::vector<long>& getNodeIds() const { return _wayData->getNodeIds(); }
 
-  void setNodes(const vector<long>& newNodes);
+  void setNodes(const std::vector<long>& newNodes);
 
   bool hasNode(long nodeId) const;
 

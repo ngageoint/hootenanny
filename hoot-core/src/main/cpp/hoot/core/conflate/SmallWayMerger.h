@@ -80,7 +80,7 @@ protected:
 
   double _threshold;
   NodeToWayMap* _n2w;
-  auto_ptr<TagDifferencer> _diff;
+  std::auto_ptr<TagDifferencer> _diff;
 
   void _mergeNeighbors(boost::shared_ptr<Way> w);
 

@@ -67,8 +67,6 @@ namespace hoot
 namespace hoot
 {
 
-using namespace std;
-
 class OsmMapIndex;
 class OsmMapListener;
 class ElementId;

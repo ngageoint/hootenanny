@@ -72,7 +72,7 @@ private:
 
   void _removeOne(boost::shared_ptr<Element> e1,boost::shared_ptr<Element> e2);
 
-  auto_ptr<TagDifferencer> _diff;
+  std::auto_ptr<TagDifferencer> _diff;
   QHash<ElementId,boost::shared_ptr<Geometry> > _geoms;
 };
 

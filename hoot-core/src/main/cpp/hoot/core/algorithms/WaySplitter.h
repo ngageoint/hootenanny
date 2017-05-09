@@ -44,12 +44,10 @@
 
 namespace hoot
 {
-  // Standard
-  using namespace std;
 
-  class WaySubline;
-  class FindNodesInWayFactory;
-  class WayLocation;
+class WaySubline;
+class FindNodesInWayFactory;
+class WayLocation;
 
 class WaySplitter
 {
@@ -71,7 +69,7 @@ public:
    *
    * @param wl A sorted list of split points. There may be duplicate split points.
    */
-  vector<WayPtr> createSplits(const vector<WayLocation>& wl);
+  std::vector<WayPtr> createSplits(const vector<WayLocation>& wl);
 
   /**
    * Given an input subline, break the way up into up to 3 pieces where one is the way that covers
@@ -84,7 +82,7 @@ public:
    * an array. The old way will be removed from the source map and the two new ones will be added.
    * No nodes will be removed or replaced, but a new node may be added.
    */
-  vector< WayPtr > split(WayLocation& splitPoint);
+  std::vector< WayPtr > split(WayLocation& splitPoint);
 
   /**
    * Splits way into smaller ways no bigger than maxSize. If a is smaller than maxSize already
@@ -95,13 +93,13 @@ public:
    */
   static void split(const OsmMapPtr& map, const WayPtr& w, double maxSize);
 
-  static vector< WayPtr > split(const OsmMapPtr& map, WayPtr a,
+  static std::vector< WayPtr > split(const OsmMapPtr& map, WayPtr a,
     WayLocation& splitPoint);
 
 private:
   OsmMapPtr _map;
   WayPtr _a;
-  auto_ptr<FindNodesInWayFactory> _nf;
+  std::auto_ptr<FindNodesInWayFactory> _nf;
 
   NodePtr _createNode(const Coordinate& c);
 };

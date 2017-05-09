@@ -59,7 +59,7 @@ public:
 protected:
   double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 
-  auto_ptr<ValueAggregator> _pointAgg;
+  std::auto_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;
 };
 

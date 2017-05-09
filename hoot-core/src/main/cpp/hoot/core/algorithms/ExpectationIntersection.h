@@ -41,7 +41,6 @@ namespace hoot
 class Settings;
 
 using namespace boost;
-using namespace std;
 using namespace tbs;
 
 /**
@@ -70,7 +69,7 @@ public:
    *
    * 1. http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
    */
-  vector<double> snapMatches(const cv::Mat& matches, const Mat& ranges);
+  std::vector<double> snapMatches(const cv::Mat& matches, const Mat& ranges);
 
 private:
 

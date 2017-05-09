@@ -34,7 +34,6 @@ class QString;
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * A singleton to initialize hootenanny. You should call getInstance() on this before any other
@@ -62,7 +61,7 @@ public:
   void reinit();
 
 private:
-  static auto_ptr<Hoot> _theInstance;
+  static std::auto_ptr<Hoot> _theInstance;
 
   Hoot();
 

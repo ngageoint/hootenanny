@@ -43,6 +43,8 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -74,7 +76,7 @@ Meters MaximalNearestSubline::_calculateIntervalLength()
   {
     Meters d0 = _maxInterval[0].calculateDistanceOnWay();
     Meters d1 = _maxInterval[1].calculateDistanceOnWay();
-    result = std::max(d0, d1) - std::min(d0, d1);
+    result = max(d0, d1) - min(d0, d1);
   }
 
   return result;
@@ -109,7 +111,7 @@ WayPtr MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
 {
   MaximalNearestSubline mns(map, a, b, minSplitSize, maxRelevantDistance/*, _headingDelta*/);
 
-  std::vector<WayLocation> interval = mns.getInterval();
+  vector<WayLocation> interval = mns.getInterval();
 
   if (interval[0].isValid() && interval[1].isValid())
   {
@@ -121,7 +123,7 @@ WayPtr MaximalNearestSubline::getMaximalNearestSubline(const OsmMapPtr& map,
   }
 }
 
-const std::vector<WayLocation>& MaximalNearestSubline::getInterval()
+const vector<WayLocation>& MaximalNearestSubline::getInterval()
 {
   vector<WayLocation> testPoints;
 
@@ -170,7 +172,7 @@ const std::vector<WayLocation>& MaximalNearestSubline::getInterval()
 
   boost::shared_ptr<LineString> bls = ElementConverter(_map).convertToLineString(_b);
   double bestLength = -1;
-  std::vector<WayLocation> bestInterval;
+  vector<WayLocation> bestInterval;
   bestInterval.resize(2);
 
   // start at the beginning and look for the longest contiguous match
@@ -213,7 +215,7 @@ const std::vector<WayLocation>& MaximalNearestSubline::getInterval()
   return _maxInterval;
 }
 
-const std::vector<WayLocation>& MaximalNearestSubline::_getInterval()
+const vector<WayLocation>& MaximalNearestSubline::_getInterval()
 {
   /**
    * The basic strategy is to pick test points on B
@@ -338,7 +340,7 @@ vector< WayPtr > MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
   vector< WayPtr > result;
   _map = map;
 
-  std::vector<WayLocation> interval = getInterval();
+  vector<WayLocation> interval = getInterval();
   WayLocation start = interval[0];
   WayLocation end = interval[1];
 
