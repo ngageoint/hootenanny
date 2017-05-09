@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * See ScoreMatrix::minSumScore for details.

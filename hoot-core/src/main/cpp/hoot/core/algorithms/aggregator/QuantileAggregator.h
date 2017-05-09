@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 class QuantileAggregator : public ValueAggregator
 {
 public:
@@ -47,7 +45,7 @@ public:
    */
   QuantileAggregator(double quantile);
 
-  virtual double aggregate(vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return QString("QuantileAggregator %1").arg(_quantile); }
 

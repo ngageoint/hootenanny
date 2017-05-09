@@ -47,7 +47,7 @@ public:
 
   // default implementation inserts all children. You will likely want to do a final check depending
   // on the data.
-  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, set<DataType>& result) const
+  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, std::set<DataType>& result) const
   {
     for (size_t i = 0; i < leaf->getChildCount(); ++i)
     {
@@ -55,7 +55,7 @@ public:
     }
   }
 
-  virtual void find(const Node<KeyType, DataType>* n, int depth, set<DataType>& result) const = 0;
+  virtual void find(const Node<KeyType, DataType>* n, int depth, std::set<DataType>& result) const = 0;
 };
 
 }

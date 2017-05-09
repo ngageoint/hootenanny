@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 class MinAggregator : public ValueAggregator
 {
 public:
@@ -42,7 +40,7 @@ public:
 
   MinAggregator();
 
-  virtual double aggregate(vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return "MinAggregator"; }
 };

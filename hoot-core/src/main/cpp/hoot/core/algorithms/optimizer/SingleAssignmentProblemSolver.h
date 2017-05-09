@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * This is a form of the assignment problem [1], but I couldn't find a specific form of the
@@ -88,9 +87,9 @@ public:
    * a result pair w/ a null task. All the tasks that are not paired will be placed into a result
    * pair w/ a null actor.
    */
-  vector<ResultPair> calculatePairing() const
+  std::vector<ResultPair> calculatePairing() const
   {
-    vector<SingleAssignmentProblemSolver::ResultPair> result;
+    std::vector<SingleAssignmentProblemSolver::ResultPair> result;
 
     IntegerProgrammingSolver solver;
 
@@ -98,8 +97,8 @@ public:
 
     solver.solve();
 
-    set<const Actor*> usedActors;
-    set<const Task*> usedTasks;
+    std::set<const Actor*> usedActors;
+    std::set<const Task*> usedTasks;
 
     // go through all the columns (variables)
     for (int i = 0; i < solver.getNumColumns(); i++)
@@ -144,8 +143,8 @@ public:
 private:
   CostFunction& _costFunction;
 
-  vector<const Actor*> _actors;
-  vector<const Task*> _tasks;
+  std::vector<const Actor*> _actors;
+  std::vector<const Task*> _tasks;
 
   void _populateSolver(IntegerProgrammingSolver& solver) const
   {
@@ -169,9 +168,9 @@ private:
     int rows = _tasks.size() * _actors.size() * 2;
     solver.addRows(rows);
 
-    vector<int> ia;
-    vector<int> ja;
-    vector<double> ra;
+    std::vector<int> ia;
+    std::vector<int> ja;
+    std::vector<double> ra;
     int i = 1;
     // GLPK's arrays are 1 based. Why!?
     ia.push_back(0);

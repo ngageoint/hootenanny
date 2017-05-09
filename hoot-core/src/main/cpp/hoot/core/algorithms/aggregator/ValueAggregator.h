@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class ValueAggregator
 {
@@ -52,7 +51,7 @@ public:
    *
    * @param d The vector may be re-ordered, but the values shouldn't be removed or changed.
    */
-  virtual double aggregate(vector<double>& d) const = 0;
+  virtual double aggregate(std::vector<double>& d) const = 0;
 
   virtual QString toString() const = 0;
 };

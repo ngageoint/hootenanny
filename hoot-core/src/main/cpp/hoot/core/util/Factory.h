@@ -46,7 +46,6 @@
 
 namespace hoot
 {
-using namespace std;
 using namespace boost;
 
 class ObjectCreator
@@ -59,9 +58,9 @@ public:
 
   virtual any create() = 0;
 
-  virtual string getBaseName() = 0;
+  virtual std::string getBaseName() = 0;
 
-  virtual string getName() = 0;
+  virtual std::string getName() = 0;
 
 private:
   ObjectCreator(const ObjectCreator& oc);
@@ -89,12 +88,12 @@ public:
     return dynamic_cast<Base*>(b);
   }
 
-  string getBaseName() { return _baseName; }
+  std::string getBaseName() { return _baseName; }
 
-  string getName() { return _name; }
+  std::string getName() { return _name; }
 
 private:
-  string _name, _baseName;
+  std::string _name, _baseName;
 };
 
 class Factory
@@ -157,7 +156,7 @@ public:
     return any_cast<T*>(constructObject(name));
   }
 
-  vector<std::string> getObjectNamesByBase(const std::string& baseName);
+  std::vector<std::string> getObjectNamesByBase(const std::string& baseName);
 
   bool hasClass(const QString& name) { return hasClass(name.toStdString()); }
 

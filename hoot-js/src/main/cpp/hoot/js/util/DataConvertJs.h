@@ -90,7 +90,7 @@ inline void toCpp(v8::Handle<v8::Value> v, Meters& o)
 }
 
 template<typename T, typename U>
-void toCpp(v8::Handle<v8::Value> v, pair<T, U>& o)
+void toCpp(v8::Handle<v8::Value> v, std::pair<T, U>& o)
 {
   if (!v->IsArray())
   {
@@ -219,7 +219,7 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
 }
 
 template<typename T>
-void toCpp(v8::Handle<v8::Value> v, vector<T>& o)
+void toCpp(v8::Handle<v8::Value> v, std::vector<T>& o)
 {
   if (!v->IsArray())
   {
@@ -240,7 +240,7 @@ void toCpp(v8::Handle<v8::Value> v, vector<T>& o)
  * std::set is converted to a JavaScript Array. Using objects coerces all the keys into strings.
  */
 template<typename T>
-void toCpp(v8::Handle<v8::Value> v, set<T>& o)
+void toCpp(v8::Handle<v8::Value> v, std::set<T>& o)
 {
   if (!v->IsArray())
   {

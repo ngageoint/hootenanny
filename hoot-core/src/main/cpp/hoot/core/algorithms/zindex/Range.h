@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Range of values. Min is inclusive. Max is inclusive.
  */

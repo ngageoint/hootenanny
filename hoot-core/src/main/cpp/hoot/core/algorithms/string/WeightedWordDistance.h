@@ -41,7 +41,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Returns the max (best) pairwise word comparison within two sets of words.
@@ -69,7 +68,7 @@ private:
   StringTokenizer _tokenizer;
   double _p;
 
-  vector<double> _calculateWeights(QStringList l) const;
+  std::vector<double> _calculateWeights(QStringList l) const;
 };
 
 }

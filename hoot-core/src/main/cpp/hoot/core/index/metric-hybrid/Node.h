@@ -83,7 +83,7 @@ public:
     {
       if (_size < LEAF_NODE_SIZE)
       {
-        _elements[(size_t)_size] = pair<KeyType, DataType>(k, d);
+        _elements[(size_t)_size] = std::pair<KeyType, DataType>(k, d);
         ++_size;
       }
       else
@@ -94,7 +94,7 @@ public:
     }
   }
 
-  const pair<KeyType, DataType>& get(size_t i) const
+  const std::pair<KeyType, DataType>& get(size_t i) const
   {
     if (i < (size_t)_size)
     {
@@ -123,18 +123,18 @@ public:
   virtual QString toString(QString indent = QString()) const
   {
     std::stringstream ss;
-    ss << indent << "Leaf: " << endl;
+    ss << indent << "Leaf: " << std::endl;
     size_t c = getSize();
     for (size_t i = 0; i < c; ++i)
     {
-      ss << indent << "  " << get(i).first << " : " << get(i).second << endl;
+      ss << indent << "  " << get(i).first << " : " << get(i).second << std::endl;
     }
     return QString::fromUtf8(ss.str().data());
   }
 
 private:
   char _size;
-  pair<KeyType, DataType> _elements[LEAF_NODE_SIZE];
+  std::pair<KeyType, DataType> _elements[LEAF_NODE_SIZE];
   Leaf* _next;
 };
 

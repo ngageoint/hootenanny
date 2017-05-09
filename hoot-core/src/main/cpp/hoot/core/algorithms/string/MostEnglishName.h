@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 class MostEnglishName;
 class Tags;
 

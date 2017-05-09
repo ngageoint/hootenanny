@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 class SigmaAggregator : public ValueAggregator
 {
 public:
@@ -45,7 +43,7 @@ public:
    */
   SigmaAggregator() {}
 
-  virtual double aggregate(vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return QString("Sigma Aggregator"); }
 

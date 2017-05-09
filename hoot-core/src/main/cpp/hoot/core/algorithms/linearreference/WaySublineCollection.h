@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Contains a continuous collection of ways. Each way subline must touch the next subline end to

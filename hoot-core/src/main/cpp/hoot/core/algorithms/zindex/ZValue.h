@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 class ZValue
 {
 public:
@@ -43,24 +41,24 @@ public:
 
   ZValue() {}
 
-  ZValue(int dimensions, int depth, vector<double> min, vector<double> max);
+  ZValue(int dimensions, int depth, std::vector<double> min, std::vector<double> max);
 
   ~ZValue();
 
-  long int calculate(vector<double> point);
+  long int calculate(std::vector<double> point);
 
   /**
    * Calculates the z value by interleaving values that are already scaled to
    * the proper space.
    */
-  long int calculate(vector<long int> point);
+  long int calculate(std::vector<long int> point);
 
   /**
    * Calculates the non-interleaved component for one dimension.
    */
   long int calculateComponent(double v, int d);
 
-  void decompose(long int v, vector<long int>& point);
+  void decompose(long int v, std::vector<long int>& point);
 
   int getDepth() { return _depth; }
 
@@ -77,11 +75,11 @@ public:
   long int getMaxDimensionRange() { return _range; }
 
 private:
-  vector<long int> _b;
+  std::vector<long int> _b;
   int _depth;
   int _dimensions;
-  vector<double> _min;
-  vector<double> _max;
+  std::vector<double> _min;
+  std::vector<double> _max;
   long int _range;
 };
 
