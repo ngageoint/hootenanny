@@ -30,6 +30,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/Serializable.h>
 
+using namespace std;
+
 namespace hoot
 {
 

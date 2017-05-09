@@ -52,8 +52,6 @@ namespace hoot
     class Way;
   }
 
-using namespace std;
-
 class OsmPbfWriterData;
 
 /**
@@ -94,7 +92,7 @@ public:
    */
   void includVersion(bool iv) { _includeVersion = iv; }
 
-  void intializePartial(ostream* strm);
+  void intializePartial(std::ostream* strm);
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith("osm.pbf"); }
 
@@ -127,13 +125,13 @@ public:
 
   void write(ConstOsmMapPtr map, const QString& path);
 
-  void write(ConstOsmMapPtr map, ostream* strm);
+  void write(ConstOsmMapPtr map, std::ostream* strm);
 
   /**
    * Writes the head out to the specified output stream. This is useful when manually composing
    * a PBF out of various parts and pieces.
    */
-  void writeHeader(ostream* strm, bool includeBounds = true, bool sorted = true);
+  void writeHeader(std::ostream* strm, bool includeBounds = true, bool sorted = true);
 
   /**
    * Write out a map in chunks. This may be called multiple times and must be precceded with a
@@ -157,38 +155,38 @@ public:
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const ConstOsmMapPtr& map, ostream* strm);
-  void writePb(const OsmMapPtr& map, ostream* strm) { writePb((const ConstOsmMapPtr)map, strm); }
+  void writePb(const ConstOsmMapPtr& map, std::ostream* strm);
+  void writePb(const OsmMapPtr& map, std::ostream* strm) { writePb((const ConstOsmMapPtr)map, strm); }
 
   /**
    * Write a single node out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const ConstNodePtr& n, ostream* strm);
-  void writePb(const NodePtr& n, ostream* strm) { writePb((const ConstNodePtr)n, strm); }
+  void writePb(const ConstNodePtr& n, std::ostream* strm);
+  void writePb(const NodePtr& n, std::ostream* strm) { writePb((const ConstNodePtr)n, strm); }
 
   /**
    * Write a single way out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const ConstWayPtr& w, ostream* strm);
-  void writePb(const WayPtr& w, ostream* strm) { writePb((const ConstWayPtr)w, strm); }
+  void writePb(const ConstWayPtr& w, std::ostream* strm);
+  void writePb(const WayPtr& w, std::ostream* strm) { writePb((const ConstWayPtr)w, strm); }
 
   /**
    * Write a single way out as a PrimitiveBlock to the specified stream. The size of the primitive
    * block will first be written as a network order uint32_t
    */
-  void writePb(const ConstRelationPtr& r, ostream* strm);
-  void writePb(const RelationPtr& r, ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
+  void writePb(const ConstRelationPtr& r, std::ostream* strm);
+  void writePb(const RelationPtr& r, std::ostream* strm) { writePb((const ConstRelationPtr)r, strm); }
 
 private:
 
-  string _buffer;
+  std::string _buffer;
   int _compressionLevel;
-  string _deflateBuffer;
+  std::string _deflateBuffer;
   int _deflateSize;
   bool _dirty;
-  ostream* _out;
+  std::ostream* _out;
   bool _includeInfo;
   bool _includeVersion;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.

@@ -47,6 +47,8 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 

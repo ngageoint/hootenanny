@@ -31,8 +31,8 @@
 
 namespace hoot
 {
-class ElementInputStream;
 
+class ElementInputStream;
 
 /**
  * Element output stream interface.

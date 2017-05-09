@@ -79,7 +79,7 @@ public:
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual vector<long> selectNodeIdsForWay(long wayId);
+  virtual std::vector<long> selectNodeIdsForWay(long wayId);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
@@ -89,7 +89,7 @@ public:
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  vector<RelationData::Entry> selectMembersForRelation(long relationId);
+  std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   /**
    * Returns true if the map with the specified ID exists in the services database
@@ -184,7 +184,7 @@ public:
 
   bool insertWay( const long wayId, const Tags& tags);
 
-  void insertWayNodes(long wayId, const vector<long>& nodeIds);
+  void insertWayNodes(long wayId, const std::vector<long>& nodeIds);
 
   bool insertRelation(const Tags& tags, long& assignedId);
 
@@ -204,7 +204,7 @@ public:
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
-  set<long> selectMapIds(QString name);
+  std::set<long> selectMapIds(QString name);
 
   void updateNode(const long id, const double lat, const double lon, const long version,
                   const Tags& tags);

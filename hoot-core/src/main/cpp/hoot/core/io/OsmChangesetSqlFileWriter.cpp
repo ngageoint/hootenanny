@@ -36,6 +36,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+using namespace std;
+
 namespace hoot
 {
 

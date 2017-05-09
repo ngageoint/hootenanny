@@ -42,6 +42,8 @@
 // standard
 #include <set>
 
+using namespace std;
+
 namespace hoot
 {
 

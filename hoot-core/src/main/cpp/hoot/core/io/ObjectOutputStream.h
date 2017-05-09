@@ -45,8 +45,8 @@
 
 namespace hoot
 {
+
 using namespace boost;
-using namespace std;
 
 class ObjectOutputStream
 {
@@ -84,7 +84,7 @@ public:
   QDataStream* _stream;
   std::auto_ptr<QDataStream> _stream2Delete;
   std::auto_ptr<QByteArray> _array;
-  ostream* _ostream;
+  std::ostream* _ostream;
 };
 
 }

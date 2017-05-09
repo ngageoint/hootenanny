@@ -28,6 +28,8 @@
 
 #include <tgs/TgsException.h>
 
+using namespace std;
+
 namespace Tgs
 {
 

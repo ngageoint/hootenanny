@@ -39,12 +39,12 @@
 
 namespace hoot
 {
-  class Way;
-  class OsmMapIndex;
 
-  using namespace geos::geom;
-  using namespace Tgs;
-  using namespace std;
+class Way;
+class OsmMapIndex;
+
+using namespace geos::geom;
+using namespace Tgs;
 
 /**
  */
@@ -52,7 +52,7 @@ class KnnWayIterator : public KnnIterator
 {
 public:
   KnnWayIterator(const OsmMap& map, ConstWayPtr way, const RStarTree* tree,
-                 const vector<long>& treeIdToWid, bool addError = false);
+                 const std::vector<long>& treeIdToWid, bool addError = false);
 
   long getWayId() const { return _treeIdToWid[getId()]; }
 
@@ -74,7 +74,7 @@ private:
   mutable int _distanceCount;
   bool _addError;
   double _baseAccuracy;
-  const vector<long>& _treeIdToWid;
+  const std::vector<long>& _treeIdToWid;
 
   long _wayId;
   boost::shared_ptr<LineString> _ls;

@@ -35,7 +35,6 @@
 
 namespace Tgs
 {
-using namespace std;
 
 /**
  * Wraps the standard istream as a QIODevice.
@@ -46,7 +45,7 @@ public:
   /**
    * Constructs the device and assume ownership of in.
    */
-  StdIoDevice(istream& in);
+  StdIoDevice(std::istream& in);
 
   virtual ~StdIoDevice();
 
@@ -65,7 +64,7 @@ public:
   virtual bool getChar(char* c) { return readData(c, 1) == 1; }
 
 private:
-  istream* _in;
+  std::istream* _in;
 };
 
 }

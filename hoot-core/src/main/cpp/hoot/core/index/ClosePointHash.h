@@ -38,8 +38,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Creates a hash with the explicit purpose of finding that are within a predefined distance. This
  * is re-entrant, but not thread safe.
@@ -60,7 +58,7 @@ public:
   /**
    * Returns the ids of the current match. This may have more ids than actually match.
    */
-  const vector<long>& getMatch();
+  const std::vector<long>& getMatch();
 
   /**
    * Returns true if there is another match in the hash. A match may be returned multiple times
@@ -88,10 +86,10 @@ private:
 
   double _binSize;
   double _distance;
-  vector<long> _match;
+  std::vector<long> _match;
 
-  HashMap< int64_t, vector<long> > _bins;
-  HashMap< int64_t, vector<long> >::const_iterator _it;
+  HashMap< int64_t, std::vector<long> > _bins;
+  HashMap< int64_t, std::vector<long> >::const_iterator _it;
 
   int64_t _toBin(double x, double y);
 };

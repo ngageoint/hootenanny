@@ -76,7 +76,7 @@ public:
 
 private:
 
-  vector< boost::shared_ptr<OsmMapOperation> > _ops;
+  std::vector< boost::shared_ptr<OsmMapOperation> > _ops;
 };
 
 }

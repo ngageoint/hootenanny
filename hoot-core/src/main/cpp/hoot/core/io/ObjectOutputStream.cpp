@@ -26,6 +26,8 @@
  */
 #include "ObjectOutputStream.h"
 
+using namespace std;
+
 namespace hoot
 {
 

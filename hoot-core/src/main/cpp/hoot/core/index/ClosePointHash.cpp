@@ -30,6 +30,8 @@
 // Standard
 #include <assert.h>
 
+using namespace std;
+
 namespace hoot
 {
 

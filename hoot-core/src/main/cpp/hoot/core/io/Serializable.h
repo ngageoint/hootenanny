@@ -35,7 +35,6 @@ class QDataStream;
 
 namespace hoot
 {
-using namespace std;
 
 class Serializable
 {

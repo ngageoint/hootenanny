@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class IntegerFieldDefinition : public FieldDefinition
 {
@@ -65,7 +64,7 @@ private:
   int _min;
   int _max;
   int _defaultValue;
-  set<int> _enumeratedValues;
+  std::set<int> _enumeratedValues;
 };
 
 }

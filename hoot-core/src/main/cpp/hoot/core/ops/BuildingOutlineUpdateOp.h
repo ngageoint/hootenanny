@@ -67,7 +67,7 @@ private:
 
   void _createOutline(const RelationPtr& building);
 
-  void _extractUsedNodes(const RelationPtr& r, set<long>& nodes);
+  void _extractUsedNodes(const RelationPtr& r, std::set<long>& nodes);
 
   /**
    * Match nodes in change to nodes in reference. If there is an exact node match then change

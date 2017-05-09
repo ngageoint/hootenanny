@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class DoubleFieldDefinition : public FieldDefinition
 {
@@ -69,7 +68,7 @@ private:
   double _defaultValue;
   double _min;
   double _max;
-  set<double> _enumeratedValues;
+  std::set<double> _enumeratedValues;
 };
 
 }

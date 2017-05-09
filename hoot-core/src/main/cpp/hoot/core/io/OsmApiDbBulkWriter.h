@@ -49,7 +49,6 @@ namespace hoot
 {
 
 using namespace boost;
-using namespace std;
 using namespace Tgs;
 
 class OsmApiDbSqlStatementFormatter;
@@ -129,7 +128,7 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   struct UnresolvedReferences
   {
     //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
-    boost::shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
+    boost::shared_ptr<std::map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
 
 public:
@@ -209,7 +208,7 @@ private:
   bool _validateData;
 
   //ended up not going with temp files here, since the file outputs aren't always temporary
-  map<QString, pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  std::map<QString, std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
@@ -256,7 +255,7 @@ private:
                                     const unsigned long memberDbId,
                                     const unsigned int memberSequenceIndex);
   void _writeWayToStream(const unsigned long wayDbId);
-  void _writeWayNodesToStream(const unsigned long wayId, const vector<long>& wayNodeIds);
+  void _writeWayNodesToStream(const unsigned long wayId, const std::vector<long>& wayNodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
                           const unsigned long dbId, boost::shared_ptr<QTextStream>& currentTable,

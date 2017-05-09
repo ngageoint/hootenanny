@@ -53,6 +53,8 @@ using namespace hoot::pb;
 
 #include "PbfConstants.h"
 
+using namespace std;
+
 namespace hoot
 {
 

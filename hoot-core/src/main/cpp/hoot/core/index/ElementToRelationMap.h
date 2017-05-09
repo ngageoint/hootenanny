@@ -41,12 +41,12 @@
 
 namespace hoot
 {
+
 class OsmMap;
 class Relation;
 class Element;
 
 using namespace boost;
-using namespace std;
 
 /**
  * Provides a mapping from all elements that are directly or indirectly part of a relation back to
@@ -68,9 +68,9 @@ public:
    * multipolygon and the multipolygon contains a way w/ id 3, when this is called with
    * (ElementType::Way, 3) you will get both the multipolygon and the building relation.
    */
-  const set<long>& getRelationByElement(ElementId eid) const;
-  const set<long>& getRelationByElement(const boost::shared_ptr<const Element>& e) const;
-  const set<long>& getRelationByElement(const Element* e) const;
+  const std::set<long>& getRelationByElement(ElementId eid) const;
+  const std::set<long>& getRelationByElement(const boost::shared_ptr<const Element>& e) const;
+  const std::set<long>& getRelationByElement(const Element* e) const;
 
   /**
    * This function assumes that the elements that make up the relation haven't changed since it was
@@ -87,8 +87,8 @@ public:
 
 private:
 
-  set<long> _emptySet;
-  HashMap< ElementId, set<long> > _mapping;
+  std::set<long> _emptySet;
+  HashMap< ElementId, std::set<long> > _mapping;
 
 };
 
