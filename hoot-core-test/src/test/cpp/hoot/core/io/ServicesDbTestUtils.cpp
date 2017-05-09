@@ -87,34 +87,6 @@ void ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase()
   database.close();
 }
 
-void ServicesDbTestUtils::execOsmApiDbSqlTestScript(const QString scriptName)
-{
-  //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
-  QString dbUrlString = getOsmApiDbUrl().toString();
-  QStringList dbUrlParts = dbUrlString.split("/");
-  QString dbName = dbUrlParts[dbUrlParts.size()-1];
-  QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
-  QString dbUser = userParts[0];
-  QString dbPassword = userParts[1].split("@")[0];
-  QString dbHost = userParts[1].split("@")[1];
-  QString dbPort = userParts[2];
-  const QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
-
-  QString cmd =
-    "export PGPASSWORD=" + dbPassword + "; export PGUSER=" + dbUser + "; export PGDATABASE=" +
-    dbName + "; psql " + auth + " -v ON_ERROR_STOP=1 -f ${HOOT_HOME}/test-files/servicesdb/" +
-    scriptName;
-  if (Log::getInstance().getLevel() > Log::Debug)
-  {
-    cmd += " > /dev/null 2>&1";
-  }
-  LOG_VARD(cmd);
-  if (std::system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Failed postgres command.  Exiting test.");
-  }
-}
-
 QUrl ServicesDbTestUtils::getDbModifyUrl()
 {
   // read the DB values from the DB config file.

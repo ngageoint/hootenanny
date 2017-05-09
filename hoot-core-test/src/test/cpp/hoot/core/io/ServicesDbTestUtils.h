@@ -82,8 +82,6 @@ public:
    */
   static int findIndex(const QList<QString>& keys, const QString& key);
 
-  static void execOsmApiDbSqlTestScript(const QString scriptName);
-
   static void deleteDataFromOsmApiTestDatabase();
 
   static void verifyTestDatabaseEmpty();
