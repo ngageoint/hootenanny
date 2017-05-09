@@ -91,7 +91,7 @@ public:
    */
   bool contains(ElementId eid) const;
 
-  const vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
+  const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
 
   virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
@@ -140,7 +140,7 @@ public:
   template<typename IT>
   void replaceElements(RelationData::Entry old, IT start, IT end);
 
-  void setMembers(const vector<RelationData::Entry>& members);
+  void setMembers(const std::vector<RelationData::Entry>& members);
 
   /**
    * Sets the "type" of the relation. See the OSM wiki [1] for a detailed description. Example

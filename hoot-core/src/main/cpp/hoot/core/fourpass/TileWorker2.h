@@ -46,7 +46,7 @@
 
 namespace hoot
 {
-using namespace std;
+
 using namespace geos::geom;
 
 /**
@@ -69,7 +69,7 @@ public:
    * @param mapIn - The path to the input map.
    * @param mapOut - The path to store the output map.
    */
-  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
+  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const std::vector<Envelope>& tiles,
                        QString mapIn, QString mapOut) = 0;
 
   /**

@@ -26,6 +26,8 @@
  */
 #include "RelationData.h"
 
+using namespace std;
+
 namespace hoot
 {
 

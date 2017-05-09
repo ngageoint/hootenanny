@@ -48,6 +48,8 @@
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 

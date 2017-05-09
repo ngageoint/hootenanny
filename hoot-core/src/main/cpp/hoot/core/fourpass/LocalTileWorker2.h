@@ -56,7 +56,7 @@ class LocalTileWorker2 : public TileWorker2
 public:
   LocalTileWorker2();
 
-  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
+  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const std::vector<Envelope>& tiles,
                        QString mapIn, QString mapOut);
 
   virtual void breakWays(QString out);
@@ -111,7 +111,7 @@ private:
   void _writeNodeReplacements(QString dir, size_t i,
     NodeReplacements& replacements);
 
-  void _writeTheRest(QString dirIn, QString dirOut, const vector<Envelope>& conflatedBits,
+  void _writeTheRest(QString dirIn, QString dirOut, const std::vector<Envelope>& conflatedBits,
     double buffer);
 
 };

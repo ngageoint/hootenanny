@@ -47,6 +47,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 
+using namespace std;
+
 namespace hoot
 {
 

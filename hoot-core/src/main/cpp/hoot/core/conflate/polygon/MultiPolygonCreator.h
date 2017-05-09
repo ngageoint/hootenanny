@@ -89,24 +89,24 @@ private:
   const ConstElementProviderPtr& _provider;
   const ConstRelationPtr& _r;
 
-  Geometry* _addHoles(vector<LinearRing*> &outers, vector<LinearRing*> &inners) const;
+  Geometry* _addHoles(std::vector<LinearRing*> &outers, std::vector<LinearRing*> &inners) const;
 
   void _addWayToSequence(ConstWayPtr w, CoordinateSequence& cs, bool reversed) const;
 
-  void _createRings(const QString &role, vector<LinearRing *> &rings) const;
+  void _createRings(const QString &role, std::vector<LinearRing *> &rings) const;
 
-  void _createRingsFromPartials(const vector<ConstWayPtr>& partials, vector<LinearRing *> &rings)
+  void _createRingsFromPartials(const std::vector<ConstWayPtr>& partials, std::vector<LinearRing *> &rings)
     const;
 
   /**
    * Given a vector of unsorted partial ways, create a ring. If the partials do not create a
    * complete ring, log a warning and just connect the ends.
    */
-  void _createSingleRing(const vector<ConstWayPtr>& partials, vector<LinearRing *> &rings) const;
+  void _createSingleRing(const std::vector<ConstWayPtr>& partials, std::vector<LinearRing *> &rings) const;
 
   bool _isValidInner(LinearRing* innerRing) const;
 
-  deque<ConstWayPtr> _orderWaysForRing(const vector<ConstWayPtr>& partials) const;
+  std::deque<ConstWayPtr> _orderWaysForRing(const std::vector<ConstWayPtr>& partials) const;
 
   LinearRing* _toLinearRing(const ConstWayPtr& w) const;
 

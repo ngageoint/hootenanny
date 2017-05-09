@@ -40,8 +40,8 @@
 #include <stdint.h>
 #include <string>
 
-namespace hoot {
-using namespace std;
+namespace hoot
+{
 
 /**
  * Contains a set of key/value pairs. Consistent with the OSM way of doing things [1] if there are

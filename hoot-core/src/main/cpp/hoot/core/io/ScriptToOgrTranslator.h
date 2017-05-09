@@ -66,10 +66,10 @@ public:
 
   virtual boost::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 
-  virtual vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
+  virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
     GeometryTypeId geometryType) = 0;
 
-  virtual vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
+  virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
     GeometryTypeId geometryType) = 0;
 };
 

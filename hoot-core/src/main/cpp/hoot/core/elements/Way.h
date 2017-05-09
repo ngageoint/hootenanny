@@ -77,7 +77,7 @@ public:
 
   void addNode(long id);
 
-  void addNodes(const vector<long>& ids);
+  void addNodes(const std::vector<long>& ids);
 
   /**
    * Adds nodes from the provided iterator. This can be faster than repeatedly calling addNode

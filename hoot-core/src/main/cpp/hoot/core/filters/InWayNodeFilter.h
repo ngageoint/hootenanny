@@ -37,9 +37,7 @@
 namespace hoot
 {
 
-  using namespace std;
-
-  class OsmMap;
+class OsmMap;
 
 /**
  * The filter matches all nodes that are in at least one of the ways referenced by wids.
@@ -47,13 +45,13 @@ namespace hoot
 class InWayNodeFilter : public NodeFilter
 {
 public:
-  InWayNodeFilter(FilterType type, const OsmMap& map, const vector<long>& wids);
+  InWayNodeFilter(FilterType type, const OsmMap& map, const std::vector<long>& wids);
 
 protected:
   virtual bool isFiltered(const Node& n) const;
 
 private:
-  set<long> _nids;
+  std::set<long> _nids;
   FilterType _type;
 };
 

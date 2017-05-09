@@ -29,6 +29,8 @@
 // Standard
 #include <numeric>
 
+using namespace std;
+
 namespace hoot
 {
 
