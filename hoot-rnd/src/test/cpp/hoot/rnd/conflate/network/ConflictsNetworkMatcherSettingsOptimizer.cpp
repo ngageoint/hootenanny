@@ -43,8 +43,13 @@
 namespace hoot
 {
 
-// used for parameter tuning only and isn't a true test.  most of the time you want to run this
-// at the error log level to reduce log clutter
+/*
+ * This is used for network conflation parameter tuning only and isn't actually a unit test.
+ *
+ * IMPORTANT: Most of the time you want to run this at the error log level to reduce log clutter.
+ *
+ * TODO: come up with a better way to control logging inside SimulatedAnnealing than cout
+ */
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
@@ -55,20 +60,23 @@ public:
 
   class SimpleListener : public CppUnit::TestListener
   {
+
   public:
+
     SimpleListener() : _failure(false) {}
 
     virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-
     bool isFailure() const { return _failure; }
 
   private:
+
     bool _failure;
   };
 
   class TempFileName
   {
   public:
+
     TempFileName()
     {
       do
@@ -93,6 +101,7 @@ public:
     QString getFileName() const { return _name; }
 
   private:
+
     QString _name;
   };
 
@@ -103,26 +112,23 @@ public:
 
     virtual double f(const ConstStatePtr& s) const
     {
+      LOG_DEBUG("Running fitness function...");
+
       Settings settings;
       foreach (QString k, s->getAllValues().keys())
       {
         settings.set(k, s->get(k));
       }
-      //possibly an easier way to do this would be to read these directly from
-      //test-files/cases/hoot-rnd/network/Config.conf instead
-      settings.set("match.creators", "hoot::NetworkMatchCreator");
-      settings.set("merger.creators", "hoot::NetworkMergerCreator");
-      settings.set("uuid.helper.repeatable", "true");
-      settings.set("writer.include.debug.tags", "true");
-      settings.set("network.matcher", "hoot::ConflictsNetworkMatcher");
-      settings.set("writer.include.conflate.review.detail.tags", "false");
-      settings.set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
-      settings.set("way.subline.matcher", "hoot::MaximalSublineMatcher");
-
+      //if you need to add any other temporary custom settings for this test that wouldn't
+      //normally be used with the network conflation case tests, add those here
+      //settings.set("", "");
+      LOG_VART(settings);
       TempFileName temp;
-      //LOG_VARE(temp.getFileName());
+      LOG_VARD(temp.getFileName());
       settings.storeJson(temp.getFileName());
 
+      //this init will add the conflicts network case tests conf which is a subset of the overall
+      //network cases tests conf
       ConflateCaseTestSuite suite("test-files/cases/hoot-rnd/network/conflicts/");
       const int testCount = suite.getChildTestCount();
       QStringList failedTests;
@@ -131,6 +137,9 @@ public:
         ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
         const QString testName = QString::fromStdString(test->getName());
         //LOG_ERROR("Running " << testName << "...");
+        //we still need to add the overall network cases tests conf
+        test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
+        //add our custom sa test option values
         test->addConfig(temp.getFileName());
         CppUnit::TestResult result;
         SimpleListener listener;
@@ -208,10 +217,10 @@ public:
         VariableDescription::Real, 0.49, 0.69)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
-        VariableDescription::Real, 20.0, 20.0)); //original default
+        //VariableDescription::Real, 20.0, 20.0)); //original default
         //VariableDescription::Real, 20.0, 20.0)); //current default
         //VariableDescription::Real, 1.0, 100.0));  //min/max??
-        //VariableDescription::Real, 36.0, 100.0)); //test values
+        VariableDescription::Real, 15.0, 25.0)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
         //VariableDescription::Real, 0.15, 0.15)); //original default
@@ -252,15 +261,25 @@ public:
     boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
     sa.setPickFromBestScores(true);
-    sa.iterate(100);
-
+    const double bestScore = sa.iterate(100);
+    LOG_ERROR("Best score: " << bestScore << " - (failures / num tests; lower is better)");
+    if (bestScore == 0.0)
+    {
+      LOG_ERROR("***YOU FOUND A SOLUTION!***");
+    }
+    else
+    {
+      LOG_ERROR("No solution was found :-(");
+    }
+    LOG_ERROR("\nBest states:\n");
     foreach (ConstStatePtr state, sa.getBestStates())
     {
       LOG_VARE(state);
+      LOG_ERROR("");
     }
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherSettingsOptimizer, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherSettingsOptimizer, "glacial");
 
 }

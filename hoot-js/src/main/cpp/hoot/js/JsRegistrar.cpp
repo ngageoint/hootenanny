@@ -27,6 +27,7 @@
 #include "JsRegistrar.h"
 
 #include <hoot/core/Hoot.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -53,6 +54,7 @@ JsRegistrar& JsRegistrar::getInstance()
 
 void JsRegistrar::Init(Handle<Object> exports)
 {
+  LOG_DEBUG("JS registrar init...");
   Hoot::getInstance().init();
   getInstance().initAll(exports);
 }

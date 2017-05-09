@@ -42,7 +42,9 @@ namespace hoot
 
 class ConflateCaseTest : public CppUnit::TestCase
 {
+
 public:
+
   ConflateCaseTest(QDir d, QStringList confs);
 
   void addConfig(QString conf) { _confs << conf; }
@@ -50,6 +52,7 @@ public:
   virtual void runTest();
 
 private:
+
   QDir _d;
   QStringList _confs;
 };
