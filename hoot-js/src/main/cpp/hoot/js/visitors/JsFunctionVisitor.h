@@ -44,7 +44,7 @@ class JsFunctionVisitor : public ElementVisitor, public ConstOsmMapConsumer,
 {
 public:
 
-  static string className() { return "hoot::JsFunctionVisitor"; }
+  static std::string className() { return "hoot::JsFunctionVisitor"; }
 
   JsFunctionVisitor() : _map(0) {}
 

@@ -54,7 +54,7 @@ class UnlikelyIntersectionRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::UnlikelyIntersectionRemover"; }
+  static std::string className() { return "hoot::UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover();
 

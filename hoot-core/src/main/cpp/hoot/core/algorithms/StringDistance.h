@@ -47,7 +47,7 @@ class StringDistance
 {
 public:
 
-  static string className() { return "hoot::StringDistance"; }
+  static std::string className() { return "hoot::StringDistance"; }
 
   virtual ~StringDistance() {}
 

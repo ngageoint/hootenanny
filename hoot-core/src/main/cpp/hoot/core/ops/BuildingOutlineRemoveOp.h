@@ -47,7 +47,7 @@ class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::BuildingOutlineRemoveOp"; }
+  static std::string className() { return "hoot::BuildingOutlineRemoveOp"; }
 
   BuildingOutlineRemoveOp();
 

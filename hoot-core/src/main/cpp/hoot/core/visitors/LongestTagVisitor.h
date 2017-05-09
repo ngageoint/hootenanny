@@ -45,7 +45,7 @@ class LongestTagVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::LongestTagVisitor"; }
+  static std::string className() { return "hoot::LongestTagVisitor"; }
 
   LongestTagVisitor() : _longestTag() {}
 

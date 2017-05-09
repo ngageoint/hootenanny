@@ -52,7 +52,7 @@ class OsmMap;
 class AbstractDistanceExtractor : public FeatureExtractor
 {
 public:
-  static string className() { return "hoot::AbstractDistanceExtractor"; }
+  static std::string className() { return "hoot::AbstractDistanceExtractor"; }
 
   virtual double combinedEnvelopeDiagonalDistance(const OsmMap& map,
     const boost::shared_ptr<const Element>& target,

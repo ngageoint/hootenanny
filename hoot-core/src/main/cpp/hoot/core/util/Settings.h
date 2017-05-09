@@ -41,7 +41,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * @defgroup properties Configuration Properties
@@ -148,7 +147,7 @@ public:
 
   void set(const QString& key, const char* value) { set(key, QString(value)); }
 
-  void set(const QString& key, const string& value) { set(key, QString::fromStdString(value)); }
+  void set(const QString& key, const std::string& value) { set(key, QString::fromStdString(value)); }
 
   void set(const QString& key, const QString& value);
 

@@ -45,7 +45,7 @@ public:
    * @brief className gets the name of the class as a string
    * @return class name
    */
-  static string className() { return "hoot::RemoveWayOp"; }
+  static std::string className() { return "hoot::RemoveWayOp"; }
   string getClassName() const { return className(); }
 
   /**

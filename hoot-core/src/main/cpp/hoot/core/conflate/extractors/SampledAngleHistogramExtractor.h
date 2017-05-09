@@ -59,7 +59,7 @@ public:
 
   SampledAngleHistogramExtractor();
 
-  static string className() { return "hoot::SampledAngleHistogramExtractor"; }
+  static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
 
   virtual string getClassName() const { return SampledAngleHistogramExtractor::className(); }
 

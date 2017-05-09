@@ -102,7 +102,7 @@ public:
     BaseFeatureType baseFeatureType;
   };
 
-  static string className() { return "hoot::MatchCreator"; }
+  static std::string className() { return "hoot::MatchCreator"; }
 
   virtual ~MatchCreator() {}
 

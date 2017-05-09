@@ -40,7 +40,7 @@ class NetworkMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::NetworkMergerCreator"; }
+  static std::string className() { return "hoot::NetworkMergerCreator"; }
 
   NetworkMergerCreator();
 

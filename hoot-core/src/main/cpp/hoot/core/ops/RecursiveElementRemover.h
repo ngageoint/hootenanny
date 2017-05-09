@@ -63,7 +63,7 @@ using namespace std;
 class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
-  static string className() { return "hoot::RecursiveElementRemover"; }
+  static std::string className() { return "hoot::RecursiveElementRemover"; }
 
   /**
    * @param eid The element to recursively delete.

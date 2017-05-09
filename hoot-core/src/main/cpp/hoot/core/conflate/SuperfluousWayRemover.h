@@ -53,7 +53,7 @@ class SuperfluousWayRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::SuperfluousWayRemover"; }
+  static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover();
 

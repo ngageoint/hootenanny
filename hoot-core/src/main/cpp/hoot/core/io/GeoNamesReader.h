@@ -39,7 +39,7 @@ namespace hoot
 class GeoNamesReader : public PartialOsmMapReader
 {
 public:
-  static string className() { return "hoot::GeoNamesReader"; }
+  static std::string className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
 

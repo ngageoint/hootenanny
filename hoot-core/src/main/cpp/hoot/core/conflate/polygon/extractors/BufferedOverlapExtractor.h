@@ -58,7 +58,7 @@ public:
    */
   BufferedOverlapExtractor(double bufferPortion=0.1);
 
-  static string className() { return "hoot::BufferedOverlapExtractor"; }
+  static std::string className() { return "hoot::BufferedOverlapExtractor"; }
 
   virtual string getClassName() const { return BufferedOverlapExtractor::className(); }
 

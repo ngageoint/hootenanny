@@ -43,7 +43,7 @@ class PoiPolygonMatchCreator : public MatchCreator
 
 public:
 
-  static string className() { return "hoot::PoiPolygonMatchCreator"; }
+  static std::string className() { return "hoot::PoiPolygonMatchCreator"; }
 
   PoiPolygonMatchCreator();
 

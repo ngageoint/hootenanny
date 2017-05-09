@@ -56,7 +56,7 @@ class ImpliedDividedMarker : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::ImpliedDividedMarker"; }
+  static std::string className() { return "hoot::ImpliedDividedMarker"; }
 
   ImpliedDividedMarker();
 

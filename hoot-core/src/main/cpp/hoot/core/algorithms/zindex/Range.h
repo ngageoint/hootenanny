@@ -45,7 +45,7 @@ class Range
 {
 public:
 
-  static string className() { return "hoot::Range"; }
+  static std::string className() { return "hoot::Range"; }
 
   Range() {}
 

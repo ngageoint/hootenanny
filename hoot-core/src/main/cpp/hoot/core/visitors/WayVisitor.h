@@ -43,7 +43,7 @@ class WayVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::WayVisitor"; }
+  static std::string className() { return "hoot::WayVisitor"; }
 
   WayVisitor() {}
 

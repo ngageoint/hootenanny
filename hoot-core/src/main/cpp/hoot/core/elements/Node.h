@@ -49,7 +49,7 @@ class Node : public Element
 {
 public:
 
-  static string className() { return "hoot::Node"; }
+  static std::string className() { return "hoot::Node"; }
 
   Node(const Node& from);
 

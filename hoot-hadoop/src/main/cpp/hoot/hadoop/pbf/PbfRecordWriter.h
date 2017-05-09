@@ -45,7 +45,7 @@ class PbfRecordWriter : public pp::RecordWriter, public pp::ReduceContextConsume
 {
 public:
 
-  static string className() { return "hoot::PbfRecordWriter"; }
+  static std::string className() { return "hoot::PbfRecordWriter"; }
 
   PbfRecordWriter();
 

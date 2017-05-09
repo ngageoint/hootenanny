@@ -54,7 +54,7 @@ class OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::OsmMapOperation"; }
+  static std::string className() { return "hoot::OsmMapOperation"; }
 
   virtual ~OsmMapOperation() {}
 

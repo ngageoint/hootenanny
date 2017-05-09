@@ -45,7 +45,7 @@ using namespace std;
 class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer, public Configurable
 {
 public:
-  static string className() { return "hoot::MaxWordSetDistance"; }
+  static std::string className() { return "hoot::MaxWordSetDistance"; }
 
   MaxWordSetDistance(StringDistance* d);
   MaxWordSetDistance() {}

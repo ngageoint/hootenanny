@@ -43,7 +43,7 @@ class KeepBuildingsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::KeepBuildingsVisitor"; }
+  static std::string className() { return "hoot::KeepBuildingsVisitor"; }
 
   KeepBuildingsVisitor() {}
 

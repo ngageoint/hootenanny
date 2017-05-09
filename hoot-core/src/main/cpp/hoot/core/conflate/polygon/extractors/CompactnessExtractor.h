@@ -56,7 +56,7 @@ class CompactnessExtractor : public FeatureExtractor
 public:
   CompactnessExtractor();
 
-  static string className() { return "hoot::CompactnessExtractor"; }
+  static std::string className() { return "hoot::CompactnessExtractor"; }
 
   virtual string getClassName() const { return CompactnessExtractor::className(); }
 

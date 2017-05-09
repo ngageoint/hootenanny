@@ -51,7 +51,7 @@ using namespace Tgs;
 class FeatureExtractor
 {
 public:
-  static string className() { return "hoot::FeatureExtractor"; }
+  static std::string className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }
 

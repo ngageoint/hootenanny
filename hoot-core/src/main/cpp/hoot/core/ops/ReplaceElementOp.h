@@ -57,7 +57,7 @@ using namespace std;
 class ReplaceElementOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
-  static string className() { return "hoot::ReplaceElementOp"; }
+  static std::string className() { return "hoot::ReplaceElementOp"; }
 
   /**
    * @param from Replace this element.

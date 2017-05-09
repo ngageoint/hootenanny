@@ -46,7 +46,7 @@ class MaximalSublineStringMatcher : public SublineStringMatcher
 {
 public:
 
-  static string className() { return "hoot::MaximalSublineStringMatcher"; }
+  static std::string className() { return "hoot::MaximalSublineStringMatcher"; }
 
   static unsigned int logWarnCount;
 

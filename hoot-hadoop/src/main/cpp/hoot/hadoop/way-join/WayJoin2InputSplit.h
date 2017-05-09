@@ -42,7 +42,7 @@ public:
     FileInputSplitType = 1
   };
 
-  static string className() { return "hoot::WayJoin2InputSplit"; }
+  static std::string className() { return "hoot::WayJoin2InputSplit"; }
 
   WayJoin2InputSplit();
 

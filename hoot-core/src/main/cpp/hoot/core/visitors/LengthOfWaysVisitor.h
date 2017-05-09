@@ -49,7 +49,7 @@ class LengthOfWaysVisitor : public ElementVisitor, public ConstOsmMapConsumer,
 {
 public:
 
-  static string className() { return "hoot::LengthOfWaysVisitor"; }
+  static std::string className() { return "hoot::LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor() : _total(0) {}
 

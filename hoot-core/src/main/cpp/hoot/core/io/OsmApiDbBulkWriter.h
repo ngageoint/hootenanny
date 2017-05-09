@@ -134,7 +134,7 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
 public:
 
-  static string className() { return "hoot::OsmApiDbBulkWriter"; }
+  static std::string className() { return "hoot::OsmApiDbBulkWriter"; }
 
   static unsigned int logWarnCount;
 

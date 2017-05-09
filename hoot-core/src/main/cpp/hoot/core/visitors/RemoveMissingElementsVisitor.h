@@ -40,7 +40,7 @@ class RemoveMissingElementsVisitor : public ElementVisitor, public ConstOsmMapCo
 {
 public:
 
-  static string className() { return "hoot::RemoveMissingElementsVisitor"; }
+  static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor();
 

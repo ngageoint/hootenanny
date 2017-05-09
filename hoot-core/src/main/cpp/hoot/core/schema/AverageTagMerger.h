@@ -36,7 +36,7 @@ class AverageTagMerger : public TagMerger
 {
 public:
 
-  static string className() { return "hoot::AverageTagMerger"; }
+  static std::string className() { return "hoot::AverageTagMerger"; }
 
   AverageTagMerger();
 

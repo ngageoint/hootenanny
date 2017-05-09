@@ -49,7 +49,7 @@ class ZCurveRanger
 {
 public:
 
-  static string className() { return "hoot::ZCurveRanger"; }
+  static std::string className() { return "hoot::ZCurveRanger"; }
 
   ZCurveRanger(const ZValue& zv);
 

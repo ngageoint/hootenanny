@@ -37,7 +37,7 @@ namespace hoot
 class HighwaySnapMergerCreator : public MergerCreator, public Configurable
 {
 public:
-  static string className() { return "hoot::HighwaySnapMergerCreator"; }
+  static std::string className() { return "hoot::HighwaySnapMergerCreator"; }
 
   HighwaySnapMergerCreator();
 

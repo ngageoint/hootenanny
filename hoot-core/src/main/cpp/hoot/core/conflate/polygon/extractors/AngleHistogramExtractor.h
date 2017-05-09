@@ -60,7 +60,7 @@ class AngleHistogramExtractor : public FeatureExtractor
 public:
   AngleHistogramExtractor(Radians smoothing = 0.0, unsigned int bins = 16);
 
-  static string className() { return "hoot::AngleHistogramExtractor"; }
+  static std::string className() { return "hoot::AngleHistogramExtractor"; }
 
   virtual string getClassName() const { return AngleHistogramExtractor::className(); }
 

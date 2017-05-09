@@ -56,7 +56,7 @@ class Tags : public QHash<QString, QString>
 {
 public:
 
-  static string className() { return "hoot::Tags"; }
+  static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
 

@@ -68,7 +68,7 @@ class UnifyingConflator : public OsmMapOperation, public Serializable, public Bo
     public Configurable
 {
 public:
-  static string className() { return "hoot::UnifyingConflator"; }
+  static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
 

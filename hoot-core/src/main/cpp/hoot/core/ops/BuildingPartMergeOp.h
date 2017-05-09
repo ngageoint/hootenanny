@@ -82,7 +82,7 @@ class BuildingPartMergeOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::BuildingPartMergeOp"; }
+  static std::string className() { return "hoot::BuildingPartMergeOp"; }
 
   static unsigned int logWarnCount;
 

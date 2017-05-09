@@ -59,7 +59,7 @@ class Relation : public Element
 {
 public:
 
-  static string className() { return "hoot::Relation"; }
+  static std::string className() { return "hoot::Relation"; }
 
   static unsigned int logWarnCount;
 

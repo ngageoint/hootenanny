@@ -43,7 +43,7 @@ class PoiPolygonNameScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
-  static string className() { return "hoot::PoiPolygonNameScoreExtractor"; }
+  static std::string className() { return "hoot::PoiPolygonNameScoreExtractor"; }
 
   PoiPolygonNameScoreExtractor();
 

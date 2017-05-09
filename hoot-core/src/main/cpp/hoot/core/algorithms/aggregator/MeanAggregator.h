@@ -38,7 +38,7 @@ class MeanAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::MeanAggregator"; }
+  static std::string className() { return "hoot::MeanAggregator"; }
 
   MeanAggregator();
 

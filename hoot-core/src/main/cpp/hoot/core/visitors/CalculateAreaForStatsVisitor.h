@@ -47,7 +47,7 @@ class CalculateAreaForStatsVisitor : public ElementVisitor, public ConstOsmMapCo
 {
 public:
 
-  static string className() { return "hoot::CalculateAreaForStatsVisitor"; }
+  static std::string className() { return "hoot::CalculateAreaForStatsVisitor"; }
 
   CalculateAreaForStatsVisitor() : _total(0) {}
 

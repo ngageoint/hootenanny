@@ -46,7 +46,7 @@ class OsmMap;
 class WayFeatureExtractor : public FeatureExtractorBase, public ValueAggregatorConsumer
 {
 public:
-  static string className() { return "hoot::WayFeatureExtractor"; }
+  static std::string className() { return "hoot::WayFeatureExtractor"; }
 
   WayFeatureExtractor(ValueAggregator* agg = 0);
 

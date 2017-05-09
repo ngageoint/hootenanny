@@ -42,7 +42,7 @@ class NetworkMatchCreator : public MatchCreator
 
 public:
 
-  static string className() { return "hoot::NetworkMatchCreator"; }
+  static std::string className() { return "hoot::NetworkMatchCreator"; }
 
   NetworkMatchCreator();
 

@@ -48,7 +48,7 @@ class CountManualMatchesVisitor : public ElementVisitor, public ConstOsmMapConsu
 
 public:
 
-  static string className() { return "hoot::CountManualMatchesVisitor"; }
+  static std::string className() { return "hoot::CountManualMatchesVisitor"; }
 
   CountManualMatchesVisitor();
 

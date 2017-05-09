@@ -43,7 +43,7 @@ class NonBuildingAreaCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::NonBuildingAreaCriterion"; }
+  static std::string className() { return "hoot::NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion();
 

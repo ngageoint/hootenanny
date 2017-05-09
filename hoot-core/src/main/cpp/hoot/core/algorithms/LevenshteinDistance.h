@@ -50,7 +50,7 @@ class LevenshteinDistance : public StringDistance, public Configurable
 {
 public:
 
-  static string className() { return "hoot::LevenshteinDistance"; }
+  static std::string className() { return "hoot::LevenshteinDistance"; }
 
   /**
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.

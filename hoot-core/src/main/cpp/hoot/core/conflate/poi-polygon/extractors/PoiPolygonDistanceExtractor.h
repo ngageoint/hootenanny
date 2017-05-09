@@ -42,7 +42,7 @@ class PoiPolygonDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static string className() { return "hoot::PoiPolygonDistanceExtractor"; }
+  static std::string className() { return "hoot::PoiPolygonDistanceExtractor"; }
 
   PoiPolygonDistanceExtractor();
 

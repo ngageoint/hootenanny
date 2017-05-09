@@ -49,7 +49,7 @@ public:
   //best type kvp match for the poly
   static QString polyBestKvp;
 
-  static string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
+  static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor();
 

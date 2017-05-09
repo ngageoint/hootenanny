@@ -45,7 +45,7 @@ class RemoveDuplicateReviewsOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::RemoveDuplicateReviewsOp"; }
+  static std::string className() { return "hoot::RemoveDuplicateReviewsOp"; }
 
   RemoveDuplicateReviewsOp();
 

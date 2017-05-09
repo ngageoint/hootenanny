@@ -53,7 +53,7 @@ public:
 
   MinSumWordSetDistance();
 
-  static string className() { return "hoot::MinSumWordSetDistance"; }
+  static std::string className() { return "hoot::MinSumWordSetDistance"; }
 
   virtual double compare(const QString& s1, const QString& s2) const;
 

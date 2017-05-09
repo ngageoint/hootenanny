@@ -52,7 +52,7 @@ public:
 
   const static double EPSILON;
 
-  static string className() { return "hoot::NetworkMatcher"; }
+  static std::string className() { return "hoot::NetworkMatcher"; }
 
   virtual ~NetworkMatcher();
 

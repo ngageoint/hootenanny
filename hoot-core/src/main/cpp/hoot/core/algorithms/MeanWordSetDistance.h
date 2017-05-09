@@ -57,7 +57,7 @@ public:
   MeanWordSetDistance(StringDistance* d, double portion=1.0);
   MeanWordSetDistance();
 
-  static string className() { return "hoot::MeanWordSetDistance"; }
+  static std::string className() { return "hoot::MeanWordSetDistance"; }
 
   virtual double compare(const QString& s1, const QString& s2) const;
 

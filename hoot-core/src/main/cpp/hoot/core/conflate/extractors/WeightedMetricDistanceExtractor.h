@@ -41,7 +41,7 @@ namespace hoot
 class WeightedMetricDistanceExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
-  static string className() { return "hoot::WeightedMetricDistanceExtractor"; }
+  static std::string className() { return "hoot::WeightedMetricDistanceExtractor"; }
 
   WeightedMetricDistanceExtractor(ValueAggregator* wayAgg = 0, ValueAggregator* pointAgg = 0,
                                   Meters searchRadius = -1);

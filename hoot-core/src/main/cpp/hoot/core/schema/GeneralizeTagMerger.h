@@ -36,7 +36,7 @@ class GeneralizeTagMerger : public TagMerger
 {
 public:
 
-  static string className() { return "hoot::GeneralizeTagMerger"; }
+  static std::string className() { return "hoot::GeneralizeTagMerger"; }
 
   GeneralizeTagMerger();
 

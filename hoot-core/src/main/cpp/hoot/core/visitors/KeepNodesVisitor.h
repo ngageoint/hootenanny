@@ -42,7 +42,7 @@ class KeepNodesVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::KeepNodesVisitor"; }
+  static std::string className() { return "hoot::KeepNodesVisitor"; }
 
   KeepNodesVisitor() {}
 

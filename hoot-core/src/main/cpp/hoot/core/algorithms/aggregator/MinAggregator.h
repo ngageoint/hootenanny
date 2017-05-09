@@ -38,7 +38,7 @@ class MinAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::MinAggregator"; }
+  static std::string className() { return "hoot::MinAggregator"; }
 
   MinAggregator();
 

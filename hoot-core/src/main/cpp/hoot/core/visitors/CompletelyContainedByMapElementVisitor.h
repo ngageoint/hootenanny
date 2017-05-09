@@ -55,7 +55,7 @@ using namespace std;
 class CompletelyContainedByMapElementVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
-  static string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
+  static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
 

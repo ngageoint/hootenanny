@@ -50,7 +50,7 @@ public:
    * @brief className the the class name as a string
    * @return the name of the class
    */
-  static string className() { return "hoot::RemoveNodeOp"; }
+  static std::string className() { return "hoot::RemoveNodeOp"; }
   string getClassName() const { return className(); }
 
   /**

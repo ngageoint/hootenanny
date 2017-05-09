@@ -39,7 +39,7 @@ class ZValue
 {
 public:
 
-  static string className() { return "hoot::ZValue"; }
+  static std::string className() { return "hoot::ZValue"; }
 
   ZValue() {}
 

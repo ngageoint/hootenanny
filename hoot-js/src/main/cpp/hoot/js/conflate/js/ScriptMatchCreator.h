@@ -44,7 +44,7 @@ class ScriptMatchCreator : public MatchCreator
 {
 public:
 
-  static string className() { return "hoot::ScriptMatchCreator"; }
+  static std::string className() { return "hoot::ScriptMatchCreator"; }
 
   ScriptMatchCreator();
 

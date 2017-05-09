@@ -47,7 +47,7 @@ class ElementConstOsmMapVisitor : public ElementVisitor, public ConstOsmMapConsu
 {
 public:
 
-  static string className() { return "hoot::ElementConstOsmMapVisitor"; }
+  static std::string className() { return "hoot::ElementConstOsmMapVisitor"; }
 
   ElementConstOsmMapVisitor() {}
 

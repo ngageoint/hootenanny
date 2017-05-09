@@ -42,19 +42,18 @@
 
 namespace hoot
 {
-using namespace std;
 
 class HootException : public std::exception
 {
 public:
 
-  static string className() { return "hoot::HootException"; }
+  static std::string className() { return "hoot::HootException"; }
 
   HootException() { }
 
   HootException(const char* str) { _what = QString::fromUtf8(str); }
 
-  HootException(const string& str) { _what = QString::fromStdString(str); }
+  HootException(const std::string& str) { _what = QString::fromStdString(str); }
 
   HootException(QString str) { _what = str; }
 
@@ -64,7 +63,7 @@ public:
 
   virtual HootException* clone() const { return new HootException(*this); }
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   const QString& getWhat() const { return _what; }
 
@@ -150,26 +149,26 @@ public:
 class Name : public HootException \
 { \
 public: \
-  static string className() { return "hoot::" #Name; } \
+  static std::string className() { return "hoot::" #Name; } \
   Name() : HootException() {} \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual string getClassName() const { return className(); } \
+  virtual std::string getClassName() const { return className(); } \
 };
 
 #define HOOT_DEFINE_EXCEPTION_STR(Name, Default) \
 class Name : public HootException \
 { \
 public: \
-  static string className() { return "hoot::" #Name; } \
+  static std::string className() { return "hoot::" #Name; } \
   Name() : HootException(Default) {} \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual string getClassName() const { return className(); } \
+  virtual std::string getClassName() const { return className(); } \
 };
 
 /****

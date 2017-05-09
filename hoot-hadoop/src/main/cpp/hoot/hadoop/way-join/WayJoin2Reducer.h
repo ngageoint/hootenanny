@@ -40,7 +40,7 @@ class WayJoin2Reducer : public pp::Reducer
 {
 public:
 
-  static string className() { return "hoot::WayJoin2Reducer"; }
+  static std::string className() { return "hoot::WayJoin2Reducer"; }
 
   static unsigned int logWarnCount;
 

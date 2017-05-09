@@ -55,7 +55,7 @@ using namespace std;
 class MultiLineStringVisitor : public ElementVisitor
 {
 public:
-  static string className() { return "hoot::MultiLineStringVisitor"; }
+  static std::string className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
 

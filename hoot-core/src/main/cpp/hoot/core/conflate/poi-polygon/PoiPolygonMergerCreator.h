@@ -39,7 +39,7 @@ class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 
 public:
 
-  static string className() { return "hoot::PoiPolygonMergerCreator"; }
+  static std::string className() { return "hoot::PoiPolygonMergerCreator"; }
 
   PoiPolygonMergerCreator();
 

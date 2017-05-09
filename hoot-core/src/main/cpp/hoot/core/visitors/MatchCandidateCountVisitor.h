@@ -46,7 +46,7 @@ class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public Sing
 {
 public:
 
-  static string className() { return "hoot::MatchCandidateCountVisitor"; }
+  static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
 
   MatchCandidateCountVisitor(const vector<boost::shared_ptr<MatchCreator> >& matchCreators);
 

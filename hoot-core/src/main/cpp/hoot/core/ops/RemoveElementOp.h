@@ -55,7 +55,7 @@ public:
    * @brief className gets the name of the class
    * @return class name string
    */
-  static string className() { return "hoot::RemoveElementOp"; }
+  static std::string className() { return "hoot::RemoveElementOp"; }
 
   /**
    * @brief RemoveElementOp removes an element from the map

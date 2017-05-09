@@ -43,7 +43,7 @@ public:
     double y;
   } __attribute__((packed));
 
-  static string className() { return "hoot::WayJoin1Reducer"; }
+  static std::string className() { return "hoot::WayJoin1Reducer"; }
 
   static unsigned int logWarnCount;
 

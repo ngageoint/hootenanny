@@ -40,7 +40,7 @@ class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
+  static std::string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
 
   RemoveInvalidReviewRelationsVisitor();
 

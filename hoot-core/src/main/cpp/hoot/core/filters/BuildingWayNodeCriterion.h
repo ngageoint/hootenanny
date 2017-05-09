@@ -43,7 +43,7 @@ class BuildingWayNodeCriterion : public ElementCriterion, public ConstOsmMapCons
 {
 public:
 
-  static string className() { return "hoot::BuildingWayNodeCriterion"; }
+  static std::string className() { return "hoot::BuildingWayNodeCriterion"; }
 
   BuildingWayNodeCriterion();
   BuildingWayNodeCriterion(ConstOsmMapPtr map);

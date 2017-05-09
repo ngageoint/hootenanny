@@ -43,7 +43,7 @@ class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
 public:
 
-  static string className() { return "hoot::JsFunctionCriterion"; }
+  static std::string className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() {}
 

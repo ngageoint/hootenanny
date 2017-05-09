@@ -52,7 +52,7 @@ class PermuteGridCalculator
 {
   public:
 
-    static string className() { return "hoot::PermuteGridCalculator"; }
+    static std::string className() { return "hoot::PermuteGridCalculator"; }
 
     virtual ~PermuteGridCalculator() { }
 

@@ -37,7 +37,7 @@ using namespace std;
 class PbfRecordReader : public pp::RecordReader
 {
 public:
-  static string className() { return "hoot::PbfRecordReader"; }
+  static std::string className() { return "hoot::PbfRecordReader"; }
 
   PbfRecordReader() {}
 

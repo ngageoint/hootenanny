@@ -92,7 +92,7 @@ class OsmMap : public boost::enable_shared_from_this<OsmMap>, public ElementProv
 
 public:
 
-  static string className() { return "hoot::OsmMap"; }
+  static std::string className() { return "hoot::OsmMap"; }
 
   OsmMap();
 

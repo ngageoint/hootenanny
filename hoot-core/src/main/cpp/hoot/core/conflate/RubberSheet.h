@@ -57,7 +57,7 @@ class RubberSheet : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::RubberSheet"; }
+  static std::string className() { return "hoot::RubberSheet"; }
 
   static unsigned int logWarnCount;
 

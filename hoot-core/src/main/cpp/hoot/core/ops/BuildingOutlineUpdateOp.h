@@ -47,7 +47,7 @@ class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::BuildingOutlineUpdateOp"; }
+  static std::string className() { return "hoot::BuildingOutlineUpdateOp"; }
 
   static unsigned int logWarnCount;
 

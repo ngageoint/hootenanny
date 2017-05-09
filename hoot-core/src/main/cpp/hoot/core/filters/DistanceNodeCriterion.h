@@ -50,7 +50,7 @@ class DistanceNodeCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::DistanceNodeCriterion"; }
+  static std::string className() { return "hoot::DistanceNodeCriterion"; }
 
   DistanceNodeCriterion() {}
   DistanceNodeCriterion(Coordinate center, Meters distance);

@@ -36,7 +36,7 @@ class OsmMap;
 class TileOpReducer : public pp::Reducer
 {
 public:
-  static string className() { return "hoot::TileOpReducer"; }
+  static std::string className() { return "hoot::TileOpReducer"; }
 
   static string opKey() { return "hoot.op.key"; }
 

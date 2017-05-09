@@ -73,7 +73,7 @@ class Element
 {
 public:
 
-  static string className() { return "hoot::Element"; }
+  static std::string className() { return "hoot::Element"; }
 
   virtual ~Element() {}
 

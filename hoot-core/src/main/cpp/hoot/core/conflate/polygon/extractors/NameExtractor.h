@@ -45,7 +45,7 @@ public:
 
   NameExtractor(StringDistance* d);
 
-  static string className() { return "hoot::NameExtractor"; }
+  static std::string className() { return "hoot::NameExtractor"; }
 
   virtual string getClassName() const { return NameExtractor::className(); }
 

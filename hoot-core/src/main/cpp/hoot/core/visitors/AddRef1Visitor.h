@@ -43,7 +43,7 @@ class AddRef1Visitor :
 {
 public:
 
-  static string className() { return "hoot::AddRef1Visitor"; }
+  static std::string className() { return "hoot::AddRef1Visitor"; }
 
   AddRef1Visitor();
 

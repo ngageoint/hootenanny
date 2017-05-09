@@ -45,7 +45,7 @@ class RefRemoveOp : public OsmMapOperation, public ElementCriterionConsumer
 {
 public:
 
-  static string className() { return "hoot::RefRemoveOp"; }
+  static std::string className() { return "hoot::RefRemoveOp"; }
 
   RefRemoveOp();
 

@@ -42,7 +42,7 @@ namespace hoot
 class TagCategoryDifferencer : public TagFilteredDifferencer, public Configurable
 {
 public:
-  static string className() { return "hoot::TagCategoryDifferencer"; }
+  static std::string className() { return "hoot::TagCategoryDifferencer"; }
 
   TagCategoryDifferencer() {}
   TagCategoryDifferencer(OsmSchemaCategory category);

@@ -39,7 +39,7 @@ namespace hoot
 class WeightedShapeDistanceExtractor : public WayFeatureExtractor
 {
 public:
-  static string className() { return "hoot::WeightedShapeDistanceExtractor"; }
+  static std::string className() { return "hoot::WeightedShapeDistanceExtractor"; }
 
   WeightedShapeDistanceExtractor(ValueAggregator* wayAgg = 0);
 

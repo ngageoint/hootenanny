@@ -41,7 +41,7 @@ class RemoveUnknown1Visitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveUnknown1Visitor"; }
+  static std::string className() { return "hoot::RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() {}
 

@@ -63,7 +63,7 @@ namespace hoot
 class SmallWayMerger : public OsmMapOperation
 {
 public:
-  static string className() { return "hoot::SmallWayMerger"; }
+  static std::string className() { return "hoot::SmallWayMerger"; }
 
   SmallWayMerger(Meters threshold = -1);
 

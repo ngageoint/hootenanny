@@ -41,7 +41,7 @@ class BBox
 {
 public:
 
-  static string className() { return "hoot::BBox"; }
+  static std::string className() { return "hoot::BBox"; }
 
   BBox(vector<double> min, vector<double> max);
 

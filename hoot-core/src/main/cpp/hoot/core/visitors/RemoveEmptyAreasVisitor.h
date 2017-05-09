@@ -43,7 +43,7 @@ class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveEmptyAreasVisitor"; }
+  static std::string className() { return "hoot::RemoveEmptyAreasVisitor"; }
 
   RemoveEmptyAreasVisitor();
 

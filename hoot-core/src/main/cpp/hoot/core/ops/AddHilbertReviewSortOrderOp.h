@@ -42,7 +42,7 @@ class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
+  static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
   AddHilbertReviewSortOrderOp();
 

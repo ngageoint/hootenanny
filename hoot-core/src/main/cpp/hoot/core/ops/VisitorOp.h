@@ -52,7 +52,7 @@ class VisitorOp :
 {
 public:
 
-  static string className() { return "hoot::VisitorOp"; }
+  static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
 

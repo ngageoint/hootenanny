@@ -61,7 +61,7 @@ class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, publ
 {
 public:
 
-  static string className() { return "hoot::SuperfluousNodeRemover"; }
+  static std::string className() { return "hoot::SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
 

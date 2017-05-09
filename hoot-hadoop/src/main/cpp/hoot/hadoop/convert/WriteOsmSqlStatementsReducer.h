@@ -48,7 +48,7 @@ class WriteOsmSqlStatementsReducer : public pp::Reducer
 
 public:
 
-  static string className() { return "hoot::WriteOsmSqlStatementsReducer"; }
+  static std::string className() { return "hoot::WriteOsmSqlStatementsReducer"; }
 
   WriteOsmSqlStatementsReducer();
   virtual ~WriteOsmSqlStatementsReducer();

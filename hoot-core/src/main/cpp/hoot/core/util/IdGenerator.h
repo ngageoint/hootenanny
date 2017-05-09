@@ -40,7 +40,7 @@ using namespace std;
 class IdGenerator
 {
 public:
-  static string className() { return "hoot::IdGenerator"; }
+  static std::string className() { return "hoot::IdGenerator"; }
 
   IdGenerator() {}
 

@@ -38,7 +38,7 @@ class SigmaAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::SigmaAggregator"; }
+  static std::string className() { return "hoot::SigmaAggregator"; }
 
   /**
    * quantile - A value from 0 to 1 for the quantile.

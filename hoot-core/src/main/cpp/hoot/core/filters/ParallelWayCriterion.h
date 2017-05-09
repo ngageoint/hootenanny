@@ -45,7 +45,7 @@ class ParallelWayCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::ParallelWayCriterion"; }
+  static std::string className() { return "hoot::ParallelWayCriterion"; }
 
   ParallelWayCriterion() {}
   ParallelWayCriterion(const ConstOsmMapPtr& map,

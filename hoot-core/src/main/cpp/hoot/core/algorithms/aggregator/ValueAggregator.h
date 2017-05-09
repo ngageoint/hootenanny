@@ -44,7 +44,7 @@ class ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::ValueAggregator"; }
+  static std::string className() { return "hoot::ValueAggregator"; }
 
   /**
    * Aggregates the values in the vector d into a single value. The aggregation may be something

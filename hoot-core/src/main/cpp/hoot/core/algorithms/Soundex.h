@@ -49,7 +49,7 @@ class Soundex : public StringDistance
 {
 public:
 
-  static string className() { return "hoot::Soundex"; }
+  static std::string className() { return "hoot::Soundex"; }
 
   Soundex();
 

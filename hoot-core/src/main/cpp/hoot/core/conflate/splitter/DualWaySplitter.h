@@ -53,7 +53,7 @@ class DualWaySplitter : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::DualWaySplitter"; }
+  static std::string className() { return "hoot::DualWaySplitter"; }
 
   static unsigned int logWarnCount;
 

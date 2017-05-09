@@ -38,7 +38,7 @@ class QuantileAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::QuantileAggregator"; }
+  static std::string className() { return "hoot::QuantileAggregator"; }
 
   QuantileAggregator();
 

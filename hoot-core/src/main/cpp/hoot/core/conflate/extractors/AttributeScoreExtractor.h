@@ -40,7 +40,7 @@ namespace hoot
 class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
-  static string className() { return "hoot::AttributeScoreExtractor"; }
+  static std::string className() { return "hoot::AttributeScoreExtractor"; }
 
   AttributeScoreExtractor(ValueAggregator* wayAgg = 0, bool useWeight = false);
 

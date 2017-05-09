@@ -45,7 +45,7 @@ class BuildingMatchCreator : public MatchCreator
 
 public:
 
-  static string className() { return "hoot::BuildingMatchCreator"; }
+  static std::string className() { return "hoot::BuildingMatchCreator"; }
 
   BuildingMatchCreator();
 

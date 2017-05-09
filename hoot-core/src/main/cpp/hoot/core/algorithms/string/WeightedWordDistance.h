@@ -50,7 +50,7 @@ class WeightedWordDistance : public StringDistance, public StringDistanceConsume
   public Configurable
 {
 public:
-  static string className() { return "hoot::WeightedWordDistance"; }
+  static std::string className() { return "hoot::WeightedWordDistance"; }
 
   WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
   WeightedWordDistance();

@@ -47,7 +47,7 @@ class ExactStringDistance : public StringDistance
 {
 public:
 
-  static string className() { return "hoot::ExactStringDistance"; }
+  static std::string className() { return "hoot::ExactStringDistance"; }
 
   ExactStringDistance();
 

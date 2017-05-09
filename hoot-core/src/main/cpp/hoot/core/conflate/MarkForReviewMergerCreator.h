@@ -40,7 +40,7 @@ class MarkForReviewMergerCreator : public MergerCreator
 {
 public:
 
-  static string className() { return "hoot::MarkForReviewMergerCreator"; }
+  static std::string className() { return "hoot::MarkForReviewMergerCreator"; }
 
   MarkForReviewMergerCreator();
 

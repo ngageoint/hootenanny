@@ -57,7 +57,7 @@ public:
     WayJoin1Reducer::Value rawWay;
   } __attribute__((packed));
 
-  static string className() { return "hoot::WayJoin2Mapper"; }
+  static std::string className() { return "hoot::WayJoin2Mapper"; }
 
   static string elementStatusKey() { return "hoot.element.status"; }
 

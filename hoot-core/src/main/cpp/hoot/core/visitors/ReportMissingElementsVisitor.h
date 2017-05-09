@@ -46,7 +46,7 @@ class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapCo
 {
 public:
 
-  static string className() { return "hoot::ReportMissingElementsVisitor"; }
+  static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
 
   ReportMissingElementsVisitor(bool removeMissing = false, int maxReport = 10);
 

@@ -50,7 +50,7 @@ class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public 
 {
 public:
 
-  static string className() { return "hoot::PertyDuplicatePoiOp"; }
+  static std::string className() { return "hoot::PertyDuplicatePoiOp"; }
 
   PertyDuplicatePoiOp();
 

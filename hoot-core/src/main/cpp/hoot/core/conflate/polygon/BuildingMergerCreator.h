@@ -37,7 +37,7 @@ class BuildingMergerCreator : public MergerCreator
 {
 public:
 
-  static string className() { return "hoot::BuildingMergerCreator"; }
+  static std::string className() { return "hoot::BuildingMergerCreator"; }
 
   BuildingMergerCreator();
 

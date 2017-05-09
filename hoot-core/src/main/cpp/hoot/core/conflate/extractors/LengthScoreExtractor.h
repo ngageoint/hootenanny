@@ -39,7 +39,7 @@ class LengthScoreExtractor : public WayFeatureExtractor
 {
 public:
 
-  static string className() { return "hoot::LengthScoreExtractor"; }
+  static std::string className() { return "hoot::LengthScoreExtractor"; }
 
   LengthScoreExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
 

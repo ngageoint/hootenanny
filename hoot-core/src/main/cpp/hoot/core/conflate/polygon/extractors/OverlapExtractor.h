@@ -53,7 +53,7 @@ class OverlapExtractor : public FeatureExtractor
 public:
   OverlapExtractor();
 
-  static string className() { return "hoot::OverlapExtractor"; }
+  static std::string className() { return "hoot::OverlapExtractor"; }
 
   virtual string getClassName() const { return OverlapExtractor::className(); }
 

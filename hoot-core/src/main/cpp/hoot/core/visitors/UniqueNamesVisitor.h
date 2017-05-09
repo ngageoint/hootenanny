@@ -46,7 +46,7 @@ class UniqueNamesVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::UniqueNamesVisitor"; }
+  static std::string className() { return "hoot::UniqueNamesVisitor"; }
 
   UniqueNamesVisitor() {}
 

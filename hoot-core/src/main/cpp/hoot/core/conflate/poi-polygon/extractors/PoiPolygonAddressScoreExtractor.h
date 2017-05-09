@@ -43,7 +43,7 @@ class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase
 {
 public:
 
-  static string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
+  static std::string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
 
   static const QChar ESZETT;
   static const QString ESZETT_REPLACE;

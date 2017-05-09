@@ -46,7 +46,7 @@ class HighwayMatchCreator : public MatchCreator
 
 public:
 
-  static string className() { return "hoot::HighwayMatchCreator"; }
+  static std::string className() { return "hoot::HighwayMatchCreator"; }
 
   HighwayMatchCreator();
 

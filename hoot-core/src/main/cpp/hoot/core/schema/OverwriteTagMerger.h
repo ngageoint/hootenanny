@@ -40,7 +40,7 @@ class OverwriteTagMerger : public TagMerger
 {
 public:
 
-  static string className() { return "hoot::OverwriteTagMerger"; }
+  static std::string className() { return "hoot::OverwriteTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
@@ -63,7 +63,7 @@ class OverwriteTag2Merger : public OverwriteTagMerger
 {
 public:
 
-  static string className() { return "hoot::OverwriteTag2Merger"; }
+  static std::string className() { return "hoot::OverwriteTag2Merger"; }
 
   OverwriteTag2Merger() : OverwriteTagMerger(false) {}
 
@@ -77,7 +77,7 @@ class OverwriteTag1Merger : public OverwriteTagMerger
 {
 public:
 
-  static string className() { return "hoot::OverwriteTag1Merger"; }
+  static std::string className() { return "hoot::OverwriteTag1Merger"; }
 
   OverwriteTag1Merger() : OverwriteTagMerger(true) {}
 

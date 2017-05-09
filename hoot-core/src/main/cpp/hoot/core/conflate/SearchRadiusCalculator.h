@@ -50,7 +50,7 @@ class SearchRadiusCalculator : public OsmMapOperation, public Configurable
 {
 public:
 
-  static string className() { return "hoot::SearchRadiusCalculator"; }
+  static std::string className() { return "hoot::SearchRadiusCalculator"; }
 
   SearchRadiusCalculator();
 

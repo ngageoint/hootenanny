@@ -68,7 +68,7 @@ public:
     QString description;
   };
 
-  static string className() { return "hoot::MergerCreator"; }
+  static std::string className() { return "hoot::MergerCreator"; }
 
   virtual ~MergerCreator() {}
 

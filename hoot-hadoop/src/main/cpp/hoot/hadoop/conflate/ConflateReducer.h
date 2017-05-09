@@ -35,7 +35,7 @@ class OsmMap;
 class ConflateReducer : public pp::Reducer
 {
 public:
-  static string className() { return "hoot::ConflateReducer"; }
+  static std::string className() { return "hoot::ConflateReducer"; }
 
   static unsigned int logWarnCount;
 

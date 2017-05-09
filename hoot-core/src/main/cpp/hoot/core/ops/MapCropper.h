@@ -64,7 +64,7 @@ class MapCropper : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
 
-  static string className() { return "hoot::MapCropper"; }
+  static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();
 

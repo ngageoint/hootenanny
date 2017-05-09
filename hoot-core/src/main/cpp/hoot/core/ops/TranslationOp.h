@@ -45,7 +45,7 @@ class ScriptTranslator;
 class TranslationOp : public OsmMapOperation, public Configurable
 {
 public:
-  static string className() { return "hoot::TranslationOp"; }
+  static std::string className() { return "hoot::TranslationOp"; }
 
   TranslationOp();
 

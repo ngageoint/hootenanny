@@ -63,7 +63,7 @@ class PertyOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static string className() { return "hoot::PertyOp"; }
+  static std::string className() { return "hoot::PertyOp"; }
 
   PertyOp();
 

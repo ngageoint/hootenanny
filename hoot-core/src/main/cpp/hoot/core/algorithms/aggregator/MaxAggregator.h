@@ -38,7 +38,7 @@ class MaxAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::MaxAggregator"; }
+  static std::string className() { return "hoot::MaxAggregator"; }
 
   MaxAggregator();
 

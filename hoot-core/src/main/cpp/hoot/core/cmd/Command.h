@@ -47,7 +47,7 @@ class Command
 {
 public:
 
-  static string className() { return "hoot::Command"; }
+  static std::string className() { return "hoot::Command"; }
 
   Command();
 

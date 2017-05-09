@@ -37,7 +37,7 @@ class SqlStatementLineRecordWriter : public LineRecordWriter
 
 public:
 
-  static string className() { return "hoot::SqlStatementLineRecordWriter"; }
+  static std::string className() { return "hoot::SqlStatementLineRecordWriter"; }
 
   SqlStatementLineRecordWriter();
 

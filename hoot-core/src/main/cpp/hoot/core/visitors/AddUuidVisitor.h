@@ -43,7 +43,7 @@ class AddUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::AddUuidVisitor"; }
+  static std::string className() { return "hoot::AddUuidVisitor"; }
 
   AddUuidVisitor() {}
   AddUuidVisitor(QString key);

@@ -57,7 +57,7 @@ public:
    */
   EdgeDistanceExtractor(ValueAggregator* a = 0, Meters spacing = 5.0);
 
-  static string className() { return "hoot::EdgeDistanceExtractor"; }
+  static std::string className() { return "hoot::EdgeDistanceExtractor"; }
 
   virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;

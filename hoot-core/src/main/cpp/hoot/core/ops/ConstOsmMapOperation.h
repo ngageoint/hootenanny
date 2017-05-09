@@ -42,7 +42,7 @@ class ConstOsmMapOperation : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::ConstOsmMapOperation"; }
+  static std::string className() { return "hoot::ConstOsmMapOperation"; }
 
   virtual ~ConstOsmMapOperation() {}
 
