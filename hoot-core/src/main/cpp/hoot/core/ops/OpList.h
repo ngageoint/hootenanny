@@ -66,7 +66,7 @@ public:
    */
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 

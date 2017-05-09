@@ -40,12 +40,11 @@
 
 namespace hoot
 {
-  class OsmMap;
-  class Way;
-  class TagDifferencer;
-  class NodeToWayMap;
 
-  using namespace std;
+class OsmMap;
+class Way;
+class TagDifferencer;
+class NodeToWayMap;
 
 /**
  * Searches for itty bitty ways that connect end to end. For some reason some files provide little
@@ -84,7 +83,7 @@ protected:
 
   void _mergeNeighbors(boost::shared_ptr<Way> w);
 
-  void _mergeWays(const set<long>& ids);
+  void _mergeWays(const std::set<long>& ids);
 };
 
 }

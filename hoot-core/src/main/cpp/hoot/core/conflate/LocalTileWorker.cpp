@@ -55,6 +55,8 @@
 
 #include "TileBoundsCalculator.h"
 
+using namespace std;
+
 namespace hoot
 {
 

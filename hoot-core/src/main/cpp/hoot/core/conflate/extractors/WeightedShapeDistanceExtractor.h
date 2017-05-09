@@ -43,7 +43,7 @@ public:
 
   WeightedShapeDistanceExtractor(ValueAggregator* wayAgg = 0);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
 private:
   double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;

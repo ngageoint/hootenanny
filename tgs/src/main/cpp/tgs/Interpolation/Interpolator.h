@@ -49,7 +49,7 @@ public:
 
   virtual ~Interpolator() {}
 
-  virtual string getClassName() const = 0;
+  virtual std::string getClassName() const = 0;
 
   /**
    * Returns the estimated RMSE for the interpolator.

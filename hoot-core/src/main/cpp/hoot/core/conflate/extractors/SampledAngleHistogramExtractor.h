@@ -61,7 +61,7 @@ public:
 
   static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual string getClassName() const { return SampledAngleHistogramExtractor::className(); }
+  virtual std::string getClassName() const { return SampledAngleHistogramExtractor::className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

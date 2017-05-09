@@ -53,7 +53,7 @@ public:
 
   PoiPolygonTypeScoreExtractor();
 
-  virtual string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
+  virtual std::string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.

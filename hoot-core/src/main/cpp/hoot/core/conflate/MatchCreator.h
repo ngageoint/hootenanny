@@ -40,7 +40,6 @@
 namespace hoot
 {
 
-using namespace std;
 class Match;
 class ElementCriterion;
 

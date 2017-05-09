@@ -41,6 +41,8 @@
 #include <fstream>
 #include <set>
 
+using namespace std;
+
 namespace hoot
 {
 

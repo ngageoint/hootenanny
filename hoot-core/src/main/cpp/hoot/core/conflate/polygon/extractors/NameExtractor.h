@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::NameExtractor"; }
 
-  virtual string getClassName() const { return NameExtractor::className(); }
+  virtual std::string getClassName() const { return NameExtractor::className(); }
 
   virtual string getName() const;
 

@@ -41,11 +41,10 @@
 
 namespace hoot
 {
-  using namespace std;
 
-  class NodeToWayMap;
-  class OsmMap;
-  class Way;
+class NodeToWayMap;
+class OsmMap;
+class Way;
 
 /**
  * Locates sections that implicitly appear to be divided highways. Primarily this is bridges and

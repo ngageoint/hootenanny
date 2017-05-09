@@ -42,7 +42,7 @@
 
 namespace hoot
 {
-using namespace std;
+
 using namespace boost;
 
 class OsmMap;

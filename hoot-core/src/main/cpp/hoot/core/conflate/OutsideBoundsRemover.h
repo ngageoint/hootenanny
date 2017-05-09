@@ -39,10 +39,9 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  using namespace std;
+using namespace geos::geom;
 
-  class OsmMap;
+class OsmMap;
 
 /**
  * Remove all ways outside the given bounds.

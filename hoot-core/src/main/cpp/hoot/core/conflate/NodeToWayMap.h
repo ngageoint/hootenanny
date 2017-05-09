@@ -38,17 +38,16 @@
 
 namespace hoot
 {
-  using namespace boost;
-  using namespace std;
+using namespace boost;
 
-  class OsmMap;
-  class Way;
+class OsmMap;
+class Way;
 
 /**
  * Traverses an OsmMap and creates a map from node id to a set of way IDs. This is handy when
  * trying to find intersections.
  */
-class NodeToWayMap : public map<long, set<long> >
+class NodeToWayMap : public std::map<long, std::set<long> >
 {
 public:
 
@@ -64,7 +63,7 @@ public:
    * Returns all the ways that use the given node ID. If the given node ID isn't found an empty
    * set is returned.
    */
-  const set<long>& getWaysByNode(long nid) const;
+  const std::set<long>& getWaysByNode(long nid) const;
 
   /**
    * This function assumes that the nodes in the way haven't changed since it was last added.
@@ -75,7 +74,7 @@ public:
 
 private:
 
-  set<long> _emptySet;
+  std::set<long> _emptySet;
 };
 
 }

@@ -81,7 +81,7 @@ public:
   static void crop(boost::shared_ptr<OsmMap> map, const boost::shared_ptr<const Geometry>& g,
     bool invert);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 

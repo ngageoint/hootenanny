@@ -46,7 +46,7 @@ public:
 
   PoiPolygonDistanceExtractor();
 
-  virtual string getClassName() const
+  virtual std::string getClassName() const
   { return PoiPolygonDistanceExtractor::className(); }
 
   /**

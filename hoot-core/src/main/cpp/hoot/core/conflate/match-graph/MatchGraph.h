@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class Match;
 class MatchGraphInternal;
@@ -84,7 +83,7 @@ public:
   void setCheckForConflicts(bool c) { _checkForConflicts = c; }
 
 private:
-  vector<const Match*> _matches;
+  std::vector<const Match*> _matches;
   bool _checkForConflicts;
   /**
    * An internal data structure to prevent users of the class from recompiling the boost graph

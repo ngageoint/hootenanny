@@ -44,7 +44,7 @@ public:
 
   DistanceScoreExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

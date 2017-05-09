@@ -38,6 +38,8 @@
 #include <QImage>
 #include <QPainter>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -45,7 +45,7 @@
 
 namespace hoot
 {
-using namespace std;
+
 using namespace geos::geom;
 
 /**
@@ -92,7 +92,7 @@ public:
    * @param mapIn - The path to the input map.
    * @param mapOut - The path to store the output map.
    */
-  virtual void conflate(const vector<Envelope>& tiles, QString mapIn, QString mapOut) = 0;
+  virtual void conflate(const std::vector<Envelope>& tiles, QString mapIn, QString mapOut) = 0;
 
   /**
    * Returns true if the specified path exists.

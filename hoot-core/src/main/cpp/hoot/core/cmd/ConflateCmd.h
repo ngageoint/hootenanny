@@ -39,8 +39,6 @@ namespace hoot
 
 class SingleStat;
 
-using namespace std;
-
 class ConflateCmd : public BaseCommand
 {
 

@@ -90,7 +90,7 @@ public:
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& /*is*/) {}
 

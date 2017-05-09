@@ -49,11 +49,11 @@
 
 namespace hoot
 {
+
 class TileBoundsCalculatorTest;
 class OsmMap;
 class Node;
 
-using namespace std;
 using namespace boost;
 using namespace geos::geom;
 
@@ -150,7 +150,7 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
-  vector< vector<Envelope> > calculateTiles();
+  std::vector< std::vector<Envelope> > calculateTiles();
 
   void renderImage(boost::shared_ptr<OsmMap> map);
 
@@ -195,9 +195,9 @@ private:
 
   void _exportImage(cv::Mat& r, QString output);
 
-  void _exportResult(const vector<PixelBox>& boxes, QString output);
+  void _exportResult(const std::vector<PixelBox>& boxes, QString output);
 
-  bool _isDone(vector<PixelBox>& boxes);
+  bool _isDone(std::vector<PixelBox>& boxes);
 
   long _sumPixels(const PixelBox& pb, cv::Mat& r);
 

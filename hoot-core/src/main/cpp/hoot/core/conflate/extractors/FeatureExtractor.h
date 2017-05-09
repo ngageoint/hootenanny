@@ -42,7 +42,7 @@
 
 namespace hoot
 {
-using namespace std;
+
 using namespace Tgs;
 
 /**
@@ -62,7 +62,7 @@ public:
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual string getClassName() const = 0;
+  virtual std::string getClassName() const = 0;
 
   virtual string getName() const { return getClassName(); }
 

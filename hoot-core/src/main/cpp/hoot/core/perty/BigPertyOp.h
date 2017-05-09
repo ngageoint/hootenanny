@@ -66,7 +66,7 @@ public:
   /**
    * Returns the name of the class. Typically just returns the result of className().
    */
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   /**
    * Reads the information for this object from the stream.

@@ -63,7 +63,7 @@ public:
 
   virtual void cleanup(QString mapIn, QString mapOut);
 
-  virtual void conflate(const vector<Envelope>& tiles, QString mapIn, QString mapOut);
+  virtual void conflate(const std::vector<Envelope>& tiles, QString mapIn, QString mapOut);
 
   virtual bool exists(QString dir);
 
@@ -110,7 +110,7 @@ private:
   void _writeNodeReplacements(QString dir, size_t i,
     NodeReplacements& replacements);
 
-  void _writeTheRest(QString dirIn, QString dirOut, const vector<Envelope>& conflatedBits);
+  void _writeTheRest(QString dirIn, QString dirOut, const std::vector<Envelope>& conflatedBits);
 
 };
 

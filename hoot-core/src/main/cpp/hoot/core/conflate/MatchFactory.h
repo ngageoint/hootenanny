@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class Match;
 class MergeCreator;
@@ -73,14 +72,14 @@ public:
   /**
    * @brief Returns a description of all available match creators.
    */
-  vector<MatchCreator::Description> getAllAvailableCreators() const;
+  std::vector<MatchCreator::Description> getAllAvailableCreators() const;
 
   /**
    *
    *
    * @return
    */
-  vector< boost::shared_ptr<MatchCreator> > getCreators() const { return _creators; }
+  std::vector< boost::shared_ptr<MatchCreator> > getCreators() const { return _creators; }
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
@@ -104,7 +103,7 @@ private:
 
   static boost::shared_ptr<MatchFactory> _theInstance;
 
-  vector< boost::shared_ptr<MatchCreator> > _creators;
+  std::vector< boost::shared_ptr<MatchCreator> > _creators;
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

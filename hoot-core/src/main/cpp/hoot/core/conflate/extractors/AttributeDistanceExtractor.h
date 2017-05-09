@@ -43,7 +43,7 @@ public:
   AttributeDistanceExtractor(ValueAggregator* wayAgg = 0, QString key = "") :
     WayFeatureExtractor(wayAgg), _key(key) {}
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual string getName() const;
 

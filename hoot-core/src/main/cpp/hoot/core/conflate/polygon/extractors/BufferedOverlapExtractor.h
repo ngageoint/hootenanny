@@ -60,7 +60,7 @@ public:
 
   static std::string className() { return "hoot::BufferedOverlapExtractor"; }
 
-  virtual string getClassName() const { return BufferedOverlapExtractor::className(); }
+  virtual std::string getClassName() const { return BufferedOverlapExtractor::className(); }
 
   virtual string getName() const;
 

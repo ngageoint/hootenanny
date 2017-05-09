@@ -58,7 +58,7 @@ public:
 
   static std::string className() { return "hoot::CompactnessExtractor"; }
 
-  virtual string getClassName() const { return CompactnessExtractor::className(); }
+  virtual std::string getClassName() const { return CompactnessExtractor::className(); }
 
   virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
 

@@ -55,7 +55,7 @@ public:
 
   PoiPolygonAddressScoreExtractor();
 
-  virtual string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
+  virtual std::string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
 
   /**
    * Calculates the address similarity score of two features

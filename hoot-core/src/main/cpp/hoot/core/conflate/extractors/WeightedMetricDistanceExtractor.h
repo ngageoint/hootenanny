@@ -46,7 +46,7 @@ public:
   WeightedMetricDistanceExtractor(ValueAggregator* wayAgg = 0, ValueAggregator* pointAgg = 0,
                                   Meters searchRadius = -1);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual string getName() const;
 

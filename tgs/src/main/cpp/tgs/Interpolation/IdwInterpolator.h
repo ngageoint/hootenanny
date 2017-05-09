@@ -54,7 +54,7 @@ public:
 
   virtual ~IdwInterpolator();
 
-  virtual string getClassName() const { return IdwInterpolator::className(); }
+  virtual std::string getClassName() const { return IdwInterpolator::className(); }
 
   virtual const vector<double>& interpolate(const vector<double>& point) const;
 

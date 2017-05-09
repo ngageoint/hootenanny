@@ -55,7 +55,7 @@ public:
 
   static std::string className() { return "hoot::OverlapExtractor"; }
 
-  virtual string getClassName() const { return OverlapExtractor::className(); }
+  virtual std::string getClassName() const { return OverlapExtractor::className(); }
 
   virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
 

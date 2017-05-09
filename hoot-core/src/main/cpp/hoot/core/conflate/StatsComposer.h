@@ -38,8 +38,8 @@
 #include <QList>
 #include <QVariantMap>
 
-namespace hoot {
-using namespace std;
+namespace hoot
+{
 
 class StatsComposer
 {

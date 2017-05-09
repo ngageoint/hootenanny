@@ -59,6 +59,8 @@
 // tgs
 #include <tgs/System/SystemInfo.h>
 
+using namespace std;
+
 namespace hoot
 {
 

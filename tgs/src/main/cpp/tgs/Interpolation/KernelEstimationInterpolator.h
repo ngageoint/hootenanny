@@ -54,7 +54,7 @@ public:
 
   virtual ~KernelEstimationInterpolator();
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   double getSigma() const { return _sigma; }
 

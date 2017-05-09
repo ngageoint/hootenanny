@@ -36,9 +36,8 @@
 
 namespace hoot
 {
-class MatchClassification;
 
-using namespace std;
+class MatchClassification;
 
 /**
  * This class is re-entrant, but not thread safe.

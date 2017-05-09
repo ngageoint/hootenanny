@@ -82,7 +82,7 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   QList<SingleStat> getStats() const { return _stats; }
 

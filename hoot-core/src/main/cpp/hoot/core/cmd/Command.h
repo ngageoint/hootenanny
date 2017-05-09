@@ -37,8 +37,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * @defgroup cmd Command Line Interface
  */

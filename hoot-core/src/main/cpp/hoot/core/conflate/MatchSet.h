@@ -35,9 +35,8 @@
 
 namespace hoot
 {
-using namespace std;
 
-typedef set<const Match *, MatchPtrComparator> MatchSet;
+typedef std::set<const Match *, MatchPtrComparator> MatchSet;
 
 }
 
