@@ -76,10 +76,12 @@ Hoot& Hoot::getInstance()
 
 void Hoot::_init()
 {
-  //lower this temporarily for debugging init issues
+  //lower this log level temporarily *only* for debugging init issues; some hoot services
+  //functionality that parses log output is sensitive to extra logged statements and will fail
+  //when this is lowered
   Log::getInstance().setLevel(Log::Info);
 
-  LOG_INFO("Hoot instance init...");
+  LOG_DEBUG("Hoot instance init...");
 
 # ifdef TGS_HAVE_LIBSTXXL
   // initialize the environment variable for loading STXXL configuration. If the environment
@@ -148,7 +150,7 @@ void Hoot::loadLibrary(QString name)
 
 void Hoot::reinit()
 {
-  LOG_INFO("Hoot instance reinit...");
+  LOG_DEBUG("Hoot instance reinit...");
 
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)
