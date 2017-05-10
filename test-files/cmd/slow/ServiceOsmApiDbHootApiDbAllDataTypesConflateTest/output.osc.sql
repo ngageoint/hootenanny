@@ -100,66 +100,66 @@ INSERT INTO current_node_tags (node_id, k, v) VALUES (79, 'name', 'Starbucks');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (79, 'name', 'Starbucks', 2);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (79, 'amenity', 'cafe');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (79, 'amenity', 'cafe', 2);
-/* create node 235*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (235, 388887009, -1047187702, 3, true, (now() at time zone 'utc'), 1329041620, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (235, 388887009, -1047187702, 3, true, (now() at time zone 'utc'), 1329041620, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (235, 'accuracy', '1000');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (235, 'accuracy', '1000', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (235, 'note', '2-c');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (235, 'note', '2-c', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (235, 'poi', 'yes');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (235, 'poi', 'yes', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (235, 'hoot:id', '235');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (235, 'hoot:id', '235', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (235, 'name', 'Starbucks');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (235, 'name', 'Starbucks', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (235, 'amenity', 'cafe');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (235, 'amenity', 'cafe', 1);
-/* create node 237*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (237, 388942750, -1047187095, 3, true, (now() at time zone 'utc'), 1329041792, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (237, 388942750, -1047187095, 3, true, (now() at time zone 'utc'), 1329041792, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (237, 'accuracy', '1000');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (237, 'accuracy', '1000', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (237, 'note', '2-b');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (237, 'note', '2-b', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (237, 'poi', 'yes');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (237, 'poi', 'yes', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (237, 'hoot:id', '237');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (237, 'hoot:id', '237', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (237, 'name', 'Starbucks');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (237, 'name', 'Starbucks', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (237, 'amenity', 'cafe');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (237, 'amenity', 'cafe', 1);
-/* create node 238*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (238, 388747831, -1047208596, 3, true, (now() at time zone 'utc'), 1329041601, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (238, 388747831, -1047208596, 3, true, (now() at time zone 'utc'), 1329041601, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (238, 'accuracy', '150');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (238, 'accuracy', '150', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (238, 'note', '2-e');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (238, 'note', '2-e', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (238, 'poi', 'yes');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (238, 'poi', 'yes', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (238, 'hoot:id', '238');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (238, 'hoot:id', '238', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (238, 'name', 'Starbucks');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (238, 'name', 'Starbucks', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (238, 'amenity', 'cafe');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (238, 'amenity', 'cafe', 1);
-/* create node 240*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (240, 388753845, -1047191537, 3, true, (now() at time zone 'utc'), 1329041601, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (240, 388753845, -1047191537, 3, true, (now() at time zone 'utc'), 1329041601, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (240, 'accuracy', '1000');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (240, 'accuracy', '1000', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (240, 'note', '2-d');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (240, 'note', '2-d', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (240, 'poi', 'yes');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (240, 'poi', 'yes', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (240, 'hoot:id', '240');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (240, 'hoot:id', '240', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (240, 'name', 'Starbucks');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (240, 'name', 'Starbucks', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (240, 'amenity', 'cafe');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (240, 'amenity', 'cafe', 1);
+/* create node 119*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (119, 388887009, -1047187702, 3, true, (now() at time zone 'utc'), 1329041620, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (119, 388887009, -1047187702, 3, true, (now() at time zone 'utc'), 1329041620, 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (119, 'accuracy', '1000');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (119, 'accuracy', '1000', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (119, 'note', '2-c');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (119, 'note', '2-c', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (119, 'poi', 'yes');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (119, 'poi', 'yes', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (119, 'hoot:id', '119');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (119, 'hoot:id', '119', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (119, 'name', 'Starbucks');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (119, 'name', 'Starbucks', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (119, 'amenity', 'cafe');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (119, 'amenity', 'cafe', 1);
+/* create node 121*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (121, 388942750, -1047187095, 3, true, (now() at time zone 'utc'), 1329041792, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (121, 388942750, -1047187095, 3, true, (now() at time zone 'utc'), 1329041792, 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (121, 'accuracy', '1000');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (121, 'accuracy', '1000', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (121, 'note', '2-b');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (121, 'note', '2-b', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (121, 'poi', 'yes');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (121, 'poi', 'yes', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (121, 'hoot:id', '121');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (121, 'hoot:id', '121', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (121, 'name', 'Starbucks');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (121, 'name', 'Starbucks', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (121, 'amenity', 'cafe');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (121, 'amenity', 'cafe', 1);
+/* create node 122*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (122, 388747831, -1047208596, 3, true, (now() at time zone 'utc'), 1329041601, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (122, 388747831, -1047208596, 3, true, (now() at time zone 'utc'), 1329041601, 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (122, 'accuracy', '150');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (122, 'accuracy', '150', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (122, 'note', '2-e');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (122, 'note', '2-e', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (122, 'poi', 'yes');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (122, 'poi', 'yes', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (122, 'hoot:id', '122');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (122, 'hoot:id', '122', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (122, 'name', 'Starbucks');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (122, 'name', 'Starbucks', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (122, 'amenity', 'cafe');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (122, 'amenity', 'cafe', 1);
+/* create node 124*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (124, 388753845, -1047191537, 3, true, (now() at time zone 'utc'), 1329041601, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (124, 388753845, -1047191537, 3, true, (now() at time zone 'utc'), 1329041601, 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (124, 'accuracy', '1000');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (124, 'accuracy', '1000', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (124, 'note', '2-d');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (124, 'note', '2-d', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (124, 'poi', 'yes');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (124, 'poi', 'yes', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (124, 'hoot:id', '124');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (124, 'hoot:id', '124', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (124, 'name', 'Starbucks');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (124, 'name', 'Starbucks', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (124, 'amenity', 'cafe');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (124, 'amenity', 'cafe', 1);
 /* create relation 2*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (2, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (2, 3, true, (now() at time zone 'utc'), 1);
@@ -179,8 +179,8 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (2, 'hoot:review:so
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (2, 'hoot:review:sort_order', '2', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (2, 'Node', 79, 'reviewee', 1, 1);
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (2, 'Node', 79, 'reviewee', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (2, 'Node', 237, 'reviewee', 1, 2);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (2, 'Node', 237, 'reviewee', 2);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (2, 'Node', 121, 'reviewee', 1, 2);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (2, 'Node', 121, 'reviewee', 2);
 /* create relation 3*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (3, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (3, 3, true, (now() at time zone 'utc'), 1);
@@ -200,8 +200,8 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (3, 'hoot:review:so
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (3, 'hoot:review:sort_order', '1', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (3, 'Node', 79, 'reviewee', 1, 1);
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (3, 'Node', 79, 'reviewee', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (3, 'Node', 235, 'reviewee', 1, 2);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (3, 'Node', 235, 'reviewee', 2);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (3, 'Node', 119, 'reviewee', 1, 2);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (3, 'Node', 119, 'reviewee', 2);
 /* create relation 4*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (4, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (4, 3, true, (now() at time zone 'utc'), 1);
@@ -221,8 +221,8 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (4, 'hoot:review:so
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (4, 'hoot:review:sort_order', '0', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (4, 'Node', 74, 'reviewee', 1, 1);
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (4, 'Node', 74, 'reviewee', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (4, 'Node', 237, 'reviewee', 1, 2);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (4, 'Node', 237, 'reviewee', 2);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (4, 'Node', 121, 'reviewee', 1, 2);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (4, 'Node', 121, 'reviewee', 2);
 /* create relation 5*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (5, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (5, 3, true, (now() at time zone 'utc'), 1);
@@ -242,8 +242,8 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (5, 'hoot:review:so
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (5, 'hoot:review:sort_order', '3', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (5, 'Node', 77, 'reviewee', 1, 1);
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (5, 'Node', 77, 'reviewee', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (5, 'Node', 240, 'reviewee', 1, 2);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (5, 'Node', 240, 'reviewee', 2);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (5, 'Node', 124, 'reviewee', 1, 2);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (5, 'Node', 124, 'reviewee', 2);
 /* create relation 6*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (6, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (6, 3, true, (now() at time zone 'utc'), 1);
@@ -263,8 +263,8 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (6, 'hoot:review:so
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (6, 'hoot:review:sort_order', '5', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (6, 'Node', 71, 'reviewee', 1, 1);
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (6, 'Node', 71, 'reviewee', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (6, 'Node', 240, 'reviewee', 1, 2);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (6, 'Node', 240, 'reviewee', 2);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (6, 'Node', 124, 'reviewee', 1, 2);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (6, 'Node', 124, 'reviewee', 2);
 /* create relation 7*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (7, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (7, 3, true, (now() at time zone 'utc'), 1);
@@ -284,6 +284,6 @@ INSERT INTO current_relation_tags (relation_id, k, v) VALUES (7, 'hoot:review:so
 INSERT INTO relation_tags (relation_id, k, v, version) VALUES (7, 'hoot:review:sort_order', '4', 1);
 INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (7, 'Node', 71, 'reviewee', 1, 1);
 INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (7, 'Node', 71, 'reviewee', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (7, 'Node', 238, 'reviewee', 1, 2);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (7, 'Node', 238, 'reviewee', 2);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (7, 'Node', 122, 'reviewee', 1, 2);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (7, 'Node', 122, 'reviewee', 2);
 UPDATE changesets SET min_lat=388580512, max_lat=389109693, min_lon=-1047869287, max_lon=-1047145693, num_changes=16 WHERE id=3;
