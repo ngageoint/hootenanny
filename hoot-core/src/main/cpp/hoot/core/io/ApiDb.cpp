@@ -42,6 +42,7 @@
 #include <hoot/core/algorithms/zindex/Range.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/FileUtils.h>
 
 // qt
 #include <QStringList>
@@ -709,11 +710,13 @@ void ApiDb::execSqlFile(const QString dbUrl, const QString sqlFile)
 //    cmd += " --quiet";
 //  }
   cmd += " " + getPsqlString(dbUrl) + " -f " + sqlFile;
+  cmd += " 2>&1";
   if (Log::getInstance().getLevel() > Log::Debug)
   {
     cmd += " > /dev/null";
   }
-  LOG_DEBUG(cmd);
+  LOG_VARD(cmd);
+  LOG_VART(FileUtils::fileToString(sqlFile));
   const int retval = system(cmd.toStdString().c_str());
   if (retval != 0)
   {
