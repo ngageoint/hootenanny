@@ -34,6 +34,7 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -91,6 +92,8 @@ void OsmApiDbReader::open(QString urlStr)
   //be invalid as a whole
   _database->transaction();
   _open = true;
+
+  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database->getDB()));
 }
 
 void OsmApiDbReader::read(OsmMapPtr map)

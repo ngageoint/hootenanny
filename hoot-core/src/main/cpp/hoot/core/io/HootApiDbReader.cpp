@@ -33,6 +33,7 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QUrl>
@@ -115,6 +116,8 @@ void HootApiDbReader::open(QString urlStr)
   //be invalid as a whole
   _database->transaction();
   _open = true;
+
+  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database->getDB()));
 }
 
 bool HootApiDbReader::hasMoreElements()

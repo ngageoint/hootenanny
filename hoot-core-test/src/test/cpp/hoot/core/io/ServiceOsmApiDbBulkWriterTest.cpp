@@ -345,7 +345,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -373,7 +374,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -404,7 +406,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -432,7 +435,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -447,10 +451,14 @@ public:
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
     //write some data from somewhere else while before our writer starts writing data
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql"); //1 changeset
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql"); //2 nodes
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql"); //1 way
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql"); //1 relation
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql"); //1 changeset
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql"); //2 nodes
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/ways.sql"); //1 way
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/relations.sql"); //1 relation
 
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
@@ -466,7 +474,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -498,7 +507,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =

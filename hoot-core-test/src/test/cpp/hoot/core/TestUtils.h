@@ -147,8 +147,11 @@ public:
 
   /**
    * Resets the test environment to a known state.
+   *
+   * @param confs custom confs to load during reset; if left blank the default config in
+   * ConfigOptions will be loaded
    */
-  static void resetEnvironment();
+  static void resetEnvironment(const QStringList confs = QStringList());
 
   /**
    * Converts a string into a format that can be cut/paste into c++ code.

@@ -104,10 +104,11 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
-
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql");
 
     /////////////////////////////////////
     // Need to get the data in the format exactly like the return of the Services Db now so we don't need to
@@ -202,7 +203,7 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/ways.sql");
 
     boost::shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
 
@@ -269,7 +270,8 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/relations.sql");
 
     boost::shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
 

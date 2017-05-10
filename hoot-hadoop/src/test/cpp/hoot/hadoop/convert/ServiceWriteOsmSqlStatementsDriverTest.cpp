@@ -34,9 +34,9 @@ using namespace pp;
 namespace hoot
 {
 
-class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
+class ServiceWriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
 {
-  CPPUNIT_TEST_SUITE(WriteOsmSqlStatementsDriverTest);
+  CPPUNIT_TEST_SUITE(ServiceWriteOsmSqlStatementsDriverTest);
   CPPUNIT_TEST(testSqlFileOutputNoBuffering);
   CPPUNIT_TEST(testDatabaseOutputNoBuffering);
   CPPUNIT_TEST(testSqlFileOutputWithBuffering);
@@ -138,7 +138,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
   }
 
   void writeAdditionalNewRecords()
@@ -271,5 +272,5 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WriteOsmSqlStatementsDriverTest, "glacial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ServiceWriteOsmSqlStatementsDriverTest, "glacial");
 
