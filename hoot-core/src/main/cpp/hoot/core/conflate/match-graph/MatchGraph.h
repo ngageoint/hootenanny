@@ -42,7 +42,7 @@ class Match;
 class MatchGraphInternal;
 class MatchThreshold;
 
-typedef vector< MatchSet > MatchSetVector;
+typedef std::vector< MatchSet > MatchSetVector;
 
 /**
  * Represents a graph of matches. At some point I'd like to extend this to include additional

@@ -40,6 +40,8 @@
 #include <QtSql/QSqlDatabase>
 #include <QUrl>
 
+using namespace std;
+
 namespace hoot
 {
 

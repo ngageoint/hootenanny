@@ -52,7 +52,7 @@ public:
 
 private:
 
-  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const set<ElementId> eids);
+  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const std::set<ElementId> eids);
 
   Envelope::AutoPtr _mapEnvelope;
 };

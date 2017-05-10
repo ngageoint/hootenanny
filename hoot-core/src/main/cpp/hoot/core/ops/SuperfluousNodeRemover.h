@@ -45,8 +45,8 @@
 
 namespace hoot
 {
+
 using namespace geos::geom;
-using namespace std;
 
 class OsmMap;
 
@@ -82,7 +82,7 @@ public:
 protected:
 
   Envelope _bounds;
-  set<long> _usedNodes;
+  std::set<long> _usedNodes;
 
 };
 

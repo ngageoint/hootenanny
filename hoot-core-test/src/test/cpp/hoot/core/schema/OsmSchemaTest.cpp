@@ -47,6 +47,8 @@ using namespace hoot;
 
 const double epsilon = 1e-6;
 
+using namespace std;
+
 namespace hoot
 {
 

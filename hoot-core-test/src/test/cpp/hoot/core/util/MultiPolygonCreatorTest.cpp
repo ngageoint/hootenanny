@@ -39,6 +39,8 @@ using namespace hoot;
 
 #include "../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 

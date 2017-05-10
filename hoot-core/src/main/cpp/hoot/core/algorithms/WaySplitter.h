@@ -69,13 +69,13 @@ public:
    *
    * @param wl A sorted list of split points. There may be duplicate split points.
    */
-  std::vector<WayPtr> createSplits(const vector<WayLocation>& wl);
+  std::vector<WayPtr> createSplits(const std::vector<WayLocation>& wl);
 
   /**
    * Given an input subline, break the way up into up to 3 pieces where one is the way that covers
    * the subline and the remaining pieces are put into the scraps vector.
    */
-  WayPtr createSubline(const WaySubline& subline, vector<WayPtr>& scraps);
+  WayPtr createSubline(const WaySubline& subline, std::vector<WayPtr>& scraps);
 
   /**
    * Given a split point on a way break the way into two smaller ways and return those ways as

@@ -58,10 +58,10 @@ public:
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator

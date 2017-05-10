@@ -32,6 +32,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 

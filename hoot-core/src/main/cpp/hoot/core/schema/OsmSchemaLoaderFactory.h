@@ -41,7 +41,6 @@ namespace hoot
 class OsmSchemaLoader;
 
 using namespace boost;
-using namespace std;
 
 class OsmSchemaLoaderFactory
 {
@@ -50,7 +49,7 @@ public:
 
   static OsmSchemaLoaderFactory& getInstance();
 
- boost::shared_ptr<OsmSchemaLoader> createLoader(QString url);
+  boost::shared_ptr<OsmSchemaLoader> createLoader(QString url);
 
 private:
   static std::auto_ptr<OsmSchemaLoaderFactory> _theInstance;

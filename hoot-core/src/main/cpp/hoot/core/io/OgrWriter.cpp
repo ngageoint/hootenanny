@@ -69,6 +69,8 @@
 
 #include "OgrOptions.h"
 
+using namespace std;
+
 namespace hoot
 {
 

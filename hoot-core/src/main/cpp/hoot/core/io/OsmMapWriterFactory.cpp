@@ -33,6 +33,8 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
+
 namespace hoot
 {
 

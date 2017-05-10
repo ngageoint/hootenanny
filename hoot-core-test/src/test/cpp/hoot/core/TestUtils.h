@@ -100,7 +100,7 @@ public:
 
   TestUtils();
 
-  static void dumpString(const string& str);
+  static void dumpString(const std::string& str);
 
   static std::string readFile(QString f1);
 

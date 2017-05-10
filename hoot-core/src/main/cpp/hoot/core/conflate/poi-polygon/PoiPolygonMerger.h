@@ -49,9 +49,9 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  PoiPolygonMerger(const set< pair<ElementId, ElementId> >& pairs);
+  PoiPolygonMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
     const;
 
   /**
@@ -72,14 +72,14 @@ protected:
 
 private:
 
-  set< pair<ElementId, ElementId> > _pairs;
+  std::set< std::pair<ElementId, ElementId> > _pairs;
 
-  ElementId _mergeBuildings(const OsmMapPtr& map, vector<ElementId>& buildings1,
-    vector<ElementId>& buildings2, vector< pair<ElementId, ElementId> >& replaced) const;
+  ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
+    std::vector<ElementId>& buildings2, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
 
   Tags _mergePoiTags(const OsmMapPtr& map, Status s) const;
 
-  vector<ElementId> _getBuildingParts(const OsmMapPtr& map, Status s) const;
+  std::vector<ElementId> _getBuildingParts(const OsmMapPtr& map, Status s) const;
 
 };
 

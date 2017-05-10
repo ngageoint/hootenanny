@@ -26,6 +26,8 @@
  */
 #include "IterativeEdgeMatcher.h"
 
+using namespace std;
+
 namespace hoot
 {
 

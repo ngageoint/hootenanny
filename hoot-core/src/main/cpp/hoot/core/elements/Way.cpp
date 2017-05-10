@@ -46,6 +46,8 @@ using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -88,7 +88,7 @@ private:
 
   Comparison _compare(const Tags& t1, const Tags& t2) const;
 
-  vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
+  std::vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
     const ConstElementPtr& in) const;
 
   /**

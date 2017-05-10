@@ -44,19 +44,19 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  MarkForReviewMerger(const set< pair<ElementId, ElementId> >& pairs, QString note,
+  MarkForReviewMerger(const std::set< std::pair<ElementId, ElementId> >& pairs, QString note,
                       QString reviewType, double score);
 
   /**
    * Review when a whole group of elements needs to be reviewed instead of specific pairs. This
    * will create a single review that contains all the specified elements.
    */
-  MarkForReviewMerger(const set<ElementId>& eids, QString note,
+  MarkForReviewMerger(const std::set<ElementId>& eids, QString note,
                       QString reviewType, double score);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
 
-  virtual set<ElementId> getImpactedElementIds() const;
+  virtual std::set<ElementId> getImpactedElementIds() const;
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
@@ -66,8 +66,8 @@ public:
 
 private:
 
-  set<ElementId> _eids;
-  set< pair<ElementId, ElementId> > _pairs;
+  std::set<ElementId> _eids;
+  std::set< std::pair<ElementId, ElementId> > _pairs;
   QString _note;
   QString _reviewType;
   double _score;

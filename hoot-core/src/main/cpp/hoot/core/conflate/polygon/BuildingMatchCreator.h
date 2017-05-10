@@ -51,10 +51,10 @@ public:
 
   virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
 
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator

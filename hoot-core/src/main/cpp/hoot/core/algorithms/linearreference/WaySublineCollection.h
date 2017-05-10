@@ -48,7 +48,7 @@ class WaySublineCollection
 {
 public:
 
-  typedef vector<WaySubline> SublineCollection;
+  typedef std::vector<WaySubline> SublineCollection;
 
   WaySublineCollection();
 

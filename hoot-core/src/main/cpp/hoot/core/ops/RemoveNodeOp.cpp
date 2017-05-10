@@ -32,6 +32,8 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
 
+using namespace std;
+
 namespace hoot
 {
 

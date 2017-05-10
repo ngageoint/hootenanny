@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class IdGenerator
 {

@@ -168,13 +168,13 @@ protected:
   //  Distinct Frechet matrix
   frechet_matrix _matrix;
   //  Locations along _w2 for each node in _w1
-  vector<WayLocation> _locations_w1;
+  std::vector<WayLocation> _locations_w1;
   //  Locations along _w1 for each node in _w2
-  vector<WayLocation> _locations_w2;
+  std::vector<WayLocation> _locations_w2;
   //  Distances between each node in _w1 and the corresponding WayLocation on _w2
-  vector<Meters> _distances_w1;
+  std::vector<Meters> _distances_w1;
   //  Distances between each node in _w2 and the corresponding WayLocation on _w1
-  vector<Meters> _distances_w2;
+  std::vector<Meters> _distances_w2;
   //  Max difference in angles to calculate Frechet distance for
   Radians _angleDiff;
   //  Max angle to compare _angleDiff against

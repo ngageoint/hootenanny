@@ -36,6 +36,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
 
+using namespace std;
+
 namespace hoot
 {
 

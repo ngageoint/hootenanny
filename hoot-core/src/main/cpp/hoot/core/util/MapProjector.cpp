@@ -47,6 +47,8 @@ using namespace boost;
 #include <iomanip>
 #include <iostream>
 
+using namespace std;
+
 namespace hoot
 {
 

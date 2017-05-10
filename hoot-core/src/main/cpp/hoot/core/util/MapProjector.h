@@ -51,11 +51,11 @@
 
 namespace hoot
 {
+
 class OsmMap;
 
-  using namespace boost;
-  using namespace geos::geom;
-  using namespace std;
+using namespace boost;
+using namespace geos::geom;
 
 class MapProjector
 {
@@ -81,12 +81,12 @@ public:
 
   static boost::shared_ptr<OGRSpatialReference> createWgs84Projection();
 
-  static void project(boost::shared_ptr<OsmMap> map,boost::shared_ptr<OGRSpatialReference> ref);
+  static void project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRSpatialReference> ref);
 
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
    */
-  vector<boost::shared_ptr<OGRSpatialReference> > createAllPlanarProjections(const OGREnvelope& env);
+  std::vector<boost::shared_ptr<OGRSpatialReference> > createAllPlanarProjections(const OGREnvelope& env);
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -179,9 +179,9 @@ private:
   bool _evaluateProjection(const OGREnvelope& env,boost::shared_ptr<OGRSpatialReference> srs,
     Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
 
-  size_t _findBestResult(vector<PlanarTestResult>& results);
+  size_t _findBestResult(std::vector<PlanarTestResult>& results);
 
-  size_t _findBestScore(vector<PlanarTestResult>& results);
+  size_t _findBestScore(std::vector<PlanarTestResult>& results);
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 };

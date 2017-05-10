@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Replaces all instances of one element with another element. In some cases we may not be able

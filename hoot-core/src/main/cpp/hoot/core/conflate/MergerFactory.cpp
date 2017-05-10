@@ -36,6 +36,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/match-graph/MatchGraph.h>
 
+using namespace std;
+
 namespace hoot
 {
 

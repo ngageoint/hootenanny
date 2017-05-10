@@ -34,6 +34,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Validate.h>
 
+using namespace std;
+
 namespace hoot
 {
 

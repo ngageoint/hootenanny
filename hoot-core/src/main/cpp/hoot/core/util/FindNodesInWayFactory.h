@@ -53,7 +53,7 @@ public:
 private:
 
   const ConstWayPtr _way;
-  set<long> _nodesToSearch;
+  std::set<long> _nodesToSearch;
 };
 
 }

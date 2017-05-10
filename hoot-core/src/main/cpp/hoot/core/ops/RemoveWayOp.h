@@ -46,7 +46,7 @@ public:
    * @return class name
    */
   static std::string className() { return "hoot::RemoveWayOp"; }
-  string getClassName() const { return className(); }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief RemoveWayOp is used to remove ways from maps

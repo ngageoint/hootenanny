@@ -73,15 +73,15 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   Persistent<Object> getPlugin() const { return _plugin; }
 
- boost::shared_ptr<PluginContext> getScript() const { return _script; }
+  boost::shared_ptr<PluginContext> getScript() const { return _script; }
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
 
 private:
 
@@ -90,9 +90,9 @@ private:
   QString _matchName;
   MatchClassification _p;
   Persistent<Object> _plugin;
- boost::shared_ptr<PluginContext> _script;
+  boost::shared_ptr<PluginContext> _script;
   QString _explainText;
-  typedef pair<ElementId, ElementId> ConflictKey;
+  typedef std::pair<ElementId, ElementId> ConflictKey;
   mutable QHash<ConflictKey, bool> _conflicts;
 
   friend class ScriptMatchTest;

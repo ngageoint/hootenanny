@@ -36,6 +36,8 @@
 
 #include "MaximalNearestSubline.h"
 
+using namespace std;
+
 namespace hoot
 {
 

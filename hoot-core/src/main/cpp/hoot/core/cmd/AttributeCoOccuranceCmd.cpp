@@ -57,6 +57,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/scoring/AttributeCoOccurence.h>
 
+using namespace std;
 
 namespace hoot
 {

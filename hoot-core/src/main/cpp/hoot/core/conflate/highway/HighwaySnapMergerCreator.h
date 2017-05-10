@@ -44,9 +44,9 @@ public:
   /**
    * If there is a single HighwayMatch, a single HighwaySnapMerger will be created and returned.
    */
-  virtual bool createMergers(const MatchSet& matches, vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 

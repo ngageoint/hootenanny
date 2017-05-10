@@ -56,7 +56,10 @@ using namespace hoot::elements;
 // Qt
 #include <QDebug>
 
-namespace hoot {
+using namespace std;
+
+namespace hoot
+{
 
 boost::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 

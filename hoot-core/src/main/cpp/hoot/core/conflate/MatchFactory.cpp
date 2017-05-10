@@ -35,6 +35,8 @@
 //Qt
 #include <QString>
 
+using namespace std;
+
 namespace hoot
 {
 

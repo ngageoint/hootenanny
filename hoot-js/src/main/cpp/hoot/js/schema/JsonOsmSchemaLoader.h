@@ -52,11 +52,11 @@ public:
 
   virtual void load(QString path, OsmSchema& s);
 
-  virtual set<QString> getDependencies() { return _deps; }
+  virtual std::set<QString> getDependencies() { return _deps; }
 
 protected:
 
-  set<QString> _deps;
+  std::set<QString> _deps;
   QList<QString> _baseDir;
   v8::Persistent<v8::Context> _context;
 

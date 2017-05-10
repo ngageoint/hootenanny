@@ -31,6 +31,8 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/OsmSchema.h>
 
+using namespace std;
+
 namespace hoot
 {
 

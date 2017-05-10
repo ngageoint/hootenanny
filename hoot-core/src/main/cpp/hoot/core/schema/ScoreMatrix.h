@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * A matrix of scores where the scores usually represent tag or name combinations. E.g. if you have
@@ -144,7 +143,7 @@ private:
     }
   };
 
-  vector< vector<double> > _v;
+  std::vector< std::vector<double> > _v;
 
 };
 

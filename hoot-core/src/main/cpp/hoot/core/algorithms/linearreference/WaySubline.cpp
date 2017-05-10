@@ -34,6 +34,8 @@
 #include <hoot/core/util/FindNodesInWayFactory.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
+using namespace std;
+
 namespace hoot
 {
 

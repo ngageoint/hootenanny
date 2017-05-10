@@ -47,9 +47,11 @@
 
 #include "../TestUtils.h"
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-using namespace Tgs;
 
 void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant v1,
   QVariant v2)

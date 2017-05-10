@@ -39,6 +39,8 @@
 // Qt
 #include <QDir>
 
+using namespace std;
+
 namespace hoot
 {
 

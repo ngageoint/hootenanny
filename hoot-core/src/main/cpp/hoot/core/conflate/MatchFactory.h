@@ -65,7 +65,7 @@ public:
    * Goes through all registered MatchCreators and calls createMatches in the order the creators
    * were registered.
    */
-  void createMatches(const ConstOsmMapPtr& map, vector<const Match *> &matches,
+  void createMatches(const ConstOsmMapPtr& map, std::vector<const Match *> &matches,
     const Envelope &bounds,
     boost::shared_ptr<const MatchThreshold> threshold = boost::shared_ptr<MatchThreshold>()) const;
 

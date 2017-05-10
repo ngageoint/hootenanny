@@ -51,7 +51,7 @@ public:
    * @return the name of the class
    */
   static std::string className() { return "hoot::RemoveNodeOp"; }
-  string getClassName() const { return className(); }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief RemoveNodeOp Removes a node from a map

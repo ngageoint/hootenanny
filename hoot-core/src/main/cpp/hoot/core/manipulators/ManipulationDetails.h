@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * An interface that provides some deep dive details on a given manipulation. This is useful for
@@ -56,7 +55,7 @@ public:
    * Returns a set of eids that have been matched as being equivalent or partially equivalent by
    * this manipulation.
    */
-  virtual set<ElementId> getMatchedElements() const = 0;
+  virtual std::set<ElementId> getMatchedElements() const = 0;
 };
 
 }

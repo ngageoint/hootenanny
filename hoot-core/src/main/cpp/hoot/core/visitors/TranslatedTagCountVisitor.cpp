@@ -38,6 +38,8 @@
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/schema/Schema.h>
 
+using namespace std;
+
 namespace hoot
 {
 

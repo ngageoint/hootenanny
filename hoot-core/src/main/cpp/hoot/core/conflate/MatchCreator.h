@@ -86,7 +86,7 @@ public:
   {
   public:
     Description() : experimental() {}
-    Description(string className, QString description, BaseFeatureType featureType,
+    Description(std::string className, QString description, BaseFeatureType featureType,
                 bool experimental)
     {
       this->className = className;
@@ -96,7 +96,7 @@ public:
     }
 
     bool experimental;
-    string className;
+    std::string className;
     QString description;
     BaseFeatureType baseFeatureType;
   };
@@ -114,14 +114,14 @@ public:
   /**
    * Search the provided map for building matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold) = 0;
 
   /**
    * Generally this just returns the class name of this creator. However, creators that take
    * arguments to specify scripts such as the ScriptMatchCreator may return multiple results.
    */
-  virtual vector<Description> getAllCreators() const = 0;
+  virtual std::vector<Description> getAllCreators() const = 0;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator

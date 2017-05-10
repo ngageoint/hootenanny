@@ -47,6 +47,8 @@
 // Standard
 #include <stdint.h>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -44,6 +44,8 @@
 // TGS
 #include <tgs/StreamUtils.h>
 #include <tgs/RStarTree/HilbertRTree.h>
+
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

@@ -82,7 +82,7 @@ public:
    * @brief getClassName gest the name of the class
    * @return class name string
    */
-  string getClassName() const { return className(); }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief setElementId sets the id of the element to remove

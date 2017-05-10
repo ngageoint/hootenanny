@@ -74,8 +74,8 @@ protected:
 
   HilbertRTreePtr _edge2Index;
   HilbertRTreePtr _vertex2Index;
-  deque<ConstNetworkEdgePtr> _index2Edge;
-  deque<ConstNetworkVertexPtr> _index2Vertex;
+  std::deque<ConstNetworkEdgePtr> _index2Edge;
+  std::deque<ConstNetworkVertexPtr> _index2Vertex;
   ConstOsmMapPtr _map;
   OsmNetworkPtr _n1, _n2;
   NetworkDetailsPtr _details;

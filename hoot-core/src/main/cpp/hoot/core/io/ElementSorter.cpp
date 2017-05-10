@@ -31,6 +31,8 @@
 // Standard
 #include <algorithm>
 
+using namespace std;
+
 namespace hoot
 {
 

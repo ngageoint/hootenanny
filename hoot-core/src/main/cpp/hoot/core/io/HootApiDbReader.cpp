@@ -39,6 +39,8 @@
 #include <QUrl>
 #include <QDateTime>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -41,6 +41,8 @@
 
 #include <QTextCodec>
 
+using namespace std;
+
 namespace hoot
 {
 

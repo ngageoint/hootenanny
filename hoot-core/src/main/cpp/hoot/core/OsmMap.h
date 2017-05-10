@@ -157,7 +157,7 @@ public:
 
   size_t getElementCount() const;
 
-  const vector< boost::shared_ptr<OsmMapListener> >& getListeners() const { return _listeners; }
+  const std::vector< boost::shared_ptr<OsmMapListener> >& getListeners() const { return _listeners; }
 
   const IdGenerator& getIdGenerator() const { return *_idGen; }
 
@@ -177,7 +177,7 @@ public:
 
   const NodeMap& getNodes() const { return _nodes; }
 
-  set<ElementId> getParents(ElementId eid) const;
+  std::set<ElementId> getParents(ElementId eid) const;
 
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
@@ -309,7 +309,7 @@ protected:
   mutable WayMap::const_iterator _tmpWayIt;
   std::vector< boost::shared_ptr<OsmMapListener> > _listeners;
 
-  vector< boost::shared_ptr<Element> > _replaceTmpArray;
+  std::vector< boost::shared_ptr<Element> > _replaceTmpArray;
 
   void _copy(boost::shared_ptr<const OsmMap> from);
 

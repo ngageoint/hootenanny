@@ -41,9 +41,9 @@ class ScriptMerger : public MergerBase
 {
 public:
   ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
-    const set<pair<ElementId, ElementId> > &pairs);
+    const std::set<std::pair<ElementId, ElementId> > &pairs);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
 
   /**
    * Returns true if the plugin has a function with the specified name.
@@ -61,16 +61,16 @@ protected:
   /**
    * Calls mergePair in the JS.
    */
-  virtual void _applyMergePair(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+  virtual void _applyMergePair(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
     const;
   /**
    * Calls mergeSet in the JS.
    */
-  virtual void _applyMergeSets(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+  virtual void _applyMergeSets(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
     const;
 
   Handle<Value> _callMergePair(const OsmMapPtr& map) const;
-  void _callMergeSets(const OsmMapPtr& map, vector<pair<ElementId, ElementId> > &replaced) const;
+  void _callMergeSets(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId> > &replaced) const;
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 

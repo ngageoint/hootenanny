@@ -68,11 +68,11 @@ public:
    * Return all the way elements that intersect with the specified envelope along with their parent
    * relations.
    */
-  set<ElementId> findWayRelations(const Envelope& e) const;
+  std::set<ElementId> findWayRelations(const Envelope& e) const;
 
-  vector<long> findNodes(const Coordinate& from, Meters maxDistance) const;
+  std::vector<long> findNodes(const Coordinate& from, Meters maxDistance) const;
 
-  vector<long> findNodes(const Envelope& e) const;
+  std::vector<long> findNodes(const Envelope& e) const;
 
   long findNearestWay(Coordinate c) const;
 
@@ -94,7 +94,7 @@ public:
    * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
-  vector<long> findWays(const Envelope& e) const;
+  std::vector<long> findWays(const Envelope& e) const;
 
   Meters getIndexSlush() const { return _indexSlush; }
 
@@ -113,9 +113,9 @@ public:
   /**
    * Get all the direct parents of a given element. This will not return grand parents, etc.
    */
-  set<ElementId> getParents(ElementId eid) const;
+  std::set<ElementId> getParents(ElementId eid) const;
 
-  const vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
+  const std::vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
 
   boost::shared_ptr<const HilbertRTree> getWayTree() const;
 
@@ -146,13 +146,13 @@ private:
 
   Meters _indexSlush;
 
-  mutable set<long> _pendingWayInsert;
-  mutable set<long> _pendingWayRemoval;
+  mutable std::set<long> _pendingWayInsert;
+  mutable std::set<long> _pendingWayRemoval;
 
-  mutable set<long> _pendingNodeInsert;
-  mutable set<long> _pendingNodeRemoval;
+  mutable std::set<long> _pendingNodeInsert;
+  mutable std::set<long> _pendingNodeRemoval;
 
-  mutable set<long> _pendingRelationChange;
+  mutable std::set<long> _pendingRelationChange;
 
   mutable boost::shared_ptr<HilbertRTree> _nodeTree;
   mutable boost::shared_ptr<HilbertRTree> _wayTree;
@@ -160,8 +160,8 @@ private:
   mutable boost::shared_ptr<NodeToWayMap> _nodeToWayMap;
   mutable boost::shared_ptr<ElementToRelationMap> _elementToRelationMap;
 
-  mutable vector<long> _treeIdToNid;
-  mutable vector<long> _treeIdToWid;
+  mutable std::vector<long> _treeIdToNid;
+  mutable std::vector<long> _treeIdToWid;
 
   void _buildNodeTree() const;
   void _buildWayTree() const;

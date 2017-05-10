@@ -42,6 +42,8 @@
 // Tgs
 #include <tgs/Statistics/Normal.h>
 
+using namespace std;
+
 namespace hoot
 {
 

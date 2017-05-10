@@ -34,6 +34,8 @@
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 
+using namespace std;
+
 namespace hoot
 {
 

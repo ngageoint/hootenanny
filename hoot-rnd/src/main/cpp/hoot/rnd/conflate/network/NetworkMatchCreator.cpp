@@ -54,12 +54,13 @@
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, NetworkMatchCreator)
-
-using namespace Tgs;
 
 NetworkMatchCreator::NetworkMatchCreator()
 {

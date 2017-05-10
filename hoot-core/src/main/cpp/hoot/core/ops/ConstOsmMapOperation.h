@@ -31,7 +31,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class OsmMap;
 

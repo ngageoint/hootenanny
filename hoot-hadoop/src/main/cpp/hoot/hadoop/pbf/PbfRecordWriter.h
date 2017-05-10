@@ -53,7 +53,7 @@ public:
 
   virtual void close();
 
-  virtual void emit(const string&, const string&);
+  virtual void emit(const std::string&, const std::string&);
 
   void emitRecord(OsmMapPtr map);
 
@@ -67,16 +67,16 @@ public:
 
   void setCompressionLevel(int z) { _OsmPbfWriter->setCompressionLevel(z); }
 
-  virtual void setMapContext(int part, string workDir);
+  virtual void setMapContext(int part, std::string workDir);
 
   virtual void setReduceContext(HadoopPipes::ReduceContext& context);
 
-  virtual void setReduceContext(int part, string workDir);
+  virtual void setReduceContext(int part, std::string workDir);
 
 private:
   OsmPbfWriter* _OsmPbfWriter;
-  string _path;
- boost::shared_ptr<ostream> _out;
+  std::string _path;
+  boost::shared_ptr<std::ostream> _out;
 };
 
 }

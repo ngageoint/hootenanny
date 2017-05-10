@@ -44,7 +44,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Yet another logistic regression class. This one does not train on data (rely on Weka for that).
@@ -53,7 +52,7 @@ using namespace std;
 class LogisticRegression
 {
 public:
-  typedef map<QString, double> Coeff;
+  typedef std::map<QString, double> Coeff;
 
   LogisticRegression();
 
@@ -61,7 +60,7 @@ public:
 
   void setIntercept(double intercept) { _intercept = intercept; }
 
-  double evaluate(map<QString, double> sample);
+  double evaluate(std::map<QString, double> sample);
 
 private:
   Coeff _coeff;

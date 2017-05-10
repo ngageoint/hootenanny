@@ -30,6 +30,8 @@
 
 #include "TileOpDriver.h"
 
+using namespace std;
+
 namespace hoot
 {
 

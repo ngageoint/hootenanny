@@ -39,6 +39,8 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Settings.h>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -38,6 +38,8 @@
 #include <fstream>
 #include <limits>
 
+using namespace std;
+
 namespace hoot
 {
 

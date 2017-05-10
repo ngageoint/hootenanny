@@ -215,7 +215,7 @@ private:
   long _wayIdDelta;
   long _nodeIdDelta;
   long _relationIdDelta;
-  std::auto_ptr<fstream> _openStream;
+  std::auto_ptr<std::fstream> _openStream;
 
   void _addTag(boost::shared_ptr<Element> n, QString k, QString v);
 
@@ -233,7 +233,7 @@ private:
 
   int _toRelationMemberType(ElementType t);
 
-  void _writeBlob(const char* buffer, int size, string type);
+  void _writeBlob(const char* buffer, int size, std::string type);
 
   /**
    * Write out the guts of the map.

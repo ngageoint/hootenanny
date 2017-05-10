@@ -53,7 +53,7 @@ public:
    *  the subline way tags. Status and CE will be taken from the first matching subline.
    */
   ElementPtr createSublines(const OsmMapPtr& map, const WaySublineCollection& string,
-    const vector<bool>& reverse, GeometryConverter::NodeFactory* nf = 0) const;
+    const std::vector<bool>& reverse, GeometryConverter::NodeFactory* nf = 0) const;
 
   /**
    * Given a subline string, cut out all the bits that match the subline and put them into @a match
@@ -68,7 +68,7 @@ public:
    * @param scraps Contains all the bits that don't match the subline string. This element will be
    *  created and added to the map. If nothing matches or the line length is zero then @a scraps
    */
-  void split(const OsmMapPtr& map, const WaySublineCollection& string, const vector<bool>& reverse,
+  void split(const OsmMapPtr& map, const WaySublineCollection& string, const std::vector<bool>& reverse,
     ElementPtr& match, ElementPtr& scraps, GeometryConverter::NodeFactory *nf = 0) const;
 
   /**

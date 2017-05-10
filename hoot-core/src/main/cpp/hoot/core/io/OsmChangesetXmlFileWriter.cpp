@@ -38,6 +38,8 @@
 #include <QFileInfo>
 #include <QXmlStreamWriter>
 
+using namespace std;
+
 namespace hoot
 {
 

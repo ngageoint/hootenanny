@@ -80,8 +80,6 @@ namespace __gnu_cxx
 namespace hoot
 {
 
-  using namespace std;
-
 /**
  * Maintains a set of way matches and provides some simple queries.
  */

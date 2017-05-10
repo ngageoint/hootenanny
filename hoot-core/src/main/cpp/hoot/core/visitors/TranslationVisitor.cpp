@@ -41,6 +41,8 @@
 
 #include "TranslationVisitor.h"
 
+using namespace std;
+
 namespace hoot
 {
 

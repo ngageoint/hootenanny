@@ -45,6 +45,8 @@
 
 #include <float.h>
 
+using namespace std;
+
 namespace hoot
 {
 

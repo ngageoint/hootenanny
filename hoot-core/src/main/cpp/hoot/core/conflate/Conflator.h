@@ -134,7 +134,7 @@ public:
   /**
    * Replaces the collection of manipulators that will be used to conflate this map.
    */
-  void setManipulators(const deque< boost::shared_ptr<Manipulator> >& m) { _manipulators = m; }
+  void setManipulators(const std::deque< boost::shared_ptr<Manipulator> >& m) { _manipulators = m; }
 
   void setMaxIterations(int i) { _maxIterations = i; }
 
@@ -158,7 +158,7 @@ protected:
 
   std::priority_queue<
         ManipulationHolder,
-        deque< ManipulationHolder >,
+        std::deque< ManipulationHolder >,
         LessThanManipulationHolder > _manipulationHeap;
 
   std::deque< boost::shared_ptr<Manipulator> > _manipulators;

@@ -59,12 +59,13 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, HighwayMatchCreator)
-
-using namespace Tgs;
 
 /**
  * Searches the specified map for any highway match potentials.

@@ -46,7 +46,7 @@ public:
    * @return class name
    */
   static std::string className() { return "hoot::RemoveRelationOp"; }
-  string getClassName() const { return className(); }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief RemoveRelationOp Default constructor

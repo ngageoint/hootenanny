@@ -59,7 +59,7 @@ public:
    * statements are used in the json file then all imported files are included in the dependency
    * list.
    */
-  virtual set<QString> getDependencies() = 0;
+  virtual std::set<QString> getDependencies() = 0;
 };
 
 }
