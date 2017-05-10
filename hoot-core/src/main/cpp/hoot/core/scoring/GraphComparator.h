@@ -35,12 +35,12 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  using namespace std;
 
-  class DirectedGraph;
-  class ShortestPath;
-  class Way;
+using namespace geos::geom;
+
+class DirectedGraph;
+class ShortestPath;
+class Way;
 
 class GraphComparator : public BaseComparator
 {
@@ -66,7 +66,7 @@ public:
 
   void setIterations(int i) { _iterations = i; }
 
-  void drawCostDistance(OsmMapPtr map, vector<Coordinate>& c, QString output);
+  void drawCostDistance(OsmMapPtr map, std::vector<Coordinate>& c, QString output);
 
 private:
 
@@ -92,7 +92,7 @@ private:
 
   cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp);
 
-  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map,WayPtr way, double friction,
+  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
     double startCost, double endCost);
 };
 

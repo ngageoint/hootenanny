@@ -35,7 +35,7 @@ PP_FACTORY_REGISTER(pp::RecordReader, PbfRecordReader)
 
 boost::shared_ptr<OsmMap> PbfRecordReader::getMap()
 {
- boost::shared_ptr<OsmMap> result(new OsmMap());
+  boost::shared_ptr<OsmMap> result(new OsmMap());
 
   Hdfs fs;
   auto_ptr<istream> is(fs.open(_path));

@@ -45,6 +45,8 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagDifferencer.h>
 
+using namespace std;
+
 namespace hoot
 {
 

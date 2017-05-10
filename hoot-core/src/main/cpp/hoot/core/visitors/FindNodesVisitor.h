@@ -50,24 +50,24 @@ public:
   void visit(const boost::shared_ptr<const Element>& e);
 
   // Get matching IDs
-  vector<long> getIds() { return _nodeIds; }
+  std::vector<long> getIds() { return _nodeIds; }
 
-  static vector<long> findNodes(const ConstOsmMapPtr& map,
-                                ElementCriterion* pCrit);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map,
+                                    ElementCriterion* pCrit);
 
-  static vector<long> findNodes(const ConstOsmMapPtr& map,
-                                ElementCriterion* pCrit,
-                                const Coordinate& refCoord,
-                                Meters maxDistance);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map,
+                                     ElementCriterion* pCrit,
+                                     const Coordinate& refCoord,
+                                     Meters maxDistance);
 
   // Convenience method for finding nodes that contain the given tag
-  static vector<long> findNodesByTag(const ConstOsmMapPtr& map,
-                                     const QString& key,
-                                     const QString& value);
+  static std::vector<long> findNodesByTag(const ConstOsmMapPtr& map,
+                                          const QString& key,
+                                          const QString& value);
 
 private:
   const OsmMap* _map;
-  vector<long> _nodeIds;
+  std::vector<long> _nodeIds;
   ElementCriterion * _pCrit;
 };
 

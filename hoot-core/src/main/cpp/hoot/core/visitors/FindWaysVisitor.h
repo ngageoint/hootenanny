@@ -46,28 +46,28 @@ public:
 
   void visit(const boost::shared_ptr<const Element>& e);
 
-  vector<long> getIds() { return _wayIds; }
+  std::vector<long> getIds() { return _wayIds; }
 
   // Convenience method for finding ways that match the given criterion
-  static vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
+  static std::vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
 
-  static vector<long> findWays(const ConstOsmMapPtr& map,
-                               ElementCriterion* pCrit,
-                              ConstWayPtr refWay,
-                               Meters maxDistance,
-                               bool addError);
+  static std::vector<long> findWays(const ConstOsmMapPtr& map,
+                                    ElementCriterion* pCrit,
+                                    ConstWayPtr refWay,
+                                    Meters maxDistance,
+                                    bool addError);
 
   // Convenience method for finding ways that contain the given node
-  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
+  static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   // Convenience method for finding ways that contain the given tag
-  static vector<long> findWaysByTag(const ConstOsmMapPtr& map,
-                                    const QString& key,
-                                    const QString& value);
+  static std::vector<long> findWaysByTag(const ConstOsmMapPtr& map,
+                                         const QString& key,
+                                         const QString& value);
 
 private:
   const OsmMap* _map;
-  vector<long> _wayIds;
+  std::vector<long> _wayIds;
   ElementCriterion * _pCrit;
 };
 

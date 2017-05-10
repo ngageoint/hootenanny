@@ -30,6 +30,8 @@
 // Qt
 #include <QMap>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -37,7 +39,6 @@ PP_FACTORY_REGISTER(pp::RecordWriter, SqlStatementLineRecordWriter)
 
 SqlStatementLineRecordWriter::SqlStatementLineRecordWriter()
 {
-
 }
 
 void SqlStatementLineRecordWriter::emitRecord(const char* keyData, size_t keySize,

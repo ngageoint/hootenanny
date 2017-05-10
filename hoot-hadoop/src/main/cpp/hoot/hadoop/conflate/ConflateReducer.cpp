@@ -49,6 +49,8 @@
 
 #include "ConflateMapper.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -87,7 +89,7 @@ void ConflateReducer::close()
         arg(_partition, 5, 10, QChar('0'));
 
     pp::Hdfs fs;
-   boost::shared_ptr<ostream> os(fs.create(path.toStdString()));
+    boost::shared_ptr<ostream> os(fs.create(path.toStdString()));
     LOG_VAR(_nr.getReplacements());
     _nr.write(*os);
     os.reset();
@@ -100,7 +102,7 @@ void ConflateReducer::close()
         arg(QString::fromStdString(_workDir)).
         arg(_partition, 5, 10, QChar('0'));
 
-   boost::shared_ptr<ostream> osStats(fs.create(path.toStdString()));
+    boost::shared_ptr<ostream> osStats(fs.create(path.toStdString()));
 
     _stats.write(*osStats);
   }
@@ -110,7 +112,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 {
   LOG_INFO("Conflating a map. key: " << key);
   LOG_INFO("  Envelope: " << GeometryUtils::toString(_envelopes[key]));
- boost::shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
   map->setIdGenerator(_idGen);
 
   while (context.nextValue())
@@ -148,7 +150,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   }
 
   // keep track of all the nodes that get replaced.
- boost::shared_ptr<ReplacedNodeListener> rnl(new ReplacedNodeListener(_nr.getReplacements()));
+  boost::shared_ptr<ReplacedNodeListener> rnl(new ReplacedNodeListener(_nr.getReplacements()));
   map->registerListener(rnl);
 
   /// @todo consolidate this inside the conflator and make it easier to read.
@@ -181,7 +183,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   conflator.loadSource(map);
   conflator.conflate();
 
- boost::shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
+  boost::shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
   MapProjector::projectToWgs84(result);
 
   for (HashMap<long, long>::const_iterator it = _nr.getReplacements().begin();
@@ -247,7 +249,7 @@ void ConflateReducer::_emitMap(boost::shared_ptr<OsmMap> map)
 
 const Envelope& ConflateReducer::_getContainingEnvelope(const boost::shared_ptr<OsmMap>& map)
 {
- boost::shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
+  boost::shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
@@ -268,7 +270,7 @@ void ConflateReducer::_init(HadoopPipes::ReduceContext& context)
     throw InternalErrorException("Error getting RecordWriter.");
   }
 
- boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _stats.read(*c);
 
   // set GDAL_DATA to the current working directory. This avoids some projection issues when
@@ -297,7 +299,7 @@ void ConflateReducer::_init(HadoopPipes::ReduceContext& context)
 boost::shared_ptr<OsmMap> ConflateReducer::_readMap(const string& value)
 {
   // read the map from the given string.
- boost::shared_ptr<OsmMap> result(new OsmMap());
+  boost::shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
   OsmPbfReader reader(true);
@@ -330,7 +332,7 @@ void ConflateReducer::reduce(HadoopPipes::ReduceContext& context)
     // emit all the data right out to disk.
     while (context.nextValue())
     {
-     boost::shared_ptr<OsmMap> map = _readMap(context.getInputValue());
+      boost::shared_ptr<OsmMap> map = _readMap(context.getInputValue());
       _emitMap(map);
     }
   }

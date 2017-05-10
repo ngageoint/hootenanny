@@ -39,6 +39,8 @@
 #include "TileOpMapper.h"
 #include "TileOpReducer.h"
 
+using namespace std;
+
 namespace hoot
 {
 

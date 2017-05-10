@@ -31,6 +31,8 @@
 #include <hoot/core/filters/ContainsNodeCriterion.h>
 #include <hoot/core/filters/TagCriterion.h>
 
+using namespace std;
+
 namespace hoot
 {
 

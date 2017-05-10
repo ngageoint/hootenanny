@@ -38,7 +38,7 @@ class TileOpReducer : public pp::Reducer
 public:
   static std::string className() { return "hoot::TileOpReducer"; }
 
-  static string opKey() { return "hoot.op.key"; }
+  static std::string opKey() { return "hoot.op.key"; }
 
   static unsigned int logWarnCount;
 
@@ -50,7 +50,7 @@ public:
 
 private:
 
-  vector<Envelope> _envelopes;
+  std::vector<Envelope> _envelopes;
 
   bool _initialized;
 
@@ -60,11 +60,11 @@ private:
   NodeReplacements _nr;
 
   MapStats _stats;
- boost::shared_ptr<HadoopIdGenerator> _idGen;
+  boost::shared_ptr<HadoopIdGenerator> _idGen;
   int _partition;
   std::string _workDir;
   PbfRecordWriter* _writer;
- boost::shared_ptr<OsmMapOperation> _op;
+  boost::shared_ptr<OsmMapOperation> _op;
 
   void _conflate(int key, HadoopPipes::ReduceContext& context);
 
@@ -74,7 +74,7 @@ private:
 
   void _init(HadoopPipes::ReduceContext& context);
 
- boost::shared_ptr<OsmMap> _readMap(const string& value);
+  boost::shared_ptr<OsmMap> _readMap(const std::string& value);
 
   void _removeReplacedNodes(boost::shared_ptr<OsmMap>& map);
 

@@ -27,8 +27,6 @@ using namespace pp;
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Identical to LineRecordWriter except for not outputting a tab between the key and value pair
  */
@@ -41,7 +39,7 @@ public:
 
   SqlStatementLineRecordWriter();
 
-  virtual ~SqlStatementLineRecordWriter() {};
+  virtual ~SqlStatementLineRecordWriter() {}
 
   virtual void emitRecord(const char* keyData, size_t keySize, const char* valueData,
                           size_t valueSize);

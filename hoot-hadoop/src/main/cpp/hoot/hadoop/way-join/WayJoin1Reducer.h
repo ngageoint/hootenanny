@@ -30,7 +30,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class WayJoin1Reducer : public pp::Reducer
 {
@@ -55,12 +54,12 @@ public:
 
 private:
   pp::RecordWriter* _writer;
-  vector<int64_t> _wayIds;
+  std::vector<int64_t> _wayIds;
   int _missingNodes;
 
   MapStats _stats;
 
-  string _workDir;
+  std::string _workDir;
   int _partition;
 };
 

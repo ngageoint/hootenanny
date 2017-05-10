@@ -33,7 +33,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Removes all ways and relations that are not part of a building.

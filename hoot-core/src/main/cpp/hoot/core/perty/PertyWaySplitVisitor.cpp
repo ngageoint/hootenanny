@@ -43,6 +43,8 @@
 // Tgs
 #include <tgs/System/Time.h>
 
+using namespace std;
+
 namespace hoot
 {
 

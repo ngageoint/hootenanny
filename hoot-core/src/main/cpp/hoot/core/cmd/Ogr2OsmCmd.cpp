@@ -36,6 +36,8 @@
 #include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
+
 namespace hoot
 {
 

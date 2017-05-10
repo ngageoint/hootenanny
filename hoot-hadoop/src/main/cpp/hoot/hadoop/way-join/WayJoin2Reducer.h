@@ -31,10 +31,9 @@
 
 namespace hoot
 {
+
 class HadoopIdGenerator;
 class PbfRecordWriter;
-
-using namespace std;
 
 class WayJoin2Reducer : public pp::Reducer
 {
@@ -53,10 +52,10 @@ public:
 private:
 
   PbfRecordWriter* _writer;
- boost::shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
   MapStats _stats;
   double _maxWaySize;
- boost::shared_ptr<HadoopIdGenerator> _idGen;
+  boost::shared_ptr<HadoopIdGenerator> _idGen;
   int _partition;
   std::string _workDir;
   bool _strict;

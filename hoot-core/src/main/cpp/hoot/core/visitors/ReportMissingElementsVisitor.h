@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Reports references to missing elements in a given map. If removeMissing is set to true then

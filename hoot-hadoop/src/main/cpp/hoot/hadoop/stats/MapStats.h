@@ -32,11 +32,11 @@
 
 namespace hoot
 {
+
 class Node;
 
 using namespace boost;
 using namespace geos::geom;
-using namespace std;
 
 class MapStats
 {
@@ -85,7 +85,7 @@ public:
 
   void read(const pp::Configuration& c);
 
-  void read(istream& is);
+  void read(std::istream& is);
 
   void readDir(QString dir);
 
@@ -94,11 +94,11 @@ public:
   /**
    * Mimics Envelope::toString(), but with a higher precision.
    */
-  static string toString(const Envelope& e);
+  static std::string toString(const Envelope& e);
 
   void write(pp::Configuration& c) const;
 
-  void write(ostream& os) const;
+  void write(std::ostream& os) const;
 
 private:
 
@@ -109,7 +109,7 @@ private:
 
   Envelope _parseEnvelope(const std::string& str);
 
-  vector<string> _split(const string& str, const string& delimiters);
+  std::vector<std::string> _split(const std::string& str, const std::string& delimiters);
 };
 
 }

@@ -51,6 +51,8 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
+using namespace std;
+
 namespace hoot
 {
 

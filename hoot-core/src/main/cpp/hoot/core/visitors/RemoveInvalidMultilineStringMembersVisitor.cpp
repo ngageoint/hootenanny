@@ -34,6 +34,8 @@
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
+using namespace std;
+
 namespace hoot
 {
 

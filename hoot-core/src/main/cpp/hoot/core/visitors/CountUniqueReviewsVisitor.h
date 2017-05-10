@@ -36,9 +36,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
@@ -64,7 +63,7 @@ public:
 private:
 
   const OsmMap* _map;
-  set<ReviewMarker::ReviewUid> _reviews;
+  std::set<ReviewMarker::ReviewUid> _reviews;
 };
 
 }

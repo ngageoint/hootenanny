@@ -32,7 +32,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Removes all elements that have a status of Unknown1.

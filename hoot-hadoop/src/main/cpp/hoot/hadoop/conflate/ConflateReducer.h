@@ -47,7 +47,7 @@ public:
 
 private:
 
-  vector<Envelope> _envelopes;
+  std::vector<Envelope> _envelopes;
 
   bool _initialized;
 
@@ -57,7 +57,7 @@ private:
   NodeReplacements _nr;
 
   MapStats _stats;
- boost::shared_ptr<HadoopIdGenerator> _idGen;
+  boost::shared_ptr<HadoopIdGenerator> _idGen;
   int _partition;
   std::string _workDir;
   PbfRecordWriter* _writer;
@@ -70,7 +70,7 @@ private:
 
   void _init(HadoopPipes::ReduceContext& context);
 
- boost::shared_ptr<OsmMap> _readMap(const string& value);
+  boost::shared_ptr<OsmMap> _readMap(const std::string& value);
 
   void _removeReplacedNodes(boost::shared_ptr<OsmMap>& map);
 

@@ -36,6 +36,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 
+using namespace std;
+
 namespace hoot
 {
 

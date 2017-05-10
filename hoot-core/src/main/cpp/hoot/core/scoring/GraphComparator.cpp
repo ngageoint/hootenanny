@@ -58,6 +58,8 @@ using namespace geos::operation::distance;
 // TGS
 #include <tgs/Statistics/Random.h>
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
+
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

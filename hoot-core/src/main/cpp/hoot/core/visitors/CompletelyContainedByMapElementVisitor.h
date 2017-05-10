@@ -42,10 +42,10 @@
 
 namespace hoot
 {
+
 class Relation;
 class Way;
 
-using namespace std;
 
 /**
  * Checks to see if the elements visited are completely contained by the specified map. This is

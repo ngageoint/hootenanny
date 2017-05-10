@@ -33,7 +33,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Removes all elements that are not Nodes w/ meaningful tags.

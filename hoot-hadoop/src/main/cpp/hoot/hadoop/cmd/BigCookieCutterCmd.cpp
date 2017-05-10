@@ -32,6 +32,8 @@
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -46,13 +48,13 @@ public:
 
   void bufferGeometry(boost::shared_ptr<Geometry>& g, double b)
   {
-   boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
     if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
     {
       throw HootException("Error creating EPSG:4326 projection.");
     }
     auto_ptr<OGREnvelope> e(GeometryUtils::toOGREnvelope(*g->getEnvelopeInternal()));
-   boost::shared_ptr<OGRSpatialReference> planar = MapProjector::createAeacProjection(*e);
+    boost::shared_ptr<OGRSpatialReference> planar = MapProjector::createAeacProjection(*e);
 
     MapProjector::project(g, wgs84, planar);
 
@@ -89,18 +91,18 @@ public:
       pp::Job::setDefaultJobTracker("local");
     }
 
-   boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
+    boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
     FourPassManager driver(worker);
     driver.setMaxNodesPerBox(maxNodeCount);
     driver.setBuffer(pixelSize);
     driver.setSource(in);
 
-   OsmMapPtr cutterShapeMap(new OsmMap());
+    OsmMapPtr cutterShapeMap(new OsmMap());
     loadMap(cutterShapeMap, cookieCutterPath, false, Status::Unknown1);
 
     UnionPolygonsVisitor v;
     cutterShapeMap->visitRo(v);
-   boost::shared_ptr<Geometry> cookieCutter = v.getUnion();
+    boost::shared_ptr<Geometry> cookieCutter = v.getUnion();
 
     bufferGeometry(cookieCutter, buffer);
 
@@ -110,7 +112,7 @@ public:
         "Remember that buffer units are in meters.");
     }
 
-   boost::shared_ptr<OpList> op(new OpList());
+    boost::shared_ptr<OpList> op(new OpList());
     op->addOp(boost::shared_ptr<OsmMapOperation>(new MapCropper(cookieCutter, !crop)));
     driver.setOperation(op);
 

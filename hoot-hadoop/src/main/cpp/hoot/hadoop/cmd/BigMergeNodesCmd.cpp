@@ -29,6 +29,8 @@
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -44,9 +44,8 @@
 
 namespace hoot
 {
-class Way;
 
-using namespace std;
+class Way;
 
 /**
  * Creates a multi-linestring out of all ways that are visited. There are no checks to be certain
@@ -75,7 +74,7 @@ public:
 
 protected:
   ConstElementProviderPtr _provider;
-  vector<Geometry*>* _ls;
+  std::vector<Geometry*>* _ls;
 };
 
 }

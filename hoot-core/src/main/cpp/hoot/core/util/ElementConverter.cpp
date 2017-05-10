@@ -56,6 +56,8 @@
 // Standard
 #include <stdint.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -134,7 +136,7 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPt
   else
   {
     // we don't recognize this geometry type.
-   boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;
   }
 }
@@ -154,13 +156,13 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelat
     MultiLineStringVisitor v;
     v.setElementProvider(_constProvider);
     e->visitRo(*_constProvider, v);
-   boost::shared_ptr<Geometry> result(v.createMultiLineString());
+    boost::shared_ptr<Geometry> result(v.createMultiLineString());
     return result;
   }
   else
   {
     // we don't recognize this geometry type.
-   boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;
   }
 }
@@ -194,7 +196,7 @@ boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstW
     cs->setAt(n->toCoordinate(), 1);
   }
 
- boost::shared_ptr<LineString> result(GeometryFactory::getDefaultInstance()->createLineString(cs));
+  boost::shared_ptr<LineString> result(GeometryFactory::getDefaultInstance()->createLineString(cs));
 
   return result;
 }
@@ -243,7 +245,7 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
   // create the outer line
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(cs);
 
- boost::shared_ptr<Polygon> result(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  boost::shared_ptr<Polygon> result(GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 
   return result;
 }

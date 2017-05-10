@@ -41,6 +41,8 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
 
+using namespace std;
+
 namespace hoot
 {
 

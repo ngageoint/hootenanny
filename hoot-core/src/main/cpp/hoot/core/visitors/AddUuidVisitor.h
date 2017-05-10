@@ -33,7 +33,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look

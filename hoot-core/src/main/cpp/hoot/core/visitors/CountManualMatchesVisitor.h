@@ -35,9 +35,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Counts matches made with ref tags by a manual matcher

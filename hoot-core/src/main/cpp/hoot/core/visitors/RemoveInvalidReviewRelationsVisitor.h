@@ -31,7 +31,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Remove all empty review relations

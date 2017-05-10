@@ -29,6 +29,8 @@
 
 #include <hoot/core/conflate/MatchType.h>
 
+using namespace std;
+
 namespace hoot
 {
 

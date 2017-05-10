@@ -42,8 +42,7 @@
 
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 
-using namespace hoot;
-
+using namespace std;
 
 namespace hoot
 {

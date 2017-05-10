@@ -36,6 +36,8 @@
 #include "ConflateMapper.h"
 #include "ConflateReducer.h"
 
+using namespace std;
+
 namespace hoot
 {
 

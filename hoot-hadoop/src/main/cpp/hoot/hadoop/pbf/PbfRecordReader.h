@@ -29,10 +29,10 @@
 
 namespace hoot
 {
+
 class OsmMap;
 
 using namespace boost;
-using namespace std;
 
 class PbfRecordReader : public pp::RecordReader
 {
@@ -43,7 +43,7 @@ public:
 
   virtual ~PbfRecordReader() {}
 
- boost::shared_ptr<OsmMap> getMap();
+  boost::shared_ptr<OsmMap> getMap();
 
   virtual bool next(std::string& key, std::string& value);
 
@@ -56,11 +56,11 @@ public:
   virtual void initialize(pp::InputSplit* split, HadoopPipes::MapContext& context);
 
 private:
-  string _path;
+  std::string _path;
   /**
    * The start position of all the headers in this split.
    */
-  vector<long> _headers;
+  std::vector<long> _headers;
   int _currentHeader;
   long _start;
 };

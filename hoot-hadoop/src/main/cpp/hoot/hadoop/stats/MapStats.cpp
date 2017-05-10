@@ -34,6 +34,7 @@
 #include <memory>
 
 using namespace boost;
+using namespace std;
 
 namespace hoot
 {

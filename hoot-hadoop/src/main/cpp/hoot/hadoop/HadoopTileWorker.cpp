@@ -28,6 +28,8 @@
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
 
+using namespace std;
+
 namespace hoot
 {
 

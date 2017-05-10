@@ -36,10 +36,6 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 
-namespace hoot {
-  class OsmMap;
-}
-
 // Boost
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -57,7 +53,8 @@ namespace geos {
   }
 }
 
-namespace hoot {
+namespace hoot
+{
 
 using namespace boost;
 using namespace geos::geom;
@@ -65,6 +62,7 @@ using namespace geos::geom;
 class ElementListener;
 class ElementProvider;
 class ElementVisitor;
+class OsmMap;
 
 /**
  * Base class for OSM elements -- node, way and relation.

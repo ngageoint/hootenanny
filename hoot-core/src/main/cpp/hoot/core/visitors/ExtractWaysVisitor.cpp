@@ -26,6 +26,8 @@
  */
 #include "ExtractWaysVisitor.h"
 
+using namespace std;
+
 namespace hoot
 {
 

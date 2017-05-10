@@ -46,8 +46,8 @@
 
 namespace hoot
 {
+
 using namespace boost;
-using namespace std;
 using namespace Tgs;
 
 class MatchCreator;
@@ -97,20 +97,20 @@ public:
 
 private:
   DataSamples _samples;
-  vector<boost::shared_ptr<MatchCreator> > _creators;
+  std::vector<boost::shared_ptr<MatchCreator> > _creators;
   // if true then make sure there is an even representation from each class and only fully populated
   // records are represented.
   bool _evenClasses;
   bool _useNulls;
   const MatchFactory* _matchFactory;
 
-  MatchType _getActualMatchType(const set<ElementId> &eids, const boost::shared_ptr<const OsmMap>& map)
+  MatchType _getActualMatchType(const std::set<ElementId> &eids, const boost::shared_ptr<const OsmMap>& map)
     const;
 
   /**
    * Returns a vector of unique factor labels. Not efficient.
    */
-  vector<string> _getUniqueLabels() const;
+  std::vector<std::string> _getUniqueLabels() const;
 
   void _resampleClasses();
 };

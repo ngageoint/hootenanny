@@ -30,6 +30,8 @@
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -145,7 +147,7 @@ void HadoopTileWorker2::cleanup(QString mapIn, QString mapOut)
   vector<Envelope> tiles;
   TileOpDriver tod;
   // a no-op
- boost::shared_ptr<OsmMapOperation> op(new OpList());
+  boost::shared_ptr<OsmMapOperation> op(new OpList());
   tod.setOperation(op);
   tod.apply(mapIn, tiles, _buffer, mapOut);
 }

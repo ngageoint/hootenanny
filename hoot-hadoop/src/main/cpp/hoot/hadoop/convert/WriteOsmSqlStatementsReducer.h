@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Mapreduce reduce task for writing OSM API database SQL statements to both file and a database.
  *

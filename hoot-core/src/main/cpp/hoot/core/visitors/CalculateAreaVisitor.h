@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be

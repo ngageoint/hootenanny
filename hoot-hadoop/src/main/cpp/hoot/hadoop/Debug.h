@@ -9,18 +9,18 @@
 
 namespace hoot
 {
+
 class OsmMap;
 
-using namespace std;
 using namespace boost;
 
 class Debug
 {
 public:
 
-  static const set<long>& getTroubledNodes() { init(); return _troubledNodes; }
+  static const std::set<long>& getTroubledNodes() { init(); return _troubledNodes; }
 
-  static const set<long>& getTroubledWays() { init(); return _troubledWays; }
+  static const std::set<long>& getTroubledWays() { init(); return _troubledWays; }
 
   /**
    * inline wrapper for _init()
@@ -57,8 +57,8 @@ public:
 
 private:
   static bool _initialized;
-  static set<long> _troubledNodes;
-  static set<long> _troubledWays;
+  static std::set<long> _troubledNodes;
+  static std::set<long> _troubledWays;
 
   static void _init();
 };

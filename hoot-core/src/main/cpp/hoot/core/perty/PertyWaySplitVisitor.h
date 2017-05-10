@@ -123,16 +123,16 @@ private:
   //for testing purposes
   int _splitRecursionLevel;
 
-  vector<ElementPtr> _split(ElementPtr element);
+  std::vector<ElementPtr> _split(ElementPtr element);
   WayLocation _calcSplitPoint(ConstWayPtr way) const;
   MultiLineStringLocation _calcSplitPoint(ConstRelationPtr relation, ElementId& wayId) const;
 
- NodePtr _getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
-                                        const vector<ElementPtr>& newElementsAfterSplit) const;
+  NodePtr _getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
+                               const std::vector<ElementPtr>& newElementsAfterSplit) const;
 
   void _updateNewNodeProperties(NodePtr newNode,
-                               ConstNodePtr firstSplitBetweenNode,
-                               ConstNodePtr lastSplitBetweenNode);
+                                ConstNodePtr firstSplitBetweenNode,
+                                ConstNodePtr lastSplitBetweenNode);
 };
 
 }

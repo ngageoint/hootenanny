@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class AddRef2Visitor :
     public ElementVisitor,

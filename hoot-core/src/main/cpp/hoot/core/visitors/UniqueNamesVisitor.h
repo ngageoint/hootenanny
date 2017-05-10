@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts all the unique names.
