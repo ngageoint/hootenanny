@@ -34,6 +34,8 @@
 
 #include "../TgsException.h"
 
+using namespace std;
+
 namespace Tgs
 {
   TrainingInputs BaseRandomForest::_trainInputs;

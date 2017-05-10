@@ -62,7 +62,7 @@ public:
 
   virtual std::string getClassName() const { return BufferedOverlapExtractor::className(); }
 
-  virtual string getName() const;
+  virtual std::string getName() const;
 
   virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
 

@@ -38,6 +38,8 @@
 #include "../TgsException.h"
 #include <tgs/Statistics/Random.h>
 
+using namespace std;
+
 namespace Tgs
 {
   RandomForest::RandomForest()

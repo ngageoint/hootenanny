@@ -45,6 +45,8 @@
 #include <tgs/Interpolation/KernelEstimationInterpolator.h>
 #include <tgs/RandomForest/DataFrame.h>
 
+using namespace std;
+
 namespace hoot
 {
 

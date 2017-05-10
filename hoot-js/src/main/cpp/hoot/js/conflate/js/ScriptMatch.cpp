@@ -60,9 +60,11 @@
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-using namespace Tgs;
 
 unsigned int ScriptMatch::logWarnCount = 0;
 

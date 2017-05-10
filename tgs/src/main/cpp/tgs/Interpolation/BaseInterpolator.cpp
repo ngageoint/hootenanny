@@ -41,6 +41,7 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RandomForest/DataFrame.h>
 
+using namespace std;
 
 namespace Tgs
 {

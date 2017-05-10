@@ -48,7 +48,7 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual string getName() const;
+  virtual std::string getName() const;
 
   virtual void setConfiguration(const Settings& conf);
 

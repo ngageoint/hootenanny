@@ -36,6 +36,8 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/GeometryConverter.h>
 
+using namespace std;
+
 namespace hoot
 {
 

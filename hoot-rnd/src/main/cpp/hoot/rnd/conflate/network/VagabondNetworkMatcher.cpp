@@ -33,6 +33,8 @@
 
 #include "EdgeMatchSetFinder.h"
 
+using namespace std;
+
 namespace hoot
 {
 

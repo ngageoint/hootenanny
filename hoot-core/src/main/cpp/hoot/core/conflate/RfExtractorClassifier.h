@@ -57,14 +57,14 @@ public:
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2) const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m,
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2) const;
 
   void import(QDomElement& docRoot);
 
 protected:
 
-  mutable vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  mutable std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
   QStringList _rfFactorLabels;
   std::auto_ptr<RandomForest> _rf;
 
@@ -75,7 +75,7 @@ protected:
    */
   virtual void _createExtractors() const = 0;
 
-  const vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 };
 
 }

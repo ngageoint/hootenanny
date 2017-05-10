@@ -54,7 +54,6 @@
 
 namespace Tgs
 {
-using namespace std;
 
 class InternalEdge;
 
@@ -172,7 +171,7 @@ class EdgeIterator
 {
 public:
 
-  EdgeIterator(const set<QuadEdge*>& edges);
+  EdgeIterator(const std::set<QuadEdge*>& edges);
 
   EdgeIterator() { _atEnd = true; }
 
@@ -185,9 +184,9 @@ public:
 private:
 
   Edge _e;
-  list<InternalEdge*> _todo;
-  const set<QuadEdge *>* _edges;
-  set<QuadEdge*>::const_iterator _it;
+  std::list<InternalEdge*> _todo;
+  const std::set<QuadEdge *>* _edges;
+  std::set<QuadEdge*>::const_iterator _it;
 
   bool _atEnd;
 };
@@ -218,7 +217,7 @@ private:
   Face* _f;
   EdgeIterator _it;
   EdgeIterator _end;
-  set<Face*, FaceCompare> _done;
+  std::set<Face*, FaceCompare> _done;
 
   bool _atEnd;
 };
@@ -257,7 +256,7 @@ public:
 
   FaceIterator getFaceIterator() const;
 
-  const vector<Face>& getFaces();
+  const std::vector<Face>& getFaces();
 
   /**
    * Inserts a single point into the triangulation. If the data is inserted in random order the
@@ -270,8 +269,8 @@ private:
   Subdivision* _subdivision;
   double _x[3], _y[3];
   int _pointCount;
-  vector<Face> _faces;
-  map< Edge, pair<int, int> > _edgeToFace;
+  std::vector<Face> _faces;
+  std::map< Edge, std::pair<int, int> > _edgeToFace;
 
   EdgeIterator _edgeEnd;
   FaceIterator _faceEnd;

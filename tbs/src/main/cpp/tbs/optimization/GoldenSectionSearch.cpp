@@ -33,9 +33,10 @@
 #include <map>
 #include <stdexcept>
 
+using namespace std;
+
 namespace tbs
 {
-using namespace std;
 
 GoldenSectionSearch::GoldenSectionSearch(double epsilon)
 {

@@ -153,7 +153,7 @@ namespace Tgs
     /**
      * Return a vector of the factor labels used to train this random forest.
      */
-    const vector<string>& getFactorLabels() const { return _factorLabels; }
+    const std::vector<std::string>& getFactorLabels() const { return _factorLabels; }
 
     /**
      * @brief importModel import the random forest object
@@ -234,7 +234,7 @@ namespace Tgs
 
     unsigned int _numSplitFactors;  /// The number of factors to test to split a node
     unsigned int _nodeSize;  /// The minimum number of data vectors in a set to split a node
-    vector<std::string> _factorLabels; /// Labels for all the factors used in training.
+    std::vector<std::string> _factorLabels; /// Labels for all the factors used in training.
 
     static TrainingInputs _trainInputs;  ///The inputs used by the map function train
 

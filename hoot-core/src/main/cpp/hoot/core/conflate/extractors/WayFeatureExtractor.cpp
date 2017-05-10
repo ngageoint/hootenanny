@@ -30,6 +30,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 
+using namespace std;
+
 namespace hoot
 {
 

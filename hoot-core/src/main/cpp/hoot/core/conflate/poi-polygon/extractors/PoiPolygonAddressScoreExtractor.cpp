@@ -34,6 +34,8 @@
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/Factory.h>
 
+using namespace std;
+
 namespace hoot
 {
 

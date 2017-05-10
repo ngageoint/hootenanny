@@ -37,6 +37,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
 
+using namespace std;
+
 namespace hoot
 {
 

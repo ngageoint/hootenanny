@@ -34,7 +34,6 @@
 
 namespace tbs
 {
-using namespace std;
 
 /**
  * Uses the Golden Section Search to look for a local minimum. [1]
@@ -59,7 +58,7 @@ public:
 private:
   double _phi;
   double _resphi;
-  map<double, double> _cache;
+  std::map<double, double> _cache;
   double _epsilon;
   Function* _userF;
   int _iterations;

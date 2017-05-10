@@ -129,11 +129,11 @@ public:
    * @return a collection of distance values
    * @throws HootException if the tie points have not been created
    */
-   vector<double> calculateTiePointDistances();
+   std::vector<double> calculateTiePointDistances();
 
 private:
 
-  typedef map<long, list<Match> > MatchList;
+  typedef std::map<long, std::list<Match> > MatchList;
 
   bool _debug;
 
@@ -156,15 +156,15 @@ private:
 
   // A map of nids to the list of matches.
   MatchList _matches;
-  vector<Match> _finalPairs;
+  std::vector<Match> _finalPairs;
   bool _ref;
   int _minimumTies;
-  vector<Tie> _ties;
+  std::vector<Tie> _ties;
   boost::shared_ptr<Interpolator> _interpolator1to2, _interpolator2to1;
   // used as a temporary in interpolating.
-  vector<double> _matchPoint;
+  std::vector<double> _matchPoint;
   boost::shared_ptr<OGRSpatialReference> _projection;
-  string _interpolatorClassName;
+  std::string _interpolatorClassName;
 
   double _searchRadius;
 
@@ -172,7 +172,7 @@ private:
 
   void _findTies();
 
-  void _addIntersection(long nid, const set<long>& wids);
+  void _addIntersection(long nid, const std::set<long>& wids);
 
   /**
    * Build a data frame for use with interpolators.

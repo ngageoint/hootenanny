@@ -44,7 +44,6 @@
 
 namespace Tgs
 {
-  using namespace std;
 
   /**
   * The DataFrame is a vector of data vectors.  Each data vector contains 
@@ -211,7 +210,7 @@ namespace Tgs
     *
     * @param factors a container to hold the factor labels
     */
-    const vector<string> getFactorLabels() const;
+    const std::vector<std::string> getFactorLabels() const;
 
     const std::vector<int>& getFactorTypes() const { return _factorType; }
 
@@ -423,7 +422,7 @@ namespace Tgs
     /**
     *  Copies the factor names into an internal vector (not strictly needed inside the data set)
     */
-    void setFactorLabels(const vector<string>& factors);
+    void setFactorLabels(const std::vector<std::string>& factors);
 
     /**
      * Sets the factor type to one of Nominal or Numeric

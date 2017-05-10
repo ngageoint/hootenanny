@@ -57,6 +57,8 @@
 //Qt
 #include <QFile>
 
+using namespace std;
+
 namespace hoot
 {
 

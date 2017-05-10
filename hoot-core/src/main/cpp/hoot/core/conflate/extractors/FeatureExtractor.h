@@ -64,7 +64,7 @@ public:
 
   virtual std::string getClassName() const = 0;
 
-  virtual string getName() const { return getClassName(); }
+  virtual std::string getName() const { return getClassName(); }
 
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).

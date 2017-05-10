@@ -64,7 +64,7 @@ public:
 
   virtual std::string getClassName() const { return EdgeDistanceExtractor::className(); }
 
-  virtual string getName() const;
+  virtual std::string getName() const;
 
   virtual void setValueAggregator(const ValueAggregatorPtr& va) { _aggregator = va; }
 
@@ -80,7 +80,7 @@ private:
   double _oneDistance(const OsmMap& map, const boost::shared_ptr<const Element>& e1,
     const boost::shared_ptr<const Element>& e2) const;
 
-  vector<Coordinate> _discretize(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
+  std::vector<Coordinate> _discretize(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
 
   boost::shared_ptr<Geometry> _toLines(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
 };

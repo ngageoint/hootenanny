@@ -44,7 +44,7 @@ class KernelEstimationInterpolator : public BaseInterpolator
 {
 public:
 
-  static string className() { return "Tgs::KernelEstimationInterpolator"; }
+  static std::string className() { return "Tgs::KernelEstimationInterpolator"; }
 
   /**
    * When sigma is less than zero (recommended) cross-validation will be used to determine an
@@ -60,7 +60,7 @@ public:
 
   double getStopDelta() const { return _stopDelta; }
 
-  virtual const vector<double>& interpolate(const vector<double>& point) const;
+  virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 
   void setSigma(double sigma) { _sigma = sigma; _checkRebuild(); }
 
@@ -69,7 +69,7 @@ public:
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; _checkRebuild(); }
 
-  virtual string toString() const;
+  virtual std::string toString() const;
 
 protected:
   double _sigma;
