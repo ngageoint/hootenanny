@@ -32,6 +32,8 @@
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
+using namespace std;
+
 namespace hoot
 {
 

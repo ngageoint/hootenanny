@@ -32,6 +32,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/DataConvertJs.h>
 
+using namespace std;
+
 namespace hoot
 {
 

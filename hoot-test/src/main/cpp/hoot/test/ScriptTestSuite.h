@@ -37,8 +37,8 @@
 
 namespace hoot
 {
+
 using namespace boost;
-using namespace std;
 
 class ScriptTestSuite : public CppUnit::TestSuite
 {
@@ -46,7 +46,7 @@ public:
   ScriptTestSuite(QString dir, bool printDiff);
 
 private:
-  vector<boost::shared_ptr<ScriptTest> > _tests;
+  std::vector<boost::shared_ptr<ScriptTest> > _tests;
 };
 
 }

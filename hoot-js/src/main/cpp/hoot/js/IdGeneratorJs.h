@@ -40,7 +40,7 @@
 
 namespace hoot
 {
-using namespace std;
+
 using namespace v8;
 
 class IdGeneratorJs : public node::ObjectWrap

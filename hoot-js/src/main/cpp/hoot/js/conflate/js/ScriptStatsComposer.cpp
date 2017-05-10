@@ -39,6 +39,8 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
 
+using namespace std;
+
 namespace hoot
 {
 

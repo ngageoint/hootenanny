@@ -42,6 +42,8 @@
 // Qt
 #include <QStringList>
 
+using namespace std;
+
 namespace hoot
 {
 

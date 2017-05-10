@@ -61,6 +61,8 @@
 #include <tgs/System/Time.h>
 
 Q_DECLARE_METATYPE(hoot::JavaScriptTranslator*)
+
+using namespace std;
 using namespace v8;
 
 namespace hoot

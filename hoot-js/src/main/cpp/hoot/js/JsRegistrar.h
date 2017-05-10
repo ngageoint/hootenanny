@@ -39,7 +39,6 @@
 namespace hoot
 {
 
-using namespace std;
 using namespace v8;
 using namespace boost;
 
@@ -91,7 +90,7 @@ public:
 
 private:
 
-  vector<boost::shared_ptr<ClassInitializer> > _initializers;
+  std::vector<boost::shared_ptr<ClassInitializer> > _initializers;
   static JsRegistrar* _theInstance;
 };
 
@@ -104,7 +103,7 @@ public:
    */
   AutoJsRegister()
   {
-   boost::shared_ptr< ClassInitializerTemplate<T> > p(new ClassInitializerTemplate<T>());
+    boost::shared_ptr< ClassInitializerTemplate<T> > p(new ClassInitializerTemplate<T>());
     JsRegistrar::getInstance().registerInitializer(p);
   }
 };

@@ -40,7 +40,6 @@ namespace hoot
 {
 class ElementVisitor;
 
-using namespace std;
 using namespace v8;
 
 class OsmMapOperation;
@@ -60,7 +59,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
- boost::shared_ptr<ElementVisitor> _v;
+  boost::shared_ptr<ElementVisitor> _v;
 };
 
 }
