@@ -252,6 +252,16 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="64"/>
     </node>
+    <node visible="true" id="65" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3" lat="38.9109692999999979" lon="-104.7145692999999937">
+        <tag k="accuracy" v="100"/>
+        <tag k="note" v="1-a;2-a"/>
+        <tag k="poi" v="yes"/>
+        <tag k="hoot:id" v="65"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="65"/>
+    </node>
     <node visible="true" id="66" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="39.5911042999999978" lon="-104.8066235999999947">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="66"/>
@@ -275,6 +285,15 @@
     <node visible="true" id="69" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="39.5911095000000017" lon="-104.8062302999999957">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="69"/>
+    </node>
+    <node visible="true" id="70" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3" lat="38.8580511999999985" lon="-104.7869287000000043">
+        <tag k="place" v="city"/>
+        <tag k="accuracy" v="20000"/>
+        <tag k="poi" v="yes"/>
+        <tag k="hoot:id" v="70"/>
+        <tag k="name" v="Colorado Springs"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="70"/>
     </node>
     <node visible="true" id="71" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3" lat="38.8745941000000030" lon="-104.7196457999999950">
         <tag k="accuracy" v="1000"/>
@@ -504,7 +523,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="118"/>
     </node>
-    <node visible="true" id="241" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8887009000000035" lon="-104.7187701999999945">
+    <node visible="true" id="235" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8887009000000035" lon="-104.7187701999999945">
         <tag k="accuracy" v="1000"/>
         <tag k="note" v="2-c"/>
         <tag k="poi" v="yes"/>
@@ -512,9 +531,9 @@
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="241"/>
+        <tag k="hoot:id" v="235"/>
     </node>
-    <node visible="true" id="242" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8942750000000004" lon="-104.7187095000000028">
+    <node visible="true" id="237" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8942750000000004" lon="-104.7187095000000028">
         <tag k="accuracy" v="1000"/>
         <tag k="note" v="2-b"/>
         <tag k="poi" v="yes"/>
@@ -522,9 +541,9 @@
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="242"/>
+        <tag k="hoot:id" v="237"/>
     </node>
-    <node visible="true" id="243" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8747831000000019" lon="-104.7208595999999972">
+    <node visible="true" id="238" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8747831000000019" lon="-104.7208595999999972">
         <tag k="accuracy" v="150"/>
         <tag k="note" v="2-e"/>
         <tag k="poi" v="yes"/>
@@ -532,9 +551,9 @@
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="243"/>
+        <tag k="hoot:id" v="238"/>
     </node>
-    <node visible="true" id="244" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8753845000000027" lon="-104.7191537000000068">
+    <node visible="true" id="240" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8753845000000027" lon="-104.7191537000000068">
         <tag k="accuracy" v="1000"/>
         <tag k="note" v="2-d"/>
         <tag k="poi" v="yes"/>
@@ -542,26 +561,7 @@
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="244"/>
-    </node>
-    <node visible="true" id="245" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.9109692999999979" lon="-104.7145692999999937">
-        <tag k="accuracy" v="100"/>
-        <tag k="note" v="1-a;2-a"/>
-        <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="65"/>
-        <tag k="name" v="Starbucks"/>
-        <tag k="amenity" v="cafe"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="245"/>
-    </node>
-    <node visible="true" id="246" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8580511999999985" lon="-104.7869287000000043">
-        <tag k="place" v="city"/>
-        <tag k="accuracy" v="20000"/>
-        <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="70"/>
-        <tag k="name" v="Colorado Springs"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="246"/>
+        <tag k="hoot:id" v="240"/>
     </node>
     <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="44"/>
@@ -781,7 +781,7 @@
     </way>
     <relation visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="79" role="reviewee"/>
-        <member type="node" ref="242" role="reviewee"/>
+        <member type="node" ref="237" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-6"/>
@@ -795,7 +795,7 @@
     </relation>
     <relation visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="79" role="reviewee"/>
-        <member type="node" ref="241" role="reviewee"/>
+        <member type="node" ref="235" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-5"/>
@@ -809,7 +809,7 @@
     </relation>
     <relation visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="74" role="reviewee"/>
-        <member type="node" ref="242" role="reviewee"/>
+        <member type="node" ref="237" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-4"/>
@@ -823,7 +823,7 @@
     </relation>
     <relation visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="77" role="reviewee"/>
-        <member type="node" ref="244" role="reviewee"/>
+        <member type="node" ref="240" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-3"/>
@@ -837,7 +837,7 @@
     </relation>
     <relation visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="71" role="reviewee"/>
-        <member type="node" ref="244" role="reviewee"/>
+        <member type="node" ref="240" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-2"/>
@@ -851,7 +851,7 @@
     </relation>
     <relation visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="71" role="reviewee"/>
-        <member type="node" ref="243" role="reviewee"/>
+        <member type="node" ref="238" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-1"/>

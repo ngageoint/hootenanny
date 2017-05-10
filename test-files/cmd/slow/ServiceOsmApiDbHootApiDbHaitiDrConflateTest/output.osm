@@ -15392,15 +15392,15 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="3822"/>
     </node>
-    <node visible="true" id="4028" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="18.5274080999999988" lon="-72.4805939000000023">
-        <tag k="hoot:id" v="-6"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="4028"/>
-    </node>
-    <node visible="true" id="4029" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="18.5274010000000011" lon="-72.4805893999999995">
+    <node visible="true" id="3826" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="18.5274010000000011" lon="-72.4805893999999995">
         <tag k="hoot:id" v="3826"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="4029"/>
+        <tag k="hoot:id" v="3826"/>
+    </node>
+    <node visible="true" id="3963" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="18.5274080999999988" lon="-72.4805939000000023">
+        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="3963"/>
     </node>
     <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="1888"/>
@@ -20322,7 +20322,7 @@
         <tag k="hoot:id" v="267"/>
     </way>
     <way visible="true" id="268" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
-        <nd ref="4028"/>
+        <nd ref="3963"/>
         <nd ref="507"/>
         <nd ref="510"/>
         <nd ref="511"/>
@@ -22450,8 +22450,8 @@
         <tag k="hoot:id" v="378"/>
     </way>
     <way visible="true" id="383" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4028"/>
-        <nd ref="4029"/>
+        <nd ref="3963"/>
+        <nd ref="3826"/>
         <tag k="source:horiz_accuracy_cat" v="accurate"/>
         <tag k="highway:min_width" v="3"/>
         <tag k="source:date_time" v="2010-01-13"/>
@@ -22507,7 +22507,7 @@
         <nd ref="503"/>
         <nd ref="504"/>
         <nd ref="506"/>
-        <nd ref="4028"/>
+        <nd ref="3963"/>
         <tag k="hoot:id" v="-10"/>
         <tag k="source" v="geoeye"/>
         <tag k="highway" v="path"/>

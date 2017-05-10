@@ -138,7 +138,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
   long nodeId;
   LOG_VART(n->getId());
   LOG_VART(n->getStatus());
-  if ((n->getStatus() == Status::Unknown1 /*|| n->getStatus() == Status::Conflated*/) && n->getId() > 0)
+  if (/*(n->getStatus() == Status::Unknown1 || n->getStatus() == Status::Conflated) &&*/ n->getId() > 0)
   {
     nodeId = n->getId();
   }
@@ -174,7 +174,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& w)
   long wayId;
   LOG_VART(w->getElementId());
   LOG_VART(w->getStatus());
-  if ((w->getStatus() == Status::Unknown1 || w->getStatus() == Status::Conflated) && w->getId() > 0)
+  if (/*(w->getStatus() == Status::Unknown1 || w->getStatus() == Status::Conflated) &&*/ w->getId() > 0)
   {
     wayId = w->getId();
   }
@@ -218,7 +218,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& r)
   long relationId;
   LOG_VART(r->getId());
   LOG_VART(r->getStatus());
-  if ((r->getStatus() == Status::Unknown1 || r->getStatus() == Status::Conflated) && r->getId() > 0)
+  if (/*(r->getStatus() == Status::Unknown1 || r->getStatus() == Status::Conflated) &&*/ r->getId() > 0)
   {
     relationId = r->getId();
   }
