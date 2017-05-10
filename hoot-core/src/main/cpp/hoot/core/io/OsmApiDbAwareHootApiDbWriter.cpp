@@ -37,7 +37,6 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbAwareHootApiDbWriter)
 OsmApiDbAwareHootApiDbWriter::OsmApiDbAwareHootApiDbWriter() :
 HootApiDbWriter()
 {
-  //_remapIds = false;
 }
 
 OsmApiDbAwareHootApiDbWriter::~OsmApiDbAwareHootApiDbWriter()
@@ -139,6 +138,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
   long nodeId;
   LOG_VART(n->getId());
   LOG_VART(n->getStatus());
+  //TODO: I think this can go away.
   if ((n->getStatus() == Status::Unknown1 || n->getStatus() == Status::Conflated) && n->getId() > 0)
   {
     nodeId = n->getId();

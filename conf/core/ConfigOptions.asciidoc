@@ -1894,7 +1894,7 @@ all readers.
 If true, all tags from the input data will be preserved.  Not honored by all readers.  e.g.
 an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will be kept.
 
-=== reader.set.status
+=== reader.set.default.status
 
 * Data Type: string
 * Default Value: `unknown1`

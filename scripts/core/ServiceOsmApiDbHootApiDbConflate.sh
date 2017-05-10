@@ -87,21 +87,21 @@ if [ "$LOAD_SEC_DATA" == "true" ]; then
   else
     cp $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
   fi
-  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D reader.set.status=unknown2 -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 6: Reading the complete secondary dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/6-secondary-complete-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/6-secondary-complete-PulledFromHootApiDb.osm
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 7: Reading the subset AOI secondary dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D convert.bounding.box=$AOI "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/7-secondary-subset-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D convert.bounding.box=$AOI "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/7-secondary-subset-PulledFromHootApiDb.osm
 fi
 
 if [ "$CONFLATE_DATA" == "true" ]; then
@@ -117,14 +117,14 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 9: Reading the complete conflated dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/9-conflated-complete-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/9-conflated-complete-PulledFromHootApiDb.osm
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 10: Reading the subset AOI conflated dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-subset-PulledFromHootApiDb.osm
+  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/10-conflated-subset-PulledFromHootApiDb.osm
 fi
 
 echo ""

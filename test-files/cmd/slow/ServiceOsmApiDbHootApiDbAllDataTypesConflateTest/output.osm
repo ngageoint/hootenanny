@@ -523,45 +523,45 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="118"/>
     </node>
-    <node visible="true" id="235" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8753845000000027" lon="-104.7191537000000068">
-        <tag k="accuracy" v="1000"/>
-        <tag k="note" v="2-d"/>
-        <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="127"/>
-        <tag k="name" v="Starbucks"/>
-        <tag k="amenity" v="cafe"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="235"/>
-    </node>
-    <node visible="true" id="236" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8747831000000019" lon="-104.7208595999999972">
-        <tag k="accuracy" v="150"/>
-        <tag k="note" v="2-e"/>
-        <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="129"/>
-        <tag k="name" v="Starbucks"/>
-        <tag k="amenity" v="cafe"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="236"/>
-    </node>
-    <node visible="true" id="237" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8942750000000004" lon="-104.7187095000000028">
-        <tag k="accuracy" v="1000"/>
-        <tag k="note" v="2-b"/>
-        <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="130"/>
-        <tag k="name" v="Starbucks"/>
-        <tag k="amenity" v="cafe"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="237"/>
-    </node>
-    <node visible="true" id="238" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8887009000000035" lon="-104.7187701999999945">
+    <node visible="true" id="241" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8887009000000035" lon="-104.7187701999999945">
         <tag k="accuracy" v="1000"/>
         <tag k="note" v="2-c"/>
         <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="133"/>
+        <tag k="hoot:id" v="235"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="241"/>
+    </node>
+    <node visible="true" id="242" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8942750000000004" lon="-104.7187095000000028">
+        <tag k="accuracy" v="1000"/>
+        <tag k="note" v="2-b"/>
+        <tag k="poi" v="yes"/>
+        <tag k="hoot:id" v="237"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="242"/>
+    </node>
+    <node visible="true" id="243" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8747831000000019" lon="-104.7208595999999972">
+        <tag k="accuracy" v="150"/>
+        <tag k="note" v="2-e"/>
+        <tag k="poi" v="yes"/>
         <tag k="hoot:id" v="238"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="243"/>
+    </node>
+    <node visible="true" id="244" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8753845000000027" lon="-104.7191537000000068">
+        <tag k="accuracy" v="1000"/>
+        <tag k="note" v="2-d"/>
+        <tag k="poi" v="yes"/>
+        <tag k="hoot:id" v="240"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="244"/>
     </node>
     <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="44"/>
@@ -781,35 +781,35 @@
     </way>
     <relation visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="79" role="reviewee"/>
-        <member type="node" ref="238" role="reviewee"/>
+        <member type="node" ref="242" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-6"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="type" v="review"/>
-        <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:sort_order" v="2"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="2"/>
     </relation>
     <relation visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="79" role="reviewee"/>
-        <member type="node" ref="237" role="reviewee"/>
+        <member type="node" ref="241" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-5"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="type" v="review"/>
-        <tag k="hoot:review:sort_order" v="2"/>
+        <tag k="hoot:review:sort_order" v="1"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="3"/>
     </relation>
     <relation visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="74" role="reviewee"/>
-        <member type="node" ref="237" role="reviewee"/>
+        <member type="node" ref="242" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-4"/>
@@ -823,7 +823,7 @@
     </relation>
     <relation visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="77" role="reviewee"/>
-        <member type="node" ref="235" role="reviewee"/>
+        <member type="node" ref="244" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-3"/>
@@ -837,28 +837,28 @@
     </relation>
     <relation visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="71" role="reviewee"/>
-        <member type="node" ref="236" role="reviewee"/>
+        <member type="node" ref="244" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-2"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="type" v="review"/>
-        <tag k="hoot:review:sort_order" v="4"/>
+        <tag k="hoot:review:sort_order" v="5"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="6"/>
     </relation>
     <relation visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <member type="node" ref="71" role="reviewee"/>
-        <member type="node" ref="235" role="reviewee"/>
+        <member type="node" ref="243" role="reviewee"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:id" v="-1"/>
         <tag k="hoot:review:score" v="1"/>
         <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="type" v="review"/>
-        <tag k="hoot:review:sort_order" v="5"/>
+        <tag k="hoot:review:sort_order" v="4"/>
         <tag k="type" v="review"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="7"/>
