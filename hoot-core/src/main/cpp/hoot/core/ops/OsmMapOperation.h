@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 class OsmMap;
 
 /**
@@ -70,7 +68,7 @@ public:
    *
    * @return boost any pointer to the result data
    */
-  virtual any getResult() { any ptr; return ptr; }
+  virtual boost::any getResult() { boost::any ptr; return ptr; }
 
   /**
     Returns a string representation of the operation

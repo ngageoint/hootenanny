@@ -99,7 +99,7 @@ private:
   double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
 
   double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
-                       any& visitorData);
+                       boost::any& visitorData);
 
   void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ElementVisitor *v);
 

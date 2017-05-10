@@ -40,7 +40,6 @@ namespace hoot
 {
 
 using namespace v8;
-using namespace boost;
 
 class ClassInitializer
 {

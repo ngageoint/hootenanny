@@ -46,8 +46,6 @@ class OsmMap;
 class Relation;
 class Element;
 
-using namespace boost;
-
 /**
  * Provides a mapping from all elements that are directly or indirectly part of a relation back to
  * the parent relation. An element may be part of multiple relations.

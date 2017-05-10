@@ -46,7 +46,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class ObjectCreator
 {
@@ -56,7 +55,7 @@ public:
 
   virtual ~ObjectCreator() { }
 
-  virtual any create() = 0;
+  virtual boost::any create() = 0;
 
   virtual std::string getBaseName() = 0;
 
@@ -82,7 +81,7 @@ public:
   /**
    * We cast it to "Base" so that the any pointer works as expected.
    */
-  any create()
+  boost::any create()
   {
     Base* b = new T();
     return dynamic_cast<Base*>(b);
@@ -141,7 +140,7 @@ public:
     }
   }
 
-  any constructObject(const std::string& name);
+  boost::any constructObject(const std::string& name);
 
   template<class T>
   T* constructObject(const QString& name)
@@ -153,7 +152,7 @@ public:
   template<class T>
   T* constructObject(const std::string& name)
   {
-    return any_cast<T*>(constructObject(name));
+    return boost::any_cast<T*>(constructObject(name));
   }
 
   std::vector<std::string> getObjectNamesByBase(const std::string& baseName);

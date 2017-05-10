@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class Schema
 {

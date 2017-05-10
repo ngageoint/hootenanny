@@ -40,8 +40,6 @@ namespace hoot
 
 class OsmSchemaLoader;
 
-using namespace boost;
-
 class OsmSchemaLoaderFactory
 {
 public:

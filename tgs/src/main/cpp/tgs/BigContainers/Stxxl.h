@@ -36,7 +36,6 @@
 
 namespace Tgs
 {
-  using namespace boost;
 
 /**
  * A convenience class for initializing STXXL in a multiple processes safe way.

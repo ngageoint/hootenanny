@@ -46,7 +46,6 @@ class QXmlStreamWriter;
 
 namespace hoot
 {
-using namespace boost;
 
 /**
  * Writes an OsmMap to a .json file format.

@@ -38,7 +38,6 @@
 
 namespace pp
 {
-using namespace boost;
 
 class FileInputFormat : public InputFormat
 {

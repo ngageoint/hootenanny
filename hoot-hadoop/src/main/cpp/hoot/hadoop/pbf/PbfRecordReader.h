@@ -32,8 +32,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace boost;
-
 class PbfRecordReader : public pp::RecordReader
 {
 public:

@@ -31,7 +31,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class ConstElementConsumer : public ElementConsumer
 {
@@ -39,7 +38,7 @@ public:
   virtual void addElement(const ConstElementPtr& e) = 0;
   virtual void addElement(const ElementPtr& e)
   {
-    addElement(dynamic_pointer_cast<const Element>(e));
+    addElement(boost::dynamic_pointer_cast<const Element>(e));
   }
 };
 

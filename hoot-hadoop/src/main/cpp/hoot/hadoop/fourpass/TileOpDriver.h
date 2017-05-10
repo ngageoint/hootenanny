@@ -37,7 +37,6 @@ namespace hoot
 
 class OsmMapOperation;
 
-using namespace boost;
 using namespace geos::geom;
 
 /**

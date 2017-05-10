@@ -42,7 +42,6 @@ uint qHash(const std::string& str);
 
 namespace pp
 {
-using namespace boost;
 
 /**
  * This simulates the execution of a hadoop job by running the job locally.

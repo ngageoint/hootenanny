@@ -35,7 +35,7 @@
 
 namespace hoot
 {
-using namespace boost;
+
 using namespace geos;
 
 class Building

@@ -38,8 +38,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 class ScriptTestSuite : public CppUnit::TestSuite
 {
 public:

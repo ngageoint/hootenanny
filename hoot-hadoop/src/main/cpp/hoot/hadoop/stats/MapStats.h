@@ -35,7 +35,6 @@ namespace hoot
 
 class Node;
 
-using namespace boost;
 using namespace geos::geom;
 
 class MapStats

@@ -39,8 +39,6 @@
 namespace pp
 {
 
-using namespace boost;
-
 class CppSeqFileRecordWriter : public pp::RecordWriter, public pp::ReduceContextConsumer
 {
 public:

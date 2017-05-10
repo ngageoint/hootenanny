@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 /*
  * Simple interface for allowing for the return of data of any type
  */
@@ -43,7 +41,7 @@ class DataProducer
 
 public:
 
-  virtual any getData() const = 0;
+  virtual boost::any getData() const = 0;
 };
 
 }

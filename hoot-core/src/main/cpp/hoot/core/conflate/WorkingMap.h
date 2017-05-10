@@ -46,8 +46,6 @@ namespace hoot
 class Manipulation;
 class Status;
 
-using namespace boost;
-
 /**
  * The WorkingMap represents one possible solution to the conflation problem. This should only be
  * modified by the initial creator of the WorkingMap.

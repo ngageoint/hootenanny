@@ -36,8 +36,6 @@ class Node;
 class Way;
 class OsmMap;
 
-using namespace boost;
-
 /**
  * Wraps another record writer to enable writing of OSM data types.
  */

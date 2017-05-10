@@ -43,7 +43,7 @@
 
 namespace hoot
 {
-using namespace boost;
+
 using namespace geos::geom;
 class Feature;
 class Schema;

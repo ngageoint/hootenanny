@@ -30,8 +30,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 class WayJoin2InputSplit : public pp::InputSplit
 {
 public:

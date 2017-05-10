@@ -45,8 +45,6 @@ namespace hoot
 class OsmMap;
 class NodeReplacements;
 
-using namespace boost;
-
 /**
  * A tile worker that performs all its operations locally. This is good for testing, but it is
  * memory bound. All files are stored on the local filesystem.

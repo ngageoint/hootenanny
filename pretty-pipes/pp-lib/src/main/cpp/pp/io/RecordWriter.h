@@ -39,8 +39,6 @@
 namespace pp
 {
 
-using namespace boost;
-
 class RecordWriter : public HadoopPipes::RecordWriter
 {
 public:

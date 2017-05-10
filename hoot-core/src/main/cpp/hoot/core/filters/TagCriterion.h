@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 /**
  * Returns true if k==v

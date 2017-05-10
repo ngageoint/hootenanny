@@ -35,8 +35,6 @@ class PbfInputSplit;
 class PbfRecordReader;
 class OsmMap;
 
-using namespace boost;
-
 class WayJoin2RecordReader : public pp::RecordReader
 {
 public:

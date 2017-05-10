@@ -39,8 +39,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 /**
  * Used to represent a bounding box in Z-Value space.
  */

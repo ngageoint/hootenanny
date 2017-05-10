@@ -54,7 +54,7 @@ public:
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual any getResult() { any result = _result; return result; }
+  virtual boost::any getResult() { boost::any result = _result; return result; }
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -49,7 +49,6 @@ class OGRSpatialReference;
 
 namespace hoot
 {
-using namespace boost;
 
 class OsmMap;
 class Manipulator;

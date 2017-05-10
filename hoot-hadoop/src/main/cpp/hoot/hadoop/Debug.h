@@ -12,8 +12,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace boost;
-
 class Debug
 {
 public:

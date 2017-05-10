@@ -54,7 +54,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace boost;
 using namespace geos::geom;
 
 class MapProjector

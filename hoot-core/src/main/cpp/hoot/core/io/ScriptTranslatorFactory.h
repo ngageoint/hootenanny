@@ -40,8 +40,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 class ScriptTranslator;
 
 class ScriptTranslatorFactory

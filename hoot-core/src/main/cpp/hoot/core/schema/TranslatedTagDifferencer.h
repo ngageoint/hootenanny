@@ -41,7 +41,6 @@
 
 namespace hoot
 {
-using namespace boost;;
 
 /**
  * The translated tag differencer calculate the difference between two sets of tags after they have

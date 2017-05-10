@@ -22,7 +22,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class PaintNodesMapper : public OsmMapMapper
 {

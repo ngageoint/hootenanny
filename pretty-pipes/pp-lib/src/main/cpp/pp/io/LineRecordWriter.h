@@ -39,8 +39,6 @@
 namespace pp
 {
 
-using namespace boost;
-
 /**
  * This class is analagous to TextOutputFormat#LineRecordWriter in hadoop.
  */

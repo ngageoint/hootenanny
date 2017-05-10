@@ -38,8 +38,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 /**
  * Base class to ease OsmMapConsumer usage.
  */

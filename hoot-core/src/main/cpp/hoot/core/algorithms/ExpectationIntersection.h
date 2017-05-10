@@ -40,7 +40,6 @@ namespace hoot
 {
 class Settings;
 
-using namespace boost;
 using namespace tbs;
 
 /**

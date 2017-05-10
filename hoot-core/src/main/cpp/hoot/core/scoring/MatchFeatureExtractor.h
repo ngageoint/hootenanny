@@ -47,7 +47,6 @@
 namespace hoot
 {
 
-using namespace boost;
 using namespace Tgs;
 
 class MatchCreator;

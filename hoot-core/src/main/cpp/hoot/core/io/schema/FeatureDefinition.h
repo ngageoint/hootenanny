@@ -41,8 +41,6 @@ namespace hoot
 
 class FieldDefinition;
 
-using namespace boost;
-
 class FeatureDefinition
 {
 public:

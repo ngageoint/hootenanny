@@ -44,8 +44,6 @@
 namespace pp
 {
 
-using namespace boost;
-
 class ObjectCreator
 {
 public:
@@ -54,7 +52,7 @@ public:
 
   virtual ~ObjectCreator() { }
 
-  virtual any create() = 0;
+  virtual boost::any create() = 0;
 
   virtual std::string getBaseName() = 0;
 
@@ -79,7 +77,7 @@ public:
   /**
    * We cast it to "Base" so that the any pointer works as expected.
    */
-  virtual any create()
+  virtual boost::any create()
   {
     Base* b = new T();
     return dynamic_cast<Base*>(b);
@@ -126,13 +124,13 @@ public:
     }
   }
 
-  any constructObject(const std::string& name)
+  boost::any constructObject(const std::string& name)
   {
     if (_creators.find(name) == _creators.end())
     {
       throw Exception("Could not find object to construct. (" + name + ")");
     }
-    any result = _creators[name]->create();
+    boost::any result = _creators[name]->create();
     return result;
   }
 
@@ -140,7 +138,7 @@ public:
   T* constructObject(const std::string& name)
   {
     //cout << "Creating " << name << " with base type: " << typeid(T).name() << endl; cout.flush();
-    any a = constructObject(name);
+    boost::any a = constructObject(name);
     // The standard any_cast fails on RHEL 5.8, dunno if it is a version of g++ or what. It appears
     // that the failure is due to going across shared libraries. The any.hpp comments make mention
     // of this by the "unsafe_any_cast" function. This poor mans type checking should be good 
@@ -159,7 +157,7 @@ public:
         std::cerr << "a.type().name() " << a.type().name() << " T name: " << typeid(T).name() << std::endl;
         std::cerr.flush();
 #     endif
-      throw bad_any_cast();
+      throw boost::bad_any_cast();
     }
   }
 

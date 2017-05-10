@@ -46,8 +46,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 class ObjectOutputStream
 {
 public:
@@ -78,7 +76,7 @@ public:
     flush();
   }
 
-  void writeObject(any obj);
+  void writeObject(boost::any obj);
 
 public:
   QDataStream* _stream;

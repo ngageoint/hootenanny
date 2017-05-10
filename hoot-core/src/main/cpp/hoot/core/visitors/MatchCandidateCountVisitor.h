@@ -54,7 +54,7 @@ public:
 
   double getStat() const { return _candidateCount; }
 
-  any getData() const { return _matchCandidateCountsByMatchCreator; }
+  boost::any getData() const { return _matchCandidateCountsByMatchCreator; }
 
 private:
 

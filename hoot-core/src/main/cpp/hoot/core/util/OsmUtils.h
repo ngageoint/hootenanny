@@ -41,11 +41,10 @@ using namespace geos::geom;
 
 namespace hoot
 {
-  using namespace boost;
 
-  class OsmMap;
-  class Node;
-  class Status;
+class OsmMap;
+class Node;
+class Status;
 
 /**
   Utilities for use with the OSM data model

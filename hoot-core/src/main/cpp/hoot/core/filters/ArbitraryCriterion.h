@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class ArbitraryCriterion : public ElementCriterion
 {

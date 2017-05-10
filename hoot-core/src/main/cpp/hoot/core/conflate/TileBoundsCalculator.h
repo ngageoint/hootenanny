@@ -54,7 +54,6 @@ class TileBoundsCalculatorTest;
 class OsmMap;
 class Node;
 
-using namespace boost;
 using namespace geos::geom;
 
 /**

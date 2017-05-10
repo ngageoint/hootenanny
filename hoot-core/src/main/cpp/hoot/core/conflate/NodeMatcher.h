@@ -44,8 +44,6 @@ namespace hoot
 class OsmMap;
 class ElementId;
 
-using namespace boost;
-
 class NodeMatcher
 {
 public:
