@@ -27,6 +27,8 @@
 
 #include "CppSeqFile.h"
 
+using namespace std;
+
 namespace pp
 {
 

@@ -39,6 +39,8 @@ using namespace pp;
 #include <iostream>
 #include <stdlib.h>
 
+using namespace std;
+
 class HdfsTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(HdfsTest);

@@ -35,6 +35,8 @@
 #include <pp/io/FileInputSplit.h>
 #include <pp/Hdfs.h>
 
+using namespace std;
+
 namespace pp
 {
 

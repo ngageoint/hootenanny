@@ -33,6 +33,8 @@
 // Qt
 #include <QString>
 
+using namespace std;
+
 namespace pp
 {
 

@@ -39,7 +39,6 @@
 
 namespace pp
 {
-using namespace std;
 
 #warning Use HadoopPipesUtils instead of a thief.
 /**
@@ -48,25 +47,25 @@ using namespace std;
  */
 class JobConfThief : public HadoopPipes::JobConf {
 private:
-  map<string, string> values;
+  std::map<std::string, std::string> values;
 public:
-  void set(const string&, const string& value) {
+  void set(const std::string&, const std::string& value) {
     throw Exception("Not Implemented");
   }
 
-  virtual bool hasKey(const string& key) const {
+  virtual bool hasKey(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
-  virtual const string& get(const string& key) const {
+  virtual const std::string& get(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
-  virtual int getInt(const string& key) const {
+  virtual int getInt(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
-  virtual float getFloat(const string& key) const {
+  virtual float getFloat(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
@@ -74,7 +73,7 @@ public:
     throw Exception("Not Implemented");
   }
 
-  const map<string, string>& getMap() const { return values; }
+  const std::map<std::string, std::string>& getMap() const { return values; }
 };
 
 }

@@ -38,8 +38,8 @@
 
 namespace pp
 {
+
 using namespace boost;
-using namespace std;
 
 class RecordWriter : public HadoopPipes::RecordWriter
 {
@@ -49,7 +49,7 @@ public:
 
   virtual ~RecordWriter() {}
 
-  virtual void emit(const string& key, const string& value)
+  virtual void emit(const std::string& key, const std::string& value)
   {
     emitRecord(key.data(), key.size(), value.data(), value.size());
   }

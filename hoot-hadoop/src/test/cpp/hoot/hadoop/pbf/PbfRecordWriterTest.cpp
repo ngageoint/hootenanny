@@ -32,6 +32,8 @@ using namespace pp;
 
 #include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -57,12 +59,12 @@ public:
     }
 
     uut.setReduceContext(2, "test-output/PbfRecordWriterTest");
-   OsmMapPtr map(new OsmMap());
-   NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    OsmMapPtr map(new OsmMap());
+    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
-   WayPtr w(new Way(Status::Unknown1, 42, 1.7));
+    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -112,7 +114,7 @@ public:
       109,  93,  53, 122};
     size_t dataSize = 310;
 
-   boost::shared_ptr<istream> strm(fs.open("test-output/PbfRecordWriterTest/part-00002r.pbf"));
+    boost::shared_ptr<istream> strm(fs.open("test-output/PbfRecordWriterTest/part-00002r.pbf"));
     unsigned char* buffer = new unsigned char[dataSize * 2];
     strm->read((char*)buffer, dataSize * 2);
     CPPUNIT_ASSERT_EQUAL(dataSize, (size_t)strm->gcount());

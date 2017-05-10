@@ -36,6 +36,8 @@
 
 #include "InputSplit.h"
 
+using namespace std;
+
 namespace pp
 {
 

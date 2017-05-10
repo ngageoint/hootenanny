@@ -36,13 +36,12 @@
 
 namespace pp
 {
-using namespace std;
 
 class FileInputSplit : public InputSplit
 {
 public:
 
-  static string className() { return "pp::FileInputSplit"; }
+  static std::string className() { return "pp::FileInputSplit"; }
 
   FileInputSplit();
 
@@ -60,9 +59,9 @@ public:
 
   void setLength(long length) { _length = length; }
 
-  void setLocations(const string& locations) { _locations = locations; }
+  void setLocations(const std::string& locations) { _locations = locations; }
 
-  void setPath(const string& path) { _path = path; }
+  void setPath(const std::string& path) { _path = path; }
 
   void setStart(long start) { _start = start; }
 
@@ -77,10 +76,10 @@ public:
 
 private:
 
-  string _path;
+  std::string _path;
   long _start;
   long _length;
-  string _locations;
+  std::string _locations;
 };
 
 }

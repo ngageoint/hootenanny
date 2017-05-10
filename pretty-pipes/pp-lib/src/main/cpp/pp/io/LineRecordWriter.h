@@ -38,8 +38,8 @@
 
 namespace pp
 {
+
 using namespace boost;
-using namespace std;
 
 /**
  * This class is analagous to TextOutputFormat#LineRecordWriter in hadoop.
@@ -48,7 +48,7 @@ class LineRecordWriter : public pp::RecordWriter, public pp::ReduceContextConsum
 {
 public:
 
-  static string className() { return "pp::LineRecordWriter"; }
+  static std::string className() { return "pp::LineRecordWriter"; }
 
   LineRecordWriter();
 
@@ -59,17 +59,17 @@ public:
   virtual void emitRecord(const char* keyData, size_t keySize, const char* valueData,
     size_t valueSize);
 
-  void init(const string& workDir, int part);
+  void init(const std::string& workDir, int part);
 
   virtual void setReduceContext(HadoopPipes::ReduceContext& context);
 
 protected:
 
-  boost::shared_ptr<ostream> _out;
+  boost::shared_ptr<std::ostream> _out;
 
 private:
 
-  string _path;
+  std::string _path;
 };
 
 }

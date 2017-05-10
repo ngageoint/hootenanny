@@ -43,7 +43,7 @@
 
 namespace pp
 {
-using namespace std;
+
 using namespace boost;
 
 class ObjectCreator
@@ -56,9 +56,9 @@ public:
 
   virtual any create() = 0;
 
-  virtual string getBaseName() = 0;
+  virtual std::string getBaseName() = 0;
 
-  virtual string getName() = 0;
+  virtual std::string getName() = 0;
 
 private:
   ObjectCreator(const ObjectCreator& oc);
@@ -85,13 +85,13 @@ public:
     return dynamic_cast<Base*>(b);
   }
 
-  string getBaseName() { return _baseName; }
+  std::string getBaseName() { return _baseName; }
 
-  string getName() { return _name; }
+  std::string getName() { return _name; }
 
 private:
-  string _baseName;
-  string _name;
+  std::string _baseName;
+  std::string _name;
 };
 
 class Factory
@@ -154,9 +154,10 @@ public:
     else
     {
 #     ifdef DEBUG
-        cerr << "Creating " << name << " with base type: " << typeid(T).name() << endl; cerr.flush();
-        cerr << "a.type().name() " << a.type().name() << " T name: " << typeid(T).name() << endl;
-        cerr.flush();
+        std::cerr << "Creating " << name << " with base type: " << typeid(T).name() << std::endl;
+        std::cerr.flush();
+        std::cerr << "a.type().name() " << a.type().name() << " T name: " << typeid(T).name() << std::endl;
+        std::cerr.flush();
 #     endif
       throw bad_any_cast();
     }

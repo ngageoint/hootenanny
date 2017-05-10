@@ -41,7 +41,7 @@ class LineRecordReader : public pp::RecordReader
 {
 public:
 
-  static string className() { return "pp::LineRecordReader"; }
+  static std::string className() { return "pp::LineRecordReader"; }
 
   LineRecordReader();
 
@@ -56,10 +56,10 @@ public:
   virtual bool next(std::string& key, std::string& value);
 
 private:
-  string _path;
+  std::string _path;
   long _start, _length;
-  istream* _stream;
-  string _buffer;
+  std::istream* _stream;
+  std::string _buffer;
 };
 
 }

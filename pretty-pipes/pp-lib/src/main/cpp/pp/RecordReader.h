@@ -56,7 +56,7 @@ public:
   /**
    * This is primarily useful in unit testing. It is called by setMapContext.
    */
-  virtual void readInputSplit(const string& is);
+  virtual void readInputSplit(const std::string& is);
 
 protected:
   HadoopPipes::MapContext* _context;

@@ -39,7 +39,7 @@ namespace pp
 class CppSeqFileRecordReader : public pp::RecordReader
 {
 public:
-  static string className() { return "pp::CppSeqFileRecordReader"; }
+  static std::string className() { return "pp::CppSeqFileRecordReader"; }
 
   CppSeqFileRecordReader();
 
@@ -56,10 +56,10 @@ public:
   virtual float getProgress();
 
 private:
-  string _path;
+  std::string _path;
   long _start, _length;
   CppSeqFile::Reader* _reader;
-  istream* _stream;
+  std::istream* _stream;
 };
 
 }

@@ -34,7 +34,6 @@
 
 namespace pp
 {
-using namespace std;
 
 class InputSplit
 {
@@ -68,7 +67,7 @@ public:
   virtual long long getStart() const = 0;
 
 #ifndef SWIG
-  void readFields(const string& bytes) { readFields((char*)bytes.data(), bytes.size()); }
+  void readFields(const std::string& bytes) { readFields((char*)bytes.data(), bytes.size()); }
 #endif
 
   virtual void readFields(char* byteArray, long len) = 0;
@@ -80,7 +79,7 @@ public:
    */
   virtual signed char* writeFields(size_t* len) const = 0;
 
-  void writeFields(string& bytes) const;
+  void writeFields(std::string& bytes) const;
 };
 
 }

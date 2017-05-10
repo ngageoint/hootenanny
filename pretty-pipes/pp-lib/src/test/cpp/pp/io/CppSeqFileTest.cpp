@@ -44,6 +44,8 @@ using namespace pp;
 #include <pp/DataOutputStream.h>
 #include <pp/io/CppSeqFile.h>
 
+using namespace std;
+
 class Int
 {
 public:

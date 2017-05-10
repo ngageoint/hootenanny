@@ -43,6 +43,8 @@ using namespace pp;
 #include <pp/DataInputStream.h>
 #include <pp/DataOutputStream.h>
 
+using namespace std;
+
 class DataInputStreamTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(DataInputStreamTest);

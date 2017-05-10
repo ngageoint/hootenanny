@@ -39,21 +39,20 @@
 
 namespace pp
 {
-using namespace std;
 
 class Plugins
 {
 public:
   Plugins();
 
-  static void loadAllLibraries(const string& libs);
+  static void loadAllLibraries(const std::string& libs);
 
   /**
    * Loads the specified library if it hasn't been loaded already.
    */
-  static void loadLibrary(const string& lib) throw(pp::Exception);
+  static void loadLibrary(const std::string& lib) throw(pp::Exception);
 
-  static string getLoadedLibraries() { return _loaded.join(",").toStdString(); }
+  static std::string getLoadedLibraries() { return _loaded.join(",").toStdString(); }
 
 private:
   static QStringList _loaded;

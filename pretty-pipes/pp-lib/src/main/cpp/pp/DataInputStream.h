@@ -41,12 +41,11 @@
 
 namespace pp
 {
-using namespace std;
 
 class DataInputStream
 {
 public:
-  DataInputStream(istream& in) : _in(in) {}
+  DataInputStream(std::istream& in) : _in(in) {}
 
   int read(char* data, int length);
 
@@ -71,7 +70,7 @@ public:
    * reads an unsigned 16bit value and then uses that to determine the length of the string. The
    * string is then read into a std::string object and returned.
    */
-  string readString();
+  std::string readString();
 
   uint32_t readUnsignedInt();
 
@@ -80,7 +79,7 @@ public:
   QString readUTF();
 
 private:
-  istream& _in;
+  std::istream& _in;
 
   void _checkEof(int s)
   {
@@ -134,11 +133,11 @@ inline long DataInputStream::readLong()
   return qFromBigEndian((quint64)v);
 }
 
-inline string DataInputStream::readString()
+inline std::string DataInputStream::readString()
 {
   unsigned short v = readUnsignedShort();
 
-  string result;
+  std::string result;
   result.resize(v);
   _in.read((char*)result.data(), v);
   _checkEof(v);
@@ -165,7 +164,7 @@ inline QString DataInputStream::readUTF()
 {
   unsigned short v = readUnsignedShort();
 
-  string result;
+  std::string result;
   result.resize(v);
   _in.read((char*)result.data(), v);
   _checkEof(v);

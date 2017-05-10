@@ -40,12 +40,11 @@
 
 namespace pp
 {
-using namespace std;
 
 class DataOutputStream
 {
 public:
-  DataOutputStream(ostream& out);
+  DataOutputStream(std::ostream& out);
 
   /**
    * Write the specified data in its raw form. No addition information is stored before or after
@@ -81,11 +80,11 @@ public:
 
   void writeUTF(const QString& str);
 
-  streamsize bytesWritten() { return _bytesWritten; }
+  std::streamsize bytesWritten() { return _bytesWritten; }
 
 private:
-  ostream& _out;
-  streamsize _bytesWritten;
+  std::ostream& _out;
+  std::streamsize _bytesWritten;
 };
 
 inline void DataOutputStream::write(const char* data, size_t length)
@@ -120,7 +119,7 @@ inline void DataOutputStream::writeLong(long v)
   _bytesWritten += sizeof(v);
 }
 
-inline void DataOutputStream::writeString(const string& v)
+inline void DataOutputStream::writeString(const std::string& v)
 {
   if (v.size() > 65535)
   {

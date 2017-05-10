@@ -44,6 +44,8 @@ using namespace pp;
 
 #include "MapReduceTestFixture.h"
 
+using namespace std;
+
 namespace hoot
 {
 

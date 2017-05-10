@@ -67,9 +67,9 @@ public:
 
   Configuration& getConfiguration() { return _conf; }
 
-  static const string& getDefaultJobTracker() { return _defaultTracker; }
+  static const std::string& getDefaultJobTracker() { return _defaultTracker; }
 
-  string getJobTracker() const { return _conf.get("mapred.job.tracker"); }
+  std::string getJobTracker() const { return _conf.get("mapred.job.tracker"); }
 
   const std::vector<std::string>& getLibraryDirs() const { return _libraryDir; }
 
@@ -113,11 +113,11 @@ public:
    *
    * @sa setJobTracker
    */
-  static void setDefaultJobTracker(const string& tracker) { _defaultTracker = tracker; }
+  static void setDefaultJobTracker(const std::string& tracker) { _defaultTracker = tracker; }
 
 private:
   Configuration _conf;
-  static string _defaultTracker;
+  static std::string _defaultTracker;
   std::string _input;
   std::string _output;
   std::vector<std::string> _libraryDir;

@@ -29,6 +29,8 @@
 
 #include "Factory.h"
 
+using namespace std;
+
 namespace pp
 {
 

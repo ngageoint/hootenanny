@@ -52,7 +52,7 @@ class LocalJobRunner
 public:
   // I started out using a QHashMap, but that gave inconsistent results from run to run. Switching
   // to QMap makes it consistent and makes unit testing easier.
-  typedef QMap<QByteArray, vector<QByteArray> > ShuffleMap;
+  typedef QMap<QByteArray, std::vector<QByteArray> > ShuffleMap;
 
   LocalJobRunner(const Configuration& conf);
 
