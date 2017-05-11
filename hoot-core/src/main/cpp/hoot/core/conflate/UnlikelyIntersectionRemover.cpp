@@ -101,6 +101,7 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // otherwise split the intersection into two groups.
   else
   {
+    LOG_TRACE("Splitting intersection for ways: " << g2 << " at node " << intersectingNode);
     _splitIntersection(intersectingNode, g2);
   }
 }
@@ -111,9 +112,7 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, boost:
   // pressume it is a valid intersection
   double p = 1.0;
 
-  LOG_VART(w1.get());
   LOG_VART(w1->getElementId());
-  LOG_VART(w2.get());
   LOG_VART(w2->getElementId());
 
   int i1 = w1->getNodeIndex(intersectingNode);

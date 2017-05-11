@@ -193,7 +193,7 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   changeElement->setVersion(1);
   changeElement->setVisible(true);
   changeElement->setChangeset(_changesetId);
-  LOG_TRACE("Creating: " << changeElement);
+  LOG_TRACE("Creating: " << changeElement->getElementId());
 
   QString note = "";
   LOG_VART(changeElement->getId());
@@ -277,7 +277,7 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
   changeElement->setVersion(newVersion);
   changeElement->setChangeset(_changesetId);
   changeElement->setVisible(true);
-  LOG_TRACE("Updating: " << changeElement);
+  LOG_TRACE("Updating: " << changeElement->getElementId());
 
   QString note = "";
   LOG_VART(changeElement->getId());
@@ -329,7 +329,7 @@ void OsmChangesetSqlFileWriter::_deleteExistingElement(ConstElementPtr element)
   changeElement->setVersion(newVersion);
   changeElement->setVisible(false);
   changeElement->setChangeset(_changesetId);
-  LOG_TRACE("Deleting: " << changeElement);
+  LOG_TRACE("Deleting: " << changeElement->getElementId());
 
   QString note = "";
   LOG_VART(changeElement->getId());
@@ -443,11 +443,16 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesWayOrRelationStr(ConstElement
 
 void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
 {
-  LOG_TRACE("Creating tags for: " << element);
+  LOG_TRACE("Creating tags for: " << element->getElementId());
 
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
 
   Tags tags = element->getTags();
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
+  }
+  LOG_VART(tags);
   if (element->getElementType().getEnum() == ElementType::Relation && !tags.contains("type"))
   {
     ConstRelationPtr tmp = dynamic_pointer_cast<const Relation>(element);
@@ -491,7 +496,7 @@ QStringList OsmChangesetSqlFileWriter::_tagTableNamesForElement(const ElementId&
 
 void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 {
-  LOG_TRACE("Creating way nodes for: " << way);
+  LOG_TRACE("Creating way nodes for: " << way->getElementId());
 
   const std::vector<long> nodeIds = way->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
@@ -517,7 +522,7 @@ void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
 
 void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation)
 {
-  LOG_TRACE("Creating relation members for: " << relation);
+  LOG_TRACE("Creating relation members for: " << relation->getElementId());
 
   const vector<RelationData::Entry> members = relation->getMembers();
   for (size_t i = 0; i < members.size(); i++)

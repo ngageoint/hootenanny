@@ -73,12 +73,15 @@ Change ChangesetDeriver::_nextChange()
 {
   Change result;
 
+  LOG_VART(_fromE.get());
+  LOG_VART(_from->hasMoreElements());
+  LOG_VART(_toE.get());
+  LOG_VART(_to->hasMoreElements());
   if (!_fromE.get() && _from->hasMoreElements())
   {
     _fromE = _from->readNextElement();
     LOG_VART(_fromE->getElementId());
   }
-
   if (!_toE.get() && _to->hasMoreElements())
   {
     _toE = _to->readNextElement();
@@ -91,21 +94,31 @@ Change ChangesetDeriver::_nextChange()
     result.type = Change::Create;
     result.e = _toE;
 
-    LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
-              _toE->getElementId() << "; creating 'to' element: ");
+    LOG_TRACE(
+      "run out of from elements; 'from' element null; 'to' element not null: " <<
+      _toE->getElementId() << "; creating 'to' element...");
 
     _toE = _to->readNextElement();
+    if (_toE)
+    {
+      LOG_VART(_toE->getElementId());
+    }
   }
   // if we've run out of "to" elements, delete all the remaining elements in "from"
   else if (_fromE.get() && !_toE.get())
-  {
+  { 
     result.type = Change::Delete;
     result.e = _fromE;
 
-    LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
-              _fromE->getElementId() << "; deleting 'from' element: ");
+    LOG_TRACE(
+      "run out of 'to' elements; to' element null; 'from' element not null: " <<
+      _fromE->getElementId() << "; deleting 'from' element...");
 
     _fromE = _from->readNextElement();
+    if (_fromE)
+    {
+      LOG_VART(_fromE->getElementId());
+    }
   }
   else
   {
@@ -113,17 +126,26 @@ Change ChangesetDeriver::_nextChange()
     while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
            _elementComparer.isSame(_fromE, _toE))
     {
-      LOG_TRACE("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
-                " 'to' element: " << _toE->getElementId());
+      LOG_TRACE(
+        "skipping identical elements - 'from' element: " << _fromE->getElementId() <<
+        " and 'to' element: " << _toE->getElementId() << "...");
 
       _toE = _to->readNextElement();
+      if (_toE)
+      {
+        LOG_VART(_toE->getElementId());
+      }
       _fromE = _from->readNextElement();
+      if (_fromE)
+      {
+        LOG_VART(_fromE->getElementId());
+      }
     }
 
     if (!_fromE.get() && !_toE.get())
     {
       // pass
-      LOG_TRACE("both are null elements; skipping");
+      LOG_TRACE("both are null elements; skipping...");
     }
     // if we've run out of "from" elements, create all the remaining elements in "to"
     else if (!_fromE.get() && _toE.get())
@@ -131,10 +153,15 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Create;
       result.e = _toE;
 
-      LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
-                _toE->getElementId() << "; creating 'to' element: ");
+      LOG_TRACE(
+        "run out of from elements; 'from' element null; 'to' element not null: " <<
+        _toE->getElementId() << "; creating 'to' element...");
 
       _toE = _to->readNextElement();
+      if (_toE)
+      {
+        LOG_VART(_toE->getElementId());
+      }
     }
     // if we've run out of "to" elements, delete all the remaining elements in "from"
     else if (_fromE.get() && !_toE.get())
@@ -142,41 +169,100 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
-                _fromE->getElementId() << "; deleting 'from' element: ");
+      LOG_TRACE(
+        "run out of 'to' elements; to' element null; 'from' element not null: " <<
+        _fromE->getElementId() << "; deleting 'from' element...");
 
       _fromE = _from->readNextElement();
+      if (_fromE)
+      {
+        LOG_VART(_fromE->getElementId());
+      }
     }
     else if (_fromE->getElementId() == _toE->getElementId())
     {
       result.type = Change::Modify;
       result.e = _toE;
 
-      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
-                _toE->getElementId() << " modifying 'to' element: ");
+      LOG_TRACE(
+        "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
+        _toE->getElementId() << " modifying 'to' element: ");
 
       _toE = _to->readNextElement();
-      _fromE = _from->readNextElement(); //TODO: this line probably needs more testing
+      if (_toE)
+      {
+        LOG_VART(_toE->getElementId());
+      }
+      _fromE = _from->readNextElement(); //this line probably needs more testing
+      if (_fromE)
+      {
+        LOG_VART(_fromE->getElementId());
+      }
     }
     else if (_fromE->getElementId() < _toE->getElementId())
     {
-      result.type = Change::Delete;
-      result.e = _fromE;
+      if (ConfigOptions().getChangesetAllowDeletingFromFeatures() ||
+          //this assumes the 'from' dataset was loaded as unknown1
+          (!ConfigOptions().getChangesetAllowDeletingFromFeatures() &&
+           _fromE->getStatus() != Status::Unknown1))
+      {
+        result.type = Change::Delete;
+        result.e = _fromE;
 
-      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
-                _toE->getElementId() << " deleting 'from' element: ");
+        LOG_TRACE(
+          "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
+          _toE->getElementId() << "; deleting 'from' element...");
+
+//        _fromE = _from->readNextElement();
+//        if (_fromE)
+//        {
+//          LOG_VART(_fromE->getElementId());
+//        }
+      }
+      else
+      {
+        //this helps with minimizing the changeset impact on reference datasets in certain
+        //situations
+        //TODO: don't completely understand why this needs to be a modify statement to prevent
+        //dropping certain features nor what implications that has
+        result.type = Change::Modify;
+        result.e = _fromE;
+        LOG_TRACE(
+          "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
+          " due to " << ConfigOptions::getChangesetAllowDeletingFromFeaturesKey() << "=true...");
+
+//        _toE = _to->readNextElement();
+//        if (_toE)
+//        {
+//          LOG_VART(_toE->getElementId());
+//        }
+//        _fromE = _from->readNextElement();
+//        if (_fromE)
+//        {
+//          LOG_VART(_fromE->getElementId());
+//        }
+      } 
 
       _fromE = _from->readNextElement();
+      if (_fromE)
+      {
+        LOG_VART(_fromE->getElementId());
+      }
     }
     else
     {
       result.type = Change::Create;
       result.e = _toE;
 
-      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
-                _toE->getElementId() << " creating 'to' element: ");
+      LOG_TRACE(
+        "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
+        _toE->getElementId() << "; creating 'to' element...");
 
       _toE = _to->readNextElement();
+      if (_toE)
+      {
+        LOG_VART(_toE->getElementId());
+      }
     }
   }
 
@@ -191,9 +277,7 @@ Change ChangesetDeriver::readNextChange()
   }
 
   Change result = _next;
-
   _next.e.reset();
-
   return result;
 }
 

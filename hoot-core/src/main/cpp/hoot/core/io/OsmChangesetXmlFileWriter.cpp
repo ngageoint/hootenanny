@@ -148,6 +148,8 @@ void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
   }
 }
 
+//TODO: redundant tag code in here
+
 void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {
   writer.writeStartElement("node");
@@ -168,7 +170,11 @@ void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr
   else
     writer.writeAttribute("timestamp", "");
 
-  const Tags& tags = n->getTags();
+  Tags tags = n->getTags();
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(n->getStatus().getEnum()));
+  }
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
   {
     if (it.key().isEmpty() == false && it.value().isEmpty() == false)
@@ -181,8 +187,7 @@ void OsmChangesetXmlFileWriter::writeNode(QXmlStreamWriter& writer, ConstNodePtr
   }
 
   // turn this on when we start using node circularError.
-  if (n->hasCircularError() &&
-      n->getTags().getNonDebugCount() > 0)
+  if (n->hasCircularError() && n->getTags().getNonDebugCount() > 0)
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", MetadataTags::ErrorCircular());
@@ -216,7 +221,11 @@ void OsmChangesetXmlFileWriter::writeWay(QXmlStreamWriter& writer, ConstWayPtr w
     writer.writeEndElement();
   }
 
-  const Tags& tags = w->getTags();
+  Tags tags = w->getTags();
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(w->getStatus().getEnum()));
+  }
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
@@ -266,7 +275,11 @@ void OsmChangesetXmlFileWriter::writeRelation(QXmlStreamWriter& writer, ConstRel
     writer.writeEndElement();
   }
 
-  const Tags& tags = r->getTags();
+  Tags tags = r->getTags();
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    tags.set(MetadataTags::HootStatus(), QString::number(r->getStatus().getEnum()));
+  }
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
     if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)

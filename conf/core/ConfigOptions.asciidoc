@@ -144,6 +144,24 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== changeset.buffer
+
+* Data Type: double
+* Default Value: `0.0`
+
+Value in degrees by which the specified AOI (convert.bounding.box) will be expanded when calculating
+changesets.  Setting this too large with some datasets may greatly increase the changeset
+derivation time.
+
+=== changeset.allow.deleting.from.features
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, changesets derived can issue delete statements for the 'from' dataset (first dataset
+passed to the changeset deriver).  If false, no delete statements will be issued for the 'from'
+dataset.
+
 === changeset.max.size
 
 * Data Type: long

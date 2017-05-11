@@ -35,6 +35,10 @@
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/GeometryUtils.h>
+
+//GEOS
+#include <geos/geom/Envelope.h>
 
 // Qt
 #include <QUrl>
@@ -100,11 +104,23 @@ public:
       "Deriving changeset for inputs " << input1 << ", " << input2 << " and writing output to " <<
       output << "...");
 
-    //use the same unknown1 status for both so that difference doesn't influence the comparison
+    const double changesetBuffer = ConfigOptions().getChangesetBuffer();
+    if (changesetBuffer > 0.0)
+    {
+      //allow for calculating the changeset with a slightly larger AOI than the default specified
+      //bounding box; useful in certain situations
+      Envelope convertBounds =
+        GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox());
+      convertBounds.expandBy(changesetBuffer, changesetBuffer);
+      conf().set(
+        ConfigOptions::getConvertBoundingBoxKey(),
+        GeometryUtils::envelopeToConfigString(convertBounds));
+    }
+
     OsmMapPtr map1(new OsmMap());
     loadMap(map1, input1, true, Status::Unknown1);
     OsmMapPtr map2(new OsmMap());
-    loadMap(map2, input2, true, Status::Unknown1);
+    loadMap(map2, input2, true, Status::Unknown2);
     //changeset derivation requires element sorting to work properly
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));

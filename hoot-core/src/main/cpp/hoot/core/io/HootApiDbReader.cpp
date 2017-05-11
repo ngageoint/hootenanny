@@ -336,7 +336,10 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
 
   // We want the reader's status to always override any existing status
   // Unless, we really want to keep the status.
-  if (! ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid) { node->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    node->setStatus(_status);
+  }
 
   LOG_VART(node->getVersion());
 
@@ -363,7 +366,11 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { way->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    way->setStatus(_status);
+  }
+  LOG_VART(way->getStatus());
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
@@ -396,7 +403,10 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { relation->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    relation->setStatus(_status);
+  }
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);

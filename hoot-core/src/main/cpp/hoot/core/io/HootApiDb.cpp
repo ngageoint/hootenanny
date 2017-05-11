@@ -1360,6 +1360,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
   _lazyFlushBulkInsert();
 
   LOG_TRACE("Inserted way: " << ElementId(ElementType::Way, wayId));
+  LOG_TRACE(tags);
 
   return true;
 }

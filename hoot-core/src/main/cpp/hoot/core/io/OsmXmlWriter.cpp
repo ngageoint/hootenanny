@@ -214,6 +214,8 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
   LOG_VART(e->getElementId());
   LOG_VART(e->getVersion());
+  LOG_VART(e->getStatus());
+
   if (_includeCompatibilityTags)
   {
     writer.writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));

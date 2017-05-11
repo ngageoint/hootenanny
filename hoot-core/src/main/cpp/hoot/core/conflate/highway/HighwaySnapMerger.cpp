@@ -313,8 +313,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         scraps1->getElementId().getType() == eid1.getType())
     {
       LOG_TRACE(
-        "Mapping reference id " << eid1.getId() << " to " << scraps1->getElementId().getId() <<
-        "...");
+        "Mapping reference id " << eid1 << " to " << scraps1->getElementId() << "...");
       _unknown1Replacements.insert(pair<ElementId, ElementId>(eid1, scraps1->getElementId()));
       unknown1IdRetained = true;
     }
@@ -324,8 +323,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
              map->containsElement(e1Match->getElementId()) &&
              e1Match->getElementId().getType() == eid1.getType())
     {
-      LOG_TRACE("Mapping reference id " << eid1.getId() << " to " <<
-                e1Match->getElementId().getId() << "...");
+      LOG_TRACE("Mapping reference id " << eid1 << " to " << e1Match->getElementId() << "...");
       _unknown1Replacements.insert(pair<ElementId, ElementId>(eid1, e1Match->getElementId()));
       unknown1IdRetained = true;
     }

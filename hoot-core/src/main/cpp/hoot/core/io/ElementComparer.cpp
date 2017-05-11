@@ -38,37 +38,40 @@ namespace hoot
 ElementComparer::ElementComparer(Meters threshold) :
 _threshold(threshold)
 {
-
 }
 
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
   if (e1->getElementId() != e2->getElementId() ||
       !(e1->getTags() == e2->getTags()) ||
-      e1->getStatus() != e2->getStatus() ||
+      //e1->getStatus() != e2->getStatus() ||
       (e1->getVersion() != e2->getVersion()) ||
       fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
   {
-    /*if (!(e1->getTags() == e2->getTags()))
+    if (Log::getInstance().getLevel() == Log::Trace)
     {
-      LOG_TRACE("compare failed on tags:");
+      if (!(e1->getTags() == e2->getTags()))
+      {
+        LOG_TRACE("compare failed on tags:");
+      }
+    //else if (e1->getStatus() != e2->getStatus())
+    //{
+    //  LOG_TRACE("compare failed on status:");
+    //}
+      else if (e1->getVersion() != e2->getVersion())
+      {
+        LOG_TRACE("compare failed on version:");
+      }
+      else if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
+      {
+        LOG_TRACE("compare failed on circular error:");
+        LOG_VART(fabs(e1->getCircularError() - e2->getCircularError()));
+        LOG_VART(_threshold);
+      }
     }
-    else if (e1->getStatus() != e2->getStatus())
-    {
-      LOG_TRACE("compare failed on status:");
-    }
-    else if (e1->getVersion() != e2->getVersion())
-    {
-      LOG_TRACE("compare failed on version:");
-    }
-    else if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
-    {
-      LOG_TRACE("compare failed on circular error:");
-      LOG_VART(fabs(e1->getCircularError() - e2->getCircularError()));
-      LOG_VART(_threshold);
-    }*/
     LOG_VART(e1);
     LOG_VART(e2);
+
     return false;
   }
   switch (e1->getElementType().getEnum())
