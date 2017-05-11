@@ -80,9 +80,9 @@ private:
   double _oneDistance(const OsmMap& map, const boost::shared_ptr<const Element>& e1,
     const boost::shared_ptr<const Element>& e2) const;
 
-  std::vector<Coordinate> _discretize(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
+  std::vector<geos::geom::Coordinate> _discretize(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
 
-  boost::shared_ptr<Geometry> _toLines(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
+  boost::shared_ptr<geos::geom::Geometry> _toLines(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
 };
 
 }

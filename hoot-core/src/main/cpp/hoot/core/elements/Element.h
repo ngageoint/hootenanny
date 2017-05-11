@@ -56,8 +56,6 @@ namespace geos {
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class ElementListener;
 class ElementProvider;
 class ElementVisitor;
@@ -91,7 +89,7 @@ public:
    * empty or any of the child elements are missing. The caller gets ownership of the returned
    * envelope.
    */
-  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
   void setId(long id) { _getElementData().setId(id); }

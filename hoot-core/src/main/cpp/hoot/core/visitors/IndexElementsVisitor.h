@@ -73,10 +73,10 @@ public:
 
   void finalizeIndex();
 
-  static std::set<ElementId> findNeighbors(const Envelope& env,
-                                      const boost::shared_ptr<Tgs::HilbertRTree>& index,
-                                      const std::deque<ElementId>& indexToEid,
-                                      ConstOsmMapPtr pMap);
+  static std::set<ElementId> findNeighbors(const geos::geom::Envelope& env,
+                                           const boost::shared_ptr<Tgs::HilbertRTree>& index,
+                                           const std::deque<ElementId>& indexToEid,
+                                           ConstOsmMapPtr pMap);
 
 private:
 

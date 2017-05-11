@@ -35,6 +35,7 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

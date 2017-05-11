@@ -29,6 +29,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

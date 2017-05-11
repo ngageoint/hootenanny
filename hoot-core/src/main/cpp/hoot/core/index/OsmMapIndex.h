@@ -66,13 +66,13 @@ public:
    * Return all the way elements that intersect with the specified envelope along with their parent
    * relations.
    */
-  std::set<ElementId> findWayRelations(const Envelope& e) const;
+  std::set<ElementId> findWayRelations(const geos::geom::Envelope& e) const;
 
-  std::vector<long> findNodes(const Coordinate& from, Meters maxDistance) const;
+  std::vector<long> findNodes(const geos::geom::Coordinate& from, Meters maxDistance) const;
 
-  std::vector<long> findNodes(const Envelope& e) const;
+  std::vector<long> findNodes(const geos::geom::Envelope& e) const;
 
-  long findNearestWay(Coordinate c) const;
+  long findNearestWay(geos::geom::Coordinate c) const;
 
   /**
    * Should run in approximately O(lg(n)).
@@ -84,7 +84,7 @@ public:
   /**
    * Very inefficient.
    */
-  std::vector<long> findWayNeighbors(Coordinate& from, Meters buffer) const;
+  std::vector<long> findWayNeighbors(geos::geom::Coordinate& from, Meters buffer) const;
 
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
@@ -92,7 +92,7 @@ public:
    * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
-  std::vector<long> findWays(const Envelope& e) const;
+  std::vector<long> findWays(const geos::geom::Envelope& e) const;
 
   Meters getIndexSlush() const { return _indexSlush; }
 

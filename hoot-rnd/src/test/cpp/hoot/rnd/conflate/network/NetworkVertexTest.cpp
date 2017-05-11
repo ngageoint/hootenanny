@@ -30,6 +30,8 @@
 #include <hoot/rnd/conflate/network/NetworkVertex.h>
 #include <hoot/core/elements/Node.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

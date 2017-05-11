@@ -66,7 +66,7 @@ public:
    * were registered.
    */
   void createMatches(const ConstOsmMapPtr& map, std::vector<const Match *> &matches,
-    const Envelope &bounds,
+    const geos::geom::Envelope &bounds,
     boost::shared_ptr<const MatchThreshold> threshold = boost::shared_ptr<MatchThreshold>()) const;
 
   /**
@@ -93,12 +93,12 @@ public:
    *
    * @return the match candidate count
    */
-  long getMatchCandidateCount(const ConstOsmMapPtr& map, const Envelope& bounds);
+  long getMatchCandidateCount(const ConstOsmMapPtr& map, const geos::geom::Envelope& bounds);
 
 private:
 
   void _checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> matchCreator,
-                                   const Envelope& bounds) const;
+                                   const geos::geom::Envelope& bounds) const;
   static void _setMatchCreators(QStringList matchCreatorsList);
 
   static boost::shared_ptr<MatchFactory> _theInstance;

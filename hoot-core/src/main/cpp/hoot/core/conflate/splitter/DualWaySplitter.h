@@ -40,10 +40,9 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
 
-  class OsmMap;
-  class Way;
+class OsmMap;
+class Way;
 
 /**
  * Splits all "divided=yes" highways into two oneway streets. All intersections should be split
@@ -91,7 +90,7 @@ private:
 
   void _createStub(boost::shared_ptr<Way> dividedWay, long centerNodeId, long edgeNodeId);
 
-  double _dotProduct(const Coordinate& c1, const Coordinate& c2) const;
+  double _dotProduct(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2) const;
 
   void _fixLanes(boost::shared_ptr<Way> w);
 
@@ -100,7 +99,7 @@ private:
    */
   long _nearestNode(long nid, boost::shared_ptr<const Way> w);
 
-  Coordinate _normalizedVector(long nid1, long nid2);
+  geos::geom::Coordinate _normalizedVector(long nid1, long nid2);
 
   bool _onRight(long intersectionId, boost::shared_ptr<Way> inbound, long leftNn, long rightNn);
 

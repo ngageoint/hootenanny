@@ -37,9 +37,9 @@ class SearchRadiusProvider
 {
 public:
 
-  virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const = 0;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const = 0;
 
-  virtual Envelope getEnvelope(ConstNetworkVertexPtr v) const = 0;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const = 0;
 
   virtual Meters getSearchRadius(ConstNetworkEdgePtr e1) const = 0;
 

@@ -39,8 +39,6 @@ namespace geos
 namespace hoot
 {
 
-using namespace geos::geom;
-
 /**
  * Implements algorithm for computing a distance metric
  * which can be thought of as the "Vertex Hausdorff Distance".
@@ -65,9 +63,9 @@ class VertexHausdorffDistance
 public:
 
   VertexHausdorffDistance() { _distance = -1; }
-  VertexHausdorffDistance(const Geometry& g1, const Geometry& g2);
+  VertexHausdorffDistance(const geos::geom::Geometry& g1, const geos::geom::Geometry& g2);
 
-  void compute(const Geometry& g1, const Geometry& g2);
+  void compute(const geos::geom::Geometry& g1, const geos::geom::Geometry& g2);
 
   double getDistance() const { return _distance; }
 

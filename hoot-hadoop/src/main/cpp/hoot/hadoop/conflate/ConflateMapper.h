@@ -48,7 +48,7 @@ public:
 
   virtual void close() {}
 
-  static std::vector<Envelope> parseEnvelopes(const std::string& envStr);
+  static std::vector<geos::geom::Envelope> parseEnvelopes(const std::string& envStr);
 
 protected:
 
@@ -56,7 +56,7 @@ protected:
   QHash< int,boost::shared_ptr<std::stringstream> > _buffers;
   double _tileBufferSize;
 
-  std::vector<Envelope> _envelopes;
+  std::vector<geos::geom::Envelope> _envelopes;
 
   bool _initialized;
 

@@ -46,8 +46,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 /**
  * A class that can perform the operations needed by the TileConflator.
  */
@@ -92,7 +90,7 @@ public:
    * @param mapIn - The path to the input map.
    * @param mapOut - The path to store the output map.
    */
-  virtual void conflate(const std::vector<Envelope>& tiles, QString mapIn, QString mapOut) = 0;
+  virtual void conflate(const std::vector<geos::geom::Envelope>& tiles, QString mapIn, QString mapOut) = 0;
 
   /**
    * Returns true if the specified path exists.

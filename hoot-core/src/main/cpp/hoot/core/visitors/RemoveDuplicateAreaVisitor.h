@@ -66,14 +66,14 @@ public:
 
 private:
 
- boost::shared_ptr<Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
+  boost::shared_ptr<geos::geom::Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
 
   bool _equals(const boost::shared_ptr<Element>& e1, const boost::shared_ptr<Element> &e2);
 
   void _removeOne(boost::shared_ptr<Element> e1,boost::shared_ptr<Element> e2);
 
   std::auto_ptr<TagDifferencer> _diff;
-  QHash<ElementId,boost::shared_ptr<Geometry> > _geoms;
+  QHash<ElementId,boost::shared_ptr<geos::geom::Geometry> > _geoms;
 };
 
 }

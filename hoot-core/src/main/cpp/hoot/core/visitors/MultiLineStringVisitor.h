@@ -66,7 +66,7 @@ public:
    * visited and clear any history. If it is called again (without visiting) it will return a valid
    * but empty geometry.
    */
-  MultiLineString* createMultiLineString();
+  geos::geom::MultiLineString* createMultiLineString();
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -74,7 +74,7 @@ public:
 
 protected:
   ConstElementProviderPtr _provider;
-  std::vector<Geometry*>* _ls;
+  std::vector<geos::geom::Geometry*>* _ls;
 };
 
 }

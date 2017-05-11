@@ -38,6 +38,7 @@
 #include <QImage>
 #include <QPainter>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

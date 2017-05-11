@@ -105,7 +105,7 @@ private:
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
 
-  void _addContainedWaysToGroup(const Geometry& g, const boost::shared_ptr<Element>& neighbor);
+  void _addContainedWaysToGroup(const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
   void _addNeighborsToGroup(const WayPtr& w);
   void _addNeighborsToGroup(const RelationPtr& r);
 

@@ -54,8 +54,6 @@ class TileBoundsCalculatorTest;
 class OsmMap;
 class Node;
 
-using namespace geos::geom;
-
 /**
  * Caculates divisions as the center of pixels.
  *
@@ -149,7 +147,7 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
-  std::vector< std::vector<Envelope> > calculateTiles();
+  std::vector< std::vector<geos::geom::Envelope> > calculateTiles();
 
   void renderImage(boost::shared_ptr<OsmMap> map);
 
@@ -202,7 +200,7 @@ private:
 
   long _sumPixels(const PixelBox& pb) { return _sumPixels(pb, _r1) + _sumPixels(pb, _r2); }
 
-  Envelope _toEnvelope(const PixelBox& pb);
+  geos::geom::Envelope _toEnvelope(const PixelBox& pb);
 
   // used for white box testing.
   friend class TileBoundsCalculatorTest;

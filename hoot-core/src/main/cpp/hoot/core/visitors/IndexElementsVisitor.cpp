@@ -37,6 +37,7 @@
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
 
+using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
 

@@ -33,9 +33,11 @@
 // opencv
 #include <opencv/cv.h>
 
+using namespace cv;
+using namespace geos::geom;
+
 namespace hoot
 {
-using namespace cv;
 
 class LineSegmentResult
 {

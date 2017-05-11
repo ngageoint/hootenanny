@@ -101,7 +101,7 @@ private:
   WayPtr _a;
   std::auto_ptr<FindNodesInWayFactory> _nf;
 
-  NodePtr _createNode(const Coordinate& c);
+  NodePtr _createNode(const geos::geom::Coordinate& c);
 };
 
 }

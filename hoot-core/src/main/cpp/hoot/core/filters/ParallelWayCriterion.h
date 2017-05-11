@@ -38,8 +38,8 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class ParallelWayCriterion : public ElementCriterion
 {
@@ -70,7 +70,7 @@ private:
 
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
-  std::vector<Point*> _points;
+  std::vector<geos::geom::Point*> _points;
   Degrees _threshold;
 };
 

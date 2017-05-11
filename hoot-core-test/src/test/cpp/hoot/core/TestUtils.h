@@ -111,7 +111,7 @@ public:
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
     double circularError = 15.0, Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce = 15,
+  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[], Meters ce = 15,
                           const QString& note = "");
 
   static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,

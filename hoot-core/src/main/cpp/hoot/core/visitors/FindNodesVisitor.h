@@ -57,7 +57,7 @@ public:
 
   static std::vector<long> findNodes(const ConstOsmMapPtr& map,
                                      ElementCriterion* pCrit,
-                                     const Coordinate& refCoord,
+                                     const geos::geom::Coordinate& refCoord,
                                      Meters maxDistance);
 
   // Convenience method for finding nodes that contain the given tag

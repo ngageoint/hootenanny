@@ -37,6 +37,7 @@
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

@@ -51,8 +51,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class OsmMap;
 class NodeReplacements;
 
@@ -95,7 +93,7 @@ private:
   Degrees _buffer;
 
   // [x][y]
-  std::vector< std::vector<Envelope> > _tiles;
+  std::vector< std::vector<geos::geom::Envelope> > _tiles;
 
   int _mapPart;
 

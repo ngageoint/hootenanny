@@ -39,7 +39,7 @@ public:
    * Calculates the envelope and returns it. In some cases this may be pre-calculated, in others
    * it may be quite expensive.
    */
-  virtual Envelope calculateEnvelope() const = 0;
+  virtual geos::geom::Envelope calculateEnvelope() const = 0;
 };
 
 }

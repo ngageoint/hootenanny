@@ -34,6 +34,7 @@
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

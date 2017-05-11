@@ -44,8 +44,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class SearchRadiusCalculatorTest;
 class RubberSheetTest;
 class OsmMap;
@@ -143,9 +141,9 @@ private:
   {
     public:
       // Unknown1 coordinate
-      Coordinate c1;
+      geos::geom::Coordinate c1;
       // Unknown2 coordinate
-      Coordinate c2;
+      geos::geom::Coordinate c2;
 
       double dx() const { return c1.x - c2.x; }
 
@@ -185,7 +183,7 @@ private:
 
   boost::shared_ptr<Tgs::Interpolator> _readInterpolator(QIODevice& is);
 
-  Coordinate _translate(const Coordinate& c, Status s);
+  geos::geom::Coordinate _translate(const geos::geom::Coordinate& c, Status s);
 
   void _writeInterpolator(boost::shared_ptr<const Tgs::Interpolator> interpolator, QIODevice& os) const;
 

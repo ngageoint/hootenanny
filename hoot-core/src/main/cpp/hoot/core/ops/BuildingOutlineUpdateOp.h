@@ -76,7 +76,7 @@ private:
   void _mergeNodes(const boost::shared_ptr<Element>& changed,
     const RelationPtr& reference);
 
-  void _unionOutline(const RelationPtr& building, boost::shared_ptr<Geometry> outline,
+  void _unionOutline(const RelationPtr& building, boost::shared_ptr<geos::geom::Geometry> outline,
                      ElementPtr buildingMember);
 
 };

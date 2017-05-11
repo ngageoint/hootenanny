@@ -41,6 +41,7 @@
 
 namespace hoot
 {
+
 class Match;
 class MatchClassification;
 class MatchFactory;
@@ -49,8 +50,6 @@ class Merger;
 class MergerFactory;
 class Settings;
 class ElementId;
-
-using namespace geos::geom;
 
 /**
  * A different form of conflation from the standard greedy conflation. This is a work in progress
@@ -96,7 +95,7 @@ public:
 
 private:
 
-  Envelope _bounds;
+  geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   boost::shared_ptr<MergerFactory> _mergerFactory;

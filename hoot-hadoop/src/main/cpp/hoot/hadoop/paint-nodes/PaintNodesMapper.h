@@ -42,7 +42,7 @@ protected:
   virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
   NodeDensity _nd;
-  Envelope _envelope;
+  geos::geom::Envelope _envelope;
   double _pixelSize;
   int _width, _height;
 

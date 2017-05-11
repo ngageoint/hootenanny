@@ -141,7 +141,7 @@ private:
    */
   ConstNodePtr _getStartNode();
 
-  bool _isInBounds(const WayLocation& wl, const boost::shared_ptr<LineString>& ls);
+  bool _isInBounds(const WayLocation& wl, const boost::shared_ptr<geos::geom::LineString>& ls);
 
   bool _isOutsideInterval(int ia);
 };

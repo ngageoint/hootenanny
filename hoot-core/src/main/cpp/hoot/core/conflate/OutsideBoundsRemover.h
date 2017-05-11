@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace geos::geom;
 
 class OsmMap;
 
@@ -49,19 +48,19 @@ class OsmMap;
 class OutsideBoundsRemover
 {
 public:
-  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse = false);
+  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e, bool inverse = false);
 
   /**
    * Removes ways completely outside the given envelope.
    */
-  static void removeWays(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse = false);
+  static void removeWays(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e, bool inverse = false);
 
   void removeWays();
 
 protected:
 
   boost::shared_ptr<OsmMap> _inputMap;
-  Envelope _envelope;
+  geos::geom::Envelope _envelope;
   bool _inverse;
 };
 

@@ -34,16 +34,15 @@
 
 namespace geos
 {
-namespace geom
-{
-class Geometry;
-class LinearRing;
-}
+  namespace geom
+  {
+    class Geometry;
+    class LinearRing;
+  }
 }
 
 namespace hoot
 {
-using namespace geos::geom;
 
 class Way;
 
@@ -93,7 +92,7 @@ public:
 
   const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
 
-  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType::Relation; }
 

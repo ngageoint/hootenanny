@@ -40,8 +40,6 @@ namespace hoot
 
 class Element;
 
-using namespace geos::geom;
-
 /**
  * isSatisfied returns true if an element is
  * within the specified distance of the given center
@@ -53,7 +51,7 @@ public:
   static std::string className() { return "hoot::DistanceNodeCriterion"; }
 
   DistanceNodeCriterion() {}
-  DistanceNodeCriterion(Coordinate center, Meters distance);
+  DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
 
   virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
@@ -61,7 +59,7 @@ public:
 
 private:
 
-  Coordinate _center;
+  geos::geom::Coordinate _center;
   Meters _distance;
 };
 

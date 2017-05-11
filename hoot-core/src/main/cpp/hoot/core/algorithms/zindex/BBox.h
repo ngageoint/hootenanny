@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class BBox
 {
 public:
@@ -43,7 +41,7 @@ public:
 
   BBox(std::vector<double> min, std::vector<double> max);
 
-  BBox(Envelope envelope);
+  BBox(geos::geom::Envelope envelope);
 
   virtual ~BBox();
 

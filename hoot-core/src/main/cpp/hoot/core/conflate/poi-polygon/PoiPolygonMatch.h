@@ -137,8 +137,8 @@ private:
   ElementId _eid2;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
-  boost::shared_ptr<Geometry> _poiGeom;
-  boost::shared_ptr<Geometry> _polyGeom;
+  boost::shared_ptr<geos::geom::Geometry> _poiGeom;
+  boost::shared_ptr<geos::geom::Geometry> _polyGeom;
   bool _e1IsPoi;
 
   //Settings _settings;

@@ -46,6 +46,7 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -250,7 +251,7 @@ void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &ma
   vector<const Match*> matches;
   Envelope bounds;
   bounds.setToNull();
- boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
+  boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
   _matchFactory->createMatches(map, matches, bounds, mt);
   // go through all the manipulators
   LOG_INFO("Processing " << matches.size() << " matches...");

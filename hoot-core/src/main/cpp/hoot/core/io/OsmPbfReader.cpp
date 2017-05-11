@@ -64,6 +64,7 @@ using namespace hoot::pb;
 
 #include "PbfConstants.h"
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

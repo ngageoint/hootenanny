@@ -72,7 +72,7 @@ public:
 
 private:
 
-  double characteristic(Geometry* g) const;
+  double characteristic(geos::geom::Geometry* g) const;
 };
 
 }

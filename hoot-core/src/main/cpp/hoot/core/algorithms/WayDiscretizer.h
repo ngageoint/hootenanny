@@ -54,8 +54,6 @@ namespace hoot {
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class WayDiscretizer
 {
 public:
@@ -68,7 +66,7 @@ public:
    *
    * @param spacing - The maximum distance between points
    */
-  void discretize(double spacing, std::vector<Coordinate>& result);
+  void discretize(double spacing, std::vector<geos::geom::Coordinate>& result);
 
   /**
    * The above function is much more efficient.
