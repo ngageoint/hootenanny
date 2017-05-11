@@ -111,7 +111,7 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
     unsigned long currentChangesetId;
     unsigned long changesetsWritten;
     unsigned int changesInChangeset;
-    Envelope changesetBounds;
+    geos::geom::Envelope changesetBounds;
   };
 
   struct UnresolvedRelationReference

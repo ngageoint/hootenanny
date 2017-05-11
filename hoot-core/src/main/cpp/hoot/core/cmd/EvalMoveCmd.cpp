@@ -51,6 +51,7 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

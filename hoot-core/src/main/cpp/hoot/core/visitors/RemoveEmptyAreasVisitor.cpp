@@ -35,6 +35,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 
+using namespace geos::geom;
 namespace hoot
 {
 
@@ -49,7 +50,7 @@ void RemoveEmptyAreasVisitor::visit(const ConstElementPtr& e)
   // no need to visit nodes.
   if (e->getElementType() != ElementType::Node)
   {
-   boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
+    boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
     visit(ee);
   }
 }
@@ -63,7 +64,7 @@ void RemoveEmptyAreasVisitor::visit(const boost::shared_ptr<Element>& e)
 
   if (OsmSchema::getInstance().isArea(e->getTags(), e->getElementType()))
   {
-   boost::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
+    boost::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
 
     if (g->getArea() == 0.0)
     {

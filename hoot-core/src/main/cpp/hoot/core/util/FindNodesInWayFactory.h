@@ -47,7 +47,7 @@ public:
 
   void addWay(const ConstWayPtr& w);
 
-  virtual NodePtr createNode(const OsmMapPtr& map, const Coordinate& c,
+  virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
     Status s, double circularError);
 
 private:

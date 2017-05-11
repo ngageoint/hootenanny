@@ -38,9 +38,8 @@
 
 namespace hoot
 {
-  class Way;
 
-  using namespace geos::geom;
+class Way;
 
 class DividedHighwayManipulation : public Manipulation
 {
@@ -85,13 +84,14 @@ private:
   /**
    * Calculates the normalized vector between the nearest points on g1 and g2.
    */
-  Coordinate _nearestVector(boost::shared_ptr<Geometry> g1, boost::shared_ptr<Geometry> g2) const;
+  geos::geom::Coordinate _nearestVector(boost::shared_ptr<geos::geom::Geometry> g1,
+                                        boost::shared_ptr<geos::geom::Geometry> g2) const;
 
   void _createStub(OsmMapPtr map, WayPtr oneway, long nodeId) const;
 
   void _mergeInbound(OsmMapPtr map, WayPtr inbound, long nodeId) const;
 
-  double _dotProduct(const Coordinate& c1, const Coordinate& c2) const;
+  double _dotProduct(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2) const;
 };
 
 }

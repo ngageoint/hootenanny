@@ -47,8 +47,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 /**
  * A class that can perform the operations needed by the TileConflator.
  */
@@ -69,7 +67,7 @@ public:
    * @param mapIn - The path to the input map.
    * @param mapOut - The path to store the output map.
    */
-  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const std::vector<Envelope>& tiles,
+  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const std::vector<geos::geom::Envelope>& tiles,
                        QString mapIn, QString mapOut) = 0;
 
   /**

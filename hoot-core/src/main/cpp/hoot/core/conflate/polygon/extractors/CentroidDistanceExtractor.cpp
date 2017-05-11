@@ -35,6 +35,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

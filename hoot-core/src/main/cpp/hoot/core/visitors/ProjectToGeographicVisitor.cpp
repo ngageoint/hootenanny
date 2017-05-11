@@ -34,6 +34,8 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/MapProjector.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

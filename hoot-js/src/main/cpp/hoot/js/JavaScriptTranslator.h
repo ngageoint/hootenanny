@@ -104,7 +104,7 @@ public:
     geos::geom::GeometryTypeId geometryType);
 
   virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    GeometryTypeId geometryType);
+    geos::geom::GeometryTypeId geometryType);
 
   virtual void setConfiguration(const Settings& conf);
 

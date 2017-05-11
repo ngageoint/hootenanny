@@ -47,6 +47,7 @@ using namespace boost;
 #include <iomanip>
 #include <iostream>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

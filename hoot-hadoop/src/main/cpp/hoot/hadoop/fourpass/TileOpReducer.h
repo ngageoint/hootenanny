@@ -50,7 +50,7 @@ public:
 
 private:
 
-  std::vector<Envelope> _envelopes;
+  std::vector<geos::geom::Envelope> _envelopes;
 
   bool _initialized;
 
@@ -70,7 +70,7 @@ private:
 
   void _emitMap(boost::shared_ptr<OsmMap> map);
 
-  const Envelope& _getContainingEnvelope(const boost::shared_ptr<OsmMap>& map);
+  const geos::geom::Envelope& _getContainingEnvelope(const boost::shared_ptr<OsmMap>& map);
 
   void _init(HadoopPipes::ReduceContext& context);
 

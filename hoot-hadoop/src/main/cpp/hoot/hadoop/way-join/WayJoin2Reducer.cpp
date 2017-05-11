@@ -38,6 +38,7 @@
 
 #include "WayJoin2Mapper.h"
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

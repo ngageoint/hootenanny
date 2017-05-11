@@ -44,6 +44,7 @@
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

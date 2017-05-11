@@ -43,8 +43,6 @@ namespace hoot
 class Way;
 class OsmMapIndex;
 
-using namespace geos::geom;
-
 /**
  */
 class KnnWayIterator : public Tgs::KnnIterator
@@ -76,8 +74,8 @@ private:
   const std::vector<long>& _treeIdToWid;
 
   long _wayId;
-  boost::shared_ptr<LineString> _ls;
-  const LineString* _lsFast;
+  boost::shared_ptr<geos::geom::LineString> _ls;
+  const geos::geom::LineString* _lsFast;
 };
 
 }

@@ -36,6 +36,7 @@ using namespace pp;
 
 #include "../MapReduceTestFixture.h"
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

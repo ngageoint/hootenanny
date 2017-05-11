@@ -45,8 +45,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class PermuteGridCalculator;
 
 /**
@@ -125,11 +123,11 @@ private:
   int _seed;
   Meters _sigmaRx, _sigmaRy;
   Meters _sigmaSx, _sigmaSy;
-  /*
-  * Previously the full covariance method was also supported as described in Doucette et al. However,
-  the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
-  the full covariance method we were able to simplify the build process and reduce maintenance cost.
-  */
+  /**
+   * Previously the full covariance method was also supported as described in Doucette et al. However,
+   * the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
+   * the full covariance method we were able to simplify the build process and reduce maintenance cost.
+   */
   QString _permuteAlgorithm;
   boost::shared_ptr<PermuteGridCalculator> _gridCalculator;
   QStringList _namedOps;

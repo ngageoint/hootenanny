@@ -36,8 +36,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 namespace hybrid
 {
 
@@ -149,7 +147,7 @@ public:
   /**
    * Returns all bounding boxes that are within radius of c.
    */
-  std::set<DataType> find(const Coordinate& c, double radius, const KeyType& k, int D) const
+  std::set<DataType> find(const geos::geom::Coordinate& c, double radius, const KeyType& k, int D) const
   {
     std::set<DataType> result;
     _rLayer.setQuery(c, radius);

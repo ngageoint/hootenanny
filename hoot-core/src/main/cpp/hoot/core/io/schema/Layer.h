@@ -42,7 +42,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
 class FeatureDefinition;
 
 class Layer
@@ -52,13 +51,13 @@ public:
 
   const boost::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 
-  GeometryTypeId getGeometryType() const { return _geometryType; }
+  geos::geom::GeometryTypeId getGeometryType() const { return _geometryType; }
 
   QString getName() const { return _name; }
 
   void setFeatureDefinition(boost::shared_ptr<FeatureDefinition> fd) { _definition = fd; }
 
-  void setGeometryType(GeometryTypeId geometryType) { _geometryType = geometryType; }
+  void setGeometryType(geos::geom::GeometryTypeId geometryType) { _geometryType = geometryType; }
 
   void setName(QString name) { _name = name; }
 

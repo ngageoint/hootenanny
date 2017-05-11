@@ -34,6 +34,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/ElementConverter.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

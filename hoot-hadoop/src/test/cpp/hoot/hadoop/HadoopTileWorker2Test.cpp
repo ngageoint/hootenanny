@@ -44,6 +44,7 @@ using namespace pp;
 
 #include "MapReduceTestFixture.h"
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -68,7 +69,7 @@ public:
     fs.copyFromLocal("test-files/DcTigerRoads.pbf", outDir + "in1.pbf/DcTigerRoads.pbf");
     fs.copyFromLocal("test-files/DcGisRoads.pbf", outDir + "in2.pbf/DcGisRoads.pbf");
 
-   boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
+    boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
     FourPassManager uut(worker);
     // ~240m
     uut.setBuffer(8.0 / 3600.0);
@@ -78,14 +79,14 @@ public:
                    QString::fromStdString(outDir) + "in2.pbf");
 
     Envelope env(-77.039, -77.033, 38.892, 38.896);
-   boost::shared_ptr<OpList> op(new OpList());
+    boost::shared_ptr<OpList> op(new OpList());
     op->addOp(boost::shared_ptr<OsmMapOperation>(new MapCropper(env)));
     op->addOp(boost::shared_ptr<OsmMapOperation>(new MergeNearbyNodes(10)));
 
     uut.setOperation(op);
     uut.apply(QString::fromStdString(outDir) + "HadoopTileWorker2Test.pbf");
 
-   OsmMapPtr map(new OsmMap);
+    OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorker2Test.pbf");

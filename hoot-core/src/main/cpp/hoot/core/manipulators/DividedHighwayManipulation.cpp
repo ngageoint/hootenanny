@@ -49,6 +49,7 @@ using namespace geos::operation::distance;
 // Qt
 #include <QDebug>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

@@ -35,8 +35,6 @@ namespace hoot
 
 class Node;
 
-using namespace geos::geom;
-
 class MapStats
 {
 public:
@@ -50,7 +48,7 @@ public:
 
   void expandEnvelope(double x, double y);
 
-  void expandEnvelope(const Envelope& e);
+  void expandEnvelope(const geos::geom::Envelope& e);
 
   void expandNodeRange(const boost::shared_ptr<const Node>& n);
 
@@ -60,7 +58,7 @@ public:
 
   void expandWayRange(long wid);
 
-  const Envelope& getEnvelope() const { return _envelope; }
+  const geos::geom::Envelope& getEnvelope() const { return _envelope; }
 
   long getMaxNodeId() const { return _maxNodeId; }
 
@@ -93,7 +91,7 @@ public:
   /**
    * Mimics Envelope::toString(), but with a higher precision.
    */
-  static std::string toString(const Envelope& e);
+  static std::string toString(const geos::geom::Envelope& e);
 
   void write(pp::Configuration& c) const;
 
@@ -104,9 +102,9 @@ private:
   long _minNodeId, _maxNodeId;
   long _minWayId, _maxWayId;
   long _minRelationId, _maxRelationId;
-  Envelope _envelope;
+  geos::geom::Envelope _envelope;
 
-  Envelope _parseEnvelope(const std::string& str);
+  geos::geom::Envelope _parseEnvelope(const std::string& str);
 
   std::vector<std::string> _split(const std::string& str, const std::string& delimiters);
 };

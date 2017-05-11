@@ -42,8 +42,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace geos::geom;
-
 /**
  * This class works with four pass as long as distance is less than the four pass buffer.
  *
@@ -74,7 +72,7 @@ protected:
 
   boost::shared_ptr<OsmMap> _map;
   Meters _distance;
-  Envelope _bounds;
+  geos::geom::Envelope _bounds;
 };
 
 }

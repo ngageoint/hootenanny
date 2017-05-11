@@ -37,8 +37,6 @@ namespace hoot
 
 class OsmMapOperation;
 
-using namespace geos::geom;
-
 /**
  * Applies a map operation in four passes across a map. This may not be applicable for all possible
  * map operations, but it should work on many operations. Each operation should be evaluated
@@ -60,7 +58,7 @@ public:
    * @param buffer The size of the buffer in degrees.
    * @param out The output path on HDFS.
    */
-  void apply(QString in, std::vector<Envelope> envelopes, double buffer, QString out);
+  void apply(QString in, std::vector<geos::geom::Envelope> envelopes, double buffer, QString out);
 
   /**
    * Sets the operation that will be applied to the map. This operation must also implement
@@ -70,7 +68,7 @@ public:
 
 private:
 
-  std::string _toString(const std::vector<Envelope>& e);
+  std::string _toString(const std::vector<geos::geom::Envelope>& e);
 
   boost::shared_ptr<OsmMapOperation> _op;
 };

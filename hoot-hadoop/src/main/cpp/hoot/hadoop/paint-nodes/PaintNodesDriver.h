@@ -30,8 +30,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class PaintNodesDriver : public Driver
 {
 public:
@@ -42,7 +40,7 @@ public:
    * into the input directory as "all.stats".
    * @param input Input directory containing .pbf file(s). This must be a directory.
    */
-  const cv::Mat& calculateDensity(const Envelope& e, double pixelSize, QString input);
+  const cv::Mat& calculateDensity(const geos::geom::Envelope& e, double pixelSize, QString input);
 
 private:
   /// Number of nodes per pixel

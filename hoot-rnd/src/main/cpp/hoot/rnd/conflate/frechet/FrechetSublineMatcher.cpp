@@ -35,6 +35,7 @@
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

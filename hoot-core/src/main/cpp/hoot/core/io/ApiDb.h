@@ -53,8 +53,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class BulkInsert;
 class InternalIdReserver;
 class HootApiDbWriterTest;
@@ -210,7 +208,7 @@ public:
    * @param bounds the query bounds
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> selectNodesByBounds(const Envelope& bounds);
+  boost::shared_ptr<QSqlQuery> selectNodesByBounds(const geos::geom::Envelope& bounds);
 
   /**
    * Returns the IDs of all ways that own the input node IDs
@@ -371,7 +369,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
   QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
-  std::vector<Range> _getTileRanges(const Envelope& env) const;
+  std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;
 };
 
 }

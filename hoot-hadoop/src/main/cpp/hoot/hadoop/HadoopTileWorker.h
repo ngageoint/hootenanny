@@ -37,7 +37,7 @@ public:
 
   virtual void cleanup(QString mapIn, QString mapOut);
 
-  virtual void conflate(const std::vector<Envelope>& tiles, QString mapIn, QString mapOut);
+  virtual void conflate(const std::vector<geos::geom::Envelope>& tiles, QString mapIn, QString mapOut);
 
   virtual bool exists(QString dir);
 

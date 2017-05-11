@@ -80,7 +80,7 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
-  virtual Envelope calculateEnvelope() const;
+  virtual geos::geom::Envelope calculateEnvelope() const;
 
   virtual void setConfiguration(const Settings &conf);
 

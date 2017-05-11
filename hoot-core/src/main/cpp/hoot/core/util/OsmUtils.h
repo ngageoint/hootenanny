@@ -34,7 +34,6 @@
 // GEOS
 
 #include <geos/geom/Coordinate.h>
-using namespace geos::geom;
 
 // Qt
 #include <QString>
@@ -88,7 +87,7 @@ class OsmUtils
       @todo Move to Element?
       */
     static QList<boost::shared_ptr<const Node> > nodeIdsToNodes(const QList<long>& nodeIds,
-                                                        boost::shared_ptr<const OsmMap> map);
+                                                                boost::shared_ptr<const OsmMap> map);
 
     /**
       Converts a OSM node to a coordinate
@@ -96,7 +95,7 @@ class OsmUtils
       @param node the node to convert
       @returns a coordinate
       */
-    static Coordinate nodeToCoord(boost::shared_ptr<const Node> node);
+    static geos::geom::Coordinate nodeToCoord(boost::shared_ptr<const Node> node);
 
     /**
       Converts OSM nodes to a coordinates
@@ -104,7 +103,7 @@ class OsmUtils
       @param nodes the nodes to convert
       @returns coordinates
       */
-    static QList<Coordinate> nodesToCoords(const QList<boost::shared_ptr<const Node> >& nodes);
+    static QList<geos::geom::Coordinate> nodesToCoords(const QList<boost::shared_ptr<const Node> >& nodes);
 
     /**
       Converts a coordinate to an OSM node
@@ -113,7 +112,8 @@ class OsmUtils
       @param map the map owning the node to be created
       @returns a node
       */
-    static boost::shared_ptr<const Node> coordToNode(const Coordinate& coord,boost::shared_ptr<const OsmMap> map);
+    static boost::shared_ptr<const Node> coordToNode(const geos::geom::Coordinate& coord,
+                                                     boost::shared_ptr<const OsmMap> map);
 
     /**
       Converts coordinates to OSM nodes
@@ -122,8 +122,8 @@ class OsmUtils
       @param map the map owning the nodes to be created
       @returns nodes
       */
-    static QList<boost::shared_ptr<const Node> > coordsToNodes(const QList<Coordinate>& coords,
-                                                       boost::shared_ptr<const OsmMap> map);
+    static QList<boost::shared_ptr<const Node> > coordsToNodes(const QList<geos::geom::Coordinate>& coords,
+                                                               boost::shared_ptr<const OsmMap> map);
 
     /**
       Loads an OSM map into an OsmMap object

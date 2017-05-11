@@ -46,8 +46,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class OsmMap;
 
 /**
@@ -73,15 +71,15 @@ public:
 
   static boost::shared_ptr<OsmMap> removeNodes(boost::shared_ptr<const OsmMap> map);
 
-  static void removeNodes(boost::shared_ptr<OsmMap>& map, const Envelope& e);
+  static void removeNodes(boost::shared_ptr<OsmMap>& map, const geos::geom::Envelope& e);
 
-  virtual void setBounds(const Envelope &bounds);
+  virtual void setBounds(const geos::geom::Envelope &bounds);
 
   virtual void writeObject(QDataStream& os) const;
 
 protected:
 
-  Envelope _bounds;
+  geos::geom::Envelope _bounds;
   std::set<long> _usedNodes;
 
 };

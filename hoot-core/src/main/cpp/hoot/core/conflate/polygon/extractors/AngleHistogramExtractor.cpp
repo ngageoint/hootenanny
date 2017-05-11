@@ -36,6 +36,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/GeometryConverter.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

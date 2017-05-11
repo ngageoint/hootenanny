@@ -48,8 +48,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 namespace hybrid
 {
 
@@ -71,7 +69,7 @@ public:
     _children.clear();
   }
 
-  void addChild(Node<KeyType, DataType>* n, const Envelope& e)
+  void addChild(Node<KeyType, DataType>* n, const geos::geom::Envelope& e)
   {
     if (n != 0)
     {
@@ -84,7 +82,7 @@ public:
 
   virtual size_t getChildCount() const { return _children.size(); }
 
-  const Envelope& getChildEnvelope(size_t i) const { return _childEnvelope[i]; }
+  const geos::geom::Envelope& getChildEnvelope(size_t i) const { return _childEnvelope[i]; }
 
   virtual QString toString(QString indent = QString()) const
   {
@@ -100,7 +98,7 @@ public:
 
 private:
   std::vector<Node<KeyType, DataType>*> _children;
-  std::vector<Envelope> _childEnvelope;
+  std::vector<geos::geom::Envelope> _childEnvelope;
 };
 
 /**
@@ -186,7 +184,7 @@ public:
         size_t iStart = start + elementCount * i / childCount;
         size_t iEnd = start + elementCount * (i + 1) / childCount;
 
-        Envelope e;
+        geos::geom::Envelope e;
         for (size_t j = iStart; j < iEnd; ++j)
         {
           e.expandToInclude(&(keys[order[j]].getEnvelope()));
@@ -200,9 +198,9 @@ public:
     }
   }
 
-  double distance(const Coordinate& c, const Envelope& e) const
+  double distance(const geos::geom::Coordinate& c, const geos::geom::Envelope& e) const
   {
-    Envelope e2(c.x, c.x, c.y, c.y);
+    geos::geom::Envelope e2(c.x, c.x, c.y, c.y);
     _distanceCount++;
     return e.distance(&e2);
   }
@@ -260,7 +258,7 @@ public:
 
   int getDepth() const { return _depth; }
 
-  const Coordinate& getQueryCoordinate() const { return _queryC; }
+  const geos::geom::Coordinate& getQueryCoordinate() const { return _queryC; }
 
   double getQueryRadius() const { return _queryRadius; }
 
@@ -296,7 +294,7 @@ public:
     _order = &order;
     _hilbertValues.resize(_keys->size());
 
-    Envelope bounds;
+    geos::geom::Envelope bounds;
     if (keys.size() > 0)
     {
       bounds = keys[0].getEnvelope();
@@ -308,11 +306,11 @@ public:
 
     // calculate the hibert values of each key.
     int hcoord[2];
-    Coordinate center;
+    geos::geom::Coordinate center;
     Tgs::HilbertCurve curve(2, 8);
     for (size_t i = 0; i < _keys->size(); ++i)
     {
-      const Envelope& e = keys[i].getEnvelope();
+      const geos::geom::Envelope& e = keys[i].getEnvelope();
       e.centre(center);
       hcoord[0] = round((center.x - bounds.getMinX()) / (bounds.getMaxX() - bounds.getMinX())
                         * 0xFF);
@@ -323,14 +321,14 @@ public:
     }
   }
 
-  void setQuery(const Coordinate& c, double radius) const
+  void setQuery(const geos::geom::Coordinate& c, double radius) const
   {
     _queryC = c;
     _queryRadius = radius;
   }
 
 private:
-  mutable Coordinate _queryC;
+  mutable geos::geom::Coordinate _queryC;
   mutable double _queryRadius;
 
   int _childCount;
@@ -399,7 +397,7 @@ public:
   /**
    * Returns all bounding boxes that are within radius of c.
    */
-  std::set<DataType> find(const Coordinate& c, double radius) const
+  std::set<DataType> find(const geos::geom::Coordinate& c, double radius) const
   {
     std::set<DataType> result;
     _layer.setQuery(c, radius);

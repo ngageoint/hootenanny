@@ -44,6 +44,8 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

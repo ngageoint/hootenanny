@@ -59,6 +59,7 @@ using namespace geos::operation::distance;
 #include <tgs/Statistics/Random.h>
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
 
+using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
 
@@ -79,7 +80,7 @@ cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c)
 
   // find the nearest feature
   long wId = map->getIndex().findNearestWay(c);
- WayPtr w = map->getWay(wId);
+  WayPtr w = map->getWay(wId);
 
   // split way at c
   WayLocation wl = LocationOfPoint::locate(map, w, c);
@@ -94,7 +95,7 @@ cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c)
   assert(wl.isNode() == true);
 
   // populate graph
- boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
   ShortestPath sp(graph);
@@ -168,7 +169,7 @@ double GraphComparator::compareMaps()
     _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
           _projectedBounds.MinY;
 
-   OsmMapPtr referenceMap;
+    OsmMapPtr referenceMap;
     // pick one map as the reference map
     if (Random::instance()->coinToss())
     {
@@ -267,7 +268,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
     cout << c[i].x << " " << c[i].y << endl;
     // find the nearest feature
     long wId = map->getIndex().findNearestWay(c[i]);
-   WayPtr w = map->getWay(wId);
+    WayPtr w = map->getWay(wId);
 
     // split way at c
     WayLocation wl = LocationOfPoint::locate(map, w, c[i]);
@@ -286,7 +287,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   for (size_t i = 0; i < c.size(); i++)
   {
     long wId = map->getIndex().findNearestWay(c[i]);
-   WayPtr w = map->getWay(wId);
+    WayPtr w = map->getWay(wId);
 
     WayLocation wl = LocationOfPoint::locate(map, w, c[i]);
 
@@ -304,7 +305,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   _saveImage(mat, output, -1.0, false);
   _saveImage(mat, output.replace(".png", "2.png"), -1.0, true);
 
- boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   srs->importFromEPSG(900913);
 
   Coordinate c1 = MapProjector::project(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);

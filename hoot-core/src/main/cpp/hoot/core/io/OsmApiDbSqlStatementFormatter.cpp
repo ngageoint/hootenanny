@@ -33,6 +33,8 @@
 // Qt
 #include <QDateTime>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

@@ -29,6 +29,7 @@
 
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -46,15 +47,15 @@ void FindNodesInWayFactory::addWay(const ConstWayPtr& w)
 }
 
 NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map,
-                                                   const Coordinate& c, Status s,
-                                                   double circularError)
+                                          const Coordinate& c, Status s,
+                                          double circularError)
 {
   long result = std::numeric_limits<long>::max();
 
   for (set<long>::const_iterator it = _nodesToSearch.begin(); it != _nodesToSearch.end(); ++it)
   {
     long nid = *it;
-   ConstNodePtr n = map->getNode(nid);
+    ConstNodePtr n = map->getNode(nid);
     if (n->toCoordinate() == c)
     {
       // if there are multiple corresponding nodes, throw an exception.
@@ -69,7 +70,7 @@ NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map,
 
   if (result == std::numeric_limits<long>::max())
   {
-   NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c,
+    NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c,
       circularError));
     map->addNode(n);
     result = n->getId();

@@ -60,6 +60,7 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
 

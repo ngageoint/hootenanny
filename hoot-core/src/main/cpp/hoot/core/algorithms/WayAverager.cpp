@@ -45,6 +45,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/elements/Way.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

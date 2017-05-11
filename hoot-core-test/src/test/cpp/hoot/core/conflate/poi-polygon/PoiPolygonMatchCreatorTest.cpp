@@ -35,6 +35,7 @@
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

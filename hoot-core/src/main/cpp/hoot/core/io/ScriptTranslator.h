@@ -43,7 +43,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
 class Feature;
 class Schema;
 class Tags;

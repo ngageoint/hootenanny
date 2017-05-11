@@ -62,6 +62,7 @@
 
 Q_DECLARE_METATYPE(hoot::JavaScriptTranslator*)
 
+using namespace geos::geom;
 using namespace std;
 using namespace v8;
 

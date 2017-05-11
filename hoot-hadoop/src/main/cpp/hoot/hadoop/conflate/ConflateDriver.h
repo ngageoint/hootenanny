@@ -32,8 +32,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class ConflateDriver : public Driver
 {
 public:
@@ -46,11 +44,11 @@ public:
    * @param buffer The size of the buffer in degrees.
    * @param out The output path on HDFS.
    */
-  void conflate(QString in, std::vector<Envelope> envelopes, double buffer, QString out);
+  void conflate(QString in, std::vector<geos::geom::Envelope> envelopes, double buffer, QString out);
 
 private:
 
-  std::string _toString(const std::vector<Envelope>& e);
+  std::string _toString(const std::vector<geos::geom::Envelope>& e);
 };
 
 }

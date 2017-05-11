@@ -30,6 +30,7 @@
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot

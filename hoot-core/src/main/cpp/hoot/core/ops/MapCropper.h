@@ -45,8 +45,6 @@ namespace hoot
 class OsmMap;
 class Way;
 
-  using namespace geos::geom;
-
 /**
  * Provides a clean crop at the edges of the map rather than the ragged crop you get from Osmosis.
  * As a result it introduces new nodes into the data and may split ways up into multiple ways.
@@ -68,17 +66,17 @@ public:
 
   MapCropper();
 
-  MapCropper(const Envelope& envelope);
+  MapCropper(const geos::geom::Envelope& envelope);
 
-  MapCropper(const boost::shared_ptr<const Geometry>& g, bool invert);
+  MapCropper(const boost::shared_ptr<const geos::geom::Geometry>& g, bool invert);
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual void setConfiguration(const Settings& conf);
 
-  static void crop(boost::shared_ptr<OsmMap> map, const Envelope& envelope);
+  static void crop(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& envelope);
 
-  static void crop(boost::shared_ptr<OsmMap> map, const boost::shared_ptr<const Geometry>& g,
+  static void crop(boost::shared_ptr<OsmMap> map, const boost::shared_ptr<const geos::geom::Geometry>& g,
     bool invert);
 
   virtual std::string getClassName() const { return className(); }
@@ -89,16 +87,16 @@ public:
    * Sets the bounds on the nodes that will be removed. This is only useful in fourpass.
    * This value will not be serialized.
    */
-  virtual void setBounds(const Envelope &bounds) { _nodeBounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope &bounds) { _nodeBounds = bounds; }
 
   virtual void writeObject(QDataStream& os) const;
 
 private:
-  Envelope _envelope;
-  boost::shared_ptr<const Geometry> _envelopeG;
+  geos::geom::Envelope _envelope;
+  boost::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;
   bool _removeNodes;
-  Envelope _nodeBounds;
+  geos::geom::Envelope _nodeBounds;
 
   void _cropWay(boost::shared_ptr<OsmMap> map, long wid);
 
@@ -107,7 +105,7 @@ private:
    * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
    * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
    */
-  long _findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w, const Coordinate& c);
+  long _findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w, const geos::geom::Coordinate& c);
 
   /**
    * Returns true if the specified envelope is wholly inside the region that will be kept. If
@@ -115,7 +113,7 @@ private:
    *
    * The operation is very quick.
    */
-  bool _isWhollyInside(const Envelope& e);
+  bool _isWhollyInside(const geos::geom::Envelope& e);
 
   /**
    * Returns true if the specified envelope is wholly outside the region that will be kept. If
@@ -123,10 +121,10 @@ private:
    *
    * The operation is very quick.
    */
-  bool _isWhollyOutside(const Envelope& e);
+  bool _isWhollyOutside(const geos::geom::Envelope& e);
 
   boost::shared_ptr<Way> _reintroduceWay(boost::shared_ptr<OsmMap> map, boost::shared_ptr<const Way> w,
-    const LineString* ls);
+    const geos::geom::LineString* ls);
 
   friend class MapCropperTest;
 };
