@@ -33,6 +33,7 @@
 #include <hoot/js/util/DataConvertJs.h>
 
 using namespace std;
+using namespace v8;
 
 namespace hoot
 {

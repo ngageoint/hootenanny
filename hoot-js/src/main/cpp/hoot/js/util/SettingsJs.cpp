@@ -32,6 +32,8 @@
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

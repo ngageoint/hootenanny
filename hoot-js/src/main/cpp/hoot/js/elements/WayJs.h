@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class OsmMapOperation;
 
 class WayJs : public ElementJs
@@ -57,8 +55,8 @@ public:
   virtual ElementPtr getElement() { return getWay(); }
   WayPtr getWay() { assert(_way); return _way; }
 
-  static Handle<Object> New(ConstWayPtr way);
-  static Handle<Object> New(WayPtr way);
+  static v8::Handle<v8::Object> New(ConstWayPtr way);
+  static v8::Handle<v8::Object> New(WayPtr way);
 
 private:
   WayJs(ConstWayPtr w);
@@ -70,7 +68,7 @@ private:
   QString _className;
   ConstWayPtr _constWay;
   WayPtr _way;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
   void _setWay(ConstWayPtr w) { _constWay = w; _way.reset(); }
   void _setWay(WayPtr w) { _way = w; _constWay = w; }

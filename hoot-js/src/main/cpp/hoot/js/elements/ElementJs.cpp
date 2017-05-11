@@ -49,6 +49,8 @@
 
 #include "ElementIdJs.h"
 
+using namespace v8;
+
 namespace hoot
 {
 

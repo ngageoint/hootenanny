@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class TagMergerFactoryJs : public node::ObjectWrap
 {
 public:

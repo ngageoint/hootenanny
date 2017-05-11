@@ -36,8 +36,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class MatchFactoryJs : public node::ObjectWrap
 {
 public:

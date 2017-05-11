@@ -39,8 +39,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class ClassInitializer
 {
 public:
@@ -49,7 +47,7 @@ public:
 
   virtual ~ClassInitializer() { }
 
-  virtual void Init(Handle<Object> exports) = 0;
+  virtual void Init(v8::Handle<v8::Object> exports) = 0;
 
 private:
   ClassInitializer(const ClassInitializer& oc);
@@ -66,7 +64,7 @@ public:
 
   virtual ~ClassInitializerTemplate() { }
 
-  virtual void Init(Handle<Object> exports)
+  virtual void Init(v8::Handle<v8::Object> exports)
   {
     T::Init(exports);
   }
@@ -81,9 +79,9 @@ public:
 
   static JsRegistrar& getInstance();
 
-  static void Init(Handle<Object> exports);
+  static void Init(v8::Handle<v8::Object> exports);
 
-  void initAll(Handle<Object> exports);
+  void initAll(v8::Handle<v8::Object> exports);
 
   void registerInitializer(boost::shared_ptr<ClassInitializer> ci);
 

@@ -33,13 +33,12 @@
 
 namespace hoot
 {
-using namespace v8;
 
 class JsFunctionConsumer
 {
 public:
 
-  virtual void addFunction(Persistent<Function> func) = 0;
+  virtual void addFunction(v8::Persistent<v8::Function> func) = 0;
 };
 
 }

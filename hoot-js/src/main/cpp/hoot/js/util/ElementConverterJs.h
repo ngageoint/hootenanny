@@ -34,8 +34,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class ElementConverterJs : public node::ObjectWrap
 {
 public:

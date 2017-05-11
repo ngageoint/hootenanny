@@ -36,8 +36,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class MergerFactoryJs : public node::ObjectWrap
 {
 public:

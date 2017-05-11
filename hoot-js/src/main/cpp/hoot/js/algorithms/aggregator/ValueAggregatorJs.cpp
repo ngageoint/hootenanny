@@ -39,6 +39,7 @@
 #include <tgs/SharedPtr.h>
 
 using namespace std;
+using namespace v8;
 
 namespace hoot
 {

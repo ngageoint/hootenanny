@@ -38,8 +38,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class OsmMapOperation;
 
 /**
@@ -52,7 +50,7 @@ public:
 
   ValueAggregatorPtr getValueAggregator() { return _va; }
 
-  static Handle<Object> New(const ValueAggregatorPtr& va);
+  static v8::Handle<v8::Object> New(const ValueAggregatorPtr& va);
 
 private:
   ValueAggregatorJs();
@@ -62,9 +60,9 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   ValueAggregatorPtr _va;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
-  static Handle<Value> toString(const Arguments& args);
+  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, ValueAggregatorPtr& p)

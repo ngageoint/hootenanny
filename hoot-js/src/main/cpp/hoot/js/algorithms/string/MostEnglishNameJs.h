@@ -38,8 +38,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class OsmMapOperation;
 
 /**
@@ -52,7 +50,7 @@ public:
 
   MostEnglishNamePtr getPtr() { return _sd; }
 
-  static Handle<Object> New(const MostEnglishNamePtr& sd);
+  static v8::Handle<v8::Object> New(const MostEnglishNamePtr& sd);
 
 private:
   MostEnglishNameJs();
@@ -62,9 +60,9 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   MostEnglishNamePtr _sd;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
-  static Handle<Value> getMostEnglishName(const Arguments& args);
+  static v8::Handle<v8::Value> getMostEnglishName(const v8::Arguments& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, MostEnglishNamePtr& p)

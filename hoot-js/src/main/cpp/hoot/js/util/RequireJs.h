@@ -37,8 +37,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class RequireJs : public node::ObjectWrap
 {
 public:

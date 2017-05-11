@@ -42,8 +42,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class OsmMapOperation;
 
 class ElementCriterionJs : public node::ObjectWrap

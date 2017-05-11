@@ -38,10 +38,8 @@
 
 namespace hoot
 {
+
 class ElementVisitor;
-
-using namespace v8;
-
 class OsmMapOperation;
 
 class ElementVisitorJs : public node::ObjectWrap

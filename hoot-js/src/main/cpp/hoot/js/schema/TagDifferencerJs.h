@@ -38,9 +38,6 @@
 
 namespace hoot
 {
-class TagDifferencer;
-
-using namespace v8;
 
 class TagDifferencer;
 

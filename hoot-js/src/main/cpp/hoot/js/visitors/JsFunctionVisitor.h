@@ -48,7 +48,7 @@ public:
 
   JsFunctionVisitor() : _map(0) {}
 
-  virtual void addFunction(Persistent<Function> func) { _func = Persistent<Function>(func); }
+  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
@@ -57,7 +57,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
 private:
-  Persistent<Function> _func;
+  v8::Persistent<v8::Function> _func;
   OsmMap* _map;
 };
 

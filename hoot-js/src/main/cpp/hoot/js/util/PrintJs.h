@@ -34,8 +34,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class PrintJs : public node::ObjectWrap
 {
 public:

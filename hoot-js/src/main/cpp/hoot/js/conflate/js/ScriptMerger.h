@@ -40,7 +40,7 @@ namespace hoot
 class ScriptMerger : public MergerBase
 {
 public:
-  ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
+  ScriptMerger(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object> plugin,
     const std::set<std::pair<ElementId, ElementId> > &pairs);
 
   virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
@@ -54,8 +54,8 @@ public:
 
 protected:
   PairsSet _pairs;
-  Persistent<Object> _plugin;
- boost::shared_ptr<PluginContext> _script;
+  v8::Persistent<v8::Object> _plugin;
+  boost::shared_ptr<PluginContext> _script;
   ElementId _eid1, _eid2;
 
   /**
@@ -69,7 +69,7 @@ protected:
   virtual void _applyMergeSets(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
     const;
 
-  Handle<Value> _callMergePair(const OsmMapPtr& map) const;
+  v8::Handle<v8::Value> _callMergePair(const OsmMapPtr& map) const;
   void _callMergeSets(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId> > &replaced) const;
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }

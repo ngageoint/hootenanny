@@ -31,6 +31,8 @@
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/JsRegistrar.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

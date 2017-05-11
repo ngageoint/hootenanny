@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class UuidHelperJs : public node::ObjectWrap
 {
 public:

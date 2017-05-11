@@ -37,6 +37,8 @@
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/util/HootExceptionJs.h> 
 
+using namespace v8;
+
 namespace hoot
 {
 

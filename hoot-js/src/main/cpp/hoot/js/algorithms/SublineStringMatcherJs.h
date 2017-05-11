@@ -40,8 +40,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class OsmMapOperation;
 
 class SublineStringMatcherJs : public node::ObjectWrap

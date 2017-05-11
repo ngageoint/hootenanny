@@ -39,8 +39,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class LogJs : public node::ObjectWrap
 {
 public:

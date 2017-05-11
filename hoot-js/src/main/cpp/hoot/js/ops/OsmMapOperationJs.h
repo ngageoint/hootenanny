@@ -39,8 +39,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class OsmMapOperation;
 
 class OsmMapOperationJs : public node::ObjectWrap

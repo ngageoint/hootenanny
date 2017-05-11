@@ -44,7 +44,6 @@
 
 namespace hoot
 {
-using namespace v8;
 
 /**
  * This is the context from which a single plugin is run. Each plugin gets its own context and
@@ -64,11 +63,11 @@ public:
    * @param name - Name of the function
    * @param args - List of arguments to the function. Converted using "toValue"
    */
-  Local<Value> call(Handle<Object> obj, QString name, QList<QVariant> args = QList<QVariant>());
+  v8::Local<v8::Value> call(v8::Handle<v8::Object> obj, QString name, QList<QVariant> args = QList<QVariant>());
 
-  Local<Value> eval(QString e);
+  v8::Local<v8::Value> eval(QString e);
 
-  Persistent<Context> getContext() { return _context; }
+  v8::Persistent<v8::Context> getContext() { return _context; }
 
 
   bool hasFunction(QString name);
@@ -76,25 +75,25 @@ public:
   /**
    * Returns true if the object v contains the key specified.
    */
-  bool hasKey(Handle<Value> v, QString key);
+  bool hasKey(v8::Handle<v8::Value> v, QString key);
 
-  Local<Object> loadScript(QString filename, QString loadInto = "");
+  v8::Local<v8::Object> loadScript(QString filename, QString loadInto = "");
 
   // Will refacter this later to get rid of duplication
-  Local<Object> loadText(QString text, QString loadInto = "", QString scriptName = "<Unknown>");
+  v8::Local<v8::Object> loadText(QString text, QString loadInto = "", QString scriptName = "<Unknown>");
 
   /**
    * Returns the specified key. If defaultValue is not UNSPECIFIED_DEFAULT then it will be used if
    * the key doesn't exist. If you need to use UNSPECIFIED_DEFAULT as the default value, use
    * another method :P.
    */
-  double toNumber(Handle<Value> v, QString key, double defaultValue = UNSPECIFIED_DEFAULT);
+  double toNumber(v8::Handle<v8::Value> v, QString key, double defaultValue = UNSPECIFIED_DEFAULT);
 
-  Local<Value> toValue(QVariant v);
+  v8::Local<v8::Value> toValue(QVariant v);
 
 private:
 
-  Persistent<Context> _context;
+  v8::Persistent<v8::Context> _context;
 };
 
 }

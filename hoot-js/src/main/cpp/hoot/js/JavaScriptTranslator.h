@@ -48,7 +48,6 @@
 namespace hoot
 {
 
-using namespace v8;
 class FieldDefinition;
 class Layer;
 class DoubleFieldDefinition;
@@ -118,7 +117,7 @@ protected:
   Tags* _tags;
   std::vector<double> _timing;
   QHash<QString, int> _logs;
-  Handle<Value> _empty[0]; // For function calls
+  v8::Handle<v8::Value> _empty[0]; // For function calls
 
   Settings _conf;
 

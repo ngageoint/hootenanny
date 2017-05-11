@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class OsmMapOperation;
 
 class FeatureExtractorJs : public node::ObjectWrap

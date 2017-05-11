@@ -30,6 +30,8 @@
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/js/JsRegistrar.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

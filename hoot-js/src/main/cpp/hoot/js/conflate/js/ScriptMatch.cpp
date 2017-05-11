@@ -62,6 +62,7 @@
 
 using namespace std;
 using namespace Tgs;
+using namespace v8;
 
 namespace hoot
 {

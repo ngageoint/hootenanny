@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace v8;
-
 class SettingsJs : public node::ObjectWrap
 {
 public:
