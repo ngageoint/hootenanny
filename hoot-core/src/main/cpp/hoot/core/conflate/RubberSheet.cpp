@@ -46,6 +46,7 @@
 #include <tgs/RandomForest/DataFrame.h>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

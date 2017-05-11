@@ -42,9 +42,7 @@
 namespace hoot
 {
 
-  using namespace Tgs;
-
-  class NodeToWayMap;
+class NodeToWayMap;
 
 class OsmMapIndex : public ElementListener
 {
@@ -108,7 +106,7 @@ public:
   /**
    * Unlike the way tree the node tree has no approximations built in.
    */
-  boost::shared_ptr<const HilbertRTree> getNodeTree() const;
+  boost::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
 
   /**
    * Get all the direct parents of a given element. This will not return grand parents, etc.
@@ -117,7 +115,7 @@ public:
 
   const std::vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
 
-  boost::shared_ptr<const HilbertRTree> getWayTree() const;
+  boost::shared_ptr<const Tgs::HilbertRTree> getWayTree() const;
 
   /**
    * This gets called before an element changes. Between this call and the call to
@@ -154,8 +152,8 @@ private:
 
   mutable std::set<long> _pendingRelationChange;
 
-  mutable boost::shared_ptr<HilbertRTree> _nodeTree;
-  mutable boost::shared_ptr<HilbertRTree> _wayTree;
+  mutable boost::shared_ptr<Tgs::HilbertRTree> _nodeTree;
+  mutable boost::shared_ptr<Tgs::HilbertRTree> _wayTree;
 
   mutable boost::shared_ptr<NodeToWayMap> _nodeToWayMap;
   mutable boost::shared_ptr<ElementToRelationMap> _elementToRelationMap;

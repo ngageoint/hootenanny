@@ -43,6 +43,7 @@
 #include <tgs/Statistics/Normal.h>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

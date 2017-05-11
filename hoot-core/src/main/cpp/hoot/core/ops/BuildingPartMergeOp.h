@@ -51,10 +51,9 @@ template<>
 
 namespace hoot
 {
+
 class Relation;
 class OsmSchema;
-
-using namespace Tgs;
 
 /**
  * UFD Data frequently has buildings mapped out as individual parts where each part has a different
@@ -102,7 +101,7 @@ public:
 private:
 
   /// Used to keep track of which elements make up a building.
-  DisjointSetMap< boost::shared_ptr<Element> > _ds;
+  Tgs::DisjointSetMap< boost::shared_ptr<Element> > _ds;
   OsmMapPtr _map;
   std::set<QString> _buildingPartTagNames;
 

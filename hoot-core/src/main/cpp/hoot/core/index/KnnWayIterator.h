@@ -44,14 +44,13 @@ class Way;
 class OsmMapIndex;
 
 using namespace geos::geom;
-using namespace Tgs;
 
 /**
  */
-class KnnWayIterator : public KnnIterator
+class KnnWayIterator : public Tgs::KnnIterator
 {
 public:
-  KnnWayIterator(const OsmMap& map, ConstWayPtr way, const RStarTree* tree,
+  KnnWayIterator(const OsmMap& map, ConstWayPtr way, const Tgs::RStarTree* tree,
                  const std::vector<long>& treeIdToWid, bool addError = false);
 
   long getWayId() const { return _treeIdToWid[getId()]; }
@@ -63,9 +62,9 @@ public:
   int getDistanceCount() { return _distanceCount; }
 
 protected:
-  virtual double _calculateDistance(const BoxInternalData& box, int id) const;
+  virtual double _calculateDistance(const Tgs::BoxInternalData& box, int id) const;
 
-  virtual double _calculateDistance(const BoxInternalData& box) const;
+  virtual double _calculateDistance(const Tgs::BoxInternalData& box) const;
 
 private:
   const OsmMap& _map;

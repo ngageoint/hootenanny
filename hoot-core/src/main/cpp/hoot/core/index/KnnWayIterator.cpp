@@ -40,6 +40,7 @@
 #include <limits>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

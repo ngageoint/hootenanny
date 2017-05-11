@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace Tgs;
 
 class PoiPolygonMatchCreator : public MatchCreator
 {

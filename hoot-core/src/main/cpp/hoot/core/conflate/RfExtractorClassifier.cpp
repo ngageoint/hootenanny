@@ -39,6 +39,7 @@
 #include <tgs/RandomForest/RandomForest.h>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

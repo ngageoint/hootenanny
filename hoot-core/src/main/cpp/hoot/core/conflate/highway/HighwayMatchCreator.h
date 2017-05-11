@@ -39,8 +39,6 @@ class SublineStringMatcher;
 class NotImplementedException;
 class TagAncestorDifferencer;
 
-using namespace Tgs;
-
 class HighwayMatchCreator : public MatchCreator
 {
 

@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class IterativeNetworkMatcherTest;
 
 /**

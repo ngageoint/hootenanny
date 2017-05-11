@@ -47,6 +47,7 @@
 #include <tgs/System/DisableCout.h>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

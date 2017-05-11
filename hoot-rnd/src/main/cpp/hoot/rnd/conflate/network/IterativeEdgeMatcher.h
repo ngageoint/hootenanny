@@ -42,8 +42,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 /**
  * This approach iteratively improves scores based on edge scores. It is more restrictive than
  * the IterativeNetworkMatcher by looking at possible edge paths not just vertex connectivity.

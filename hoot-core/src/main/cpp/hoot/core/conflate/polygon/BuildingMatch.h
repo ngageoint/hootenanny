@@ -45,8 +45,6 @@ namespace Tgs
 namespace hoot
 {
 
-using namespace Tgs;
-
 class BuildingRfClassifier;
 
 /**

@@ -41,8 +41,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 /**
  * Not to be confused with a NetworkMatch, the NetworkMatcher matches up a whole network.
  */
@@ -72,8 +70,8 @@ public:
 
 protected:
 
-  HilbertRTreePtr _edge2Index;
-  HilbertRTreePtr _vertex2Index;
+  Tgs::HilbertRTreePtr _edge2Index;
+  Tgs::HilbertRTreePtr _vertex2Index;
   std::deque<ConstNetworkEdgePtr> _index2Edge;
   std::deque<ConstNetworkVertexPtr> _index2Vertex;
   ConstOsmMapPtr _map;
@@ -84,7 +82,7 @@ protected:
 
   void _createVertex2Index();
 
-  IntersectionIterator _createIterator(Envelope env, HilbertRTreePtr tree);
+  Tgs::IntersectionIterator _createIterator(Envelope env, Tgs::HilbertRTreePtr tree);
 
 };
 

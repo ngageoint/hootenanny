@@ -48,7 +48,6 @@ namespace Tgs
 
 namespace hoot
 {
-using namespace Tgs;
 
 class HighwayClassifier;
 class SublineStringMatcher;

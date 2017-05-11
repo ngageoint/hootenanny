@@ -38,6 +38,7 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

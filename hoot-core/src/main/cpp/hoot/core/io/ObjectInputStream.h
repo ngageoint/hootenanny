@@ -48,8 +48,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class ObjectInputStream
 {
 public:
@@ -69,7 +67,7 @@ public:
 
 private:
   std::istream* _istream;
-  std::auto_ptr<StdIoDevice> _stdIoDevice;
+  std::auto_ptr<Tgs::StdIoDevice> _stdIoDevice;
   std::auto_ptr<QDataStream> _streamDelete;
   QDataStream* _stream;
 };

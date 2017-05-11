@@ -39,8 +39,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 typedef std::map<QString, double> Sample;
 
 /**
@@ -53,7 +51,7 @@ public:
 
   std::vector<std::string> getUniqueLabels() const;
 
-  boost::shared_ptr<DataFrame> toDataFrame(double nullValue) const;
+  boost::shared_ptr<Tgs::DataFrame> toDataFrame(double nullValue) const;
 
   const Sample& get(size_t i) const { return operator[](i); }
 

@@ -64,11 +64,11 @@ public:
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
 
-  virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
+  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
 
-  virtual DataFrame::NullTreatment getNullTreatment() const
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
   {
-    return DataFrame::NullAsMissingValue;
+    return Tgs::DataFrame::NullAsMissingValue;
   }
 
 };

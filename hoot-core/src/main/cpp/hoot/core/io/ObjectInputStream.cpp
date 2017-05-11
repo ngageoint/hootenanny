@@ -31,6 +31,7 @@
 #include <hoot/core/io/Serializable.h>
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

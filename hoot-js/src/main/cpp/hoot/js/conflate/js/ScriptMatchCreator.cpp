@@ -63,6 +63,7 @@
 #include "ScriptMatch.h"
 
 using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {

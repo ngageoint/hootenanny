@@ -36,9 +36,8 @@ class RandomForest;
 
 namespace hoot
 {
-class BuildingRfClassifier;
 
-using namespace Tgs;
+class BuildingRfClassifier;
 
 class BuildingMatchCreator : public MatchCreator
 {

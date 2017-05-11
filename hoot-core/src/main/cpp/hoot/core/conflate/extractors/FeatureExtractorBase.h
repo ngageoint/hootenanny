@@ -48,14 +48,14 @@ public:
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).
    */
-  virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
+  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
 
   /**
    * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
    */
-  virtual DataFrame::NullTreatment getNullTreatment() const
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
   {
-    return DataFrame::NullAsMissingValue;
+    return Tgs::DataFrame::NullAsMissingValue;
   }
 };
 

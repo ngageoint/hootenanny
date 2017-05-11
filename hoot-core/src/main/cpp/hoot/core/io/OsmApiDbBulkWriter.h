@@ -48,8 +48,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class OsmApiDbSqlStatementFormatter;
 
 /**
@@ -96,15 +94,15 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   {
     unsigned long startingNodeId;
     unsigned long currentNodeId;
-    boost::shared_ptr<BigMap<long, unsigned long> > nodeIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > nodeIdMap;
 
     unsigned long startingWayId;
     unsigned long currentWayId;
-    boost::shared_ptr<BigMap<long, unsigned long> > wayIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > wayIdMap;
 
     unsigned long startingRelationId;
     unsigned long currentRelationId;
-    boost::shared_ptr<BigMap<long, unsigned long> > relationIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > relationIdMap;
   };
 
   struct ChangesetData

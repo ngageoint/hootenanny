@@ -43,7 +43,7 @@
 
 namespace hoot
 {
-using namespace Tgs;
+
 using namespace geos::geom;
 
 class SearchRadiusCalculatorTest;
@@ -160,7 +160,7 @@ private:
   bool _ref;
   int _minimumTies;
   std::vector<Tie> _ties;
-  boost::shared_ptr<Interpolator> _interpolator1to2, _interpolator2to1;
+  boost::shared_ptr<Tgs::Interpolator> _interpolator1to2, _interpolator2to1;
   // used as a temporary in interpolating.
   std::vector<double> _matchPoint;
   boost::shared_ptr<OGRSpatialReference> _projection;
@@ -177,17 +177,17 @@ private:
   /**
    * Build a data frame for use with interpolators.
    */
-  boost::shared_ptr<DataFrame> _buildDataFrame(Status s) const;
+  boost::shared_ptr<Tgs::DataFrame> _buildDataFrame(Status s) const;
 
-  boost::shared_ptr<Interpolator> _buildInterpolator(Status s) const;
+  boost::shared_ptr<Tgs::Interpolator> _buildInterpolator(Status s) const;
 
   const Match& _findMatch(long nid1, long nid2);
 
-  boost::shared_ptr<Interpolator> _readInterpolator(QIODevice& is);
+  boost::shared_ptr<Tgs::Interpolator> _readInterpolator(QIODevice& is);
 
   Coordinate _translate(const Coordinate& c, Status s);
 
-  void _writeInterpolator(boost::shared_ptr<const Interpolator> interpolator, QIODevice& os) const;
+  void _writeInterpolator(boost::shared_ptr<const Tgs::Interpolator> interpolator, QIODevice& os) const;
 
   friend class SearchRadiusCalculatorTest;
   friend class RubberSheetTest;

@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace Tgs;
 
 class FeatureExtractor;
 class WaySublineMatchString;
@@ -66,7 +65,7 @@ protected:
 
   mutable std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
   QStringList _rfFactorLabels;
-  std::auto_ptr<RandomForest> _rf;
+  std::auto_ptr<Tgs::RandomForest> _rf;
 
   /**
    * Creates all the possible extractors for this classifier. Only the ones that are also listed

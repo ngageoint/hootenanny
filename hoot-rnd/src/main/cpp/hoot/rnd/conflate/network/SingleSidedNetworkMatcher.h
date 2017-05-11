@@ -45,8 +45,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class SingleSidedNetworkMatcherTest;
 
 /**

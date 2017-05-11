@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 /**
  * Extracts a single feature (AKA factor) for a given element pair.
  */
@@ -69,12 +67,12 @@ public:
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).
    */
-  virtual DataFrame::FactorType getFactorType() const = 0;
+  virtual Tgs::DataFrame::FactorType getFactorType() const = 0;
 
   /**
    * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
    */
-  virtual DataFrame::NullTreatment getNullTreatment() const = 0;
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const = 0;
 
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 

@@ -47,8 +47,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class MatchCreator;
 class MatchFactory;
 class OsmMap;
