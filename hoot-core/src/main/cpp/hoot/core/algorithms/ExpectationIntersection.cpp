@@ -33,6 +33,7 @@
 // Tbs
 #include <tbs/stats/TDistribution.h>
 
+using namespace cv;
 using namespace std;
 using namespace tbs;
 

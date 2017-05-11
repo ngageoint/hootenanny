@@ -34,8 +34,6 @@
 namespace tbs
 {
 
-using namespace cv;
-
 class CostT;
 
 /**
@@ -60,42 +58,42 @@ public:
   /**
    * Similar to calling initialize.
    */
-  TDistribution(const Mat& m);
+  TDistribution(const cv::Mat& m);
 
   /**
    * Returns the likelihood at a given point.
    */
-  double getLikelihood(const Mat &p) const;
+  double getLikelihood(const cv::Mat &p) const;
 
-  double getLogLikelihood(const Mat &p) const;
+  double getLogLikelihood(const cv::Mat &p) const;
 
   /**
    * Creates a TDistribution for the provided Matrix. Each row is a sample and each column is a
    * dimension.
    */
-  void initialize(const Mat& m);
+  void initialize(const cv::Mat& m);
 
 private:
   int _D;
-  Mat _mu;
-  Mat _sigma;
+  cv::Mat _mu;
+  cv::Mat _sigma;
   double _v;
 
   friend class CostT;
 
-  double _calculateDataLogLikelihood(const Mat& m, double v);
+  double _calculateDataLogLikelihood(const cv::Mat& m, double v);
 
-  void _calculateNewMuAndSigma(const vector<double>& EH, const Mat& m);
+  void _calculateNewMuAndSigma(const std::vector<double>& EH, const cv::Mat& m);
 
-  void _calculateNewV(const Mat& m, const vector<double>& EH, const vector<double>& ELogH);
+  void _calculateNewV(const cv::Mat& m, const std::vector<double>& EH, const std::vector<double>& ELogH);
 
-  double _calculateTCost(double v, const vector<double> &EH, const vector<double> &ELogH);
+  double _calculateTCost(double v, const std::vector<double> &EH, const std::vector<double> &ELogH);
 
-  void _initMu(const Mat& m);
+  void _initMu(const cv::Mat& m);
 
-  void _initSigma(const Mat& m);
+  void _initSigma(const cv::Mat& m);
 
-  Mat _log(const Mat& m);
+  cv::Mat _log(const cv::Mat& m);
 };
 
 }

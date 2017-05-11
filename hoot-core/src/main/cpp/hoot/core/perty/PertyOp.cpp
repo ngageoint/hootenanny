@@ -46,6 +46,8 @@
 //Qt
 #include <QVector>
 
+using namespace cv;
+
 namespace hoot
 {
 

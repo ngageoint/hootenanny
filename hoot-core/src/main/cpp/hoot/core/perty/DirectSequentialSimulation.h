@@ -50,11 +50,11 @@ public:
   /**
    * @see PermuteGridCalculator
    */
-  virtual Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols);
+  virtual cv::Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols);
 
 private:
 
-  Mat _gm2dPerturb2(geos::geom::Envelope env, Meters sigma, boost::minstd_rand& rng);
+  cv::Mat _gm2dPerturb2(geos::geom::Envelope env, Meters sigma, boost::minstd_rand& rng);
 };
 
 }

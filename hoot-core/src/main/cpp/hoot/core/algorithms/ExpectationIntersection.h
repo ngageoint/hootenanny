@@ -38,9 +38,8 @@
 
 namespace hoot
 {
-class Settings;
 
-using namespace tbs;
+class Settings;
 
 /**
  * This class provides the ability to segement an ordered set of points with constraints.
@@ -68,23 +67,23 @@ public:
    *
    * 1. http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
    */
-  std::vector<double> snapMatches(const cv::Mat& matches, const Mat& ranges);
+  std::vector<double> snapMatches(const cv::Mat& matches, const cv::Mat& ranges);
 
 private:
 
   int _maxIterations;
 
   void _calculateTDistribution(const cv::Mat &matches, int start, int end,
-    TDistribution& t);
+    tbs::TDistribution& t);
 
-  double _findSplit(const TDistribution& t1, const TDistribution& t2, const cv::Mat& matches,
+  double _findSplit(const tbs::TDistribution& t1, const tbs::TDistribution& t2, const cv::Mat& matches,
     int start, int stop);
 
   /**
    * Verify that the caller provided meaningful ranges.
    * Throws an exception on failure.
    */
-  void _validateRanges(int rowCount, const Mat& ranges);
+  void _validateRanges(int rowCount, const cv::Mat& ranges);
 };
 
 }

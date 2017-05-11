@@ -39,6 +39,8 @@ using namespace std;
 // tbs
 #include <tbs/optimization/GoldenSectionSearch.h>
 
+using namespace cv;
+
 namespace tbs
 {
 

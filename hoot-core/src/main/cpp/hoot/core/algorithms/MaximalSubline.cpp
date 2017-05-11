@@ -41,6 +41,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 
+using namespace cv;
 using namespace std;
 
 namespace hoot

@@ -43,6 +43,8 @@
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/variate_generator.hpp>
 
+using namespace cv;
+
 namespace tbs
 {
 using namespace std;

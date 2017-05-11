@@ -44,7 +44,7 @@
 
 namespace hoot
 {
-using namespace cv;
+
 using namespace geos::geom;
 
 class PermuteGridCalculator;
@@ -79,7 +79,7 @@ public:
   /**
    * Generates a map of all the grid offset vectors and permutes the given map.
    */
- boost::shared_ptr<OsmMap> generateDebugMap(boost::shared_ptr<OsmMap>& map);
+  boost::shared_ptr<OsmMap> generateDebugMap(boost::shared_ptr<OsmMap>& map);
 
   void permute(const boost::shared_ptr<OsmMap>& map);
 
@@ -131,14 +131,14 @@ private:
   the full covariance method we were able to simplify the build process and reduce maintenance cost.
   */
   QString _permuteAlgorithm;
- boost::shared_ptr<PermuteGridCalculator> _gridCalculator;
+  boost::shared_ptr<PermuteGridCalculator> _gridCalculator;
   QStringList _namedOps;
 
   Settings& _settings;
 
   void _configure();
 
-  Mat _calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols);
+  cv::Mat _calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols);
 };
 
 }
