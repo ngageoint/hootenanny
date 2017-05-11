@@ -68,7 +68,7 @@
 
 namespace Tgs
 {
-  using namespace NEWMAT;
+
 /*====================================Jacobi================================
 This code was taken from the newmat11 beta library.  I wanted to turn off
 the sorting of the eigenvalues and vectors without altering the original 
@@ -91,16 +91,16 @@ public:
     Matrix& V - the resulting eigenvectors
 
   */
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D,
-                     SymmetricMatrix& A, Matrix& V, bool eivec);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D,
+                     NEWMAT::SymmetricMatrix& A, NEWMAT::Matrix& V, bool eivec);
 
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D);
 
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D,
-                     SymmetricMatrix& A);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D,
+                     NEWMAT::SymmetricMatrix& A);
 
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D,
-                     Matrix& V);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D,
+                     NEWMAT::Matrix& V);
 
 };
 

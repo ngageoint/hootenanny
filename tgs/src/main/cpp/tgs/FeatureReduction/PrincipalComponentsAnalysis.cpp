@@ -39,6 +39,8 @@
 
 #include "Jacobi.h"
 
+using namespace NEWMAT;
+
 namespace Tgs
 {
   void PrincipalComponentsAnalysis::compute(DataFrame& df)

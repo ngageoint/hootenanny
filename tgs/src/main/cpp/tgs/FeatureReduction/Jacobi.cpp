@@ -27,6 +27,8 @@
 #include "Jacobi.h"
 #include <math.h>
 
+using namespace NEWMAT;
+
 namespace Tgs
 {
 
