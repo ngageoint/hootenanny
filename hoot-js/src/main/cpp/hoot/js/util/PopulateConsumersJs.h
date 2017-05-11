@@ -53,7 +53,6 @@
 
 namespace hoot
 {
-using namespace node;
 
 class PopulateConsumersJs
 {
@@ -150,7 +149,7 @@ public:
   template <typename T>
   static void populateCriterionConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    ElementCriterionJs* obj = ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
+    ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
 
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
@@ -167,7 +166,7 @@ public:
   template <typename T>
   static void populateElementConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    ElementJs* obj = ObjectWrap::Unwrap<ElementJs>(v->ToObject());
+    ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject());
 
     ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
 
@@ -219,7 +218,7 @@ public:
   template <typename T>
   static void populateOsmMapConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
+    OsmMapJs* obj = node::ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
 
     if (obj->isConst())
     {
@@ -287,7 +286,7 @@ public:
   template <typename T>
   static void populateVisitorConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    ElementVisitorJs* obj = ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
+    ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
 
     ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
 

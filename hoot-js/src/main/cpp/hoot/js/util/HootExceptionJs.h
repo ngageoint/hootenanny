@@ -45,7 +45,7 @@
 
 namespace hoot
 {
-using namespace node;
+
 using namespace v8;
 
 class HootExceptionJs : public node::ObjectWrap

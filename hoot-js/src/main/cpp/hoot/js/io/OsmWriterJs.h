@@ -33,7 +33,7 @@
 
 namespace hoot
 {
-using namespace node;
+
 using namespace v8;
 
 class OsmWriterJs : public node::ObjectWrap

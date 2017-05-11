@@ -19,7 +19,6 @@
 
 // Pretty Pipes
 #include <pp/io/LineRecordWriter.h>
-using namespace pp;
 
 // std
 #include <string>
@@ -30,7 +29,7 @@ namespace hoot
 /**
  * Identical to LineRecordWriter except for not outputting a tab between the key and value pair
  */
-class SqlStatementLineRecordWriter : public LineRecordWriter
+class SqlStatementLineRecordWriter : public pp::LineRecordWriter
 {
 
 public:

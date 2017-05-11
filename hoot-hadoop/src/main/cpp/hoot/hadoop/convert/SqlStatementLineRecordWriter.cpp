@@ -30,6 +30,7 @@
 // Qt
 #include <QMap>
 
+using namespace pp;
 using namespace std;
 
 namespace hoot
