@@ -36,8 +36,6 @@
 namespace hoot
 {
 
-using namespace geos;
-
 class Building
 {
 public:

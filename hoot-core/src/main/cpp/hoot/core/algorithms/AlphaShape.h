@@ -56,8 +56,6 @@ class Face;
 namespace hoot
 {
 
-using namespace geos;
-
 class FaceGroup;
 class OsmMap;
 class Way;
