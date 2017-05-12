@@ -145,9 +145,13 @@ CPPUNIT_INIT()
 m4_include([m4/glpk.m4])
 GLPK_INIT()
 
-# liqpq
-m4_include([m4/libpq.m4])
-LIBPQ_INIT()
+# liqpq - part of Postgres
+#m4_include([m4/libpq.m4])
+#LIBPQ_INIT()
+m4_include([m4/ax_lib_postgresql.m4])
+AX_LIB_POSTGRESQL(9.1)
+LIBS="${LIBS} ${POSTGRESQL_LDFLAGS} ${POSTGRESQL_LIBS}"
+CPPFLAGS="${CPPFLAGS} ${POSTGRESQL_CPPFLAGS}"
 
 # Newmat
 m4_include([m4/newmat.m4])
