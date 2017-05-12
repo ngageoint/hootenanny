@@ -112,6 +112,8 @@ class ConflateCommand extends ExternalCommand {
         String input2 = input2Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput2()) : params.getInput2();
 
         String referenceLayer = params.getReferenceLayer();
+        //The command line workflow also used reader.add.source.datetime=false and 
+        //reader.preserve.all.tags=true here...not convinced yet we need it here.
         if (referenceLayer.equalsIgnoreCase("1")) {
             if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
                 input1 = OSMAPI_DB_URL;
