@@ -58,7 +58,7 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   else
     cp $REF_DATASET $OUTPUT_DIR/2-ref-raw-complete.osm
   fi 
-  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -81,11 +81,11 @@ if [ "$LOAD_SEC_DATA" == "true" ]; then
   echo ""
   if [[ $SEC_DATASET == *"pbf"* ]]; then
     #we want this in .osm format to be able to examine it for debugging purposes anyway
-    hoot convert $HOOT_OPTS $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
+    hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
   else
     cp $SEC_DATASET $OUTPUT_DIR/5-secondary-raw-complete.osm
   fi
-  hoot convert $HOOT_OPTS -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then

@@ -253,10 +253,11 @@
         <tag k="hoot:id" v="64"/>
     </node>
     <node visible="true" id="65" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3" lat="38.9109692999999979" lon="-104.7145692999999937">
+        <tag k="accuracy" v="100"/>
         <tag k="note" v="1-a;2-a"/>
         <tag k="poi" v="yes"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="65"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="hoot:id" v="65"/>
@@ -266,6 +267,7 @@
         <tag k="hoot:id" v="66"/>
     </node>
     <node visible="true" id="67" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8467217999999974" lon="-104.8852148000000000">
+        <tag k="accuracy" v="1000"/>
         <tag k="poi" v="yes"/>
         <tag k="leisure" v="park"/>
         <tag k="name" v="Red Rock Canyon"/>
@@ -273,6 +275,7 @@
         <tag k="hoot:id" v="67"/>
     </node>
     <node visible="true" id="68" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.9239773999999983" lon="-104.8439481000000058">
+        <tag k="accuracy" v="50"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
@@ -285,12 +288,14 @@
     </node>
     <node visible="true" id="70" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8580511999999985" lon="-104.7869287999999983">
         <tag k="place" v="city"/>
+        <tag k="accuracy" v="20000"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Colorado Springs"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="70"/>
     </node>
     <node visible="true" id="71" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8745941000000030" lon="-104.7196459000000033">
+        <tag k="accuracy" v="1000"/>
         <tag k="note" v="1-e"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Starbucks"/>
@@ -303,19 +308,20 @@
         <tag k="hoot:id" v="72"/>
     </node>
     <node visible="true" id="73" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8618558000000007" lon="-104.8786905000000047">
+        <tag k="accuracy" v="1000"/>
         <tag k="poi" v="yes"/>
         <tag k="leisure" v="park"/>
         <tag k="name" v="Garden of the Gods"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="73"/>
     </node>
-    <node visible="true" id="74" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3" lat="38.8940861000000027" lon="-104.7174957000000006">
-        <tag k="note" v="1-b;2-b"/>
+    <node visible="true" id="74" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8940861000000027" lon="-104.7174957999999947">
+        <tag k="accuracy" v="200"/>
+        <tag k="note" v="1-b"/>
         <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="74"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="74"/>
     </node>
     <node visible="true" id="75" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="39.5918306000000015" lon="-104.8062371000000041">
@@ -324,12 +330,14 @@
     </node>
     <node visible="true" id="76" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8571566000000033" lon="-104.9070372000000049">
         <tag k="place" v="town"/>
+        <tag k="accuracy" v="1500"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Manitou Springs"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="76"/>
     </node>
     <node visible="true" id="77" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8751954999999967" lon="-104.7179399999999987">
+        <tag k="accuracy" v="1000"/>
         <tag k="note" v="1-d"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Starbucks"/>
@@ -341,17 +349,18 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="78"/>
     </node>
-    <node visible="true" id="79" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3" lat="38.8885118999999975" lon="-104.7175564000000065">
-        <tag k="note" v="1-c;2-c"/>
+    <node visible="true" id="79" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8885118999999975" lon="-104.7175565000000006">
+        <tag k="accuracy" v="1000"/>
+        <tag k="note" v="1-c"/>
         <tag k="poi" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="79"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="79"/>
     </node>
     <node visible="true" id="80" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="38.8593024999999983" lon="-104.9197585999999944">
         <tag k="place" v="town"/>
+        <tag k="accuracy" v="2000"/>
         <tag k="poi" v="yes"/>
         <tag k="name" v="Manitou Springs"/>
         <tag k="hoot:status" v="1"/>
@@ -509,15 +518,28 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="118"/>
     </node>
-    <node visible="true" id="120" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8319586000000001" lon="-104.7772180000000048">
-        <tag k="place" v="city"/>
+    <node visible="true" id="119" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8887009000000035" lon="-104.7187701999999945">
+        <tag k="accuracy" v="1000"/>
+        <tag k="note" v="2-c"/>
         <tag k="poi" v="yes"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="120"/>
-        <tag k="name" v="Colorado Springs"/>
-        <tag k="hoot:id" v="120"/>
+        <tag k="hoot:id" v="119"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="hoot:id" v="119"/>
+    </node>
+    <node visible="true" id="121" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8942750000000004" lon="-104.7187095000000028">
+        <tag k="accuracy" v="1000"/>
+        <tag k="note" v="2-b"/>
+        <tag k="poi" v="yes"/>
+        <tag k="hoot:id" v="121"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="hoot:id" v="121"/>
     </node>
     <node visible="true" id="122" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8747831000000019" lon="-104.7208595999999972">
+        <tag k="accuracy" v="150"/>
         <tag k="note" v="2-e"/>
         <tag k="poi" v="yes"/>
         <tag k="hoot:id" v="122"/>
@@ -527,10 +549,11 @@
         <tag k="hoot:id" v="122"/>
     </node>
     <node visible="true" id="124" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8753845000000027" lon="-104.7191537000000068">
+        <tag k="accuracy" v="1000"/>
         <tag k="note" v="2-d"/>
         <tag k="poi" v="yes"/>
-        <tag k="hoot:id" v="124"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="124"/>
         <tag k="name" v="Starbucks"/>
         <tag k="amenity" v="cafe"/>
         <tag k="hoot:id" v="124"/>

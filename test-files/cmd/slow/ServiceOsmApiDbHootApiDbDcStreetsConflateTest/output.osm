@@ -17788,57 +17788,57 @@
     </node>
     <node visible="true" id="4691" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8920986999999982" lon="-77.0391228999999953">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-359"/>
+        <tag k="hoot:id" v="-255"/>
         <tag k="hoot:id" v="4691"/>
     </node>
     <node visible="true" id="4692" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8920930999999968" lon="-77.0339249000000024">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-357"/>
+        <tag k="hoot:id" v="-253"/>
         <tag k="hoot:id" v="4692"/>
     </node>
     <node visible="true" id="4693" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8953917999999987" lon="-77.0384008999999992">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-351"/>
+        <tag k="hoot:id" v="-246"/>
         <tag k="hoot:id" v="4693"/>
     </node>
     <node visible="true" id="4694" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8953915000000023" lon="-77.0377119000000050">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-350"/>
+        <tag k="hoot:id" v="-245"/>
         <tag k="hoot:id" v="4694"/>
     </node>
     <node visible="true" id="4695" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8954753000000011" lon="-77.0338679000000042">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-347"/>
+        <tag k="hoot:id" v="-242"/>
         <tag k="hoot:id" v="4695"/>
     </node>
     <node visible="true" id="4696" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8943749999999966" lon="-77.0347337999999979">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-345"/>
+        <tag k="hoot:id" v="-240"/>
         <tag k="hoot:id" v="4696"/>
     </node>
     <node visible="true" id="4697" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8932649999999995" lon="-77.0348666999999949">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-344"/>
+        <tag k="hoot:id" v="-239"/>
         <tag k="hoot:id" v="4697"/>
     </node>
     <node visible="true" id="4698" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8932770999999988" lon="-77.0382196000000050">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-341"/>
+        <tag k="hoot:id" v="-236"/>
         <tag k="hoot:id" v="4698"/>
     </node>
     <node visible="true" id="4699" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8949631999999994" lon="-77.0377191000000039">
-        <tag k="hoot:id" v="-339"/>
+        <tag k="hoot:id" v="-234"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="4699"/>
     </node>
     <node visible="true" id="4700" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8957228000000015" lon="-77.0377182999999945">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-335"/>
+        <tag k="hoot:id" v="-231"/>
         <tag k="hoot:id" v="4700"/>
     </node>
     <node visible="true" id="4701" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8957692999999978" lon="-77.0353233999999958">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-333"/>
+        <tag k="hoot:id" v="-229"/>
         <tag k="hoot:id" v="4701"/>
     </node>
     <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
@@ -17848,6 +17848,7 @@
         <nd ref="2373"/>
         <nd ref="2372"/>
         <nd ref="3561"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13 1/2 ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -17861,6 +17862,7 @@
         <nd ref="1281"/>
         <nd ref="1278"/>
         <nd ref="2339"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -17875,6 +17877,7 @@
         <nd ref="1669"/>
         <nd ref="1667"/>
         <nd ref="1950"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="4"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
@@ -17908,6 +17911,7 @@
         <nd ref="1232"/>
         <nd ref="1230"/>
         <nd ref="2450"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -17920,6 +17924,7 @@
         <nd ref="1661"/>
         <nd ref="1661"/>
         <nd ref="2365"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -17933,6 +17938,7 @@
         <nd ref="1113"/>
         <nd ref="1111"/>
         <nd ref="328"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -17963,6 +17969,7 @@
         <nd ref="1196"/>
         <nd ref="1196"/>
         <nd ref="212"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -17978,6 +17985,7 @@
         <nd ref="1099"/>
         <nd ref="1097"/>
         <nd ref="2903"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18026,6 +18034,7 @@
         <nd ref="2867"/>
         <nd ref="2865"/>
         <nd ref="3500"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18043,6 +18052,7 @@
         <nd ref="3568"/>
         <nd ref="3567"/>
         <nd ref="3566"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18057,6 +18067,7 @@
         <nd ref="14"/>
         <nd ref="13"/>
         <nd ref="2684"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18076,6 +18087,7 @@
         <nd ref="3"/>
         <nd ref="2"/>
         <nd ref="2333"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18206,6 +18218,7 @@
         <nd ref="1325"/>
         <nd ref="1323"/>
         <nd ref="1321"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18288,6 +18301,7 @@
         <nd ref="1183"/>
         <nd ref="1181"/>
         <nd ref="1179"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18305,6 +18319,7 @@
         <nd ref="2265"/>
         <nd ref="2262"/>
         <nd ref="1733"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WASHINGTON CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18321,6 +18336,7 @@
         <nd ref="2245"/>
         <nd ref="2243"/>
         <nd ref="1734"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WASHINGTON CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18357,6 +18373,7 @@
         <nd ref="808"/>
         <nd ref="804"/>
         <nd ref="800"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18393,6 +18410,7 @@
         <nd ref="376"/>
         <nd ref="374"/>
         <nd ref="372"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18414,6 +18432,7 @@
         <nd ref="756"/>
         <nd ref="752"/>
         <nd ref="748"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18439,6 +18458,7 @@
         <nd ref="2806"/>
         <nd ref="2803"/>
         <nd ref="3083"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18460,6 +18480,7 @@
         <nd ref="701"/>
         <nd ref="698"/>
         <nd ref="695"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18474,6 +18495,7 @@
         <nd ref="4013"/>
         <nd ref="4012"/>
         <nd ref="1320"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="MADISON PL NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18485,6 +18507,7 @@
         <nd ref="1081"/>
         <nd ref="1080"/>
         <nd ref="2837"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18543,6 +18566,7 @@
         <nd ref="3617"/>
         <nd ref="3617"/>
         <nd ref="1619"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18589,6 +18613,7 @@
         <nd ref="725"/>
         <nd ref="720"/>
         <nd ref="2558"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="D ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18602,6 +18627,7 @@
         <nd ref="3551"/>
         <nd ref="3549"/>
         <nd ref="3547"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="27"/>
         <tag k="alt_name" v="17th St NW"/>
@@ -18617,6 +18643,7 @@
         <nd ref="501"/>
         <nd ref="498"/>
         <nd ref="1932"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW YORK AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18628,6 +18655,7 @@
         <nd ref="4007"/>
         <nd ref="4006"/>
         <nd ref="186"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18639,6 +18667,7 @@
         <nd ref="4004"/>
         <nd ref="2107"/>
         <nd ref="2107"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18651,6 +18680,7 @@
         <nd ref="4001"/>
         <nd ref="4000"/>
         <nd ref="1430"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18663,6 +18693,7 @@
         <nd ref="3997"/>
         <nd ref="3996"/>
         <nd ref="4208"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18672,6 +18703,7 @@
         <nd ref="4208"/>
         <nd ref="3995"/>
         <nd ref="4140"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18683,6 +18715,7 @@
         <nd ref="4189"/>
         <nd ref="4188"/>
         <nd ref="1003"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18749,6 +18782,7 @@
         <nd ref="1084"/>
         <nd ref="1083"/>
         <nd ref="1179"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -18763,6 +18797,7 @@
         <nd ref="4183"/>
         <nd ref="4182"/>
         <nd ref="2333"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18795,6 +18830,7 @@
         <nd ref="301"/>
         <nd ref="300"/>
         <nd ref="2394"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18806,6 +18842,7 @@
         <nd ref="298"/>
         <nd ref="297"/>
         <nd ref="2409"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18814,6 +18851,7 @@
     <way visible="true" id="39" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="209"/>
         <nd ref="1519"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="ALEXANDER HAMILTON PL NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18847,6 +18885,7 @@
         <nd ref="2041"/>
         <nd ref="2040"/>
         <nd ref="2039"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="OHIO DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18880,6 +18919,7 @@
         <nd ref="275"/>
         <nd ref="274"/>
         <nd ref="2388"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18900,6 +18940,7 @@
         <nd ref="2028"/>
         <nd ref="2027"/>
         <nd ref="2026"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="OHIO DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18916,8 +18957,9 @@
         <nd ref="622"/>
         <nd ref="620"/>
         <nd ref="3628"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="43"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
@@ -18930,8 +18972,9 @@
         <nd ref="602"/>
         <nd ref="600"/>
         <nd ref="4693"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="44"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
@@ -18953,6 +18996,7 @@
         <nd ref="150"/>
         <nd ref="148"/>
         <nd ref="2392"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -18969,6 +19013,7 @@
         <nd ref="584"/>
         <nd ref="3575"/>
         <nd ref="3575"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19004,6 +19049,7 @@
         <nd ref="523"/>
         <nd ref="520"/>
         <nd ref="2517"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19016,6 +19062,7 @@
         <nd ref="331"/>
         <nd ref="330"/>
         <nd ref="329"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19028,6 +19075,7 @@
         <nd ref="255"/>
         <nd ref="253"/>
         <nd ref="2360"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19037,6 +19085,7 @@
         <nd ref="2360"/>
         <nd ref="251"/>
         <nd ref="248"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19048,6 +19097,7 @@
         <nd ref="242"/>
         <nd ref="239"/>
         <nd ref="2157"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19056,6 +19106,7 @@
     <way visible="true" id="52" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="3875"/>
         <nd ref="867"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19068,6 +19119,7 @@
         <nd ref="233"/>
         <nd ref="1471"/>
         <nd ref="230"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19078,6 +19130,7 @@
         <nd ref="227"/>
         <nd ref="224"/>
         <nd ref="3988"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19089,6 +19142,7 @@
         <nd ref="1780"/>
         <nd ref="218"/>
         <nd ref="3609"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19138,6 +19192,7 @@
         <nd ref="135"/>
         <nd ref="134"/>
         <nd ref="1079"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19147,6 +19202,7 @@
         <nd ref="3609"/>
         <nd ref="215"/>
         <nd ref="212"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19201,6 +19257,7 @@
         <nd ref="81"/>
         <nd ref="419"/>
         <nd ref="419"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19211,6 +19268,7 @@
         <nd ref="4068"/>
         <nd ref="4067"/>
         <nd ref="4066"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19230,6 +19288,7 @@
         <nd ref="644"/>
         <nd ref="643"/>
         <nd ref="642"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19240,6 +19299,7 @@
         <nd ref="641"/>
         <nd ref="640"/>
         <nd ref="639"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19254,6 +19314,7 @@
         <nd ref="3267"/>
         <nd ref="3265"/>
         <nd ref="3263"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="62"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="17th St NW"/>
@@ -19268,6 +19329,7 @@
         <nd ref="3257"/>
         <nd ref="3255"/>
         <nd ref="3253"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="63"/>
         <tag k="alt_name" v="17th St NW"/>
@@ -19286,6 +19348,7 @@
         <nd ref="4054"/>
         <nd ref="4053"/>
         <nd ref="4052"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19299,6 +19362,7 @@
         <nd ref="3245"/>
         <nd ref="3243"/>
         <nd ref="3241"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="65"/>
         <tag k="alt_name" v="17th St NW"/>
@@ -19317,6 +19381,7 @@
         <nd ref="3618"/>
         <nd ref="3615"/>
         <nd ref="2789"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW HAMPSHIRE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19329,8 +19394,9 @@
         <nd ref="3235"/>
         <nd ref="3233"/>
         <nd ref="3556"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="67"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="17th St NW"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
@@ -19352,6 +19418,7 @@
         <nd ref="3598"/>
         <nd ref="3596"/>
         <nd ref="44"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW HAMPSHIRE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19361,6 +19428,7 @@
         <nd ref="44"/>
         <nd ref="3594"/>
         <nd ref="3592"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW HAMPSHIRE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19399,8 +19467,9 @@
         <nd ref="219"/>
         <nd ref="216"/>
         <nd ref="1950"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="70"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
@@ -19420,6 +19489,7 @@
         <nd ref="2692"/>
         <nd ref="2689"/>
         <nd ref="2686"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="12TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19433,6 +19503,7 @@
         <nd ref="3584"/>
         <nd ref="3582"/>
         <nd ref="3580"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW HAMPSHIRE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19466,6 +19537,7 @@
         <nd ref="1625"/>
         <nd ref="1622"/>
         <nd ref="1619"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="OHIO DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19477,6 +19549,7 @@
         <nd ref="211"/>
         <nd ref="210"/>
         <nd ref="209"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="74"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
@@ -19492,6 +19565,7 @@
         <nd ref="2096"/>
         <nd ref="2094"/>
         <nd ref="2092"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="C ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19504,6 +19578,7 @@
         <nd ref="206"/>
         <nd ref="205"/>
         <nd ref="204"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19529,6 +19604,7 @@
         <nd ref="2076"/>
         <nd ref="2075"/>
         <nd ref="639"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19539,6 +19615,7 @@
         <nd ref="203"/>
         <nd ref="202"/>
         <nd ref="201"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19557,6 +19634,7 @@
         <nd ref="2066"/>
         <nd ref="2065"/>
         <nd ref="340"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19569,6 +19647,7 @@
         <nd ref="198"/>
         <nd ref="197"/>
         <nd ref="1920"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19577,6 +19656,7 @@
     <way visible="true" id="81" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="419"/>
         <nd ref="2601"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19589,6 +19669,7 @@
         <nd ref="194"/>
         <nd ref="193"/>
         <nd ref="192"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19602,6 +19683,7 @@
         <nd ref="188"/>
         <nd ref="187"/>
         <nd ref="186"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19615,6 +19697,7 @@
         <nd ref="1182"/>
         <nd ref="1180"/>
         <nd ref="3071"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="84"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="C St NW"/>
@@ -19630,6 +19713,7 @@
         <nd ref="1175"/>
         <nd ref="1174"/>
         <nd ref="2159"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="C ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19644,6 +19728,7 @@
         <nd ref="113"/>
         <nd ref="111"/>
         <nd ref="3056"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="86"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="D St NW"/>
@@ -19659,6 +19744,7 @@
         <nd ref="1170"/>
         <nd ref="1169"/>
         <nd ref="3884"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="C ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19674,6 +19760,7 @@
         <nd ref="1163"/>
         <nd ref="1162"/>
         <nd ref="2015"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="C ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19688,6 +19775,7 @@
         <nd ref="1157"/>
         <nd ref="1156"/>
         <nd ref="1817"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="C ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19710,6 +19798,7 @@
         <nd ref="62"/>
         <nd ref="60"/>
         <nd ref="3502"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19734,6 +19823,7 @@
         <nd ref="46"/>
         <nd ref="45"/>
         <nd ref="44"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19742,6 +19832,7 @@
     <way visible="true" id="92" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="3085"/>
         <nd ref="3083"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19754,6 +19845,7 @@
         <nd ref="3077"/>
         <nd ref="3074"/>
         <nd ref="3071"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19765,6 +19857,7 @@
         <nd ref="69"/>
         <nd ref="67"/>
         <nd ref="65"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="26TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19777,6 +19870,7 @@
         <nd ref="3062"/>
         <nd ref="3059"/>
         <nd ref="3056"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19790,6 +19884,7 @@
         <nd ref="3047"/>
         <nd ref="3044"/>
         <nd ref="3041"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19802,6 +19897,7 @@
         <nd ref="3035"/>
         <nd ref="3032"/>
         <nd ref="3029"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19852,6 +19948,7 @@
         <nd ref="535"/>
         <nd ref="531"/>
         <nd ref="527"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -19867,6 +19964,7 @@
         <nd ref="3010"/>
         <nd ref="3006"/>
         <nd ref="3002"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19880,6 +19978,7 @@
         <nd ref="2982"/>
         <nd ref="2977"/>
         <nd ref="2972"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19892,6 +19991,7 @@
         <nd ref="2955"/>
         <nd ref="2955"/>
         <nd ref="2951"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19905,6 +20005,7 @@
         <nd ref="2935"/>
         <nd ref="2931"/>
         <nd ref="2927"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19918,6 +20019,7 @@
         <nd ref="2911"/>
         <nd ref="2907"/>
         <nd ref="2903"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19941,6 +20043,7 @@
         <nd ref="3536"/>
         <nd ref="3535"/>
         <nd ref="1963"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19961,6 +20064,7 @@
         <nd ref="3525"/>
         <nd ref="3592"/>
         <nd ref="3592"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19975,6 +20079,7 @@
         <nd ref="2306"/>
         <nd ref="2304"/>
         <nd ref="4195"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -19987,6 +20092,7 @@
         <nd ref="2298"/>
         <nd ref="2296"/>
         <nd ref="2112"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20007,6 +20113,7 @@
         <nd ref="2275"/>
         <nd ref="2272"/>
         <nd ref="2662"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20021,6 +20128,7 @@
         <nd ref="2257"/>
         <nd ref="2254"/>
         <nd ref="4223"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20034,6 +20142,7 @@
         <nd ref="2244"/>
         <nd ref="2244"/>
         <nd ref="2927"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20045,6 +20154,7 @@
         <nd ref="2241"/>
         <nd ref="2240"/>
         <nd ref="2326"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20064,8 +20174,9 @@
         <nd ref="508"/>
         <nd ref="505"/>
         <nd ref="2148"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="112"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
@@ -20078,6 +20189,7 @@
         <nd ref="496"/>
         <nd ref="494"/>
         <nd ref="3183"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="113"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="E St NW;Ellipse Rd NW"/>
@@ -20130,6 +20242,7 @@
         <nd ref="351"/>
         <nd ref="350"/>
         <nd ref="349"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20147,6 +20260,7 @@
         <nd ref="477"/>
         <nd ref="475"/>
         <nd ref="3041"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="115"/>
         <tag k="alt_name" v="E St NW"/>
@@ -20165,6 +20279,7 @@
         <nd ref="342"/>
         <nd ref="341"/>
         <nd ref="340"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20180,6 +20295,7 @@
         <nd ref="466"/>
         <nd ref="465"/>
         <nd ref="2359"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20193,6 +20309,7 @@
         <nd ref="336"/>
         <nd ref="335"/>
         <nd ref="2601"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20205,6 +20322,7 @@
         <nd ref="462"/>
         <nd ref="461"/>
         <nd ref="2141"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20219,6 +20337,7 @@
         <nd ref="456"/>
         <nd ref="455"/>
         <nd ref="2355"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20233,6 +20352,7 @@
         <nd ref="450"/>
         <nd ref="449"/>
         <nd ref="3867"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20250,6 +20370,7 @@
         <nd ref="441"/>
         <nd ref="440"/>
         <nd ref="230"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20267,6 +20388,7 @@
         <nd ref="432"/>
         <nd ref="431"/>
         <nd ref="430"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20291,6 +20413,7 @@
         <nd ref="29"/>
         <nd ref="28"/>
         <nd ref="2198"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="JEFFERSON DR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20303,6 +20426,7 @@
         <nd ref="26"/>
         <nd ref="25"/>
         <nd ref="4052"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="JEFFERSON DR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20315,6 +20439,7 @@
         <nd ref="2204"/>
         <nd ref="2202"/>
         <nd ref="2200"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20332,6 +20457,7 @@
         <nd ref="4099"/>
         <nd ref="4098"/>
         <nd ref="4223"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONNECTICUT AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20341,6 +20467,7 @@
         <nd ref="4290"/>
         <nd ref="2198"/>
         <nd ref="2198"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20353,6 +20480,7 @@
         <nd ref="2192"/>
         <nd ref="2190"/>
         <nd ref="642"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20371,6 +20499,7 @@
         <nd ref="421"/>
         <nd ref="420"/>
         <nd ref="3936"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20379,6 +20508,7 @@
     <way visible="true" id="131" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="642"/>
         <nd ref="4069"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20388,6 +20518,7 @@
         <nd ref="3547"/>
         <nd ref="4298"/>
         <nd ref="4296"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20401,6 +20532,7 @@
         <nd ref="4286"/>
         <nd ref="4283"/>
         <nd ref="4280"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20412,6 +20544,7 @@
         <nd ref="4271"/>
         <nd ref="4268"/>
         <nd ref="4265"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20427,6 +20560,7 @@
         <nd ref="4250"/>
         <nd ref="4247"/>
         <nd ref="4244"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20439,8 +20573,9 @@
         <nd ref="2693"/>
         <nd ref="2690"/>
         <nd ref="2687"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="136"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="16th St NW"/>
         <tag k="name" v="16TH ST NW"/>
         <tag k="highway" v="road"/>
@@ -20469,6 +20604,7 @@
         <nd ref="3748"/>
         <nd ref="4254"/>
         <nd ref="4254"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20482,6 +20618,7 @@
         <nd ref="4232"/>
         <nd ref="4229"/>
         <nd ref="4226"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20496,6 +20633,7 @@
         <nd ref="2670"/>
         <nd ref="2666"/>
         <nd ref="2662"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="16TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20511,8 +20649,9 @@
         <nd ref="3736"/>
         <nd ref="3735"/>
         <nd ref="2702"/>
-        <tag k="hoot:id" v="140"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="140"/>
         <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
@@ -20525,6 +20664,7 @@
         <nd ref="4214"/>
         <nd ref="4211"/>
         <nd ref="4208"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20541,8 +20681,9 @@
         <nd ref="3728"/>
         <nd ref="3727"/>
         <nd ref="4691"/>
-        <tag k="hoot:id" v="142"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="142"/>
         <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
@@ -20554,6 +20695,7 @@
         <nd ref="3725"/>
         <nd ref="3724"/>
         <nd ref="3723"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="143"/>
         <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
@@ -20567,6 +20709,7 @@
         <nd ref="3722"/>
         <nd ref="3721"/>
         <nd ref="3085"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20578,6 +20721,7 @@
         <nd ref="3719"/>
         <nd ref="3718"/>
         <nd ref="2171"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20589,6 +20733,7 @@
         <nd ref="3716"/>
         <nd ref="3715"/>
         <nd ref="3889"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20611,6 +20756,7 @@
         <nd ref="2525"/>
         <nd ref="2521"/>
         <nd ref="2517"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20622,6 +20768,7 @@
         <nd ref="3713"/>
         <nd ref="3712"/>
         <nd ref="3711"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20649,6 +20796,7 @@
         <nd ref="2454"/>
         <nd ref="2452"/>
         <nd ref="2450"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20659,6 +20807,7 @@
         <nd ref="3710"/>
         <nd ref="3708"/>
         <nd ref="2025"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20695,6 +20844,7 @@
         <nd ref="2396"/>
         <nd ref="2394"/>
         <nd ref="2394"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20706,6 +20856,7 @@
         <nd ref="3704"/>
         <nd ref="3702"/>
         <nd ref="1824"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20745,6 +20896,7 @@
         <nd ref="3646"/>
         <nd ref="3644"/>
         <nd ref="3642"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20758,6 +20910,7 @@
         <nd ref="4315"/>
         <nd ref="4314"/>
         <nd ref="2360"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="C ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20768,8 +20921,9 @@
         <nd ref="3625"/>
         <nd ref="3622"/>
         <nd ref="1519"/>
-        <tag k="hoot:id" v="155"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="155"/>
         <tag k="alt_name" v="E Executive Ave NW"/>
         <tag k="name" v="EAST EXECUTIVE AVE NW"/>
         <tag k="highway" v="road"/>
@@ -20782,6 +20936,7 @@
         <nd ref="3614"/>
         <nd ref="1003"/>
         <nd ref="1003"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="EAST EXECUTIVE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20801,6 +20956,7 @@
         <nd ref="1902"/>
         <nd ref="1901"/>
         <nd ref="3711"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="HENRY BACON DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20814,6 +20970,7 @@
         <nd ref="4154"/>
         <nd ref="4153"/>
         <nd ref="4277"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20834,6 +20991,7 @@
         <nd ref="4142"/>
         <nd ref="4141"/>
         <nd ref="4140"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -20909,6 +21067,7 @@
         <nd ref="693"/>
         <nd ref="691"/>
         <nd ref="349"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="MAINE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21023,6 +21182,7 @@
         <nd ref="656"/>
         <nd ref="655"/>
         <nd ref="3392"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21038,6 +21198,7 @@
         <nd ref="235"/>
         <nd ref="232"/>
         <nd ref="3835"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21053,6 +21214,7 @@
         <nd ref="1699"/>
         <nd ref="1698"/>
         <nd ref="192"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21065,6 +21227,7 @@
         <nd ref="223"/>
         <nd ref="220"/>
         <nd ref="3935"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21075,6 +21238,7 @@
         <nd ref="4223"/>
         <nd ref="1697"/>
         <nd ref="4226"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21084,6 +21248,7 @@
         <nd ref="217"/>
         <nd ref="214"/>
         <nd ref="991"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21094,6 +21259,7 @@
         <nd ref="1696"/>
         <nd ref="1695"/>
         <nd ref="3835"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21110,6 +21276,7 @@
         <nd ref="1688"/>
         <nd ref="1687"/>
         <nd ref="3839"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21123,6 +21290,7 @@
         <nd ref="4281"/>
         <nd ref="4278"/>
         <nd ref="4278"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21138,6 +21306,7 @@
         <nd ref="4260"/>
         <nd ref="4257"/>
         <nd ref="4254"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21149,6 +21318,7 @@
         <nd ref="4245"/>
         <nd ref="4242"/>
         <nd ref="334"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21159,6 +21329,7 @@
         <nd ref="4239"/>
         <nd ref="4236"/>
         <nd ref="4233"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21172,6 +21343,7 @@
         <nd ref="2361"/>
         <nd ref="2360"/>
         <nd ref="2360"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21185,6 +21357,7 @@
         <nd ref="4221"/>
         <nd ref="4218"/>
         <nd ref="4215"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21197,6 +21370,7 @@
         <nd ref="2356"/>
         <nd ref="2356"/>
         <nd ref="2355"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21209,6 +21383,7 @@
         <nd ref="4206"/>
         <nd ref="4203"/>
         <nd ref="4200"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21226,6 +21401,7 @@
         <nd ref="2347"/>
         <nd ref="2347"/>
         <nd ref="2346"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21237,6 +21413,7 @@
         <nd ref="4197"/>
         <nd ref="4196"/>
         <nd ref="4195"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21251,6 +21428,7 @@
         <nd ref="2341"/>
         <nd ref="2340"/>
         <nd ref="2339"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21263,6 +21441,7 @@
         <nd ref="4192"/>
         <nd ref="4191"/>
         <nd ref="328"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21285,6 +21464,7 @@
         <nd ref="4085"/>
         <nd ref="4084"/>
         <nd ref="2448"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21297,6 +21477,7 @@
         <nd ref="2335"/>
         <nd ref="2334"/>
         <nd ref="2333"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21320,6 +21501,7 @@
         <nd ref="4071"/>
         <nd ref="4070"/>
         <nd ref="2411"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21334,6 +21516,7 @@
         <nd ref="2328"/>
         <nd ref="2327"/>
         <nd ref="2326"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21347,6 +21530,7 @@
         <nd ref="2322"/>
         <nd ref="2321"/>
         <nd ref="2320"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21365,6 +21549,7 @@
         <nd ref="4131"/>
         <nd ref="4131"/>
         <nd ref="2951"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21377,6 +21562,7 @@
         <nd ref="2109"/>
         <nd ref="2108"/>
         <nd ref="2107"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21387,6 +21573,7 @@
         <nd ref="4062"/>
         <nd ref="4061"/>
         <nd ref="2379"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="D ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21406,6 +21593,7 @@
         <nd ref="918"/>
         <nd ref="915"/>
         <nd ref="2112"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VERMONT AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21426,6 +21614,7 @@
         <nd ref="2229"/>
         <nd ref="2228"/>
         <nd ref="2359"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21440,6 +21629,7 @@
         <nd ref="2223"/>
         <nd ref="2222"/>
         <nd ref="2338"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21450,6 +21640,7 @@
         <nd ref="3476"/>
         <nd ref="3473"/>
         <nd ref="4215"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW YORK AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21469,6 +21660,7 @@
         <nd ref="4163"/>
         <nd ref="4163"/>
         <nd ref="4162"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="12TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21481,6 +21673,7 @@
         <nd ref="4128"/>
         <nd ref="4127"/>
         <nd ref="4126"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21494,6 +21687,7 @@
         <nd ref="2163"/>
         <nd ref="2161"/>
         <nd ref="2159"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21506,6 +21700,7 @@
         <nd ref="4124"/>
         <nd ref="4123"/>
         <nd ref="4122"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21525,6 +21720,7 @@
         <nd ref="2142"/>
         <nd ref="2142"/>
         <nd ref="2141"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21539,6 +21735,7 @@
         <nd ref="3990"/>
         <nd ref="3989"/>
         <nd ref="3576"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW HAMPSHIRE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21554,6 +21751,7 @@
         <nd ref="4117"/>
         <nd ref="4116"/>
         <nd ref="4115"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21568,6 +21766,7 @@
         <nd ref="2137"/>
         <nd ref="2136"/>
         <nd ref="3575"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21579,6 +21778,7 @@
         <nd ref="4113"/>
         <nd ref="4112"/>
         <nd ref="1621"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21594,6 +21794,7 @@
         <nd ref="2130"/>
         <nd ref="2129"/>
         <nd ref="2128"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21606,6 +21807,7 @@
         <nd ref="4109"/>
         <nd ref="4108"/>
         <nd ref="4107"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21621,6 +21823,7 @@
         <nd ref="2122"/>
         <nd ref="2122"/>
         <nd ref="3815"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21638,6 +21841,7 @@
         <nd ref="3843"/>
         <nd ref="3841"/>
         <nd ref="925"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="RAOUL WALLENBERG PL SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21696,6 +21900,7 @@
         <nd ref="954"/>
         <nd ref="951"/>
         <nd ref="951"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21727,6 +21932,7 @@
         <nd ref="1492"/>
         <nd ref="1491"/>
         <nd ref="4700"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="207"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
@@ -21744,6 +21950,7 @@
         <nd ref="1956"/>
         <nd ref="1954"/>
         <nd ref="1952"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21764,6 +21971,7 @@
         <nd ref="1925"/>
         <nd ref="1923"/>
         <nd ref="1921"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="209"/>
         <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
@@ -21780,6 +21988,7 @@
         <nd ref="1913"/>
         <nd ref="1911"/>
         <nd ref="1909"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21791,6 +22000,7 @@
         <nd ref="2377"/>
         <nd ref="2376"/>
         <nd ref="4251"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21799,6 +22009,7 @@
     <way visible="true" id="212" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="1619"/>
         <nd ref="4201"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21810,6 +22021,7 @@
         <nd ref="2371"/>
         <nd ref="2369"/>
         <nd ref="2379"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21847,6 +22059,7 @@
         <nd ref="2252"/>
         <nd ref="2249"/>
         <nd ref="2601"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="OHIO DR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21889,6 +22102,7 @@
         <nd ref="3891"/>
         <nd ref="3890"/>
         <nd ref="4207"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -21899,6 +22113,7 @@
         <nd ref="2381"/>
         <nd ref="2380"/>
         <nd ref="4210"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="RAOUL WALLENBERG PL SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21908,6 +22123,7 @@
         <nd ref="4213"/>
         <nd ref="2117"/>
         <nd ref="3012"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="JEFFERSON DR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21928,6 +22144,7 @@
         <nd ref="2648"/>
         <nd ref="2645"/>
         <nd ref="4216"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="12TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -21937,6 +22154,7 @@
         <nd ref="4219"/>
         <nd ref="928"/>
         <nd ref="925"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="MAINE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22005,6 +22223,7 @@
         <nd ref="935"/>
         <nd ref="934"/>
         <nd ref="3500"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="MAINE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22076,6 +22295,7 @@
         <nd ref="3190"/>
         <nd ref="3188"/>
         <nd ref="4225"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -22090,6 +22310,7 @@
         <nd ref="2101"/>
         <nd ref="2099"/>
         <nd ref="2967"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22110,6 +22331,7 @@
         <nd ref="619"/>
         <nd ref="617"/>
         <nd ref="1321"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -22138,8 +22360,9 @@
         <nd ref="3127"/>
         <nd ref="3125"/>
         <nd ref="4698"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="224"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
@@ -22155,6 +22378,7 @@
         <nd ref="1074"/>
         <nd ref="1073"/>
         <nd ref="4231"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="ARLINGTON MEMORIAL BRG SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22165,6 +22389,7 @@
         <nd ref="4065"/>
         <nd ref="4064"/>
         <nd ref="4234"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22192,6 +22417,7 @@
         <nd ref="1410"/>
         <nd ref="1408"/>
         <nd ref="4237"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONNECTICUT AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22207,6 +22433,7 @@
         <nd ref="3061"/>
         <nd ref="3058"/>
         <nd ref="3002"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22215,6 +22442,7 @@
     <way visible="true" id="229" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="4240"/>
         <nd ref="654"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22227,6 +22455,7 @@
         <nd ref="1354"/>
         <nd ref="1352"/>
         <nd ref="1350"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22248,6 +22477,7 @@
         <nd ref="3022"/>
         <nd ref="3019"/>
         <nd ref="3965"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22258,6 +22488,7 @@
         <nd ref="4175"/>
         <nd ref="4174"/>
         <nd ref="3642"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -22273,6 +22504,7 @@
         <nd ref="1338"/>
         <nd ref="4200"/>
         <nd ref="4200"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22314,6 +22546,7 @@
         <nd ref="2896"/>
         <nd ref="2893"/>
         <nd ref="2890"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22349,6 +22582,7 @@
         <nd ref="472"/>
         <nd ref="470"/>
         <nd ref="4246"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WEST BASIN DR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22361,6 +22595,7 @@
         <nd ref="1332"/>
         <nd ref="1330"/>
         <nd ref="1909"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22423,6 +22658,7 @@
         <nd ref="2458"/>
         <nd ref="2455"/>
         <nd ref="2064"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="OHIO DR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22432,6 +22668,7 @@
         <nd ref="2392"/>
         <nd ref="1677"/>
         <nd ref="4249"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22445,6 +22682,7 @@
         <nd ref="1324"/>
         <nd ref="1322"/>
         <nd ref="1320"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22453,6 +22691,7 @@
     <way visible="true" id="240" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="4252"/>
         <nd ref="1621"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW YORK AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22465,6 +22704,7 @@
         <nd ref="1314"/>
         <nd ref="1312"/>
         <nd ref="1310"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22473,6 +22713,7 @@
     <way visible="true" id="242" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="3578"/>
         <nd ref="4255"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW HAMPSHIRE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22486,6 +22727,7 @@
         <nd ref="1304"/>
         <nd ref="1302"/>
         <nd ref="4244"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22498,6 +22740,7 @@
         <nd ref="4179"/>
         <nd ref="4178"/>
         <nd ref="1730"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22509,6 +22752,7 @@
         <nd ref="4010"/>
         <nd ref="4009"/>
         <nd ref="4107"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22523,6 +22767,7 @@
         <nd ref="1289"/>
         <nd ref="1286"/>
         <nd ref="2338"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22532,6 +22777,7 @@
         <nd ref="3935"/>
         <nd ref="4177"/>
         <nd ref="4176"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22545,6 +22791,7 @@
         <nd ref="2995"/>
         <nd ref="2995"/>
         <nd ref="654"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="12TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22553,6 +22800,7 @@
     <way visible="true" id="249" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="4261"/>
         <nd ref="4173"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="MADISON DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22568,6 +22816,7 @@
         <nd ref="1271"/>
         <nd ref="1268"/>
         <nd ref="3815"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22580,6 +22829,7 @@
         <nd ref="2980"/>
         <nd ref="2975"/>
         <nd ref="2970"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="12TH ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22591,6 +22841,7 @@
         <nd ref="2318"/>
         <nd ref="2316"/>
         <nd ref="1610"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22599,6 +22850,7 @@
     <way visible="true" id="253" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="991"/>
         <nd ref="4267"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22608,6 +22860,7 @@
         <nd ref="4270"/>
         <nd ref="3565"/>
         <nd ref="1633"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22703,6 +22956,7 @@
         <nd ref="3394"/>
         <nd ref="3393"/>
         <nd ref="3392"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22715,6 +22969,7 @@
         <nd ref="539"/>
         <nd ref="536"/>
         <nd ref="1624"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22728,6 +22983,7 @@
         <nd ref="1395"/>
         <nd ref="1393"/>
         <nd ref="4276"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22739,6 +22995,7 @@
         <nd ref="2114"/>
         <nd ref="2113"/>
         <nd ref="4279"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22755,6 +23012,7 @@
         <nd ref="2642"/>
         <nd ref="2639"/>
         <nd ref="4233"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22763,6 +23021,7 @@
     <way visible="true" id="260" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="3387"/>
         <nd ref="3386"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22775,6 +23034,7 @@
         <nd ref="2119"/>
         <nd ref="2118"/>
         <nd ref="4282"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VERMONT AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22787,6 +23047,7 @@
         <nd ref="2630"/>
         <nd ref="2627"/>
         <nd ref="201"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22800,6 +23061,7 @@
         <nd ref="2665"/>
         <nd ref="2661"/>
         <nd ref="4122"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22816,6 +23078,7 @@
         <nd ref="2606"/>
         <nd ref="2605"/>
         <nd ref="2972"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22824,6 +23087,7 @@
     <way visible="true" id="265" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="3392"/>
         <nd ref="3387"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22921,6 +23185,7 @@
         <nd ref="1544"/>
         <nd ref="1543"/>
         <nd ref="4288"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -22934,6 +23199,7 @@
         <nd ref="2600"/>
         <nd ref="2598"/>
         <nd ref="2128"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23055,6 +23321,7 @@
         <nd ref="2956"/>
         <nd ref="2952"/>
         <nd ref="3280"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -23074,6 +23341,7 @@
         <nd ref="3817"/>
         <nd ref="3816"/>
         <nd ref="976"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WEST EXECUTIVE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23087,6 +23355,7 @@
         <nd ref="1897"/>
         <nd ref="1896"/>
         <nd ref="4126"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23102,6 +23371,7 @@
         <nd ref="2586"/>
         <nd ref="2584"/>
         <nd ref="3860"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23118,6 +23388,7 @@
         <nd ref="3761"/>
         <nd ref="3757"/>
         <nd ref="4069"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="C ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23252,6 +23523,7 @@
         <nd ref="2729"/>
         <nd ref="2728"/>
         <nd ref="527"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -23261,6 +23533,7 @@
         <nd ref="4293"/>
         <nd ref="3805"/>
         <nd ref="4162"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23278,6 +23551,7 @@
         <nd ref="2017"/>
         <nd ref="2016"/>
         <nd ref="2015"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="22ND ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23297,6 +23571,7 @@
         <nd ref="2564"/>
         <nd ref="2562"/>
         <nd ref="3964"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23311,6 +23586,7 @@
         <nd ref="20"/>
         <nd ref="19"/>
         <nd ref="4115"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23343,6 +23619,7 @@
         <nd ref="1993"/>
         <nd ref="1992"/>
         <nd ref="3964"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="22ND ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23374,6 +23651,7 @@
         <nd ref="2488"/>
         <nd ref="2484"/>
         <nd ref="3589"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="G ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23385,6 +23663,7 @@
         <nd ref="2390"/>
         <nd ref="2389"/>
         <nd ref="4297"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23418,6 +23697,7 @@
         <nd ref="1967"/>
         <nd ref="1965"/>
         <nd ref="1963"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="22ND ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23429,6 +23709,7 @@
         <nd ref="4202"/>
         <nd ref="4199"/>
         <nd ref="4299"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23450,6 +23731,7 @@
         <nd ref="1940"/>
         <nd ref="1937"/>
         <nd ref="3935"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="22ND ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23459,6 +23741,7 @@
         <nd ref="63"/>
         <nd ref="61"/>
         <nd ref="4300"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="26TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23470,6 +23753,7 @@
         <nd ref="1728"/>
         <nd ref="1727"/>
         <nd ref="1726"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23480,6 +23764,7 @@
         <nd ref="987"/>
         <nd ref="983"/>
         <nd ref="4301"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23502,6 +23787,7 @@
         <nd ref="1713"/>
         <nd ref="1712"/>
         <nd ref="1711"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23514,6 +23800,7 @@
         <nd ref="1088"/>
         <nd ref="1086"/>
         <nd ref="4302"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="16TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23524,6 +23811,7 @@
         <nd ref="1732"/>
         <nd ref="1731"/>
         <nd ref="4303"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23542,6 +23830,7 @@
         <nd ref="3593"/>
         <nd ref="3591"/>
         <nd ref="3589"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23553,6 +23842,7 @@
         <nd ref="2095"/>
         <nd ref="2093"/>
         <nd ref="4304"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="18TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23567,6 +23857,7 @@
         <nd ref="3579"/>
         <nd ref="3577"/>
         <nd ref="3576"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23579,6 +23870,7 @@
         <nd ref="2219"/>
         <nd ref="2218"/>
         <nd ref="4305"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="19TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23594,6 +23886,7 @@
         <nd ref="3828"/>
         <nd ref="3827"/>
         <nd ref="4306"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23616,6 +23909,7 @@
         <nd ref="3922"/>
         <nd ref="3921"/>
         <nd ref="4307"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="22ND ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23624,6 +23918,7 @@
     <way visible="true" id="296" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="4308"/>
         <nd ref="4162"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="12TH ST EXPY NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23634,6 +23929,7 @@
         <nd ref="4106"/>
         <nd ref="4105"/>
         <nd ref="4309"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23646,6 +23942,7 @@
         <nd ref="4159"/>
         <nd ref="4158"/>
         <nd ref="4310"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="12TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23658,6 +23955,7 @@
         <nd ref="325"/>
         <nd ref="324"/>
         <nd ref="4311"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="14TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23672,6 +23970,7 @@
         <nd ref="1706"/>
         <nd ref="1705"/>
         <nd ref="4312"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23681,6 +23980,7 @@
         <nd ref="2107"/>
         <nd ref="2106"/>
         <nd ref="4313"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23695,6 +23995,7 @@
         <nd ref="87"/>
         <nd ref="85"/>
         <nd ref="2320"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23705,6 +24006,7 @@
         <nd ref="1630"/>
         <nd ref="1627"/>
         <nd ref="1624"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23716,6 +24018,7 @@
         <nd ref="1939"/>
         <nd ref="1936"/>
         <nd ref="1350"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW YORK AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23729,6 +24032,7 @@
         <nd ref="1614"/>
         <nd ref="1612"/>
         <nd ref="1610"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="13TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23738,6 +24042,7 @@
         <nd ref="4215"/>
         <nd ref="1934"/>
         <nd ref="1920"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW YORK AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23751,6 +24056,7 @@
         <nd ref="1924"/>
         <nd ref="1922"/>
         <nd ref="3029"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="NEW YORK AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23759,6 +24065,7 @@
     <way visible="true" id="308" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="1825"/>
         <nd ref="1824"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23773,6 +24080,7 @@
         <nd ref="1819"/>
         <nd ref="1818"/>
         <nd ref="1817"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23790,6 +24098,7 @@
         <nd ref="1809"/>
         <nd ref="1808"/>
         <nd ref="2558"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23820,6 +24129,7 @@
         <nd ref="3504"/>
         <nd ref="3503"/>
         <nd ref="3502"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23849,6 +24159,7 @@
         <nd ref="1782"/>
         <nd ref="1780"/>
         <nd ref="2513"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23877,6 +24188,7 @@
         <nd ref="3463"/>
         <nd ref="3587"/>
         <nd ref="3587"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23913,6 +24225,7 @@
         <nd ref="1745"/>
         <nd ref="1744"/>
         <nd ref="2448"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23931,6 +24244,7 @@
         <nd ref="1736"/>
         <nd ref="1735"/>
         <nd ref="1734"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23946,6 +24260,7 @@
         <nd ref="1030"/>
         <nd ref="1027"/>
         <nd ref="334"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23962,6 +24277,7 @@
         <nd ref="1009"/>
         <nd ref="1006"/>
         <nd ref="209"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23972,6 +24288,7 @@
         <nd ref="2217"/>
         <nd ref="2216"/>
         <nd ref="3875"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23988,6 +24305,7 @@
         <nd ref="982"/>
         <nd ref="979"/>
         <nd ref="976"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -23997,6 +24315,7 @@
         <nd ref="976"/>
         <nd ref="973"/>
         <nd ref="4265"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24008,6 +24327,7 @@
         <nd ref="1841"/>
         <nd ref="1840"/>
         <nd ref="1726"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="I ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24021,6 +24341,7 @@
         <nd ref="961"/>
         <nd ref="958"/>
         <nd ref="2967"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24032,6 +24353,7 @@
         <nd ref="952"/>
         <nd ref="949"/>
         <nd ref="1300"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24052,6 +24374,7 @@
         <nd ref="2717"/>
         <nd ref="2716"/>
         <nd ref="4176"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WASHINGTON CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24063,6 +24386,7 @@
         <nd ref="3389"/>
         <nd ref="3388"/>
         <nd ref="73"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="QUEEN ANNES LN NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24094,6 +24418,7 @@
         <nd ref="2667"/>
         <nd ref="3578"/>
         <nd ref="3578"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WASHINGTON CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24110,6 +24435,7 @@
         <nd ref="708"/>
         <nd ref="704"/>
         <nd ref="3850"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="H ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24125,6 +24451,7 @@
         <nd ref="2650"/>
         <nd ref="2647"/>
         <nd ref="217"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WASHINGTON CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24149,6 +24476,7 @@
         <nd ref="2610"/>
         <nd ref="2607"/>
         <nd ref="3580"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="WASHINGTON CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24169,6 +24497,7 @@
         <nd ref="2173"/>
         <nd ref="2172"/>
         <nd ref="4696"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="330"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
@@ -24182,6 +24511,7 @@
         <nd ref="3563"/>
         <nd ref="3562"/>
         <nd ref="3561"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24194,6 +24524,7 @@
         <nd ref="3558"/>
         <nd ref="3557"/>
         <nd ref="1921"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="332"/>
         <tag k="alt_name" v="E St NW"/>
@@ -24209,6 +24540,7 @@
         <nd ref="1683"/>
         <nd ref="1682"/>
         <nd ref="1711"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24222,6 +24554,7 @@
         <nd ref="1678"/>
         <nd ref="1678"/>
         <nd ref="3834"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24252,6 +24585,7 @@
         <nd ref="3967"/>
         <nd ref="3966"/>
         <nd ref="3965"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="22ND ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24289,6 +24623,7 @@
         <nd ref="3938"/>
         <nd ref="3937"/>
         <nd ref="3936"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="22ND ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24300,6 +24635,7 @@
         <nd ref="4324"/>
         <nd ref="4323"/>
         <nd ref="3547"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="STATE PL NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24312,6 +24648,7 @@
         <nd ref="4320"/>
         <nd ref="4319"/>
         <nd ref="1932"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="STATE PL NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24344,6 +24681,7 @@
         <nd ref="4031"/>
         <nd ref="4030"/>
         <nd ref="1825"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24358,6 +24696,7 @@
         <nd ref="1835"/>
         <nd ref="1834"/>
         <nd ref="2200"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="D ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24378,6 +24717,7 @@
         <nd ref="4019"/>
         <nd ref="4018"/>
         <nd ref="185"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="LINCOLN MEMORIAL CIR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24394,6 +24734,7 @@
         <nd ref="1827"/>
         <nd ref="1826"/>
         <nd ref="4066"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="D ST SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24406,6 +24747,7 @@
         <nd ref="1436"/>
         <nd ref="1433"/>
         <nd ref="1430"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="16TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24523,6 +24865,7 @@
         <nd ref="3282"/>
         <nd ref="3281"/>
         <nd ref="3280"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="hoot:status" v="1"/>
@@ -24549,6 +24892,7 @@
         <nd ref="1763"/>
         <nd ref="1761"/>
         <nd ref="3386"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="DANIEL C FRENCH DR SW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24557,6 +24901,7 @@
     <way visible="true" id="346" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
         <nd ref="3561"/>
         <nd ref="4251"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24585,6 +24930,7 @@
         <nd ref="2791"/>
         <nd ref="2791"/>
         <nd ref="2789"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24594,6 +24940,7 @@
         <nd ref="212"/>
         <nd ref="2116"/>
         <nd ref="796"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24606,6 +24953,7 @@
         <nd ref="2367"/>
         <nd ref="2366"/>
         <nd ref="1310"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="JACKSON PL NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24618,6 +24966,7 @@
         <nd ref="3886"/>
         <nd ref="3885"/>
         <nd ref="3884"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24639,6 +24988,7 @@
         <nd ref="2767"/>
         <nd ref="800"/>
         <nd ref="800"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24657,6 +25007,7 @@
         <nd ref="3876"/>
         <nd ref="3875"/>
         <nd ref="3875"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24680,6 +25031,7 @@
         <nd ref="1530"/>
         <nd ref="1529"/>
         <nd ref="4278"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="MADISON DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24696,6 +25048,7 @@
         <nd ref="3868"/>
         <nd ref="3868"/>
         <nd ref="3867"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24715,6 +25068,7 @@
         <nd ref="1521"/>
         <nd ref="1520"/>
         <nd ref="1952"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="MADISON DR NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24729,6 +25083,7 @@
         <nd ref="3861"/>
         <nd ref="3861"/>
         <nd ref="3860"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24742,6 +25097,7 @@
         <nd ref="3854"/>
         <nd ref="3852"/>
         <nd ref="3850"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24755,6 +25111,7 @@
         <nd ref="3842"/>
         <nd ref="3840"/>
         <nd ref="3839"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24766,6 +25123,7 @@
         <nd ref="3837"/>
         <nd ref="3836"/>
         <nd ref="3835"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24788,6 +25146,7 @@
         <nd ref="2611"/>
         <nd ref="2608"/>
         <nd ref="991"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="24TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24813,6 +25172,7 @@
         <nd ref="2468"/>
         <nd ref="2465"/>
         <nd ref="796"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24827,6 +25187,7 @@
         <nd ref="1891"/>
         <nd ref="1890"/>
         <nd ref="329"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24850,6 +25211,7 @@
         <nd ref="2439"/>
         <nd ref="2439"/>
         <nd ref="2837"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24861,6 +25223,7 @@
         <nd ref="1888"/>
         <nd ref="1887"/>
         <nd ref="204"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24883,6 +25246,7 @@
         <nd ref="2415"/>
         <nd ref="2413"/>
         <nd ref="2411"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24897,6 +25261,7 @@
         <nd ref="1883"/>
         <nd ref="1882"/>
         <nd ref="2346"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24915,6 +25280,7 @@
         <nd ref="2395"/>
         <nd ref="2393"/>
         <nd ref="2392"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24929,6 +25295,7 @@
         <nd ref="1877"/>
         <nd ref="1877"/>
         <nd ref="3566"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24942,6 +25309,7 @@
         <nd ref="1873"/>
         <nd ref="1872"/>
         <nd ref="3866"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24979,6 +25347,7 @@
         <nd ref="1844"/>
         <nd ref="1843"/>
         <nd ref="2513"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="F ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -24995,6 +25364,7 @@
         <nd ref="2382"/>
         <nd ref="73"/>
         <nd ref="73"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="26TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -25008,6 +25378,7 @@
         <nd ref="3811"/>
         <nd ref="3810"/>
         <nd ref="1730"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="20TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -25023,6 +25394,7 @@
         <nd ref="3802"/>
         <nd ref="3802"/>
         <nd ref="3866"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -25047,6 +25419,7 @@
         <nd ref="3750"/>
         <nd ref="3747"/>
         <nd ref="3834"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="21ST ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -25074,6 +25447,7 @@
         <nd ref="3744"/>
         <nd ref="3742"/>
         <nd ref="2409"/>
+        <tag k="accuracy" v="5"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:status" v="1"/>
@@ -25094,6 +25468,7 @@
         <nd ref="4511"/>
         <nd ref="4512"/>
         <nd ref="4695"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="378"/>
         <tag k="name" v="Ellipse Rd NW"/>
@@ -25112,6 +25487,7 @@
         <nd ref="4380"/>
         <nd ref="4381"/>
         <nd ref="4692"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="386"/>
         <tag k="name" v="Ellipse Rd NW"/>
@@ -25138,8 +25514,9 @@
         <nd ref="4360"/>
         <nd ref="4361"/>
         <nd ref="4691"/>
-        <tag k="hoot:status" v="2"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="389"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ellipse Rd NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="389"/>
@@ -25147,54 +25524,14 @@
     <way visible="true" id="392" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4699"/>
         <nd ref="4693"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="392"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="Ellipse Rd NW"/>
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="392"/>
     </way>
-    <way visible="true" id="400" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4591"/>
-        <nd ref="4592"/>
-        <nd ref="4593"/>
-        <nd ref="4594"/>
-        <nd ref="4595"/>
-        <nd ref="4596"/>
-        <nd ref="4597"/>
-        <nd ref="4598"/>
-        <nd ref="4599"/>
-        <nd ref="4600"/>
-        <nd ref="3723"/>
-        <tag k="hoot:id" v="-850"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="alt_name" v="Constitution Ave NW"/>
-        <tag k="name" v="US Hwy 50"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:id" v="400"/>
-    </way>
-    <way visible="true" id="401" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4691"/>
-        <nd ref="3263"/>
-        <tag k="hoot:id" v="-841"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="401"/>
-    </way>
     <way visible="true" id="402" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="1950"/>
-        <nd ref="3745"/>
-        <nd ref="3743"/>
-        <nd ref="4692"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-834"/>
-        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="402"/>
-    </way>
-    <way visible="true" id="406" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="209"/>
         <nd ref="4550"/>
         <nd ref="4551"/>
@@ -25213,25 +25550,27 @@
         <nd ref="4564"/>
         <nd ref="4565"/>
         <nd ref="4566"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-640"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-811"/>
         <tag k="alt_name" v="Raoul Wallenberg Pl SW"/>
         <tag k="name" v="15th St NW"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="406"/>
+        <tag k="hoot:id" v="402"/>
     </way>
-    <way visible="true" id="407" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="404" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4693"/>
         <nd ref="598"/>
         <nd ref="3556"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-619"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-794"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="407"/>
+        <tag k="hoot:id" v="404"/>
     </way>
-    <way visible="true" id="408" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="405" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3183"/>
         <nd ref="618"/>
         <nd ref="616"/>
@@ -25240,51 +25579,27 @@
         <nd ref="610"/>
         <nd ref="608"/>
         <nd ref="4694"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-616"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-791"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="408"/>
+        <tag k="hoot:id" v="405"/>
     </way>
-    <way visible="true" id="409" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="1519"/>
-        <nd ref="4616"/>
-        <nd ref="4617"/>
-        <nd ref="4618"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-16"/>
-        <tag k="name" v="E Executive Ave NW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="409"/>
-    </way>
-    <way visible="true" id="410" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4694"/>
-        <nd ref="4490"/>
-        <nd ref="4492"/>
-        <nd ref="4494"/>
-        <nd ref="4496"/>
-        <nd ref="4498"/>
-        <nd ref="4700"/>
-        <tag k="hoot:id" v="-13"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="South Pl NW"/>
-        <tag k="foot" v="designated"/>
-        <tag k="highway" v="path"/>
-        <tag k="hoot:id" v="410"/>
-    </way>
-    <way visible="true" id="411" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="406" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="1921"/>
         <nd ref="636"/>
         <nd ref="4695"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-776"/>
+        <tag k="hoot:id" v="-601"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="411"/>
+        <tag k="hoot:id" v="406"/>
     </way>
-    <way visible="true" id="413" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="407" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="2687"/>
         <nd ref="2215"/>
         <nd ref="2214"/>
@@ -25309,14 +25624,15 @@
         <nd ref="2185"/>
         <nd ref="2184"/>
         <nd ref="4697"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-773"/>
+        <tag k="hoot:id" v="-598"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="413"/>
+        <tag k="hoot:id" v="407"/>
     </way>
-    <way visible="true" id="415" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="408" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4696"/>
         <nd ref="2170"/>
         <nd ref="2168"/>
@@ -25330,14 +25646,43 @@
         <nd ref="2152"/>
         <nd ref="2150"/>
         <nd ref="2148"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-770"/>
+        <tag k="hoot:id" v="-595"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="415"/>
+        <tag k="hoot:id" v="408"/>
     </way>
-    <way visible="true" id="416" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="409" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="1519"/>
+        <nd ref="4616"/>
+        <nd ref="4617"/>
+        <nd ref="4618"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-16"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="E Executive Ave NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="409"/>
+    </way>
+    <way visible="true" id="410" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="4694"/>
+        <nd ref="4490"/>
+        <nd ref="4492"/>
+        <nd ref="4494"/>
+        <nd ref="4496"/>
+        <nd ref="4498"/>
+        <nd ref="4700"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-13"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="South Pl NW"/>
+        <tag k="foot" v="designated"/>
+        <tag k="highway" v="path"/>
+        <tag k="hoot:id" v="410"/>
+    </way>
+    <way visible="true" id="412" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4698"/>
         <nd ref="3123"/>
         <nd ref="3121"/>
@@ -25356,14 +25701,15 @@
         <nd ref="3095"/>
         <nd ref="3093"/>
         <nd ref="2687"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-580"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-755"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="416"/>
+        <tag k="hoot:id" v="412"/>
     </way>
-    <way visible="true" id="417" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="414" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3183"/>
         <nd ref="3181"/>
         <nd ref="3179"/>
@@ -25375,14 +25721,15 @@
         <nd ref="3167"/>
         <nd ref="3165"/>
         <nd ref="4699"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-751"/>
+        <tag k="hoot:id" v="-576"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="417"/>
+        <tag k="hoot:id" v="414"/>
     </way>
-    <way visible="true" id="418" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="415" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3547"/>
         <nd ref="4623"/>
         <nd ref="4624"/>
@@ -25409,28 +25756,30 @@
         <nd ref="4645"/>
         <nd ref="4646"/>
         <nd ref="4647"/>
+        <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-749"/>
+        <tag k="hoot:id" v="-574"/>
         <tag k="name" v="17th St NW"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="418"/>
+        <tag k="hoot:id" v="415"/>
     </way>
-    <way visible="true" id="420" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="416" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4700"/>
         <nd ref="1490"/>
         <nd ref="1489"/>
         <nd ref="1488"/>
         <nd ref="1487"/>
         <nd ref="1486"/>
-        <tag k="hoot:id" v="-727"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-559"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="South Pl NW"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
         <tag k="foot" v="designated"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="420"/>
+        <tag k="hoot:id" v="416"/>
     </way>
-    <way visible="true" id="421" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="417" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="1519"/>
         <nd ref="1518"/>
         <nd ref="1517"/>
@@ -25438,11 +25787,56 @@
         <nd ref="1515"/>
         <nd ref="1514"/>
         <nd ref="4701"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-555"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-723"/>
         <tag k="alt_name" v="Executive Ave NW;South Pl NW"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="421"/>
+        <tag k="hoot:id" v="417"/>
+    </way>
+    <way visible="true" id="418" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="4591"/>
+        <nd ref="4592"/>
+        <nd ref="4593"/>
+        <nd ref="4594"/>
+        <nd ref="4595"/>
+        <nd ref="4596"/>
+        <nd ref="4597"/>
+        <nd ref="4598"/>
+        <nd ref="4599"/>
+        <nd ref="4600"/>
+        <nd ref="3723"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-682"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="alt_name" v="Constitution Ave NW"/>
+        <tag k="name" v="US Hwy 50"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="418"/>
+    </way>
+    <way visible="true" id="419" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="4691"/>
+        <nd ref="3263"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="-673"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="419"/>
+    </way>
+    <way visible="true" id="420" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="1950"/>
+        <nd ref="3745"/>
+        <nd ref="3743"/>
+        <nd ref="4692"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-666"/>
+        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="420"/>
     </way>
 </osm>
