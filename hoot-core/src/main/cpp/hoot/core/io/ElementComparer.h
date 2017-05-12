@@ -59,6 +59,8 @@ private:
   bool _compareRelation(const boost::shared_ptr<const Element>& re,
                         const boost::shared_ptr<const Element>& e) const;
 
+  void _removeTagsNotImportantForComparison(Tags& tags) const;
+
 };
 
 }

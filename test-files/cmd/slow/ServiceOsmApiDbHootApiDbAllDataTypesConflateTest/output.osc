@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <modify>
+        <node id="65" version="1" lat="38.9109692999999979" lon="-104.7145694000000020">
+            <tag k="note" v="1-a;2-a"/>
+            <tag k="poi" v="yes"/>
+            <tag k="hoot:id" v="65"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="name" v="Starbucks"/>
+            <tag k="amenity" v="cafe"/>
+            <tag k="error:circular" v="15"/>
+        </node>
+        <node id="74" version="1" lat="38.8940861000000027" lon="-104.7174957999999947">
+            <tag k="note" v="1-b;2-b"/>
+            <tag k="poi" v="yes"/>
+            <tag k="hoot:id" v="74"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="name" v="Starbucks"/>
+            <tag k="amenity" v="cafe"/>
+            <tag k="error:circular" v="15"/>
+        </node>
+        <node id="79" version="1" lat="38.8885118999999975" lon="-104.7175565000000006">
+            <tag k="note" v="1-c;2-c"/>
+            <tag k="poi" v="yes"/>
+            <tag k="hoot:id" v="79"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="name" v="Starbucks"/>
+            <tag k="amenity" v="cafe"/>
+            <tag k="error:circular" v="15"/>
+        </node>
+    </modify>
+    <create>
+        <node id="-120" version="0" lat="38.8319586024348027" lon="-104.7772181212619955">
+            <tag k="place" v="city"/>
+            <tag k="poi" v="yes"/>
+            <tag k="hoot:id" v="120"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="name" v="Colorado Springs"/>
+            <tag k="error:circular" v="5000"/>
+        </node>
+        <node id="-122" version="0" lat="38.8747831409682973" lon="-104.7208597111930004">
+            <tag k="note" v="2-e"/>
+            <tag k="poi" v="yes"/>
+            <tag k="hoot:id" v="122"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="name" v="Starbucks"/>
+            <tag k="amenity" v="cafe"/>
+            <tag k="error:circular" v="150"/>
+        </node>
+        <node id="-124" version="0" lat="38.8753845261677995" lon="-104.7191538262590029">
+            <tag k="note" v="2-d"/>
+            <tag k="poi" v="yes"/>
+            <tag k="hoot:id" v="124"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="name" v="Starbucks"/>
+            <tag k="amenity" v="cafe"/>
+            <tag k="error:circular" v="1000"/>
+        </node>
+    </create>
+</osmChange>

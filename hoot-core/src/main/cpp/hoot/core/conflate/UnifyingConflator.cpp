@@ -316,6 +316,8 @@ void UnifyingConflator::_mapUnknownIdsBackToModifiedElements(OsmMapPtr& map)
         LOG_VARD(replacementElement->getElementId().getType());
         ElementPtr newUnknown1Element(replacementElement->clone());
         newUnknown1Element->setId(eid1.getId());
+        //TODO: I believe this should be status=3, but I'm not 100% convinced yet.
+        newUnknown1Element->setStatus(Status::Conflated/*Status::Unknown1*/);
         map->replace(replacementElement, newUnknown1Element);
       }
     }

@@ -40,27 +40,47 @@ _threshold(threshold)
 {
 }
 
+void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
+{
+  tags.remove(MetadataTags::HootStatus());
+  //TODO: not sure where "status" is coming from...should be "hoot:status"
+  tags.remove("status");
+  //this is ok b/c we have the actual id to compare to, but it should still probably be fixed to
+  //carry along the hoot:id tag for consistency's sake when that is desired
+  tags.remove(MetadataTags::HootId());
+  tags.remove(MetadataTags::SourceDateTime());
+}
+
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
+  LOG_VART(e1->getElementId());
+  LOG_VART(e2->getElementId());
+
+  //create modified copies of the tags for comparing, as we don't care if some tags are identical
+  Tags tags1 = e1->getTags();
+  _removeTagsNotImportantForComparison(tags1);
+  Tags tags2 = e2->getTags();
+  _removeTagsNotImportantForComparison(tags2);
+
   if (e1->getElementId() != e2->getElementId() ||
-      !(e1->getTags() == e2->getTags()) ||
-      //e1->getStatus() != e2->getStatus() ||
+      !(tags1 == tags2) ||
+      (ConfigOptions().getChangesetCompareStatus() && e1->getStatus() != e2->getStatus()) ||
       (e1->getVersion() != e2->getVersion()) ||
       fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
   {
     if (Log::getInstance().getLevel() == Log::Trace)
     {
-      if (!(e1->getTags() == e2->getTags()))
+      if (!(tags1 == tags2))
       {
-        LOG_TRACE("compare failed on tags:");
+        LOG_TRACE("compare failed on tags");
       }
-    //else if (e1->getStatus() != e2->getStatus())
-    //{
-    //  LOG_TRACE("compare failed on status:");
-    //}
+      else if (e1->getStatus() != e2->getStatus())
+      {
+        LOG_TRACE("compare failed on status");
+      }
       else if (e1->getVersion() != e2->getVersion())
       {
-        LOG_TRACE("compare failed on version:");
+        LOG_TRACE("compare failed on version");
       }
       else if (fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
       {
@@ -68,9 +88,10 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
         LOG_VART(fabs(e1->getCircularError() - e2->getCircularError()));
         LOG_VART(_threshold);
       }
+
+      LOG_VART(tags1);
+      LOG_VART(tags2);
     }
-    LOG_VART(e1);
-    LOG_VART(e2);
 
     return false;
   }

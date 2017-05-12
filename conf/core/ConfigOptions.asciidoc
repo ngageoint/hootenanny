@@ -162,6 +162,16 @@ If true, changesets derived can issue delete statements for the 'from' dataset (
 passed to the changeset deriver).  If false, no delete statements will be issued for the 'from'
 dataset.
 
+=== changeset.compare.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, changeset elements are considered different if they have different statuses.  If false,
+then status does not matter during element comparison.  Setting this to true may result in many
+additional changeset modify statements when Hootenanny changes the status of elements to
+'conflated'.
+
 === changeset.max.size
 
 * Data Type: long
@@ -175,6 +185,15 @@ The maximum allowed element size of an OSM changeset written to an OSM API datab
 * Default Value: `-1`
 
 The user ID used by certain changeset writers when writing to an OSM API database.
+
+=== changeset.xml.writer.add.timestamp
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, XML changesets will add the 'timestamp' attribute to the element tags.  If false, the
+timestamp attribute will not be added.  This generally should only be set to false for testing
+purposes.
 
 === circular.error.default.value
 
@@ -2583,7 +2602,7 @@ useful for debugging.
 * Data Type: bool
 * Default Value: `false`
 
-When true, writers will include debug information (hoot::* tags; e.g. status). Not honored by all
+When true, writers will include debug information (hoot:* tags; e.g. status). Not honored by all
 writers.
 
 === writer.clean.review.tags

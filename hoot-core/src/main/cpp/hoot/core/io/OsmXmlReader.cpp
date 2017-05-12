@@ -81,7 +81,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
        (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
        (_addSourceDateTime == true) )
   {
-    _element->setTag("source:datetime",attributes.value("timestamp"));
+    _element->setTag(MetadataTags::SourceDateTime(),attributes.value("timestamp"));
   }
 
 }

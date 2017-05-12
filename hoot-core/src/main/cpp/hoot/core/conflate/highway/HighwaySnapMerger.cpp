@@ -214,7 +214,9 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   OsmMapPtr result = map;
 
   ElementPtr e1 = result->getElement(eid1);
+  LOG_VART(e1->getStatus());
   ElementPtr e2 = result->getElement(eid2);
+  LOG_VART(e2->getStatus());
 
   // if the element is no longer part of the map. This can happen in rare cases where a match may
   // not conflict with any one match in the set, but may conflict with multiple matches in the

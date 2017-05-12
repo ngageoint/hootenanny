@@ -80,11 +80,13 @@ Change ChangesetDeriver::_nextChange()
   if (!_fromE.get() && _from->hasMoreElements())
   {
     _fromE = _from->readNextElement();
+    LOG_TRACE("'from' element null and 'from'' has more elements...");
     LOG_VART(_fromE->getElementId());
   }
   if (!_toE.get() && _to->hasMoreElements())
   {
     _toE = _to->readNextElement();
+    LOG_TRACE("'to' element null and 'to'' has more elements...");
     LOG_VART(_toE->getElementId());
   }
 
@@ -212,35 +214,18 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE(
           "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
           _toE->getElementId() << "; deleting 'from' element...");
-
-//        _fromE = _from->readNextElement();
-//        if (_fromE)
-//        {
-//          LOG_VART(_fromE->getElementId());
-//        }
       }
       else
       {
-        //this helps with minimizing the changeset impact on reference datasets in certain
-        //situations
-        //TODO: don't completely understand why this needs to be a modify statement to prevent
-        //dropping certain features nor what implications that has
-        result.type = Change::Modify;
+        //The changeset provider will return no more changes if a null change is returned here.  We
+        //want to force no changes for this particular element, so we're going to use the unknown
+        //change type, which ends up being a no-op.  Skipping an element delete in this situation
+        //minimizes the changeset impact on reference datasets in certain situations.
+        result.type = Change::Unknown;
         result.e = _fromE;
         LOG_TRACE(
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingFromFeaturesKey() << "=true...");
-
-//        _toE = _to->readNextElement();
-//        if (_toE)
-//        {
-//          LOG_VART(_toE->getElementId());
-//        }
-//        _fromE = _from->readNextElement();
-//        if (_fromE)
-//        {
-//          LOG_VART(_fromE->getElementId());
-//        }
       } 
 
       _fromE = _from->readNextElement();

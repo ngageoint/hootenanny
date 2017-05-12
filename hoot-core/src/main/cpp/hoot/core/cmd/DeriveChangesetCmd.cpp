@@ -36,6 +36,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -117,10 +119,21 @@ public:
         GeometryUtils::envelopeToConfigString(convertBounds));
     }
 
+    //some in these datasets may have status=3 if you're loading conflated data, so use
+    //reader.use.file.status and reader.keep.file.status if you want to retain that value
     OsmMapPtr map1(new OsmMap());
     loadMap(map1, input1, true, Status::Unknown1);
     OsmMapPtr map2(new OsmMap());
     loadMap(map2, input2, true, Status::Unknown2);
+
+    //we don't want to include review relations
+    boost::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    removeElementsVisitor.setRecursive(false);
+    map1->visitRw(removeElementsVisitor);
+    map2->visitRw(removeElementsVisitor);
+
     //changeset derivation requires element sorting to work properly
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));

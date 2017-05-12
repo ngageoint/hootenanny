@@ -68,7 +68,7 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
     throw IllegalArgumentException("You must specify a valid 'from' and 'to' element ID.");
   }
 
-  LOG_TRACE("Replacing " << _from << " with " << _to < "...");
+  LOG_TRACE("Replacing " << _from << " with " << _to << "...");
 
   // if from isn't in the map, there is nothing to do.
   if (map->containsElement(_from) == false)

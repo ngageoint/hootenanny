@@ -57,7 +57,7 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
 {
   LOG_DEBUG("Writing changeset to " << path);
 
-   _changesetBounds.init();
+  _changesetBounds.init();
 
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
@@ -82,17 +82,23 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
       case Change::Delete:
         _deleteExistingElement(change.e);
         break;
+      case Change::Unknown:
+        //see comment in ChangesetDeriver::_nextChange() when
+        //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+        break;
       default:
         throw IllegalArgumentException("Unexpected change type.");
     }
 
-    if (change.e->getElementType().getEnum() == ElementType::Node)
+    if (change.type != Change::Unknown)
     {
-      ConstNodePtr node = dynamic_pointer_cast<const Node>(change.e);
-      _changesetBounds.expandToInclude(node->getX(), node->getY());
+      if (change.e->getElementType().getEnum() == ElementType::Node)
+      {
+        ConstNodePtr node = dynamic_pointer_cast<const Node>(change.e);
+        _changesetBounds.expandToInclude(node->getX(), node->getY());
+      }
+      changes++;
     }
-
-    changes++;
 
     if (changes > _changesetMaxSize)
     {
@@ -170,13 +176,13 @@ ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
     default:
       throw HootException("Unknown element type");
   }
-
   return changeElement;
 }
 
 // If osm.changeset.file.writer.generate.new.ids is false, then these create methods assume
 // you've already set the ID correctly in terms of the OSM API target db for the element to be
 // created.
+//TODO: Can we get rid of the generate new ID's option now?
 
 void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
 {
