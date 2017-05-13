@@ -97,8 +97,8 @@ public:
     {
       boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
       reader->open(input);
-      boost::shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-      boost::shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+      boost::shared_ptr<ElementInputStream> streamReader = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+      boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
       boost::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
       ProjectToGeographicVisitor visitor;

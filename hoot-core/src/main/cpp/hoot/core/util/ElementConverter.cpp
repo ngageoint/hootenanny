@@ -99,11 +99,11 @@ boost::shared_ptr<Geometry> ElementConverter::convertToGeometry(const boost::sha
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    return convertToGeometry(dynamic_pointer_cast<const Node>(e));
+    return convertToGeometry(boost::dynamic_pointer_cast<const Node>(e));
   case ElementType::Way:
-    return convertToGeometry(dynamic_pointer_cast<const Way>(e), throwError, statsFlag);
+    return convertToGeometry(boost::dynamic_pointer_cast<const Way>(e), throwError, statsFlag);
   case ElementType::Relation:
-    return convertToGeometry(dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
+    return convertToGeometry(boost::dynamic_pointer_cast<const Relation>(e), throwError, statsFlag);
   default:
     LOG_VART(e->toString());
     throw HootException("Unexpected element type: " + e->getElementType().toString());
@@ -186,14 +186,14 @@ boost::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstW
 
   for (size_t i = 0; i < ids.size(); i++)
   {
-   ConstNodePtr n = _constProvider->getNode(ids[i]);
+    ConstNodePtr n = _constProvider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
   {
-   ConstNodePtr n = _constProvider->getNode(ids[0]);
+    ConstNodePtr n = _constProvider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), 1);
   }
 
@@ -228,7 +228,7 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
-   ConstNodePtr n = _constProvider->getNode(ids[i]);
+    ConstNodePtr n = _constProvider->getNode(ids[i]);
     cs->setAt(n->toCoordinate(), i);
   }
 
@@ -236,7 +236,7 @@ boost::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr&
   while (i < size)
   {
     // add the first point onto the end.
-   ConstNodePtr n = _constProvider->getNode(ids[0]);
+    ConstNodePtr n = _constProvider->getNode(ids[0]);
     cs->setAt(n->toCoordinate(), i);
     i++;
   }
@@ -266,7 +266,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
 
   case ElementType::Way:
     {
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
       assert(w);
 
       if(statsFlag)
@@ -287,7 +287,7 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementP
 
   case ElementType::Relation:
     {
-      ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+      ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
       assert(r);
 
       if(statsFlag)

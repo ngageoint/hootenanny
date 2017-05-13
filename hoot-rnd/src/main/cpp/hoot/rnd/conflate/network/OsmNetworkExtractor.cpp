@@ -125,7 +125,7 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
     if (OsmSchema::getInstance().isLinear(*e) == false)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -174,14 +174,14 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
     if (e->getElementType() == ElementType::Way)
     {
       members.append(e);
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
       from = ElementId::node(w->getFirstNodeId());
       to = ElementId::node(w->getLastNodeId());
     }
     else if (e->getElementType() == ElementType::Relation)
     {
       members.append(e);
-      ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+      ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
       if (_isContiguous(r))
       {

@@ -55,7 +55,7 @@ boost::shared_ptr<Geometry> Building::buildOutline() const
     // construct the outline from the union of the parts.
     result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
-    ConstRelationPtr r = dynamic_pointer_cast<const Relation>(_e);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(_e);
     const vector<RelationData::Entry> entries = r->getMembers();
     for (size_t i = 0; i < entries.size(); i++)
     {

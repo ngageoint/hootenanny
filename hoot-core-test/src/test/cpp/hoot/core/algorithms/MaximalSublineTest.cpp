@@ -251,8 +251,8 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w52 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
-    WayPtr w812 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
+    WayPtr w52 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
+    WayPtr w812 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(25.08, 1.0471975511965976), 5);
 
@@ -275,8 +275,8 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w1 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
-    WayPtr w2 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
+    WayPtr w1 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+    WayPtr w2 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
 
     //MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(36, 1.57079632679), 5);
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(46, 1.5708), 5);

@@ -29,8 +29,5 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-using boost::dynamic_pointer_cast;
-using boost::weak_ptr;
-using boost::shared_ptr;
 
 #endif

@@ -137,19 +137,19 @@ Handle<Object> ElementJs::New(ConstElementPtr e)
   {
   case ElementType::Node:
     {
-      ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+      ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
       result = NodeJs::New(n);
       break;
     }
   case ElementType::Way:
     {
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
       result = WayJs::New(w);
       break;
     }
   case ElementType::Relation:
     {
-      ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+      ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
       result = RelationJs::New(r);
       break;
     }
@@ -170,19 +170,19 @@ Handle<Object> ElementJs::New(ElementPtr e)
   {
   case ElementType::Node:
     {
-      NodePtr n = dynamic_pointer_cast<Node>(e);
+      NodePtr n = boost::dynamic_pointer_cast<Node>(e);
       result = NodeJs::New(n);
       break;
     }
   case ElementType::Way:
     {
-      WayPtr w = dynamic_pointer_cast<Way>(e);
+      WayPtr w = boost::dynamic_pointer_cast<Way>(e);
       result = WayJs::New(w);
       break;
     }
   case ElementType::Relation:
     {
-      RelationPtr r = dynamic_pointer_cast<Relation>(e);
+      RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
       result = RelationJs::New(r);
       break;
     }

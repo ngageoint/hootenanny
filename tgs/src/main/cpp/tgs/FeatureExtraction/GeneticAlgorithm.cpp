@@ -67,9 +67,9 @@ namespace Tgs
     int maxDepth = 6;
     while ((int)_population.size() < _populationSize)
     {
-     boost::shared_ptr<Genome> g = _seed->clone();
+      boost::shared_ptr<Genome> g = _seed->clone();
 
-     boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(g);
+      boost::shared_ptr<CalculatorGenome> cg = boost::dynamic_pointer_cast<CalculatorGenome>(g);
       // use a ramped grow method, see page 12 in
       // http://www.lulu.com/items/volume_63/2167000/2167025/2/print/book.pdf
       if (cg)
@@ -234,14 +234,14 @@ namespace Tgs
 
     for (int i = 0; i < _keepBest && i < (int)_population.size(); i++)
     {
-     boost::shared_ptr<Genome> g = _population[i]->clone();
+      boost::shared_ptr<Genome> g = _population[i]->clone();
       g->mutate(_mutationSeverity);
       nextGen.push_back(g);
     }
 
     for (int i = 0; i < _freshMeat; i++)
     {
-     boost::shared_ptr<Genome> g = _seed->clone();
+      boost::shared_ptr<Genome> g = _seed->clone();
       _initializeGenome(g);
       if (_used.find(g->toString()) == _used.end())
       {
@@ -264,7 +264,7 @@ namespace Tgs
       if (act < _mutationProb)
       {
         int index = _selectMateRoulette();
-       boost::shared_ptr<Genome> genome = _population[index]->clone();
+        boost::shared_ptr<Genome> genome = _population[index]->clone();
         _mutate(genome);
 //         // make sure at least half of the new generation is unique
 //         if ((int)nextGen.size() < _populationSize / 4)
@@ -286,9 +286,9 @@ namespace Tgs
         int motherIndex = _selectMateTournament();
         if (fatherIndex != motherIndex)
         {
-         boost::shared_ptr<Genome> father = _population[fatherIndex];
-         boost::shared_ptr<Genome> mother = _population[motherIndex];
-         boost::shared_ptr<Genome> brother, sister;
+          boost::shared_ptr<Genome> father = _population[fatherIndex];
+          boost::shared_ptr<Genome> mother = _population[motherIndex];
+          boost::shared_ptr<Genome> brother, sister;
           father->crossoverSexually(*father, *mother, brother, sister);
 //           if (mutate < _mutationProb)
 //           {
@@ -346,7 +346,7 @@ namespace Tgs
     bool printedProgress = false;
     for (unsigned int i = 0; i < _population.size(); i++)
     {
-     boost::shared_ptr<Genome> g = _population[i];
+      boost::shared_ptr<Genome> g = _population[i];
       double score = g->getScore();
       string str = g->toString();
       _used.insert(str);

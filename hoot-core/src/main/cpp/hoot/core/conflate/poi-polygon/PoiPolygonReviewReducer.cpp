@@ -336,14 +336,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                   //Calc the distance from the poi to the poly line instead of the poly itself.
                   //Calcing distance to the poly itself will always return 0 when the poi is in the
                   //poly.
-                  ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
+                  ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
                   boost::shared_ptr<const LineString> polyLineStr =
-                      dynamic_pointer_cast<const LineString>(
+                      boost::dynamic_pointer_cast<const LineString>(
                         ElementConverter(_map).convertToLineString(polyWay));
                   poiToPolyNodeDist = polyLineStr->distance(poiGeom.get());
-                  ConstWayPtr polyNeighborWay = dynamic_pointer_cast<const Way>(polyNeighbor);
+                  ConstWayPtr polyNeighborWay = boost::dynamic_pointer_cast<const Way>(polyNeighbor);
                   boost::shared_ptr<const LineString> polyNeighborLineStr =
-                      dynamic_pointer_cast<const LineString>(
+                      boost::dynamic_pointer_cast<const LineString>(
                         ElementConverter(_map).convertToLineString(polyNeighborWay));
                   poiToOtherParkPolyNodeDist = polyNeighborLineStr->distance(poiGeom.get());
                 }

@@ -143,7 +143,7 @@ namespace Tgs
         cout << "dad: " << father->toString() << endl;
 
        boost::shared_ptr<CalculatorGenome> mother =
-          dynamic_pointer_cast<CalculatorGenome>(father->clone());
+          boost::dynamic_pointer_cast<CalculatorGenome>(father->clone());
         mother->initialize();
         cout << "mom: " << mother->toString() << endl;
 
@@ -348,7 +348,7 @@ namespace Tgs
         ga.step();
         c+= ga.getPopulation().size();
        boost::shared_ptr<CalculatorGenome> best =
-          dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
+          boost::dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
         score = best->getScore();
         //cout << "individuals: " << c << "\r";
         stagnant++;

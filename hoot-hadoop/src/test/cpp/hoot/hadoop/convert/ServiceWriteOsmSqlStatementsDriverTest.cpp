@@ -112,7 +112,7 @@ public:
 
     //verify sequences - sequences can't be updated b/c of a chicken egg situation with nextval; sql
     //file validation will have to be good enough
-//    boost::shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    CPPUNIT_ASSERT_EQUAL((long)118, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));

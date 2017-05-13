@@ -138,7 +138,7 @@ const Envelope& Way::getApproximateEnvelope(boost::shared_ptr<const ElementProvi
       else
       {
         boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-        ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+        ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
         assert(n.get());
         _cachedEnvelope.expandToInclude(n->getX(), n->getY());
       }
@@ -167,7 +167,7 @@ const Envelope& Way::getEnvelopeInternal(boost::shared_ptr<const ElementProvider
   for (size_t i = 0; i < ids.size(); i++)
   {
     boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-    ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
     assert(n.get());
     _cachedEnvelope.expandToInclude(n->getX(), n->getY());
   }

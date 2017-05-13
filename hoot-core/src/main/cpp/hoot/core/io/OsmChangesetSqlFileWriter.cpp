@@ -90,7 +90,7 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
 
     if (change.e->getElementType().getEnum() == ElementType::Node)
     {
-      ConstNodePtr node = dynamic_pointer_cast<const Node>(change.e);
+      ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.e);
       _changesetBounds.expandToInclude(node->getX(), node->getY());
     }
 
@@ -161,13 +161,13 @@ ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      changeElement.reset(new Node(*dynamic_pointer_cast<const Node>(element)));
+      changeElement.reset(new Node(*boost::dynamic_pointer_cast<const Node>(element)));
       break;
     case ElementType::Way:
-      changeElement.reset(new Way(*dynamic_pointer_cast<const Way>(element)));
+      changeElement.reset(new Way(*boost::dynamic_pointer_cast<const Way>(element)));
       break;
    case ElementType::Relation:
-      changeElement.reset(new Relation(*dynamic_pointer_cast<const Relation>(element)));
+      changeElement.reset(new Relation(*boost::dynamic_pointer_cast<const Relation>(element)));
       break;
     default:
       throw HootException("Unknown element type");
@@ -215,10 +215,10 @@ void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
   switch (changeElement->getElementType().getEnum())
   {
     case ElementType::Way:
-      _createWayNodes(dynamic_pointer_cast<const Way>(changeElement));
+      _createWayNodes(boost::dynamic_pointer_cast<const Way>(changeElement));
       break;
     case ElementType::Relation:
-      _createRelationMembers(dynamic_pointer_cast<const Relation>(changeElement));
+      _createRelationMembers(boost::dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
       //node
@@ -231,7 +231,7 @@ QString OsmChangesetSqlFileWriter::_getUpdateValuesStr(ConstElementPtr element) 
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return _getUpdateValuesNodeStr(dynamic_pointer_cast<const Node>(element));
+      return _getUpdateValuesNodeStr(boost::dynamic_pointer_cast<const Node>(element));
     case ElementType::Way:
       return _getUpdateValuesWayOrRelationStr(element);
     case ElementType::Relation:
@@ -306,12 +306,12 @@ void OsmChangesetSqlFileWriter::_updateExistingElement(ConstElementPtr element)
     case ElementType::Way:
       _deleteAll(ApiDb::getCurrentWayNodesTableName(), "way_id", changeElement->getId());
       _deleteAll(ApiDb::getWayNodesTableName(), "way_id", changeElement->getId());
-      _createWayNodes(dynamic_pointer_cast<const Way>(changeElement));
+      _createWayNodes(boost::dynamic_pointer_cast<const Way>(changeElement));
       break;
     case ElementType::Relation:
       _deleteAll(ApiDb::getCurrentRelationMembersTableName(), "relation_id", changeElement->getId());
       _deleteAll(ApiDb::getRelationMembersTableName(), "relation_id", changeElement->getId());
-      _createRelationMembers(dynamic_pointer_cast<const Relation>(changeElement));
+      _createRelationMembers(boost::dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
       //node
@@ -406,7 +406,7 @@ QString OsmChangesetSqlFileWriter::_getInsertValuesStr(ConstElementPtr element) 
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return _getInsertValuesNodeStr(dynamic_pointer_cast<const Node>(element));
+      return _getInsertValuesNodeStr(boost::dynamic_pointer_cast<const Node>(element));
     case ElementType::Way:
       return _getInsertValuesWayOrRelationStr(element);
     case ElementType::Relation:
@@ -452,7 +452,7 @@ void OsmChangesetSqlFileWriter::_createTags(ConstElementPtr element)
   Tags tags = element->getTags();
   if (element->getElementType().getEnum() == ElementType::Relation && !tags.contains("type"))
   {
-    ConstRelationPtr tmp = dynamic_pointer_cast<const Relation>(element);
+    ConstRelationPtr tmp = boost::dynamic_pointer_cast<const Relation>(element);
     tags.appendValue("type", tmp->getType());
   }
 

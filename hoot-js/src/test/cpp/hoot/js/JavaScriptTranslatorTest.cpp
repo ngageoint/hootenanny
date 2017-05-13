@@ -63,10 +63,10 @@ public:
   void runToOsmTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-   boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
                                       "test-files/io/SampleTranslation.js"));
 
-   boost::shared_ptr<ScriptToOgrTranslator>uut = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    boost::shared_ptr<ScriptToOgrTranslator>uut = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
 
     if (!uut)
     {
@@ -74,7 +74,7 @@ public:
                           "converting to OGR.");
     }
 
-   boost::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
+    boost::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
 //    JavaScriptTranslator::TranslatedFeature tf;
     ScriptToOgrTranslator::TranslatedFeature tf;
@@ -150,7 +150,7 @@ public:
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
     // We just need a standard ScriptTranslator for this test.
-   boost::shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(
                                       "test-files/io/SampleTranslation.js"));
 
     if (!uut)
@@ -165,17 +165,17 @@ public:
   void runSchemaTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-   boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
                                       "test-files/io/SampleTranslation.js"));
 
-   boost::shared_ptr<ScriptToOgrTranslator>uut = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    boost::shared_ptr<ScriptToOgrTranslator>uut = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
 
     if (!uut)
     {
       throw HootException("Error allocating translator");
     }
 
-   boost::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
+    boost::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
     QString result;
     // handy for creating the c formatted version.
@@ -184,9 +184,9 @@ public:
     QString sep1, sep2;
     for (size_t i = 0; i < schema->getLayerCount(); i++)
     {
-     boost::shared_ptr<const Layer> l = schema->getLayer(i);
+      boost::shared_ptr<const Layer> l = schema->getLayer(i);
       result += sep1 + l->getName() + sep2 + "\n";
-     boost::shared_ptr<const FeatureDefinition> fd = l->getFeatureDefinition();
+      boost::shared_ptr<const FeatureDefinition> fd = l->getFeatureDefinition();
       for (size_t j = 0; j < fd->getFieldCount(); j++)
       {
        boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(j);

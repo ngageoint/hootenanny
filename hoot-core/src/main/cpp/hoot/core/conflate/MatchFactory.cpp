@@ -89,7 +89,7 @@ void MatchFactory::_checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> m
 {
   if (bounds.isNull() == false)
   {
-    boost::shared_ptr<Boundable> boundable = dynamic_pointer_cast<Boundable>(matchCreator);
+    boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(matchCreator);
     if (boundable == 0)
     {
       throw HootException("One or more match creators is not boundable and cannot be used with "

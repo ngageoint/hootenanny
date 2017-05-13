@@ -55,14 +55,14 @@ ProjectToGeographicVisitor::~ProjectToGeographicVisitor()
 void ProjectToGeographicVisitor::initialize(boost::shared_ptr<OGRSpatialReference>& projection)
 {
   _transform = OGRCreateCoordinateTransformation(projection.get(), MapProjector::createWgs84Projection().get());
-  _rcf =boost::shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
+  _rcf = boost::shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
 }
 
 void ProjectToGeographicVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getElementType().getEnum() == ElementType::Node)
   {
-    NodePtr node = dynamic_pointer_cast<Node>(e);
+    NodePtr node = boost::dynamic_pointer_cast<Node>(e);
     Coordinate coord = node->toCoordinate();
     try
     {

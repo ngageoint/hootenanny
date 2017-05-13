@@ -55,7 +55,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const ConstWayPtr& w = dynamic_pointer_cast<const Way>(e);
+      const ConstWayPtr& w = boost::dynamic_pointer_cast<const Way>(e);
       //const ConstWayPtr& w = _map.getWay(e->getId());
 
       vector<long> nodes = w->getNodeIds();

@@ -52,7 +52,7 @@ TranslatedTagCountVisitor::TranslatedTagCountVisitor(boost::shared_ptr<ScriptTra
   _defaultCount(),
   _nullCount()
 {
-  _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(t);
+  _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(t);
   if (!_translator)
   {
     throw HootException("Error allocating translator, the translation script must support "

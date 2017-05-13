@@ -137,7 +137,7 @@ bool ParallelWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e
 {
   if(e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     double difference = calculateDifference(w);
 
     // If the mean "normals" are within 10 degrees of perpendicular.

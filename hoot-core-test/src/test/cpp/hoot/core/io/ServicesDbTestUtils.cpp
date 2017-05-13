@@ -250,7 +250,7 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
     DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
   //verify sequences
-  boost::shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+  boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Node));
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Way));
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));

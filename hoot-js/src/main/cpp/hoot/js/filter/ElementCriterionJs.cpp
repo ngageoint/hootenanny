@@ -67,8 +67,8 @@ Handle<Value> ElementCriterionJs::addCriterion(const Arguments& args) {
   ElementCriterionPtr other = ObjectWrap::Unwrap<ElementCriterionJs>(args[0]->ToObject())->
       getCriterion();
 
- boost::shared_ptr<ElementCriterionConsumer> consumer =
-      dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
+  boost::shared_ptr<ElementCriterionConsumer> consumer =
+    boost::dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
 
   if (!consumer)
   {

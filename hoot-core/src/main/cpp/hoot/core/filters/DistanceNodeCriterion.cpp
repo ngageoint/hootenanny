@@ -50,7 +50,7 @@ bool DistanceNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &
   if (e->getElementType() != ElementType::Node)
     return false;
 
-  ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
   return _center.distance(n->toCoordinate()) < _distance;
 }
 

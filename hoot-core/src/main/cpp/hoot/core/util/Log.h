@@ -51,6 +51,12 @@
 
 namespace hoot
 {
+/**
+ * The following 'using namespace std' is required to be here.  If it is removed, the software compiles
+ * BUT it doesn't run correctly.  Removing it causes multiple unit tests fail.
+ * See
+ */
+using namespace std;
 
 /**
  * This class is here to abstract out the logging interface. I only have mild confidence in log4cxx

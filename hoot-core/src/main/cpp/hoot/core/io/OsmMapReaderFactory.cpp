@@ -58,7 +58,7 @@ bool OsmMapReaderFactory::hasElementInputStream(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  boost::shared_ptr<ElementInputStream> eis = dynamic_pointer_cast<ElementInputStream>(reader);
+  boost::shared_ptr<ElementInputStream> eis = boost::dynamic_pointer_cast<ElementInputStream>(reader);
   if (eis)
   {
     result = true;
@@ -71,7 +71,7 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  boost::shared_ptr<PartialOsmMapReader> pr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  boost::shared_ptr<PartialOsmMapReader> pr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
   if (pr)
   {
     result = true;

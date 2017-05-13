@@ -157,7 +157,7 @@ boost::shared_ptr<ScriptToOgrTranslator> TranslatedTagDifferencer::_getTranslato
       _script));
 
     st->setErrorTreatment(StrictOff);
-    _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
     if (!_translator)
     {
       throw HootException("Error allocating translator, the translation script must support "
