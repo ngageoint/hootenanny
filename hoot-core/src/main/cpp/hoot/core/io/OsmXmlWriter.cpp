@@ -69,6 +69,7 @@ _encodingErrorCount(0)
 
 }
 
+//TODO: refactor this
 QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.

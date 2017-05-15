@@ -13,7 +13,7 @@
         </node>
     </modify>
     <create>
-        <node id="-119" version="0" lat="38.8887008885512984" lon="-104.7187703222329986">
+        <node id="-1" version="0" lat="38.8887008885512984" lon="-104.7187703222329986">
             <tag k="accuracy" v="1000"/>
             <tag k="note" v="2-c"/>
             <tag k="poi" v="yes"/>
@@ -23,7 +23,7 @@
             <tag k="amenity" v="cafe"/>
             <tag k="error:circular" v="1000"/>
         </node>
-        <node id="-121" version="0" lat="38.8942750169006004" lon="-104.7187096307719969">
+        <node id="-2" version="0" lat="38.8942750169006004" lon="-104.7187096307719969">
             <tag k="accuracy" v="1000"/>
             <tag k="note" v="2-b"/>
             <tag k="poi" v="yes"/>
@@ -33,7 +33,7 @@
             <tag k="amenity" v="cafe"/>
             <tag k="error:circular" v="1000"/>
         </node>
-        <node id="-122" version="0" lat="38.8747831409682973" lon="-104.7208597111930004">
+        <node id="-3" version="0" lat="38.8747831409682973" lon="-104.7208597111930004">
             <tag k="accuracy" v="150"/>
             <tag k="note" v="2-e"/>
             <tag k="poi" v="yes"/>
@@ -43,7 +43,7 @@
             <tag k="amenity" v="cafe"/>
             <tag k="error:circular" v="150"/>
         </node>
-        <node id="-124" version="0" lat="38.8753845261677995" lon="-104.7191538262590029">
+        <node id="-4" version="0" lat="38.8753845261677995" lon="-104.7191538262590029">
             <tag k="accuracy" v="1000"/>
             <tag k="note" v="2-d"/>
             <tag k="poi" v="yes"/>
