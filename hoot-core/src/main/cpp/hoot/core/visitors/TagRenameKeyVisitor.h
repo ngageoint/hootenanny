@@ -42,7 +42,7 @@ class TagRenameKeyVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
-  static string className() { return "hoot::TagRenameKeyVisitor"; }
+  static std::string className() { return "hoot::TagRenameKeyVisitor"; }
 
   TagRenameKeyVisitor();
 

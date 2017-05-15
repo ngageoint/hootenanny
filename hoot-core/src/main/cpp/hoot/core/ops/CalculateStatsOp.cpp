@@ -64,6 +64,8 @@
 #include <hoot/core/io/ScriptTranslator.h>
 
 #include <math.h>
+
+using namespace boost;
 using namespace std;
 
 namespace hoot

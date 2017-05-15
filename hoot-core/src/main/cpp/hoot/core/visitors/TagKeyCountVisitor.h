@@ -42,7 +42,7 @@ class TagKeyCountVisitor : public ElementVisitor, public SingleStatistic
 {
   public:
 
-    static string className() { return "hoot::TagKeyCountVisitor"; }
+    static std::string className() { return "hoot::TagKeyCountVisitor"; }
 
     TagKeyCountVisitor() {}
     TagKeyCountVisitor(const QString key);

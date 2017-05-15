@@ -151,9 +151,10 @@ protected:
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
-  void _addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<Geometry> g);
+  void _addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<geos::geom::Geometry> g);
 
-  void _addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f, const Geometry* g,
+  void _addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f,
+                          const geos::geom::Geometry* g,
                           OGRFeature* poFeature);
 
   void _createLayer(boost::shared_ptr<const Layer> layer);
@@ -162,7 +163,7 @@ protected:
 
   OGRLayer* _getLayerByName(const QString layerName);
 
-  boost::shared_ptr<Geometry> _toMulti(boost::shared_ptr<Geometry> from);
+  boost::shared_ptr<geos::geom::Geometry> _toMulti(boost::shared_ptr<geos::geom::Geometry> from);
 
   void strictError(QString warning);
 

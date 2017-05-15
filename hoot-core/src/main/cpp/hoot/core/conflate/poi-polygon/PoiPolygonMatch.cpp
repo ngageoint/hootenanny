@@ -45,6 +45,8 @@
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 
+using namespace std;
+
 namespace hoot
 {
 

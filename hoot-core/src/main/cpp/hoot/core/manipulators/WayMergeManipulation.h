@@ -50,22 +50,22 @@ public:
 
   virtual void addBogusReviewTags(const OsmMapPtr& map) const;
 
-  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
-    set<ElementId>& newElements) const;
+  virtual void applyManipulation(OsmMapPtr wm, std::set<ElementId>& impactedElements,
+    std::set<ElementId>& newElements) const;
 
   virtual double calculateProbability(ConstOsmMapPtr map) const;
 
   virtual double calculateScore(ConstOsmMapPtr map) const;
 
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
+  virtual const std::set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
-  virtual const set<long>& getImpactedWayIds(const ConstOsmMapPtr& map) const;
+  virtual const std::set<long>& getImpactedWayIds(const ConstOsmMapPtr& map) const;
 
-  virtual set<ElementId> getMatchedElements() const;
+  virtual std::set<ElementId> getMatchedElements() const;
 
   virtual double getProbabilityEstimate() const { return _p; }
 
-  double getBogusReviewScore() const { return max(0.0, 1.0 - (getProbabilityEstimate() / 0.5)); }
+  double getBogusReviewScore() const { return std::max(0.0, 1.0 - (getProbabilityEstimate() / 0.5)); }
 
   virtual double getScoreEstimate() const { return _estimate; }
 
@@ -74,8 +74,8 @@ public:
   virtual QString toString() const;
 
 protected:
-  mutable set<ElementId> _impactedElements;
-  mutable set<long> _impactedWays;
+  mutable std::set<ElementId> _impactedElements;
+  mutable std::set<long> _impactedWays;
   long _left, _right;
   mutable double _p;
   Meters _minSplitSize;
@@ -88,7 +88,7 @@ protected:
    */
   bool _directConnect(const OsmMapPtr& map, WayPtr w) const;
 
-  void _removeSpans(OsmMapPtr map, set<ElementId> &ids) const;
+  void _removeSpans(OsmMapPtr map, std::set<ElementId> &ids) const;
 
   /**
    * Calculates the MNS for left and right and updates the map accordingly. The new left and

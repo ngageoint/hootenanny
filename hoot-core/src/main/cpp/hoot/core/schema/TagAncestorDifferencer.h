@@ -41,7 +41,7 @@ namespace hoot
 class TagAncestorDifferencer : public TagFilteredDifferencer, public Configurable
 {
 public:
-  static string className() { return "hoot::TagAncestorDifferencer"; }
+  static std::string className() { return "hoot::TagAncestorDifferencer"; }
 
   TagAncestorDifferencer() {}
   TagAncestorDifferencer(QString ancestor);

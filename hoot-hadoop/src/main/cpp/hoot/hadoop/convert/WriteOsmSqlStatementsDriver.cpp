@@ -44,6 +44,8 @@ using namespace geos::geom;
 #include "WriteOsmSqlStatementsDriver.h"
 #include "SqlStatementLineRecordWriter.h"
 
+using namespace std;
+
 namespace hoot
 {
 

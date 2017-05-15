@@ -33,6 +33,8 @@
 
 #include "MaximalSubline.h"
 
+using namespace std;
+
 namespace hoot
 {
 

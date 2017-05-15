@@ -42,6 +42,9 @@
 // Standard
 #include <fstream>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -58,8 +61,8 @@ class PaintNodesCmd : public BaseCommand
 
     Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
     {
-      boost::shared_ptr<EnvelopeProvider> ep = dynamic_pointer_cast<EnvelopeProvider>(reader);
-      boost::shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      boost::shared_ptr<EnvelopeProvider> ep = boost::dynamic_pointer_cast<EnvelopeProvider>(reader);
+      boost::shared_ptr<PartialOsmMapReader> r = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
       if (ep)
       {
@@ -78,7 +81,7 @@ class PaintNodesCmd : public BaseCommand
           if (e.get() && e->getElementType() == ElementType::Node)
           {
             nodeCount++;
-            NodePtr n = dynamic_pointer_cast<Node>(e);
+            NodePtr n = boost::dynamic_pointer_cast<Node>(e);
             if (result.isNull())
             {
               result = Envelope(n->getX(), n->getX(), n->getY(), n->getY());
@@ -104,7 +107,7 @@ class PaintNodesCmd : public BaseCommand
 
     cv::Mat calculateDensity(Envelope envelope, double pixelSize, boost::shared_ptr<OsmMapReader> reader)
     {
-      boost::shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      boost::shared_ptr<PartialOsmMapReader> r = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
       r->setUseDataSourceIds(true);
       //r->initializePartial();
 
@@ -120,7 +123,7 @@ class PaintNodesCmd : public BaseCommand
 
         if (e->getElementType() == ElementType::Node)
         {
-          NodePtr n = dynamic_pointer_cast<Node>(e);
+          NodePtr n = boost::dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);
           int py = int((n->getY() - envelope.getMinY()) / pixelSize);
           px = std::min(width - 1, std::max(0, px));

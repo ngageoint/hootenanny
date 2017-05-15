@@ -41,6 +41,8 @@
 // tgs
 #include <tgs/Optimization/NelderMead.h>
 
+using namespace std;
+
 namespace hoot
 {
 

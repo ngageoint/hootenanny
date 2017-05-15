@@ -33,7 +33,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Remove all elements that are not review relations.
@@ -44,7 +43,7 @@ class KeepReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::KeepReviewsVisitor"; }
+  static std::string className() { return "hoot::KeepReviewsVisitor"; }
 
   KeepReviewsVisitor() {}
 

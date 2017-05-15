@@ -36,6 +36,8 @@
 // Qt
 #include <QSet>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

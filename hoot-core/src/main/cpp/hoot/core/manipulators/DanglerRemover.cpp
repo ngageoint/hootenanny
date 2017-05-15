@@ -65,7 +65,8 @@ using namespace Tgs;
 
 #include "DanglerRemoverManipulation.h"
 
-namespace hoot {
+namespace hoot
+{
 
 #define SQR(x) ((x) * (x))
 

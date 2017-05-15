@@ -33,6 +33,8 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

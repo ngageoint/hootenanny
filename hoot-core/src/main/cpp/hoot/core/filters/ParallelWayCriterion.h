@@ -38,14 +38,14 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class ParallelWayCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::ParallelWayCriterion"; }
+  static std::string className() { return "hoot::ParallelWayCriterion"; }
 
   ParallelWayCriterion() {}
   ParallelWayCriterion(const ConstOsmMapPtr& map,
@@ -70,7 +70,7 @@ private:
 
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
-  std::vector<Point*> _points;
+  std::vector<geos::geom::Point*> _points;
   Degrees _threshold;
 };
 

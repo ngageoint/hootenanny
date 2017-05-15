@@ -38,7 +38,7 @@ namespace hoot
 class WaterwayCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::WaterwayCriterion"; }
+  static std::string className() { return "hoot::WaterwayCriterion"; }
 
   WaterwayCriterion() {}
 

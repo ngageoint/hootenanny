@@ -72,7 +72,7 @@ private:
 
   ConstOsmMapPtr _source;
 
-  vector<long> _nodeIds, _wayIds, _relationIds;
+  std::vector<long> _nodeIds, _wayIds, _relationIds;
   size_t _nodeIndex, _wayIndex, _relationIndex;
 
 };

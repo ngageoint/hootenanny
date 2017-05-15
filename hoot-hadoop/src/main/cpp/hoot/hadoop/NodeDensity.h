@@ -22,7 +22,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class NodeDensity
 {

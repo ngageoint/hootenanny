@@ -40,6 +40,8 @@
 // Tgs
 #include <tgs/Optimization/SimulatedAnnealing.h>
 
+using namespace Tgs;
+
 namespace hoot
 {
 

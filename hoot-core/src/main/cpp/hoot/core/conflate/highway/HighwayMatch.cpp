@@ -48,6 +48,8 @@
 
 #include "HighwayClassifier.h"
 
+using namespace std;
+
 namespace hoot
 {
 

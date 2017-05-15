@@ -62,6 +62,8 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 

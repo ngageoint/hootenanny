@@ -58,6 +58,8 @@
 
 #include "BuildingRfClassifier.h"
 
+using namespace std;
+
 namespace hoot
 {
 

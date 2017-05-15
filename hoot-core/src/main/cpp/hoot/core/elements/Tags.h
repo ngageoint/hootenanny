@@ -40,8 +40,8 @@
 #include <stdint.h>
 #include <string>
 
-namespace hoot {
-using namespace std;
+namespace hoot
+{
 
 /**
  * Contains a set of key/value pairs. Consistent with the OSM way of doing things [1] if there are
@@ -56,7 +56,7 @@ class Tags : public QHash<QString, QString>
 {
 public:
 
-  static string className() { return "hoot::Tags"; }
+  static std::string className() { return "hoot::Tags"; }
   static QString uuidKey() { return "uuid"; }
 
 

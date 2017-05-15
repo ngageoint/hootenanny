@@ -53,6 +53,9 @@
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -314,15 +317,15 @@ void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
 
   if (e1->getElementType() == ElementType::Way)
   {
-    WayPtr w1 = dynamic_pointer_cast<Way>(e1);
-    WayPtr w2 = dynamic_pointer_cast<Way>(e2);
+    WayPtr w1 = boost::dynamic_pointer_cast<Way>(e1);
+    WayPtr w2 = boost::dynamic_pointer_cast<Way>(e2);
 
     _removeSpans(map, w1, w2);
   }
   else
   {
-    RelationPtr r1 = dynamic_pointer_cast<Relation>(e1);
-    RelationPtr r2 = dynamic_pointer_cast<Relation>(e2);
+    RelationPtr r1 = boost::dynamic_pointer_cast<Relation>(e1);
+    RelationPtr r2 = boost::dynamic_pointer_cast<Relation>(e2);
 
     if (r1->getMembers().size() != r2->getMembers().size())
     {
@@ -394,7 +397,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
       {
         if (e->getElementType() == ElementType::Way)
         {
-          result.push_back(dynamic_pointer_cast<Way>(e));
+          result.push_back(boost::dynamic_pointer_cast<Way>(e));
         }
         else
         {
@@ -410,7 +413,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
     {
       if (e->getElementType() == ElementType::Way)
       {
-        WayPtr w = dynamic_pointer_cast<Way>(e);
+        WayPtr w = boost::dynamic_pointer_cast<Way>(e);
         _w.push_back(w);
       }
     }
@@ -496,7 +499,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     }
     else
     {
-      r = dynamic_pointer_cast<Relation>(scrap);
+      r = boost::dynamic_pointer_cast<Relation>(scrap);
     }
 
     for (set<ConstWayPtr, WayPtrCompare>::iterator it = ways.begin(); it != ways.end(); ++it)
@@ -559,7 +562,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     else if (splitee->getElementType() == ElementType::Way &&
         scrap->getElementType() == ElementType::Relation)
     {
-      RelationPtr r = dynamic_pointer_cast<Relation>(scrap);
+      RelationPtr r = boost::dynamic_pointer_cast<Relation>(scrap);
       // make sure none of the child ways have tags.
       for (size_t i = 0; i < r->getMembers().size(); i++)
       {

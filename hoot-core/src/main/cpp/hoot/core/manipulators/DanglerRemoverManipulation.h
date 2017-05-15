@@ -46,14 +46,14 @@ public:
 
   virtual ~DanglerRemoverManipulation() {}
 
-  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
-    set<ElementId>& newElements) const;
+  virtual void applyManipulation(OsmMapPtr wm, std::set<ElementId>& impactedElements,
+    std::set<ElementId>& newElements) const;
 
   virtual double calculateProbability(ConstOsmMapPtr map) const;
 
   virtual double calculateScore(ConstOsmMapPtr map) const;
 
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
+  virtual const std::set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
   virtual double getProbabilityEstimate() const { return _p; }
 
@@ -65,7 +65,7 @@ public:
 
 private:
 
-  mutable set<ElementId> _impactedElements;
+  mutable std::set<ElementId> _impactedElements;
   mutable double _p;
 
   double _errorPlus;

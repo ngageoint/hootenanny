@@ -37,6 +37,8 @@
 
 #include "WayJoin1Mapper.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -136,7 +138,7 @@ void WayJoin2Mapper::mapOsmMap(boost::shared_ptr<OsmMap> m)
   OsmPbfWriter writer;
 
   // Remove all non-roads.
- boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
+  boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
   RemoveElementsVisitor::removeWays(m, pCrit);
 
   _key->elementType = NodesType;

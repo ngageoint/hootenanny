@@ -49,8 +49,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class OsmMap;
 
 /**
@@ -74,8 +72,8 @@ public:
 protected:
 
   int _width, _height;
- boost::shared_ptr<OsmMap> _map1, _map2;
- boost::shared_ptr<OsmMap> _mapP1, _mapP2;
+  boost::shared_ptr<OsmMap> _map1, _map2;
+  boost::shared_ptr<OsmMap> _mapP1, _mapP2;
   Meters _pixelSize;
   OGREnvelope _worldBounds;
   OGREnvelope _projectedBounds;
@@ -83,7 +81,7 @@ protected:
 
   double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
 
-  Coordinate _findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, Coordinate c);
+  geos::geom::Coordinate _findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, geos::geom::Coordinate c);
 
   virtual void _init(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
 

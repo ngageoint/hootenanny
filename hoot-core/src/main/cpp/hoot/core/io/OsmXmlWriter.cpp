@@ -48,6 +48,8 @@ using namespace boost;
 #include <QFile>
 #include <QXmlStreamWriter>
 
+using namespace std;
+
 namespace hoot
 {
 

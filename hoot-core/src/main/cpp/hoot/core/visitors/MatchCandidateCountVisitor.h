@@ -46,15 +46,15 @@ class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public Sing
 {
 public:
 
-  static string className() { return "hoot::MatchCandidateCountVisitor"; }
+  static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
 
-  MatchCandidateCountVisitor(const vector<boost::shared_ptr<MatchCreator> >& matchCreators);
+  MatchCandidateCountVisitor(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
   double getStat() const { return _candidateCount; }
 
-  any getData() const { return _matchCandidateCountsByMatchCreator; }
+  boost::any getData() const { return _matchCandidateCountsByMatchCreator; }
 
 private:
 
@@ -62,7 +62,7 @@ private:
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
-  void _setupCreators(const vector<boost::shared_ptr<MatchCreator> >& matchCreators);
+  void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);
 };
 
 }

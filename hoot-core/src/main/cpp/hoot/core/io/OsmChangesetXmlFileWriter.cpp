@@ -38,13 +38,15 @@
 #include <QFileInfo>
 #include <QXmlStreamWriter>
 
+using namespace std;
+
 namespace hoot
 {
 
-OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter() :
-_precision(ConfigOptions().getWriterPrecision()),
-_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-_multipleChangesetsWritten(false)
+OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
+  : _precision(ConfigOptions().getWriterPrecision()),
+    _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+    _multipleChangesetsWritten(false)
 {
 }
 
@@ -120,13 +122,13 @@ void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
       switch (_change.e->getElementType().getEnum())
       {
         case ElementType::Node:
-          writeNode(writer, dynamic_pointer_cast<const Node>(_change.e));
+          writeNode(writer, boost::dynamic_pointer_cast<const Node>(_change.e));
           break;
         case ElementType::Way:
-          writeWay(writer, dynamic_pointer_cast<const Way>(_change.e));
+          writeWay(writer, boost::dynamic_pointer_cast<const Way>(_change.e));
           break;
         case ElementType::Relation:
-          writeRelation(writer, dynamic_pointer_cast<const Relation>(_change.e));
+          writeRelation(writer, boost::dynamic_pointer_cast<const Relation>(_change.e));
           break;
         default:
           throw IllegalArgumentException("Unexpected element type.");

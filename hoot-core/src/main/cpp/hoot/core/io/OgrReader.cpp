@@ -63,6 +63,8 @@ using namespace geos::geom;
 // #include "JavaScriptTranslator.h"
 #include "PythonTranslator.h"
 
+using namespace std;
+
 namespace hoot
 {
 

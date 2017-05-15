@@ -33,6 +33,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 
+using namespace std;
+
 namespace hoot
 {
 

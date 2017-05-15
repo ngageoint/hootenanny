@@ -34,7 +34,7 @@ void ExtractNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
     _n.append(n);
   }
 }

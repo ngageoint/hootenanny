@@ -33,6 +33,8 @@
 
 #include "ReviewMarker.h"
 
+using namespace std;
+
 namespace hoot
 {
 

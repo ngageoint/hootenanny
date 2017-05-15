@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOT_HYBRID_NODE_H
 #define HOOT_HYBRID_NODE_H
@@ -83,7 +83,7 @@ public:
     {
       if (_size < LEAF_NODE_SIZE)
       {
-        _elements[(size_t)_size] = pair<KeyType, DataType>(k, d);
+        _elements[(size_t)_size] = std::pair<KeyType, DataType>(k, d);
         ++_size;
       }
       else
@@ -94,7 +94,7 @@ public:
     }
   }
 
-  const pair<KeyType, DataType>& get(size_t i) const
+  const std::pair<KeyType, DataType>& get(size_t i) const
   {
     if (i < (size_t)_size)
     {
@@ -123,18 +123,18 @@ public:
   virtual QString toString(QString indent = QString()) const
   {
     std::stringstream ss;
-    ss << indent << "Leaf: " << endl;
+    ss << indent << "Leaf: " << std::endl;
     size_t c = getSize();
     for (size_t i = 0; i < c; ++i)
     {
-      ss << indent << "  " << get(i).first << " : " << get(i).second << endl;
+      ss << indent << "  " << get(i).first << " : " << get(i).second << std::endl;
     }
     return QString::fromUtf8(ss.str().data());
   }
 
 private:
   char _size;
-  pair<KeyType, DataType> _elements[LEAF_NODE_SIZE];
+  std::pair<KeyType, DataType> _elements[LEAF_NODE_SIZE];
   Leaf* _next;
 };
 

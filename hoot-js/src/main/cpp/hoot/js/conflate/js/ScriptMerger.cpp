@@ -39,9 +39,12 @@
 // node.js
 #include <hoot/js/SystemNodeJs.h>
 
+using namespace node;
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
-using namespace node;
 
 ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
                            const set<pair<ElementId, ElementId> > &pairs) :

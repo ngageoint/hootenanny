@@ -51,7 +51,7 @@ public:
 
   static unsigned int logWarnCount;
 
-  ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
+  ScriptMatch(boost::shared_ptr<PluginContext> script, v8::Persistent<v8::Object> plugin,
               const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
               ConstMatchThresholdPtr mt);
 
@@ -73,15 +73,15 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
-  Persistent<Object> getPlugin() const { return _plugin; }
+  v8::Persistent<v8::Object> getPlugin() const { return _plugin; }
 
- boost::shared_ptr<PluginContext> getScript() const { return _script; }
+  boost::shared_ptr<PluginContext> getScript() const { return _script; }
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
 
 private:
 
@@ -89,20 +89,20 @@ private:
   bool _isWholeGroup;
   QString _matchName;
   MatchClassification _p;
-  Persistent<Object> _plugin;
- boost::shared_ptr<PluginContext> _script;
+  v8::Persistent<v8::Object> _plugin;
+  boost::shared_ptr<PluginContext> _script;
   QString _explainText;
-  typedef pair<ElementId, ElementId> ConflictKey;
+  typedef std::pair<ElementId, ElementId> ConflictKey;
   mutable QHash<ConflictKey, bool> _conflicts;
 
   friend class ScriptMatchTest;
 
-  void _calculateClassification(const ConstOsmMapPtr& map, Handle<Object> plugin);
-  Handle<Value> _call(const ConstOsmMapPtr& map, Handle<Object> plugin);
+  void _calculateClassification(const ConstOsmMapPtr& map, v8::Handle<v8::Object> plugin);
+  v8::Handle<v8::Value> _call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> plugin);
   ConflictKey _getConflictKey() const { return ConflictKey(_eid1, _eid2); }
   bool _isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
     ElementId other1, ElementId other2) const;
-  Handle<Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
+  v8::Handle<v8::Value> _callGetMatchFeatureDetails(const ConstOsmMapPtr& map) const;
 
 };
 

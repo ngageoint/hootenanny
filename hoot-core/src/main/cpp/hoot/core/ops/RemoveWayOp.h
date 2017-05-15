@@ -45,8 +45,8 @@ public:
    * @brief className gets the name of the class as a string
    * @return class name
    */
-  static string className() { return "hoot::RemoveWayOp"; }
-  string getClassName() const { return className(); }
+  static std::string className() { return "hoot::RemoveWayOp"; }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief RemoveWayOp is used to remove ways from maps

@@ -42,10 +42,8 @@
 namespace hoot
 {
 
-  using namespace boost;
-
-  class PertyTestRunResult;
-  class PertyMatchScorer;
+class PertyTestRunResult;
+class PertyMatchScorer;
 
 /**
  * Runs a PERTY test to generate a PERTY score with an option to vary a single PERTY input variable

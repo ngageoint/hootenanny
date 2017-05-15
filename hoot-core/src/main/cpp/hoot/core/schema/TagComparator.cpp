@@ -41,6 +41,8 @@
 #include <queue>
 #include <set>
 
+using namespace std;
+
 namespace hoot
 {
 

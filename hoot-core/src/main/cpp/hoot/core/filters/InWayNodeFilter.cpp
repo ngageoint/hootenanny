@@ -31,6 +31,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 
+using namespace std;
+
 namespace hoot
 {
 

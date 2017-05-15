@@ -54,12 +54,14 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
-
-using namespace Tgs;
 
 /**
  * Searches the specified map for any poi/polygon match potentials

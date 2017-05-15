@@ -45,12 +45,12 @@ public:
 
   PoiPolygonRfClassifier();
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m, ElementId eid1,
-                                           ElementId eid2) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m, ElementId eid1,
+                                                ElementId eid2) const;
 
 private:
 
-  vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
 
   void _createExtractors();
 };

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WEIGHTEDMETRICDISTANCEEXTRACTOR_H
 #define WEIGHTEDMETRICDISTANCEEXTRACTOR_H
@@ -41,14 +41,14 @@ namespace hoot
 class WeightedMetricDistanceExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
-  static string className() { return "hoot::WeightedMetricDistanceExtractor"; }
+  static std::string className() { return "hoot::WeightedMetricDistanceExtractor"; }
 
   WeightedMetricDistanceExtractor(ValueAggregator* wayAgg = 0, ValueAggregator* pointAgg = 0,
                                   Meters searchRadius = -1);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
-  virtual string getName() const;
+  virtual std::string getName() const;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -59,7 +59,7 @@ public:
 protected:
   double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const;
 
-  auto_ptr<ValueAggregator> _pointAgg;
+  std::auto_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;
 };
 

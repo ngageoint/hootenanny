@@ -41,10 +41,9 @@
 
 namespace hoot
 {
+
 class OsmMap;
 class NodeReplacements;
-
-using namespace boost;
 
 /**
  * A tile worker that performs all its operations locally. This is good for testing, but it is
@@ -63,7 +62,7 @@ public:
 
   virtual void cleanup(QString mapIn, QString mapOut);
 
-  virtual void conflate(const vector<Envelope>& tiles, QString mapIn, QString mapOut);
+  virtual void conflate(const std::vector<geos::geom::Envelope>& tiles, QString mapIn, QString mapOut);
 
   virtual bool exists(QString dir);
 
@@ -95,7 +94,7 @@ private:
    */
   HashMap<long, long> _readNodeReplacements(QString inputDir);
 
-  boost::shared_ptr<OsmMap> _readTile(QString input, const Envelope& e);
+  boost::shared_ptr<OsmMap> _readTile(QString input, const geos::geom::Envelope& e);
 
   void _replaceNodes(boost::shared_ptr<OsmMap> map, const HashMap<long, long>& replacements);
 
@@ -110,7 +109,7 @@ private:
   void _writeNodeReplacements(QString dir, size_t i,
     NodeReplacements& replacements);
 
-  void _writeTheRest(QString dirIn, QString dirOut, const vector<Envelope>& conflatedBits);
+  void _writeTheRest(QString dirIn, QString dirOut, const std::vector<geos::geom::Envelope>& conflatedBits);
 
 };
 

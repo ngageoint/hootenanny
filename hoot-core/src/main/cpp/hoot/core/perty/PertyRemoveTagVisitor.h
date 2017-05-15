@@ -73,7 +73,7 @@ class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
 
     double _p;
     boost::minstd_rand* _rng;
-    auto_ptr<boost::minstd_rand> _localRng;
+    std::auto_ptr<boost::minstd_rand> _localRng;
 
     QStringList _exemptTagKeys;
     QStringList _replacementTagKeys;

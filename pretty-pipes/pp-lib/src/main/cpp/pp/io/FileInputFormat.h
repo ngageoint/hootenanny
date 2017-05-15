@@ -38,12 +38,11 @@
 
 namespace pp
 {
-using namespace boost;
 
 class FileInputFormat : public InputFormat
 {
 public:
-  static string className() { return "pp::FileInputFormat"; }
+  static std::string className() { return "pp::FileInputFormat"; }
 
   FileInputFormat();
 
@@ -55,13 +54,13 @@ public:
 
   virtual void setConfiguration(const Configuration& conf);
 
-  void setPath(const string& path) { _path = path; _init(); }
+  void setPath(const std::string& path) { _path = path; _init(); }
 
 private:
   std::string _path;
-  vector<boost::shared_ptr<FileInputSplit> > _splits;
+  std::vector<boost::shared_ptr<FileInputSplit> > _splits;
 
-  void _addFile(const string& path);
+  void _addFile(const std::string& path);
 
   void _init();
 };

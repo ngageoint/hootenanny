@@ -42,7 +42,7 @@ class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::NeedsReviewCriterion"; }
+  static std::string className() { return "hoot::NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() {}
 

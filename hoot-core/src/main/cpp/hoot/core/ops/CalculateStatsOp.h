@@ -92,14 +92,14 @@ private:
    * @param [out] featureType base feature type for the found matchCreator
    * @return ptr to match creator, if found, otherwise boost::shared_ptr to null
    */
-  boost::shared_ptr<MatchCreator> getMatchCreator(const vector< boost::shared_ptr<MatchCreator> > &matchCreators,
+  boost::shared_ptr<MatchCreator> getMatchCreator(const std::vector< boost::shared_ptr<MatchCreator> > &matchCreators,
                                            const QString &matchCreatorName,
                                            MatchCreator::BaseFeatureType &featureType);
 
   double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
 
   double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
-                       any& visitorData);
+                       boost::any& visitorData);
 
   void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ElementVisitor *v);
 

@@ -52,6 +52,7 @@ using namespace pp;
 #include <pp/io/CppSeqFileRecordReader.h>
 #include <pp/io/FileInputFormat.h>
 
+using namespace std;
 
 class DummyBlock
 {

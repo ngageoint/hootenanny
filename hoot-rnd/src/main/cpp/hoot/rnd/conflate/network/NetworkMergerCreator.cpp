@@ -41,6 +41,8 @@
 #include "NetworkMatch.h"
 #include "PartialNetworkMerger.h"
 
+using namespace std;
+
 namespace hoot
 {
 

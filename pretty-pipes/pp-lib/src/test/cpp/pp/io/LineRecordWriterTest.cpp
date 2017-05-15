@@ -48,6 +48,8 @@ using namespace pp;
 #include <pp/Hdfs.h>
 #include <pp/io/LineRecordWriter.h>
 
+using namespace std;
+
 class LineRecordWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(LineRecordWriterTest);

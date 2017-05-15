@@ -52,6 +52,9 @@
 
 #include "../../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 using namespace hybrid;
@@ -304,7 +307,7 @@ public:
     {
       if (e->getElementType() == ElementType::Node)
       {
-        const boost::shared_ptr<const hoot::Node>& n = dynamic_pointer_cast<const hoot::Node>(e);
+        const boost::shared_ptr<const hoot::Node>& n = boost::dynamic_pointer_cast<const hoot::Node>(e);
         QStringList names = n->getTags().getNames();
         set<QString> nameSet;
         for (int i = 0; i < names.size(); i++)

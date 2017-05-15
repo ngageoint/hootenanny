@@ -30,6 +30,8 @@
 #include <hoot/core/util/Log.h>
 #include "../../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 

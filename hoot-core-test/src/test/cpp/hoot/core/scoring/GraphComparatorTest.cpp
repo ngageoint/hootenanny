@@ -53,6 +53,9 @@ using namespace boost;
 // Standard
 #include <stdio.h>
 
+using namespace geos::geom;
+using namespace std;
+
 class GraphComparatorTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(GraphComparatorTest);

@@ -59,7 +59,7 @@ public:
   virtual void setOsmMap(const OsmMap* map);
 
 private:
-  set<long> _highwayIds;
+  std::set<long> _highwayIds;
   ConstOsmMapPtr _map;
 };
 

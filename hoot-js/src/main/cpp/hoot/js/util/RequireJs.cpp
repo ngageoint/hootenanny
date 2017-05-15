@@ -38,9 +38,10 @@
 #include <QDir>
 #include <QFile>
 
+using namespace v8;
+
 namespace hoot
 {
-using namespace v8;
 
 HOOT_JS_REGISTER(RequireJs)
 

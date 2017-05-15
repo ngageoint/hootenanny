@@ -36,6 +36,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 
+using namespace std;
+
 namespace hoot
 {
 

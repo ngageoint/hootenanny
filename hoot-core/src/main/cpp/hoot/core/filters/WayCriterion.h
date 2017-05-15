@@ -40,7 +40,7 @@ class WayCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::WayCriterion"; }
+  static std::string className() { return "hoot::WayCriterion"; }
 
   WayCriterion();
 

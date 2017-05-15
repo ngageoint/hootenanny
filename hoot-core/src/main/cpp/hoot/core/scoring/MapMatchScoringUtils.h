@@ -35,9 +35,8 @@
 
 namespace hoot
 {
-  using namespace boost;
 
-  class MatchComparator;
+class MatchComparator;
 
 /**
  * Various utilities to be used when scoring matches after conflation

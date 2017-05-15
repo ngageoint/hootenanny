@@ -59,6 +59,9 @@
 
 #include "../../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -499,7 +502,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     //will throw an exception on failure
     ConstRelationPtr reviewRelation =
-      dynamic_pointer_cast<Relation>(
+      boost::dynamic_pointer_cast<Relation>(
         TestUtils::getElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
     HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get(MetadataTags::HootReviewType()));
   }

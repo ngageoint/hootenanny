@@ -33,7 +33,6 @@
 #include <hoot/core/elements/Status.h>
 #include <hoot/core/util/ConfigOptions.h>
 
-
 namespace hoot
 {
 
@@ -44,7 +43,7 @@ class StatusCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static string className() { return "hoot::StatusCriterion"; }
+  static std::string className() { return "hoot::StatusCriterion"; }
 
   StatusCriterion() { setConfiguration(conf()); }
   StatusCriterion(Status s) : _status(s) { }

@@ -33,6 +33,9 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

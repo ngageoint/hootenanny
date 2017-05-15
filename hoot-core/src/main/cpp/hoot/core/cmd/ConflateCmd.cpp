@@ -55,10 +55,11 @@
 
 #include <QFileInfo>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-
-using namespace Tgs;
 
 HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 

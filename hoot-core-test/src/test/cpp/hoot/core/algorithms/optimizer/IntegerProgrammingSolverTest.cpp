@@ -43,6 +43,8 @@
 #include <list>
 #include <cassert>
 
+using namespace std;
+
 namespace hoot
 {
 

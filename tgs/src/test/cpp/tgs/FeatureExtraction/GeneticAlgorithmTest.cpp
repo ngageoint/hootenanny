@@ -117,7 +117,7 @@ namespace Tgs
         ga.step();
         c+= ga.getPopulation().size();
        boost::shared_ptr<CalculatorGenome> best = 
-          dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
+          boost::dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
         cout << c << "\t" << best->getScore() << "\t" << best->toString() << endl;
 //         if (1 / best->getScore() < 1.0)
 //         {

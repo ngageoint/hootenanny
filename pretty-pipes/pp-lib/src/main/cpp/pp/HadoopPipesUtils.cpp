@@ -40,6 +40,8 @@
 #include <pp/io/RecordReaderProvider.h>
 #include <pp/io/RecordWriterProvider.h>
 
+using namespace std;
+
 namespace pp
 {
 

@@ -42,8 +42,6 @@ namespace hoot
 
 class DirectedGraph;
 
-using namespace std;
-
 class ShortestPath
 {
 public:
@@ -89,10 +87,10 @@ private:
   };
 
 
- boost::shared_ptr<const DirectedGraph> _graph;
+  boost::shared_ptr<const DirectedGraph> _graph;
 
   QHash<long, double> _cost;
-  priority_queue<Node, std::deque<Node>, LesserNode> _queue;
+  std::priority_queue<Node, std::deque<Node>, LesserNode> _queue;
 };
 
 }

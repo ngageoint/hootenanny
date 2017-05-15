@@ -49,11 +49,9 @@ class OGRSpatialReference;
 
 namespace hoot
 {
-  using namespace boost;
-  using namespace std;
 
-  class OsmMap;
-  class Manipulator;
+class OsmMap;
+class Manipulator;
 
 /**
  * Conflates a map made up of Unknown1, Unknown2 and Conflated elements into a new map. An attempt
@@ -135,7 +133,7 @@ public:
   /**
    * Replaces the collection of manipulators that will be used to conflate this map.
    */
-  void setManipulators(const deque< boost::shared_ptr<Manipulator> >& m) { _manipulators = m; }
+  void setManipulators(const std::deque< boost::shared_ptr<Manipulator> >& m) { _manipulators = m; }
 
   void setMaxIterations(int i) { _maxIterations = i; }
 
@@ -152,22 +150,22 @@ protected:
   int _maxIterations;
   double _bestScore;
   Meters _vectorError, _maxDividedSeparation;
-  priority_queue<
+  std::priority_queue<
           boost::shared_ptr<const WorkingMap>,
-          deque< boost::shared_ptr<const WorkingMap> >,
+          std::deque< boost::shared_ptr<const WorkingMap> >,
           GreaterWorkingMap > _searchHeap;
 
-  priority_queue<
+  std::priority_queue<
         ManipulationHolder,
-        deque< ManipulationHolder >,
+        std::deque< ManipulationHolder >,
         LessThanManipulationHolder > _manipulationHeap;
 
-  deque< boost::shared_ptr<Manipulator> > _manipulators;
-  vector< boost::shared_ptr<Manipulation> > _manipulations;
+  std::deque< boost::shared_ptr<Manipulator> > _manipulators;
+  std::vector< boost::shared_ptr<Manipulation> > _manipulations;
   boost::shared_ptr<OsmMap> _map;
   boost::shared_ptr<WorkingMap> _bestMap;
   boost::shared_ptr<OGRSpatialReference> _planarSrs;
-  map< ElementId, set< boost::shared_ptr<Manipulation>, LessThanManipulation > > _impacted2Manipulation;
+  std::map< ElementId, std::set< boost::shared_ptr<Manipulation>, LessThanManipulation > > _impacted2Manipulation;
 
   double _minValidScore;
   bool _createBogusReviewTags;
@@ -179,11 +177,11 @@ protected:
   /**
    * Create manipulations for the specified ways.
    */
-  void _createManipulations(boost::shared_ptr<OsmMap> map, const set<ElementId>& eids);
+  void _createManipulations(boost::shared_ptr<OsmMap> map, const std::set<ElementId>& eids);
 
   void _saveMap(QString path);
 
-  void _updateManipulationEstimates(boost::shared_ptr<const OsmMap> map, const set<ElementId>& eids);
+  void _updateManipulationEstimates(boost::shared_ptr<const OsmMap> map, const std::set<ElementId>& eids);
 };
 
 }

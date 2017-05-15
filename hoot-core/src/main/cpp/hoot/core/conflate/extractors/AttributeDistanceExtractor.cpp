@@ -31,11 +31,12 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/TagComparator.h>
 
+using namespace std;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AttributeDistanceExtractor)
-
 
 double AttributeDistanceExtractor::_extract(const OsmMap& /*map*/, const ConstWayPtr& w1,
                                             const ConstWayPtr& w2) const

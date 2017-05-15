@@ -31,6 +31,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchemaLoader.h>
 
+using namespace std;
+
 namespace hoot
 {
 

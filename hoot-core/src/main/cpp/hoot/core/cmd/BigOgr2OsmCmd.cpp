@@ -38,6 +38,8 @@
 // Standard
 #include <fstream>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -122,8 +124,8 @@ public:
               //          break;
               //        }
 
-              WayPtr w = dynamic_pointer_cast<Way>(e);
-              NodePtr n = dynamic_pointer_cast<Node>(e);
+              WayPtr w = boost::dynamic_pointer_cast<Way>(e);
+              NodePtr n = boost::dynamic_pointer_cast<Node>(e);
 
               if (w != 0)
               {

@@ -40,15 +40,13 @@ namespace geos {
 
 // Hoot
 #include <hoot/core/util/Units.h>
-namespace hoot {
-  class OsmMap;
-  class Node;
-  class Way;
-}
 
-namespace hoot {
+namespace hoot
+{
 
-  using namespace std;
+class OsmMap;
+class Node;
+class Way;
 
 /**
  * This class merges roads that are similar to roads in the companion data set. The result of the
@@ -63,11 +61,11 @@ public:
 
   virtual ~WayMerger() {}
 
-  virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
           ConstOsmMapPtr map);
 
-  virtual const vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
-          ConstOsmMapPtr map, const vector<long>& wids);
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
+          ConstOsmMapPtr map, const std::vector<long>& wids);
 
 protected:
   /**
@@ -78,7 +76,7 @@ protected:
 
 private:
 
-  vector< boost::shared_ptr<Manipulation> > _result;
+  std::vector< boost::shared_ptr<Manipulation> > _result;
   ConstOsmMapPtr _map;
 
   Meters _minSplitSize;
@@ -86,7 +84,7 @@ private:
   /**
    * Find all parallel ways that are potential matches for the given way.
    */
-  vector<long> _findOtherWays(ConstWayPtr way);
+  std::vector<long> _findOtherWays(ConstWayPtr way);
 
   void _findMatches(long baseWayId);
 

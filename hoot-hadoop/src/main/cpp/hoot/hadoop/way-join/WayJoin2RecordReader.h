@@ -35,12 +35,10 @@ class PbfInputSplit;
 class PbfRecordReader;
 class OsmMap;
 
-using namespace boost;
-
 class WayJoin2RecordReader : public pp::RecordReader
 {
 public:
-  static string className() { return "hoot::WayJoin2RecordReader"; }
+  static std::string className() { return "hoot::WayJoin2RecordReader"; }
 
   WayJoin2RecordReader() {}
 

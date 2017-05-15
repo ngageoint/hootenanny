@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WEIGHTEDSHAPEDISTANCEEXTRACTOR_H
 #define WEIGHTEDSHAPEDISTANCEEXTRACTOR_H
@@ -39,11 +39,11 @@ namespace hoot
 class WeightedShapeDistanceExtractor : public WayFeatureExtractor
 {
 public:
-  static string className() { return "hoot::WeightedShapeDistanceExtractor"; }
+  static std::string className() { return "hoot::WeightedShapeDistanceExtractor"; }
 
   WeightedShapeDistanceExtractor(ValueAggregator* wayAgg = 0);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
 private:
   double _extract(const OsmMap& map, const ConstWayPtr& w1, const ConstWayPtr& w2) const;

@@ -26,6 +26,8 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/stats/MapStats.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

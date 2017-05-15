@@ -32,6 +32,8 @@
 // Qt
 #include <QStringBuilder>
 
+using namespace std;
+
 namespace hoot
 {
 
