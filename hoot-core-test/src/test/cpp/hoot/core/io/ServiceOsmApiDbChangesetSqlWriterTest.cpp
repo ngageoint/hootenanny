@@ -130,7 +130,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+//    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    const QString scriptDir = QString(getenv("HOOT_HOME")) + "/test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
     ApiDb::execSqlFile(
       ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql");
@@ -188,7 +189,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+//    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    const QString scriptDir = QString(getenv("HOOT_HOME")) + "/test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //grab the current time
@@ -212,7 +214,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+//    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    const QString scriptDir = QString(getenv("HOOT_HOME")) + "/test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //grab the current time
@@ -235,7 +238,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+//    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    const QString scriptDir = QString(getenv("HOOT_HOME")) + "/test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //define an aoi
