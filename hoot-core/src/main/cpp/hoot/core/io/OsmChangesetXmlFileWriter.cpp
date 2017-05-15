@@ -346,7 +346,7 @@ void OsmChangesetXmlFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     const ElementType elementType = e.getElementId().getType();
     writer.writeAttribute("type", elementType.toString().toLower());
     long memberId = e.getElementId().getId();
-    if (_newElementIdMappings[elementType.getEnum()].contains(id))
+    if (_newElementIdMappings[elementType.getEnum()].contains(memberId))
     {
       const long newMemberId = _newElementIdMappings[elementType.getEnum()][memberId];
       LOG_TRACE(
@@ -354,7 +354,7 @@ void OsmChangesetXmlFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
         ElementId(elementType, newMemberId));
       memberId = newMemberId;
     }
-    writer.writeAttribute("ref", QString::number(id));
+    writer.writeAttribute("ref", QString::number(memberId));
     writer.writeAttribute("role", _invalidCharacterRemover.removeInvalidCharacters(e.role));
     writer.writeEndElement();
   }

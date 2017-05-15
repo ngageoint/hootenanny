@@ -165,7 +165,7 @@ dataset.
 === changeset.compare.status
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, changeset elements are considered different if they have different statuses.  If false,
 then status does not matter during element comparison.  Setting this to true may result in many
