@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RFQHYBRIDTREE_H
 #define RFQHYBRIDTREE_H
@@ -35,8 +35,6 @@
 
 namespace hoot
 {
-
-using namespace geos::geom;
 
 namespace hybrid
 {
@@ -80,9 +78,9 @@ public:
    */
   RFqHybridTree(int bucketSize = 1, int rChildCount = 10, int rDepth = 5, int fqDepth = 27) :
     // set the depth to the max of the two so we don't create leaves prematurely.
-    _rLayer(rChildCount, bucketSize, max(rDepth, fqDepth)),
+    _rLayer(rChildCount, bucketSize, std::max(rDepth, fqDepth)),
     // set the depth to the max of the two so we don't create leaves prematurely.
-    _fqLayer(bucketSize, max(rDepth, fqDepth))
+    _fqLayer(bucketSize, std::max(rDepth, fqDepth))
   {
     _rDepth = rDepth;
     _fqDepth = fqDepth;
@@ -97,12 +95,12 @@ public:
   /**
    * Clear any old data and build a new index with the specified keys and values.
    */
-  void buildIndex(const vector<KeyType>& keys, const vector<DataType>& values)
+  void buildIndex(const std::vector<KeyType>& keys, const std::vector<DataType>& values)
   {
     assert(keys.size() == values.size());
     delete _root;
     // As the tree is built we re-order
-    vector<size_t> order;
+    std::vector<size_t> order;
     order.resize(keys.size());
     for (size_t i = 0; i < order.size(); ++i)
     {
@@ -134,7 +132,7 @@ public:
   /**
    * This method is used internally and should not be called directly.
    */
-  virtual void find(const Node<KeyType, DataType>* n, int depth, set<DataType>& result) const
+  virtual void find(const Node<KeyType, DataType>* n, int depth, std::set<DataType>& result) const
   {
     if (_isRLayer(depth))
     {
@@ -149,9 +147,9 @@ public:
   /**
    * Returns all bounding boxes that are within radius of c.
    */
-  set<DataType> find(const Coordinate& c, double radius, const KeyType& k, int D) const
+  std::set<DataType> find(const geos::geom::Coordinate& c, double radius, const KeyType& k, int D) const
   {
-    set<DataType> result;
+    std::set<DataType> result;
     _rLayer.setQuery(c, radius);
     _queryTerm = k;
     _fqLayer.setQuery(k, D);
@@ -159,11 +157,11 @@ public:
     return result;
   }
 
-  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, set<DataType>& result) const
+  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, std::set<DataType>& result) const
   {
     for (size_t i = 0; i < leaf->getSize(); ++i)
     {
-      const pair<KeyType, DataType>& p = leaf->get(i);
+      const std::pair<KeyType, DataType>& p = leaf->get(i);
       if (_rLayer.distance(_rLayer.getQueryCoordinate(), p.first.getEnvelope()) <=
           _rLayer.getQueryRadius())
       {

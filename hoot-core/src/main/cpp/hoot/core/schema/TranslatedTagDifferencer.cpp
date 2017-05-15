@@ -38,6 +38,9 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/HootException.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -150,11 +153,11 @@ boost::shared_ptr<ScriptToOgrTranslator> TranslatedTagDifferencer::_getTranslato
 {
   if (_translator == 0)
   {
-   boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
       _script));
 
     st->setErrorTreatment(StrictOff);
-    _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
     if (!_translator)
     {
       throw HootException("Error allocating translator, the translation script must support "
@@ -181,7 +184,7 @@ Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrTranslator::TranslatedFe
 
   if (tf)
   {
-   boost::shared_ptr<Feature> f = tf->feature;
+    boost::shared_ptr<Feature> f = tf->feature;
     QString layer = tf->tableName;
 
     const QVariantMap& vm = f->getValues();
@@ -198,7 +201,7 @@ Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrTranslator::TranslatedFe
 vector<ScriptToOgrTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(
   const ConstOsmMapPtr& map, const ConstElementPtr& e) const
 {
- boost::shared_ptr<Geometry> g = ElementConverter(map).convertToGeometry(e);
+  boost::shared_ptr<Geometry> g = ElementConverter(map).convertToGeometry(e);
   Tags t = e->getTags();
 
   return _getTranslator()->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());

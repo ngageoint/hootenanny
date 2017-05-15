@@ -33,10 +33,12 @@
 // Tbs
 #include <tbs/stats/TDistribution.h>
 
+using namespace cv;
+using namespace std;
+using namespace tbs;
+
 namespace hoot
 {
-
-using namespace tbs;
 
 ExpectationIntersection::ExpectationIntersection()
 {

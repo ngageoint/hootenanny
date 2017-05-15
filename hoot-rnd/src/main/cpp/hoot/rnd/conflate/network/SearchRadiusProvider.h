@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SEARCHRADIUSPROVIDER_H
 #define SEARCHRADIUSPROVIDER_H
@@ -37,9 +37,9 @@ class SearchRadiusProvider
 {
 public:
 
-  virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const = 0;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const = 0;
 
-  virtual Envelope getEnvelope(ConstNetworkVertexPtr v) const = 0;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const = 0;
 
   virtual Meters getSearchRadius(ConstNetworkEdgePtr e1) const = 0;
 

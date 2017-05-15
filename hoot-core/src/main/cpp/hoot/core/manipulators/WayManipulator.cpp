@@ -27,6 +27,8 @@
 
 #include "WayManipulator.h"
 
+using namespace std;
+
 namespace hoot
 {
 

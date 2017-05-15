@@ -37,9 +37,11 @@
 #include "WayJoin2RecordReader.h"
 #include "WayJoin2InputFormat.h"
 
+using namespace pp;
+using namespace std;
+
 namespace hoot
 {
-using namespace pp;
 
 WayJoinDriver::WayJoinDriver(Meters maxWaySize)
 {

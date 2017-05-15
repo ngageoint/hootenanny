@@ -55,15 +55,15 @@ class SmallerOverlapExtractor : public FeatureExtractor
 public:
   SmallerOverlapExtractor();
 
-  static string className() { return "hoot::SmallerOverlapExtractor"; }
+  static std::string className() { return "hoot::SmallerOverlapExtractor"; }
 
-  virtual string getClassName() const { return SmallerOverlapExtractor::className(); }
+  virtual std::string getClassName() const { return SmallerOverlapExtractor::className(); }
 
-  virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
+  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
 
-  virtual DataFrame::NullTreatment getNullTreatment() const
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
   {
-    return DataFrame::NullAsMissingValue;
+    return Tgs::DataFrame::NullAsMissingValue;
   }
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,

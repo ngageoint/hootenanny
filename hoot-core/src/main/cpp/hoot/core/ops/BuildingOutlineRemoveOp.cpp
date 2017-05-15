@@ -40,6 +40,8 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 

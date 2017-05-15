@@ -45,7 +45,7 @@ namespace hoot
 class NamedOp : public OsmMapOperation, public Configurable
 {
 public:
-  static string className() { return "hoot::NamedOp"; }
+  static std::string className() { return "hoot::NamedOp"; }
 
   NamedOp();
 

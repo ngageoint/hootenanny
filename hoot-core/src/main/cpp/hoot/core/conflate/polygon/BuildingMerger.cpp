@@ -41,6 +41,8 @@
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -195,7 +197,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, c
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
       {
-        RelationPtr r = dynamic_pointer_cast<Relation>(e);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (r->getType() == MetadataTags::RelationBuilding())
         {
           isBuilding = true;

@@ -26,6 +26,8 @@
  */
 #include "ExtractWaysVisitor.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -33,7 +35,7 @@ void ExtractWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     _w.push_back(w);
   }
 }

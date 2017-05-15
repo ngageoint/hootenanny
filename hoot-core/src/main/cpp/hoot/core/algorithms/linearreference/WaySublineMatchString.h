@@ -52,7 +52,7 @@ class WaySublineMatchString
 public:
   static std::string className() { return "hoot::WaySublineMatchString"; }
 
-  typedef vector<WaySublineMatch> MatchCollection;
+  typedef std::vector<WaySublineMatch> MatchCollection;
 
   WaySublineMatchString() {}
 
@@ -87,8 +87,8 @@ public:
   const MatchCollection& getMatches() const { return _matches; }
 
   /// @todo move reverse vector into the way subline string, but keep the interface identical
-  vector<bool> getReverseVector1() const;
-  vector<bool> getReverseVector2() const;
+  std::vector<bool> getReverseVector1() const;
+  std::vector<bool> getReverseVector2() const;
 
   /**
    * Returns the string of sublines that represent the first match.

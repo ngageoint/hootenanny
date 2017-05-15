@@ -29,6 +29,8 @@
 #include <hoot/core/conflate/MatchCreator.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -44,7 +46,7 @@ void MatchCandidateCountVisitor::_setupCreators(const vector<boost::shared_ptr<M
   LOG_VARD(matchCreators.size());
   for (size_t i = 0; i < matchCreators.size(); i++)
   {
-   boost::shared_ptr<MatchCreator> matchCreator = matchCreators[i];
+    boost::shared_ptr<MatchCreator> matchCreator = matchCreators[i];
     QString matchCreatorName;
     const QString matchCreatorDescription = matchCreator->getDescription();
     if (matchCreatorDescription.isEmpty())
@@ -63,12 +65,12 @@ void MatchCandidateCountVisitor::_setupCreators(const vector<boost::shared_ptr<M
 
 void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
-  for (QMap<QString,boost::shared_ptr<MatchCreator> >::const_iterator iterator = _matchCreatorsByName.begin();
+  for (QMap<QString, boost::shared_ptr<MatchCreator> >::const_iterator iterator = _matchCreatorsByName.begin();
        iterator != _matchCreatorsByName.end(); ++iterator)
   {
     const QString matchCreatorName = iterator.key();
     LOG_VART(matchCreatorName);
-   boost::shared_ptr<MatchCreator> matchCreator = iterator.value();
+    boost::shared_ptr<MatchCreator> matchCreator = iterator.value();
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
       LOG_TRACE("is match candidate");

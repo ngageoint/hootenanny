@@ -99,7 +99,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
   switch ( newElement->getElementType().getEnum() )
   {
   case ElementType::Node:
-    newNode = dynamic_pointer_cast<const Node>(newElement);
+    newNode = boost::dynamic_pointer_cast<const Node>(newElement);
     if ( newNode != ConstNodePtr() )
     {
       // Do we have to replace an entry?
@@ -113,7 +113,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     }
     break;
   case ElementType::Way:
-    newWay = dynamic_pointer_cast<const Way>(newElement);
+    newWay = boost::dynamic_pointer_cast<const Way>(newElement);
     if ( newWay != ConstWayPtr() )
     {
       // Do we have to replace an entry?
@@ -127,7 +127,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 
     break;
   case ElementType::Relation:
-    newRelation = dynamic_pointer_cast<const Relation>(newElement);
+    newRelation = boost::dynamic_pointer_cast<const Relation>(newElement);
     if ( newRelation != ConstRelationPtr() )
     {
       // Do we have to replace an entry?

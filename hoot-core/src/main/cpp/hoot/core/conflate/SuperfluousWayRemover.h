@@ -41,9 +41,8 @@
 
 namespace hoot
 {
-  using namespace std;
 
-  class OsmMap;
+class OsmMap;
 
 /**
  * Removes all ways that are not being used by relations that contain zero nodes, or all the nodes
@@ -53,7 +52,7 @@ class SuperfluousWayRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::SuperfluousWayRemover"; }
+  static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover();
 

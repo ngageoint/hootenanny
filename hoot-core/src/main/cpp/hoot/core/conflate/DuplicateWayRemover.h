@@ -50,7 +50,7 @@ class DuplicateWayRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::DuplicateWayRemover"; }
+  static std::string className() { return "hoot::DuplicateWayRemover"; }
 
   DuplicateWayRemover();
 

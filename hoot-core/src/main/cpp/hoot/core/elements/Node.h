@@ -39,9 +39,8 @@ namespace geos {
   }
 }
 
-namespace hoot {
-
-using namespace geos::geom;
+namespace hoot
+{
 
 class NodeData;
 
@@ -49,11 +48,11 @@ class Node : public Element
 {
 public:
 
-  static string className() { return "hoot::Node"; }
+  static std::string className() { return "hoot::Node"; }
 
   Node(const Node& from);
 
-  Node(Status s, long id, const Coordinate& c, Meters circularError);
+  Node(Status s, long id, const geos::geom::Coordinate& c, Meters circularError);
 
   Node(Status s, long id, double x, double y, Meters circularError,
        long changeset = ElementData::CHANGESET_EMPTY, long version = ElementData::VERSION_EMPTY,
@@ -71,7 +70,7 @@ public:
 
   virtual Element* clone() const { return new Node(*this); }
 
-  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
   double getX() const { return _nodeData.getX(); }
 

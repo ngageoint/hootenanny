@@ -44,8 +44,8 @@ class PoiPolygonReviewReducer
 
 public:
 
-  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const set<ElementId>& polyNeighborIds,
-                          const set<ElementId>& poiNeighborIds, double distance,
+  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
+                          const std::set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, bool nameMatch, bool exactNameMatch,
                           double typeScore, bool typeMatch, double matchDistanceThreshold);
 
@@ -55,8 +55,8 @@ private:
 
   ConstOsmMapPtr _map;
 
-  set<ElementId> _polyNeighborIds;
-  set<ElementId> _poiNeighborIds;
+  std::set<ElementId> _polyNeighborIds;
+  std::set<ElementId> _poiNeighborIds;
 
   double _distance;
   double _nameScoreThreshold;

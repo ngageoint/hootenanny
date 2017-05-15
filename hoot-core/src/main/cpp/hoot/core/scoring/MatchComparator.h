@@ -115,10 +115,10 @@ public:
   double getPertyScore() const;
 
 private:
-  typedef pair<QString, QString> UuidPair;
+  typedef std::pair<QString, QString> UuidPair;
 
-  set<UuidPair> _actual;
-  set<UuidPair> _expected;
+  std::set<UuidPair> _actual;
+  std::set<UuidPair> _expected;
   // contains a disjoint set of all matched uuids. E.g. if A matched B and B matches C then
   // A, B and C will all be in the same group.
   UuidToEid _actualUuidToEid;
@@ -130,7 +130,7 @@ private:
   /**
    * Confusion matrix with [actual][expected]
    */
-  vector< vector<int> > _confusion;
+  std::vector< std::vector<int> > _confusion;
 
   /**
    * Matrix of wrong values. The data is arranged as [row][col] where row <= col. Using
@@ -146,7 +146,7 @@ private:
   void _addWrong(const Tags& t1, const Tags& t2);
 
   void _clearCache();
-  void _createMatches(const set<QString>& uuids1, const set<QString>& uuids2, set<UuidPair>& matches,
+  void _createMatches(const std::set<QString>& uuids1, const std::set<QString>& uuids2, std::set<UuidPair>& matches,
     Tgs::DisjointSetMap<QString>& groups);
 
   bool _debugLog(QString uuid1, QString uuid2, const ConstOsmMapPtr& in,

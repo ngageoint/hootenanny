@@ -62,10 +62,10 @@ namespace Tgs
     return 1 + result;
   }
 
- boost::shared_ptr<TreeGenomeNode> CalculatorGenomeNode::clone() const
+  boost::shared_ptr<TreeGenomeNode> CalculatorGenomeNode::clone() const
   {
     // create a new node of the same type
-   boost::shared_ptr<CalculatorGenomeNode> newNode(_createNew());
+    boost::shared_ptr<CalculatorGenomeNode> newNode(_createNew());
     // copy all the internal class data and children
     newNode->copy(*this);
     return newNode;
@@ -79,7 +79,7 @@ namespace Tgs
     {
       if (it->second)
       {
-        _inputs[it->first] = dynamic_pointer_cast<CalculatorGenomeNode>(it->second->clone());
+        _inputs[it->first] = boost::dynamic_pointer_cast<CalculatorGenomeNode>(it->second->clone());
       }
     }
     _id = cgnFrom._id;
@@ -105,7 +105,7 @@ namespace Tgs
     return typeid(*this).name();
   }
 
- boost::shared_ptr<CalculatorGenomeNode> CalculatorGenomeNode::getInput(const std::string& name) const
+  boost::shared_ptr<CalculatorGenomeNode> CalculatorGenomeNode::getInput(const std::string& name) const
   {
     std::map<std::string,boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = 
       _inputs.find(name);
@@ -180,11 +180,11 @@ namespace Tgs
 
   void CalculatorGenomeNode::setInput(const std::string& name, CalculatorGenomeNode* node)
   {
-    setInput(name,boost::shared_ptr<CalculatorGenomeNode>(node));
+    setInput(name, boost::shared_ptr<CalculatorGenomeNode>(node));
   }
 
   void CalculatorGenomeNode::setInput(const std::string& name, 
-   boost::shared_ptr<CalculatorGenomeNode> node)
+    boost::shared_ptr<CalculatorGenomeNode> node)
   {
     _inputs[name] = node;
   }
@@ -205,7 +205,7 @@ namespace Tgs
     {
       strm << "(";
       bool first = true;
-      for (map<string,boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = _inputs.begin();
+      for (map<string, boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = _inputs.begin();
         it != _inputs.end(); ++it)
       {
         if (!first)

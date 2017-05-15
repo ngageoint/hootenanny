@@ -49,14 +49,14 @@ public:
 
   virtual void setConfiguration(const pp::Configuration& conf);
 
-  void setPath(const string& path) { _path = path; _init(); }
+  void setPath(const std::string& path) { _path = path; _init(); }
 
 private:
 
   std::string _path;
   std::vector<PbfInputSplit> _splits;
 
-  void _addSplit(const string& path);
+  void _addSplit(const std::string& path);
 
   void _init();
 };

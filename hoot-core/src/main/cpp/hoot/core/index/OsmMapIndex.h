@@ -42,9 +42,7 @@
 namespace hoot
 {
 
-  using namespace Tgs;
-
-  class NodeToWayMap;
+class NodeToWayMap;
 
 class OsmMapIndex : public ElementListener
 {
@@ -68,13 +66,13 @@ public:
    * Return all the way elements that intersect with the specified envelope along with their parent
    * relations.
    */
-  set<ElementId> findWayRelations(const Envelope& e) const;
+  std::set<ElementId> findWayRelations(const geos::geom::Envelope& e) const;
 
-  vector<long> findNodes(const Coordinate& from, Meters maxDistance) const;
+  std::vector<long> findNodes(const geos::geom::Coordinate& from, Meters maxDistance) const;
 
-  vector<long> findNodes(const Envelope& e) const;
+  std::vector<long> findNodes(const geos::geom::Envelope& e) const;
 
-  long findNearestWay(Coordinate c) const;
+  long findNearestWay(geos::geom::Coordinate c) const;
 
   /**
    * Should run in approximately O(lg(n)).
@@ -86,7 +84,7 @@ public:
   /**
    * Very inefficient.
    */
-  std::vector<long> findWayNeighbors(Coordinate& from, Meters buffer) const;
+  std::vector<long> findWayNeighbors(geos::geom::Coordinate& from, Meters buffer) const;
 
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
@@ -94,7 +92,7 @@ public:
    * Return all ways that intersect the given envelope. This runs in approximately O(lg(n)) time.
    * Due to the buffer added to ways this is only efficient with a planar projection.
    */
-  vector<long> findWays(const Envelope& e) const;
+  std::vector<long> findWays(const geos::geom::Envelope& e) const;
 
   Meters getIndexSlush() const { return _indexSlush; }
 
@@ -108,16 +106,16 @@ public:
   /**
    * Unlike the way tree the node tree has no approximations built in.
    */
-  boost::shared_ptr<const HilbertRTree> getNodeTree() const;
+  boost::shared_ptr<const Tgs::HilbertRTree> getNodeTree() const;
 
   /**
    * Get all the direct parents of a given element. This will not return grand parents, etc.
    */
-  set<ElementId> getParents(ElementId eid) const;
+  std::set<ElementId> getParents(ElementId eid) const;
 
-  const vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
+  const std::vector<long>& getTreeIdToWidMap() const { return _treeIdToWid; }
 
-  boost::shared_ptr<const HilbertRTree> getWayTree() const;
+  boost::shared_ptr<const Tgs::HilbertRTree> getWayTree() const;
 
   /**
    * This gets called before an element changes. Between this call and the call to
@@ -146,22 +144,22 @@ private:
 
   Meters _indexSlush;
 
-  mutable set<long> _pendingWayInsert;
-  mutable set<long> _pendingWayRemoval;
+  mutable std::set<long> _pendingWayInsert;
+  mutable std::set<long> _pendingWayRemoval;
 
-  mutable set<long> _pendingNodeInsert;
-  mutable set<long> _pendingNodeRemoval;
+  mutable std::set<long> _pendingNodeInsert;
+  mutable std::set<long> _pendingNodeRemoval;
 
-  mutable set<long> _pendingRelationChange;
+  mutable std::set<long> _pendingRelationChange;
 
-  mutable boost::shared_ptr<HilbertRTree> _nodeTree;
-  mutable boost::shared_ptr<HilbertRTree> _wayTree;
+  mutable boost::shared_ptr<Tgs::HilbertRTree> _nodeTree;
+  mutable boost::shared_ptr<Tgs::HilbertRTree> _wayTree;
 
   mutable boost::shared_ptr<NodeToWayMap> _nodeToWayMap;
   mutable boost::shared_ptr<ElementToRelationMap> _elementToRelationMap;
 
-  mutable vector<long> _treeIdToNid;
-  mutable vector<long> _treeIdToWid;
+  mutable std::vector<long> _treeIdToNid;
+  mutable std::vector<long> _treeIdToWid;
 
   void _buildNodeTree() const;
   void _buildWayTree() const;

@@ -24,8 +24,6 @@ namespace hoot
 {
 class OsmMap;
 
-using namespace boost;
-
 class WayJoin1Mapper : public OsmMapMapper
 {
 public:

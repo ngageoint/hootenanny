@@ -31,6 +31,8 @@
 #include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
 
+using namespace std;
+
 namespace hoot
 {
 

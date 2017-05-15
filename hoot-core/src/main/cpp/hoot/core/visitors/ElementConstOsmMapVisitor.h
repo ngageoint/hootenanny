@@ -37,8 +37,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
 
 /**
  * Base class to ease OsmMapConsumer usage.
@@ -47,7 +45,7 @@ class ElementConstOsmMapVisitor : public ElementVisitor, public ConstOsmMapConsu
 {
 public:
 
-  static string className() { return "hoot::ElementConstOsmMapVisitor"; }
+  static std::string className() { return "hoot::ElementConstOsmMapVisitor"; }
 
   ElementConstOsmMapVisitor() {}
 

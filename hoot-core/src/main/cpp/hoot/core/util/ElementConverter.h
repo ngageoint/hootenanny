@@ -63,7 +63,6 @@ namespace geos
 
 namespace hoot
 {
-using namespace geos::geom;
 
 /**
  * Converts elements to geometries
@@ -91,15 +90,15 @@ public:
    * determine the geometry type.
    */
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const boost::shared_ptr<const Element>& e,
-                                                     bool throwError=true,
-                                                     const bool statsFlag=false) const;
+                                                           bool throwError=true,
+                                                           const bool statsFlag=false) const;
  boost::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
-                                                     const bool statsFlag=false) const;
+                                                           const bool statsFlag=false) const;
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r,
-                                                     bool throwError,
-                                                     const bool statsFlag=false) const;
+                                                           bool throwError,
+                                                           const bool statsFlag=false) const;
  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;
  boost::shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
  boost::shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;

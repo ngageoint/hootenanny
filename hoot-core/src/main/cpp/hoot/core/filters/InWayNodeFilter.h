@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INWAYNODEFILTER_H
@@ -37,9 +37,7 @@
 namespace hoot
 {
 
-  using namespace std;
-
-  class OsmMap;
+class OsmMap;
 
 /**
  * The filter matches all nodes that are in at least one of the ways referenced by wids.
@@ -47,13 +45,13 @@ namespace hoot
 class InWayNodeFilter : public NodeFilter
 {
 public:
-  InWayNodeFilter(FilterType type, const OsmMap& map, const vector<long>& wids);
+  InWayNodeFilter(FilterType type, const OsmMap& map, const std::vector<long>& wids);
 
 protected:
   virtual bool isFiltered(const Node& n) const;
 
 private:
-  set<long> _nids;
+  std::set<long> _nids;
   FilterType _type;
 };
 

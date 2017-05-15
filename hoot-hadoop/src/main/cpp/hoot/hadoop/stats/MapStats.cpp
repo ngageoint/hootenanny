@@ -34,6 +34,8 @@
 #include <memory>
 
 using namespace boost;
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

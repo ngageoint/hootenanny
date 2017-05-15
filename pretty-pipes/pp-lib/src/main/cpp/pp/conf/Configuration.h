@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PP_CONFIGURATION_H
@@ -40,7 +40,6 @@
 
 namespace pp
 {
-using namespace std;
 
 // Avoids a warning by SWIG.
 #ifndef SWIG
@@ -53,7 +52,7 @@ public:
   Configuration();
 
 #ifndef SWIG
-  Configuration(const map<string, string>& values) : _conf(values) {}
+  Configuration(const std::map<std::string, std::string>& values) : _conf(values) {}
 
   Configuration(const Configuration& c) : HadoopPipes::JobConf() { _conf = c._conf; }
 
@@ -64,16 +63,16 @@ public:
 
   virtual bool hasKey(const std::string& key) const { return _conf.find(key) != _conf.end(); }
 
-  virtual const string& get(const string& key) const { return _conf.find(key)->second; }
+  virtual const std::string& get(const std::string& key) const { return _conf.find(key)->second; }
 
-  virtual const string& get(const string& key, const string& defaultValue) const;
+  virtual const std::string& get(const std::string& key, const std::string& defaultValue) const;
 
   virtual bool getBoolean(const std::string& key) const;
 
   /**
    * Decodes the bytes from Base64 then returns the bytes as raw binary.
    */
-  virtual string getBytes(const std::string& key) const;
+  virtual std::string getBytes(const std::string& key) const;
 
   virtual double getDouble(const std::string& key) const;
 
@@ -86,7 +85,7 @@ public:
   virtual long getLong(const std::string& key) const;
 
 #ifndef SWIG
-  virtual const std::map<string, string>& getMap() const { return _conf; }
+  virtual const std::map<std::string, std::string>& getMap() const { return _conf; }
 #endif
 
   virtual void set(const std::string& key, const std::string& value) { _conf[key] = value; }
@@ -108,7 +107,7 @@ public:
 
 private:
 
-  std::map<string, string> _conf;
+  std::map<std::string, std::string> _conf;
 };
 
 }

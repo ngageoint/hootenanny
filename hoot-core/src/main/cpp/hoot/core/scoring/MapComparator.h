@@ -35,8 +35,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace boost;
-
 /**
  * Compares two maps.
  */

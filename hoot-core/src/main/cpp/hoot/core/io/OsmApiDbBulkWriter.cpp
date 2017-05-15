@@ -41,10 +41,11 @@
 
 #include <tgs/System/SystemInfo.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-
-using namespace Tgs;
 
 unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
 

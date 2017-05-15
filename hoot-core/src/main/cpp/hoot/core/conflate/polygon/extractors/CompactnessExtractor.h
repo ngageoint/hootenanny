@@ -56,15 +56,15 @@ class CompactnessExtractor : public FeatureExtractor
 public:
   CompactnessExtractor();
 
-  static string className() { return "hoot::CompactnessExtractor"; }
+  static std::string className() { return "hoot::CompactnessExtractor"; }
 
-  virtual string getClassName() const { return CompactnessExtractor::className(); }
+  virtual std::string getClassName() const { return CompactnessExtractor::className(); }
 
-  virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
+  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
 
-  virtual DataFrame::NullTreatment getNullTreatment() const
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
   {
-    return DataFrame::NullAsMissingValue;
+    return Tgs::DataFrame::NullAsMissingValue;
   }
 
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
@@ -72,7 +72,7 @@ public:
 
 private:
 
-  double characteristic(Geometry* g) const;
+  double characteristic(geos::geom::Geometry* g) const;
 };
 
 }

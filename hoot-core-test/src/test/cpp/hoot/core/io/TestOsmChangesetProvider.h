@@ -37,7 +37,6 @@
 
 // TGS
 #include <tgs/Statistics/Random.h>
-using namespace Tgs;
 
 namespace hoot
 {
@@ -59,7 +58,7 @@ public:
   TestOsmChangesetProvider(bool useCoordScale)
     : _ctr(0), _max(10), _node(0), _way(0), _rel(0), _coordinateScale(1.0)
   {
-    Random::instance()->seed(0);
+    Tgs::Random::instance()->seed(0);
     if (useCoordScale)
       _coordinateScale = ApiDb::COORDINATE_SCALE;
   }
@@ -78,9 +77,9 @@ public:
   Change readNextChange()
   {
     Change change;
-    change.type = (Change::ChangeType)(Random::instance()->generateInt() % 3);
+    change.type = (Change::ChangeType)(Tgs::Random::instance()->generateInt() % 3);
 
-    switch ((ElementType::Type)(Random::instance()->generateInt() % 3))
+    switch ((ElementType::Type)(Tgs::Random::instance()->generateInt() % 3))
     {
     default:
     case ElementType::Node:
@@ -121,8 +120,8 @@ public:
   }
 
 private:
-  double getLat() { return (Random::instance()->generateInt() % 180 -  90.0) / _coordinateScale; }
-  double getLon() { return (Random::instance()->generateInt() % 360 - 180.0) / _coordinateScale; }
+  double getLat() { return (Tgs::Random::instance()->generateInt() % 180 -  90.0) / _coordinateScale; }
+  double getLon() { return (Tgs::Random::instance()->generateInt() % 360 - 180.0) / _coordinateScale; }
 
   int _ctr;
   int _max;

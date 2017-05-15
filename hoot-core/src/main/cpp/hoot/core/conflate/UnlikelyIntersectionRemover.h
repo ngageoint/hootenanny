@@ -41,10 +41,9 @@
 
 namespace hoot
 {
-  using namespace std;
 
-  class OsmMap;
-  class Way;
+class OsmMap;
+class Way;
 
 /**
  * Locates intersections that are likely mistakes and separates them. This is typically a problem
@@ -54,7 +53,7 @@ class UnlikelyIntersectionRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::UnlikelyIntersectionRemover"; }
+  static std::string className() { return "hoot::UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover();
 
@@ -69,11 +68,11 @@ protected:
 
   boost::shared_ptr<OsmMap> _result;
 
-  void _evaluateAndSplit(long intersectingNode, const set<long>& wayIds);
+  void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
 
   double _pIntersection(long intersectingNode, boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
 
-  void _splitIntersection(long intersectingNode, const vector< boost::shared_ptr<Way> >& g2);
+  void _splitIntersection(long intersectingNode, const std::vector< boost::shared_ptr<Way> >& g2);
 
 };
 

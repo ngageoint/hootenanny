@@ -49,11 +49,11 @@ public:
   //best type kvp match for the poly
   static QString polyBestKvp;
 
-  static string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
+  static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
   PoiPolygonTypeScoreExtractor();
 
-  virtual string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
+  virtual std::string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature types.

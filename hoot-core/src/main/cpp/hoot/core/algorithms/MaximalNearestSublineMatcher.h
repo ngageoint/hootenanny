@@ -55,7 +55,7 @@ private:
   Radians _maxRelevantAngle;
   Meters _headingDelta;
 
-  void _snapToEnds(const ConstOsmMapPtr &map, vector<WayLocation> &wl) const;
+  void _snapToEnds(const ConstOsmMapPtr &map, std::vector<WayLocation> &wl) const;
 };
 
 }

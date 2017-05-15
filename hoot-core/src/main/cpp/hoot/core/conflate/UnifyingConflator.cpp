@@ -53,9 +53,11 @@
 #include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-using namespace Tgs;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 

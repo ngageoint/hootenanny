@@ -30,6 +30,8 @@
 #include <hoot/rnd/conflate/network/OsmNetwork.h>
 #include <hoot/core/util/MapProjector.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

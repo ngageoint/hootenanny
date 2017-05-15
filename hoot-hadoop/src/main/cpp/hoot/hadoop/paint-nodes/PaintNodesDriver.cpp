@@ -39,6 +39,8 @@ using namespace std;
 #include "../pbf/PbfInputFormat.h"
 #include "../pbf/PbfRecordReader.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

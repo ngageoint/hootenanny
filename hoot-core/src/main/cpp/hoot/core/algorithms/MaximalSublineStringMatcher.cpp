@@ -46,6 +46,8 @@
 
 #include "MaximalSubline.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -344,7 +346,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
 
   if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
     if (OsmSchema::getInstance().isMultiLineString(*r) == false)
     {
@@ -365,7 +367,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   }
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     LOG_VART(w.get());
 
     if (w->getNodeCount() <= 1)

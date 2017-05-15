@@ -106,7 +106,7 @@ class WayCleaner
      * @param map the map owning the ways to be cleaned
      * @return a collection of unmodifiable cleaned ways
      */
-    static vector<ConstWayPtr> cleanWays(const vector<ConstWayPtr>& ways, const ConstOsmMapPtr& map);
+    static std::vector<ConstWayPtr> cleanWays(const std::vector<ConstWayPtr>& ways, const ConstOsmMapPtr& map);
 };
 
 }

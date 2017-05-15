@@ -90,7 +90,7 @@ inline void toCpp(v8::Handle<v8::Value> v, Meters& o)
 }
 
 template<typename T, typename U>
-void toCpp(v8::Handle<v8::Value> v, pair<T, U>& o)
+void toCpp(v8::Handle<v8::Value> v, std::pair<T, U>& o)
 {
   if (!v->IsArray())
   {
@@ -118,7 +118,7 @@ inline void toCpp(v8::Handle<v8::Value> v, QString& s)
   {
     throw IllegalArgumentException("Expected a string. Got an empty value.");
   }
-  Handle<String> str;
+  v8::Handle<v8::String> str;
   if (v->IsString() || v->IsNumber() || v->IsBoolean())
   {
     str = v->ToString();
@@ -219,7 +219,7 @@ inline void toCpp(v8::Handle<v8::Value> v, QVariant& qv)
 }
 
 template<typename T>
-void toCpp(v8::Handle<v8::Value> v, vector<T>& o)
+void toCpp(v8::Handle<v8::Value> v, std::vector<T>& o)
 {
   if (!v->IsArray())
   {
@@ -240,7 +240,7 @@ void toCpp(v8::Handle<v8::Value> v, vector<T>& o)
  * std::set is converted to a JavaScript Array. Using objects coerces all the keys into strings.
  */
 template<typename T>
-void toCpp(v8::Handle<v8::Value> v, set<T>& o)
+void toCpp(v8::Handle<v8::Value> v, std::set<T>& o)
 {
   if (!v->IsArray())
   {
@@ -349,7 +349,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
   switch (v.type())
   {
   case QVariant::Invalid:
-    return Undefined();
+    return v8::Undefined();
   case QVariant::Bool:
     return v8::Boolean::New(v.toBool());
   case QVariant::Double:
@@ -377,7 +377,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
 
     for (QVariantHash::const_iterator i = m.begin(); i != m.end(); i++)
     {
-      result->Set(toV8(i.key()),toV8(i.value()),None);
+      result->Set(toV8(i.key()),toV8(i.value()), v8::None);
     }
 
     return result;
@@ -389,7 +389,7 @@ inline v8::Handle<v8::Value> toV8(const QVariant& v)
 
     for (QVariantMap::const_iterator i = m.begin(); i != m.end(); i++)
     {
-      result->Set(toV8(i.key()),toV8(i.value()),None);
+      result->Set(toV8(i.key()),toV8(i.value()), v8::None);
     }
 
     return result;
@@ -408,7 +408,7 @@ inline v8::Handle<v8::Value> toV8(const QHash<T, U>& m)
   typename QHash<T, U>::const_iterator i;
   for (i = m.begin(); i != m.end(); i++)
   {
-    result->Set(toV8(i.key()),toV8(i.value()),None);
+    result->Set(toV8(i.key()),toV8(i.value()), v8::None);
   }
 
   return result;

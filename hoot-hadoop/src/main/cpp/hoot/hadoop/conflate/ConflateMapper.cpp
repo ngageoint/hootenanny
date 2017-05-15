@@ -27,6 +27,9 @@
 #include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

@@ -42,7 +42,7 @@ namespace hoot
 class DefaultIdGenerator : public IdGenerator
 {
 public:
-  static string className() { return "hoot::DefaultIdGenerator"; }
+  static std::string className() { return "hoot::DefaultIdGenerator"; }
 
   DefaultIdGenerator() { reset(); }
 

@@ -44,6 +44,8 @@ using namespace hoot::elements;
 #include <iostream>
 #include <limits>
 
+using namespace std;
+
 namespace hoot
 {
 

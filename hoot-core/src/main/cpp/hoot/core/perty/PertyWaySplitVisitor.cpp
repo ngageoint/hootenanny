@@ -43,6 +43,8 @@
 // Tgs
 #include <tgs/System/Time.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -116,7 +118,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     //determine where to split the element
     if (element->getElementType() == ElementType::Way)
     {
-      WayPtr way = dynamic_pointer_cast<Way>(element);
+      WayPtr way = boost::dynamic_pointer_cast<Way>(element);
       LOG_VART(way->getNodeCount());
       nodeIdsBeforeSplit = QVector<long>::fromStdVector(way->getNodeIds()).toList();
       LOG_VART(nodeIdsBeforeSplit);
@@ -124,7 +126,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     }
     else
     {
-      multiLineSplitPoint = _calcSplitPoint(dynamic_pointer_cast<Relation>(element), wayId);
+      multiLineSplitPoint = _calcSplitPoint(boost::dynamic_pointer_cast<Relation>(element), wayId);
       waySplitPoint = multiLineSplitPoint.getWayLocation();
     }
 
@@ -154,7 +156,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     if (element->getElementType() == ElementType::Way)
     {
       vector<WayPtr> newWaysAfterSplit =
-        WaySplitter::split(_map->shared_from_this(), dynamic_pointer_cast<Way>(element), waySplitPoint);
+        WaySplitter::split(_map->shared_from_this(), boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
       for (size_t i = 0; i < newWaysAfterSplit.size(); i++)
       {
         newElementsAfterSplit.push_back(newWaysAfterSplit.at(i));
@@ -175,7 +177,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
 
     if (numNewNodesCreatedBySplit > 0)
     {
-      WayPtr way = dynamic_pointer_cast<Way>(element);
+      WayPtr way = boost::dynamic_pointer_cast<Way>(element);
       //Its possible that the splitting of a relation could generate a new node.  In that case,
       //_updateNewNodeProperties does not need to be called b/c the MultiLineStringSplitter has
       //already properly updated the new node's properties.  when a way is split, however, the
@@ -256,7 +258,7 @@ MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(ConstRelationPtr r
     throw HootException(
       "PERTY feature splitting for multi-line string relations may only occur on relations which contain only ways.");
   }
-  WayPtr way = dynamic_pointer_cast<Way>(element);
+  WayPtr way = boost::dynamic_pointer_cast<Way>(element);
   LOG_VART(way->getNodeCount());
 
   //calculate the split point
@@ -284,10 +286,10 @@ NodePtr PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& nodeIdsBef
   //newElementsAfterSplit is assumed to only contain ways; find the new node created by the way
   //split; it will be the last node in the first way, which is the same as the first node in the
   //last way
- ConstWayPtr firstWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(0));
+  ConstWayPtr firstWay = boost::dynamic_pointer_cast<Way>(newElementsAfterSplit.at(0));
   const long lastNodeIdInFirstWay = firstWay->getNodeIds().at(firstWay->getNodeCount() - 1);
   LOG_VART(lastNodeIdInFirstWay);
- ConstWayPtr lastWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(1));
+  ConstWayPtr lastWay = boost::dynamic_pointer_cast<Way>(newElementsAfterSplit.at(1));
   const long firstNodeIdInLastWay = lastWay->getNodeIds().at(0);
   LOG_VART(firstNodeIdInLastWay);
   assert(lastNodeIdInFirstWay == firstNodeIdInLastWay);

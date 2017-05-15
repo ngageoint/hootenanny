@@ -40,6 +40,8 @@
 // Qt
 #include <QFileInfo>
 
+using namespace std;
+
 namespace hoot
 {
 

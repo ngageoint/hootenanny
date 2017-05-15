@@ -35,6 +35,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 

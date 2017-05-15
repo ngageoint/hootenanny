@@ -35,6 +35,8 @@
 // Standard
 #include <map>
 
+using namespace std;
+
 namespace pp
 {
 

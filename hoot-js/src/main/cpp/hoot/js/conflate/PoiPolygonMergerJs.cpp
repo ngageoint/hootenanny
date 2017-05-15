@@ -36,6 +36,8 @@
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

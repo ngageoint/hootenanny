@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CLOSEPOINTHASH_H
@@ -37,8 +37,6 @@
 
 namespace hoot
 {
-
-using namespace std;
 
 /**
  * Creates a hash with the explicit purpose of finding that are within a predefined distance. This
@@ -60,7 +58,7 @@ public:
   /**
    * Returns the ids of the current match. This may have more ids than actually match.
    */
-  const vector<long>& getMatch();
+  const std::vector<long>& getMatch();
 
   /**
    * Returns true if there is another match in the hash. A match may be returned multiple times
@@ -88,10 +86,10 @@ private:
 
   double _binSize;
   double _distance;
-  vector<long> _match;
+  std::vector<long> _match;
 
-  HashMap< int64_t, vector<long> > _bins;
-  HashMap< int64_t, vector<long> >::const_iterator _it;
+  HashMap< int64_t, std::vector<long> > _bins;
+  HashMap< int64_t, std::vector<long> >::const_iterator _it;
 
   int64_t _toBin(double x, double y);
 };

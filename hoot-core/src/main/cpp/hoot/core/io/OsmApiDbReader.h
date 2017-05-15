@@ -98,7 +98,7 @@ private:
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 
-  void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
+  void _addNodesForWay(std::vector<long> nodeIds, OsmMap& map);
 
   void _parseAndSetTagsOnElement(ElementPtr element);
 };

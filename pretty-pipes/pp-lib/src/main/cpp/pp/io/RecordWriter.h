@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RECORDWRITER_H
@@ -38,8 +38,6 @@
 
 namespace pp
 {
-using namespace boost;
-using namespace std;
 
 class RecordWriter : public HadoopPipes::RecordWriter
 {
@@ -49,7 +47,7 @@ public:
 
   virtual ~RecordWriter() {}
 
-  virtual void emit(const string& key, const string& value)
+  virtual void emit(const std::string& key, const std::string& value)
   {
     emitRecord(key.data(), key.size(), value.data(), value.size());
   }

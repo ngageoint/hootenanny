@@ -45,6 +45,8 @@
 #include <tgs/StreamUtils.h>
 #include <tgs/System/Time.h>
 
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

@@ -38,6 +38,7 @@
 #include "../elements/ElementJs.h"
 #include "../OsmMapJs.h"
 
+using namespace std;
 using namespace v8;
 
 namespace hoot

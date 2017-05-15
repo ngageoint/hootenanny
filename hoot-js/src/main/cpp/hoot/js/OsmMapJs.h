@@ -36,15 +36,14 @@
 
 namespace hoot
 {
-using namespace v8;
 
 class OsmMapJs : public node::ObjectWrap
 {
 public:
  static void Init(v8::Handle<v8::Object> target);
 
- static Handle<Object> create(ConstOsmMapPtr map);
- static Handle<Object> create(OsmMapPtr map);
+ static v8::Handle<v8::Object> create(ConstOsmMapPtr map);
+ static v8::Handle<v8::Object> create(OsmMapPtr map);
 
  OsmMapPtr& getMap();
  ConstOsmMapPtr& getConstMap() { return _constMap; }
@@ -56,14 +55,14 @@ private:
  OsmMapJs(OsmMapPtr map);
  ~OsmMapJs();
 
-  static Handle<Value> clone(const Arguments& args);
+  static v8::Handle<v8::Value> clone(const v8::Arguments& args);
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
   static v8::Handle<v8::Value> getElement(const v8::Arguments& args);
   static v8::Handle<v8::Value> getElementCount(const v8::Arguments& args);
   static v8::Handle<v8::Value> getParents(const v8::Arguments& args);
   static v8::Handle<v8::Value> removeElement(const v8::Arguments& args);
   static v8::Handle<v8::Value> setIdGenerator(const v8::Arguments& args);
-  static Handle<Value> visit(const Arguments& args);
+  static v8::Handle<v8::Value> visit(const v8::Arguments& args);
 
   OsmMapPtr _map;
   ConstOsmMapPtr _constMap;

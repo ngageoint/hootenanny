@@ -52,9 +52,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace geos::geom;
-using namespace std;
 
 class BulkInsert;
 class InternalIdReserver;
@@ -152,9 +149,9 @@ public:
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual vector<long> selectNodeIdsForWay(long wayId) = 0;
+  virtual std::vector<long> selectNodeIdsForWay(long wayId) = 0;
 
-  vector<long> selectNodeIdsForWay(long wayId, const QString sql);
+  std::vector<long> selectNodeIdsForWay(long wayId, const QString sql);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
@@ -166,7 +163,7 @@ public:
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  virtual vector<RelationData::Entry> selectMembersForRelation(long relationId) = 0;
+  virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId) = 0;
 
   /**
    * Returns the user ID if the email is found. If throwWhenMissing is false then -1 is returned
@@ -211,7 +208,7 @@ public:
    * @param bounds the query bounds
    * @return a SQL results iterator
    */
-  boost::shared_ptr<QSqlQuery> selectNodesByBounds(const Envelope& bounds);
+  boost::shared_ptr<QSqlQuery> selectNodesByBounds(const geos::geom::Envelope& bounds);
 
   /**
    * Returns the IDs of all ways that own the input node IDs
@@ -371,8 +368,8 @@ private:
 
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
-  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
-  vector<Range> _getTileRanges(const Envelope& env) const;
+  QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
+  std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;
 };
 
 }

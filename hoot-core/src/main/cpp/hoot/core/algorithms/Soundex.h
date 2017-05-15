@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SOUNDEX_H
 #define SOUNDEX_H
@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Implements Soundex as described on Wikipedia on 5/16/2013 [1].
@@ -49,7 +48,7 @@ class Soundex : public StringDistance
 {
 public:
 
-  static string className() { return "hoot::Soundex"; }
+  static std::string className() { return "hoot::Soundex"; }
 
   Soundex();
 

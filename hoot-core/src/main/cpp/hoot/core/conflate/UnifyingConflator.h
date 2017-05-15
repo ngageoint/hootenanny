@@ -41,6 +41,7 @@
 
 namespace hoot
 {
+
 class Match;
 class MatchClassification;
 class MatchFactory;
@@ -49,8 +50,6 @@ class Merger;
 class MergerFactory;
 class Settings;
 class ElementId;
-
-using namespace geos::geom;
 
 /**
  * A different form of conflation from the standard greedy conflation. This is a work in progress
@@ -68,7 +67,7 @@ class UnifyingConflator : public OsmMapOperation, public Serializable, public Bo
     public Configurable
 {
 public:
-  static string className() { return "hoot::UnifyingConflator"; }
+  static std::string className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
 
@@ -82,7 +81,7 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   QList<SingleStat> getStats() const { return _stats; }
 
@@ -96,17 +95,17 @@ public:
 
 private:
 
-  Envelope _bounds;
+  geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   boost::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
-  HashMap<ElementId, vector<Merger*> > _e2m;
-  vector<const Match*> _matches;
-  vector<Merger*> _mergers;
+  HashMap<ElementId, std::vector<Merger*> > _e2m;
+  std::vector<const Match*> _matches;
+  std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;
 
-  void _addReviewTags(const OsmMapPtr &map, const vector<const Match *> &matches);
+  void _addReviewTags(const OsmMapPtr &map, const std::vector<const Match *> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
 
   template <typename InputCollection>
@@ -129,10 +128,10 @@ private:
    */
   void _mapElementIdsToMergers();
 
-  void _removeWholeGroups(vector<const Match *> &matches, MatchSetVector &matchSets,
+  void _removeWholeGroups(std::vector<const Match *> &matches, MatchSetVector &matchSets,
     const OsmMapPtr &map);
 
-  void _replaceElementIds(const vector< pair<ElementId, ElementId> >& replaced);
+  void _replaceElementIds(const std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -140,10 +139,10 @@ private:
    */
   void _reset();
 
-  void _validateConflictSubset(const ConstOsmMapPtr& map, vector<const Match *> matches);
+  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<const Match *> matches);
 
-  void _printMatches(vector<const Match*> matches);
-  void _printMatches(vector<const Match*> matches, const MatchType& typeFilter);
+  void _printMatches(std::vector<const Match*> matches);
+  void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
 
   void _mapUnknownIdsBackToModifiedElements(OsmMapPtr& map);
 };

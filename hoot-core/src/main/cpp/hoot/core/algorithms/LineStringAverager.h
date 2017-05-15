@@ -36,24 +36,25 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
 
 class LineStringAverager
 {
 public:
-  LineStringAverager(boost::shared_ptr<LineString> l1, boost::shared_ptr<LineString> l2);
+  LineStringAverager(boost::shared_ptr<geos::geom::LineString> l1,
+                     boost::shared_ptr<geos::geom::LineString> l2);
 
-  boost::shared_ptr<LineString> average();
+  boost::shared_ptr<geos::geom::LineString> average();
 
-  static boost::shared_ptr<LineString> average(boost::shared_ptr<LineString> l1, boost::shared_ptr<LineString> l2);
+  static boost::shared_ptr<geos::geom::LineString> average(boost::shared_ptr<geos::geom::LineString> l1,
+                                                           boost::shared_ptr<geos::geom::LineString> l2);
 
 protected:
-  boost::shared_ptr<LineString> _l1;
-  boost::shared_ptr<LineString> _l2;
+  boost::shared_ptr<geos::geom::LineString> _l1;
+  boost::shared_ptr<geos::geom::LineString> _l2;
 
-  Coordinate _merge(const Coordinate& c1, const Coordinate& c2);
+  geos::geom::Coordinate _merge(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 
-  Coordinate _moveToLine(const Coordinate& c1, const LineString* ls);
+  geos::geom::Coordinate _moveToLine(const geos::geom::Coordinate& c1, const geos::geom::LineString* ls);
 };
 
 }

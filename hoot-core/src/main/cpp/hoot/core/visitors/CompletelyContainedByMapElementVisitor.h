@@ -42,10 +42,10 @@
 
 namespace hoot
 {
+
 class Relation;
 class Way;
 
-using namespace std;
 
 /**
  * Checks to see if the elements visited are completely contained by the specified map. This is
@@ -55,7 +55,7 @@ using namespace std;
 class CompletelyContainedByMapElementVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
-  static string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
+  static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
 

@@ -56,15 +56,11 @@ namespace hoot
 
 class Node;
 
-using namespace boost;
-using namespace geos::geom;
-using namespace std;
-
 class Way : public Element
 {
 public:
 
-  static string className() { return "hoot::Way"; }
+  static std::string className() { return "hoot::Way"; }
 
   Way(Status s, long id, Meters circularError, long changeset = ElementData::CHANGESET_EMPTY,
       long version = ElementData::VERSION_EMPTY,
@@ -78,7 +74,7 @@ public:
 
   void addNode(long id);
 
-  void addNodes(const vector<long>& ids);
+  void addNodes(const std::vector<long>& ids);
 
   /**
    * Adds nodes from the provided iterator. This can be faster than repeatedly calling addNode
@@ -112,21 +108,21 @@ public:
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */
-  const Envelope& getApproximateEnvelope(boost::shared_ptr<const ElementProvider> ep) const;
+  const geos::geom::Envelope& getApproximateEnvelope(boost::shared_ptr<const ElementProvider> ep) const;
 
   virtual ElementType getElementType() const { return ElementType::Way; }
 
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const
-  { return new Envelope(getEnvelopeInternal(ep)); }
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const
+  { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
   /**
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const Envelope& getEnvelopeInternal(boost::shared_ptr<const ElementProvider> ep) const;
+  const geos::geom::Envelope& getEnvelopeInternal(boost::shared_ptr<const ElementProvider> ep) const;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node
@@ -144,7 +140,7 @@ public:
 
   const std::vector<long>& getNodeIds() const { return _wayData->getNodeIds(); }
 
-  void setNodes(const vector<long>& newNodes);
+  void setNodes(const std::vector<long>& newNodes);
 
   bool hasNode(long nodeId) const;
 
@@ -183,7 +179,7 @@ public:
    * This is rarely used. Primarily it is useful when loading the way from a file that does
    * cache way envelope bounds (see .osm.pbf).
    */
-  void setCachedEnvelope(const Envelope& e) { _cachedEnvelope = e; }
+  void setCachedEnvelope(const geos::geom::Envelope& e) { _cachedEnvelope = e; }
 
   QString toString() const;
 
@@ -197,7 +193,7 @@ protected:
   /**
    * This envelope may be cached, but it also may not be exact.
    */
-  mutable Envelope _cachedEnvelope;
+  mutable geos::geom::Envelope _cachedEnvelope;
 
   virtual ElementData& _getElementData() { _makeWritable(); return *_wayData; }
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HDFS_H
@@ -41,7 +41,6 @@
 
 namespace pp
 {
-using namespace std;
 
 class FileStatus
 {
@@ -65,7 +64,7 @@ public:
 
   long getModificationTime() { return _modTime; }
 
-  const string& getPath() const { return _path; }
+  const std::string& getPath() const { return _path; }
 
   bool isDir() { return _kind == kObjectKindDirectory; }
 
@@ -76,7 +75,7 @@ protected:
   long _len;
   long _modTime;
   long _blockSize;
-  string _path;
+  std::string _path;
   tObjectKind _kind;
 
   friend class Hdfs;
@@ -91,7 +90,7 @@ protected:
 
   void _setKind(tObjectKind kind) { _kind = kind; }
 
-  void _setPath(const string& s) { _path = s; }
+  void _setPath(const std::string& s) { _path = s; }
 };
 
 /**
@@ -107,69 +106,69 @@ public:
    */
   Hdfs(std::string host = "default", int port = 0);
 
-  void copyFromLocal(string src, string dst);
+  void copyFromLocal(std::string src, std::string dst);
 
   /**
    * Opens a new ostream and returns ownership to the caller. An exception is thrown on failure.
    * Seeking is not supported on the output stream.
    */
-  ostream* create(string path);
+  std::ostream* create(std::string path);
 
   /**
    * Equivalent to Hadoop's FileSystem::delete.
    * @param recursive Only true is supported at this time.
    */
-  bool deletePath(string path, bool recursive);
+  bool deletePath(std::string path, bool recursive);
 
   /**
    * Returns true if the specified path exists.
    */
-  bool exists(string path);
+  bool exists(std::string path);
 
   /**
    * Given a path, calculate the absolute path and return it. If the path is already absolute
    * then no change is made. The path does not have to exist for this to work.
    */
-  string getAbsolutePath(const std::string& path);
+  std::string getAbsolutePath(const std::string& path);
 
   /**
    * Returns a status object describing path.
    */
-  FileStatus getFileStatus(string path);
+  FileStatus getFileStatus(std::string path);
 
   /**
    * Returns a list of data nodes that have a copy of the given file segment.
    */
-  QStringList getLocations(string path, long start, long length, const bool sort = false);
+  QStringList getLocations(std::string path, long start, long length, const bool sort = false);
 
   /**
    * Return the file status of all the files/directories in the given path.
    */
-  std::vector<FileStatus> listStatus(string path, const bool sortByPath = false);
+  std::vector<FileStatus> listStatus(std::string path, const bool sortByPath = false);
 
   /**
    * Creates a directory and all the necessary parent directories with default permissions.
    */
-  void mkdirs(string path);
+  void mkdirs(std::string path);
 
   /**
    * Opens a new istream and returns ownership to the caller. An exception is thrown on failure.
    */
-  istream* open(std::string path);
+  std::istream* open(std::string path);
 
   /**
    * Deletes the specified path.
    */
-  void remove(string path);
+  void remove(std::string path);
 
   /**
    * Move file from one location to another.
    */
-  void rename(const string& from, const string& to);
+  void rename(const std::string& from, const std::string& to);
 
 private:
 
-  string _host;
+  std::string _host;
   int _port;
 
   hdfsFS _fs;

@@ -48,7 +48,6 @@ namespace Tgs
 
 namespace hoot
 {
-using namespace Tgs;
 
 class HighwayClassifier;
 class SublineStringMatcher;
@@ -69,7 +68,7 @@ public:
 
   virtual const MatchClassification& getClassification() const { return _c; }
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   virtual QString getMatchName() const { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return _matchName; }
@@ -85,7 +84,7 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   const WaySublineMatchString& getSublineMatch() const { return _sublineMatch; }
 

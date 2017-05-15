@@ -39,6 +39,9 @@
 #include "TileOpMapper.h"
 #include "TileOpReducer.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

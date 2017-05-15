@@ -55,6 +55,8 @@
 # include <tgs/BigContainers/Stxxl.h>
 #endif
 
+using namespace std;
+
 namespace hoot
 {
 

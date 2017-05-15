@@ -29,6 +29,8 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 
+using namespace std;
+
 namespace hoot
 {
 

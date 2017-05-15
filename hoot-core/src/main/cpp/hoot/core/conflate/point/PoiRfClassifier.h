@@ -52,19 +52,19 @@ public:
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2);
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr &m,
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr &m,
     ElementId eid1, ElementId eid2) const;
 
 private:
 
   boost::shared_ptr<Tgs::RandomForest> _rf;
   QStringList _rfFactorLabels;
-  vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
 
   void _createAllExtractors();
   void _createTestExtractors();
 
-  const vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 
 };
 

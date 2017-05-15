@@ -43,7 +43,7 @@ class BuildingCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::BuildingCriterion"; }
+  static std::string className() { return "hoot::BuildingCriterion"; }
 
   BuildingCriterion() {}
   BuildingCriterion(ConstOsmMapPtr map) : _map(map) {}

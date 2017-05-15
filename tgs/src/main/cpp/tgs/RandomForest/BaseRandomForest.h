@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BASERANDOMFOREST_H
 #define BASERANDOMFOREST_H
@@ -153,7 +153,7 @@ namespace Tgs
     /**
      * Return a vector of the factor labels used to train this random forest.
      */
-    const vector<string>& getFactorLabels() const { return _factorLabels; }
+    const std::vector<std::string>& getFactorLabels() const { return _factorLabels; }
 
     /**
      * @brief importModel import the random forest object
@@ -234,7 +234,7 @@ namespace Tgs
 
     unsigned int _numSplitFactors;  /// The number of factors to test to split a node
     unsigned int _nodeSize;  /// The minimum number of data vectors in a set to split a node
-    vector<std::string> _factorLabels; /// Labels for all the factors used in training.
+    std::vector<std::string> _factorLabels; /// Labels for all the factors used in training.
 
     static TrainingInputs _trainInputs;  ///The inputs used by the map function train
 

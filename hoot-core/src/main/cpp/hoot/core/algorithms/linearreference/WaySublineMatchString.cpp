@@ -29,6 +29,8 @@
 #include <hoot/core/util/Log.h>
 #include "WaySublineCollection.h"
 
+using namespace std;
+
 namespace hoot
 {
 

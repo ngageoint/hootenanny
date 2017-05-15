@@ -38,22 +38,20 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace Tgs;
 
-typedef map<QString, double> Sample;
+typedef std::map<QString, double> Sample;
 
 /**
  * A very simple construct for storing simple data samples.
  */
-class DataSamples : public vector<Sample>
+class DataSamples : public std::vector<Sample>
 {
 public:
   DataSamples();
 
-  vector<string> getUniqueLabels() const;
+  std::vector<std::string> getUniqueLabels() const;
 
- boost::shared_ptr<DataFrame> toDataFrame(double nullValue) const;
+  boost::shared_ptr<Tgs::DataFrame> toDataFrame(double nullValue) const;
 
   const Sample& get(size_t i) const { return operator[](i); }
 

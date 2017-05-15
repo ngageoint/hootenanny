@@ -38,6 +38,7 @@
 #include "JsRegistrar.h"
 
 using namespace hoot;
+using namespace std;
 using namespace v8;
 
 /**

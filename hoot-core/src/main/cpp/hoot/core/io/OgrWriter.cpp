@@ -69,6 +69,9 @@
 
 #include "OgrOptions.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -160,7 +163,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
   }
 
   // convert the geometry.
-  boost::shared_ptr<GeometryCollection> gc = dynamic_pointer_cast<GeometryCollection>(g);
+  boost::shared_ptr<GeometryCollection> gc = boost::dynamic_pointer_cast<GeometryCollection>(g);
   if (gc.get() != 0)
   {
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
@@ -399,7 +402,7 @@ void OgrWriter::open(QString url)
     boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
          _scriptPath));
     st->setErrorTreatment(_strictChecking);
-    _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
   }
 
   if (!_translator)
