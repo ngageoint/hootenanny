@@ -40,7 +40,7 @@ class PoiPolygonPolyCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::PoiPolygonPolyCriterion"; }
+  static std::string className() { return "hoot::PoiPolygonPolyCriterion"; }
 
   PoiPolygonPolyCriterion();
 

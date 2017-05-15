@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
@@ -47,7 +46,7 @@ class CalculateAreaForStatsVisitor : public ElementVisitor, public ConstOsmMapCo
 {
 public:
 
-  static string className() { return "hoot::CalculateAreaForStatsVisitor"; }
+  static std::string className() { return "hoot::CalculateAreaForStatsVisitor"; }
 
   CalculateAreaForStatsVisitor() : _total(0) {}
 

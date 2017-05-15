@@ -26,6 +26,8 @@
  */
 #include "MergerBase.h"
 
+using namespace std;
+
 namespace hoot
 {
 

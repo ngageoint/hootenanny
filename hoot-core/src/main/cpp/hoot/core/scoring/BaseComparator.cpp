@@ -48,8 +48,7 @@ using namespace geos::operation::distance;
 #include <QImage>
 #include <QPainter>
 
-// TGS
-//using namespace Tgs;
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -150,11 +149,11 @@ Coordinate BaseComparator::_findNearestPointOnFeature(boost::shared_ptr<OsmMap> 
 
   // find the nearest feature
   long wId = map->getIndex().findNearestWay(c);
- WayPtr w = map->getWay(wId);
+  WayPtr w = map->getWay(wId);
 
   // find the nearest point on that feature.
- boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
- boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+  boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
   CoordinateSequence* cs = DistanceOp::closestPoints(p.get(), ls.get());
 
   cs->getAt(0, result);

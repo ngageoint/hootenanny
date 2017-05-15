@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class OsmMap;
 class ElementVisitor;
@@ -52,7 +51,7 @@ class VisitorOp :
 {
 public:
 
-  static string className() { return "hoot::VisitorOp"; }
+  static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
 

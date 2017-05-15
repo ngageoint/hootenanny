@@ -84,9 +84,9 @@ namespace Tgs
 
   }
 
- boost::shared_ptr<DataFrame> CfsFitnessFunction::_addOneFactor(boost::shared_ptr<DataFrame> df)
+  boost::shared_ptr<DataFrame> CfsFitnessFunction::_addOneFactor(boost::shared_ptr<DataFrame> df)
   {
-   boost::shared_ptr<DataFrame> result(new DataFrame());
+    boost::shared_ptr<DataFrame> result(new DataFrame());
     std::vector<std::string> factorLabels = df->getFactorLabels();
     stringstream strm;
     strm << "f" << factorLabels.size();
@@ -105,7 +105,7 @@ namespace Tgs
 
   void CfsFitnessFunction::addFeature(boost::shared_ptr<Genome> genome)
   {
-   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
+    boost::shared_ptr<CalculatorGenome> cg = boost::dynamic_pointer_cast<CalculatorGenome>(genome);
     _baseScore = calculateFitness(*cg);
     _loadGenome(*cg);
     _baseCopy = _addOneFactor(_baseCopy);

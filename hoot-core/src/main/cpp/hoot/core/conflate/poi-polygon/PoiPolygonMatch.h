@@ -55,8 +55,8 @@ public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     boost::shared_ptr<const PoiPolygonRfClassifier> rf,
-    const set<ElementId>& polyNeighborIds = set<ElementId>(),
-    const set<ElementId>& poiNeighborIds = set<ElementId>());
+    const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
+    const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -69,7 +69,7 @@ public:
 
   virtual QString getMatchName() const { return _matchName; }
 
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   virtual double getProbability() const { return _class.getMatchP(); }
 
@@ -80,7 +80,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   /**
    * Determines criteria for a feature to be considered a polygon for matching by
@@ -137,8 +137,8 @@ private:
   ElementId _eid2;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
-  boost::shared_ptr<Geometry> _poiGeom;
-  boost::shared_ptr<Geometry> _polyGeom;
+  boost::shared_ptr<geos::geom::Geometry> _poiGeom;
+  boost::shared_ptr<geos::geom::Geometry> _polyGeom;
   bool _e1IsPoi;
 
   //Settings _settings;
@@ -163,8 +163,8 @@ private:
   double _addressScore;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
-  set<ElementId> _polyNeighborIds;
-  set<ElementId> _poiNeighborIds;
+  std::set<ElementId> _polyNeighborIds;
+  std::set<ElementId> _poiNeighborIds;
 
   MatchClassification _class;
 

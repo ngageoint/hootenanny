@@ -43,6 +43,8 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -40,12 +40,11 @@
 
 namespace hoot
 {
-  class OsmMap;
-  class Way;
-  class TagDifferencer;
-  class NodeToWayMap;
 
-  using namespace std;
+class OsmMap;
+class Way;
+class TagDifferencer;
+class NodeToWayMap;
 
 /**
  * Searches for itty bitty ways that connect end to end. For some reason some files provide little
@@ -63,7 +62,7 @@ namespace hoot
 class SmallWayMerger : public OsmMapOperation
 {
 public:
-  static string className() { return "hoot::SmallWayMerger"; }
+  static std::string className() { return "hoot::SmallWayMerger"; }
 
   SmallWayMerger(Meters threshold = -1);
 
@@ -80,11 +79,11 @@ protected:
 
   double _threshold;
   NodeToWayMap* _n2w;
-  auto_ptr<TagDifferencer> _diff;
+  std::auto_ptr<TagDifferencer> _diff;
 
   void _mergeNeighbors(boost::shared_ptr<Way> w);
 
-  void _mergeWays(const set<long>& ids);
+  void _mergeWays(const std::set<long>& ids);
 };
 
 }

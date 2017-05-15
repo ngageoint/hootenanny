@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __DATA_FRAME_H__
@@ -44,7 +44,6 @@
 
 namespace Tgs
 {
-  using namespace std;
 
   /**
   * The DataFrame is a vector of data vectors.  Each data vector contains 
@@ -211,7 +210,7 @@ namespace Tgs
     *
     * @param factors a container to hold the factor labels
     */
-    const vector<string> getFactorLabels() const;
+    const std::vector<std::string> getFactorLabels() const;
 
     const std::vector<int>& getFactorTypes() const { return _factorType; }
 
@@ -423,7 +422,7 @@ namespace Tgs
     /**
     *  Copies the factor names into an internal vector (not strictly needed inside the data set)
     */
-    void setFactorLabels(const vector<string>& factors);
+    void setFactorLabels(const std::vector<std::string>& factors);
 
     /**
      * Sets the factor type to one of Nominal or Numeric

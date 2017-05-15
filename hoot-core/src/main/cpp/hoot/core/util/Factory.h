@@ -46,8 +46,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace boost;
 
 class ObjectCreator
 {
@@ -57,11 +55,11 @@ public:
 
   virtual ~ObjectCreator() { }
 
-  virtual any create() = 0;
+  virtual boost::any create() = 0;
 
-  virtual string getBaseName() = 0;
+  virtual std::string getBaseName() = 0;
 
-  virtual string getName() = 0;
+  virtual std::string getName() = 0;
 
 private:
   ObjectCreator(const ObjectCreator& oc);
@@ -83,18 +81,18 @@ public:
   /**
    * We cast it to "Base" so that the any pointer works as expected.
    */
-  any create()
+  boost::any create()
   {
     Base* b = new T();
     return dynamic_cast<Base*>(b);
   }
 
-  string getBaseName() { return _baseName; }
+  std::string getBaseName() { return _baseName; }
 
-  string getName() { return _name; }
+  std::string getName() { return _name; }
 
 private:
-  string _name, _baseName;
+  std::string _name, _baseName;
 };
 
 class Factory
@@ -142,7 +140,7 @@ public:
     }
   }
 
-  any constructObject(const std::string& name);
+  boost::any constructObject(const std::string& name);
 
   template<class T>
   T* constructObject(const QString& name)
@@ -154,10 +152,10 @@ public:
   template<class T>
   T* constructObject(const std::string& name)
   {
-    return any_cast<T*>(constructObject(name));
+    return boost::any_cast<T*>(constructObject(name));
   }
 
-  vector<std::string> getObjectNamesByBase(const std::string& baseName);
+  std::vector<std::string> getObjectNamesByBase(const std::string& baseName);
 
   bool hasClass(const QString& name) { return hasClass(name.toStdString()); }
 

@@ -35,6 +35,7 @@
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
 
 namespace hoot
 {

@@ -42,8 +42,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace boost;
 
 class OsmMap;
 
@@ -54,7 +52,7 @@ class OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::OsmMapOperation"; }
+  static std::string className() { return "hoot::OsmMapOperation"; }
 
   virtual ~OsmMapOperation() {}
 
@@ -70,7 +68,7 @@ public:
    *
    * @return boost any pointer to the result data
    */
-  virtual any getResult() { any ptr; return ptr; }
+  virtual boost::any getResult() { boost::any ptr; return ptr; }
 
   /**
     Returns a string representation of the operation

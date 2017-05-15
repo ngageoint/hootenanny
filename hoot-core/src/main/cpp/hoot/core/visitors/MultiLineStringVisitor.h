@@ -44,9 +44,8 @@
 
 namespace hoot
 {
-class Way;
 
-using namespace std;
+class Way;
 
 /**
  * Creates a multi-linestring out of all ways that are visited. There are no checks to be certain
@@ -55,7 +54,7 @@ using namespace std;
 class MultiLineStringVisitor : public ElementVisitor
 {
 public:
-  static string className() { return "hoot::MultiLineStringVisitor"; }
+  static std::string className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
 
@@ -67,7 +66,7 @@ public:
    * visited and clear any history. If it is called again (without visiting) it will return a valid
    * but empty geometry.
    */
-  MultiLineString* createMultiLineString();
+  geos::geom::MultiLineString* createMultiLineString();
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -75,7 +74,7 @@ public:
 
 protected:
   ConstElementProviderPtr _provider;
-  vector<Geometry*>* _ls;
+  std::vector<geos::geom::Geometry*>* _ls;
 };
 
 }

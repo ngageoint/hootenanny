@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Base class to ease OsmMapConsumer usage.

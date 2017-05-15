@@ -43,6 +43,7 @@
 // tgs
 #include <tgs/HashMap.h>
 
+using namespace std;
 
 namespace hoot
 {

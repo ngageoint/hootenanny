@@ -40,7 +40,7 @@ class SplitNameVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::SplitNameVisitor"; }
+  static std::string className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
 

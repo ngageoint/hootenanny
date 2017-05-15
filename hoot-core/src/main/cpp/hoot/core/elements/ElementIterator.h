@@ -40,8 +40,6 @@ namespace hoot
 
 class Element;
 
-using namespace std;
-
 /**
  * Implements the iterator concept and provides some simple methods for the inheriter to use.
  *
@@ -74,7 +72,7 @@ protected:
 
 private:
   boost::shared_ptr<Element> _current;
-  list< boost::shared_ptr<Element> > _pending;
+  std::list< boost::shared_ptr<Element> > _pending;
 };
 
 }

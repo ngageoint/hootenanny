@@ -25,6 +25,9 @@
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -74,7 +77,7 @@ void PaintNodesMapper::flush()
 void PaintNodesMapper::_init(HadoopPipes::MapContext& context)
 {
   _context = &context;
- boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _envelope = Envelope(c->get("hoot.envelope"));
   LOG_INFO("_envelope: " << _envelope.toString());
   _pixelSize = c->getDouble("hoot.pixel.size");

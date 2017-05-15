@@ -43,6 +43,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -57,7 +60,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      WayDiscretizer wd(_map->shared_from_this(), dynamic_pointer_cast<const Way>(e));
+      WayDiscretizer wd(_map->shared_from_this(), boost::dynamic_pointer_cast<const Way>(e));
       wd.discretize(_spacing, _result);
     }
   }
@@ -76,7 +79,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      ConstWayPtr w(dynamic_pointer_cast<const Way>(e));
+      ConstWayPtr w(boost::dynamic_pointer_cast<const Way>(e));
 
       Geometry* ls = ElementConverter(_map->shared_from_this()).convertToLineString(w)->clone();
       _lines.push_back(ls);

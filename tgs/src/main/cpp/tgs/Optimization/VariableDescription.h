@@ -35,7 +35,6 @@
 
 namespace Tgs
 {
-using namespace boost;
 
 class VariableDescription
 {

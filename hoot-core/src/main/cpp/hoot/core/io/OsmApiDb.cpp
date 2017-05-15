@@ -54,6 +54,8 @@
 
 #include "InternalIdReserver.h"
 
+using namespace std;
+
 namespace hoot
 {
 

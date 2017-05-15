@@ -40,11 +40,10 @@
 
 namespace hoot
 {
-  using namespace boost;
 
-  class OsmMap;
-  class Node;
-  class Way;
+class OsmMap;
+class Node;
+class Way;
 
 /**
  * Uses the Ramer-Douglas Peucker algorithm [1] to generalize a set of point.  This

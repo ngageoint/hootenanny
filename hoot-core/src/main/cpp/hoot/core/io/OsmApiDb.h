@@ -77,7 +77,7 @@ public:
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual vector<long> selectNodeIdsForWay(long wayId);
+  virtual std::vector<long> selectNodeIdsForWay(long wayId);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
@@ -87,7 +87,7 @@ public:
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  virtual vector<RelationData::Entry> selectMembersForRelation(long relationId);
+  virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   /**
    * Returns a results iterator to a node for a given node id.

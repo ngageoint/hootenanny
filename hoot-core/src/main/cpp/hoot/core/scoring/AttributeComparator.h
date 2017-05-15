@@ -54,7 +54,7 @@ public:
 
 private:
   int _iterations;
-  Coordinate _r;
+  geos::geom::Coordinate _r;
   double _median;
   double _mean;
   // confidence interval

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOT_HYBRID_RTREE_H
 #define HOOT_HYBRID_RTREE_H
@@ -47,8 +47,6 @@
 
 namespace hoot
 {
-using namespace geos::geom;
-using namespace std;
 
 namespace hybrid
 {
@@ -71,7 +69,7 @@ public:
     _children.clear();
   }
 
-  void addChild(Node<KeyType, DataType>* n, const Envelope& e)
+  void addChild(Node<KeyType, DataType>* n, const geos::geom::Envelope& e)
   {
     if (n != 0)
     {
@@ -84,23 +82,23 @@ public:
 
   virtual size_t getChildCount() const { return _children.size(); }
 
-  const Envelope& getChildEnvelope(size_t i) const { return _childEnvelope[i]; }
+  const geos::geom::Envelope& getChildEnvelope(size_t i) const { return _childEnvelope[i]; }
 
   virtual QString toString(QString indent = QString()) const
   {
     std::stringstream ss;
-    ss << indent << "RNode: " << endl;
+    ss << indent << "RNode: " << std::endl;
     for (size_t i = 0; i < _children.size(); ++i)
     {
-      ss << indent << "  " << _childEnvelope[i].toString() << endl;
+      ss << indent << "  " << _childEnvelope[i].toString() << std::endl;
       ss << _children[i]->toString(indent + "  ");
     }
     return QString::fromUtf8(ss.str().data());
   }
 
 private:
-  vector<Node<KeyType, DataType>*> _children;
-  vector<Envelope> _childEnvelope;
+  std::vector<Node<KeyType, DataType>*> _children;
+  std::vector<geos::geom::Envelope> _childEnvelope;
 };
 
 /**
@@ -115,14 +113,14 @@ public:
   class Order
   {
   public:
-    Order(vector<int>& hilbertValue) : _hilbertValue(hilbertValue) { }
+    Order(std::vector<int>& hilbertValue) : _hilbertValue(hilbertValue) { }
 
     bool operator() (size_t o1, size_t o2)
     {
       return _hilbertValue[o1] < _hilbertValue[o2];
     }
 
-    vector<int>& _hilbertValue;
+    std::vector<int>& _hilbertValue;
   };
 
   RTreeLayer(int childCount = 2, int bucketSize = 1, int depth = -1)
@@ -136,9 +134,9 @@ public:
 
   virtual Leaf<KeyType, DataType>* buildLeaf(size_t start, size_t end)
   {
-    const vector<KeyType>& keys = *_keys;
-    const vector<DataType>& values = *_values;
-    vector<size_t>& order = *_order;
+    const std::vector<KeyType>& keys = *_keys;
+    const std::vector<DataType>& values = *_values;
+    std::vector<size_t>& order = *_order;
 
     Leaf<KeyType, DataType>* result = new Leaf<KeyType, DataType>();
 
@@ -161,8 +159,8 @@ public:
       return 0;
     }
 
-    const vector<KeyType>& keys = *_keys;
-    vector<size_t>& order = *_order;
+    const std::vector<KeyType>& keys = *_keys;
+    std::vector<size_t>& order = *_order;
 
     // if we've reached the bottom then create a leaf node.
     if (depth >= _depth && (int)(end - start) <= _bucketSize)
@@ -178,7 +176,7 @@ public:
       Order o(_hilbertValues);
       sort(order.begin() + start, order.begin() + end, o);
 
-      int childCount = min(end - start, (size_t)_childCount);
+      int childCount = std::min(end - start, (size_t)_childCount);
       int elementCount = end - start;
       // evenly distribute the elements among our children and build the sub-trees.
       for (int i = 0; i < childCount; ++i)
@@ -186,7 +184,7 @@ public:
         size_t iStart = start + elementCount * i / childCount;
         size_t iEnd = start + elementCount * (i + 1) / childCount;
 
-        Envelope e;
+        geos::geom::Envelope e;
         for (size_t j = iStart; j < iEnd; ++j)
         {
           e.expandToInclude(&(keys[order[j]].getEnvelope()));
@@ -200,9 +198,9 @@ public:
     }
   }
 
-  double distance(const Coordinate& c, const Envelope& e) const
+  double distance(const geos::geom::Coordinate& c, const geos::geom::Envelope& e) const
   {
-    Envelope e2(c.x, c.x, c.y, c.y);
+    geos::geom::Envelope e2(c.x, c.x, c.y, c.y);
     _distanceCount++;
     return e.distance(&e2);
   }
@@ -221,7 +219,7 @@ public:
   /**
    * Recursively search the tree for any keys that are within radius distance of c.
    */
-  void find(const Node<KeyType, DataType>* n, int depth, set<DataType>& result) const
+  void find(const Node<KeyType, DataType>* n, int depth, std::set<DataType>& result) const
   {
     const Leaf<KeyType, DataType>* l = dynamic_cast<const Leaf<KeyType, DataType>*>(n);
 
@@ -246,11 +244,11 @@ public:
     }
   }
 
-  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, set<DataType>& result) const
+  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, std::set<DataType>& result) const
   {
     for (size_t i = 0; i < leaf->getSize(); ++i)
     {
-      const pair<KeyType, DataType>& p = leaf->get(i);
+      const std::pair<KeyType, DataType>& p = leaf->get(i);
       if (distance(_queryC, p.first.getEnvelope()) <= _queryRadius)
       {
         result.insert(p.second);
@@ -260,7 +258,7 @@ public:
 
   int getDepth() const { return _depth; }
 
-  const Coordinate& getQueryCoordinate() const { return _queryC; }
+  const geos::geom::Coordinate& getQueryCoordinate() const { return _queryC; }
 
   double getQueryRadius() const { return _queryRadius; }
 
@@ -288,15 +286,15 @@ public:
    *  reference start/end values in this order. The order contains values from 0 to n-1, initially
    *  sorted.
    */
-  void setKeysValues(const vector<KeyType>& keys, const vector<DataType>& values,
-                     vector<size_t>& order)
+  void setKeysValues(const std::vector<KeyType>& keys, const std::vector<DataType>& values,
+                     std::vector<size_t>& order)
   {
     _keys = &keys;
     _values = &values;
     _order = &order;
     _hilbertValues.resize(_keys->size());
 
-    Envelope bounds;
+    geos::geom::Envelope bounds;
     if (keys.size() > 0)
     {
       bounds = keys[0].getEnvelope();
@@ -308,11 +306,11 @@ public:
 
     // calculate the hibert values of each key.
     int hcoord[2];
-    Coordinate center;
+    geos::geom::Coordinate center;
     Tgs::HilbertCurve curve(2, 8);
     for (size_t i = 0; i < _keys->size(); ++i)
     {
-      const Envelope& e = keys[i].getEnvelope();
+      const geos::geom::Envelope& e = keys[i].getEnvelope();
       e.centre(center);
       hcoord[0] = round((center.x - bounds.getMinX()) / (bounds.getMaxX() - bounds.getMinX())
                         * 0xFF);
@@ -323,14 +321,14 @@ public:
     }
   }
 
-  void setQuery(const Coordinate& c, double radius) const
+  void setQuery(const geos::geom::Coordinate& c, double radius) const
   {
     _queryC = c;
     _queryRadius = radius;
   }
 
 private:
-  mutable Coordinate _queryC;
+  mutable geos::geom::Coordinate _queryC;
   mutable double _queryRadius;
 
   int _childCount;
@@ -338,10 +336,10 @@ private:
   SubTreeCallback<KeyType, DataType>* _callback;
   int _depth;
   mutable int _distanceCount;
-  const vector<KeyType>* _keys;
-  const vector<DataType>* _values;
-  vector<int> _hilbertValues;
-  vector<size_t>* _order;
+  const std::vector<KeyType>* _keys;
+  const std::vector<DataType>* _values;
+  std::vector<int> _hilbertValues;
+  std::vector<size_t>* _order;
 };
 
 
@@ -378,12 +376,12 @@ public:
   /**
    * Clear any old data and build a new index with the specified keys and values.
    */
-  void buildIndex(const vector<KeyType>& keys, const vector<DataType>& values)
+  void buildIndex(const std::vector<KeyType>& keys, const std::vector<DataType>& values)
   {
     assert(keys.size() == values.size());
     delete _root;
     // As the tree is built we re-order
-    vector<size_t> order;
+    std::vector<size_t> order;
     order.resize(keys.size());
     for (size_t i = 0; i < order.size(); ++i)
     {
@@ -399,9 +397,9 @@ public:
   /**
    * Returns all bounding boxes that are within radius of c.
    */
-  set<DataType> find(const Coordinate& c, double radius) const
+  std::set<DataType> find(const geos::geom::Coordinate& c, double radius) const
   {
-    set<DataType> result;
+    std::set<DataType> result;
     _layer.setQuery(c, radius);
     _layer.find(_root, 0, result);
     return result;

@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Mapreduce reduce task for writing OSM API database SQL statements to both file and a database.
  *
@@ -48,7 +46,7 @@ class WriteOsmSqlStatementsReducer : public pp::Reducer
 
 public:
 
-  static string className() { return "hoot::WriteOsmSqlStatementsReducer"; }
+  static std::string className() { return "hoot::WriteOsmSqlStatementsReducer"; }
 
   WriteOsmSqlStatementsReducer();
   virtual ~WriteOsmSqlStatementsReducer();

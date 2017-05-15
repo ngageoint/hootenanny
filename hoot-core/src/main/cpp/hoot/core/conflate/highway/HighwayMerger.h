@@ -37,10 +37,10 @@ class HighwayMerger : public Merger
 public:
   HighwayMerger();
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
     const;
 
-  virtual set<ElementId> getImpactedElementIds() const;
+  virtual std::set<ElementId> getImpactedElementIds() const;
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 

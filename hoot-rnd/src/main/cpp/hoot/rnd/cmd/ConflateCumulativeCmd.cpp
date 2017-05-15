@@ -30,6 +30,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/conflate/CumulativeConflator.h>
 
+using namespace std;
+
 namespace hoot
 {
 

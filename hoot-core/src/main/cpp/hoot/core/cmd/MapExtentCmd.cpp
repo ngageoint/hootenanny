@@ -32,6 +32,8 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
 
+using namespace std;
+
 namespace hoot
 {
 

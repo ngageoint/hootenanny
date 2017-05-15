@@ -72,8 +72,8 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  Envelope _bounds;
-  Envelope _overrideBounds; //this will override _bounds
+  geos::geom::Envelope _bounds;
+  geos::geom::Envelope _overrideBounds; //this will override _bounds
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -87,11 +87,11 @@ protected:
   /*
    * This is based off of the Map.java query method.
    */
-  virtual void _readByBounds(OsmMapPtr map, const Envelope& bounds);
+  virtual void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
 
   void _updateMetadataOnElement(ElementPtr element);
 
-  static bool _isValidBounds(const Envelope& bounds);
+  static bool _isValidBounds(const geos::geom::Envelope& bounds);
   bool _hasBounds();
 };
 

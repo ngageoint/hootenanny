@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyTestRunResult.h"
 
@@ -31,6 +31,8 @@
 
 // TBS
 #include <tbs/stats/SampleStats.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -43,22 +45,21 @@ PertyTestRunResult::PertyTestRunResult(const QString& referenceInput, const QStr
                                        const QStringList& dynamicVariables,
                                        const double dynamicVariableStartingValue,
                                        const double dynamicVariableIncrement,
-                                       const double dynamicVariableValue) :
-_referenceInput(referenceInput),
-_outputDir(outputDir),
-_testRunNum(testRunNum),
-_score(score),
-_simulationScores(simulationScores),
-_expectedScore(expectedScore),
-_scoreVariance(scoreVariance),
-_allowedScoreVariance(allowedScoreVariance),
-_failOnBetterScore(failOnBetterScore),
-_dynamicVariables(dynamicVariables),
-_dynamicVariableStartingValue(dynamicVariableStartingValue),
-_dynamicVariableIncrement(dynamicVariableIncrement),
-_dynamicVariableValue(dynamicVariableValue)
+                                       const double dynamicVariableValue)
+  : _referenceInput(referenceInput),
+    _outputDir(outputDir),
+    _testRunNum(testRunNum),
+    _score(score),
+    _simulationScores(simulationScores),
+    _expectedScore(expectedScore),
+    _scoreVariance(scoreVariance),
+    _allowedScoreVariance(allowedScoreVariance),
+    _failOnBetterScore(failOnBetterScore),
+    _dynamicVariables(dynamicVariables),
+    _dynamicVariableStartingValue(dynamicVariableStartingValue),
+    _dynamicVariableIncrement(dynamicVariableIncrement),
+    _dynamicVariableValue(dynamicVariableValue)
 {
-
 }
 
 bool PertyTestRunResult::testPassed() const

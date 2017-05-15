@@ -128,7 +128,7 @@ private:
 
   double _confidentThreshold;
 
-  Tgs::IntersectionIterator _createIterator(Envelope env);
+  Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env);
 
   void _createVertexIndex(const OsmNetwork::VertexMap& vm, SearchRadiusProvider &srp);
 

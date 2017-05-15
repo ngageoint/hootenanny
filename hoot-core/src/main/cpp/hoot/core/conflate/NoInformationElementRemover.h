@@ -46,7 +46,7 @@ class NoInformationElementRemover : public OsmMapOperation
 {
   public:
 
-    static string className() { return "hoot::NoInformationElementRemover"; }
+    static std::string className() { return "hoot::NoInformationElementRemover"; }
 
     NoInformationElementRemover();
 

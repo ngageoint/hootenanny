@@ -50,6 +50,8 @@
 // Standard
 #include <stdint.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

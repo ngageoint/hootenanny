@@ -27,6 +27,7 @@
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
 
+using namespace std;
 
 namespace hoot
 {

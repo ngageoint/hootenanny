@@ -42,7 +42,7 @@ namespace hoot
 class CalculateMapBoundsVisitor : public ElementConstOsmMapVisitor
 {
 public:
-  static string className() { return "hoot::CalculateMapBoundsVisitor"; }
+  static std::string className() { return "hoot::CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor();
 

@@ -47,6 +47,9 @@ using namespace hoot;
 
 const double epsilon = 1e-6;
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

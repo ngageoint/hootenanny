@@ -36,6 +36,8 @@
 #include <tgs/RStarTree/KnnIteratorNd.h>
 #include <tgs/Statistics/Random.h>
 
+using namespace std;
+
 namespace Tgs
 {
 
@@ -121,8 +123,8 @@ void DelaunayInterpolator::_buildModel()
 
 double DelaunayInterpolator::_calculateFoldError(int fold, const vector<size_t> indexes) const
 {
- boost::shared_ptr<const DataFrame> originalDf = _df;
- boost::shared_ptr<DataFrame> copiedDf(new DataFrame());
+  boost::shared_ptr<const DataFrame> originalDf = _df;
+  boost::shared_ptr<DataFrame> copiedDf(new DataFrame());
 
   copiedDf->setFactorLabels(_df->getFactorLabels());
   copiedDf->setFactorTypes(_df->getFactorTypes());

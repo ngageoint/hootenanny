@@ -34,6 +34,8 @@
 // Standard
 #include <math.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

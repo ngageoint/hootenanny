@@ -40,11 +40,11 @@ class DistanceScoreExtractor : public WayFeatureExtractor
 {
 public:
 
-  static string className() { return "hoot::DistanceScoreExtractor"; }
+  static std::string className() { return "hoot::DistanceScoreExtractor"; }
 
   DistanceScoreExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

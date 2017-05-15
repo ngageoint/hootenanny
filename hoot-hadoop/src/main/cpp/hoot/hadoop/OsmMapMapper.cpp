@@ -28,6 +28,8 @@
 #include <pp/Factory.h>
 #include <pp/Hdfs.h>
 
+using namespace std;
+
 namespace hoot
 {
 

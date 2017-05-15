@@ -45,7 +45,7 @@ class ScriptTranslator;
 class TranslationOp : public OsmMapOperation, public Configurable
 {
 public:
-  static string className() { return "hoot::TranslationOp"; }
+  static std::string className() { return "hoot::TranslationOp"; }
 
   TranslationOp();
 
@@ -61,7 +61,7 @@ public:
   void setPath(QString path);
 
 private:
-  auto_ptr<ScriptTranslator> _translator;
+  std::auto_ptr<ScriptTranslator> _translator;
   bool _toOgr;
 };
 

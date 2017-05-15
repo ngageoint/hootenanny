@@ -29,6 +29,8 @@
 #include <hoot/core/Hoot.h>
 #include <hoot/core/util/Log.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

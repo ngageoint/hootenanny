@@ -31,6 +31,8 @@
 // Qt
 #include <QImage>
 
+using namespace std;
+
 namespace hoot
 {
 

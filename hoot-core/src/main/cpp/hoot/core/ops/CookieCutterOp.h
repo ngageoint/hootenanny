@@ -44,13 +44,13 @@ class CookieCutterOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static string className() { return "hoot::CookieCutterOp"; }
+  static std::string className() { return "hoot::CookieCutterOp"; }
 
   CookieCutterOp();
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

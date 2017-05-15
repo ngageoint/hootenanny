@@ -33,6 +33,8 @@
 #include "BuildingMatch.h"
 #include "BuildingMerger.h"
 
+using namespace std;
+
 namespace hoot
 {
 

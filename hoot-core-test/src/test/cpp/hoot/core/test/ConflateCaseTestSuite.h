@@ -41,9 +41,6 @@
 namespace hoot
 {
 
-using namespace boost;
-using namespace std;
-
 class ConflateCaseTestSuite : public CppUnit::TestSuite
 {
 

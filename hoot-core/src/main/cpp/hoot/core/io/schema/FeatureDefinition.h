@@ -38,9 +38,8 @@ class QString;
 
 namespace hoot
 {
+
 class FieldDefinition;
-using namespace boost;
-using namespace std;
 
 class FeatureDefinition
 {
@@ -57,7 +56,7 @@ public:
 
 private:
 
-  vector< boost::shared_ptr<FieldDefinition> > _fields;
+  std::vector< boost::shared_ptr<FieldDefinition> > _fields;
 };
 
 }

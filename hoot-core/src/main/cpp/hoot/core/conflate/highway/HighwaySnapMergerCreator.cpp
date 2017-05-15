@@ -34,6 +34,8 @@
 #include "HighwayMatch.h"
 #include "HighwaySnapMergerCreator.h"
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -41,7 +41,7 @@ namespace hoot
 class PositiveIdGenerator : public IdGenerator
 {
 public:
-  static string className() { return "hoot::PositiveIdGenerator"; }
+  static std::string className() { return "hoot::PositiveIdGenerator"; }
 
   PositiveIdGenerator() { reset(); }
 

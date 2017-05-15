@@ -38,6 +38,8 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

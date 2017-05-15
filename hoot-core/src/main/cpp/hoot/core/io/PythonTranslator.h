@@ -38,8 +38,6 @@ namespace hoot
 
 class Tags;
 
-using namespace std;
-
 class PythonTranslator : public ScriptTranslator
 {
 public:

@@ -43,7 +43,7 @@ class TagKeyCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::TagKeyCriterion"; }
+  static std::string className() { return "hoot::TagKeyCriterion"; }
 
   TagKeyCriterion() {}
   TagKeyCriterion(QString key);

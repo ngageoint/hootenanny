@@ -34,6 +34,8 @@
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
+using namespace std;
+
 namespace hoot
 {
 

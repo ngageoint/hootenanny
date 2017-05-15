@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class ConflictsNetworkMatcherTest;
 
 /**
@@ -54,7 +52,7 @@ class ConflictsNetworkMatcher : public NetworkMatcher
 {
 public:
 
-  static string className() { return "hoot::ConflictsNetworkMatcher"; }
+  static std::string className() { return "hoot::ConflictsNetworkMatcher"; }
 
   const static double EPSILON;
 
