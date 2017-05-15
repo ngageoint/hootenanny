@@ -35,6 +35,8 @@
 #include <QDebug>
 #include <QTime>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -44,7 +44,7 @@ namespace Tgs
 class IdwInterpolator : public BaseInterpolator
 {
 public:
-  static string className() { return "Tgs::IdwInterpolator"; }
+  static std::string className() { return "Tgs::IdwInterpolator"; }
 
   /**
    * Constructs a IDW instance where the power parameter, p, will be determined via hold one out
@@ -54,9 +54,9 @@ public:
 
   virtual ~IdwInterpolator();
 
-  virtual string getClassName() const { return IdwInterpolator::className(); }
+  virtual std::string getClassName() const { return IdwInterpolator::className(); }
 
-  virtual const vector<double>& interpolate(const vector<double>& point) const;
+  virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 
   void setP(double p) { _p = p; }
 
@@ -65,11 +65,12 @@ public:
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; }
 
-  virtual string toString() const;
+  virtual std::string toString() const;
 
 protected:
   double _p;
   double _stopDelta;
+  mutable std::auto_ptr<HilbertRTree> _index;
 
   virtual void _buildModel();
 
@@ -80,7 +81,7 @@ protected:
   /**
    * The ignoreId is used to ignore a specific point when doing hold one back error estimation.
    */
-  virtual const vector<double>& _interpolate(const vector<double>& point, int ignoreId) const;
+  virtual const std::vector<double>& _interpolate(const std::vector<double>& point, int ignoreId) const;
 
   virtual void _readInterpolator(QIODevice& is);
 

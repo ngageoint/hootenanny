@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace Tgs;
 
 class BuildingRfClassifier : public RfExtractorClassifier
 {

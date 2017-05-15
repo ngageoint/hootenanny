@@ -38,6 +38,8 @@
 // Qt
 #include <QSet>
 
+using namespace std;
+
 namespace hoot
 {
 

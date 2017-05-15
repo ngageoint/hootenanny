@@ -47,9 +47,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
-using namespace Tgs;
 
 class ObjectInputStream
 {
@@ -57,7 +54,7 @@ public:
   /**
    * Takes ownership of the istream.
    */
-  ObjectInputStream(istream& is);
+  ObjectInputStream(std::istream& is);
 
   ObjectInputStream(QDataStream& is);
 
@@ -72,9 +69,9 @@ private:
   //  Don't allow copy constructor
   ObjectInputStream(const ObjectInputStream&) { }
 
-  istream* _istream;
-  auto_ptr<StdIoDevice> _stdIoDevice;
-  auto_ptr<QDataStream> _streamDelete;
+  std::istream* _istream;
+  std::auto_ptr<Tgs::StdIoDevice> _stdIoDevice;
+  std::auto_ptr<QDataStream> _streamDelete;
   QDataStream* _stream;
 };
 

@@ -38,7 +38,7 @@ namespace hoot
 class HighwayCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::HighwayCriterion"; }
+  static std::string className() { return "hoot::HighwayCriterion"; }
 
   HighwayCriterion() {}
 

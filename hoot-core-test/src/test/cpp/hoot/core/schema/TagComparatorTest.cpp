@@ -41,6 +41,8 @@
 // Qt
 #include <QDebug>
 
+using namespace std;
+
 namespace hoot
 {
 

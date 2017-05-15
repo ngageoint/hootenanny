@@ -34,6 +34,8 @@
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/util/Factory.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -74,13 +76,13 @@ double PoiPolygonAddressScoreExtractor::extract(const OsmMap& map, const ConstEl
     //if not, try to find the address from a poly way node instead
     if (poly->getElementType() == ElementType::Way)
     {
-      _collectAddressesFromWayNodes(dynamic_pointer_cast<const Way>(poly), polyAddresses, map);
+      _collectAddressesFromWayNodes(boost::dynamic_pointer_cast<const Way>(poly), polyAddresses, map);
     }
     //if still no luck, try to find the address from a poly way node that is a relation member
     else if (poly->getElementType() == ElementType::Relation)
     {
       _collectAddressesFromRelationMembers(
-        dynamic_pointer_cast<const Relation>(poly), polyAddresses, map);
+        boost::dynamic_pointer_cast<const Relation>(poly), polyAddresses, map);
     }
   }
   if (polyAddresses.size() == 0)
@@ -338,7 +340,7 @@ void PoiPolygonAddressScoreExtractor::_collectAddressesFromRelationMembers(Const
     }
     else if (member->getElementType() == ElementType::Way)
     {
-      _collectAddressesFromWayNodes(dynamic_pointer_cast<const Way>(member), addresses, map);
+      _collectAddressesFromWayNodes(boost::dynamic_pointer_cast<const Way>(member), addresses, map);
     }
   }
 }

@@ -32,6 +32,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
 
+using namespace std;
+
 namespace hoot
 {
 

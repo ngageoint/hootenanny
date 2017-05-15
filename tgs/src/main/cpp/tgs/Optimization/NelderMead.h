@@ -43,7 +43,6 @@
 #include <limits>
 #include <map>
 #include <vector>
-using namespace std;
 
 // Tgs
 #include <tgs/TgsException.h>
@@ -174,11 +173,11 @@ public:
         return pow(sum, 0.5);
     }
 
-    const vector<double>& getVector() { return coords; }
+    const std::vector<double>& getVector() { return coords; }
 
 private:
 
-    vector<double> coords;
+    std::vector<double> coords;
 };
 
 // This class stores known values for vectors. It throws unknown vectors.
@@ -205,7 +204,7 @@ public:
 
   bool contains(Vector vec)
   {
-    map<Vector, double>::iterator it = values.find(vec); // TODO add tolerance
+    std::map<Vector, double>::iterator it = values.find(vec); // TODO add tolerance
     return it != values.end();
   }
 
@@ -214,7 +213,7 @@ private:
   ValueDB(const ValueDB&);
   ValueDB& operator=(const ValueDB&);
 
-  map<Vector, double> values;
+  std::map<Vector, double> values;
 };
 
 class NelderMead {
@@ -257,7 +256,7 @@ public:
     rho = -0.5;
     sigma = 0.5;
     this->termination_distance = termination_distance;
-    _bestDistance = numeric_limits<double>::max();
+    _bestDistance = std::numeric_limits<double>::max();
     _noChange = 0;
     _maxNoChange = 4;
   }
@@ -405,11 +404,11 @@ private:
     return s;
   }
 
-  auto_ptr<Function> _function;
+  std::auto_ptr<Function> _function;
   size_t dimension;
   double alpha, gamma, rho, sigma;
   double termination_distance;
-  vector<Vector> vectors;
+  std::vector<Vector> vectors;
   ValueDB db;
   double _bestDistance;
   int _noChange;

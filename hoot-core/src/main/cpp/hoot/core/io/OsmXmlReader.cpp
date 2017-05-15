@@ -529,7 +529,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         {
           long newRef = _nodeIdMap.value(ref);
 
-          WayPtr w = dynamic_pointer_cast<Way, Element>(_element);
+          WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
 
           w->addNode(newRef);
         }
@@ -540,7 +540,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         QString type = attributes.value("type");
         QString role = attributes.value("role");
 
-        RelationPtr r = dynamic_pointer_cast<Relation, Element>(_element);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
 
         if (type == "node")
         {
@@ -617,7 +617,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         }
         else if (key == "type" && _element->getElementType() == ElementType::Relation)
         {
-          RelationPtr r = dynamic_pointer_cast<Relation, Element>(_element);
+          RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
 
           if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
@@ -698,17 +698,17 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
   {
     if (qName == "node")
     {
-        NodePtr n = dynamic_pointer_cast<Node, Element>(_element);
+        NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
         _map->addNode(n);
     }
     else if (qName == "way")
     {
-        WayPtr w = dynamic_pointer_cast<Way, Element>(_element);
+        WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
         _map->addWay(w);
     }
     else if (qName == "relation")
     {
-        RelationPtr r = dynamic_pointer_cast<Relation, Element>(_element);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
         _map->addRelation(r);
     }
   }

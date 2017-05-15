@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class RelationData : public ElementData
 {
@@ -79,7 +78,7 @@ public:
 
   virtual void clear();
 
-  const vector<Entry>& getElements() const { return _members; }
+  const std::vector<Entry>& getElements() const { return _members; }
 
   const QString& getType() const { return _type; }
 
@@ -101,7 +100,7 @@ public:
   template<typename IT>
   void replaceElements(Entry old, IT start, IT end);
 
-  void setMembers(const vector<Entry>& members) { _members = members; }
+  void setMembers(const std::vector<Entry>& members) { _members = members; }
 
   void setType(const QString& type) { _type = type; }
 
@@ -109,7 +108,7 @@ private:
 
   QString _type;
 
-  vector<Entry> _members;
+  std::vector<Entry> _members;
 };
 
 inline std::ostream& operator<<(std::ostream& o, const RelationData::Entry& e)
@@ -122,7 +121,7 @@ template<typename IT>
 void RelationData::replaceElements(Entry old, IT start, IT end)
 {
   // make a copy of the old members list to work from.
-  vector<Entry> oldMembers = _members;
+  std::vector<Entry> oldMembers = _members;
   _members.resize(0);
   _members.reserve(oldMembers.size() + (end - start));
 

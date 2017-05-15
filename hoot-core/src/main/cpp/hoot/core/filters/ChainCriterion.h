@@ -56,9 +56,9 @@ public:
 
 protected:
 
-  ChainCriterion(vector< boost::shared_ptr<ElementCriterion> > filters);
+  ChainCriterion(std::vector< boost::shared_ptr<ElementCriterion> > filters);
 
-  vector< boost::shared_ptr<ElementCriterion> > _filters;
+  std::vector< boost::shared_ptr<ElementCriterion> > _filters;
 
 };
 

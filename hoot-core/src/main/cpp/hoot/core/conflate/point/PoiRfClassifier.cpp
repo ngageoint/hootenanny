@@ -64,6 +64,9 @@
 // Qt
 #include <QFile>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 

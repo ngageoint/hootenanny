@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INPUTFORMATSPLIT_H
@@ -34,7 +34,6 @@
 
 namespace pp
 {
-using namespace std;
 
 class InputSplit
 {
@@ -68,7 +67,7 @@ public:
   virtual long long getStart() const = 0;
 
 #ifndef SWIG
-  void readFields(const string& bytes) { readFields((char*)bytes.data(), bytes.size()); }
+  void readFields(const std::string& bytes) { readFields((char*)bytes.data(), bytes.size()); }
 #endif
 
   virtual void readFields(char* byteArray, long len) = 0;
@@ -80,7 +79,7 @@ public:
    */
   virtual signed char* writeFields(size_t* len) const = 0;
 
-  void writeFields(string& bytes) const;
+  void writeFields(std::string& bytes) const;
 };
 
 }

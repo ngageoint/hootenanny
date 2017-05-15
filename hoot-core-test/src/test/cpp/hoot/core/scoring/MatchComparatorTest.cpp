@@ -54,6 +54,8 @@ using namespace boost;
 // Standard
 #include <stdio.h>
 
+using namespace std;
+
 namespace hoot
 {
 

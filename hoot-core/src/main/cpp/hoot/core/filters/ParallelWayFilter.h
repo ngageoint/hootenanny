@@ -39,8 +39,8 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class ParallelWayFilter : public WayFilter
 {
@@ -62,7 +62,7 @@ private:
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
   ConstOsmMapPtr _map;
-  std::vector<Point*> _points;
+  std::vector<geos::geom::Point*> _points;
   Degrees _threshold;
 };
 

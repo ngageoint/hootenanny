@@ -19,7 +19,6 @@
 
 // Pretty Pipes
 #include <pp/io/LineRecordWriter.h>
-using namespace pp;
 
 // std
 #include <string>
@@ -27,21 +26,19 @@ using namespace pp;
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Identical to LineRecordWriter except for not outputting a tab between the key and value pair
  */
-class SqlStatementLineRecordWriter : public LineRecordWriter
+class SqlStatementLineRecordWriter : public pp::LineRecordWriter
 {
 
 public:
 
-  static string className() { return "hoot::SqlStatementLineRecordWriter"; }
+  static std::string className() { return "hoot::SqlStatementLineRecordWriter"; }
 
   SqlStatementLineRecordWriter();
 
-  virtual ~SqlStatementLineRecordWriter() {};
+  virtual ~SqlStatementLineRecordWriter() {}
 
   virtual void emitRecord(const char* keyData, size_t keySize, const char* valueData,
                           size_t valueSize);

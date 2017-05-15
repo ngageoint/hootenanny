@@ -63,8 +63,8 @@ public:
    * @param filesDir HDFS directory containing the files to merge
    * @param mergedFileOutputLocation single output file
    */
-  static void mergeFilesToLocalFileSystem(const string& filesDir,
-                                          const string& mergedFileOutputLocation);
+  static void mergeFilesToLocalFileSystem(const std::string& filesDir,
+                                          const std::string& mergedFileOutputLocation);
 };
 
 }

@@ -56,7 +56,6 @@ namespace geos
 
 namespace hoot
 {
-using namespace geos::geom;
 
 /**
  * GeometryConverter is undergoing a transition. We've moving from using the element's pointers to
@@ -91,7 +90,7 @@ public:
   class NodeFactory
   {
   public:
-    virtual NodePtr createNode(const OsmMapPtr& map, const Coordinate& c,
+    virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
       Status s, double circularError) = 0;
   };
 
@@ -101,7 +100,7 @@ public:
    * geometry in the collection then convertGeometryToElement will be called for that geometry.
    * If there are no geometries in the collection then a null point is returned.
    */
- boost::shared_ptr<Element> convertGeometryCollection(const GeometryCollection* gc,
+  boost::shared_ptr<Element> convertGeometryCollection(const geos::geom::GeometryCollection* gc,
     Status s, double circularError);
 
   /**
@@ -118,19 +117,19 @@ public:
    * @param status The status to assign to the newly created elements.
    * @param circularError The circular error to assign to the newly created elements.
    */
- boost::shared_ptr<Element> convertGeometryToElement(const Geometry* g, Status s, double circularError);
+  boost::shared_ptr<Element> convertGeometryToElement(const geos::geom::Geometry* g, Status s, double circularError);
 
- WayPtr convertLineStringToWay(const LineString* ls, const OsmMapPtr& map,
+  WayPtr convertLineStringToWay(const geos::geom::LineString* ls, const OsmMapPtr& map,
     Status s, double circularError);
 
   /**
    * If the MultiLineString contains multiple lines a multilinestring relation is returned. If the
    * multilinestring contains just one LineString a single Way is returned.
    */
- boost::shared_ptr<Element> convertMultiLineStringToElement(const MultiLineString* mls,
+  boost::shared_ptr<Element> convertMultiLineStringToElement(const geos::geom::MultiLineString* mls,
     const OsmMapPtr& map, Status s, double circularError);
 
- RelationPtr convertMultiPolygonToRelation(const MultiPolygon* mp,
+  RelationPtr convertMultiPolygonToRelation(const geos::geom::MultiPolygon* mp,
     const OsmMapPtr& map, Status s, double circularError);
 
   /**
@@ -138,25 +137,25 @@ public:
    * polygon relation will be created. If the polygon doesn't contain holes then a closed way will
    * be created and the area=yes tag will be set.
    */
- boost::shared_ptr<Element> convertPolygonToElement(const Polygon* polygon,
+  boost::shared_ptr<Element> convertPolygonToElement(const geos::geom::Polygon* polygon,
     const OsmMapPtr& map, Status s, double circularError);
 
- RelationPtr convertPolygonToRelation(const Polygon* polygon,
+  RelationPtr convertPolygonToRelation(const geos::geom::Polygon* polygon,
     const OsmMapPtr& map, Status s, double circularError);
 
-  void convertPolygonToRelation(const Polygon* polygon,
+  void convertPolygonToRelation(const geos::geom::Polygon* polygon,
     const OsmMapPtr& map, const RelationPtr& r, Status s, double circularError);
 
-  void convertPolygonToWays(const Polygon* polygon, const OsmMapPtr& map,
+  void convertPolygonToWays(const geos::geom::Polygon* polygon, const OsmMapPtr& map,
     Status s, double circularError);
 
   void setNodeFactory(boost::shared_ptr<NodeFactory> nf) { _nf = nf; }
 
 protected:
- NodePtr _createNode(const OsmMapPtr& map, const Coordinate& c, Status s,
+  NodePtr _createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c, Status s,
     double circularError);
 
- boost::shared_ptr<NodeFactory> _nf;
+  boost::shared_ptr<NodeFactory> _nf;
   ConstOsmMapPtr _constMap;
   OsmMapPtr _map;
   int _logCount;

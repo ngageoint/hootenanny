@@ -39,6 +39,8 @@
 #include <QThreadPool>
 #include <QElapsedTimer>
 
+using namespace std;
+
 namespace hoot
 {
 

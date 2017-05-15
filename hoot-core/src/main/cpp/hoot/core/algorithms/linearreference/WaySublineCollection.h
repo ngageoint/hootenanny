@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Contains a continuous collection of ways. Each way subline must touch the next subline end to
@@ -49,7 +48,7 @@ class WaySublineCollection
 {
 public:
 
-  typedef vector<WaySubline> SublineCollection;
+  typedef std::vector<WaySubline> SublineCollection;
 
   WaySublineCollection();
 

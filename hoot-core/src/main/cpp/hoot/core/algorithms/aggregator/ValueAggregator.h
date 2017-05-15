@@ -38,13 +38,12 @@
 
 namespace hoot
 {
-using namespace std;
 
 class ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::ValueAggregator"; }
+  static std::string className() { return "hoot::ValueAggregator"; }
 
   /**
    * Aggregates the values in the vector d into a single value. The aggregation may be something
@@ -52,7 +51,7 @@ public:
    *
    * @param d The vector may be re-ordered, but the values shouldn't be removed or changed.
    */
-  virtual double aggregate(vector<double>& d) const = 0;
+  virtual double aggregate(std::vector<double>& d) const = 0;
 
   virtual QString toString() const = 0;
 };

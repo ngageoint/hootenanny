@@ -49,21 +49,21 @@ public:
 
   virtual void setData(const boost::shared_ptr<const DataFrame>& df);
 
-  virtual void setDependentColumns(const vector<string>& labels);
+  virtual void setDependentColumns(const std::vector<std::string>& labels);
 
-  virtual void setIndependentColumns(const vector<string>& labels);
+  virtual void setIndependentColumns(const std::vector<std::string>& labels);
 
   virtual void writeInterpolator(QIODevice& os) const;
 
 protected:
-  vector<int> _indColumns;
-  vector<string> _indColumnsLabels;
-  mutable auto_ptr<HilbertRTree> _index;
-  vector<int> _depColumns;
-  vector<string> _depColumnsLabels;
+  std::vector<int> _indColumns;
+  std::vector<std::string> _indColumnsLabels;
+  mutable std::auto_ptr<HilbertRTree> _index;
+  std::vector<int> _depColumns;
+  std::vector<std::string> _depColumnsLabels;
   // A temp variable used to return the result of interpolate()
-  mutable vector<double> _result;
- boost::shared_ptr<const DataFrame> _df;
+  mutable std::vector<double> _result;
+  boost::shared_ptr<const DataFrame> _df;
 
   virtual void _buildModel() = 0;
 

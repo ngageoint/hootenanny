@@ -71,7 +71,8 @@ public:
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     writer.setChangesetUserId(1);
@@ -94,7 +95,8 @@ public:
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "${HOOT_HOME}/test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     //  Set the changeset max size to 5 (half of the changes) for this test only

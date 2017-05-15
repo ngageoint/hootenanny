@@ -29,6 +29,8 @@
 // Standard
 #include <fstream>
 
+using namespace std;
+
 namespace hoot
 {
 

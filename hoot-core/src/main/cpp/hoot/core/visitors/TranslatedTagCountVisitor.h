@@ -44,7 +44,7 @@ class TranslatedTagCountVisitor : public ElementVisitor, public ConstOsmMapConsu
   public SingleStatistic
 {
 public:
-  static string className() { return "hoot::TranslatedTagCountVisitor"; }
+  static std::string className() { return "hoot::TranslatedTagCountVisitor"; }
 
   TranslatedTagCountVisitor() {}
   TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t);

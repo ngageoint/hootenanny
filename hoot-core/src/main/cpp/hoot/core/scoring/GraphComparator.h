@@ -35,12 +35,10 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  using namespace std;
 
-  class DirectedGraph;
-  class ShortestPath;
-  class Way;
+class DirectedGraph;
+class ShortestPath;
+class Way;
 
 class GraphComparator : public BaseComparator
 {
@@ -66,12 +64,12 @@ public:
 
   void setIterations(int i) { _iterations = i; }
 
-  void drawCostDistance(OsmMapPtr map, vector<Coordinate>& c, QString output);
+  void drawCostDistance(OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output);
 
 private:
 
   int _iterations;
-  Coordinate _r;
+  geos::geom::Coordinate _r;
   double _median;
   double _mean;
   // confidence interval
@@ -81,7 +79,7 @@ private:
   double _maxGraphCost;
   bool _debugImages;
 
-  cv::Mat _calculateCostDistance(OsmMapPtr map, Coordinate c);
+  cv::Mat _calculateCostDistance(OsmMapPtr map, geos::geom::Coordinate c);
 
   void _calculateRasterCost(cv::Mat& mat);
 
@@ -92,7 +90,7 @@ private:
 
   cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp);
 
-  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map,WayPtr way, double friction,
+  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
     double startCost, double endCost);
 };
 

@@ -47,7 +47,7 @@ class NoInformationCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static string className() { return "hoot::NoInformationCriterion"; }
+  static std::string className() { return "hoot::NoInformationCriterion"; }
 
   NoInformationCriterion() { setConfiguration(conf()); }
   NoInformationCriterion(bool treatReviewTagsAsMetadata) :

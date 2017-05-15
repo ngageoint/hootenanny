@@ -50,6 +50,8 @@ using namespace boost;
 #include <QXmlStreamWriter>
 #include <QtCore/QStringBuilder>
 
+using namespace std;
+
 namespace hoot {
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)

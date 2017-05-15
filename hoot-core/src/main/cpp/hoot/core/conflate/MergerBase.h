@@ -37,13 +37,13 @@ class MergerBase : public Merger
 public:
   static std::string className() { return "hoot::MergerBase"; }
 
-  typedef set< pair<ElementId, ElementId> > PairsSet;
+  typedef std::set< std::pair<ElementId, ElementId> > PairsSet;
 
   MergerBase() {}
 
   virtual ~MergerBase() {}
 
-  virtual set<ElementId> getImpactedElementIds() const;
+  virtual std::set<ElementId> getImpactedElementIds() const;
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 

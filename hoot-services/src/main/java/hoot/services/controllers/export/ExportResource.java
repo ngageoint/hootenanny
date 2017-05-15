@@ -145,21 +145,21 @@ public class ExportResource {
             // As of 04/03/2017, OSC support is not fully implemented yet.  This REST controller might not
             // even be the right place to host it.
             else if (outputType.equalsIgnoreCase("osc")) {
-                ExternalCommand exportOSCCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, ExportOSCCommand.class, this.getClass());
+                ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, DeriveChangesetCommand.class, this.getClass());
 
-                workflow.add(exportOSCCommand);
+                workflow.add(deriveChangesetCommand);
             }
             //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
-                ExternalCommand osmAPIDBDeriveChangesetCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, OSMAPIDBDeriveChangesetCommand.class, this.getClass());
+                ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, DeriveChangesetCommand.class, this.getClass());
 
-                ExternalCommand osmAPIDBApplyChangesetCommand = exportCommandFactory.build(jobId, params,
-                        debugLevel, OSMAPIDBApplyChangesetCommand.class, this.getClass());
+                ExternalCommand applyChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, ApplyChangesetCommand.class, this.getClass());
 
-                workflow.add(osmAPIDBDeriveChangesetCommand);
-                workflow.add(osmAPIDBApplyChangesetCommand);
+                workflow.add(deriveChangesetCommand);
+                workflow.add(applyChangesetCommand);
             }
             else { //else Shape/FGDB
                 ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,

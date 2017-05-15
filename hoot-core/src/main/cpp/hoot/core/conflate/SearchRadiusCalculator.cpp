@@ -38,6 +38,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 //TODO: a lot of the logging levels in this class need changed, as they've revealed issues
 //with the element status reading...will handle that in #1262
 namespace hoot

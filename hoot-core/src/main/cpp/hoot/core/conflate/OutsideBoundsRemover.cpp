@@ -36,6 +36,8 @@
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

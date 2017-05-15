@@ -41,7 +41,7 @@ WayCriterion::WayCriterion()
 
 bool WayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  return dynamic_pointer_cast<const Way>(e) != 0;
+  return boost::dynamic_pointer_cast<const Way>(e) != 0;
 }
 
 }

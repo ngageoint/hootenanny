@@ -41,10 +41,11 @@
 
 #include <tgs/System/SystemInfo.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-
-using namespace Tgs;
 
 unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
 
@@ -101,6 +102,7 @@ void OsmApiDbBulkWriter::open(QString url)
   if (_destinationIsDatabase())
   {
     _database.open(_outputUrl);
+    LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database.getDB()));
   }
   _verifyDependencies();
 }
@@ -723,7 +725,7 @@ void OsmApiDbBulkWriter::_reserveIdsInDb()
                                 _idMappings.currentNodeId + _writeStats.nodesWritten,
                                 _idMappings.currentWayId + _writeStats.waysWritten,
                                 _idMappings.currentRelationId + _writeStats.relationsWritten,
-                                 reserveElementIdsSql);
+                                reserveElementIdsSql);
   LOG_VART(reserveElementIdsSql);
 
   LOG_INFO("Writing sequence ID updates to database to reserve record IDs...");

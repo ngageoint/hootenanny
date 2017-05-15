@@ -38,6 +38,8 @@
 // Standard
 #include <limits>
 
+using namespace std;
+
 namespace hoot
 {
 

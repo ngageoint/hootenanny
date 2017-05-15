@@ -44,6 +44,8 @@ using namespace geos::geom;
 #include "WriteOsmSqlStatementsDriver.h"
 #include "SqlStatementLineRecordWriter.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -89,6 +91,7 @@ void WriteOsmSqlStatementsDriver::open(QString url)
   if (_destinationIsDatabase(_output))
   {
     _database.open(_output);
+    LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database.getDB()));
   }
 }
 

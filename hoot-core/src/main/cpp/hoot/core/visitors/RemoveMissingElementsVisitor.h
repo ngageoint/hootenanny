@@ -32,15 +32,14 @@
 
 namespace hoot
 {
-class ReportMissingElementsVisitor;
 
-using namespace std;
+class ReportMissingElementsVisitor;
 
 class RemoveMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::RemoveMissingElementsVisitor"; }
+  static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor();
 
@@ -54,7 +53,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
 private:
- boost::shared_ptr<ReportMissingElementsVisitor> _v;
+  boost::shared_ptr<ReportMissingElementsVisitor> _v;
 };
 
 }

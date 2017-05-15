@@ -38,14 +38,14 @@
 #include <QList>
 #include <QVariantMap>
 
-namespace hoot {
-using namespace std;
+namespace hoot
+{
 
 class StatsComposer
 {
 public:
 
-  static string className() { return "hoot::StatsComposer"; }
+  static std::string className() { return "hoot::StatsComposer"; }
 
   virtual ~StatsComposer() {}
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MINSUMWORDSETDISTANCE_H
 #define MINSUMWORDSETDISTANCE_H
@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * See ScoreMatrix::minSumScore for details.
@@ -53,7 +52,7 @@ public:
 
   MinSumWordSetDistance();
 
-  static string className() { return "hoot::MinSumWordSetDistance"; }
+  static std::string className() { return "hoot::MinSumWordSetDistance"; }
 
   virtual double compare(const QString& s1, const QString& s2) const;
 

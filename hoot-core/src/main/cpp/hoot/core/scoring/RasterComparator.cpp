@@ -48,6 +48,8 @@
 // TGS
 //using namespace Tgs;
 
+using namespace std;
+
 namespace hoot
 {
 

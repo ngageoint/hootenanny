@@ -39,6 +39,8 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/visitors/ExtractNodesVisitor.h>
 
+using namespace std;
+
 namespace hoot
 {
 

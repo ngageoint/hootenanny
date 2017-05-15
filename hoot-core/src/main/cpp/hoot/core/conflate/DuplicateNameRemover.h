@@ -49,7 +49,7 @@ class DuplicateNameRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::DuplicateNameRemover"; }
+  static std::string className() { return "hoot::DuplicateNameRemover"; }
 
   DuplicateNameRemover();
 

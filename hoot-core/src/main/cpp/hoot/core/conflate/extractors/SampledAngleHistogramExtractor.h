@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
 #define SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -59,9 +59,9 @@ public:
 
   SampledAngleHistogramExtractor();
 
-  static string className() { return "hoot::SampledAngleHistogramExtractor"; }
+  static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual string getClassName() const { return SampledAngleHistogramExtractor::className(); }
+  virtual std::string getClassName() const { return SampledAngleHistogramExtractor::className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

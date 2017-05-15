@@ -48,11 +48,11 @@
 // Tgs
 #include <tgs/StreamUtils.h>
 
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
 {
-  using namespace std;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SmallWayMerger)
 

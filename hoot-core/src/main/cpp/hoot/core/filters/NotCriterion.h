@@ -37,7 +37,7 @@ class NotCriterion : public ElementCriterion, public ElementCriterionConsumer
 {
 public:
 
-  static string className() { return "hoot::NotCriterion"; }
+  static std::string className() { return "hoot::NotCriterion"; }
 
   NotCriterion() {}
   NotCriterion(ElementCriterion* c) : _child(c) {}

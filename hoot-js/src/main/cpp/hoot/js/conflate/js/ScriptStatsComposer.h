@@ -42,7 +42,7 @@ class ScriptStatsComposer : public StatsComposer
 {
 public:
 
-  static string className() { return "hoot::ScriptStatsComposer"; }
+  static std::string className() { return "hoot::ScriptStatsComposer"; }
 
   ScriptStatsComposer();
 

@@ -26,6 +26,8 @@
  */
 #include "HighwayMerger.h"
 
+using namespace std;
+
 namespace hoot
 {
 

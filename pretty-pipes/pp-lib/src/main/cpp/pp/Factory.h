@@ -43,8 +43,6 @@
 
 namespace pp
 {
-using namespace std;
-using namespace boost;
 
 class ObjectCreator
 {
@@ -54,11 +52,11 @@ public:
 
   virtual ~ObjectCreator() { }
 
-  virtual any create() = 0;
+  virtual boost::any create() = 0;
 
-  virtual string getBaseName() = 0;
+  virtual std::string getBaseName() = 0;
 
-  virtual string getName() = 0;
+  virtual std::string getName() = 0;
 
 private:
   ObjectCreator(const ObjectCreator& oc);
@@ -79,19 +77,19 @@ public:
   /**
    * We cast it to "Base" so that the any pointer works as expected.
    */
-  virtual any create()
+  virtual boost::any create()
   {
     Base* b = new T();
     return dynamic_cast<Base*>(b);
   }
 
-  string getBaseName() { return _baseName; }
+  std::string getBaseName() { return _baseName; }
 
-  string getName() { return _name; }
+  std::string getName() { return _name; }
 
 private:
-  string _baseName;
-  string _name;
+  std::string _baseName;
+  std::string _name;
 };
 
 class Factory
@@ -126,13 +124,13 @@ public:
     }
   }
 
-  any constructObject(const std::string& name)
+  boost::any constructObject(const std::string& name)
   {
     if (_creators.find(name) == _creators.end())
     {
       throw Exception("Could not find object to construct. (" + name + ")");
     }
-    any result = _creators[name]->create();
+    boost::any result = _creators[name]->create();
     return result;
   }
 
@@ -140,7 +138,7 @@ public:
   T* constructObject(const std::string& name)
   {
     //cout << "Creating " << name << " with base type: " << typeid(T).name() << endl; cout.flush();
-    any a = constructObject(name);
+    boost::any a = constructObject(name);
     // The standard any_cast fails on RHEL 5.8, dunno if it is a version of g++ or what. It appears
     // that the failure is due to going across shared libraries. The any.hpp comments make mention
     // of this by the "unsafe_any_cast" function. This poor mans type checking should be good 
@@ -154,11 +152,12 @@ public:
     else
     {
 #     ifdef DEBUG
-        cerr << "Creating " << name << " with base type: " << typeid(T).name() << endl; cerr.flush();
-        cerr << "a.type().name() " << a.type().name() << " T name: " << typeid(T).name() << endl;
-        cerr.flush();
+        std::cerr << "Creating " << name << " with base type: " << typeid(T).name() << std::endl;
+        std::cerr.flush();
+        std::cerr << "a.type().name() " << a.type().name() << " T name: " << typeid(T).name() << std::endl;
+        std::cerr.flush();
 #     endif
-      throw bad_any_cast();
+      throw boost::bad_any_cast();
     }
   }
 

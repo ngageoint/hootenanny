@@ -46,6 +46,9 @@
 //Qt
 #include <QVector>
 
+using namespace cv;
+using namespace geos::geom;
+
 namespace hoot
 {
 

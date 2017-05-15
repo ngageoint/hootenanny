@@ -47,9 +47,11 @@
 
 #include "../TestUtils.h"
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-using namespace Tgs;
 
 void ServicesDbTestUtils::compareRecords(QString sql, QString expected, QVariant v1,
   QVariant v2)
@@ -85,28 +87,6 @@ void ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase()
   database.open(getOsmApiDbUrl().toString());
   database.deleteData();
   database.close();
-}
-
-void ServicesDbTestUtils::execOsmApiDbSqlTestScript(const QString scriptName)
-{
-  //example: osmapidb://hoot:hoottest@localhost:5432/osmapi_test
-  QString dbUrlString = getOsmApiDbUrl().toString();
-  QStringList dbUrlParts = dbUrlString.split("/");
-  QString dbName = dbUrlParts[dbUrlParts.size()-1];
-  QStringList userParts = dbUrlParts[dbUrlParts.size()-2].split(":");
-  QString dbUser = userParts[0];
-  QString dbPassword = userParts[1].split("@")[0];
-  QString dbHost = userParts[1].split("@")[1];
-  QString dbPort = userParts[2];
-  const QString auth = "-h "+dbHost+" -p "+dbPort+" -U "+dbUser;
-
-  const QString cmd = "export PGPASSWORD="+dbPassword+"; export PGUSER="+dbUser+"; export PGDATABASE="+dbName+";\
-    psql "+auth+" -v ON_ERROR_STOP=1 -f ${HOOT_HOME}/test-files/servicesdb/"+scriptName+" > /dev/null 2>&1";
-  LOG_VARD(cmd);
-  if (std::system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Failed postgres command.  Exiting test.");
-  }
 }
 
 QUrl ServicesDbTestUtils::getDbModifyUrl()
@@ -270,7 +250,7 @@ void ServicesDbTestUtils::verifyTestDatabaseEmpty()
     DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
   //verify sequences
-  boost::shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+  boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Node));
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Way));
   CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));

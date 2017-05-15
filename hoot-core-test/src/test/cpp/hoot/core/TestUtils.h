@@ -61,7 +61,7 @@ inline QString toQString(const std::string& s)
 
 #define HOOT_STR_EQUALS(v1, v2) \
 { \
-  stringstream ss1, ss2; \
+  std::stringstream ss1, ss2; \
   ss1 << v1; \
   ss2 << v2; \
   CPPUNIT_ASSERT_EQUAL(ss1.str(), ss2.str()); \
@@ -88,7 +88,6 @@ inline QString toQString(const std::string& s)
 
 namespace hoot
 {
-using namespace std;
 
 class TestUtils
 {
@@ -101,7 +100,7 @@ public:
 
   TestUtils();
 
-  static void dumpString(const string& str);
+  static void dumpString(const std::string& str);
 
   static std::string readFile(QString f1);
 
@@ -112,7 +111,7 @@ public:
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
     double circularError = 15.0, Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce = 15,
+  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[], Meters ce = 15,
                           const QString& note = "");
 
   static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
@@ -147,8 +146,11 @@ public:
 
   /**
    * Resets the test environment to a known state.
+   *
+   * @param confs custom confs to load during reset; if left blank the default config in
+   * ConfigOptions will be loaded
    */
-  static void resetEnvironment();
+  static void resetEnvironment(const QStringList confs = QStringList());
 
   /**
    * Converts a string into a format that can be cut/paste into c++ code.

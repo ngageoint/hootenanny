@@ -47,6 +47,9 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

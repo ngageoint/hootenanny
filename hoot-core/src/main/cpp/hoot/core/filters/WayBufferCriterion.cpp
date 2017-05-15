@@ -40,6 +40,8 @@
 // Qt
 #include <QDebug>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -74,7 +76,7 @@ bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) 
   if (e->getElementType() != ElementType::Way)
     return false;
 
-  ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
   try
   {
     bool result = true;

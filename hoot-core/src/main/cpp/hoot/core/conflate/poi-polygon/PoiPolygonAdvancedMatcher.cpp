@@ -41,6 +41,9 @@
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

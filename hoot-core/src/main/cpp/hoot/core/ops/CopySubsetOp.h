@@ -41,9 +41,9 @@ namespace hoot
 class CopySubsetOp : public OsmMapOperation
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
+  CopySubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
+  CopySubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
 
   CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
 
@@ -54,7 +54,7 @@ public:
   virtual void apply(OsmMapPtr& map);
 
 private:
-  set<ElementId> _eids;
+  std::set<ElementId> _eids;
   const ConstOsmMapPtr& _from;
 };
 

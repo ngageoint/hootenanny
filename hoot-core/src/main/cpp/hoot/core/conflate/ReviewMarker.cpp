@@ -33,6 +33,8 @@
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
 
+using namespace std;
+
 namespace hoot
 {
 

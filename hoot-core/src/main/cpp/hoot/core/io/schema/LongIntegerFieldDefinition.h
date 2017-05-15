@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class LongIntegerFieldDefinition : public FieldDefinition
 {
@@ -65,7 +64,7 @@ private:
   long long _min;
   long long _max;
   long long _defaultValue;
-  set<long long> _enumeratedValues;
+  std::set<long long> _enumeratedValues;
 };
 
 }

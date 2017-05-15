@@ -36,12 +36,11 @@
 // TGS
 #include <tgs/SharedPtr.h>
 
-namespace hoot {
+namespace hoot
+{
 
-  using namespace std;
-
-  class Manipulation;
-  class OsmMap;
+class Manipulation;
+class OsmMap;
 
 /**
  * Manipulates a working map in some fashion that produces a vector of new working maps. The new
@@ -54,11 +53,11 @@ public:
 
   static std::string className() { return "hoot::Manipulator"; }
 
-  virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
           boost::shared_ptr<const OsmMap> map) = 0;
 
-  virtual const vector< boost::shared_ptr<Manipulation> >& findManipulations(
-      boost::shared_ptr<const OsmMap> map, const vector<ElementId>& ids) = 0;
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findManipulations(
+      boost::shared_ptr<const OsmMap> map, const std::vector<ElementId>& ids) = 0;
 
 };
 

@@ -45,8 +45,6 @@ namespace Tgs
 namespace hoot
 {
 
-using namespace Tgs;
-
 class BuildingRfClassifier;
 
 /**
@@ -62,7 +60,7 @@ public:
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Polygon; }
 
@@ -78,7 +76,7 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   virtual QString toString() const;
 

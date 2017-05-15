@@ -60,9 +60,12 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-using namespace Tgs;
 
 class MapCropperTest : public CppUnit::TestFixture
 {

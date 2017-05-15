@@ -42,6 +42,9 @@
 //Qt includes
 #include <QStringList>
 
+using namespace boost;
+using namespace std;
+
 namespace hoot
 {
 class LongBox;

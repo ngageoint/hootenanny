@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements.
@@ -47,7 +46,7 @@ class MaxIdVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
-  MaxIdVisitor() : _maxId(-numeric_limits<long>::max()) {}
+  MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) {}
 
   virtual ~MaxIdVisitor() {}
 

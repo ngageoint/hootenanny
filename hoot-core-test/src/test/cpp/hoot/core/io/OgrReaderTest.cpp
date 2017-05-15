@@ -44,6 +44,8 @@ using namespace boost;
 // Qt
 #include <QDebug>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

@@ -32,7 +32,7 @@ namespace hoot
 class MapReduceTestFixture : public CppUnit::TestFixture
 {
 public:
-  string jobTracker;
+  std::string jobTracker;
 
   virtual void setUp()
   {

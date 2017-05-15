@@ -79,7 +79,7 @@ namespace Tgs
     {
       if (it->second)
       {
-        _inputs[it->first] = dynamic_pointer_cast<CalculatorGenomeNode>(it->second->clone());
+        _inputs[it->first] = boost::dynamic_pointer_cast<CalculatorGenomeNode>(it->second->clone());
       }
     }
     _id = cgnFrom._id;

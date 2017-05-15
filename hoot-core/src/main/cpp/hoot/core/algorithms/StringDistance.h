@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * An interface to determining the distance between two strings.
@@ -47,7 +46,7 @@ class StringDistance
 {
 public:
 
-  static string className() { return "hoot::StringDistance"; }
+  static std::string className() { return "hoot::StringDistance"; }
 
   virtual ~StringDistance() {}
 

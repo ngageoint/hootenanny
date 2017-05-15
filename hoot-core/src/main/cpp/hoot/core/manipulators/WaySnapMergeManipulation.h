@@ -44,10 +44,10 @@ public:
   WaySnapMergeManipulation(long leftId, long rightId, ConstOsmMapPtr map,
     Meters minSplitSize);
 
-  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
-    set<ElementId>& newElements) const;
+  virtual void applyManipulation(OsmMapPtr wm, std::set<ElementId>& impactedElements,
+    std::set<ElementId>& newElements) const;
 
-  virtual const set<long>& getImpactedWayIds(ConstOsmMapPtr map) const;
+  virtual const std::set<long>& getImpactedWayIds(ConstOsmMapPtr map) const;
 
 protected:
 

@@ -33,9 +33,8 @@
 
 namespace hoot
 {
-using namespace std;
 
-struct Sparse2dCellId : public pair<int, int>
+struct Sparse2dCellId : public std::pair<int, int>
 {
   Sparse2dCellId()
   {

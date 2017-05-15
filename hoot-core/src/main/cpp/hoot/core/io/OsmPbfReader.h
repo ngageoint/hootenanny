@@ -58,7 +58,6 @@ namespace hoot
     class Relation;
     class Way;
   }
-using namespace std;
 
 class OsmPbfReaderData;
 
@@ -80,7 +79,7 @@ public:
 
   static QString maxElementsPerMapKey() { return "pbf.reader.max.elements.per.partial.map"; }
 
-  static string className() { return "hoot::OsmPbfReader"; }
+  static std::string className() { return "hoot::OsmPbfReader"; }
 
   static unsigned int logWarnCount;
 
@@ -100,7 +99,7 @@ public:
    * Scan through the file and calculate the offsets of every blob. This is handy when
    * distributing the processing of the file.
    */
-  vector<BlobLocation> loadOsmDataBlobOffsets(istream& strm);
+  std::vector<BlobLocation> loadOsmDataBlobOffsets(std::istream& strm);
 
   /**
    * Determines the reader's default element status
@@ -123,17 +122,17 @@ public:
    */
   void read(QString path, OsmMapPtr map);
 
-  void parse(istream* strm, OsmMapPtr map);
+  void parse(std::istream* strm, OsmMapPtr map);
 
-  void parseBlob(BlobLocation& bl, istream* strm, OsmMapPtr map);
+  void parseBlob(BlobLocation& bl, std::istream* strm, OsmMapPtr map);
 
-  void parseBlob(long headerOffset, istream* strm, OsmMapPtr map);
+  void parseBlob(long headerOffset, std::istream* strm, OsmMapPtr map);
 
   /**
    * Reads a uint32 in network order from the stream to determine the PBF size, then reads the
    * PrimitiveBlock from the stream specified into the provided map.
    */
-  void parseElements(istream* strm, const OsmMapPtr& map);
+  void parseElements(std::istream* strm, const OsmMapPtr& map);
 
   /**
    * Allows loading of data that isn't complete such as unknown node IDs in a way.
@@ -170,8 +169,8 @@ public:
 private:
 
   Meters _circularError;
-  string _buffer;
-  istream* _in;
+  std::string _buffer;
+  std::istream* _in;
   bool _needToCloseInput;
 
   /// The last position of the pointer while reading data.
@@ -182,10 +181,10 @@ private:
   double _startReadTime;
   long _fileLength;
 
-  string _inflated;
+  std::string _inflated;
   // Bend over backwards to keep the PBF headers out of the normal build. They're quite large.
   OsmPbfReaderData* _d;
-  vector<QString> _strings;
+  std::vector<QString> _strings;
   /// @todo Possibly, it makes sense to replace _map with _partialMap (then rename to _map in base
   /// class), which was added to PartialOsmMapReader after it was implemented on this class.
   OsmMapPtr _map;
@@ -207,7 +206,7 @@ private:
   bool _useFileStatus;
 
   //for partial reading of blobs
-  vector<BlobLocation> _blobs;
+  std::vector<BlobLocation> _blobs;
   int _blobIndex;
 
   //partial read iterators
@@ -243,7 +242,7 @@ private:
 
   long _getNodeId(long fromFile);
 
-  const char* _inflate(const string& compressed, size_t rawSize);
+  const char* _inflate(const std::string& compressed, size_t rawSize);
 
   void _loadDenseNodes();
 

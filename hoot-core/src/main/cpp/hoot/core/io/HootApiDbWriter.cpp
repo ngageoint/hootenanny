@@ -34,10 +34,13 @@
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
 #include <QUrl>
+
+using namespace std;
 
 namespace hoot
 {
@@ -113,6 +116,8 @@ bool HootApiDbWriter::isSupported(QString urlStr)
 void HootApiDbWriter::open(QString urlStr)
 {
   set<long> mapIds = _openDb(urlStr);
+
+  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_hootdb.getDB()));
 
   QUrl url(urlStr);
   QStringList pList = url.path().split("/");

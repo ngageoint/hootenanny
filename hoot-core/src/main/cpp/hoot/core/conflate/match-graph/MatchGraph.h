@@ -37,13 +37,12 @@
 
 namespace hoot
 {
-using namespace std;
 
 class Match;
 class MatchGraphInternal;
 class MatchThreshold;
 
-typedef vector< MatchSet > MatchSetVector;
+typedef std::vector< MatchSet > MatchSetVector;
 
 /**
  * Represents a graph of matches. At some point I'd like to extend this to include additional
@@ -84,13 +83,13 @@ public:
   void setCheckForConflicts(bool c) { _checkForConflicts = c; }
 
 private:
-  vector<const Match*> _matches;
+  std::vector<const Match*> _matches;
   bool _checkForConflicts;
   /**
    * An internal data structure to prevent users of the class from recompiling the boost graph
    * craziness.
    */
-  auto_ptr<MatchGraphInternal> _d;
+  std::auto_ptr<MatchGraphInternal> _d;
 
   /**
    * Invalidates the current graph.

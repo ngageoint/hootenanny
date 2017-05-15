@@ -36,6 +36,8 @@
 #include "HdfsConnection.h"
 #include "HdfsDevice.hpp"
 
+using namespace std;
+
 namespace pp
 {
 

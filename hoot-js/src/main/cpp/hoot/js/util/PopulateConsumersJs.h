@@ -53,13 +53,12 @@
 
 namespace hoot
 {
-using namespace node;
 
 class PopulateConsumersJs
 {
 public:
 
-  static Local<String> baseClass() { return String::New("baseClass"); }
+  static v8::Local<v8::String> baseClass() { return v8::String::New("baseClass"); }
 
   template <typename T>
   static void populateConsumers(T* consumer, const v8::Arguments& args)
@@ -79,7 +78,7 @@ public:
     }
     else if (v->IsObject())
     {
-      Local<Object> obj = v->ToObject();
+      v8::Local<v8::Object> obj = v->ToObject();
 
       if (obj->Has(baseClass()))
       {
@@ -121,11 +120,11 @@ public:
   }
 
   template <typename T>
-  static void populateConfigurable(T* consumer, const Local<Object>& obj)
+  static void populateConfigurable(T* consumer, const v8::Local<v8::Object>& obj)
   {
     Settings settings = conf();
 
-    Local<Array> keys = obj->GetPropertyNames();
+    v8::Local<v8::Array> keys = obj->GetPropertyNames();
     if (keys->Length() == 0)
     {
       LOG_WARN("Populating object with empty configuration. Is this what you wanted?");
@@ -133,8 +132,8 @@ public:
 
     for (uint32_t i = 0; i < keys->Length(); i++)
     {
-      Local<String> k = keys->Get(i)->ToString();
-      Local<String> v = obj->Get(k)->ToString();
+      v8::Local<v8::String> k = keys->Get(i)->ToString();
+      v8::Local<v8::String> v = obj->Get(k)->ToString();
       settings.set(str(k), str(v));
     }
 
@@ -150,7 +149,7 @@ public:
   template <typename T>
   static void populateCriterionConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    ElementCriterionJs* obj = ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
+    ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
 
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
@@ -167,7 +166,7 @@ public:
   template <typename T>
   static void populateElementConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    ElementJs* obj = ObjectWrap::Unwrap<ElementJs>(v->ToObject());
+    ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject());
 
     ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
 
@@ -189,7 +188,7 @@ public:
       throw IllegalArgumentException("Expected the argument to be a valid function.");
     }
 
-    Persistent<Function> func = Persistent<Function>::New(Handle<Function>::Cast(v));
+    v8::Persistent<v8::Function> func = v8::Persistent<v8::Function>::New(v8::Handle<v8::Function>::Cast(v));
     JsFunctionConsumer* c = dynamic_cast<JsFunctionConsumer*>(consumer);
     ElementCriterionConsumer* ecc = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
@@ -219,7 +218,7 @@ public:
   template <typename T>
   static void populateOsmMapConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
+    OsmMapJs* obj = node::ObjectWrap::Unwrap<OsmMapJs>(v->ToObject());
 
     if (obj->isConst())
     {
@@ -251,7 +250,7 @@ public:
   }
 
   template <typename T>
-  static void populateStringDistanceConsumer(T* consumer, const Local<Value>& value)
+  static void populateStringDistanceConsumer(T* consumer, const v8::Local<v8::Value>& value)
   {
     StringDistancePtr sd = toCpp<StringDistancePtr>(value);
 
@@ -268,7 +267,7 @@ public:
   }
 
   template <typename T>
-  static void populateValueAggregatorConsumer(T* consumer, const Local<Value>& value)
+  static void populateValueAggregatorConsumer(T* consumer, const v8::Local<v8::Value>& value)
   {
     ValueAggregatorPtr va = toCpp<ValueAggregatorPtr>(value);
 
@@ -287,7 +286,7 @@ public:
   template <typename T>
   static void populateVisitorConsumer(T* consumer, const v8::Local<v8::Value>& v)
   {
-    ElementVisitorJs* obj = ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
+    ElementVisitorJs* obj = node::ObjectWrap::Unwrap<ElementVisitorJs>(v->ToObject());
 
     ElementVisitorConsumer* c = dynamic_cast<ElementVisitorConsumer*>(consumer);
 

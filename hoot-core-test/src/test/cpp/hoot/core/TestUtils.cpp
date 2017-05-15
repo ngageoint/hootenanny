@@ -48,6 +48,9 @@
 // Qt
 #include <QFile>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -188,12 +191,24 @@ std::string TestUtils::readFile(QString f1)
   return QString(fpTest.readAll()).toStdString();
 }
 
-void TestUtils::resetEnvironment()
+void TestUtils::resetEnvironment(const QStringList confs)
 {
+  LOG_DEBUG("Resetting test environment...");
+
   // provide the most basic configuration.
   OsmMap::resetCounters();
   conf().clear();
   ConfigOptions::populateDefaults(conf());
+  //The primary reason for allowing custom configs to be loaded here is in certain situaions to
+  //prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
+  //many hoot commands at once.
+  LOG_VART(confs.size());
+  for (int i = 0; i < confs.size(); i++)
+  {
+    LOG_VART(confs[i]);
+    conf().loadJson(confs[i]);
+  }
+  LOG_VART(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new

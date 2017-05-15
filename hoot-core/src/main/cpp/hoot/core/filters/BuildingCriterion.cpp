@@ -31,11 +31,12 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 
+using namespace std;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
-
 
 bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {

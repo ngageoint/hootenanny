@@ -29,6 +29,8 @@
 #include "../../TestUtils.h"
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

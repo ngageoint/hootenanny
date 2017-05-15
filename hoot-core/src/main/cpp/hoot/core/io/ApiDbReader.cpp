@@ -36,6 +36,8 @@
 // Qt
 #include <QSet>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -146,16 +148,24 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      try
       {
-        LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-                 QString::number(element->getId()));
+        //  Try parsing the status in text form
+        element->setStatus(Status::fromString(statusStr));
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      catch (const HootException&)
       {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+                   QString::number(element->getId()));
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      logWarnCount++;
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.

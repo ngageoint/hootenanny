@@ -53,6 +53,10 @@
 #include <tgs/RStarTree/RStarTreePrinter.h>
 #include <tgs/RStarTree/IntersectionIterator.h>
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 

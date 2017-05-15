@@ -33,29 +33,25 @@
 namespace hoot
 {
 
-using namespace std;
-
-using namespace geos::geom;
-
 class BBox
 {
 public:
 
-  static string className() { return "hoot::BBox"; }
+  static std::string className() { return "hoot::BBox"; }
 
-  BBox(const vector<double>& min, const vector<double>& max);
+  BBox(const std::vector<double>& min, const std::vector<double>& max);
 
-  BBox(Envelope envelope);
+  BBox(geos::geom::Envelope envelope);
 
   virtual ~BBox();
 
   int getDimensions() { return _max.size(); }
 
-  vector<double> getMax() { return _max; }
+  std::vector<double> getMax() { return _max; }
 
-  vector<double> getMin() { return _min; }
+  std::vector<double> getMin() { return _min; }
 
-  bool in(vector<double> p);
+  bool in(std::vector<double> p);
 
   bool in(BBox container);
 
@@ -77,8 +73,8 @@ public:
 
 private:
   void _check();
-  vector<double> _min;
-  vector<double> _max;
+  std::vector<double> _min;
+  std::vector<double> _max;
 };
 
 }

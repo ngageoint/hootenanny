@@ -42,6 +42,8 @@
 // Standard
 #include <sstream>
 
+using namespace std;
+
 
 uint qHash(const std::string& str)
 {

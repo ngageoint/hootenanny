@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STREAMUTILSJS_H
 #define STREAMUTILSJS_H
@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace v8;
 
 /**
  * @param qstr JSON string to parse
@@ -44,19 +43,19 @@ using namespace v8;
  *  to report errors.
  * @return Parsed JSON value
  */
-inline Handle<Value> fromJson(QString qstr, QString fileName="")
+inline v8::Handle<v8::Value> fromJson(QString qstr, QString fileName="")
 {
-  HandleScope scope;
-  Handle<Context> context = Context::GetCurrent();
-  Handle<Object> global = context->Global();
+  v8::HandleScope scope;
+  v8::Handle<v8::Context> context = v8::Context::GetCurrent();
+  v8::Handle<v8::Object> global = context->Global();
 
   QByteArray utf8 = qstr.toUtf8();
-  Handle<Value> str = v8::String::New(utf8.data(), utf8.length());
+  v8::Handle<v8::Value> str = v8::String::New(utf8.data(), utf8.length());
 
-  Handle<Object> JSON = global->Get(String::New("JSON"))->ToObject();
-  Handle<Function> JSON_parse = Handle<Function>::Cast(JSON->Get(String::New("parse")));
+  v8::Handle<v8::Object> JSON = global->Get(v8::String::New("JSON"))->ToObject();
+  v8::Handle<v8::Function> JSON_parse = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::New("parse")));
 
-  Handle<Value> args[1];
+  v8::Handle<v8::Value> args[1];
   args[0] = str;
 
   v8::TryCatch tc;
@@ -93,20 +92,20 @@ inline Handle<Value> fromJson(QString qstr, QString fileName="")
  * @todo strangely this class can sometimes cause objects to go wonky.
  */
 template <class T>
-QString toJson(const Handle<T> object)
+QString toJson(const v8::Handle<T> object)
 {
-  HandleScope scope;
+  v8::HandleScope scope;
 
-  Local<Context> context = Context::GetCurrent();
-  Local<Object> global = context->Global();
+  v8::Local<v8::Context> context = v8::Context::GetCurrent();
+  v8::Local<v8::Object> global = context->Global();
 
-  Local<Object> JSON = global->Get(String::New("JSON"))->ToObject();
-  Handle<Function> JSON_stringify = Handle<Function>::Cast(JSON->Get(String::New("stringify")));
+  v8::Local<v8::Object> JSON = global->Get(v8::String::New("JSON"))->ToObject();
+  v8::Handle<v8::Function> JSON_stringify = v8::Handle<v8::Function>::Cast(JSON->Get(v8::String::New("stringify")));
 
-  Handle<Value> args[1];
+  v8::Handle<v8::Value> args[1];
   args[0] = object;
-  Handle<Value> result = JSON_stringify->Call(JSON, 1, args);
-  Handle<String> s = Handle<String>::Cast(result);
+  v8::Handle<v8::Value> result = JSON_stringify->Call(JSON, 1, args);
+  v8::Handle<v8::String> s = v8::Handle<v8::String>::Cast(result);
 
   size_t utf8Length = s->Utf8Length() + 1;
   std::auto_ptr<char> buffer(new char[utf8Length]);
@@ -115,7 +114,7 @@ QString toJson(const Handle<T> object)
   return QString::fromUtf8(buffer.get());
 }
 
-std::ostream& operator<<(std::ostream& o, const v8::Handle<Function>& f);
+std::ostream& operator<<(std::ostream& o, const v8::Handle<v8::Function>& f);
 
 template <class T>
 inline std::ostream& operator<<(std::ostream& o, const v8::Handle<T>& v)
@@ -134,7 +133,7 @@ inline std::ostream& operator<<(std::ostream& o, const v8::Handle<T>& v)
   }
   else if (v->IsFunction())
   {
-    Handle<Function> f = Handle<Function>::Cast(v);
+    v8::Handle<v8::Function> f = v8::Handle<v8::Function>::Cast(v);
     o << f;
   }
   else
@@ -144,7 +143,7 @@ inline std::ostream& operator<<(std::ostream& o, const v8::Handle<T>& v)
   return o;
 }
 
-inline std::ostream& operator<<(std::ostream& o, const v8::Handle<Function>& f)
+inline std::ostream& operator<<(std::ostream& o, const v8::Handle<v8::Function>& f)
 {
   QString name = toJson(f->GetName());
   if (name != "\"\"")

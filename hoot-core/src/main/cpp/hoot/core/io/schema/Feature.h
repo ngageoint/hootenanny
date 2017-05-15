@@ -37,8 +37,8 @@
 
 namespace hoot
 {
+
 class FeatureDefinition;
-using namespace boost;
 
 class Feature
 {

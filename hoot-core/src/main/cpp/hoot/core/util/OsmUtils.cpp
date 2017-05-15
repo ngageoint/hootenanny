@@ -42,6 +42,8 @@
 //Qt
 #include <QDateTime>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -78,7 +80,7 @@ QList<boost::shared_ptr<const Node> > OsmUtils::nodeIdsToNodes(const QList<long>
   QList<boost::shared_ptr<const Node> > nodes;
   for (QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
   {
-    nodes.append(dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
+    nodes.append(boost::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
   }
   return nodes;
 }

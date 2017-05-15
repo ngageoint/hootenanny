@@ -30,6 +30,8 @@
 // Standard
 #include <sstream>
 
+using namespace std;
+
 namespace hoot
 {
 

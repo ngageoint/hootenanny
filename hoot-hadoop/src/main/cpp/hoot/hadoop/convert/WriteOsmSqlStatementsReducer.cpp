@@ -139,6 +139,8 @@ void WriteOsmSqlStatementsReducer::_flushToDb(const QString tableHeader, const Q
     //PQsetClientEncoding(_pqConn, "UTF8");
     LOG_TRACE(pg_encoding_to_char(PQclientEncoding(_pqConn)));
     PQsetErrorVerbosity(_pqConn, PQERRORS_VERBOSE);
+
+    LOG_DEBUG("Postgres database version: " << PQserverVersion(_pqConn));
   }
   else if (PQstatus(_pqConn) != CONNECTION_OK)
   {

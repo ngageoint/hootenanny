@@ -38,6 +38,9 @@
 
 // TGS
 #include <tgs/StreamUtils.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

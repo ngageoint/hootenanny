@@ -36,9 +36,6 @@
 namespace hoot
 {
 
-using namespace node;
-using namespace v8;
-
 /**
  * The ReviewMarkerJs class wraps objects of type ReviewMarker. It is an abstract base class.
  *

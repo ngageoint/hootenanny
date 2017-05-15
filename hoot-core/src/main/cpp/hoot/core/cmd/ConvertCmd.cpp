@@ -45,6 +45,8 @@
 // Qt
 #include <QElapsedTimer>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -137,21 +139,21 @@ public:
 
     boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);
-    boost::shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
+    boost::shared_ptr<ElementInputStream> streamReader = boost::dynamic_pointer_cast<ElementInputStream>(reader);
     boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
     writer->open(out);
-    boost::shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+    boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
     boost::shared_ptr<PartialOsmMapReader> partialReader =
-      dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
     if (partialReader.get())
     {
       partialReader->finalizePartial();
     }
     boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-      dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
     if (partialWriter.get())
     {
       partialWriter->finalizePartial();

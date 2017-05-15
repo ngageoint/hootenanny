@@ -30,6 +30,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -53,14 +55,14 @@ double WayFeatureExtractor::extract(const OsmMap& map,
   if (target->getElementType() == ElementType::Way &&
       candidate->getElementType() == ElementType::Way)
   {
-    scores.push_back(_extract(map, dynamic_pointer_cast<const Way>(target),
-                              dynamic_pointer_cast<const Way>(candidate)));
+    scores.push_back(_extract(map, boost::dynamic_pointer_cast<const Way>(target),
+                              boost::dynamic_pointer_cast<const Way>(candidate)));
   }
   else if (target->getElementType() == ElementType::Relation &&
            candidate->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r1 = dynamic_pointer_cast<const Relation>(target);
-    ConstRelationPtr r2 = dynamic_pointer_cast<const Relation>(candidate);
+    ConstRelationPtr r1 = boost::dynamic_pointer_cast<const Relation>(target);
+    ConstRelationPtr r2 = boost::dynamic_pointer_cast<const Relation>(candidate);
 
     if (r1->getType() == MetadataTags::RelationMultilineString() &&
         r2->getType() == MetadataTags::RelationMultilineString() &&

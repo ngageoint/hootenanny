@@ -36,6 +36,8 @@
 
 #include "Exception.h"
 
+using namespace std;
+
 namespace pp
 {
 

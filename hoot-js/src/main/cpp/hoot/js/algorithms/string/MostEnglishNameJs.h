@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __MOST_ENGLISH_NAME_JS_H__
@@ -37,8 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -52,7 +50,7 @@ public:
 
   MostEnglishNamePtr getPtr() { return _sd; }
 
-  static Handle<Object> New(const MostEnglishNamePtr& sd);
+  static v8::Handle<v8::Object> New(const MostEnglishNamePtr& sd);
 
 private:
   MostEnglishNameJs();
@@ -62,9 +60,9 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   MostEnglishNamePtr _sd;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
-  static Handle<Value> getMostEnglishName(const Arguments& args);
+  static v8::Handle<v8::Value> getMostEnglishName(const v8::Arguments& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, MostEnglishNamePtr& p)

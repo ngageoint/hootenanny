@@ -48,6 +48,8 @@
 #include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
 
+using namespace std;
+
 namespace hoot
 {
 void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
@@ -70,10 +72,10 @@ void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList n
   //implementation available
   QString statsClassName = "hoot::ScriptStatsComposer";
   QString statsScript = configOptions.getStatsScript();
-  LOG_DEBUG("stats format = " << statsFormat << endl);
-  LOG_DEBUG("stats outfile= " << statsOutput << endl);
-  LOG_DEBUG("stats className= " << statsClassName << endl);
-  LOG_DEBUG("stats script= " << statsScript << endl);
+  LOG_DEBUG("stats format = " << statsFormat << std::endl);
+  LOG_DEBUG("stats outfile= " << statsOutput << std::endl);
+  LOG_DEBUG("stats className= " << statsClassName << std::endl);
+  LOG_DEBUG("stats script= " << statsScript << std::endl);
 
   if(statsOutput=="") return; // just need to specify only output file, rest of args have default values
 

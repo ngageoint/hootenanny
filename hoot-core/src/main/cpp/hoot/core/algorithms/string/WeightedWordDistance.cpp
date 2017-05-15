@@ -45,6 +45,8 @@
 // Tgs
 #include <tbs/stats/SampleStats.h>
 
+using namespace std;
+
 namespace hoot
 {
 

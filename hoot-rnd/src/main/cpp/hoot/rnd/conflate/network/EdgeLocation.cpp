@@ -28,6 +28,8 @@
 
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 
+using namespace std;
+
 namespace hoot
 {
 

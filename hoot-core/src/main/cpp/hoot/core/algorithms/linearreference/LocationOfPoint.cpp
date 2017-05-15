@@ -41,7 +41,10 @@
 #include <limits>
 #include <numeric>
 
-namespace hoot {
+using namespace geos::geom;
+
+namespace hoot
+{
 
 LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way) :
   _map(map),

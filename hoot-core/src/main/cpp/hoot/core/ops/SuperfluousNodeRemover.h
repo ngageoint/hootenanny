@@ -45,8 +45,6 @@
 
 namespace hoot
 {
-using namespace geos::geom;
-using namespace std;
 
 class OsmMap;
 
@@ -61,28 +59,28 @@ class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, publ
 {
 public:
 
-  static string className() { return "hoot::SuperfluousNodeRemover"; }
+  static std::string className() { return "hoot::SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 
   static boost::shared_ptr<OsmMap> removeNodes(boost::shared_ptr<const OsmMap> map);
 
-  static void removeNodes(boost::shared_ptr<OsmMap>& map, const Envelope& e);
+  static void removeNodes(boost::shared_ptr<OsmMap>& map, const geos::geom::Envelope& e);
 
-  virtual void setBounds(const Envelope &bounds);
+  virtual void setBounds(const geos::geom::Envelope &bounds);
 
   virtual void writeObject(QDataStream& os) const;
 
 protected:
 
-  Envelope _bounds;
-  set<long> _usedNodes;
+  geos::geom::Envelope _bounds;
+  std::set<long> _usedNodes;
 
 };
 

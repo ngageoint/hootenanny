@@ -44,9 +44,6 @@ namespace hoot
 class OsmMap;
 class ElementId;
 
-using namespace std;
-using namespace boost;
-
 class NodeMatcher
 {
 public:
@@ -82,7 +79,7 @@ public:
    * If the node is both a start and end node then two entries will be made in the resulting vector.
    * First the start, then the end node.
    */
-  static vector<Radians> calculateAngles(const OsmMap* map, long nid, const set<long>& wids,
+  static std::vector<Radians> calculateAngles(const OsmMap* map, long nid, const std::set<long>& wids,
     Meters delta = 0.001);
 
 private:
@@ -92,8 +89,8 @@ private:
   double _strictness;
 
 
-  double _calculateAngleScore(const vector<Radians>& theta1, const vector<Radians>& theta2,
-    vector<bool>& exclude, size_t depth, bool debug = false);
+  double _calculateAngleScore(const std::vector<Radians>& theta1, const std::vector<Radians>& theta2,
+    std::vector<bool>& exclude, size_t depth, bool debug = false);
 };
 
 typedef boost::shared_ptr<NodeMatcher> NodeMatcherPtr;

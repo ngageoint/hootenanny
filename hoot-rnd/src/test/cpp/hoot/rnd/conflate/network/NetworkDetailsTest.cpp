@@ -36,6 +36,9 @@
 #include <hoot/rnd/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

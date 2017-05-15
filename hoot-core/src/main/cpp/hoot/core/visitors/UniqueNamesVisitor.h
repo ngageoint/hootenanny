@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts all the unique names.
@@ -46,7 +45,7 @@ class UniqueNamesVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::UniqueNamesVisitor"; }
+  static std::string className() { return "hoot::UniqueNamesVisitor"; }
 
   UniqueNamesVisitor() {}
 

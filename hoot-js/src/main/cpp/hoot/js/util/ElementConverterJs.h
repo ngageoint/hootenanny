@@ -33,8 +33,6 @@
 
 namespace hoot
 {
-using namespace node;
-using namespace v8;
 
 class ElementConverterJs : public node::ObjectWrap
 {

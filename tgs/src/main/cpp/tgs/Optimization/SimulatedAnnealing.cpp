@@ -106,6 +106,9 @@ StatePtr SimulatedAnnealing::_generateRandomState() const
 
 double SimulatedAnnealing::iterate(int kmax)
 {
+  //enable this log statement for better logging when calculating opts
+  //cout << "Initializing simulated annealing state..." << endl;
+
   StatePtr s1 = _generateRandomState();
   s1->setScore(_fitness->f(s1));
   ConstStatePtr s = s1;
@@ -115,7 +118,8 @@ double SimulatedAnnealing::iterate(int kmax)
 
   for (int k = 0; k < kmax; ++k)
   {
-    //cout << "Running Simulated Annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
+    //enable this log statement for better logging when calculating opts
+    //cout << "Running simulated annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
 
     double T = 1.0 - (double)k / (double)kmax;
     StatePtr sNew = _generateNeighbor(s, T);

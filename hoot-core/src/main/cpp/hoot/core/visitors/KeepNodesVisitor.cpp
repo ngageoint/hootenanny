@@ -34,6 +34,8 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 
+using namespace std;
+
 namespace hoot
 {
 

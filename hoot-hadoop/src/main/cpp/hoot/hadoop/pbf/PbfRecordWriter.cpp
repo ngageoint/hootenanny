@@ -27,6 +27,8 @@ using namespace pp;
 // Standard
 #include <map>
 
+using namespace std;
+
 namespace hoot
 {
 

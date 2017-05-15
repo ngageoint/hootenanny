@@ -26,6 +26,8 @@
  */
 #include "WaySublineCollection.h"
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -45,6 +45,8 @@ using namespace Tgs;
 
 #include "NodeToWayMap.h"
 
+using namespace std;
+
 namespace hoot
 {
 

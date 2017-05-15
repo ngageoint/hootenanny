@@ -41,8 +41,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -59,7 +57,7 @@ public:
 
   Tags& getTags() { return _tags; }
 
-  static Handle<Object> New(const Tags& t);
+  static v8::Handle<v8::Object> New(const Tags& t);
 
 private:
   TagsJs(ConstNodePtr n);
@@ -69,17 +67,17 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   Tags _tags;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
-  static Handle<Value> contains(const Arguments& args);
-  static Handle<Value> get(const Arguments& args);
-  static Handle<Value> getCreateUuid(const Arguments& args);
-  static Handle<Value> getLengthInMeters(const Arguments& args);
-  static Handle<Value> getVelocityInMeters(const Arguments& args);
-  static Handle<Value> getInformationCount(const Arguments& args);
-  static Handle<Value> set(const Arguments& args);
-  static Handle<Value> toDict(const Arguments& args);
-  static Handle<Value> toString(const Arguments& args);
+  static v8::Handle<v8::Value> contains(const v8::Arguments& args);
+  static v8::Handle<v8::Value> get(const v8::Arguments& args);
+  static v8::Handle<v8::Value> getCreateUuid(const v8::Arguments& args);
+  static v8::Handle<v8::Value> getLengthInMeters(const v8::Arguments& args);
+  static v8::Handle<v8::Value> getVelocityInMeters(const v8::Arguments& args);
+  static v8::Handle<v8::Value> getInformationCount(const v8::Arguments& args);
+  static v8::Handle<v8::Value> set(const v8::Arguments& args);
+  static v8::Handle<v8::Value> toDict(const v8::Arguments& args);
+  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 
   void _setTags(const Tags& t) { _tags = t; }
 };

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EXPECTATIONINTERSECTION_H
 #define EXPECTATIONINTERSECTION_H
@@ -38,11 +38,8 @@
 
 namespace hoot
 {
-class Settings;
 
-using namespace boost;
-using namespace std;
-using namespace tbs;
+class Settings;
 
 /**
  * This class provides the ability to segement an ordered set of points with constraints.
@@ -70,23 +67,23 @@ public:
    *
    * 1. http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
    */
-  vector<double> snapMatches(const cv::Mat& matches, const Mat& ranges);
+  std::vector<double> snapMatches(const cv::Mat& matches, const cv::Mat& ranges);
 
 private:
 
   int _maxIterations;
 
   void _calculateTDistribution(const cv::Mat &matches, int start, int end,
-    TDistribution& t);
+    tbs::TDistribution& t);
 
-  double _findSplit(const TDistribution& t1, const TDistribution& t2, const cv::Mat& matches,
+  double _findSplit(const tbs::TDistribution& t1, const tbs::TDistribution& t2, const cv::Mat& matches,
     int start, int stop);
 
   /**
    * Verify that the caller provided meaningful ranges.
    * Throws an exception on failure.
    */
-  void _validateRanges(int rowCount, const Mat& ranges);
+  void _validateRanges(int rowCount, const cv::Mat& ranges);
 };
 
 }

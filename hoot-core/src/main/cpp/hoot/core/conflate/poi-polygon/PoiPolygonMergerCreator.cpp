@@ -41,6 +41,8 @@
 #include "PoiPolygonMatch.h"
 #include "PoiPolygonMerger.h"
 
+using namespace std;
+
 namespace hoot
 {
 

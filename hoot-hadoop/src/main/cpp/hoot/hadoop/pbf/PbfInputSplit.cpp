@@ -29,9 +29,11 @@
 #include <stdio.h>
 #include <string.h>
 
+using namespace pp;
+using namespace std;
+
 namespace hoot
 {
-using namespace pp;
 
 PP_FACTORY_REGISTER(pp::InputSplit, PbfInputSplit)
 

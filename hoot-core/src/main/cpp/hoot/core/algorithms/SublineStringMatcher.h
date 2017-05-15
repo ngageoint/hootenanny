@@ -45,7 +45,7 @@ class SublineStringMatcher : public Configurable
 {
 public:
 
-  static string className() { return "hoot::SublineStringMatcher"; }
+  static std::string className() { return "hoot::SublineStringMatcher"; }
 
   SublineStringMatcher() {}
 

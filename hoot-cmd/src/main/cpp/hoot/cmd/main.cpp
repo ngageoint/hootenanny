@@ -48,6 +48,8 @@ using namespace hoot;
 // Standard
 #include <exception>
 
+using namespace std;
+
 int main(int argc, char *argv[])
 {
   Hoot::getInstance().init();
