@@ -34,6 +34,7 @@
 // Qt
 #include <QMultiHash>
 #include <QSet>
+#include <QMap>
 
 namespace hoot
 {
@@ -69,6 +70,7 @@ private:
   boost::shared_ptr<OsmMap> _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;
+  QMap<long, long> _wayReplacements;
 
   void _mapNodesToWays();
 
