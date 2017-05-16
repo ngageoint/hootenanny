@@ -144,7 +144,7 @@ private:
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
 
-  void _mapUnknownIdsBackToModifiedElements(OsmMapPtr& map);
+  void _mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map);
 };
 
 }

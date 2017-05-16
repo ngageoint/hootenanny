@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBAWAREHOOTAPIDBWRITER_H
-#define OSMAPIDBAWAREHOOTAPIDBWRITER_H
+#ifndef NONIDREMAPPINGHOOTAPIDBWRITER_H
+#define NONIDREMAPPINGHOOTAPIDBWRITER_H
 
 #include "HootApiDbWriter.h"
 #include "OsmApiDb.h"
@@ -34,35 +34,24 @@ namespace hoot
 {
 
 /**
- * Hoot api db writer that doesn't allow hoot api db element id's to clash with a specified osm api
- * db's id's (osm api db is the id master reference).
+ * Hoot api db writer that doesn't remap ID's.  It assumes you've handled ID conflicts beforehand.
  */
-class OsmApiDbAwareHootApiDbWriter : public HootApiDbWriter
+class NonIdRemappingHootApiDbWriter : public HootApiDbWriter
 {
 public:
 
-  static std::string className() { return "hoot::OsmApiDbAwareHootApiDbWriter"; }
+  static std::string className() { return "hoot::NonIdRemappingHootApiDbWriter"; }
 
-  OsmApiDbAwareHootApiDbWriter();
+  NonIdRemappingHootApiDbWriter();
 
-  virtual ~OsmApiDbAwareHootApiDbWriter();
-
-  virtual void open(QString urlStr);
-
-  virtual void writePartial(const ConstNodePtr& n);
-  virtual void writePartial(const ConstWayPtr& w);
-  virtual void writePartial(const ConstRelationPtr& r);
+  //virtual ~NonIdRemappingHootApiDbWriter() {};
 
 protected:
 
   virtual long _getRemappedElementId(const ElementId& eid);
 
-private:
-
-  OsmApiDb _osmApiDb;
-
 };
 
 }
 
-#endif // OSMAPIDBAWAREHOOTAPIDBWRITER_H
+#endif // NONIDREMAPPINGHOOTAPIDBWRITER_H

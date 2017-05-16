@@ -210,6 +210,7 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 
 long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
+  LOG_VART(_remapIds);
   if (_remapIds == false)
   {
     return eid.getId();
@@ -223,6 +224,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     if (_nodeRemap.count(eid.getId()) == 1)
     {
       retVal = _nodeRemap.at(eid.getId());
+      LOG_VART(retVal);
     }
     else
     {
@@ -232,6 +234,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       {
         _sourceNodeIds.insert(eid.getId());
       }
+      LOG_VART(retVal);
     }
 
     break;
@@ -240,6 +243,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     if (_wayRemap.count(eid.getId()) == 1)
     {
       retVal = _wayRemap.at(eid.getId());
+      LOG_VART(retVal);
     }
     else
     {
@@ -249,6 +253,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       {
         _sourceWayIds.insert(eid.getId());
       }
+      LOG_VART(retVal);
     }
 
     break;
@@ -257,6 +262,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     if (_relationRemap.count(eid.getId()) == 1)
     {
       retVal = _relationRemap.at(eid.getId());
+      LOG_VART(retVal);
     }
     else
     {
@@ -266,6 +272,7 @@ long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
       {
         _sourceRelationIds.insert(eid.getId());
       }
+      LOG_VART(retVal);
     }
 
     break;

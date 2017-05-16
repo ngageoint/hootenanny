@@ -138,13 +138,13 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
   long nodeId;
   LOG_VART(n->getId());
   LOG_VART(n->getStatus());
-  if (/*(n->getStatus() == Status::Unknown1 || n->getStatus() == Status::Conflated) &&*/ n->getId() > 0)
+  if (n->getId() > 0)
   {
     nodeId = n->getId();
   }
   else
   {
-    nodeId =  _getRemappedElementId(n->getElementId());
+    nodeId = _getRemappedElementId(n->getElementId());
   }
   LOG_VART(nodeId);
   const bool alreadyThere = _nodeRemap.count(nodeId) != 0;
@@ -174,13 +174,13 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& w)
   long wayId;
   LOG_VART(w->getElementId());
   LOG_VART(w->getStatus());
-  if (/*(w->getStatus() == Status::Unknown1 || w->getStatus() == Status::Conflated) &&*/ w->getId() > 0)
+  if (w->getId() > 0)
   {
     wayId = w->getId();
   }
   else
   {
-    wayId =  _getRemappedElementId(w->getElementId());
+    wayId = _getRemappedElementId(w->getElementId());
   }
   const bool alreadyThere = _wayRemap.count(wayId) != 0;
   if (alreadyThere)
@@ -218,13 +218,13 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& r)
   long relationId;
   LOG_VART(r->getId());
   LOG_VART(r->getStatus());
-  if (/*(r->getStatus() == Status::Unknown1 || r->getStatus() == Status::Conflated) &&*/ r->getId() > 0)
+  if (r->getId() > 0)
   {
     relationId = r->getId();
   }
   else
   {
-    relationId =  _getRemappedElementId(r->getElementId());
+    relationId = _getRemappedElementId(r->getElementId());
   }
   const bool alreadyThere = _relationRemap.count(relationId) != 0;
   if (alreadyThere)

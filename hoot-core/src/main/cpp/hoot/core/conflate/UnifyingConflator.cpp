@@ -278,7 +278,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
   {
-    _mapUnknownIdsBackToModifiedElements(map);
+    _mapUnknown1IdsBackToModifiedElements(map);
   }
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
@@ -297,25 +297,48 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Apply Post Ops Time (sec)", timer.getElapsedAndRestart()));
 }
 
-void UnifyingConflator::_mapUnknownIdsBackToModifiedElements(OsmMapPtr& map)
+bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
+                          const pair<ElementId, ElementId>& pair2)
 {
+  return pair1.first.getId() > pair2.first.getId();
+}
+
+void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
+{ 
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
     set< pair<ElementId, ElementId> > impactedUnknown1ElementIds =
       _mergers[i]->getImpactedUnknown1ElementIds();
-    for (set< pair<ElementId, ElementId> >::const_iterator it = impactedUnknown1ElementIds.begin();
-         it != impactedUnknown1ElementIds.end(); ++it)
+    //convert to list for sorting (can't sort a set); not sure why the std::sort with std::list
+    //isn't working here...using qt classes instead
+    list< pair<ElementId, ElementId> > impactedUnknown1ElementIdsAsList(
+      impactedUnknown1ElementIds.begin(), impactedUnknown1ElementIds.end());
+    QList< pair<ElementId, ElementId> > impactedUnknown1ElementIdsAsList2 =
+      QList <pair<ElementId, ElementId> >::fromStdList(impactedUnknown1ElementIdsAsList);
+    //sort from highest to lowest element id keys, since when using the positive id generator,
+    //later elements created by the conflation may have been replaced more than once
+    LOG_VART(impactedUnknown1ElementIdsAsList2);
+    if (ConfigOptions().getIdGenerator() == "hoot::PositiveIdGenerator")
+    {
+      qSort(impactedUnknown1ElementIdsAsList2.begin(), impactedUnknown1ElementIdsAsList2.end(),
+            elementIdPairCompare);
+    }
+    LOG_VART(impactedUnknown1ElementIdsAsList2);
+    for (QList< pair<ElementId, ElementId> >::const_iterator it =
+         impactedUnknown1ElementIdsAsList2.begin();
+         it != impactedUnknown1ElementIdsAsList2.end(); ++it)
     {
       ElementId eid1 = it->first;
       ElementId eid2 = it->second;
-      LOG_VARD(eid1);
-      LOG_VARD(eid2);
+      LOG_VART(eid1);
+      LOG_VART(eid2);
 
       if (eid1.getType() == eid2.getType())
       {
-        LOG_DEBUG("Setting " << eid1.getId() << " on " << eid2.getId() << "...");
+        LOG_TRACE("Setting " << eid1 << " on " << eid2 << "...");
         ElementPtr replacementElement = map->getElement(eid2);
-        LOG_VARD(replacementElement->getElementId().getType());
+        LOG_VART(replacementElement.get());
+        LOG_VART(replacementElement->getElementId().getType());
         ElementPtr newUnknown1Element(replacementElement->clone());
         newUnknown1Element->setId(eid1.getId());
         //TODO: I believe this should be status=3, but I'm not 100% convinced yet.

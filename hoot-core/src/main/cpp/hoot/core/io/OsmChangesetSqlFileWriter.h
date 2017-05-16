@@ -114,7 +114,6 @@ private:
   /** Settings from the config file */
   long _changesetMaxSize;
   double _changesetUserId;
-  bool _changesetGenerateNewIds;
 
   friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 

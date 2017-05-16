@@ -24,45 +24,44 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBAWAREHOOTAPIDBWRITER_H
-#define OSMAPIDBAWAREHOOTAPIDBWRITER_H
+#include "NonIdRemappingHootApiDbWriter.h"
 
-#include "HootApiDbWriter.h"
-#include "OsmApiDb.h"
+// hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * Hoot api db writer that doesn't allow hoot api db element id's to clash with a specified osm api
- * db's id's (osm api db is the id master reference).
- */
-class OsmApiDbAwareHootApiDbWriter : public HootApiDbWriter
+HOOT_FACTORY_REGISTER(OsmMapWriter, NonIdRemappingHootApiDbWriter)
+
+NonIdRemappingHootApiDbWriter::NonIdRemappingHootApiDbWriter() :
+HootApiDbWriter()
 {
-public:
-
-  static std::string className() { return "hoot::OsmApiDbAwareHootApiDbWriter"; }
-
-  OsmApiDbAwareHootApiDbWriter();
-
-  virtual ~OsmApiDbAwareHootApiDbWriter();
-
-  virtual void open(QString urlStr);
-
-  virtual void writePartial(const ConstNodePtr& n);
-  virtual void writePartial(const ConstWayPtr& w);
-  virtual void writePartial(const ConstRelationPtr& r);
-
-protected:
-
-  virtual long _getRemappedElementId(const ElementId& eid);
-
-private:
-
-  OsmApiDb _osmApiDb;
-
-};
-
 }
 
-#endif // OSMAPIDBAWAREHOOTAPIDBWRITER_H
+long NonIdRemappingHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
+{
+  switch(eid.getType().getEnum())
+  {
+  case ElementType::Node:
+    _nodeRemap[eid.getId()] = eid.getId();
+    break;
+
+  case ElementType::Way:
+    _wayRemap[eid.getId()] = eid.getId();
+    break;
+
+  case ElementType::Relation:
+    _relationRemap[eid.getId()] = eid.getId();
+    break;
+
+  default:
+    LOG_ERROR("Tried to create or remap ID for invalid type");
+    throw NotImplementedException();
+  }
+
+  LOG_TRACE("No ID remap performed.  Returning original ID " << eid);
+  return eid.getId();
+}
+
+}

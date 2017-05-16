@@ -12,6 +12,8 @@ set -e
 #   - writes out a sql changeset file that is the difference between the original OSM API database reference dataset and the conflated output in the Hoot API database
 #   - executes the changeset file SQL against the OSM API database
 #   - reads out the entire contents of the OSM API database and verifies it
+# TODO: if we add xml changeset apply capabilities, then this script will need to take in a test type param and run twice 
+# for each test, once for sql and once for xml OR create two completely separate scripts
 
 REF_DATASET=$1
 SEC_DATASET=$2
@@ -108,7 +110,9 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   echo ""
   # We're writing the output to the hoot api db first here, rather than directly to the osm api db, b/c if there are reviews 
   # we want to give the user a chance to review them.  That can only happen when the output is stored in a hoot api db.
-  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids=true -D preserve.unknown1.element.id.when.modifying.features=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8-conflated-$TEST_NAME"
+  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.1=true -D reader.conflate.use.data.source.ids.2=true -D preserve.unknown1.element.id.when.modifying.features=true -D osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader -D osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter -D osmapidb.id.aware.url=$OSM_API_DB_URL $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+
+  hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.1=true -D reader.conflate.use.data.source.ids.2=false -D id.generator=hoot::PositiveIdGenerator -D osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter -D preserve.unknown1.element.id.when.modifying.features=true $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
@@ -126,40 +130,37 @@ if [ "$RUN_DEBUG_STEPS" == "true" ]; then
 fi
 
 echo ""
-echo "STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
+echo "STEP 11: Writing a changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI..."
 echo ""
-hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.from.features=false -D changeset.compare.status=false $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
-echo ""
-echo "STEP 12: Writing an XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI (will not be applied to the database)..."
-echo ""
+hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.from.features=false -D changeset.compare.status=false $OSM_API_DB_URL "$HOOT_DB_URL/8a-conflated-$TEST_NAME" $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+
 # changeset.xml.writer.add.timestamp should only be set false for this test's purposes; leave it set to the default value of
 # true for production purposes
-hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D osm.changeset.sql.file.writer.generate.new.ids=false -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.from.features=false -D changeset.compare.status=false -D changeset.xml.writer.add.timestamp=false $OSM_API_DB_URL "$HOOT_DB_URL/8-conflated-$TEST_NAME" $OUTPUT_DIR/12-conflated-changeset-ToBeAppliedToOsmApiDb.osc
+hoot derive-changeset $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D reader.use.file.status=true -D reader.keep.file.status=true -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.buffer=0.001 -D changeset.allow.deleting.from.features=false -D changeset.compare.status=false -D changeset.xml.writer.add.timestamp=false $OSM_API_DB_URL "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
 
 echo ""
-echo "STEP 13: Executing the changeset SQL on the osm api db..."
+echo "STEP 12: Executing the changeset SQL on the osm api db..."
 echo ""
-hoot apply-changeset $HOOT_OPTS $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
+# we don't have any way in core of applying xml changesets
+hoot apply-changeset $HOOT_OPTS $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql $OSM_API_DB_URL
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
-  echo "STEP 14: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debug)..."
+  echo "STEP 13: Reading the contents of the osm api db for the specified aoi, writing it into a file, and verifying it (debug)..."
   echo ""
-  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D writer.include.circular.error.tags=false -D convert.bounding.box=$AOI $OSM_API_DB_URL $OUTPUT_DIR/14-subset-output-PulledFromOsmApiDb.osm
+  hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D writer.include.circular.error.tags=false -D convert.bounding.box=$AOI $OSM_API_DB_URL $OUTPUT_DIR/13-subset-output-PulledFromOsmApiDb.osm
 fi
 
 echo ""
-echo "STEP 15: Reading the entire contents of the osm api db, writing it into a file, and verifying the data..."
+echo "STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying the data..."
 echo ""
-hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/15-complete-output-PulledFromOsmApiDb.osm
-hoot is-match test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/15-complete-output-PulledFromOsmApiDb.osm
+hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot is-match test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+
 echo ""
-echo "STEP 16: Verifying the SQL changeset..."
+echo "STEP 15: Verifying the changesets..."
 echo ""
-diff test-files/cmd/slow/$TEST_NAME/output.osc.sql $OUTPUT_DIR/11-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
-echo ""
-echo "STEP 17: Verifying the XML changeset..."
-echo ""
-diff test-files/cmd/slow/$TEST_NAME/output.osc $OUTPUT_DIR/12-conflated-changeset-ToBeAppliedToOsmApiDb.osc
+diff test-files/cmd/slow/$TEST_NAME/output.osc.sql $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
+diff test-files/cmd/slow/$TEST_NAME/output.osc $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
 
 

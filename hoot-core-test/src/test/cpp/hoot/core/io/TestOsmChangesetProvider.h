@@ -34,6 +34,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/util/Log.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -116,6 +117,7 @@ public:
       break;
     }
     _ctr++;
+    LOG_VART(change);
     return change;
   }
 

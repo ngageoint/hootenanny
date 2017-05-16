@@ -38,30 +38,30 @@
             <tag k="error:circular" v="15"/>
         </node>
         <node id="-8" version="0" lat="31.1806942014484996" lon="34.0508434650486009">
-            <tag k="hoot:id" v="-82"/>
+            <tag k="hoot:id" v="136"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-9" version="0" lat="31.1798581538179000" lon="34.0563642624791996">
-            <tag k="hoot:id" v="-96"/>
+        <node id="-9" version="0" lat="31.1800186168267004" lon="34.0525847494192035">
+            <tag k="hoot:id" v="141"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-10" version="0" lat="31.1798141000056006" lon="34.0513880469564967">
-            <tag k="hoot:id" v="-92"/>
+        <node id="-10" version="0" lat="31.1790643923775015" lon="34.0528070894873025">
+            <tag k="hoot:id" v="142"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-11" version="0" lat="31.1790643923775015" lon="34.0528070894873025">
-            <tag k="hoot:id" v="-88"/>
+        <node id="-11" version="0" lat="31.1798141000056006" lon="34.0513880469564967">
+            <tag k="hoot:id" v="146"/>
             <tag k="hoot:status" v="1"/>
         </node>
-        <node id="-12" version="0" lat="31.1800186168267004" lon="34.0525847494192035">
-            <tag k="hoot:id" v="-87"/>
+        <node id="-12" version="0" lat="31.1798581538179000" lon="34.0563642624791996">
+            <tag k="hoot:id" v="150"/>
             <tag k="hoot:status" v="1"/>
         </node>
     </create>
     <modify>
         <way id="10" version="1">
             <nd ref="15"/>
-            <nd ref="-9"/>
+            <nd ref="-12"/>
             <tag k="hoot:id" v="10"/>
             <tag k="hoot:status" v="3"/>
             <tag k="source" v="Bing"/>
@@ -72,7 +72,7 @@
     </modify>
     <modify>
         <way id="17" version="1">
-            <nd ref="-10"/>
+            <nd ref="-11"/>
             <nd ref="39"/>
             <nd ref="5"/>
             <tag k="hoot:id" v="17"/>
@@ -83,8 +83,8 @@
             <tag k="error:circular" v="15"/>
         </way>
         <way id="19" version="1">
-            <nd ref="-12"/>
-            <nd ref="-11"/>
+            <nd ref="-9"/>
+            <nd ref="-10"/>
             <tag k="hoot:id" v="19"/>
             <tag k="hoot:status" v="3"/>
             <tag k="source" v="digitalglobe"/>
@@ -95,80 +95,79 @@
     </modify>
     <create>
         <way id="-1" version="0">
-            <nd ref="-3"/>
-            <nd ref="-4"/>
-            <tag k="hoot:id" v="-6"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="highway" v="road"/>
+            <nd ref="10"/>
+            <nd ref="26"/>
+            <nd ref="30"/>
+            <tag k="hoot:id" v="25"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="Bing"/>
+            <tag k="highway" v="unclassified"/>
+            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
             <tag k="error:circular" v="15"/>
         </way>
         <way id="-2" version="0">
-            <nd ref="-6"/>
-            <nd ref="-5"/>
-            <nd ref="-3"/>
-            <tag k="hoot:id" v="-5"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="highway" v="road"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-        <way id="-3" version="0">
             <nd ref="30"/>
             <nd ref="12"/>
             <nd ref="28"/>
             <nd ref="14"/>
-            <tag k="hoot:id" v="-4"/>
+            <tag k="hoot:id" v="27"/>
             <tag k="hoot:status" v="1"/>
             <tag k="source" v="Bing"/>
             <tag k="highway" v="unclassified"/>
             <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="-4" version="0">
-            <nd ref="10"/>
-            <nd ref="26"/>
-            <nd ref="30"/>
-            <tag k="hoot:id" v="-2"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="source" v="Bing"/>
-            <tag k="highway" v="unclassified"/>
-            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-        <way id="-5" version="0">
-            <nd ref="-9"/>
-            <nd ref="25"/>
-            <nd ref="31"/>
-            <nd ref="10"/>
-            <tag k="hoot:id" v="-195"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="source" v="Bing"/>
-            <tag k="highway" v="unclassified"/>
-            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
-            <tag k="error:circular" v="15"/>
-        </way>
-        <way id="-6" version="0">
-            <nd ref="-10"/>
-            <nd ref="-1"/>
-            <nd ref="-12"/>
-            <tag k="hoot:id" v="-192"/>
+        <way id="-3" version="0">
+            <nd ref="-6"/>
+            <nd ref="-5"/>
+            <nd ref="-3"/>
+            <tag k="hoot:id" v="28"/>
             <tag k="hoot:status" v="2"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="-7" version="0">
-            <nd ref="6"/>
-            <nd ref="-10"/>
-            <tag k="hoot:id" v="-189"/>
+        <way id="-4" version="0">
+            <nd ref="-3"/>
+            <nd ref="-4"/>
+            <tag k="hoot:id" v="29"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="highway" v="road"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-5" version="0">
+            <nd ref="-3"/>
+            <nd ref="29"/>
+            <tag k="hoot:id" v="188"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="highway" v="road"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-6" version="0">
+            <nd ref="24"/>
+            <nd ref="-8"/>
+            <nd ref="3"/>
+            <nd ref="4"/>
+            <tag k="hoot:id" v="191"/>
             <tag k="hoot:status" v="3"/>
+            <tag k="source" v="digitalglobe"/>
+            <tag k="highway" v="residential"/>
+            <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-7" version="0">
+            <nd ref="5"/>
+            <nd ref="-9"/>
+            <tag k="hoot:id" v="205"/>
+            <tag k="hoot:status" v="1"/>
             <tag k="source" v="digitalglobe"/>
             <tag k="highway" v="residential"/>
             <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
             <tag k="error:circular" v="15"/>
         </way>
         <way id="-8" version="0">
-            <nd ref="-11"/>
+            <nd ref="-10"/>
             <nd ref="30"/>
-            <tag k="hoot:id" v="-183"/>
+            <tag k="hoot:id" v="206"/>
             <tag k="hoot:status" v="1"/>
             <tag k="source" v="digitalglobe"/>
             <tag k="highway" v="residential"/>
@@ -176,33 +175,34 @@
             <tag k="error:circular" v="15"/>
         </way>
         <way id="-9" version="0">
-            <nd ref="5"/>
-            <nd ref="-12"/>
-            <tag k="hoot:id" v="-182"/>
-            <tag k="hoot:status" v="1"/>
+            <nd ref="6"/>
+            <nd ref="-11"/>
+            <tag k="hoot:id" v="212"/>
+            <tag k="hoot:status" v="3"/>
             <tag k="source" v="digitalglobe"/>
             <tag k="highway" v="residential"/>
             <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
             <tag k="error:circular" v="15"/>
         </way>
         <way id="-10" version="0">
-            <nd ref="24"/>
-            <nd ref="-8"/>
-            <nd ref="3"/>
-            <nd ref="4"/>
-            <tag k="hoot:id" v="-168"/>
-            <tag k="hoot:status" v="3"/>
-            <tag k="source" v="digitalglobe"/>
-            <tag k="highway" v="residential"/>
-            <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
+            <nd ref="-11"/>
+            <nd ref="-1"/>
+            <nd ref="-9"/>
+            <tag k="hoot:id" v="215"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="highway" v="road"/>
             <tag k="error:circular" v="15"/>
         </way>
         <way id="-11" version="0">
-            <nd ref="-3"/>
-            <nd ref="29"/>
-            <tag k="hoot:id" v="-165"/>
-            <tag k="hoot:status" v="2"/>
-            <tag k="highway" v="road"/>
+            <nd ref="-12"/>
+            <nd ref="25"/>
+            <nd ref="31"/>
+            <nd ref="10"/>
+            <tag k="hoot:id" v="218"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="Bing"/>
+            <tag k="highway" v="unclassified"/>
+            <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
             <tag k="error:circular" v="15"/>
         </way>
     </create>

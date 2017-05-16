@@ -1389,14 +1389,6 @@ This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmAp
 It forces database reading/writing use the specified OSM API database as master for determining the
 sequencing of element ID's.
 
-=== osm.changeset.sql.file.writer.generate.new.ids
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the OSM changeset sql file writer will generate new ID's for elements being created.
-Otherwise, it will use the ID's of the elements passed to it.
-
 === osm.map.reader.factory.reader
 
 * Data Type: string
@@ -1906,13 +1898,23 @@ reported.
 
 By default add the `source:datetime` stamp when reading files.  Not honored by all readers.
 
-=== reader.conflate.use.data.source.ids
+=== reader.conflate.use.data.source.ids.1
 
 * Data Type: bool
 * Default Value: `false`
 
-Determines whether the reader used by the conflate command will use the element ID's specified
-by the input datasets (true) or use internal ID management for the inputs (false).
+Determines whether the reader used by the conflate command to read the first input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
+=== reader.conflate.use.data.source.ids.2
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command to read the second input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
 
 === reader.keep.file.status
 

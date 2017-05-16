@@ -44,8 +44,7 @@ namespace hoot
 OsmChangesetSqlFileWriter::OsmChangesetSqlFileWriter(QUrl url) :
 _changesetId(0),
 _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-_changesetUserId(ConfigOptions().getChangesetUserId()),
-_changesetGenerateNewIds(ConfigOptions().getOsmChangesetSqlFileWriterGenerateNewIds())
+_changesetUserId(ConfigOptions().getChangesetUserId())
 {
   _db.open(url);
 }
@@ -181,21 +180,28 @@ ElementPtr OsmChangesetSqlFileWriter::_getChangeElement(ConstElementPtr element)
   return changeElement;
 }
 
-// If osm.changeset.file.writer.generate.new.ids is false, then these create methods assume
-// you've already set the ID correctly in terms of the OSM API target db for the element to be
-// created.
-//TODO: Can we get rid of the generate new ID's option now?
+// These create methods assume you've already set the ID correctly in terms of preventing
+// conflicts with the OSM API target db for the element to be created.  The one exception is
+// for new elements with negative ids.
 
 void OsmChangesetSqlFileWriter::_createNewElement(ConstElementPtr element)
 {
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
 
+  //we only grab and assign a new id if we have a new element with a negative id, since we'll be
+  //writing this directly to the database and negative ids aren't allowed
+  LOG_TRACE("ID before: " << changeElement->getElementId());
   long id;
-  if (_changesetGenerateNewIds)
+  if (changeElement->getId() < 0)
+  {
     id = _db.getNextId(element->getElementType().getEnum());
+  }
   else
+  {
     id = changeElement->getId();
+  }
+  LOG_TRACE("ID after: " << ElementId(changeElement->getElementType(), id));
 
   changeElement->setId(id);
   changeElement->setVersion(1);
@@ -510,7 +516,7 @@ void OsmChangesetSqlFileWriter::_createWayNodes(ConstWayPtr way)
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     const long nodeId = nodeIds.at(i);
-    LOG_VART(nodeId);
+    LOG_VART(ElementId(ElementType::Node, nodeId));
 
     QString values =
       QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
@@ -536,7 +542,7 @@ void OsmChangesetSqlFileWriter::_createRelationMembers(ConstRelationPtr relation
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry member = members[i];
-    LOG_VART(member.toString());
+    LOG_VART(member.getElementId());
 
     QString values =
       QString(

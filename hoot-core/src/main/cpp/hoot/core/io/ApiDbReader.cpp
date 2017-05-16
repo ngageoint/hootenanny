@@ -76,6 +76,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
   LOG_VART(oldId);
+  LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {
     result = oldId;
@@ -89,36 +90,42 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
       if (_nodeIdMap.count(id) > 0)
       {
         result = ElementId::node(_nodeIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextNodeId();
         _nodeIdMap[id] = newId;
         result = ElementId::node(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Way:
       if (_wayIdMap.count(id) > 0)
       {
         result = ElementId::way(_wayIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextWayId();
         _wayIdMap[id] = newId;
         result = ElementId::way(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Relation:
       if (_relationIdMap.count(id) > 0)
       {
         result = ElementId::relation(_relationIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextRelationId();
         _relationIdMap[id] = newId;
         result = ElementId::relation(newId);
+        LOG_VART(result);
       }
       break;
     default:
@@ -126,7 +133,6 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
         QString::number(oldId.getType().getEnum()));
     }
   }
-  LOG_VART(result);
 
   return result;
 }

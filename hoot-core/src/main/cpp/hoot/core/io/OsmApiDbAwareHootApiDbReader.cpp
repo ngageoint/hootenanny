@@ -71,41 +71,41 @@ ElementId OsmApiDbAwareHootApiDbReader::_mapElementId(const OsmMap& /*map*/, Ele
   switch (oldId.getType().getEnum())
   {
     case ElementType::Node:
-    if (_nodeIdMap.count(id) > 0)
-    {
-      result = ElementId::node(_nodeIdMap.at(id));
-    }
-    else
-    {
-      long newId = _osmApiDb.getNextId(ElementType::Node);
-      _nodeIdMap[id] = newId;
-      result = ElementId::node(newId);
-    }
-    break;
+      if (_nodeIdMap.count(id) > 0)
+      {
+        result = ElementId::node(_nodeIdMap.at(id));
+      }
+      else
+      {
+        long newId = _osmApiDb.getNextId(ElementType::Node);
+        _nodeIdMap[id] = newId;
+        result = ElementId::node(newId);
+      }
+      break;
     case ElementType::Way:
-    if (_wayIdMap.count(id) > 0)
-    {
-      result = ElementId::way(_wayIdMap.at(id));
-    }
-    else
-    {
-      long newId = _osmApiDb.getNextId(ElementType::Way);
-      _wayIdMap[id] = newId;
-      result = ElementId::way(newId);
-    }
-    break;
+      if (_wayIdMap.count(id) > 0)
+      {
+        result = ElementId::way(_wayIdMap.at(id));
+      }
+      else
+      {
+        long newId = _osmApiDb.getNextId(ElementType::Way);
+        _wayIdMap[id] = newId;
+        result = ElementId::way(newId);
+      }
+      break;
     case ElementType::Relation:
-    if (_relationIdMap.count(id) > 0)
-    {
-      result = ElementId::relation(_relationIdMap.at(id));
-    }
-    else
-    {
-      long newId = _osmApiDb.getNextId(ElementType::Relation);
-      _relationIdMap[id] = newId;
-      result = ElementId::relation(newId);
-    }
-    break;
+      if (_relationIdMap.count(id) > 0)
+      {
+        result = ElementId::relation(_relationIdMap.at(id));
+      }
+      else
+      {
+        long newId = _osmApiDb.getNextId(ElementType::Relation);
+        _relationIdMap[id] = newId;
+        result = ElementId::relation(newId);
+      }
+      break;
     default:
       throw IllegalArgumentException("Expected a valid element type, but got: " +
                                      QString::number(oldId.getType().getEnum()));

@@ -17,7 +17,7 @@
             <tag k="accuracy" v="1000"/>
             <tag k="note" v="2-c"/>
             <tag k="poi" v="yes"/>
-            <tag k="hoot:id" v="119"/>
+            <tag k="hoot:id" v="80"/>
             <tag k="hoot:status" v="2"/>
             <tag k="name" v="Starbucks"/>
             <tag k="amenity" v="cafe"/>
@@ -27,7 +27,7 @@
             <tag k="accuracy" v="1000"/>
             <tag k="note" v="2-b"/>
             <tag k="poi" v="yes"/>
-            <tag k="hoot:id" v="121"/>
+            <tag k="hoot:id" v="82"/>
             <tag k="hoot:status" v="2"/>
             <tag k="name" v="Starbucks"/>
             <tag k="amenity" v="cafe"/>
@@ -37,7 +37,7 @@
             <tag k="accuracy" v="150"/>
             <tag k="note" v="2-e"/>
             <tag k="poi" v="yes"/>
-            <tag k="hoot:id" v="122"/>
+            <tag k="hoot:id" v="83"/>
             <tag k="hoot:status" v="2"/>
             <tag k="name" v="Starbucks"/>
             <tag k="amenity" v="cafe"/>
@@ -47,7 +47,7 @@
             <tag k="accuracy" v="1000"/>
             <tag k="note" v="2-d"/>
             <tag k="poi" v="yes"/>
-            <tag k="hoot:id" v="124"/>
+            <tag k="hoot:id" v="85"/>
             <tag k="hoot:status" v="2"/>
             <tag k="name" v="Starbucks"/>
             <tag k="amenity" v="cafe"/>
