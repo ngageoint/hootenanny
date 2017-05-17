@@ -13,10 +13,11 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
-export LIBRARY_PATH=$LIBRARY_PATH:/usr/pgsql-9.2/lib
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/pgsql-9.2/lib
+# Sort out what version of Postgres we have - MJ
+PG_VERSION=`ls /etc/init.d | grep postgresql- | sort | tail -1 | egrep -o '[0-9]{1,}\.[0-9]{1,}'`
 
-aclocal && autoconf && autoheader && automake --add-missing && ./configure --quiet --with-rnd --with-services
+aclocal && autoconf && autoheader && automake --add-missing && \
+  ./configure --quiet --with-rnd --with-services --with-postgresql=/usr/pgsql-$PG_VERSION/bin/pg_config
 
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
