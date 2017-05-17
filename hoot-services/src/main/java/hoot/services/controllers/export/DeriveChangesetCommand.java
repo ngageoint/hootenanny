@@ -48,18 +48,14 @@ class DeriveChangesetCommand extends ExportCommand {
 
         String aoi = getAOI(params, conflatedMap);
 
-        //The command line workflow also used reader.add.source.datetime=false and 
-        //reader.preserve.all.tags=true here...not convinced yet we need it here.
+        //This is set up for the XML changeset workflow.
         List<String> options = super.getCommonExportHootOptions();
         options.add("convert.bounding.box=" + aoi);
-        options.add("osm.changeset.sql.file.writer.generate.new.ids=false");
         options.add("api.db.email=test@test.com");
         options.add("reader.use.file.status=true");
         options.add("reader.keep.file.status=true");
         double changesetBufferSize = Double.parseDouble(CHANGESET_DERIVE_BUFFER); //in degrees
         options.add("changeset.buffer=" + String.valueOf(changesetBufferSize));
-        options.add("changeset.allow.deleting.from.features=false");
-        options.add("changeset.compare.status=false");
 
         String userId = params.getUserId();
         if (userId != null) {

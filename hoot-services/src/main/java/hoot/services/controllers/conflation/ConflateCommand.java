@@ -112,31 +112,25 @@ class ConflateCommand extends ExternalCommand {
         String input2 = input2Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput2()) : params.getInput2();
 
         String referenceLayer = params.getReferenceLayer();
-        //The command line workflow also used reader.add.source.datetime=false and 
-        //reader.preserve.all.tags=true here...not convinced yet we need it here.
+        //This is set up for the XML changeset workflow.
         if (referenceLayer.equalsIgnoreCase("1")) {
             if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
-                input1 = OSMAPI_DB_URL;
-                options.add("convert.bounding.box=" + aoi);
-                options.add("reader.conflate.use.data.source.ids=true");
-                options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
-                options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
-                options.add("preserve.unknown1.element.id.when.modifying.features=true");
+                input1 = OSMAPI_DB_URL; 
             }
         }
         else if (referenceLayer.equalsIgnoreCase("2")) {
             options.add("tag.merger.default=hoot::OverwriteTag1Merger");
             if (input2Type.equalsIgnoreCase("OSM_API_DB")) {
                 input2 = OSMAPI_DB_URL;
-                options.add("convert.bounding.box=" + aoi);
-                options.add("reader.conflate.use.data.source.ids=true");
-                options.add("osm.map.reader.factory.reader=hoot::OsmApiDbAwareHootApiDbReader");
-                options.add("osm.map.writer.factory.writer=hoot::OsmApiDbAwareHootApiDbWriter");
-                options.add("osmapidb.id.aware.url=" + OSMAPI_DB_URL);
-                options.add("preserve.unknown1.element.id.when.modifying.features=true");
             }
         }
+        options.add("convert.bounding.box=" + aoi);
+        options.add("reader.conflate.use.data.source.ids=true");
+        options.add("reader.conflate.use.data.source.ids.1=true");
+        options.add("reader.conflate.use.data.source.ids.2=false");
+        options.add("id.generator=hoot::PositiveIdGenerator");
+        options.add("osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter");
+        options.add("preserve.unknown1.element.id.when.modifying.features=true");
 
         String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
 
