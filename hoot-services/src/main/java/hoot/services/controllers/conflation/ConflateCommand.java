@@ -112,7 +112,6 @@ class ConflateCommand extends ExternalCommand {
         String input2 = input2Type.equalsIgnoreCase("DB") ? (HOOTAPI_DB_URL + "/" + params.getInput2()) : params.getInput2();
 
         String referenceLayer = params.getReferenceLayer();
-        //This is set up for the XML changeset workflow.
         if (referenceLayer.equalsIgnoreCase("1")) {
             if (input1Type.equalsIgnoreCase("OSM_API_DB")) {
                 input1 = OSMAPI_DB_URL; 
@@ -124,13 +123,16 @@ class ConflateCommand extends ExternalCommand {
                 input2 = OSMAPI_DB_URL;
             }
         }
-        options.add("convert.bounding.box=" + aoi);
-        options.add("reader.conflate.use.data.source.ids=true");
-        options.add("reader.conflate.use.data.source.ids.1=true");
-        options.add("reader.conflate.use.data.source.ids.2=false");
-        options.add("id.generator=hoot::PositiveIdGenerator");
-        options.add("osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter");
-        options.add("preserve.unknown1.element.id.when.modifying.features=true");
+        //This is set up for the XML changeset workflow.
+        if (input1Type.equalsIgnoreCase("OSM_API_DB") || input2Type.equalsIgnoreCase("OSM_API_DB"))
+        {
+          options.add("convert.bounding.box=" + aoi);
+          options.add("reader.conflate.use.data.source.ids.1=true");
+          options.add("reader.conflate.use.data.source.ids.2=false");
+          options.add("id.generator=hoot::PositiveIdGenerator");
+          options.add("osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter");
+          options.add("preserve.unknown1.element.id.when.modifying.features=true");
+        }
 
         String output = HOOTAPI_DB_URL + "/" + params.getOutputName();
 
