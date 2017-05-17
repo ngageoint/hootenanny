@@ -78,29 +78,10 @@
         <url-pattern>/config/*</url-pattern>
     </servlet-mapping>
 
-    <!-- GBM - DG's Global Base Map service for commercial clients.
-         As of 09/16/2016 this proxy is still needed by the GUI tier. -->
+    <!-- EVWHS - DG's imagery service for non-commercial clients.
+         As of 05/17/2017 this proxy is still needed by the GUI tier. -->
     <servlet>
-        <servlet-name>gbm</servlet-name>
-        <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
-        <init-param>
-            <param-name>targetUri</param-name>
-            <param-value>https://services.digitalglobe.com</param-value>
-        </init-param>
-        <init-param>
-            <param-name>log</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>gbm</servlet-name>
-        <url-pattern>/gbm/*</url-pattern>
-    </servlet-mapping>
-
-    <!-- EGD - DG's Global Base Map service for non-commercial clients.
-         As of 09/16/2016 this proxy is still needed by the GUI tier. -->
-    <servlet>
-        <servlet-name>egd</servlet-name>
+        <servlet-name>evwhs</servlet-name>
         <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
         <init-param>
             <param-name>targetUri</param-name>
@@ -112,8 +93,8 @@
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>egd</servlet-name>
-        <url-pattern>/egd/*</url-pattern>
+        <servlet-name>evwhs</servlet-name>
+        <url-pattern>/evwhs/*</url-pattern>
     </servlet-mapping>
 
 </web-app>
