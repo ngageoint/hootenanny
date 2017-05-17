@@ -15713,7 +15713,7 @@
     </node>
     <node visible="true" id="3960" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="18.5274080999999988" lon="-72.4805939000000023">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:id" v="3960"/>
         <tag k="hoot:id" v="3960"/>
     </node>
     <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
@@ -22790,7 +22790,7 @@
         <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
         <tag k="source:abs_vert_accuracy" v="-32765"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:id" v="-14"/>
+        <tag k="hoot:id" v="380"/>
         <tag k="hoot:id" v="380"/>
     </way>
     <way visible="true" id="381" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
@@ -22882,7 +22882,7 @@
         <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
         <tag k="source:abs_vert_accuracy" v="-32765"/>
         <tag k="location" v="surface"/>
-        <tag k="hoot:id" v="-13"/>
+        <tag k="hoot:id" v="381"/>
         <tag k="hoot:id" v="381"/>
     </way>
     <way visible="true" id="382" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
@@ -22904,7 +22904,7 @@
         <nd ref="614"/>
         <nd ref="611"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-11"/>
+        <tag k="hoot:id" v="382"/>
         <tag k="source" v="geoeye"/>
         <tag k="source:datetime" v="2010-01-18T18:46:23.000Z"/>
         <tag k="highway" v="path"/>
@@ -22942,7 +22942,7 @@
         <nd ref="506"/>
         <nd ref="3960"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-10"/>
+        <tag k="hoot:id" v="383"/>
         <tag k="source" v="geoeye"/>
         <tag k="highway" v="path"/>
         <tag k="source:datetime" v="2010-01-18T18:46:23.000Z"/>

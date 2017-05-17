@@ -81,13 +81,13 @@ Change ChangesetDeriver::_nextChange()
   {
     _fromE = _from->readNextElement();
     LOG_TRACE("'from' element null and 'from'' has more elements...");
-    LOG_VART(_fromE->getElementId());
+    LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
   }
   if (!_toE.get() && _to->hasMoreElements())
   {
     _toE = _to->readNextElement();
     LOG_TRACE("'to' element null and 'to'' has more elements...");
-    LOG_VART(_toE->getElementId());
+    LOG_TRACE("Next 'to' element: " << _toE->getElementId());
   }
 
   // if we've run out of "from" elements, create all the remaining elements in "to"
@@ -103,7 +103,7 @@ Change ChangesetDeriver::_nextChange()
     _toE = _to->readNextElement();
     if (_toE)
     {
-      LOG_VART(_toE->getElementId());
+      LOG_TRACE("Next 'to' element: " << _toE->getElementId());
     }
   }
   // if we've run out of "to" elements, delete all the remaining elements in "from"
@@ -119,7 +119,7 @@ Change ChangesetDeriver::_nextChange()
     _fromE = _from->readNextElement();
     if (_fromE)
     {
-      LOG_VART(_fromE->getElementId());
+      LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
     }
   }
   else
@@ -135,12 +135,12 @@ Change ChangesetDeriver::_nextChange()
       _toE = _to->readNextElement();
       if (_toE)
       {
-        LOG_VART(_toE->getElementId());
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
       _fromE = _from->readNextElement();
       if (_fromE)
       {
-        LOG_VART(_fromE->getElementId());
+        LOG_TRACE("Next 'from' element: " << _toE->getElementId());
       }
     }
 
@@ -162,7 +162,7 @@ Change ChangesetDeriver::_nextChange()
       _toE = _to->readNextElement();
       if (_toE)
       {
-        LOG_VART(_toE->getElementId());
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
     }
     // if we've run out of "to" elements, delete all the remaining elements in "from"
@@ -178,7 +178,7 @@ Change ChangesetDeriver::_nextChange()
       _fromE = _from->readNextElement();
       if (_fromE)
       {
-        LOG_VART(_fromE->getElementId());
+        LOG_TRACE("Next 'from' element: " << _toE->getElementId());
       }
     }
     else if (_fromE->getElementId() == _toE->getElementId())
@@ -193,19 +193,26 @@ Change ChangesetDeriver::_nextChange()
       _toE = _to->readNextElement();
       if (_toE)
       {
-        LOG_VART(_toE->getElementId());
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
       _fromE = _from->readNextElement(); //this line probably needs more testing
       if (_fromE)
       {
-        LOG_VART(_fromE->getElementId());
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
     else if (_fromE->getElementId() < _toE->getElementId())
     {
-      if (ConfigOptions().getChangesetAllowDeletingFromFeatures() ||
+      //I don't believe hoot conflation is going to delete reference features (could be wrong)...
+      //only modify them.  So, this is a safety feature.  We need to prove this by conflating a lot
+      //more data.
+      //TODO: this logic may need to ref the bounds to be more granular; i.e.  Only prevent deleting
+      //ref features crossing the changeset bounds or split features created from former ref
+      //features crossing the changeset bounds
+
+      if (ConfigOptions().getChangesetAllowDeletingReferenceFeatures() ||
           //this assumes the 'from' dataset was loaded as unknown1
-          (!ConfigOptions().getChangesetAllowDeletingFromFeatures() &&
+          (!ConfigOptions().getChangesetAllowDeletingReferenceFeatures() &&
            _fromE->getStatus() != Status::Unknown1))
       {
         result.type = Change::Delete;
@@ -225,13 +232,14 @@ Change ChangesetDeriver::_nextChange()
         result.e = _fromE;
         LOG_TRACE(
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
-          " due to " << ConfigOptions::getChangesetAllowDeletingFromFeaturesKey() << "=true...");
-      } 
+          " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
+          "=true...");
+      }
 
       _fromE = _from->readNextElement();
       if (_fromE)
       {
-        LOG_VART(_fromE->getElementId());
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
     else
@@ -246,7 +254,7 @@ Change ChangesetDeriver::_nextChange()
       _toE = _to->readNextElement();
       if (_toE)
       {
-        LOG_VART(_toE->getElementId());
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
     }
   }

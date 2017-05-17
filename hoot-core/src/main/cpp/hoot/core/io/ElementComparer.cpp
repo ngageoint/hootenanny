@@ -64,7 +64,9 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 
   if (e1->getElementId() != e2->getElementId() ||
       !(tags1 == tags2) ||
-      (ConfigOptions().getChangesetCompareStatus() && e1->getStatus() != e2->getStatus()) ||
+      //if only the status changed on the element and no other tags or geometries, there's no point
+      //in detecting a change
+      //e1->getStatus() != e2->getStatus() ||
       (e1->getVersion() != e2->getVersion()) ||
       fabs(e1->getCircularError() - e2->getCircularError()) > _threshold)
   {
@@ -74,10 +76,10 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
       {
         LOG_TRACE("compare failed on tags");
       }
-      else if (e1->getStatus() != e2->getStatus())
-      {
-        LOG_TRACE("compare failed on status");
-      }
+//      else if (e1->getStatus() != e2->getStatus())
+//      {
+//        LOG_TRACE("compare failed on status");
+//      }
       else if (e1->getVersion() != e2->getVersion())
       {
         LOG_TRACE("compare failed on version");

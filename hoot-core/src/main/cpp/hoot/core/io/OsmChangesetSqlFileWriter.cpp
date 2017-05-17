@@ -71,6 +71,7 @@ void OsmChangesetSqlFileWriter::write(const QString path, ChangeSetProviderPtr c
 
   while (changesetProvider->hasMoreChanges())
   {
+    LOG_TRACE("Reading next SQL change...");
     Change change = changesetProvider->readNextChange();
     switch (change.type)
     {

@@ -49,9 +49,9 @@ public:
 
   virtual void open(QString urlStr);
 
-  virtual void writePartial(const ConstNodePtr& n);
-  virtual void writePartial(const ConstWayPtr& w);
-  virtual void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstNodePtr& node);
+  virtual void writePartial(const ConstWayPtr& way);
+  virtual void writePartial(const ConstRelationPtr& relation);
 
 protected:
 

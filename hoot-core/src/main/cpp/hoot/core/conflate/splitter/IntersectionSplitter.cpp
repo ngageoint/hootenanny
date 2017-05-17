@@ -260,13 +260,11 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
             way->getStatus() == Status::Unknown1)
         {
-          //With this option enabled, we want to retain the element ID of the original modified
-          //unknown1 way for provenance purposes.  So, we'll arbitrarily replace the ID on the
-          //first way in the split group with the unknown1 ID.
+          //see similar notes in HighwaySnapMerger::_mergePair
 
           LOG_TRACE(
-            "Setting " << way->getElementId().getId() << " on " << splits[0]->getElementId() <<
-            "...");
+            "Setting unknown1 " << way->getElementId().getId() << " on " <<
+            splits[0]->getElementId() << "...");
           ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
           newWaySegment->setId(way->getElementId().getId());
           _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);

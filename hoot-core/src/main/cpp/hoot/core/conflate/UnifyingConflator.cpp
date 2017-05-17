@@ -315,11 +315,11 @@ void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
       impactedUnknown1ElementIds.begin(), impactedUnknown1ElementIds.end());
     QList< pair<ElementId, ElementId> > impactedUnknown1ElementIdsAsList2 =
       QList <pair<ElementId, ElementId> >::fromStdList(impactedUnknown1ElementIdsAsList);
-    //sort from highest to lowest element id keys, since when using the positive id generator,
-    //later elements created by the conflation may have been replaced more than once
     LOG_VART(impactedUnknown1ElementIdsAsList2);
     if (ConfigOptions().getIdGenerator() == "hoot::PositiveIdGenerator")
     {
+      //sort from highest to lowest element id keys, since when using the positive id generator,
+      //later elements created by the conflation may have been replaced more than once
       qSort(impactedUnknown1ElementIdsAsList2.begin(), impactedUnknown1ElementIdsAsList2.end(),
             elementIdPairCompare);
     }
@@ -335,14 +335,13 @@ void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
 
       if (eid1.getType() == eid2.getType())
       {
-        LOG_TRACE("Setting " << eid1 << " on " << eid2 << "...");
+        LOG_TRACE("Setting unknown1: " << eid1 << " on " << eid2 << "...");
         ElementPtr replacementElement = map->getElement(eid2);
         LOG_VART(replacementElement.get());
         LOG_VART(replacementElement->getElementId().getType());
         ElementPtr newUnknown1Element(replacementElement->clone());
         newUnknown1Element->setId(eid1.getId());
-        //TODO: I believe this should be status=3, but I'm not 100% convinced yet.
-        newUnknown1Element->setStatus(Status::Conflated/*Status::Unknown1*/);
+        newUnknown1Element->setStatus(Status::Conflated);
         map->replace(replacementElement, newUnknown1Element);
       }
     }

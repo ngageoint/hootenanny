@@ -153,24 +153,14 @@ Value in degrees by which the specified AOI (convert.bounding.box) will be expan
 changesets.  Setting this too large with some datasets may greatly increase the changeset
 derivation time.
 
-=== changeset.allow.deleting.from.features
+=== changeset.allow.deleting.reference.features
 
 * Data Type: bool
 * Default Value: `true`
 
-If true, changesets derived can issue delete statements for the 'from' dataset (first dataset
-passed to the changeset deriver).  If false, no delete statements will be issued for the 'from'
+If true, changesets derived can issue delete statements for the reference dataset (first dataset
+passed to the changeset deriver).  If false, no delete statements will be issued for the reference
 dataset.
-
-=== changeset.compare.status
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, changeset elements are considered different if they have different statuses.  If false,
-then status does not matter during element comparison.  Setting this to true may result in many
-additional changeset modify statements when Hootenanny changes the status of elements to
-'conflated'.
 
 === changeset.max.size
 

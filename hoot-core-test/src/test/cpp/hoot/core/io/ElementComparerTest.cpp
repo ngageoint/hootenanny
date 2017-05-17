@@ -38,13 +38,16 @@ namespace hoot
 
 class ElementComparerTest : public CppUnit::TestFixture
 {
+    //disabled the status tests here; see comments in ElementComparer::isSame; I don't believe
+    //we need them anymore, but will keep around for the time being until more testing can be
+    //done.
     CPPUNIT_TEST_SUITE(ElementComparerTest);
     CPPUNIT_TEST(runNodeWithinDistanceThresholdTest1);
     CPPUNIT_TEST(runNodeWithinDistanceThresholdTest2);
     CPPUNIT_TEST(runNodeOutsideOfDistanceThresholdTest);
     CPPUNIT_TEST(runNodeDifferentIdsTest);
     CPPUNIT_TEST(runNodeDifferentTagsTest);
-    CPPUNIT_TEST(runNodeDifferentStatusTest);
+    //CPPUNIT_TEST(runNodeDifferentStatusTest);
     CPPUNIT_TEST(runNodeDifferentCircularErrorTest);
     CPPUNIT_TEST(runNodeDifferentVersionsTest);
     CPPUNIT_TEST(runWaySameTest);
@@ -52,7 +55,7 @@ class ElementComparerTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runWayDifferentNodesTest);
     CPPUNIT_TEST(runWayDifferentNodeOrderTest);
     CPPUNIT_TEST(runWayDifferentTagsTest);
-    CPPUNIT_TEST(runWayDifferentStatusTest);
+    //CPPUNIT_TEST(runWayDifferentStatusTest);
     CPPUNIT_TEST(runWayDifferentCircularErrorTest);
     CPPUNIT_TEST(runWayDifferentVersionsTest);
     CPPUNIT_TEST(runRelationSameTest);
@@ -61,7 +64,7 @@ class ElementComparerTest : public CppUnit::TestFixture
     CPPUNIT_TEST(runRelationDifferentMembersTest);
     CPPUNIT_TEST(runRelationDifferentMemberRolesTest);
     CPPUNIT_TEST(runRelationDifferentTagsTest);
-    CPPUNIT_TEST(runRelationDifferentStatusTest);
+    //CPPUNIT_TEST(runRelationDifferentStatusTest);
     CPPUNIT_TEST(runRelationDifferentCircularErrorTest);
     CPPUNIT_TEST(runRelationDifferentVersionsTest);
     CPPUNIT_TEST_SUITE_END();

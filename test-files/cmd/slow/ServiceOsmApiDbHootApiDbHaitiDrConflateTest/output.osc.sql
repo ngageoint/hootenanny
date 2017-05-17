@@ -465,8 +465,8 @@ INSERT INTO node_tags (node_id, k, v, version) VALUES (3957, 'hoot:status', '2',
 /* create node 3960*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (3960, 185274081, -724805939, 3, true, (now() at time zone 'utc'), 1642347363, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (3960, 185274081, -724805939, 3, true, (now() at time zone 'utc'), 1642347363, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (3960, 'hoot:id', '-6');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (3960, 'hoot:id', '-6', 1);
+INSERT INTO current_node_tags (node_id, k, v) VALUES (3960, 'hoot:id', '3960');
+INSERT INTO node_tags (node_id, k, v, version) VALUES (3960, 'hoot:id', '3960', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (3960, 'hoot:status', '1');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (3960, 'hoot:status', '1', 1);
 /* modify way 268*/
@@ -665,8 +665,8 @@ INSERT INTO current_way_tags (way_id, k, v) VALUES (380, 'location', 'surface');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (380, 'location', 'surface', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (380, 'source:abs_vert_accuracy', '-32765');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (380, 'source:abs_vert_accuracy', '-32765', 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (380, 'hoot:id', '-14');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (380, 'hoot:id', '-14', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (380, 'hoot:id', '380');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (380, 'hoot:id', '380', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (380, 3960, 1, 1);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (380, 3960, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (380, 3825, 1, 2);
@@ -718,8 +718,8 @@ INSERT INTO current_way_tags (way_id, k, v) VALUES (381, 'location', 'surface');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (381, 'location', 'surface', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (381, 'source:abs_vert_accuracy', '-32765');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (381, 'source:abs_vert_accuracy', '-32765', 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (381, 'hoot:id', '-13');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (381, 'hoot:id', '-13', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (381, 'hoot:id', '381');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (381, 'hoot:id', '381', 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (381, 3893, 1, 1);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (381, 3893, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (381, 3894, 1, 2);
@@ -855,8 +855,8 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (381, 577, 6
 /* create way 382*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (382, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (382, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (382, 'hoot:id', '-11');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (382, 'hoot:id', '-11', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (382, 'hoot:id', '382');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (382, 'hoot:id', '382', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (382, 'hoot:status', '1');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (382, 'hoot:status', '1', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (382, 'source', 'geoeye');
@@ -902,8 +902,8 @@ INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (382, 611, 1
 /* create way 383*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (383, 3, true, (now() at time zone 'utc'), 1);
 INSERT INTO current_ways (id, changeset_id, visible, "timestamp", version) VALUES (383, 3, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_way_tags (way_id, k, v) VALUES (383, 'hoot:id', '-10');
-INSERT INTO way_tags (way_id, k, v, version) VALUES (383, 'hoot:id', '-10', 1);
+INSERT INTO current_way_tags (way_id, k, v) VALUES (383, 'hoot:id', '383');
+INSERT INTO way_tags (way_id, k, v, version) VALUES (383, 'hoot:id', '383', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (383, 'hoot:status', '1');
 INSERT INTO way_tags (way_id, k, v, version) VALUES (383, 'hoot:status', '1', 1);
 INSERT INTO current_way_tags (way_id, k, v) VALUES (383, 'source', 'geoeye');

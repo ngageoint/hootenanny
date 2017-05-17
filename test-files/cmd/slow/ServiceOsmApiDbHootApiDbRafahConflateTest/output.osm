@@ -205,26 +205,26 @@
     </node>
     <node visible="true" id="55" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1806942000000014" lon="34.0508434999999992">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-82"/>
+        <tag k="hoot:id" v="55"/>
         <tag k="hoot:id" v="55"/>
     </node>
     <node visible="true" id="56" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1798582000000017" lon="34.0563642999999985">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-96"/>
+        <tag k="hoot:id" v="56"/>
         <tag k="hoot:id" v="56"/>
     </node>
     <node visible="true" id="57" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1798141000000015" lon="34.0513880000000029">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-92"/>
+        <tag k="hoot:id" v="57"/>
         <tag k="hoot:id" v="57"/>
     </node>
     <node visible="true" id="58" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1790644000000015" lon="34.0528071000000025">
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-88"/>
+        <tag k="hoot:id" v="58"/>
         <tag k="hoot:id" v="58"/>
     </node>
     <node visible="true" id="59" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="31.1800186000000004" lon="34.0525846999999970">
-        <tag k="hoot:id" v="-87"/>
+        <tag k="hoot:id" v="59"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="59"/>
     </node>
@@ -417,7 +417,7 @@
     <way visible="true" id="24" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="50"/>
         <nd ref="51"/>
-        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:id" v="24"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="24"/>
@@ -426,7 +426,7 @@
         <nd ref="53"/>
         <nd ref="52"/>
         <nd ref="50"/>
-        <tag k="hoot:id" v="-5"/>
+        <tag k="hoot:id" v="25"/>
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="25"/>
@@ -437,7 +437,7 @@
         <nd ref="28"/>
         <nd ref="14"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:id" v="26"/>
         <tag k="source" v="Bing"/>
         <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
         <tag k="highway" v="unclassified"/>
@@ -447,7 +447,7 @@
         <nd ref="10"/>
         <nd ref="26"/>
         <nd ref="30"/>
-        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:id" v="27"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source" v="Bing"/>
         <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
@@ -460,7 +460,7 @@
         <nd ref="31"/>
         <nd ref="10"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-195"/>
+        <tag k="hoot:id" v="28"/>
         <tag k="source" v="Bing"/>
         <tag k="source:datetime" v="2016-08-06T20:08:03Z"/>
         <tag k="highway" v="unclassified"/>
@@ -471,7 +471,7 @@
         <nd ref="45"/>
         <nd ref="59"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-192"/>
+        <tag k="hoot:id" v="29"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="29"/>
     </way>
@@ -479,7 +479,7 @@
         <nd ref="6"/>
         <nd ref="57"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-189"/>
+        <tag k="hoot:id" v="30"/>
         <tag k="source" v="digitalglobe"/>
         <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
         <tag k="highway" v="residential"/>
@@ -489,7 +489,7 @@
         <nd ref="58"/>
         <nd ref="30"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-183"/>
+        <tag k="hoot:id" v="31"/>
         <tag k="source" v="digitalglobe"/>
         <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
         <tag k="highway" v="residential"/>
@@ -499,7 +499,7 @@
         <nd ref="5"/>
         <nd ref="59"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="-182"/>
+        <tag k="hoot:id" v="32"/>
         <tag k="source" v="digitalglobe"/>
         <tag k="source:datetime" v="2016-05-02T23:46:09Z"/>
         <tag k="highway" v="residential"/>
@@ -510,7 +510,7 @@
         <nd ref="55"/>
         <nd ref="3"/>
         <nd ref="4"/>
-        <tag k="hoot:id" v="-168"/>
+        <tag k="hoot:id" v="33"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source" v="digitalglobe"/>
         <tag k="source:datetime" v="2016-05-02T23:46:04Z"/>
@@ -521,7 +521,7 @@
         <nd ref="50"/>
         <nd ref="29"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="-165"/>
+        <tag k="hoot:id" v="34"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="34"/>
     </way>

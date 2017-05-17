@@ -109,6 +109,7 @@ void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
 
     while (cs->hasMoreChanges() && changesetProgress <= _changesetMaxSize)
     {
+      LOG_TRACE("Reading next XML change...");
       _change = cs->readNextChange();
       LOG_VART(_change.toString());
       if (_change.type != last)
