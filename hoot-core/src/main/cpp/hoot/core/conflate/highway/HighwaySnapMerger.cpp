@@ -298,7 +298,9 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     //With this option enabled, we want to retain the element ID of the original modified
     //unknown1 way for provenance purposes.  So, we'll keep a mapping from the unknown 1 ID to the
     //ID on the scraps way, so we can reset the unknown1 ID back on the feature after conflation is
-    //finished.
+    //finished.  Choosing to record a mapping and do the replacement after conflation, as replacing
+    //it here causes internal ID conflicts.  This is in consistent, however, with how this same
+    //thing is being done in some of the other cleaning related classes.
 
     bool unknown1IdRetained = false;
     if (scraps1 && eid1.getType() == scraps1->getElementId().getType() &&
@@ -307,7 +309,8 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         scraps1->getElementId().getType() == eid1.getType())
     {
       LOG_TRACE(
-        "Mapping unknown1 id " << eid1 << " to scrap: " << scraps1->getElementId() << "...");
+        "Retaining reference ID by mapping unknown1 id " << eid1 << " to scrap: " <<
+        scraps1->getElementId() << "...");
       _unknown1Replacements.insert(pair<ElementId, ElementId>(eid1, scraps1->getElementId()));
       unknown1IdRetained = true;
     }
@@ -318,7 +321,8 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
              e1Match->getElementId().getType() == eid1.getType())
     {
       LOG_TRACE(
-        "Mapping unknown1 id " << eid1 << " to e1Match: " << e1Match->getElementId() << "...");
+        "Retaining reference ID by mapping " << eid1 << " to e1Match: " <<
+        e1Match->getElementId() << "...");
       _unknown1Replacements.insert(pair<ElementId, ElementId>(eid1, e1Match->getElementId()));
       unknown1IdRetained = true;
     }

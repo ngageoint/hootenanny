@@ -335,7 +335,9 @@ void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
 
       if (eid1.getType() == eid2.getType())
       {
-        LOG_TRACE("Setting unknown1: " << eid1 << " on " << eid2 << "...");
+        LOG_TRACE(
+          "Retaining reference ID by setting: " << eid1 << " on " << eid2 <<
+          " and setting status to conflated...");
         ElementPtr replacementElement = map->getElement(eid2);
         LOG_VART(replacementElement.get());
         LOG_VART(replacementElement->getElementId().getType());

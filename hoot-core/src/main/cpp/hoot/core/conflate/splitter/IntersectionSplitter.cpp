@@ -256,7 +256,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // they're split.
         _map->replace(way, newWays);
 
-        bool unknown1IdRetained = false;
         if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
             way->getStatus() == Status::Unknown1)
         {
@@ -269,7 +268,6 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
           newWaySegment->setId(way->getElementId().getId());
           _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
           _wayReplacements[splits[0]->getElementId().getId()] = way->getElementId().getId();
-          unknown1IdRetained = true;
         }
 
         _removeWayFromMap(way);
@@ -281,10 +279,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
           _mapNodesToWay(splits[i]);
         }
 
-        if (unknown1IdRetained)
-        {
-          assert(_map->containsElement(splitWayId));
-        }
+        LOG_VART(_map->containsElement(splitWayId));
       }
     }
   }
