@@ -113,11 +113,34 @@ public:
     {
       //allow for calculating the changeset with a slightly larger AOI than the default specified
       //bounding box; useful in certain situations
-      geos::geom::Envelope convertBounds =
-        GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox());
+
+      QString bboxStr;
+      QString convertBoundsParamName;
+      //only one of these three should be specified
+      if (!ConfigOptions().getConvertBoundingBox().isEmpty())
+      {
+        bboxStr = ConfigOptions().getConvertBoundingBox();
+        convertBoundsParamName = ConfigOptions::getConvertBoundingBoxKey();
+      }
+      else if (!ConfigOptions().getConvertBoundingBoxHootApiDatabase().isEmpty())
+      {
+        bboxStr = ConfigOptions().getConvertBoundingBoxHootApiDatabase();
+        convertBoundsParamName = ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey();
+      }
+      else if (!ConfigOptions().getConvertBoundingBoxOsmApiDatabase().isEmpty())
+      {
+        bboxStr = ConfigOptions().getConvertBoundingBoxOsmApiDatabase();
+        convertBoundsParamName = ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey();
+      }
+      else
+      {
+        throw HootException(
+          "A changeset buffer was specified but no convert bounding box was specified.");
+      }
+      geos::geom::Envelope convertBounds = GeometryUtils::envelopeFromConfigString(bboxStr);
       convertBounds.expandBy(changesetBuffer, changesetBuffer);
       conf().set(
-        ConfigOptions::getConvertBoundingBoxKey(),
+        convertBoundsParamName,
         GeometryUtils::envelopeToConfigString(convertBounds));
     }
 
