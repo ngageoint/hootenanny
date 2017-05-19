@@ -184,8 +184,6 @@ public:
   void runCalculateTiePointDistancesNotEnoughTiePointsTest()
   {
     RubberSheet rubberSheet;
-    vector<RubberSheet::Tie> ties;
-    rubberSheet._ties = ties;
 
     QString exceptionMsg("");
     try

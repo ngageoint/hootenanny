@@ -196,7 +196,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
 
     //recursive call
     for (vector<ElementPtr>::const_iterator it = newElementsAfterSplit.begin();
-         it != newElementsAfterSplit.end(); it++)
+         it != newElementsAfterSplit.end(); ++it)
     {
       _split(*it);
     }

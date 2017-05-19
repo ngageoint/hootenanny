@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GreedyStepwiseSearch.h"
@@ -78,15 +78,15 @@ namespace Tgs
       double score = _fse->evaluateSubset(columns);
       bestScore = score;
       bestSolution = columns;
-//       printf("score: %.3f size: %d\n", score, columns.size());
+//      printf("score: %.3f size: %d\n", score, columns.size());
       do
       {
         score = _removeWorst(columns);
 
-//         printf("score: %.3f size: %d\n", score, columns.size());
+//        printf("score: %.3f size: %d\n", score, columns.size());
         for (unsigned int i = 0; i < columns.size(); i++)
         {
-          string s = df.getFactorLabelFromIndex(columns[i]);
+          df.getFactorLabelFromIndex(columns[i]);
         }
         if (score >= bestScore)
         {

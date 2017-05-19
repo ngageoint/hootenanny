@@ -364,7 +364,7 @@ public:
     {
       CPPUNIT_ASSERT(!reader.isSupported("test-files"));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -387,7 +387,7 @@ public:
     {
       reader.open("test-files/fileDoesntExist.osm.pbf");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

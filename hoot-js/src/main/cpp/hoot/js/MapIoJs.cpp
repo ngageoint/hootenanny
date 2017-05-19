@@ -103,11 +103,9 @@ public:
     }
 
     OsmXmlReader reader;
-    bool useDataSourceIds = false;
     if (args.Length() >= 5)
     {
-      useDataSourceIds = toCpp<bool>(args[4]);
-      reader.setUseDataSourceIds(useDataSourceIds);
+      reader.setUseDataSourceIds(toCpp<bool>(args[4]));
     }
     reader.readFromString(mapXml, map->getMap());
 

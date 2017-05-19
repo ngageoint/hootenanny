@@ -53,7 +53,7 @@ void PbfRecordWriter::close()
     _out->flush();
     _out.reset();
   }
-  catch (std::exception& e)
+  catch (const std::exception& e)
   {
     throw HadoopUtils::Error(e.what());
   }

@@ -47,7 +47,7 @@ Plugins::Plugins()
 {
 }
 
-void Plugins::loadAllLibraries(const string& libs)
+void Plugins::loadAllLibraries(const string& libs) throw(Exception)
 {
   QStringList l = QString::fromStdString(libs).split(",");
   for (int i = 0; i < l.size(); i++)

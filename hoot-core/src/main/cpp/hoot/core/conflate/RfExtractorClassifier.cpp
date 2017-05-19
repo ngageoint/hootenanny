@@ -58,7 +58,7 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   std::map<QString, double> features = getFeatures(map, eid1, eid2);
   vector<double> row;
   row.reserve(features.size());
-  for (std::map<QString, double>::const_iterator it = features.begin(); it != features.end(); it++)
+  for (std::map<QString, double>::const_iterator it = features.begin(); it != features.end(); ++it)
   {
     row.push_back(it->second);
   }

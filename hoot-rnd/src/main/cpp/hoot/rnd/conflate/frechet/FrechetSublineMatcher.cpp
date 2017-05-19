@@ -67,7 +67,7 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtr& map
     return WaySublineMatchString();
   }
   vector<WaySublineMatch> v;
-  for (vector<frechet_subline>::iterator it = max.begin(); it != max.end(); it++)
+  for (vector<frechet_subline>::iterator it = max.begin(); it != max.end(); ++it)
   {
     //  Create the way sublines
     subline_entry max_subline = it->second;

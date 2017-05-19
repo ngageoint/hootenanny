@@ -135,20 +135,18 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    {
-      WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
-      WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
+    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
 
-      FrechetSublineMatcher uut;
-      uut.setConfiguration(s);
+    FrechetSublineMatcher uut;
+    uut.setConfiguration(s);
 
-      vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score).getMatches();
-      HOOT_STR_EQUALS(1, m.size());
-      HOOT_STR_EQUALS(
-        "subline 1: start: way: -1 index: 87 fraction: 0 end: way: -1 index: 90 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 4 fraction: 0",
-        m[0].toString());
-    }
+    vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score).getMatches();
+    HOOT_STR_EQUALS(1, m.size());
+    HOOT_STR_EQUALS(
+      "subline 1: start: way: -1 index: 87 fraction: 0 end: way: -1 index: 90 fraction: 0\n"
+      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 4 fraction: 0",
+      m[0].toString());
   }
 
   OsmMapPtr createMap()

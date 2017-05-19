@@ -131,12 +131,13 @@ public:
 
     int getWidth() const { return maxX - minX + 1; }
 
-    void operator=(const PixelBox& pb)
+    PixelBox& operator=(const PixelBox& pb)
     {
       minX = pb.minX;
       maxX = pb.maxX;
       minY = pb.minY;
       maxY = pb.maxY;
+      return *this;
     }
 
     QString toString() const

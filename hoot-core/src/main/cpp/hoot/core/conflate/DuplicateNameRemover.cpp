@@ -60,7 +60,7 @@ void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
 
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
 

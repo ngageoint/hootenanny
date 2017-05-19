@@ -154,7 +154,7 @@ public:
     long total = 0;
     QVector<WordCount> wc;
     wc.reserve(counts.size());
-    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); it++)
+    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); ++it)
     {
       wc.push_back(WordCount(it->first, it->second));
       total += it->second;

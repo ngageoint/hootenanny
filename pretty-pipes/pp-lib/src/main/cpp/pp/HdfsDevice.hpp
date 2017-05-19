@@ -65,13 +65,10 @@ public: // boost iostream concepts
   }
 
   HdfsDevice(const HdfsDevice& other) :
-    _fp(NULL), _fs(NULL), _info(NULL), _initialized(false)
+    _bufferSize(other._bufferSize),
+    _fp(NULL), _fs(NULL), _host(other._host), _info(NULL), _initialized(false),
+    _path(other._path), _port(other._port), _writeOnly(other._writeOnly)
   {
-    _host = other._host;
-    _port = other._port;
-    _path = other._path;
-    _writeOnly = other._writeOnly;
-    _bufferSize = other._bufferSize;
   }
 
   virtual ~HdfsDevice()

@@ -159,9 +159,9 @@ protected:
 
   void _createLayer(boost::shared_ptr<const Layer> layer);
 
-  OGRLayer* _getLayer(const QString layerName);
+  OGRLayer* _getLayer(const QString& layerName);
 
-  OGRLayer* _getLayerByName(const QString layerName);
+  OGRLayer* _getLayerByName(const QString& layerName);
 
   boost::shared_ptr<geos::geom::Geometry> _toMulti(boost::shared_ptr<geos::geom::Geometry> from);
 

@@ -490,7 +490,7 @@ vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
           "description.").arg(scripts[i]));
       }
     }
-    catch (HootException& e)
+    catch (const HootException& e)
     {
       LOG_WARN("Error loading script: " + scripts[i] + " exception: " + e.getWhat());
     }

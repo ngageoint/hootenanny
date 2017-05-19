@@ -54,7 +54,7 @@ public:
 #ifndef SWIG
   Configuration(const std::map<std::string, std::string>& values) : _conf(values) {}
 
-  Configuration(const Configuration& c) : HadoopPipes::JobConf() { _conf = c._conf; }
+  Configuration(const Configuration& c) : HadoopPipes::JobConf(), _conf(c._conf) {}
 
   Configuration& operator=(const Configuration& c) { _conf = c._conf; return *this; }
 #endif

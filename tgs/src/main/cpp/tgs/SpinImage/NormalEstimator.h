@@ -58,7 +58,7 @@ namespace Tgs
 
     NormalEstimator();
 
-    virtual ~NormalEstimator() {};
+    virtual ~NormalEstimator() {}
 
     void calculateNormals(PointCloud& pc);
 
@@ -78,10 +78,10 @@ namespace Tgs
       double cost;
       int parent;
 
-      VertexOrder(int id, double cost, int parent) 
-      { 
-        this->id = id; 
-        this->cost = cost; 
+      VertexOrder(int id, double cost, int parent)
+      {
+        this->id = id;
+        this->cost = cost;
         this->parent = parent;
       }
     };
@@ -91,7 +91,7 @@ namespace Tgs
     {
     public:
       bool operator()(const VertexOrder& _Left, const VertexOrder& _Right) const
-      {	
+      {
         return (_Left.cost > _Right.cost);
       }
     };
@@ -99,14 +99,14 @@ namespace Tgs
     // white box testing
     friend class NormalEstimatorTest;
 
-   boost::shared_ptr<Tgs::HilbertRTree> _rtree;
+    boost::shared_ptr<Tgs::HilbertRTree> _rtree;
     PointCloud* _pc;
     std::vector<int> _nearestNeighbors;
     std::vector<double> _nnDistances;
-   boost::shared_ptr<KnnIteratorNd> _it;
+    boost::shared_ptr<KnnIteratorNd> _it;
     std::vector<double> _nnTmp;
     int _k;
-    
+
     /// this is set to true for a point if its children have been traversed.
     std::vector<bool> _processed;
 

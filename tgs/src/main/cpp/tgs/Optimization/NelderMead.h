@@ -64,10 +64,7 @@ public:
       //cout << "~Vector()" << endl << flush;
     }
 
-    Vector(const Vector& v)
-    {
-      coords = v.coords;
-    }
+    Vector(const Vector& v) : coords(v.coords) { }
 
     Vector(double c0)
     {
@@ -159,7 +156,7 @@ public:
             coords[i] /= factor;
         }
     }
-    bool operator<(const Vector other) const {
+    bool operator<(const Vector& other) const {
         for (int i=0; i<dimension(); i++) {
             if (at(i) < other.at(i))
                 return false;

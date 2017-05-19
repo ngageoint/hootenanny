@@ -247,7 +247,7 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   {
     match = _sublineMatcher->findMatch(result, e1, e2);
   }
-  catch (NeedsReviewException& e)
+  catch (const NeedsReviewException& e)
   {
     LOG_VART(e.getWhat());
     _markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());

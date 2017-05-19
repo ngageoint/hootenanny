@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConsistencySubsetEvaluator.h"
@@ -85,6 +85,11 @@ namespace Tgs
 
   std::vector<int> BinHashFunctor::_columns;
 
+  ConsistencySubsetEvaluator::ConsistencySubsetEvaluator()
+    : _enumCnt(0)
+  {
+  }
+
   int ConsistencySubsetEvaluator::_calculateBin(double v, int column)
   {
     const DataFrame& df = _dataFrame;
@@ -116,7 +121,7 @@ namespace Tgs
     int count = 0;
     int max = 0;
     for (InconsistentInstancesMap::const_iterator it = classes.begin(); it != classes.end();
-      it++)
+      ++it)
     {
       count += *it;
       max = *it > max ? *it : max;
@@ -152,7 +157,7 @@ namespace Tgs
     }
 
     int inconsistencyCount = 0;
-    for (BinMap::const_iterator it = binMap.begin(); it != binMap.end(); it++)
+    for (BinMap::const_iterator it = binMap.begin(); it != binMap.end(); ++it)
     {
       inconsistencyCount += _calculateInconsistentCount(it->second);
     }

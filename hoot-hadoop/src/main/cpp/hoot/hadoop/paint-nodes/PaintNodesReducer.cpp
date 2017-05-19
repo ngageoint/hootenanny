@@ -53,19 +53,16 @@ void PaintNodesReducer::reduce(HadoopPipes::ReduceContext& context)
     }
   }
 
-  int* count;
-
   const string& key = context.getInputKey();
   if (key.size() == sizeof(Pixel))
   {
-    Pixel* p = (Pixel*)(key.data());
+    const Pixel* p = reinterpret_cast<const Pixel*>(key.data());
     int sum = 0;
 
     while (context.nextValue())
     {
       const string& value = context.getInputValue();
-      count = (int*)(value.data());
-      sum += *count;
+      sum += *(reinterpret_cast<const int*>(value.data()));
     }
 
     _writer->emitRaw<Pixel, int>(*p, sum);

@@ -122,7 +122,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
     result.removeEmptyMatches();
     return result;
   }
-  catch(OverlappingMatchesException &e)
+  catch(const OverlappingMatchesException &e)
   {
     throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
       "one set of ways.  Please report this to hootenanny.help@digitalglobe.com.");

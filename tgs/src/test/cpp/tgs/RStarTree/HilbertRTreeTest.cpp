@@ -360,11 +360,10 @@ public:
 
     std::vector<Tmp> bruteForceResults;
     bruteForceResults.resize(testSize);
-    double x, y;
     for (int i = 0; i < sampleSize; i++)
     {
-      x = Tgs::Random::instance()->generateInt() - 3000;
-      y = Tgs::Random::instance()->generateInt() - 3000;
+      double x = Tgs::Random::instance()->generateInt() - 3000;
+      double y = Tgs::Random::instance()->generateInt() - 3000;
 
       for (int j = 0; j < testSize; j++)
       {
@@ -413,11 +412,10 @@ public:
     }
 
     Tgs::Random::instance()->seed(0);
-    double x, y;
     for (int i = 0; i < sampleSize; i++)
     {
-      x = Tgs::Random::instance()->generateInt() - 3000;
-      y = Tgs::Random::instance()->generateInt() - 3000;
+      double x = Tgs::Random::instance()->generateInt() - 3000;
+      double y = Tgs::Random::instance()->generateInt() - 3000;
 
       KnnIterator it(rst.get(), x, y);
       CPPUNIT_ASSERT(it.next());
@@ -577,7 +575,7 @@ public:
     {
       if (found[i] != true)
       {
-        printf("Didn't find %d\n", i);
+        printf("Didn't find %u\n", i);
       }
       CPPUNIT_ASSERT_EQUAL(true, (bool)found[i]);
     }
