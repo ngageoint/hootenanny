@@ -26,6 +26,9 @@
  */
 #include "SampleStats.h"
 
+// QT
+#include <qnumeric.h>
+
 // Standard
 #include <algorithm>
 #include <iostream>
@@ -130,7 +133,7 @@ double SampleStats::calculateUnbiasedStandardDeviation()
       _standardDeviation = sqrt(sumSquares / (double)(_samples.size() - 1));
     }
 
-    if (int(::qIsNaN(_standardDeviation)))
+    if (::qIsNaN(_standardDeviation))
     {
       std::cout << "sd: " << _standardDeviation << endl;
       std::cout << "samples: " << _samples.size() << endl;

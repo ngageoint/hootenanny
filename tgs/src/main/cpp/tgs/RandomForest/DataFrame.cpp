@@ -755,7 +755,7 @@ namespace Tgs
 #   ifdef _WIN32
       return _isnan(v) == 0 ? false : true;
 #   else
-      return ::qIsNaN(v) == 0 ? false : true;
+      return int(::qIsNaN(v)) == 0 ? false : true;
 #   endif
     }
     catch(const Exception & e)
