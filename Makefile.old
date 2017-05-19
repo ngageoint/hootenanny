@@ -235,7 +235,7 @@ plugins/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translat
 # GGDMv30 is built from the GGDMv30 spec with additional layers and values files
 plugins/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
 	mkdir -p $(@D)
-	$< $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
+	$< $(word 2,$^) --withdefs $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
 
 # GGDMv30 full schema
 # This one has all of the Text Enumerations
@@ -378,7 +378,7 @@ archive: js-make services-build docs
 	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
 	# Put the docs in their own compressed file
 	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
-	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
+	cp Makefile.in missing aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/
