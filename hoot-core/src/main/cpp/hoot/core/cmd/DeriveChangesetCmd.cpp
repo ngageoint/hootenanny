@@ -105,14 +105,15 @@ public:
     const QString output = args[2];
 
     LOG_INFO(
-      "Deriving changeset for inputs " << input1 << ", " << input2 << " and writing output to " <<
-      output << "...");
+      "Deriving changeset for inputs " << input1.right(50) << ", " << input2.right(50) <<
+      " and writing output to " <<
+      output.right(50) << "...");
 
     const double changesetBuffer = ConfigOptions().getChangesetBuffer();
     if (changesetBuffer > 0.0)
     {
       //allow for calculating the changeset with a slightly larger AOI than the default specified
-      //bounding box; useful in certain situations
+      //bounding box
 
       QString bboxStr;
       QString convertBoundsParamName;

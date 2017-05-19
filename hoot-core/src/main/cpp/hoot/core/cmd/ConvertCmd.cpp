@@ -84,7 +84,7 @@ public:
 
     QElapsedTimer timer;
     timer.start();
-    LOG_INFO("Converting " << args[0] << " to " << args[1] << "...");
+    LOG_INFO("Converting " << args[0].right(100) << " to " << args[1].right(100) << "...");
 
     // This keeps the status and the tags.
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);

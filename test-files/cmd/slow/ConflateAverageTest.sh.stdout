@@ -1,59 +1,59 @@
-10:50:40.984 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 128) Conflating test-files/DcGisRoads.osm with test-files/DcTigerRoads.osm and writing the output to test-output/cmd/ConflateAverageTest/output.osm
-10:50:40.985 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/DcGisRoads.osm ...
-10:50:41.082 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/DcTigerRoads.osm ...
-10:50:41.153 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 171) Applying pre-conflation operations...
-10:50:41.153 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
-10:50:41.153 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
-10:50:41.153 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
-Reprojecting 0 / 7487         Reprojecting 1000 / 7487         Reprojecting 2000 / 7487         Reprojecting 3000 / 7487         Reprojecting 4000 / 7487         Reprojecting 5000 / 7487         Reprojecting 6000 / 7487         Reprojecting 7000 / 7487         
-10:50:41.214 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
-10:50:41.219 INFO  ...hoot/core/schema/OsmSchema.cpp(1807) Loading translation files...
-10:50:41.295 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
-10:50:41.295 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
-  Intersection splitter todo: 0       10:50:41.311 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
-10:50:41.318 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
-10:50:41.325 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
-10:50:41.332 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
-10:50:41.336 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-10:50:41.352 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
-10:50:41.364 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-10:50:41.378 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
-10:50:41.391 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
-10:50:41.391 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
-10:50:41.447 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
-10:50:41.447 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
-  Intersection splitter todo: 0       10:50:41.460 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
-10:50:41.466 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
-10:50:41.469 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
-10:50:41.476 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
-10:50:41.481 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-10:50:41.496 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
-10:50:41.508 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
-10:50:41.521 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
-10:50:41.534 INFO  ...ore/manipulators/WayMerger.cpp(  92) Finding all way merge manipulations...
+17:03:53.494 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 123) Conflating test-files/DcGisRoads.osm with test-files/DcTigerRoads.osm and writing the output to test-output/cmd/ConflateAverageTest/output.osm
+17:03:53.495 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/DcGisRoads.osm...
+17:03:53.584 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/DcTigerRoads.osm...
+17:03:53.647 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 166) Applying pre-conflation operations...
+17:03:53.647 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+17:03:53.648 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+17:03:53.648 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+
+17:03:53.704 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+17:03:53.708 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+17:03:53.779 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+17:03:53.780 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+17:03:53.797 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+17:03:53.805 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+17:03:53.811 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+17:03:53.818 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+17:03:53.822 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+17:03:53.837 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+17:03:53.847 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+17:03:53.860 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+17:03:53.883 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+17:03:53.884 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+17:03:53.932 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+17:03:53.933 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+17:03:53.944 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+17:03:53.951 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+17:03:53.954 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+17:03:53.961 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+17:03:53.965 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+17:03:53.977 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+17:03:53.990 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+17:03:54.001 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+17:03:54.024 INFO  ...ore/manipulators/WayMerger.cpp(  93) Finding all way merge manipulations...
   finding manipulations: 100 / 434          finding manipulations: 200 / 434          finding manipulations: 300 / 434          finding manipulations: 400 / 434        
-10:50:44.606 INFO  ...in/cpp/hoot/core/Conflator.cpp( 110) Conflating map. Node count: 7500 way count: 1140
-Current Score: 41.6693 it: 83 remaining: 836 elapsed: 1020ms             Current Score: 69.1876 it: 141 remaining: 880 elapsed: 2020ms             Current Score: 108.806 it: 238 remaining: 952 elapsed: 3022ms             Current Score: 138.133 it: 333 remaining: 1047 elapsed: 4027ms             Current Score: 152.772 it: 411 remaining: 1139 elapsed: 5033ms             Current Score: 162.094 it: 514 remaining: 1171 elapsed: 6039ms             Current Score: 177.837 it: 815 remaining: 1046 elapsed: 7042ms             Current Score: 190.962 it: 1105 remaining: 974 elapsed: 8049ms             
-10:50:53.488 INFO  ...in/cpp/hoot/core/Conflator.cpp( 184) Conflating map. Node count: 7596 way count: 728
-10:50:53.488 INFO  ...in/cpp/hoot/core/Conflator.cpp( 191) Conflating map. Node count: 7596 way count: 728
-10:50:53.502 INFO  ...conflate/UnifyingConflator.cpp( 121) Applying pre-unifying conflation operations...
-10:50:53.502 INFO  ...conflate/UnifyingConflator.cpp( 141) Creating matches...
-10:50:53.502 INFO  ...conflate/UnifyingConflator.cpp( 227) Match count: 0
-10:50:53.502 INFO  ...conflate/UnifyingConflator.cpp( 244) Creating mergers...
-10:50:53.502 INFO  ...conflate/UnifyingConflator.cpp( 261) Applying 0 mergers...
-10:50:53.502 INFO  ...conflate/UnifyingConflator.cpp( 288) Applying post-unifying conflation operations...
-10:50:53.502 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
-Reprojecting 0 / 7596         Reprojecting 1000 / 7596         Reprojecting 2000 / 7596         Reprojecting 3000 / 7596         Reprojecting 4000 / 7596         Reprojecting 5000 / 7596         Reprojecting 6000 / 7596         Reprojecting 7000 / 7596         
-10:50:53.516 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
-10:50:53.525 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 197) Applying post-conflation operations...
-10:50:53.525 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveMissingElementsVisitor
-10:50:53.527 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
-10:50:53.529 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
-10:50:53.529 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
-10:50:53.529 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
-Reprojecting 0 / 7092         Reprojecting 1000 / 7092         Reprojecting 2000 / 7092         Reprojecting 3000 / 7092         Reprojecting 4000 / 7092         Reprojecting 5000 / 7092         Reprojecting 6000 / 7092         Reprojecting 7000 / 7092         
-10:50:53.532 INFO  ...ore/io/OsmMapWriterFactory.cpp( 134) Writing map to test-output/cmd/ConflateAverageTest/output.osm
-10:50:53.632 INFO  ...pp/hoot/core/cmd/ConflateCmd.h( 256) Conflation job completed.
-10:50:53.781 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-output/cmd/ConflateAverageTest/output.osm ...
-10:50:53.912 INFO  ...ore/io/OsmMapReaderFactory.cpp( 151) Loading map data from test-files/cmd/slow/ConflateAverageTest/output.osm ...
+17:03:56.889 INFO  ...ot/core/conflate/Conflator.cpp( 107) Conflating map. Node count: 7500 way count: 1140
+Current Score: 41.6693 it: 83 remaining: 836 elapsed: 1001ms             Current Score: 72.3138 it: 146 remaining: 884 elapsed: 2008ms             Current Score: 116.914 it: 252 remaining: 954 elapsed: 3012ms             Current Score: 142.666 it: 358 remaining: 1067 elapsed: 4027ms             Current Score: 155.321 it: 442 remaining: 1163 elapsed: 5046ms             Current Score: 168.053 it: 652 remaining: 1081 elapsed: 6056ms             Current Score: 181.896 it: 855 remaining: 1085 elapsed: 7058ms             Current Score: 193.758 it: 1297 remaining: 843 elapsed: 8065ms             
+17:04:05.354 INFO  ...ot/core/conflate/Conflator.cpp( 181) Conflating map. Node count: 7596 way count: 728
+17:04:05.355 INFO  ...ot/core/conflate/Conflator.cpp( 188) Conflating map. Node count: 7596 way count: 728
+17:04:05.369 INFO  ...conflate/UnifyingConflator.cpp( 126) Applying pre-unifying conflation operations...
+17:04:05.369 INFO  ...conflate/UnifyingConflator.cpp( 228) Match count: 0
+17:04:05.369 INFO  ...conflate/UnifyingConflator.cpp( 245) Creating mergers...
+17:04:05.369 INFO  ...conflate/UnifyingConflator.cpp( 262) Applying 0 mergers...
+17:04:05.369 INFO  ...conflate/UnifyingConflator.cpp( 294) Applying post-unifying conflation operations...
+17:04:05.369 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+
+17:04:05.383 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+17:04:05.392 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 192) Applying post-conflation operations...
+17:04:05.393 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveMissingElementsVisitor
+17:04:05.395 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+17:04:05.397 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+17:04:05.397 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+17:04:05.397 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidMultilineStringMembersVisitor
+17:04:05.399 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+
+17:04:05.403 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/cmd/ConflateAverageTest/output.osm...
+17:04:05.497 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 251) Conflation job completed.
+17:04:05.811 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/cmd/ConflateAverageTest/output.osm...
+17:04:05.932 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/cmd/slow/ConflateAverageTest/output.osm...
 0

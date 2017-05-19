@@ -118,7 +118,9 @@ int ConflateCmd::runSimple(QStringList args)
     output = args[1];
   }
 
-  LOG_INFO("Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
+  LOG_INFO(
+    "Conflating " << input1.right(50) << " with " << input2.right(50) <<
+    " and writing the output to " << output.right(50));
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);

@@ -396,20 +396,20 @@ void OsmApiDbBulkWriter::finalizePartial()
   //out
   _writeCombinedSqlFile();
 
-  LOG_INFO("File write stats:");
-  _logStats();
+  LOG_DEBUG("File write stats:");
+  _logStats(true);
 
   if (_destinationIsDatabase())
   {
     _writeDataToDb();
-    LOG_INFO("Final database write stats:");
+    LOG_DEBUG("Final database write stats:");
   }
   else
   {
     LOG_DEBUG("Skipping SQL execution against database due to configuration...");
-    LOG_INFO("Final file write stats:");
+    LOG_DEBUG("Final file write stats:");
   }
-  _logStats();
+  _logStats(true);
 }
 
 bool OsmApiDbBulkWriter::_destinationIsDatabase() const
