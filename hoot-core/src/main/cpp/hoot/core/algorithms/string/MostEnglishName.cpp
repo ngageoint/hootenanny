@@ -127,7 +127,6 @@ long MostEnglishName::_loadEnglishWords(QString path)
 {
   QFile fp(path);
   const int MAX_LINE_SIZE = 2048;
-  int count = 0;
   long wordCount = 0;
 
   if (fp.open(QFile::ReadOnly))
@@ -136,7 +135,7 @@ long MostEnglishName::_loadEnglishWords(QString path)
     while (!fp.atEnd())
     {
       QByteArray ba = fp.readLine(MAX_LINE_SIZE);
-      if (ba.size() == MAX_LINE_SIZE && count < 10)
+      if (ba.size() == MAX_LINE_SIZE && wordCount < 10)
       {
         if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {

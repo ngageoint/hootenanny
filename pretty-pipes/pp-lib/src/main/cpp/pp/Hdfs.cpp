@@ -41,11 +41,11 @@ using namespace std;
 namespace pp
 {
 
-Hdfs::Hdfs(std::string host, int port)
+Hdfs::Hdfs(const string& host, int port)
+  : _host(host),
+    _port(port),
+    _fs(NULL)
 {
-  _host = host;
-  _port = port;
-  _fs = NULL;
 }
 
 void Hdfs::copyFromLocal(string src, string dst)

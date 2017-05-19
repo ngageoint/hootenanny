@@ -45,7 +45,7 @@ class Plugins
 public:
   Plugins();
 
-  static void loadAllLibraries(const std::string& libs);
+  static void loadAllLibraries(const std::string& libs) throw(pp::Exception);
 
   /**
    * Loads the specified library if it hasn't been loaded already.

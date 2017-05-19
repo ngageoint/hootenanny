@@ -91,10 +91,10 @@ PoiRfClassifier::PoiRfClassifier()
     _rf->importModel(file);
     file.close();
   }
-  catch (const Exception& e)
+  catch (const Exception&)
   {
     file.close();
-    throw e;
+    throw;
   }
 
   vector<string> factorLabels = _rf->getFactorLabels();

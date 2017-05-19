@@ -200,7 +200,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& /*e*/)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -234,7 +234,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& /*e*/)
+      catch (const HootException&)
       {
         ok = false;
       }

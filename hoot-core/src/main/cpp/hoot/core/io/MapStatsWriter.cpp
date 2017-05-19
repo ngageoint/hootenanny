@@ -200,7 +200,7 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
     }
     pt::write_json(statsOutputFilePath.toStdString(), pt);
   }
-  catch (std::exception e)
+  catch (const std::exception& e)
   {
     QString reason = e.what();
     LOG_ERROR("Error writing JSON " + reason);

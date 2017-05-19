@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -92,7 +92,7 @@ public:
     std::vector<int> result;
     uut.setRandomNoise(0.0);
     uut.calculateProbablePaths(1);
-    result = uut.getRouteCounts();
+    uut.getRouteCounts();
     vector<float> costSurface = uut.getCostSurface();
 
     uut.setRandomPatches(0.1f, 10);
@@ -170,9 +170,9 @@ public:
     std::vector<int> result;
     uut.setRandomNoise(0.0);
     uut.calculateProbablePaths(1);
-    result = uut.getRouteCounts();
+    uut.getRouteCounts();
     uut.calculateProbablePaths(1);
-    result = uut.getRouteCounts();
+    uut.getRouteCounts();
   }
 
   void testUpdateCostSurface()

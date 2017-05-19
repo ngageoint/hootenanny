@@ -101,7 +101,7 @@ OgrUtilities& OgrUtilities::getInstance()
 
 OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
 {
-  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); it++)
+  for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); ++it)
   {
     if (((it->_is_ext && url.endsWith(it->_indicator)) || (!it->_is_ext && url.startsWith(it->_indicator))) &&
         (readonly || it->_is_rw))
@@ -158,8 +158,8 @@ boost::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, 
    */
   OgrDriverInfo driverInfo = getDriverInfo(url, readonly);
   const char* drivers[2] = { driverInfo._driverName, NULL };
-  boost::shared_ptr<GDALDataset> result((GDALDataset*)GDALOpenEx(url.toUtf8().data(),
-    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL));
+  boost::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
+    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), NULL, NULL)));
 
   if (!result)
     throw HootException("Unable to open: " + url);

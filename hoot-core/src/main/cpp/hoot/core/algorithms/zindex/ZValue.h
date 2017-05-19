@@ -41,7 +41,7 @@ public:
 
   ZValue() {}
 
-  ZValue(int dimensions, int depth, std::vector<double> min, std::vector<double> max);
+  ZValue(int dimensions, int depth, const std::vector<double>& min, const std::vector<double>& max);
 
   ~ZValue();
 

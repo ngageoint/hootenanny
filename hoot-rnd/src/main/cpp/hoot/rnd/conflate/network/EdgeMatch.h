@@ -75,9 +75,9 @@ public:
    */
   int countPartialMatches() const;
 
-  EdgeStringPtr getString1() { return _edges1; _resetHash(); }
+  EdgeStringPtr getString1() { return _edges1; }
 
-  EdgeStringPtr getString2() { return _edges2; _resetHash(); }
+  EdgeStringPtr getString2() { return _edges2; }
 
   ConstEdgeStringPtr getString1() const { return _edges1; }
 

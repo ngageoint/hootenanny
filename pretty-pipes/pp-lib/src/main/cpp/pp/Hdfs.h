@@ -47,15 +47,6 @@ class FileStatus
 public:
   FileStatus() {}
 
-  FileStatus(const FileStatus& in)
-  {
-    _accessTime = in._accessTime;
-    _modTime = in._modTime;
-    _len = in._len;
-    _path = in._path;
-    _kind = in._kind;
-  }
-
   long getAccessTime() { return _accessTime; }
 
   long getBlockSize() { return _blockSize; }
@@ -104,7 +95,7 @@ public:
    * Create an HDFS connector. The actual connection is delayed until needed. In most cases
    * the default arguments should be sufficient.
    */
-  Hdfs(std::string host = "default", int port = 0);
+  Hdfs(const std::string& host = "default", int port = 0);
 
   void copyFromLocal(std::string src, std::string dst);
 

@@ -57,7 +57,7 @@ void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
 
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const boost::shared_ptr<Relation>& r = it->second;
     // add the relation to a building group if appropriate

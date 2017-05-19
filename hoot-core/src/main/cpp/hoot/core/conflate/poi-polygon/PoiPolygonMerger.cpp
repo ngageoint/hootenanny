@@ -246,8 +246,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   int poiCount = 0;
   ElementId poiElementId;
   Status poiStatus;
-  NodeMap::const_iterator nodeItr = map->getNodes().begin();
-  while (nodeItr != map->getNodes().end())
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
   {
     const int nodeId = nodeItr->first;
     NodePtr node = map->getNode(nodeId);
@@ -263,7 +263,6 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
       poiElementId = ElementId::node(nodeId);
       poiCount++;
     }
-    nodeItr++;
   }
   if (poiCount == 0)
   {
@@ -276,8 +275,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
 
   int polyCount = 0;
   ElementId polyElementId;
-  WayMap::const_iterator wayItr = map->getWays().begin();
-  while (wayItr != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const int wayId = wayItr->first;
     WayPtr way = map->getWay(wayId);
@@ -298,12 +297,11 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
       polyElementId = ElementId::way(wayId);
       polyCount++;
     }
-    wayItr++;
   }
   if (polyElementId.isNull())
   {
-    RelationMap::const_iterator relItr = map->getRelations().begin();
-    while (relItr != map->getRelations().end())
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
     {
       const int relationId = relItr->first;
       RelationPtr relation = map->getRelation(relationId);
@@ -324,7 +322,6 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
         polyElementId = ElementId::relation(relationId);
         polyCount++;
       }
-      relItr++;
     }
   }
   if (polyCount == 0)

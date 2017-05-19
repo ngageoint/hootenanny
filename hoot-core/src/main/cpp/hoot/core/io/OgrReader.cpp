@@ -231,13 +231,13 @@ protected:
     _d->readNext(_map);
 
     const NodeMap& nm = _map->getNodes();
-    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
+    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       _addElement(_map->getNode(it->first));
     }
 
     const WayMap& wm = _map->getWays();
-    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
       _addElement(_map->getWay(it->first));
     }
@@ -640,7 +640,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
           throw HootException("Unsupported geometry type.");
       }
     }
-    catch (IllegalArgumentException& e)
+    catch (const IllegalArgumentException& e)
     {
       throw IllegalArgumentException(
         "Error projecting geometry with tags: " + t.toString() + " " + e.what());
@@ -990,7 +990,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::ErrorCircular()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -1012,7 +1012,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::Accuracy()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -1231,17 +1231,17 @@ ElementPtr OgrReaderInternal::readNextElement()
   if ( _nodesItr != _map->getNodes().end() )
   {
     returnElement.reset(new Node(*_nodesItr->second.get()));
-    _nodesItr++;
+    ++_nodesItr;
   }
   else if ( _waysItr != _map->getWays().end() )
   {
     returnElement.reset(new Way(*_waysItr->second.get()));
-    _waysItr++;
+    ++_waysItr;
   }
   else
   {
     returnElement.reset(new Relation(*_relationsItr->second.get()));
-    _relationsItr++;
+    ++_relationsItr;
   }
 
   return returnElement;

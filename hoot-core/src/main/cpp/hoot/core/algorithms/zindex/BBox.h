@@ -39,7 +39,7 @@ public:
 
   static std::string className() { return "hoot::BBox"; }
 
-  BBox(std::vector<double> min, std::vector<double> max);
+  BBox(const std::vector<double>& min, const std::vector<double>& max);
 
   BBox(geos::geom::Envelope envelope);
 

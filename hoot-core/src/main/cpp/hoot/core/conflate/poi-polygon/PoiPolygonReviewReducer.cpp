@@ -177,7 +177,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
 
   //Similar to previous, except more focused for restrooms.
-  if (poiHasType && polyHasType && !_typeScore == 1.0 &&
+  if (poiHasType && polyHasType && _typeScore != 1.0 &&
       PoiPolygonTypeScoreExtractor::isRestroom(poi) &&
       !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
         OsmSchemaCategory::building()))
@@ -277,8 +277,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   PoiPolygonTypeScoreExtractor typeScorer;
   PoiPolygonNameScoreExtractor nameScorer;
 
-  set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
-  while (polyNeighborItr != _polyNeighborIds.end())
+  for (set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
+       polyNeighborItr != _polyNeighborIds.end(); ++polyNeighborItr)
   {
     ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
     if (polyNeighbor->getElementId() != poly->getElementId())
@@ -442,7 +442,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         }
       }
     }
-    polyNeighborItr++;
   }
 
   return false;

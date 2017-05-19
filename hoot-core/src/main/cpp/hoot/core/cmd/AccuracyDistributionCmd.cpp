@@ -70,13 +70,13 @@ public:
     const WayMap& ways = map->getWays();
 
     std::map<Meters, int> m;
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       const WayPtr& w = it->second;
       m[w->getCircularError()]++;
     }
 
-    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); it++)
+    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); ++it)
     {
       double p = (double)it->second / (double)ways.size();
       cout << it->first << " : " << it->second << " (" << p << ")" << endl;

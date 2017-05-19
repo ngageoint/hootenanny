@@ -50,8 +50,8 @@ namespace Tgs
     int result = 0;
     if (_inputs.size() != 0)
     {
-      for (map<string,boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = 
-        _inputs.begin(); it != _inputs.end(); ++it)
+      for (map<string, boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it =
+           _inputs.begin(); it != _inputs.end(); ++it)
       {
         if (it->second)
         {
@@ -74,8 +74,8 @@ namespace Tgs
   void CalculatorGenomeNode::copy(const TreeGenomeNode& from)
   {
     const CalculatorGenomeNode& cgnFrom = dynamic_cast<const CalculatorGenomeNode&>(from);
-    for (map<string,boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = 
-      cgnFrom._inputs.begin(); it != cgnFrom._inputs.end(); ++it)
+    for (map<string, boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it =
+         cgnFrom._inputs.begin(); it != cgnFrom._inputs.end(); ++it)
     {
       if (it->second)
       {
@@ -89,7 +89,7 @@ namespace Tgs
 
   std::string CalculatorGenomeNode::findInput(boost::shared_ptr<CalculatorGenomeNode> node)
   {
-    for (map<string,boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = _inputs.begin();
+    for (map<string, boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = _inputs.begin();
       it != _inputs.end(); ++it)
     {
       if (it->second == node)
@@ -107,8 +107,8 @@ namespace Tgs
 
   boost::shared_ptr<CalculatorGenomeNode> CalculatorGenomeNode::getInput(const std::string& name) const
   {
-    std::map<std::string,boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = 
-      _inputs.find(name);
+    std::map<std::string, boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it =
+        _inputs.find(name);
 
     if (it != _inputs.end())
     {
@@ -132,7 +132,7 @@ namespace Tgs
     if(str == "<Children>")
     {
       while(buffer.find("</Children>") == std::string::npos && s.eof() == false)
-      {  
+      {
         std::getline(s, buffer);
         stringstream strm1(buffer);
         strm1 >> str;
@@ -140,14 +140,14 @@ namespace Tgs
         if(str == "<CalculatorGenomeNode")
         {
           string id = Tgs::XmlHelper::parseAttributes(buffer)["id"];
-         boost::shared_ptr<Tgs::CalculatorGenomeNode> cg(factory.createNode(id));
+          boost::shared_ptr<Tgs::CalculatorGenomeNode> cg(factory.createNode(id));
           cg->load(s, factory);
           if (it == inputs.end())
           {
             throw Exception("Error, more inputs/children than expected.");
           }
           setInput(it->first, cg);
-          it++;
+          ++it;
         }
       }
     }
@@ -158,14 +158,14 @@ namespace Tgs
     }
   }
 
-  void CalculatorGenomeNode::save(std::ostream& s, const std::string indent)
+  void CalculatorGenomeNode::save(std::ostream& s, const std::string& indent)
   {
     s << indent << "<CalculatorGenomeNode id='" << getId() << "'>" << endl;
     _saveInternals(s, indent + "  ");
     if (_inputs.size() > 0)
     {
       s << indent << "  <Children>" << endl;
-      for (map<string,boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = _inputs.begin();
+      for (map<string, boost::shared_ptr<CalculatorGenomeNode> >::const_iterator it = _inputs.begin();
         it != _inputs.end(); ++it)
       {
         if (it->second)
@@ -183,7 +183,7 @@ namespace Tgs
     setInput(name, boost::shared_ptr<CalculatorGenomeNode>(node));
   }
 
-  void CalculatorGenomeNode::setInput(const std::string& name, 
+  void CalculatorGenomeNode::setInput(const std::string& name,
     boost::shared_ptr<CalculatorGenomeNode> node)
   {
     _inputs[name] = node;
@@ -227,4 +227,3 @@ namespace Tgs
     return strm.str();
   }
 }
-

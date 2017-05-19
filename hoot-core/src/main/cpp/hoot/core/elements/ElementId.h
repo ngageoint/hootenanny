@@ -90,7 +90,7 @@ public:
 
   QString toString()
   {
-    return ((const ElementId*)this)->toString();
+    return const_cast<const ElementId*>(this)->toString();
   }
 
   /**

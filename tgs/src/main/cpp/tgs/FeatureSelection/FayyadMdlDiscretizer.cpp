@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FayyadMdlDiscretizer.h"
@@ -40,7 +40,12 @@ using namespace std;
 
 namespace Tgs
 {
-  double log2 = log(2.0);
+  const double log2 = log(2.0);
+
+  FayyadMdlDiscretizer::FayyadMdlDiscretizer()
+    : _classes(NULL), _values(NULL)
+  {
+  }
 
   FayyadMdlDiscretizer::SplitPoints FayyadMdlDiscretizer::calculateSplitPoints(
     const std::vector<int>& classes, const vector<double>& values)
@@ -49,7 +54,6 @@ namespace Tgs
     _classes = &classes;
     _entropyCacheDown.resize(classes.size());
     _entropyCacheUp.resize(classes.size());
-    SplitPoints result;
 
     _result.clear();
     _calculateSplits(0, classes.size());
@@ -115,7 +119,7 @@ namespace Tgs
     }
 
     double entropy = 0.0;
-    for (it = frequency.begin(); it != frequency.end(); it++)
+    for (it = frequency.begin(); it != frequency.end(); ++it)
     {
       double proportion = (double)it->second / (double)size;
       entropy += proportion * log(proportion) / log2;
@@ -159,7 +163,6 @@ namespace Tgs
     HashMap<int, int> frequency;
 
     HashMap<int, int>::const_iterator it;
-    double log2 = log(2.0);
     int cnt = 0;
     for (int i = start; i < start + size; i++)
     {
@@ -178,7 +181,7 @@ namespace Tgs
       cnt++;
 
       double entropy = 0.0;
-      for (it = frequency.begin(); it != frequency.end(); it++)
+      for (it = frequency.begin(); it != frequency.end(); ++it)
       {
         double proportion = (double)it->second / (double)cnt;
         entropy += proportion * log(proportion) / log2;
@@ -205,7 +208,7 @@ namespace Tgs
       cnt++;
 
       double entropy = 0.0;
-      for (it = frequency.begin(); it != frequency.end(); it++)
+      for (it = frequency.begin(); it != frequency.end(); ++it)
       {
         double proportion = (double)it->second / (double)cnt;
         entropy += proportion * log(proportion) / log2;
@@ -233,9 +236,9 @@ namespace Tgs
 
       double leftSize = i - start + 1;
       double rightSize = size - leftSize;
-      double gain = totalEntropy - 
-        (rightEnt * rightSize / (double)size + 
-        leftEnt * leftSize / (double)size);
+      double gain = totalEntropy -
+        (rightEnt * rightSize / (double)size +
+         leftEnt * leftSize / (double)size);
 
       int smallSide = (int)((leftSize < rightSize ? leftSize : rightSize) + .5);
       // find the split with the most information gain and the most even split

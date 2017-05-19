@@ -360,7 +360,7 @@ public:
         uut.read(pMap);
         success = true;
       }
-      catch (HootException ex)
+      catch (const HootException& ex)
       {
         numTries++;
         LOG_INFO(ex.getWhat() + QString(" will retry after %1 seconds").arg(RETRY_SECS));

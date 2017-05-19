@@ -67,7 +67,7 @@ WeightedWordDistance::WeightedWordDistance()
   {
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary());
   }
-  catch (FileNotFoundException& e)
+  catch (const FileNotFoundException&)
   {
     LOG_WARN("Unable to locate words.sqlite. This should be downloaded during the make "
       "process. It can be manually downloaded from "

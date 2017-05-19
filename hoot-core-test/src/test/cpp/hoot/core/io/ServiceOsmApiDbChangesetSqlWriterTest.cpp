@@ -268,7 +268,7 @@ public:
       OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget("-10,-10,10,10", "2016-05-04 10:15");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -279,7 +279,7 @@ public:
       OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget("-10,-10,10,10", " ");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

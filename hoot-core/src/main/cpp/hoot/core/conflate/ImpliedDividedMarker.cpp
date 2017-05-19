@@ -82,7 +82,7 @@ bool ImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
 {
   const set<long>& wayIds = (*_n2w)[nodeId];
 
-  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); it++)
+  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
     if (*it != excludedWayId)
     {

@@ -137,6 +137,7 @@ class Face
 public:
   Face() { _id = -1; }
 
+  Face(Face& other);
   Face(const Face& other);
 
   Face(Edge start);
@@ -157,7 +158,7 @@ public:
 
   bool operator==(const Face& other) const;
   bool operator<(const Face& other) const;
-  void operator=(const Face& other);
+  Face& operator=(const Face& other);
 
   std::string toString() const;
 
@@ -176,7 +177,8 @@ public:
   EdgeIterator() { _atEnd = true; }
 
   Edge operator*();
-  void operator++(int);
+  Edge operator++(int);
+  Edge& operator++();
   bool operator==(const EdgeIterator& other) const { return _atEnd == other._atEnd; }
   bool operator!=(const EdgeIterator& other) const { return !operator==(other); }
   EdgeIterator end() { EdgeIterator result; result._atEnd = true; return result; }
@@ -208,7 +210,8 @@ public:
   virtual ~FaceIterator();
 
   const Face& operator*();
-  void operator++(int);
+  Face operator++(int);
+  Face& operator++();
   bool operator==(const FaceIterator& other) const { return _atEnd == other._atEnd; }
   bool operator!=(const FaceIterator& other) const { return !operator==(other); }
 

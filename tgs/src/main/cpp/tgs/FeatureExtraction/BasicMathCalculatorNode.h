@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__BASIC_MATH_CALCULATOR_NODE_H__
@@ -38,8 +38,8 @@ namespace Tgs
   class TGS_EXPORT BinaryCalculatorNode : public CalculatorGenomeNode
   {
   public:
-    // I started out doing these as simple static member variables, but it complained when 
-    // exporting out of the DLL. Did some searches and it doesn't make sense to me, but this 
+    // I started out doing these as simple static member variables, but it complained when
+    // exporting out of the DLL. Did some searches and it doesn't make sense to me, but this
     // works.
     static const std::string V1() { return std::string("v1"); }
     static const std::string V2() { return std::string("v2"); }
@@ -59,7 +59,7 @@ namespace Tgs
   class TGS_EXPORT AddCalculatorNode : public BinaryCalculatorNode
   {
   public:
-    virtual ~AddCalculatorNode() {};
+    virtual ~AddCalculatorNode() {}
   protected:
     virtual double _calculate(double v1, double v2) const { return v1 + v2; }
 
@@ -71,7 +71,7 @@ namespace Tgs
   class TGS_EXPORT SubtractCalculatorNode : public BinaryCalculatorNode
   {
   public:
-    virtual ~SubtractCalculatorNode() {};
+    virtual ~SubtractCalculatorNode() {}
   protected:
     virtual double _calculate(double v1, double v2) const { return v1 - v2; }
 
@@ -83,7 +83,7 @@ namespace Tgs
   class TGS_EXPORT MultiplyCalculatorNode : public BinaryCalculatorNode
   {
   public:
-    virtual ~MultiplyCalculatorNode() {};
+    virtual ~MultiplyCalculatorNode() {}
 
     virtual void mutate(double /*p*/) {}
 
@@ -98,7 +98,7 @@ namespace Tgs
   class TGS_EXPORT DivideCalculatorNode : public BinaryCalculatorNode
   {
   public:
-    virtual ~DivideCalculatorNode() {};
+    virtual ~DivideCalculatorNode() {}
   protected:
     virtual double _calculate(double v1, double v2) const { return v2 == 0.0 ? 0.0 : v1 / v2; }
 
@@ -110,7 +110,7 @@ namespace Tgs
   class TGS_EXPORT PowCalculatorNode : public BinaryCalculatorNode
   {
   public:
-    virtual ~PowCalculatorNode() {};
+    virtual ~PowCalculatorNode() {}
   protected:
     virtual double _calculate(double v1, double v2) const { return pow(fabs(v1), v2); }
 

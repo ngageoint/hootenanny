@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__CFS_SUBSET_EVALUATOR_H__
@@ -41,7 +41,7 @@ namespace Tgs
   class CfsSubsetEvaluatorTest;
 
   /**
-   * Evaluates a set of factors for fitness by maximizing correlation with the class and 
+   * Evaluates a set of factors for fitness by maximizing correlation with the class and
    * reducing intra-factor correlation. See [1] for more details.
    *
    * [1] M. Hall 1999, Correlation-based Feature Selection for Machine Learning
@@ -51,14 +51,14 @@ namespace Tgs
   {
   public:
 
-    virtual ~CfsSubsetEvaluator() {};
+    virtual ~CfsSubsetEvaluator() {}
 
     /**
     * Evaluates the columns in the data frame and returns a correlation score.
     * @param columns a vector of ints that refer to the columns in the data frame
     * @returns the quality of the data frame (bigger is better). Zero should be the lower bound.
     */
-    virtual double evaluateSubset(const std::vector<int>& columns, 
+    virtual double evaluateSubset(const std::vector<int>& columns,
       TgsProgress* progress = NULL);
 
     virtual void setDataFrame(const DataFrame& dataFrame, TgsProgress* progress = NULL);

@@ -245,7 +245,7 @@ class PaintNodesCmd : public BaseCommand
         const int32_t* row = mat.ptr<int32_t>(y);
         for (int x = 0; x < qImage.width(); x++)
         {
-          double v = log(row[x] + 1) / log(maxValue);
+          double v = log1p(row[x]) / log(maxValue);
           int r = max(0, min<int>(255, v * colorMultiplier[0] + qRed(baseColors)));
           int g = max(0, min<int>(255, v * colorMultiplier[1] + qGreen(baseColors)));
           int b = max(0, min<int>(255, v * colorMultiplier[2] + qBlue(baseColors)));

@@ -228,7 +228,7 @@ void GeometryPainter::drawNode(QPainter& pt, const Node* node, const QMatrix& m)
 void GeometryPainter::drawOsmMap(QPainter& pt, const OsmMap* map, const QMatrix& m)
 {
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     drawWay(pt, map, it->second.get(), m);
   }

@@ -189,7 +189,7 @@ public:
       WaySubline w2subline(WayLocation(map, w1, 11.0), WayLocation(map, w1, 15.0));
       wstring->append(w2subline);
     }
-    catch (HootException ex)
+    catch (const HootException& ex)
     {
       exThrown = true;
       HOOT_STR_EQUALS("All consecutive ways must connect end to start in a WayString.", ex.what());
@@ -207,7 +207,7 @@ public:
       WaySubline w2subline(WayLocation(map, w2, 10.0), WayLocation::createAtEndOfWay(map, w2));
       wstring->append(w2subline);
     }
-    catch (HootException ex)
+    catch (const HootException& ex)
     {
       exThrown = true;
       HOOT_STR_EQUALS("If ways are different they must connect at an extreme node.", ex.what());
@@ -229,7 +229,7 @@ public:
 //      WaySubline w3subline(WayLocation(map, w3, 0), WayLocation::createAtEndOfWay(map, w3));
 //      wstring->append(w3subline);
 //    }
-//    catch (HootException ex)
+//    catch (const HootException& ex)
 //    {
 //      exThrown = true;
 //      HOOT_STR_EQUALS("Ways must connect at a node in the WayString.", ex.what());

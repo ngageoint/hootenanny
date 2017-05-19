@@ -205,11 +205,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   Meters l = _calculateIntervalLength();
   // if this interval is the best & it is at least _minSplitSize in length
   if (l > bestLength)
-  {
-    // save the interval
-    bestLength = l;
     bestInterval = _maxInterval;
-  }
 
   _maxInterval = bestInterval;
 

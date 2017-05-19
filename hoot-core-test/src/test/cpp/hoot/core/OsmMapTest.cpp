@@ -96,7 +96,7 @@ public:
 
     ElementConverter ec(map);
     const WayMap& ways = map->getWays();
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); itw++)
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end(); ++itw)
     {
       const WayPtr& w = itw->second;
       boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
@@ -216,7 +216,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }
@@ -255,7 +255,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }
@@ -287,7 +287,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }
@@ -308,7 +308,7 @@ public:
     {
       mapA->append(mapA);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -335,7 +335,7 @@ public:
     {
       mapA->append(mapB);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = QString::fromAscii(e.what());
     }
@@ -378,13 +378,10 @@ public:
 
     t.restart();
     int i = 0;
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       const WayPtr& w = itw->second;
-
       std::vector<long> wids = map->getIndex().findWayNeighbors(w, 30.0);
-      //LOG_WARN("wid count: " << wids.size());
-
       i++;
     }
 
@@ -392,13 +389,10 @@ public:
 
     t.restart();
     i = 0;
-    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; itw++)
+    for (WayMap::const_iterator itw = ways.begin(); itw != ways.end() && i < 20; ++itw)
     {
       WayPtr w = itw->second;
-
       std::vector<long> wids = map->getIndex().findWayNeighborsBruteForce(w, 30.0);
-      //LOG_WARN("wid count: " << wids.size());
-
       i++;
     }
 
@@ -644,7 +638,7 @@ public:
     CPPUNIT_ASSERT( 4 == ways.size() );
 
     int i = 1;
-    for ( WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); iterator++ )
+    for ( WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); ++iterator )
     {
       WayPtr way = iterator->second;
       //LOG_DEBUG(way->toString());

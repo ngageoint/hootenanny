@@ -204,9 +204,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     {
       _inputIsConflatedMapOutput = true;
     }
-    double conflatableFeatureCount = -1.0;
     any matchCandidateCountsData;
-    conflatableFeatureCount =
+    double conflatableFeatureCount =
       _applyVisitor(
         constMap,
         FilteredVisitor(

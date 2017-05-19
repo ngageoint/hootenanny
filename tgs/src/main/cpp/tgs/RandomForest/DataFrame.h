@@ -357,7 +357,7 @@ namespace Tgs
     /**
      * Assignment operator, copies all data. Potentially very expensive.
      */
-    void operator=(const DataFrame& from);
+    DataFrame& operator=(const DataFrame& from);
 
     /**
      * @brief operator [] provides access to the stored training data vectors

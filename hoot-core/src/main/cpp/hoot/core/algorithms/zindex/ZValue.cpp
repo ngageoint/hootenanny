@@ -38,18 +38,16 @@ using namespace std;
 namespace hoot
 {
 
-ZValue::ZValue(int dimensions, int depth, vector<double> min, vector<double> max)
+ZValue::ZValue(int dimensions, int depth, const vector<double>& min, const vector<double>& max)
+  : _depth(depth),
+    _dimensions(dimensions),
+    _min(min),
+    _max(max),
+    _range((1 << depth) - 1)
 {
-  _depth = depth;
-  _dimensions = dimensions;
-  _min = min;
-  _max = max;
-  _range = (1 << _depth) - 1;
   _b.reserve(dimensions);
   for (int i = 0; i < dimensions; i++)
-  {
-    _b.push_back(0);;
-  }
+    _b.push_back(0);
 }
 
 ZValue::~ZValue()

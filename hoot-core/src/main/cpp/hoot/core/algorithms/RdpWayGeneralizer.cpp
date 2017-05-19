@@ -69,7 +69,7 @@ void RdpWayGeneralizer::generalize(boost::shared_ptr<Way> way)
   //tried using hoot filters here at first, but it didn't end up making sense
   QList<long> wayNodeIdsAfterFiltering;
   for (QList<long>::const_iterator it = wayNodeIdsBeforeFiltering.begin();
-       it != wayNodeIdsBeforeFiltering.end(); it++)
+       it != wayNodeIdsBeforeFiltering.end(); ++it)
   {
     if (_map->getNode(*it)->getTags().getInformationCount() == 0)
     {

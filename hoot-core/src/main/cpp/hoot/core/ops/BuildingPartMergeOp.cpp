@@ -84,7 +84,7 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
         boost::shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
         contains = g.contains(cg.get());
       }
-      catch (geos::util::TopologyException& e)
+      catch (const geos::util::TopologyException&)
       {
         boost::shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
         auto_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
@@ -104,7 +104,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
 {
   set<long> neighborIds = _calculateNeighbors(w, w->getTags());
   // go through each of the neighboring ways.
-  for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); it++)
+  for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
   {
     WayPtr neighbor = _map->getWay(*it);
     // add these two buildings to a set.
@@ -128,7 +128,7 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
 
       set<long> neighborIds = _calculateNeighbors(member, r->getTags());
       // got through each of the neighboring ways.
-      for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); it++)
+      for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
         WayPtr neighbor = _map->getWay(*it);
         // add these two buildings to a set.
@@ -163,7 +163,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   i = 0;
   // go through all the ways
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
     {
@@ -190,7 +190,7 @@ void BuildingPartMergeOp::apply(OsmMapPtr& map)
   i = 0;
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     if (Log::getInstance().getLevel() <= Log::Info /* && i % 100 == 0 */)
     {
@@ -258,7 +258,7 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& 
     const set<long>& ways = n2w.getWaysByNode(w->getNodeId(i));
 
     // go through each of the neighboring ways.
-    for (set<long>::const_iterator it = ways.begin(); it != ways.end(); it++)
+    for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       WayPtr neighbor = _map->getWay(*it);
       // if the neighbor is a building and it also has the two contiguos nodes we're looking at
@@ -305,7 +305,7 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
     t.set(names);
 
     // go through all the tags.
-    for (Tags::const_iterator it = pt.begin(); it != pt.end(); it++)
+    for (Tags::const_iterator it = pt.begin(); it != pt.end(); ++it)
     {
       // ignore all keys that are building:part specific.
       if (_buildingPartTagNames.find(it.key()) == _buildingPartTagNames.end())
@@ -332,7 +332,7 @@ RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   // go through all the keys that were consistent for each of the parts and move them into the
   // relation.
   Tags tCopy = t;
-  for (Tags::const_iterator it = tCopy.begin(); it != tCopy.end(); it++)
+  for (Tags::const_iterator it = tCopy.begin(); it != tCopy.end(); ++it)
   {
     // if the value is empty, then the tag isn't needed, or it wasn't consistent between multiple
     // parts.
@@ -370,7 +370,7 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
 {
   // remove all the building tags that are building:part=yes specific.
   for (set<QString>::const_iterator it = _buildingPartTagNames.begin();
-    it != _buildingPartTagNames.end(); it++)
+    it != _buildingPartTagNames.end(); ++it)
   {
     t1.remove(*it);
     t2.remove(*it);

@@ -202,7 +202,7 @@ namespace Tgs
     if (it == _availableNodes.end())
     {
       cout << "available nodes: " << endl;
-      for (it = _availableNodes.begin(); it != _availableNodes.end(); it++)
+      for (it = _availableNodes.begin(); it != _availableNodes.end(); ++it)
       {
         cout << "  " << it->first << endl;
       }
@@ -395,7 +395,7 @@ namespace Tgs
     }
   }
 
-  void CalculatorGenome::save(std::ostream& s, const std::string indent) const
+  void CalculatorGenome::save(std::ostream& s, const std::string& indent) const
   {
     s << indent << "<Genome type='CalculatorGenome'>" << endl;
     if (_root)

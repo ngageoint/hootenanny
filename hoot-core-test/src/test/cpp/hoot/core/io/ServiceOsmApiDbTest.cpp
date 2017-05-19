@@ -220,7 +220,6 @@ public:
     elementCtr = ids.size()-1;
     LOG_VART(elementCtr);
     CPPUNIT_ASSERT(elementCtr >= 0);
-    tagIndx = -1;
     ctr = 0;
     while( wayResultIterator->next() )
     {
@@ -288,7 +287,6 @@ public:
     elementCtr = ids.size()-1;
     LOG_VART(elementCtr);
     CPPUNIT_ASSERT(elementCtr >= 0);
-    tagIndx = -1;
     ctr = 0;
     while ( relationResultIterator->next() )
     {

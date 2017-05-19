@@ -168,12 +168,12 @@ vector<boost::shared_ptr<OGRSpatialReference> > MapProjector::createAllPlanarPro
   double stdP1 = env.MinY + height * .25;
   double stdP2 = env.MinY + height * .75;
 
-  try { result.push_back(createOrthographic(env)); } catch (HootException& e) { }
+  try { result.push_back(createOrthographic(env)); } catch (const HootException&) { }
 
   if (ConfigOptions().getTestForceOrthographicProjection() == false)
   {
-    try { result.push_back(createAeacProjection(env)); } catch (HootException& e) { }
-    try { result.push_back(createSinusoidalProjection(env)); } catch (HootException& e) { }
+    try { result.push_back(createAeacProjection(env)); } catch (const HootException&) { }
+    try { result.push_back(createSinusoidalProjection(env)); } catch (const HootException&) { }
 
    boost::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
     if (mollweide->importFromEPSG(54009) == OGRERR_NONE)
@@ -559,7 +559,7 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map,boost::shared_ptr<OGRSp
     {
       rcf.project(&c);
     }
-    catch(IllegalArgumentException& e)
+    catch(const IllegalArgumentException&)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
@@ -570,7 +570,7 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map,boost::shared_ptr<OGRSp
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      throw e;
+      throw;
     }
 
     n->setX(c.x);

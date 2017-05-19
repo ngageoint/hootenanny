@@ -61,10 +61,10 @@ bool ClosePointHash::next()
     if (_it->second.size() > 1)
     {
       _match = _it->second;
-      _it++;
+      ++_it;
       return true;
     }
-    _it++;
+    ++_it;
   }
 
   return false;

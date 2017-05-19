@@ -215,7 +215,7 @@ void OsmChangesetXmlFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   {
     tags.set(MetadataTags::HootStatus(), QString::number(n->getStatus().getEnum()));
   }
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     if (it.key().isEmpty() == false && it.value().isEmpty() == false)
     {
