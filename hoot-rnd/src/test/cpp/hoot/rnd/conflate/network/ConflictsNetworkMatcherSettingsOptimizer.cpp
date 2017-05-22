@@ -33,9 +33,11 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/rnd/conflate/network/ConflictsNetworkMatcher.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QTemporaryFile>
+#include <QTextStream>
 
 // Tgs
 #include <tgs/Optimization/SimulatedAnnealing.h>
@@ -113,6 +115,13 @@ public:
   {
   public:
 
+    CaseFitnessFunction() :
+    _testCount(0)
+    {
+      _testSuite.reset(new ConflateCaseTestSuite("test-files/cases/hoot-rnd/network/conflicts/"));
+      _testCount = _testSuite->getChildTestCount();
+    }
+
     virtual double f(const ConstStatePtr& s) const
     {
       LOG_DEBUG("Running fitness function...");
@@ -132,12 +141,10 @@ public:
 
       //this init will add the conflicts network case tests conf which is a subset of the overall
       //network cases tests conf
-      ConflateCaseTestSuite suite("test-files/cases/hoot-rnd/network/conflicts/");
-      const int testCount = suite.getChildTestCount();
       QStringList failedTests;
-      for (int i = 0; i < testCount; ++i)
+      for (int i = 0; i < _testCount; ++i)
       {
-        ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(suite.getChildTestAt(i));
+        ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(_testSuite->getChildTestAt(i));
         const QString testName = QString::fromStdString(test->getName());
         //LOG_ERROR("Running " << testName << "...");
         //we still need to add the overall network cases tests conf
@@ -166,7 +173,7 @@ public:
       else
       {
         QString failureMsg =
-          QString::number(failedTests.size()) + "/" + QString::number(testCount) +
+          QString::number(failedTests.size()) + "/" + QString::number(_testCount) +
           " tests failed:\n\n";
         for (int i = 0; i < failedTests.size(); i++)
         {
@@ -175,8 +182,15 @@ public:
         LOG_ERROR(failureMsg);
       }
 
-      return (double)failedTests.size() / (double)testCount;
+      return (double)failedTests.size() / (double)_testCount;
     }
+
+    int getTestCount() { return _testCount; }
+
+    private:
+
+      int _testCount;
+      boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
   };
 
   void optimizeAgainstCaseDataTest()
@@ -267,25 +281,37 @@ public:
         //VariableDescription::Real, 0, 100));  //min/max??
         VariableDescription::Real, 10, 20)); //test values
 
-    boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
-    SimulatedAnnealing sa(desc, ff);
+    boost::shared_ptr<CaseFitnessFunction> fitnessFunction(new CaseFitnessFunction());
+    SimulatedAnnealing sa(desc, fitnessFunction);
     sa.setPickFromBestScores(true);
-    const double bestScore = sa.iterate(50);  //change your number of test iterations here
-    LOG_ERROR("Best score: " << bestScore << " - (failures / num tests; lower is better)");
+    const int numIterations = 50; //change your number of test iterations here
+    const double bestScore = sa.iterate(numIterations);
+
+    LOG_ERROR("Number of test iterations: " << numIterations);
+    LOG_ERROR("Number of tests in test suite: " << fitnessFunction->getTestCount());
+    LOG_ERROR(
+      "Lowest number of test failures in test iteration: " <<
+      (int)(fitnessFunction->getTestCount() * bestScore));
+    LOG_ERROR("Number of best states found: " << sa.getBestStates().size());
     if (bestScore == 0.0)
     {
-      LOG_ERROR("***YOU FOUND A SOLUTION!***");
+      LOG_ERROR("***YOU FOUND A SOLUTION! :-)***");
     }
     else
     {
-      LOG_ERROR("No solution was found :-(");
+      LOG_ERROR("No solution was found. :-(");
     }
-    LOG_ERROR("\nBest states:\n");
+
+    QDir().mkdir("test-output/algorithms");
+    const QString statesOutputPath =
+      "test-output/algorithms/ConflictsNetworkMatcherSettingsOptimizer-states-out";
+    LOG_ERROR("Writing best states to: " << statesOutputPath << "...");
+    QString output = "\nBest states:\n";
     foreach (ConstStatePtr state, sa.getBestStates())
     {
-      LOG_VARE(state);
-      LOG_ERROR("");
+      output += state->toString() + "\n";
     }
+    FileUtils::writeFully(statesOutputPath, output);
   }
 };
 

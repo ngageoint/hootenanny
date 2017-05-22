@@ -189,7 +189,7 @@ void WriteOsmSqlStatementsDriver::_writeSequenceUpdateStatements(const QString e
   elementCounts[ElementType::Way] = 0;
   elementCounts[ElementType::Relation] = 0;
   const QStringList elementCountsStrList =
-    FileUtils::fileToString(mergedElementCountFileTempPath).split("\n");
+    FileUtils::readFully(mergedElementCountFileTempPath).split("\n");
   for (int i = 0; i < elementCountsStrList.size(); i++)
   {
     const QString line = elementCountsStrList.at(i);

@@ -56,10 +56,18 @@ public:
   /**
    * Reads an entire file to string
    *
-   * @param path file path
+   * @param path file path to read from
    * @return a string
    */
-  static QString fileToString(const QString path);
+  static QString readFully(const QString path);
+
+  /**
+   * Writes an entire file to string.  Closes the file on success.
+   *
+   * @param path file path to write to
+   * @param text text to be written
+   */
+  static void writeFully(const QString path, const QString text);
 };
 
 }
