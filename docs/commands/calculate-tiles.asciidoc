@@ -1,0 +1,17 @@
+== calculate-tiles 
+
+=== Description
+
+Returns a collection of bounding boxes as strings that contain roughly equal distributions of node data from the specified input.
+
+* +input+ - input path(s); use semicolon to delimit multiple paths
+* +output+ - output file name containing the bounding box strings
+* +maxNodeCountPerTile+ The maximum number of nodes in any tile (?).
+
+calculate-tiles honors the convert.bounding.box and convert.*.bounding.box configuration options.
+
+=== Usage
+
+--------------------------------------
+calculate-tiles (input) (output) [maxNodeCountPerTile]
+--------------------------------------
