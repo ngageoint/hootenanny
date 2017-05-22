@@ -27,6 +27,7 @@
 package hoot.services.controllers.export;
 
 import static hoot.services.HootProperties.OSMAPI_DB_URL;
+import static hoot.services.HootProperties.CHANGESET_DERIVE_BUFFER;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,9 +48,15 @@ class DeriveChangesetCommand extends ExportCommand {
 
         String aoi = getAOI(params, conflatedMap);
 
+        //This is set up for the XML changeset workflow.
         List<String> options = super.getCommonExportHootOptions();
         options.add("convert.bounding.box=" + aoi);
-        options.add("osm.changeset.sql.file.writer.generate.new.ids=false");
+        options.add("api.db.email=test@test.com");
+        options.add("reader.use.file.status=true");
+        options.add("reader.keep.file.status=true");
+        double changesetBufferSize = Double.parseDouble(CHANGESET_DERIVE_BUFFER); //in degrees
+        options.add("changeset.buffer=" + String.valueOf(changesetBufferSize));
+        options.add("changeset.allow.deleting.reference.features=false");
 
         String userId = params.getUserId();
         if (userId != null) {

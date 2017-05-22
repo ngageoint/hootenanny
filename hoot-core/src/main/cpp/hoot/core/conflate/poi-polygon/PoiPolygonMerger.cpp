@@ -47,8 +47,7 @@ _pairs(pairs)
   assert(_pairs.size() >= 1);
 }
 
-void PoiPolygonMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   ////
   /// See "Hootenanny - POI to Building" powerpoint for more details.

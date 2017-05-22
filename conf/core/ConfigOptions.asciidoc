@@ -144,6 +144,24 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== changeset.buffer
+
+* Data Type: double
+* Default Value: `0.0`
+
+Value in degrees by which the specified AOI (convert.bounding.box) will be expanded when calculating
+changesets.  Setting this too large with some datasets may greatly increase the changeset
+derivation time.
+
+=== changeset.allow.deleting.reference.features
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, changesets derived can issue delete statements for the reference dataset (first dataset
+passed to the changeset deriver).  If false, no delete statements will be issued for the reference
+dataset.
+
 === changeset.max.size
 
 * Data Type: long
@@ -157,6 +175,15 @@ The maximum allowed element size of an OSM changeset written to an OSM API datab
 * Default Value: `-1`
 
 The user ID used by certain changeset writers when writing to an OSM API database.
+
+=== changeset.xml.writer.add.timestamp
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, XML changesets will add the 'timestamp' attribute to the element tags.  If false, the
+timestamp attribute will not be added.  This generally should only be set to false for testing
+purposes.
 
 === circular.error.default.value
 
@@ -277,14 +304,6 @@ See also:
 
 The string that lists the types of conflation used in the user interface.  The possible values
 are: reference, cookieCutter, average, and advancedConflation.
-
-=== conflate.use.data.source.ids
-
-* Data Type: bool
-* Default Value: `false`
-
-Determines whether the conflate command will use the element ID's specified by the input datasets
-(true) or use internal ID management for the inputs (false).
 
 === conflator.manipulators
 
@@ -1360,14 +1379,6 @@ This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmAp
 It forces database reading/writing use the specified OSM API database as master for determining the
 sequencing of element ID's.
 
-=== osm.changeset.sql.file.writer.generate.new.ids
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, the OSM changeset sql file writer will generate new ID's for elements being created.
-Otherwise, it will use the ID's of the elements passed to it.
-
 === osm.map.reader.factory.reader
 
 * Data Type: string
@@ -1849,6 +1860,18 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== preserve.unknown1.element.id.when.modifying.features
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the element ID of features with status=unknown1 will be preserved when modifying features
+(merging, splitting, etc. during conflation, cleaning, etc.).  If false, the modified feature will
+be given a new, unique element ID.  This is useful when writing conflated data output back to a
+reference data store (associated with the unknown1 status) where modifying existing features is
+preferred over replacing them for provenance purposes.  Not honored by all visitors, map operations,
+or mergers which modify features.
+
 === progress.reporting.format
 
 * Data Type: string
@@ -1863,7 +1886,34 @@ reported.
 * Data Type: bool
 * Default Value: `true`
 
-By default add the `source:datetime` stamp when reading files. This is not honored by all readers.
+By default add the `source:datetime` stamp when reading files.  Not honored by all readers.
+
+=== reader.conflate.use.data.source.ids.1
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command to read the first input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
+=== reader.conflate.use.data.source.ids.2
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command to read the second input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
+=== reader.keep.file.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If reader.use.file.status is true, the default action is to drop the status tag from the file
+during reading.  Setting reader.keep.file.status to true preserves the status tag.  Not honored by
+all readers.
 
 === reader.preserve.all.tags
 
@@ -1873,20 +1923,20 @@ By default add the `source:datetime` stamp when reading files. This is not honor
 If true, all tags from the input data will be preserved.  Not honored by all readers.  e.g.
 an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will be kept.
 
+=== reader.set.default.status
+
+* Data Type: string
+* Default Value: `unknown1`
+
+Sets the status on data being read.  Valid values are "unknown1" and "unknown2".  Not honored by all
+readers.
+
 === reader.use.file.status
 
 * Data Type: bool
 * Default Value: `false`
 
 By default should a reader use the file status from the file. Not honored by all readers.
-
-=== reader.keep.file.status
-
-* Data Type: bool
-* Default Value: `false`
-
-If reader.use.file.status is true, the default action is to drop the status tag from the file during reading.
-Setting reader.keep.file.status to true preserves the status tag. Not honored by all readers.
 
 === remove.attribute.visitor.types
 
@@ -2544,7 +2594,7 @@ useful for debugging.
 * Data Type: bool
 * Default Value: `false`
 
-When true, writers will include debug information (hoot::* tags; e.g. status). Not honored by all
+When true, writers will include debug information (hoot:* tags; e.g. status). Not honored by all
 writers.
 
 === writer.clean.review.tags

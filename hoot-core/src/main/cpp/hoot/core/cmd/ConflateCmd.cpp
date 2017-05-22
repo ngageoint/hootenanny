@@ -118,7 +118,9 @@ int ConflateCmd::runSimple(QStringList args)
     output = args[1];
   }
 
-  LOG_INFO("Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
+  LOG_INFO(
+    "Conflating " << input1.right(50) << " with " << input2.right(50) <<
+    " and writing the output to " << output.right(50));
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
@@ -126,11 +128,11 @@ int ConflateCmd::runSimple(QStringList args)
 
   // read input 1
   OsmMapPtr map(new OsmMap());
-  loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
+  loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
   // read input 2
   if (!input2.isEmpty())
   {
-    loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+    loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
   }
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);

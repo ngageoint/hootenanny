@@ -470,7 +470,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-          nodes[i]->setTag("source:datetime", dts);
+          nodes[i]->setTag(MetadataTags::SourceDateTime(), dts);
         }
       }
     }
@@ -1351,7 +1351,7 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
         QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
         QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
 
-        t.set("source:datetime", dts);
+        t.set(MetadataTags::SourceDateTime(), dts);
       }
     }
   }

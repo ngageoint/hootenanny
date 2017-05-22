@@ -71,7 +71,7 @@ public:
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = QString(getenv("HOOT_HOME")) + "/test-files/servicesdb";
+    const QString scriptDir = "test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
@@ -95,7 +95,7 @@ public:
     //clear out the db so we get consistent next id results
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    const QString scriptDir = QString(getenv("HOOT_HOME")) + "/test-files/servicesdb";
+    const QString scriptDir = "test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());

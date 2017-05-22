@@ -76,6 +76,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
   LOG_VART(oldId);
+  LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {
     result = oldId;
@@ -89,36 +90,42 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
       if (_nodeIdMap.count(id) > 0)
       {
         result = ElementId::node(_nodeIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextNodeId();
         _nodeIdMap[id] = newId;
         result = ElementId::node(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Way:
       if (_wayIdMap.count(id) > 0)
       {
         result = ElementId::way(_wayIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextWayId();
         _wayIdMap[id] = newId;
         result = ElementId::way(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Relation:
       if (_relationIdMap.count(id) > 0)
       {
         result = ElementId::relation(_relationIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextRelationId();
         _relationIdMap[id] = newId;
         result = ElementId::relation(newId);
+        LOG_VART(result);
       }
       break;
     default:
@@ -126,7 +133,6 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
         QString::number(oldId.getType().getEnum()));
     }
   }
-  LOG_VART(result);
 
   return result;
 }
@@ -169,7 +175,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    if (! ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
+    if (!ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
   }
 
   if (tags.contains("type"))
@@ -280,9 +286,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     boundedNodeCount++;
     //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
     //with any queries.  Mapped ids may not exist yet.
-    const QString nodeId = QString::number(resultIterator.value(0).toLongLong());
-    LOG_VART(nodeId);
-    nodeIds.insert(nodeId);
+    const long nodeId = resultIterator.value(0).toLongLong();
+    LOG_VART(ElementId(ElementType::Node, nodeId));
+    nodeIds.insert( QString::number(nodeId));
   }
   LOG_VARD(nodeIds.size());
 
@@ -293,9 +299,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
     while (wayIdItr->next())
     {
-      const QString wayId = QString::number((*wayIdItr).value(0).toLongLong());
-      LOG_VART(wayId);
-      wayIds.insert(wayId);
+      const long wayId = (*wayIdItr).value(0).toLongLong();
+      LOG_VART(ElementId(ElementType::Way, wayId));
+      wayIds.insert(QString::number(wayId));
     }
     LOG_VARD(wayIds.size());
 
@@ -321,9 +327,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
       while (additionalWayNodeIdItr->next())
       {
-        const QString nodeId = QString::number((*additionalWayNodeIdItr).value(0).toLongLong());
-        LOG_VART(nodeId);
-        additionalWayNodeIds.insert(nodeId);
+        const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Node, nodeId));
+        additionalWayNodeIds.insert(QString::number(nodeId));
       }
 
       //subtract nodeIds from additionalWayNodeIds so no dupes get added
@@ -356,18 +362,18 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
       _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
     while (relationIdItr->next())
     {
-      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
-      LOG_VART(relationId);
-      relationIds.insert(relationId);
+      const long relationId = (*relationIdItr).value(0).toLongLong();
+      LOG_VART(ElementId(ElementType::Relation, relationId));
+      relationIds.insert(QString::number(relationId));
     }
     if (wayIds.size() > 0)
     {
       relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
       while (relationIdItr->next())
       {
-        const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
-        LOG_VART(relationId);
-        relationIds.insert(relationId);
+        const long relationId = (*relationIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Relation, relationId));
+        relationIds.insert(QString::number(relationId));
       }
     }
     LOG_VARD(relationIds.size());

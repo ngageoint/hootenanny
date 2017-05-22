@@ -73,7 +73,7 @@ void PartialNetworkMerger::_appendSublineMappings(
 }
 
 void PartialNetworkMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+                                 vector< pair<ElementId, ElementId> >& replaced)
 {
   _mergerList.clear();
 
@@ -104,7 +104,7 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   QList<ConstNodePtr> scrapNodeList;
   ExtractNodesVisitor extractVisitor(scrapNodeList);
   str2->visitRo(*map, extractVisitor);
- boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
   QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
   foreach (ConstNodePtr n, scrapNodeSet)
   {

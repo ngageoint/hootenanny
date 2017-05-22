@@ -56,7 +56,7 @@ ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<O
   _eid2 = _pairs.begin()->second;
 }
 
-void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const
+void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   bool hasMergeSet = hasFunction("mergeSets");
   bool hasMergePair = hasFunction("mergePair");

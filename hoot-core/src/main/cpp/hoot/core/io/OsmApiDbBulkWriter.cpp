@@ -396,20 +396,20 @@ void OsmApiDbBulkWriter::finalizePartial()
   //out
   _writeCombinedSqlFile();
 
-  LOG_INFO("File write stats:");
-  _logStats();
+  LOG_DEBUG("File write stats:");
+  _logStats(true);
 
   if (_destinationIsDatabase())
   {
     _writeDataToDb();
-    LOG_INFO("Final database write stats:");
+    LOG_DEBUG("Final database write stats:");
   }
   else
   {
     LOG_DEBUG("Skipping SQL execution against database due to configuration...");
-    LOG_INFO("Final file write stats:");
+    LOG_DEBUG("Final file write stats:");
   }
-  _logStats();
+  _logStats(true);
 }
 
 bool OsmApiDbBulkWriter::_destinationIsDatabase() const
@@ -790,7 +790,14 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   }
   // Have to establish new mapping
   const unsigned long nodeDbId = _establishNewIdMapping(node->getElementId());
-  LOG_VART(nodeDbId);
+  LOG_VART(ElementId(ElementType::Node, nodeDbId));
+
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    Tags tags = node->getTags();
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(nodeDbId));
+  }
 
   _writeNodeToStream(node, nodeDbId);
   _writeTagsToStream(node->getTags(), ElementType::Node, nodeDbId,
@@ -819,6 +826,8 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
     PROGRESS_INFO(
       "Parsed " << _formatPotentiallyLargeNumber(_writeStats.nodesWritten) << " nodes from input.");
   }
+
+  LOG_VART(node->getVersion());
 }
 
 QString OsmApiDbBulkWriter::_secondsToDhms(const qint64 durationInMilliseconds) const
@@ -860,7 +869,14 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   }
   // Have to establish new mapping
   const unsigned long wayDbId = _establishNewIdMapping(way->getElementId());
-  LOG_VART(wayDbId);
+  LOG_VART(ElementId(ElementType::Way, wayDbId));
+
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    Tags tags = way->getTags();
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(wayDbId));
+  }
 
   _writeWayToStream(wayDbId);
   _writeWayNodesToStream(wayDbId, way->getNodeIds());
@@ -909,7 +925,14 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   }
   // Have to establish new mapping
   const unsigned long relationDbId = _establishNewIdMapping(relation->getElementId());
-  LOG_VART(relationDbId);
+  LOG_VART(ElementId(ElementType::Relation, relationDbId));
+
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    Tags tags = relation->getTags();
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(relationDbId));
+  }
 
   _writeRelationToStream(relationDbId);
   _writeRelationMembersToStream(relation, relationDbId);

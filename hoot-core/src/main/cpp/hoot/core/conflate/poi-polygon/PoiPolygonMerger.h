@@ -51,8 +51,7 @@ public:
    */
   PoiPolygonMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   /**
    * Merges a single POI with a single polygon, both as defined by PoiPolygonMerger
@@ -75,7 +74,8 @@ private:
   std::set< std::pair<ElementId, ElementId> > _pairs;
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
-    std::vector<ElementId>& buildings2, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
+                            std::vector<ElementId>& buildings2,
+                            std::vector< std::pair<ElementId, ElementId> >& replaced) const;
 
   Tags _mergePoiTags(const OsmMapPtr& map, Status s) const;
 

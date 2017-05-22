@@ -33,8 +33,10 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt
+#include <QMap>
 class QXmlStreamWriter;
 
 namespace hoot
@@ -79,11 +81,6 @@ public:
 
 private:
 
-  /** Helper functions to write nodes, ways, and relations. */
-  void writeNode(QXmlStreamWriter& writer, ConstNodePtr n);
-  void writeWay(QXmlStreamWriter& writer, ConstWayPtr w);
-  void writeRelation(QXmlStreamWriter& writer, ConstRelationPtr n);
-
   /** Settings from the config file */
   int _precision;
   long _changesetMaxSize;
@@ -92,6 +89,18 @@ private:
 
   bool _multipleChangesetsWritten;
 
+  OsmXmlWriter _invalidCharacterRemover;
+
+  QMap<ElementType::Type, long> _newElementIdCtrs;
+  //keeping track of these mappings unfortunately makes this writer memory bound
+  QMap<ElementType::Type, QMap<long, long> > _newElementIdMappings;
+
+  /** Helper functions to write nodes, ways, and relations. */
+  void _writeNode(QXmlStreamWriter& writer, ConstNodePtr n);
+  void _writeWay(QXmlStreamWriter& writer, ConstWayPtr w);
+  void _writeRelation(QXmlStreamWriter& writer, ConstRelationPtr n);
+
+  void _initIdCounters();
 };
 
 }

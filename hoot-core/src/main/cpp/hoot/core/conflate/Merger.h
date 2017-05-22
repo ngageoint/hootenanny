@@ -53,13 +53,15 @@ public:
    *
    * @param replaced A deque of all element Ids that were replaced as part of this Merger operation.
    */
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
-    const = 0;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector< std::pair<ElementId, ElementId> >& replaced) = 0;
 
   /**
    * Returns all the element ids that are impacted by this merger operation.
    */
   virtual std::set<ElementId> getImpactedElementIds() const = 0;
+
+  virtual set< pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const = 0;
 
   /**
    * Returns true if this merge can be applied to the specified map.

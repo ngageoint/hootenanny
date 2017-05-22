@@ -35,12 +35,8 @@ using namespace boost;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/manipulators/DanglerRemover.h>
-#include <hoot/core/manipulators/DividedHighwayMerger.h>
-#include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>

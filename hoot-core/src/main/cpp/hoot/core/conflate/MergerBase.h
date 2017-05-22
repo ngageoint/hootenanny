@@ -45,6 +45,9 @@ public:
 
   virtual std::set<ElementId> getImpactedElementIds() const;
 
+  virtual set< pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
+  {  return set< pair<ElementId, ElementId> >(); }
+
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
   virtual void replace(ElementId oldEid, ElementId newEid);

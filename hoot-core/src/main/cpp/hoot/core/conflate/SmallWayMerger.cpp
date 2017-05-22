@@ -90,7 +90,7 @@ void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
 
       // if the way is smaller than the threshold
       if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) &&
-        ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
+          ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
       {
         _mergeNeighbors(w);
       }
@@ -179,7 +179,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       LOG_TRACE("w1: " << w1->toString());
       LOG_TRACE("w2: " << w2->toString());
       throw HootException("The ends of the ways don't touch. "
-                    "Did you run the intersection splitter first?");
+                          "Did you run the intersection splitter first?");
     }
 
     // if the ways share both ends (circle) then this causes bad weird things to happen so
@@ -191,6 +191,12 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     }
     else
     {
+      LOG_TRACE("Merging " << next->getElementId() << " into " << first->getElementId() << "...");
+      LOG_VART(first->getElementId());
+      LOG_VART(first->getStatus());
+      LOG_VART(next->getElementId());
+      LOG_VART(next->getStatus());
+
       // add next's nodes onto first's list.
       for (size_t i = 1; i < next->getNodeCount(); ++i)
       {
@@ -204,6 +210,24 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       // just in case we can't delete it, clear the tags.
       next->getTags().clear();
       RecursiveElementRemover(next->getElementId()).apply(_map);
+
+      if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+          //since this is being run as a post conflation op, need to also check for a conflated
+          //status due to associated bookkeeping modifications made in
+          //UnifyingConflator::_mapUnknown1IdsBackToModifiedElements...not sure if the other classes
+          //with this same change should also check for the conflated status too ??
+          (next->getStatus() == Status::Unknown1 || next->getStatus() == Status::Conflated))
+      {
+        //see similar notes in HighwaySnapMerger::_mergePair
+
+        LOG_TRACE(
+          "Retaining reference ID by setting " << next->getElementId().getId() << " on " <<
+          first->getElementId() << "...");
+        ElementPtr newWaySegment(_map->getElement(first->getElementId())->clone());
+        newWaySegment->setId(next->getElementId().getId());
+        _map->replace(_map->getElement(first->getElementId()), newWaySegment);
+      }
+      LOG_VART(_map->containsElement(next->getElementId()));
     }
   }
 }

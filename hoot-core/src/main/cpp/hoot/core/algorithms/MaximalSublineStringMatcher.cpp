@@ -113,6 +113,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
   ScoredMatch scoredResult = _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1,
     reversed2);
+  LOG_VARD(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
   try
@@ -338,7 +339,10 @@ void MaximalSublineStringMatcher::setSublineMatcher(boost::shared_ptr<SublineMat
 
 void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, ElementId eid) const
 {
+  LOG_TRACE("Validating element " << eid << "...");
+
   ConstElementPtr e = map->getElement(eid);
+  LOG_VART(e.get());
 
   if (e->getElementType() == ElementType::Relation)
   {
@@ -364,6 +368,7 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    LOG_VART(w.get());
 
     if (w->getNodeCount() <= 1)
     {

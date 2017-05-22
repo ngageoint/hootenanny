@@ -71,6 +71,7 @@ _encodingErrorCount(0)
 
 }
 
+//TODO: refactor this
 QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.
@@ -215,6 +216,8 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
 void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
   LOG_VART(e->getElementId());
+  LOG_VART(e->getVersion());
+  LOG_VART(e->getStatus());
 
   if (_includeCompatibilityTags)
   {
@@ -225,6 +228,7 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
       version = 1;
     }
     writer.writeAttribute("version", QString::number(version));
+    LOG_VART(version);
   }
   else
   {

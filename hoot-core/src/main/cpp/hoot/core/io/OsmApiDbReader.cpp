@@ -194,11 +194,13 @@ void OsmApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
       {
         if (tags.size() > 0)
         {
-          //LOG_VART(tags);
           element->setTags(ApiDb::unescapeTags(tags.join(", ")));
           _updateMetadataOnElement(element);
         }
-        if (_status != Status::Invalid) { element->setStatus(_status); }
+        if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+        {
+          element->setStatus(_status);
+        }
         LOG_VART(element);
         map->addElement(element);
         elementCount++;
@@ -244,7 +246,10 @@ void OsmApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
       element->setTags(ApiDb::unescapeTags(tags.join(", ")));
       _updateMetadataOnElement(element);
     }
-    if (_status != Status::Invalid) { element->setStatus(_status); }
+    if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+    {
+      element->setStatus(_status);
+    }
     LOG_VART(element);
     map->addElement(element);
     elementCount++;
@@ -277,9 +282,9 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   const long nodeId = _mapElementId(map, ElementId::node(rawId)).getId();
   LOG_VART(nodeId);
   const double lat =
-    resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+    resultIterator.value(ApiDb::NODES_LATITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
   const double lon =
-    resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
+    resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
 
   NodePtr node(
     new Node(
@@ -295,7 +300,13 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   _parseAndSetTagsOnElement(node);
   _updateMetadataOnElement(node);
   //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { node->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    node->setStatus(_status);
+  }
+  LOG_VART(node->getStatus());
+
+  LOG_VART(node->getVersion());
 
   return node;
 }
@@ -332,7 +343,11 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   _parseAndSetTagsOnElement(way);
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { way->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    way->setStatus(_status);
+  }
+  LOG_VART(way->getStatus());
 
   return way;
 }
@@ -361,7 +376,10 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
           _updateMetadataOnElement(node);
         }
         //we want the reader's status to always override any existing status
-        if (_status != Status::Invalid) { node->setStatus(_status); }
+        if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+        {
+          node->setStatus(_status);
+        }
         LOG_VART(node);
         map.addElement(node);
       }
@@ -403,7 +421,11 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   _parseAndSetTagsOnElement(relation);
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { relation->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    relation->setStatus(_status);
+  }
+  LOG_VART(relation->getStatus());
 
   return relation;
 }

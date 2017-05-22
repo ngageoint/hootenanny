@@ -42,10 +42,10 @@ public:
    */
   BuildingMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
-  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const std::set<ElementId>& eids);
+  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
+                                                  const std::set<ElementId>& eids);
 
   virtual QString toString() const;
 

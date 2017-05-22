@@ -46,10 +46,11 @@ public:
     const std::set< std::pair<ElementId, ElementId> >& pairs,
     const boost::shared_ptr<SublineStringMatcher>& sublineMatcher);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   virtual QString toString() const;
+
+  virtual set< pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const;
 
 protected:
 
@@ -61,9 +62,7 @@ private:
   double _minSplitSize;
   std::set< std::pair<ElementId, ElementId> > _pairs;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
-
-  void _addScrapsToMap(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced,
-    ElementId originalId, std::vector<WayPtr>& scraps) const;
+  set< pair<ElementId, ElementId> > _unknown1Replacements;
 
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance
@@ -75,7 +74,7 @@ private:
                         QString reviewType) const;
 
   void _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                   std::vector< std::pair<ElementId, ElementId> >& replaced) const;
+                  std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
   void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;
@@ -91,8 +90,9 @@ private:
    * appropriately and the match and scrap are added to the replaced list and added to the map.
    * The original elements are deleted.
    */
-  void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s, const std::vector<bool>& reverse,
-    std::vector< std::pair<ElementId, ElementId> >& replaced,
+  void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
+                     const std::vector<bool>& reverse,
+                     std::vector< std::pair<ElementId, ElementId> >& replaced,
     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;

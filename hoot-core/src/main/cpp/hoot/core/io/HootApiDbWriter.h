@@ -71,7 +71,8 @@ public:
 
   void setTextStatus(bool textStatus) { _textStatus = textStatus; }
 
-  void setIncludeCircularError(bool includeCircularError) { _includeCircularError = includeCircularError; }
+  void setIncludeCircularError(bool includeCircularError)
+  { _includeCircularError = includeCircularError; }
 
   /**
    * If set to true (the default) then all IDs are remapped into new IDs. This is appropriate if

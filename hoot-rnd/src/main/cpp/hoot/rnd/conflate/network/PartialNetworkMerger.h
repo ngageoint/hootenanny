@@ -53,7 +53,7 @@ public:
   PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId> > &pairs,
     QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced) const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   /**
    * Maps from a retired EID to its latest EID. If this EID has no mapping then the original EID
@@ -87,10 +87,12 @@ private:
     std::vector<std::pair<ElementId, ElementId> > &replaced,
     ConstEdgeMatchPtr edgeMatch) const;
 
-  void _processFullMatch(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId> > &replaced) const;
+  void _processFullMatch(const OsmMapPtr& map,
+                         std::vector<std::pair<ElementId, ElementId> > &replaced) const;
 
-  void _processStubMatch(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId> > &replaced,
-    ConstEdgeMatchPtr edgeMatch) const;
+  void _processStubMatch(const OsmMapPtr& map,
+                         std::vector<std::pair<ElementId, ElementId> > &replaced,
+                         ConstEdgeMatchPtr edgeMatch) const;
 };
 
 }

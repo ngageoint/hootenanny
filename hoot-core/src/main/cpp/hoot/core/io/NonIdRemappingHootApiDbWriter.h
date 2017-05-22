@@ -22,38 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwayMerger.h"
+#ifndef NONIDREMAPPINGHOOTAPIDBWRITER_H
+#define NONIDREMAPPINGHOOTAPIDBWRITER_H
 
-using namespace std;
+#include "HootApiDbWriter.h"
+#include "OsmApiDb.h"
 
 namespace hoot
 {
 
-HighwayMerger::HighwayMerger()
+/**
+ * Hoot api db writer that doesn't remap ID's.  It assumes you've handled ID conflicts beforehand.
+ */
+class NonIdRemappingHootApiDbWriter : public HootApiDbWriter
 {
-}
+public:
 
-void HighwayMerger::apply(const OsmMapPtr& /*map*/,
-  vector< pair<ElementId, ElementId> >& /*replaced*/) const
-{
+  static std::string className() { return "hoot::NonIdRemappingHootApiDbWriter"; }
 
-}
+  NonIdRemappingHootApiDbWriter();
 
-set<ElementId> HighwayMerger::getImpactedElementIds() const
-{
-  return set<ElementId>();
-}
+  //virtual ~NonIdRemappingHootApiDbWriter() {};
 
-bool HighwayMerger::isValid(const ConstOsmMapPtr& /*map*/) const
-{
-  return false;
-}
+protected:
 
-void HighwayMerger::replace(ElementId /*oldEid*/, ElementId /*newEid*/)
-{
+  virtual long _getRemappedElementId(const ElementId& eid);
+
+};
 
 }
 
-}
+#endif // NONIDREMAPPINGHOOTAPIDBWRITER_H

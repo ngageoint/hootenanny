@@ -578,8 +578,7 @@ void MapProjector::project(boost::shared_ptr<OsmMap> map,boost::shared_ptr<OGRSp
 
     if (count % 1000 == 0 && Log::getInstance().isInfoEnabled())
     {
-      cout << "Reprojecting " << count << " / " << nodes.size() << "         \r";
-      cout.flush();
+      PROGRESS_DEBUG("Reprojecting " << count << " / " << nodes.size());
     }
     count++;
   }

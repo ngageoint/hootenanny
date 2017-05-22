@@ -118,8 +118,8 @@ private:
   /**
    * Converts a query result to an OSM element
    */
-  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator, const ElementType& elementType,
-                                       OsmMap& map);
+  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
+                                              const ElementType& elementType, OsmMap& map);
 };
 
 }
