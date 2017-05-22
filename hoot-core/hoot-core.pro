@@ -542,7 +542,8 @@ SOURCES += \
     src/main/cpp/hoot/core/util/DbUtils.cpp \
     src/main/cpp/hoot/core/io/OsmApiDbSqlStatementFormatter.cpp \
     src/main/cpp/hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.cpp \
-    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.cpp
+    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.cpp \
+    src/main/cpp/hoot/core/cmd/CalculateTilesCmd.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
