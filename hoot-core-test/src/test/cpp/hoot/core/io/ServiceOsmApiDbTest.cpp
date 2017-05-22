@@ -37,7 +37,6 @@
 
 // Qt
 #include <QFile>
-#include <QTextStream>
 #include <QDir>
 
 #include "../TestUtils.h"
