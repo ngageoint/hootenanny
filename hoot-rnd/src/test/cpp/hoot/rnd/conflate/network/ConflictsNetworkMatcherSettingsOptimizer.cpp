@@ -49,6 +49,7 @@ namespace hoot
  * This is used for network conflation parameter tuning only and isn't actually a unit test.
  *
  * IMPORTANT: Most of the time you want to run this at the error log level to reduce log clutter.
+ * Temporarily uncomment cout lines in SimulatedAnnealing::iterate for better logging feedback.
  *
  * TODO: come up with a better way to control logging inside SimulatedAnnealing than cout
  */
@@ -107,7 +108,7 @@ public:
     QString _name;
   };
 
-  //TODO: modify fitness function to give variable failure based on the number of reviews
+  //TODO: modify fitness function to give variable failure based on the number of reviews (#1092)
   class CaseFitnessFunction : public Tgs::FitnessFunction
   {
   public:
@@ -186,7 +187,7 @@ public:
         //VariableDescription::Real, 4.4, 4.4)); //original default
         //VariableDescription::Real, 8.8, 8.8)); //current default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 3.4, 5.4)); //test values
+        VariableDescription::Real, 4.0, 10.0)); //test values
     desc->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
         //VariableDescription::Real, 0.2, 0.2)); //original default
@@ -259,11 +260,17 @@ public:
         //VariableDescription::Real, 5.0, 5.0)); //new default
         //VariableDescription::Real, 0.01, 100.0));  //min/max??
         VariableDescription::Real, 4.0, 6.0)); //test values
+    desc->addVariable(
+      new VariableDescription(ConfigOptions::getNetworkOptimizationIterationsKey(),
+        //VariableDescription::Real, 10, 10)); //original default
+        //VariableDescription::Real, 10, 10)); //new default
+        //VariableDescription::Real, 0, 100));  //min/max??
+        VariableDescription::Real, 10, 20)); //test values
 
     boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
     sa.setPickFromBestScores(true);
-    const double bestScore = sa.iterate(100);
+    const double bestScore = sa.iterate(50);  //change your number of test iterations here
     LOG_ERROR("Best score: " << bestScore << " - (failures / num tests; lower is better)");
     if (bestScore == 0.0)
     {
