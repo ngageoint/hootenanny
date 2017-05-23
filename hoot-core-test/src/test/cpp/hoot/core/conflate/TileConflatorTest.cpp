@@ -84,8 +84,8 @@ public:
 
     uut.conflate("test-output/conflate/TileConflatorTest.osm");
 
-    CPPUNIT_ASSERT_EQUAL(true, TestUtils::compareMaps("test-files/conflate/TileConflatorTest.osm",
-      "test-output/conflate/TileConflatorTest.osm"));
+    HOOT_FILE_EQUALS("test-files/conflate/TileConflatorTest.osm",
+                     "test-output/conflate/TileConflatorTest.osm");
   }
 
   virtual void tearDown()

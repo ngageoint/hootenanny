@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" lat="38.8549321261880536" lon="-104.8979050333482093"/>
-    <node visible="true" id="-2" lat="38.8549524185660573" lon="-104.8987388916486054"/>
-    <node visible="true" id="-3" lat="38.8549614373988845" lon="-104.8997124086258452"/>
-    <node visible="true" id="-4" lat="38.8549052746487078" lon="-104.8971818522900037"/>
-    <node visible="true" id="-5" lat="38.8538973595014951" lon="-104.9009792766811699"/>
-    <node visible="true" id="-6" lat="38.8539439301530720" lon="-104.9002787394481544"/>
-    <node visible="true" id="-7" lat="38.8539805213579186" lon="-104.8997960522083304"/>
-    <node visible="true" id="-8" lat="38.8540038066602875" lon="-104.8988605787081525"/>
-    <node visible="true" id="-9" lat="38.8537509943980552" lon="-104.8980532522627982"/>
-    <node visible="true" id="-10" lat="38.8531921430506770" lon="-104.8976688110983275"/>
-    <node visible="true" id="-11" lat="38.8529060626855411" lon="-104.8969212866118710"/>
-    <node visible="true" id="-12" lat="38.8544329201535206" lon="-104.8976816258037985"/>
-    <node visible="true" id="-13" lat="38.8544828169033210" lon="-104.8987196169478437"/>
-    <node visible="true" id="-14" lat="38.8544595317577688" lon="-104.8996123747631088"/>
-    <node visible="true" id="-15" lat="38.8540969477935292" lon="-104.8970152611187530"/>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <node visible="true" id="-16" lat="38.8544428995062887" lon="-104.9003598992495370"/>
-    <way visible="true" id="-7">
+    <node visible="true" id="-15" lat="38.8540969477935292" lon="-104.8970152611187530"/>
+    <node visible="true" id="-14" lat="38.8544595317577688" lon="-104.8996123747631088"/>
+    <node visible="true" id="-13" lat="38.8544828169033210" lon="-104.8987196169478437"/>
+    <node visible="true" id="-12" lat="38.8544329201535206" lon="-104.8976816258037985"/>
+    <node visible="true" id="-11" lat="38.8529060626855411" lon="-104.8969212866118710"/>
+    <node visible="true" id="-10" lat="38.8531921430506770" lon="-104.8976688110983275"/>
+    <node visible="true" id="-9" lat="38.8537509943980552" lon="-104.8980532522627982"/>
+    <node visible="true" id="-8" lat="38.8540038066602875" lon="-104.8988605787081525"/>
+    <node visible="true" id="-7" lat="38.8539805213579186" lon="-104.8997960522083304"/>
+    <node visible="true" id="-6" lat="38.8539439301530720" lon="-104.9002787394481544"/>
+    <node visible="true" id="-5" lat="38.8538973595014951" lon="-104.9009792766811699"/>
+    <node visible="true" id="-4" lat="38.8549052746487078" lon="-104.8971818522900037"/>
+    <node visible="true" id="-3" lat="38.8549614373988845" lon="-104.8997124086258452"/>
+    <node visible="true" id="-2" lat="38.8549524185660573" lon="-104.8987388916486054"/>
+    <node visible="true" id="-1" lat="38.8549321261880536" lon="-104.8979050333482093"/>
+    <way visible="true" id="-6">
         <nd ref="-13"/>
         <nd ref="-12"/>
         <nd ref="-15"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5">
         <nd ref="-16"/>
         <nd ref="-14"/>
         <nd ref="-13"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4">
         <nd ref="-7"/>
@@ -37,7 +35,6 @@
         <nd ref="-10"/>
         <tag k="note" v="3"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3">
         <nd ref="-5"/>
@@ -49,7 +46,6 @@
         <nd ref="-11"/>
         <tag k="note" v="4"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2">
         <nd ref="-2"/>
@@ -57,7 +53,6 @@
         <nd ref="-4"/>
         <tag k="note" v="2"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1">
         <nd ref="-3"/>
@@ -65,6 +60,5 @@
         <nd ref="-1"/>
         <tag k="note" v="1"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="15"/>
     </way>
 </osm>
