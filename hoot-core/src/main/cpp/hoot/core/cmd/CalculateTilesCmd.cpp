@@ -35,9 +35,6 @@
 #include <hoot/core/conflate/TileBoundsCalculator.h>
 #include <hoot/core/util/FileUtils.h>
 
-// Standard
-#include <fstream>
-
 namespace hoot
 {
 
@@ -62,7 +59,7 @@ class CalculateTilesCmd : public BaseCommand
 
       QStringList inputs;
       const QString input = args[0];
-      LOG_VAR(input);
+      LOG_VARD(input);
       if (!input.contains(";"))
       {
         inputs.append(input);
@@ -77,7 +74,7 @@ class CalculateTilesCmd : public BaseCommand
       const QString output = args[1];
       LOG_VARD(output);
 
-      long maxNodesPerTile = 5000000; //not sure what a good default for this is
+      long maxNodesPerTile = 1000;
       if (args.size() > 2)
       {
         bool parseSuccess = false;
@@ -93,32 +90,37 @@ class CalculateTilesCmd : public BaseCommand
       for (int i = 0; i < inputs.size(); i++)
       {
         boost::shared_ptr<OsmMapReader> reader =
-          OsmMapReaderFactory::getInstance().createReader(inputs.at(i), true);
+          OsmMapReaderFactory::getInstance().createReader(inputs.at(i), true, Status::Unknown1);
         reader->open(inputs.at(i));
         reader->read(map);
       }
+      LOG_VARD(map->getNodeCount());
 
-      //1km; TODO: how to derive this...some percentage of the total area or let the user define it?
-      TileBoundsCalculator tbc(0.01);
-      tbc.setMaxNodesPerBox(maxNodesPerTile);
+      //TODO: how to derive pixel size?...some percentage of the total convert bounds or input data
+      //area? or let the user define it?
+      TileBoundsCalculator tileBoundsCalculator(0.001); //.1km
+      tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
       //tbc.setSlop(0.1);
       cv::Mat r1, r2;
-      tbc.renderImage(map, r1, r2);
-      const std::vector< std::vector<geos::geom::Envelope> > tiles = tbc.calculateTiles();
+      tileBoundsCalculator.renderImage(map, r1, r2);
+      cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
+      tileBoundsCalculator.setImages(r1, zeros);
+      const std::vector< std::vector<geos::geom::Envelope> > tiles =
+        tileBoundsCalculator.calculateTiles();
 
-      //return a semi-colon delimited string of bounds obj's
+      //write a semi-colon delimited string of bounds obj's to output
       QString outputTilesStr;
-      LOG_VAR(tiles.size());
+      LOG_VARD(tiles.size());
       for (size_t tx = 0; tx < tiles.size(); tx++)
       {
-        LOG_VAR(tiles[tx].size());
+        LOG_VART(tiles[tx].size());
         for (size_t ty = 0; ty < tiles[tx].size(); ty++)
         {
-          outputTilesStr += QString::fromStdString(tiles[tx][ty].toString()) + ";";
+          outputTilesStr += GeometryUtils::envelopeToConfigString(tiles[tx][ty]) + ";";
         }
       }
       outputTilesStr.chop(1);
-      LOG_VAR(outputTilesStr);
+      LOG_VARD(outputTilesStr);
       FileUtils::writeFully(output, outputTilesStr);
 
       return 0;
