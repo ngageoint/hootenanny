@@ -166,7 +166,7 @@ The advantage to this method is that you're using the package manager to keep th
 
 ==== Configure Eclipse
 
-* Go to Window --> Preferences --> Java --> Installed JRE's to make sure your JDK is correctly set to: @/usr/lib/jvm/oracle_jdk8/@.
+* Go to Window --> Preferences --> Java --> Installed JRE's to make sure your JDK is correctly set to: @/usr/lib/jvm/java-8-oracle/@.
 * Set your tab spacing to 2 spaces.
 * See "steps 7 and above here":https://127.0.0.1:9443/redmine/projects/mrgeo/wiki/DeveloperDocumentationBuildEnvironment2#Eclipse for some optional Eclipse configuration steps to make it behave more nicely. (Optional)
 * *TODO: Set up source code formatting in eclipse*
@@ -217,7 +217,7 @@ sudo service tomcat8 stop
 ** Click Add External Jars
 ** Add the following jars if they are not already present:
 *** /usr/share/tomcat8/bin/bootstrap.jar
-*** /usr/lib/jvm/oracle_jdk8/lib/tools.jar
+*** /usr/lib/jvm/java-8-oracle/lib/tools.jar
 *** Click the Arguments tab
 *** Program arguments should contain the text:
 ------

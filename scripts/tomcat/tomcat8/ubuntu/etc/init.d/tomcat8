@@ -54,7 +54,7 @@ fi
 TOMCAT8_USER=tomcat8
 TOMCAT8_GROUP=tomcat8
 
-export JAVA_HOME=/usr/lib/jvm/oracle_jdk8
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 # Directory where the Tomcat 8 binary distribution resides
 CATALINA_HOME=/usr/share/tomcat8
