@@ -63,7 +63,7 @@ class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 
 public:
 
-  const int NUM_TEST_ITERATIONS = 3;
+  const int NUM_TEST_ITERATIONS = 50;
 
   class SimpleListener : public CppUnit::TestListener
   {
@@ -203,6 +203,8 @@ public:
           failureMsg += "\t" + failedTests[i] + "\n";
         }
         LOG_ERROR(failureMsg);
+        LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
+        LOG_ERROR("");
       }
 
       return (double)failedTests.size() / (double)_testCount;
