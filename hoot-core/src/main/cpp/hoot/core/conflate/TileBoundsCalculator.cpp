@@ -33,6 +33,7 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QImage>
@@ -438,6 +439,11 @@ void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map)
 void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
+    LOG_VAR(tempEnv->toString());
+  }
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;

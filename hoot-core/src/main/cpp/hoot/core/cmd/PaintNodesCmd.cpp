@@ -214,7 +214,6 @@ class PaintNodesCmd : public BaseCommand
       Envelope e = getEnvelope(reader);
       LOG_INFO("Envelope: " << GeometryUtils::toString(e));
 
-
       double pixelSize;
       if (e.getWidth() > e.getHeight())
       {

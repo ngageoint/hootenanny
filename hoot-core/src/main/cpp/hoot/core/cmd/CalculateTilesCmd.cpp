@@ -28,22 +28,15 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/EnvelopeProvider.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/OpenCv.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-
-// Qt
-#include <QImage>
+#include <hoot/core/conflate/TileBoundsCalculator.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Standard
 #include <fstream>
-
-using namespace geos::geom;
-using namespace std;
 
 namespace hoot
 {
@@ -61,34 +54,72 @@ class CalculateTilesCmd : public BaseCommand
 
     virtual int runSimple(QStringList args)
     {
-      if (args.size() != 2)
+      if (args.size() < 2 || args.size() > 3)
       {
         cout << getHelp() << endl << endl;
-        throw HootException(QString("%1 takes two parameters.").arg(getName()));
+        throw HootException(QString("%1 takes two to three parameters.").arg(getName()));
       }
 
-      QString input = args[0];
-      QString output = args[1];
+      QStringList inputs;
+      const QString input = args[0];
+      LOG_VAR(input);
+      if (!input.contains(";"))
+      {
+        inputs.append(input);
+      }
+      else
+      {
+        //multiple inputs
+        inputs = input.split(";");
+      }
+      LOG_VARD(inputs);
 
-//      boost::shared_ptr<OsmMapReader> reader =
-//        OsmMapReaderFactory::getInstance().createReader(input, true);
-//      reader->open(input);
-//      Envelope e = getEnvelope(reader);
-//      LOG_INFO("Envelope: " << GeometryUtils::toString(e));
+      const QString output = args[1];
+      LOG_VARD(output);
 
-//      double pixelSize;
-//      if (e.getWidth() > e.getHeight())
-//      {
-//        pixelSize = e.getWidth() / maxSize;
-//      }
-//      else
-//      {
-//        pixelSize = e.getHeight() / maxSize;
-//      }
+      long maxNodesPerTile = 5000000; //not sure what a good default for this is
+      if (args.size() > 2)
+      {
+        bool parseSuccess = false;
+        maxNodesPerTile = args[2].toLong(&parseSuccess);
+        if (!parseSuccess || maxNodesPerTile < 1)
+        {
+          throw HootException("Invalid maximum nodes per tile value: " + args[2]);
+        }
+      }
+      LOG_VARD(maxNodesPerTile);
 
-//      reader = OsmMapReaderFactory::getInstance().createReader(input, true);
-//      reader->open(input);
-//      cv::Mat mat = calculateDensity(e, pixelSize, reader);
+      OsmMapPtr map(new OsmMap());
+      for (int i = 0; i < inputs.size(); i++)
+      {
+        boost::shared_ptr<OsmMapReader> reader =
+          OsmMapReaderFactory::getInstance().createReader(inputs.at(i), true);
+        reader->open(inputs.at(i));
+        reader->read(map);
+      }
+
+      //1km; TODO: how to derive this...some percentage of the total area or let the user define it?
+      TileBoundsCalculator tbc(0.01);
+      tbc.setMaxNodesPerBox(maxNodesPerTile);
+      //tbc.setSlop(0.1);
+      cv::Mat r1, r2;
+      tbc.renderImage(map, r1, r2);
+      const std::vector< std::vector<geos::geom::Envelope> > tiles = tbc.calculateTiles();
+
+      //return a semi-colon delimited string of bounds obj's
+      QString outputTilesStr;
+      LOG_VAR(tiles.size());
+      for (size_t tx = 0; tx < tiles.size(); tx++)
+      {
+        LOG_VAR(tiles[tx].size());
+        for (size_t ty = 0; ty < tiles[tx].size(); ty++)
+        {
+          outputTilesStr += QString::fromStdString(tiles[tx][ty].toString()) + ";";
+        }
+      }
+      outputTilesStr.chop(1);
+      LOG_VAR(outputTilesStr);
+      FileUtils::writeFully(output, outputTilesStr);
 
       return 0;
     }
