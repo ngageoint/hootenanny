@@ -22,21 +22,21 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
+if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
     echo "### Installing Java 8..."
 
     # jdk-8u112-linux-x64.tar.gz's official checksums:
-    #    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
-    #    md5: de9b7a90f0f5a13cfcaa3b01451d0337
-    echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
+    #    sha256:  62b215bdfb48bace523723cdbb2157c665e6a25429c73828a32f00e587301236
+    #    md5: 75b2cb2249710d822a60f83e28860053
+    echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
 
-    if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u112-linux-x64.tar.gz"
+    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz  ] || ! md5sum -c /tmp/jdk.md5; then
+        echo "Downloading jdk-8u131-linux-x64.tar.gz...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
+        echo "Finished download of jdk-8u131-linux-x64.tar.gz "
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
 
     if [[ ! -e /usr/lib/jvm ]]; then
         sudo mkdir /usr/lib/jvm
@@ -46,7 +46,7 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
         fi
     fi
 
-    sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
+    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
