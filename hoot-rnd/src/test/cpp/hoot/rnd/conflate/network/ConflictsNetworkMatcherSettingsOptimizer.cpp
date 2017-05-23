@@ -63,6 +63,8 @@ class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 
 public:
 
+  const int NUM_TEST_ITERATIONS = 3;
+
   class SimpleListener : public CppUnit::TestListener
   {
 
@@ -116,13 +118,14 @@ public:
   public:
 
     CaseFitnessFunction() :
-    _testCount(0)
+    _testCount(0),
+    _lowestNumFailingTestsPerRun(-1)
     {
       _testSuite.reset(new ConflateCaseTestSuite("test-files/cases/hoot-rnd/network/conflicts/"));
       _testCount = _testSuite->getChildTestCount();
     }
 
-    virtual double f(const ConstStatePtr& s) const
+    virtual double f(const ConstStatePtr& s)
     {
       LOG_DEBUG("Running fitness function...");
 
@@ -163,6 +166,26 @@ public:
         }
       }
 
+      QString failedTestsStr;
+      if (failedTests.size() > 0)
+      {
+        failedTestsStr = _failedTestsToString(failedTests);
+      }
+      if (failedTests.size() < _lowestNumFailingTestsPerRun || _lowestNumFailingTestsPerRun == -1)
+      {
+        _lowestNumFailingTestsPerRun = failedTests.size();
+        _failingTestsForBestRuns.clear();
+        if (!failedTestsStr.isEmpty())
+        {
+          _failingTestsForBestRuns.append(failedTestsStr);
+        }
+      }
+      else if (failedTests.size() == _lowestNumFailingTestsPerRun &&
+               !failedTestsStr.isEmpty() && !_failingTestsForBestRuns.contains(failedTestsStr))
+      {
+        _failingTestsForBestRuns.append(failedTestsStr);
+      }
+
       if (failedTests.size() == 0)
       {
         //This message will actually show if, by chance, the first selected random state
@@ -187,131 +210,215 @@ public:
 
     int getTestCount() { return _testCount; }
 
+    QStringList getFailingTestsForBestRuns() { return _failingTestsForBestRuns; }
+
     private:
 
       int _testCount;
+      int _lowestNumFailingTestsPerRun;
+      //list members are one or more test names joined by a ';'
+      QStringList _failingTestsForBestRuns;
       boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
+
+      QString _failedTestsToString(const QStringList failedTests) const
+      {
+        QString concatTestNames;
+        for (int i = 0; i < failedTests.size(); i++)
+        {
+          concatTestNames += failedTests.at(i) + ";";
+        }
+        concatTestNames.chop(1);
+        return concatTestNames;
+      }
   };
 
-  void optimizeAgainstCaseDataTest()
+  StateDescriptionPtr initStateDescription()
   {
-    StateDescriptionPtr desc(new StateDescription());
-    desc->addVariable(
+    StateDescriptionPtr stateDescription(new StateDescription());
+
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
         //VariableDescription::Real, 4.4, 4.4)); //original default
         //VariableDescription::Real, 8.8, 8.8)); //current default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
         VariableDescription::Real, 4.0, 10.0)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
         //VariableDescription::Real, 0.2, 0.2)); //original default
         //VariableDescription::Real, 0.2, 0.2)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
         VariableDescription::Real, 0.1, 0.3)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
         //VariableDescription::Real, 0.86, 0.86)); //original default
         //VariableDescription::Real, 1.7, 1.7)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
         VariableDescription::Real, 0.76, 0.96)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
         //VariableDescription::Real, 0.0, 0.0)); //original default
         //VariableDescription::Real, 0.0, 0.0)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
         VariableDescription::Real, 0.0, 0.1)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
         //VariableDescription::Real, 0.0, 0.0)); //original default
         //VariableDescription::Real, 0.25, 0.25)); //current default
         //VariableDescription::Real, 0.0, 2.0)); //min/max
         VariableDescription::Real, 0.0, 0.1)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
         //VariableDescription::Real, 0.59, 0.59)); //original default
         //VariableDescription::Real, 0.5, 0.5)); //current default
         //VariableDescription::Real, 0.0, 10.0)); //min/max
         VariableDescription::Real, 0.49, 0.69)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
         //VariableDescription::Real, 20.0, 20.0)); //original default
         //VariableDescription::Real, 20.0, 20.0)); //current default
         //VariableDescription::Real, 1.0, 100.0));  //min/max??
         VariableDescription::Real, 15.0, 25.0)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
         //VariableDescription::Real, 0.15, 0.15)); //original default
         //VariableDescription::Real, 0.15, 0.15)); //current default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
         VariableDescription::Real, 0.05, 0.25)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkMissThresholdKey(),
         //VariableDescription::Real, 0.85, 0.85)); //original default
         //VariableDescription::Real, 0.85, 0.85)); //current default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
         VariableDescription::Real, 0.75, 0.95)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkReviewThresholdKey(),
         //VariableDescription::Real, 0.5, 0.5)); //original default
         //VariableDescription::Real, 0.5, 0.5)); //current default
         //VariableDescription::Real, 0.01, 0.99));  //min/max
         VariableDescription::Real, 0.4, 0.6)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getWayMergerMinSplitSizeKey(),
         //VariableDescription::Real, 5.0, 5.0)); //original default
         //VariableDescription::Real, 5.0, 5.0)); //current default
         //VariableDescription::Real, 0.01, 100.0));  //min/max??
         VariableDescription::Real, 4.0, 6.0)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getWayMatcherMaxAngleKey(),
         //VariableDescription::Real, 60.0, 60.0)); //original default
         //VariableDescription::Real, 60.0, 60.0)); //current default
         //VariableDescription::Real, 0.01, 90.0));  //min/max
         VariableDescription::Real, 50.0, 70.0)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getWayMatcherHeadingDeltaKey(),
         //VariableDescription::Real, 5.0, 5.0)); //original default
         //VariableDescription::Real, 5.0, 5.0)); //new default
         //VariableDescription::Real, 0.01, 100.0));  //min/max??
         VariableDescription::Real, 4.0, 6.0)); //test values
-    desc->addVariable(
+    stateDescription->addVariable(
       new VariableDescription(ConfigOptions::getNetworkOptimizationIterationsKey(),
         //VariableDescription::Real, 10, 10)); //original default
-        //VariableDescription::Real, 10, 10)); //new default
+        VariableDescription::Real, 10, 10)); //new default
         //VariableDescription::Real, 0, 100));  //min/max??
-        VariableDescription::Real, 10, 20)); //test values
+        //VariableDescription::Real, 10, 20)); //test values
 
-    boost::shared_ptr<CaseFitnessFunction> fitnessFunction(new CaseFitnessFunction());
-    SimulatedAnnealing sa(desc, fitnessFunction);
+    return stateDescription;
+  }
+
+  QSet<ConstStatePtr> runSa(ConstStateDescriptionPtr stateDescription,
+                            boost::shared_ptr<CaseFitnessFunction> fitnessFunction,
+                            double& bestScore)
+  {
+    SimulatedAnnealing sa(stateDescription, fitnessFunction);
     sa.setPickFromBestScores(true);
-    const int numIterations = 50; //change your number of test iterations here
-    const double bestScore = sa.iterate(numIterations);
+    bestScore = sa.iterate(NUM_TEST_ITERATIONS);
+    return sa.getBestStates();
+  }
 
-    LOG_ERROR("Number of test iterations: " << numIterations);
-    LOG_ERROR("Number of tests in test suite: " << fitnessFunction->getTestCount());
-    LOG_ERROR(
-      "Lowest number of test failures in test iteration: " <<
-      (int)(fitnessFunction->getTestCount() * bestScore));
-    LOG_ERROR("Number of best states found: " << sa.getBestStates().size());
+  void writeOutput(boost::shared_ptr<CaseFitnessFunction> fitnessFunction,
+                   const QSet<ConstStatePtr>& bestStates, const double bestScore)
+  {
+    QString output =
+      "Results for Conflicts Network Matcher Configuration Option Optimization with Simulated Annealing\n\n";
+
+    QString temp = "Number of test iterations: " + QString::number(NUM_TEST_ITERATIONS);
+    LOG_ERROR(temp);
+    output += temp + "\n\n";
+
+    temp = "Number of tests in test suite: " + QString::number(fitnessFunction->getTestCount());
+    LOG_ERROR(temp);
+    output += temp + "\n\n";
+
+    temp =
+      "Lowest number of test failures in test iteration: " +
+      QString::number((int)(fitnessFunction->getTestCount() * bestScore));
+    LOG_ERROR(temp);
+    output += temp + "\n\n";
+
+    temp = "Number of best states found: " + QString::number(bestStates.size());
+    LOG_ERROR(temp);
+    output += temp + "\n\n";
+
     if (bestScore == 0.0)
     {
-      LOG_ERROR("***YOU FOUND A SOLUTION! :-)***");
+      temp = "***YOU FOUND A SOLUTION! :-)***";
     }
     else
     {
-      LOG_ERROR("No solution was found. :-(");
+      temp = "No solution was found. :-(";
     }
+    LOG_ERROR(temp);
+    output += temp + "\n\n";
 
     QDir().mkdir("test-output/algorithms");
     const QString statesOutputPath =
       "test-output/algorithms/ConflictsNetworkMatcherSettingsOptimizer-states-out";
-    LOG_ERROR("Writing best states to: " << statesOutputPath << "...");
-    QString output = "\nBest states:\n";
-    foreach (ConstStatePtr state, sa.getBestStates())
+    LOG_ERROR("Writing best states and failing test groups to: " << statesOutputPath << "...");
+    const QStringList failingTestsForBestRuns = fitnessFunction->getFailingTestsForBestRuns();
+    output +=
+      "Failing Test Groups For Best States (" + QString::number(failingTestsForBestRuns.size()) +
+      "):\n\n";
+    if (failingTestsForBestRuns.size() == 0)
     {
-      output += state->toString() + "\n";
+      output += "no failing test groups\n";
+    }
+    else
+    {
+      for (int i = 0; i < failingTestsForBestRuns.size(); i++)
+      {
+        output += "#" + QString::number(i + 1) + ":\n\n";
+        QString failingTestsStr = failingTestsForBestRuns.at(i);
+        if (failingTestsStr.contains(";"))
+        {
+          QStringList failingTests = failingTestsStr.split(";");
+          for (int j = 0; j < failingTests.size(); j++)
+          {
+            output += failingTests.at(j) + "\n";
+          }
+        }
+        else
+        {
+          output += failingTestsStr + "\n";
+        }
+        output += "\n";
+      }
+    }
+    output += "Best States (" + QString::number(bestStates.size()) + "):\n\n";
+    int statesCtr = 1;
+    foreach (ConstStatePtr state, bestStates)
+    {
+      output += "#" + QString::number(statesCtr) + ":\n\n";
+      output += state->toString() + "\n\n";
+      statesCtr++;
     }
     FileUtils::writeFully(statesOutputPath, output);
+  }
+
+  void optimizeAgainstCaseDataTest()
+  {
+    boost::shared_ptr<CaseFitnessFunction> fitnessFunction(new CaseFitnessFunction());
+    double bestScore = -1.0;
+    const QSet<ConstStatePtr> bestStates = runSa(initStateDescription(), fitnessFunction, bestScore);
+    writeOutput(fitnessFunction, bestStates, bestScore);
   }
 };
 

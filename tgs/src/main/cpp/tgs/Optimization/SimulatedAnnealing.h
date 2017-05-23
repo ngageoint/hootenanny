@@ -42,7 +42,8 @@ namespace Tgs
 class SimulatedAnnealing
 {
 public:
-  SimulatedAnnealing(ConstStateDescriptionPtr sd, ConstFitnessFunctionPtr fitness);
+
+  SimulatedAnnealing(ConstStateDescriptionPtr sd, FitnessFunctionPtr fitness);
 
   QSet<ConstStatePtr> getBestStates() const { return _bestStates; }
 
@@ -53,12 +54,13 @@ public:
    * best states found so far.
    */
   void setPickFromBestScores(bool best) { _pickFromBestScores = best; }
+
 private:
 
   mutable Random _rand;
   double _bestScore;
   QSet<ConstStatePtr> _bestStates;
-  ConstFitnessFunctionPtr _fitness;
+  FitnessFunctionPtr _fitness;
   bool _pickFromBestScores;
   ConstStateDescriptionPtr _stateDescription;
 

@@ -49,7 +49,7 @@ class SimulatedAnnealingTest : public CppUnit::TestFixture
 public:
   class TestFitnessFunction : public FitnessFunction
   {
-    virtual double f(const ConstStatePtr& s) const
+    virtual double f(const ConstStatePtr& s)
     {
       double w = s->get("w");
       double x = s->get("x");

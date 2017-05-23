@@ -40,7 +40,7 @@ public:
    *
    * While not required fitness functions that return values from [0, 1] may work better.
    */
-  virtual double f(const ConstStatePtr& s) const = 0;
+  virtual double f(const ConstStatePtr& s) = 0;
 };
 
 typedef boost::shared_ptr<FitnessFunction> FitnessFunctionPtr;
