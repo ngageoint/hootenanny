@@ -72,13 +72,12 @@ ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
 
 void ConflateCaseTest::runTest()
 {
+  TestUtils::resetEnvironment();
   LOG_DEBUG("Running conflate case test...");
 
   // configures and cleans up the conf() environment
   LOG_VART(_confs);
   SetupTest st(_confs);
-
-  bool failed = false;
 
   ConflateCmd cmd;
 
@@ -124,15 +123,10 @@ void ConflateCaseTest::runTest()
 
   if (result != 0)
   {
-    failed = true;
+    CPPUNIT_ASSERT_MESSAGE(QString("Conflate command had nonzero exit status").toStdString(), false);
   }
 
   if (!TestUtils::compareMaps(expected.absoluteFilePath(), testOutput))
-  {
-    failed = true;
-  }
-
-  if (failed)
   {
     CPPUNIT_ASSERT_MESSAGE(QString("Maps do not match").toStdString(), false);
   }
