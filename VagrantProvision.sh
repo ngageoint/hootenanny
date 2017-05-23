@@ -13,6 +13,8 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
+# Don't automatically update the oracle jdk, we need to control the version
+sudo apt-mark -qq hold oracle-java8-installer oracle-java8-set-default >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
@@ -41,12 +43,12 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
     if [[ ! -e /usr/lib/jvm ]]; then
         sudo mkdir /usr/lib/jvm
     else
-        if [[ -e /usr/lib/jvm/java-8-oracle ]]; then
-            sudo rm -rf /usr/lib/jvm/java-8-oracle
+        if [[ -e /usr/lib/jvm/oracle_jdk8 ]]; then
+            sudo rm -rf /usr/lib/jvm/oracle_jdk8
         fi
     fi
 
-    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/java-8-oracle
+    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."

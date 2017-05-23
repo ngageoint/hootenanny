@@ -7,7 +7,7 @@ TOMCAT8_USER=tomcat8
 TOMCAT8_GROUP=tomcat8
 
 # The home directory of the Java development kit (JDK). You need at least JDK version 7.
-JAVA_HOME=/usr/lib/jvm/java-8-oracle
+JAVA_HOME=/usr/lib/jvm/oracle_jdk8
 
 # You may pass JVM startup parameters to Java here. If unset, the default
 # options will be: -Djava.awt.headless=true -Xmx128m -XX:+UseConcMarkSweepGC
