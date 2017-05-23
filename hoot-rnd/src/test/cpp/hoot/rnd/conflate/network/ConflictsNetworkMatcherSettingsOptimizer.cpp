@@ -63,8 +63,6 @@ class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 
 public:
 
-  const int NUM_TEST_ITERATIONS = 50;
-
   class SimpleListener : public CppUnit::TestListener
   {
 
@@ -326,23 +324,24 @@ public:
     return stateDescription;
   }
 
-  QSet<ConstStatePtr> runSa(ConstStateDescriptionPtr stateDescription,
-                            boost::shared_ptr<CaseFitnessFunction> fitnessFunction,
-                            double& bestScore)
+  QSet<ConstStatePtr> runOptimization(ConstStateDescriptionPtr stateDescription,
+                                      boost::shared_ptr<CaseFitnessFunction> fitnessFunction,
+                                      double& bestScore, const int numIterations)
   {
     SimulatedAnnealing sa(stateDescription, fitnessFunction);
     sa.setPickFromBestScores(true);
-    bestScore = sa.iterate(NUM_TEST_ITERATIONS);
+    bestScore = sa.iterate(numIterations);
     return sa.getBestStates();
   }
 
   void writeOutput(boost::shared_ptr<CaseFitnessFunction> fitnessFunction,
-                   const QSet<ConstStatePtr>& bestStates, const double bestScore)
+                   const QSet<ConstStatePtr>& bestStates, const double bestScore,
+                   const int numIterations)
   {
     QString output =
       "Results for Conflicts Network Matcher Configuration Option Optimization with Simulated Annealing\n\n";
 
-    QString temp = "Number of test iterations: " + QString::number(NUM_TEST_ITERATIONS);
+    QString temp = "Number of test iterations: " + QString::number(numIterations);
     LOG_ERROR(temp);
     output += temp + "\n\n";
 
@@ -418,9 +417,11 @@ public:
   void optimizeAgainstCaseDataTest()
   {
     boost::shared_ptr<CaseFitnessFunction> fitnessFunction(new CaseFitnessFunction());
+    const int numIterations = 50;
     double bestScore = -1.0;
-    const QSet<ConstStatePtr> bestStates = runSa(initStateDescription(), fitnessFunction, bestScore);
-    writeOutput(fitnessFunction, bestStates, bestScore);
+    const QSet<ConstStatePtr> bestStates =
+      runOptimization(initStateDescription(), fitnessFunction, bestScore, numIterations);
+    writeOutput(fitnessFunction, bestStates, bestScore, numIterations);
   }
 };
 
