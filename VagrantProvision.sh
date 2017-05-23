@@ -30,10 +30,10 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
     #    md5: 75b2cb2249710d822a60f83e28860053
     echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
 
-    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz  ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u131-linux-x64.tar.gz...."
+    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
+        echo "Downloading jdk-8u131-linux-x64.tar.gz ...."
         sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u131-linux-x64.tar.gz "
+        echo "Finished download of jdk-8u131-linux-x64.tar.gzx "
     fi
 
     sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
