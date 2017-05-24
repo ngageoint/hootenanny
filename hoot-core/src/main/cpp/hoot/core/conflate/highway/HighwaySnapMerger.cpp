@@ -302,7 +302,6 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     //it here causes internal ID conflicts.  This is in consistent, however, with how this same
     //thing is being done in some of the other cleaning related classes.
 
-    bool unknown1IdRetained = false;
     if (scraps1 && eid1.getType() == scraps1->getElementId().getType() &&
         scraps1->getElementId().getType() != ElementType::Relation &&
         map->containsElement(scraps1->getElementId()) &&
@@ -312,7 +311,6 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         "Retaining reference ID by mapping unknown1 id " << eid1 << " to scrap: " <<
         scraps1->getElementId() << "...");
       _unknown1Replacements.insert(pair<ElementId, ElementId>(eid1, scraps1->getElementId()));
-      unknown1IdRetained = true;
     }
     //this 'else if' could possibly become an 'else'
     else if (e1Match && eid1.getType() == e1Match->getElementId().getType() &&
@@ -324,7 +322,6 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
         "Retaining reference ID by mapping " << eid1 << " to e1Match: " <<
         e1Match->getElementId() << "...");
       _unknown1Replacements.insert(pair<ElementId, ElementId>(eid1, e1Match->getElementId()));
-      unknown1IdRetained = true;
     }
   }
 
