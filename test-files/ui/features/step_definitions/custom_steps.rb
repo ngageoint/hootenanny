@@ -654,6 +654,11 @@ Then(/^I click on the first thumbnail$/) do
   list.first('li').click
 end
 
+Then(/^I click on the first active thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li.active').click unless list.first('li.active').nil?
+end
+
 Then(/^I double click on the first thumbnail$/) do
   list = page.find('ul.carousel-metadata-list')
   list.first('li').double_click
