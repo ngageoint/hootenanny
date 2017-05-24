@@ -85,6 +85,7 @@ class CalculateTilesCmd : public BaseCommand
         }
       }
       LOG_VARD(maxNodesPerTile);
+
       double pixelSize = 0.001; //.1km?
       if (args.size() > 3)
       {
