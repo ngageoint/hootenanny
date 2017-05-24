@@ -38,7 +38,7 @@ namespace Tgs
 using namespace std;
 
 SimulatedAnnealing::SimulatedAnnealing(ConstStateDescriptionPtr sd,
-  ConstFitnessFunctionPtr fitness) : _rand(0)
+  FitnessFunctionPtr fitness) : _rand(0)
 {
   _stateDescription = sd;
   _fitness = fitness;
