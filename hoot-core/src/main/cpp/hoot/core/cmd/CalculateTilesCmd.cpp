@@ -79,8 +79,8 @@ class CalculateTilesCmd : public BaseCommand
       return tileBoundsCalculator.calculateTiles();
     }
 
-    void writeOutput(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-                     const QString outputPath)
+    void writeOutputAsString(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
+                             const QString outputPath)
     {
       //write a semi-colon delimited string of bounds obj's to output
       QString outputTilesStr;
@@ -98,8 +98,8 @@ class CalculateTilesCmd : public BaseCommand
       FileUtils::writeFully(outputPath, outputTilesStr);
     }
 
-    void writeDebugMap(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-                       const QString outputPath)
+    void writeOutputAsMap(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
+                          const QString outputPath)
     {
       //write out a viewable version of the boundaries for debugging purposes
       OsmMapPtr boundaryMap(new OsmMap());
@@ -211,13 +211,17 @@ class CalculateTilesCmd : public BaseCommand
       LOG_VARD(pixelSize);
 
       OsmMapPtr inputMap = readInputs(inputs);
+
       const std::vector< std::vector<geos::geom::Envelope> > tiles =
         calculateTiles(maxNodesPerTile, pixelSize, inputMap);
-      writeOutput(tiles, output);
 
-      if (Log::getInstance().getLevel() <= Log::Debug)
+      if (output.endsWith(".osm"))
       {
-        writeDebugMap(tiles, "tmp/calculate-tiles-debug.osm");
+        writeOutputAsMap(tiles, output);
+      }
+      else
+      {
+        writeOutputAsString(tiles, output);
       }
 
       return 0;
