@@ -36,6 +36,9 @@
 #include <hoot/core/conflate/TileBoundsCalculator.h>
 #include <hoot/core/util/FileUtils.h>
 
+// Qt
+#include <QTemporaryFile>
+
 namespace hoot
 {
 
@@ -50,7 +53,79 @@ class CalculateTilesCmd : public BaseCommand
 
     virtual QString getName() const { return "calculate-tiles"; }
 
-    OsmMapPtr readInputs(const QStringList inputs)
+    virtual int runSimple(QStringList args)
+    {
+      if (args.size() < 2 || args.size() > 4)
+      {
+        cout << getHelp() << endl << endl;
+        throw HootException(QString("%1 takes two to four parameters.").arg(getName()));
+      }
+
+      QStringList inputs;
+      const QString input = args[0];
+      LOG_VARD(input);
+      if (!input.contains(";"))
+      {
+        inputs.append(input);
+      }
+      else
+      {
+        //multiple inputs
+        inputs = input.split(";");
+      }
+      LOG_VARD(inputs);
+
+      const QString output = args[1];
+      if (!output.toLower().endsWith(".osm") && !output.toLower().endsWith(".geojson"))
+      {
+        throw HootException("Invalid output file format: " + output);
+      }
+      LOG_VARD(output);
+
+      long maxNodesPerTile = 1000;
+      if (args.size() > 2)
+      {
+        bool parseSuccess = false;
+        maxNodesPerTile = args[2].toLong(&parseSuccess);
+        if (!parseSuccess || maxNodesPerTile < 1)
+        {
+          throw HootException("Invalid maximum nodes per tile value: " + args[2]);
+        }
+      }
+      LOG_VARD(maxNodesPerTile);
+
+      double pixelSize = 0.001; //.1km?
+      if (args.size() > 3)
+      {
+        bool parseSuccess = false;
+        pixelSize = args[3].toDouble(&parseSuccess);
+        if (!parseSuccess || pixelSize <= 0.0)
+        {
+          throw HootException("Invalid pixel size value: " + args[3]);
+        }
+      }
+      LOG_VARD(pixelSize);
+
+      OsmMapPtr inputMap = _readInputs(inputs);
+
+      const std::vector< std::vector<geos::geom::Envelope> > tiles =
+        _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
+
+      if (output.endsWith(".osm"))
+      {
+        _writeOutputAsOsm(tiles, output);
+      }
+      else
+      {
+        _writeOutputAsGeoJson(tiles, output);
+      }
+
+      return 0;
+    }
+
+  private:
+
+    OsmMapPtr _readInputs(const QStringList inputs)
     {
       OsmMapPtr map(new OsmMap());
       for (int i = 0; i < inputs.size(); i++)
@@ -64,9 +139,9 @@ class CalculateTilesCmd : public BaseCommand
       return map;
     }
 
-    std::vector< std::vector<geos::geom::Envelope> > calculateTiles(const long maxNodesPerTile,
-                                                                    const double pixelSize,
-                                                                    OsmMapPtr map)
+    std::vector< std::vector<geos::geom::Envelope> > _calculateTiles(const long maxNodesPerTile,
+                                                                     const double pixelSize,
+                                                                     OsmMapPtr map)
     {
       TileBoundsCalculator tileBoundsCalculator(pixelSize);
       tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
@@ -79,27 +154,53 @@ class CalculateTilesCmd : public BaseCommand
       return tileBoundsCalculator.calculateTiles();
     }
 
-    void writeOutputAsString(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-                             const QString outputPath)
+//    void _writeOutputAsString(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
+//                              const QString outputPath)
+//    {
+//      //write a semi-colon delimited string of bounds obj's to output
+//      QString outputTilesStr;
+//      LOG_VARD(tiles.size());
+//      for (size_t tx = 0; tx < tiles.size(); tx++)
+//      {
+//        LOG_VART(tiles[tx].size());
+//        for (size_t ty = 0; ty < tiles[tx].size(); ty++)
+//        {
+//          outputTilesStr += GeometryUtils::envelopeToConfigString(tiles[tx][ty]) + ";";
+//        }
+//      }
+//      outputTilesStr.chop(1);
+//      LOG_VARD(outputTilesStr);
+//      FileUtils::writeFully(outputPath, outputTilesStr);
+//    }
+
+    void _writeOutputAsGeoJson(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
+                               const QString outputPath)
     {
-      //write a semi-colon delimited string of bounds obj's to output
-      QString outputTilesStr;
-      LOG_VARD(tiles.size());
-      for (size_t tx = 0; tx < tiles.size(); tx++)
+      //write out to temp osm and then use ogr2ogr to convert to geojson
+
+      QTemporaryFile osmTempFile("calculate-tiles-temp-XXXXXX.osm");
+      if (!osmTempFile.open())
       {
-        LOG_VART(tiles[tx].size());
-        for (size_t ty = 0; ty < tiles[tx].size(); ty++)
-        {
-          outputTilesStr += GeometryUtils::envelopeToConfigString(tiles[tx][ty]) + ";";
-        }
+        throw HootException(
+          "Unable to open OSM temp file: " + osmTempFile.fileName() + " for GeoJSON output.");
       }
-      outputTilesStr.chop(1);
-      LOG_VARD(outputTilesStr);
-      FileUtils::writeFully(outputPath, outputTilesStr);
+      LOG_VARD(osmTempFile.fileName());
+      _writeOutputAsOsm(tiles, osmTempFile.fileName());
+
+      const QString cmd =
+        "ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " lines";
+      LOG_DEBUG("Writing output to " << outputPath);
+      const int retval = std::system(cmd.toStdString().c_str());
+      if (retval != 0)
+      {
+        throw HootException(
+          "Failed converting " + osmTempFile.fileName() + " to GeoJSON: " + outputPath +
+          ".  Status: " + QString::number(retval));
+      }
     }
 
-    void writeOutputAsMap(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-                          const QString outputPath)
+    void _writeOutputAsOsm(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
+                           const QString outputPath)
     {
       //write out a viewable version of the boundaries for debugging purposes
       OsmMapPtr boundaryMap(new OsmMap());
@@ -159,72 +260,6 @@ class CalculateTilesCmd : public BaseCommand
       }
 
       OsmMapWriterFactory::getInstance().write(boundaryMap, outputPath);
-    }
-
-    virtual int runSimple(QStringList args)
-    {
-      if (args.size() < 2 || args.size() > 4)
-      {
-        cout << getHelp() << endl << endl;
-        throw HootException(QString("%1 takes two to four parameters.").arg(getName()));
-      }
-
-      QStringList inputs;
-      const QString input = args[0];
-      LOG_VARD(input);
-      if (!input.contains(";"))
-      {
-        inputs.append(input);
-      }
-      else
-      {
-        //multiple inputs
-        inputs = input.split(";");
-      }
-      LOG_VARD(inputs);
-
-      const QString output = args[1];
-      LOG_VARD(output);
-
-      long maxNodesPerTile = 1000;
-      if (args.size() > 2)
-      {
-        bool parseSuccess = false;
-        maxNodesPerTile = args[2].toLong(&parseSuccess);
-        if (!parseSuccess || maxNodesPerTile < 1)
-        {
-          throw HootException("Invalid maximum nodes per tile value: " + args[2]);
-        }
-      }
-      LOG_VARD(maxNodesPerTile);
-
-      double pixelSize = 0.001; //.1km?
-      if (args.size() > 3)
-      {
-        bool parseSuccess = false;
-        pixelSize = args[3].toDouble(&parseSuccess);
-        if (!parseSuccess || pixelSize <= 0.0)
-        {
-          throw HootException("Invalid pixel size value: " + args[3]);
-        }
-      }
-      LOG_VARD(pixelSize);
-
-      OsmMapPtr inputMap = readInputs(inputs);
-
-      const std::vector< std::vector<geos::geom::Envelope> > tiles =
-        calculateTiles(maxNodesPerTile, pixelSize, inputMap);
-
-      if (output.endsWith(".osm"))
-      {
-        writeOutputAsMap(tiles, output);
-      }
-      else
-      {
-        writeOutputAsString(tiles, output);
-      }
-
-      return 0;
     }
 };
 

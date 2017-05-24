@@ -5,7 +5,7 @@
 Calculates a collection of bounding boxes that contain roughly equal distributions of node data from the specified input(s).
 
 * +input+ - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
-* +output+ - output file to write the tile boundaries to; if the output is *.osm an OSM map with the boundaries will be drawn; if no extension is specified, the output file will contain a concatenated string made up of one or more bounding box strings
+* +output+ - output file to write the tile boundaries to; valid formats are OSM (*.osm) and GeoJSON (*.geojson)
 * +maxNodeCountPerTile+ The maximum number of nodes in any tile.  The default is 1000; optional (required if pixelSize is specified)
 * +pixelSize+ The size of the pixels used in the calculation.  The default is 0.001; optional
 
@@ -30,5 +30,5 @@ hoot calculate-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" M
 --------------------------------------
 
 --------------------------------------
-hoot calculate-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile 1000 0.001
+hoot calculate-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 0.001
 --------------------------------------
