@@ -79,7 +79,6 @@ public class ExportResource {
     @Autowired
     private ExportCommandFactory exportCommandFactory;
 
-
     public ExportResource() {}
 
     /**
@@ -95,11 +94,12 @@ public class ExportResource {
      *                            //a file path will be specified.
      *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db.
      *                            //For inputtype=file, specify full path to a file.
-     *   "outputtype":"gdb",      //[gdb | shp | osm_api_db | osc]. gdb will produce file gdb,
-     *                            //shp will output shapefile. osm_api_db will derive and apply a
+     *   "outputtype":"gdb",      //[gdb | shp | osm_api_db | osc | tiles]. gdb will produce an ESRI file 
+     *                             geodatabase, shp will output shapefile. osm_api_db will derive and apply a
      *                            //changeset to an OSM API database . osc will derive changeset
      *                            //xml computing the the difference between the configured
-     *                            //OSM API database and the specified input layer
+     *                            //OSM API database and the specified input layer.  tiles outputs a GeoJSON file
+     *                            //containing partitioned concentrations of node tiles
      *   "removereview" : "false"
      * }
      *
@@ -160,6 +160,12 @@ public class ExportResource {
 
                 workflow.add(deriveChangesetCommand);
                 workflow.add(applyChangesetCommand);
+            }
+            else if (outputType.equalsIgnoreCase("tiles")) {
+                ExternalCommand calculateTilesCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, CalculateTilesCommand.class, this.getClass());
+
+                workflow.add(calculateTilesCommand);
             }
             else { //else Shape/FGDB
                 ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,
