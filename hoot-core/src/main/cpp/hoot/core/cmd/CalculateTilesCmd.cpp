@@ -173,6 +173,10 @@ class CalculateTilesCmd : public BaseCommand
 //      FileUtils::writeFully(outputPath, outputTilesStr);
 //    }
 
+    //This is kind of a shortcut way to get geojson output.  Its probably worth either figuring
+    //out a way to use osm2ogr without a translation (or with a simple one) to do this OR adding
+    //an OsmWriter class that can do this same thing, so the convert command can take advantage of
+    //it.
     void _writeOutputAsGeoJson(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
                                const QString outputPath)
     {
