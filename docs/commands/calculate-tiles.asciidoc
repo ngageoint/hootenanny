@@ -2,11 +2,12 @@
 
 === Description
 
-Returns a collection of bounding boxes as strings that contain roughly equal distributions of node data from the specified input.
+Returns a collection of bounding boxes represented by strings that contain roughly equal distributions of node data from the specified input(s).
 
-* +input+ - one or more input path(s); use semicolon to delimit multiple paths
+* +input+ - one or more inputs; specify multiple inputs by separating them with a semicolon
 * +output+ - output file to write the tile boundaries to
-* +maxNodeCountPerTile+ The maximum number of nodes in any tile (?); optional
+* +maxNodeCountPerTile+ The maximum number of nodes in any tile.  The default is 1000; optional (required if pixelSize is specified)
+* +pixelSize+ The size of the pixels used in the calculation.  The default is 0.001; optional
 
 This command makes use of the optional 'convert.bounding.box' configuration option to determine a subset of the input data 
 to calculate tiles for.
@@ -14,5 +15,5 @@ to calculate tiles for.
 === Usage
 
 --------------------------------------
-calculate-tiles (input) (output) [maxNodeCountPerTile]
+calculate-tiles (input(s)) (output) [maxNodeCountPerTile] [pixelSize]
 --------------------------------------

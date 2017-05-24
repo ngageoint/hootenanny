@@ -51,10 +51,10 @@ class CalculateTilesCmd : public BaseCommand
 
     virtual int runSimple(QStringList args)
     {
-      if (args.size() < 2 || args.size() > 3)
+      if (args.size() < 2 || args.size() > 4)
       {
         cout << getHelp() << endl << endl;
-        throw HootException(QString("%1 takes two to three parameters.").arg(getName()));
+        throw HootException(QString("%1 takes two to four parameters.").arg(getName()));
       }
 
       QStringList inputs;
@@ -85,6 +85,17 @@ class CalculateTilesCmd : public BaseCommand
         }
       }
       LOG_VARD(maxNodesPerTile);
+      double pixelSize = 0.001; //.1km?
+      if (args.size() > 3)
+      {
+        bool parseSuccess = false;
+        pixelSize = args[3].toDouble(&parseSuccess);
+        if (!parseSuccess || pixelSize <= 0.0)
+        {
+          throw HootException("Invalid pixel size value: " + args[3]);
+        }
+      }
+      LOG_VARD(pixelSize);
 
       OsmMapPtr map(new OsmMap());
       for (int i = 0; i < inputs.size(); i++)
@@ -96,13 +107,12 @@ class CalculateTilesCmd : public BaseCommand
       }
       LOG_VARD(map->getNodeCount());
 
-      //TODO: how to derive pixel size?...some percentage of the total convert bounds or input data
-      //area? or let the user define it?
-      TileBoundsCalculator tileBoundsCalculator(0.001); //.1km
+      TileBoundsCalculator tileBoundsCalculator(pixelSize);
       tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
       //tbc.setSlop(0.1);
       cv::Mat r1, r2;
       tileBoundsCalculator.renderImage(map, r1, r2);
+      //we're calculating for unknown1 only, so fill the second matrix with all zeroes
       cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
       tileBoundsCalculator.setImages(r1, zeros);
       const std::vector< std::vector<geos::geom::Envelope> > tiles =

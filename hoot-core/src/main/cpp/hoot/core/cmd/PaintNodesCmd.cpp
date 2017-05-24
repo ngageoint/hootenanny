@@ -230,7 +230,6 @@ class PaintNodesCmd : public BaseCommand
       Envelope imageEnvelope(e.getMinX(), e.getMinX() + pixelSize * mat.size().width,
                              e.getMinY(), e.getMinY() + pixelSize * mat.size().height);
 
-
       QImage qImage(mat.size().width, mat.size().height, QImage::Format_ARGB32);
 
       int32_t maxValue = 0;
