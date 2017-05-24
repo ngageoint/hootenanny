@@ -9,11 +9,26 @@ Returns a collection of bounding boxes represented by strings that contain rough
 * +maxNodeCountPerTile+ The maximum number of nodes in any tile.  The default is 1000; optional (required if pixelSize is specified)
 * +pixelSize+ The size of the pixels used in the calculation.  The default is 0.001; optional
 
-This command makes use of the optional 'convert.bounding.box' configuration option to determine a subset of the input data 
+If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the algorithm used
+may not be able to find a solution.  This command makes use of the optional 'convert.bounding.box' configuration option to determine a subset of the input data 
 to calculate tiles for.
 
 === Usage
 
 --------------------------------------
-calculate-tiles (input(s)) (output) [maxNodeCountPerTile] [pixelSize]
+hoot calculate-tiles (input(s)) (output) [maxNodeCountPerTile] [pixelSize]
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+hoot calculate-tiles test-files/MyInputFile.osm MyOutputFile
+--------------------------------------
+
+--------------------------------------
+hoot calculate-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile 1000
+--------------------------------------
+
+--------------------------------------
+hoot calculate-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile 1000 0.001
 --------------------------------------

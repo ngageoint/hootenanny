@@ -50,6 +50,7 @@ unsigned int TileBoundsCalculator::logWarnCount = 0;
 TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
 {
   _pixelSize = pixelSize;
+  LOG_VARD(_pixelSize);
   _slop = 0.1;
   setMaxNodesPerBox(1000);
 }
@@ -129,6 +130,7 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
   vector< vector<Envelope> > result;
 
   long maxNodeCount = 0;
+  long minNodeCount = LONG_MAX;
   result.resize(width);
   for (size_t tx = 0; tx < width; tx++)
   {
@@ -136,7 +138,9 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     for (size_t ty = 0; ty < width; ty++)
     {
       PixelBox& pb = boxes[tx + ty * width];
-      maxNodeCount = std::max(maxNodeCount, _sumPixels(pb));
+      const long nodeCount = _sumPixels(pb);
+      maxNodeCount = std::max(maxNodeCount, nodeCount);
+      minNodeCount = std::min(minNodeCount, nodeCount);
       if (pb.getWidth() < 3 || pb.getHeight() < 3)
       {
         throw HootException("PixelBox must be at least 3 pixels wide and tall.");
@@ -145,6 +149,7 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     }
   }
   LOG_DEBUG("Max node count in one tile: " << maxNodeCount);
+  LOG_DEBUG("Min node count in one tile: " << minNodeCount);
   _exportResult(boxes, "tmp/result.png");
 
   return result;
@@ -469,7 +474,7 @@ void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
     boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
-    LOG_VAR(tempEnv->toString());
+    LOG_VARD(tempEnv->toString());
   }
   LOG_VART(_pixelSize);
   LOG_VART(map->getNodeCount());
