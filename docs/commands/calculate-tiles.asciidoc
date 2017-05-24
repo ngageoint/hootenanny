@@ -4,11 +4,11 @@
 
 Returns a collection of bounding boxes as strings that contain roughly equal distributions of node data from the specified input.
 
-* +input+ - input path(s); use semicolon to delimit multiple paths
-* +output+ - output file name containing the bounding box strings
-* +maxNodeCountPerTile+ The maximum number of nodes in any tile (?).
+* +input+ - one or more input path(s); use semicolon to delimit multiple paths
+* +output+ - output file to write the tile boundaries to
+* +maxNodeCountPerTile+ The maximum number of nodes in any tile (?); optional
 
-This command makes use of the convert.bounding.box configuration option to determine the subset of the input data 
+This command makes use of the optional 'convert.bounding.box' configuration option to determine a subset of the input data 
 to calculate tiles for.
 
 === Usage
