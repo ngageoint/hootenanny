@@ -177,13 +177,13 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
         long mapId = MapUtils.insertMap(userId);
         String aoi = "-104.8192,38.8162,-104.6926,38.9181";
 
-        CalculateTilesParams jobParams = new CalculateTilesParams();
+        ExportParams jobParams = new ExportParams();
         jobParams.setOutputName("output");
         jobParams.setAppend(false);
         jobParams.setTextStatus(false);
         jobParams.setInputType("file");
         jobParams.setOutputType("tiles");
-        jobParams.setInput(Long.toString(mapId));
+        jobParams.setInput("input1;input2");
         jobParams.setBounds(aoi);
         jobParams.setMaxNodeCountPerTile(1000);
         jobParams.setPixelSize(0.001);

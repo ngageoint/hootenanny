@@ -35,35 +35,31 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.xpath.XPathAPI;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.w3c.dom.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import hoot.services.IntegrationTest;
-import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommandRunner;
-import hoot.services.command.ExternalCommandRunnerImpl;
-import hoot.services.utils.MapUtils;
-import hoot.services.utils.XmlDocumentBuilder;
+import hoot.services.UnitTest;
 
 
 public class CalculateTilesCommandTest {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CalculateTilesCommandTest.class);
 
     @Test
+    @Category(UnitTest.class)
     public void testCalculateTilesCommand() {
         String jobId = UUID.randomUUID().toString();
         String debugLevel = "error";
         Class<?> caller = this.getClass();
         String aoi = "-104.8192,38.8162,-104.6926,38.9181";
 
-        CalculateTilesParams jobParams = new CalculateTilesParams();
+        ExportParams jobParams = new ExportParams();
         jobParams.setOutputName("output");
         jobParams.setAppend(false);
         jobParams.setTextStatus(false);
-        //jobParams.setInput("");
+        jobParams.setInput("input1;input2");
         jobParams.setInputType("file");
         jobParams.setOutputType("tiles");
         jobParams.setBounds(aoi);
@@ -72,10 +68,10 @@ public class CalculateTilesCommandTest {
 
         CalculateTilesCommand command = new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
 
-        List<String> options = command.getCommonExportHootOptions();
-        options.add("convert.bounding.box=" + aoi);
+        List<String> options = new LinkedList<>();
         options.add("id.generator=hoot::PositiveIdGenerator");
         options.add("api.db.email=test@test.com");
+        options.add("convert.bounding.box=" + aoi);
 
         List<String> hootOptions = new LinkedList<>();
 
@@ -96,17 +92,17 @@ public class CalculateTilesCommandTest {
         assertTrue(command.getSubstitutionMap().containsKey("HOOT_OPTIONS"));
         assertEquals(hootOptions, command.getSubstitutionMap().get("HOOT_OPTIONS"));
 
-        assertTrue(command.getSubstitutionMap().containsKey("INPUT"));
-        assertEquals(jobParams.getInput(), command.getSubstitutionMap().get("INPUT"));
+        assertTrue(command.getSubstitutionMap().containsKey("INPUTS"));
+        assertEquals(jobParams.getInput(), command.getSubstitutionMap().get("INPUTS"));
 
         String expectedOutputPath = new File(new File(TEMP_OUTPUT_PATH, jobId),
         		jobParams.getOutputName() + "." + jobParams.getOutputType()).getAbsolutePath();
 
-        assertTrue(command.getSubstitutionMap().containsKey("OUTPUT_PATH"));
-        assertEquals(expectedOutputPath, command.getSubstitutionMap().get("OUTPUT_PATH"));
+        assertTrue(command.getSubstitutionMap().containsKey("OUTPUT"));
+        assertEquals(expectedOutputPath, command.getSubstitutionMap().get("OUTPUT"));
         
         assertTrue(command.getSubstitutionMap().containsKey("MAX_NODE_COUNT_PER_TILE"));
-        assertEquals(1000, command.getSubstitutionMap().get("MAX_NODE_COUNT_PER_TILE"));
+        assertEquals(new Long(1000), command.getSubstitutionMap().get("MAX_NODE_COUNT_PER_TILE"));
         
         assertTrue(command.getSubstitutionMap().containsKey("PIXEL_SIZE"));
         assertEquals(0.001, command.getSubstitutionMap().get("PIXEL_SIZE"));

@@ -48,8 +48,6 @@ class CalculateTilesCommand extends ExportCommand {
 
     CalculateTilesCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
-
-        CalculateTilesParams calcTilesParams = (CalculateTilesParams)params;
         
         List<String> options = new LinkedList<>();
         options.add("id.generator=hoot::PositiveIdGenerator");
@@ -68,12 +66,12 @@ class CalculateTilesCommand extends ExportCommand {
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         //can specify multiple inputs with ';' delimiter
-        //substitutionMap.put("INPUTS", super.getInput());
-        //substitutionMap.put("OUTPUT", super.getOutputPath());
-        substitutionMap.put("MAX_NODE_COUNT_PER_TILE", calcTilesParams.getMaxNodeCountPerTile());
-        substitutionMap.put("PIXEL_SIZE", calcTilesParams.getPixelSize());
+        substitutionMap.put("INPUTS", super.getInput());
+        substitutionMap.put("OUTPUT", super.getOutputPath());
+        substitutionMap.put("MAX_NODE_COUNT_PER_TILE", params.getMaxNodeCountPerTile());
+        substitutionMap.put("PIXEL_SIZE", params.getPixelSize());
 
-        String command = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT_PATH} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        String command = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
