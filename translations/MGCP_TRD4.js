@@ -36,6 +36,11 @@ hoot.require('mgcp_rules')
 hoot.require('fcode_common')
 hoot.require('translate');
 
+function initialize()
+{
+    // Set the schema type for the export
+    hoot.Settings.set({"osm.map.writer.schema":"MGCP"});
+}
 
 // Set up the Schema for export
 function getDbSchema()
