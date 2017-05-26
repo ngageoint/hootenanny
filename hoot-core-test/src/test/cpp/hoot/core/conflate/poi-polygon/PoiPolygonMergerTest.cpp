@@ -34,10 +34,14 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QDir>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -504,7 +508,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -523,7 +527,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -542,7 +546,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -562,7 +566,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

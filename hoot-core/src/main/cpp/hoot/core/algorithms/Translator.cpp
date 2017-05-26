@@ -54,7 +54,6 @@ using namespace std;
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * JSON Spirit isn't a very well behaved header file so I'm only using it within the CPP file.
@@ -78,7 +77,7 @@ public:
 
       _loadTags(pt);
     }
-    catch (std::exception e)
+    catch (const std::exception& e)
     {
       QString reason = e.what();
       throw HootException("Error parsing JSON. " + reason);
@@ -194,7 +193,7 @@ QStringList Translator::toEnglishAll(const QStringList& l)
   QStringList biggestMatch;
   QString s = l[0].toLower();
   // find the biggest list of consecutive words that match our dictionary
-  for (QMap<QString, QStringList>::const_iterator it = dict.find(s); it != dict.constEnd(); it++)
+  for (QMap<QString, QStringList>::const_iterator it = dict.find(s); it != dict.constEnd(); ++it)
   {
     QStringList from = it.key().split(" ");
     // if this no longer starts with our first word.

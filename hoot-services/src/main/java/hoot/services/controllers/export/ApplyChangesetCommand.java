@@ -36,16 +36,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-class OSMAPIDBApplyChangesetCommand extends ExportCommand {
-    private static final Logger logger = LoggerFactory.getLogger(OSMAPIDBApplyChangesetCommand.class);
+class ApplyChangesetCommand extends ExportCommand {
+    private static final Logger logger = LoggerFactory.getLogger(ApplyChangesetCommand.class);
 
-    OSMAPIDBApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+    ApplyChangesetCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
 
         List<String> hootOptions = toHootOptions(super.getCommonExportHootOptions());
 
-        String mapName = params.getInput();
-        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapName);
+        Long mapId = Long.parseLong(params.getInput());
+        hoot.services.models.osm.Map conflatedMap = getConflatedMap(mapId);
 
         // AOI = Area of Interest
         String conflictAOI = getAOI(params, conflatedMap);

@@ -48,6 +48,8 @@
 
 #include "HighwayClassifier.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -223,7 +225,7 @@ bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) 
         result = false;
       }
     }
-    catch (NeedsReviewException& e)
+    catch (const NeedsReviewException&)
     {
       result = true;
     }

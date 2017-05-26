@@ -30,13 +30,10 @@
 
 namespace hoot
 {
-using namespace std;
 
 class WayJoinDriver : public Driver
 {
 public:
-
-
   /**
    * @param maxWaySize The maximum way size in degrees.
    */

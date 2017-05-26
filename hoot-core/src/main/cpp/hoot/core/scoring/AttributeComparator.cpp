@@ -40,12 +40,14 @@
 
 // TGS
 #include <tgs/Statistics/Random.h>
+
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
 {
 
-AttributeComparator::AttributeComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2) :
+AttributeComparator::AttributeComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2) :
   BaseComparator(map1, map2)
 {
   _iterations = 10;
@@ -68,7 +70,7 @@ double AttributeComparator::compareMaps()
   double zalpha = 1.645;
   _ci = -1;
 
- boost::shared_ptr<OsmMap> referenceMap, otherMap;
+  boost::shared_ptr<OsmMap> referenceMap, otherMap;
 
   // do this a bunch of times
   for (int i = 0; i < _iterations * 4 && (int)scores.size() < _iterations; i++)
@@ -99,11 +101,11 @@ double AttributeComparator::compareMaps()
     double bestScore = -1.0;
     for (size_t j = 0; j < wids1.size(); j++)
     {
-     WayPtr w1 = referenceMap->getWay(wids1[j]);
+      WayPtr w1 = referenceMap->getWay(wids1[j]);
 
       for (size_t k = 0; k < wids2.size(); k++)
       {
-       WayPtr w2 = otherMap->getWay(wids2[k]);
+        WayPtr w2 = otherMap->getWay(wids2[k]);
         double score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
         if (score > bestScore)
         {

@@ -36,6 +36,9 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/GeometryConverter.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -52,7 +55,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const ConstWayPtr& w = dynamic_pointer_cast<const Way>(e);
+      const ConstWayPtr& w = boost::dynamic_pointer_cast<const Way>(e);
       //const ConstWayPtr& w = _map.getWay(e->getId());
 
       vector<long> nodes = w->getNodeIds();

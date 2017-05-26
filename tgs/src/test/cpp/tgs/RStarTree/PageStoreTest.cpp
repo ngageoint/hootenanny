@@ -71,7 +71,7 @@ public:
 
       for (int i = 0; i < 100; i++)
       {
-       boost::shared_ptr<Page> p = uut.getPage(_ids[i]);
+        boost::shared_ptr<Page> p = uut.getPage(_ids[i]);
         verifyPage(p);
       }
     }
@@ -101,7 +101,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getPageCount());
     int pageSize = uut.getPageSize();
 
-   boost::shared_ptr<Page> p = uut.createPage();
+    boost::shared_ptr<Page> p = uut.createPage();
     CPPUNIT_ASSERT_EQUAL(pageSize, p->getDataSize());
 
     populatePage(p);

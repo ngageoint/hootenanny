@@ -41,7 +41,6 @@
 
 namespace hoot
 {
-using namespace boost;;
 
 /**
  * The translated tag differencer calculate the difference between two sets of tags after they have
@@ -88,14 +87,14 @@ private:
 
   Comparison _compare(const Tags& t1, const Tags& t2) const;
 
-  vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
+  std::vector<ScriptToOgrTranslator::TranslatedFeature> _translate(const ConstOsmMapPtr& map,
     const ConstElementPtr& in) const;
 
   /**
    * Does a lazy load of the translator to avoid initializing configuration options that aren't
    * being used.
    */
- boost::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
+  boost::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
 
   /**
    * Converts to tags if not-null otherwise returns an empty set of tags.

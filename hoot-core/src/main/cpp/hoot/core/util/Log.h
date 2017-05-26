@@ -51,7 +51,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * This class is here to abstract out the logging interface. I only have mild confidence in log4cxx
@@ -114,16 +113,16 @@ public:
 
   bool isInfoEnabled() { return _level <= Info; }
 
-  void log(WarningLevel level, const string& str);
+  void log(WarningLevel level, const std::string& str);
 
-  void log(WarningLevel level, const string& str, const string& filename,
-           const string &functionName, int lineNumber);
+  void log(WarningLevel level, const std::string& str, const std::string& filename,
+           const std::string &functionName, int lineNumber);
 
   void log(WarningLevel level, const QString& str, const QString& filename,
     const QString& functionName, int lineNumber);
 
-  void progress(WarningLevel level, const string& str, const string& filename,
-    const string& functionName, int lineNumber);
+  void progress(WarningLevel level, const std::string& str, const std::string& filename,
+    const std::string& functionName, int lineNumber);
 
   void setLevel(WarningLevel l);
 
@@ -131,7 +130,7 @@ public:
   log4cxx::LoggerPtr _logger;
 #endif
 
-  static string ellipsisStr(const string& str, uint count = 33);
+  static std::string ellipsisStr(const std::string& str, uint count = 33);
 
 private:
   WarningLevel _level;

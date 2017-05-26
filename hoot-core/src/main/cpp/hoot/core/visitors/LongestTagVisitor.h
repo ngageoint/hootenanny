@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
@@ -45,7 +44,7 @@ class LongestTagVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::LongestTagVisitor"; }
+  static std::string className() { return "hoot::LongestTagVisitor"; }
 
   LongestTagVisitor() : _longestTag() {}
 

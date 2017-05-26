@@ -32,6 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/HootApiDbWriter.h>
@@ -39,11 +41,10 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/RemoveAttributeVisitor.h>
-#include <hoot/core/elements/ElementAttributeType.h>
 
 // Qt
 #include <QDir>
@@ -51,6 +52,7 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+using namespace std;
 
 namespace hoot
 {
@@ -225,7 +227,7 @@ public:
       reader.open(
         ServicesDbTestUtils::getDbReadUrl(mapId).toString().replace("/" + QString::number(mapId), ""));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -246,7 +248,7 @@ public:
         ServicesDbTestUtils::getDbReadUrl(mapId).toString().replace(
           "/" + QString::number(mapId), "/" + QString::number(invalidMapId)));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

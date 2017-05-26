@@ -35,11 +35,10 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/FindIntersectionsOp.h>
 
+using namespace std;
 
 namespace hoot
 {
-
-
 
 class FindIntersectionsCmd : public BaseCommand
 {

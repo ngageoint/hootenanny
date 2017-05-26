@@ -167,8 +167,8 @@ public:
 
   void compareNode(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-   ConstNodePtr rn = dynamic_pointer_cast<const Node>(re);
-   ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr rn = boost::dynamic_pointer_cast<const Node>(re);
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
 
     if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
     {
@@ -184,8 +184,8 @@ public:
 
   void compareWay(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-   ConstWayPtr rw = dynamic_pointer_cast<const Way>(re);
-   ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr rw = boost::dynamic_pointer_cast<const Way>(re);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
 
     CHECK_MSG(rw->getNodeIds().size() == w->getNodeIds().size(),
               "Node count does not match.");
@@ -200,8 +200,8 @@ public:
 
   void compareRelation(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-   ConstRelationPtr rr = dynamic_pointer_cast<const Relation>(re);
-   ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr rr = boost::dynamic_pointer_cast<const Relation>(re);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
     QString relationStr = QString("%1 vs. %2").arg(hoot::toString(rr)).arg(hoot::toString(r));
 
@@ -218,7 +218,7 @@ public:
   }
 
 private:
- boost::shared_ptr<OsmMap> _ref;
+  boost::shared_ptr<OsmMap> _ref;
   Meters _threshold;
   Degrees _thresholdDeg;
   bool _matches;

@@ -54,6 +54,8 @@
 
 #include "InternalIdReserver.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -608,6 +610,8 @@ long OsmApiDb::getNextId(const QString tableName)
 
 long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString sequenceType)
 {
+  LOG_TRACE(
+    "Retrieving " << sequenceType << " " << elementType.toString() << " ID from sequence...");
   switch (elementType.getEnum())
   {
     case ElementType::Node:

@@ -25,8 +25,6 @@ namespace hoot
 {
 class OsmMap;
 
-using namespace boost;
-
 class MapStatsMapper : public OsmMapMapper
 {
 public:

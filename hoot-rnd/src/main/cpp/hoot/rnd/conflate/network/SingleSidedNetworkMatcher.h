@@ -45,8 +45,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class SingleSidedNetworkMatcherTest;
 
 /**
@@ -64,7 +62,7 @@ class SingleSidedNetworkMatcherTest;
 class SingleSidedNetworkMatcher : public NetworkMatcher
 {
 public:
-  static string className() { return "hoot::SingleSidedNetworkMatcher"; }
+  static std::string className() { return "hoot::SingleSidedNetworkMatcher"; }
 
   const static double EPSILON;
 

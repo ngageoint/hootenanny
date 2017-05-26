@@ -34,6 +34,8 @@
 #include <algorithm>
 #include <cmath>
 
+using namespace std;
+
 namespace hoot
 {
 

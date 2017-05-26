@@ -30,6 +30,9 @@
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -133,7 +136,7 @@ MapStats HadoopTileWorker2::_calculateStats(QString in)
   if (fs.getFileStatus(in.toStdString()).isDir())
   {
     // write the newly calculated stats out to the input directory.
-   boost::shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
+    boost::shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
     result.write(*out);
   }
   return result;
@@ -145,7 +148,7 @@ void HadoopTileWorker2::cleanup(QString mapIn, QString mapOut)
   vector<Envelope> tiles;
   TileOpDriver tod;
   // a no-op
- boost::shared_ptr<OsmMapOperation> op(new OpList());
+  boost::shared_ptr<OsmMapOperation> op(new OpList());
   tod.setOperation(op);
   tod.apply(mapIn, tiles, _buffer, mapOut);
 }

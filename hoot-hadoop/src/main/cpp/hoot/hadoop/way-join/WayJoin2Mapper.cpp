@@ -20,6 +20,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // Pretty Pipes
@@ -36,6 +37,8 @@
 #include <time.h>
 
 #include "WayJoin1Mapper.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -136,7 +139,7 @@ void WayJoin2Mapper::mapOsmMap(boost::shared_ptr<OsmMap> m)
   OsmPbfWriter writer;
 
   // Remove all non-roads.
- boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
+  boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
   RemoveElementsVisitor::removeWays(m, pCrit);
 
   _key->elementType = NodesType;

@@ -102,12 +102,12 @@ public:
 private:
 
   boost::minstd_rand* _rng;
-  auto_ptr<boost::minstd_rand> _localRng;
+  std::auto_ptr<boost::minstd_rand> _localRng;
 
   double _wayGeneralizeProbability;
   double _epsilon;
 
- boost::shared_ptr<RdpWayGeneralizer> _generalizer;
+  boost::shared_ptr<RdpWayGeneralizer> _generalizer;
 
   void _generalize(const WayPtr& way);
 

@@ -26,6 +26,8 @@
  */
 #include "IntegerProgrammingSolver.h"
 
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
 
 namespace hoot

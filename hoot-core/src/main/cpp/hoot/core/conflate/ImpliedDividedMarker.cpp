@@ -45,6 +45,8 @@ using namespace Tgs;
 
 #include "NodeToWayMap.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -80,7 +82,7 @@ bool ImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
 {
   const set<long>& wayIds = (*_n2w)[nodeId];
 
-  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); it++)
+  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
     if (*it != excludedWayId)
     {
@@ -126,7 +128,6 @@ boost::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
       w->setTag("divider", "yes");
     }
   }
-
 
   _result.reset();
   return result;

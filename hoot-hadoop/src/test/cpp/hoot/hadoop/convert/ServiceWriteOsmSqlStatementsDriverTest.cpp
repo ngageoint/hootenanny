@@ -31,12 +31,14 @@ using namespace pp;
 
 #include "../MapReduceTestFixture.h"
 
+using namespace std;
+
 namespace hoot
 {
 
-class WriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
+class ServiceWriteOsmSqlStatementsDriverTest : public MapReduceTestFixture
 {
-  CPPUNIT_TEST_SUITE(WriteOsmSqlStatementsDriverTest);
+  CPPUNIT_TEST_SUITE(ServiceWriteOsmSqlStatementsDriverTest);
   CPPUNIT_TEST(testSqlFileOutputNoBuffering);
   CPPUNIT_TEST(testDatabaseOutputNoBuffering);
   CPPUNIT_TEST(testSqlFileOutputWithBuffering);
@@ -110,7 +112,7 @@ public:
 
     //verify sequences - sequences can't be updated b/c of a chicken egg situation with nextval; sql
     //file validation will have to be good enough
-//    boost::shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    CPPUNIT_ASSERT_EQUAL((long)118, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));
@@ -138,7 +140,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
   }
 
   void writeAdditionalNewRecords()
@@ -271,5 +274,5 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WriteOsmSqlStatementsDriverTest, "glacial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ServiceWriteOsmSqlStatementsDriverTest, "glacial");
 

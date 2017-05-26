@@ -42,10 +42,8 @@
 namespace hoot
 {
 
-  using namespace boost;
-
-  class PertyTestRunResult;
-  class PertyMatchScorer;
+class PertyTestRunResult;
+class PertyMatchScorer;
 
 /**
  * Runs a PERTY test to generate a PERTY score with an option to vary a single PERTY input variable
@@ -193,7 +191,7 @@ private:
 
   Settings _settings;
 
- boost::shared_ptr<PertyMatchScorer> _matchScorer;
+  boost::shared_ptr<PertyMatchScorer> _matchScorer;
 
   void _writeStatsForOutputFiles(const QString& inputMapPath, QString sep);
   void _writePlotFile(const QString outputPath,

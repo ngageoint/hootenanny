@@ -57,6 +57,8 @@ using namespace boost;
 
 // Tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
+
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

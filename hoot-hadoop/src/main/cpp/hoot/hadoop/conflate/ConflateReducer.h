@@ -35,7 +35,7 @@ class OsmMap;
 class ConflateReducer : public pp::Reducer
 {
 public:
-  static string className() { return "hoot::ConflateReducer"; }
+  static std::string className() { return "hoot::ConflateReducer"; }
 
   static unsigned int logWarnCount;
 
@@ -47,7 +47,7 @@ public:
 
 private:
 
-  vector<Envelope> _envelopes;
+  std::vector<geos::geom::Envelope> _envelopes;
 
   bool _initialized;
 
@@ -57,7 +57,7 @@ private:
   NodeReplacements _nr;
 
   MapStats _stats;
- boost::shared_ptr<HadoopIdGenerator> _idGen;
+  boost::shared_ptr<HadoopIdGenerator> _idGen;
   int _partition;
   std::string _workDir;
   PbfRecordWriter* _writer;
@@ -66,11 +66,11 @@ private:
 
   void _emitMap(boost::shared_ptr<OsmMap> map);
 
-  const Envelope& _getContainingEnvelope(const boost::shared_ptr<OsmMap>& map);
+  const geos::geom::Envelope& _getContainingEnvelope(const boost::shared_ptr<OsmMap>& map);
 
   void _init(HadoopPipes::ReduceContext& context);
 
- boost::shared_ptr<OsmMap> _readMap(const string& value);
+  boost::shared_ptr<OsmMap> _readMap(const std::string& value);
 
   void _removeReplacedNodes(boost::shared_ptr<OsmMap>& map);
 

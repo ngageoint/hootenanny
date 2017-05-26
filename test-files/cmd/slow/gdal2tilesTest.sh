@@ -38,6 +38,6 @@ NEWSIZE=`du -c $OUTPUT_TILES | grep total | awk '{print $1}'`
 
 [ $NEWSIZE -gt 2710 ] && echo "gdal2tiles.py: Expecting a tile size around 2700. Got" $NEWSIZE
 
-[ $NEWSIZE -lt 2500 ] && echo "gdal2tiles.py: Expecting a tile size between 2500 and 2700. Got" $NEWSIZE
+[ $NEWSIZE -lt 2450 ] && echo "gdal2tiles.py: Expecting a tile size between 2500 and 2700. Got" $NEWSIZE
 
 

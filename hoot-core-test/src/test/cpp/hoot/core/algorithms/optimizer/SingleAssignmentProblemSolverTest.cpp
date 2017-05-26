@@ -30,6 +30,8 @@
 #include <hoot/core/util/Log.h>
 #include "../../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -98,7 +100,7 @@ public:
     CostFunction costFunction;
     double totalCost = 0.0;
     for (vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair>::const_iterator it = pairs.begin();
-         it != pairs.end(); it++)
+         it != pairs.end(); ++it)
     {
       SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair pair = *it;
       if (pair.actor != NULL && pair.task != NULL)

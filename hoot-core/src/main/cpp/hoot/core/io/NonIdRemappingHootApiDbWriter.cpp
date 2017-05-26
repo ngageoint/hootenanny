@@ -22,34 +22,46 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAYMERGER_H
-#define HIGHWAYMERGER_H
+#include "NonIdRemappingHootApiDbWriter.h"
 
-#include <hoot/core/conflate/Merger.h>
+// hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-class HighwayMerger : public Merger
+HOOT_FACTORY_REGISTER(OsmMapWriter, NonIdRemappingHootApiDbWriter)
+
+NonIdRemappingHootApiDbWriter::NonIdRemappingHootApiDbWriter() :
+HootApiDbWriter()
 {
-public:
-  HighwayMerger();
-
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
-    const;
-
-  virtual set<ElementId> getImpactedElementIds() const;
-
-  virtual bool isValid(const ConstOsmMapPtr& map) const;
-
-  virtual void replace(ElementId oldEid, ElementId newEid);
-
-private:
-
-};
-
 }
 
-#endif // HIGHWAYMERGER_H
+long NonIdRemappingHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
+{
+  switch(eid.getType().getEnum())
+  {
+  case ElementType::Node:
+    _nodeRemap[eid.getId()] = eid.getId();
+    break;
+
+  case ElementType::Way:
+    _wayRemap[eid.getId()] = eid.getId();
+    break;
+
+  case ElementType::Relation:
+    _relationRemap[eid.getId()] = eid.getId();
+    break;
+
+  default:
+    LOG_ERROR("Tried to create or remap ID for invalid type");
+    throw NotImplementedException();
+  }
+
+  LOG_TRACE("No ID remap performed.  Returning original ID " << eid);
+  return eid.getId();
+}
+
+}

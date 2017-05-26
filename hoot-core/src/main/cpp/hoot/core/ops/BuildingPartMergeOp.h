@@ -51,10 +51,9 @@ template<>
 
 namespace hoot
 {
+
 class Relation;
 class OsmSchema;
-
-using namespace Tgs;
 
 /**
  * UFD Data frequently has buildings mapped out as individual parts where each part has a different
@@ -82,7 +81,7 @@ class BuildingPartMergeOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::BuildingPartMergeOp"; }
+  static std::string className() { return "hoot::BuildingPartMergeOp"; }
 
   static unsigned int logWarnCount;
 
@@ -90,29 +89,29 @@ public:
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& /*is*/) {}
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
   RelationPtr combineParts(const OsmMapPtr &map,
-    const vector< boost::shared_ptr<Element> >& parts);
+    const std::vector< boost::shared_ptr<Element> >& parts);
 
 private:
 
   /// Used to keep track of which elements make up a building.
-  DisjointSetMap< boost::shared_ptr<Element> > _ds;
+  Tgs::DisjointSetMap< boost::shared_ptr<Element> > _ds;
   OsmMapPtr _map;
-  set<QString> _buildingPartTagNames;
+  std::set<QString> _buildingPartTagNames;
 
-  void _addContainedWaysToGroup(const Geometry& g, const boost::shared_ptr<Element>& neighbor);
+  void _addContainedWaysToGroup(const geos::geom::Geometry& g, const boost::shared_ptr<Element>& neighbor);
   void _addNeighborsToGroup(const WayPtr& w);
   void _addNeighborsToGroup(const RelationPtr& r);
 
-  set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
+  std::set<long> _calculateNeighbors(const WayPtr& w, const Tags& tags);
 
-  void _combineParts(const vector< boost::shared_ptr<Element> >& parts) { combineParts(_map, parts); }
+  void _combineParts(const std::vector< boost::shared_ptr<Element> >& parts) { combineParts(_map, parts); }
 
   /**
    * Compares the given tags and determines if the two building parts could be part of the same

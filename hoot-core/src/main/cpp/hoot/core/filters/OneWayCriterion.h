@@ -41,7 +41,7 @@ class OneWayCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::OneWayCriterion"; }
+  static std::string className() { return "hoot::OneWayCriterion"; }
 
   OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 

@@ -47,13 +47,13 @@ class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::BuildingOutlineRemoveOp"; }
+  static std::string className() { return "hoot::BuildingOutlineRemoveOp"; }
 
   BuildingOutlineRemoveOp();
 
   virtual void apply(boost::shared_ptr<OsmMap> &map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& /*is*/) {}
 

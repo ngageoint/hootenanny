@@ -67,7 +67,7 @@ public:
 
 private:
   boost::minstd_rand* _rng;
-  auto_ptr<boost::minstd_rand> _localRng;
+  std::auto_ptr<boost::minstd_rand> _localRng;
   double _p;
 };
 

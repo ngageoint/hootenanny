@@ -39,7 +39,7 @@ namespace hoot
 class PoiCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::PoiCriterion"; }
+  static std::string className() { return "hoot::PoiCriterion"; }
 
   PoiCriterion() {}
 

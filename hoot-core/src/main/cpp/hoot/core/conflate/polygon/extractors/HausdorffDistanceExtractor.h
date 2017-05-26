@@ -43,12 +43,12 @@ namespace hoot
 class HausdorffDistanceExtractor : public AbstractDistanceExtractor
 {
 public:
-  static string className() { return "hoot::HausdorffDistanceExtractor"; }
+  static std::string className() { return "hoot::HausdorffDistanceExtractor"; }
 
   virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const;
 
-  virtual string getClassName() const { return HausdorffDistanceExtractor::className(); }
+  virtual std::string getClassName() const { return HausdorffDistanceExtractor::className(); }
 };
 
 }

@@ -29,6 +29,9 @@
 
 #include <hoot/core/conflate/MatchType.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -63,7 +66,7 @@ vector<string> DataSamples::getUniqueLabels() const
 
 boost::shared_ptr<DataFrame> DataSamples::toDataFrame(double nullValue) const
 {
- boost::shared_ptr<DataFrame> result(new DataFrame);
+  boost::shared_ptr<DataFrame> result(new DataFrame);
   vector<string> labels = getUniqueLabels();
   result->setFactorLabels(labels);
 

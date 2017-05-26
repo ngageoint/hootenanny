@@ -34,6 +34,9 @@
 #include <hoot/core/util/FindNodesInWayFactory.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

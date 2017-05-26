@@ -32,6 +32,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 
+using namespace std;
+
 namespace hoot
 {
 

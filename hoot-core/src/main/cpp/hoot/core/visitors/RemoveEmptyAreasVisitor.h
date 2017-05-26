@@ -43,7 +43,7 @@ class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveEmptyAreasVisitor"; }
+  static std::string className() { return "hoot::RemoveEmptyAreasVisitor"; }
 
   RemoveEmptyAreasVisitor();
 
@@ -51,7 +51,7 @@ public:
 
   virtual void visit(const boost::shared_ptr<Element>& e);
 private:
-  auto_ptr<ElementConverter> _ec;
+  std::auto_ptr<ElementConverter> _ec;
 };
 
 }

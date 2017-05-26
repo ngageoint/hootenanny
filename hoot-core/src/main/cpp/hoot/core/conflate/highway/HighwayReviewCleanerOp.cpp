@@ -32,6 +32,8 @@
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 

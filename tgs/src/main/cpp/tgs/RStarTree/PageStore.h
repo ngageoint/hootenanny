@@ -37,7 +37,7 @@ namespace Tgs
 
   /**
    * PageStore is an abstraction that allows the saving and retrieving of blocks of data. These
-   * blocks of data are typically stored out to file, but could conceivably be any form of 
+   * blocks of data are typically stored out to file, but could conceivably be any form of
    * persistent store.
    */
   class  TGS_EXPORT PageStore
@@ -47,10 +47,10 @@ namespace Tgs
     /**
      * All page shared pointers should be freed before the PageStore is destroyed.
      */
-    virtual ~PageStore() {};
+    virtual ~PageStore() {}
 
     /**
-     * Creates a new page w/ a new id and returns the page. All page shared pointers should be 
+     * Creates a new page w/ a new id and returns the page. All page shared pointers should be
      * freed before the PageStore is destroyed.
      */
     virtual boost::shared_ptr<Page> createPage() = 0;

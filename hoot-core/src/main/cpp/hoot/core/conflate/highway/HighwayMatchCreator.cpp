@@ -59,12 +59,14 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, HighwayMatchCreator)
-
-using namespace Tgs;
 
 /**
  * Searches the specified map for any highway match potentials.
@@ -76,10 +78,10 @@ public:
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
-    vector<const Match*>& result,boost::shared_ptr<HighwayClassifier> c,
-   boost::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
+    vector<const Match*>& result, boost::shared_ptr<HighwayClassifier> c,
+    boost::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
     ConstMatchThresholdPtr threshold,
-   boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff):
+    boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff):
     _map(map),
     _result(result),
     _c(c),
@@ -137,10 +139,10 @@ public:
   }
 
   static HighwayMatch* createMatch(const ConstOsmMapPtr& map,
-   boost::shared_ptr<HighwayClassifier> classifier,
-   boost::shared_ptr<SublineStringMatcher> sublineMatcher,
+    boost::shared_ptr<HighwayClassifier> classifier,
+    boost::shared_ptr<SublineStringMatcher> sublineMatcher,
     ConstMatchThresholdPtr threshold,
-   boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
+    boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff,
     ConstElementPtr e1, ConstElementPtr e2)
   {
     HighwayMatch* result = 0;
@@ -194,18 +196,18 @@ public:
     return OsmSchema::getInstance().isLinearHighway(element->getTags(), element->getElementType());
   }
 
- boost::shared_ptr<HilbertRTree>& getIndex()
+  boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368
-     boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
       // Only index elements satisfy isMatchCandidate(e)
       boost::function<bool (ConstElementPtr e)> f = boost::bind(&HighwayMatchVisitor::isMatchCandidate, _1);
-     boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
+      boost::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
@@ -228,8 +230,8 @@ private:
   const ConstOsmMapPtr& _map;
   vector<const Match*>& _result;
   set<ElementId> _empty;
- boost::shared_ptr<HighwayClassifier> _c;
- boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<HighwayClassifier> _c;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   Status _matchStatus;
   int _neighborCountMax;
   int _neighborCountSum;
@@ -237,10 +239,10 @@ private:
   size_t _maxGroupSize;
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
- boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+  boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 
   // Used for finding neighbors
- boost::shared_ptr<HilbertRTree> _index;
+  boost::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 };
 
@@ -253,7 +255,7 @@ HighwayMatchCreator::HighwayMatchCreator()
     Factory::getInstance().constructObject<SublineStringMatcher>(
       ConfigOptions().getHighwaySublineStringMatcher()));
 
-  _tagAncestorDiff =boost::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
+  _tagAncestorDiff = boost::shared_ptr<TagAncestorDifferencer>(new TagAncestorDifferencer("highway"));
 
   Settings settings = conf();
   settings.set("way.matcher.max.angle", ConfigOptions().getHighwayMatcherMaxAngle());

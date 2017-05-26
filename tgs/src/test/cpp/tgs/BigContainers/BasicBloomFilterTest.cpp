@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -63,12 +63,12 @@ public:
         boost::bloom_filters::boost_hash<size_t, 0x7545E14679E2A9E3>,
         boost::bloom_filters::boost_hash<size_t, 0x5BD062C2515F007C>,
         boost::bloom_filters::boost_hash<size_t, 0x4DB127F812200854> > > Bloom;
-    Bloom* b = new Bloom();
-    Bloom& uut = *b;
+    //  NOTE: Bloom must be created on the heap and not the stack, thus the "new Bloom()"
+    boost::shared_ptr<Bloom> b(new Bloom());
 
-    uut.insert(5);
-    CPPUNIT_ASSERT_EQUAL(true, uut.probably_contains(5));
-    CPPUNIT_ASSERT_EQUAL(false, uut.probably_contains(7));
+    b->insert(5);
+    CPPUNIT_ASSERT_EQUAL(true, b->probably_contains(5));
+    CPPUNIT_ASSERT_EQUAL(false, b->probably_contains(7));
 
     vector<long> ks;
     set<long> s;
@@ -77,31 +77,13 @@ public:
       long k = Tgs::Random::instance()->generateInt();
       ks.push_back(k);
       s.insert(k);
-      uut.insert(k);
+      b->insert(k);
     }
 
     for (size_t i = 0; i < ks.size(); i++)
     {
-      CPPUNIT_ASSERT_EQUAL(true, uut.probably_contains(ks[i]));
+      CPPUNIT_ASSERT_EQUAL(true, b->probably_contains(ks[i]));
     }
-
-//    size_t tests = 1000 * 100;
-//    int fp = 0;
-//    size_t testCount = 0;
-//    for (size_t i = 0; i < tests; i++)
-//    {
-//      long k = Tgs::Random::instance()->generateInt();
-//      if (s.find(k) == s.end())
-//      {
-//        testCount++;
-//        if (uut.probably_contains(k))
-//        {
-//          fp++;
-//        }
-//      }
-//    }
-//    cout << "fp: " << fp << endl;
-//    cout << "fpr: " << (double)fp / (double)testCount << endl;
   }
 };
 

@@ -45,10 +45,12 @@
 // Qt
 #include <QStringList>
 
+using namespace boost;
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
-
-using namespace boost;
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 

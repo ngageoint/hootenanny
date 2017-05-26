@@ -37,8 +37,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
 
 class Schema
 {
@@ -54,7 +52,7 @@ public:
   size_t getLayerCount() const { return _layers.size(); }
 
 private:
-  vector< boost::shared_ptr<Layer> > _layers;
+  std::vector< boost::shared_ptr<Layer> > _layers;
 };
 
 }

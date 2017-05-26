@@ -35,8 +35,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace boost;
-
 /**
  * Compares two maps.
  */
@@ -49,7 +47,7 @@ public:
    * Returns true if the maps are essentially the same. Minor differences in node locations are
    * ignored.
    */
-  bool isMatch(boost::shared_ptr<OsmMap> ref,boost::shared_ptr<OsmMap> test);
+  bool isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test);
 
   void setIgnoreUUID() { _ignoreUUID = true; }
 

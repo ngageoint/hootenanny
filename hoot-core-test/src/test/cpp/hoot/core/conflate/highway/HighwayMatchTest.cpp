@@ -32,7 +32,6 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
@@ -42,6 +41,8 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -53,6 +54,8 @@
 #include <tgs/StreamUtils.h>
 
 #include "../../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -310,15 +313,15 @@ public:
     LOG_INFO(
       sublineMatcher->findMatch(
         map,
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
     HOOT_STR_EQUALS("matches:\n"
       "subline 1: start: way: -3 index: 0 fraction: 0.354292349419726 end: way: -3 index: 1 fraction: 0\n"
       "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
       sublineMatcher->findMatch(
         map,
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
   }
 
   /**
@@ -340,9 +343,9 @@ public:
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    WayPtr w218 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-218"));
-    WayPtr w948 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-948"));
-    WayPtr w582 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-582"));
+    WayPtr w218 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-218"));
+    WayPtr w948 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-948"));
+    WayPtr w582 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-582"));
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.0001, 0.9999));
 

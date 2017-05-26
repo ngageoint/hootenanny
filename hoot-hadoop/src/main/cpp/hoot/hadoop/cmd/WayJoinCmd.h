@@ -26,7 +26,7 @@ class WayJoinCmd : public Command
 {
 public:
 
-  static string className() { return "hoot::WayJoinCmd"; }
+  static std::string className() { return "hoot::WayJoinCmd"; }
 
   WayJoinCmd();
 

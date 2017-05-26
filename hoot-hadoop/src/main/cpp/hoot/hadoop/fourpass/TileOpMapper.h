@@ -34,13 +34,13 @@ public:
 
   static std::string className() { return "hoot::TileOpMapper"; }
 
-  static string envelopesKey() { return "hoot.envelopes"; }
+  static std::string envelopesKey() { return "hoot.envelopes"; }
 
-  static string bufferKey() { return "hoot.buffer"; }
+  static std::string bufferKey() { return "hoot.buffer"; }
 
-  static string maxWaySizeKey() { return "hoot.max.way.size"; }
+  static std::string maxWaySizeKey() { return "hoot.max.way.size"; }
 
-  static string replacementsKey() { return "hoot.node.replacements"; }
+  static std::string replacementsKey() { return "hoot.node.replacements"; }
 
   TileOpMapper();
 
@@ -48,19 +48,19 @@ public:
 
   virtual void close() {}
 
-  static vector<Envelope> parseEnvelopes(const string& envStr);
+  static std::vector<geos::geom::Envelope> parseEnvelopes(const std::string& envStr);
 
 protected:
 
-  QHash< int,boost::shared_ptr<OsmPbfWriter> > _writers;
-  QHash< int,boost::shared_ptr<stringstream> > _buffers;
+  QHash< int, boost::shared_ptr<OsmPbfWriter> > _writers;
+  QHash< int, boost::shared_ptr<std::stringstream> > _buffers;
   Degrees _tileBufferSize;
 
-  vector<Envelope> _envelopes;
+  std::vector<geos::geom::Envelope> _envelopes;
 
   bool _initialized;
 
-  string _replacmentsPath;
+  std::string _replacmentsPath;
   int _reduceTaskCount;
 
   void _addNode(const NodePtr& n);
@@ -78,7 +78,7 @@ protected:
 
   void _replaceNodes(OsmMapPtr& m);
 
-  void _replaceNodes(OsmMapPtr& m, istream& is);
+  void _replaceNodes(OsmMapPtr& m, std::istream& is);
 
 };
 

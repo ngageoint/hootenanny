@@ -32,6 +32,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

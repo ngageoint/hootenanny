@@ -37,10 +37,8 @@
 namespace hoot
 {
 
-  class Way;
-  class OsmMap;
-
-  using namespace boost;
+class Way;
+class OsmMap;
 
 class DirectedGraph
 {

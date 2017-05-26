@@ -78,7 +78,7 @@ public:
 private:
 
   OsmMap* _map;
- boost::shared_ptr<ElementCriterion> _filter;
+  boost::shared_ptr<ElementCriterion> _filter;
   bool _recursive;
 };
 

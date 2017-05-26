@@ -56,6 +56,8 @@ using namespace hoot;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

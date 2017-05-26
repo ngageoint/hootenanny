@@ -64,6 +64,8 @@
 #include <hoot/core/io/ScriptTranslator.h>
 
 #include <math.h>
+
+using namespace boost;
 using namespace std;
 
 namespace hoot
@@ -202,9 +204,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     {
       _inputIsConflatedMapOutput = true;
     }
-    double conflatableFeatureCount = -1.0;
     any matchCandidateCountsData;
-    conflatableFeatureCount =
+    double conflatableFeatureCount =
       _applyVisitor(
         constMap,
         FilteredVisitor(

@@ -115,13 +115,12 @@ namespace Tgs
     {
       std::fstream ins(fn.c_str(), std::fstream::in);
 
-      char inLine[512];
-
       if(ins.is_open())
       {
         while(!ins.eof())
         {
-          Tgs::CloudPoint cp; 
+          char inLine[512];
+          Tgs::CloudPoint cp;
           ins.getline(inLine, 512);
           std::stringstream ss;
           ss << inLine;
@@ -247,7 +246,7 @@ for (unsigned int si = 0; si < s.size(); si++)
       for (unsigned int i = 0; i < training.size(); i++)
       {
         cout << "Training " << training[i] << endl;
-       boost::shared_ptr<SpinImageStack> stack(new SpinImageStack());
+        boost::shared_ptr<SpinImageStack> stack(new SpinImageStack());
         stacks.push_back(stack);
         PointCloud pc;
         pc.load(training[i]);
@@ -261,7 +260,7 @@ for (unsigned int si = 0; si < s.size(); si++)
       for (unsigned int i = 0; i < testing.size(); i++)
       {
         cout << "Testing " << testing[i] << endl;
-        SpinImageStack stack;
+//        SpinImageStack stack;
         PointCloud pc;
 //         cout << "  Loading..." << endl;
         loadPointCloud(testing[i], pc);
@@ -271,7 +270,7 @@ for (unsigned int si = 0; si < s.size(); si++)
         //gen.generateStack(pc, stack);
 
         double bestScore;
-        std::map<string, double> bestScores;
+//        std::map<string, double> bestScores;
 
         std::map<string, int> results;
         bestScore = -1e300;
@@ -323,7 +322,7 @@ for (unsigned int si = 0; si < s.size(); si++)
         }
 
         int max = -1;
-        for (std::map<string, int>::iterator it = results.begin(); it != results.end(); it++)
+        for (std::map<string, int>::iterator it = results.begin(); it != results.end(); ++it)
         {
           max = std::max(it->second, max);
         }

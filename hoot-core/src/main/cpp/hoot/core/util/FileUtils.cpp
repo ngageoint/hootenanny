@@ -100,7 +100,7 @@ QStringList FileUtils::tokenizeOutputFileWithoutDates(const QString filePath)
   return tokens;
 }
 
-QString FileUtils::fileToString(const QString path)
+QString FileUtils::readFully(const QString path)
 {
   QFile file(path);
   if (file.open(QIODevice::ReadOnly))
@@ -111,6 +111,23 @@ QString FileUtils::fileToString(const QString path)
   {
     throw HootException("Unable to read file at: " + path);
   }
+}
+
+void FileUtils::writeFully(const QString path, const QString text)
+{
+  QFile outFile(path);
+  if (outFile.exists() && !outFile.remove())
+  {
+    throw HootException("Unable to remove file: " + path);
+  }
+  if (!outFile.open(QFile::WriteOnly | QFile::Text))
+  {
+    throw HootException("Error opening file: " + path);
+  }
+  QTextStream out(&outFile);
+  out << text;
+  out.flush();
+  outFile.close();
 }
 
 }

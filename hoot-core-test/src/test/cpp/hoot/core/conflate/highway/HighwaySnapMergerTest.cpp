@@ -35,7 +35,6 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
@@ -46,6 +45,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 
 // Qt
@@ -58,6 +59,9 @@
 #include <tgs/StreamUtils.h>
 
 #include "../../TestUtils.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -499,7 +503,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     //will throw an exception on failure
     ConstRelationPtr reviewRelation =
-      dynamic_pointer_cast<Relation>(
+      boost::dynamic_pointer_cast<Relation>(
         TestUtils::getElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
     HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get(MetadataTags::HootReviewType()));
   }

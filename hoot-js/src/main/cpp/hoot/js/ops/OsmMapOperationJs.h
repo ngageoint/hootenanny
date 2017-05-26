@@ -38,8 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -59,7 +57,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  auto_ptr<OsmMapOperation> _op;
+  std::auto_ptr<OsmMapOperation> _op;
 };
 
 }

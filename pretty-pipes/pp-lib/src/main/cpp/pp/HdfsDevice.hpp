@@ -56,7 +56,7 @@ public: // boost iostream concepts
    * @param write - If true, then writing is enabled. Only writing or reading can be enabled at
    *             one time.
    */
-  HdfsDevice(const string& host, int port, const std::string& path, const bool write = false,
+  HdfsDevice(const std::string& host, int port, const std::string& path, const bool write = false,
              int bufferSize = DEFAULT_BUFFER_SIZE) :
     _bufferSize(bufferSize),
     _fp(NULL), _fs(NULL), _host(host), _info(NULL), _initialized(false),
@@ -65,13 +65,10 @@ public: // boost iostream concepts
   }
 
   HdfsDevice(const HdfsDevice& other) :
-    _fp(NULL), _fs(NULL), _info(NULL), _initialized(false)
+    _bufferSize(other._bufferSize),
+    _fp(NULL), _fs(NULL), _host(other._host), _info(NULL), _initialized(false),
+    _path(other._path), _port(other._port), _writeOnly(other._writeOnly)
   {
-    _host = other._host;
-    _port = other._port;
-    _path = other._path;
-    _writeOnly = other._writeOnly;
-    _bufferSize = other._bufferSize;
   }
 
   virtual ~HdfsDevice()
@@ -89,12 +86,12 @@ public: // boost iostream concepts
       {
         if (hdfsFlush(_fs, _fp) == -1)
         {
-          throw ios_base::failure("Error flushing HDFS stream.");
+          throw std::ios_base::failure("Error flushing HDFS stream.");
         }
       }
       if (hdfsCloseFile(_fs, _fp) == -1)
       {
-        throw ios_base::failure("Error closing HDFS stream.");
+        throw std::ios_base::failure("Error closing HDFS stream.");
       }
       _fp = NULL;
       _fs = NULL;
@@ -105,7 +102,7 @@ public: // boost iostream concepts
   {
     if (_writeOnly && _fp != NULL && hdfsFlush(_fs, _fp) == -1)
     {
-      throw ios_base::failure("Error flushing HDFS stream.");
+      throw std::ios_base::failure("Error flushing HDFS stream.");
     }
     return true;
   }
@@ -117,7 +114,7 @@ public: // boost iostream concepts
       _info = hdfsGetPathInfo(_fs, _path.data());
       if (_info == NULL)
       {
-        throw ios_base::failure("Error getting path info.");
+        throw std::ios_base::failure("Error getting path info.");
       }
     }
     return _info;
@@ -130,7 +127,7 @@ public: // boost iostream concepts
       _fs = HdfsConnection::getInstance().getConnection(_host, _port);
       if (_fs == NULL)
       {
-        throw ios_base::failure("Error connecting to HDFS.");
+        throw std::ios_base::failure("Error connecting to HDFS.");
       }
 
       // open the file
@@ -141,7 +138,7 @@ public: // boost iostream concepts
                           replication, block_size);
       if (_fp == NULL)
       {
-        throw ios_base::failure(QString("Error opening file (%1)").
+        throw std::ios_base::failure(QString("Error opening file (%1)").
           arg(QString::fromStdString(_path)).toStdString());
       }
       _initialized = true;
@@ -157,7 +154,7 @@ public: // boost iostream concepts
   std::streamsize read(char* strm_ptr, std::streamsize n)
   {
     _init();
-    streamsize result = hdfsRead(_fs, _fp, strm_ptr, n);
+    std::streamsize result = hdfsRead(_fs, _fp, strm_ptr, n);
     // if we're at the end of the stream
     if (result == 0)
     {
@@ -167,34 +164,34 @@ public: // boost iostream concepts
     return result;
   }
 
-  virtual streampos seek(streampos off, std::ios_base::seekdir way)
+  virtual std::streampos seek(std::streampos off, std::ios_base::seekdir way)
   {
     _init();
     tOffset pos;
-    if (way == ios_base::end)
+    if (way == std::ios_base::end)
     {
       pos = _getInfo()->mSize + off;
     }
-    else if (way == ios_base::beg)
+    else if (way == std::ios_base::beg)
     {
       pos = off;
     }
-    else if (way == ios_base::cur)
+    else if (way == std::ios_base::cur)
     {
       pos = hdfsTell(_fs, _fp);
       if (pos == -1)
       {
-        throw ios_base::failure("Error querying HDFS file position.");
+        throw std::ios_base::failure("Error querying HDFS file position.");
       }
       pos += off;
     }
     else
     {
-      throw ios_base::failure("Unexpected state.");
+      throw std::ios_base::failure("Unexpected state.");
     }
     if (hdfsSeek(_fs, _fp, pos) == -1)
     {
-      throw ios_base::failure("Error seeking on HDFS file.");
+      throw std::ios_base::failure("Error seeking on HDFS file.");
     }
     return pos;
   }
@@ -215,7 +212,7 @@ private:
   int _bufferSize;
   mutable hdfsFile _fp;
   mutable hdfsFS _fs;
-  string _host;
+  std::string _host;
   hdfsFileInfo* _info;
   mutable bool _initialized;
   std::string _path;

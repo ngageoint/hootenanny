@@ -45,60 +45,57 @@
 namespace hoot
 {
 
-using namespace cv;
-using namespace geos::geom;
-
 /**
  *
  */
 class PermuteGridCalculator
 {
-  public:
+public:
 
-    static string className() { return "hoot::PermuteGridCalculator"; }
+  static std::string className() { return "hoot::PermuteGridCalculator"; }
 
-    virtual ~PermuteGridCalculator() { }
+  virtual ~PermuteGridCalculator() { }
 
-    /**
-     * Calculates a permutation grid and the values in that grid for a given envelope. The number of
-     * rows and columns are returned in rows and cols.
-     */
-    virtual Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols) = 0;
+  /**
+   * Calculates a permutation grid and the values in that grid for a given envelope. The number of
+   * rows and columns are returned in rows and cols.
+   */
+  virtual cv::Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols) = 0;
 
-    /**
+  /**
    * Seeds the permutation process. By default a seed is generated based on time. The seed should
    * be non-negative or -1 to generate a seed based on time.
    */
-    void setSeed(int seed) { _seed = seed; }
+  void setSeed(int seed) { _seed = seed; }
 
-    /**
+  /**
    * Sets the systematic error. This is the sigma value for Sx and Sy. The same sigma value is used
    * for all values in each matrix. See [1] for more information.
    */
-   void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
+  void setSystematicError(Meters sigmaX, Meters sigmaY) { _sigmaSx = sigmaX; _sigmaSy = sigmaY; }
 
-   void setCsmParameters(double D) { _D = D; }
+  void setCsmParameters(double D) { _D = D; }
 
-    /**
+  /**
    * Sets the random error. This is the sigma value for Rx and Ry. The same sigma value is used
    * for all values in each matrix. See [1] for more information.
    * @note There were problems with taking the sqrtm when sigma is zero. Now I make sigma a small
    * value (1e-6) when sigma is zero.
    */
-    void setRandomError(Meters sigmaX, Meters sigmaY) { _sigmaRx = sigmaX; _sigmaRy = sigmaY; }
+  void setRandomError(Meters sigmaX, Meters sigmaY) { _sigmaRx = sigmaX; _sigmaRy = sigmaY; }
 
-    void setGridSpacing(Meters gridSpacing) { _gridSpacing = gridSpacing; }
+  void setGridSpacing(Meters gridSpacing) { _gridSpacing = gridSpacing; }
 
-    virtual QString toString();
+  virtual QString toString();
 
-    protected:
+protected:
 
-      Meters _sigmaRx, _sigmaRy;
+  Meters _sigmaRx, _sigmaRy;
 
-      Meters _D;
-      Meters _gridSpacing;
-      int _seed;
-      Meters _sigmaSx, _sigmaSy;
+  Meters _D;
+  Meters _gridSpacing;
+  int _seed;
+  Meters _sigmaSx, _sigmaSy;
 };
 
 }

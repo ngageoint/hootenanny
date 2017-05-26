@@ -37,6 +37,9 @@
 #include <QString>
 #include <QStringList>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -105,7 +108,7 @@ public:
       const int32_t* row = mat.ptr<int32_t>(y);
       for (int x = 0; x < qImage.width(); x++)
       {
-        int c = (255 * log(row[x] + 1)) / log(max);
+        int c = (255 * log1p(row[x])) / log(max);
         rgb = qRgb(c, c, c);
         qImage.setPixel(x, qImage.height() - y - 1, rgb);
       }

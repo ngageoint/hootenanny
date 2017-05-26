@@ -59,12 +59,12 @@ class DelaunayInterpolatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
- boost::shared_ptr<DelaunayInterpolator> buildRandom()
+  boost::shared_ptr<DelaunayInterpolator> buildRandom()
   {
-   boost::shared_ptr<DelaunayInterpolator> result(new DelaunayInterpolator);
+    boost::shared_ptr<DelaunayInterpolator> result(new DelaunayInterpolator);
     DelaunayInterpolator& uut = *result;
 
-   boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");
@@ -103,7 +103,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-   boost::shared_ptr<DelaunayInterpolator> di = buildRandom();
+    boost::shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.025, uut.estimateError(), 0.001);
@@ -162,7 +162,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-   boost::shared_ptr<DelaunayInterpolator> di = buildRandom();
+    boost::shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
 
     Tgs::Random::instance()->seed(0);
@@ -187,7 +187,7 @@ public:
     Tgs::Random::instance()->seed(0);
     DelaunayInterpolator uut;
 
-   boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
+    boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");

@@ -43,7 +43,7 @@ public:
 
   ContainsNodeCriterion() {}
 
-  static string className() { return "hoot::ContainsNodeCriterion"; }
+  static std::string className() { return "hoot::ContainsNodeCriterion"; }
 
   explicit ContainsNodeCriterion(long nodeId): _nodeId(nodeId)
   {

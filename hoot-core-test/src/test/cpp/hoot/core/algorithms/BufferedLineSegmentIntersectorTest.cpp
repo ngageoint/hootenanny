@@ -46,6 +46,7 @@
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
 using namespace hoot;
 using namespace std;
 

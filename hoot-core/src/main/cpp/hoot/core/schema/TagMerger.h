@@ -42,7 +42,7 @@ class TagMerger
 {
 public:
 
-  static string className() { return "hoot::TagMerger"; }
+  static std::string className() { return "hoot::TagMerger"; }
 
   TagMerger() {}
 

@@ -64,6 +64,9 @@ using namespace hoot::pb;
 
 #include "PbfConstants.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -174,7 +177,7 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
           isBad = true;
         }
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         isBad = true;
       }
@@ -467,7 +470,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-          nodes[i]->setTag("source:datetime", dts);
+          nodes[i]->setTag(MetadataTags::SourceDateTime(), dts);
         }
       }
     }
@@ -1283,19 +1286,19 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     // need the reader to go faster.
 
     element.reset(new Node(*_nodesItr->second.get()));
-    _nodesItr++;
+    ++_nodesItr;
     _partialNodesRead++;
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
     element.reset(new Way(*_waysItr->second.get()));
-    _waysItr++;
+    ++_waysItr;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelations().size()))
   {
     element.reset(new Relation(*_relationsItr->second.get()));
-    _relationsItr++;
+    ++_relationsItr;
     _partialRelationsRead++;
   }
   assert(element.get());
@@ -1338,10 +1341,9 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
 {
   if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
   {
-    long timestamp = 0;
     if (info.has_timestamp())
     {
-      timestamp = info.timestamp() * _dateGranularity;
+      long timestamp = info.timestamp() * _dateGranularity;
 
       if (timestamp != 0)
       {
@@ -1349,7 +1351,7 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
         QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
         QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
 
-        t.set("source:datetime", dts);
+        t.set(MetadataTags::SourceDateTime(), dts);
       }
     }
   }

@@ -56,7 +56,10 @@ using namespace hoot::elements;
 // Qt
 #include <QDebug>
 
-namespace hoot {
+using namespace std;
+
+namespace hoot
+{
 
 boost::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
@@ -164,13 +167,13 @@ void OsmMap::addElement(const boost::shared_ptr<Element>& e)
   switch(e->getElementType().getEnum())
   {
   case ElementType::Node:
-    addNode(dynamic_pointer_cast<Node>(e));
+    addNode(boost::dynamic_pointer_cast<Node>(e));
     break;
   case ElementType::Way:
-    addWay(dynamic_pointer_cast<Way>(e));
+    addWay(boost::dynamic_pointer_cast<Way>(e));
     break;
   case ElementType::Relation:
-    addRelation(dynamic_pointer_cast<Relation>(e));
+    addRelation(boost::dynamic_pointer_cast<Relation>(e));
     break;
   default:
     throw HootException(QString("Unexpected element type: %1").arg(e->getElementType().toString()));
@@ -383,7 +386,7 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const boost::
 
     // create a copy of the set b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
-    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
       const RelationPtr& r = getRelation(*it);
       r->replaceElement(from, to);
@@ -425,7 +428,7 @@ void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<E
 
     // create a copy of the set b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
-    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
+    for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {
       const RelationPtr& r = getRelation(*it);
       r->replaceElement(from, to);
@@ -455,7 +458,7 @@ void OsmMap::replaceNode(long oldId, long newId)
 
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
 
-  for (set<long>::iterator it = ways.begin(); it != ways.end(); it++)
+  for (set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = getWay(*it);
 

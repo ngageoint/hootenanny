@@ -109,7 +109,7 @@ inline uint qHash(const ConstNetworkEdgePtr& v)
 
 inline uint qHash(const NetworkEdgePtr& v)
 {
-  return qHash(dynamic_pointer_cast<const NetworkEdge>(v));
+  return qHash(boost::dynamic_pointer_cast<const NetworkEdge>(v));
 }
 
 }

@@ -15,14 +15,15 @@
  */
 
 // Hoot
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/hadoop/pbf/PbfInputFormat.h>
-#include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/core/io/ApiDb.h>
-#include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/UuidHelper.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
@@ -43,6 +44,8 @@ using namespace geos::geom;
 #include "WriteOsmSqlStatementsReducer.h"
 #include "WriteOsmSqlStatementsDriver.h"
 #include "SqlStatementLineRecordWriter.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -89,6 +92,7 @@ void WriteOsmSqlStatementsDriver::open(QString url)
   if (_destinationIsDatabase(_output))
   {
     _database.open(_output);
+    LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database.getDB()));
   }
 }
 
@@ -186,7 +190,7 @@ void WriteOsmSqlStatementsDriver::_writeSequenceUpdateStatements(const QString e
   elementCounts[ElementType::Way] = 0;
   elementCounts[ElementType::Relation] = 0;
   const QStringList elementCountsStrList =
-    FileUtils::fileToString(mergedElementCountFileTempPath).split("\n");
+    FileUtils::readFully(mergedElementCountFileTempPath).split("\n");
   for (int i = 0; i < elementCountsStrList.size(); i++)
   {
     const QString line = elementCountsStrList.at(i);

@@ -40,13 +40,13 @@ class MarkForReviewMergerCreator : public MergerCreator
 {
 public:
 
-  static string className() { return "hoot::MarkForReviewMergerCreator"; }
+  static std::string className() { return "hoot::MarkForReviewMergerCreator"; }
 
   MarkForReviewMergerCreator();
 
-  virtual bool createMergers(const MatchSet& matches, vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 

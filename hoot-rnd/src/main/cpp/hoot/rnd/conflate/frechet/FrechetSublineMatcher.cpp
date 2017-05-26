@@ -35,6 +35,9 @@
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -64,7 +67,7 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtr& map
     return WaySublineMatchString();
   }
   vector<WaySublineMatch> v;
-  for (vector<frechet_subline>::iterator it = max.begin(); it != max.end(); it++)
+  for (vector<frechet_subline>::iterator it = max.begin(); it != max.end(); ++it)
   {
     //  Create the way sublines
     subline_entry max_subline = it->second;
@@ -78,8 +81,8 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(const ConstOsmMapPtr& map
     //  Calculate the score (max length of both sublines)
     if (sub1->getNodeCount() > 1 && sub2->getNodeCount() > 1)
     {
-     boost::shared_ptr<LineString> ls1 = ElementConverter(mapCopy).convertToLineString(sub1);
-     boost::shared_ptr<LineString> ls2 = ElementConverter(mapCopy).convertToLineString(sub2);
+      boost::shared_ptr<LineString> ls1 = ElementConverter(mapCopy).convertToLineString(sub1);
+      boost::shared_ptr<LineString> ls2 = ElementConverter(mapCopy).convertToLineString(sub2);
       if (ls1->isValid() && ls2->isValid())
       {
         score = min(ls1->getLength(), ls2->getLength());

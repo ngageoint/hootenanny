@@ -38,6 +38,8 @@ using namespace hoot;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -74,7 +76,7 @@ public:
     {
       GeometryUtils::envelopeFromConfigString("-10,-10,10,");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -84,7 +86,7 @@ public:
     {
       GeometryUtils::envelopeFromConfigString("-10,-10,a,10");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -94,7 +96,7 @@ public:
     {
       GeometryUtils::envelopeFromConfigString(" ");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

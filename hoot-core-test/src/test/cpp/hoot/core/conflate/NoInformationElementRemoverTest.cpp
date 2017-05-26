@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/conflate/NoInformationElementRemover.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 using namespace hoot;
-
 
 // Boost
 using namespace boost;
@@ -44,6 +44,8 @@ using namespace boost;
 #include <QDebug>
 
 #include "../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {

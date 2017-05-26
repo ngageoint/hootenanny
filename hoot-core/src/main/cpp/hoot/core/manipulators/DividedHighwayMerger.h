@@ -67,28 +67,28 @@ public:
   DividedHighwayMerger(Meters minSeparation, Meters maxSeparation, Meters vectorError,
                        double matchPercent);
 
-  virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
           ConstOsmMapPtr map);
 
-  virtual const vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
-          ConstOsmMapPtr map, const vector<long>& wids);
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
+          ConstOsmMapPtr map, const std::vector<long>& wids);
 
 private:
 
-  vector< boost::shared_ptr<Manipulation> > _result;
+  std::vector< boost::shared_ptr<Manipulation> > _result;
   ConstOsmMapPtr _map;
 
   Meters _minSeparation, _maxSeparation, _vectorError;
   ChainCriterion _oneWayUnknownCriterion;
   double _matchPercent;
 
-  vector<long> _findCenterWays(ConstWayPtr w1, ConstWayPtr w2);
+  std::vector<long> _findCenterWays(ConstWayPtr w1, ConstWayPtr w2);
 
   /**
    * Find all parallel ways that go in the opposite direction and are within the appropriate
    * threshold.
    */
-  vector<long> _findOtherWays(boost::shared_ptr<const hoot::Way> way);
+  std::vector<long> _findOtherWays(boost::shared_ptr<const hoot::Way> way);
 
   void _findMatches(long baseWayId);
 

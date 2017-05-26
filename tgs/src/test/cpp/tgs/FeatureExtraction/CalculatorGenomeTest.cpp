@@ -136,18 +136,18 @@ namespace Tgs
 
       for (unsigned int i = 0; i < 10; i++)
       {
-       boost::shared_ptr<CalculatorGenome> father(new CalculatorGenome());
+        boost::shared_ptr<CalculatorGenome> father(new CalculatorGenome());
         father->addBasicMathNodeTypes();
         father->addNodeType(new VectorCalculatorNodeSource(v), "VectorCalculatorNodeSource", 1.0);
         father->initialize();
         cout << "dad: " << father->toString() << endl;
 
-       boost::shared_ptr<CalculatorGenome> mother =
-          dynamic_pointer_cast<CalculatorGenome>(father->clone());
+        boost::shared_ptr<CalculatorGenome> mother =
+          boost::dynamic_pointer_cast<CalculatorGenome>(father->clone());
         mother->initialize();
         cout << "mom: " << mother->toString() << endl;
 
-       boost::shared_ptr<Genome> brother, sister;
+        boost::shared_ptr<Genome> brother, sister;
         father->crossoverSexually(*father, *mother, brother, sister);
 
         cout << "bro: " << brother->toString() << endl;
@@ -213,7 +213,7 @@ namespace Tgs
       params["learningRate"] = Parameter(.01, .99, .2, .3);
 
       results << "score\tindividuals\tvariableSize";
-      for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+      for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
       {
         results << "\t" << it->first;
       }
@@ -233,7 +233,7 @@ namespace Tgs
           int individuals;
           cout << "Temp: " << temp << endl;
           cout << "Parameters:" << endl;
-          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
           {
             cout << "\t" << it->first << ": \t" << it->second.value << endl;
           }
@@ -254,7 +254,7 @@ namespace Tgs
           }
 
           results << score << "\t" << individuals << "\t" << vs;
-          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
           {
             results << "\t" << it->second.value;
           }
@@ -262,7 +262,7 @@ namespace Tgs
 
           temp *= .8;
           params = bestParams;
-          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); it++)
+          for (map<string, Parameter>::iterator it = params.begin(); it != params.end(); ++it)
           {
             it->second.mutate(temp);
           }
@@ -285,9 +285,9 @@ namespace Tgs
 
       double vweight = 1.0 / (VARIABLE_SIZE + 2) * (params.find("variableWeight")->second.value);
 
-     boost::shared_ptr<SimpleFitness> fitness(new SimpleFitness(v1, v2));
+      boost::shared_ptr<SimpleFitness> fitness(new SimpleFitness(v1, v2));
 
-     boost::shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
+      boost::shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
       genome->addBasicMathNodeTypes();
       VectorCalculatorNodeSource* good1 = new VectorCalculatorNodeSource(v1);
       good1->setLabel("v1[]");
@@ -309,7 +309,7 @@ namespace Tgs
         {
           bad.push_back(Tgs::Random::instance()->generateInt());
         }
-       boost::shared_ptr<VectorCalculatorNodeSource> src(new VectorCalculatorNodeSource(bad));
+        boost::shared_ptr<VectorCalculatorNodeSource> src(new VectorCalculatorNodeSource(bad));
         src->setLabel(strm.str() + "[]");
         genome->addNodeType(src, strm.str(), vweight);
         badGenome.push_back(src);
@@ -347,8 +347,8 @@ namespace Tgs
 
         ga.step();
         c+= ga.getPopulation().size();
-       boost::shared_ptr<CalculatorGenome> best =
-          dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
+        boost::shared_ptr<CalculatorGenome> best =
+          boost::dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
         score = best->getScore();
         //cout << "individuals: " << c << "\r";
         stagnant++;
@@ -388,14 +388,14 @@ namespace Tgs
     {
       for (unsigned int i = 0; i < 10; i++)
       {
-       boost::shared_ptr<CalculatorGenome> father(new CalculatorGenome());
+        boost::shared_ptr<CalculatorGenome> father(new CalculatorGenome());
         father->addBasicMathNodeTypes();
         father->initialize();
 
         stringstream strm;
         father->save(strm);
 
-       boost::shared_ptr<CalculatorGenome> loader(new CalculatorGenome());
+        boost::shared_ptr<CalculatorGenome> loader(new CalculatorGenome());
         //stringstream strm2(strm.str());
         loader->addBasicMathNodeTypes();
         loader->load(strm);

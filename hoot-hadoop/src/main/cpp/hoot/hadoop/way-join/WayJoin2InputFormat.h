@@ -49,7 +49,7 @@ public:
 
   int getSplitCount() { return _splits.size(); }
 
-  virtual void setPath(string path);
+  virtual void setPath(std::string path);
 
   virtual void setConfiguration(const pp::Configuration& conf);
 

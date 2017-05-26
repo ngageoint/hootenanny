@@ -34,6 +34,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

@@ -44,6 +44,9 @@
 
 #include "Way.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -328,7 +331,7 @@ void Relation::_visitRw(ElementProvider& map, ElementVisitor& filter,
 
   filter.visit(map.getRelation(getId()));
 
-  const vector<RelationData::Entry> members = getMembers();
+  const vector<RelationData::Entry>& members = getMembers();
 
   for (size_t i = 0; i < members.size(); i++)
   {

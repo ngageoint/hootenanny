@@ -43,8 +43,6 @@
 
 namespace hoot
 {
-using namespace Tgs;
-using namespace geos::geom;
 
 class SearchRadiusCalculatorTest;
 class RubberSheetTest;
@@ -57,7 +55,7 @@ class RubberSheet : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::RubberSheet"; }
+  static std::string className() { return "hoot::RubberSheet"; }
 
   static unsigned int logWarnCount;
 
@@ -129,11 +127,11 @@ public:
    * @return a collection of distance values
    * @throws HootException if the tie points have not been created
    */
-   vector<double> calculateTiePointDistances();
+   std::vector<double> calculateTiePointDistances();
 
 private:
 
-  typedef map<long, list<Match> > MatchList;
+  typedef std::map<long, std::list<Match> > MatchList;
 
   bool _debug;
 
@@ -143,9 +141,9 @@ private:
   {
     public:
       // Unknown1 coordinate
-      Coordinate c1;
+      geos::geom::Coordinate c1;
       // Unknown2 coordinate
-      Coordinate c2;
+      geos::geom::Coordinate c2;
 
       double dx() const { return c1.x - c2.x; }
 
@@ -156,15 +154,15 @@ private:
 
   // A map of nids to the list of matches.
   MatchList _matches;
-  vector<Match> _finalPairs;
+  std::vector<Match> _finalPairs;
   bool _ref;
   int _minimumTies;
-  vector<Tie> _ties;
-  boost::shared_ptr<Interpolator> _interpolator1to2, _interpolator2to1;
+  std::vector<Tie> _ties;
+  boost::shared_ptr<Tgs::Interpolator> _interpolator1to2, _interpolator2to1;
   // used as a temporary in interpolating.
-  vector<double> _matchPoint;
+  std::vector<double> _matchPoint;
   boost::shared_ptr<OGRSpatialReference> _projection;
-  string _interpolatorClassName;
+  std::string _interpolatorClassName;
 
   double _searchRadius;
 
@@ -172,22 +170,22 @@ private:
 
   void _findTies();
 
-  void _addIntersection(long nid, const set<long>& wids);
+  void _addIntersection(long nid, const std::set<long>& wids);
 
   /**
    * Build a data frame for use with interpolators.
    */
-  boost::shared_ptr<DataFrame> _buildDataFrame(Status s) const;
+  boost::shared_ptr<Tgs::DataFrame> _buildDataFrame(Status s) const;
 
-  boost::shared_ptr<Interpolator> _buildInterpolator(Status s) const;
+  boost::shared_ptr<Tgs::Interpolator> _buildInterpolator(Status s) const;
 
   const Match& _findMatch(long nid1, long nid2);
 
-  boost::shared_ptr<Interpolator> _readInterpolator(QIODevice& is);
+  boost::shared_ptr<Tgs::Interpolator> _readInterpolator(QIODevice& is);
 
-  Coordinate _translate(const Coordinate& c, Status s);
+  geos::geom::Coordinate _translate(const geos::geom::Coordinate& c, Status s);
 
-  void _writeInterpolator(boost::shared_ptr<const Interpolator> interpolator, QIODevice& os) const;
+  void _writeInterpolator(boost::shared_ptr<const Tgs::Interpolator> interpolator, QIODevice& os) const;
 
   friend class SearchRadiusCalculatorTest;
   friend class RubberSheetTest;

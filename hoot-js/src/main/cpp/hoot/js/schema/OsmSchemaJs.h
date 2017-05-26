@@ -35,8 +35,6 @@
 
 namespace hoot
 {
-using namespace node;
-using namespace v8;
 
 class OsmSchemaJs : public node::ObjectWrap
 {
@@ -77,18 +75,18 @@ inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
   }
   else
   {
-    result->Set(toV8("name"), toV8(tv.name), None);
-    result->Set(toV8("description"), toV8(tv.description), None);
-    result->Set(toV8("key"), toV8(tv.key), None);
-    result->Set(toV8("value"), toV8(tv.value), None);
-    result->Set(toV8("influence"), toV8(tv.influence), None);
-    result->Set(toV8("childWeight"), toV8(tv.childWeight), None);
-    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore), None);
+    result->Set(toV8("name"), toV8(tv.name), v8::None);
+    result->Set(toV8("description"), toV8(tv.description), v8::None);
+    result->Set(toV8("key"), toV8(tv.key), v8::None);
+    result->Set(toV8("value"), toV8(tv.value), v8::None);
+    result->Set(toV8("influence"), toV8(tv.influence), v8::None);
+    result->Set(toV8("childWeight"), toV8(tv.childWeight), v8::None);
+    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore), v8::None);
     // need to create a string conversion for this if we want to use it. Unused for now.
     //result->Set(toV8("valueType"), toV8(tv.valueType), None);
-    result->Set(toV8("aliases"), toV8(tv.aliases), None);
-    result->Set(toV8("categories"), toV8(tv.categories), None);
-    result->Set(toV8("geometries"), toV8(tv.geometries), None);
+    result->Set(toV8("aliases"), toV8(tv.aliases), v8::None);
+    result->Set(toV8("categories"), toV8(tv.categories), v8::None);
+    result->Set(toV8("geometries"), toV8(tv.geometries), v8::None);
   }
 
   return result;

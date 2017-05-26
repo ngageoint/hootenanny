@@ -51,9 +51,11 @@
 
 #include "LargeWaySplitter.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
-using namespace geos::geom;
 
 TileConflator::TileConflator(boost::shared_ptr<TileWorker> worker)
 {

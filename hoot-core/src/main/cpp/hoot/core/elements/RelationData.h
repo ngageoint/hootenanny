@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATIONDATA_H
 #define RELATIONDATA_H
@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class RelationData : public ElementData
 {
@@ -48,16 +47,9 @@ public:
 
     Entry() {}
 
-    Entry(QString role, ElementId eid)
-    {
-      this->role = role;
-      _eid = eid;
-    }
+    Entry(QString r, ElementId eid) : role(r), _eid(eid)  { }
 
-    Entry(ElementId eid) :
-      _eid(eid)
-    {
-    }
+    Entry(ElementId eid) : _eid(eid) { }
 
     ElementId getElementId() const { return _eid; }
     void setElementId(ElementId eid) { _eid = eid; }
@@ -86,7 +78,7 @@ public:
 
   virtual void clear();
 
-  const vector<Entry>& getElements() const { return _members; }
+  const std::vector<Entry>& getElements() const { return _members; }
 
   const QString& getType() const { return _type; }
 
@@ -108,7 +100,7 @@ public:
   template<typename IT>
   void replaceElements(Entry old, IT start, IT end);
 
-  void setMembers(const vector<Entry>& members) { _members = members; }
+  void setMembers(const std::vector<Entry>& members) { _members = members; }
 
   void setType(const QString& type) { _type = type; }
 
@@ -116,7 +108,7 @@ private:
 
   QString _type;
 
-  vector<Entry> _members;
+  std::vector<Entry> _members;
 };
 
 inline std::ostream& operator<<(std::ostream& o, const RelationData::Entry& e)
@@ -129,7 +121,7 @@ template<typename IT>
 void RelationData::replaceElements(Entry old, IT start, IT end)
 {
   // make a copy of the old members list to work from.
-  vector<Entry> oldMembers = _members;
+  std::vector<Entry> oldMembers = _members;
   _members.resize(0);
   _members.reserve(oldMembers.size() + (end - start));
 

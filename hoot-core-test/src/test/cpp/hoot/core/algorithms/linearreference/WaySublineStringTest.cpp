@@ -32,6 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 
 #include "../../TestUtils.h"

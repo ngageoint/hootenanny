@@ -125,89 +125,147 @@ long OsmApiDbAwareHootApiDbWriter::_getRemappedElementId(const ElementId& eid)
     break;
   }
 
-  LOG_TRACE("Remapped ID for element type " << eid.getType().toString() << " from " <<
-            eid.getId() << " to " << retVal);
+  LOG_TRACE("Remapped ID from " << eid << " to " << ElementId(eid.getType(), retVal));
 
   return retVal;
 }
 
-void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& n)
-{
-  Tags t = n->getTags();
-  _addElementTags(n, t);
+//TODO: a lot of similar code in these write methods that could be consolidated into something
+//generic
 
-  const long nodeId = _getRemappedElementId(n->getElementId());
-  const bool alreadyThere = _nodeRemap.count(nodeId) != 0;
-  if (alreadyThere)
+void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& node)
+{
+  long nodeId;
+  LOG_VART(node->getId());
+  LOG_VART(node->getStatus());
+  if (node->getId() > 0)
   {
-    _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, t);
+    nodeId = node->getId();
   }
   else
   {
-    _hootdb.insertNode(nodeId, n->getY(), n->getX(), t);
+    nodeId = _getRemappedElementId(node->getElementId());
+  }
+  LOG_VART(nodeId);
+
+  Tags tags = node->getTags();
+  _addElementTags(node, tags);
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(nodeId));
+  }
+
+  const bool alreadyThere = _nodeRemap.count(nodeId) != 0;
+  if (alreadyThere)
+  {
+    _hootdb.updateNode(nodeId, node->getY(), node->getX(), node->getVersion() + 1, tags);
+
+    LOG_VART(node->getVersion() + 1);
+  }
+  else
+  {
+    _hootdb.insertNode(nodeId, node->getY(), node->getX(), tags);
+    _nodeRemap[nodeId] = nodeId;
+
+    LOG_TRACE("version=1");
   }
 
   _countChange();
   _nodesWritten++;
 }
 
-void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& w)
+void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& way)
 {
-  Tags tags = w->getTags();
-  _addElementTags(w, tags);
+  long wayId;
+  LOG_VART(way->getElementId());
+  LOG_VART(way->getStatus());
+  if (way->getId() > 0)
+  {
+    wayId = way->getId();
+  }
+  else
+  {
+    wayId = _getRemappedElementId(way->getElementId());
+  }
 
-  const long wayId = _getRemappedElementId(w->getElementId());
+  Tags tags = way->getTags();
+  _addElementTags(way, tags);
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(wayId));
+  }
+
   const bool alreadyThere = _wayRemap.count(wayId) != 0;
   if (alreadyThere)
   {
-    _hootdb.updateWay(wayId, w->getVersion() + 1, tags);
+    _hootdb.updateWay(wayId, way->getVersion() + 1, tags);
   }
   else
   {
     _hootdb.insertWay(wayId, tags);
+    _wayRemap[wayId] = wayId;
   }
 
-  if (_remapIds == true)
+  if (_remapIds)
   {
-    _hootdb.insertWayNodes(wayId, _remapNodes(w->getNodeIds()));
+    _hootdb.insertWayNodes(wayId, _remapNodes(way->getNodeIds()));
   }
   else
   {
-    _hootdb.insertWayNodes(wayId, w->getNodeIds());
+    _hootdb.insertWayNodes(wayId, way->getNodeIds());
   }
 
   _countChange();
   _waysWritten++;
 }
 
-void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& r)
+void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& relation)
 {
-  Tags tags = r->getTags();
-  _addElementTags(r, tags);
-  if (!r->getType().isEmpty())
+  long relationId;
+  LOG_VART(relation->getId());
+  LOG_VART(relation->getStatus());
+  if (relation->getId() > 0)
   {
-    tags["type"] = r->getType();
+    relationId = relation->getId();
+  }
+  else
+  {
+    relationId = _getRemappedElementId(relation->getElementId());
   }
 
-  const long relationId = _getRemappedElementId(r->getElementId());
+  Tags tags = relation->getTags();
+  _addElementTags(relation, tags);
+  if (!relation->getType().isEmpty())
+  {
+    tags["type"] = relation->getType();
+  }
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    //keep the hoot:id tag in sync with what could be a newly assigned id
+    tags.set(MetadataTags::HootId(), QString::number(relationId));
+  }
+
   const bool alreadyThere = _relationRemap.count(relationId) != 0;
   if (alreadyThere)
   {
-    _hootdb.updateRelation(relationId, r->getVersion() + 1, tags);
+    _hootdb.updateRelation(relationId, relation->getVersion() + 1, tags);
   }
   else
   {
     _hootdb.insertRelation(relationId, tags);
+    _relationRemap[relationId] = relationId;
   }
 
-  for (size_t i = 0; i < r->getMembers().size(); ++i)
+  for (size_t i = 0; i < relation->getMembers().size(); ++i)
   {
-    RelationData::Entry e = r->getMembers()[i];
+    RelationData::Entry e = relation->getMembers()[i];
 
     // May need to create new ID mappings for items we've not yet seen
     ElementId relationMemberElementId = e.getElementId();
 
-    if (_remapIds == true)
+    if (_remapIds)
     {
       relationMemberElementId =
         ElementId(relationMemberElementId.getType(), _getRemappedElementId(relationMemberElementId));

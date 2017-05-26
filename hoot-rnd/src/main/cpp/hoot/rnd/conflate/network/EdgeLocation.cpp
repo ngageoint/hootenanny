@@ -27,6 +27,9 @@
 #include "EdgeLocation.h"
 
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/util/Log.h>
+
+using namespace std;
 
 namespace hoot
 {

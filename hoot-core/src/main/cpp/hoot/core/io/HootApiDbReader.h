@@ -80,7 +80,7 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
-  virtual Envelope calculateEnvelope() const;
+  virtual geos::geom::Envelope calculateEnvelope() const;
 
   virtual void setConfiguration(const Settings &conf);
 
@@ -118,8 +118,8 @@ private:
   /**
    * Converts a query result to an OSM element
    */
-  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator, const ElementType& elementType,
-                                       OsmMap& map);
+  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
+                                              const ElementType& elementType, OsmMap& map);
 };
 
 }

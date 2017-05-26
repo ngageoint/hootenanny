@@ -51,8 +51,6 @@ class Way;
 class OsmMap;
 class Relation;
 
-using namespace boost;
-
 /**
  * Writes a map or portion of a map to a GML file. Not completely implemented.
  *

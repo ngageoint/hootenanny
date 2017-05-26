@@ -143,16 +143,19 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testExportOSCResource() throws Exception {
+        long userId = MapUtils.insertUser();
+        long mapId = MapUtils.insertMap(userId);
+        String aoi = "-104.8192,38.8162,-104.6926,38.9181";
+
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("osc");
-        exportParams.setInput("input");
+        exportParams.setInput(Long.toString(mapId));
         exportParams.setOutputName("output");
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);
         exportParams.setInputType("file");
-
-        String aoi = "-104.8192,38.8162,-104.6926,38.9181";
         exportParams.setBounds(aoi);
+        exportParams.setUserId(String.valueOf(userId));
 
         String responseData = target("export/execute")
                 .request(MediaType.APPLICATION_JSON)
@@ -164,7 +167,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
         assertNotNull(job);
         assertEquals(1, job.getCommands().length);
-        assertSame(ExportOSCCommand.class, job.getCommands()[0].getClass());
+        assertSame(DeriveChangesetCommand.class, job.getCommands()[0].getClass());
     }
 
     @Test
@@ -176,7 +179,7 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
         ExportParams exportParams = new ExportParams();
         exportParams.setOutputType("osm_api_db");
-        exportParams.setInput("map-with-id-" + mapId);
+        exportParams.setInput(Long.toString(mapId));
         exportParams.setOutputName("output");
         exportParams.setAppend(false);
         exportParams.setTextStatus(false);
@@ -199,8 +202,8 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
 
         assertNotNull(job);
         assertEquals(2, job.getCommands().length);
-        assertSame(OSMAPIDBDeriveChangesetCommand.class, job.getCommands()[0].getClass());
-        assertSame(OSMAPIDBApplyChangesetCommand.class, job.getCommands()[1].getClass());
+        assertSame(DeriveChangesetCommand.class, job.getCommands()[0].getClass());
+        assertSame(ApplyChangesetCommand.class, job.getCommands()[1].getClass());
     }
 
     @Test

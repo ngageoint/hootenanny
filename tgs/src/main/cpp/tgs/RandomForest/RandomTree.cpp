@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RandomTree.h"
 
@@ -375,13 +375,10 @@ namespace Tgs
   }
 
   void RandomTree::trainBinary(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
-    std::string posClass, unsigned int nodeSize, bool balanced)
+    std::string /*posClass*/, unsigned int nodeSize, bool balanced)
   {
     try
     {
-      //Warning suppression
-      posClass = posClass;
-
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
@@ -448,13 +445,10 @@ namespace Tgs
   }
 
   void RandomTree::trainRoundRobin(boost::shared_ptr<DataFrame> data, unsigned int numFactors,
-    std::string posClass, std::string negClass, unsigned int nodeSize, bool balanced)
+    std::string posClass, std::string negClass, unsigned int nodeSize, bool /*balanced*/)
   {
     try
     {
-      //Warning suppression
-      balanced = balanced;
-
       //std::cout << "Train Tree" << std::endl;
       _factPerNode = numFactors;
 
@@ -530,14 +524,14 @@ namespace Tgs
 
           double minVal, maxVal, mean, q1, q3;
 
-          double bandwidth = data->computeBandwidthByFactor(fIdx, dataSet, minVal,
+          //  bandwidth
+          data->computeBandwidthByFactor(fIdx, dataSet, minVal,
             maxVal, mean, q1, q3);
-          bandwidth = bandwidth;
-  //         node->rangeMin = mean - (6 * bandwidth);
-  //         node->rangeMax = mean + (6 * bandwidth);
-  //           double midVal = (maxVal - minVal) / 2.0;
-  //           node->rangeMin = minVal - (0.5 *(maxVal - minVal));
-  //           node->rangeMax = maxVal + (0.5 * (maxVal - minVal));
+//          node->rangeMin = mean - (6 * bandwidth);
+//          node->rangeMax = mean + (6 * bandwidth);
+//          double midVal = (maxVal - minVal) / 2.0;
+//          node->rangeMin = minVal - (0.5 *(maxVal - minVal));
+//          node->rangeMax = maxVal + (0.5 * (maxVal - minVal));
            double iqr = q3 - q1;
            node->rangeMin = q1 - ( 3 * iqr);
            node->rangeMax = q3 + (3 * iqr);
@@ -630,7 +624,6 @@ namespace Tgs
             fileStream << tabDepth + "\t<ClassName>\t" << node->classLabel << "\t</ClassName>" <<
               std::endl;
             fileStream << tabDepth + "\t<Data>\t" << node->nodeId;
-            std::set<unsigned int>::iterator itr;
 
             for(unsigned int i = 0; i < node->dataList.size(); i++)
             {
@@ -780,7 +773,6 @@ namespace Tgs
       //std::cout << "F" << buffer << std::endl;
       std::stringstream ss(buffer);
       std::string firstStr;
-      std::string nextStr;
 
       ss >> firstStr;
 
@@ -1064,7 +1056,6 @@ namespace Tgs
         std::stringstream ss(buffer);
         std::string firstStr;
         std::string nextStr;
-        unsigned int idx;
         ss >> firstStr;
 
         if(firstStr == "<OobSet>")
@@ -1073,6 +1064,7 @@ namespace Tgs
 
           while(nextStr != "</OobSet>")
           {
+            unsigned int idx;
             std::stringstream ss2(nextStr);
             ss2 >> idx;
             _oobSet.push_back(idx);

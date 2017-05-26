@@ -32,6 +32,8 @@
 // Qt
 #include <QImage>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -67,14 +69,14 @@ public:
       pp::Job::setDefaultJobTracker("local");
     }
 
-   boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
+    boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
     FourPassManager driver(worker);
     driver.setMaxNodesPerBox(maxNodeCount);
     driver.setBuffer(pixelSize);
     driver.setSources(in1, in2);
 
-   boost::shared_ptr<UnifyingConflator> unify(new UnifyingConflator());
-   boost::shared_ptr<OpList> op(new OpList());
+    boost::shared_ptr<UnifyingConflator> unify(new UnifyingConflator());
+    boost::shared_ptr<OpList> op(new OpList());
     op->addOp(unify);
     driver.setOperation(op);
 

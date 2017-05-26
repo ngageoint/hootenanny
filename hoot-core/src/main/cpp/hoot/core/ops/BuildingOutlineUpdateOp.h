@@ -47,7 +47,7 @@ class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::BuildingOutlineUpdateOp"; }
+  static std::string className() { return "hoot::BuildingOutlineUpdateOp"; }
 
   static unsigned int logWarnCount;
 
@@ -55,7 +55,7 @@ public:
 
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& /*is*/) {}
 
@@ -67,7 +67,7 @@ private:
 
   void _createOutline(const RelationPtr& building);
 
-  void _extractUsedNodes(const RelationPtr& r, set<long>& nodes);
+  void _extractUsedNodes(const RelationPtr& r, std::set<long>& nodes);
 
   /**
    * Match nodes in change to nodes in reference. If there is an exact node match then change
@@ -76,7 +76,7 @@ private:
   void _mergeNodes(const boost::shared_ptr<Element>& changed,
     const RelationPtr& reference);
 
-  void _unionOutline(const RelationPtr& building, boost::shared_ptr<Geometry> outline,
+  void _unionOutline(const RelationPtr& building, boost::shared_ptr<geos::geom::Geometry> outline,
                      ElementPtr buildingMember);
 
 };

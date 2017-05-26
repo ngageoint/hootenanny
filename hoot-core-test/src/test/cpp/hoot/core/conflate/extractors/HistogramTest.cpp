@@ -26,6 +26,7 @@
  */
 
 #include <hoot/core/conflate/extractors/Histogram.h>
+#include <hoot/core/util/Log.h>
 
 #include "../../TestUtils.h"
 

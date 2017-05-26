@@ -36,8 +36,6 @@
 // Qt
 #include <QString>
 
-using namespace std;
-
 namespace hoot
 {
 
@@ -50,7 +48,7 @@ public:
 
   Histogram(int bins);
 
-  const vector<double>& getAllBins() const { return _bins; }
+  const std::vector<double>& getAllBins() const { return _bins; }
 
   void addAngle(Radians theta, double length);
 
@@ -80,7 +78,7 @@ public:
 
 private:
 
-  vector<double> _bins;
+  std::vector<double> _bins;
 
   Radians _getBinAngle(size_t i);
 
