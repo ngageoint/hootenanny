@@ -49,6 +49,13 @@ class CalculateTilesCommand extends ExportCommand {
     CalculateTilesCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
         
+        //if one of these is specified, then both must be
+        if ((params.getMaxNodeCountPerTile() == -1 && params.getPixelSize() != -1.0) ||
+        	(params.getPixelSize() == -1.0 && params.getMaxNodeCountPerTile() != -1))
+        {
+          throw new IllegalArgumentException("If either max node count per tile or pixel size is specified, then both input parameters must be specified.");
+        }
+        
         List<String> options = new LinkedList<>();
         options.add("id.generator=hoot::PositiveIdGenerator");
         options.add("api.db.email=test@test.com");
@@ -68,10 +75,19 @@ class CalculateTilesCommand extends ExportCommand {
         //can specify multiple inputs with ';' delimiter
         substitutionMap.put("INPUTS", super.getInput());
         substitutionMap.put("OUTPUT", super.getOutputPath());
-        substitutionMap.put("MAX_NODE_COUNT_PER_TILE", params.getMaxNodeCountPerTile());
-        substitutionMap.put("PIXEL_SIZE", params.getPixelSize());
+        //max node count per tile and pixel size are optional; core will use default params if both are
+        //missing; see the calculate-tiles command line documentation for more details
+        if (params.getMaxNodeCountPerTile() != -1 && params.getPixelSize() != -1.0)
+        {
+          substitutionMap.put("MAX_NODE_COUNT_PER_TILE", params.getMaxNodeCountPerTile());
+          substitutionMap.put("PIXEL_SIZE", params.getPixelSize());
+        }
 
-        String command = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        String command = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}"; 
+        if (params.getMaxNodeCountPerTile() != -1 && params.getPixelSize() != -1.0)
+        {
+          command += " ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        }
 
         super.configureCommand(command, substitutionMap, caller);
     }

@@ -55,10 +55,10 @@ class CalculateTilesCmd : public BaseCommand
 
     virtual int runSimple(QStringList args)
     {
-      if (args.size() < 2 || args.size() > 4)
+      if (args.size() != 2 && args.size() != 4)
       {
         cout << getHelp() << endl << endl;
-        throw HootException(QString("%1 takes two to four parameters.").arg(getName()));
+        throw HootException(QString("%1 takes either two or four parameters.").arg(getName()));
       }
 
       QStringList inputs;
@@ -82,6 +82,8 @@ class CalculateTilesCmd : public BaseCommand
       }
       LOG_VARD(output);
 
+      //if either of max nodes per tile or pixel size is specified, then both must be specified
+
       long maxNodesPerTile = 1000;
       if (args.size() > 2)
       {
@@ -95,7 +97,7 @@ class CalculateTilesCmd : public BaseCommand
       LOG_VARD(maxNodesPerTile);
 
       double pixelSize = 0.001; //.1km?
-      if (args.size() > 3)
+      if (args.size() > 2)
       {
         bool parseSuccess = false;
         pixelSize = args[3].toDouble(&parseSuccess);
@@ -154,25 +156,6 @@ class CalculateTilesCmd : public BaseCommand
       return tileBoundsCalculator.calculateTiles();
     }
 
-//    void _writeOutputAsString(const std::vector< std::vector<geos::geom::Envelope> >& tiles,
-//                              const QString outputPath)
-//    {
-//      //write a semi-colon delimited string of bounds obj's to output
-//      QString outputTilesStr;
-//      LOG_VARD(tiles.size());
-//      for (size_t tx = 0; tx < tiles.size(); tx++)
-//      {
-//        LOG_VART(tiles[tx].size());
-//        for (size_t ty = 0; ty < tiles[tx].size(); ty++)
-//        {
-//          outputTilesStr += GeometryUtils::envelopeToConfigString(tiles[tx][ty]) + ";";
-//        }
-//      }
-//      outputTilesStr.chop(1);
-//      LOG_VARD(outputTilesStr);
-//      FileUtils::writeFully(outputPath, outputTilesStr);
-//    }
-
     //This is kind of a shortcut way to get geojson output.  Its probably worth either figuring
     //out a way to use osm2ogr without a translation (or with a simple one) to do this OR adding
     //an OsmWriter class that can do this same thing, so the convert command can take advantage of
@@ -191,6 +174,8 @@ class CalculateTilesCmd : public BaseCommand
       LOG_VARD(osmTempFile.fileName());
       _writeOutputAsOsm(tiles, osmTempFile.fileName());
 
+      //The "lines" part at the end is necessary to prevent a conversion error from osm to geojson.  Not
+      //fully clear on what that's doing yet.
       const QString cmd =
         "ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " lines";
       LOG_DEBUG("Writing output to " << outputPath);

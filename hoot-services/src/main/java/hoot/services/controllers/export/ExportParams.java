@@ -65,10 +65,10 @@ public class ExportParams {
     private String userEmail;
     
     @JsonProperty("MAX_NODE_COUNT_PER_TILE")
-    private long maxNodeCountPerTile;
+    private long maxNodeCountPerTile = -1;
     
     @JsonProperty("PIXEL_SIZE")
-    private double pixelSize;
+    private double pixelSize = -1.0;
 
     public String getOutputType() {
         return outputType;
