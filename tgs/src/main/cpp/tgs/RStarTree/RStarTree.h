@@ -239,7 +239,7 @@ namespace Tgs
     double _p;
     RTreeNodeStore _store;
     Header* _headerStruct;
-   boost::shared_ptr<Page> _header;
+    boost::shared_ptr<Page> _header;
     /// Levels that have been treated for overflow during this insert.
     std::set<int> _overflowedLevels;
 

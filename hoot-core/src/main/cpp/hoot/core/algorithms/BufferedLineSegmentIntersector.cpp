@@ -35,6 +35,7 @@
 
 using namespace cv;
 using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

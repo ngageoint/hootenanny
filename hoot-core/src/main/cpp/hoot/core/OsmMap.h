@@ -37,12 +37,15 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/WayMap.h>
+#include <hoot/core/util/DefaultIdGenerator.h>
+#include <hoot/core/util/Units.h>
 namespace hoot
 {
     namespace elements
@@ -57,12 +60,6 @@ namespace hoot
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
-
-#include <hoot/core/util/DefaultIdGenerator.h>
-#include <hoot/core/elements/RelationMap.h>
-#include <hoot/core/elements/WayMap.h>
-#include <hoot/core/elements/NodeMap.h>
-
 
 namespace hoot
 {

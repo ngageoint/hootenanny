@@ -17,8 +17,9 @@
 #include "PaintNodesMapper.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>

@@ -30,6 +30,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/RemoveRef2Visitor.h>
 

@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
 using namespace hoot;

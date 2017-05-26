@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 #include "../TestUtils.h"
 

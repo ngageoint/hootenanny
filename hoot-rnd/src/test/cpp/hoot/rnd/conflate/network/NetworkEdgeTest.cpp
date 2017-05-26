@@ -27,9 +27,10 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/conflate/network/NetworkEdge.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/rnd/conflate/network/NetworkEdge.h>
 
 using namespace geos::geom;
 
@@ -66,7 +67,7 @@ public:
     OGREnvelope env;
     env.MinX = env.MinY = 0.0;
     env.MaxX = env.MaxY = 2.0;
-   boost::shared_ptr<OGRSpatialReference> sref = MapProjector::getInstance().
+    boost::shared_ptr<OGRSpatialReference> sref = MapProjector::getInstance().
         createPlanarProjection(env);
     OsmMapPtr pMap(new OsmMap(sref));
     pMap->addElement(pN1);

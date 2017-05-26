@@ -47,7 +47,7 @@ namespace Tgs
   {
   public:
 
-    RTreeNodeStore(int dimensions,boost::shared_ptr<PageStore> ps);
+    RTreeNodeStore(int dimensions, boost::shared_ptr<PageStore> ps);
 
     ~RTreeNodeStore();
     
@@ -88,7 +88,7 @@ namespace Tgs
     // mutable cache
     NodeMap _availableNodes;
     int _dimensions;
-   boost::shared_ptr<PageStore> _storeSp;
+    boost::shared_ptr<PageStore> _storeSp;
     /// pointer to the same thing as above, only faster. Zoom zoom!
     PageStore* _store;
 

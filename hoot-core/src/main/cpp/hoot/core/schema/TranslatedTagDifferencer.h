@@ -94,7 +94,7 @@ private:
    * Does a lazy load of the translator to avoid initializing configuration options that aren't
    * being used.
    */
- boost::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
+  boost::shared_ptr<ScriptToOgrTranslator> _getTranslator() const;
 
   /**
    * Converts to tags if not-null otherwise returns an empty set of tags.

@@ -85,12 +85,12 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
 
   if (type == ElementType::Way)
   {
-   boost::shared_ptr<const Way> w = _map->getWay(id);
+    boost::shared_ptr<const Way> w = _map->getWay(id);
     _visit(w);
   }
   else if (type == ElementType::Relation)
   {
-   ConstRelationPtr r = _map->getRelation(id);
+    ConstRelationPtr r = _map->getRelation(id);
     _visit(r);
   }
   else if (type != ElementType::Node)

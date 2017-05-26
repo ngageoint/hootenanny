@@ -58,7 +58,7 @@ public:
 
 private:
 
-  QMap<QString,boost::shared_ptr<MatchCreator> > _matchCreatorsByName;
+  QMap<QString, boost::shared_ptr<MatchCreator> > _matchCreatorsByName;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 

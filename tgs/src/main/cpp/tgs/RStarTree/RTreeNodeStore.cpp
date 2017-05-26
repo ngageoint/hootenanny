@@ -34,7 +34,7 @@ namespace Tgs
 {
   const int MAX_NODE_COUNT = 100000;
 
-  RTreeNodeStore::RTreeNodeStore(int dimensions,boost::shared_ptr<PageStore> ps)
+  RTreeNodeStore::RTreeNodeStore(int dimensions, boost::shared_ptr<PageStore> ps)
   {
     _dimensions = dimensions;
     _storeSp = ps;
@@ -60,7 +60,7 @@ namespace Tgs
 
   RTreeNode* RTreeNodeStore::createNode()
   {
-   boost::shared_ptr<Page> page = _store->createPage();
+    boost::shared_ptr<Page> page = _store->createPage();
     page->setDirty();
     RTreeNode* node = new RTreeNode(_dimensions, page);
     node->clear();
@@ -83,7 +83,7 @@ namespace Tgs
     if (it == _availableNodes.end())
     {
       RTreeNodeStore* me = const_cast<RTreeNodeStore*>(this);
-     boost::shared_ptr<Page> page = me->_store->getPage(id);
+      boost::shared_ptr<Page> page = me->_store->getPage(id);
       node = new RTreeNode(_dimensions, page);
       RecItem * item = new RecItem();
       item->pNode = node;
@@ -115,7 +115,7 @@ namespace Tgs
     }
     else
     {
-     boost::shared_ptr<Page> page = _store->getPage(id);
+      boost::shared_ptr<Page> page = _store->getPage(id);
       node = new RTreeNode(_dimensions, page);
       RecItem * item = new RecItem();
       item->pNode = node;

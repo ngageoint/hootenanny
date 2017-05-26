@@ -78,7 +78,7 @@ public:
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
-    vector<const Match*>& result,boost::shared_ptr<HighwayClassifier> c,
+    vector<const Match*>& result, boost::shared_ptr<HighwayClassifier> c,
     boost::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
     ConstMatchThresholdPtr threshold,
     boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff):

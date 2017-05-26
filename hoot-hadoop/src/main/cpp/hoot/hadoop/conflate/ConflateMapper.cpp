@@ -23,9 +23,10 @@
 #include <pp/conf/Configuration.h>
 
 // Hoot
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/hadoop/Debug.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -123,7 +124,7 @@ void ConflateMapper::_flush()
   key.resize(sizeof(int64_t));
   int64_t* k = (int64_t*)key.data();
   // emit all maps
-  for (QHash< int,boost::shared_ptr<OsmPbfWriter> >::iterator it = _writers.begin();
+  for (QHash< int, boost::shared_ptr<OsmPbfWriter> >::iterator it = _writers.begin();
     it != _writers.end(); ++it)
   {
     *k = it.key();
@@ -144,7 +145,7 @@ void ConflateMapper::_init(HadoopPipes::MapContext& context)
   // read the envelopes
   _envelopes = parseEnvelopes(context.getJobConf()->get(envelopesKey()));
 
- boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _tileBufferSize = c->getDouble(bufferKey());
 
   // read the node replacements

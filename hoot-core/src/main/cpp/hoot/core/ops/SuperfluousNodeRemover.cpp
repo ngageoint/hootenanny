@@ -75,7 +75,7 @@ void SuperfluousNodeRemover::apply(boost::shared_ptr<OsmMap> &map)
     }
   }
 
- boost::shared_ptr<OsmMap> reprojected;
+  boost::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
   // if the map is not in WGS84
   if (MapProjector::isGeographic(map) == false)
@@ -121,7 +121,7 @@ void SuperfluousNodeRemover::readObject(QDataStream& is)
 
 boost::shared_ptr<OsmMap> SuperfluousNodeRemover::removeNodes(boost::shared_ptr<const OsmMap> map)
 {
- boost::shared_ptr<OsmMap> result(new OsmMap(map));
+  boost::shared_ptr<OsmMap> result(new OsmMap(map));
   SuperfluousNodeRemover().apply(result);
   return result;
 }

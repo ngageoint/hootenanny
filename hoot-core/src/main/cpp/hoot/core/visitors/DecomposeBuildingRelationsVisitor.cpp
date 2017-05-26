@@ -99,7 +99,7 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_p
     }
 
     // ok, we've got a building part. Recompose it as a building.
-   boost::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
+    boost::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
 
     Tags t = baseTags;
     t.addTags(e->getTags());

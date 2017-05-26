@@ -32,15 +32,16 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QDir>

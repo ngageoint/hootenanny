@@ -54,7 +54,6 @@ using namespace std;
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * JSON Spirit isn't a very well behaved header file so I'm only using it within the CPP file.

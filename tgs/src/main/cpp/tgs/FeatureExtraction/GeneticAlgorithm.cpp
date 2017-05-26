@@ -44,7 +44,7 @@ using namespace std;
 
 namespace Tgs
 {
-  GeneticAlgorithm::GeneticAlgorithm(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness)
+  GeneticAlgorithm::GeneticAlgorithm(boost::shared_ptr<Genome> seed, boost::shared_ptr<FitnessFunction> fitness)
   {
     _seed = seed;
     _fitness = fitness;

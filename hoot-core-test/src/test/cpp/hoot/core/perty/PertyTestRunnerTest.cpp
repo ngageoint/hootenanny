@@ -26,12 +26,13 @@
  */
 
 // Hoot
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/perty/PertyTestRunner.h>
 #include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/perty/PertyTestRunResult.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QString>

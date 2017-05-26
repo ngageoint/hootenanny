@@ -246,7 +246,7 @@ for (unsigned int si = 0; si < s.size(); si++)
       for (unsigned int i = 0; i < training.size(); i++)
       {
         cout << "Training " << training[i] << endl;
-       boost::shared_ptr<SpinImageStack> stack(new SpinImageStack());
+        boost::shared_ptr<SpinImageStack> stack(new SpinImageStack());
         stacks.push_back(stack);
         PointCloud pc;
         pc.load(training[i]);
