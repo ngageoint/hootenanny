@@ -35,7 +35,7 @@ class OsmMapIterator : public pp::Iterator<OsmMapPtr >
 {
 public:
 
-  OsmMapIterator(HadoopPipes::ReduceContext* context,OsmMapPtr& map,
+  OsmMapIterator(HadoopPipes::ReduceContext* context, OsmMapPtr& map,
                  OsmPbfReader& reader) :
     _context(context),
     _map(map),
