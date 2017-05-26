@@ -175,7 +175,7 @@ private:
 
   static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
-  bool _evaluateProjection(const OGREnvelope& env,boost::shared_ptr<OGRSpatialReference> srs,
+  bool _evaluateProjection(const OGREnvelope& env, boost::shared_ptr<OGRSpatialReference> srs,
     Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
 
   size_t _findBestResult(std::vector<PlanarTestResult>& results);

@@ -107,7 +107,7 @@ private:
   double _wayGeneralizeProbability;
   double _epsilon;
 
- boost::shared_ptr<RdpWayGeneralizer> _generalizer;
+  boost::shared_ptr<RdpWayGeneralizer> _generalizer;
 
   void _generalize(const WayPtr& way);
 

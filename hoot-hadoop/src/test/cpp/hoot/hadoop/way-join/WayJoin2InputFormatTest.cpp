@@ -63,7 +63,7 @@ public:
     WayJoin1Reducer::Value v;
     int64_t wid;
 
-   boost::shared_ptr<ostream> sample(fs.create(csqIn));
+    boost::shared_ptr<ostream> sample(fs.create(csqIn));
 
     pp::CppSeqFile::Writer writer(*sample);
 

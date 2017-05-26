@@ -1,6 +1,7 @@
 #include "Debug.h"
 
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 

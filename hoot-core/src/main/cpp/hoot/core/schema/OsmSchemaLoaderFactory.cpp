@@ -55,7 +55,7 @@ boost::shared_ptr<OsmSchemaLoader> OsmSchemaLoaderFactory::createLoader(QString 
 
   for (size_t i = 0; i < names.size(); ++i)
   {
-   boost::shared_ptr<OsmSchemaLoader> l(Factory::getInstance().constructObject<OsmSchemaLoader>(
+    boost::shared_ptr<OsmSchemaLoader> l(Factory::getInstance().constructObject<OsmSchemaLoader>(
       names[i]));
 
     if (l->isSupported(url))

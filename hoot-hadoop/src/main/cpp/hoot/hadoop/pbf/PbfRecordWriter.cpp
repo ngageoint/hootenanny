@@ -24,6 +24,9 @@
 #include <pp/Hdfs.h>
 using namespace pp;
 
+// Hoot
+#include <hoot/core/util/Log.h>
+
 // Standard
 #include <map>
 

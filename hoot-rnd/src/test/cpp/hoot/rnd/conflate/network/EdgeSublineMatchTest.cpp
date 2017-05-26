@@ -26,8 +26,9 @@
  */
 
 // Hoot
-#include <hoot/rnd/conflate/network/EdgeSublineMatch.h>
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/rnd/conflate/network/EdgeSublineMatch.h>
 
 namespace hoot
 {

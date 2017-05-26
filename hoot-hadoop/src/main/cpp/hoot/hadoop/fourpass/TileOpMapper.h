@@ -52,8 +52,8 @@ public:
 
 protected:
 
-  QHash< int,boost::shared_ptr<OsmPbfWriter> > _writers;
-  QHash< int,boost::shared_ptr<std::stringstream> > _buffers;
+  QHash< int, boost::shared_ptr<OsmPbfWriter> > _writers;
+  QHash< int, boost::shared_ptr<std::stringstream> > _buffers;
   Degrees _tileBufferSize;
 
   std::vector<geos::geom::Envelope> _envelopes;

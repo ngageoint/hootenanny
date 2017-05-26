@@ -42,6 +42,8 @@
 // Standard
 #include <cmath>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -129,7 +131,7 @@ QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(con
       {
         const QString testRunOutputPath =
           outputPath + "/test-" + QString::number(i + 1) + "-" + QString::number(j + 1);
-       boost::shared_ptr<const MatchComparator> matchComparator =
+        boost::shared_ptr<const MatchComparator> matchComparator =
           _matchScorer->scoreMatches(referenceMapInputPath, testRunOutputPath);
         const double score = matchComparator->getPertyScore();
         simulationScores.append(score);
@@ -157,7 +159,7 @@ QList<boost::shared_ptr<const PertyTestRunResult> > PertyTestRunner::runTest(con
     const double scoreVariance = abs(_expectedScores[i] - avgScore);
     LOG_VARD(scoreVariance);
 
-   boost::shared_ptr<const PertyTestRunResult> testRunResult(
+    boost::shared_ptr<const PertyTestRunResult> testRunResult(
       new PertyTestRunResult(
          referenceMapInputPath, outputPath, i + 1, simulationScores, avgScore, _expectedScores[i],
           scoreVariance, _allowedScoreVariance, _failOnBetterScore, _dynamicVariables,
@@ -209,7 +211,7 @@ void PertyTestRunner::_writePlotFile(const QString outputPath,
   for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = testRunResults.begin();
        it != testRunResults.end(); ++it)
   {
-   boost::shared_ptr<const PertyTestRunResult> result = *it;
+    boost::shared_ptr<const PertyTestRunResult> result = *it;
     outStr += QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
     dynamicVariableValue += _dynamicVariableIncrement;
   }

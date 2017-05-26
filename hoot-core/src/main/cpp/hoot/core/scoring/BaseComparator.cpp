@@ -53,7 +53,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-BaseComparator::BaseComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2)
+BaseComparator::BaseComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2)
 {
   _init(map1, map2);
 }
@@ -163,7 +163,7 @@ Coordinate BaseComparator::_findNearestPointOnFeature(boost::shared_ptr<OsmMap> 
   return result;
 }
 
-void BaseComparator::_init(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2)
+void BaseComparator::_init(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2)
 {
   _map1 = map1;
   _map2 = map2;

@@ -48,7 +48,7 @@ public:
 
   Meters calculateLength(const ConstElementProviderPtr& provider) const;
 
- boost::shared_ptr<EdgeSubline> clone() const;
+  boost::shared_ptr<EdgeSubline> clone() const;
 
   bool contains(ConstNetworkVertexPtr v) const;
 
@@ -111,7 +111,7 @@ public:
    * Returns a new subline that combines this and other. This and other must touch. If they are
    * going in different directions then the direction of this will be maintained.
    */
- boost::shared_ptr<EdgeSubline> unionSubline(boost::shared_ptr<const EdgeSubline> other) const;
+  boost::shared_ptr<EdgeSubline> unionSubline(boost::shared_ptr<const EdgeSubline> other) const;
 
 private:
   ConstEdgeLocationPtr _start, _end;

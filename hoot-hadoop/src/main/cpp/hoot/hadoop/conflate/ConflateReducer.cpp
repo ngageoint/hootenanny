@@ -17,10 +17,10 @@
 #include "ConflateReducer.h"
 
 // Hoot
-#include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/conflate/ImpliedDividedMarker.h>
@@ -36,9 +36,10 @@
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/pbf/PbfRecordWriter.h>
 

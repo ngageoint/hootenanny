@@ -50,7 +50,7 @@ public:
 
   void basicTest()
   {
-   boost::shared_ptr<PluginContext> _pc(new PluginContext());
+    boost::shared_ptr<PluginContext> _pc(new PluginContext());
     HandleScope handleScope;
     Context::Scope context_scope(_pc->getContext());
 

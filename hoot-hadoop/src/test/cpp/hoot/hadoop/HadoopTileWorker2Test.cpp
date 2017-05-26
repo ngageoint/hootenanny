@@ -37,6 +37,7 @@ using namespace pp;
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
@@ -96,7 +97,7 @@ public:
       LOG_INFO(path);
       if (QString::fromStdString(path).endsWith(".pbf"))
       {
-       boost::shared_ptr<istream> is(fs.open(path));
+        boost::shared_ptr<istream> is(fs.open(path));
         reader.parse(is.get(), map);
       }
     }

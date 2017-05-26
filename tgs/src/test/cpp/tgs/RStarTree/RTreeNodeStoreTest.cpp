@@ -46,7 +46,7 @@ class RTreeNodeStoreTest : public CppUnit::TestFixture
 public:
   void test1()
   {
-   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(100));
+    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(100));
     RTreeNodeStore uut(2, mps);
 
     RTreeNode* n1 = uut.createNode();

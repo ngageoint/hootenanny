@@ -40,20 +40,20 @@ namespace hoot
 class OsmMapJs : public node::ObjectWrap
 {
 public:
- static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Handle<v8::Object> target);
 
- static v8::Handle<v8::Object> create(ConstOsmMapPtr map);
- static v8::Handle<v8::Object> create(OsmMapPtr map);
+  static v8::Handle<v8::Object> create(ConstOsmMapPtr map);
+  static v8::Handle<v8::Object> create(OsmMapPtr map);
 
- OsmMapPtr& getMap();
- ConstOsmMapPtr& getConstMap() { return _constMap; }
+  OsmMapPtr& getMap();
+  ConstOsmMapPtr& getConstMap() { return _constMap; }
 
- bool isConst() const { return !_map.get() && _constMap.get(); }
+  bool isConst() const { return !_map.get() && _constMap.get(); }
 
 private:
- OsmMapJs();
- OsmMapJs(OsmMapPtr map);
- ~OsmMapJs();
+  OsmMapJs();
+  OsmMapJs(OsmMapPtr map);
+  ~OsmMapJs();
 
   static v8::Handle<v8::Value> clone(const v8::Arguments& args);
   static v8::Handle<v8::Value> New(const v8::Arguments& args);

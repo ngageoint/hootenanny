@@ -59,7 +59,7 @@ public:
 private:
   HadoopPipes::ReduceContext* _context;
   bool _hasNext;
- OsmMapPtr& _map;
+  OsmMapPtr& _map;
   OsmPbfReader& _reader;
 };
 

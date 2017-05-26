@@ -29,17 +29,18 @@
 // hoot
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/BaseFilter.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/schema/OverwriteTagMerger.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
 
 using namespace std;
 

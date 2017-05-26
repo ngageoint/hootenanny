@@ -63,13 +63,13 @@ public:
       pp::Job::setDefaultJobTracker("local");
     }
 
-   boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
+    boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
     FourPassManager driver(worker);
     driver.setBuffer(pixelSize);
     driver.setMaxNodesPerBox(maxNodeCount);
     driver.setSource(in);
 
-   boost::shared_ptr<OpList> op(new OpList());
+    boost::shared_ptr<OpList> op(new OpList());
     // this will automatically reproject to planar as needed.
     op->addOp(boost::shared_ptr<OsmMapOperation>(new MergeNearbyNodes()));
     // after the op is done the reducer will automatically reproject to WGS84 as needed.

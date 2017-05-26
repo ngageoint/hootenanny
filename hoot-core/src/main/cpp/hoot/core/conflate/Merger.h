@@ -61,7 +61,7 @@ public:
    */
   virtual std::set<ElementId> getImpactedElementIds() const = 0;
 
-  virtual set< pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const = 0;
+  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const = 0;
 
   /**
    * Returns true if this merge can be applied to the specified map.

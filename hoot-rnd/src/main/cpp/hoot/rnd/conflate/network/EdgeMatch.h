@@ -49,7 +49,7 @@ public:
 
   EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2);
 
- boost::shared_ptr<EdgeMatch> clone() const;
+  boost::shared_ptr<EdgeMatch> clone() const;
 
   /**
    * Returns true if the specified edge is in either the first or second edge string.

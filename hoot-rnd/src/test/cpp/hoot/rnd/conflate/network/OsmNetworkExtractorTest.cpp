@@ -29,6 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/filters/HighwayCriterion.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
 
 namespace hoot

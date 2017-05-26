@@ -69,7 +69,7 @@ public:
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
 private:
- boost::shared_ptr<ElementVisitor> _visitor;
+  boost::shared_ptr<ElementVisitor> _visitor;
 };
 
 }

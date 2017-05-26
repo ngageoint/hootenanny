@@ -30,6 +30,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ElementSorter.h>
+#include <hoot/core/util/Log.h>
 
 // Boost
 using namespace boost;

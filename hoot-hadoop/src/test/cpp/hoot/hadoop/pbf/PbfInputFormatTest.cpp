@@ -26,6 +26,7 @@ using namespace pp;
 #include <iostream>
 #include <stdlib.h>
 
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/paint-nodes/PaintNodesMapper.h>

@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFile>
