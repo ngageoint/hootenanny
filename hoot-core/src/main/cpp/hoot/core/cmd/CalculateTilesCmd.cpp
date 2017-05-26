@@ -35,6 +35,8 @@
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/conflate/TileBoundsCalculator.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/io/ApiDbReader.h>
 
 // Qt
 #include <QTemporaryFile>
@@ -113,7 +115,7 @@ class CalculateTilesCmd : public BaseCommand
       const std::vector< std::vector<geos::geom::Envelope> > tiles =
         _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
 
-      if (output.endsWith(".osm"))
+      if (output.toLower().endsWith(".osm"))
       {
         _writeOutputAsOsm(tiles, output);
       }
@@ -128,16 +130,51 @@ class CalculateTilesCmd : public BaseCommand
   private:
 
     OsmMapPtr _readInputs(const QStringList inputs)
-    {
+    { 
+      const bool bboxSpecified =
+        !ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() ||
+        !ConfigOptions().getConvertBoundingBoxHootApiDatabase().trimmed().isEmpty() ||
+        !ConfigOptions().getConvertBoundingBoxOsmApiDatabase().trimmed().isEmpty();
+
       OsmMapPtr map(new OsmMap());
       for (int i = 0; i < inputs.size(); i++)
       {
         boost::shared_ptr<OsmMapReader> reader =
           OsmMapReaderFactory::getInstance().createReader(inputs.at(i), true, Status::Unknown1);
+
+        boost::shared_ptr<ApiDbReader> apiDbReader =
+          boost::dynamic_pointer_cast<ApiDbReader>(reader);
+        if (apiDbReader)
+        {
+          //the tiles calculation is only concerned with nodes, and the only readers capable of
+          //filtering down to nodes up front right now are the api db readers; more importantly,
+          //setting this to true also prevents any features from being returned outside of
+          //convert.bounding.box, if it was specified (ways partially inside the bounds, etc.)
+          apiDbReader->setReturnNodesOnly(true);
+        }
+        if (bboxSpecified && !apiDbReader)
+        {
+          //non api db readers don't support convert.bounding.box right now and are just going to
+          //generate confusing output with its specified, so let's throw
+          throw HootException(
+            "convert.bounding.box configuration option specified for a non API DB reader");
+        }
+
         reader->open(inputs.at(i));
         reader->read(map);
       }
       LOG_VARD(map->getNodeCount());
+
+      if (Log::getInstance().getLevel() <= Log::Debug)
+      {
+        OGREnvelope envelope = CalculateMapBoundsVisitor::getBounds(map);
+        boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(envelope));
+        LOG_VARD(tempEnv->toString());
+        const QString debugMapPath = "tmp/calc-tiles-combined-map-debug.osm";
+        LOG_DEBUG("writing debug output to " << debugMapPath)
+        OsmMapWriterFactory::getInstance().write(map, debugMapPath);
+      }
+
       return map;
     }
 
@@ -178,7 +215,7 @@ class CalculateTilesCmd : public BaseCommand
       //fully clear on what that's doing yet.
       const QString cmd =
         "ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " lines";
-      LOG_DEBUG("Writing output to " << outputPath);
+      LOG_INFO("Writing output to " << outputPath);
       const int retval = std::system(cmd.toStdString().c_str());
       if (retval != 0)
       {

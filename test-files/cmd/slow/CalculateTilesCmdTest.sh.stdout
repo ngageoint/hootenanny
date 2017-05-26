@@ -1,3 +1,2 @@
-14:12:04.591 WARN  ...flate/TileBoundsCalculator.cpp( 258) bestSum isn't valid. 0,0,2,9 total: 749 size: 9
-14:12:05.053 WARN  ...flate/TileBoundsCalculator.cpp( 258) bestSum isn't valid. 0,0,2,9 total: 749 size: 9
-14:12:05.054 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/cmd/slow/CalculateTilesCmdTest/output.osm...
+19:56:16.479 WARN  ...flate/TileBoundsCalculator.cpp( 258) bestSum isn't valid. 0,0,2,9 total: 749 size: 9
+19:56:16.775 WARN  ...flate/TileBoundsCalculator.cpp( 258) bestSum isn't valid. 0,0,2,9 total: 749 size: 9

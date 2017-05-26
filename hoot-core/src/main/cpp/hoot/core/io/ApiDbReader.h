@@ -61,6 +61,8 @@ public:
 
   void setBoundingBox(const QString bbox);
   void setOverrideBoundingBox(const QString bbox);
+  void setReturnNodesOnly(const bool returnNodesOnly)
+  { _returnNodesOnly = returnNodesOnly; }
 
 protected:
 
@@ -74,6 +76,8 @@ protected:
 
   geos::geom::Envelope _bounds;
   geos::geom::Envelope _overrideBounds; //this will override _bounds
+
+  bool _returnNodesOnly;
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -93,6 +97,7 @@ protected:
 
   static bool _isValidBounds(const geos::geom::Envelope& bounds);
   bool _hasBounds();
+
 };
 
 }

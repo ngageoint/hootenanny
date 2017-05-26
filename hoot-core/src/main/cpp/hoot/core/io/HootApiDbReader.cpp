@@ -149,6 +149,10 @@ void HootApiDbReader::read(OsmMapPtr map)
     LOG_DEBUG("Executing Hoot API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
+      if (_returnNodesOnly && ctr != ElementType::Node)
+      {
+        break;
+      }
       _read(map, static_cast<ElementType::Type>(ctr));
     }
   }
