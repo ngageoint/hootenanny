@@ -12,22 +12,22 @@ Vagrant.configure(2) do |config|
 
   tomcatPort = ENV['TOMCAT_PORT']
   if tomcatPort.nil?
-    tomcatPort = '8888'
+    tomcatPort = '9888'
   end
 
   transPort = ENV['NODEJS_PORT']
   if transPort.nil?
-    transPort = '8894'
+    transPort = '9894'
   end
 
   mergePort = ENV['P2P_PORT']
   if mergePort.nil?
-    mergePort = '8896'
+    mergePort = '9896'
   end
 
   mapnikPort = ENV['NODE_MAPNIK_SERVER_PORT']
   if mapnikPort.nil?
-    mapnikPort = '8800'
+    mapnikPort = '9800'
   end
 
   # tomcat service
@@ -40,19 +40,19 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
 
   # Global settings - default for Ubuntu1404
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
 
 
   # Ubuntu1404 Box
   # This is the standard, working box
-  config.vm.define "hoot_ubuntu1404", primary: true do |hoot_ubuntu1404|
-     config.vm.synced_folder ".", "/home/vagrant/hoot"
-     config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
-     config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-     config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-     config.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
-     config.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+  config.vm.define "hoot", primary: true do |hoot|
+    hoot.vm.box = "ubuntu/trusty64"
+    hoot.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
+    hoot.vm.synced_folder ".", "/home/vagrant/hoot"
+    hoot.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
+#      config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+#      config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+#      config.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+#      config.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
 
   # Ubuntu1604 Box
@@ -121,8 +121,8 @@ Vagrant.configure(2) do |config|
   config.vm.provider "parallels" do |para, override|
         para.memory = 8192
         para.cpus = 4
-        override.vm.box = "parallels/ubuntu-14.04"
-        override.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
+        override.hoot.vm.box = "parallels/ubuntu-14.04"
+        override.hoot.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
 
         # NOTE: I have no way to test these - mattj
         override.hoot_ubuntu1604.vm.box = "parallels/ubuntu-16.04"
@@ -136,8 +136,8 @@ Vagrant.configure(2) do |config|
   config.vm.provider "vmware_workstation" do |vw, override|
       vw.memory = 8192
       vw.cpus = 4
-      override.vm.box = "puphpet/ubuntu1404-x64"
-      override.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1404-x64"
+      override.hoot.vm.box = "puphpet/ubuntu1404-x64"
+      override.hoot.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1404-x64"
 
       # NOTE: Yet again, I have no way to test this - mattj
       override.hoot_ubuntu1604.vm.box = "puphpet/ubuntu1604-x64"
