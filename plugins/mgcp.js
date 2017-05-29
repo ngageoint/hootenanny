@@ -329,7 +329,7 @@ mgcp = {
     // Some people have been editing OSM files and inserting MGCP attributes
     untangleAttributes: function (attrs, tags)
     {
-        // If we use ogr2osm, the GDAL driver jams ant tag it doesn't know about into an "other_tags" tag.
+        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
         // We need to unpack this before we can do anything.
         if (attrs.other_tags)
         {

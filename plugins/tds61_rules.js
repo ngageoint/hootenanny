@@ -148,7 +148,7 @@ tds61.rules = {
      'ZI001_SDP':'source', // Source Information : Source Description
      'ZI001_SDV':'source:datetime', // Source Information : Source Date and Time
      'ZI001_VSD':'source:vertical_source:datetime', // Source Information : Vertical Source Date and Time
-//      'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
+     'ZI001_VSN':'source:vertical_source:description', // Source Information : Vertical Source Description
      'CCN':'source:copyright', // Restriction Information : Commercial Copyright Notice
      'CDR':'source:commercial_distribution_restriction', // Restriction Information : Commercial Distribution Restriction
      'ZI002_UFI':'security:restriction_ufi', // Restriction Information : Unique Entity Identifier
@@ -161,6 +161,7 @@ tds61.rules = {
      'ZI005_NFN3':'gndb_id:3', // Geographic Name Information : Name Identifier (third)
      'ZI006_MEM':'note', // Note : Memorandum
 // We are going to look at valid values for the first country designation and then just treat the rest as plain text fields
+// We are treating this as an enumerated field.
 //     'ZI020_GE4':'raw:ZI020_GE4', // (Location Country) Designation : GENC Short URN-based Identifier
      'ZI020_GE42':'country_code:second', // (Location Country) Designation : GENC Short URN-based Identifier (second)
      'ZI020_GE43':'country_code:third', // (Location Country) Designation : GENC Short URN-based Identifier (third)
@@ -4528,6 +4529,199 @@ tds61.rules = {
      ['ZI016_ROC','999',schemaTools.simple('surface=other',1)], // Other
     ],
     // ##### End of fuzzyTable #####
+
+    // ##### Start of ignoreList #####
+    // This is taken from OSM pre processing and a few added
+    ignoreList : [
+        'APT2', 'APT3',
+        'APU2', 'APU3',
+        'AQO2', 'AQO3',
+        'AQP2', 'AQP3',
+        'ASU', 'ASU2', 'ASU3',
+        'AT005_CAB', 'AT005_CAB2', 'AT005_CAB3',
+        'BMC2', 'BMC3',
+        'BSC2', 'BSC3',
+        'CAB2', 'CAB3',
+        'CSC2', 'CSC3',
+        'CVT2', 'CVT3',
+        'FCSUBTYPE','FCSubtype',
+        'FFN2', 'FFN3',
+        'FHC2', 'FHC3',
+        'FRT2', 'FRT3',
+        'F_CODE',
+        'HST2', 'HST3',
+        'HYP',
+        'MCC2', 'MCC3',
+        'MEM',
+        'MST2', 'MST3',
+        'PBY', 'PBY2', 'PBY3',
+        'PFD',
+        'PLT2', 'PLT3',
+        'POS2', 'POS3',
+        'PPO', 'PPO2', 'PPO3',
+        'PRW', 'PRW2', 'PRW3',
+        'RCG',
+        'RIN_ROI2', 'RIN_ROI3',
+        'RIN_RTN2', 'RIN_RTN3',
+        'RRC2', 'RRC3',
+        'RTN', 'RTN2', 'RTN3',
+        'SBT2', 'SBT3',
+        'SSR2', 'SSR3',
+        'STL2', 'STL3',
+        'SUR',
+        'TRS2', 'TRS3',
+        'TSM2', 'TSM3',
+        'TTC2', 'TTC3',
+        'UTY2', 'UTY3',
+        'VCA2', 'VCA3',
+        'VCM2', 'VCM3',
+        'VCT2', 'VCT3',
+        'VSP2', 'VSP3',
+        'WBD',
+        'WD1',
+        'WEQ2', 'WEQ3',
+        'YWQ',
+        'ZI005_FNA2', 'ZI005_FNA3',
+        'ZI005_NFN2', 'ZI005_NFN3',
+        'ZI013_CSP2', 'ZI013_CSP3',
+        'ZI013_FFP2', 'ZI013_FFP3',
+        'ZI013_FMM2', 'ZI013_FMM3',
+        'ZI014_PBY2', 'ZI014_PBY3',
+        'ZI014_PPO2', 'ZI014_PPO3',
+        'ZI014_PRW2', 'ZI014_PRW3',
+        'ZI019_ASP2', 'ZI019_ASP3',
+        'ZI019_ASU2', 'ZI019_ASU3',
+        'ZI025_MAN',
+        'ZI025_WLE',
+        'ZI032_GUG',
+        'ZI032_PYC',
+        'ZI032_PYM',
+        'ZI032_TOS',
+        'ZI071_FFN', 'ZI071_FFN2', 'ZI071_FFN3',
+        'ZSAX_RX3', 'ZSAX_RX4',
+        'ZVH_VDT',
+        ],
+        // ##### End of ignoreList #####
+
+    // ##### Start of fCodeMap #####
+    // This is a map of FCODE's and filenames
+    fCodeMap : [
+        ['AF010', ['af010','smokestack_p']], // Smokestack
+        ['AH025', ['ah025','engineered_earthwork_s','engineered_earthwork_p']], // Engineered Earthwork
+        ['AH060', ['ah060','underground_bunker_s','underground_bunker_p']], // Underground Bunker
+        ['AL010', ['al010','facility_s','facility_p']], // Facility
+        ['AL013', ['al013','building_s','building_p']], // Building
+        ['AL018', ['al018','building_superstructure_s','building_superstructure_c','building_superstructure_p']], // Building Superstructure
+        ['AL020', ['al020','built-up_area_s','built-up_area_p']], // Built up area
+        ['AL030', ['al030','cemetery_s','cemetery_p']], // Cemetary
+        ['AL070', ['al070','fence_c']], // Fence
+        ['AL099', ['al099','hut_p']], // Hut
+        ['AL105', ['al105','settlement_s','settlement_p']], // Settlement
+        ['AL130', ['al130','memorial_monument_s','memorial_monument_p']], // Memorial Monument
+        ['AL200', ['al200','ruins_s','ruins_p']], // Ruins
+        ['AL208', ['al208','shanty_town_s','shanty_town_p']], // Shanty Town
+        ['AL241', ['al241','tower_s','tower_p']], // Tower
+        ['AL260', ['al260','wall_c']], // Wall
+        ['AM080', ['am080','water_tower_p','water_tower_s']], // Water Tower
+        ['AN010', ['an010','railway_c']], // Railway
+        ['AN050', ['an050','railway_sidetrack_c']], // Railway Sidetrack
+        ['AN060', ['an060','railway_yard_s']], // Railway Yard
+        ['AN075', ['an075','railway_turntable_p','railway_turntable_p']], // Railway Turntable
+        ['AN076', ['an076','roundhouse_s','roundhouse_p']], // Roundhouse
+        ['AP010', ['ap010','cart_track_c']], // Cart Track
+        ['AP020', ['ap020','road_interchange_p']], // Interchange
+        ['AP030', ['ap030','road_c']], // Road
+        ['AP040', ['ap040','gate_c','gate_p']], // Gate
+        ['AP041', ['ap041','vehicle_barrier_c','vehicle_barrier_p']], // Vehicle Barrier
+        ['AP050', ['ap050','trail_c']], // Trail
+        ['AQ040', ['aq040','bridge_c','bridge_p']], // Bridge
+        ['AQ045', ['aq045','bridge_span_c','bridge_span_p']], // Bridge Span
+        ['AQ065', ['aq065','culvert_c','culvert_p']], // Culvert
+        ['AQ070', ['aq070','ferry_crossing_c']], // Ferry Crossing
+        ['AQ095', ['aq095','tunnel_mouth_p']], // Tunnel Mouth
+        ['AQ113', ['aq113','pipeline_c']], // Pipeline
+        ['AQ125', ['aq125','transportation_station_s','transportation_station_p']], // Transportation Station
+        ['AQ130', ['aq130','tunnel_c']], // Tunnel
+        ['AQ140', ['aq140','vehicle_lot_s']], // Vehicle Lot
+        ['AQ141', ['aq141','parking_garage_s','parking_garage_p']], // Parking Garage
+        ['AQ170', ['aq170','motor_vehicle_station_s','motor_vehicle_station_p']], // Motor Vehicle Station
+        ['AT010', ['at010','dish_aerial_p']], // Dish Aerial
+        ['AT042', ['at042','pylon_p']], // Pylon
+        ['BH010', ['bh010','aqueduct_s','aqueduct_c']], // Aqueduct
+        ['BH020', ['bh020','canal_s','canal_c']], // Canal
+        ['BH030', ['bh030','ditch_s','ditch_c']], // Ditch
+        ['BH070', ['bh070','ford_c','ford_p']], // Ford
+        ['BH082', ['bh082','inland_waterbody_s','inland_waterbody_p']], // Inland Waterbody
+        ['BH140', ['bh140', 'river_s','river_c']], // River
+        ['BH170', ['bh170','natural_pool_p']], // Natural Pool
+        ['BH230', ['bh230', 'water_well_p','water_well_s']], // Water Well
+        ['BI010', ['bi010', 'cistern_p']], // Cistern
+        ['DB070', ['db070','cut_c']], // Cut
+        ['DB150', ['db150','mountain_pass_p']], // Mountain Pass
+        ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
+        ['ZD040', ['zd040','named_location_s','named_location_c','named_location_p']], // Named Location
+        ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
+        ],
+    // ##### End of fCodeMap #####
+
+
+    // ##### Start of closureList #####
+    closureList : {
+                    'AQTC':['AQTL','AQTU'],
+                    'AYRC':['AYRL','AYRU'],
+                    'BPWHAC':['BPWHAL','BPWHAU'],
+                    'BPWHBC':['BPWHBL','BPWHBU'],
+                    'BPWSAC':['BPWSAL','BPWSAU'],
+                    'BPWSBC':['BPWSBL','BPWSBU'],
+                    'BWVCAC':['BWVCAL','BWVCAU'],
+                    'BWVCBC':['BWVCBL','BWVCBU'],
+                    'DMBC':['DMBL','DMBU'],
+                    'DPAC':['DPAL','DPAU'],
+                    'GSGCHC':['GSGCHL','GSGCHU'],
+                    'GSGCLC':['GSGCLL','GSGCLU'],
+                    'PWAC':['PWAL','PWAU'],
+                    'RMWC':['RMWL','RMWU'],
+                    'SDCC':['SDCL','SDCU'],
+                    'SDSC':['SDSL','SDSU'],
+                    'SGCC':['SGCL','SGCU'],
+                    'TSCC':['TSCL','TSCU'],
+                    'WDAC':['WDAL','WDAU'],
+                    'ZI026_CTUC':['ZI026_CTUL','ZI026_CTUU']
+                    },
+    // ##### End of closureList #####
+
+
+    // ##### Start of swapList #####
+    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+    // but renamed in different features. We swap these so that there is only one
+    // set of rules needed in the One2One section.
+    // These get converted back on output - if we need to.
+    swapList : {
+            'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
+            'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+            'HYP':'ZI024_HYP',
+            // 'LEN_':'LZN',
+            'MEM':'ZI006_MEM',
+            'PFD':'PWA',
+            'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+            'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
+            'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+            'RCG':'ZI004_RCG',
+            'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
+            'SUR':'ZI026_SUR',
+            'WBD':'PWA',
+            'WD1':'ZI016_WD1',
+            'YWQ':'ZI024_YWQ',
+            'ZI025_MAN':'MAN',
+            'ZI025_WLE':'WLE',
+            'ZI032_GUG':'GUG',
+            'ZI032_TOS':'TOS',
+            'ZI032_PYC':'PYC',
+            'ZI032_PYM':'PYM',
+            'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
+            'ZVH_VDT':'VDT'
+            },
+    // ##### End of swapList #####
 
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export
