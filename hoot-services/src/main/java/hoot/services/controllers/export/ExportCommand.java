@@ -68,7 +68,7 @@ class ExportCommand extends ExternalCommand {
         java.util.Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+        substitutionMap.put("TRANSLATION_PATH", new File(SCRIPT_FOLDER, params.getTranslation()).getAbsolutePath());
         substitutionMap.put("INPUT_PATH", this.getInput());
         substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
 
