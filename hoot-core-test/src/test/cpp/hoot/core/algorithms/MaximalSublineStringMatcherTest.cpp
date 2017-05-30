@@ -29,7 +29,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -58,6 +58,8 @@ using namespace std;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -76,7 +78,7 @@ public:
   OsmMapPtr createMap()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -207,7 +209,7 @@ public:
     WayPtr wg2b = createWay(map, Status::Unknown2, cg2b, 15.0, "g2");
 
     RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-      "multilinestring"));
+      MetadataTags::RelationMultilineString()));
     r->getTags()["note"] = "rg2";
     r->addElement("", wg2a);
     r->addElement("", wg2b);
@@ -238,7 +240,7 @@ public:
     WayPtr wh2b = createWay(map, Status::Unknown2, ch2b, ce, "h2");
 
     RelationPtr rh2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      "multilinestring"));
+      MetadataTags::RelationMultilineString()));
     rh2->getTags()["note"] = "rh2";
     rh2->addElement("", wh2a);
     rh2->addElement("", wh2b);
@@ -269,7 +271,7 @@ public:
     WayPtr wi2b = createWay(map, Status::Unknown2, ci2b, ce, "i2");
 
     RelationPtr ri2(new Relation(Status::Unknown1, map->createNextRelationId(), 3,
-      "multilinestring"));
+      MetadataTags::RelationMultilineString()));
     ri2->getTags()["note"] = "ri2";
     ri2->addElement("", wi2a);
     ri2->addElement("", wi2b);
@@ -288,7 +290,7 @@ public:
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
     WayPtr w2 = createWay(map, Status::Unknown1, w2c, 5, "w2");
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -320,7 +322,7 @@ public:
                          Coordinate::getNull() };
     WayPtr w2 = createWay(map, Status::Unknown1, w2c, 5, "w2");
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -357,8 +359,7 @@ public:
 
   ConstRelationPtr toRelation(OsmMapPtr map, QString note)
   {
-    vector<ConstRelationPtr> result;
-    const RelationMap& relations = map->getRelationMap();
+    const RelationMap& relations = map->getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       if (it->second->getTags().get("note") == note)
@@ -527,7 +528,7 @@ public:
                          Coordinate::getNull() };
     WayPtr w2 = createWay(map, Status::Unknown1, w2c, 5, "w2");
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -551,7 +552,7 @@ public:
     // test the simplest case
     {
       RelationPtr r(new Relation(Status::Unknown1, map->createNextRelationId(), 5,
-        "multilinestring"));
+        MetadataTags::RelationMultilineString()));
       r->addElement("", toWay(map, "a1"));
       map->addElement(r);
 

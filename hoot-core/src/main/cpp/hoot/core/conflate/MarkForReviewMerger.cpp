@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MarkForReviewMerger.h"
 
@@ -30,9 +30,10 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CountNodesVisitor.h>
 
 #include "ReviewMarker.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -56,7 +57,7 @@ MarkForReviewMerger::MarkForReviewMerger(const set<ElementId>& eids, QString not
 }
 
 void MarkForReviewMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& /*replaced*/) const
+                                vector< pair<ElementId, ElementId> >& /*replaced*/)
 {
   assert(!(_eids.size() >=1 && _pairs.size() >= 1));
 
@@ -145,7 +146,8 @@ void MarkForReviewMerger::replace(ElementId oldEid, ElementId newEid)
 
 QString MarkForReviewMerger::toString() const
 {
-  return QString("MarkForReviewMerger");
+  //return QString("MarkForReviewMerger");
+  return QString("MarkForReviewMerger, pairs: ") + hoot::toString(_pairs);
 }
 
 }

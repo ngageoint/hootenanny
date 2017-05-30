@@ -36,7 +36,7 @@
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -69,7 +69,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/visitors/RemoveDuplicateAreaVisitorTest.osm", map);

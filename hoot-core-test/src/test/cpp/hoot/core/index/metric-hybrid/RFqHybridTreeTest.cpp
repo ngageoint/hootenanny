@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
@@ -51,6 +51,9 @@
 #include <tgs/System/Time.h>
 
 #include "../../TestUtils.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -300,11 +303,11 @@ public:
 
     BuildKeysVisitor(vector<RFqHybridDummyData>& keys) : _keys(keys) {}
 
-    virtual void visit(const shared_ptr<const Element>& e)
+    virtual void visit(const boost::shared_ptr<const Element>& e)
     {
       if (e->getElementType() == ElementType::Node)
       {
-        const shared_ptr<const hoot::Node>& n = dynamic_pointer_cast<const hoot::Node>(e);
+        const boost::shared_ptr<const hoot::Node>& n = boost::dynamic_pointer_cast<const hoot::Node>(e);
         QStringList names = n->getTags().getNames();
         set<QString> nameSet;
         for (int i = 0; i < names.size(); i++)
@@ -473,7 +476,7 @@ public:
 
   void runRandomQueryTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
 //    OsmPbfReader(true).read("/scratch/gis-data/geonames.org/tmp/GeoNamesOrgAfghanistan.osm.pbf",
 //                             map);

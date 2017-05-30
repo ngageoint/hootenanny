@@ -74,7 +74,7 @@ public:
 
     FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
 
-    shared_ptr<TileWorker> worker(new LocalTileWorker());
+    boost::shared_ptr<TileWorker> worker(new LocalTileWorker());
     TileConflator uut(worker);
     // ~240m
     uut.setBuffer(8.0 / 3600.0);

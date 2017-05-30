@@ -484,7 +484,7 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
+    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
     {
       result.push_back(_graph[*it]);
     }
@@ -499,7 +499,7 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
+    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
     {
       result.push_back(_graph[*it]);
     }
@@ -509,7 +509,7 @@ public:
 
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
   {
-    if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp1))
+    if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp2))
     {
       return empty;
     }
@@ -1005,12 +1005,12 @@ private:
                             distance_compare(comparer));
 
     graph_traits < TagGraph >::vertex_iterator vi, vend;
-    LOG_TRACE("Scores for: " << _graph[vd].name.toStdString());
+    //LOG_TRACE("Scores for: " << _graph[vd].name.toStdString());
     for (boost::tie(vi, vend) = vertices(_graph); vi != vend; ++vi)
     {
       pair<VertexId, VertexId> key = pair<VertexId, VertexId>(vd, *vi);
       _cachedScores[key] = d[*vi];
-      LOG_TRACE("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
+      //LOG_TRACE("  " << _graph[*vi].name.toStdString() << " : " << d[*vi]);
 
       // cache the score between vd and vi in another structure that is more efficient for other
       // query types.
@@ -1211,7 +1211,7 @@ private:
       {
         set<VertexId> children;
         _getChildTags(*vi, children);
-        for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); it++)
+        for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); ++it)
         {
           pair<EdgeId, EdgeId> p = addSimilarTo(_graph[*it].name, _graph[*vi].name,
                                                 _graph[*vi].childWeight);
@@ -1670,11 +1670,11 @@ bool OsmSchema::isCollection(const Element& e) const
     const Relation& r = dynamic_cast<const Relation&>(e);
 
     // This list could get HUGE.
-    if (r.getType() == "waterway" ||
-        r.getType() == "network" ||
-        r.getType() == "route_master" ||
-        r.getType() == "superroute" ||
-        r.getType() == "route")
+    if (r.getType() == MetadataTags::RelationWaterway() ||
+        r.getType() == MetadataTags::RelationNetwork() ||
+        r.getType() == MetadataTags::RelationRouteMaster() ||
+        r.getType() == MetadataTags::RelationSuperRoute() ||
+        r.getType() == MetadataTags::RelationRoute())
     {
       result = true;
     }
@@ -1735,8 +1735,8 @@ bool OsmSchema::isLinear(const Element &e)
   if (e.getElementType() == ElementType::Relation)
   {
     const Relation& r = dynamic_cast<const Relation&>(e);
-    result |= r.getType() == "multilinestring";
-    result |= r.getType() == "route";
+    result |= r.getType() == MetadataTags::RelationMultilineString();
+    result |= r.getType() == MetadataTags::RelationRoute();
   }
 
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
@@ -1789,7 +1789,7 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
 
 bool OsmSchema::isMultiLineString(const Relation& r) const
 {
-  return r.getType() == "multilinestring";
+  return r.getType() == MetadataTags::RelationMultilineString();
 }
 
 bool OsmSchema::isOneWay(const Element& e) const
@@ -1801,6 +1801,19 @@ bool OsmSchema::isOneWay(const Element& e) const
     result = true;
   }
   return result;
+}
+
+bool OsmSchema::hasName(const Element& element) const
+{
+  const QStringList names = element.getTags().getNames();
+  for (int i = 0; i < names.size(); i++)
+  {
+    if (!element.getTags().get("name").trimmed().isEmpty())
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 bool OsmSchema::isPoi(const Element& e)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ImpliedDividedMarker.h"
@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/filters/ChainCriterion.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/filters/TagCriterion.h>
 
@@ -45,6 +45,8 @@ using namespace Tgs;
 
 #include "NodeToWayMap.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -55,12 +57,12 @@ ImpliedDividedMarker::ImpliedDividedMarker()
 
 }
 
-ImpliedDividedMarker::ImpliedDividedMarker(shared_ptr<const OsmMap> map)
+ImpliedDividedMarker::ImpliedDividedMarker(boost::shared_ptr<const OsmMap> map)
 {
   _inputMap = map;
 }
 
-bool ImpliedDividedMarker::_dividerSandwhich(shared_ptr<Way> w)
+bool ImpliedDividedMarker::_dividerSandwhich(boost::shared_ptr<Way> w)
 {
   long firstNodeId = w->getNodeId(0);
   long lastNodeId = w->getLastNodeId();
@@ -80,11 +82,11 @@ bool ImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
 {
   const set<long>& wayIds = (*_n2w)[nodeId];
 
-  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); it++)
+  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
     if (*it != excludedWayId)
     {
-      shared_ptr<const Way> w = _result->getWay(*it);
+      boost::shared_ptr<const Way> w = _result->getWay(*it);
       if (w->getTags()["divider"] == "yes")
       {
         return true;
@@ -95,30 +97,30 @@ bool ImpliedDividedMarker::_hasDividerConnected(long nodeId, long excludedWayId)
   return false;
 }
 
-shared_ptr<OsmMap> ImpliedDividedMarker::markDivided(shared_ptr<const OsmMap> map)
+boost::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided(boost::shared_ptr<const OsmMap> map)
 {
   ImpliedDividedMarker t(map);
   return t.markDivided();
 }
 
-shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
+boost::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
 {
-  shared_ptr<OsmMap> result(new OsmMap(_inputMap));
+  boost::shared_ptr<OsmMap> result(new OsmMap(_inputMap));
   _result = result;
 
   // create a map from nodes to ways
   _n2w.reset(new NodeToWayMap(*_inputMap));
 
   // find all the tunnels & bridges
-  shared_ptr<TagCriterion> tunnelCrit(new TagCriterion("tunnel", "yes"));
-  shared_ptr<TagCriterion> bridgeCrit(new TagCriterion("bridge", "yes"));
+  boost::shared_ptr<TagCriterion> tunnelCrit(new TagCriterion("tunnel", "yes"));
+  boost::shared_ptr<TagCriterion> bridgeCrit(new TagCriterion("bridge", "yes"));
   ChainCriterion chain(tunnelCrit, bridgeCrit);
   vector<long> wayIds = FindWaysVisitor::findWays(_result, &chain);
 
   // go through each way
   for (size_t i = 0; i < wayIds.size(); i++)
   {
-    shared_ptr<Way> w = _result->getWay(wayIds[i]);
+    boost::shared_ptr<Way> w = _result->getWay(wayIds[i]);
     // if the way has a divided road on both ends
     if (_dividerSandwhich(w))
     {
@@ -127,12 +129,11 @@ shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
     }
   }
 
-
   _result.reset();
   return result;
 }
 
-void ImpliedDividedMarker::apply(shared_ptr<OsmMap>& map)
+void ImpliedDividedMarker::apply(boost::shared_ptr<OsmMap>& map)
 {
   map = markDivided(map);
 }

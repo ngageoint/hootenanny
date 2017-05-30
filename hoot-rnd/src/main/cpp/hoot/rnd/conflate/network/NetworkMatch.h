@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMATCH_H
 #define NETWORKMATCH_H
@@ -96,7 +96,7 @@ public:
    * In general Unknown1 should be the status of the first element and Unknown2 the status of the
    * second element.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const { return _pairs; }
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const { return _pairs; }
 
   virtual QString toString() const;
 
@@ -113,7 +113,7 @@ private:
   MatchClassification _classification;
   ConstNetworkDetailsPtr _details;
   ConstEdgeMatchPtr _edgeMatch;
-  set< pair<ElementId, ElementId> > _pairs;
+  std::set< std::pair<ElementId, ElementId> > _pairs;
 };
 
 }

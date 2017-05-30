@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
@@ -36,6 +36,8 @@
 
 // Qt
 #include <QFile>
+
+using namespace std;
 
 namespace hoot
 {
@@ -60,7 +62,7 @@ public:
 
     QString transformPath = args[0];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[1], true, Status::Unknown1);
     QString outputPath = args[2];
 

@@ -67,7 +67,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.read("test-files/ToyTestA.osm", map);
 
     OsmPbfWriter writer;
@@ -78,39 +78,18 @@ public:
 
   }
 
-  void _dumpString(const string& str)
-  {
-    cout << "const unsigned char data[] = {";
-    for (size_t i = 0; i < str.size(); i++)
-    {
-      if (i != 0)
-      {
-        cout << ", ";
-      }
-      if (i % 18 == 0)
-      {
-        cout << endl << "  ";
-      }
-      //printf("%3d%c", (unsigned char)str.at(i),
-      //  str.at(i) >= 32 && str.at(i) <= 125 ? (char)(str.at(i)) : '#');
-      printf("%3d", (unsigned char)str.at(i));
-    }
-    cout << "};" << endl;
-    cout << "size_t dataSize = " << str.size() << ";" << endl;
-  }
-
   void runWriteNodeTest()
   {
     stringstream ss(stringstream::out);
 
     OsmPbfWriter writer;
 
-    shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     writer.writePb(n, &ss);
 
-    //_dumpString(ss.str());
+    //TestUtils::dumpString(ss.str());
 
     const unsigned char data[] = {
         0,   0,   0, 101,  10,  69,  10,   0,  10,   4, 110, 111, 116, 101,  10,   8, 116, 101,
@@ -134,8 +113,8 @@ public:
 
     OsmPbfWriter writer;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Relation> r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r(new Relation(Status::Unknown1, 42, 1.7, "foo"));
     r->addElement("s", ElementId::node(1));
     r->addElement("t", ElementId::node(2));
     r->addElement("u", ElementId::node(3));
@@ -172,8 +151,8 @@ public:
 
     OsmPbfWriter writer;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
+    OsmMapPtr map(new OsmMap());
+    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);
@@ -217,12 +196,12 @@ public:
     OsmMap::resetCounters();
     Tgs::Random::instance()->seed(0);
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Node> n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
+    OsmMapPtr map(new OsmMap());
+    NodePtr n(new Node(Status::Unknown1, 72, 42.0, 3.14159, 7.1));
     n->setTag("hello", "world");
     n->setTag("note", "test tag");
     map->addNode(n);
-    shared_ptr<Way> w(new Way(Status::Unknown1, 42, 1.7));
+    WayPtr w(new Way(Status::Unknown1, 42, 1.7));
     vector<long> nodes;
     nodes.push_back(1);
     nodes.push_back(3);

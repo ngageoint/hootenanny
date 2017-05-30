@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025804601605429" lon="-77.0514144252534834">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-88"/>
+    </node>
+    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027400000000014" lon="-77.0547488009000006">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-53"/>
+    </node>
+    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387999999992" lon="-77.0547485154699956">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-52"/>
+    </node>
+    <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025804592999975" lon="-77.0513349999999946">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-51"/>
+    </node>
+    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024925138299906" lon="-77.0550999999999959">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-47"/>
+    </node>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025844559999925" lon="-77.0550999999999959">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-46"/>
+    </node>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024959999999993" lon="-77.0539250000000067">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-42"/>
+    </node>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025319999999937" lon="-77.0547399999999811">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-37"/>
+    </node>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024840000000012" lon="-77.0547410000000070">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-36"/>
+    </node>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022949999999952" lon="-77.0547459999999944">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-35"/>
+    </node>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022759999999934" lon="-77.0547480000000036">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-34"/>
+    </node>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025730000000038" lon="-77.0547420000000045">
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="-30"/>
+    </node>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387999999992" lon="-77.0533079467499959">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-27"/>
+    </node>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027400000000014" lon="-77.0514145757999955">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-26"/>
+    </node>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387999999850" lon="-77.0514146507699991">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-25"/>
+    </node>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027400000000014" lon="-77.0533046103400068">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-24"/>
+    </node>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387999999992" lon="-77.0547484074700009">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-23"/>
+    </node>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025300591699974" lon="-77.0550999999999959">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-22"/>
+    </node>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025283665099906" lon="-77.0531847423000045">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-21"/>
+    </node>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025284025699918" lon="-77.0531686073299937">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-20"/>
+    </node>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025264744799912" lon="-77.0526521244700007">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-19"/>
+    </node>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025244213700034" lon="-77.0522087328999987">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-18"/>
+    </node>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025235192000096" lon="-77.0516034805999936">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-17"/>
+    </node>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025297312699934" lon="-77.0547521492199934">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-16"/>
+    </node>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027221091900017" lon="-77.0533046411700013">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-15"/>
+    </node>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9026471263899936" lon="-77.0533047710299996">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-14"/>
+    </node>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025284756599987" lon="-77.0533059865399963">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-13"/>
+    </node>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023955139499904" lon="-77.0533073491500033">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-12"/>
+    </node>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023225500799938" lon="-77.0533076275099802">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-11"/>
+    </node>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027123771800021" lon="-77.0514143574200006">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-10"/>
+    </node>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9026433320600020" lon="-77.0514143926800017">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-9"/>
+    </node>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025897801899987" lon="-77.0514144203699942">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-8"/>
+    </node>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025232123599949" lon="-77.0514144552499971">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-7"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024604607099960" lon="-77.0514144871199989">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-6"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024040205300068" lon="-77.0514145163299844">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-5"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023203903100026" lon="-77.0514145590900057">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-4"/>
+    </node>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022482401199952" lon="-77.0514145964300070">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-3"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022952814200025" lon="-77.0547462705499981">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-2"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022760928699967" lon="-77.0547478698200052">
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:id" v="-1"/>
+    </node>
+    <way visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-26"/>
+        <tag k="alt_name" v="24th St NW"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-165"/>
+    </way>
+    <way visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="-88"/>
+        <tag k="alt_name" v="24th St NW"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-164"/>
+    </way>
+    <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-42"/>
+        <nd ref="-36"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-37"/>
+    </way>
+    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-30"/>
+        <nd ref="-53"/>
+        <tag k="name" v="26th St NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-33"/>
+    </way>
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="-37"/>
+        <nd ref="-30"/>
+        <tag k="name" v="26th St NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-32"/>
+    </way>
+    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-30"/>
+        <nd ref="-46"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-31"/>
+    </way>
+    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-30"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-30"/>
+    </way>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88"/>
+        <nd ref="-13"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-26"/>
+    </way>
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-51"/>
+        <nd ref="-88"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-24"/>
+    </way>
+    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-25"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <tag k="alt_name" v="24th St NW"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-20"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-52"/>
+        <nd ref="-34"/>
+        <nd ref="-35"/>
+        <nd ref="-36"/>
+        <tag k="name" v="26th St NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-14"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="-47"/>
+        <tag k="alt_name" v="K St NW"/>
+        <tag k="name" v="US Hwy 29"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-13"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27"/>
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <tag k="alt_name" v="25th St NW"/>
+        <tag k="name" v="25TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-6"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-15"/>
+        <nd ref="-24"/>
+        <tag k="alt_name" v="25th St NW"/>
+        <tag k="name" v="25TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-4"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-23"/>
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <tag k="name" v="26TH ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-3"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="-17"/>
+        <nd ref="-18"/>
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="-21"/>
+        <nd ref="-13"/>
+        <tag k="alt_name" v="K St NW;US Hwy 29"/>
+        <tag k="name" v="K ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-2"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-16"/>
+        <nd ref="-22"/>
+        <tag k="name" v="K ST NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="5"/>
+        <tag k="hoot:id" v="-1"/>
+    </way>
+    <relation visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-37" role="reviewee"/>
+        <member type="way" ref="-13" role="reviewee"/>
+        <member type="way" ref="-1" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:members" v="3"/>
+        <tag k="type" v="review"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-30"/>
+    </relation>
+    <relation visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-31" role="reviewee"/>
+        <member type="way" ref="-30" role="reviewee"/>
+        <member type="way" ref="-1" role="reviewee"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:members" v="3"/>
+        <tag k="type" v="review"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-29"/>
+    </relation>
+</osm>

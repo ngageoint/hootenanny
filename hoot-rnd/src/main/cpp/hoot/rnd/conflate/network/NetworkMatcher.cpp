@@ -22,13 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatcher.h"
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
+
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {
@@ -45,7 +49,7 @@ void NetworkMatcher::_createEdge2Index()
 
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
-  shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _edge2Index.reset(new HilbertRTree(mps, 2));
 
   std::vector<Box> boxes;
@@ -87,7 +91,7 @@ void NetworkMatcher::_createVertex2Index()
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
-  shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _vertex2Index.reset(new HilbertRTree(mps, 2));
 
   std::vector<Box> boxes;

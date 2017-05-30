@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySublineMatchString.h"
 
 #include <hoot/core/util/Log.h>
 #include "WaySublineCollection.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -152,6 +154,8 @@ bool WaySublineMatchString::isValid() const
     for (size_t i = 0; i < _matches.size(); i++)
     {
       const WaySublineMatch& m = _matches[i];
+      LOG_VART(m.getSubline1());
+      LOG_VART(m.getSubline2());
       if (m.getSubline1().isZeroLength() || m.getSubline2().isZeroLength())
       {
         return false;
@@ -190,6 +194,21 @@ bool WaySublineMatchString::touches(const WaySublineMatchString& other) const
       wss2.touches(owss2) ||
       wss1.touches(owss2) ||
       wss2.touches(owss1);
+}
+
+QString WaySublineMatchString::toString() const
+{
+  QString result;
+  //result += "subline 1: " + getSublineString1().toString() + "\n";
+  //result += "subline 2: " + getSublineString2().toString() + "\n";
+  result += QString("matches:\n");
+  QStringList l;
+  for (size_t i = 0; i < _matches.size(); i++)
+  {
+    l.append(_matches[i].toString());
+  }
+  result += l.join("\n");
+  return result;
 }
 
 }

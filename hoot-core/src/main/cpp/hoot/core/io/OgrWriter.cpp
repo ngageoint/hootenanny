@@ -35,8 +35,8 @@
 #include <geos/geom/MultiPolygon.h>
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/RelationData.h>
@@ -53,6 +53,7 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/IntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Layer.h>
+#include <hoot/core/io/schema/LongIntegerFieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -64,10 +65,12 @@
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptToOgrTranslator.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 #include "OgrOptions.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -83,7 +86,8 @@ static OGRFieldType toOgrFieldType(QVariant::Type t)
   case QVariant::Int:
     return OFTInteger;
   case QVariant::LongLong:
-    throw HootException("LongLong is not supported by OGR");
+    return OFTInteger64;
+//    throw HootException("LongLong is not supported by OGR");
   case QVariant::String:
     return OFTString;
   case QVariant::Double:
@@ -114,7 +118,7 @@ OgrWriter::~OgrWriter()
 
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<Geometry> g)
+void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost::shared_ptr<Geometry> g)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
@@ -140,6 +144,9 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
     case QVariant::Int:
       poFeature->SetField(ba.constData(), v.toInt());
       break;
+    case QVariant::LongLong:
+      poFeature->SetField(ba.constData(), v.toLongLong());
+      break;
     case QVariant::Double:
       poFeature->SetField(ba.constData(), v.toDouble());
       break;
@@ -156,7 +163,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
   }
 
   // convert the geometry.
-  shared_ptr<GeometryCollection> gc = dynamic_pointer_cast<GeometryCollection>(g);
+  boost::shared_ptr<GeometryCollection> gc = boost::dynamic_pointer_cast<GeometryCollection>(g);
   if (gc.get() != 0)
   {
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
@@ -173,7 +180,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, shared_ptr<Feature> f, shared_ptr<G
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void OgrWriter::_addFeatureToLayer(OGRLayer* layer, shared_ptr<Feature> f, const Geometry* g,
+void OgrWriter::_addFeatureToLayer(OGRLayer* layer, boost::shared_ptr<Feature> f, const Geometry* g,
                                    OGRFeature* poFeature)
 {
   std::string wkt = g->toString();
@@ -210,7 +217,7 @@ void OgrWriter::close()
   _ds.reset();
 }
 
-void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
+void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
 {
   OGRLayer *poLayer;
 
@@ -279,10 +286,10 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
     // they don't exist
     OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 
-    shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+    boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
-      shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+      boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
 
       if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
       {
@@ -311,10 +318,10 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
     }
     _layers[layer->getName()] = poLayer;
 
-    shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
+    boost::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
     for (size_t i = 0; i < fd->getFieldCount(); i++)
     {
-      shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
+      boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(i);
       OGRFieldDefn oField(f->getName().toAscii(), toOgrFieldType(f->getType()));
       if (f->getWidth() > 0)
       {
@@ -331,7 +338,7 @@ void OgrWriter::_createLayer(shared_ptr<const Layer> layer)
   } // End layer does not exist
 }
 
-OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
+OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
 {
   // Check if the layer exists in the output.
   int layerCount = _ds->GetLayerCount();
@@ -350,7 +357,7 @@ OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
   return NULL;
 }
 
-OGRLayer* OgrWriter::_getLayer(const QString layerName)
+OGRLayer* OgrWriter::_getLayer(const QString& layerName)
 {
   if (!_layers.contains(layerName))
   {
@@ -392,10 +399,10 @@ void OgrWriter::open(QString url)
   if (_translator == 0)
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
          _scriptPath));
     st->setErrorTreatment(_strictChecking);
-    _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
   }
 
   if (!_translator)
@@ -408,15 +415,15 @@ void OgrWriter::open(QString url)
 
   try
   {
-    _ds = OgrUtilities::getInstance().openDataSource(url);
+    _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
-  catch(HootException& openException)
+  catch(const HootException& openException)
   {
     try
     {
       _ds = OgrUtilities::getInstance().createDataSource(url);
     }
-    catch(HootException& createException)
+    catch(const HootException& createException)
     {
       throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
         "Creating error: \"%2\"").arg(openException.what()).arg(createException.what()));
@@ -460,9 +467,9 @@ void OgrWriter::setConfiguration(const Settings& conf)
   }
 }
 
-shared_ptr<Geometry> OgrWriter::_toMulti(shared_ptr<Geometry> from)
+boost::shared_ptr<Geometry> OgrWriter::_toMulti(boost::shared_ptr<Geometry> from)
 {
-  shared_ptr<Geometry> result;
+  boost::shared_ptr<Geometry> result;
 
   switch (from->getGeometryTypeId())
   {
@@ -511,12 +518,12 @@ void OgrWriter::strictError(QString warning)
   }
 }
 
-void OgrWriter::write(shared_ptr<const OsmMap> map)
+void OgrWriter::write(ConstOsmMapPtr map)
 {
   ElementProviderPtr provider(boost::const_pointer_cast<ElementProvider>(
     boost::dynamic_pointer_cast<const ElementProvider>(map)));
 
-  const NodeMap& nm = map->getNodeMap();
+  const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     _writePartial(provider, it->second);
@@ -531,7 +538,7 @@ void OgrWriter::write(shared_ptr<const OsmMap> map)
   _failOnSkipRelation = false;
   _unwrittenFirstPassRelationIds.clear();
   LOG_DEBUG("Writing first pass relations...");
-  const RelationMap& rm = map->getRelationMap();
+  const RelationMap& rm = map->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     _writePartial(provider, it->second);
@@ -542,7 +549,7 @@ void OgrWriter::write(shared_ptr<const OsmMap> map)
   _failOnSkipRelation = true;
   LOG_DEBUG("Writing second pass relations...");
   for (QList<long>::const_iterator relationIdIter = _unwrittenFirstPassRelationIds.begin();
-       relationIdIter != _unwrittenFirstPassRelationIds.end(); relationIdIter++)
+       relationIdIter != _unwrittenFirstPassRelationIds.end(); ++relationIdIter)
   {
     _writePartial(provider, map->getRelation(*relationIdIter));
   }
@@ -561,13 +568,13 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     // convertToGeometry calls  getGeometryType which will throw an exception if it gets a relation
     // that it doesn't know about. E.g. "route", "superroute", " turnlanes:turns" etc
 
-    shared_ptr<Geometry> g;
+    boost::shared_ptr<Geometry> g;
 
     try
     {
       g = ElementConverter(provider).convertToGeometry(e);
     }
-    catch (IllegalArgumentException& err)
+    catch (const IllegalArgumentException& err)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
@@ -658,7 +665,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
   const std::vector<long> wayNodeIds = newWay->getNodeIds();
   std::vector<long>::const_iterator nodeIdIterator;
 
-  for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); nodeIdIterator++)
+  for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); ++nodeIdIterator)
   {
     if (_elementCache->containsNode(*nodeIdIterator) == false)
     {
@@ -693,7 +700,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   unsigned long relationCount = 0;
 
   for (std::vector<RelationData::Entry>::const_iterator relationElementIter = relationEntries.begin();
-       relationElementIter != relationEntries.end(); relationElementIter++)
+       relationElementIter != relationEntries.end(); ++relationElementIter)
   {
     switch (relationElementIter->getElementId().getType().getEnum())
     {

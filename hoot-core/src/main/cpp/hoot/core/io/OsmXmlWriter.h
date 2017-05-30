@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLWRITER_H
 #define OSMXMLWRITER_H
@@ -46,7 +46,6 @@ class QXmlStreamWriter;
 
 namespace hoot
 {
-using namespace boost;
 
 /**
  * Writes an OsmMap to a .osm (XML) file format.
@@ -93,9 +92,9 @@ public:
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void write(boost::shared_ptr<const OsmMap> map, const QString& path);
+  void write(ConstOsmMapPtr map, const QString& path);
 
-  virtual void write(boost::shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   /**
    * Remove any invalid characters from the string s and print an error if one is found.
@@ -113,15 +112,15 @@ private:
   QString _osmSchema;
   QString _timestamp;
   int _precision;
-  auto_ptr<QIODevice> _fp;
+  std::auto_ptr<QIODevice> _fp;
   int _encodingErrorCount;
 
   static QString _typeName(ElementType e);
 
   void _writeMetadata(QXmlStreamWriter& writer, const Element* e);
-  void _writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
-  void _writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
-  void _writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer);
+  void _writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer);
+  void _writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer);
+  void _writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer);
 };
 
 } // hoot

@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/core/conflate/MatchThreshold.h>
@@ -40,6 +40,8 @@
 
 #include "PoiPolygonMatch.h"
 #include "PoiPolygonMerger.h"
+
+using namespace std;
 
 namespace hoot
 {

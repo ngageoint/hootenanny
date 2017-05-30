@@ -28,6 +28,8 @@
 #include <pp/Factory.h>
 #include <pp/Hdfs.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -42,14 +44,14 @@ void OsmMapMapper::map(HadoopPipes::MapContext& context)
     throw HootException("Error parsing start value.");
   }
 
-  shared_ptr<OsmMap> m(new OsmMap());
+ OsmMapPtr m(new OsmMap());
 
   _loadMap(m);
 
   _map(m, context);
 }
 
-void OsmMapMapper::_loadMap(shared_ptr<OsmMap>& m)
+void OsmMapMapper::_loadMap(OsmMapPtr& m)
 {
   OsmPbfReader reader(true);
   reader.setUseFileStatus(true);

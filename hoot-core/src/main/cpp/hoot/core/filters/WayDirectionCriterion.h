@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYDIRECTIONCRITERION_H
@@ -33,30 +33,30 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 #include "WayFilter.h"
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class WayDirectionCriterion : public ElementCriterion
 {
 public:
   WayDirectionCriterion(const ConstOsmMapPtr& map,
-                        shared_ptr<const Way> baseWay,
+                        ConstWayPtr baseWay,
                         bool similarDirection = true);
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   WayDirectionCriterion* clone() { return new WayDirectionCriterion(_map, _baseWay, _similarDirection); }
 
 private:
   ConstOsmMapPtr _map;
-  shared_ptr<const Way> _baseWay;
+  ConstWayPtr _baseWay;
   bool _similarDirection;
 };
 

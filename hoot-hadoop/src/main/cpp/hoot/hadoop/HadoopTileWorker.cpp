@@ -20,6 +20,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 #include <hoot/hadoop/way-join/WayJoinDriver.h>
 #include <hoot/core/util/UuidHelper.h>
 
@@ -27,7 +28,8 @@
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
 
-#include "PaintNodesDriver.h"
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -120,7 +122,7 @@ MapStats HadoopTileWorker::_calculateStats(QString in)
   if (fs.getFileStatus(in.toStdString()).isDir())
   {
     // write the newly calculated stats out to the input directory.
-    shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
+   boost::shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
     result.write(*out);
   }
   return result;

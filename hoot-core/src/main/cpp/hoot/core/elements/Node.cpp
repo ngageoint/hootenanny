@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Node.h"
@@ -69,7 +69,7 @@ void Node::clear()
   _nodeData.clear();
 }
 
-Envelope* Node::getEnvelope(const shared_ptr<const ElementProvider> &/*ep*/) const
+Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider> &/*ep*/) const
 {
   return new Envelope(getX(), getX(), getY(), getY());
 }
@@ -84,11 +84,11 @@ void Node::setY(double y)
   _nodeData.setY(y);
 }
 
-shared_ptr<geos::geom::Point> Node::toPoint() const
+boost::shared_ptr<geos::geom::Point> Node::toPoint() const
 {
   Coordinate c(getX(), getY());
 
-  shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
+  boost::shared_ptr<Point> result(GeometryFactory::getDefaultInstance()->createPoint(c));
 
   return result;
 }

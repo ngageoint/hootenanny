@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSREGISTRAR_H
 #define JSREGISTRAR_H
@@ -39,10 +39,6 @@
 namespace hoot
 {
 
-using namespace std;
-using namespace v8;
-using namespace boost;
-
 class ClassInitializer
 {
 public:
@@ -51,7 +47,7 @@ public:
 
   virtual ~ClassInitializer() { }
 
-  virtual void Init(Handle<Object> exports) = 0;
+  virtual void Init(v8::Handle<v8::Object> exports) = 0;
 
 private:
   ClassInitializer(const ClassInitializer& oc);
@@ -68,7 +64,7 @@ public:
 
   virtual ~ClassInitializerTemplate() { }
 
-  virtual void Init(Handle<Object> exports)
+  virtual void Init(v8::Handle<v8::Object> exports)
   {
     T::Init(exports);
   }
@@ -83,15 +79,15 @@ public:
 
   static JsRegistrar& getInstance();
 
-  static void Init(Handle<Object> exports);
+  static void Init(v8::Handle<v8::Object> exports);
 
-  void initAll(Handle<Object> exports);
+  void initAll(v8::Handle<v8::Object> exports);
 
-  void registerInitializer(shared_ptr<ClassInitializer> ci);
+  void registerInitializer(boost::shared_ptr<ClassInitializer> ci);
 
 private:
 
-  vector< shared_ptr<ClassInitializer> > _initializers;
+  std::vector<boost::shared_ptr<ClassInitializer> > _initializers;
   static JsRegistrar* _theInstance;
 };
 
@@ -104,7 +100,7 @@ public:
    */
   AutoJsRegister()
   {
-    shared_ptr< ClassInitializerTemplate<T> > p(new ClassInitializerTemplate<T>());
+    boost::shared_ptr< ClassInitializerTemplate<T> > p(new ClassInitializerTemplate<T>());
     JsRegistrar::getInstance().registerInitializer(p);
   }
 };

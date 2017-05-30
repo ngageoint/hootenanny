@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocationOfPoint.h"
@@ -41,9 +41,12 @@
 #include <limits>
 #include <numeric>
 
-namespace hoot {
+using namespace geos::geom;
 
-LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, shared_ptr<const Way> way) :
+namespace hoot
+{
+
+LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way) :
   _map(map),
   _way(way)
 {
@@ -98,7 +101,7 @@ Coordinate LocationOfPoint::locate(double d)
   return result;
 }
 
-WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, shared_ptr<const Way> way,
+WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way,
   const Coordinate& inputPt)
 {
   LocationOfPoint locater(map, way);

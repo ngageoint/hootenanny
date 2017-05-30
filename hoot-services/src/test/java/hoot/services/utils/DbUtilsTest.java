@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
-import static hoot.services.testsupport.MapUtils.insertMap;
+import static hoot.services.utils.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -43,7 +43,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -51,13 +50,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootServicesSpringTestConfig;
-import hoot.services.testsupport.MapUtils;
+import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
-@ActiveProfiles("test")
 public class DbUtilsTest {
 
     @Autowired
@@ -127,7 +124,7 @@ public class DbUtilsTest {
         // Test json tag value
         Map<String, String> tagsJson = new HashMap<>();
         String k5 = "params";
-        String v5 = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\",\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\",\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\",\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" -D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D \\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" -D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" -D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" -D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" -D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" -D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" -D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" -D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" -D \\\"writer.include.debug=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\",\"USER_EMAIL\":\"test@test.com\"}";
+        String v5 = "{\"INPUT1\":\"4835\",\"INPUT2\":\"4836\",\"OUTPUT_NAME\":\"Merged_525_stats\",\"CONFLATION_TYPE\":\"Reference\",\"GENERATE_REPORT\":\"false\",\"TIME_STAMP\":\"1453777469448\",\"REFERENCE_LAYER\":\"1\",\"AUTO_TUNNING\":\"false\",\"ADV_OPTIONS\":\"-D \\\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::IntersectionSplitter;hoot::UnlikelyIntersectionRemover;hoot::DualWaySplitter;hoot::ImpliedDividedMarker;hoot::DuplicateNameRemover;hoot::SmallWayMerger;hoot::RemoveEmptyAreasVisitor;hoot::RemoveDuplicateAreaVisitor;hoot::NoInformationElementRemover\\\" -D \\\"small.way.merger.threshold=15\\\" -D \\\"unify.optimizer.time.limit=30\\\" -D \\\"ogr.split.o2s=false\\\" -D \\\"ogr.tds.add.fcsubtype=true\\\" -D \\\"ogr.tds.structure=true\\\" -D \\\"duplicate.name.case.sensitive=true\\\" -D \\\"conflate.match.highway.classifier=hoot::HighwayRfClassifier\\\" -D \\\"match.creators=hoot::HighwayMatchCreator;hoot::BuildingMatchCreator;hoot::ScriptMatchCreator,PoiGeneric.js;hoot::ScriptMatchCreator,LinearWaterway.js\\\" -D \\\"merger.creators=hoot::HighwaySnapMergerCreator;hoot::BuildingMergerCreator;hoot::ScriptMergerCreator\\\" -D \\\"search.radius.highway=-1\\\" -D \\\"highway.matcher.heading.delta=5.0\\\" -D \\\"highway.matcher.max.angle=60\\\" -D \\\"way.merger.min.split.size=5\\\" -D \\\"conflate.enable.old.roads=false\\\" -D \\\"way.subline.matcher=hoot::MaximalNearestSublineMatcher\\\" -D \\\"waterway.angle.sample.distance=20.0\\\" -D \\\"waterway.matcher.heading.delta=150.0\\\" -D \\\"waterway.auto.calc.search.radius=true\\\" -D \\\"search.radius.waterway=-1\\\" -D \\\"waterway.rubber.sheet.minimum.ties=5\\\" -D \\\"waterway.rubber.sheet.ref=true\\\" -D \\\"writer.include.debug.tags=false\\\"\",\"INPUT1_TYPE\":\"DB\",\"INPUT2_TYPE\":\"DB\",\"USER_EMAIL\":\"test@test.com\"}";
         tagsJson.put(k5, JsonUtils.escapeJson(v5));
         result = DbUtils.updateMapsTableTags(tagsJson, mapId);
         assertTrue(result > -1);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ONEWAYCRITERION_H
@@ -41,11 +41,11 @@ class OneWayCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::OneWayCriterion"; }
+  static std::string className() { return "hoot::OneWayCriterion"; }
 
   OneWayCriterion(bool isOneWay = true): _isOneWay(isOneWay) { }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   OneWayCriterion* clone() { return new OneWayCriterion(); }
 

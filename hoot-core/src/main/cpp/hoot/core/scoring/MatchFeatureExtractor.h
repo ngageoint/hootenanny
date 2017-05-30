@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MANIPULATORFEATUREEXTRACTOR_H
@@ -46,9 +46,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
-using namespace Tgs;
 
 class MatchCreator;
 class MatchFactory;
@@ -80,7 +77,7 @@ public:
    * Adds a match creator to the list of matches that will be evaluated. There must be at least
    * one. The match creator's matches must implement MatchDetails.
    */
-  void addMatchCreator(const shared_ptr<MatchCreator>& m);
+  void addMatchCreator(const boost::shared_ptr<MatchCreator>& m);
 
   /**
    * Returns the results as an ARFF file.
@@ -93,24 +90,24 @@ public:
   /**
    * Evaluates all the features in the given map.
    */
-  void processMap(const shared_ptr<const OsmMap>& map);
+  void processMap(const boost::shared_ptr<const OsmMap>& map);
 
 private:
   DataSamples _samples;
-  vector< shared_ptr<MatchCreator> > _creators;
+  std::vector<boost::shared_ptr<MatchCreator> > _creators;
   // if true then make sure there is an even representation from each class and only fully populated
   // records are represented.
   bool _evenClasses;
   bool _useNulls;
   const MatchFactory* _matchFactory;
 
-  MatchType _getActualMatchType(const set<ElementId> &eids, const shared_ptr<const OsmMap>& map)
+  MatchType _getActualMatchType(const std::set<ElementId> &eids, const boost::shared_ptr<const OsmMap>& map)
     const;
 
   /**
    * Returns a vector of unique factor labels. Not efficient.
    */
-  vector<string> _getUniqueLabels() const;
+  std::vector<std::string> _getUniqueLabels() const;
 
   void _resampleClasses();
 };

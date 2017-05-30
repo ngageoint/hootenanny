@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COUNTMANUALMATCHESVISITOR_H
 #define COUNTMANUALMATCHESVISITOR_H
@@ -35,9 +35,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Counts matches made with ref tags by a manual matcher
@@ -48,7 +47,7 @@ class CountManualMatchesVisitor : public ElementVisitor, public ConstOsmMapConsu
 
 public:
 
-  static string className() { return "hoot::CountManualMatchesVisitor"; }
+  static std::string className() { return "hoot::CountManualMatchesVisitor"; }
 
   CountManualMatchesVisitor();
 

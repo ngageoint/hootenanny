@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef KSKIPBIGRAMDISTANCE_H
@@ -82,7 +82,7 @@ public:
 
   KskipBigramDistance(int k = 2);
 
-  static string className() { return "hoot::KskipBigramDistance"; }
+  static std::string className() { return "hoot::KskipBigramDistance"; }
 
   virtual ~KskipBigramDistance() {}
 

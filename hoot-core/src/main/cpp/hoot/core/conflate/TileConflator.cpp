@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TileConflator.h"
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeReplacements.h>
@@ -51,11 +51,13 @@
 
 #include "LargeWaySplitter.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
-using namespace geos::geom;
 
-TileConflator::TileConflator(shared_ptr<TileWorker> worker)
+TileConflator::TileConflator(boost::shared_ptr<TileWorker> worker)
 {
   _worker = worker;
   // set the buffer to ~5km.

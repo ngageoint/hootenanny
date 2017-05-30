@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
 import static hoot.services.models.db.QChangesets.changesets;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
-import static hoot.services.utils.StringUtils.encodeURIComponentForJavaScript;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,7 +70,8 @@ import hoot.services.utils.PostgresUtils;
  */
 public abstract class Element implements XmlSerializable, DbSerializable {
     private static final Logger logger = LoggerFactory.getLogger(Element.class);
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern(DbUtils.TIMESTAMP_DATE_FORMAT);
+
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
 
     protected Map<Long, CurrentNodes> dbNodeCache;
 
@@ -359,21 +361,11 @@ public abstract class Element implements XmlSerializable, DbSerializable {
     }
 
     /*
-     * If a new element is being created, it always gets a newly assigned
-     * version = 1. Otherwise, the version passed in the changeset request must
-     * match the existing version the server to ensure data integrity.
+     * Increment the version
      */
-    long parseVersion() {
-        long version = 1;
-
-        // version passed in the request can be ignored if it is a create
-        // request, since we've already
-        // done version error checking at this point
-        if (entityChangeType != EntityChangeType.CREATE) {
-            version++;
-        }
-
-        return version;
+    long incrementVersion(NamedNodeMap xmlAttributes) {
+        long version = Long.parseLong(xmlAttributes.getNamedItem("version").getNodeValue());
+        return ++version;
     }
 
     // is this timestamp even actually honored from the xml in the rails
@@ -705,4 +697,19 @@ public abstract class Element implements XmlSerializable, DbSerializable {
 
     public abstract void checkAndFailIfUsedByOtherObjects()
             throws OSMAPIAlreadyDeletedException, OSMAPIPreconditionException;
+
+    /**
+     * URI encodes a string for Javascript consumption; client should call
+     * decodeURIComponent to decode
+     *
+     * @param str
+     *            string to encode
+     * @return a URI encoded string safe for Javascript consumption
+     * @throws UnsupportedEncodingException
+     */
+    private static String encodeURIComponentForJavaScript(String str) throws UnsupportedEncodingException {
+        return URLEncoder.encode(str, "UTF-8").replaceAll("\\+", "%20").replaceAll("\\%21", "!")
+                .replaceAll("\\%27", "'").replaceAll("\\%28", "(").replaceAll("\\%29", ")").replaceAll("\\%7E", "~")
+                .replaceAll("\\%3B", ";");
+    }
 }

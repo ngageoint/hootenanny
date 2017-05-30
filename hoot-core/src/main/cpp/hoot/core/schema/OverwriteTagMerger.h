@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OVERWRITETAGMERGER_H
 #define OVERWRITETAGMERGER_H
@@ -40,7 +40,7 @@ class OverwriteTagMerger : public TagMerger
 {
 public:
 
-  static string className() { return "hoot::OverwriteTagMerger"; }
+  static std::string className() { return "hoot::OverwriteTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
@@ -63,7 +63,7 @@ class OverwriteTag2Merger : public OverwriteTagMerger
 {
 public:
 
-  static string className() { return "hoot::OverwriteTag2Merger"; }
+  static std::string className() { return "hoot::OverwriteTag2Merger"; }
 
   OverwriteTag2Merger() : OverwriteTagMerger(false) {}
 
@@ -77,7 +77,7 @@ class OverwriteTag1Merger : public OverwriteTagMerger
 {
 public:
 
-  static string className() { return "hoot::OverwriteTag1Merger"; }
+  static std::string className() { return "hoot::OverwriteTag1Merger"; }
 
   OverwriteTag1Merger() : OverwriteTagMerger(true) {}
 

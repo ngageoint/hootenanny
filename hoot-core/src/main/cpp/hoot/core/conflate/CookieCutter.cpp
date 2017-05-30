@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CookieCutter.h"
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -37,6 +37,8 @@
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/Log.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -61,7 +63,7 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
   // create a complex geometry representing the alpha shape
   UnionPolygonsVisitor v;
   cutterShapeMap->visitRo(v);
-  shared_ptr<Geometry> cutterShape = v.getUnion();
+  boost::shared_ptr<Geometry> cutterShape = v.getUnion();
 
   if (_outputBuffer != 0.0)
   {

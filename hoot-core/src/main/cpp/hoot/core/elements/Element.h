@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_H
 #define ELEMENT_H
@@ -34,11 +34,7 @@
 #include "Tags.h"
 
 // Hoot
-#include <hoot/core/Units.h>
-
-namespace hoot {
-  class OsmMap;
-}
+#include <hoot/core/util/Units.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -57,14 +53,13 @@ namespace geos {
   }
 }
 
-namespace hoot {
-
-using namespace boost;
-using namespace geos::geom;
+namespace hoot
+{
 
 class ElementListener;
 class ElementProvider;
 class ElementVisitor;
+class OsmMap;
 
 /**
  * Base class for OSM elements -- node, way and relation.
@@ -73,7 +68,7 @@ class Element
 {
 public:
 
-  static string className() { return "hoot::Element"; }
+  static std::string className() { return "hoot::Element"; }
 
   virtual ~Element() {}
 
@@ -94,7 +89,7 @@ public:
    * empty or any of the child elements are missing. The caller gets ownership of the returned
    * envelope.
    */
-  virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
   void setId(long id) { _getElementData().setId(id); }

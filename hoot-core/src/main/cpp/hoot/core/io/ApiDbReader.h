@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -59,6 +59,9 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() {}
 
+  void setBoundingBox(const QString bbox);
+  void setOverrideBoundingBox(const QString bbox);
+
 protected:
 
   bool _useDataSourceIds;
@@ -69,22 +72,27 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
-  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+  geos::geom::Envelope _bounds;
+  geos::geom::Envelope _overrideBounds; //this will override _bounds
+
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator,
                                                  const OsmMap& map) = 0;
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
-  virtual shared_ptr<ApiDb> _getDatabase() const = 0;
+  virtual boost::shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
-   * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been
-   * implemented yet.
+   * This is based off of the Map.java query method.
    */
-  virtual void _readByBounds(OsmMapPtr map, const Envelope& bounds);
+  virtual void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
 
   void _updateMetadataOnElement(ElementPtr element);
+
+  static bool _isValidBounds(const geos::geom::Envelope& bounds);
+  bool _hasBounds();
 };
 
 }

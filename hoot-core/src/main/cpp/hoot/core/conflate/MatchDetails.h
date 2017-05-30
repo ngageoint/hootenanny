@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHDETAILS_H
 #define MATCHDETAILS_H
@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * An interface that provides some deep dive details on a given match. This is useful for
@@ -54,7 +53,7 @@ public:
    * Returns a map of features that went into determining this as a match and their values. The
    * QVariant can either be a QString (nominal) or double (numeric).
    */
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const = 0;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const = 0;
 };
 
 }

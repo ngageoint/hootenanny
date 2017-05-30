@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/elements/Way.h>
@@ -47,6 +47,8 @@
 #include <tgs/StreamUtils.h>
 
 #include "../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -90,7 +92,7 @@ public:
   void runSimpleTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -105,7 +107,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
+    boost::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 
     double score;
     WaySublineMatchString match = matcher->findMatch(map, w1, w2, score, 10.0);
@@ -129,7 +131,7 @@ public:
   void runNoOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -144,7 +146,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
+    boost::shared_ptr<MaximalNearestSublineMatcher> matcher(new MaximalNearestSublineMatcher());
 
     double score;
     WaySublineMatchString match = matcher->findMatch(map, w1, w2, score, 10.0);

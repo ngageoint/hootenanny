@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapComparator.h"
 
@@ -81,7 +81,7 @@ public:
   /**
    * Defaults to 5cm threshold
    */
-  CompareVisitor(shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+  CompareVisitor(boost::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
   {
     _ref = ref;
     _threshold = threshold;
@@ -93,11 +93,11 @@ public:
 
   bool isMatch() { return _matches; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
+  virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     CHECK_MSG(_ref->containsElement(e->getElementId()), "Did not find element: " <<
               e->getElementId());
-    const shared_ptr<const Element>& re = _ref->getElement(e->getElementId());
+    const boost::shared_ptr<const Element>& re = _ref->getElement(e->getElementId());
 
     Tags in1 = re->getTags();
     Tags in2 = e->getTags();
@@ -165,24 +165,27 @@ public:
     }
   }
 
-  void compareNode(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
+  void compareNode(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-    shared_ptr<const Node> rn = dynamic_pointer_cast<const Node>(re);
-    shared_ptr<const Node> n = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr rn = boost::dynamic_pointer_cast<const Node>(re);
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
 
     if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
     {
-      LOG_WARN("rn: " << std::fixed << std::setprecision(15) << rn->getX() << ", " << rn->getY() <<
-               " n: " << n->getX() << ", " << n->getY());
+      if (_errorCount <= 10)
+      {
+        LOG_WARN("rn: " << std::fixed << std::setprecision(15) << rn->getX() << ", " << rn->getY() <<
+                 " n: " << n->getX() << ", " << n->getY());
+      }
       _matches = false;
       _errorCount++;
     }
   }
 
-  void compareWay(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
+  void compareWay(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-    shared_ptr<const Way> rw = dynamic_pointer_cast<const Way>(re);
-    shared_ptr<const Way> w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr rw = boost::dynamic_pointer_cast<const Way>(re);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
 
     CHECK_MSG(rw->getNodeIds().size() == w->getNodeIds().size(),
               "Node count does not match.");
@@ -195,10 +198,10 @@ public:
     }
   }
 
-  void compareRelation(const shared_ptr<const Element>& re, const shared_ptr<const Element>& e)
+  void compareRelation(const boost::shared_ptr<const Element>& re, const boost::shared_ptr<const Element>& e)
   {
-    shared_ptr<const Relation> rr = dynamic_pointer_cast<const Relation>(re);
-    shared_ptr<const Relation> r = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr rr = boost::dynamic_pointer_cast<const Relation>(re);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
     QString relationStr = QString("%1 vs. %2").arg(hoot::toString(rr)).arg(hoot::toString(r));
 
@@ -215,7 +218,7 @@ public:
   }
 
 private:
-  shared_ptr<OsmMap> _ref;
+  boost::shared_ptr<OsmMap> _ref;
   Meters _threshold;
   Degrees _thresholdDeg;
   bool _matches;
@@ -230,11 +233,11 @@ MapComparator::MapComparator()
   _useDateTime = false;
 }
 
-bool MapComparator::isMatch(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test)
+bool MapComparator::isMatch(boost::shared_ptr<OsmMap> ref, boost::shared_ptr<OsmMap> test)
 {
-  if (ref->getNodeMap().size() != test->getNodeMap().size() ||
+  if (ref->getNodes().size() != test->getNodes().size() ||
       ref->getWays().size() != test->getWays().size() ||
-      ref->getRelationMap().size() != test->getRelationMap().size())
+      ref->getRelations().size() != test->getRelations().size())
   {
     LOG_WARN("Number of elements does not match.");
     return false;

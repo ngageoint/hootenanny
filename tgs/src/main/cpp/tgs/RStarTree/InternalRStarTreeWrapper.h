@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __INTERNAL_RSTAR_TREE_WRAPPER_H__
 #define __INTERNAL_RSTAR_TREE_WRAPPER_H__
@@ -60,7 +60,7 @@ namespace Tgs
     * @param maxBounds the minimum values of the bounding region of interest
     * @param returns the list of object ids
     */
-    void getIntersectingObjects(const std::vector<double> minBounds, const std::vector<double> maxBounds, std::vector<int> & objIds);
+    void getIntersectingObjects(const std::vector<double>& minBounds, const std::vector<double>& maxBounds, std::vector<int>& objIds);
 
     /**
     *  Updates an iterator over all the current R*Tree of all objects within
@@ -80,12 +80,12 @@ namespace Tgs
     */
     void insert(int uniqueId, std::vector<double> & minBounds, std::vector<double> & maxBounds);
 
-    void bulkInsert(const std::vector<int>& uniqueId, const std::vector<double>& minBounds, 
+    void bulkInsert(const std::vector<int>& uniqueId, const std::vector<double>& minBounds,
       const std::vector<double>& maxBounds);
 
   private:
-    shared_ptr<HilbertRTree> _tree;
+    boost::shared_ptr<HilbertRTree> _tree;
     unsigned int _dimensions;
   };
 }
-#endif 
+#endif

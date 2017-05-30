@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateNameRemover.h"
@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
@@ -54,15 +54,15 @@ _caseSensitive(true)
   setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
 }
 
-void DuplicateNameRemover::apply(shared_ptr<OsmMap>& map)
+void DuplicateNameRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
   _map = map;
 
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<Way>& w = it->second;
+    const WayPtr& w = it->second;
 
     QStringList list = w->getTags().getNames();
     // put all the alt_name values in a set, this will remove duplicates.
@@ -160,7 +160,7 @@ QString DuplicateNameRemover::_getBestName(QString n1, QString n2)
   }
 }
 
-void DuplicateNameRemover::removeDuplicates(shared_ptr<OsmMap> map)
+void DuplicateNameRemover::removeDuplicates(boost::shared_ptr<OsmMap> map)
 {
   DuplicateNameRemover a;
   a.apply(map);

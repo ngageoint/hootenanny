@@ -76,8 +76,6 @@ HOOT_VERSION_FILE
 HootConfig.h
 .idea/*
 *.iml
-ingest/processed
-ingest/upload
 **/lib*.a
 **/lib*.so.*
 local/lib/
@@ -89,6 +87,7 @@ tgs/Makefile
 Makefile.in
 Makefile.inc
 Makefile.qmake
+missing
 Output.osm
 /output.osm
 /output.pgm
@@ -120,14 +119,12 @@ todo.txt
 /test-output
 .project
 matt_test
-/upload
 /src
 /test-out
 hoot-core/src/test/resources/nohup.out
 nohup.out
 /lib
 docs/node_modules/
-customscript/
 **/buildInfo.json/**
 */buildInfo.json/*
 **/buildInfo.json/*.*
@@ -146,7 +143,6 @@ tagCountHistogram2.png
 uniqueHistogram.png
 test-files/cmd/current
 test-files/DcTigerRoadsHighwayExactMatchInputs.osm
-data/
 .vagrant/
 inputFeatures.png
 docs/developer/restDocs/
@@ -160,6 +156,7 @@ id_rsa.pub
 coverage/
 plugins/eggdm30_osm_rules.js
 plugins/eggdm30_rules.js
+userfiles/
 
 ###### hoot-services ignores
 hoot-services/db.properties
@@ -168,7 +165,11 @@ hoot-services/src/main/resources/build.info
 hoot-services/src/main/resources/db/spring-database.xml
 hoot-services/src/main/resources/conf/hoot-services.conf
 hoot-services/src/main/resources/db/*.properties
+scripts/database/blank_osmapidb.sql
 ######
 
 compile
 VagrantfileLocal
+config.rpath
+0
+tbs/0

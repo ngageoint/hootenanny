@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyDuplicatePoiOp.h"
 
@@ -32,9 +32,9 @@
 #include <boost/random/variate_generator.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
@@ -65,7 +65,7 @@ QString PertyDuplicatePoiOp::toString()
     ", _moveMultiplier: "  + QString::number(_moveMultiplier);
 }
 
-void PertyDuplicatePoiOp::apply(shared_ptr<OsmMap>& map)
+void PertyDuplicatePoiOp::apply(OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
   boost::uniform_real<> uni(0.0, 1.0);
@@ -73,7 +73,7 @@ void PertyDuplicatePoiOp::apply(shared_ptr<OsmMap>& map)
   boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<> > N(*_rng, nd);
 
   // make a copy since we'll be modifying the map as we go.
-  NodeMap nm = map->getNodeMap();
+  NodeMap nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     if (uni(*_rng) < _p)

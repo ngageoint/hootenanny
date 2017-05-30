@@ -8,7 +8,7 @@ EXPERIMENTAL
 Conflates three or more input sources into a single output in a cumulative fashion.
 
 This command must be run with the following configuration options:
-* review.tags.treat.as.metadata=false
+* writer.clean.review.tags=false
 * tag.merger.default=hoot::ProvenanceAwareOverwriteTagMerger
 
 This command does not work with the --stats option.

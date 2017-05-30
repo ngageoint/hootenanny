@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERIONJS_H
 #define ELEMENTCRITERIONJS_H
@@ -41,8 +41,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 

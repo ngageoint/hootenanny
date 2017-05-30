@@ -20,7 +20,7 @@
 // Hoot
 #include <hoot/core/elements/Status.h>
 #include <hoot/hadoop/Driver.h>
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 
 // Qt
 #include <QString>
@@ -30,13 +30,10 @@
 
 namespace hoot
 {
-using namespace std;
 
 class WayJoinDriver : public Driver
 {
 public:
-
-
   /**
    * @param maxWaySize The maximum way size in degrees.
    */

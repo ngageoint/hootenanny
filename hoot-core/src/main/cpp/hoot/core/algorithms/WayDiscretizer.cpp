@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayDiscretizer.h"
@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr &map, shared_ptr<const Way> way) :
+WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr &map, ConstWayPtr way) :
   _map(map)
 {
   _way = way;
@@ -54,11 +54,11 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr &map, shared_ptr<const Way> 
   // Go through all the nodes
   double l = 0;
   const std::vector<long>& nodeIds = _way->getNodeIds();
-  shared_ptr<const Node> lastNode = _map->getNode(nodeIds[0]);
+  ConstNodePtr lastNode = _map->getNode(nodeIds[0]);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
     // calculate the distance from the last node to this node.
-    shared_ptr<const Node> n = _map->getNode(nodeIds[i]);
+    ConstNodePtr n = _map->getNode(nodeIds[i]);
     double d = Distance::euclidean(*lastNode, *n);
 
     // add the distance to a running total
@@ -106,13 +106,13 @@ geos::geom::Coordinate WayDiscretizer::interpolate(double d)
 
   if (d <= 0)
   {
-    shared_ptr<const Node> n = _map->getNode(nodeIds[0]);
+    ConstNodePtr n = _map->getNode(nodeIds[0]);
     result.x = n->getX();
     result.y = n->getY();
   }
   else if (d >= _lengthNodes.back())
   {
-    shared_ptr<const Node> n = _map->getNode(nodeIds.back());
+    ConstNodePtr n = _map->getNode(nodeIds.back());
     result.x = n->getX();
     result.y = n->getY();
   }
@@ -124,8 +124,8 @@ geos::geom::Coordinate WayDiscretizer::interpolate(double d)
     double startD = _lengthNodes[i];
     double endD = _lengthNodes[i + 1];
 
-    shared_ptr<const Node> startN = _map->getNode(nodeIds[i]);
-    shared_ptr<const Node> endN = _map->getNode(nodeIds[i + 1]);
+    ConstNodePtr startN = _map->getNode(nodeIds[i]);
+    ConstNodePtr endN = _map->getNode(nodeIds[i + 1]);
 
     double w = (d - startD) / (endD - startD);
 

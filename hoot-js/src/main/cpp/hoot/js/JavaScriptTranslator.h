@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef JAVASCRIPTTRANSLATOR_H
@@ -48,12 +48,11 @@
 namespace hoot
 {
 
-using namespace std;
-using namespace v8;
 class FieldDefinition;
 class Layer;
 class DoubleFieldDefinition;
 class IntegerFieldDefinition;
+class LongIntegerFieldDefinition;
 class Schema;
 class ElementType;
 
@@ -90,7 +89,7 @@ public:
    */
   int getLogCount(QString log);
 
-  virtual shared_ptr<const Schema> getOgrOutputSchema();
+  virtual boost::shared_ptr<const Schema> getOgrOutputSchema();
 
   // Filter for file names
   virtual const QString getLayerNameFilter();
@@ -100,30 +99,30 @@ public:
    */
   void setScriptText(QString text) { close(); _scriptText = text; _scriptPath = QString(); }
 
-  virtual vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
+  virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
     geos::geom::GeometryTypeId geometryType);
 
-  virtual vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    GeometryTypeId geometryType);
+  virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType);
 
   virtual void setConfiguration(const Settings& conf);
 
 protected:
-  shared_ptr<PluginContext> _gContext;
+  boost::shared_ptr<PluginContext> _gContext;
   QString _toOsmFunctionName;
 
   bool _error;
-  shared_ptr<Schema> _schema;
+  boost::shared_ptr<Schema> _schema;
   QString _scriptText;
   Tags* _tags;
-  vector<double> _timing;
+  std::vector<double> _timing;
   QHash<QString, int> _logs;
-  Handle<Value> _empty[0]; // For function calls
+  v8::Handle<v8::Value> _empty[0]; // For function calls
 
   Settings _conf;
 
-  vector<TranslatedFeature> _createAllFeatures(QVariantList vm);
-  shared_ptr<Feature> _createFeature(QVariantMap vm, QString& tableName);
+  std::vector<TranslatedFeature> _createAllFeatures(QVariantList vm);
+  boost::shared_ptr<Feature> _createFeature(QVariantMap vm, QString& tableName);
 
   virtual void _init();
 
@@ -141,9 +140,11 @@ protected:
 
   void _parseEnumerations(IntegerFieldDefinition* fd, QVariant& enumerations) const;
 
-  shared_ptr<FieldDefinition> _parseFieldDefinition(QVariant fieldV) const;
+  void _parseEnumerations(LongIntegerFieldDefinition* fd, QVariant& enumerations) const;
 
-  shared_ptr<Layer> _parseLayer(QVariant layer) const;
+  boost::shared_ptr<FieldDefinition> _parseFieldDefinition(QVariant fieldV) const;
+
+  boost::shared_ptr<Layer> _parseLayer(QVariant layer) const;
 
   double _toDouble(const QVariant& v) const;
 

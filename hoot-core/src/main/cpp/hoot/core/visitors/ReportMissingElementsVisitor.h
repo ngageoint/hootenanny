@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPORTMISSINGELEMENTSVISITOR_H
 #define REPORTMISSINGELEMENTSVISITOR_H
@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Reports references to missing elements in a given map. If removeMissing is set to true then
@@ -46,7 +45,7 @@ class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapCo
 {
 public:
 
-  static string className() { return "hoot::ReportMissingElementsVisitor"; }
+  static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
 
   ReportMissingElementsVisitor(bool removeMissing = false, int maxReport = 10);
 

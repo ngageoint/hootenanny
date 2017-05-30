@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "KnnWayIterator.h"
@@ -39,10 +39,14 @@
 // Standard
 #include <limits>
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
-KnnWayIterator::KnnWayIterator(const OsmMap& map, shared_ptr<const Way> way,
+KnnWayIterator::KnnWayIterator(const OsmMap& map, ConstWayPtr way,
   const RStarTree* tree, const vector<long>& treeIdToWid, bool addError) :
   KnnIterator(tree, 0.0, 0.0, Box()),
   _map(map),
@@ -74,7 +78,7 @@ double KnnWayIterator::_calculateDistance(const BoxInternalData&, int id)
     ConstWayPtr w = _map.getWay(otherWayId);
 
     // grab the geometry for the way that we're comparing against.
-    shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
+    boost::shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
 
     Meters d = ls->distance(_lsFast);
 

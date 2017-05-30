@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocalJobRunner.h"
@@ -42,6 +42,8 @@
 // Standard
 #include <sstream>
 
+using namespace std;
+
 
 uint qHash(const std::string& str)
 {
@@ -58,7 +60,7 @@ namespace pp
 class LocalMapContext : public HadoopPipes::MapContext, public RecordReaderProvider
 {
 public:
-  LocalMapContext(Configuration* conf, shared_ptr<HadoopPipes::RecordReader> reader,
+  LocalMapContext(Configuration* conf,boost::shared_ptr<HadoopPipes::RecordReader> reader,
     LocalJobRunner::ShuffleMap& shuffle, const InputSplit& is) :
     _conf(conf),
     _is(is),
@@ -112,7 +114,7 @@ private:
   string _empty;
   string _isStr;
   string _key;
-  shared_ptr<HadoopPipes::RecordReader> _reader;
+ boost::shared_ptr<HadoopPipes::RecordReader> _reader;
   LocalJobRunner::ShuffleMap& _shuffle;
   string _value;
 
@@ -137,7 +139,7 @@ private:
 class LocalReduceContext : public HadoopPipes::ReduceContext, public RecordWriterProvider
 {
 public:
-  LocalReduceContext(Configuration* conf, shared_ptr<HadoopPipes::RecordWriter> writer) :
+  LocalReduceContext(Configuration* conf,boost::shared_ptr<HadoopPipes::RecordWriter> writer) :
     _conf(conf),
     _writer(writer)
   {
@@ -199,7 +201,7 @@ private:
   Configuration* _conf;
   string _empty;
   string _key;
-  shared_ptr<HadoopPipes::RecordWriter> _writer;
+ boost::shared_ptr<HadoopPipes::RecordWriter> _writer;
   vector<QByteArray>::const_iterator _it;
   string _value;
   const vector<QByteArray>* _values;
@@ -246,7 +248,7 @@ void LocalJobRunner::run()
   {
     // if there are no reducers then just write the output.
     ShuffleMap::iterator it = _shuffle.begin();
-    shared_ptr<pp::RecordWriter> writer;
+   boost::shared_ptr<pp::RecordWriter> writer;
 
     writer.reset(Factory::getInstance().constructObject<pp::RecordWriter>(
       _conf.get(PP_RECORD_WRITER, LineRecordWriter::className())));
@@ -277,7 +279,7 @@ void LocalJobRunner::run()
 
 void LocalJobRunner::_runMapper()
 {
-  shared_ptr<pp::InputFormat> inputFormat(Factory::getInstance().
+ boost::shared_ptr<pp::InputFormat> inputFormat(Factory::getInstance().
     constructObject<pp::InputFormat>(_conf.get(PP_INPUT_FORMAT, FileInputFormat::className())));
   inputFormat->setConfiguration(_conf);
 
@@ -291,10 +293,10 @@ void LocalJobRunner::_runMapper()
     }
 
     // create a new mapper for each split
-    shared_ptr<pp::Mapper> mapper(Factory::getInstance().
+   boost::shared_ptr<pp::Mapper> mapper(Factory::getInstance().
       constructObject<pp::Mapper>(conf.get(PP_MAPPER, NullMapper::className())));
 
-    shared_ptr<pp::RecordReader> reader(
+   boost::shared_ptr<pp::RecordReader> reader(
       Factory::getInstance().constructObject<pp::RecordReader>(
       conf.get(PP_RECORD_READER, LineRecordReader::className())));
 
@@ -337,8 +339,8 @@ void LocalJobRunner::_runReducer()
   int reduceSize = _shuffle.size() / _reducerCount + 1;
   for (int i = 0; i < _reducerCount; i++)
   {
-    shared_ptr<pp::Reducer> reducer;
-    shared_ptr<pp::RecordWriter> writer;
+   boost::shared_ptr<pp::Reducer> reducer;
+   boost::shared_ptr<pp::RecordWriter> writer;
 
     reducer.reset(Factory::getInstance().
       constructObject<pp::Reducer>(_conf.get(PP_REDUCER, NullReducer::className())));

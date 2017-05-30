@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGSETPROVIDER_H
 #define CHANGSETPROVIDER_H
@@ -76,8 +76,8 @@ public:
   QString toString() const
   {
     return
-      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +		       "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
-      ", Note: " + note;		+      ", Note: " + note + "\n" + e->toString();
+      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
+      ", Note: " + note + "\n" + e->toString();
   }
 
   ConstElementPtr e;
@@ -85,7 +85,6 @@ public:
   QString note;
 
 };
-
 
 /**
  * Interface for classes implementing OSM changeset capabilities
@@ -131,7 +130,7 @@ public:
 
 };
 
-typedef shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
+typedef boost::shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
 
 }
 

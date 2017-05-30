@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -36,8 +37,8 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import hoot.services.controllers.auxiliaryservices.ElementMergeServiceResource;
-import hoot.services.controllers.auxiliaryservices.TranslationServiceResource;
+import hoot.services.controllers.nodejs.ElementMergeServiceResource;
+import hoot.services.controllers.nodejs.TranslationServiceResource;
 
 
 public class HootServletContext implements ServletContextListener {
@@ -51,9 +52,7 @@ public class HootServletContext implements ServletContextListener {
 
         HootProperties.init();
 
-        createIngestFolder();
-
-        createUploadFolder();
+        createFolders();
 
         TranslationServiceResource.startTranslationService();
 
@@ -78,20 +77,16 @@ public class HootServletContext implements ServletContextListener {
         SLF4JBridgeHandler.install();
     }
 
-    private static void createIngestFolder() {
-        File ingestFolder = new File(TILE_SERVER_PATH);
-        if (!ingestFolder.exists()) {
-            if (!ingestFolder.mkdir()) {
-                throw new RuntimeException("Error creating " + ingestFolder.getAbsolutePath() + " directory!");
-            }
-        }
-    }
+    private static void createFolders() {
+        String[] folders = { UPLOAD_FOLDER, BASEMAPS_TILES_FOLDER, RPT_STORE_PATH,
+                BASEMAPS_FOLDER, SCRIPT_FOLDER, TEMP_OUTPUT_PATH };
 
-    private static void createUploadFolder() {
-        File uploadDir = new File(UPLOAD_FOLDER);
-        if (!uploadDir.exists()) {
-            if (!uploadDir.mkdir()) {
-                throw new RuntimeException("Error creating " + uploadDir.getAbsolutePath() + " directory!");
+        for (String folder : folders) {
+            try {
+                FileUtils.forceMkdir(new File(folder));
+            }
+            catch (IOException ioe) {
+                throw new RuntimeException("Error creating " + folder + " directory!", ioe);
             }
         }
     }

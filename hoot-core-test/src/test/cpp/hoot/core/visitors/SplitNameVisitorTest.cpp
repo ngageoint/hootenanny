@@ -36,6 +36,8 @@
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -54,7 +56,7 @@ public:
     // make the max size smaller so the test is a little easier to read.
     v.setMaxSize(20);
 
-    shared_ptr<Node> n(new Node(Status::Unknown1, -1, Coordinate(0, 0), 5));
+    NodePtr n(new Node(Status::Unknown1, -1, Coordinate(0, 0), 5));
     Tags& t = n->getTags();
 
     t.clear();
@@ -91,7 +93,7 @@ public:
     // make the max size smaller so the test is a little easier to read.
     v.setMaxSize(255);
 
-    shared_ptr<Node> n(new Node(Status::Unknown1, -1, Coordinate(0, 0), 5));
+    NodePtr n(new Node(Status::Unknown1, -1, Coordinate(0, 0), 5));
     Tags& t = n->getTags();
 
     t.clear();

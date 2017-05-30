@@ -36,6 +36,8 @@ using namespace hoot;
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
+using namespace std;
+
 class LogisticRegressionTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(LogisticRegressionTest);

@@ -1,9 +1,8 @@
 ****Quick Stats****
-14:10:57.859 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
-Reprojecting 0 / 117         
-14:10:57.894 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
-14:10:57.894 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
-14:10:57.894 INFO  ...oot/core/io/MapStatsWriter.cpp( 221) Writing stats to file: test-output/StatsAllDataTypesA.txt
+17:09:46.251 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+
+17:09:46.290 INFO  .../core/ops/CalculateStatsOp.cpp( 124) Calculating map statistics...
+17:09:46.290 INFO  ...oot/core/io/MapStatsWriter.cpp( 212) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -14,23 +13,19 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-14:10:58.031 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesA.osm ...
-Reprojecting 0 / 117         
-14:10:58.066 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
-14:10:58.067 INFO  ...hoot/core/schema/OsmSchema.cpp(1809) Loading translation files...
-14:10:58.174 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
-14:10:58.175 INFO  ...ate/SearchRadiusCalculator.cpp(  89) Skipping 131 conflated or invalid features out of 131 total features.
-14:10:58.175 INFO  ...ate/SearchRadiusCalculator.cpp(  96) Unable to automatically calculate search radius.  All features have already been conflated or are invalid.
+17:09:46.575 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+
+17:09:46.612 INFO  .../core/ops/CalculateStatsOp.cpp( 124) Calculating map statistics...
+17:09:46.614 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+17:09:46.722 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+17:09:46.722 INFO  ...ate/SearchRadiusCalculator.cpp(  93) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-14:10:59.405 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
-14:10:59.405 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/conflate/unified/AllDataTypesB.osm ...
-Reprojecting 0 / 116         
-14:10:59.438 INFO  .../core/ops/CalculateStatsOp.cpp( 122) Calculating map statistics...
-14:10:59.447 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Automatically calculating search radius..."
-14:10:59.448 INFO  ...ate/SearchRadiusCalculator.cpp(  89) Skipping 128 conflated or invalid features out of 128 total features.
-14:10:59.448 INFO  ...ate/SearchRadiusCalculator.cpp(  96) Unable to automatically calculate search radius.  All features have already been conflated or are invalid.
+17:09:47.796 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+
+17:09:47.825 INFO  .../core/ops/CalculateStatsOp.cpp( 124) Calculating map statistics...
+17:09:47.837 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+17:09:47.838 INFO  ...ate/SearchRadiusCalculator.cpp(  93) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-14:11:01.250 INFO  .../core/ops/CalculateStatsOp.cpp( 368) Map statistics calculated.
 {
     "Node Count":
     [

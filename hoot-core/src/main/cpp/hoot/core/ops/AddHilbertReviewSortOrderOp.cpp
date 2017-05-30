@@ -27,8 +27,8 @@
 #include "AddHilbertReviewSortOrderOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -36,6 +36,9 @@
 
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -62,18 +65,20 @@ AddHilbertReviewSortOrderOp::AddHilbertReviewSortOrderOp()
 {
 }
 
-void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
+void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
 {
-  if (!ConfigOptions().getConflateAddReviewDetail())
+  if (!ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
-    LOG_DEBUG("AddHilbertReviewSortOrderOp disabled due to conflate.add.review.detail=false.");
+    LOG_DEBUG(
+      "AddHilbertReviewSortOrderOp disabled due to " <<
+      ConfigOptions::getWriterIncludeConflateReviewDetailTagsKey() << "=false.");
     return;
   }
 
   _mapEnvelope.reset();
   MapProjector::projectToPlanar(map);
 
-  const RelationMap& relations = map->getRelationMap();
+  const RelationMap& relations = map->getRelations();
 
   vector< pair<ElementId, int64_t> > reviewOrder;
   // reserves at least as much as we need.
@@ -82,10 +87,12 @@ void AddHilbertReviewSortOrderOp::apply(shared_ptr<OsmMap>& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr r = it->second;
+    LOG_VART(r->getElementId());
     if (ReviewMarker::isReviewUid(map, r->getElementId()))
     {
       const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
       LOG_VART(eids.size());
+      LOG_VART(eids);
       if (eids.size() > 0)
       {
         int64_t hv = _calculateHilbertValue(map, eids);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  *
@@ -46,7 +45,7 @@ using namespace std;
 class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
-  static string className() { return "hoot::RemoveReviewsByEidOp"; }
+  static std::string className() { return "hoot::RemoveReviewsByEidOp"; }
 
   /**
    */
@@ -66,7 +65,7 @@ public:
    */
   virtual void addElement(const ConstElementPtr& e);
 
-  virtual void apply(const shared_ptr<OsmMap>& map);
+  virtual void apply(const OsmMapPtr& map);
 
 private:
   ElementId _eid;

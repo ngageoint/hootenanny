@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_ID_SET_VISITOR_H
 #define ELEMENT_ID_SET_VISITOR_H
@@ -32,8 +32,6 @@
 
 namespace hoot
 {
-
-using namespace std;
 
 /**
  * Returns a set of the element ids visited.
@@ -49,13 +47,13 @@ public:
   /**
    * Returns a set containing all the ElementIds visited.
    */
-  const set<ElementId>& getElementSet() const { return _elements; }
+  const std::set<ElementId>& getElementSet() const { return _elements; }
 
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
-  set<ElementId> _elements;
+  std::set<ElementId> _elements;
 };
 
 }

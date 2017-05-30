@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
 #define UNLIKELYINTERSECTIONREMOVER_H
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 // Standard
@@ -41,10 +41,9 @@
 
 namespace hoot
 {
-  using namespace std;
 
-  class OsmMap;
-  class Way;
+class OsmMap;
+class Way;
 
 /**
  * Locates intersections that are likely mistakes and separates them. This is typically a problem
@@ -54,26 +53,26 @@ class UnlikelyIntersectionRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::UnlikelyIntersectionRemover"; }
+  static std::string className() { return "hoot::UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover();
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static void removeIntersections(shared_ptr<OsmMap> map);
+  static void removeIntersections(boost::shared_ptr<OsmMap> map);
 
 protected:
 
-  shared_ptr<OsmMap> _result;
+  boost::shared_ptr<OsmMap> _result;
 
-  void _evaluateAndSplit(long intersectingNode, const set<long>& wayIds);
+  void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
 
-  double _pIntersection(long intersectingNode, shared_ptr<Way> w1, shared_ptr<Way> w2);
+  double _pIntersection(long intersectingNode, boost::shared_ptr<Way> w1, boost::shared_ptr<Way> w2);
 
-  void _splitIntersection(long intersectingNode, const vector< shared_ptr<Way> >& g2);
+  void _splitIntersection(long intersectingNode, const std::vector< boost::shared_ptr<Way> >& g2);
 
 };
 

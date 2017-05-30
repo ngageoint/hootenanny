@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYBUFFERCRITERION_H
@@ -33,13 +33,13 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class WayBufferCriterion : public ElementCriterion
 {
@@ -61,22 +61,22 @@ public:
    * @param circularError circular error of baseLine
    */
   WayBufferCriterion(ConstOsmMapPtr map,
-                     shared_ptr<LineString> baseLine,
+                     boost::shared_ptr<geos::geom::LineString> baseLine,
                      Meters buffer,
                      Meters circularError,
                      double matchPercent);
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   WayBufferCriterion* clone() { return new WayBufferCriterion(_map, _baseLs, _buffer, 0, _matchPercent); }
 
 private:
   Meters _buffer;
-  mutable shared_ptr<Geometry> _baseBuffered;
-  shared_ptr<LineString> _baseLs;
+  mutable boost::shared_ptr<geos::geom::Geometry> _baseBuffered;
+  boost::shared_ptr<geos::geom::LineString> _baseLs;
 
   // Anything outside the given bounds cannot be within maxDistance
-  mutable Envelope _boundsPlus;
+  mutable geos::geom::Envelope _boundsPlus;
   mutable Meters _baseLength;
   mutable Meters _bufferAccuracy;
   ConstOsmMapPtr _map;

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReplaceElementOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -61,16 +63,19 @@ void ReplaceElementOp::addElement(const ConstElementPtr& e)
   }
 }
 
-void ReplaceElementOp::apply(const shared_ptr<OsmMap> &map)
+void ReplaceElementOp::apply(const OsmMapPtr &map)
 {
   if (_from.isNull() || _to.isNull())
   {
     throw IllegalArgumentException("You must specify a valid 'from' and 'to' element ID.");
   }
 
+  LOG_TRACE("Replacing " << _from << " with " << _to << "...");
+
   // if from isn't in the map, there is nothing to do.
   if (map->containsElement(_from) == false)
   {
+    LOG_TRACE(_from << " doesn't exist in map.");
     return;
   }
 

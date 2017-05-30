@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementCriterionJs.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Log.h>
@@ -42,6 +42,9 @@
 
 // Tgs
 #include <tgs/SharedPtr.h>
+
+using namespace std;
+using namespace v8;
 
 namespace hoot
 {
@@ -64,8 +67,8 @@ Handle<Value> ElementCriterionJs::addCriterion(const Arguments& args) {
   ElementCriterionPtr other = ObjectWrap::Unwrap<ElementCriterionJs>(args[0]->ToObject())->
       getCriterion();
 
-  shared_ptr<ElementCriterionConsumer> consumer =
-      dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
+  boost::shared_ptr<ElementCriterionConsumer> consumer =
+    boost::dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
 
   if (!consumer)
   {

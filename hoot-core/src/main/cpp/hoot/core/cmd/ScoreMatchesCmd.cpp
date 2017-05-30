@@ -26,8 +26,8 @@
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -43,6 +43,7 @@
 // tgs
 #include <tgs/Optimization/NelderMead.h>
 
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -57,13 +58,13 @@ public:
 
   ScoreMatchesCmd() { }
 
-//  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, shared_ptr<MatchThreshold> mt,
+//  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, boost::shared_ptr<MatchThreshold> mt,
 //    bool showConfusion, double& score)
 //  {
 //    return evaluateThreshold(maps, output, mt, showConfusion, score, -1);
 //  }
 
-  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, shared_ptr<MatchThreshold> mt,
+  QString evaluateThreshold(vector<OsmMapPtr> maps, QString output, boost::shared_ptr<MatchThreshold> mt,
     bool showConfusion, double& score/*, long numManualMatches*/)
   {
     MatchComparator comparator;
@@ -122,7 +123,7 @@ public:
     virtual double f(Tgs::Vector v)
     {
       double score;
-      shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
+      boost::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
       _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score/*, -1*/);
       return score;
     }
@@ -190,11 +191,11 @@ public:
     vector<OsmMapPtr> maps;
     QString output = args.last();
     //for calculating the actual number of manual matches made
-    //shared_ptr<OsmMap> ref2Map(new OsmMap());
+    //OsmMapPtr ref2Map(new OsmMap());
 
     for (int i = 0; i < args.size() - 1; i+=2)
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       loadMap(map, args[i], false, Status::Unknown1);
       loadMap(map, args[i + 1], false, Status::Unknown2);
       //loadMap(ref2Map, args[i + 1], false, Status::Unknown2);
@@ -208,7 +209,7 @@ public:
               .arg(MetadataTags::Ref2()));
       }
 
-      shared_ptr<OsmMap> mapCopy(map);
+      OsmMapPtr mapCopy(map);
       MapProjector::projectToWgs84(mapCopy);
       OsmUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
 
@@ -218,12 +219,12 @@ public:
 
     //This logic is oddly affecting some test scores.  Since this isn't a critical feature,
     //disabling it for now.  #1185 created to fix it.
-    //shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(new CountManualMatchesVisitor());
+    //boost::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(new CountManualMatchesVisitor());
     //ref2Map->visitRo(*manualMatchVisitor);
     //const long numManualMatches = manualMatchVisitor->getStat();
 
     LOG_VARD(maps.size());
-    shared_ptr<OsmMap> mapCopy(maps[0]);
+    OsmMapPtr mapCopy(maps[0]);
     MapProjector::projectToWgs84(mapCopy);
     OsmUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 
@@ -234,7 +235,7 @@ public:
     else
     {
       double score;
-      shared_ptr<MatchThreshold> mt;
+      boost::shared_ptr<MatchThreshold> mt;
       QString result = evaluateThreshold(maps, output, mt, showConfusion, score/*, numManualMatches*/);
 
       cout << result;

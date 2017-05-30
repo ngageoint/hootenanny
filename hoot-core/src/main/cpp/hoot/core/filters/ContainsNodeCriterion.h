@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONTAINSNODECRITERION_H
 #define CONTAINSNODECRITERION_H
@@ -43,14 +43,14 @@ public:
 
   ContainsNodeCriterion() {}
 
-  static string className() { return "hoot::ContainsNodeCriterion"; }
+  static std::string className() { return "hoot::ContainsNodeCriterion"; }
 
   explicit ContainsNodeCriterion(long nodeId): _nodeId(nodeId)
   {
     // This space intentionally left blank
   }
 
-  bool isSatisfied(const shared_ptr<const Element>& e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   ContainsNodeCriterion* clone() { return new ContainsNodeCriterion(_nodeId); }
 

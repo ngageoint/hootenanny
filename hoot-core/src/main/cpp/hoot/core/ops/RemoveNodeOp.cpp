@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveNodeOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -50,15 +52,15 @@ RemoveNodeOp::RemoveNodeOp(long nId, bool doCheck, bool removeFully):
 {
 }
 
-void RemoveNodeOp::_removeNodeNoCheck(shared_ptr<OsmMap>& map, long nId)
+void RemoveNodeOp::_removeNodeNoCheck(OsmMapPtr& map, long nId)
 {
   map->_index->removeNode(map->getNode(_nodeIdToRemove));
   map->_nodes.erase(nId);
 }
 
-void RemoveNodeOp::_removeNode(shared_ptr<OsmMap>& map, long nId)
+void RemoveNodeOp::_removeNode(OsmMapPtr& map, long nId)
 {
-  const shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
+  const boost::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long>& ways = n2w->getWaysByNode(nId);
   if (ways.size() > 0)
   {
@@ -67,7 +69,7 @@ void RemoveNodeOp::_removeNode(shared_ptr<OsmMap>& map, long nId)
   _removeNodeNoCheck(map, nId);
 }
 
-void RemoveNodeOp::_removeNodeFully(shared_ptr<OsmMap>& map, long nId)
+void RemoveNodeOp::_removeNodeFully(OsmMapPtr& map, long nId)
 {
   // copy the set because we may modify it later.
   set<long> rid = map->getIndex().getElementToRelationMap()->
@@ -78,7 +80,7 @@ void RemoveNodeOp::_removeNodeFully(shared_ptr<OsmMap>& map, long nId)
     map->getRelation(*it)->removeElement(ElementId::node(nId));
   }
 
-  const shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
+  const boost::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long> ways = n2w->getWaysByNode(nId);
 
   for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -91,7 +93,7 @@ void RemoveNodeOp::_removeNodeFully(shared_ptr<OsmMap>& map, long nId)
   VALIDATE(map->validate());
 }
 
-void RemoveNodeOp::apply(shared_ptr<OsmMap>& map)
+void RemoveNodeOp::apply(OsmMapPtr& map)
 {
   if (_removeFully)
     _removeNodeFully(map, _nodeIdToRemove);

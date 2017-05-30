@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMerger.h"
 
@@ -33,6 +33,8 @@
 #include <hoot/core/util/Log.h>
 
 #include "PoiPolygonMatch.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -45,8 +47,7 @@ _pairs(pairs)
   assert(_pairs.size() >= 1);
 }
 
-void PoiPolygonMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   ////
   /// See "Hootenanny - POI to Building" powerpoint for more details.
@@ -245,8 +246,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   int poiCount = 0;
   ElementId poiElementId;
   Status poiStatus;
-  NodeMap::const_iterator nodeItr = map->getNodeMap().begin();
-  while (nodeItr != map->getNodeMap().end())
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
   {
     const int nodeId = nodeItr->first;
     NodePtr node = map->getNode(nodeId);
@@ -262,7 +263,6 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
       poiElementId = ElementId::node(nodeId);
       poiCount++;
     }
-    nodeItr++;
   }
   if (poiCount == 0)
   {
@@ -275,8 +275,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
 
   int polyCount = 0;
   ElementId polyElementId;
-  WayMap::const_iterator wayItr = map->getWays().begin();
-  while (wayItr != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const int wayId = wayItr->first;
     WayPtr way = map->getWay(wayId);
@@ -297,12 +297,11 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
       polyElementId = ElementId::way(wayId);
       polyCount++;
     }
-    wayItr++;
   }
   if (polyElementId.isNull())
   {
-    RelationMap::const_iterator relItr = map->getRelationMap().begin();
-    while (relItr != map->getRelationMap().end())
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
     {
       const int relationId = relItr->first;
       RelationPtr relation = map->getRelation(relationId);
@@ -323,7 +322,6 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
         polyElementId = ElementId::relation(relationId);
         polyCount++;
       }
-      relItr++;
     }
   }
   if (polyCount == 0)

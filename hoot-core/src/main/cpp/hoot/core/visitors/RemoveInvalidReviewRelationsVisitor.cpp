@@ -29,7 +29,7 @@
 
 //hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -51,9 +51,9 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
     assert(r != 0);
 
     LOG_VART(r->getId());
-    bool invalidRelation = false;
-    if (r->getType() == Relation::REVIEW)
+    if (r->getType() == MetadataTags::RelationReview())
     {
+      bool invalidRelation = false;
       const bool hasMemberCountTag = r->getTags().contains(MetadataTags::HootReviewMembers());
       if (hasMemberCountTag &&
           (int)r->getMembers().size() != r->getTags().get(MetadataTags::HootReviewMembers()).toInt())

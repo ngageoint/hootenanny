@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IMPLIEDDIVIDEDMARKER_H
 #define IMPLIEDDIVIDEDMARKER_H
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 // Standard
@@ -41,11 +41,10 @@
 
 namespace hoot
 {
-  using namespace std;
 
-  class NodeToWayMap;
-  class OsmMap;
-  class Way;
+class NodeToWayMap;
+class OsmMap;
+class Way;
 
 /**
  * Locates sections that implicitly appear to be divided highways. Primarily this is bridges and
@@ -56,31 +55,31 @@ class ImpliedDividedMarker : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::ImpliedDividedMarker"; }
+  static std::string className() { return "hoot::ImpliedDividedMarker"; }
 
   ImpliedDividedMarker();
 
-  ImpliedDividedMarker(shared_ptr<const OsmMap> map);
+  ImpliedDividedMarker(boost::shared_ptr<const OsmMap> map);
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static shared_ptr<OsmMap> markDivided(shared_ptr<const OsmMap> map);
+  static boost::shared_ptr<OsmMap> markDivided(boost::shared_ptr<const OsmMap> map);
 
-  shared_ptr<OsmMap> markDivided();
+  boost::shared_ptr<OsmMap> markDivided();
 
 protected:
 
-  shared_ptr<const OsmMap> _inputMap;
-  shared_ptr<OsmMap> _result;
-  shared_ptr<NodeToWayMap> _n2w;
+  boost::shared_ptr<const OsmMap> _inputMap;
+  boost::shared_ptr<OsmMap> _result;
+  boost::shared_ptr<NodeToWayMap> _n2w;
 
   /**
    * Returns true if the given way has a divider highway connected on both ends.
    */
-  bool _dividerSandwhich(shared_ptr<Way> w);
+  bool _dividerSandwhich(boost::shared_ptr<Way> w);
 
   bool _hasDividerConnected(long nodeId, long excludedWayId);
 };

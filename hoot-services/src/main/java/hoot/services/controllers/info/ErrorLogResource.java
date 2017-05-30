@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
@@ -143,7 +143,6 @@ public class ErrorLogResource {
     }
 
     private String generateExportLog() throws IOException {
-        UUID uuid = UUID.randomUUID();
 
         VersionInfo versionInfo = this.aboutResource.getCoreVersionInfo();
         String data = System.lineSeparator() + "************ CORE VERSION INFO ***********" + System.lineSeparator();
@@ -165,10 +164,11 @@ public class ErrorLogResource {
 
         String logStr = getErrorLog(maxSize);
 
-        String outputPath = TEMP_OUTPUT_PATH + File.separator + uuid;
-        try (RandomAccessFile raf = new RandomAccessFile(outputPath, "rw")) {
+        UUID uuid = UUID.randomUUID();
+        File output = new File(TEMP_OUTPUT_PATH, uuid.toString());
+        try (RandomAccessFile raf = new RandomAccessFile(output, "rw")) {
             raf.writeBytes(data + System.lineSeparator() + logStr);
-            return outputPath;
+            return output.getAbsolutePath();
         }
     }
 }

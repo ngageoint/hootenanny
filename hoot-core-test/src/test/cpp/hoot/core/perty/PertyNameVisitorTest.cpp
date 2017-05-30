@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -62,7 +62,7 @@ public:
   void runBasicTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "strange test";
     n1->getTags()["name:ru"] = QString::fromUtf8("странное испытание");

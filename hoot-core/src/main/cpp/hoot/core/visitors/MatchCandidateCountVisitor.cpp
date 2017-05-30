@@ -22,29 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchCandidateCountVisitor.h"
 
 #include <hoot/core/conflate/MatchCreator.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
-  const vector< shared_ptr<MatchCreator> >& matchCreators) :
+  const vector<boost::shared_ptr<MatchCreator> >& matchCreators) :
 _candidateCount(0)
 {
   _setupCreators(matchCreators);
 }
 
-void MatchCandidateCountVisitor::_setupCreators(const vector< shared_ptr<MatchCreator> >& matchCreators)
+void MatchCandidateCountVisitor::_setupCreators(const vector<boost::shared_ptr<MatchCreator> >& matchCreators)
 {
   LOG_VARD(matchCreators.size());
   for (size_t i = 0; i < matchCreators.size(); i++)
   {
-    shared_ptr<MatchCreator> matchCreator = matchCreators[i];
+    boost::shared_ptr<MatchCreator> matchCreator = matchCreators[i];
     QString matchCreatorName;
     const QString matchCreatorDescription = matchCreator->getDescription();
     if (matchCreatorDescription.isEmpty())
@@ -61,14 +63,14 @@ void MatchCandidateCountVisitor::_setupCreators(const vector< shared_ptr<MatchCr
   LOG_VART(_matchCreatorsByName.size());
 }
 
-void MatchCandidateCountVisitor::visit(const shared_ptr<const Element>& e)
+void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
-  for (QMap<QString, shared_ptr<MatchCreator> >::const_iterator iterator = _matchCreatorsByName.begin();
+  for (QMap<QString, boost::shared_ptr<MatchCreator> >::const_iterator iterator = _matchCreatorsByName.begin();
        iterator != _matchCreatorsByName.end(); ++iterator)
   {
     const QString matchCreatorName = iterator.key();
     LOG_VART(matchCreatorName);
-    shared_ptr<MatchCreator> matchCreator = iterator.value();
+    boost::shared_ptr<MatchCreator> matchCreator = iterator.value();
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
       LOG_TRACE("is match candidate");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNKNOWNCRITERION_H
@@ -43,9 +43,9 @@ public:
 
   UnknownCriterion() {}
 
-  static string className() { return "hoot::UnknownCriterion"; }
+  static std::string className() { return "hoot::UnknownCriterion"; }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   UnknownCriterion* clone() { return new UnknownCriterion(); }
 };

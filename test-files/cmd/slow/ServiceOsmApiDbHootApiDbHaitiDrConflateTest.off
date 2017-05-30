@@ -1,3 +1,0 @@
-#!/bin/bash
-
-test-files/cmd/slow/ServiceOsmApiDbHootApiDbConflate.off tmp/haiti-and-domrep-latest.osm.pbf tmp/PapMgcpClip.osm -72.4987792839,18.5317003042,-72.4932861198,18.5369085571 ServiceOsmApiDbHootApiDbHaitiDrConflateTest

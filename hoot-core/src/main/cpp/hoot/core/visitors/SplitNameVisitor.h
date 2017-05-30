@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPLITNAMEVISITOR_H
 #define SPLITNAMEVISITOR_H
@@ -40,13 +40,13 @@ class SplitNameVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::SplitNameVisitor"; }
+  static std::string className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
 
   void setMaxSize(int s) { _maxSize = s; }
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYMATCHCREATOR_H
 #define HIGHWAYMATCHCREATOR_H
@@ -39,14 +39,12 @@ class SublineStringMatcher;
 class NotImplementedException;
 class TagAncestorDifferencer;
 
-using namespace Tgs;
-
 class HighwayMatchCreator : public MatchCreator
 {
 
 public:
 
-  static string className() { return "hoot::HighwayMatchCreator"; }
+  static std::string className() { return "hoot::HighwayMatchCreator"; }
 
   HighwayMatchCreator();
 
@@ -58,10 +56,10 @@ public:
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -72,14 +70,14 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 
-  virtual shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 
 private:
 
-  shared_ptr<HighwayClassifier> _classifier;
-  shared_ptr<SublineStringMatcher> _sublineMatcher;
-  shared_ptr<MatchThreshold> _matchThreshold;
-  shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+  boost::shared_ptr<HighwayClassifier> _classifier;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<MatchThreshold> _matchThreshold;
+  boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
 };
 
 }

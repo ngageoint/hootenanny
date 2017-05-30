@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_SUBLINE_MATCH_STRING_JS_H__
 #define __WAY_SUBLINE_MATCH_STRING_JS_H__
@@ -41,8 +41,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -56,7 +54,7 @@ public:
 
   WaySublineMatchStringPtr getWaySublineMatchString() { return _sm; }
 
-  static Handle<Object> New(WaySublineMatchStringPtr sm);
+  static v8::Handle<v8::Object> New(WaySublineMatchStringPtr sm);
 
 private:
   WaySublineMatchStringJs(ConstNodePtr n);
@@ -66,9 +64,9 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   WaySublineMatchStringPtr _sm;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
-  static Handle<Value> toString(const Arguments& args);
+  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSUBLINECOLLECTION_H
 #define WAYSUBLINECOLLECTION_H
@@ -31,7 +31,7 @@
 #include <vector>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include "WaySubline.h"
 
 // Qt
@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Contains a continuous collection of ways. Each way subline must touch the next subline end to
@@ -49,7 +48,7 @@ class WaySublineCollection
 {
 public:
 
-  typedef vector<WaySubline> SublineCollection;
+  typedef std::vector<WaySubline> SublineCollection;
 
   WaySublineCollection();
 

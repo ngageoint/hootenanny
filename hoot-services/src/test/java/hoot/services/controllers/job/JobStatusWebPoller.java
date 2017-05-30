@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
-import static hoot.services.HootProperties.TEST_JOB_STATUS_POLLER_TIMEOUT;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Connection;
@@ -42,8 +41,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.springframework.beans.BeansException;
 
-import hoot.services.controllers.job.JobStatusManager.JOB_STATUS;
-import hoot.services.models.db.JobStatus;
+import hoot.services.job.JobStatus;
 import hoot.services.models.db.QJobStatus;
 
 
@@ -61,9 +59,13 @@ public class JobStatusWebPoller {
         this.conn = conn;
 
         // increase this to something long when debugging in debugger to the
-        // poller from polling and changing
-        // program flow while you're trying to debug service code
-        this.jobStatusPollDelayMs = Integer.parseInt(TEST_JOB_STATUS_POLLER_TIMEOUT);
+        // poller from polling and changing program flow while you're trying to debug service code.
+        // Amount of time in ms the job status polling class used only in test code waits before attempting
+        // to determine the status of a running job; 250 is a good value for development environments and
+        // prevents the services tests from taking a long time to run; may need to increase to as much as
+        // 2000 or more in some continuous integration environments where postgres seems to respond more
+        // slowly to queries
+        this.jobStatusPollDelayMs = 250;
     }
 
     /**
@@ -74,11 +76,11 @@ public class JobStatusWebPoller {
      * @return a hoot job status
      * @throws ParseException
      */
-    private JOB_STATUS pollJobStatus(String jobId) throws ParseException {
+    private JobStatus pollJobStatus(String jobId) throws ParseException {
         String response = webTarget.path("status/" + jobId).request(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject responseObj = (JSONObject) (new JSONParser()).parse(response);
         assert (responseObj.get("jobId").equals(jobId));
-        return JOB_STATUS.valueOf(((String) responseObj.get("status")).toUpperCase());
+        return JobStatus.valueOf(((String) responseObj.get("status")).toUpperCase());
     }
 
     /**
@@ -109,14 +111,14 @@ public class JobStatusWebPoller {
      * @throws BeansException
      */
     public void pollJobStatusUntilCompleteOrFail(String jobId, boolean jobShouldFail) throws Exception {
-        JOB_STATUS jobStatus = JOB_STATUS.UNKNOWN;
-        while ((jobStatus == JOB_STATUS.UNKNOWN) || (jobStatus == JOB_STATUS.RUNNING)) {
+        JobStatus jobStatus = JobStatus.UNKNOWN;
+        while ((jobStatus == JobStatus.UNKNOWN) || (jobStatus == JobStatus.RUNNING)) {
             Thread.sleep(jobStatusPollDelayMs);
             JSONObject jobStatusObj = pollJobStatusObj(jobId);
-            jobStatus = JOB_STATUS.valueOf(((String) jobStatusObj.get("status")).toUpperCase());
-            if (jobStatus == JOB_STATUS.FAILED) {
+            jobStatus = JobStatus.valueOf(((String) jobStatusObj.get("status")).toUpperCase());
+            if (jobStatus == JobStatus.FAILED) {
                 if (jobShouldFail) {
-                    verifyJobStatusInDb(jobId, JOB_STATUS.FAILED);
+                    verifyJobStatusInDb(jobId, JobStatus.FAILED);
                 }
                 else {
                     Assert.fail("Job failed: " + jobStatusObj.get("statusDetail"));
@@ -124,8 +126,8 @@ public class JobStatusWebPoller {
             }
         }
         if (!jobShouldFail) {
-            Assert.assertEquals(JOB_STATUS.COMPLETE, jobStatus);
-            verifyJobStatusInDb(jobId, JOB_STATUS.COMPLETE);
+            Assert.assertEquals(JobStatus.COMPLETE, jobStatus);
+            verifyJobStatusInDb(jobId, JobStatus.COMPLETE);
         }
     }
 
@@ -141,9 +143,9 @@ public class JobStatusWebPoller {
      * @param status
      *            status the job should have in the database
      */
-    private void verifyJobStatusInDb(String jobId, JOB_STATUS status) {
+    private void verifyJobStatusInDb(String jobId, JobStatus status) {
         QJobStatus jobStatus = QJobStatus.jobStatus;
-        JobStatus finalJobStatus = createQuery()
+        hoot.services.models.db.JobStatus finalJobStatus = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
                 .where(jobStatus.jobId.eq(jobId))

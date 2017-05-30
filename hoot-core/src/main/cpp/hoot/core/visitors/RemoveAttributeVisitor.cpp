@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveAttributeVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementAttributeType.h>
@@ -62,7 +62,7 @@ void RemoveAttributeVisitor::setTypes(const QStringList& types)
   }
 }
 
-void RemoveAttributeVisitor::visit(const shared_ptr<Element>& e)
+void RemoveAttributeVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   //see extensibility issue comments in ElementAttributeType
   for (int i = 0; i < _types.length(); i++)

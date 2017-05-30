@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -62,7 +62,7 @@ public:
 
   void runBasicTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MaxX = 1;
@@ -88,11 +88,9 @@ public:
     uut.apply(map);
 
     QSet<long> nids;
-    NodeMap::const_iterator it = map->getNodeMap().begin();
-    while (it != map->getNodeMap().end()) {
+    const NodeMap& nodes = map->getNodes();
+    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
       nids.insert(it->first);
-      it++;
-    }
     QList<long> keys = QList<long>::fromSet(nids);
 
     qSort(keys);

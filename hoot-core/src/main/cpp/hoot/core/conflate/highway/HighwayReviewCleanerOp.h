@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYREVIEWCLEANEROP_H
 #define HIGHWAYREVIEWCLEANEROP_H
@@ -45,17 +45,17 @@ class HighwayReviewCleanerOp : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::HighwayReviewCleanerOp"; }
+  static std::string className() { return "hoot::HighwayReviewCleanerOp"; }
 
   HighwayReviewCleanerOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual QString toString() const { return QString::fromStdString(className()); }
 
 private:
 
-  bool _isBadHighwayReview(shared_ptr<OsmMap>& map, ReviewMarker::ReviewUid review);
+  bool _isBadHighwayReview(OsmMapPtr& map, ReviewMarker::ReviewUid review);
 };
 
 }

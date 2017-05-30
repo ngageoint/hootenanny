@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMERGERCREATOR_H
 #define NETWORKMERGERCREATOR_H
@@ -40,16 +40,16 @@ class NetworkMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::NetworkMergerCreator"; }
+  static std::string className() { return "hoot::NetworkMergerCreator"; }
 
   NetworkMergerCreator();
 
   /**
    *
    */
-  virtual bool createMergers(const MatchSet& matches, vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 

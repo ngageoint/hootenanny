@@ -8,7 +8,7 @@ export INPUT="Ex Ren Db"
 export AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD
 export DB_URL=hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
-export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com -D hootapi.db.writer.overwrite.map=true -D writer.include.debug=true --warn"
+export HOOT_OPTS="-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true --warn"
 
 # Ingest the data
 hoot --convert $HOOT_OPTS test-files/ExRenDb.osm "$DB_URL/$INPUT"
@@ -23,7 +23,7 @@ dropdb $AUTH $RENDER_DB &>/dev/null || true
 # to test the streaming reader to ogr writer
 # with data that generated the error:
 # Relation element did not exist in cache
-scripts/services/exportrenderdb.sh # || true # Don't error out so test will continue to clean up
+scripts/services/exportrenderdb.sh $MAP_ID $DB_URL # || true # Don't error out so test will continue to clean up
 
 # Clean up
 hoot delete-map $HOOT_OPTS "$DB_URL/$INPUT"

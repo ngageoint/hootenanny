@@ -47,7 +47,7 @@ using namespace boost;
 #include <geos/geom/Point.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -74,7 +74,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/BuildingPartMergeOp/ToyBuildings.osm", map);

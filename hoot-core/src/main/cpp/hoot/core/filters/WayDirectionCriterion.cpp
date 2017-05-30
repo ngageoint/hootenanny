@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayDirectionCriterion.h"
@@ -32,7 +32,7 @@ namespace hoot
 {
 
 WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
-                                             shared_ptr<const Way> baseWay,
+                                             ConstWayPtr baseWay,
                                              bool similarDirection) :
   _map(map),
   _baseWay(baseWay),
@@ -41,12 +41,12 @@ WayDirectionCriterion::WayDirectionCriterion(const ConstOsmMapPtr& map,
   // Blank
 }
 
-bool WayDirectionCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool WayDirectionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   if (e->getElementType() != ElementType::Way)
     return false;
 
-  ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
   return DirectionFinder::isSimilarDirection(_map, _baseWay, w) == _similarDirection;
 }
 

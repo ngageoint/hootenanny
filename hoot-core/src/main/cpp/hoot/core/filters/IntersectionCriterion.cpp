@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IntersectionCriterion.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -42,14 +44,14 @@ IntersectionCriterion::IntersectionCriterion(ConstOsmMapPtr map)
   setOsmMap(map.get());
 }
 
-bool IntersectionCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool IntersectionCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   if (e->getElementType() != ElementType::Node)
   {
     return false;
   }
 
-  shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);

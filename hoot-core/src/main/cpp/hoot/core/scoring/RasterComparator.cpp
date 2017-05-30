@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RasterComparator.h"
@@ -31,8 +31,8 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/GeometryPainter.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/GeometryPainter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/OpenCv.h>
@@ -48,10 +48,12 @@
 // TGS
 //using namespace Tgs;
 
+using namespace std;
+
 namespace hoot
 {
 
-RasterComparator::RasterComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2) :
+RasterComparator::RasterComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2) :
       BaseComparator(map1, map2)
 {
 }
@@ -139,7 +141,7 @@ private:
   QMatrix& _m;
 };
 
-void RasterComparator::_renderImage(shared_ptr<OsmMap> map, cv::Mat& image)
+void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& image)
 {
   QImage qImage(_width, _height, QImage::Format_ARGB32);
   QPainter pt(&qImage);

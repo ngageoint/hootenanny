@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIFILTER_H
 #define POIFILTER_H
@@ -39,11 +39,11 @@ namespace hoot
 class PoiCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::PoiCriterion"; }
+  static std::string className() { return "hoot::PoiCriterion"; }
 
   PoiCriterion() {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new PoiCriterion(); }
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -30,14 +30,17 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Settings.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -62,7 +65,7 @@ public:
 
     QString output = args[0];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     for (int i = 1; i < args.size(); i++)
     {
@@ -70,9 +73,9 @@ public:
       loadMap(map, input, false);
     }
 
-    shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     int count = 0;
-    const RelationMap& rm = map->getRelationMap();
+    const RelationMap& rm = map->getRelations();
     for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
     {
       const ConstRelationPtr r = it->second;
@@ -85,7 +88,7 @@ public:
       LOG_INFO("No polygons were found in the input.");
     }
 
-    shared_ptr<OsmMap> result(new OsmMap());
+    OsmMapPtr result(new OsmMap());
     GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
 
     saveMap(result, output);

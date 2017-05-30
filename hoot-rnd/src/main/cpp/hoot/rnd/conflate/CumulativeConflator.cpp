@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CumulativeConflator.h"
@@ -35,7 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 
@@ -47,11 +47,11 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
   assert(inputs.size() >= 3);
 
   //for NoInformationElementRemover
-  if (ConfigOptions().getReviewTagsTreatAsMetadata())
+  if (ConfigOptions().getWriterCleanReviewTags())
   {
     throw HootException(
-      "Multi-conflation must be run with " + ConfigOptions::getReviewTagsTreatAsMetadataKey() +
-      "=false");
+      "Multi-conflation must be run with " +
+      ConfigOptions::getWriterCleanReviewTagsKey() + "=false");
   }
 
   //for TagMergerFactory
@@ -70,7 +70,8 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
     if (i == 0)
     {
       OsmMapReaderFactory::read(
-        cumulativeMap, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
+        cumulativeMap, inputs[i], ConfigOptions().getReaderConflateUseDataSourceIds1(),
+        Status::Unknown1);
 
       //keep a source tag history on the data for provenance; append to any existing source values
       //(this shouldn't be added to any review relations)
@@ -94,7 +95,8 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
 
       OsmMapPtr unknown2Map(new OsmMap());
       OsmMapReaderFactory::read(
-        unknown2Map, inputs[i], ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+        unknown2Map, inputs[i], ConfigOptions().getReaderConflateUseDataSourceIds2(),
+        Status::Unknown2);
       MapProjector::projectToWgs84(unknown2Map);
 
       //Same as above, but do this before combining the cumulative map with the unknown2 map to
@@ -115,7 +117,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
       if (reviewCache.get() && reviewCache->getElementCount() > 0)
       {
         LOG_DEBUG("Adding previous reviews...");
-        const RelationMap& reviews = reviewCache->getRelationMap();
+        const RelationMap& reviews = reviewCache->getRelations();
         for (RelationMap::const_iterator it = reviews.begin(); it != reviews.end(); ++it)
         {
           RelationPtr review = it->second;
@@ -140,7 +142,7 @@ void CumulativeConflator::conflate(const QStringList inputs, const QString outpu
         //features.
         LOG_DEBUG("Setting status tags for map " << QString::number(i + 1) << "...");
         SetTagVisitor statusTagVisitor(
-          "hoot:status", QString("%1").arg(Status(Status::Unknown1).getEnum()));
+          MetadataTags::HootStatus(), QString("%1").arg(Status(Status::Unknown1).getEnum()));
         cumulativeMap->visitRw(statusTagVisitor);
       }
 

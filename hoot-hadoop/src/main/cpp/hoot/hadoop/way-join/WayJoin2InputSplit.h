@@ -29,8 +29,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
 
 class WayJoin2InputSplit : public pp::InputSplit
 {
@@ -42,7 +40,7 @@ public:
     FileInputSplitType = 1
   };
 
-  static string className() { return "hoot::WayJoin2InputSplit"; }
+  static std::string className() { return "hoot::WayJoin2InputSplit"; }
 
   WayJoin2InputSplit();
 
@@ -56,7 +54,7 @@ public:
 
   virtual const std::string& getPath() const;
 
-  shared_ptr<const InputSplit> getChildSplit() const { return _childSplit; }
+  boost::shared_ptr<const InputSplit> getChildSplit() const { return _childSplit; }
 
   virtual long long getStart() const;
 
@@ -65,7 +63,7 @@ public:
   /**
    * Sets the child split. This object takes ownership of the split.
    */
-  void setSplit(shared_ptr<InputSplit> split);
+  void setSplit(boost::shared_ptr<InputSplit> split);
 
   /**
    * Return a newly allocated array, caller owns it. The size of the array should be put in
@@ -78,7 +76,7 @@ private:
   /**
    * Contains the "real" split data.
    */
-  shared_ptr<InputSplit> _childSplit;
+  boost::shared_ptr<InputSplit> _childSplit;
   char _type;
 };
 

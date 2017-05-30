@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WORDCOUNTWRITER_H
@@ -73,9 +73,8 @@ public:
   void write(QString basePath, QVector<WordCount> words);
 
 private:
-  long _maxFrequent;
 
-  void _exec(QSqlDatabase& db, QString sql);
+  long _maxFrequent;
 
   void _writeFile(QString path, long totalCount, QVector<WordCount> words, long maxSize);
 };

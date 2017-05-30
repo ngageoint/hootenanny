@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LARGEWAYSPLITTER_H
@@ -36,8 +36,6 @@
 
 namespace hoot
 {
-
-using namespace boost;
 
 class OsmMap;
 class Way;
@@ -57,21 +55,21 @@ public:
 
   LargeWaySplitter(double threshold);
 
-  void apply(shared_ptr<OsmMap> map);
+  void apply(boost::shared_ptr<OsmMap> map);
 
   /**
    * Split large ways into smaller ways.
    * @param threshold - The threshold length. This projection units.
    */
-  static void splitWays(shared_ptr<OsmMap> map, double threshold);
+  static void splitWays(boost::shared_ptr<OsmMap> map, double threshold);
 
 protected:
 
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
   double _threshold;
 
-  void _divideWay(shared_ptr<Way> way, int numPieces);
+  void _divideWay(boost::shared_ptr<Way> way, int numPieces);
 };
 
 }

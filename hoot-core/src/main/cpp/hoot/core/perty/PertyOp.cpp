@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -45,6 +45,9 @@
 
 //Qt
 #include <QVector>
+
+using namespace cv;
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -76,7 +79,7 @@ public:
     }
   }
 
-  virtual void visit(const shared_ptr<Element>&) {}
+  virtual void visit(const boost::shared_ptr<Element>&) {}
 
   /**
    * User barycentric interpolation to determine the shift at a given point.
@@ -205,7 +208,7 @@ QString PertyOp::toString()
   return str;
 }
 
-void PertyOp::apply(shared_ptr<OsmMap>& map)
+void PertyOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   // permute the data first
   permute(map);
@@ -238,10 +241,10 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
   return _gridCalculator->permute(env, rows, cols);
 }
 
-shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
+boost::shared_ptr<OsmMap> PertyOp::generateDebugMap(boost::shared_ptr<OsmMap>& map)
 {
   MapProjector::projectToPlanar(map);
-  shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
+ boost::shared_ptr<OsmMap> result(new OsmMap(map->getProjection()));
 
   LOG_INFO(toString());
 
@@ -268,12 +271,12 @@ shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
       double dy = EX.at<double>((i * cols + j) * 2 + 1, 0);
       dSum += sqrt(dx * dx + dy * dy);
 
-      shared_ptr<Node> n1(new Node(Status::Unknown1, result->createNextNodeId(), x, y, 5));
-      shared_ptr<Node> n2(new Node(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5));
+     NodePtr n1(new Node(Status::Unknown1, result->createNextNodeId(), x, y, 5));
+     NodePtr n2(new Node(Status::Unknown1, result->createNextNodeId(), x + dx, y + dy, 5));
       result->addNode(n1);
       result->addNode(n2);
 
-      shared_ptr<Way> w(new Way(Status::Unknown1, result->createNextWayId(), 5.0));
+     WayPtr w(new Way(Status::Unknown1, result->createNextWayId(), 5.0));
       w->addNode(n1->getId());
       w->addNode(n2->getId());
       w->getTags().addNote(QString("r: %1 c: %2").arg(i).arg(j));
@@ -285,7 +288,7 @@ shared_ptr<OsmMap> PertyOp::generateDebugMap(shared_ptr<OsmMap>& map)
   return result;
 }
 
-void PertyOp::permute(const shared_ptr<OsmMap> &map)
+void PertyOp::permute(const boost::shared_ptr<OsmMap> &map)
 {
   MapProjector::projectToPlanar(map);
 

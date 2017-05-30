@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMATCHSTRINGSPLITTER_H
 #define WAYMATCHSTRINGSPLITTER_H
@@ -41,7 +41,7 @@ public:
    * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
    * place.
    */
-  void applySplits(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
+  void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings) throw (NeedsReviewException);
 
 private:
@@ -54,9 +54,9 @@ private:
 
   /// @todo there is probably a clever way to make these two functions a single funtion that takes
   /// function pointers or similar
-  void _splitWay1(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
+  void _splitWay1(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
-  void _splitWay2(OsmMapPtr map, vector<pair<ElementId, ElementId> > &replaced,
+  void _splitWay2(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId> > &replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 };
 

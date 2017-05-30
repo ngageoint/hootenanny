@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <boost/shared_ptr.hpp>
 #include <hoot/core/io/ElementInputStream.h>
@@ -34,7 +34,7 @@ namespace hoot
 {
 
 ElementVisitorInputStream::ElementVisitorInputStream(
-    const shared_ptr<ElementInputStream>& elementSource, const shared_ptr<ElementVisitor>& visitor) :
+    const boost::shared_ptr<ElementInputStream>& elementSource, const boost::shared_ptr<ElementVisitor>& visitor) :
 _elementSource(elementSource),
 _visitor(visitor)
 {

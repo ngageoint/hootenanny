@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODEMATCHER_H
 #define NODEMATCHER_H
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -43,9 +43,6 @@ namespace hoot
 
 class OsmMap;
 class ElementId;
-
-using namespace std;
-using namespace boost;
 
 class NodeMatcher
 {
@@ -72,7 +69,7 @@ public:
    */
   double scorePair(long nid1, long nid2);
 
-  void setMap(const shared_ptr<const OsmMap>& map) { _map = map; }
+  void setMap(const boost::shared_ptr<const OsmMap>& map) { _map = map; }
 
   /**
    * Calculates the outbound heading for an node that intersects the given wids. The nid must be
@@ -82,22 +79,22 @@ public:
    * If the node is both a start and end node then two entries will be made in the resulting vector.
    * First the start, then the end node.
    */
-  static vector<Radians> calculateAngles(const OsmMap* map, long nid, const set<long>& wids,
+  static std::vector<Radians> calculateAngles(const OsmMap* map, long nid, const std::set<long>& wids,
     Meters delta = 0.001);
 
 private:
 
-  shared_ptr<const OsmMap> _map;
+  boost::shared_ptr<const OsmMap> _map;
 
   double _strictness;
 
 
-  double _calculateAngleScore(const vector<Radians>& theta1, const vector<Radians>& theta2,
-    vector<bool>& exclude, size_t depth, bool debug = false);
+  double _calculateAngleScore(const std::vector<Radians>& theta1, const std::vector<Radians>& theta2,
+    std::vector<bool>& exclude, size_t depth, bool debug = false);
 };
 
-typedef shared_ptr<NodeMatcher> NodeMatcherPtr;
-typedef shared_ptr<const NodeMatcher> ConstNodeMatcherPtr;
+typedef boost::shared_ptr<NodeMatcher> NodeMatcherPtr;
+typedef boost::shared_ptr<const NodeMatcher> ConstNodeMatcherPtr;
 
 }
 

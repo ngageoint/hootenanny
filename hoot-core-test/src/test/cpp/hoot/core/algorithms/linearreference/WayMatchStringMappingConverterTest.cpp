@@ -49,7 +49,7 @@ public:
   {
     TestUtils::resetEnvironment();
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     NodePtr n1a = TestUtils::createNode(map, Status::Unknown1, 0, 0);
     NodePtr n1b = TestUtils::createNode(map, Status::Unknown1, 100, 0);

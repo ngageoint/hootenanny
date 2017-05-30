@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/SingleStatistic.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -37,7 +39,7 @@ CalculateMapBoundsVisitor::CalculateMapBoundsVisitor():
 {
 }
 
-void CalculateMapBoundsVisitor::visit(const shared_ptr<const Element>& e)
+void CalculateMapBoundsVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)

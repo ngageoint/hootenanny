@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDNODESVISITOR_H
 #define FINDNODESVISITOR_H
@@ -47,27 +47,27 @@ public:
 
   void setOsmMap(const OsmMap* map) { _map = map; }
 
-  void visit(const shared_ptr<const Element>& e);
+  void visit(const boost::shared_ptr<const Element>& e);
 
   // Get matching IDs
-  vector<long> getIds() { return _nodeIds; }
+  std::vector<long> getIds() { return _nodeIds; }
 
-  static vector<long> findNodes(const ConstOsmMapPtr& map,
-                                ElementCriterion* pCrit);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map,
+                                    ElementCriterion* pCrit);
 
-  static vector<long> findNodes(const ConstOsmMapPtr& map,
-                                ElementCriterion* pCrit,
-                                const Coordinate& refCoord,
-                                Meters maxDistance);
+  static std::vector<long> findNodes(const ConstOsmMapPtr& map,
+                                     ElementCriterion* pCrit,
+                                     const geos::geom::Coordinate& refCoord,
+                                     Meters maxDistance);
 
   // Convenience method for finding nodes that contain the given tag
-  static vector<long> findNodesByTag(const ConstOsmMapPtr& map,
-                                     const QString& key,
-                                     const QString& value);
+  static std::vector<long> findNodesByTag(const ConstOsmMapPtr& map,
+                                          const QString& key,
+                                          const QString& value);
 
 private:
   const OsmMap* _map;
-  vector<long> _nodeIds;
+  std::vector<long> _nodeIds;
   ElementCriterion * _pCrit;
 };
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGERBASE_H
 #define MERGERBASE_H
@@ -37,13 +37,16 @@ class MergerBase : public Merger
 public:
   static std::string className() { return "hoot::MergerBase"; }
 
-  typedef set< pair<ElementId, ElementId> > PairsSet;
+  typedef std::set< std::pair<ElementId, ElementId> > PairsSet;
 
   MergerBase() {}
 
   virtual ~MergerBase() {}
 
-  virtual set<ElementId> getImpactedElementIds() const;
+  virtual std::set<ElementId> getImpactedElementIds() const;
+
+  virtual set< pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
+  {  return set< pair<ElementId, ElementId> >(); }
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 

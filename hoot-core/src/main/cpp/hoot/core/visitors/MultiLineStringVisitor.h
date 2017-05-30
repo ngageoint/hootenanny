@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTILINESTRINGVISITOR_H
 #define MULTILINESTRINGVISITOR_H
@@ -44,9 +44,8 @@
 
 namespace hoot
 {
-class Way;
 
-using namespace std;
+class Way;
 
 /**
  * Creates a multi-linestring out of all ways that are visited. There are no checks to be certain
@@ -55,7 +54,7 @@ using namespace std;
 class MultiLineStringVisitor : public ElementVisitor
 {
 public:
-  static string className() { return "hoot::MultiLineStringVisitor"; }
+  static std::string className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
 
@@ -67,15 +66,15 @@ public:
    * visited and clear any history. If it is called again (without visiting) it will return a valid
    * but empty geometry.
    */
-  MultiLineString* createMultiLineString();
+  geos::geom::MultiLineString* createMultiLineString();
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual void visit(const shared_ptr<const Way>& w);
+  virtual void visit(const ConstWayPtr& w);
 
 protected:
   ConstElementProviderPtr _provider;
-  vector<Geometry*>* _ls;
+  std::vector<geos::geom::Geometry*>* _ls;
 };
 
 }

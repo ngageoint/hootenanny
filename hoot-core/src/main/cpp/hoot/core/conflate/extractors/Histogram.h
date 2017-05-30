@@ -22,21 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // standard
 #include <vector>
 
 // Qt
 #include <QString>
-
-using namespace std;
 
 namespace hoot
 {
@@ -50,7 +48,7 @@ public:
 
   Histogram(int bins);
 
-  const vector<double>& getAllBins() const { return _bins; }
+  const std::vector<double>& getAllBins() const { return _bins; }
 
   void addAngle(Radians theta, double length);
 
@@ -80,7 +78,7 @@ public:
 
 private:
 
-  vector<double> _bins;
+  std::vector<double> _bins;
 
   Radians _getBinAngle(size_t i);
 

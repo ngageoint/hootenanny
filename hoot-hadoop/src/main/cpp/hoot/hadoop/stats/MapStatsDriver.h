@@ -18,7 +18,7 @@
 #define MAPSTATSDRIVER_H
 
 // hoot
-#include <hoot/hadoop/MapStats.h>
+#include <hoot/hadoop/stats/MapStats.h>
 #include <hoot/hadoop/Driver.h>
 
 // Qt

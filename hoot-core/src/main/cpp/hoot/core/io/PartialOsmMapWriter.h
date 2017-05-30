@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALOSMMAPWRITER_H
 #define PARTIALOSMMAPWRITER_H
@@ -42,6 +42,7 @@ class ElementInputStream;
 class PartialOsmMapWriter : public OsmMapWriter, public ElementOutputStream
 {
 public:
+
   PartialOsmMapWriter();
 
   virtual ~PartialOsmMapWriter() {}
@@ -55,7 +56,7 @@ public:
   /**
    * The default writes the map and then calls finalizePartial();
    */
-  virtual void write(boost::shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   /**
    * Write all the entries in the OsmMap to the output. This does not guarantee that all data will
@@ -63,21 +64,21 @@ public:
    *
    * The default write function writes nodes, ways, then relations.
    */
-  virtual void writePartial(const shared_ptr<const Element>& e);
-  virtual void writePartial(const shared_ptr<const OsmMap>& map);
+  virtual void writePartial(const boost::shared_ptr<const Element>& e);
+  virtual void writePartial(const ConstOsmMapPtr& map);
   /**
    * These silly non-const overloads are here to placate the old compiler in RHEL 5.8.
    */
-  void writePartial(const shared_ptr<OsmMap>& map);
+  void writePartial(const OsmMapPtr& map);
 
-  virtual void writePartial(const shared_ptr<const Node>& n) = 0;
-  void writePartial(const shared_ptr<Node>& n) { writePartial((const shared_ptr<const Node>)n); }
+  virtual void writePartial(const ConstNodePtr& n) = 0;
+  void writePartial(const NodePtr& n) { writePartial((const ConstNodePtr)n); }
 
-  virtual void writePartial(const shared_ptr<const Way>& w) = 0;
-  void writePartial(const shared_ptr<Way>& w) { writePartial((const shared_ptr<const Way>)w); }
+  virtual void writePartial(const ConstWayPtr& w) = 0;
+  void writePartial(const WayPtr& w) { writePartial((const ConstWayPtr)w); }
 
-  virtual void writePartial(const shared_ptr<const Relation>& r) = 0;
-  void writePartial(const shared_ptr<Relation>& r);
+  virtual void writePartial(const ConstRelationPtr& r) = 0;
+  void writePartial(const RelationPtr& r);
 
   virtual void writeElement(ElementInputStream& in);
 

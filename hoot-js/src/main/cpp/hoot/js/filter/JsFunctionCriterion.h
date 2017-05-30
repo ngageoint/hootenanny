@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CUSTOMCRITERION_H
@@ -43,20 +43,20 @@ class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
 public:
 
-  static string className() { return "hoot::JsFunctionCriterion"; }
+  static std::string className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() {}
 
-  virtual void addFunction(Persistent<Function> func) { _func = Persistent<Function>(func); }
+  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new JsFunctionCriterion(_func); }
 
 private:
-  JsFunctionCriterion(Persistent<Function> func) { _func = func; }
+  JsFunctionCriterion(v8::Persistent<v8::Function> func) { _func = func; }
 
-  Persistent<Function> _func;
+  v8::Persistent<v8::Function> _func;
 };
 
 }

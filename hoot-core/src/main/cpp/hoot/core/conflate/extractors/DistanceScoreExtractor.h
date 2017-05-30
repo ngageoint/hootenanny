@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DISTANCESCOREEXTRACTOR_H
 #define DISTANCESCOREEXTRACTOR_H
@@ -40,11 +40,11 @@ class DistanceScoreExtractor : public WayFeatureExtractor
 {
 public:
 
-  static string className() { return "hoot::DistanceScoreExtractor"; }
+  static std::string className() { return "hoot::DistanceScoreExtractor"; }
 
   DistanceScoreExtractor(ValueAggregator* wayAgg = 0) : WayFeatureExtractor(wayAgg) {}
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
 protected:
 

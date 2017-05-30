@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BufferedOverlapExtractor.h"
 
@@ -32,10 +32,13 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -51,8 +54,8 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
   const ConstElementPtr& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
   {
@@ -65,7 +68,7 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
     a1 = g1->getArea();
     a2 = g2->getArea();
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));
@@ -82,7 +85,7 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
     g2.reset(g2->buffer(buffer));
     overlap.reset(g1->intersection(g2.get()));
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));

@@ -45,6 +45,8 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -66,7 +68,7 @@ public:
   void runWayWithInfoOneNodeWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -86,7 +88,7 @@ public:
     //No elements should be removed.  Node 2 should not be removed, even though it has no info,
     //since its still owned by the way.
 
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
 
     WayPtr parsedWay = map->getWay(way->getElementId());
@@ -96,7 +98,7 @@ public:
   void runStandAloneNodesWithAndWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node1->getTags().appendValue("hoot:test", "test1");
@@ -110,9 +112,9 @@ public:
 
     //Node 2 has no info and isn't owned by a way, so it should be removed.
 
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
 
-    shared_ptr<const Node> parsedNode1 = map->getNode(node1->getElementId().getId());
+    ConstNodePtr parsedNode1 = map->getNode(node1->getElementId().getId());
     const Tags& node1Tags = parsedNode1->getTags();
     CPPUNIT_ASSERT_EQUAL(2, node1Tags.size());
     CPPUNIT_ASSERT_EQUAL(QString("test1"), node1Tags.get("hoot:test"));
@@ -124,7 +126,7 @@ public:
   void runWayWithoutInfoOneNodeWithInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -143,14 +145,14 @@ public:
     //The way owning both nodes has no info and should be removed.  Since the nodes are not
     //standalone and are part of a way being removed, they should be removed as well.
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
   }
 
   void runWayWithoutInfoAllNodesWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<NodePtr> nodes;
     NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
@@ -167,14 +169,14 @@ public:
 
     //Neither the way or its nodes have info, so all should be removed.
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
   }
 
   void runRelationWithInfoOneElementWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 
@@ -208,15 +210,15 @@ public:
     //No elements should be removed.  The node 1 and way 2 should not be removed, even though they
     //have no info, since they are still owned by the relation.
 
-    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
   }
 
   void runRelationWithoutInfoOneNodeElementWithInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 
@@ -247,15 +249,15 @@ public:
 
     //The relation and all of its elements should be removed.
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
   }
 
   void runRelationWithoutInfoOneWayElementWithInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 
@@ -286,15 +288,15 @@ public:
 
     //The relation and all of its elements should be removed.
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
   }
 
   void runRelationWithoutInfoAllElementsWithoutInfoTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     QList<ElementPtr> elements;
 
@@ -324,9 +326,9 @@ public:
 
     //The relation and all of its elements should be removed.
 
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
   }
 };
 

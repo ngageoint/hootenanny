@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FEATURECOUNTVISITOR_H
@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements with an information tag count greater than zero.
@@ -52,7 +51,7 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
 private:
 

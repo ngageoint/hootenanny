@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PARALLELWAYFILTER_H
@@ -33,36 +33,36 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 #include "WayFilter.h"
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class ParallelWayFilter : public WayFilter
 {
 public:
-  ParallelWayFilter(const ConstOsmMapPtr& map, shared_ptr<const Way> baseWay,
+  ParallelWayFilter(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
     bool filterUnparallel = true);
 
   virtual ~ParallelWayFilter();
 
-  Radians calculateDifference(const shared_ptr<const Way>& w) const;
+  Radians calculateDifference(const ConstWayPtr& w) const;
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isFiltered(const shared_ptr<const Way>& w) const;
+  virtual bool isFiltered(const ConstWayPtr& w) const;
 
 private:
-  shared_ptr<const Way> _baseWay;
+  ConstWayPtr _baseWay;
   bool _filterUnparallel;
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
   ConstOsmMapPtr _map;
-  std::vector<Point*> _points;
+  std::vector<geos::geom::Point*> _points;
   Degrees _threshold;
 };
 

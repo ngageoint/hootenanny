@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GETELEMENTIDSVISITOR_H
 #define GETELEMENTIDSVISITOR_H
@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Puts all the visited elementIds into a bag.
  */
@@ -42,7 +40,7 @@ class GetElementIdsVisitor : public ElementVisitor
 {
 public:
 
-  GetElementIdsVisitor(set<ElementId>& bag) : _bag(bag) {}
+  GetElementIdsVisitor(std::set<ElementId>& bag) : _bag(bag) {}
 
   virtual ~GetElementIdsVisitor() {}
 
@@ -50,7 +48,7 @@ public:
 
 private:
 
-  set<ElementId>& _bag;
+  std::set<ElementId>& _bag;
 };
 
 }

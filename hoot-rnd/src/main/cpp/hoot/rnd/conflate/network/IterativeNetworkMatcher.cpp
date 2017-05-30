@@ -22,15 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IterativeNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/rnd/conflate/network/EdgeMatch.h>
 
 #include "EdgeMatchSetFinder.h"
+
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {
@@ -94,9 +98,9 @@ double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& 
   return sqrt(sFrom * sTo);
 }
 
-shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
+boost::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
 {
-  return shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
+  return boost::shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
 }
 
 void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)

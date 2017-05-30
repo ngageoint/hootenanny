@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ZCURVERANGER_H
 #define ZCURVERANGER_H
@@ -33,8 +33,6 @@
 
 namespace hoot
 {
-
-using namespace std;
 
 class Range;
 class BBox;
@@ -49,43 +47,43 @@ class ZCurveRanger
 {
 public:
 
-  static string className() { return "hoot::ZCurveRanger"; }
+  static std::string className() { return "hoot::ZCurveRanger"; }
 
   ZCurveRanger(const ZValue& zv);
 
   ~ZCurveRanger() {}
 
-  /* Find a good break point for the given box based on major z-value breaks
-  * and break the box into two children.
-  */
-  vector<shared_ptr<LongBox> > breakBox(shared_ptr<LongBox> box);
+  /** Find a good break point for the given box based on major z-value breaks
+   * and break the box into two children.
+   */
+  std::vector<boost::shared_ptr<LongBox> > breakBox(boost::shared_ptr<LongBox> box);
 
-  long int calculateExcess(shared_ptr<LongBox> box);
+  long int calculateExcess(boost::shared_ptr<LongBox> box);
 
   /**
-  * Recursively decompose a box over level iterations.
-  */
-  vector<shared_ptr<LongBox> > decomposeBox(shared_ptr<LongBox> box, int level);
+   * Recursively decompose a box over level iterations.
+   */
+  std::vector<boost::shared_ptr<LongBox> > decomposeBox(boost::shared_ptr<LongBox> box, int level);
 
   static int getMaxBitColumn(long int v);
 
   static long int getSplitValue(long int v1, long int v2);
 
   /**
-  * Focuses the decomposition to the ares that intersect the focus box. The
-  * shows some promise with the dual space index.
-  */
-   vector<Range> decomposeRange(BBox box, BBox focusBox, int levels);
+   * Focuses the decomposition to the ares that intersect the focus box. The
+   * shows some promise with the dual space index.
+   */
+  std::vector<Range> decomposeRange(BBox box, BBox focusBox, int levels);
 
 
-   /**
+  /**
    * Decomposes the z value ranges that cover box into an array of ranges.
    *
    * @param box - Must be a valid box within the ZValue.
    */
-   vector<Range> decomposeRange(BBox box, int levels);
+  std::vector<Range> decomposeRange(BBox box, int levels);
 
-   /**
+  /**
    * The number of cells that can be acceptably merged into one range. This
    * should never be less than one. Other than that it is a tunable parameter.
    * Denser data sets probably want a smaller value. Less dense data sets
@@ -93,29 +91,29 @@ public:
    *
    * @param slop
    */
-   void setSlop(int slop) { _slop = slop; }
+  void setSlop(int slop) { _slop = slop; }
 
-   vector<Range> decomposeRange(LongBox box, int levels);
+  std::vector<Range> decomposeRange(LongBox box, int levels);
 
-   vector<Range> decomposeRangeIterative(BBox box, int count);
+  std::vector<Range> decomposeRangeIterative(BBox box, int count);
 
-   bool rangeCoversIdentity(Range r);
+  bool rangeCoversIdentity(Range r);
 
 private:
   /**
-  * Condense ranges that overlap or are within "slop" cells of each other.
-  */
-  vector<Range> _condenseRanges(vector<Range>& r);
+   * Condense ranges that overlap or are within "slop" cells of each other.
+   */
+  std::vector<Range> _condenseRanges(std::vector<Range>& r);
 
-  Range _toRange(shared_ptr<LongBox> box);
+  Range _toRange(boost::shared_ptr<LongBox> box);
 
   LongBox _toLongBox(BBox box);
 
-  vector<Range> _decomposeRange(LongBox box, LongBox focusBox, int levels);
+  std::vector<Range> _decomposeRange(LongBox box, LongBox focusBox, int levels);
 
   LongBox _clipBox(LongBox box);
 
-  vector<Range> _decomposeRangeIterative(LongBox box, int count);
+  std::vector<Range> _decomposeRangeIterative(LongBox box, int count);
 
   long int _slop;
   ZValue _zv;

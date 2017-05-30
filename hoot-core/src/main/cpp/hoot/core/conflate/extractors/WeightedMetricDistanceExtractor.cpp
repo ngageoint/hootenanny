@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WeightedMetricDistanceExtractor.h"
@@ -36,7 +36,10 @@
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -68,7 +71,7 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   WayDiscretizer wd(map.shared_from_this(), w1);
   wd.discretize(2.0, v);
 
-  shared_ptr<LineString> ls2 = ElementConverter(map.shared_from_this()).convertToLineString(w2);
+  boost::shared_ptr<LineString> ls2 = ElementConverter(map.shared_from_this()).convertToLineString(w2);
 
   double sigma = _searchRadius;
 

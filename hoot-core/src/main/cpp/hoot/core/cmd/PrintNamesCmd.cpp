@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -121,7 +121,7 @@ public:
     // adding the source datetime just makes things really slow.
     conf().set(ConfigOptions().getReaderAddSourceDatetimeKey(), false);
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     std::map<QString, int> counts;
     NameCountVisitor v(counts);
@@ -132,8 +132,8 @@ public:
     {
       if (OsmMapReaderFactory::getInstance().hasPartialReader(args[i]))
       {
-        shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(args[i]);
-        shared_ptr<PartialOsmMapReader> pomr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+        boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(args[i]);
+        boost::shared_ptr<PartialOsmMapReader> pomr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
         pomr->open(args[i]);
 
@@ -145,7 +145,7 @@ public:
       }
       else
       {
-        shared_ptr<OsmMap> map(new OsmMap());
+        OsmMapPtr map(new OsmMap());
         loadMap(map, args[i], false, Status::Unknown1);
         map->visitRo(v);
       }
@@ -154,7 +154,7 @@ public:
     long total = 0;
     QVector<WordCount> wc;
     wc.reserve(counts.size());
-    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); it++)
+    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); ++it)
     {
       wc.push_back(WordCount(it->first, it->second));
       total += it->second;

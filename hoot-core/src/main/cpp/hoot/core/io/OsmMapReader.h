@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADER_H
 #define OSMMAPREADER_H
@@ -40,7 +40,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapReader"; }
 
-  OsmMapReader() {};
+  OsmMapReader() {}
 
   virtual ~OsmMapReader() {}
 
@@ -59,7 +59,7 @@ public:
   /**
    * Reads the specified map. When this method is complete the input will likely be closed.
    */
-  virtual void read(shared_ptr<OsmMap> map) = 0;
+  virtual void read(OsmMapPtr map) = 0;
 
   /**
    * Determines the reader's default element status

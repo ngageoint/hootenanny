@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyRemoveTagVisitor.h"
 
@@ -31,7 +31,7 @@
 #include <boost/random/uniform_real.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -79,7 +79,7 @@ void PertyRemoveTagVisitor::setConfiguration(const Settings& conf)
   _replacementTagValues = configOptions.getPertyRemoveTagVisitorSubstitutionValues();
 }
 
-void PertyRemoveTagVisitor::visit(const shared_ptr<Element>& e)
+void PertyRemoveTagVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
 

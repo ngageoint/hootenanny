@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Translator.h"
@@ -78,7 +78,7 @@ public:
 
       _loadTags(pt);
     }
-    catch (std::exception e)
+    catch (const std::exception& e)
     {
       QString reason = e.what();
       throw HootException("Error parsing JSON. " + reason);
@@ -194,7 +194,7 @@ QStringList Translator::toEnglishAll(const QStringList& l)
   QStringList biggestMatch;
   QString s = l[0].toLower();
   // find the biggest list of consecutive words that match our dictionary
-  for (QMap<QString, QStringList>::const_iterator it = dict.find(s); it != dict.constEnd(); it++)
+  for (QMap<QString, QStringList>::const_iterator it = dict.find(s); it != dict.constEnd(); ++it)
   {
     QStringList from = it.key().split(" ");
     // if this no longer starts with our first word.

@@ -22,6 +22,7 @@
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 #include <hoot/hadoop/fourpass/TileOpDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 #include <hoot/hadoop/way-join/WayJoinDriver.h>
 #include <hoot/core/util/UuidHelper.h>
 
@@ -29,7 +30,8 @@
 #include <pp/Hdfs.h>
 #include <pp/mapreduce/Job.h>
 
-#include "PaintNodesDriver.h"
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -47,7 +49,7 @@ HadoopTileWorker2::HadoopTileWorker2()
 //  pp::Job::setDefaultJobTracker("local");
 }
 
-void HadoopTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
+void HadoopTileWorker2::applyOp(boost::shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
   QString mapIn, QString mapOut)
 {
   TileOpDriver tod;
@@ -134,7 +136,7 @@ MapStats HadoopTileWorker2::_calculateStats(QString in)
   if (fs.getFileStatus(in.toStdString()).isDir())
   {
     // write the newly calculated stats out to the input directory.
-    shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
+   boost::shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
     result.write(*out);
   }
   return result;
@@ -146,7 +148,7 @@ void HadoopTileWorker2::cleanup(QString mapIn, QString mapOut)
   vector<Envelope> tiles;
   TileOpDriver tod;
   // a no-op
-  shared_ptr<OsmMapOperation> op(new OpList());
+  boost::shared_ptr<OsmMapOperation> op(new OpList());
   tod.setOperation(op);
   tod.apply(mapIn, tiles, _buffer, mapOut);
 }

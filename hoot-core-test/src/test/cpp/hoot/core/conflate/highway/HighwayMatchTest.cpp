@@ -32,7 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
@@ -53,6 +53,8 @@
 #include <tgs/StreamUtils.h>
 
 #include "../../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -100,7 +102,7 @@ public:
   void runMajorOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -119,8 +121,8 @@ public:
     WayPtr w3 = createWay(map, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.6));
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -150,7 +152,7 @@ public:
   void runPartialMatchTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -170,8 +172,8 @@ public:
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.9));
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -201,7 +203,7 @@ public:
   void runPartialOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -220,8 +222,8 @@ public:
     WayPtr w3 = createWay(map, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.05, 0.95));
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -249,7 +251,7 @@ public:
   void runSimpleConflictTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -268,8 +270,8 @@ public:
     WayPtr w3 = createWay(map, w3c);
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.1, 0.6));
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
     HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
@@ -298,27 +300,27 @@ public:
   void runRealWorld1Test()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld1Test.osm",
       false);
     MapProjector::projectToOrthographic(map);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
     LOG_INFO(
       sublineMatcher->findMatch(
         map,
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
     HOOT_STR_EQUALS("matches:\n"
       "subline 1: start: way: -3 index: 0 fraction: 0.354292349419726 end: way: -3 index: 1 fraction: 0\n"
       "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 1 fraction: 0",
       sublineMatcher->findMatch(
         map,
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
-        dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1")),
+        boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "3"))));
   }
 
   /**
@@ -326,7 +328,7 @@ public:
   void runRealWorld2Test()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/conflate/highway/HighwayMatchRealWorld2Test.osm",
       false);
     MapProjector::projectToOrthographic(map);
@@ -334,15 +336,15 @@ public:
     Settings conf;
     conf.set(ConfigOptions::getWaySublineMatcherKey(), MaximalNearestSublineMatcher::className());
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setConfiguration(conf);
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
-    WayPtr w218 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-218"));
-    WayPtr w948 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-948"));
-    WayPtr w582 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-582"));
+    WayPtr w218 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-218"));
+    WayPtr w948 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-948"));
+    WayPtr w582 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-582"));
 
     ConstMatchThresholdPtr mt(new MatchThreshold(0.0001, 0.9999));
 

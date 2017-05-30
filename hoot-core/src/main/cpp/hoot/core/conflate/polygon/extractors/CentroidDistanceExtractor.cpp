@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CentroidDistanceExtractor.h"
 
@@ -31,9 +31,12 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -41,11 +44,11 @@ namespace hoot
 HOOT_FACTORY_REGISTER(FeatureExtractor, CentroidDistanceExtractor)
 
 double CentroidDistanceExtractor::distance(const OsmMap &map,
-  const shared_ptr<const Element>& target, const shared_ptr<const Element> &candidate) const
+  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element> &candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
   {

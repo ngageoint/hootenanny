@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONADDRESSSCOREEXTRACTOR_H
 #define POIPOLYGONADDRESSSCOREEXTRACTOR_H
@@ -43,7 +43,7 @@ class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase
 {
 public:
 
-  static string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
+  static std::string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
 
   static const QChar ESZETT;
   static const QString ESZETT_REPLACE;
@@ -55,7 +55,7 @@ public:
 
   PoiPolygonAddressScoreExtractor();
 
-  virtual string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
+  virtual std::string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
 
   /**
    * Calculates the address similarity score of two features

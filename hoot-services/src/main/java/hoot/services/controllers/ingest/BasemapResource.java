@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -31,15 +31,14 @@ import static hoot.services.HootProperties.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -54,14 +53,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.glassfish.jersey.media.multipart.BodyPart;
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -69,27 +67,26 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import hoot.services.controllers.job.JobControllerBase;
+import hoot.services.command.Command;
+import hoot.services.command.ExternalCommand;
+import hoot.services.job.Job;
+import hoot.services.job.JobProcessor;
+import hoot.services.utils.JsonUtils;
+import hoot.services.utils.MultipartSerializer;
+
 
 @Controller
 @Path("/basemap")
 @Transactional
-public class BasemapResource extends JobControllerBase {
+public class BasemapResource {
     private static final Logger logger = LoggerFactory.getLogger(BasemapResource.class);
-    private static final Map<String, String> basemapRasterExt;
 
-    static {
-        basemapRasterExt = new HashMap<>();
-        String[] extList = BASEMAP_RASTER_EXTENSIONS.toLowerCase().split(",");
+    @Autowired
+    private JobProcessor jobProcessor;
 
-        for (String ext : extList) {
-            basemapRasterExt.put(ext, ext);
-        }
-    }
+    @Autowired
+    private BasemapCommandFactory ingestBasemapCommandFactory;
 
-    public BasemapResource() {
-        super(BASEMAP_RASTER_TO_TILES);
-    }
 
     /**
      * Upload dataset file and create TMS tiles.
@@ -100,6 +97,8 @@ public class BasemapResource extends JobControllerBase {
      *            Name of basemap
      * @param projection
      *            projection to apply. defaults to EPSG:4326
+     * @param verboseOutput
+     *            controls level of status output
      * @param multiPart
      *            multipart data
      * @return JSON Array containing JSON of job id
@@ -110,93 +109,57 @@ public class BasemapResource extends JobControllerBase {
     @Produces(MediaType.APPLICATION_JSON)
     public Response processUpload(@QueryParam("INPUT_NAME") String inputName,
                                   @QueryParam("PROJECTION") String projection,
+                                  @QueryParam("VERBOSE_OUTPUT") @DefaultValue("false") Boolean verboseOutput,
                                   FormDataMultiPart multiPart) {
-        String groupId = UUID.randomUUID().toString();
         JSONArray jobsArr = new JSONArray();
 
         try {
-            String repFolderPath = UPLOAD_FOLDER + "/" + groupId;
-            File dir = new File(repFolderPath);
-            if (!dir.exists()) {
-                if (!dir.mkdir()) {
-                    throw new IOException("Error creating " + dir.getAbsolutePath() + " directory!");
-                }
+            String jobId = UUID.randomUUID().toString();
+            File workDir = new File(UPLOAD_FOLDER, jobId);
+            FileUtils.forceMkdir(workDir);
+
+            List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
+
+            if (uploadedFiles.isEmpty()) {
+                throw new IllegalArgumentException("No basemap raster file provided!");
             }
 
-            Map<String, String> uploadedFiles = new HashMap<>();
-            Map<String, String> uploadedFilesPaths = new HashMap<>();
-            List<BodyPart> fileItems = multiPart.getBodyParts();
-
-            for (BodyPart fileItem : fileItems) {
-                String fileName = fileItem.getContentDisposition().getFileName();
-
-                try (InputStream fileStream = fileItem.getEntityAs(InputStream.class)) {
-                    String uploadedPath = repFolderPath + "/" + fileName;
-                    File file = new File(uploadedPath);
-                    FileUtils.copyInputStreamToFile(fileStream, file);
-                }
-
-                String[] nameParts = fileName.split("\\.");
-                if (nameParts.length > 1) {
-                    String extension = nameParts[nameParts.length - 1].toLowerCase();
-                    String filename = nameParts[0];
-
-                    if (basemapRasterExt.get(extension) != null) {
-                        uploadedFiles.put(filename, extension);
-                        uploadedFilesPaths.put(filename, fileName);
-                        logger.debug("Saving uploaded:{}", filename);
-                    }
-                }
+            if (uploadedFiles.size() > 1) {
+                throw new IllegalArgumentException("Exactly one basemap raster file expected!");
             }
 
-            for (Map.Entry<String, String> pairs : uploadedFiles.entrySet()) {
-                String jobId = UUID.randomUUID().toString();
-                String fName = pairs.getKey();
+            File uploadedFile = uploadedFiles.get(0);
+            String fileName = uploadedFile.getName();
+            String baseName = FilenameUtils.getBaseName(fileName);
+            String extension = FilenameUtils.getExtension(fileName);
 
-                logger.debug("Preparing Basemap Ingest for :{}", fName);
-                String bmName = inputName;
-
-                if ((bmName == null) || (bmName.isEmpty())) {
-                    bmName = fName;
-                }
-
-                String inputFileName = uploadedFilesPaths.get(fName);
-
-                JSONArray commandArgs = new JSONArray();
-                JSONObject arg = new JSONObject();
-                arg.put("INPUT", "upload/" + groupId + "/" + inputFileName);
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("INPUT_NAME", bmName);
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("RASTER_OUTPUT_DIR", TILE_SERVER_PATH + "/BASEMAP");
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                if ((projection != null) && (!projection.isEmpty())) {
-                    arg.put("PROJECTION", projection);
-                }
-                else {
-                    arg.put("PROJECTION", "auto");
-                }
-                commandArgs.add(arg);
-
-                arg = new JSONObject();
-                arg.put("JOB_PROCESSOR_DIR", INGEST_STAGING_PATH + "/BASEMAP");
-                commandArgs.add(arg);
-
-                String argStr = createBashPostBody(commandArgs);
-                postJobRequest(jobId, argStr);
-
-                JSONObject res = new JSONObject();
-                res.put("jobid", jobId);
-                res.put("name", bmName);
-
-                jobsArr.add(res);
+            if (!BASEMAP_RASTER_EXTENSIONS.contains(extension)) {
+                throw new RuntimeException("Extension " + extension + " is not supported! Filename:" + fileName);
             }
+
+            String basemapName = (StringUtils.isBlank(inputName)) ? fileName : inputName;
+
+            File tileOutputDir = new File(BASEMAPS_TILES_FOLDER, basemapName);
+            FileUtils.forceMkdir(tileOutputDir);
+
+            ExternalCommand ingestBasemapCommand = ingestBasemapCommandFactory.build(jobId, basemapName, uploadedFile,
+                    projection, tileOutputDir, verboseOutput, this.getClass());
+
+            Command[] workflow = { ingestBasemapCommand };
+
+            jobProcessor.submitAsync(new Job(jobId, workflow));
+
+            JSONObject response = new JSONObject();
+            response.put("jobid", jobId);
+            response.put("name", basemapName);
+
+            jobsArr.add(response);
+        }
+        catch (WebApplicationException wae) {
+            throw wae;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
             String msg = "Error processing upload for: " + inputName + ".  Cause: " + e.getMessage();
@@ -217,11 +180,10 @@ public class BasemapResource extends JobControllerBase {
     @Path("/getlist")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBasemapList() {
-        JSONArray basemapList = new JSONArray();
-        JSONArray filesList;
+        JSONArray basemaps;
 
         try {
-            filesList = getBasemapListHelper();
+            basemaps = getBasemapListHelper();
         }
         catch (Exception e) {
             String message = "Error getting basemap list.  Cause: " + e.getMessage();
@@ -229,14 +191,15 @@ public class BasemapResource extends JobControllerBase {
         }
 
         // sort the list
-        Map<String, JSONObject> sortedScripts = new TreeMap<>();
-        for (Object file : filesList) {
-            JSONObject cO = (JSONObject) file;
-            String sName = cO.get("name").toString();
-            sortedScripts.put(sName.toUpperCase(), cO);
+        Map<String, JSONObject> sortedBasemaps = new TreeMap<>();
+        for (Object basemap : basemaps) {
+            JSONObject json = (JSONObject) basemap;
+            String basemapName = json.get("name").toString();
+            sortedBasemaps.put(basemapName.toUpperCase(), json);
         }
 
-        basemapList.addAll(sortedScripts.values());
+        JSONArray basemapList = new JSONArray();
+        basemapList.addAll(sortedBasemaps.values());
 
         return Response.ok(basemapList.toJSONString()).build();
     }
@@ -260,15 +223,15 @@ public class BasemapResource extends JobControllerBase {
             toggleBaseMap(basemap, enable);
         }
         catch (Exception e) {
-            String msg = "Error enabling basemap: " + basemap + ".  Cause: " + e.getMessage();
+            String msg = "Error toggling basemap: " + basemap + ".  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject entity = new JSONObject();
-        entity.put("name", basemap);
-        entity.put("isenabled", String.valueOf(enable));
+        JSONObject json = new JSONObject();
+        json.put("name", basemap);
+        json.put("isenabled", String.valueOf(enable));
 
-        return Response.ok(entity.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 
     /**
@@ -294,112 +257,97 @@ public class BasemapResource extends JobControllerBase {
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
-        JSONObject entity = new JSONObject();
-        entity.put("name", basemap);
+        JSONObject json = new JSONObject();
+        json.put("name", basemap);
 
-        return Response.ok(entity.toJSONString()).build();
+        return Response.ok(json.toJSONString()).build();
     }
 
-    private static void toggleBaseMap(String bmName, boolean enable) throws IOException {
-        // See ticket#6760
-        // for file path manipulation
-        String fileExt = "enabled";
-        String targetExt = ".disabled";
+    private static void toggleBaseMap(String basemapName, boolean enable) {
+        String srcExt = "enabled";
+        String destExt = "disabled";
 
         if (enable) {
-            fileExt = "disabled";
-            targetExt = ".enabled";
+            srcExt = "disabled";
+            destExt = "enabled";
         }
 
-        // We first verify that file exits in the folder first and then try to get the source file
-        File sourceFile = hoot.services.utils.FileUtils.getFileFromFolder(INGEST_STAGING_PATH + "/BASEMAP/", bmName, fileExt);
+        File srcFile = new File(BASEMAPS_FOLDER, basemapName + "." + srcExt);
+        File destFile = new File(BASEMAPS_FOLDER, basemapName + "." + destExt);
 
-        if ((sourceFile != null) && sourceFile.exists()) {
-            // if the source file exist then just swap the extension
-            boolean renamed = sourceFile.renameTo(new File(INGEST_STAGING_PATH + "/BASEMAP/", bmName + targetExt));
-
-            if (!renamed) {
-                throw new IOException("Failed to rename file:" + bmName + fileExt + " to " + bmName + targetExt);
-            }
+        try {
+            FileUtils.moveFile(srcFile, destFile);
         }
-        else {
-            throw new IOException("Can not enable file:" + bmName + targetExt + ". It does not exist.");
+        catch (IOException ioe) {
+            throw new RuntimeException("Error moving " + srcFile.getAbsolutePath() + " to " + destFile.getAbsolutePath(), ioe);
         }
     }
 
-    private static void deleteBaseMapHelper(String bmName) throws IOException {
-        File tileDir = hoot.services.utils.FileUtils.getSubFolderFromFolder(TILE_SERVER_PATH + "/BASEMAP/", bmName);
-        if ((tileDir != null) && tileDir.exists()) {
-            FileUtils.forceDelete(tileDir);
+    private static void deleteBaseMapHelper(String basemapName) throws IOException {
+        File tilesDir = new File(BASEMAPS_TILES_FOLDER, basemapName);
+        if (tilesDir.exists()) {
+            FileUtils.forceDelete(tilesDir);
         }
 
-        String controlFolder = INGEST_STAGING_PATH + "/BASEMAP/";
-        File dir = new File(controlFolder);
-        FileFilter fileFilter = new WildcardFileFilter(bmName + ".*");
-        File[] files = dir.listFiles(fileFilter);
+        FileFilter fileFilter = new WildcardFileFilter(basemapName + ".*");
+        File[] files = new File(BASEMAPS_FOLDER).listFiles(fileFilter);
         if (files != null) {
-            for (File curFile : files) {
-                FileUtils.forceDelete(curFile);
+            for (File file : files) {
+                FileUtils.forceDelete(file);
             }
         }
     }
 
-    private static JSONArray getBasemapListHelper() throws IOException, ParseException {
+    private static JSONArray getBasemapListHelper() throws IOException {
         JSONArray filesList = new JSONArray();
-        File basmapDir = new File(INGEST_STAGING_PATH + "/BASEMAP");
 
-        if (basmapDir.exists()) {
-            String[] exts = {"processing", "enabled", "disabled", "failed"};
+        String[] exts = { "processing", "enabled", "disabled", "failed" };
 
-            List<File> files = (List<File>) FileUtils.listFiles(basmapDir, exts, false);
+        List<File> files = (List<File>) FileUtils.listFiles(new File(BASEMAPS_FOLDER), exts, false);
 
-            for (File file : files) {
-                if (file.isFile()) {
-                    String basemapName = file.getName();
-                    String ext = FilenameUtils.getExtension(basemapName);
-                    String name = FilenameUtils.getBaseName(basemapName);
+        for (File file : files) {
+            if (file.isFile()) {
+                String basemapName = file.getName();
+                String ext = FilenameUtils.getExtension(basemapName);
+                String name = FilenameUtils.getBaseName(basemapName);
 
-                    String meta = FileUtils.readFileToString(file, Charset.defaultCharset());
-                    JSONParser parser = new JSONParser();
-                    JSONObject jsonMeta = (JSONObject) parser.parse(meta);
-                    String jobId = jsonMeta.get("jobid").toString();
+                String metadata = FileUtils.readFileToString(file, Charset.defaultCharset());
+                Map<String, String> map = JsonUtils.jsonToMap(metadata);
+                String jobId = map.get("jobid");
 
-                    // Check for tilemapresource.xml in processed folder
-                    JSONObject jsonExtent = new JSONObject();
+                JSONObject jsonExtent = null;
 
-                    String XmlPath = TILE_SERVER_PATH + "/BASEMAP/" + name + "/tilemapresource.xml";
-                    File fXmlFile = new File(XmlPath);
-                    if (fXmlFile.exists()) {
-                        try {
-                            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                            Document doc = dBuilder.parse(fXmlFile);
-                            doc.getDocumentElement().normalize();
-                            NodeList nodeList = doc.getElementsByTagName("BoundingBox");
-                            Node prop = nodeList.item(0);
-                            NamedNodeMap attr = prop.getAttributes();
-                            if (attr != null) {
-                                jsonExtent.put("minx", Double.parseDouble(attr.getNamedItem("minx").getNodeValue()));
-                                jsonExtent.put("miny", Double.parseDouble(attr.getNamedItem("miny").getNodeValue()));
-                                jsonExtent.put("maxx", Double.parseDouble(attr.getNamedItem("maxx").getNodeValue()));
-                                jsonExtent.put("maxy", Double.parseDouble(attr.getNamedItem("maxy").getNodeValue()));
-                            }
-                            else {
-                                jsonExtent = null;
-                            }
-                        }
-                        catch (Exception ignored) {
-                            jsonExtent = null;
+                File xmlFile = new File(new File(BASEMAPS_TILES_FOLDER, name), "tilemapresource.xml");
+
+                if (xmlFile.exists()) {
+                    try {
+                        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                        Document doc = dBuilder.parse(xmlFile);
+                        doc.getDocumentElement().normalize();
+                        NodeList nodeList = doc.getElementsByTagName("BoundingBox");
+                        Node prop = nodeList.item(0);
+                        NamedNodeMap attr = prop.getAttributes();
+
+                        if (attr != null) {
+                            jsonExtent = new JSONObject();
+                            jsonExtent.put("minx", Double.parseDouble(attr.getNamedItem("minx").getNodeValue()));
+                            jsonExtent.put("miny", Double.parseDouble(attr.getNamedItem("miny").getNodeValue()));
+                            jsonExtent.put("maxx", Double.parseDouble(attr.getNamedItem("maxx").getNodeValue()));
+                            jsonExtent.put("maxy", Double.parseDouble(attr.getNamedItem("maxy").getNodeValue()));
                         }
                     }
-
-                    JSONObject oBaseMap = new JSONObject();
-                    oBaseMap.put("name", name);
-                    oBaseMap.put("status", ext);
-                    oBaseMap.put("jobid", jobId);
-                    oBaseMap.put("extent", jsonExtent);
-                    filesList.add(oBaseMap);
+                    catch (Exception e) {
+                        logger.warn("Error parsing {} ", xmlFile, e);
+                    }
                 }
+
+                JSONObject basemap = new JSONObject();
+                basemap.put("name", name);
+                basemap.put("status", ext);
+                basemap.put("jobid", jobId);
+                basemap.put("extent", jsonExtent);
+                filesList.add(basemap);
             }
         }
 

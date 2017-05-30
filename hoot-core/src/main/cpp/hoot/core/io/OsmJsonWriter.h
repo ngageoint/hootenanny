@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMJSONWRITER_H
 #define OSMJSONWRITER_H
@@ -46,7 +46,6 @@ class QXmlStreamWriter;
 
 namespace hoot
 {
-using namespace boost;
 
 /**
  * Writes an OsmMap to a .json file format.
@@ -77,14 +76,14 @@ public:
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
    */
-  void write(boost::shared_ptr<const OsmMap> map, const QString& path);
+  void write(ConstOsmMapPtr map, const QString& path);
 
-  virtual void write(boost::shared_ptr<const OsmMap> map);
+  virtual void write(ConstOsmMapPtr map);
 
   /**
    * Very handy for testing.
    */
-  QString toString(boost::shared_ptr<const OsmMap> map);
+  QString toString(ConstOsmMapPtr map);
 
 protected:
   bool _includeDebug;
@@ -101,9 +100,9 @@ protected:
    */
   QString _markupString(const QString& str);
 
-  void _writeNodes(shared_ptr<const OsmMap> map);
-  void _writeWays(shared_ptr<const OsmMap> map);
-  void _writeRelations(shared_ptr<const OsmMap> map);
+  void _writeNodes(ConstOsmMapPtr map);
+  void _writeWays(ConstOsmMapPtr map);
+  void _writeRelations(ConstOsmMapPtr map);
   void _write(const QString& str) { _write(str, _pretty); }
   void _write(const QString& str, bool newLine);
   void _writeLn(const QString& str) { _write(str, true); }

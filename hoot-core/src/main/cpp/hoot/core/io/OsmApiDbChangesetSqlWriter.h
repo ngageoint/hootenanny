@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBCHANGESETSQLWRITER_H
 #define OSMAPIDBCHANGESETSQLWRITER_H
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Writes OSM changesets from a .osc.sql executable SQL file to an OSM API database.
  *
- * This class expects incoming changesets to have been written by the OsmChangesetSqlWriter
+ * This class expects incoming changesets to have been written by the OsmChangesetSqlFileWriter
  * and is coupled to its output format in certain parts of the SQL parsing logic.
  */
 class OsmApiDbChangesetSqlWriter
@@ -83,10 +83,8 @@ public:
 
 private:
 
-  void _execNoPrepare(const QString sql);
   void _initChangesetStats();
-  void _execTransaction(const QString changesetInsertStatement,
-                        const QString elementSqlStatements);
+  void _execTransaction(const QString changesetInsertStatement, const QString elementSqlStatements);
 
   OsmApiDb _db;
 

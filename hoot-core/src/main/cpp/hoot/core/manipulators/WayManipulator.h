@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYMANIPULATOR_H
 #define WAYMANIPULATOR_H
@@ -44,18 +44,18 @@ public:
 
   static std::string className() { return "hoot::WayManipulator"; }
 
-  virtual const vector< shared_ptr<Manipulation> >& findAllManipulations(
-          shared_ptr<const OsmMap> map) = 0;
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+          boost::shared_ptr<const OsmMap> map) = 0;
 
   /**
    * A convenience method that maintains compatibility with the older implementations of
    * Manipulator.
    */
-  virtual const vector< shared_ptr<Manipulation> >& findManipulations(
-      shared_ptr<const OsmMap> map, const vector<ElementId>& ids);
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findManipulations(
+      boost::shared_ptr<const OsmMap> map, const std::vector<ElementId>& ids);
 
-  virtual const vector< shared_ptr<Manipulation> >& findWayManipulations(
-      shared_ptr<const OsmMap> map, const vector<long>& wids) = 0;
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
+      boost::shared_ptr<const OsmMap> map, const std::vector<long>& wids) = 0;
 };
 
 }

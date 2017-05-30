@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FindWaysVisitor.h"
@@ -30,6 +30,8 @@
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/filters/ContainsNodeCriterion.h>
 #include <hoot/core/filters/TagCriterion.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -40,11 +42,11 @@ FindWaysVisitor::FindWaysVisitor (ElementCriterion* pCrit):
   // Nothing
 }
 
-void FindWaysVisitor::visit(const shared_ptr<const Element>& e)
+void FindWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     if (_pCrit->isSatisfied(e))
     {
       _wayIds.push_back(e->getId());
@@ -63,7 +65,7 @@ vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map, ElementCriteri
 
 vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
                                        ElementCriterion* pCrit,
-                                       shared_ptr<const Way> refWay,
+                                      ConstWayPtr refWay,
                                        Meters maxDistance,
                                        bool addError)
 {
@@ -72,7 +74,7 @@ vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
 
   for (size_t i = 0; i < close.size(); i++)
   {
-    const shared_ptr<const Way>& w = map->getWay(close[i]);
+    const ConstWayPtr& w = map->getWay(close[i]);
     if (pCrit->isSatisfied(w))
       result.push_back(w->getId());
   }

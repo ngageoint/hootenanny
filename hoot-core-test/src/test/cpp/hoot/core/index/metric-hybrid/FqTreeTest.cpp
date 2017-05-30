@@ -45,6 +45,8 @@
 
 #include "../../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 using namespace hybrid;
@@ -230,7 +232,7 @@ public:
 
   void runRandomQueryTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmPbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;

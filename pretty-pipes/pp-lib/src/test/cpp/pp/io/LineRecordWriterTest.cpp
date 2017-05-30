@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -47,6 +47,8 @@ using namespace pp;
 #include <pp/conf/Configuration.h>
 #include <pp/Hdfs.h>
 #include <pp/io/LineRecordWriter.h>
+
+using namespace std;
 
 class LineRecordWriterTest : public CppUnit::TestFixture
 {
@@ -77,7 +79,7 @@ public:
       uut.emitRecord(key.data(), key.size(), value.data(), value.size());
     }
 
-    shared_ptr<istream> is(fs.open("test-output/LineRecordWriterTest/output/part-00000.txt"));
+   boost::shared_ptr<istream> is(fs.open("test-output/LineRecordWriterTest/output/part-00000.txt"));
     char buffer[1000] = { '\0' };
     is->read(buffer, 1000);
     string output(buffer);

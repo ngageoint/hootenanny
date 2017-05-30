@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSFUNCTIONVISITOR_H
 #define JSFUNCTIONVISITOR_H
@@ -44,11 +44,11 @@ class JsFunctionVisitor : public ElementVisitor, public ConstOsmMapConsumer,
 {
 public:
 
-  static string className() { return "hoot::JsFunctionVisitor"; }
+  static std::string className() { return "hoot::JsFunctionVisitor"; }
 
   JsFunctionVisitor() : _map(0) {}
 
-  virtual void addFunction(Persistent<Function> func) { _func = Persistent<Function>(func); }
+  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
@@ -57,7 +57,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
 private:
-  Persistent<Function> _func;
+  v8::Persistent<v8::Function> _func;
   OsmMap* _map;
 };
 

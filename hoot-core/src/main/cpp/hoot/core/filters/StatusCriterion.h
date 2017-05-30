@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STATUSCRITERION_H
 #define STATUSCRITERION_H
@@ -32,7 +32,6 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/Status.h>
 #include <hoot/core/util/ConfigOptions.h>
-
 
 namespace hoot
 {
@@ -44,12 +43,12 @@ class StatusCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static string className() { return "hoot::StatusCriterion"; }
+  static std::string className() { return "hoot::StatusCriterion"; }
 
   StatusCriterion() { setConfiguration(conf()); }
   StatusCriterion(Status s) : _status(s) { }
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual void setConfiguration(const Settings& conf);
 

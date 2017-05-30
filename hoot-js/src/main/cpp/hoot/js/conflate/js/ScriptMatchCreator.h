@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMATCHCREATOR_H
 #define SCRIPTMATCHCREATOR_H
@@ -44,7 +44,7 @@ class ScriptMatchCreator : public MatchCreator
 {
 public:
 
-  static string className() { return "hoot::ScriptMatchCreator"; }
+  static std::string className() { return "hoot::ScriptMatchCreator"; }
 
   ScriptMatchCreator();
 
@@ -58,10 +58,10 @@ public:
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   virtual void setArguments(QStringList args);
 
@@ -74,18 +74,18 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 
-  virtual shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 
 private:
 
-  shared_ptr<PluginContext> _script;
+  boost::shared_ptr<PluginContext> _script;
   QString _scriptPath;
 
   Description _getScriptDescription(QString path) const;
 
-  shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
+  boost::shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
   double _worstCircularError;
-  shared_ptr<MatchThreshold> _matchThreshold;
+  boost::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
 };
 

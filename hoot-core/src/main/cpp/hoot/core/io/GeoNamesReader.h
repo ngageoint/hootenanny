@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GEONAMESREADER_H
 #define GEONAMESREADER_H
@@ -39,7 +39,7 @@ namespace hoot
 class GeoNamesReader : public PartialOsmMapReader
 {
 public:
-  static string className() { return "hoot::GeoNamesReader"; }
+  static std::string className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
 
@@ -76,7 +76,7 @@ private:
   int _LONGITUDE;
   int _GEONAMESID;
   bool _useDataSourceIds;
-  mutable shared_ptr<OGRSpatialReference> _wgs84;
+  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
 
 
   const QString& _saveMemory(const QString& s);

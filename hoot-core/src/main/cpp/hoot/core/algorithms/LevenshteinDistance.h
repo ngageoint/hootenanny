@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LEVENSHTEINDISTANCE_H
@@ -42,15 +42,13 @@
 namespace hoot
 {
 
-using namespace std;
-
 class HootException;
 
 class LevenshteinDistance : public StringDistance, public Configurable
 {
 public:
 
-  static string className() { return "hoot::LevenshteinDistance"; }
+  static std::string className() { return "hoot::LevenshteinDistance"; }
 
   /**
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.
@@ -90,7 +88,7 @@ public:
   template<class T> static
   unsigned int distance(const T& s1, const T& s2) {
     const size_t len1 = s1.size(), len2 = s2.size();
-    vector<unsigned int> col(len2+1), prevCol(len2+1);
+    std::vector<unsigned int> col(len2+1), prevCol(len2+1);
 
     for (unsigned int i = 0; i < prevCol.size(); i++)
     {
@@ -101,7 +99,7 @@ public:
       col[0] = i+1;
       for (unsigned int j = 0; j < len2; j++)
       {
-        col[j+1] = min( min( 1 + col[j], 1 + prevCol[1 + j]), prevCol[j] + (s1[i]==s2[j] ? 0 : 1) );
+        col[j+1] = std::min( std::min( 1 + col[j], 1 + prevCol[1 + j]), prevCol[j] + (s1[i]==s2[j] ? 0 : 1) );
       }
       col.swap(prevCol);
     }

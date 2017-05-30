@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GCC
@@ -33,7 +33,7 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/Hoot.h>
 #include <hoot/core/HootConfig.h>
 #include <hoot/core/cmd/Command.h>
@@ -48,6 +48,8 @@ using namespace hoot;
 // Standard
 #include <exception>
 
+using namespace std;
+
 int main(int argc, char *argv[])
 {
   Hoot::getInstance().init();
@@ -56,7 +58,7 @@ int main(int argc, char *argv[])
 
   vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
 
-  shared_ptr<Command> c;
+  boost::shared_ptr<Command> c;
   for (size_t i = 0; i < cmds.size(); i++)
   {
     c.reset(Factory::getInstance().constructObject<Command>(cmds[i]));
@@ -77,7 +79,7 @@ int main(int argc, char *argv[])
     {
       return c->run(argv, argc);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
       cerr << "Error running " << c->getName().toStdString() << ":" << endl;
       cerr << e.what() << endl;

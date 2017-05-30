@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
@@ -32,15 +32,14 @@
 
 namespace hoot
 {
-class ReportMissingElementsVisitor;
 
-using namespace std;
+class ReportMissingElementsVisitor;
 
 class RemoveMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::RemoveMissingElementsVisitor"; }
+  static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor();
 
@@ -54,7 +53,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
 private:
-  shared_ptr<ReportMissingElementsVisitor> _v;
+  boost::shared_ptr<ReportMissingElementsVisitor> _v;
 };
 
 }

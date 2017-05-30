@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JACOBI_H
 #define JACOBI_H
@@ -68,7 +68,7 @@
 
 namespace Tgs
 {
-  using namespace NEWMAT;
+
 /*====================================Jacobi================================
 This code was taken from the newmat11 beta library.  I wanted to turn off
 the sorting of the eigenvalues and vectors without altering the original 
@@ -91,16 +91,16 @@ public:
     Matrix& V - the resulting eigenvectors
 
   */
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D,
-                     SymmetricMatrix& A, Matrix& V, bool eivec);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D,
+                     NEWMAT::SymmetricMatrix& A, NEWMAT::Matrix& V, bool eivec);
 
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D);
 
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D,
-                     SymmetricMatrix& A);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D,
+                     NEWMAT::SymmetricMatrix& A);
 
-  static void jacobi(const SymmetricMatrix& X, DiagonalMatrix& D,
-                     Matrix& V);
+  static void jacobi(const NEWMAT::SymmetricMatrix& X, NEWMAT::DiagonalMatrix& D,
+                     NEWMAT::Matrix& V);
 
 };
 

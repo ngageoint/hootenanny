@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __TAG_DIFFERENCER_JS_H__
 #define __TAG_DIFFERENCER_JS_H__
@@ -38,10 +38,6 @@
 
 namespace hoot
 {
-class TagDifferencer;
-
-using namespace std;
-using namespace v8;
 
 class TagDifferencer;
 
@@ -60,7 +56,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  auto_ptr<TagDifferencer> _td;
+  std::auto_ptr<TagDifferencer> _td;
 };
 
 }

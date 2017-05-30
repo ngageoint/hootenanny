@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -48,6 +48,9 @@
 #include <QByteArray>
 
 #include "../TestUtils.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -71,7 +74,7 @@ public:
     {
       OsmXmlReader reader;
       OsmMap::resetCounters();
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -97,7 +100,7 @@ public:
     {
       OsmXmlReader reader;
       OsmMap::resetCounters();
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -136,7 +139,7 @@ public:
 
     OsmXmlReader reader;
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -181,8 +184,6 @@ public:
   void runCalculateTiePointDistancesNotEnoughTiePointsTest()
   {
     RubberSheet rubberSheet;
-    vector<RubberSheet::Tie> ties;
-    rubberSheet._ties = ties;
 
     QString exceptionMsg("");
     try

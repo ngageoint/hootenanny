@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateAreaForStatsVisitor.h"
 
@@ -30,9 +30,11 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/ElementConverter.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -49,7 +51,7 @@ Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 
 void CalculateAreaForStatsVisitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, true, true);
+  boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, true, true);
   _total += g->getArea();
 }
 

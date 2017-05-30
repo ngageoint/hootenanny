@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -67,7 +67,7 @@ public:
   {
     OsmXmlReader reader;
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
 

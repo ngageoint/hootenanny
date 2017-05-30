@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagCountVisitor.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

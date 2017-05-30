@@ -27,7 +27,7 @@
 
 #include "PoiPolygonMergerJs.h"
 
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -35,6 +35,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
+
+using namespace v8;
 
 namespace hoot
 {
@@ -82,16 +84,6 @@ v8::Handle<v8::Value> PoiPolygonMergerJs::jsPoiPolyMerge(const v8::Arguments& ar
     ElementPtr polyElement = map->getElement(polyId);
     polyElement->setStatus(Status(Status::Conflated));
     polyElement->getTags()[MetadataTags::HootStatus()] = "3";
-
-    if (Log::getInstance().isDebugEnabled())
-    {
-      LOG_DEBUG("Writing debug map...");
-      OsmMapPtr debug(new OsmMap(map));
-      MapProjector::projectToWgs84(debug);
-      //if you're testing this from the mocha test, you may need to put an absolute path here for
-      //the output instead
-      //OsmMapWriterFactory::write(debug, ConfigOptions().getDebugMapFilename());
-    }
 
     v8::Handle<v8::Object> returnMap = OsmMapJs::create(map);
     return scope.Close(returnMap);

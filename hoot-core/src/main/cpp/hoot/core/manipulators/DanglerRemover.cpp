@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DanglerRemover.h"
@@ -40,7 +40,7 @@ using namespace geos::operation::distance;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/WorkingMap.h>
+#include <hoot/core/conflate/WorkingMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/elements/Node.h>
@@ -65,7 +65,8 @@ using namespace Tgs;
 
 #include "DanglerRemoverManipulation.h"
 
-namespace hoot {
+namespace hoot
+{
 
 #define SQR(x) ((x) * (x))
 
@@ -74,8 +75,8 @@ DanglerRemover::DanglerRemover(Meters errorPlus)
   _errorPlus = errorPlus;
 }
 
-const vector< shared_ptr<Manipulation> >& DanglerRemover::findAllManipulations(
-        shared_ptr<const OsmMap> map)
+const vector< boost::shared_ptr<Manipulation> >& DanglerRemover::findAllManipulations(
+        ConstOsmMapPtr map)
 {
   LOG_INFO("Finding all dangle remover manipulations...");
 
@@ -87,8 +88,8 @@ const vector< shared_ptr<Manipulation> >& DanglerRemover::findAllManipulations(
   return findWayManipulations(map, unknown);
 }
 
-const vector< shared_ptr<Manipulation> >& DanglerRemover::findWayManipulations(
-        shared_ptr<const OsmMap> map, const vector<long>& wids)
+const vector< boost::shared_ptr<Manipulation> >& DanglerRemover::findWayManipulations(
+        ConstOsmMapPtr map, const vector<long>& wids)
 {
   _result.clear();
   _map = map;
@@ -118,7 +119,7 @@ const vector< shared_ptr<Manipulation> >& DanglerRemover::findWayManipulations(
 
 void DanglerRemover::_findMatches(long baseWayId)
 {
-  shared_ptr<DanglerRemoverManipulation> result(new DanglerRemoverManipulation(baseWayId, _map, _errorPlus));
+  boost::shared_ptr<DanglerRemoverManipulation> result(new DanglerRemoverManipulation(baseWayId, _map, _errorPlus));
 
   if (result->getScoreEstimate() > 0)
   {

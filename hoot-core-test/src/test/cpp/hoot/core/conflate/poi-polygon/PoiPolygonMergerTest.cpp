@@ -27,7 +27,7 @@
 
 // Hoot
 #include "../../TestUtils.h"
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/OsmJsonWriter.h>
@@ -38,6 +38,9 @@
 
 // Qt
 #include <QDir>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -504,7 +507,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -523,7 +526,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -542,7 +545,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -562,7 +565,7 @@ public:
 
       PoiPolygonMerger::merge(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

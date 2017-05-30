@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/OgrReader.h>
@@ -35,6 +35,8 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -78,7 +80,7 @@ public:
     QString translation = args[a++];
     QString output = args[a++];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OgrReader reader;
     reader.setLimit(limit);
     reader.setTranslationFile(translation);
@@ -173,7 +175,7 @@ public:
       }
     }
 
-    if (map->getNodeMap().size() == 0)
+    if (map->getNodes().size() == 0)
     {
       progress.set(1.0, "Failed", true, "After translation the map is empty.  Aborting.");
       throw HootException("After translation the map is empty. Aborting.");

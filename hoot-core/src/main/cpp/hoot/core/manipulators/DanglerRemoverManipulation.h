@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DANGLERREMOVERMANIPULATION_H
@@ -31,7 +31,7 @@
 #include "Manipulation.h"
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
@@ -42,30 +42,30 @@ namespace hoot
 class DanglerRemoverManipulation : public Manipulation
 {
 public:
-  DanglerRemoverManipulation(long wayId, shared_ptr<const OsmMap> map, Meters errorPlus);
+  DanglerRemoverManipulation(long wayId, ConstOsmMapPtr map, Meters errorPlus);
 
   virtual ~DanglerRemoverManipulation() {}
 
-  virtual void applyManipulation(shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
-    set<ElementId>& newElements) const;
+  virtual void applyManipulation(OsmMapPtr wm, std::set<ElementId>& impactedElements,
+    std::set<ElementId>& newElements) const;
 
-  virtual double calculateProbability(shared_ptr<const OsmMap> map) const;
+  virtual double calculateProbability(ConstOsmMapPtr map) const;
 
-  virtual double calculateScore(shared_ptr<const OsmMap> map) const;
+  virtual double calculateScore(ConstOsmMapPtr map) const;
 
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
+  virtual const std::set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
   virtual double getProbabilityEstimate() const { return _p; }
 
   virtual double getScoreEstimate() const { return _estimate; }
 
-  virtual bool isValid(shared_ptr<const OsmMap> map) const;
+  virtual bool isValid(ConstOsmMapPtr map) const;
 
   virtual QString toString() const;
 
 private:
 
-  mutable set<ElementId> _impactedElements;
+  mutable std::set<ElementId> _impactedElements;
   mutable double _p;
 
   double _errorPlus;

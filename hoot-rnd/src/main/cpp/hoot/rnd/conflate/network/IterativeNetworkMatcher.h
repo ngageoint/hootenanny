@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ITERATIVENETWORKMATCHER_H
 #define ITERATIVENETWORKMATCHER_H
@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class IterativeNetworkMatcherTest;
 
 /**
@@ -55,7 +53,7 @@ class IterativeNetworkMatcherTest;
 class IterativeNetworkMatcher : public NetworkMatcher
 {
 public:
-  static string className() { return "hoot::IterativeNetworkMatcher"; }
+  static std::string className() { return "hoot::IterativeNetworkMatcher"; }
 
   const static double EPSILON;
 
@@ -67,7 +65,7 @@ public:
   /**
    * Use this instead of a constructor.
    */
-  static shared_ptr<IterativeNetworkMatcher> create();
+  static boost::shared_ptr<IterativeNetworkMatcher> create();
 
   void iterate();
 
@@ -185,8 +183,8 @@ private:
 
 };
 
-typedef shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
-typedef shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
+typedef boost::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcherPtr;
+typedef boost::shared_ptr<const IterativeNetworkMatcher> ConstIterativeNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstIterativeNetworkMatcherPtr, ConstIterativeNetworkMatcherPtr);

@@ -41,6 +41,8 @@
 
 #include "../../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -104,8 +106,8 @@ public:
     vector<long int> maxL;
     maxL.push_back(5);
     maxL.push_back(3);
-    shared_ptr<LongBox> in = shared_ptr<LongBox>(new LongBox(minL, maxL));
-    vector<shared_ptr<LongBox> > lb = ranger.breakBox(in);
+    boost::shared_ptr<LongBox> in = boost::shared_ptr<LongBox>(new LongBox(minL, maxL));
+    vector<boost::shared_ptr<LongBox> > lb = ranger.breakBox(in);
     HOOT_STR_EQUALS("{ ( 2 : 3) ( 0 : 3) }", lb[0]->toString());
     HOOT_STR_EQUALS("{ ( 4 : 5) ( 0 : 3) }", lb[1]->toString());
 
@@ -115,8 +117,8 @@ public:
     vector<long int> maxL1;
     maxL1.push_back(5);
     maxL1.push_back(4);
-    shared_ptr<LongBox> in1 = shared_ptr<LongBox>(new LongBox(minL1, maxL1));
-    vector<shared_ptr<LongBox> > lb1 = ranger.breakBox(in1);
+    boost::shared_ptr<LongBox> in1 = boost::shared_ptr<LongBox>(new LongBox(minL1, maxL1));
+    vector<boost::shared_ptr<LongBox> > lb1 = ranger.breakBox(in1);
     HOOT_STR_EQUALS("{ ( 2 : 5) ( 3 : 3) }", lb1[0]->toString());
     HOOT_STR_EQUALS("{ ( 2 : 5) ( 4 : 4) }", lb1[1]->toString());
 
@@ -126,8 +128,8 @@ public:
     vector<long int> maxL2;
     maxL2.push_back(4);
     maxL2.push_back(7);
-    shared_ptr<LongBox> in2 = shared_ptr<LongBox>(new LongBox(minL2, maxL2));
-    vector<shared_ptr<LongBox> > lb2 = ranger.breakBox(in2);
+    boost::shared_ptr<LongBox> in2 = boost::shared_ptr<LongBox>(new LongBox(minL2, maxL2));
+    vector<boost::shared_ptr<LongBox> > lb2 = ranger.breakBox(in2);
     HOOT_STR_EQUALS("{ ( 2 : 4) ( 2 : 3) }", lb2[0]->toString());
     HOOT_STR_EQUALS("{ ( 2 : 4) ( 4 : 7) }", lb2[1]->toString());
 
@@ -137,8 +139,8 @@ public:
     vector<long int> maxL3;
     maxL3.push_back(7);
     maxL3.push_back(5);
-    shared_ptr<LongBox> in3 = shared_ptr<LongBox>(new LongBox(minL3, maxL3));
-    vector<shared_ptr<LongBox> > lb3 = ranger.breakBox(in3);
+    boost::shared_ptr<LongBox> in3 = boost::shared_ptr<LongBox>(new LongBox(minL3, maxL3));
+    vector<boost::shared_ptr<LongBox> > lb3 = ranger.breakBox(in3);
     HOOT_STR_EQUALS("{ ( 4 : 5) ( 4 : 5) }", lb3[0]->toString());
     HOOT_STR_EQUALS("{ ( 6 : 7) ( 4 : 5) }", lb3[1]->toString());
   }

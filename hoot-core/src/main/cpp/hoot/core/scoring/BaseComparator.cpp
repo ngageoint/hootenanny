@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseComparator.h"
@@ -35,8 +35,8 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/GeometryPainter.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/GeometryPainter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -48,13 +48,12 @@ using namespace geos::operation::distance;
 #include <QImage>
 #include <QPainter>
 
-// TGS
-//using namespace Tgs;
+using namespace geos::geom;
 
 namespace hoot
 {
 
-BaseComparator::BaseComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2)
+BaseComparator::BaseComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2)
 {
   _init(map1, map2);
 }
@@ -144,17 +143,17 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
   }
 }
 
-Coordinate BaseComparator::_findNearestPointOnFeature(shared_ptr<OsmMap> map, Coordinate c)
+Coordinate BaseComparator::_findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, Coordinate c)
 {
   Coordinate result;
 
   // find the nearest feature
   long wId = map->getIndex().findNearestWay(c);
-  shared_ptr<Way> w = map->getWay(wId);
+  WayPtr w = map->getWay(wId);
 
   // find the nearest point on that feature.
-  shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
-  shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  boost::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+  boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
   CoordinateSequence* cs = DistanceOp::closestPoints(p.get(), ls.get());
 
   cs->getAt(0, result);
@@ -164,7 +163,7 @@ Coordinate BaseComparator::_findNearestPointOnFeature(shared_ptr<OsmMap> map, Co
   return result;
 }
 
-void BaseComparator::_init(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2)
+void BaseComparator::_init(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2)
 {
   _map1 = map1;
   _map2 = map2;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDWAYSVISITOR_H
 #define FINDWAYSVISITOR_H
@@ -44,30 +44,30 @@ public:
 
   void setOsmMap(const OsmMap* map) { _map = map; }
 
-  void visit(const shared_ptr<const Element>& e);
+  void visit(const boost::shared_ptr<const Element>& e);
 
-  vector<long> getIds() { return _wayIds; }
+  std::vector<long> getIds() { return _wayIds; }
 
   // Convenience method for finding ways that match the given criterion
-  static vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
+  static std::vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit);
 
-  static vector<long> findWays(const ConstOsmMapPtr& map,
-                               ElementCriterion* pCrit,
-                               shared_ptr<const Way> refWay,
-                               Meters maxDistance,
-                               bool addError);
+  static std::vector<long> findWays(const ConstOsmMapPtr& map,
+                                    ElementCriterion* pCrit,
+                                    ConstWayPtr refWay,
+                                    Meters maxDistance,
+                                    bool addError);
 
   // Convenience method for finding ways that contain the given node
-  static vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
+  static std::vector<long> findWaysByNode(const ConstOsmMapPtr& map, long nodeId);
 
   // Convenience method for finding ways that contain the given tag
-  static vector<long> findWaysByTag(const ConstOsmMapPtr& map,
-                                    const QString& key,
-                                    const QString& value);
+  static std::vector<long> findWaysByTag(const ConstOsmMapPtr& map,
+                                         const QString& key,
+                                         const QString& value);
 
 private:
   const OsmMap* _map;
-  vector<long> _wayIds;
+  std::vector<long> _wayIds;
   ElementCriterion * _pCrit;
 };
 

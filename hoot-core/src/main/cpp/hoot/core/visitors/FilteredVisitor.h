@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FILTEREDVISITOR_H
 #define FILTEREDVISITOR_H
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
 
 #include "ElementVisitorConsumer.h"
@@ -77,12 +78,18 @@ public:
 
   virtual void visit(const ConstElementPtr& e);
 
+  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+                        const ConstOsmMapPtr& map);
+  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+                        const ConstOsmMapPtr& map, const ElementPtr& element);
+
 private:
+
   const ElementCriterion* _criterion;
-  shared_ptr<ElementCriterion> _criterionDelete;
+ boost::shared_ptr<ElementCriterion> _criterionDelete;
   const OsmMap* _map;
   ElementVisitor* _visitor;
-  shared_ptr<ElementVisitor> _visitDelete;
+ boost::shared_ptr<ElementVisitor> _visitDelete;
 };
 
 }

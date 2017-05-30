@@ -41,6 +41,9 @@
 
 #include "../../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -55,7 +58,7 @@ public:
 
   void runTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
@@ -84,7 +87,7 @@ public:
 
   void runTouchesTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                        Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),

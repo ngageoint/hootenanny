@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineRemoveOp.h"
 
@@ -32,13 +32,15 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/OsmMap.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -49,29 +51,29 @@ BuildingOutlineRemoveOp::BuildingOutlineRemoveOp()
 {
 }
 
-void BuildingOutlineRemoveOp::apply(shared_ptr<OsmMap>& map)
+void BuildingOutlineRemoveOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
   // go through all the relations
-  const RelationMap& relations = map->getRelationMap();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  const RelationMap& relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    const shared_ptr<Relation>& r = it->second;
+    const boost::shared_ptr<Relation>& r = it->second;
     // add the relation to a building group if appropriate
-    if (r->getType() == "building")
+    if (r->getType() == MetadataTags::RelationBuilding())
     {
       _removeOutline(r);
     }
   }
 }
 
-void BuildingOutlineRemoveOp::_removeOutline(const shared_ptr<Relation>& building)
+void BuildingOutlineRemoveOp::_removeOutline(const boost::shared_ptr<Relation> &building)
 {
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
   {
-    if (entries[i].role == "outline")
+    if (entries[i].role == MetadataTags::RoleOutline())
     {
       building->removeElement(entries[i].role, entries[i].getElementId());
       RecursiveElementRemover(entries[i].getElementId()).apply(_map);

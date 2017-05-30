@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
 /**
  * Generates an OSM XML response header
  */
-final class OsmResponseHeaderGenerator {
+public final class OsmResponseHeaderGenerator {
     private OsmResponseHeaderGenerator() {
     }
 
@@ -46,7 +46,7 @@ final class OsmResponseHeaderGenerator {
      *            owning XML document
      * @return an XML Element
      */
-    static Element getOsmDataHeader(Document document) {
+    public static Element getOsmDataHeader(Document document) {
         Element osmElement = getOsmHeader(document);
         osmElement.setAttribute("copyright", COPYRIGHT);
         osmElement.setAttribute("attribution", ATTRIBUTION);
@@ -61,7 +61,7 @@ final class OsmResponseHeaderGenerator {
      *            owning XML document
      * @return an XML Element
      */
-    static Element getOsmHeader(Document document) {
+    public static Element getOsmHeader(Document document) {
         Element osmElement = document.createElement("osm");
         osmElement.setAttribute("version", OSM_VERSION);
         osmElement.setAttribute("generator", GENERATOR);

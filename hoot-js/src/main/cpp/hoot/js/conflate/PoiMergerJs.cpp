@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include <set>
 #include <utility>    // For std::pair
@@ -43,6 +43,8 @@
 #include <hoot/js/PluginContext.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/js/util/HootExceptionJs.h>
+
+using namespace v8;
 
 namespace hoot
 {
@@ -88,7 +90,7 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     OsmMapPtr map( mapJs->getMap() );
 
     // Instantiate script merger
-    shared_ptr<PluginContext> script(new PluginContext());
+    boost::shared_ptr<PluginContext> script(new PluginContext());
     v8::HandleScope handleScope;
     v8::Context::Scope context_scope(script->getContext());
     script->loadScript(scriptPath, "plugin");
@@ -115,7 +117,7 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     //   A->B, A->C, A->D, A->E
     //
     // ...then pass those pairs one at a time through the merger, since it only merges pairs
-    NodeMap nodes = map->getNodeMap();
+    NodeMap nodes = map->getNodes();
     OsmMapPtr mergedMap(map);
 
     const ElementId firstId = ElementId::node(elementId);
@@ -123,7 +125,7 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
       if (it->second->getId() != elementId) {
-        const boost::shared_ptr<const Node>& n = it->second;
+        const ConstNodePtr& n = it->second;
 
         std::set< std::pair< ElementId, ElementId> > matches;
         matches.insert(std::pair<ElementId,ElementId>(firstId, ElementId::node(n->getId())));

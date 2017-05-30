@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYHEADING_H
@@ -32,14 +32,12 @@
 #include <geos/geom/Coordinate.h>
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
 
 class WayLocation;
-
-  using namespace geos::geom;
 
 /**
  * Calculates the heading of a way at any point on the way.
@@ -54,11 +52,11 @@ public:
    */
   static Radians calculateHeading(const WayLocation& loc, Meters delta = 0.001);
 
-  static Radians calculateHeading(const Coordinate& c1, const Coordinate& c2);
+  static Radians calculateHeading(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 
-  static Coordinate calculateVector(const WayLocation& loc, Meters delta = 0.001);
+  static geos::geom::Coordinate calculateVector(const WayLocation& loc, Meters delta = 0.001);
 
-  static Coordinate calculateVector(const Coordinate& c1, const Coordinate& c2);
+  static geos::geom::Coordinate calculateVector(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
 
   static Radians deltaMagnitude(Radians r1, Radians r2);
 

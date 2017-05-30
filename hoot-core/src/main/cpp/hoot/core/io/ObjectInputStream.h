@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OBJECTINPUTSTREAM_H
 #define OBJECTINPUTSTREAM_H
@@ -31,7 +31,7 @@
 #include <boost/any.hpp>
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Log.h>
 
@@ -47,9 +47,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
-using namespace Tgs;
 
 class ObjectInputStream
 {
@@ -57,7 +54,7 @@ public:
   /**
    * Takes ownership of the istream.
    */
-  ObjectInputStream(istream& is);
+  ObjectInputStream(std::istream& is);
 
   ObjectInputStream(QDataStream& is);
 
@@ -69,9 +66,12 @@ public:
   T* readObject();
 
 private:
-  istream* _istream;
-  auto_ptr<StdIoDevice> _stdIoDevice;
-  auto_ptr<QDataStream> _streamDelete;
+  //  Don't allow copy constructor
+  ObjectInputStream(const ObjectInputStream&) { }
+
+  std::istream* _istream;
+  std::auto_ptr<Tgs::StdIoDevice> _stdIoDevice;
+  std::auto_ptr<QDataStream> _streamDelete;
   QDataStream* _stream;
 };
 

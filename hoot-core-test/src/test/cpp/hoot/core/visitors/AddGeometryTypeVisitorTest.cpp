@@ -32,13 +32,15 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/visitors/AddGeometryTypeVisitor.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt
 #include <QDir>
 
 #include "../TestUtils.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -55,12 +57,12 @@ public:
   void runBasicTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     NodePtr n1(new Node(Status::Unknown1, map->createNextNodeId(), 0, 0, 10));
     n1->getTags()["name"] = "strange test";
     map->addNode(n1);
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
+    WayPtr w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
     w1->setTag("highway", "road");
     map->addWay(w1);
 

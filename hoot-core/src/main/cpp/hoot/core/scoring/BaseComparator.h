@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef BASE_COMPARATOR_H
@@ -35,7 +35,7 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/util/OpenCv.h>
 
 // Qt
@@ -49,8 +49,6 @@
 namespace hoot
 {
 
-using namespace geos::geom;
-
 class OsmMap;
 
 /**
@@ -63,7 +61,7 @@ public:
   /**
    * Takes two maps for comparison as input
    */
-  BaseComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  BaseComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
 
   virtual ~BaseComparator() {}
 
@@ -74,8 +72,8 @@ public:
 protected:
 
   int _width, _height;
-  shared_ptr<OsmMap> _map1, _map2;
-  shared_ptr<OsmMap> _mapP1, _mapP2;
+  boost::shared_ptr<OsmMap> _map1, _map2;
+  boost::shared_ptr<OsmMap> _mapP1, _mapP2;
   Meters _pixelSize;
   OGREnvelope _worldBounds;
   OGREnvelope _projectedBounds;
@@ -83,9 +81,9 @@ protected:
 
   double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
 
-  Coordinate _findNearestPointOnFeature(shared_ptr<OsmMap> map, Coordinate c);
+  geos::geom::Coordinate _findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, geos::geom::Coordinate c);
 
-  virtual void _init(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  virtual void _init(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
 
   void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true);
 

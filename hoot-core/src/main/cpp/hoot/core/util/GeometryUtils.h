@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYUTILS_H
@@ -56,7 +56,6 @@ namespace geos
 
 namespace hoot
 {
-using namespace geos::geom;
 
 class GeometryUtils
 {
@@ -73,43 +72,43 @@ public:
    *
    * Taken from http://www.movable-type.co.uk/scripts/latlong.html
    */
-  static Coordinate calculateDestination(const Coordinate& start, Degrees bearing, Meters distance);
+  static geos::geom::Coordinate calculateDestination(const geos::geom::Coordinate& start, Degrees bearing, Meters distance);
 
   /**
    * Returns the distance between two coordinates using the haversine formula and a mean earth
    * radius of MEAN_EARTH_RADIUS.
    */
-  static double haversine(const Coordinate& c1, const Coordinate& c2);
+  static double haversine(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2);
   static bool highPrecisionHaversine();
 
-  static Envelope* toEnvelope(const OGREnvelope& e);
+  static geos::geom::Envelope* toEnvelope(const OGREnvelope& e);
 
   /**
    * Converts the envelope into a hex representation. This preserves all double information but
    * is likely platform dependent.
    */
-  static Envelope* toEnvelopeFromHex(const QString& s);
+  static geos::geom::Envelope* toEnvelopeFromHex(const QString& s);
 
-  static QString toHexString(const Envelope& e);
+  static QString toHexString(const geos::geom::Envelope& e);
 
-  static OGREnvelope* toOGREnvelope(const Envelope& e);
+  static OGREnvelope* toOGREnvelope(const geos::geom::Envelope& e);
 
-  static QString toString(const Envelope& e);
+  static QString toString(const geos::geom::Envelope& e);
 
-  static Geometry* validateGeometry(const Geometry *g);
+  static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry *g);
 
-  static Geometry* validateGeometryCollection(const GeometryCollection* gc);
+  static geos::geom::Geometry* validateGeometryCollection(const geos::geom::GeometryCollection* gc);
 
-  static Geometry* validateLineString(const LineString* ls);
+  static geos::geom::Geometry* validateLineString(const geos::geom::LineString* ls);
 
-  static LinearRing* validateLinearRing(const LinearRing* lr);
+  static geos::geom::LinearRing* validateLinearRing(const geos::geom::LinearRing* lr);
 
   /**
    * Performs the following cleanup operations:
    * - Removes polygons with an area of zero
    * - Removes linear rings less than 3 points
    */
-  static Geometry* validatePolygon(const Polygon* p);
+  static geos::geom::Geometry* validatePolygon(const geos::geom::Polygon* p);
 
   /**
    * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
@@ -118,7 +117,7 @@ public:
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return
    */
-  static Envelope envelopeFromConfigString(const QString boundsStr);
+  static geos::geom::Envelope envelopeFromConfigString(const QString boundsStr);
 
   /**
    * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
@@ -127,7 +126,7 @@ public:
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return
    */
-  static QString envelopeToConfigString(const Envelope& bounds);
+  static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
 
 };
 

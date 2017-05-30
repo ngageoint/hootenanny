@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ATTRIBUTESCOREEXTRACTOR_H
 #define ATTRIBUTESCOREEXTRACTOR_H
@@ -40,13 +40,13 @@ namespace hoot
 class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
-  static string className() { return "hoot::AttributeScoreExtractor"; }
+  static std::string className() { return "hoot::AttributeScoreExtractor"; }
 
   AttributeScoreExtractor(ValueAggregator* wayAgg = 0, bool useWeight = false);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
-  virtual string getName() const;
+  virtual std::string getName() const;
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ZVALUE_H
 #define ZVALUE_H
@@ -33,34 +33,32 @@
 namespace hoot
 {
 
-using namespace std;
-
 class ZValue
 {
 public:
 
-  static string className() { return "hoot::ZValue"; }
+  static std::string className() { return "hoot::ZValue"; }
 
   ZValue() {}
 
-  ZValue(int dimensions, int depth, vector<double> min, vector<double> max);
+  ZValue(int dimensions, int depth, const std::vector<double>& min, const std::vector<double>& max);
 
   ~ZValue();
 
-  long int calculate(vector<double> point);
+  long int calculate(std::vector<double> point);
 
   /**
    * Calculates the z value by interleaving values that are already scaled to
    * the proper space.
    */
-  long int calculate(vector<long int> point);
+  long int calculate(std::vector<long int> point);
 
   /**
    * Calculates the non-interleaved component for one dimension.
    */
   long int calculateComponent(double v, int d);
 
-  void decompose(long int v, vector<long int>& point);
+  void decompose(long int v, std::vector<long int>& point);
 
   int getDepth() { return _depth; }
 
@@ -77,11 +75,11 @@ public:
   long int getMaxDimensionRange() { return _range; }
 
 private:
-  vector<long int> _b;
+  std::vector<long int> _b;
   int _depth;
   int _dimensions;
-  vector<double> _min;
-  vector<double> _max;
+  std::vector<double> _min;
+  std::vector<double> _max;
   long int _range;
 };
 

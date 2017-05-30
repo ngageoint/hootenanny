@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WaySubline.h"
 
@@ -33,6 +33,9 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
 #include <hoot/core/elements/ElementVisitor.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -174,7 +177,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
   if (!_start.isNode())
   {
     Coordinate c = _start.getCoordinate();
-    shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(), ce);
+    NodePtr n = nf->createNode(map, c, way->getStatus(), ce);
     map->addNode(n);
     result->addNode(n->getId());
   }
@@ -187,7 +190,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* n
   if (!_end.isNode())
   {
     Coordinate c = _end.getCoordinate();
-    shared_ptr<Node> n = nf->createNode(map, c, way->getStatus(), ce);
+    NodePtr n = nf->createNode(map, c, way->getStatus(), ce);
     map->addNode(n);
     result->addNode(n->getId());
   }

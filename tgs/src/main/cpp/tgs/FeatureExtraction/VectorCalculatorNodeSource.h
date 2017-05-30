@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__VECTOR_CALCULATOR_NODE_SOURCE_H__
@@ -38,18 +38,18 @@ namespace Tgs
   class TGS_EXPORT VectorCalculatorNodeSource : public CalculatorGenomeNode
   {
   public:
-    VectorCalculatorNodeSource() { _label = "v[]"; };
+    VectorCalculatorNodeSource() : _label("v[]") { }
 
     VectorCalculatorNodeSource(const std::vector<double>& source);
 
     virtual ~VectorCalculatorNodeSource() {}
 
-    virtual const std::map<std::string, std::string> getInputs() const 
+    virtual const std::map<std::string, std::string> getInputs() const
     { return std::map<std::string, std::string>(); }
 
     virtual double getOutput(const int uid) const { return _source[uid]; }
 
-    virtual void mutate(double /*p*/) {};
+    virtual void mutate(double /*p*/) {}
 
     void setLabel(std::string label) { _label = label; }
 

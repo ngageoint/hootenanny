@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMergerCreator.h"
 
@@ -30,9 +30,12 @@
 #include "ScriptMerger.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
+
+using namespace std;
+using namespace v8;
 
 namespace hoot
 {
@@ -52,7 +55,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
 
   set< pair<ElementId, ElementId> > eids;
 
-  shared_ptr<PluginContext> script;
+  boost::shared_ptr<PluginContext> script;
   Persistent<Object> plugin;
   QStringList matchType;
 

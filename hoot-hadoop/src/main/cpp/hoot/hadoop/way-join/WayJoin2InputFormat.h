@@ -18,7 +18,7 @@
 #define WAYJOIN2INPUTFORMAT_H
 
 // Hoot
-#include <hoot/hadoop/PbfInputSplit.h>
+#include <hoot/hadoop/pbf/PbfInputSplit.h>
 
 // Pretty Pipes
 #include <pp/conf/Configuration.h>
@@ -49,7 +49,7 @@ public:
 
   int getSplitCount() { return _splits.size(); }
 
-  virtual void setPath(string path);
+  virtual void setPath(std::string path);
 
   virtual void setConfiguration(const pp::Configuration& conf);
 

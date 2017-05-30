@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "GeoNamesReader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 
 // qt
@@ -76,7 +76,7 @@ void GeoNamesReader::close()
   _fp.close();
 }
 
-shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
+boost::shared_ptr<OGRSpatialReference> GeoNamesReader::getProjection() const
 {
   if (!_wgs84)
   {
@@ -147,7 +147,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  shared_ptr<Node> n(new Node(_status, id, x, y, _circularError));
+  NodePtr n(new Node(_status, id, x, y, _circularError));
 
   if (_columns.size() != fields.size())
   {

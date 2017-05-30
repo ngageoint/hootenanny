@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __INDEXED_EDGE_MATCH_SET_H__
 #define __INDEXED_EDGE_MATCH_SET_H__
@@ -50,9 +50,9 @@ public:
    */
   void addEdgeMatch(const ConstEdgeMatchPtr& em, double score);
 
-  shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
+ boost::shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
 
-  shared_ptr<IndexedEdgeMatchSet> clone() const;
+ boost::shared_ptr<IndexedEdgeMatchSet> clone() const;
 
   /**
    * Returns true if the specified element (or the reversed equivalent) is contained in this set.
@@ -139,8 +139,8 @@ private:
   void _addVertexToMatchMapping(ConstEdgeStringPtr str, const ConstEdgeMatchPtr &em);
 };
 
-typedef shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;
-typedef shared_ptr<const IndexedEdgeMatchSet> ConstIndexedEdgeMatchSetPtr;
+typedef boost::shared_ptr<IndexedEdgeMatchSet> IndexedEdgeMatchSetPtr;
+typedef boost::shared_ptr<const IndexedEdgeMatchSet> ConstIndexedEdgeMatchSetPtr;
 
 // not implemented
 bool operator<(ConstIndexedEdgeMatchSetPtr, ConstIndexedEdgeMatchSetPtr);

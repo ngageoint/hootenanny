@@ -34,13 +34,13 @@ public:
 
   static std::string className() { return "hoot::TileOpMapper"; }
 
-  static string envelopesKey() { return "hoot.envelopes"; }
+  static std::string envelopesKey() { return "hoot.envelopes"; }
 
-  static string bufferKey() { return "hoot.buffer"; }
+  static std::string bufferKey() { return "hoot.buffer"; }
 
-  static string maxWaySizeKey() { return "hoot.max.way.size"; }
+  static std::string maxWaySizeKey() { return "hoot.max.way.size"; }
 
-  static string replacementsKey() { return "hoot.node.replacements"; }
+  static std::string replacementsKey() { return "hoot.node.replacements"; }
 
   TileOpMapper();
 
@@ -48,24 +48,24 @@ public:
 
   virtual void close() {}
 
-  static vector<Envelope> parseEnvelopes(const string& envStr);
+  static std::vector<geos::geom::Envelope> parseEnvelopes(const std::string& envStr);
 
 protected:
 
-  QHash< int, shared_ptr<OsmPbfWriter> > _writers;
-  QHash< int, shared_ptr<stringstream> > _buffers;
+  QHash< int,boost::shared_ptr<OsmPbfWriter> > _writers;
+  QHash< int,boost::shared_ptr<std::stringstream> > _buffers;
   Degrees _tileBufferSize;
 
-  vector<Envelope> _envelopes;
+  std::vector<geos::geom::Envelope> _envelopes;
 
   bool _initialized;
 
-  string _replacmentsPath;
+  std::string _replacmentsPath;
   int _reduceTaskCount;
 
-  void _addNode(const shared_ptr<Node>& n);
+  void _addNode(const NodePtr& n);
 
-  void _addWay(ConstOsmMapPtrR map, const shared_ptr<Way> &w);
+  void _addWay(const ConstOsmMapPtr& map, const WayPtr &w);
 
   /**
    * After each input OsmMap, emit all the data thus far. This reduce memory usage.
@@ -74,11 +74,11 @@ protected:
 
   void _init(HadoopPipes::MapContext& context);
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
-  void _replaceNodes(shared_ptr<OsmMap>& m);
+  void _replaceNodes(OsmMapPtr& m);
 
-  void _replaceNodes(shared_ptr<OsmMap>& m, istream& is);
+  void _replaceNodes(OsmMapPtr& m, std::istream& is);
 
 };
 

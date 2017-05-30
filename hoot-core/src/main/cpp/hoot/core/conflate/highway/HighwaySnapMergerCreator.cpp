@@ -22,17 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwaySnapMerger.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 #include "HighwayMatch.h"
 #include "HighwaySnapMergerCreator.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -53,7 +55,7 @@ bool HighwaySnapMergerCreator::createMergers(const MatchSet& matches, vector<Mer
 
   set< pair<ElementId, ElementId> > eids;
 
-  shared_ptr<SublineStringMatcher> sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> sublineMatcher;
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {

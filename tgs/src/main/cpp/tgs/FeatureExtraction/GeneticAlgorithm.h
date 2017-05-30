@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__GENETIC_ALGORITHM_H__
@@ -81,7 +81,7 @@ namespace Tgs
   {
   public:
 
-    GeneticAlgorithm(shared_ptr<Genome> seed, shared_ptr<FitnessFunction> fitness);
+    GeneticAlgorithm(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness);
 
     virtual ~GeneticAlgorithm();
 
@@ -92,9 +92,9 @@ namespace Tgs
 
     void enableScoreCaching() { _scoreCaching = true; }
 
-    shared_ptr<Genome> getBestGenome() const { return _best; }
+   boost::shared_ptr<Genome> getBestGenome() const { return _best; }
 
-    const std::vector< shared_ptr<Genome> >& getPopulation() const { return _population; }
+    const std::vector<boost::shared_ptr<Genome> >& getPopulation() const { return _population; }
 
     int getUniqueEvalCount() const { return _used.size(); }
 
@@ -111,15 +111,15 @@ namespace Tgs
     class CompareGenomes
     {
     public:
-      bool operator() (const shared_ptr<Genome>& a, const shared_ptr<Genome>& b) const
+      bool operator() (const boost::shared_ptr<Genome>& a, const boost::shared_ptr<Genome>& b) const
       {
         return a->getScore() > b->getScore();
       }
     };
 
-    std::vector< shared_ptr<Genome> > _population;
+    std::vector<boost::shared_ptr<Genome> > _population;
 
-    virtual void _initializeGenome(shared_ptr<Genome> genome);
+    virtual void _initializeGenome(boost::shared_ptr<Genome> genome);
 
     template <class T>
     void _loadParameter(const std::map<std::string, Parameter>& params, const std::string& key,
@@ -132,18 +132,18 @@ namespace Tgs
       }
     }
 
-    virtual void _mutate(shared_ptr<Genome> genome);
+    virtual void _mutate(boost::shared_ptr<Genome> genome);
 
     virtual void _updateScores();
 
   private:
     /// the very first genome
-    shared_ptr<Genome> _seed;
+   boost::shared_ptr<Genome> _seed;
     /// the best genome
-    shared_ptr<Genome> _best;
+   boost::shared_ptr<Genome> _best;
     /// number of new genomes to create at each iteration
     int _freshMeat;
-    shared_ptr<FitnessFunction> _fitness;
+   boost::shared_ptr<FitnessFunction> _fitness;
     bool _initialized;
 
     int _populationSize;

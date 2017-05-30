@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MergerFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/polygon/BuildingMergerCreator.h>
@@ -36,10 +36,12 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/match-graph/MatchGraph.h>
 
+using namespace std;
+
 namespace hoot
 {
 
-shared_ptr<MergerFactory> MergerFactory::_theInstance;
+boost::shared_ptr<MergerFactory> MergerFactory::_theInstance;
 
 MergerFactory::MergerFactory()
 {

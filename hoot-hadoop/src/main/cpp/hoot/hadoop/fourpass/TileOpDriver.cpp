@@ -22,11 +22,11 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/hadoop/MapStats.h>
-#include <hoot/hadoop/PbfInputFormat.h>
-#include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/hadoop/stats/MapStats.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
@@ -38,6 +38,9 @@
 
 #include "TileOpMapper.h"
 #include "TileOpReducer.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -153,7 +156,7 @@ void TileOpDriver::apply(QString in, vector<Envelope> envelopes, double buffer,
   job.run();
 }
 
-void TileOpDriver::setOperation(shared_ptr<OsmMapOperation> op)
+void TileOpDriver::setOperation(boost::shared_ptr<OsmMapOperation> op)
 {
   _op = op;
 }

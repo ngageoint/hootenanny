@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseCommand.h"
@@ -45,6 +45,8 @@
 
 // Qt
 #include <QFileInfo>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -73,7 +75,7 @@ QString BaseCommand::_getHelpPath() const
   return result;
 }
 
-void BaseCommand::loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
+void BaseCommand::loadMap(OsmMapPtr map, QString path, bool useFileId,
                           Status defaultStatus)
 {
   OsmMapReaderFactory::read(map, path, useFileId, defaultStatus);
@@ -117,7 +119,7 @@ int BaseCommand::run(char* argv[], int argc)
   return runSimple(args);
 }
 
-void BaseCommand::saveMap(shared_ptr<const OsmMap> map, QString path)
+void BaseCommand::saveMap(boost::shared_ptr<const OsmMap> map, QString path)
 {
   OsmMapWriterFactory::write(map, path);
 }

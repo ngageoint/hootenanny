@@ -52,13 +52,13 @@ public:
 
   static QString getBadGeometryType() { return _complexGeometryType; }
 
-  static set<ElementId> getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid);
+  static std::set<ElementId> getReviewElements(const ConstOsmMapPtr &map, ReviewUid uid);
 
-  static set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map, ConstElementPtr e1);
+  static std::set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map, ConstElementPtr e1);
 
   static QString getReviewType(const ConstOsmMapPtr &map, ReviewUid uid);
 
-  static set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map);
+  static std::set<ReviewUid> getReviewUids(const ConstOsmMapPtr &map);
 
   /**
    * Returns true if the element is in at least one review.
@@ -89,7 +89,7 @@ public:
    */
   static void mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
     const QString& note, const QString& reviewType, double score = -1,
-    vector<QString> choices = vector<QString>() );
+    std::vector<QString> choices = std::vector<QString>() );
 
   /**
    * Marks a set of elements as needing review and sets them to reference each other. If the score is
@@ -99,15 +99,15 @@ public:
    * @param reviewType A human readable review type. Typically this is a one word description of
    *  the feature being reviewed. E.g. "Highway" or "Building".
    */
-  static void mark(const OsmMapPtr &map, set<ElementId> ids,
+  static void mark(const OsmMapPtr &map, std::set<ElementId> ids,
     const QString& note, const QString& reviewType, double score = -1,
-    vector<QString> choices = vector<QString>() );
+    std::vector<QString> choices = std::vector<QString>() );
 
   /**
    * Marks a single element as needing review.
    */
   static void mark(const OsmMapPtr &map, const ElementPtr& e, const QString& note,
-    const QString& reviewType, double score = -1, vector<QString> choices = vector<QString>());
+    const QString& reviewType, double score = -1, std::vector<QString> choices = std::vector<QString>());
 
   /**
    * Removes a single element.
@@ -117,7 +117,6 @@ public:
 private:
   // don't use these keys directly, instead call the helper functions above.
   static QString _complexGeometryType;
-  static QString _revieweeKey;
 
   /**
    * Returns a hilbert value that represents the center of the bounds that covers e1 and e2.
@@ -125,7 +124,7 @@ private:
   static int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, ConstElementPtr e1,
     ConstElementPtr e2 = ConstElementPtr());
 
-  static set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
+  static std::set<ElementId> _getReviewRelations(const ConstOsmMapPtr &map, ElementId eid);
 
   void _updateScore(Tags& t, double score);
 

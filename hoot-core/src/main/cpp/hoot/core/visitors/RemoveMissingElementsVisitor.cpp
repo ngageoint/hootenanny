@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveMissingElementsVisitor.h"
 
 //hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveMissingElementsVisitor)
 
 RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
 {
-  _v = shared_ptr<ReportMissingElementsVisitor>(new ReportMissingElementsVisitor(true));
+  _v =boost::shared_ptr<ReportMissingElementsVisitor>(new ReportMissingElementsVisitor(true));
 }
 
 void RemoveMissingElementsVisitor::visit(const ConstElementPtr& e)

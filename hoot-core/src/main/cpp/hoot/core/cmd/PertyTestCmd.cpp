@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/perty/PertyTestRunner.h>
 #include <hoot/core/perty/PertyTestRunResult.h>
@@ -34,6 +34,8 @@
 // Qt
 #include <QFileInfo>
 #include <QDir>
+
+using namespace std;
 
 namespace hoot
 {
@@ -57,17 +59,17 @@ class PertyTestCmd : public BaseCommand
         throw HootException(QString("%1 takes two parameters.").arg(getName()));
       }
 
-      QList<shared_ptr<const PertyTestRunResult> > results =
+      QList<boost::shared_ptr<const PertyTestRunResult> > results =
         PertyTestRunner().runTest(args[0], args[1]);
 
       LOG_INFO("\n\nPERTY Test Results");
       LOG_INFO("\n\nNumber of Test Runs: " << results.size());
       bool anyTestFailed = false;
       bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
-      for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-           it != results.end(); it++)
+      for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+           it != results.end(); ++it)
       {
-        shared_ptr<const PertyTestRunResult> result = *it;
+        boost::shared_ptr<const PertyTestRunResult> result = *it;
         LOG_INFO(result->toString());
         anyTestFailed = !result->testPassed();
         //just checking here for test run scores that were higher than expected but allowed to pass;

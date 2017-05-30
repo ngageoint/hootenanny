@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKDETAILS_H
 #define NETWORKDETAILS_H
@@ -112,9 +112,9 @@ public:
 
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
 
-  virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const;
 
-  virtual Envelope getEnvelope(ConstNetworkVertexPtr v) const;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const;
 
   ConstOsmMapPtr getMap() const { return _map; }
 
@@ -179,10 +179,10 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
-  shared_ptr<HighwayClassifier> _classifier;
+ boost::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
-  shared_ptr<SublineStringMatcher> _sublineMatcher;
+ boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   LegacyVertexMatcherPtr _vertexMatcher;
 
   class SublineCache
@@ -216,8 +216,8 @@ private:
     const WaySublineCollection& ws) const;
 };
 
-typedef shared_ptr<NetworkDetails> NetworkDetailsPtr;
-typedef shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+typedef boost::shared_ptr<NetworkDetails> NetworkDetailsPtr;
+typedef boost::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
 
 // not implemented
 bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);

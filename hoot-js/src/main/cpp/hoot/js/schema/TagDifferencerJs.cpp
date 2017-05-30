@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagDifferencerJs.h"
 
@@ -30,7 +30,7 @@
 #include <boost/any.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -42,10 +42,12 @@
 // Qt
 #include <QStringList>
 
+using namespace boost;
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
-
-using namespace boost;
 
 HOOT_JS_REGISTER(TagDifferencerJs)
 

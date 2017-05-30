@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "VisitorOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
 
@@ -46,7 +46,7 @@ void VisitorOp::addVisitor(const ElementVisitorPtr& e)
   _visitor = e;
 }
 
-void VisitorOp::apply(shared_ptr<OsmMap>& map)
+void VisitorOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   map->visitRw(*_visitor);
 }

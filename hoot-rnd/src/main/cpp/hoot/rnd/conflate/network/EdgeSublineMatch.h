@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGESUBLINEMATCH_H
 #define EDGESUBLINEMATCH_H
@@ -57,8 +57,8 @@ private:
 
 };
 
-typedef shared_ptr<EdgeSublineMatch> EdgeSublineMatchPtr;
-typedef shared_ptr<const EdgeSublineMatch> ConstEdgeSublineMatchPtr;
+typedef boost::shared_ptr<EdgeSublineMatch> EdgeSublineMatchPtr;
+typedef boost::shared_ptr<const EdgeSublineMatch> ConstEdgeSublineMatchPtr;
 
 // not implemented
 bool operator<(ConstEdgeSublineMatchPtr, ConstEdgeSublineMatchPtr);

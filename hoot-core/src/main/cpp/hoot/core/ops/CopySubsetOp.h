@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COPYSUBSETOP_H
 #define COPYSUBSETOP_H
@@ -41,9 +41,9 @@ namespace hoot
 class CopySubsetOp : public OsmMapOperation
 {
 public:
-  CopySubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids);
+  CopySubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
 
-  CopySubsetOp(const ConstOsmMapPtr& from, const vector<long>& ids);
+  CopySubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& ids);
 
   CopySubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
 
@@ -51,10 +51,10 @@ public:
    * A new map is created and the eids specified in the constructor and their depedencies will be
    * copied into the new map. The @a map will be set to point to the new map.
    */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
 private:
-  set<ElementId> _eids;
+  std::set<ElementId> _eids;
   const ConstOsmMapPtr& _from;
 };
 

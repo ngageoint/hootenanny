@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/PbfElementIterator.h>
@@ -37,6 +37,8 @@
 // Standard
 #include <fstream>
 #include <limits>
+
+using namespace std;
 
 namespace hoot
 {
@@ -100,10 +102,10 @@ public:
       PbfElementIterator it(input);
       while (it.hasNext())
       {
-        shared_ptr<Element> e = it.next();
-        shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-        shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
-        shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        boost::shared_ptr<Element> e = it.next();
+        WayPtr w = boost::dynamic_pointer_cast<Way>(e);
+        NodePtr n = boost::dynamic_pointer_cast<Node>(e);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (w != 0)
         {
           minWay[i - 1] = min(w->getId(), minWay[i - 1]);
@@ -143,10 +145,10 @@ public:
       PbfElementIterator it(input);
       while (it.hasNext())
       {
-        shared_ptr<Element> e = it.next();
-        shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-        shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
-        shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        boost::shared_ptr<Element> e = it.next();
+        WayPtr w = boost::dynamic_pointer_cast<Way>(e);
+        NodePtr n = boost::dynamic_pointer_cast<Node>(e);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (w != 0)
         {
           writer.writePartial(w);

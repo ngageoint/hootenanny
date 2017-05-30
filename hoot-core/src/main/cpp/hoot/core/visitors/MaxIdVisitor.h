@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MAXIDVISITOR_H
@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements.
@@ -47,7 +46,7 @@ class MaxIdVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
 
-  MaxIdVisitor() : _maxId(-numeric_limits<long>::max()) {}
+  MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) {}
 
   virtual ~MaxIdVisitor() {}
 

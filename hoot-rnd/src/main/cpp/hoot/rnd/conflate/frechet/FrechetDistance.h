@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FRECHETDISTANCE_H
 #define FRECHETDISTANCE_H
@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/Way.h>
 
@@ -48,7 +48,7 @@ typedef std::pair<int, int> vertex_match;
 typedef std::vector<vertex_match> subline_entry;
 typedef std::pair<Meters, subline_entry> frechet_subline;
 
-typedef shared_ptr<LineString> LineStringPtr;
+typedef boost::shared_ptr<geos::geom::LineString> LineStringPtr;
 
 /** Class for calculating Frechet Distance between two ways and calculating maximal subline matches.
  *  Algorithm developed from "A new merging process for data integration base on the descrete Frechet distance"
@@ -168,13 +168,13 @@ protected:
   //  Distinct Frechet matrix
   frechet_matrix _matrix;
   //  Locations along _w2 for each node in _w1
-  vector<WayLocation> _locations_w1;
+  std::vector<WayLocation> _locations_w1;
   //  Locations along _w1 for each node in _w2
-  vector<WayLocation> _locations_w2;
+  std::vector<WayLocation> _locations_w2;
   //  Distances between each node in _w1 and the corresponding WayLocation on _w2
-  vector<Meters> _distances_w1;
+  std::vector<Meters> _distances_w1;
   //  Distances between each node in _w2 and the corresponding WayLocation on _w1
-  vector<Meters> _distances_w2;
+  std::vector<Meters> _distances_w2;
   //  Max difference in angles to calculate Frechet distance for
   Radians _angleDiff;
   //  Max angle to compare _angleDiff against

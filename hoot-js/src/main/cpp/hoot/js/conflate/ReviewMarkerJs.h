@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWMARKERJS_H
 #define REVIEWMARKERJS_H
@@ -35,9 +35,6 @@
 
 namespace hoot
 {
-
-using namespace node;
-using namespace v8;
 
 /**
  * The ReviewMarkerJs class wraps objects of type ReviewMarker. It is an abstract base class.

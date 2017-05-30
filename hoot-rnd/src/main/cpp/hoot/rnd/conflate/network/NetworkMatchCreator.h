@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMATCHCREATOR_H
 #define NETWORKMATCHCREATOR_H
@@ -35,14 +35,13 @@
 
 namespace hoot
 {
-using namespace Tgs;
 
 class NetworkMatchCreator : public MatchCreator
 {
 
 public:
 
-  static string className() { return "hoot::NetworkMatchCreator"; }
+  static std::string className() { return "hoot::NetworkMatchCreator"; }
 
   NetworkMatchCreator();
 
@@ -51,18 +50,18 @@ public:
   /**
    * Search the provided map for network matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
                              ConstMatchThresholdPtr threshold);
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 
-  virtual shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 
 private:
 
-  shared_ptr<MatchThreshold> _matchThreshold;
+  boost::shared_ptr<MatchThreshold> _matchThreshold;
   ElementCriterionPtr _userCriterion;
 
   const Match* _createMatch(const NetworkDetailsPtr &map, NetworkEdgeScorePtr e,

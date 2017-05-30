@@ -15,7 +15,7 @@
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/TileConflator.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -23,7 +23,7 @@
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>
-#include <hoot/hadoop/PaintNodesDriver.h>
+#include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 #include <hoot/hadoop/stats/MapStatsDriver.h>
 
 // Pretty Pipes
@@ -31,6 +31,8 @@
 
 // Qt
 #include <QImage>
+
+using namespace std;
 
 namespace hoot
 {
@@ -67,14 +69,14 @@ public:
       pp::Job::setDefaultJobTracker("local");
     }
 
-    shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
+    boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
     FourPassManager driver(worker);
     driver.setMaxNodesPerBox(maxNodeCount);
     driver.setBuffer(pixelSize);
     driver.setSources(in1, in2);
 
-    shared_ptr<UnifyingConflator> unify(new UnifyingConflator());
-    shared_ptr<OpList> op(new OpList());
+    boost::shared_ptr<UnifyingConflator> unify(new UnifyingConflator());
+    boost::shared_ptr<OpList> op(new OpList());
     op->addOp(unify);
     driver.setOperation(op);
 

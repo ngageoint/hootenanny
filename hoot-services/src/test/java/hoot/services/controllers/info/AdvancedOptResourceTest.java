@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,74 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
 
-import static hoot.services.HootProperties.HOME_FOLDER;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.net.URL;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.FileUtils;
 import org.hamcrest.CoreMatchers;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
-import hoot.services.testsupport.HootServicesJerseyTestAbstract;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
 
 
 public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
-
-    private static File homeFolder;
-    private static String original_HOME_FOLDER;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        original_HOME_FOLDER = HOME_FOLDER;
-        homeFolder = new File(FileUtils.getTempDirectory(), "AdvancedOptResourceTest");
-        FileUtils.forceMkdir(homeFolder);
-        assertTrue(homeFolder.exists());
-        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", homeFolder.getAbsolutePath());
-
-        File testFolder = new File(homeFolder, "conf");
-        FileUtils.forceMkdir(testFolder);
-
-        File dest = new File(testFolder, "services/conflationRefOps.json");
-        URL inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationRefOps.json");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        dest = new File(testFolder, "services/conflateAdvOps.json");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflateAdvOps.json");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        dest = new File(testFolder, "services/conflationAverageOps.json");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationAverageOps.json");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        dest = new File(testFolder, "services/conflationHorizontalOps.json");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/conflationHorizontalOps.json");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        dest = new File(testFolder, "core/ConfigOptions.asciidoc");
-        inputUrl = AdvancedOptResourceTest.class.getResource("/hoot/services/controllers/info/ConfigOptions.asciidoc");
-        FileUtils.copyURLToFile(inputUrl, dest);
-    }
-
-    @AfterClass
-    public static void afterClass() throws Exception {
-        FileUtils.deleteDirectory(homeFolder);
-        HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
-    }
 
     @Test
     @Category(UnitTest.class)

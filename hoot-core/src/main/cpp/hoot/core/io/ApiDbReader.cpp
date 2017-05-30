@@ -27,6 +27,7 @@
 #include "ApiDbReader.h"
 
 // Hoot
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
@@ -34,6 +35,8 @@
 
 // Qt
 #include <QSet>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -48,10 +51,32 @@ _open(false)
 
 }
 
+void ApiDbReader::setBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
+}
+
+void ApiDbReader::setOverrideBoundingBox(const QString bbox)
+{
+  if (!bbox.trimmed().isEmpty())
+  {
+    _overrideBounds = GeometryUtils::envelopeFromConfigString(bbox);
+  }
+}
+
+bool ApiDbReader::_hasBounds()
+{
+  return _isValidBounds(_bounds) || _isValidBounds(_overrideBounds);
+}
+
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
   LOG_VART(oldId);
+  LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {
     result = oldId;
@@ -65,36 +90,42 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
       if (_nodeIdMap.count(id) > 0)
       {
         result = ElementId::node(_nodeIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextNodeId();
         _nodeIdMap[id] = newId;
         result = ElementId::node(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Way:
       if (_wayIdMap.count(id) > 0)
       {
         result = ElementId::way(_wayIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextWayId();
         _wayIdMap[id] = newId;
         result = ElementId::way(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Relation:
       if (_relationIdMap.count(id) > 0)
       {
         result = ElementId::relation(_relationIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextRelationId();
         _relationIdMap[id] = newId;
         result = ElementId::relation(newId);
+        LOG_VART(result);
       }
       break;
     default:
@@ -102,7 +133,6 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
         QString::number(oldId.getType().getEnum()));
     }
   }
-  LOG_VART(result);
 
   return result;
 }
@@ -124,20 +154,28 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      try
       {
-        LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-                 QString::number(element->getId()));
+        //  Try parsing the status in text form
+        element->setStatus(Status::fromString(statusStr));
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      catch (const HootException&)
       {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+                   QString::number(element->getId()));
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      logWarnCount++;
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    if (! ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
+    if (!ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
   }
 
   if (tags.contains("type"))
@@ -162,7 +200,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& /*e*/)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -196,7 +234,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& /*e*/)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -219,6 +257,17 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
   }
 }
 
+bool ApiDbReader::_isValidBounds(const Envelope& bounds)
+{
+  if (bounds.isNull() ||
+      (bounds.getMinX() == -180.0 && bounds.getMinY() == -90.0 && bounds.getMaxX() == 180.0 &&
+       bounds.getMaxY() == 90.0))
+  {
+    return false;
+  }
+  return true;
+}
+
 void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 {
   long boundedNodeCount = 0;
@@ -226,7 +275,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   long boundedRelationCount = 0;
 
   LOG_DEBUG("Retrieving node records within the query bounds...");
-  shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
+  boost::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
   QSet<QString> nodeIds;
   while (nodeItr->next())
   {
@@ -237,9 +286,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     boundedNodeCount++;
     //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
     //with any queries.  Mapped ids may not exist yet.
-    const QString nodeId = QString::number(resultIterator.value(0).toLongLong());
-    LOG_VART(nodeId);
-    nodeIds.insert(nodeId);
+    const long nodeId = resultIterator.value(0).toLongLong();
+    LOG_VART(ElementId(ElementType::Node, nodeId));
+    nodeIds.insert( QString::number(nodeId));
   }
   LOG_VARD(nodeIds.size());
 
@@ -247,19 +296,19 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   {
     LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
     QSet<QString> wayIds;
-    shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
+    boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
     while (wayIdItr->next())
     {
-      const QString wayId = QString::number((*wayIdItr).value(0).toLongLong());
-      LOG_VART(wayId);
-      wayIds.insert(wayId);
+      const long wayId = (*wayIdItr).value(0).toLongLong();
+      LOG_VART(ElementId(ElementType::Way, wayId));
+      wayIds.insert(QString::number(wayId));
     }
     LOG_VARD(wayIds.size());
 
     if (wayIds.size() > 0)
     {
       LOG_DEBUG("Retrieving ways by way ID...");
-      shared_ptr<QSqlQuery> wayItr =
+      boost::shared_ptr<QSqlQuery> wayItr =
         _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
       while (wayItr->next())
       {
@@ -274,13 +323,13 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
       LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
       QSet<QString> additionalWayNodeIds;
-      shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+      boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
         _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
       while (additionalWayNodeIdItr->next())
       {
-        const QString nodeId = QString::number((*additionalWayNodeIdItr).value(0).toLongLong());
-        LOG_VART(nodeId);
-        additionalWayNodeIds.insert(nodeId);
+        const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Node, nodeId));
+        additionalWayNodeIds.insert(QString::number(nodeId));
       }
 
       //subtract nodeIds from additionalWayNodeIds so no dupes get added
@@ -294,7 +343,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         nodeIds.unite(additionalWayNodeIds);
         LOG_DEBUG(
           "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
-        shared_ptr<QSqlQuery> additionalWayNodeItr =
+        boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
           _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
         while (additionalWayNodeItr->next())
         {
@@ -309,22 +358,22 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
     QSet<QString> relationIds;
     assert(nodeIds.size() > 0);
-    shared_ptr<QSqlQuery> relationIdItr =
+    boost::shared_ptr<QSqlQuery> relationIdItr =
       _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
     while (relationIdItr->next())
     {
-      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
-      LOG_VART(relationId);
-      relationIds.insert(relationId);
+      const long relationId = (*relationIdItr).value(0).toLongLong();
+      LOG_VART(ElementId(ElementType::Relation, relationId));
+      relationIds.insert(QString::number(relationId));
     }
     if (wayIds.size() > 0)
     {
       relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
       while (relationIdItr->next())
       {
-        const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
-        LOG_VART(relationId);
-        relationIds.insert(relationId);
+        const long relationId = (*relationIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Relation, relationId));
+        relationIds.insert(QString::number(relationId));
       }
     }
     LOG_VARD(relationIds.size());
@@ -332,7 +381,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     if (relationIds.size() > 0)
     {
       LOG_DEBUG("Retrieving relations by relation ID...");
-      shared_ptr<QSqlQuery> relationItr =
+      boost::shared_ptr<QSqlQuery> relationItr =
         _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
       while (relationItr->next())
       {
@@ -351,9 +400,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VARD(boundedWayCount);
   LOG_VARD(boundedRelationCount);
   LOG_DEBUG("Current map:");
-  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());
-  LOG_VARD(map->getRelationMap().size());
+  LOG_VARD(map->getRelations().size());
 }
 
 }

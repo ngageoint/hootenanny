@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatch.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
@@ -44,12 +44,15 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/js/OsmMapJs.h>
 #include <hoot/js/conflate/js/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
+
+// Qt
+#include <qnumeric.h>
 
 // Standard
 #include <sstream>
@@ -57,13 +60,16 @@
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
+using namespace std;
+using namespace Tgs;
+using namespace v8;
+
 namespace hoot
 {
-using namespace Tgs;
 
 unsigned int ScriptMatch::logWarnCount = 0;
 
-ScriptMatch::ScriptMatch(shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),
@@ -121,9 +127,9 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
       }
     }
   }
-  catch (NeedsReviewException& ex)
+  catch (const NeedsReviewException& ex)
   {
-    LOG_VAR(ex.getClassName());
+    LOG_VART(ex.getClassName());
     _p.setReview();
     _explainText = ex.getWhat();
   }
@@ -221,7 +227,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
         conflicting = false;
       }
     }
-    catch (NeedsReviewException& e)
+    catch (const NeedsReviewException& e)
     {
       conflicting = true;
     }
@@ -388,7 +394,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
     {
       double d = it.value().toDouble();
       result[it.key()] = d;
-      if (isnan(result[it.key()]))
+      if (::qIsNaN(result[it.key()]))
       {
         if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {

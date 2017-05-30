@@ -22,16 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AlphaShapeGenerator.h"
 
 // Hoot
 #include <hoot/core/algorithms/AlphaShape.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -46,7 +49,7 @@ _buffer(buffer)
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
-  shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
+  boost::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
     if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -60,13 +63,13 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     logWarnCount++;
   }
 
-  shared_ptr<OsmMap> result;
+  OsmMapPtr result;
 
   result.reset(new OsmMap(inputMap->getProjection()));
   // add the resulting alpha shape for debugging.
   GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
 
-  const RelationMap& rm = result->getRelationMap();
+  const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
     Relation* r = result->getRelation(it->first).get();
@@ -76,14 +79,14 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   return result;
 }
 
-shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
+boost::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
   MapProjector::projectToPlanar(inputMap);
 
   // put all the nodes into a vector of points.
   std::vector< std::pair<double, double> > points;
-  points.reserve(inputMap->getNodeMap().size());
-  const NodeMap& nodes = inputMap->getNodeMap();
+  points.reserve(inputMap->getNodes().size());
+  const NodeMap& nodes = inputMap->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     pair<double, double> p;
@@ -93,7 +96,7 @@ shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
   }
 
   // create a complex geometry representing the alpha shape
-  shared_ptr<Geometry> cutterShape;
+  boost::shared_ptr<Geometry> cutterShape;
   {
     AlphaShape alphaShape(_alpha);
     alphaShape.insert(points);

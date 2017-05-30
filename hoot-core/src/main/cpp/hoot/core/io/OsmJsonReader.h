@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_JSON_READER_H
@@ -141,7 +141,7 @@ public:
    *        will likely be closed after this call
    * @param map
    */
-  virtual void read(shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   /**
    * @brief setDefaultStatus Sets the default status to use for elements

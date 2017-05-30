@@ -13,6 +13,8 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
+# Don't automatically update the oracle jdk, we need to control the version
+sudo apt-mark -qq hold oracle-java8-installer oracle-java8-set-default >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
@@ -22,21 +24,21 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
+if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
     echo "### Installing Java 8..."
 
     # jdk-8u112-linux-x64.tar.gz's official checksums:
-    #    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
-    #    md5: de9b7a90f0f5a13cfcaa3b01451d0337
-    echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
+    #    sha256:  62b215bdfb48bace523723cdbb2157c665e6a25429c73828a32f00e587301236
+    #    md5: 75b2cb2249710d822a60f83e28860053
+    echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
 
-    if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u112-linux-x64.tar.gz"
+    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
+        echo "Downloading jdk-8u131-linux-x64.tar.gz ...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
+        echo "Finished download of jdk-8u131-linux-x64.tar.gz"
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
 
     if [[ ! -e /usr/lib/jvm ]]; then
         sudo mkdir /usr/lib/jvm
@@ -46,7 +48,7 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
         fi
     fi
 
-    sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
+    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -64,12 +66,12 @@ echo "### Installing dependencies from repos..."
 sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-dev libcppunit-dev \
  libcv-dev libopencv-dev liblog4cxx10-dev libnewmat10-dev libproj-dev python-dev libjson-spirit-dev \
  automake protobuf-compiler libprotobuf-dev gdb libqt4-sql-psql libgeos++-dev swig lcov maven \
- libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc pgadmin3 curl npm libxerces-c28 \
+ libstxxl-dev nodejs-dev nodejs-legacy doxygen xsltproc asciidoc curl npm libxerces-c28 \
  libglpk-dev libboost-all-dev source-highlight texlive-lang-arabic texlive-lang-hebrew \
- texlive-lang-cyrillic graphviz w3m python-setuptools python python-pip git ccache libogdi3.2-dev \
+ w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 >> Ubuntu_upgrade.txt 2>&1
+ libpango-1.0-0 libappindicator1 valgrind dos2unix >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -117,6 +119,20 @@ fi
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
     echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    source ~/.profile
+fi
+
+# Whether the client uses distcc or not, have distcc set up and ready to go.  To turn it on, 
+# enable it in LocalConfig.pri, configure the slaves in ~/.distcc/hosts, and launch distccd on 
+# the slaves.
+if [ ! -f ~/.distcc/hosts ]; then
+    echo "Adding distcc hosts file..."
+    mkdir -p ~/.distcc
+    echo "localhost/4" >> ~/.distcc/hosts
+fi
+if ! grep --quiet "DISTCC_TCP_CORK=0" ~/.profile; then
+    echo "Configuring distcc in profile..."
+    echo "export DISTCC_TCP_CORK=0" >> ~/.profile
     source ~/.profile
 fi
 
@@ -234,13 +250,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
         tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
+    if [ ! -f FileGDB_API_1_5_64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/FileGDB_API_1_5_64.tar.gz
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
@@ -270,14 +286,34 @@ if ! mocha --version &>/dev/null; then
     sudo rm -rf $HOME/tmp
 fi
 
+
+# Get the configuration for the Database
+source $HOOT_HOME/conf/database/DatabaseConfig.sh
+
 # NOTE: These have been changed to pg9.5
-if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
+# See if we already have a dB user
+if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER; then
+    echo "### Adding a Services Database user..."
+    sudo -u postgres createuser --superuser "$DB_USER"
+    sudo -u postgres psql -c "alter user \"$DB_USER\" with password '$DB_PASSWORD';"
+fi
+
+# Check that the OsmApiDb user exists
+# NOTE:
+#  + The OsmAPI Db user _might_ be different to the Hoot Services Db user...
+#  + The SetupOsmApiDB.sh script expects that the DB_USER_OSMAPI account exists
+if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER_OSMAPI; then
+    sudo -u postgres createuser --superuser "$DB_USER_OSMAPI"
+    sudo -u postgres psql -c "alter user \"$DB_USER_OSMAPI\" with password '$DB_PASSWORD_OSMAPI';"
+fi
+
+
+# Check for a hoot Db
+if ! sudo -u postgres psql -lqt | awk -F"|" '{print $1}' | grep -iw --quiet $DB_NAME; then
     echo "### Creating Services Database..."
-    sudo -u postgres createuser --superuser hoot
-    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
-    sudo -u postgres createdb hoot --owner=hoot
-    sudo -u postgres createdb wfsstoredb --owner=hoot
-    sudo -u postgres psql -d hoot -c 'create extension hstore;'
+    sudo -u postgres createdb $DB_NAME --owner="$DB_USER"
+    sudo -u postgres createdb wfsstoredb --owner="$DB_USER"
+    sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
     sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
 fi
@@ -366,7 +402,7 @@ fi
 cd ~
 # hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
 # so purposefully not installing hoot from the repos.
-if ! which hadoop > /dev/null ; then
+if ! hash hadoop >/dev/null 2>&1 ; then
   echo "Installing Hadoop..."
   if [ ! -f hadoop-0.20.2.tar.gz ]; then
     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
@@ -538,12 +574,6 @@ rm -rf $HOME/tmp
 
 cd $HOOT_HOME
 
-rm -rf $HOOT_HOME/ingest
-mkdir -p $HOOT_HOME/ingest/processed
-
-rm -rf $HOOT_HOME/upload
-mkdir -p $HOOT_HOME/upload
-
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
@@ -553,3 +583,33 @@ touch Vagrant.marker
 # switch to auto mode and use the highest priority installed alternatives for Java.
 sudo update-alternatives --auto java
 sudo update-alternatives --auto javac
+
+
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+    mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
+
+# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
+rm -rf $HOOT_HOME/upload
+rm -rf $HOOT_HOME/tmp
+
+if [ -d "$HOOT_HOME/data/reports" ]; then
+    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/data/reports
+fi
+
+if [ -d "$HOOT_HOME/customscript" ]; then
+    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/customscript
+fi
+
+if [ -d "$HOOT_HOME/ingest" ]; then
+    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/ingest
+fi
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+rm -rf $HOOT_HOME/userfiles/tmp

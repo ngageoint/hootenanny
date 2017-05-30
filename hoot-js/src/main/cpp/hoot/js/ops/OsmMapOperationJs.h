@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPOPERATIONJS_H
 #define OSMMAPOPERATIONJS_H
@@ -38,8 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -59,7 +57,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  auto_ptr<OsmMapOperation> _op;
+  std::auto_ptr<OsmMapOperation> _op;
 };
 
 }

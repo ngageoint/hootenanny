@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SimulatedAnnealing.h"
 
@@ -38,7 +38,7 @@ namespace Tgs
 using namespace std;
 
 SimulatedAnnealing::SimulatedAnnealing(ConstStateDescriptionPtr sd,
-  ConstFitnessFunctionPtr fitness) : _rand(0)
+  FitnessFunctionPtr fitness) : _rand(0)
 {
   _stateDescription = sd;
   _fitness = fitness;
@@ -106,6 +106,9 @@ StatePtr SimulatedAnnealing::_generateRandomState() const
 
 double SimulatedAnnealing::iterate(int kmax)
 {
+  //enable this log statement for better logging when calculating opts
+  //cout << "Initializing simulated annealing state..." << endl;
+
   StatePtr s1 = _generateRandomState();
   s1->setScore(_fitness->f(s1));
   ConstStatePtr s = s1;
@@ -115,7 +118,8 @@ double SimulatedAnnealing::iterate(int kmax)
 
   for (int k = 0; k < kmax; ++k)
   {
-    //cout << "Running Simulated Annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
+    //enable this log statement for better logging when calculating opts
+    //cout << "Running simulated annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
 
     double T = 1.0 - (double)k / (double)kmax;
     StatePtr sNew = _generateNeighbor(s, T);

@@ -18,9 +18,9 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/hadoop/PbfInputFormat.h>
-#include <hoot/hadoop/PbfRecordReader.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/UuidHelper.h>
@@ -37,9 +37,11 @@
 #include "WayJoin2RecordReader.h"
 #include "WayJoin2InputFormat.h"
 
+using namespace pp;
+using namespace std;
+
 namespace hoot
 {
-using namespace pp;
 
 WayJoinDriver::WayJoinDriver(Meters maxWaySize)
 {
@@ -63,13 +65,13 @@ void WayJoinDriver::calculateWayBounds(QString in, QString out)
 
     fs.deletePath(tmp.toStdString(), true);
   }
-  catch (HootException& e)
+  catch (const HootException&)
   {
     if (fs.exists(tmp.toStdString()))
     {
       fs.deletePath(tmp.toStdString(), true);
     }
-    throw e;
+    throw;
   }
 }
 

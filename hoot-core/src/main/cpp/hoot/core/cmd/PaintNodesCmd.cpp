@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/EnvelopeProvider.h>
 #include <hoot/core/io/OsmMapReader.h>
@@ -42,6 +42,9 @@
 // Standard
 #include <fstream>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -56,10 +59,10 @@ class PaintNodesCmd : public BaseCommand
 
     virtual QString getName() const { return "paint-nodes"; }
 
-    Envelope getEnvelope(shared_ptr<OsmMapReader> reader)
+    Envelope getEnvelope(boost::shared_ptr<OsmMapReader> reader)
     {
-      shared_ptr<EnvelopeProvider> ep = dynamic_pointer_cast<EnvelopeProvider>(reader);
-      shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      boost::shared_ptr<EnvelopeProvider> ep = boost::dynamic_pointer_cast<EnvelopeProvider>(reader);
+      boost::shared_ptr<PartialOsmMapReader> r = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
       if (ep)
       {
@@ -78,7 +81,7 @@ class PaintNodesCmd : public BaseCommand
           if (e.get() && e->getElementType() == ElementType::Node)
           {
             nodeCount++;
-            shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+            NodePtr n = boost::dynamic_pointer_cast<Node>(e);
             if (result.isNull())
             {
               result = Envelope(n->getX(), n->getX(), n->getY(), n->getY());
@@ -102,9 +105,9 @@ class PaintNodesCmd : public BaseCommand
       }
     }
 
-    cv::Mat calculateDensity(Envelope envelope, double pixelSize, shared_ptr<OsmMapReader> reader)
+    cv::Mat calculateDensity(Envelope envelope, double pixelSize, boost::shared_ptr<OsmMapReader> reader)
     {
-      shared_ptr<PartialOsmMapReader> r = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+      boost::shared_ptr<PartialOsmMapReader> r = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
       r->setUseDataSourceIds(true);
       //r->initializePartial();
 
@@ -120,7 +123,7 @@ class PaintNodesCmd : public BaseCommand
 
         if (e->getElementType() == ElementType::Node)
         {
-          shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+          NodePtr n = boost::dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);
           int py = int((n->getY() - envelope.getMinY()) / pixelSize);
           px = std::min(width - 1, std::max(0, px));
@@ -201,7 +204,7 @@ class PaintNodesCmd : public BaseCommand
         colorMultiplier[3] = toColorPortion(bs[3]);
       }
 
-      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input,
+      boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input,
         true);
       reader->open(input);
       Envelope e = getEnvelope(reader);
@@ -242,7 +245,7 @@ class PaintNodesCmd : public BaseCommand
         const int32_t* row = mat.ptr<int32_t>(y);
         for (int x = 0; x < qImage.width(); x++)
         {
-          double v = log(row[x] + 1) / log(maxValue);
+          double v = log1p(row[x]) / log(maxValue);
           int r = max(0, min<int>(255, v * colorMultiplier[0] + qRed(baseColors)));
           int g = max(0, min<int>(255, v * colorMultiplier[1] + qGreen(baseColors)));
           int b = max(0, min<int>(255, v * colorMultiplier[2] + qBlue(baseColors)));

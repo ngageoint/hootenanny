@@ -27,7 +27,7 @@
 #include "AddRef1Visitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
@@ -45,7 +45,7 @@ AddRef1Visitor::AddRef1Visitor()
 
 void AddRef1Visitor::visit(const ConstElementPtr& e)
 {
-  shared_ptr<Element> ee = _map->getElement(e->getElementId());
+  boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
 
   if (_informationOnly == false || ee->getTags().getNonDebugCount() > 0)
   {

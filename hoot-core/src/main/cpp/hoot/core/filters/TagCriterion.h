@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCRITERION_H
 #define TAGCRITERION_H
@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 /**
  * Returns true if k==v
@@ -45,12 +44,12 @@ class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static string className() { return "hoot::TagCriterion"; }
+  static std::string className() { return "hoot::TagCriterion"; }
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v) : _k(k), _v(v) {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   void setConfiguration(const Settings& s);
 

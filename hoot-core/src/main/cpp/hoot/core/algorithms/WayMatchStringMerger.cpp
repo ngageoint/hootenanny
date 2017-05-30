@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayMatchStringMerger.h"
 
@@ -31,6 +31,9 @@
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

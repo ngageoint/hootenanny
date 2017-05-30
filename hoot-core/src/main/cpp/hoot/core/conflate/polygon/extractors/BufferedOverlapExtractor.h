@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUFFEREDOVERLAPEXTRACTOR_H
 #define BUFFEREDOVERLAPEXTRACTOR_H
@@ -58,21 +58,21 @@ public:
    */
   BufferedOverlapExtractor(double bufferPortion=0.1);
 
-  static string className() { return "hoot::BufferedOverlapExtractor"; }
+  static std::string className() { return "hoot::BufferedOverlapExtractor"; }
 
-  virtual string getClassName() const { return BufferedOverlapExtractor::className(); }
+  virtual std::string getClassName() const { return BufferedOverlapExtractor::className(); }
 
-  virtual string getName() const;
+  virtual std::string getName() const;
 
-  virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
+  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
 
-  virtual DataFrame::NullTreatment getNullTreatment() const
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
   {
-    return DataFrame::NullAsMissingValue;
+    return Tgs::DataFrame::NullAsMissingValue;
   }
 
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const;
+  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const;
 
 private:
   double _bufferPortion;

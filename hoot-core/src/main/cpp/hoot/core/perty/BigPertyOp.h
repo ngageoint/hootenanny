@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BIGPERTYOP_H
 #define BIGPERTYOP_H
@@ -33,7 +33,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/perty/RngConsumer.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
@@ -61,12 +61,12 @@ public:
 
   virtual ~BigPertyOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Returns the name of the class. Typically just returns the result of className().
    */
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   /**
    * Reads the information for this object from the stream.
@@ -91,7 +91,7 @@ public:
 
 private:
   geos::geom::Envelope _bounds;
-  auto_ptr<boost::minstd_rand> _rngAuto;
+  std::auto_ptr<boost::minstd_rand> _rngAuto;
   boost::minstd_rand* _rng;
   Meters _sigma;
   Meters _maxDistance;

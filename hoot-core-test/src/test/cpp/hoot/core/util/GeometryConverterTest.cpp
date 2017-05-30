@@ -37,7 +37,8 @@
 // Hoot
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -57,7 +58,7 @@ public:
     w->getTags()["building"] = "yes";
 
     ElementConverter uut(map);
-    shared_ptr<Geometry> g = uut.convertToGeometry(w);
+    boost::shared_ptr<Geometry> g = uut.convertToGeometry(w);
 
     CPPUNIT_ASSERT_EQUAL(true, g->isEmpty());
   }

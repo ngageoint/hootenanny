@@ -27,16 +27,20 @@
 #include "HootApiDbReader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Qt
 #include <QUrl>
 #include <QDateTime>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -52,14 +56,6 @@ _database(new HootApiDb())
 HootApiDbReader::~HootApiDbReader()
 {
   close();
-}
-
-void HootApiDbReader::setBoundingBox(const QString bbox)
-{
-  if (!bbox.trimmed().isEmpty())
-  {
-    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
-  }
 }
 
 Envelope HootApiDbReader::calculateEnvelope() const
@@ -123,6 +119,8 @@ void HootApiDbReader::open(QString urlStr)
   //be invalid as a whole
   _database->transaction();
   _open = true;
+
+  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database->getDB()));
 }
 
 bool HootApiDbReader::hasMoreElements()
@@ -144,13 +142,11 @@ void  HootApiDbReader::initializePartial()
   _elementsRead = 0;
 }
 
-void HootApiDbReader::read(shared_ptr<OsmMap> map)
+void HootApiDbReader::read(OsmMapPtr map)
 {
-  if (_bounds.isNull() ||
-      (_bounds.getMinX() == -180.0 && _bounds.getMinY() == -90.0 && _bounds.getMaxX() == 180.0
-       && _bounds.getMaxY() == 90.0))
+  if (!_hasBounds())
   {
-    LOG_INFO("Executing Hoot API read query...");
+    LOG_DEBUG("Executing Hoot API read query...");
     for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
     {
       _read(map, static_cast<ElementType::Type>(ctr));
@@ -158,26 +154,35 @@ void HootApiDbReader::read(shared_ptr<OsmMap> map)
   }
   else
   {
-    LOG_INFO("Executing Hoot API bounded read query with bounds " << _bounds.toString() << "...");
-    _readByBounds(map, _bounds);
+    Envelope bounds;
+    if (!_overrideBounds.isNull())
+    {
+      bounds = _overrideBounds;
+    }
+    else
+    {
+      bounds = _bounds;
+    }
+    LOG_DEBUG("Executing Hoot API bounded read query with bounds " << bounds.toString() << "...");
+    _readByBounds(map, bounds);
   }
 }
 
 //TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
 //this read performs better for some reason
-void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
+void HootApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
   long elementCount = 0; //TODO: break this out by element type
 
   // contact the DB and select all
-  shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
+  boost::shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end, unfortunately (see comments in
   //HootApiDb::resultToElement)
   while (elementResultsIterator->isActive())
   {
-    shared_ptr<Element> element =
+    boost::shared_ptr<Element> element =
       _resultToElement(*elementResultsIterator, elementType, *map );
     //this check is necessary due to an inefficiency in HootApiDb::resultToElement
     if (element.get())
@@ -190,16 +195,16 @@ void HootApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementTy
 
   LOG_DEBUG(
     "Select all query read " << elementCount << " " << elementType.toString() << " elements.");
-  LOG_VARD(map->getNodeMap().size());
+  LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());
-  LOG_VARD(map->getRelationMap().size());
+  LOG_VARD(map->getRelations().size());
 }
 
-shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
+boost::shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
 {
   if (_selectElementType == ElementType::Unknown)
   {
-    return shared_ptr<Element>();
+    return boost::shared_ptr<Element>();
   }
 
   //see if another result is available
@@ -210,7 +215,7 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
   }
 
   //results still available, so keep parsing through them
-  shared_ptr<Element> element =
+  boost::shared_ptr<Element> element =
     _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
 
   //QSqlQuery::next() in HootApiDbReader::_resultToElement will return null
@@ -230,11 +235,11 @@ shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
   return element;
 }
 
-shared_ptr<Element> HootApiDbReader::readNextElement()
+boost::shared_ptr<Element> HootApiDbReader::readNextElement()
 {
   if (hasMoreElements())
   {
-    shared_ptr<Element> result = _nextElement;
+    boost::shared_ptr<Element> result = _nextElement;
     _nextElement.reset();
     _elementsRead++;
     return result;
@@ -266,7 +271,7 @@ void HootApiDbReader::close()
 }
 
 //TODO: this method could probably be moved up to the parent class
-shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
+boost::shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
                                                       const ElementType& elementType, OsmMap& map)
 {
   assert(resultIterator.isActive());
@@ -278,7 +283,7 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
   //calling resultIterator->next() and also should check for the null element.
   if (resultIterator.next())
   {
-    shared_ptr<Element> element;
+    boost::shared_ptr<Element> element;
     switch (elementType.getEnum())
     {
       case ElementType::Node:
@@ -308,22 +313,22 @@ shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
   else
   {
     resultIterator.finish();
-    return shared_ptr<Element>();
+    return boost::shared_ptr<Element>();
   }
 }
 
-shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
+NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
-  LOG_TRACE("Reading node with ID: " << nodeId);
+  LOG_VART(ElementId(ElementType::Node, nodeId));
 
-  shared_ptr<Node> node(
+  NodePtr node(
     new Node(
       _status,
       nodeId,
       resultIterator.value(ApiDb::NODES_LONGITUDE).toDouble(),
       resultIterator.value(ApiDb::NODES_LATITUDE).toDouble(),
-      ConfigOptions().getCircularErrorDefaultValue(),
+      -1,
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -334,24 +339,27 @@ shared_ptr<Node> HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator,
 
   // We want the reader's status to always override any existing status
   // Unless, we really want to keep the status.
-//    if (_status != Status::Invalid) { node->setStatus(_status); }
-  if (! ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid) { node->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    node->setStatus(_status);
+  }
 
-  //LOG_VART(node);
+  LOG_VART(node->getVersion());
+
   return node;
 }
 
-shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
+WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
-  LOG_TRACE("Reading way with ID: " << wayId);
+  LOG_VART(ElementId(ElementType::Way, wayId));
 
-  shared_ptr<Way> way(
+  WayPtr way(
     new Way(
       _status,
       newWayId,
-      ConfigOptions().getCircularErrorDefaultValue(),
+      -1,
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -361,7 +369,11 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { way->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    way->setStatus(_status);
+  }
+  LOG_VART(way->getStatus());
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
@@ -371,23 +383,21 @@ shared_ptr<Way> HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, O
   }
   way->addNodes(nodeIds);
 
-  //LOG_VART(way);
   return way;
 }
 
-shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
-                                                        const OsmMap& map)
+RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map)
 {
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
-  LOG_TRACE("Reading relation with ID: " << relationId);
+  LOG_VART(ElementId(ElementType::Relation, relationId));
 
-  shared_ptr<Relation> relation(
+  RelationPtr relation(
     new Relation(
       _status,
       newRelationId,
-      ConfigOptions().getCircularErrorDefaultValue(),
-      "",/*"collection"*/ //services db doesn't support relation "type" yet
+      -1,
+      "",/*MetadataTags::RelationCollection()*/ //services db doesn't support relation "type" yet
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
@@ -396,7 +406,10 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
-  if (_status != Status::Invalid) { relation->setStatus(_status); }
+  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  {
+    relation->setStatus(_status);
+  }
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
@@ -406,7 +419,6 @@ shared_ptr<Relation> HootApiDbReader::_resultToRelation(const QSqlQuery& resultI
   }
   relation->setMembers(members);
 
-  //LOG_VART(relation);
   return relation;
 }
 
@@ -416,6 +428,7 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
+  setOverrideBoundingBox(configOptions.getConvertBoundingBoxHootApiDatabase());
 }
 
 boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const
@@ -428,6 +441,5 @@ boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const
 
   return wgs84;
 }
-
 
 }

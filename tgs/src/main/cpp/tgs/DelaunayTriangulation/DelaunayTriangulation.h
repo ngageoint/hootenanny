@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DELAUNAYTRIANGULATION_H
@@ -54,7 +54,6 @@
 
 namespace Tgs
 {
-using namespace std;
 
 class InternalEdge;
 
@@ -138,6 +137,7 @@ class Face
 public:
   Face() { _id = -1; }
 
+  Face(Face& other);
   Face(const Face& other);
 
   Face(Edge start);
@@ -158,7 +158,7 @@ public:
 
   bool operator==(const Face& other) const;
   bool operator<(const Face& other) const;
-  void operator=(const Face& other);
+  Face& operator=(const Face& other);
 
   std::string toString() const;
 
@@ -172,12 +172,13 @@ class EdgeIterator
 {
 public:
 
-  EdgeIterator(const set<QuadEdge*>& edges);
+  EdgeIterator(const std::set<QuadEdge*>& edges);
 
   EdgeIterator() { _atEnd = true; }
 
   Edge operator*();
-  void operator++(int);
+  Edge operator++(int);
+  Edge& operator++();
   bool operator==(const EdgeIterator& other) const { return _atEnd == other._atEnd; }
   bool operator!=(const EdgeIterator& other) const { return !operator==(other); }
   EdgeIterator end() { EdgeIterator result; result._atEnd = true; return result; }
@@ -185,9 +186,9 @@ public:
 private:
 
   Edge _e;
-  list<InternalEdge*> _todo;
-  const set<QuadEdge *>* _edges;
-  set<QuadEdge*>::const_iterator _it;
+  std::list<InternalEdge*> _todo;
+  const std::set<QuadEdge *>* _edges;
+  std::set<QuadEdge*>::const_iterator _it;
 
   bool _atEnd;
 };
@@ -209,7 +210,8 @@ public:
   virtual ~FaceIterator();
 
   const Face& operator*();
-  void operator++(int);
+  Face operator++(int);
+  Face& operator++();
   bool operator==(const FaceIterator& other) const { return _atEnd == other._atEnd; }
   bool operator!=(const FaceIterator& other) const { return !operator==(other); }
 
@@ -218,7 +220,7 @@ private:
   Face* _f;
   EdgeIterator _it;
   EdgeIterator _end;
-  set<Face*, FaceCompare> _done;
+  std::set<Face*, FaceCompare> _done;
 
   bool _atEnd;
 };
@@ -257,7 +259,7 @@ public:
 
   FaceIterator getFaceIterator() const;
 
-  const vector<Face>& getFaces();
+  const std::vector<Face>& getFaces();
 
   /**
    * Inserts a single point into the triangulation. If the data is inserted in random order the
@@ -270,8 +272,8 @@ private:
   Subdivision* _subdivision;
   double _x[3], _y[3];
   int _pointCount;
-  vector<Face> _faces;
-  map< Edge, pair<int, int> > _edgeToFace;
+  std::vector<Face> _faces;
+  std::map< Edge, std::pair<int, int> > _edgeToFace;
 
   EdgeIterator _edgeEnd;
   FaceIterator _faceEnd;

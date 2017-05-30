@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OutsideBoundsRemover.h"
@@ -36,10 +36,12 @@
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
-OutsideBoundsRemover::OutsideBoundsRemover(shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
+OutsideBoundsRemover::OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
 {
   _inputMap = map;
   _envelope = e;
@@ -47,7 +49,7 @@ OutsideBoundsRemover::OutsideBoundsRemover(shared_ptr<OsmMap> map, const Envelop
 }
 
 
-void OutsideBoundsRemover::removeWays(shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
+void OutsideBoundsRemover::removeWays(boost::shared_ptr<OsmMap> map, const Envelope& e, bool inverse)
 {
   OutsideBoundsRemover obr(map, e, inverse);
   return obr.removeWays();
@@ -60,7 +62,7 @@ void OutsideBoundsRemover::removeWays()
   const WayMap ways = _inputMap->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const shared_ptr<const Way>& w = it->second;
+    const ConstWayPtr& w = it->second;
     Envelope e = w->getEnvelopeInternal(_inputMap);
 
     if (_inverse == false)

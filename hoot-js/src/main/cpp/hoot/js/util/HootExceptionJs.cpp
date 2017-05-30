@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,15 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootExceptionJs.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
+
+using namespace std;
+using namespace v8;
 
 namespace hoot
 {
@@ -43,7 +46,7 @@ HootExceptionJs::HootExceptionJs()
 {
 }
 
-Handle<Object> HootExceptionJs::create(shared_ptr<HootException> e)
+Handle<Object> HootExceptionJs::create(boost::shared_ptr<HootException> e)
 {
   HandleScope scope;
 
@@ -125,7 +128,7 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
 
   if (isHootException(exception))
   {
-    shared_ptr<HootException> e = toCpp< shared_ptr<HootException> >(exception);
+   boost::shared_ptr<HootException> e = toCpp<boost::shared_ptr<HootException> >(exception);
     HootExceptionThrower::getInstance().rethrowPointer(e);
   }
   else
@@ -175,7 +178,7 @@ v8::Handle<v8::Value> HootExceptionJs::toJSON(const v8::Arguments& args)
 {
   HandleScope scope;
 
-  shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+ boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
   QVariantMap m;
   m["message"] = e->getWhat();
@@ -188,7 +191,7 @@ v8::Handle<v8::Value> HootExceptionJs::toString(const v8::Arguments& args)
 {
   HandleScope scope;
 
-  shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+ boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
   return scope.Close(toV8(e->getWhat()));
 }

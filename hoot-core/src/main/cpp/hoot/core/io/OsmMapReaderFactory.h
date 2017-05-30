@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
@@ -51,7 +51,7 @@ public:
 
   OsmMapReaderFactory();
 
-  shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
+  boost::shared_ptr<OsmMapReader> createReader(QString url, bool useFileId = true,
                                         Status defaultStatus = Status::Invalid);
 
   static OsmMapReaderFactory& getInstance();
@@ -63,14 +63,12 @@ public:
 
   bool hasElementInputStream(QString url);
 
-  bool hasReader(QString url);
-
-  static void read(shared_ptr<OsmMap> map, QString url, bool useFileId = true,
+  static void read(boost::shared_ptr<OsmMap> map, QString url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);
 
 private:
 
-  static shared_ptr<OsmMapReaderFactory> _theInstance;
+  static boost::shared_ptr<OsmMapReaderFactory> _theInstance;
 };
 
 }

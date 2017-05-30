@@ -22,17 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayExpertClassifier.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -118,7 +120,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   return result;
 }
 
-map<QString, double> HighwayExpertClassifier::getFeatures(const shared_ptr<const OsmMap>& /*m*/,
+map<QString, double> HighwayExpertClassifier::getFeatures(const ConstOsmMapPtr& /*m*/,
   ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString& /*match*/) const
 {
   return map<QString, double>();

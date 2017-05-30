@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WaySplitter.h"
@@ -40,10 +40,13 @@
 #include <hoot/core/util/FindNodesInWayFactory.h>
 #include "linearreference/WayLocation.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
-WaySplitter::WaySplitter(const OsmMapPtr& map, shared_ptr<Way> a) :
+WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr a) :
   _map(map)
 {
   _a = a;
@@ -107,23 +110,23 @@ WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scr
   return splits[1];
 }
 
-vector< shared_ptr<Way> > WaySplitter::split(const OsmMapPtr& map, shared_ptr<Way> a,
+vector< WayPtr > WaySplitter::split(const OsmMapPtr& map, WayPtr a,
   WayLocation& splitPoint)
 {
   WaySplitter s(map, a);
   return s.split(splitPoint);
 }
 
-void WaySplitter::split(const OsmMapPtr& map, const shared_ptr<Way>& w, double maxSize)
+void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
 {
-  shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
 
   double l = ls->getLength();
 
   if (l > maxSize)
   {
     WayLocation wl (map, w, l / 2.0);
-    vector< shared_ptr<Way> > children = WaySplitter(map, w).split(wl);
+    vector< WayPtr > children = WaySplitter(map, w).split(wl);
 
     for (size_t i = 0; i < children.size(); i++)
     {
@@ -132,9 +135,9 @@ void WaySplitter::split(const OsmMapPtr& map, const shared_ptr<Way>& w, double m
   }
 }
 
-vector< shared_ptr<Way> > WaySplitter::split(WayLocation& splitPoint)
+vector< WayPtr > WaySplitter::split(WayLocation& splitPoint)
 {
-  vector< shared_ptr<Way> > result;
+  vector< WayPtr > result;
 
   if (splitPoint.isFirst() || splitPoint.isLast())
   {

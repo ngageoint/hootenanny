@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WeightedWordDistance.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
@@ -44,6 +44,8 @@
 
 // Tgs
 #include <tbs/stats/SampleStats.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -65,7 +67,7 @@ WeightedWordDistance::WeightedWordDistance()
   {
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary());
   }
-  catch (FileNotFoundException& e)
+  catch (const FileNotFoundException&)
   {
     LOG_WARN("Unable to locate words.sqlite. This should be downloaded during the make "
       "process. It can be manually downloaded from "

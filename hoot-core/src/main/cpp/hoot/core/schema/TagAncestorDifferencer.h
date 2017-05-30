@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __TAG_ANCESTOR_DIFFERENCER_H__
 #define __TAG_ANCESTOR_DIFFERENCER_H__
@@ -41,7 +41,7 @@ namespace hoot
 class TagAncestorDifferencer : public TagFilteredDifferencer, public Configurable
 {
 public:
-  static string className() { return "hoot::TagAncestorDifferencer"; }
+  static std::string className() { return "hoot::TagAncestorDifferencer"; }
 
   TagAncestorDifferencer() {}
   TagAncestorDifferencer(QString ancestor);

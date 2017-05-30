@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -40,15 +40,15 @@ namespace Tgs
   {
   }
 
-  shared_ptr<Page> MemoryPageStore::createPage()
+ boost::shared_ptr<Page> MemoryPageStore::createPage()
   {
     char* data = Page::allocateAligned(_pageSize);
-    shared_ptr<Page> newPage(_createPage(this, (int)_pages.size(), data, _pageSize));
+   boost::shared_ptr<Page> newPage(_createPage(this, (int)_pages.size(), data, _pageSize));
     _pages.push_back(newPage);
     return newPage;
   }
 
-  shared_ptr<Page> MemoryPageStore::getPage(int id)
+ boost::shared_ptr<Page> MemoryPageStore::getPage(int id)
   {
     assert(id >= 0 && id <= (int)_pages.size());
     return _pages[id];

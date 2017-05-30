@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -41,8 +41,6 @@
 
 namespace hoot
 {
-
-using namespace geos::geom;
 
 /**
  * The WayLocation has a segment index and segmentFraction. The segment index is
@@ -114,12 +112,13 @@ public:
    * @param length the length to the desired point
    * @return the Coordinate of the desired point
    */
-  static const Coordinate pointAlongSegmentByFraction(const Coordinate& p0, const Coordinate& p1,
-                                                      double frac);
+  static const geos::geom::Coordinate pointAlongSegmentByFraction(const geos::geom::Coordinate& p0,
+                                                                  const geos::geom::Coordinate& p1,
+                                                                  double frac);
 
   const ConstOsmMapPtr& getMap() const { return _map; }
 
-  const shared_ptr<const Way>& getWay() const { return _way; }
+  const ConstWayPtr& getWay() const { return _way; }
 
   /**
    * Returns the node at this WayLocation. If isNode() returns false this will thrown an exception.
@@ -146,7 +145,7 @@ public:
 
   bool isValid() const { return _segmentIndex != -1; }
 
-  const Coordinate getCoordinate() const;
+  const geos::geom::Coordinate getCoordinate() const;
 
   /**
    * Move the location on the way. Negative values will move closer to the beginning of the way.
@@ -202,8 +201,8 @@ inline uint qHash(const WayLocation& wl)
   return qHash(wl.toString());
 }
 
-typedef shared_ptr<WayLocation> WayLocationPtr;
-typedef shared_ptr<const WayLocation> ConstWayLocationPtr;
+typedef boost::shared_ptr<WayLocation> WayLocationPtr;
+typedef boost::shared_ptr<const WayLocation> ConstWayLocationPtr;
 
 }
 

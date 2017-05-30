@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -33,14 +33,12 @@ import java.sql.Timestamp;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
-import hoot.services.testsupport.HootServicesJerseyTestAbstract;
-import hoot.services.testsupport.MapUtils;
+import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.utils.MapUtils;
 
 
 /*
@@ -62,13 +60,6 @@ public abstract class OSMResourceTestAbstract extends HootServicesJerseyTestAbst
     }
 
     public OSMResourceTestAbstract(String... controllerGroup) {}
-
-
-    @BeforeClass
-    public static void beforeClass() {}
-
-    @AfterClass
-    public static void afterClass() {}
 
     @Before
     public void beforeTest() throws Exception {

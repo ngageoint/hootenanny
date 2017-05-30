@@ -22,12 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PbfElementIterator.h"
 
 // Standard
 #include <fstream>
+
+using namespace std;
 
 namespace hoot
 {
@@ -45,15 +47,15 @@ PbfElementIterator::PbfElementIterator(QString path)
     }
     _init(fp);
   }
-  catch (const HootException& e)
+  catch (const HootException&)
   {
     delete fp;
-    throw e;
+    throw;
   }
   catch (const std::exception& e)
   {
     delete fp;
-    throw e;
+    throw HootException(e.what());
   }
 }
 
@@ -80,7 +82,7 @@ void PbfElementIterator::_next()
   {
     _reader->parseBlob(_blobs[_blobIndex++], _in.get(), _map);
 
-    const NodeMap& nodes = _map->getNodeMap();
+    const NodeMap& nodes = _map->getNodes();
     for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
       _addElement(_map->getNode(it->first));
@@ -92,7 +94,7 @@ void PbfElementIterator::_next()
       _addElement(_map->getWay(it->first));
     }
 
-    const RelationMap& relations = _map->getRelationMap();
+    const RelationMap& relations = _map->getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       _addElement(_map->getRelation(it->first));

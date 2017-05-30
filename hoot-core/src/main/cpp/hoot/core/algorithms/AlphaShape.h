@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __ALPHASHAPE_H__
@@ -55,9 +55,6 @@ class Face;
 
 namespace hoot
 {
-using namespace boost;
-using namespace geos;
-using namespace std;
 
 class FaceGroup;
 class OsmMap;
@@ -78,31 +75,31 @@ public:
 
   AlphaShape(double alpha);
 
-  shared_ptr<geos::geom::Geometry> toGeometry();
+  boost::shared_ptr<geos::geom::Geometry> toGeometry();
 
   void insert(const std::vector< std::pair<double, double> >& points);
 
   QString toString();
 
-  shared_ptr<OsmMap> toOsmMap();
+  boost::shared_ptr<OsmMap> toOsmMap();
 
 private:
 
   double _alpha;
 
   std::auto_ptr<Tgs::DelaunayTriangulation> _dt;
-  set< pair<double, double> > _outsidePoint;
+  std::set< std::pair<double, double> > _outsidePoint;
 
-  shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, shared_ptr<OsmMap> map);
+  boost::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, boost::shared_ptr<OsmMap> map);
 
-  shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
+  boost::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
 
   // The root group represents empty space
   // first level children represent filled space
   // second level children are empty
   // third filled
   // etc, alternating at each level between filled and empty
-  shared_ptr<OsmMap> _groupFaces();
+  boost::shared_ptr<OsmMap> _groupFaces();
 
   bool _isBoundary(const Tgs::Edge& e) const;
 
@@ -118,7 +115,7 @@ private:
 
   bool _isTooLong(const Tgs::Edge& e) const;
 
-  shared_ptr<geos::geom::Geometry> _validateGeometry(const shared_ptr<geos::geom::Geometry>& g);
+  boost::shared_ptr<geos::geom::Geometry> _validateGeometry(const boost::shared_ptr<geos::geom::Geometry>& g);
 };
 
 }

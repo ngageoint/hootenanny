@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GMLWRITER_H
@@ -51,8 +51,6 @@ class Way;
 class OsmMap;
 class Relation;
 
-using namespace boost;
-
 /**
  * Writes a map or portion of a map to a GML file. Not completely implemented.
  *
@@ -70,19 +68,19 @@ public:
 
   void setIncludeHootInfo(bool includeInfo) { _includeInfo = includeInfo; }
 
-  void write(shared_ptr<const OsmMap> map, QString path);
+  void write(boost::shared_ptr<const OsmMap> map, QString path);
 
-  void writePoints(shared_ptr<const OsmMap> map, const QString& path);
+  void writePoints(boost::shared_ptr<const OsmMap> map, const QString& path);
 
 protected:
   QStringList _columns;
   bool _includeIds;
   bool _includeInfo;
 
-  void _writeRelationPolygon(const shared_ptr<Relation> &relation, OGRLayer *poLayer,
+  void _writeRelationPolygon(const boost::shared_ptr<Relation> &relation, OGRLayer *poLayer,
     const QStringList &shpColumns);
 
-  void _writeWayPolygon(const shared_ptr<Way>& way, OGRLayer *poLayer,
+  void _writeWayPolygon(const boost::shared_ptr<Way>& way, OGRLayer *poLayer,
     const QStringList& shpColumns);
 };
 

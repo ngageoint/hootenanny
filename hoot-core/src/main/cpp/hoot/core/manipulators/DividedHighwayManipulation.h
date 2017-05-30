@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DIVIDEDHIGHWAYMANIPULATION_H
@@ -34,13 +34,12 @@
 #include <geos/geom/Geometry.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 namespace hoot
 {
-  class Way;
 
-  using namespace geos::geom;
+class Way;
 
 class DividedHighwayManipulation : public Manipulation
 {
@@ -50,19 +49,19 @@ public:
    * v1 & v2.
    * @param threshold Error threshold of the input data in meters.
    */
-  DividedHighwayManipulation(long leftId, long rightId, long midId, shared_ptr<const OsmMap> map,
+  DividedHighwayManipulation(long leftId, long rightId, long midId, ConstOsmMapPtr map,
                              Meters threshold);
 
-  virtual bool isValid(shared_ptr<const OsmMap> map) const;
+  virtual bool isValid(ConstOsmMapPtr map) const;
 
-  virtual void applyManipulation(shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
-                                               set<ElementId>& newElements) const;
+  virtual void applyManipulation(OsmMapPtr wm, std::set<ElementId>& impactedElements,
+                                               std::set<ElementId>& newElements) const;
 
-  virtual double calculateProbability(shared_ptr<const OsmMap> map) const;
+  virtual double calculateProbability(ConstOsmMapPtr map) const;
 
-  virtual double calculateScore(shared_ptr<const OsmMap> map) const;
+  virtual double calculateScore(ConstOsmMapPtr map) const;
 
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
+  virtual const std::set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const;
 
   virtual double getProbabilityEstimate() const { return _p; }
 
@@ -71,8 +70,8 @@ public:
   virtual QString toString() const;
 
 private:
-  mutable set<ElementId> _impactedElements;
-  mutable set<ElementId> _newWays;
+  mutable std::set<ElementId> _impactedElements;
+  mutable std::set<ElementId> _newWays;
   long _left, _right, _mid;
   Meters _vectorError;
   mutable double _p;
@@ -80,18 +79,19 @@ private:
   /**
    * Checks to see if a connector is necessary and then add it to the map if appropriate.
    */
-  void _addConnector(shared_ptr<OsmMap> map, long nodeId) const;
+  void _addConnector(OsmMapPtr map, long nodeId) const;
 
   /**
    * Calculates the normalized vector between the nearest points on g1 and g2.
    */
-  Coordinate _nearestVector(shared_ptr<Geometry> g1, shared_ptr<Geometry> g2) const;
+  geos::geom::Coordinate _nearestVector(boost::shared_ptr<geos::geom::Geometry> g1,
+                                        boost::shared_ptr<geos::geom::Geometry> g2) const;
 
-  void _createStub(shared_ptr<OsmMap> map, shared_ptr<Way> oneway, long nodeId) const;
+  void _createStub(OsmMapPtr map, WayPtr oneway, long nodeId) const;
 
-  void _mergeInbound(shared_ptr<OsmMap> map, shared_ptr<Way> inbound, long nodeId) const;
+  void _mergeInbound(OsmMapPtr map, WayPtr inbound, long nodeId) const;
 
-  double _dotProduct(const Coordinate& c1, const Coordinate& c2) const;
+  double _dotProduct(const geos::geom::Coordinate& c1, const geos::geom::Coordinate& c2) const;
 };
 
 }

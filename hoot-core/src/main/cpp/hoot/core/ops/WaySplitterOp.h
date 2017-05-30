@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __WAY_SPLITTER_OP_H__
 #define __WAY_SPLITTER_OP_H__
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -58,9 +58,9 @@ public:
 
   WaySplitterOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 

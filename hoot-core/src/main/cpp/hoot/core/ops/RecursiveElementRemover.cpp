@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RecursiveElementRemover.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
@@ -35,6 +35,8 @@
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -47,7 +49,7 @@ RecursiveElementRemover::RecursiveElementRemover(ElementId eid, const ElementCri
 {
 }
 
-void RecursiveElementRemover::apply(const shared_ptr<OsmMap> &map)
+void RecursiveElementRemover::apply(const boost::shared_ptr<OsmMap> &map)
 {
   assert(_eid.isNull() == false);
   if (map->containsElement(_eid) == false)
@@ -118,7 +120,7 @@ void RecursiveElementRemover::apply(const shared_ptr<OsmMap> &map)
   _remove(map, _eid, toErase);
 }
 
-void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId eid,
+void RecursiveElementRemover::_remove(const boost::shared_ptr<OsmMap>& map, ElementId eid,
   const set<ElementId>& removeSet)
 {
   // if this element isn't being removed
@@ -129,7 +131,7 @@ void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId e
 
   if (eid.getType() == ElementType::Relation)
   {
-    const shared_ptr<Relation>& r = map->getRelation(eid.getId());
+    const RelationPtr& r = map->getRelation(eid.getId());
 
     // make a copy so we can traverse it after this element is cleared.
     vector<RelationData::Entry> e = r->getMembers();
@@ -143,7 +145,7 @@ void RecursiveElementRemover::_remove(const shared_ptr<OsmMap>& map, ElementId e
   }
   else if (eid.getType() == ElementType::Way)
   {
-    const shared_ptr<Way>& w = map->getWay(eid.getId());
+    const WayPtr& w = map->getWay(eid.getId());
 
     std::vector<long> nodes = w->getNodeIds();
     w->clear();

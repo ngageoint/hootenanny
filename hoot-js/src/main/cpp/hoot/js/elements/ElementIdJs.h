@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_ID_JS_H__
 #define __ELEMENT_ID_JS_H__
@@ -43,8 +43,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -58,7 +56,7 @@ public:
 
   ElementId& getElementId() { return _eid; }
 
-  static Handle<Object> New(ElementId eid);
+  static v8::Handle<v8::Object> New(ElementId eid);
 
 private:
   ElementIdJs();
@@ -67,11 +65,11 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   ElementId _eid;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
-  static Handle<Value> getType(const Arguments& args);
-  static Handle<Value> toJSON(const Arguments& args);
-  static Handle<Value> toString(const Arguments& args);
+  static v8::Handle<v8::Value> getType(const v8::Arguments& args);
+  static v8::Handle<v8::Value> toJSON(const v8::Arguments& args);
+  static v8::Handle<v8::Value> toString(const v8::Arguments& args);
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
@@ -94,12 +92,12 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
   {
     eid = eidj->getElementId();
   }
-  else if (obj->Has(String::NewSymbol("id")) && obj->Has(String::NewSymbol("type")))
+  else if (obj->Has(v8::String::NewSymbol("id")) && obj->Has(v8::String::NewSymbol("type")))
   {
     long id;
     QString type;
-    toCpp(obj->Get(String::NewSymbol("id")), id);
-    toCpp(obj->Get(String::NewSymbol("type")), type);
+    toCpp(obj->Get(v8::String::NewSymbol("id")), id);
+    toCpp(obj->Get(v8::String::NewSymbol("type")), type);
     eid = ElementId(ElementType::fromString(type), id);
   }
   else

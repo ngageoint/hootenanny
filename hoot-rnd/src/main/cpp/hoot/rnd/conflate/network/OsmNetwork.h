@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMNETWORK_H
 #define OSMNETWORK_H
@@ -94,8 +94,8 @@ private:
   VertexToEdgeMap _vertexToEdge;
 };
 
-typedef shared_ptr<OsmNetwork> OsmNetworkPtr;
-typedef shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
+typedef boost::shared_ptr<OsmNetwork> OsmNetworkPtr;
+typedef boost::shared_ptr<const OsmNetwork> ConstOsmNetworkPtr;
 
 // not implemented
 bool operator<(ConstOsmNetworkPtr, ConstOsmNetworkPtr);

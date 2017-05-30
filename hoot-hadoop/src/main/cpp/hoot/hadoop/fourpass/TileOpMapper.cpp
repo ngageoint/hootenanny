@@ -30,6 +30,9 @@
 
 #include "TileOpDriver.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -40,7 +43,7 @@ TileOpMapper::TileOpMapper()
   _initialized = false;
 }
 
-void TileOpMapper::_addNode(const shared_ptr<Node>& n)
+void TileOpMapper::_addNode(const NodePtr& n)
 {
   long key = -1;
 
@@ -80,7 +83,7 @@ void TileOpMapper::_addNode(const shared_ptr<Node>& n)
   _writers[key]->writePartial(n);
 }
 
-void TileOpMapper::_addWay(ConstOsmMapPtrR map, const shared_ptr<Way>& w)
+void TileOpMapper::_addWay(const ConstOsmMapPtr& map, const WayPtr& w)
 {
   long key = -1;
 
@@ -123,7 +126,7 @@ void TileOpMapper::_flush()
   key.resize(sizeof(int64_t));
   int64_t* k = (int64_t*)key.data();
   // emit all maps
-  for (QHash< int, shared_ptr<OsmPbfWriter> >::iterator it = _writers.begin();
+  for (QHash< int,boost::shared_ptr<OsmPbfWriter> >::iterator it = _writers.begin();
     it != _writers.end(); ++it)
   {
     *k = it.key();
@@ -141,7 +144,7 @@ void TileOpMapper::_flush()
 void TileOpMapper::_init(HadoopPipes::MapContext& context)
 {
   LOG_INFO("Initializing.");
-  shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+ boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _tileBufferSize = c->getDouble(bufferKey());
 
   LOG_DEBUG("Serialized settings: " << c->get(TileOpDriver::settingsConfKey().toStdString(), "{}"));
@@ -164,16 +167,16 @@ void TileOpMapper::_init(HadoopPipes::MapContext& context)
   // create all the necessary OsmMaps for holding our results.
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
-    _writers[i] = shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
-    _buffers[i] = shared_ptr<stringstream>(new stringstream(stringstream::out));
+    _writers[i] =boost::shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
+    _buffers[i] =boost::shared_ptr<stringstream>(new stringstream(stringstream::out));
     _writers[i]->intializePartial(_buffers[i].get());
     LOG_INFO("key: " << i << " envelope: " << _envelopes[i].toString());
   }
   _reduceTaskCount = context.getJobConf()->getInt("mapred.reduce.tasks");
   for (int i = 0; i < _reduceTaskCount; i++)
   {
-    _writers[-1 - i] = shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
-    _buffers[-1 - i] = shared_ptr<stringstream>(new stringstream(stringstream::out));
+    _writers[-1 - i] =boost::shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
+    _buffers[-1 - i] =boost::shared_ptr<stringstream>(new stringstream(stringstream::out));
     _writers[-1 - i]->intializePartial(_buffers[-1 - i].get());
     LOG_INFO("key: " << -1 - i << " dregs");
   }
@@ -181,7 +184,7 @@ void TileOpMapper::_init(HadoopPipes::MapContext& context)
   _initialized = true;
 }
 
-void TileOpMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
+void TileOpMapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
   _init(context);
 
@@ -193,24 +196,24 @@ void TileOpMapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
   LOG_DEBUG("Troubled data after replace nodes:");
   Debug::printTroubled(m);
 
-  LOG_INFO("Node count: " << m->getNodeMap().size());
+  LOG_INFO("Node count: " << m->getNodes().size());
   LOG_INFO("Way count: " << m->getWays().size());
 
   // go through all ways
   const WayMap& wm = m->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<Way>& w = it->second;
+    const WayPtr& w = it->second;
 
     // add way to appropriate map
     _addWay(m, w);
   }
 
   // go through all nodes
-  const NodeMap& nm = m->getNodeMap();
+  const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<Node>& n = it->second;
+    const NodePtr& n = it->second;
 
     // add node to appropriate map
     _addNode(n);
@@ -237,7 +240,7 @@ vector<Envelope> TileOpMapper::parseEnvelopes(const string& envStr)
   return result;
 }
 
-void TileOpMapper::_replaceNodes(shared_ptr<OsmMap>& m)
+void TileOpMapper::_replaceNodes(OsmMapPtr& m)
 {
   pp::Hdfs fs;
 
@@ -266,7 +269,7 @@ void TileOpMapper::_replaceNodes(shared_ptr<OsmMap>& m)
   }
 }
 
-void TileOpMapper::_replaceNodes(shared_ptr<OsmMap>& m, istream& is)
+void TileOpMapper::_replaceNodes(OsmMapPtr& m, istream& is)
 {
   int64_t ids[2];
   while (!is.eof())

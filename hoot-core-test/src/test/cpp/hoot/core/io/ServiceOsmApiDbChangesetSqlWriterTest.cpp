@@ -44,6 +44,8 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -130,14 +132,16 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql");
 
-    shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
+    boost::shared_ptr<QSqlQuery> nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
     CPPUNIT_ASSERT_EQUAL(0, nodesItr->size());
 
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql");
 
     nodesItr = database.selectElements(ElementType::Node);
     assert(nodesItr->isActive());
@@ -186,7 +190,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //grab the current time
     const QDateTime startTime = now();
@@ -209,7 +214,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //grab the current time
     const QDateTime startTime = now();
@@ -231,7 +237,8 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     //define an aoi
     const QString aoi = "-10,-10,10,10";
@@ -261,7 +268,7 @@ public:
       OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget("-10,-10,10,10", "2016-05-04 10:15");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -272,7 +279,7 @@ public:
       OsmApiDbChangesetSqlWriter(ServicesDbTestUtils::getOsmApiDbUrl())
         .conflictExistsInTarget("-10,-10,10,10", " ");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

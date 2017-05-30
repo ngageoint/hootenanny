@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateAreaVisitor.h"
 
@@ -31,7 +31,7 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -45,6 +45,9 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/schema/TagDifferencer.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -57,21 +60,21 @@ RemoveDuplicateAreaVisitor::RemoveDuplicateAreaVisitor()
       ConfigOptions().getRemoveDuplicateAreasDiff()));
 }
 
-shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(const shared_ptr<Element>& e1)
+boost::shared_ptr<Geometry> RemoveDuplicateAreaVisitor::_convertToGeometry(const boost::shared_ptr<Element>& e1)
 {
-  QHash<ElementId, shared_ptr<Geometry> >::const_iterator it = _geoms.find(e1->getElementId());
+  QHash<ElementId,boost::shared_ptr<Geometry> >::const_iterator it = _geoms.find(e1->getElementId());
   if (it != _geoms.end())
   {
     return it.value();
   }
   ElementConverter gc(_map->shared_from_this());
-  shared_ptr<Geometry> g = gc.convertToGeometry(e1);
+ boost::shared_ptr<Geometry> g = gc.convertToGeometry(e1);
   _geoms[e1->getElementId()] = g;
   return g;
 }
 
-bool RemoveDuplicateAreaVisitor::_equals(const shared_ptr<Element>& e1,
-  const shared_ptr<Element>& e2)
+bool RemoveDuplicateAreaVisitor::_equals(const boost::shared_ptr<Element>& e1,
+  const boost::shared_ptr<Element>& e2)
 {
   if (e1->getStatus() != e2->getStatus())
   {
@@ -92,8 +95,8 @@ bool RemoveDuplicateAreaVisitor::_equals(const shared_ptr<Element>& e1,
   }
 
   // convert to geometry and cache as relevant.
-  shared_ptr<Geometry> g1 = _convertToGeometry(e1);
-  shared_ptr<Geometry> g2 = _convertToGeometry(e2);
+ boost::shared_ptr<Geometry> g1 = _convertToGeometry(e1);
+ boost::shared_ptr<Geometry> g2 = _convertToGeometry(e2);
 
   double a1 = g1->getArea();
   double a2 = g2->getArea();
@@ -105,12 +108,12 @@ bool RemoveDuplicateAreaVisitor::_equals(const shared_ptr<Element>& e1,
   }
 
   // calculate the overlap of the areas
-  shared_ptr<Geometry> overlap;
+ boost::shared_ptr<Geometry> overlap;
   try
   {
-    overlap = shared_ptr<Geometry>(g1->intersection(g2.get()));
+    overlap =boost::shared_ptr<Geometry>(g1->intersection(g2.get()));
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));
@@ -127,7 +130,7 @@ bool RemoveDuplicateAreaVisitor::_equals(const shared_ptr<Element>& e1,
   return true;
 }
 
-void RemoveDuplicateAreaVisitor::_removeOne(shared_ptr<Element> e1, shared_ptr<Element> e2)
+void RemoveDuplicateAreaVisitor::_removeOne(boost::shared_ptr<Element> e1,boost::shared_ptr<Element> e2)
 {
   if (e1->getTags().size() > e2->getTags().size())
   {
@@ -149,14 +152,14 @@ void RemoveDuplicateAreaVisitor::_removeOne(shared_ptr<Element> e1, shared_ptr<E
 
 void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
 {
-  if(e->getElementType() != ElementType::Node)
+  if (e->getElementType() != ElementType::Node)
   {
-    shared_ptr<Element> ee = _map->getElement(e->getElementId());
+    boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
     visit(ee);
   }
 }
 
-void RemoveDuplicateAreaVisitor::visit(const shared_ptr<Element>& e1)
+void RemoveDuplicateAreaVisitor::visit(const boost::shared_ptr<Element>& e1)
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
@@ -175,7 +178,7 @@ void RemoveDuplicateAreaVisitor::visit(const shared_ptr<Element>& e1)
     ElementId eit = *it;
     if (e1->getElementId() < eit && eit.getType() != ElementType::Node)
     {
-      shared_ptr<Element> e2 = _map->getElement(*it);
+     boost::shared_ptr<Element> e2 = _map->getElement(*it);
 
       // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
       // a parent.

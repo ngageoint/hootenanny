@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCOUNTVISITOR_H
 #define ELEMENTCOUNTVISITOR_H
@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements.

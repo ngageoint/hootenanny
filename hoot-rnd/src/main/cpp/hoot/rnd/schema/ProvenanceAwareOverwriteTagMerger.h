@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PROVENANCEAWAREOVERWRITETAGMERGER_H
 #define PROVENANCEAWAREOVERWRITETAGMERGER_H
@@ -41,7 +41,7 @@ class ProvenanceAwareOverwriteTagMerger : public OverwriteTagMerger
 
 public:
 
-  static string className() { return "hoot::ProvenanceAwareOverwriteTagMerger"; }
+  static std::string className() { return "hoot::ProvenanceAwareOverwriteTagMerger"; }
 
   ProvenanceAwareOverwriteTagMerger(bool swap = false);
 

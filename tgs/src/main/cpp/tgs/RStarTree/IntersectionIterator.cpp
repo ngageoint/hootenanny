@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "IntersectionIterator.h"
@@ -38,16 +38,15 @@ namespace Tgs
 {
   IntersectionIterator::IntersectionIterator(const RStarTree *tree, const std::vector<double>& minBounds,
     const std::vector<double>& maxBounds)
+    : nodeHits(1),
+      distCalcs(0),
+      _tree(tree),
+      _minBounds(minBounds),
+      _maxBounds(maxBounds),
+      _done(false)
   {
-    _done = false;
-    _tree = tree;
-    _minBounds = minBounds;
-    _maxBounds = maxBounds;
-
     const RTreeNode* root = _tree->getRoot();
     _pendingNodes.push_back(root->getId());  //Begin traversal at root
-    nodeHits = 1;
-    distCalcs = 0;
 
     _populateNext();  //Traverse tree to gather nodes within range
   }
@@ -80,7 +79,7 @@ namespace Tgs
     return _currentResult.id;
   }
 
-  bool IntersectionIterator::hasNext() 
+  bool IntersectionIterator::hasNext()
   {
     _populateNext();
     return !_done;
@@ -110,7 +109,7 @@ namespace Tgs
       else
       {
         //Get the first node in the list to examine
-        const RTreeNode* node = _tree->getNode(_pendingNodes.front());  
+        const RTreeNode* node = _tree->getNode(_pendingNodes.front());
         nodeHits++;
         _pendingNodes.pop_front(); //Remove node from future consideration
         for (int i = 0; i < node->getChildCount(); i++)

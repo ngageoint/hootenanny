@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATESTATSOP_H
 #define CALCULATESTATSOP_H
@@ -50,7 +50,7 @@ public:
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
                    bool inputIsConflatedMapOutput = false);
 
-  virtual void apply(const shared_ptr<OsmMap>& map);
+  virtual void apply(const OsmMapPtr& map);
 
   QList<SingleStat> getStats() const { return _stats; }
 
@@ -90,23 +90,23 @@ private:
    * @param [in]  matchCreators vector of matchCreators to search
    * @param [in]  matchCreatorName name for which to search
    * @param [out] featureType base feature type for the found matchCreator
-   * @return ptr to match creator, if found, otherwise shared_ptr to null
+   * @return ptr to match creator, if found, otherwise boost::shared_ptr to null
    */
-  shared_ptr<MatchCreator> getMatchCreator(const vector< shared_ptr<MatchCreator> > &matchCreators,
+  boost::shared_ptr<MatchCreator> getMatchCreator(const std::vector< boost::shared_ptr<MatchCreator> > &matchCreators,
                                            const QString &matchCreatorName,
                                            MatchCreator::BaseFeatureType &featureType);
 
-  double _applyVisitor(shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
+  double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
 
-  double _applyVisitor(shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
-                       any& visitorData);
+  double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
+                       boost::any& visitorData);
 
-  void _applyVisitor(shared_ptr<const OsmMap>& map, ElementVisitor *v);
+  void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ElementVisitor *v);
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
 
-  void _generateFeatureStats(shared_ptr<const OsmMap>& map, QString description,
+  void _generateFeatureStats(boost::shared_ptr<const OsmMap>& map, QString description,
                              float conflatableCount, MatchCreator::FeatureCalcType type,
                              ElementCriterion* criterion);
 };

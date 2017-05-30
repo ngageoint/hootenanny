@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/conflate/MatchCreator.h>
@@ -44,6 +44,9 @@
 #include <tgs/RandomForest/RandomForest.h>
 #include <tgs/Statistics/Random.h>
 #include <tgs/System/DisableCout.h>
+
+using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {
@@ -95,13 +98,13 @@ public:
       {
         mc->setArguments(args);
       }
-      mfe.addMatchCreator(shared_ptr<MatchCreator>(mc));
+      mfe.addMatchCreator(boost::shared_ptr<MatchCreator>(mc));
     }
 
     for (int i = 0; i < args.size() - 1; i+=2)
     {
       LOG_INFO("Processing map : " << args[i] << " and " << args[i + 1]);
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
 
       loadMap(map, args[i], false, Status::Unknown1);
       loadMap(map, args[i + 1], false, Status::Unknown2);
@@ -120,7 +123,7 @@ public:
 
     // using -1 for null isn't ideal, but it doesn't seem to have a big impact on performance.
     // ideally we'll circle back and update RF to use null values.
-    shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
+    boost::shared_ptr<DataFrame> df = mfe.getSamples().toDataFrame(-1);
 
     Tgs::Random::instance()->seed(0);
     RandomForest rf;

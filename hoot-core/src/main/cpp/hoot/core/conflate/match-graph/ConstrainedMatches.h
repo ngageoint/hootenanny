@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONSTRAINEDMATCHES_H
 #define CONSTRAINEDMATCHES_H
@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class IntegerProgrammingSolver;
 class Match;
@@ -74,7 +73,7 @@ public:
    * scores. All matches will be considered so if you don't want matches below a threshold included
    * then don't add them.
    */
-  virtual vector<const Match*> calculateSubset() = 0;
+  virtual std::vector<const Match*> calculateSubset() = 0;
 
   /**
    * Returns the score for the last calculateSubset operation.
@@ -87,7 +86,7 @@ public:
 
 protected:
   const ConstOsmMapPtr& _map;
-  vector<const Match*> _matches;
+  std::vector<const Match*> _matches;
 
   MatchConflicts::ConflictMap _conflicts;
   double _score;

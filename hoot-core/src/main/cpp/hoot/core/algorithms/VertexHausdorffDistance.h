@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VERTEXHAUSDORFFDISTANCE_H
 #define VERTEXHAUSDORFFDISTANCE_H
@@ -38,8 +38,6 @@ namespace geos
 
 namespace hoot
 {
-
-using namespace geos::geom;
 
 /**
  * Implements algorithm for computing a distance metric
@@ -65,9 +63,9 @@ class VertexHausdorffDistance
 public:
 
   VertexHausdorffDistance() { _distance = -1; }
-  VertexHausdorffDistance(const Geometry& g1, const Geometry& g2);
+  VertexHausdorffDistance(const geos::geom::Geometry& g1, const geos::geom::Geometry& g2);
 
-  void compute(const Geometry& g1, const Geometry& g2);
+  void compute(const geos::geom::Geometry& g1, const geos::geom::Geometry& g2);
 
   double getDistance() const { return _distance; }
 

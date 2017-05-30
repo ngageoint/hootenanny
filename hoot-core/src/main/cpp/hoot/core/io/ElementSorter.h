@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTSORTER_H
 #define ELEMENTSORTER_H
@@ -72,12 +72,12 @@ private:
 
   ConstOsmMapPtr _source;
 
-  vector<long> _nodeIds, _wayIds, _relationIds;
+  std::vector<long> _nodeIds, _wayIds, _relationIds;
   size_t _nodeIndex, _wayIndex, _relationIndex;
 
 };
 
-typedef shared_ptr<ElementSorter> ElementSorterPtr;
+typedef boost::shared_ptr<ElementSorter> ElementSorterPtr;
 
 }
 

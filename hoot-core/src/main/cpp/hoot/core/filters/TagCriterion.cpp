@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagCriterion.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
 
@@ -58,7 +58,7 @@ void TagCriterion::setConfiguration(const Settings &s)
   }
 }
 
-bool TagCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool TagCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   assert(!_k.isEmpty());
   return e->getTags().get(_k) == _v;

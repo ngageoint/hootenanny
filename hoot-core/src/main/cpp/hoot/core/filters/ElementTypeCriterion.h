@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTYPECRITERION_H
 #define ELEMENTTYPECRITERION_H
@@ -43,7 +43,7 @@ public:
 
   virtual ~ElementTypeCriterion() {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new ElementTypeCriterion(_elementType); }
 

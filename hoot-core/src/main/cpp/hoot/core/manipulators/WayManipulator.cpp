@@ -22,16 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayManipulator.h"
 
+using namespace std;
+
 namespace hoot
 {
 
-const vector< shared_ptr<Manipulation> >& WayManipulator::findManipulations(
-    shared_ptr<const OsmMap> map, const vector<ElementId>& ids)
+const vector< boost::shared_ptr<Manipulation> >& WayManipulator::findManipulations(
+    boost::shared_ptr<const OsmMap> map, const vector<ElementId>& ids)
 {
   vector<long> wids(ids.size());
 

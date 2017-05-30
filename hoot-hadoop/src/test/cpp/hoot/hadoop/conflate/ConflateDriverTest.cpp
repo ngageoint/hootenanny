@@ -30,11 +30,14 @@ using namespace pp;
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/hadoop/PbfInputFormat.h>
-#include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
 
 #include "../MapReduceTestFixture.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -89,7 +92,7 @@ public:
     uut.conflate(QString::fromStdString(outDir) + "step2.pbf", e, 0.002,
                  QString::fromStdString(outDir) + "result.pbf");
 
-    shared_ptr<OsmMap> map(new OsmMap);
+   OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "result.pbf");
@@ -99,7 +102,7 @@ public:
       LOG_INFO(path);
       if (QString::fromStdString(path).endsWith(".pbf"))
       {
-        shared_ptr<istream> is(fs.open(path));
+       boost::shared_ptr<istream> is(fs.open(path));
         reader.parse(is.get(), map);
       }
     }

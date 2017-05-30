@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RTreeNode.h"
@@ -160,7 +160,7 @@ bool BoxInternalData::isContained(const Box& b) const
 }
 
 
-RTreeNode::RTreeNode(int dimensions, shared_ptr<Page> page)
+RTreeNode::RTreeNode(int dimensions, boost::shared_ptr<Page> page)
 {
   _dimensions = dimensions;
   _pageSp = page;
@@ -276,12 +276,12 @@ int RTreeNode::getChildUserId(int childIndex) const
 
 RTreeNode::ChildData* RTreeNode::_getChildPtr(int index) 
 {
-  return (ChildData*)(_page->getData() + _getChildSize() * index + _getHeaderSize());
+  return reinterpret_cast<ChildData*>(_page->getData() + _getChildSize() * index + _getHeaderSize());
 }
 
 const RTreeNode::ChildData* RTreeNode::_getChildPtr(int index) const
 {
-  return (ChildData*)(_page->getData() + _getChildSize() * index + _getHeaderSize());
+  return reinterpret_cast<ChildData*>(_page->getData() + _getChildSize() * index + _getHeaderSize());
 }
 
 int RTreeNode::_getChildSize() const
@@ -291,12 +291,12 @@ int RTreeNode::_getChildSize() const
 
 RTreeNode::Header* RTreeNode::_getHeader()
 {
-  return (Header*)_page->getData();
+  return reinterpret_cast<Header*>(_page->getData());
 }
 
 const RTreeNode::Header* RTreeNode::_getHeader() const
 {
-  return (const Header*)_page->getData();
+  return reinterpret_cast<Header*>(_page->getData());
 }
 
 int RTreeNode::getParentId() const
@@ -362,4 +362,3 @@ void RTreeNode::updateChildEnvelope(int index, const Box& envelope)
   BoxInternalData bid(_dimensions, _getChildPtr(index)->getBox(), envelope);
   _page->setDirty();
 }
-

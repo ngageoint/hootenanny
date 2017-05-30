@@ -53,7 +53,7 @@ using namespace boost;
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 
 // Qt
@@ -61,6 +61,8 @@ using namespace boost;
 #include <QDir>
 
 #include "../TestUtils.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -76,7 +78,7 @@ public:
   void runTest()
   {
     QDataStream dataStream;
-    string className = "";
+    string className;
 
     // AddHilbertReviewSortOrderOp
     AddHilbertReviewSortOrderOp addHilbertReviewSortOrderOp;

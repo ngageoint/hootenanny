@@ -22,13 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDB_H
 #define OSMAPIDB_H
 
 // Hoot
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/Relation.h>
 
 // Qt
 #include <QFile>
@@ -54,7 +57,7 @@ public:
 
   virtual void close();
 
-  virtual bool isSupported(QUrl url);
+  virtual bool isSupported(const QUrl& url);
 
   virtual void open(const QUrl& url);
 
@@ -69,27 +72,27 @@ public:
   /**
    * Returns a results iterator to all OSM elements for a given element type in the database.
    */
-  virtual shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual vector<long> selectNodeIdsForWay(long wayId);
+  virtual std::vector<long> selectNodeIdsForWay(long wayId);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  virtual shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
+  virtual boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  virtual vector<RelationData::Entry> selectMembersForRelation(long relationId);
+  virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   /**
    * Returns a results iterator to a node for a given node id.
    */
-  shared_ptr<QSqlQuery> selectNodeById(const long elementId);
+  boost::shared_ptr<QSqlQuery> selectNodeById(const long elementId);
 
   /**
     * Deletes data in the Osm Api db
@@ -108,21 +111,28 @@ public:
    * @param Type
    * @return
    */
-  QString extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type Type);
+  QString extractTagFromRow(boost::shared_ptr<QSqlQuery> row, const ElementType::Type Type);
 
-  shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
+  boost::shared_ptr<QSqlQuery> selectTagsForNode(long nodeId);
 
-  shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
+  boost::shared_ptr<QSqlQuery> selectTagsForWay(long wayId);
 
-  shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
+  boost::shared_ptr<QSqlQuery> selectTagsForRelation(long wayId);
 
+  /**
+   * Increment the sequence ID for the given sequence and return it
+   *
+   * @param tableName element type associated with the sequence
+   * @return the next sequence ID for the given type
+   */
   virtual long getNextId(const ElementType& elementType);
 
   /**
-   * Gets the next sequence ID for the given database table
+   * Increment the sequence ID for the given sequence and return it
    *
-   * @param tableName database table name
-   * @return an element ID
+   * @param tableName database table name associated with the sequence
+   * @return the next sequence ID for the given type
+   * @todo need to make use of sequence and table strings more consistent here
    */
   long getNextId(const QString tableName);
 
@@ -146,7 +156,36 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
+  //TODO: two methods below may be able to be combined
+
+  /**
+   * Converts a table type to a OSM API database table name
+   *
+   * @param tableType table type enum to convert
+   * @return a database table name string
+   */
   virtual QString tableTypeToTableName(const TableType& tableType) const;
+
+  /**
+   * Returns an OSM API database table name
+   *
+   * @param elementType type of the element
+   * @param historical whether the requested table is current or historical
+   * @param tags if true; returns the corresponding element tag table name
+   * @return a database table name string
+   */
+  static QString elementTypeToElementTableName(const ElementType& elementType,
+                                               const bool historical, const bool tags);
+
+  /**
+   * Disables all OSM table constraints
+   */
+  void disableConstraints();
+
+  /**
+   * Enables all OSM table constraints
+   */
+  void enableConstraints();
 
 protected:
 
@@ -156,19 +195,24 @@ private:
 
   bool _inTransaction;
 
-  shared_ptr<QSqlQuery> _selectElementsForMap;
-  shared_ptr<QSqlQuery> _selectTagsForNode;
-  shared_ptr<QSqlQuery> _selectTagsForWay;
-  shared_ptr<QSqlQuery> _selectTagsForRelation;
-  shared_ptr<QSqlQuery> _selectMembersForRelation;
-  shared_ptr<QSqlQuery> _selectNodeById;
+  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
+  boost::shared_ptr<QSqlQuery> _selectTagsForNode;
+  boost::shared_ptr<QSqlQuery> _selectTagsForWay;
+  boost::shared_ptr<QSqlQuery> _selectTagsForRelation;
+  boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
+  boost::shared_ptr<QSqlQuery> _selectNodeById;
 
-  QHash<QString, shared_ptr<QSqlQuery> > _seqQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _seqQueries;
 
   void _init();
 
-  QString _elementTypeToElementTableName(const ElementType& elementType) const;
+  QString _elementTypeToElementTableNameStr(const ElementType& elementType) const;
 
+  long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
+  long _getIdFromSequence(const QString tableName, const QString sequenceType);
+
+  static QStringList _getTables();
+  void _modifyConstraints(const QStringList tableNames, const bool disable);
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PARTIALNETWORKMERGER_H
 #define PARTIALNETWORKMERGER_H
@@ -50,10 +50,10 @@ public:
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  PartialNetworkMerger(const set<pair<ElementId, ElementId> > &pairs,
+  PartialNetworkMerger(const std::set<std::pair<ElementId, ElementId> > &pairs,
     QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   /**
    * Maps from a retired EID to its latest EID. If this EID has no mapping then the original EID
@@ -84,13 +84,15 @@ private:
   void _applyMerger(const OsmMapPtr& map, WayMatchStringMergerPtr merger) const;
 
   WayMatchStringMergerPtr _createMatchStringMerger(const OsmMapPtr &map,
-    vector<pair<ElementId, ElementId> > &replaced,
+    std::vector<std::pair<ElementId, ElementId> > &replaced,
     ConstEdgeMatchPtr edgeMatch) const;
 
-  void _processFullMatch(const OsmMapPtr& map, vector<pair<ElementId, ElementId> > &replaced) const;
+  void _processFullMatch(const OsmMapPtr& map,
+                         std::vector<std::pair<ElementId, ElementId> > &replaced) const;
 
-  void _processStubMatch(const OsmMapPtr& map, vector<pair<ElementId, ElementId> > &replaced,
-    ConstEdgeMatchPtr edgeMatch) const;
+  void _processStubMatch(const OsmMapPtr& map,
+                         std::vector<std::pair<ElementId, ElementId> > &replaced,
+                         ConstEdgeMatchPtr edgeMatch) const;
 };
 
 }

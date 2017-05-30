@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchGraph.h"
 
@@ -57,6 +57,8 @@ using namespace boost;
 
 // Tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>
+
+using namespace std;
 using namespace Tgs;
 
 namespace hoot

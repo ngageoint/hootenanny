@@ -31,11 +31,13 @@ using namespace pp;
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/hadoop/PbfInputFormat.h>
-#include <hoot/hadoop/PbfRecordReader.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/way-join/WayJoinDriver.h>
 
 #include "../MapReduceTestFixture.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -65,7 +67,7 @@ public:
     uut.calculateWayBounds(QString::fromStdString(outDir) + "/input.pbf",
       QString::fromStdString(outDir) +  "result.pbf");
 
-    shared_ptr<OsmMap> map(new OsmMap);
+   OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);
@@ -76,7 +78,7 @@ public:
       LOG_INFO(path);
       if (QString::fromStdString(path).endsWith(".pbf"))
       {
-        shared_ptr<istream> is(fs.open(path));
+       boost::shared_ptr<istream> is(fs.open(path));
         reader.parse(is.get(), map);
       }
     }

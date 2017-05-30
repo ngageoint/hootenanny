@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -35,8 +35,6 @@
 
 namespace hoot
 {
-using namespace node;
-using namespace v8;
 
 class OsmSchemaJs : public node::ObjectWrap
 {
@@ -64,7 +62,7 @@ private:
   static v8::Handle<v8::Value> isLinearHighway(const v8::Arguments& args);
   static v8::Handle<v8::Value> score(const v8::Arguments& args);
   static v8::Handle<v8::Value> scoreOneWay(const v8::Arguments& args);
-
+  static v8::Handle<v8::Value> hasName(const v8::Arguments& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
@@ -77,18 +75,18 @@ inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)
   }
   else
   {
-    result->Set(toV8("name"), toV8(tv.name), None);
-    result->Set(toV8("description"), toV8(tv.description), None);
-    result->Set(toV8("key"), toV8(tv.key), None);
-    result->Set(toV8("value"), toV8(tv.value), None);
-    result->Set(toV8("influence"), toV8(tv.influence), None);
-    result->Set(toV8("childWeight"), toV8(tv.childWeight), None);
-    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore), None);
+    result->Set(toV8("name"), toV8(tv.name), v8::None);
+    result->Set(toV8("description"), toV8(tv.description), v8::None);
+    result->Set(toV8("key"), toV8(tv.key), v8::None);
+    result->Set(toV8("value"), toV8(tv.value), v8::None);
+    result->Set(toV8("influence"), toV8(tv.influence), v8::None);
+    result->Set(toV8("childWeight"), toV8(tv.childWeight), v8::None);
+    result->Set(toV8("mismatchScore"), toV8(tv.mismatchScore), v8::None);
     // need to create a string conversion for this if we want to use it. Unused for now.
     //result->Set(toV8("valueType"), toV8(tv.valueType), None);
-    result->Set(toV8("aliases"), toV8(tv.aliases), None);
-    result->Set(toV8("categories"), toV8(tv.categories), None);
-    result->Set(toV8("geometries"), toV8(tv.geometries), None);
+    result->Set(toV8("aliases"), toV8(tv.aliases), v8::None);
+    result->Set(toV8("categories"), toV8(tv.categories), v8::None);
+    result->Set(toV8("geometries"), toV8(tv.geometries), v8::None);
   }
 
   return result;

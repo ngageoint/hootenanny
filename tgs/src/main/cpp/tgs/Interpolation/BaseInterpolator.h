@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BASEINTERPOLATOR_H
 #define BASEINTERPOLATOR_H
@@ -47,23 +47,23 @@ public:
 
   virtual void readInterpolator(QIODevice& is);
 
-  virtual void setData(const shared_ptr<const DataFrame>& df);
+  virtual void setData(const boost::shared_ptr<const DataFrame>& df);
 
-  virtual void setDependentColumns(const vector<string>& labels);
+  virtual void setDependentColumns(const std::vector<std::string>& labels);
 
-  virtual void setIndependentColumns(const vector<string>& labels);
+  virtual void setIndependentColumns(const std::vector<std::string>& labels);
 
   virtual void writeInterpolator(QIODevice& os) const;
 
 protected:
-  vector<int> _indColumns;
-  vector<string> _indColumnsLabels;
-  mutable auto_ptr<HilbertRTree> _index;
-  vector<int> _depColumns;
-  vector<string> _depColumnsLabels;
+  std::vector<int> _indColumns;
+  std::vector<std::string> _indColumnsLabels;
+  mutable std::auto_ptr<HilbertRTree> _index;
+  std::vector<int> _depColumns;
+  std::vector<std::string> _depColumnsLabels;
   // A temp variable used to return the result of interpolate()
-  mutable vector<double> _result;
-  shared_ptr<const DataFrame> _df;
+  mutable std::vector<double> _result;
+  boost::shared_ptr<const DataFrame> _df;
 
   virtual void _buildModel() = 0;
 

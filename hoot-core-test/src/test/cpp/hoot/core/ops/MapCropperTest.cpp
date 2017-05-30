@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/ObjectInputStream.h>
 #include <hoot/core/io/ObjectOutputStream.h>
@@ -60,9 +60,12 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-using namespace Tgs;
 
 class MapCropperTest : public CppUnit::TestFixture
 {
@@ -75,17 +78,17 @@ class MapCropperTest : public CppUnit::TestFixture
 
 public:
 
-  shared_ptr<OsmMap> genPoints(int seed)
+  OsmMapPtr genPoints(int seed)
   {
     Tgs::Random::instance()->seed(seed);
-    shared_ptr<OsmMap> result(new OsmMap());
+    OsmMapPtr result(new OsmMap());
 
     for (int i = 0; i < 1000; i++)
     {
       double x = Random::instance()->generateUniform() * 360 - 180;
       double y = Random::instance()->generateUniform() * 180 - 90;
 
-      shared_ptr<Node> n(new Node(Status::Invalid, result->createNextNodeId(), x, y, 10));
+      NodePtr n(new Node(Status::Invalid, result->createNextNodeId(), x, y, 10));
       result->addNode(n);
     }
 
@@ -94,13 +97,13 @@ public:
 
   void runGeometryTest()
   {
-    shared_ptr<OsmMap> map = genPoints(0);
+    OsmMapPtr map = genPoints(0);
 
-    shared_ptr<Geometry> g(geos::io::WKTReader().read(
+    boost::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     int insideCount = 0;
-    const NodeMap& nm = map->getNodeMap();
+    const NodeMap& nm = map->getNodes();
     for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       Coordinate c = it->second->toCoordinate();
@@ -115,25 +118,25 @@ public:
       MapCropper uut(g, false);
       uut.apply(map);
 
-      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodes().size());
     }
 
     {
-      shared_ptr<OsmMap> map = genPoints(0);
+      OsmMapPtr map = genPoints(0);
 
       MapCropper uut(g, true);
       uut.apply(map);
-      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
     }
   }
 
   void runSerializationTest()
   {
-    shared_ptr<Geometry> g(geos::io::WKTReader().read(
+    boost::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
     MapCropper pre(g, false);
-    shared_ptr<OsmMap> mapPre = genPoints(0);
+    OsmMapPtr mapPre = genPoints(0);
     pre.apply(mapPre);
 
     stringstream ss;
@@ -145,11 +148,11 @@ public:
     stringstream ss2(ss.str());
     ObjectInputStream ois(ss2);
     auto_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
-    shared_ptr<OsmMap> mapPost = genPoints(0);
+    OsmMapPtr mapPost = genPoints(0);
     post->apply(mapPost);
 
     // do we get the same result before/after serialization.
-    CPPUNIT_ASSERT_EQUAL(mapPre->getNodeMap().size(), mapPost->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(mapPre->getNodes().size(), mapPost->getNodes().size());
   }
 
   void runConfigurationTest()
@@ -251,7 +254,7 @@ public:
 
   void runMultiPolygonTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/MultipolygonTest.osm",true);
 
     Envelope env(0.30127,0.345,0.213,0.28154);
@@ -259,12 +262,12 @@ public:
     MapCropper::crop(map, env);
 
     //compare relations
-    const RelationMap relations = map->getRelationMap();
+    const RelationMap relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
     QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way:-1556;   Entry: role: inner, eid: Way:-1552; ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
-    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
-      const shared_ptr<Relation>& r = it->second;
+      const RelationPtr& r = it->second;
       HOOT_STR_EQUALS(relationStr, r->toString().replace("\n","; "));
     }
 
@@ -272,10 +275,10 @@ public:
     int count = 0;
     const WayMap ways = map->getWays();
     HOOT_STR_EQUALS(2, ways.size());
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      const shared_ptr<Way>& w = it->second;
-      shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
+      const WayPtr& w = it->second;
+      boost::shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
       const Envelope& e = *(pl->getEnvelopeInternal());
       double area = pl->getArea();
       if (count == 0)

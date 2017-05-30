@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PARALLELWAYCRITERION_H
@@ -33,44 +33,44 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class ParallelWayCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::ParallelWayCriterion"; }
+  static std::string className() { return "hoot::ParallelWayCriterion"; }
 
   ParallelWayCriterion() {}
   ParallelWayCriterion(const ConstOsmMapPtr& map,
-                       shared_ptr<const Way> baseWay,
+                       ConstWayPtr baseWay,
                        bool isParallel = true);
 
   virtual ~ParallelWayCriterion();
 
-  Radians calculateDifference(const shared_ptr<const Way>& w) const;
+  Radians calculateDifference(const ConstWayPtr& w) const;
 
   void setThreshold(Degrees threshold) { _threshold = threshold; }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   ParallelWayCriterion* clone() { return new ParallelWayCriterion(_map, _baseWay, _isParallel); }
 
 private:
 
   ConstOsmMapPtr _map;
-  shared_ptr<const Way> _baseWay;
+  ConstWayPtr _baseWay;
   bool _isParallel;
 
   // heading of baseWay at each coord
   std::vector<Radians> _headings;
-  std::vector<Point*> _points;
+  std::vector<geos::geom::Point*> _points;
   Degrees _threshold;
 };
 

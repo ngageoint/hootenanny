@@ -32,7 +32,7 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt
@@ -59,7 +59,7 @@ public:
     OsmMapReaderFactory::getInstance().read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
-    shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
+    boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(false);
     map->visitRw(removeElementsVisitor);
@@ -78,7 +78,7 @@ public:
     OsmMapReaderFactory::getInstance().read(
       map, "test-files/visitors/RemoveElementsVisitorInput.osm");
 
-    shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion());
+    boost::shared_ptr<HighwayCriterion> elementCriterion(new HighwayCriterion());
     RemoveElementsVisitor removeElementsVisitor(elementCriterion);
     removeElementsVisitor.setRecursive(true);
     map->visitRw(removeElementsVisitor);

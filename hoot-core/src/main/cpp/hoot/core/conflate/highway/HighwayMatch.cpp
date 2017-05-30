@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMatch.h"
 
@@ -48,14 +48,16 @@
 
 #include "HighwayClassifier.h"
 
+using namespace std;
+
 namespace hoot
 {
 
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 QString HighwayMatch::_matchName = "Highway";
 
-HighwayMatch::HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
-  const shared_ptr<SublineStringMatcher>& sublineMatcher,
+HighwayMatch::HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
+  const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
   ConstMatchThresholdPtr mt) :
   Match(mt),
@@ -126,7 +128,7 @@ QString HighwayMatch::explain() const
   return _explainText;
 }
 
-map<QString, double> HighwayMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
+map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
 {
   map<QString, double> result;
   if (_sublineMatch.isValid())
@@ -223,7 +225,7 @@ bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) 
         result = false;
       }
     }
-    catch (NeedsReviewException& e)
+    catch (const NeedsReviewException&)
     {
       result = true;
     }
@@ -271,7 +273,7 @@ bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sh
     return true;
   }
 
-  //shared_ptr<MatchThreshold> mt(new MatchThreshold());
+  //boost::shared_ptr<MatchThreshold> mt(new MatchThreshold());
   // check to see if the scraps match other2
   HighwayMatch m0(
     _classifier, _sublineMatcher, copiedMap, scrapsShared->getElementId(), other2, _threshold);

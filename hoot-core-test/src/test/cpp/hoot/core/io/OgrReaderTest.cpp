@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -43,6 +43,8 @@ using namespace boost;
 
 // Qt
 #include <QDebug>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -65,10 +67,10 @@ public:
       OgrReader uut;
 
       Progress progress("runBasicTest");
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
     }
 
@@ -86,7 +88,7 @@ public:
       Coordinate c2(1, 84);
 
       {
-        shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
+        boost::shared_ptr<OGRSpatialReference> ortho1 = MapProjector::createOrthographic(env);
 
         Settings s;
         // 15512.4m wide at the top
@@ -115,18 +117,18 @@ public:
       OgrReader uut;
 
       Progress progress("runBasicTest");
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       uut.setTranslationFile("translations/cloudmade.js");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
 
       int shoreline = 0;
       int water = 0;
       for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
       {
-        shared_ptr<Way> w = it->second;
+        WayPtr w = it->second;
         if (w->getTags()["natural"] == "shoreline")
         {
           shoreline++;
@@ -145,18 +147,18 @@ public:
       OgrReader uut;
 
       Progress progress("runBasicTest");
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       uut.setTranslationFile("cloudmade");
       uut.read("test-files/jakarta_raya_coastline.shp", "", map, progress);
 
-      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodeMap().size());
+      CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
       CPPUNIT_ASSERT_EQUAL(6, (int)map->getWays().size());
 
       int shoreline = 0;
       int water = 0;
       for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
       {
-        shared_ptr<Way> w = it->second;
+        WayPtr w = it->second;
         if (w->getTags()["natural"] == "shoreline")
         {
           shoreline++;

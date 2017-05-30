@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEAREAFORSTATSVISITOR_H
 #define CALCULATEAREAFORSTATSVISITOR_H
@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
@@ -47,7 +46,7 @@ class CalculateAreaForStatsVisitor : public ElementVisitor, public ConstOsmMapCo
 {
 public:
 
-  static string className() { return "hoot::CalculateAreaForStatsVisitor"; }
+  static std::string className() { return "hoot::CalculateAreaForStatsVisitor"; }
 
   CalculateAreaForStatsVisitor() : _total(0) {}
 

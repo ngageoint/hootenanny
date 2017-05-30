@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatch.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
@@ -58,12 +58,14 @@
 
 #include "BuildingRfClassifier.h"
 
+using namespace std;
+
 namespace hoot
 {
 
 QString BuildingMatch::_matchName = "Building";
 
-BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const BuildingRfClassifier> rf,
+BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
   const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),
   _eid1(eid1),
@@ -118,7 +120,7 @@ BuildingMatch::BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const Buildin
   LOG_VART(toString());
 }
 
-map<QString, double> BuildingMatch::getFeatures(const shared_ptr<const OsmMap>& m) const
+map<QString, double> BuildingMatch::getFeatures(const ConstOsmMapPtr& m) const
 {
   return _rf->getFeatures(m, _eid1, _eid2);
 }

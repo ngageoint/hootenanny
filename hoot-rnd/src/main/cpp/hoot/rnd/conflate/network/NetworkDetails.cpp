@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkDetails.h"
 
@@ -39,10 +39,13 @@
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -82,8 +85,8 @@ Meters NetworkDetails::calculateDistance(ConstEdgeStringPtr s, ConstEdgeLocation
 
   if (d == numeric_limits<double>::max())
   {
-    LOG_VARW(s);
-    LOG_VARW(el);
+    LOG_VART(s);
+    LOG_VART(el);
     throw IllegalArgumentException("el isn't close enough to s to provide a distance.");
   }
   else if (d < 0)
@@ -113,11 +116,11 @@ Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNet
 {
   if (e->getMembers().size() != 1 || e->getMembers()[0]->getElementType() != ElementType::Way)
   {
-    LOG_VAR(e);
+    LOG_VART(e);
     throw IllegalArgumentException("The input edge must have exactly 1 way as its member.");
   }
 
-  ConstWayPtr w = dynamic_pointer_cast<const Way>(e->getMembers()[0]);
+  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e->getMembers()[0]);
   Radians result;
   if (v == e->getFrom())
   {
@@ -564,8 +567,8 @@ double NetworkDetails::getEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdg
   assert(e1->getMembers().size() == 1);
   assert(e2->getMembers().size() == 1);
 
-  ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
-  ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+  ConstWayPtr w1 = boost::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
+  ConstWayPtr w2 = boost::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
   double result;
 
@@ -644,9 +647,9 @@ double NetworkDetails::getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeS
     else
     {
       RelationPtr r1(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
-      r1->setType("multilinestring");
+      r1->setType(MetadataTags::RelationMultilineString());
       RelationPtr r2(new Relation(Status::Unknown1, _map->createNextRelationId(), 15));
-      r2->setType("multilinestring");
+      r2->setType(MetadataTags::RelationMultilineString());
 
       // create a set of all the way IDs
       set<long> widSet;
@@ -748,8 +751,8 @@ double NetworkDetails::getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNet
       bestScore = 1.0;
     }
 
-    ConstWayPtr w1 = dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
-    ConstWayPtr w2 = dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
+    ConstWayPtr w1 = boost::dynamic_pointer_cast<const Way>(e1->getMembers()[0]);
+    ConstWayPtr w2 = boost::dynamic_pointer_cast<const Way>(e2->getMembers()[0]);
 
     const SublineCache& sc = _getSublineCache(w1, w2);
     LOG_VART(sc.p);
@@ -1035,7 +1038,7 @@ ConstWayPtr NetworkDetails::toWay(ConstNetworkEdgePtr e) const
     throw IllegalArgumentException("Expected e to contain a single way.");
   }
 
-  ConstWayPtr w = dynamic_pointer_cast<const Way>(e->getMembers()[0]);
+  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e->getMembers()[0]);
 
   if (!w)
   {
@@ -1063,7 +1066,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
       ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(_map->getWay(eid));
+      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(_map->getWay(eid));
 
       Meters l = calculateLength(e);
       double startP = subline->getStart()->getPortion();

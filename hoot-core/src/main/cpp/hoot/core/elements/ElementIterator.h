@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ELEMENTPROVIDER_H
@@ -40,8 +40,6 @@ namespace hoot
 
 class Element;
 
-using namespace std;
-
 /**
  * Implements the iterator concept and provides some simple methods for the inheriter to use.
  *
@@ -54,7 +52,7 @@ public:
 
   virtual ~ElementIterator() {}
 
-  const shared_ptr<Element>& next();
+  const boost::shared_ptr<Element>& next();
 
   bool hasNext();
 
@@ -63,7 +61,7 @@ protected:
   /**
    * A method to be used by the inheriting class to add new available elements.
    */
-  void _addElement(const shared_ptr<Element>& e) { _pending.push_back(e); }
+  void _addElement(const boost::shared_ptr<Element>& e) { _pending.push_back(e); }
 
   /**
    * A method to be overridden by the implementing class. This method will be called periodically
@@ -73,8 +71,8 @@ protected:
   virtual void _next() = 0;
 
 private:
-  shared_ptr<Element> _current;
-  list< shared_ptr<Element> > _pending;
+  boost::shared_ptr<Element> _current;
+  std::list< boost::shared_ptr<Element> > _pending;
 };
 
 }

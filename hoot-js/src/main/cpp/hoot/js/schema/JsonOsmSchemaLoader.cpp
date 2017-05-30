@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsonOsmSchemaLoader.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/util/DataConvertJs.h>
 #include <hoot/js/util/StreamUtilsJs.h>
 #include <hoot/core/schema/SchemaChecker.h>
@@ -37,6 +37,8 @@
 #include <QByteArray>
 #include <QFile>
 #include <QDir>
+
+using namespace v8;
 
 namespace hoot
 {

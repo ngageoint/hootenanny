@@ -7,11 +7,11 @@ Feature: Manually resolve reviews feature
     And I press "Add Reference Dataset"
     And I click the "AllDataTypesACucumber" Dataset
     And I press "Add Layer"
-    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
+    Then I wait 30 "seconds" to see "span.strong" element with text "AllDataTypesACucumber"
     And I press "Add Secondary Dataset"
     And I click the "AllDataTypesBCucumber" Dataset
     And I press "Add Layer"
-    Then I wait 15 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
+    Then I wait 30 "seconds" to see "span.strong" element with text "AllDataTypesBCucumber"
     Then I should see "Conflate"
     And I press "Conflate"
     And I append "saveAs" input with "_Cucumber"
@@ -37,6 +37,11 @@ Feature: Manually resolve reviews feature
         | name | Test Name |
     #Edit a review feature
     When I select a node map feature with class "activeReviewFeature"
+
+    #Make sure feature has a hoot:status of 1
+    Then I wait 3 "seconds" to see css "div.key-wrap input.key[title='hoot:status']"
+    Then I wait 3 "seconds" to see css "div.input-wrap-position input.value[title='Input1']"
+
     And I type "Edit Name" in input "preset-input-name"
     Then I wait 2 "seconds" to see "div.tag-table td.f1" element with text "Edit Name"
 

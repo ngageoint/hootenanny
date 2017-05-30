@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYEXPERTCLASSIFIER_H
 #define HIGHWAYEXPERTCLASSIFIER_H
@@ -48,7 +48,7 @@ public:
   MatchClassification classify(const ConstOsmMapPtr& map,
     const WaySublineMatch& match);
 
-  map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m,
+  std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 };
 

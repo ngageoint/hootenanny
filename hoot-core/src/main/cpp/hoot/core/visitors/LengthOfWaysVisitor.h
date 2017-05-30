@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LENGTHOFWAYSVISITOR_H
 #define LENGTHOFWAYSVISITOR_H
@@ -36,9 +36,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
@@ -49,7 +48,7 @@ class LengthOfWaysVisitor : public ElementVisitor, public ConstOsmMapConsumer,
 {
 public:
 
-  static string className() { return "hoot::LengthOfWaysVisitor"; }
+  static std::string className() { return "hoot::LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor() : _total(0) {}
 

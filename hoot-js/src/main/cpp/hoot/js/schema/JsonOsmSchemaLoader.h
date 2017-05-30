@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSONOSMSCHEMALOADER_H
 #define JSONOSMSCHEMALOADER_H
@@ -40,7 +40,7 @@ class JsonOsmSchemaLoader : public OsmSchemaLoader
 {
 public:
 
-  static string className() { return "hoot::JsonOsmSchemaLoader"; }
+  static std::string className() { return "hoot::JsonOsmSchemaLoader"; }
 
   static unsigned int logWarnCount;
 
@@ -52,11 +52,11 @@ public:
 
   virtual void load(QString path, OsmSchema& s);
 
-  virtual set<QString> getDependencies() { return _deps; }
+  virtual std::set<QString> getDependencies() { return _deps; }
 
 protected:
 
-  set<QString> _deps;
+  std::set<QString> _deps;
   QList<QString> _baseDir;
   v8::Persistent<v8::Context> _context;
 

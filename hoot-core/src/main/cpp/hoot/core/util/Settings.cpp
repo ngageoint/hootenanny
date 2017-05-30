@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Settings.h"
@@ -73,7 +73,7 @@ public:
     {
       load(is);
     }
-    catch (HootException& e)
+    catch (const HootException& e)
     {
       throw HootException("Error parsing file: " + path + ". " + e.what());
     }
@@ -87,7 +87,7 @@ public:
       pt::read_json(is, pt);
       _loadTags(pt);
     }
-    catch (std::exception e)
+    catch (const std::exception& e)
     {
       QString reason = e.what();
       throw HootException("Error parsing JSON " + reason);
@@ -419,7 +419,7 @@ void Settings::loadDefaults()
     QString localPath = ConfPath::search("LocalHoot.json");
     loadJson(localPath);
   }
-  catch (FileNotFoundException& e)
+  catch (const FileNotFoundException&)
   {
     // pass
   }

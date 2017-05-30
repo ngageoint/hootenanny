@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ADD_HILBERT_REVIEW_SORT_ORDER_H__
 #define __ADD_HILBERT_REVIEW_SORT_ORDER_H__
@@ -42,19 +42,19 @@ class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
+  static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
   AddHilbertReviewSortOrderOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
 private:
 
-  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const set<ElementId> eids);
+  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const std::set<ElementId> eids);
 
-  Envelope::AutoPtr _mapEnvelope;
+  geos::geom::Envelope::AutoPtr _mapEnvelope;
 };
 
 }

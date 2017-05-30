@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MergeNearbyNodes.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/index/ClosePointHash.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Settings.h>
@@ -44,6 +44,8 @@
 // TGS
 #include <tgs/StreamUtils.h>
 #include <tgs/RStarTree/HilbertRTree.h>
+
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -51,7 +53,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MergeNearbyNodes)
 
-double calcDistance(const shared_ptr<Node>& n1, const shared_ptr<Node>& n2)
+double calcDistance(const NodePtr& n1, const NodePtr& n2)
 {
   double dx = n1->getX() - n2->getX();
   double dy = n1->getY() - n2->getY();
@@ -68,15 +70,15 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
   }
 }
 
-void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
+void MergeNearbyNodes::apply(boost::shared_ptr<OsmMap>& map)
 {
   LOG_INFO("MergeNearbyNodes start");
 
   QTime time;
   time.start();
 
-  shared_ptr<OsmMap> wgs84;
-  shared_ptr<OsmMap> planar;
+  boost::shared_ptr<OsmMap> wgs84;
+  boost::shared_ptr<OsmMap> planar;
 
   if (MapProjector::isGeographic(map))
   {
@@ -97,10 +99,10 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
 
   ClosePointHash cph(_distance);
 
-  const NodeMap& nodes = planar->getNodeMap();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+  const NodeMap& nodes = planar->getNodes();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    const shared_ptr<Node>& n = it->second;
+    const NodePtr& n = it->second;
     cph.addPoint(n->getX(), n->getY(), n->getId());
   }
 
@@ -118,8 +120,8 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
       {
         if (v[i] != v[j] && map->containsNode(v[i]) && map->containsNode(v[j]))
         {
-          const shared_ptr<Node>& n1 = planar->getNode(v[i]);
-          const shared_ptr<Node>& n2 = planar->getNode(v[j]);
+          const NodePtr& n1 = planar->getNode(v[i]);
+          const NodePtr& n2 = planar->getNode(v[j]);
           double d = calcDistance(n1, n2);
           if (d < _distance && n1->getStatus() == n2->getStatus())
           {
@@ -132,8 +134,8 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
             // if the geographic bounds are specified, then make sure both points are inside.
             else
             {
-              const shared_ptr<Node>& g1 = wgs84->getNode(v[i]);
-              const shared_ptr<Node>& g2 = wgs84->getNode(v[j]);
+              const NodePtr& g1 = wgs84->getNode(v[i]);
+              const NodePtr& g2 = wgs84->getNode(v[j]);
               if (_bounds.contains(g1->getX(), g1->getY()) &&
                   _bounds.contains(g2->getX(), g2->getY()))
               {
@@ -165,7 +167,7 @@ void MergeNearbyNodes::apply(shared_ptr<OsmMap>& map)
   }
 }
 
-void MergeNearbyNodes::mergeNodes(shared_ptr<OsmMap> map, Meters distance)
+void MergeNearbyNodes::mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance)
 {
   MergeNearbyNodes mnn(distance);
   mnn.apply(map);

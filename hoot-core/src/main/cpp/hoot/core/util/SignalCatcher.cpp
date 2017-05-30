@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SignalCatcher.h"
@@ -32,7 +32,6 @@
 
 // Standard
 #include <cxxabi.h>
-#include <signal.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -40,7 +39,72 @@
 namespace hoot
 {
 
-void SignalCatcher::handler(int sig)
+boost::shared_ptr<SignalCatcher> SignalCatcher::_instance;
+
+SignalCatcher::SignalCatcher()
+  : _defaultSet(false)
+{
+}
+
+boost::shared_ptr<SignalCatcher> SignalCatcher::getInstance()
+{
+  if (!SignalCatcher::_instance)
+    SignalCatcher::_instance.reset(new SignalCatcher());
+  return SignalCatcher::_instance;
+}
+
+void SignalCatcher::registerDefaultHandlers()
+{
+  // These _might_ work depending on the specific error.
+  std::set_terminate(terminateHandler);
+  registerHandler(SIGSEGV, default_handler);
+  registerHandler(SIGABRT, default_handler);
+  _defaultSet = true;
+}
+
+void SignalCatcher::registerHandler(unsigned int signal_id, __sighandler_t handler)
+{
+  if (signal_id < _NSIG)
+  {
+    if (_handlers.find(signal_id) == _handlers.end())
+      _handlers[signal_id] = std::stack<__sighandler_t>();
+    _handlers[signal_id].push(handler);
+    signal(signal_id, handler);
+  }
+}
+
+void SignalCatcher::unregisterHandler(unsigned int signal_id)
+{
+  if (signal_id >= _NSIG)
+    return;
+  __sighandler_t handler = SIG_DFL;
+  if (_handlers.find(signal_id) != _handlers.end())
+  {
+    switch (signal_id)
+    {
+    case SIGSEGV:
+    case SIGABRT:
+      //  These could possibly have a default handler already set
+      if ((_handlers[signal_id].size() > 1 && _defaultSet) || _handlers[signal_id].size() > 0)
+      {
+        _handlers[signal_id].pop();
+        handler = _handlers[signal_id].top();
+      }
+      break;
+    default:
+      //  No default other than SIG_DFL
+      if (_handlers[signal_id].size() > 0)
+      {
+        _handlers[signal_id].pop();
+        handler = _handlers[signal_id].top();
+      }
+      break;
+    }
+  }
+  signal(signal_id, handler);
+}
+
+void SignalCatcher::default_handler(int sig)
 {
   // print out all the frames to stderr
   fprintf(stderr, "Error: signal %d:\n", sig);
@@ -133,14 +197,6 @@ void SignalCatcher::print_stacktrace(FILE *out, unsigned int max_frames)
     free(symbollist);
 }
 
-void SignalCatcher::registerHandlers()
-{
-  // These _might_ work depending on the specific error.
-  std::set_terminate(terminateHandler);
-  signal(SIGSEGV, handler);
-  signal(SIGABRT, handler);
-}
-
 void SignalCatcher::terminateHandler()
 {
   static bool tried_throw = false;
@@ -148,8 +204,9 @@ void SignalCatcher::terminateHandler()
   try
   {
     // try once to re-throw currently active exception
-    if (!tried_throw++)
+    if (!tried_throw)
     {
+      tried_throw = true;
       throw;
     }
   }

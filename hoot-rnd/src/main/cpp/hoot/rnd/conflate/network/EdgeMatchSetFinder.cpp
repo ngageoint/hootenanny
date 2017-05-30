@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeMatchSetFinder.h"
 
@@ -177,7 +177,10 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
   {
     LOG_VART(neighbor1);
     LOG_VART(em->contains(neighbor1));
-    LOG_VART(_details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()));
+
+    // Calling this non-const function can alter the state of the map, and lead to different
+    // behaviors at different log levels! Beware!
+    //LOG_VART(_details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getLastEdge()));
 
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor1) == false &&
@@ -198,7 +201,10 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToEnd(ConstEdgeMatchPtr em,
     LOG_VART(neighbor2);
     LOG_VART(em->contains(neighbor2));
     LOG_VART(_details->isStringCandidate(em->getString2()->getLastEdge(), neighbor2));
-    LOG_VART(_details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getLastEdge()));
+
+    // Calling this non-const function can alter the state of the map, and lead to different
+    // behaviors at different log levels! Beware!
+    //LOG_VART(_details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getLastEdge()));
 
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor2) == false &&
@@ -230,7 +236,10 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
   {
     LOG_VART(neighbor1);
     LOG_VART(em->getString2()->getFirstEdge());
-    LOG_VART(_details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()));
+
+    // Calling this non-const function can alter the state of the map, and lead to different
+    // behaviors at different log levels! Beware!
+    //LOG_VART(_details->getPartialEdgeMatchScore(neighbor1, em->getString2()->getFirstEdge()));
 
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor1) == false &&
@@ -250,7 +259,10 @@ bool EdgeMatchSetFinder::_addEdgeNeighborsToStart(ConstEdgeMatchPtr em,
   {
     LOG_VART(neighbor2);
     LOG_VART(em->getString1()->getFirstEdge());
-    LOG_VART(_details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()));
+
+    // Calling this non-const function can alter the state of the map, and lead to different
+    // behaviors at different log levels! Beware!
+    //LOG_VART(_details->getPartialEdgeMatchScore(neighbor2, em->getString1()->getFirstEdge()));
 
     // if the neighbor pair score is non-zero
     if (em->contains(neighbor2) == false &&

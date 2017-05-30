@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GraphComparator.h"
@@ -39,8 +39,8 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/GeometryPainter.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/GeometryPainter.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/conflate/splitter/IntersectionSplitter.h>
@@ -58,30 +58,33 @@ using namespace geos::operation::distance;
 // TGS
 #include <tgs/Statistics/Random.h>
 #include <tgs/ProbablePath/ProbablePathCalculator.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
 {
 
-GraphComparator::GraphComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2) :
+GraphComparator::GraphComparator(OsmMapPtr map1,OsmMapPtr map2) :
       BaseComparator(map1, map2)
 {
   _iterations = 100;
   _init();
 }
 
-cv::Mat GraphComparator::_calculateCostDistance(shared_ptr<OsmMap> map, Coordinate c)
+cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c)
 {
   // make a copy of the map so we can manipulate it.
   map.reset(new OsmMap(map));
 
   // find the nearest feature
   long wId = map->getIndex().findNearestWay(c);
-  shared_ptr<Way> w = map->getWay(wId);
+  WayPtr w = map->getWay(wId);
 
   // split way at c
   WayLocation wl = LocationOfPoint::locate(map, w, c);
-  vector< shared_ptr<Way> > v = WaySplitter::split(map, w, wl);
+  vector<WayPtr > v = WaySplitter::split(map, w, wl);
   wl = LocationOfPoint::locate(map, v[0], c);
   if (wl.isNode() == false)
   {
@@ -92,7 +95,7 @@ cv::Mat GraphComparator::_calculateCostDistance(shared_ptr<OsmMap> map, Coordina
   assert(wl.isNode() == true);
 
   // populate graph
-  shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
   ShortestPath sp(graph);
@@ -166,7 +169,7 @@ double GraphComparator::compareMaps()
     _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
           _projectedBounds.MinY;
 
-    shared_ptr<OsmMap> referenceMap;
+    OsmMapPtr referenceMap;
     // pick one map as the reference map
     if (Random::instance()->coinToss())
     {
@@ -251,7 +254,7 @@ double GraphComparator::compareMaps()
   return _mean;
 }
 
-void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate>& c,
+void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
                                        QString output)
 {
   _updateBounds();
@@ -265,17 +268,17 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
     cout << c[i].x << " " << c[i].y << endl;
     // find the nearest feature
     long wId = map->getIndex().findNearestWay(c[i]);
-    shared_ptr<Way> w = map->getWay(wId);
+    WayPtr w = map->getWay(wId);
 
     // split way at c
     WayLocation wl = LocationOfPoint::locate(map, w, c[i]);
-    vector< shared_ptr<Way> > v = WaySplitter::split(map, w, wl);
+    vector<WayPtr > v = WaySplitter::split(map, w, wl);
     wl = LocationOfPoint::locate(map, v[0], c[i]);
     assert(wl.isNode() == true);
   }
 
   // populate graph
-  shared_ptr<DirectedGraph> graph(new DirectedGraph());
+ boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
   LOG_DEBUG("Running cost");
@@ -284,7 +287,7 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
   for (size_t i = 0; i < c.size(); i++)
   {
     long wId = map->getIndex().findNearestWay(c[i]);
-    shared_ptr<Way> w = map->getWay(wId);
+    WayPtr w = map->getWay(wId);
 
     WayLocation wl = LocationOfPoint::locate(map, w, c[i]);
 
@@ -302,7 +305,7 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
   _saveImage(mat, output, -1.0, false);
   _saveImage(mat, output.replace(".png", "2.png"), -1.0, true);
 
-  shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   srs->importFromEPSG(900913);
 
   Coordinate c1 = MapProjector::project(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
@@ -327,10 +330,10 @@ void GraphComparator::drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate
   //_exportGraphImage(map, *graph, sp, output);
 }
 
-void GraphComparator::_exportGraphImage(shared_ptr<OsmMap> map, DirectedGraph& /*graph*/,
+void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
                                         ShortestPath& sp, QString path)
 {
-  const NodeMap& nodes = map->getNodeMap();
+  const NodeMap& nodes = map->getNodes();
 
   double maxCost = 1e-100;
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -395,7 +398,7 @@ void GraphComparator::_init()
   _debugImages = false;
 }
 
-cv::Mat GraphComparator::_paintGraph(shared_ptr<OsmMap> map, DirectedGraph& graph, ShortestPath& sp)
+cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp)
 {
   const WayMap& ways = map->getWays();
 
@@ -412,7 +415,7 @@ cv::Mat GraphComparator::_paintGraph(shared_ptr<OsmMap> map, DirectedGraph& grap
 
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    shared_ptr<Way> w = it->second;
+   WayPtr w = it->second;
     double cost = sp.getNodeCost(w->getNodeIds()[0]);
     if (cost >= 0)
     {
@@ -430,7 +433,7 @@ cv::Mat GraphComparator::_paintGraph(shared_ptr<OsmMap> map, DirectedGraph& grap
   return mat;
 }
 
-void GraphComparator::_paintWay(cv::Mat& mat, ConstOsmMapPtr map, shared_ptr<Way> way, double friction,
+void GraphComparator::_paintWay(cv::Mat& mat, ConstOsmMapPtr map,WayPtr way, double friction,
                                 double startCost, double endCost)
 {
   LocationOfPoint lop(map, way);

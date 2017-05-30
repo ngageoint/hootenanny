@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocalTileWorker2.h"
 
 // hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/LargeWaySplitter.h>
 #include <hoot/core/conflate/OutsideBoundsRemover.h>
@@ -47,6 +47,9 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/NodeReplacements.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -55,9 +58,9 @@ class ReplacedNodeListener : public OsmMapListener
 public:
   ReplacedNodeListener(HashMap<long, long>& m) : _map(m) {}
 
-  virtual shared_ptr<OsmMapListener> clone() const
+  virtual boost::shared_ptr<OsmMapListener> clone() const
   {
-    return shared_ptr<OsmMapListener>(new ReplacedNodeListener(_map));
+    return boost::shared_ptr<OsmMapListener>(new ReplacedNodeListener(_map));
   }
 
   void replaceNodePre(long oldId, long newId) { _map[oldId] = newId; }
@@ -75,7 +78,7 @@ LocalTileWorker2::LocalTileWorker2()
   QDir().mkdir(_workDir);
 }
 
-void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
+void LocalTileWorker2::applyOp(boost::shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
   QString mapIn, QString mapOut)
 {
   _mapPart = 0;
@@ -83,12 +86,12 @@ void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Enve
   {
     NodeReplacements replacements;
     replacements.readDir(mapIn);
-    shared_ptr<OsmMap> map = _readTile(mapIn, tiles[i], _buffer);
+    boost::shared_ptr<OsmMap> map = _readTile(mapIn, tiles[i], _buffer);
 
-    if (map->getNodeMap().size() > 0)
+    if (map->getNodes().size() > 0)
     {
       // keep track of any replaced nodes.
-      shared_ptr<ReplacedNodeListener> rnl(
+      boost::shared_ptr<ReplacedNodeListener> rnl(
         new ReplacedNodeListener(replacements.getReplacements()));
       map->registerListener(rnl);
 
@@ -106,7 +109,7 @@ void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Enve
       const WayMap wm = map->getWays();
       for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
       {
-        const shared_ptr<Way>& w = map->getWay(it->first);
+        const WayPtr& w = map->getWay(it->first);
         WaySplitter::split(map, w, _maxWaySize);
       }
 
@@ -120,7 +123,7 @@ void LocalTileWorker2::applyOp(shared_ptr<OsmMapOperation> op, const vector<Enve
 
 void LocalTileWorker2::breakWays(QString out)
 {
-  shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -140,7 +143,7 @@ void LocalTileWorker2::breakWays(QString out)
 
 OGREnvelope LocalTileWorker2::calculateEnvelope()
 {
-  shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -156,7 +159,7 @@ OGREnvelope LocalTileWorker2::calculateEnvelope()
 
 void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 {
-  shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setDefaultStatus(Status::Unknown1);
@@ -173,7 +176,7 @@ void LocalTileWorker2::calculateNodeDensity(cv::Mat& r1, cv::Mat& r2)
 
 void LocalTileWorker2::cleanup(QString mapIn, QString mapOut)
 {
-  shared_ptr<OsmMap> map = _readAllParts(mapIn);
+  boost::shared_ptr<OsmMap> map = _readAllParts(mapIn);
 
   OsmXmlWriter writer;
   writer.setIncludePointsInWays(true);
@@ -203,9 +206,9 @@ void LocalTileWorker2::mkdir(QString dir)
   }
 }
 
-shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
+boost::shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
 {
-  shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
 
   OsmXmlReader reader;
   reader.setUseDataSourceIds(true);
@@ -230,9 +233,9 @@ shared_ptr<OsmMap> LocalTileWorker2::_readAllParts(QString dir)
   return map;
 }
 
-shared_ptr<OsmMap> LocalTileWorker2::_readTile(QString input, const Envelope& e, double buffer)
+boost::shared_ptr<OsmMap> LocalTileWorker2::_readTile(QString input, const Envelope& e, double buffer)
 {
-  shared_ptr<OsmMap> map = _readAllParts(input);
+  boost::shared_ptr<OsmMap> map = _readAllParts(input);
 
   Envelope buffered = e;
   buffered.expandBy(buffer);
@@ -242,10 +245,10 @@ shared_ptr<OsmMap> LocalTileWorker2::_readTile(QString input, const Envelope& e,
   return map;
 }
 
-void LocalTileWorker2::_replaceNodes(shared_ptr<OsmMap> map, const HashMap<long, long>& replacements)
+void LocalTileWorker2::_replaceNodes(boost::shared_ptr<OsmMap> map, const HashMap<long, long>& replacements)
 {
   for (HashMap<long, long>::const_iterator it = replacements.begin(); it != replacements.end();
-       it++)
+       ++it)
   {
     long from = it->first;
     long to = it->second;
@@ -262,7 +265,7 @@ void LocalTileWorker2::rmdir(QString dir)
   FileUtils::removeDir(dir);
 }
 
-void LocalTileWorker2::_storeMapPart(shared_ptr<OsmMap> map, QString dir)
+void LocalTileWorker2::_storeMapPart(boost::shared_ptr<OsmMap> map, QString dir)
 {
   QString fn = dir + QString("/Part%1.osm").arg(_mapPart++, 4, 10, QChar('0'));
   OsmXmlWriter writer;
@@ -281,7 +284,7 @@ void LocalTileWorker2::_writeNodeReplacements(QString dir, size_t i,
 void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
   const vector<Envelope>& conflatedBits, double buffer)
 {
-  shared_ptr<OsmMap> map = _readAllParts(dirIn);
+  boost::shared_ptr<OsmMap> map = _readAllParts(dirIn);
 
   for (size_t i = 0; i < conflatedBits.size(); i++)
   {
@@ -290,7 +293,7 @@ void LocalTileWorker2::_writeTheRest(QString dirIn, QString dirOut,
     OutsideBoundsRemover::removeWays(map, buffered, true);
   }
 
-  NodeMap nodes = map->getNodeMap();
+  NodeMap nodes = map->getNodes();
   // @optimize could use the index for this, but not necessary in debug mode.
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {

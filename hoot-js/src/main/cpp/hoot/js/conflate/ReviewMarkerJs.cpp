@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #define BUILDING_NODE_EXTENSION
 #include "ReviewMarkerJs.h"
@@ -38,6 +38,7 @@
 #include "../elements/ElementJs.h"
 #include "../OsmMapJs.h"
 
+using namespace std;
 using namespace v8;
 
 namespace hoot

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Settings.h>
@@ -34,6 +34,8 @@
 // Qt
 #include <QDebug>
 #include <QTime>
+
+using namespace std;
 
 namespace hoot
 {
@@ -61,20 +63,20 @@ public:
 
     // open up both OSM files.
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(args[0], map);
 
     const WayMap& ways = map->getWays();
 
     std::map<Meters, int> m;
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      const shared_ptr<Way>& w = it->second;
+      const WayPtr& w = it->second;
       m[w->getCircularError()]++;
     }
 
-    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); it++)
+    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); ++it)
     {
       double p = (double)it->second / (double)ways.size();
       cout << it->first << " : " << it->second << " (" << p << ")" << endl;

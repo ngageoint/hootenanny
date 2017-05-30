@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -62,7 +62,7 @@ class OgrReader : public PartialOsmMapReader
 {
 public:
 
-  static string className() { return "hoot::OgrReader"; }
+  static std::string className() { return "hoot::OgrReader"; }
 
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the
@@ -93,7 +93,7 @@ public:
    * @param map Put what we read in this map.
    * @param progress Report progress to this object.
    */
-  void read(QString path, QString layer, shared_ptr<OsmMap> map, Progress progress);
+  void read(QString path, QString layer, OsmMapPtr map, Progress progress);
 
   void setDefaultCircularError(Meters circularError);
 
@@ -127,7 +127,7 @@ public:
    * Returns the bounding box for the specified projection and configuration settings. This is
    * likely only useful in unit tests.
    */
-  virtual shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s,
+  virtual boost::shared_ptr<geos::geom::Envelope> getBoundingBoxFromConfig(const Settings& s,
     OGRSpatialReference* srs);
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;

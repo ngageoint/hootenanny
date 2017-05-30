@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCACHELRU_H
 #define ELEMENTCACHELRU_H
@@ -104,17 +104,17 @@ public:
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
 
-  virtual const boost::shared_ptr<const Node> getNode(long id) const;
+  virtual const ConstNodePtr getNode(long id) const;
 
-  virtual const boost::shared_ptr<Node> getNode(long id);
+  virtual const NodePtr getNode(long id);
 
-  virtual const boost::shared_ptr<const Relation> getRelation(long id) const;
+  virtual const ConstRelationPtr getRelation(long id) const;
 
-  virtual const boost::shared_ptr<Relation> getRelation(long id);
+  virtual const RelationPtr getRelation(long id);
 
-  virtual const boost::shared_ptr<const Way> getWay(long id) const;
+  virtual const ConstWayPtr getWay(long id) const;
 
-  virtual const boost::shared_ptr<Way> getWay(long id);
+  virtual const WayPtr getWay(long id);
 
   virtual bool containsNode(long id) const;
 

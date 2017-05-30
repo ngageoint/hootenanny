@@ -37,11 +37,12 @@
 
 // Qt
 #include <QFile>
-#include <QTextStream>
 #include <QDir>
 
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -104,10 +105,11 @@ public:
     OsmApiDb database;
     database.open(ServicesDbTestUtils::getOsmApiDbUrl());
     database.deleteData();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql");
-
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql");
 
     /////////////////////////////////////
     // Need to get the data in the format exactly like the return of the Services Db now so we don't need to
@@ -140,7 +142,7 @@ public:
     QList<float> lats = QList<float>() << 38.4 << 38;
     QList<float> lons = QList<float>() << -106.5 << -104;
 
-    shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
+    boost::shared_ptr<QSqlQuery> nodeResultIterator = database.selectElements(ElementType::Node);
 
     // check if db active or not
     assert(nodeResultIterator->isActive());
@@ -202,9 +204,9 @@ public:
     nodeIds.push_back(nodeId1);
     nodeIds.push_back(nodeId2);
 
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql");
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/ways.sql");
 
-    shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
+    boost::shared_ptr<QSqlQuery> wayResultIterator = database.selectElements(ElementType::Way);
 
     // check again if db active or not
     assert(wayResultIterator->isActive());
@@ -217,7 +219,6 @@ public:
     elementCtr = ids.size()-1;
     LOG_VART(elementCtr);
     CPPUNIT_ASSERT(elementCtr >= 0);
-    tagIndx = -1;
     ctr = 0;
     while( wayResultIterator->next() )
     {
@@ -269,9 +270,10 @@ public:
     long relationId = 1;
     ids.append(relationId);
 
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/relations.sql");
 
-    shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
+    boost::shared_ptr<QSqlQuery> relationResultIterator = database.selectElements(ElementType::Relation);
 
     // check again if db active or not
     assert(relationResultIterator->isActive());
@@ -284,7 +286,6 @@ public:
     elementCtr = ids.size()-1;
     LOG_VART(elementCtr);
     CPPUNIT_ASSERT(elementCtr >= 0);
-    tagIndx = -1;
     ctr = 0;
     while ( relationResultIterator->next() )
     {

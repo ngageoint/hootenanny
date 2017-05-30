@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveRelationOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -46,7 +48,7 @@ RemoveRelationOp::RemoveRelationOp(long rId):
 {
 }
 
-void RemoveRelationOp::apply(shared_ptr<OsmMap>& map)
+void RemoveRelationOp::apply(OsmMapPtr& map)
 {
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
   {

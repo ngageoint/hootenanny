@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveTagVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -68,7 +68,7 @@ void RemoveTagVisitor::addKey(QString key)
   _keys.append(key);
 }
 
-void RemoveTagVisitor::visit(const shared_ptr<Element>& e)
+void RemoveTagVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   for (int i = 0; i < _keys.size(); i++)
   {

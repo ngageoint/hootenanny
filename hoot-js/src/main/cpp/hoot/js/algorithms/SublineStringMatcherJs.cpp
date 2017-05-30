@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SublineStringMatcherJs.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/CopySubsetOp.h>
@@ -49,6 +49,9 @@
 
 // Tgs
 #include <tgs/SharedPtr.h>
+
+using namespace std;
+using namespace v8;
 
 namespace hoot
 {
@@ -111,13 +114,13 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
       MultiLineStringSplitter().split(copiedMap, string2, copiedMatch.getReverseVector2(), match2,
         scraps2);
     }
-    catch (const IllegalArgumentException& e)
+    catch (const IllegalArgumentException&)
     {
       // this is unusual print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
       LOG_TRACE(OsmXmlWriter::toString(copiedMap));
       logWarnCount++;
-      throw e;
+      throw;
     }
 
     if (!match1 || !match2)

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEWAYOP_H
 #define REMOVEWAYOP_H
@@ -45,8 +45,8 @@ public:
    * @brief className gets the name of the class as a string
    * @return class name
    */
-  static string className() { return "hoot::RemoveWayOp"; }
-  string getClassName() const { return className(); }
+  static std::string className() { return "hoot::RemoveWayOp"; }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief RemoveWayOp is used to remove ways from maps
@@ -67,7 +67,7 @@ public:
    * @brief apply Apply the operation to the given map
    * @param map the map to operate on
    */
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * @brief setWayId set the ID of the way to remove on the apply() call
@@ -93,8 +93,8 @@ private:
   long _wayIdToRemove;
   bool _removeFully;
 
-  void _removeWay(shared_ptr<OsmMap> &map, long wId);
-  void _removeWayFully(shared_ptr<OsmMap> &map, long wId);
+  void _removeWay(OsmMapPtr &map, long wId);
+  void _removeWayFully(OsmMapPtr &map, long wId);
 
 };
 

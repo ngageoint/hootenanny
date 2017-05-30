@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LineStringAverager.h"
@@ -39,16 +39,18 @@ using namespace geos::operation::distance;
 // Qt
 #include <QDebug>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
-LineStringAverager::LineStringAverager(shared_ptr<LineString> l1, shared_ptr<LineString> l2)
+LineStringAverager::LineStringAverager(boost::shared_ptr<LineString> l1, boost::shared_ptr<LineString> l2)
 {
   _l1 = l1;
   _l2 = l2;
 }
 
-shared_ptr<LineString> LineStringAverager::average()
+boost::shared_ptr<LineString> LineStringAverager::average()
 {
   const LineString* l1 = _l1.get();
   const LineString* l2 = _l2.get();
@@ -100,11 +102,11 @@ shared_ptr<LineString> LineStringAverager::average()
   // merge the last two nodes and move to the average location
   result.setAt(_merge(cs1[i1], cs2[i2]), ri++);
 
-  return shared_ptr<LineString>(GeometryFactory::getDefaultInstance()->createLineString(&result));
+  return boost::shared_ptr<LineString>(GeometryFactory::getDefaultInstance()->createLineString(&result));
 }
 
-shared_ptr<LineString> LineStringAverager::average(shared_ptr<LineString> l1,
-                                                          shared_ptr<LineString> l2)
+boost::shared_ptr<LineString> LineStringAverager::average(boost::shared_ptr<LineString> l1,
+                                                          boost::shared_ptr<LineString> l2)
 {
   LineStringAverager lsa(l1, l2);
   return lsa.average();

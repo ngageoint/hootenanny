@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -621,14 +621,12 @@ public class Map extends Maps {
     public static MapLayers mapLayerRecordsToLayers(List<Maps> mapLayerRecords) {
         MapLayers mapLayers = new MapLayers();
         List<MapLayer> mapLayerList = new ArrayList<>();
-        
-        boolean osmApiDbEnabled = Boolean.parseBoolean(OSM_API_DB_ENABLED);
 
-        if (osmApiDbEnabled) {
+        if (OSM_API_DB_ENABLED) {
             // add a OSM API db dummy record for the UI for conflation involving OSM API db data
             MapLayer mapLayer = new MapLayer();
             mapLayer.setId(-1); // using id = -1 to identify the OSM API db source layer in the ui
-            mapLayer.setName("OSM_API_DB_" + OSM_API_DB_NAME);
+            mapLayer.setName("OSM_API_DB_" + replaceSensitiveData(OSMAPI_DB_NAME));
             mapLayer.setDate(new Timestamp(System.currentTimeMillis()));
             mapLayerList.add(mapLayer);
         }
@@ -639,7 +637,7 @@ public class Map extends Maps {
             mapLayer.setName(mapLayerRecord.getDisplayName());
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
 
-            if (osmApiDbEnabled) {
+            if (OSM_API_DB_ENABLED) {
                 java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
                 //This tag, set during conflation, is what indicates whether a conflated dataset
                 //had any osm api db source data in it.  That is the requirement to export back

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREDEFINITION_H
 #define FEATUREDEFINITION_H
@@ -38,26 +38,25 @@ class QString;
 
 namespace hoot
 {
+
 class FieldDefinition;
-using namespace boost;
-using namespace std;
 
 class FeatureDefinition
 {
 public:
   FeatureDefinition();
 
-  void addField(shared_ptr<FieldDefinition> fd) { _fields.push_back(fd); }
+  void addField(boost::shared_ptr<FieldDefinition> fd) { _fields.push_back(fd); }
 
   bool hasField(const QString& name) const;
 
   size_t getFieldCount() const { return _fields.size(); }
 
-  shared_ptr<const FieldDefinition> getFieldDefinition(size_t i) const { return _fields[i]; }
+  boost::shared_ptr<const FieldDefinition> getFieldDefinition(size_t i) const { return _fields[i]; }
 
 private:
 
-  vector< shared_ptr<FieldDefinition> > _fields;
+  std::vector< boost::shared_ptr<FieldDefinition> > _fields;
 };
 
 }

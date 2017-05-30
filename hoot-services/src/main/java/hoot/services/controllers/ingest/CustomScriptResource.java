@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -271,7 +273,7 @@ public class CustomScriptResource {
                             if (oTrans.get("PATH") != null) {
                                 File fScript = new File(HOME_FOLDER + "/" + oTrans.get("PATH"));
                                 if (fScript.exists()) {
-                                    String sScript = FileUtils.readFileToString(fScript);
+                                    String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
                                     boolean canExport = validateExport(sScript);
                                     oTrans.put("CANEXPORT", canExport);
                                 }
@@ -437,7 +439,7 @@ public class CustomScriptResource {
             if (pathValidated) {
                 File scriptFile = new File(HOME_FOLDER, scriptPath);
                 if (scriptFile.exists()) {
-                    script = FileUtils.readFileToString(scriptFile);
+                    script = FileUtils.readFileToString(scriptFile, Charset.defaultCharset());
                 }
             }
             else {
@@ -602,7 +604,7 @@ public class CustomScriptResource {
             FileUtils.forceMkdir(getUploadDir());
         }
 
-        if (!hoot.services.utils.FileUtils.validateFilePath(SCRIPT_FOLDER, SCRIPT_FOLDER + "/" + name + ".js")) {
+        if (!validateFilePath(SCRIPT_FOLDER, SCRIPT_FOLDER + "/" + name + ".js")) {
             throw new IOException("Script name can not contain path.");
         }
 
@@ -622,7 +624,7 @@ public class CustomScriptResource {
         header += oHeader.toString();
         header += HEADER_END;
 
-        FileUtils.writeStringToFile(fScript, header + content);
+        FileUtils.writeStringToFile(fScript, header + content, Charset.defaultCharset());
 
         logger.debug("Saved script: {}", name);
 
@@ -696,5 +698,10 @@ public class CustomScriptResource {
             }
             return false;
         }
+    }
+
+    private static boolean validateFilePath(String expectedPath, String actualPath) {
+        String path = FilenameUtils.getFullPathNoEndSeparator(actualPath);
+        return expectedPath.equals(path);
     }
 }

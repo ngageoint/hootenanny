@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATIONJS_H
 #define RELATIONJS_H
@@ -42,8 +42,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -57,8 +55,8 @@ public:
   virtual ElementPtr getElement() { return getRelation(); }
   RelationPtr getRelation() { assert(_relation); return _relation; }
 
-  static Handle<Object> New(ConstRelationPtr relation);
-  static Handle<Object> New(RelationPtr relation);
+  static v8::Handle<v8::Object> New(ConstRelationPtr relation);
+  static v8::Handle<v8::Object> New(RelationPtr relation);
 
 private:
   RelationJs(ConstRelationPtr w);
@@ -71,7 +69,7 @@ private:
   QString _className;
   ConstRelationPtr _constRelation;
   RelationPtr _relation;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
   void _setRelation(ConstRelationPtr r) { _constRelation = r; _relation.reset(); }
   void _setRelation(RelationPtr r) { _relation = r; _constRelation = r; }

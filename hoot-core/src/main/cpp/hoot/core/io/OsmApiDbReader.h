@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
@@ -37,10 +37,7 @@
 namespace hoot
 {
 
-class OsmApiDbReader :
-    public ApiDbReader,
-    public OsmMapReader,
-    public Configurable
+class OsmApiDbReader : public ApiDbReader, public OsmMapReader, public Configurable
 {
 public:
 
@@ -68,7 +65,7 @@ public:
   /**
    * The read command called after open.
    */
-  virtual void read(shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   void close();
 
@@ -76,25 +73,24 @@ public:
 
   void setUserEmail(const QString email) { _email = email; }
 
-  void setBoundingBox(const QString bbox);
-
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
-
 protected:
 
-  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
-                                                 const OsmMap& map);
+  virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
-  virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
+  virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
 private:
 
-  shared_ptr<OsmApiDb> _database;
-  shared_ptr<QSqlQuery> _elementResultIterator;
+  //for white box testing
+  friend class ServiceOsmApiDbBulkWriterTest;
+  friend class ServicesDbTestUtils;
+  friend class ServiceWriteOsmSqlStatementsDriverTest;
+
+  boost::shared_ptr<OsmApiDb> _database;
+  boost::shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
-  Envelope _bounds;
 
   long _osmElemId;
   ElementType _osmElemType;
@@ -102,7 +98,7 @@ private:
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 
-  void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
+  void _addNodesForWay(std::vector<long> nodeIds, OsmMap& map);
 
   void _parseAndSetTagsOnElement(ElementPtr element);
 };

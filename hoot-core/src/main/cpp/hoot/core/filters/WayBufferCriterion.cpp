@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayBufferCriterion.h"
@@ -39,6 +39,8 @@
 
 // Qt
 #include <QDebug>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -57,7 +59,7 @@ WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
 }
 
 WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
-                                       shared_ptr<LineString> baseLine,
+                                       boost::shared_ptr<LineString> baseLine,
                                        Meters buffer,
   Meters circularError, double matchPercent) :
   _map(map)
@@ -69,16 +71,16 @@ WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
   _bufferAccuracy = -1;
 }
 
-bool WayBufferCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   if (e->getElementType() != ElementType::Way)
     return false;
 
-  ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
   try
   {
     bool result = true;
-    shared_ptr<LineString> ls2 = ElementConverter(_map).
+    boost::shared_ptr<LineString> ls2 = ElementConverter(_map).
         convertToLineString(_map->getWay(w->getId()));
 
     if (fabs((w->getCircularError() + _buffer) - _bufferAccuracy) > 0.1)
@@ -93,13 +95,13 @@ bool WayBufferCriterion::isSatisfied(const shared_ptr<const Element> &e) const
     if (ls2->getEnvelopeInternal()->intersects(_boundsPlus))
     {
 
-      shared_ptr<Geometry> g(_baseBuffered->intersection(ls2.get()));
+      boost::shared_ptr<Geometry> g(_baseBuffered->intersection(ls2.get()));
       double ls2Length = ls2->getLength();
       double ls2IntersectLength = g->getLength();
 
       if (ls2IntersectLength / ls2Length >= _matchPercent)
       {
-        shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3,
+        boost::shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3,
                                                    geos::operation::buffer::BufferOp::CAP_ROUND));
         g.reset(ls2Buffer->intersection(_baseLs.get()));
         double ls1IntersectLength = g->getLength();
@@ -113,10 +115,10 @@ bool WayBufferCriterion::isSatisfied(const shared_ptr<const Element> &e) const
 
     return result;
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     LOG_VART(ElementConverter(_map).convertToLineString(_map->getWay(w->getId())));
-    throw e;
+    throw;
   }
 }
 

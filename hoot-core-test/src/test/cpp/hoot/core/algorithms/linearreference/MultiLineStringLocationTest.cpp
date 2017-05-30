@@ -35,13 +35,15 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 #include "../../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -67,14 +69,14 @@ public:
   void runSingleWayTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), Relation::MULTILINESTRING));
+      way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -85,7 +87,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 0), wayLocation.getCoordinate());
-    const shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
@@ -108,7 +110,7 @@ public:
   void runMultipleWaysWayLocationOnFirstWayTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -117,7 +119,7 @@ public:
     WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, coords1, 1, "");
     WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), Relation::MULTILINESTRING));
+      way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     map->addElement(relation);
@@ -129,7 +131,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 0), wayLocation.getCoordinate());
-    const shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
@@ -150,7 +152,7 @@ public:
   void runMultipleWaysWayLocationOnLastWayTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -159,7 +161,7 @@ public:
     WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, coords1, 1, "");
     WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), Relation::MULTILINESTRING));
+      way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     map->addElement(relation);
@@ -171,7 +173,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(50, 10), wayLocation.getCoordinate());
-    const shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-2", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
@@ -192,7 +194,7 @@ public:
   void runMultipleWaysWayLocationOnMiddleWayTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -204,7 +206,7 @@ public:
     WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
     WayPtr way3 = TestUtils::createWay(map, Status::Unknown1, coords3, 1, "");
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), Relation::MULTILINESTRING));
+      way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());
     relation->addElement("", way3->getElementId());
@@ -217,7 +219,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.5, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(100, 7.5), wayLocation.getCoordinate());
-    const shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-2", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)2, nodeIds.size());
@@ -238,14 +240,14 @@ public:
   void runWayLocationAtBeginningOfWayTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), Relation::MULTILINESTRING));
+      way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -256,7 +258,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.0, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(0, 0), wayLocation.getCoordinate());
-    const shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
@@ -279,14 +281,14 @@ public:
   void runWayLocationAtEndOfWayTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), Relation::MULTILINESTRING));
+      way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -297,7 +299,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, wayLocation.getSegmentIndex());
     CPPUNIT_ASSERT_EQUAL(0.0, wayLocation.getSegmentFraction());
     CPPUNIT_ASSERT_EQUAL(Coordinate(100, 0), wayLocation.getCoordinate());
-    const shared_ptr<const Way> wayLocationWay = wayLocation.getWay();
+    const ConstWayPtr wayLocationWay = wayLocation.getWay();
     HOOT_STR_EQUALS("Way:-1", wayLocationWay->getElementId());
     const std::vector<long>& nodeIds = wayLocationWay->getNodeIds();
     CPPUNIT_ASSERT_EQUAL((size_t)4, nodeIds.size());
@@ -320,14 +322,14 @@ public:
   void runRelationHasNoWaysTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), Relation::MULTILINESTRING));
+      way->getCircularError(), MetadataTags::RelationMultilineString()));
     //relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -350,14 +352,14 @@ public:
   void runRelationNotMultiLineStringTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), Relation::MULTIPOLYGON));
+      way->getCircularError(), MetadataTags::RelationMultiPolygon()));
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -379,14 +381,14 @@ public:
   void runInvalidWayIndexTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), Relation::MULTILINESTRING));
+      way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", way->getElementId());
     map->addElement(relation);
 
@@ -408,14 +410,14 @@ public:
   void runRelationWayMemberDoesntMatchWayLocationWayTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                             Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
                             Coordinate::getNull() };
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, coords, 1, "");
     RelationPtr relation(new Relation(way->getStatus(), map->createNextRelationId(),
-      way->getCircularError(), Relation::MULTILINESTRING));
+      way->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", map->getNode(way->getNodeId(0))->getElementId());
     relation->addElement("", way->getElementId());
     map->addElement(relation);
@@ -439,7 +441,7 @@ public:
   void runRelationContainsFeaturesOtherThanWaysTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     Coordinate coords1[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
                              Coordinate::getNull() };
@@ -448,7 +450,7 @@ public:
     WayPtr way1 = TestUtils::createWay(map, Status::Unknown1, coords1, 1, "");
     WayPtr way2 = TestUtils::createWay(map, Status::Unknown1, coords2, 1, "");
     RelationPtr relation(new Relation(way1->getStatus(), map->createNextRelationId(),
-      way1->getCircularError(), Relation::MULTILINESTRING));
+      way1->getCircularError(), MetadataTags::RelationMultilineString()));
     relation->addElement("", map->getNode(way1->getNodeId(0))->getElementId());
     relation->addElement("", way1->getElementId());
     relation->addElement("", way2->getElementId());

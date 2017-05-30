@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReprojectToPlanarOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 
 namespace hoot
@@ -40,7 +40,7 @@ ReprojectToPlanarOp::ReprojectToPlanarOp()
 {
 }
 
-void ReprojectToPlanarOp::apply(shared_ptr<OsmMap>& map)
+void ReprojectToPlanarOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   if (MapProjector::isGeographic(map))
   {

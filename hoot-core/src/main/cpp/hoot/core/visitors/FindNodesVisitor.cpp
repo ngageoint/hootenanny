@@ -22,12 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FindNodesVisitor.h"
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/filters/ElementCriterion.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -38,11 +41,11 @@ FindNodesVisitor::FindNodesVisitor (ElementCriterion* pCrit):
   // This space intentionally left blank
 }
 
-void FindNodesVisitor::visit(const shared_ptr<const Element>& e)
+void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr pNode = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr pNode = boost::dynamic_pointer_cast<const Node>(e);
     if (_pCrit->isSatisfied(e))
     {
       _nodeIds.push_back(e->getId());
@@ -69,7 +72,7 @@ vector<long> FindNodesVisitor::findNodes(const ConstOsmMapPtr& map,
 
   for (size_t i = 0; i < close.size(); i++)
   {
-    const shared_ptr<const Node>& n = map->getNode(close[i]);
+    const ConstNodePtr& n = map->getNode(close[i]);
     if (pCrit->isSatisfied(n))
       result.push_back(n->getId());
   }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPLACEELEMENTOP_H
 #define REPLACEELEMENTOP_H
@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Replaces all instances of one element with another element. In some cases we may not be able
@@ -57,7 +56,7 @@ using namespace std;
 class ReplaceElementOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
-  static string className() { return "hoot::ReplaceElementOp"; }
+  static std::string className() { return "hoot::ReplaceElementOp"; }
 
   /**
    * @param from Replace this element.
@@ -83,7 +82,7 @@ public:
    */
   virtual void addElement(const ConstElementPtr& e);
 
-  virtual void apply(const shared_ptr<OsmMap>& map);
+  virtual void apply(const OsmMapPtr& map);
 
 private:
   ElementId _from, _to;

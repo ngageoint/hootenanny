@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/io/OgrReader.h>
@@ -35,6 +35,8 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -81,7 +83,7 @@ public:
       relationCacheSize = args[a++].toLong();
     }
 
-    shared_ptr<OgrWriter> writer(new OgrWriter());
+    boost::shared_ptr<OgrWriter> writer(new OgrWriter());
     if (nodeCacheSize > 0 && wayCacheSize > 0 && relationCacheSize > 0)
     {
       writer->setCacheCapacity(nodeCacheSize, wayCacheSize, relationCacheSize);
@@ -93,12 +95,12 @@ public:
     if (readerFactory.hasElementInputStream(input) &&
       ConfigOptions().getOsm2ogrOps().size() == 0)
     {
-      shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
+      boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(input);
       reader->open(input);
-      shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-      shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+      boost::shared_ptr<ElementInputStream> streamReader = boost::dynamic_pointer_cast<ElementInputStream>(reader);
+      boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
-      shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
+      boost::shared_ptr<OGRSpatialReference> projection = streamReader->getProjection();
       ProjectToGeographicVisitor visitor;
       bool notGeographic = !projection->IsGeographic();
 
@@ -115,7 +117,7 @@ public:
     }
     else
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
 
       loadMap(map, input, true);
 

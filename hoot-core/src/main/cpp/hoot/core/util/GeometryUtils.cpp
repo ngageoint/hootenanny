@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "GeometryUtils.h"
@@ -36,7 +36,7 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
 
@@ -46,6 +46,9 @@
 
 // Standard
 #include <stdint.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -294,10 +297,11 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
 
 Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
 {
+  LOG_VART(boundsStr);
   const QString errMsg = "Invalid envelope string: " + boundsStr;
   if (boundsStr.contains(","))
   {
-    const QStringList bboxParts = boundsStr.split(",");
+    const QStringList bboxParts = boundsStr.trimmed().split(",");
     if (bboxParts.size() == 4)
     {
       bool parseSuccess = true;

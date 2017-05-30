@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/MedianNodeVisitor.h>
@@ -51,7 +51,7 @@ public:
     TestUtils::resetEnvironment();
 
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);

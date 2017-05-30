@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INDEXELEMENTVISITOR_H
 #define INDEXELEMENTVISITOR_H
@@ -61,9 +61,9 @@ public:
 
   static std::string className() { return "hoot::CreateIndexVisitor"; }
 
-  explicit IndexElementsVisitor(shared_ptr<Tgs::HilbertRTree>& index,
-                                deque<ElementId>& indexToEid,
-                                const shared_ptr<ElementCriterion>& filter,
+  explicit IndexElementsVisitor(boost::shared_ptr<Tgs::HilbertRTree>& index,
+                                std::deque<ElementId>& indexToEid,
+                                const boost::shared_ptr<ElementCriterion>& filter,
                                 boost::function<Meters (const ConstElementPtr& e)> getSearchRadius,
                                 ConstOsmMapPtr pMap);
 
@@ -73,19 +73,19 @@ public:
 
   void finalizeIndex();
 
-  static set<ElementId> findNeighbors(const Envelope& env,
-                                      const shared_ptr<Tgs::HilbertRTree>& index,
-                                      const deque<ElementId>& indexToEid,
-                                      ConstOsmMapPtr pMap);
+  static std::set<ElementId> findNeighbors(const geos::geom::Envelope& env,
+                                           const boost::shared_ptr<Tgs::HilbertRTree>& index,
+                                           const std::deque<ElementId>& indexToEid,
+                                           ConstOsmMapPtr pMap);
 
 private:
 
   ConstOsmMapPtr _pMap;
-  shared_ptr<ElementCriterion> _filter;
+  boost::shared_ptr<ElementCriterion> _filter;
   boost::function<Meters (const ConstElementPtr& e)> _getSearchRadius;
 
-  shared_ptr<Tgs::HilbertRTree>& _index;
-  deque<ElementId>& _indexToEid;
+  boost::shared_ptr<Tgs::HilbertRTree>& _index;
+  std::deque<ElementId>& _indexToEid;
   std::vector<Tgs::Box> _boxes;
   std::vector<int> _fids;
 };

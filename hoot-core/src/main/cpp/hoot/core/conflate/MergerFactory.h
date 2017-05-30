@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGEFACTORY_H
 #define MERGEFACTORY_H
@@ -41,7 +41,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class Match;
 class Merger;
@@ -75,12 +74,12 @@ public:
    * The caller assumes ownership of the new Mergers in the result.
    */
   void createMergers(const hoot::OsmMapPtr &map, const MatchSet& matches,
-    vector<Merger *> &result) const;
+    std::vector<Merger *> &result) const;
 
   /**
    * @brief Returns a description of all available match creators.
    */
-  vector<MergerCreator::Description> getAllAvailableCreators() const;
+  std::vector<MergerCreator::Description> getAllAvailableCreators() const;
 
   /**
    * A singleton is provided, but not required.
@@ -99,9 +98,9 @@ public:
   void reset() { _creators.clear(); }
 
 private:
-  static shared_ptr<MergerFactory> _theInstance;
+  static boost::shared_ptr<MergerFactory> _theInstance;
 
-  vector<MergerCreator*> _creators;
+  std::vector<MergerCreator*> _creators;
 };
 
 }

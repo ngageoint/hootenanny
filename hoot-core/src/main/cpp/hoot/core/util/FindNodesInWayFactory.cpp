@@ -22,12 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FindNodesInWayFactory.h"
 
 #include <hoot/core/util/Log.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -43,16 +46,16 @@ void FindNodesInWayFactory::addWay(const ConstWayPtr& w)
   _nodesToSearch.insert(nids.begin(), nids.end());
 }
 
-shared_ptr<Node> FindNodesInWayFactory::createNode(const shared_ptr<OsmMap>& map,
-                                                   const Coordinate& c, Status s,
-                                                   double circularError)
+NodePtr FindNodesInWayFactory::createNode(const OsmMapPtr& map,
+                                          const Coordinate& c, Status s,
+                                          double circularError)
 {
   long result = std::numeric_limits<long>::max();
 
   for (set<long>::const_iterator it = _nodesToSearch.begin(); it != _nodesToSearch.end(); ++it)
   {
     long nid = *it;
-    shared_ptr<const Node> n = map->getNode(nid);
+    ConstNodePtr n = map->getNode(nid);
     if (n->toCoordinate() == c)
     {
       // if there are multiple corresponding nodes, throw an exception.
@@ -67,7 +70,7 @@ shared_ptr<Node> FindNodesInWayFactory::createNode(const shared_ptr<OsmMap>& map
 
   if (result == std::numeric_limits<long>::max())
   {
-    shared_ptr<Node> n = shared_ptr<Node>(new Node(s, map->createNextNodeId(), c,
+    NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c,
       circularError));
     map->addNode(n);
     result = n->getId();

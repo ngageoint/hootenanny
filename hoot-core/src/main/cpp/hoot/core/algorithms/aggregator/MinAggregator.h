@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MINAGGREGATOR_H
 #define MINAGGREGATOR_H
@@ -32,17 +32,15 @@
 namespace hoot
 {
 
-using namespace std;
-
 class MinAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::MinAggregator"; }
+  static std::string className() { return "hoot::MinAggregator"; }
 
   MinAggregator();
 
-  virtual double aggregate(vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return "MinAggregator"; }
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAPCOMPARATOR_H
 #define MAPCOMPARATOR_H
@@ -34,8 +34,6 @@ namespace hoot
 {
 
 class OsmMap;
-
-using namespace boost;
 
 /**
  * Compares two maps.
@@ -49,7 +47,7 @@ public:
    * Returns true if the maps are essentially the same. Minor differences in node locations are
    * ignored.
    */
-  bool isMatch(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test);
+  bool isMatch(boost::shared_ptr<OsmMap> ref,boost::shared_ptr<OsmMap> test);
 
   void setIgnoreUUID() { _ignoreUUID = true; }
 

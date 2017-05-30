@@ -35,7 +35,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
@@ -59,6 +59,9 @@
 
 #include "../../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -79,7 +82,7 @@ public:
   OsmMapPtr createMap()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -127,7 +130,7 @@ public:
     Coordinate w2c[] = { Coordinate(100, 0), Coordinate(0, 0), Coordinate::getNull() };
     WayPtr w2 = createWay(map, w2c, Status::Unknown2);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -193,7 +196,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = createWay(map, w2c, Status::Unknown2);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -237,7 +240,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = createWay(map, w2c, Status::Unknown2);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -296,14 +299,14 @@ public:
     w3->getTags()["highway"] = "path";
     w3->getTags()["uuid"] = "w3";
 
-    RelationPtr r(new Relation(Status::Unknown1, 0, 15, Relation::MULTILINESTRING));
+    RelationPtr r(new Relation(Status::Unknown1, 0, 15, MetadataTags::RelationMultilineString()));
     r->addElement("", w1);
     r->addElement("", w2);
     r->setTag("uuid", "r");
     r->setTag("highway", "footway");
     map->addElement(r);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -373,7 +376,7 @@ public:
     w2->getTags()["highway"] = "path";
     w2->getTags()["uuid"] = "w2";
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -436,13 +439,13 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = createWay(map, w2c, Status::Unknown2);
 
-    RelationPtr r(new Relation(Status::Unknown2, 0, 15, Relation::MULTILINESTRING));
+    RelationPtr r(new Relation(Status::Unknown2, 0, 15, MetadataTags::RelationMultilineString()));
     r->addElement("", w2);
     r->setTag("uuid", "r");
     r->setTag("highway", "footway");
     map->addElement(r);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -482,7 +485,7 @@ public:
     Coordinate w2c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
     WayPtr w2 = createWay(map, w2c, Status::Unknown2);
 
-    shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
+    boost::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
 
@@ -496,10 +499,10 @@ public:
 
     merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
 
-    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelationMap().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
     //will throw an exception on failure
     ConstRelationPtr reviewRelation =
-      dynamic_pointer_cast<Relation>(
+      boost::dynamic_pointer_cast<Relation>(
         TestUtils::getElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));
     HOOT_STR_EQUALS("a review type", reviewRelation->getTags().get(MetadataTags::HootReviewType()));
   }

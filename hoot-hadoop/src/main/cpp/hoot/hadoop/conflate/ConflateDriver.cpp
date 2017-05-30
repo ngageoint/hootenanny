@@ -20,10 +20,10 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/hadoop/MapStats.h>
-#include <hoot/hadoop/PbfInputFormat.h>
-#include <hoot/hadoop/PbfRecordReader.h>
-#include <hoot/hadoop/PbfRecordWriter.h>
+#include <hoot/hadoop/stats/MapStats.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
@@ -35,6 +35,9 @@
 
 #include "ConflateMapper.h"
 #include "ConflateReducer.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ScriptTest.h"
 
 // hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 
@@ -38,6 +38,8 @@
 #include <QProcess>
 #include <QThreadPool>
 #include <QElapsedTimer>
+
+using namespace std;
 
 namespace hoot
 {

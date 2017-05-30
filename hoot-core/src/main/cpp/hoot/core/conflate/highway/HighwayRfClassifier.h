@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYRFCLASSIFIER_H
 #define HIGHWAYRFCLASSIFIER_H
@@ -50,19 +50,19 @@ public:
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m,
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 
 private:
   // these are mutable because we do a lazy load.
-  mutable shared_ptr<Tgs::RandomForest> _rf;
+  mutable boost::shared_ptr<Tgs::RandomForest> _rf;
   mutable QStringList _rfFactorLabels;
-  mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
+  mutable std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
 
   void _createAllExtractors() const;
   void _createTestExtractors() const;
 
-  const vector< shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 
   /**
    * This provides a lazy load and should be called before any private members are accessed. This

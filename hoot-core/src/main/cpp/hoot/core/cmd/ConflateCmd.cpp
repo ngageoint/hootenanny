@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConflateCmd.h"
@@ -31,9 +31,9 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/Conflator.h>
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ConflateStatsHelper.h>
 #include <hoot/core/conflate/StatsComposer.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -55,10 +55,11 @@
 
 #include <QFileInfo>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
-
-using namespace Tgs;
 
 HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 
@@ -117,19 +118,21 @@ int ConflateCmd::runSimple(QStringList args)
     output = args[1];
   }
 
-  LOG_INFO("Conflating " << input1 << " with " << input2 << " and writing the output to " << output);
+  LOG_INFO(
+    "Conflating " << input1.right(50) << " with " << input2.right(50) <<
+    " and writing the output to " << output.right(50));
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
   QList< QList<SingleStat> > allStats;
 
   // read input 1
-  shared_ptr<OsmMap> map(new OsmMap());
-  loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
+  OsmMapPtr map(new OsmMap());
+  loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
   // read input 2
   if (!input2.isEmpty())
   {
-    loadMap(map, input2, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown2);
+    loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
   }
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -165,7 +168,7 @@ int ConflateCmd::runSimple(QStringList args)
 
   stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
 
-  shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   if (ConfigOptions().getConflateEnableOldRoads())
   {

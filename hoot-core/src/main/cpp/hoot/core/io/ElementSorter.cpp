@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementSorter.h"
 
@@ -30,6 +30,8 @@
 
 // Standard
 #include <algorithm>
+
+using namespace std;
 
 namespace hoot
 {
@@ -44,8 +46,8 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
 
   _source = source;
 
-  for (NodeMap::const_iterator it = _source->getNodeMap().begin();
-    it != _source->getNodeMap().end(); ++it)
+  for (NodeMap::const_iterator it = _source->getNodes().begin();
+    it != _source->getNodes().end(); ++it)
   {
     _nodeIds.push_back(it->first);
   }
@@ -54,8 +56,8 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
   {
     _wayIds.push_back(it->first);
   }
-  for (RelationMap::const_iterator it = _source->getRelationMap().begin();
-    it != _source->getRelationMap().end(); ++it)
+  for (RelationMap::const_iterator it = _source->getRelations().begin();
+    it != _source->getRelations().end(); ++it)
   {
     _relationIds.push_back(it->first);
   }

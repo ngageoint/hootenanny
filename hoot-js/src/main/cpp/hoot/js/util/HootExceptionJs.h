@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTEXCEPTIONJS_H
 #define HOOTEXCEPTIONJS_H
@@ -45,20 +45,18 @@
 
 namespace hoot
 {
-using namespace node;
-using namespace v8;
 
 class HootExceptionJs : public node::ObjectWrap
 {
 public:
-  static void Init(Handle<Object> target);
+  static void Init(v8::Handle<v8::Object> target);
 
-  static Handle<Object> create(const HootException& e) { return create(shared_ptr<HootException>(e.clone())); }
-  static Handle<Object> create(shared_ptr<HootException> e);
+  static v8::Handle<v8::Object> create(const HootException& e) { return create(boost::shared_ptr<HootException>(e.clone())); }
+  static v8::Handle<v8::Object> create(boost::shared_ptr<HootException> e);
 
-  shared_ptr<HootException> getException() const { return _e; }
+  boost::shared_ptr<HootException> getException() const { return _e; }
 
-  static bool isHootException(Handle<Value> v);
+  static bool isHootException(v8::Handle<v8::Value> v);
 
   /**
    * A convenience function for checking the result of a V8 call. This will throw an appropriate
@@ -67,21 +65,21 @@ public:
    * @param result Result of the V8 function call.
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void checkV8Exception(Handle<Value> result, TryCatch& tc);
+  static void checkV8Exception(v8::Handle<v8::Value> result, v8::TryCatch& tc);
 
   /**
    * This will throw an appropriate HootException based on the contents of tc.
    *
    * @param tc Try catch object. Must be instantiated before the V8 function is called.
    */
-  static void throwAsHootException(TryCatch& tc);
+  static void throwAsHootException(v8::TryCatch& tc);
 
 private:
   HootExceptionJs();
 
-  shared_ptr<HootException> _e;
+  boost::shared_ptr<HootException> _e;
   QString _className;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
   static v8::Handle<v8::Value> toJSON(const v8::Arguments& args);
@@ -89,7 +87,7 @@ private:
 
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, shared_ptr<HootException>& e)
+inline void toCpp(v8::Handle<v8::Value> v,boost::shared_ptr<HootException>& e)
 {
   if (HootExceptionJs::isHootException(v))
   {

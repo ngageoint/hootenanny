@@ -33,23 +33,26 @@
 #include <hoot/core/io/schema/FieldDefinition.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/schema/Schema.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, TranslatedTagCountVisitor)
 
-TranslatedTagCountVisitor::TranslatedTagCountVisitor(shared_ptr<ScriptTranslator> t) :
+TranslatedTagCountVisitor::TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t) :
   _map(),
   _populatedCount(),
   _defaultCount(),
   _nullCount()
 {
-  _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(t);
+  _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(t);
   if (!_translator)
   {
     throw HootException("Error allocating translator, the translation script must support "
@@ -59,13 +62,13 @@ TranslatedTagCountVisitor::TranslatedTagCountVisitor(shared_ptr<ScriptTranslator
   _schema = _translator->getOgrOutputSchema();
 }
 
-void TranslatedTagCountVisitor::_countTags(shared_ptr<Feature>& f)
+void TranslatedTagCountVisitor::_countTags(boost::shared_ptr<Feature>& f)
 {
-  const shared_ptr<const FeatureDefinition>& defn = f->getFeatureDefinition();
+  const boost::shared_ptr<const FeatureDefinition>& defn = f->getFeatureDefinition();
 
   for (size_t i = 0; i < defn->getFieldCount(); i++)
   {
-    shared_ptr<const FieldDefinition> fd = defn->getFieldDefinition(i);
+    boost::shared_ptr<const FieldDefinition> fd = defn->getFieldDefinition(i);
 
     const QVariantMap& vm = f->getValues();
 
@@ -97,7 +100,7 @@ void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {
-    shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, false);
+    boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e, false);
 
     Tags t = e->getTags();
     t[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());

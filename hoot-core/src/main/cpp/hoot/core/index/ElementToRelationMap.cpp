@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementToRelationMap.h"
 
@@ -32,6 +32,8 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -39,7 +41,7 @@ ElementToRelationMap::ElementToRelationMap()
 {
 }
 
-void ElementToRelationMap::addRelation(const OsmMap& map, const shared_ptr<const Relation>& r)
+void ElementToRelationMap::addRelation(const OsmMap& map, const boost::shared_ptr<const Relation> &r)
 {
   class AddMemberVisitor : public ElementVisitor
   {
@@ -81,7 +83,7 @@ const set<long>& ElementToRelationMap::getRelationByElement(ElementId eid) const
   }
 }
 
-const set<long>& ElementToRelationMap::getRelationByElement(const shared_ptr<const Element>& e)
+const set<long>& ElementToRelationMap::getRelationByElement(const boost::shared_ptr<const Element>& e)
   const
 {
   return getRelationByElement(e->getElementId());
@@ -92,7 +94,7 @@ const set<long>& ElementToRelationMap::getRelationByElement(const Element* e) co
   return getRelationByElement(e->getElementId());
 }
 
-void ElementToRelationMap::removeRelation(const OsmMap& map, const shared_ptr<const Relation>& r)
+void ElementToRelationMap::removeRelation(const OsmMap& map, const boost::shared_ptr<const Relation>& r)
 {
   class RemoveMemberVisitor : public ElementVisitor
   {
@@ -161,7 +163,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
       _good = true;
     }
 
-    bool containsRecursive(ConstRelationPtrR r, ElementId eid)
+    bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
     {
       ContainsElementVisitor v(_map, eid);
       r->visitRo(_map, v);
@@ -175,11 +177,11 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
 
       // first check to see that this element maps to the right relations.
       const set<long>& mappedRelations = _mapping.getRelationByElement(ElementId(type, id));
-      const RelationMap& relationMap = _map.getRelationMap();
+      const RelationMap& relationMap = _map.getRelations();
       for (RelationMap::const_iterator it = relationMap.begin(); it != relationMap.end(); ++it)
       {
         bool inMappedRelation = mappedRelations.find(it->first) != mappedRelations.end();
-        const shared_ptr<const Relation>& r = it->second;
+        const boost::shared_ptr<const Relation>& r = it->second;
         ElementId childEid(type, id);
         if (inMappedRelation)
         {

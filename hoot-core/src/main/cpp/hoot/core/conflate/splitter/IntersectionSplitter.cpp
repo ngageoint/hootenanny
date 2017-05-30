@@ -28,7 +28,7 @@
 #include "IntersectionSplitter.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -38,6 +38,8 @@
 
 // Qt
 #include <QDebug>
+
+using namespace std;
 
 namespace hoot
 {
@@ -49,12 +51,12 @@ IntersectionSplitter::IntersectionSplitter()
 
 }
 
-IntersectionSplitter::IntersectionSplitter(shared_ptr<OsmMap> map)
+IntersectionSplitter::IntersectionSplitter(boost::shared_ptr<OsmMap> map)
 {
   _map = map;
 }
 
-void IntersectionSplitter::_mapNodesToWay(shared_ptr<Way> way)
+void IntersectionSplitter::_mapNodesToWay(boost::shared_ptr<Way> way)
 {
   long wId = way->getId();
 
@@ -77,7 +79,7 @@ void IntersectionSplitter::_mapNodesToWays()
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    shared_ptr<Way> w = it->second;
+    boost::shared_ptr<Way> w = it->second;
 
     bool isNetworkType = false;
 
@@ -111,7 +113,7 @@ void IntersectionSplitter::_mapNodesToWays()
   }
 }
 
-void IntersectionSplitter::_removeWayFromMap(shared_ptr<Way> way)
+void IntersectionSplitter::_removeWayFromMap(boost::shared_ptr<Way> way)
 {
   long wId = way->getId();
 
@@ -122,7 +124,7 @@ void IntersectionSplitter::_removeWayFromMap(shared_ptr<Way> way)
   }
 }
 
-void IntersectionSplitter::splitIntersections(shared_ptr<OsmMap> map)
+void IntersectionSplitter::splitIntersections(boost::shared_ptr<OsmMap> map)
 {
   IntersectionSplitter is(map);
   return is.splitIntersections();
@@ -132,6 +134,7 @@ void IntersectionSplitter::splitIntersections()
 {
   // make a map of nodes to ways.
   _mapNodesToWays();
+  _wayReplacements.clear();
 
   // go through all the nodes
   bool todoLogged = false;
@@ -167,14 +170,16 @@ void IntersectionSplitter::splitIntersections()
 
 void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 {
-  shared_ptr<Way> way = _map->getWay(wayId);
+  boost::shared_ptr<Way> way = _map->getWay(wayId);
   if (way == 0)
   {
     LOG_TRACE("way at " << wayId << " does not exist.");
     return;
   }
 
-  LOG_TRACE("Splitting way: " << way->getId() << " at node: " << nodeId);
+  LOG_TRACE(
+    "Splitting way: " << way->getElementId() << " at node: " <<
+    ElementId(ElementType::Node, nodeId));
 
   // find the first index of the split node that isn't an endpoint.
   int firstIndex = -1;
@@ -187,21 +192,30 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       break;
     }
   }
+  LOG_VART(firstIndex);
 
   // if the first index wasn't an endpoint.
   if (firstIndex != -1)
   {
     QList<long> ways = _nodeToWays.values(nodeId);
+    LOG_VART(ways);
     int concurrent_count = 0;
     int otherWays_count = ways.count() - 1;
     for (QList<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
+      long compWayId = *it;
+      LOG_VART(compWayId);
       //  Don't compare it against itself
-      if (wayId == *it)
+      if (wayId == compWayId)
         continue;
 
       //  Get the way info to make the comparison
-      WayPtr comp = _map->getWay(*it);
+      if (_wayReplacements.contains(compWayId))
+      {
+        compWayId = _wayReplacements[compWayId];
+      }
+      boost::shared_ptr<Way> comp = _map->getWay(compWayId);
+      LOG_VART(comp.get());
       const std::vector<long>& compIds = comp->getNodeIds();
       long idx = comp->getNodeIndex(nodeId);
 
@@ -221,13 +235,19 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);
-      vector< shared_ptr<Way> > splits = WaySplitter::split(_map, way, wl);
+      vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, way, wl);
 
       // if a split occurred.
       if (splits.size() > 1)
       {
+        LOG_VART(way->getElementId());
+        LOG_VART(way->getStatus());
+        LOG_VART(splits[0]->getElementId());
+
+        const ElementId splitWayId = way->getElementId();
+
         QList<ElementPtr> newWays;
-        foreach (const WayPtr& w, splits)
+        foreach (const boost::shared_ptr<Way>& w, splits)
         {
           newWays.append(w);
         }
@@ -235,6 +255,20 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // make sure any ways that are part of relations continue to be part of those relations after
         // they're split.
         _map->replace(way, newWays);
+
+        if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+            way->getStatus() == Status::Unknown1)
+        {
+          //see similar notes in HighwaySnapMerger::_mergePair
+
+          LOG_TRACE(
+            "Setting unknown1 " << way->getElementId().getId() << " on " <<
+            splits[0]->getElementId() << "...");
+          ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
+          newWaySegment->setId(way->getElementId().getId());
+          _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
+          _wayReplacements[splits[0]->getElementId().getId()] = way->getElementId().getId();
+        }
 
         _removeWayFromMap(way);
 
@@ -244,12 +278,14 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
           // add the new ways nodes just in case the way was self intersecting.
           _mapNodesToWay(splits[i]);
         }
+
+        LOG_VART(_map->containsElement(splitWayId));
       }
     }
   }
 }
 
-void IntersectionSplitter::apply(shared_ptr<OsmMap>& map)
+void IntersectionSplitter::apply(boost::shared_ptr<OsmMap> &map)
 {
   splitIntersections(map);
 }

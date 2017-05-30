@@ -31,13 +31,15 @@
 #include <boost/random/variate_generator.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -56,14 +58,14 @@ BigPertyOp::~BigPertyOp()
 
 }
 
-void BigPertyOp::apply(shared_ptr<OsmMap>& map)
+void BigPertyOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   MapProjector::projectToWgs84(map);
 
   const QString pertiedStr(MetadataTags::HootPertied());
   const QString trueStr("true");
 
-  const NodeMap& nm = map->getNodeMap();
+  const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     NodePtr n = it->second;

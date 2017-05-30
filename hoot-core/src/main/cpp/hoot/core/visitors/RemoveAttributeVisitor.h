@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEATTRIBUTEVISITOR_H
 #define REMOVEATTRIBUTEVISITOR_H
@@ -51,7 +51,7 @@ public:
   RemoveAttributeVisitor();
   RemoveAttributeVisitor(const QList<ElementAttributeType>& types);
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings &conf);
 

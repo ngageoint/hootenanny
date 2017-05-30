@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OUTSIDEBOUNDSREMOVER_H
@@ -39,10 +39,8 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  using namespace std;
 
-  class OsmMap;
+class OsmMap;
 
 /**
  * Remove all ways outside the given bounds.
@@ -50,19 +48,19 @@ namespace hoot
 class OutsideBoundsRemover
 {
 public:
-  OutsideBoundsRemover(shared_ptr<OsmMap> map, const Envelope& e, bool inverse = false);
+  OutsideBoundsRemover(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e, bool inverse = false);
 
   /**
    * Removes ways completely outside the given envelope.
    */
-  static void removeWays(shared_ptr<OsmMap> map, const Envelope& e, bool inverse = false);
+  static void removeWays(boost::shared_ptr<OsmMap> map, const geos::geom::Envelope& e, bool inverse = false);
 
   void removeWays();
 
 protected:
 
-  shared_ptr<OsmMap> _inputMap;
-  Envelope _envelope;
+  boost::shared_ptr<OsmMap> _inputMap;
+  geos::geom::Envelope _envelope;
   bool _inverse;
 };
 

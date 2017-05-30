@@ -22,17 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/OsmMap.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -43,14 +45,14 @@ RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
 {
 }
 
-void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
+void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
   // go through all the relations to get duplicate reviews
-  const RelationMap& relations = map->getRelationMap();
+  const RelationMap& relations = map->getRelations();
   QMap< set<ElementId>, QList<ReviewMarker::ReviewUid> > membersToReview;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId eid = ElementId::relation(it->first);
     if (ReviewMarker::isReviewUid(map, eid))
@@ -84,7 +86,7 @@ void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
       ElementId beid = *eids.begin();
       ElementId eeid = *eids.rbegin();
 
-      OsmMapPtr copy(new OsmMap());
+      boost::shared_ptr<OsmMap> copy(new OsmMap());
       CopySubsetOp(map, beid, eeid).apply(copy);
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);

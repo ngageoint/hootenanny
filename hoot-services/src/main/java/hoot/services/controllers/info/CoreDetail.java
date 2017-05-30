@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.info;
+
+import java.util.Arrays;
+
 
 /**
  * Represents details about the core environment
  */
-
 public class CoreDetail {
     private String[] environmentInfo;
 
@@ -41,5 +43,12 @@ public class CoreDetail {
 
     public void setEnvironmentInfo(String[] environmentInfo) {
         this.environmentInfo = environmentInfo;
+    }
+
+    @Override
+    public String toString() {
+        return "CoreDetail{" +
+                "environmentInfo=" + Arrays.toString(environmentInfo) +
+                '}';
     }
 }

@@ -22,13 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "GreedyConstrainedMatches.h"
 
 // hoot
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/util/Log.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -105,14 +107,12 @@ vector<const Match *> GreedyConstrainedMatches::calculateSubset()
     size_t mi = matchOrder[i];
 
     // see if any of our conflicting matches are already being kept
-    MatchConflicts::ConflictMap::const_iterator it = cm.find(mi);
-    while (it != cm.end() && it.key() == mi)
+    for (MatchConflicts::ConflictMap::const_iterator it = cm.find(mi); it != cm.end() && it.key() == mi; ++it)
     {
       if (keepers.count(it.value()))
       {
         keep = false;
       }
-      it++;
     }
 
     if (keep)

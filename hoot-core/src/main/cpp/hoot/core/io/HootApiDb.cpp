@@ -37,6 +37,7 @@
 #include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/io/TableType.h>
+#include <hoot/core/util/DbUtils.h>
 
 // qt
 #include <QStringList>
@@ -53,6 +54,9 @@
 #include <tgs/System/Time.h>
 
 #include "InternalIdReserver.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -239,7 +243,7 @@ void HootApiDb::commit()
   while (taskIt.hasNext())
   {
     QString task = taskIt.next();
-    _execNoPrepare(task);
+    DbUtils::execNoPrepare(_db, task);
   }
 }
 
@@ -266,44 +270,54 @@ void HootApiDb::createPendingMapIndexes()
   {
     long mapId = _pendingMapIndexes[i];
 
-    _execNoPrepare(QString("ALTER TABLE %1 "
-      "ADD CONSTRAINT current_nodes_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
-        "REFERENCES %3 (id) MATCH SIMPLE "
-        "ON UPDATE NO ACTION ON DELETE NO ACTION ")
-        .arg(getCurrentNodesTableName(mapId))
-        .arg(getMapIdString(mapId))
-        .arg(getChangesetsTableName(mapId)));
+    DbUtils::execNoPrepare(
+      _db,
+      QString("ALTER TABLE %1 "
+        "ADD CONSTRAINT current_nodes_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
+          "REFERENCES %3 (id) MATCH SIMPLE "
+          "ON UPDATE NO ACTION ON DELETE NO ACTION ")
+          .arg(getCurrentNodesTableName(mapId))
+          .arg(getMapIdString(mapId))
+          .arg(getChangesetsTableName(mapId)));
 
-    _execNoPrepare(QString("CREATE INDEX %1_tile_idx ON %1 USING btree (tile)")
+    DbUtils::execNoPrepare(
+      _db,
+      QString("CREATE INDEX %1_tile_idx ON %1 USING btree (tile)")
         .arg(getCurrentNodesTableName(mapId)));
 
-    _execNoPrepare(QString("ALTER TABLE %1 "
-      "ADD CONSTRAINT current_relations_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
-        "REFERENCES %3 (id) MATCH SIMPLE "
-        "ON UPDATE NO ACTION ON DELETE NO ACTION ")
-        .arg(getCurrentRelationsTableName(mapId))
-        .arg(getMapIdString(mapId))
-        .arg(getChangesetsTableName(mapId)));
+    DbUtils::execNoPrepare(
+      _db,
+      QString("ALTER TABLE %1 "
+        "ADD CONSTRAINT current_relations_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
+          "REFERENCES %3 (id) MATCH SIMPLE "
+          "ON UPDATE NO ACTION ON DELETE NO ACTION ")
+          .arg(getCurrentRelationsTableName(mapId))
+          .arg(getMapIdString(mapId))
+          .arg(getChangesetsTableName(mapId)));
 
-    _execNoPrepare(QString("ALTER TABLE %1 "
-      "ADD CONSTRAINT current_way_nodes_node_id_fkey_%2 FOREIGN KEY (node_id) "
-        "REFERENCES %3 (id) MATCH SIMPLE "
-        "ON UPDATE NO ACTION ON DELETE NO ACTION, "
-      "ADD CONSTRAINT current_way_nodes_way_id_fkey_%2 FOREIGN KEY (way_id) "
-        "REFERENCES %4 (id) MATCH SIMPLE "
-        "ON UPDATE NO ACTION ON DELETE NO ACTION")
-        .arg(getCurrentWayNodesTableName(mapId))
-        .arg(getMapIdString(mapId))
-        .arg(getCurrentNodesTableName(mapId))
-        .arg(getCurrentWaysTableName(mapId)));
+    DbUtils::execNoPrepare(
+      _db,
+      QString("ALTER TABLE %1 "
+        "ADD CONSTRAINT current_way_nodes_node_id_fkey_%2 FOREIGN KEY (node_id) "
+          "REFERENCES %3 (id) MATCH SIMPLE "
+          "ON UPDATE NO ACTION ON DELETE NO ACTION, "
+        "ADD CONSTRAINT current_way_nodes_way_id_fkey_%2 FOREIGN KEY (way_id) "
+          "REFERENCES %4 (id) MATCH SIMPLE "
+          "ON UPDATE NO ACTION ON DELETE NO ACTION")
+          .arg(getCurrentWayNodesTableName(mapId))
+          .arg(getMapIdString(mapId))
+          .arg(getCurrentNodesTableName(mapId))
+          .arg(getCurrentWaysTableName(mapId)));
 
-    _execNoPrepare(QString("ALTER TABLE %1 "
-      "ADD CONSTRAINT current_ways_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
-        "REFERENCES %3 (id) MATCH SIMPLE "
-        "ON UPDATE NO ACTION ON DELETE NO ACTION ")
-        .arg(getCurrentWaysTableName(mapId))
-        .arg(getMapIdString(mapId))
-        .arg(getChangesetsTableName(mapId)));
+    DbUtils::execNoPrepare(
+      _db,
+      QString("ALTER TABLE %1 "
+        "ADD CONSTRAINT current_ways_changeset_id_fkey_%2 FOREIGN KEY (changeset_id) "
+          "REFERENCES %3 (id) MATCH SIMPLE "
+          "ON UPDATE NO ACTION ON DELETE NO ACTION ")
+          .arg(getCurrentWaysTableName(mapId))
+          .arg(getMapIdString(mapId))
+          .arg(getChangesetsTableName(mapId)));
   }
 
   _pendingMapIndexes.clear();
@@ -323,9 +337,12 @@ void HootApiDb::deleteMap(long mapId)
   dropTable(getChangesetsTableName(mapId));
 
   // Drop related sequences
-  _execNoPrepare("DROP SEQUENCE IF EXISTS " + getCurrentNodesSequenceName(mapId) + " CASCADE");
-  _execNoPrepare("DROP SEQUENCE IF EXISTS " + getCurrentWaysSequenceName(mapId) + " CASCADE");
-  _execNoPrepare("DROP SEQUENCE IF EXISTS " + getCurrentRelationsSequenceName(mapId) + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DROP SEQUENCE IF EXISTS " + getCurrentNodesSequenceName(mapId) + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DROP SEQUENCE IF EXISTS " + getCurrentWaysSequenceName(mapId) + " CASCADE");
+  DbUtils::execNoPrepare(
+    _db, "DROP SEQUENCE IF EXISTS " + getCurrentRelationsSequenceName(mapId) + " CASCADE");
 
   // Delete map last
   _exec("DELETE FROM " + ApiDb::getMapsTableName() + " WHERE id=:id", (qlonglong)mapId);
@@ -348,12 +365,14 @@ void HootApiDb::dropDatabase(const QString& databaseName)
   // If this is the case, we store the statement & execute it right after
   // the current trans is successfully committed.
   if (_inTransaction)
-  { // Store for later
+  {
+    // Store for later
     _postTransactionStatements.push_back(sql);
   }
   else
-  { // Execute now
-    _execNoPrepare(sql);
+  {
+    // Execute now
+    DbUtils::execNoPrepare(_db, sql);
   }
 }
 
@@ -462,29 +481,29 @@ void HootApiDb::_flushBulkInserts()
   }
 }
 
-bool HootApiDb::isCorrectDbVersion()
+bool HootApiDb::isCorrectHootDbVersion()
 {
-  return getDbVersion() == ApiDb::expectedDbVersion();
+  return getHootDbVersion() == ApiDb::expectedHootDbVersion();
 }
 
-QString HootApiDb::getDbVersion()
+QString HootApiDb::getHootDbVersion()
 {
-  if (_selectDbVersion == 0)
+  if (_selectHootDbVersion == 0)
   {
-    _selectDbVersion.reset(new QSqlQuery(_db));
-    _selectDbVersion->prepare("SELECT id || ':' || author AS version_id FROM databasechangelog "
-                             "ORDER BY dateexecuted DESC LIMIT 1");
+    _selectHootDbVersion.reset(new QSqlQuery(_db));
+    _selectHootDbVersion->prepare("SELECT id || ':' || author AS version_id FROM databasechangelog "
+                                  "ORDER BY dateexecuted DESC LIMIT 1");
   }
 
-  if (_selectDbVersion->exec() == false)
+  if (_selectHootDbVersion->exec() == false)
   {
-    throw HootException(_selectDbVersion->lastError().text());
+    throw HootException(_selectHootDbVersion->lastError().text());
   }
 
   QString result;
-  if (_selectDbVersion->next())
+  if (_selectHootDbVersion->next())
   {
-    result = _selectDbVersion->value(0).toString();
+    result = _selectHootDbVersion->value(0).toString();
   }
   else
   {
@@ -609,28 +628,35 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   _copyTableStructure(ApiDb::getCurrentWayNodesTableName(), getCurrentWayNodesTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWaysTableName(), getCurrentWaysTableName(mapId));
 
-  _execNoPrepare("CREATE SEQUENCE " + getCurrentNodesSequenceName(mapId));
-  _execNoPrepare("CREATE SEQUENCE " + getCurrentRelationsSequenceName(mapId));
-  _execNoPrepare("CREATE SEQUENCE " + getCurrentWaysSequenceName(mapId));
+  DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentNodesSequenceName(mapId));
+  DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentRelationsSequenceName(mapId));
+  DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentWaysSequenceName(mapId));
 
-  _execNoPrepare(QString("ALTER TABLE %1 "
-    "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
-      .arg(getCurrentNodesTableName(mapId))
-      .arg(getCurrentNodesSequenceName(mapId)));
+  DbUtils::execNoPrepare(
+    _db,
+    QString("ALTER TABLE %1 "
+      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
+        .arg(getCurrentNodesTableName(mapId))
+        .arg(getCurrentNodesSequenceName(mapId)));
 
-  _execNoPrepare(QString("ALTER TABLE %1 "
-    "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
-      .arg(getCurrentRelationsTableName(mapId))
-      .arg(getCurrentRelationsSequenceName(mapId)));
+  DbUtils::execNoPrepare(
+    _db,
+    QString("ALTER TABLE %1 "
+      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
+        .arg(getCurrentRelationsTableName(mapId))
+        .arg(getCurrentRelationsSequenceName(mapId)));
 
-  _execNoPrepare(QString("ALTER TABLE %1 "
-    "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
-      .arg(getCurrentWaysTableName(mapId))
-      .arg(getCurrentWaysSequenceName(mapId)));
+  DbUtils::execNoPrepare(
+    _db,
+    QString("ALTER TABLE %1 "
+      "ALTER COLUMN id SET DEFAULT NEXTVAL('%4'::regclass)")
+        .arg(getCurrentWaysTableName(mapId))
+        .arg(getCurrentWaysSequenceName(mapId)));
 
   // remove the index to speed up inserts. It'll be added back by createPendingMapIndexes
-  _execNoPrepare(QString("DROP INDEX %1_tile_idx")
-      .arg(getCurrentNodesTableName(mapId)));
+  DbUtils::execNoPrepare(
+    _db,
+    QString("DROP INDEX %1_tile_idx").arg(getCurrentNodesTableName(mapId)));
 
   _pendingMapIndexes.append(mapId);
 
@@ -686,8 +712,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
-  LOG_TRACE("Inserted node with ID: " << QString::number(id));
-  LOG_VART(QString::number(lat, 'g', 15));
+  LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
+  LOG_VART(QString::number(lat, 'g', 15))
   LOG_VART(QString::number(lon, 'g', 15));
 
   return true;
@@ -727,7 +753,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_TRACE("Inserted relation with ID: " << QString::number(relationId));
+  LOG_TRACE("Inserted relation: " << ElementId(ElementType::Relation, relationId));
 
   return true;
 }
@@ -818,7 +844,7 @@ long HootApiDb::_insertRecord(QSqlQuery& query)
   return id;
 }
 
-bool HootApiDb::isSupported(QUrl url)
+bool HootApiDb::isSupported(const QUrl& url)
 {
   bool valid = ApiDb::isSupported(url);
 
@@ -902,11 +928,11 @@ void HootApiDb::open(const QUrl& url)
 
   ApiDb::open(url);
 
-  if (isCorrectDbVersion() == false)
+  if (isCorrectHootDbVersion() == false)
   {
-    const QString msg = "Running against an unexpected DB version.";
-    LOG_DEBUG("Expected: " << expectedDbVersion());
-    LOG_DEBUG("Actual: " << getDbVersion());
+    const QString msg = "Running against an unexpected Hootenanny DB version.";
+    LOG_DEBUG("Expected: " << expectedHootDbVersion());
+    LOG_DEBUG("Actual: " << getHootDbVersion());
     throw HootException(msg);
   }
 }
@@ -921,7 +947,7 @@ void HootApiDb::_resetQueries()
   _insertMap.reset();
   _insertWayNodes.reset();
   _insertRelationMembers.reset();
-  _selectDbVersion.reset();
+  _selectHootDbVersion.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
   _mapExists.reset();
@@ -1098,7 +1124,7 @@ long HootApiDb::numElements(const ElementType& elementType)
   return result;
 }
 
-shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
 {
   const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
@@ -1127,17 +1153,15 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
   _checkLastMapId(mapId);
   QString sql = "SELECT node_id FROM " + getCurrentWayNodesTableName(mapId) +
       " WHERE way_id = :wayId ORDER BY sequence_id";
-
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
-shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
+boost::shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
 {
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
   QString sql = "SELECT node_id FROM " + getCurrentWayNodesTableName(mapId) +
       " WHERE way_id = :wayId ORDER BY sequence_id";
-
   return ApiDb::selectNodesForWay(wayId, sql);
 }
 
@@ -1169,13 +1193,14 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
   while (_selectMembersForRelation->next())
   {
     const QString memberType = _selectMembersForRelation->value(0).toString();
+    LOG_VART(memberType);
     if (ElementType::isValidTypeString(memberType))
     {
       RelationData::Entry member =
         RelationData::Entry(
           _selectMembersForRelation->value(2).toString(),
           ElementId(ElementType::fromString(memberType),
-                    _selectMembersForRelation->value(1).toLongLong()));
+          _selectMembersForRelation->value(1).toLongLong()));
       LOG_VART(member);
       result.push_back(member);
     }
@@ -1197,7 +1222,7 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 }
 
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
-                            const Tags& tags)
+                           const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -1231,7 +1256,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
 
   _updateNode->finish();
 
-  LOG_DEBUG("Updated node with ID: " << QString::number(id));
+  LOG_TRACE("Updated node: " << ElementId(ElementType::Node, id));
 }
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
@@ -1263,7 +1288,7 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
 
   _updateRelation->finish();
 
-  LOG_DEBUG("Updated relation with ID: " << QString::number(id));
+  LOG_TRACE("Updated relation: " << ElementId(ElementType::Relation, id));
 }
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
@@ -1295,7 +1320,7 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
 
   _updateWay->finish();
 
-  LOG_DEBUG("Updated way with ID: " << QString::number(id));
+  LOG_TRACE("Updated way: " << ElementId(ElementType::Way, id));
 }
 
 bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
@@ -1337,7 +1362,8 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_TRACE("Inserted way with ID: " << QString::number(wayId));
+  LOG_TRACE("Inserted way: " << ElementId(ElementType::Way, wayId));
+  LOG_TRACE(tags);
 
   return true;
 }

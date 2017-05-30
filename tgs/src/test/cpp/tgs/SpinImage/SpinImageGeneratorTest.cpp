@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -115,13 +115,12 @@ namespace Tgs
     {
       std::fstream ins(fn.c_str(), std::fstream::in);
 
-      char inLine[512];
-
       if(ins.is_open())
       {
         while(!ins.eof())
         {
-          Tgs::CloudPoint cp; 
+          char inLine[512];
+          Tgs::CloudPoint cp;
           ins.getline(inLine, 512);
           std::stringstream ss;
           ss << inLine;
@@ -236,7 +235,7 @@ for (unsigned int rai = 0; rai < ra.size(); rai++)
 for (unsigned int bi = 0; bi < b.size(); bi++)
 for (unsigned int si = 0; si < s.size(); si++)
 {
-      vector< shared_ptr<SpinImageStack> > stacks;
+      vector<boost::shared_ptr<SpinImageStack> > stacks;
 
       SpinImageGenerator gen;
       gen.setRelativeAngle(ra[rai]);
@@ -247,7 +246,7 @@ for (unsigned int si = 0; si < s.size(); si++)
       for (unsigned int i = 0; i < training.size(); i++)
       {
         cout << "Training " << training[i] << endl;
-        shared_ptr<SpinImageStack> stack(new SpinImageStack());
+       boost::shared_ptr<SpinImageStack> stack(new SpinImageStack());
         stacks.push_back(stack);
         PointCloud pc;
         pc.load(training[i]);
@@ -261,7 +260,7 @@ for (unsigned int si = 0; si < s.size(); si++)
       for (unsigned int i = 0; i < testing.size(); i++)
       {
         cout << "Testing " << testing[i] << endl;
-        SpinImageStack stack;
+//        SpinImageStack stack;
         PointCloud pc;
 //         cout << "  Loading..." << endl;
         loadPointCloud(testing[i], pc);
@@ -271,7 +270,7 @@ for (unsigned int si = 0; si < s.size(); si++)
         //gen.generateStack(pc, stack);
 
         double bestScore;
-        std::map<string, double> bestScores;
+//        std::map<string, double> bestScores;
 
         std::map<string, int> results;
         bestScore = -1e300;
@@ -288,7 +287,7 @@ for (unsigned int si = 0; si < s.size(); si++)
             trainingStackIdx++)
           {
             std::vector<double> scores;
-            const shared_ptr<SpinImageStack> sig = stacks[trainingStackIdx];
+            const boost::shared_ptr<SpinImageStack> sig = stacks[trainingStackIdx];
             scores.reserve(sig->getSize());
   //           cout << " * comparing " << trainingType[trainingStackIdx];
             for (unsigned int imageIdx = 0; imageIdx < sig->getSize(); imageIdx++)
@@ -323,7 +322,7 @@ for (unsigned int si = 0; si < s.size(); si++)
         }
 
         int max = -1;
-        for (std::map<string, int>::iterator it = results.begin(); it != results.end(); it++)
+        for (std::map<string, int>::iterator it = results.begin(); it != results.end(); ++it)
         {
           max = std::max(it->second, max);
         }

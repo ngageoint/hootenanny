@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineUpdateOp.h"
 
@@ -34,7 +34,7 @@
 #include <geos/opBuffer.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -43,9 +43,12 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/OsmMap.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -80,7 +83,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const shared_ptr<Way>& w = _map.getWay(e->getId());
+      const WayPtr& w = _map.getWay(e->getId());
       std::vector<long> oldNodes = w->getNodeIds();
       std::vector<long> newNodes = w->getNodeIds();
 
@@ -116,15 +119,15 @@ BuildingOutlineUpdateOp::BuildingOutlineUpdateOp()
 {
 }
 
-void BuildingOutlineUpdateOp::apply(shared_ptr<OsmMap>& map)
+void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   _map = map;
 
   // go through all the relations
-  const RelationMap& relations = map->getRelationMap();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  const RelationMap& relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    const shared_ptr<Relation>& r = it->second;
+    const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
     if (OsmSchema::getInstance().isBuilding(r->getTags(), r->getElementType()))
     {
@@ -134,15 +137,15 @@ void BuildingOutlineUpdateOp::apply(shared_ptr<OsmMap>& map)
 }
 
 void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
-                                            shared_ptr<Geometry> outline,
+                                            boost::shared_ptr<Geometry> outline,
                                             ElementPtr buildingMember)
 {
-  shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(buildingMember);
+  boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(buildingMember);
   try
   {
     outline.reset(outline->Union(g.get()));
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException& e)
   {
     LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
     LOG_VART(buildingMember->toString());
@@ -151,7 +154,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
     {
       outline.reset(outline->Union(cleanedGeom));
     }
-    catch (geos::util::TopologyException& e)
+    catch (const geos::util::TopologyException& e)
     {
       //couldn't clean, so mark parent relation for review (eventually we'll come up with
       //cleaning that works here)
@@ -172,35 +175,35 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
   }
 }
 
-void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& building)
+void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
 {
   LOG_VART(building->toString());
 
-  shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+  boost::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
   const vector<RelationData::Entry> entries = building->getMembers();
   for (size_t i = 0; i < entries.size(); i++)
   {
-    if (entries[i].role == "outline")
+    if (entries[i].role == MetadataTags::RoleOutline())
     {
       LOG_TRACE("Removing outline from building: " << entries[i].getElementId() << "...");
       building->removeElement(entries[i].role, entries[i].getElementId());
     }
-    else if (entries[i].role == "part")
+    else if (entries[i].role == MetadataTags::RolePart())
     {
       LOG_TRACE("Processing building part: " << entries[i].getElementId() << "...");
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
         {
-          shared_ptr<Way> way = _map->getWay(entries[i].getElementId().getId());
+          WayPtr way = _map->getWay(entries[i].getElementId().getId());
           if (way->getNodeCount() >= 4)
           {
-            shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(way);
+            boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(way);
             try
             {
               outline.reset(outline->Union(g.get()));
             }
-            catch (geos::util::TopologyException& e)
+            catch (const geos::util::TopologyException& e)
             {
               LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
               LOG_VART(way->toString());
@@ -209,7 +212,7 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
               {
                 outline.reset(outline->Union(cleanedGeom));
               }
-              catch (geos::util::TopologyException& e)
+              catch (const geos::util::TopologyException& e)
               {
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)
@@ -243,16 +246,16 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
       }
       else if (entries[i].getElementId().getType() == ElementType::Relation)
       {
-        shared_ptr<Relation> relation = _map->getRelation(entries[i].getElementId().getId());
+        RelationPtr relation = _map->getRelation(entries[i].getElementId().getId());
         if (relation->isMultiPolygon())
         {
           {
-            shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(relation);
+            boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(relation);
             try
             {
               outline.reset(outline->Union(g.get()));
             }
-            catch (geos::util::TopologyException& e)
+            catch (const geos::util::TopologyException& e)
             {
               LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
               LOG_VART(relation->toString());
@@ -261,7 +264,7 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
               {
                 outline.reset(outline->Union(cleanedGeom));
               }
-              catch (geos::util::TopologyException& e)
+              catch (const geos::util::TopologyException& e)
               {
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)
@@ -308,19 +311,19 @@ void BuildingOutlineUpdateOp::_createOutline(const shared_ptr<Relation>& buildin
   if (outline->isEmpty() == false)
   {
     LOG_TRACE("Processing outline...");
-    const shared_ptr<Element> outlineElement =
+    const boost::shared_ptr<Element> outlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), building->getStatus(), building->getCircularError());
     _mergeNodes(outlineElement, building);
     outlineElement->setTags(building->getTags());
     // we don't need the relation "type" tag.
     outlineElement->getTags().remove("type");
-    building->addElement("outline", outlineElement);
+    building->addElement(MetadataTags::RoleOutline(), outlineElement);
   }
 }
 
-void BuildingOutlineUpdateOp::_mergeNodes(const shared_ptr<Element>& changed,
-  const shared_ptr<Relation>& reference)
+void BuildingOutlineUpdateOp::_mergeNodes(const boost::shared_ptr<Element>& changed,
+  const RelationPtr& reference)
 {
   set<long> changedNodes;
   set<long> referenceNodes;
@@ -334,15 +337,15 @@ void BuildingOutlineUpdateOp::_mergeNodes(const shared_ptr<Element>& changed,
   map<long, long> nodeIdMap;
 
   double epsilon = 1e-9;
-  for (set<long>::const_iterator ci = changedNodes.begin(); ci != changedNodes.end(); ci++)
+  for (set<long>::const_iterator ci = changedNodes.begin(); ci != changedNodes.end(); ++ci)
   {
     double bestDistance = epsilon;
     // should never be used uninitialized
     long bestMatch = -9999;
-    const shared_ptr<Node>& cn = _map->getNode(*ci);
-    for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ri++)
+    const NodePtr& cn = _map->getNode(*ci);
+    for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ++ri)
     {
-      const shared_ptr<Node>& rn = _map->getNode(*ri);
+      const NodePtr& rn = _map->getNode(*ri);
       double distance = cn->toCoordinate().distance(rn->toCoordinate());
       if (distance < bestDistance)
       {

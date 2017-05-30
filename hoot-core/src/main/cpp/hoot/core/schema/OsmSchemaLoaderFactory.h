@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMALOADERFACTORY_H
 #define OSMSCHEMALOADERFACTORY_H
@@ -40,9 +40,6 @@ namespace hoot
 
 class OsmSchemaLoader;
 
-using namespace boost;
-using namespace std;
-
 class OsmSchemaLoaderFactory
 {
 public:
@@ -50,10 +47,10 @@ public:
 
   static OsmSchemaLoaderFactory& getInstance();
 
-  shared_ptr<OsmSchemaLoader> createLoader(QString url);
+  boost::shared_ptr<OsmSchemaLoader> createLoader(QString url);
 
 private:
-  static auto_ptr<OsmSchemaLoaderFactory> _theInstance;
+  static std::auto_ptr<OsmSchemaLoaderFactory> _theInstance;
 };
 
 }

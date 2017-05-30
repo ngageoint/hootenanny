@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SampledAngleHistogramExtractor.h"
 
@@ -32,13 +32,18 @@
 using namespace geos::geom;
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/extractors/Histogram.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+
+// Qt
+#include <qnumeric.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -60,7 +65,7 @@ public:
 
   }
 
-  virtual void visit(const shared_ptr<const Element>& e)
+  virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     if (e->getElementType() == ElementType::Way)
     {
@@ -84,7 +89,7 @@ public:
         const double distance = currentLoc.getCoordinate().distance(lastLoc.getCoordinate());
         //calculate the heading using some distance around the way
         const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
-        if (!isnan(theta))
+        if (! ::qIsNaN(theta))
         {
           _angleHistogram.addAngle(theta, distance);
         }

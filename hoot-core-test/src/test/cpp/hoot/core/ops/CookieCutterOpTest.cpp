@@ -43,7 +43,7 @@ using namespace boost;
 #include <cppunit/TestFixture.h>
 
 // hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/MapCleaner.h>
 
 // Qt
@@ -67,7 +67,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ops/CookieCutterOp/DcTigerRoads-cropped.osm", map);

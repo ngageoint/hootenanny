@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnknownCriterion.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
@@ -34,7 +34,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, UnknownCriterion)
 
-bool UnknownCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool UnknownCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   return e->isUnknown();
 }

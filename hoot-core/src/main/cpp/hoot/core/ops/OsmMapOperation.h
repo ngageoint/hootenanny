@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OsmMapOperation_H
@@ -42,8 +42,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace boost;
 
 class OsmMap;
 
@@ -54,7 +52,7 @@ class OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::OsmMapOperation"; }
+  static std::string className() { return "hoot::OsmMapOperation"; }
 
   virtual ~OsmMapOperation() {}
 
@@ -63,14 +61,14 @@ public:
    * assigning the new map to the shared pointer. The only guarantee is that the "map" parameter
    * will point to a valid OsmMap upon completion.
    */
-  virtual void apply(shared_ptr<OsmMap>& map) = 0;
+  virtual void apply(boost::shared_ptr<OsmMap>& map) = 0;
 
   /**
    * Allows for returning the result of some calculation done as a result of the map operation.
    *
    * @return boost any pointer to the result data
    */
-  virtual any getResult() { any ptr; return ptr; }
+  virtual boost::any getResult() { boost::any ptr; return ptr; }
 
   /**
     Returns a string representation of the operation

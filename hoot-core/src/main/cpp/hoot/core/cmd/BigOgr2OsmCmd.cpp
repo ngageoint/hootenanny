@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OgrReader.h>
@@ -37,6 +37,8 @@
 
 // Standard
 #include <fstream>
+
+using namespace std;
 
 namespace hoot
 {
@@ -108,11 +110,11 @@ public:
           // Added this so the output is roughly the same as Ogr2OsmCmp.cpp
           LOG_INFO("Reading: " + input + " " + layers[i]);
 
-          shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
+          boost::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
 
           while(iterator->hasNext())
           {
-              shared_ptr<Element> e = iterator->next();
+              boost::shared_ptr<Element> e = iterator->next();
 
               //        // Interesting problem: If there are no elements in the file, e == 0
               //        // Need to look at the ElementIterator.cpp file to fix this.
@@ -122,8 +124,8 @@ public:
               //          break;
               //        }
 
-              shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-              shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
+              WayPtr w = boost::dynamic_pointer_cast<Way>(e);
+              NodePtr n = boost::dynamic_pointer_cast<Node>(e);
 
               if (w != 0)
               {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EXTRACTWAYSVISITOR_H
 #define EXTRACTWAYSVISITOR_H
@@ -36,18 +36,18 @@ class ExtractWaysVisitor :  public ElementConstOsmMapVisitor
 {
 public:
 
-  ExtractWaysVisitor(vector<ConstWayPtr>& w) : _w(w) {}
+  ExtractWaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
   /**
    * Convenience method.
    */
-  static vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
+  static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
 private:
 
-  vector<ConstWayPtr>& _w;
+  std::vector<ConstWayPtr>& _w;
 };
 
 }

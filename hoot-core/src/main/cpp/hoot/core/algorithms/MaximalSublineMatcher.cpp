@@ -22,16 +22,18 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSublineMatcher.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 #include "MaximalSubline.h"
+
+using namespace std;
 
 namespace hoot
 {

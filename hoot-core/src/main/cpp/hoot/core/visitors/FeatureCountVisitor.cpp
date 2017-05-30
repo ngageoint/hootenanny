@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FeatureCountVisitor.h"
 
@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-void FeatureCountVisitor::visit(const shared_ptr<const Element>& e)
+void FeatureCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {

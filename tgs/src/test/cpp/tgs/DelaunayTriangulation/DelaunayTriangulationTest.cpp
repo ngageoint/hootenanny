@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -61,11 +61,9 @@ public:
     uut.insert(1, 1);
     uut.insert(0.7, 0.3);
     int count = 0;
-    EdgeIterator ei = uut.getEdgeIterator();
-    while (ei != uut.getEdgeEnd())
+    for (EdgeIterator ei = uut.getEdgeIterator();  ei != uut.getEdgeEnd(); ++ei)
     {
       count++;
-      ei++;
     }
     CPPUNIT_ASSERT_EQUAL(12, count);
   }
@@ -78,10 +76,8 @@ public:
     uut.insert(1, 1);
     uut.insert(0.7, 0.3);
     int count = 0;
-    FaceIterator fi = uut.getFaceIterator();
-    while (fi != uut.getFaceEnd())
+    for (FaceIterator fi = uut.getFaceIterator(); fi != uut.getFaceEnd(); ++fi)
     {
-      fi++;
       count++;
     }
     CPPUNIT_ASSERT_EQUAL(4, count);

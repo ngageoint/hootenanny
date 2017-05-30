@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FourPassManager.h"
@@ -44,11 +44,13 @@
 // TGS
 #include <tgs/System/Time.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
-using namespace geos::geom;
 
-FourPassManager::FourPassManager(shared_ptr<TileWorker2> worker)
+FourPassManager::FourPassManager(boost::shared_ptr<TileWorker2> worker)
 {
   _worker = worker;
   // set the buffer to ~5km.

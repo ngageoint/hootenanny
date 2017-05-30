@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepBuildingsVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RemoveElementOp.h>
@@ -44,7 +44,7 @@ void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
 
   if (type != ElementType::Node)
   {
-    shared_ptr<Element> ee = _map->getElement(type, id);
+    boost::shared_ptr<Element> ee = _map->getElement(type, id);
 
     if (OsmSchema::getInstance().isBuilding(ee->getTags(), type) == false)
     {

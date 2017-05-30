@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_MAP_SCORER_H
 #define PERTY_MAP_SCORER_H
@@ -54,7 +54,7 @@ public:
     @param outputPath output directory
     @returns a match comparator from which the PERTY score can be retrieved
     */
-  shared_ptr<MatchComparator> scoreMatches(const QString referenceMapInputPath,
+ boost::shared_ptr<MatchComparator> scoreMatches(const QString referenceMapInputPath,
                                            const QString outputPath);
 
   /**
@@ -105,13 +105,13 @@ private:
 
   Settings _settings;
 
-  shared_ptr<OsmMap> _loadReferenceMap(const QString referenceMapInputPath,
+ OsmMapPtr _loadReferenceMap(const QString referenceMapInputPath,
                                        const QString referenceMapOutputPath);
   void _loadPerturbedMap(const QString perturbedMapInputPath,
                          const QString perturbedMapOutputPath);
-  shared_ptr<OsmMap> _combineMapsAndPrepareForConflation(shared_ptr<OsmMap> referenceMap,
+ OsmMapPtr _combineMapsAndPrepareForConflation(OsmMapPtr referenceMap,
                                                          const QString perturbedMapInputPath);
-  shared_ptr<MatchComparator> _conflateAndScoreMatches(shared_ptr<OsmMap> combinedDataToConflate,
+ boost::shared_ptr<MatchComparator> _conflateAndScoreMatches(OsmMapPtr combinedDataToConflate,
                                                        const QString conflatedMapOutputPath);
 
   /**

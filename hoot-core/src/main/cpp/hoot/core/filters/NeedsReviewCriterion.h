@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NEEDSREVIEWCRITERION_H
 #define NEEDSREVIEWCRITERION_H
@@ -42,13 +42,13 @@ class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::NeedsReviewCriterion"; }
+  static std::string className() { return "hoot::NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() {}
 
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new NeedsReviewCriterion(_map); }
 

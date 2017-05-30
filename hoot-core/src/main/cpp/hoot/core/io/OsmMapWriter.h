@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPWRITER_H
 #define OSMMAPWRITER_H
@@ -39,7 +39,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapWriter"; }
 
-  OsmMapWriter() {};
+  OsmMapWriter() {}
 
   virtual ~OsmMapWriter() {}
 
@@ -59,7 +59,7 @@ public:
    * Writes the specified map out. When this method is complete the output will likely be closed
    * and all data is guaranteed to be flushed.
    */
-  virtual void write(boost::shared_ptr<const OsmMap> map) = 0;
+  virtual void write(ConstOsmMapPtr map) = 0;
 
 };
 

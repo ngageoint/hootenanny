@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CompactnessExtractor.h"
 
@@ -31,8 +31,10 @@
 #include <geos/geom/Geometry.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -60,8 +62,8 @@ double CompactnessExtractor::extract(const OsmMap& map, const ConstElementPtr& t
   const ConstElementPtr& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   double result;
   if (g1->isEmpty() || g2->isEmpty())

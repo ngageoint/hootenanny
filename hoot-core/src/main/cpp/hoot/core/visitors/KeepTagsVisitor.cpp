@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KeepTagsVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
@@ -52,7 +52,7 @@ void KeepTagsVisitor::setConfiguration(const Settings& conf)
   _keys = ConfigOptions(conf).getKeepTagsVisitorKeys();
 }
 
-void KeepTagsVisitor::visit(const shared_ptr<Element>& e)
+void KeepTagsVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   //get a copy of the tags for modifying
   Tags tags;

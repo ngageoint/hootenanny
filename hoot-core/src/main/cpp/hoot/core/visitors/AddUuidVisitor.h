@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDUUIDVISITOR_H
 #define ADDUUIDVISITOR_H
@@ -33,7 +33,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
@@ -43,7 +42,7 @@ class AddUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::AddUuidVisitor"; }
+  static std::string className() { return "hoot::AddUuidVisitor"; }
 
   AddUuidVisitor() {}
   AddUuidVisitor(QString key);

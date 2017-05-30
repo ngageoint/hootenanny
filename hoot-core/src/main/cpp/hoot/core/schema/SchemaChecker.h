@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SCHEMA_CHECKER_H__
 #define __SCHEMA_CHECKER_H__
@@ -38,8 +38,6 @@ namespace hoot
 {
 
 class OsmSchema;
-
-using namespace std;
 
 /**
  * The SchemaChecker checks if SchemaVertex is an unknown type or has no geometries listed.
@@ -85,7 +83,7 @@ public:
 
 private:
 
-  vector<SchemaVertex> _schemaVertexList;
+  std::vector<SchemaVertex> _schemaVertexList;
 };
 
 }

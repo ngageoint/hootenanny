@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMATCHCREATOR_H
 #define BUILDINGMATCHCREATOR_H
@@ -36,25 +36,24 @@ class RandomForest;
 
 namespace hoot
 {
-class BuildingRfClassifier;
 
-using namespace Tgs;
+class BuildingRfClassifier;
 
 class BuildingMatchCreator : public MatchCreator
 {
 
 public:
 
-  static string className() { return "hoot::BuildingMatchCreator"; }
+  static std::string className() { return "hoot::BuildingMatchCreator"; }
 
   BuildingMatchCreator();
 
   virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
 
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   /**
    * Determines whether an element is a candidate for matching for this match creator
@@ -65,18 +64,18 @@ public:
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map);
 
-  virtual shared_ptr<MatchThreshold> getMatchThreshold();
+  virtual boost::shared_ptr<MatchThreshold> getMatchThreshold();
 
 private:
 
   /// Don't use this directly. See below.
-  shared_ptr<BuildingRfClassifier> _rf;
-  shared_ptr<MatchThreshold> _matchThreshold;
+  boost::shared_ptr<BuildingRfClassifier> _rf;
+  boost::shared_ptr<MatchThreshold> _matchThreshold;
 
   /**
    * The building model can be slow to load, this provides a lazy load.
    */
-  shared_ptr<BuildingRfClassifier> _getRf();
+  boost::shared_ptr<BuildingRfClassifier> _getRf();
 };
 
 }

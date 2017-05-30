@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NODEJS_H
 #define NODEJS_H
@@ -42,8 +42,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -57,8 +55,8 @@ public:
   virtual ElementPtr getElement() { return getNode(); }
   NodePtr getNode() { assert(_node); return _node; }
 
-  static Handle<Object> New(ConstNodePtr n);
-  static Handle<Object> New(NodePtr n);
+  static v8::Handle<v8::Object> New(ConstNodePtr n);
+  static v8::Handle<v8::Object> New(NodePtr n);
 
 private:
   NodeJs(ConstNodePtr n);
@@ -72,7 +70,7 @@ private:
   QString _className;
   ConstNodePtr _constNode;
   NodePtr _node;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
   void _setNode(ConstNodePtr n) { _constNode = n; _node.reset(); }
   void _setNode(NodePtr n) { _constNode = n; _node = n; }

@@ -18,14 +18,12 @@
 #define MAP_STATS_MAPPER_H
 
 // Hoot
-#include <hoot/hadoop/MapStats.h>
+#include "MapStats.h"
 #include <hoot/hadoop/OsmMapMapper.h>
 
 namespace hoot
 {
 class OsmMap;
-
-using namespace boost;
 
 class MapStatsMapper : public OsmMapMapper
 {
@@ -45,7 +43,7 @@ protected:
 
   HadoopPipes::MapContext* _context;
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
   void _writeStats(HadoopPipes::MapContext& context, const MapStats& stats);
 

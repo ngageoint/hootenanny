@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TILECONFLATOR_H
@@ -35,7 +35,7 @@
 #include <geos/geom/Envelope.h>
 
 // hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QString>
@@ -51,10 +51,6 @@
 namespace hoot
 {
 
-using namespace boost;
-using namespace geos::geom;
-using namespace std;
-
 class OsmMap;
 class NodeReplacements;
 
@@ -67,7 +63,7 @@ class NodeReplacements;
 class TileConflator
 {
 public:
-  TileConflator(shared_ptr<TileWorker> worker);
+  TileConflator(boost::shared_ptr<TileWorker> worker);
 
   virtual ~TileConflator();
 
@@ -97,7 +93,7 @@ private:
   Degrees _buffer;
 
   // [x][y]
-  vector< vector<Envelope> > _tiles;
+  std::vector< std::vector<geos::geom::Envelope> > _tiles;
 
   int _mapPart;
 
@@ -105,7 +101,7 @@ private:
   int _nodeReplacementPart;
   int _iteration;
 
-  shared_ptr<TileWorker> _worker;
+  boost::shared_ptr<TileWorker> _worker;
 
   /**
    * The tile conflation works by creating and removing temporary copies of the input data. This

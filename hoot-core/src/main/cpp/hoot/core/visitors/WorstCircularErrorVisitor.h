@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WORSTCIRCULARERRORVISITOR_H
@@ -41,7 +41,7 @@ namespace hoot
 class WorstCircularErrorVisitor : public ElementConstOsmMapVisitor, public SingleStatistic
 {
 public:
-  static string className() { return "hoot::WorstCircularErrorVisitor"; }
+  static std::string className() { return "hoot::WorstCircularErrorVisitor"; }
 
   WorstCircularErrorVisitor(): _worst(-1) {}
 
@@ -51,7 +51,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
   // Convenient way to get worst circular error
   static Meters getWorstCircularError(const OsmMapPtr& map);

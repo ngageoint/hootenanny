@@ -22,14 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DistanceNodeCriterion.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Node.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -43,12 +45,12 @@ DistanceNodeCriterion::DistanceNodeCriterion(Coordinate center, Meters distance)
   // Blank
 }
 
-bool DistanceNodeCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool DistanceNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   if (e->getElementType() != ElementType::Node)
     return false;
 
-  ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
   return _center.distance(n->toCoordinate()) < _distance;
 }
 

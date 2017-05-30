@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "LengthOfWaysVisitor.h"
 
@@ -30,7 +30,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 
 namespace hoot
@@ -50,7 +50,7 @@ void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-    const shared_ptr<const Way> w = _map->getWay(e->getId());
+    const ConstWayPtr w = _map->getWay(e->getId());
     _total += ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
   }
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ProbablePathCalculator.h"
@@ -361,7 +361,7 @@ namespace Tgs
     {
       float minD = 1e10f;
       for (HashSet<int>::const_iterator it = _destPending.begin(); it != _destPending.end(); 
-        it++)
+        ++it)
       {
         float d = _calculateDistance(_toPoint(start), _destinations[0]);
         minD = std::min(minD, d);
@@ -432,7 +432,7 @@ namespace Tgs
         PpPoint c = _toPoint(i);
         float w = 0.0;
         float r = 0.0;
-        for (map<int, float>::iterator it = patch.begin(); it != patch.end(); it++)
+        for (map<int, float>::iterator it = patch.begin(); it != patch.end(); ++it)
         {
           PpPoint p = _toPoint(it->first);
           float d = _calculateDistance(c, p);
@@ -643,7 +643,7 @@ namespace Tgs
 
     _destPending.clear();
     for (list<Destination>::iterator it = _remainingDest.begin(); it != _remainingDest.end();
-      it++)
+      ++it)
     {
       _destPending.insert(_toIndex(it->row, it->col));
     }
@@ -654,13 +654,10 @@ namespace Tgs
       
       _costSurface[index] = _tmpCost[index];
 
-      if (_destPending.find(index) != _destPending.end())
+      _destPending.erase(index);
+      if (_destPending.size() == 0)
       {
-        _destPending.erase(index);
-        if (_destPending.size() == 0)
-        {
-          return;
-        }
+        return;
       }
 
       _surround(index, _costSurface[index], q);

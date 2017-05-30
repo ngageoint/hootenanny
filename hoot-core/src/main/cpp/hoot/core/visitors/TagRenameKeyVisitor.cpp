@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagRenameKeyVisitor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -56,7 +56,7 @@ void TagRenameKeyVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void TagRenameKeyVisitor::visit(const shared_ptr<Element>& e)
+void TagRenameKeyVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_VART(_oldKey);
   LOG_VART(_newKey);

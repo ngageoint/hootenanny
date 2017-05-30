@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RfExtractorClassifier.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/extractors/FeatureExtractor.h>
 #include <hoot/core/conflate/MatchClassification.h>
@@ -37,6 +37,9 @@
 
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
+
+using namespace std;
+using namespace Tgs;
 
 namespace hoot
 {
@@ -55,7 +58,7 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   std::map<QString, double> features = getFeatures(map, eid1, eid2);
   vector<double> row;
   row.reserve(features.size());
-  for (std::map<QString, double>::const_iterator it = features.begin(); it != features.end(); it++)
+  for (std::map<QString, double>::const_iterator it = features.begin(); it != features.end(); ++it)
   {
     row.push_back(it->second);
   }
@@ -69,7 +72,7 @@ MatchClassification RfExtractorClassifier::classify(const ConstOsmMapPtr& map,
   return result;
 }
 
-const vector< shared_ptr<const FeatureExtractor> >& RfExtractorClassifier::_getExtractors()
+const vector< boost::shared_ptr<const FeatureExtractor> >& RfExtractorClassifier::_getExtractors()
   const
 {
   if (_extractors.size() == 0)
@@ -80,13 +83,13 @@ const vector< shared_ptr<const FeatureExtractor> >& RfExtractorClassifier::_getE
   return _extractors;
 }
 
-map<QString, double> RfExtractorClassifier::getFeatures(const shared_ptr<const OsmMap>& m,
+map<QString, double> RfExtractorClassifier::getFeatures(const ConstOsmMapPtr& m,
   ElementId eid1, ElementId eid2) const
 {
   map<QString, double> result;
 
-  const shared_ptr<const Element>& e1 = m->getElement(eid1);
-  const shared_ptr<const Element> e2 = m->getElement(eid2);
+  const boost::shared_ptr<const Element>& e1 = m->getElement(eid1);
+  const boost::shared_ptr<const Element> e2 = m->getElement(eid2);
 
   _getExtractors();
   for (size_t i = 0; i < _extractors.size(); i++)

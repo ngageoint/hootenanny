@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGKEYCOUNTVISITOR_H
 #define TAGKEYCOUNTVISITOR_H
@@ -42,7 +42,7 @@ class TagKeyCountVisitor : public ElementVisitor, public SingleStatistic
 {
   public:
 
-    static string className() { return "hoot::TagKeyCountVisitor"; }
+    static std::string className() { return "hoot::TagKeyCountVisitor"; }
 
     TagKeyCountVisitor() {}
     TagKeyCountVisitor(const QString key);

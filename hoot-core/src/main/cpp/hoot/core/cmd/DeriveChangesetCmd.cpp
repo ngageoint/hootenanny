@@ -22,20 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangesetXmlWriter.h>
-#include <hoot/core/io/OsmChangesetSqlWriter.h>
+#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
+#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
 #include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/filters/TagKeyCriterion.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+
+//GEOS
+#include <geos/geom/Envelope.h>
 
 // Qt
 #include <QUrl>
+
+using namespace std;
 
 namespace hoot
 {
@@ -95,27 +105,75 @@ public:
     const QString output = args[2];
 
     LOG_INFO(
-      "Deriving changeset for inputs " << input1 << ", " << input2 << " and writing output to " <<
-      output << "...");
+      "Deriving changeset for inputs " << input1.right(50) << ", " << input2.right(50) <<
+      " and writing output to " <<
+      output.right(50) << "...");
 
-    //use the same unknown1 status for both so that difference doesn't influence the comparison
+    const double changesetBuffer = ConfigOptions().getChangesetBuffer();
+    if (changesetBuffer > 0.0)
+    {
+      //allow for calculating the changeset with a slightly larger AOI than the default specified
+      //bounding box
+
+      QString bboxStr;
+      QString convertBoundsParamName;
+      //only one of these three should be specified
+      if (!ConfigOptions().getConvertBoundingBox().isEmpty())
+      {
+        bboxStr = ConfigOptions().getConvertBoundingBox();
+        convertBoundsParamName = ConfigOptions::getConvertBoundingBoxKey();
+      }
+      else if (!ConfigOptions().getConvertBoundingBoxHootApiDatabase().isEmpty())
+      {
+        bboxStr = ConfigOptions().getConvertBoundingBoxHootApiDatabase();
+        convertBoundsParamName = ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey();
+      }
+      else if (!ConfigOptions().getConvertBoundingBoxOsmApiDatabase().isEmpty())
+      {
+        bboxStr = ConfigOptions().getConvertBoundingBoxOsmApiDatabase();
+        convertBoundsParamName = ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey();
+      }
+      else
+      {
+        throw HootException(
+          "A changeset buffer was specified but no convert bounding box was specified.");
+      }
+      geos::geom::Envelope convertBounds = GeometryUtils::envelopeFromConfigString(bboxStr);
+      convertBounds.expandBy(changesetBuffer, changesetBuffer);
+      conf().set(
+        convertBoundsParamName,
+        GeometryUtils::envelopeToConfigString(convertBounds));
+    }
+
+    //some in these datasets may have status=3 if you're loading conflated data, so use
+    //reader.use.file.status and reader.keep.file.status if you want to retain that value
     OsmMapPtr map1(new OsmMap());
     loadMap(map1, input1, true, Status::Unknown1);
     OsmMapPtr map2(new OsmMap());
-    loadMap(map2, input2, true, Status::Unknown1);
+    loadMap(map2, input2, true, Status::Unknown2);
+
+    //we don't want to include review relations
+    boost::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    removeElementsVisitor.setRecursive(false);
+    map1->visitRw(removeElementsVisitor);
+    map2->visitRw(removeElementsVisitor);
+
+    //changeset derivation requires element sorting to work properly
     ElementSorterPtr sorted1(new ElementSorter(map1));
     ElementSorterPtr sorted2(new ElementSorter(map2));
     ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
 
     if (isXmlOutput)
     {
-      OsmChangesetXmlWriter().write(output, delta);
+      OsmChangesetXmlFileWriter().write(output, delta);
     }
     else
     {
       assert(!osmApiDbUrl.isEmpty());
       LOG_DEBUG(osmApiDbUrl);
-      OsmChangesetSqlWriter(QUrl(osmApiDbUrl)).write(output, delta);
+      OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
     }
 
     return 0;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyWaySplitVisitor.h"
 
@@ -31,9 +31,9 @@
 #include <boost/random/uniform_int.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/WaySplitter.h>
 #include <hoot/core/algorithms/MultiLineStringSplitter.h>
@@ -42,6 +42,8 @@
 
 // Tgs
 #include <tgs/System/Time.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -80,7 +82,7 @@ QString PertyWaySplitVisitor::toString()
     ", _minNodeSpacing: " + QString::number(_minNodeSpacing);
 }
 
-void PertyWaySplitVisitor::visit(const shared_ptr<Element>& e)
+void PertyWaySplitVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_TRACE(e->getElementType());
   if (OsmSchema::getInstance().isLinearHighway(e->getTags(), e->getElementType()))
@@ -103,7 +105,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     _splitRecursionLevel++;
     LOG_VART(_splitRecursionLevel);
 
-    const int numNodesBeforeSplit = _map->getNodeMap().size();
+    const int numNodesBeforeSplit = _map->getNodes().size();
     LOG_VART(numNodesBeforeSplit);
     const int numWaysBeforeSplit = _map->getWays().size();
     LOG_VART(numWaysBeforeSplit);
@@ -116,7 +118,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     //determine where to split the element
     if (element->getElementType() == ElementType::Way)
     {
-      WayPtr way = dynamic_pointer_cast<Way>(element);
+      WayPtr way = boost::dynamic_pointer_cast<Way>(element);
       LOG_VART(way->getNodeCount());
       nodeIdsBeforeSplit = QVector<long>::fromStdVector(way->getNodeIds()).toList();
       LOG_VART(nodeIdsBeforeSplit);
@@ -124,7 +126,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     }
     else
     {
-      multiLineSplitPoint = _calcSplitPoint(dynamic_pointer_cast<Relation>(element), wayId);
+      multiLineSplitPoint = _calcSplitPoint(boost::dynamic_pointer_cast<Relation>(element), wayId);
       waySplitPoint = multiLineSplitPoint.getWayLocation();
     }
 
@@ -154,7 +156,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
     if (element->getElementType() == ElementType::Way)
     {
       vector<WayPtr> newWaysAfterSplit =
-        WaySplitter::split(_map->shared_from_this(), dynamic_pointer_cast<Way>(element), waySplitPoint);
+        WaySplitter::split(_map->shared_from_this(), boost::dynamic_pointer_cast<Way>(element), waySplitPoint);
       for (size_t i = 0; i < newWaysAfterSplit.size(); i++)
       {
         newElementsAfterSplit.push_back(newWaysAfterSplit.at(i));
@@ -167,7 +169,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
       newElementsAfterSplit.push_back(match);
     }
 
-    const int numNodesAfterSplit = _map->getNodeMap().size();
+    const int numNodesAfterSplit = _map->getNodes().size();
     LOG_VART(numNodesAfterSplit);
     const int numNewNodesCreatedBySplit = numNodesAfterSplit - numNodesBeforeSplit;
     LOG_VART(numNewNodesCreatedBySplit);
@@ -175,7 +177,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
 
     if (numNewNodesCreatedBySplit > 0)
     {
-      WayPtr way = dynamic_pointer_cast<Way>(element);
+      WayPtr way = boost::dynamic_pointer_cast<Way>(element);
       //Its possible that the splitting of a relation could generate a new node.  In that case,
       //_updateNewNodeProperties does not need to be called b/c the MultiLineStringSplitter has
       //already properly updated the new node's properties.  when a way is split, however, the
@@ -194,7 +196,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
 
     //recursive call
     for (vector<ElementPtr>::const_iterator it = newElementsAfterSplit.begin();
-         it != newElementsAfterSplit.end(); it++)
+         it != newElementsAfterSplit.end(); ++it)
     {
       _split(*it);
     }
@@ -212,7 +214,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
   return vector<ElementPtr>();
 }
 
-WayLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const Way> way) const
+WayLocation PertyWaySplitVisitor::_calcSplitPoint(ConstWayPtr way) const
 {
   //create a way location that is the minimum node spacing distance from the beginning of the way
   WayLocation splitWayStart(_map->shared_from_this(), way, _minNodeSpacing);
@@ -238,7 +240,7 @@ WayLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const Way> way) con
   }
 }
 
-MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const Relation> relation,
+MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(ConstRelationPtr relation,
                                                               ElementId& wayId) const
 {
   const vector<RelationData::Entry>& members = relation->getMembers();
@@ -256,7 +258,7 @@ MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const R
     throw HootException(
       "PERTY feature splitting for multi-line string relations may only occur on relations which contain only ways.");
   }
-  WayPtr way = dynamic_pointer_cast<Way>(element);
+  WayPtr way = boost::dynamic_pointer_cast<Way>(element);
   LOG_VART(way->getNodeCount());
 
   //calculate the split point
@@ -278,16 +280,16 @@ MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(shared_ptr<const R
   }
 }
 
-shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
+NodePtr PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
   const vector<ElementPtr>& newElementsAfterSplit) const
 {
   //newElementsAfterSplit is assumed to only contain ways; find the new node created by the way
   //split; it will be the last node in the first way, which is the same as the first node in the
   //last way
-  shared_ptr<const Way> firstWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(0));
+  ConstWayPtr firstWay = boost::dynamic_pointer_cast<Way>(newElementsAfterSplit.at(0));
   const long lastNodeIdInFirstWay = firstWay->getNodeIds().at(firstWay->getNodeCount() - 1);
   LOG_VART(lastNodeIdInFirstWay);
-  shared_ptr<const Way> lastWay = dynamic_pointer_cast<Way>(newElementsAfterSplit.at(1));
+  ConstWayPtr lastWay = boost::dynamic_pointer_cast<Way>(newElementsAfterSplit.at(1));
   const long firstNodeIdInLastWay = lastWay->getNodeIds().at(0);
   LOG_VART(firstNodeIdInLastWay);
   assert(lastNodeIdInFirstWay == firstNodeIdInLastWay);
@@ -296,9 +298,9 @@ shared_ptr<Node> PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& n
   return _map->getNode(firstNodeIdInLastWay);
 }
 
-void PertyWaySplitVisitor::_updateNewNodeProperties(shared_ptr<Node> newNode,
-                                                    shared_ptr<const Node> firstSplitBetweenNode,
-                                                    shared_ptr<const Node> lastSplitBetweenNode)
+void PertyWaySplitVisitor::_updateNewNodeProperties(NodePtr newNode,
+                                                   ConstNodePtr firstSplitBetweenNode,
+                                                   ConstNodePtr lastSplitBetweenNode)
 {
   //arbitrarily copy the status from one split between node to the new node
   newNode->setStatus(firstSplitBetweenNode->getStatus());

@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
@@ -54,6 +54,8 @@
 #include <tgs/StreamUtils.h>
 
 #include "../../TestUtils.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -100,7 +102,7 @@ public:
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -121,7 +123,7 @@ public:
     BuildingMatchCreator uut;
     vector<const Match*> matches;
 
-    shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
+    boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
@@ -135,7 +137,7 @@ public:
     BuildingMatchCreator uut;
 
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);

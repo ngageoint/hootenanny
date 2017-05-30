@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -71,7 +71,7 @@ namespace Tgs
     {
       // load data frame
       cout << "Importing data frame... ";
-      shared_ptr<DataFrame> df(new DataFrame);
+     boost::shared_ptr<DataFrame> df(new DataFrame);
       fstream fs("OttawaCars.xml", ios_base::in);
       if (fs.is_open() == false)
       {
@@ -80,14 +80,14 @@ namespace Tgs
       df->import(fs);
       cout << "done." << endl;
 
-      shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
+     boost::shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
       genome->setInitializationDepth(4);
       genome->addBasicMathNodeTypes();
 
       // create source node for each factor
       for (unsigned int i = 0; i < df->getNumFactors(); i++)
       {
-        shared_ptr<DataFrameCalculatorNodeSource> src(new DataFrameCalculatorNodeSource(df, i));
+       boost::shared_ptr<DataFrameCalculatorNodeSource> src(new DataFrameCalculatorNodeSource(df, i));
         string label = df->getFactorLabelFromIndex(i);
         if (label != "MAX_Z_GROUND" && label != "MIN_Z_GROUND" && 
           label != "MAX_Z_AERIAL" && label != "MIN_Z_AERIAL")
@@ -97,8 +97,8 @@ namespace Tgs
       }
 
       // create a fitness function using symmetric uncertainty
-      shared_ptr<FeatureScoreCalculator> fsc(new SymmetricUncertaintyCalculator());
-      shared_ptr<FeatureScoreFitnessFunction> fitness(new FeatureScoreFitnessFunction(df, fsc));
+     boost::shared_ptr<FeatureScoreCalculator> fsc(new SymmetricUncertaintyCalculator());
+     boost::shared_ptr<FeatureScoreFitnessFunction> fitness(new FeatureScoreFitnessFunction(df, fsc));
 
       GeneticAlgorithm ga(genome, fitness);
       ga.setPopulationSize(500);
@@ -116,8 +116,8 @@ namespace Tgs
       {
         ga.step();
         c+= ga.getPopulation().size();
-        shared_ptr<CalculatorGenome> best = 
-          dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
+       boost::shared_ptr<CalculatorGenome> best = 
+          boost::dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
         cout << c << "\t" << best->getScore() << "\t" << best->toString() << endl;
 //         if (1 / best->getScore() < 1.0)
 //         {

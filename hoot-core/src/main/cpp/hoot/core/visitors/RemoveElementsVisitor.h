@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEELEMENTSVISITOR_H
 #define REMOVEELEMENTSVISITOR_H
@@ -54,7 +54,7 @@ public:
    */
   RemoveElementsVisitor();
 
-  RemoveElementsVisitor(const shared_ptr<ElementCriterion>& filter);
+  RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter);
 
   virtual void addCriterion(const ElementCriterionPtr& e)
   {
@@ -72,13 +72,13 @@ public:
 
   void setRecursive(bool recursive) { _recursive = recursive; }
 
-  static void removeWays(shared_ptr<OsmMap> pMap,
-                         const shared_ptr<ElementCriterion>& pCrit);
+  static void removeWays(boost::shared_ptr<OsmMap> pMap,
+                         const boost::shared_ptr<ElementCriterion>& pCrit);
 
 private:
 
   OsmMap* _map;
-  shared_ptr<ElementCriterion> _filter;
+ boost::shared_ptr<ElementCriterion> _filter;
   bool _recursive;
 };
 

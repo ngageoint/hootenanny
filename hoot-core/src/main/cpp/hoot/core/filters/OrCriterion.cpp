@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OrCriterion.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
 
-bool OrCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool OrCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   for (size_t i = 0; i < _filters.size(); i++)
   {

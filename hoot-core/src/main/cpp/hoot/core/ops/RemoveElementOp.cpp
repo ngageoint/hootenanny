@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveElementOp.h"
 #include "RemoveNodeOp.h"
@@ -30,7 +30,7 @@
 #include "RemoveRelationOp.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -48,7 +48,7 @@ RemoveElementOp::RemoveElementOp(ElementId eId, bool doCheck):
 {
 }
 
-void RemoveElementOp::apply(shared_ptr<OsmMap>& map)
+void RemoveElementOp::apply(OsmMapPtr& map)
 {
   if (ElementType::Node == _eIdToRemove.getType().getEnum())
   {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AreaMerger.h"
 
@@ -57,8 +57,8 @@ void AreaMerger::merge(OsmMapPtr map)
   ElementPtr element2;
   int parsedElementCount = 0;
 
-  WayMap::const_iterator wayItr = map->getWays().begin();
-  while (wayItr != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const int wayId = wayItr->first;
     if (PoiPolygonMatch::isArea(*map->getWay(wayId)))
@@ -73,13 +73,12 @@ void AreaMerger::merge(OsmMapPtr map)
       }
       parsedElementCount++;
     }
-    wayItr++;
   }
 
   if (parsedElementCount < 2)
   {
-    RelationMap::const_iterator relItr = map->getRelationMap().begin();
-    while (relItr != map->getRelationMap().end())
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != map->getRelations().end(); ++relItr)
     {
       const int relationId = relItr->first;
       if (PoiPolygonMatch::isArea(*map->getRelation(relationId)))
@@ -94,7 +93,6 @@ void AreaMerger::merge(OsmMapPtr map)
         }
         parsedElementCount++;
       }
-      relItr++;
     }
   }
 

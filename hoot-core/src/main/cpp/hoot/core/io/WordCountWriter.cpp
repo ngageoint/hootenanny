@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WordCountWriter.h"
@@ -30,12 +30,13 @@
 // hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/DbUtils.h>
 #include "WordCount.h"
 
 // Qt
 #include <QtAlgorithms>
 #include <QFile>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 
@@ -52,18 +53,6 @@ bool descendingCount(const WordCount& w1, const WordCount& w2)
   return w1.count > w2.count;
 }
 
-void WordCountWriter::_exec(QSqlDatabase& db, QString sql)
-{
-  QSqlQuery q(db);
-  if (q.exec(sql) == false)
-  {
-    QString error = QString("Error executing query: %1 (%2)").arg(q.lastError().text()).
-        arg(sql);
-    throw HootException(error);
-  }
-}
-
-
 void WordCountWriter::write(QString basePath, QVector<WordCount> words)
 {
   LOG_INFO("Start writing");
@@ -74,8 +63,8 @@ void WordCountWriter::write(QString basePath, QVector<WordCount> words)
     throw HootException("Error opening database: " + basePath);
   }
 
-  _exec(db, "CREATE TABLE words (word TEXT PRIMARY KEY, count INT)");
-  _exec(db, "BEGIN");
+  DbUtils::execNoPrepare(db, "CREATE TABLE words (word TEXT PRIMARY KEY, count INT)");
+  DbUtils::execNoPrepare(db, "BEGIN");
 
   QSqlQuery q(db);
   if (q.prepare("INSERT INTO words (word, count) VALUES(:word, :count)") == false)
@@ -95,7 +84,7 @@ void WordCountWriter::write(QString basePath, QVector<WordCount> words)
     }
   }
 
-  _exec(db, "COMMIT");
+  DbUtils::execNoPrepare(db, "COMMIT");
   LOG_INFO("Committed");
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnionPolygonsVisitor.h"
 
@@ -32,7 +32,9 @@
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -44,7 +46,7 @@ UnionPolygonsVisitor::UnionPolygonsVisitor()
   _result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 }
 
-void UnionPolygonsVisitor::visit(const shared_ptr<const Element>& e)
+void UnionPolygonsVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
@@ -53,7 +55,7 @@ void UnionPolygonsVisitor::visit(const shared_ptr<const Element>& e)
 
   if (OsmSchema::getInstance().isArea(e->getTags(), e->getElementType()))
   {
-    shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
+    boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
     _result.reset(g->Union(_result.get()));
   }
 }

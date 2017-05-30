@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEMATCHSETFINDER_H
 #define EDGEMATCHSETFINDER_H
@@ -107,8 +107,8 @@ private:
   EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
 };
 
-typedef shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
-typedef shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
+typedef boost::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
+typedef boost::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
 
 // not implemented
 bool operator<(ConstEdgeMatchSetFinderPtr, ConstEdgeMatchSetFinderPtr);

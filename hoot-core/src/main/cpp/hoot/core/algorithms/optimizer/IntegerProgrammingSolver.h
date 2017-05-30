@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTEGERPROGRAMMINGSOLVER_H
 #define INTEGERPROGRAMMINGSOLVER_H
@@ -39,7 +39,7 @@
 #endif
 
 // Hoot
-#include <hoot/core/Exception.h>
+#include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -50,7 +50,6 @@
 
 namespace hoot
 {
-using namespace std;
 /**
  * A thin C++ style wrapper for a small subset of GLPK.
  * http://www.gnu.org/software/glpk/
@@ -67,29 +66,9 @@ public:
 
   void addRows(int rowCount) { glp_add_rows(_lp, rowCount); }
 
-  double getColumnPrimalValue(int j) const
-  {
-    if (isIntegerProblem())
-    {
-      return glp_mip_col_val(_lp, j);
-    }
-    else
-    {
-      return glp_get_col_prim(_lp, j);
-    }
-  }
+  double getColumnPrimalValue(int j) const;
 
-  double getObjectiveValue() const
-  {
-    if (isIntegerProblem())
-    {
-      return glp_mip_obj_val(_lp);
-    }
-    else
-    {
-      return glp_get_obj_val(_lp);
-    }
-  }
+  double getObjectiveValue() const;
 
   int getNumColumns() const { return glp_get_num_cols(_lp); }
 
@@ -105,7 +84,7 @@ public:
    * Just like GLPK the index starts at 1, not 0. This means that i.size() - 1 records will be
    * loaded.
    */
-  void loadMatrix(const vector<int>& i, const vector<int>& j, const vector<double>& r)
+  void loadMatrix(const std::vector<int>& i, const std::vector<int>& j, const std::vector<double>& r)
   {
     glp_load_matrix(_lp, i.size() - 1, &(i[0]), &(j[0]), &(r[0]));
   }
@@ -152,78 +131,11 @@ public:
   /**
    * Solves the problem using the default method.
    */
-  void solve()
-  {
-    if (isIntegerProblem())
-    {
-      solveBranchAndCut();
-    }
-    else
-    {
-      solveSimplex();
-    }
-  }
+  void solve();
 
-  void solveBranchAndCut()
-  {
-    glp_iocp iocp;
-    glp_init_iocp(&iocp);
-    iocp.presolve = GLP_ON;
-    if (_timeLimit > 0)
-    {
-      iocp.tm_lim = _timeLimit * 1000.0 + 0.5;
-    }
-    if (Log::getInstance().getLevel() <= Log::Debug)
-    {
-      iocp.msg_lev = GLP_MSG_ON;
-    }
-    else if (Log::getInstance().getLevel() <= Log::Warn)
-    {
-      iocp.msg_lev = GLP_MSG_ERR;
-    }
-    else
-    {
-      iocp.msg_lev = GLP_MSG_OFF;
-    }
+  void solveBranchAndCut();
 
-    int result = glp_intopt(_lp, &iocp);
-
-    // if there was an error and the error was not a timeout or iteration limit error.
-    if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
-    {
-      throw Exception(QString("Error solving integer programming problem. %1").arg(result));
-    }
-  }
-
-  void solveSimplex()
-  {
-    glp_smcp smcp;
-    glp_init_smcp(&smcp);
-    if (_timeLimit > 0)
-    {
-      smcp.tm_lim = _timeLimit * 1000.0 + 0.5;
-    }
-    if (Log::getInstance().getLevel() <= Log::Debug)
-    {
-      smcp.msg_lev = GLP_MSG_ON;
-    }
-    else if (Log::getInstance().getLevel() <= Log::Warn)
-    {
-      smcp.msg_lev = GLP_MSG_ERR;
-    }
-    else
-    {
-      smcp.msg_lev = GLP_MSG_OFF;
-    }
-
-    int result = glp_simplex(_lp, &smcp);
-
-    // if there was an error and the error was not a timeout or iteration limit error.
-    if (result != 0 && result != GLP_EITLIM && result != GLP_ETMLIM)
-    {
-      throw Exception(QString("Error solving integer programming problem. %1").arg(result));
-    }
-  }
+  void solveSimplex();
 
 private:
 

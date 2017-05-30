@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ParallelWayCriterion.h"
@@ -39,11 +39,13 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/util/ElementConverter.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 
 // Qt
 #include <QDebug>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -51,7 +53,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, ParallelWayCriterion)
 
 ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map,
-                                           shared_ptr<const Way> baseWay,
+                                           ConstWayPtr baseWay,
                                            bool isParallel) :
   _map(map),
   _baseWay(baseWay),
@@ -89,9 +91,9 @@ ParallelWayCriterion::~ParallelWayCriterion()
   }
 }
 
-Radians ParallelWayCriterion::calculateDifference(const shared_ptr<const Way>& w) const
+Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
 {
-  shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
+  boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
 
   Radians deltaSum = 0.0;
   int count = 0;
@@ -131,11 +133,11 @@ Radians ParallelWayCriterion::calculateDifference(const shared_ptr<const Way>& w
   }
 }
 
-bool ParallelWayCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool ParallelWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   if(e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     double difference = calculateDifference(w);
 
     // If the mean "normals" are within 10 degrees of perpendicular.

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.ingest;
 
@@ -34,7 +34,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,7 +57,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import hoot.services.UnitTest;
-import hoot.services.testsupport.HootCustomPropertiesSetter;
+import hoot.services.utils.HootCustomPropertiesSetter;
 
 
 /*
@@ -71,9 +71,6 @@ public class CustomScriptResourceTest {
     private static File customScriptFolder;
     private static String original_HOME_FOLDER;
     private static String original_SCRIPT_FOLDER;
-    private static String original_JS_HEADER_SCRIPT_PATH;
-    private static String original_DEFAULT_TRANSLATIONS_CONFIG;
-    private static String original_TRANSLATION_SCRIPT_PATH;
 
 
     @BeforeClass
@@ -93,63 +90,13 @@ public class CustomScriptResourceTest {
         File scriptsFolder = new File(homefolder, "scripts");
         FileUtils.forceMkdir(scriptsFolder);
         assertTrue(scriptsFolder.exists());
-
-        //dummyjsHeaderScriptPath=$(homeFolder)/scripts/empty_rh.js
-
-        original_JS_HEADER_SCRIPT_PATH = JS_HEADER_SCRIPT_PATH;
-        URL inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/empty_rh.js");
-        File dest = new File(scriptsFolder.getAbsolutePath(), "empty_rh.js");
-        FileUtils.copyURLToFile(inputUrl, dest);
-        HootCustomPropertiesSetter.setProperty("JS_HEADER_SCRIPT_PATH", dest.getAbsolutePath());
-
-        File confFolder = new File(homefolder, "conf");
-        FileUtils.forceMkdir(confFolder);
-        assertTrue(confFolder.exists());
-
-        original_DEFAULT_TRANSLATIONS_CONFIG = DEFAULT_TRANSLATIONS_CONFIG;
-        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/DefaultTranslations.json");
-        dest = new File(confFolder, "DefaultTranslations.json");
-        FileUtils.copyURLToFile(inputUrl, dest);
-        HootCustomPropertiesSetter.setProperty("DEFAULT_TRANSLATIONS_CONFIG", dest.getAbsolutePath());
-
-        //translationScriptPath=$(homeFolder)/translations
-
-        original_TRANSLATION_SCRIPT_PATH = TRANSLATION_SCRIPT_PATH;
-        File translationsFolder = new File(homefolder, "translations");
-        FileUtils.forceMkdir(translationsFolder);
-        assertTrue(translationsFolder.exists());
-
-        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-        dest = new File(translationsFolder, "TDSv61.js");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-        dest = new File(translationsFolder, "TDSv40.js");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-        dest = new File(translationsFolder, "MGCP_TRD4.js");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-        dest = new File(translationsFolder, "OSM_Ingest.js");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        inputUrl = CustomScriptResourceTest.class.getResource("/hoot/services/controllers/ingest/translations");
-        dest = new File(translationsFolder, "GeoNames.js");
-        FileUtils.copyURLToFile(inputUrl, dest);
-
-        HootCustomPropertiesSetter.setProperty("TRANSLATION_SCRIPT_PATH", translationsFolder.getAbsolutePath());
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
         FileUtils.deleteDirectory(homefolder);
         HootCustomPropertiesSetter.setProperty("HOME_FOLDER", original_HOME_FOLDER);
-        HootCustomPropertiesSetter.setProperty("DEFAULT_TRANSLATIONS_CONFIG", original_DEFAULT_TRANSLATIONS_CONFIG);
-        HootCustomPropertiesSetter.setProperty("JS_HEADER_SCRIPT_PATH", original_JS_HEADER_SCRIPT_PATH);
         HootCustomPropertiesSetter.setProperty("SCRIPT_FOLDER", original_SCRIPT_FOLDER);
-        HootCustomPropertiesSetter.setProperty("TRANSLATION_SCRIPT_PATH", original_TRANSLATION_SCRIPT_PATH);
     }
 
     @Before
@@ -564,13 +511,6 @@ public class CustomScriptResourceTest {
         assertTrue(file.exists());
     }
 
-    /**
-     * Removes the first line from a file
-     *
-     * @param file
-     *            file to modify
-     * @throws IOException
-     */
     private static void removeFirstLineFromFile(File file) throws IOException {
         try (Scanner fileScanner = new Scanner(file)) {
             fileScanner.nextLine();
@@ -591,8 +531,6 @@ public class CustomScriptResourceTest {
             }
         }
     }
-
-
 
     @Test
     @Category(UnitTest.class)
@@ -675,18 +613,45 @@ public class CustomScriptResourceTest {
             assertTrue(!oName.toString().isEmpty());
             assertNotNull(jsTrans.get("DESCRIPTION"));
 
-            Object oPath = jsTrans.get("PATH");
-            assertNotNull(oPath);
-            assertTrue(!oPath.toString().isEmpty());
+            if (jsTrans.containsKey("PATH")) {
+                Object oPath = jsTrans.get("PATH");
+                assertNotNull(oPath);
+                assertTrue(!oPath.toString().isEmpty());
 
-            File fScript = new File(homefolder, (String) oPath);
-            assertTrue(fScript.exists());
+                File fScript = new File(original_HOME_FOLDER, (String) oPath);
+                assertTrue(fScript.exists());
 
-            String sScript = FileUtils.readFileToString(fScript);
-            validateExportMethod.invoke(null, sScript);
+                String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
+                validateExportMethod.invoke(null, sScript);
+            }
+            else {
+                if (jsTrans.containsKey("IMPORTPATH")) {
+                    Object oPath = jsTrans.get("IMPORTPATH");
+                    assertNotNull(oPath);
+                    assertTrue(!oPath.toString().isEmpty());
+
+                    File fScript = new File(original_HOME_FOLDER, (String) oPath);
+                    assertTrue(fScript.exists());
+
+                    String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
+                    validateExportMethod.invoke(null, sScript);
+                }
+
+                if (jsTrans.containsKey("EXPORTPATH")) {
+                    Object oPath = jsTrans.get("EXPORTPATH");
+                    assertNotNull(oPath);
+                    assertTrue(!oPath.toString().isEmpty());
+
+                    File fScript = new File(original_HOME_FOLDER, (String) oPath);
+                    assertTrue(fScript.exists());
+
+                    String sScript = FileUtils.readFileToString(fScript, Charset.defaultCharset());
+                    validateExportMethod.invoke(null, sScript);
+                }
+            }
 
             if (jsTrans.get("FOUO_PATH") != null) {
-                File fouo = new File(homefolder, (String) jsTrans.get("FOUO_PATH"));
+                File fouo = new File(original_HOME_FOLDER, (String) jsTrans.get("FOUO_PATH"));
                 assertTrue(fouo.exists());
             }
         }

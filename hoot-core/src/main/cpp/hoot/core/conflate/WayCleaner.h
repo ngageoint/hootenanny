@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYCLEANER_H
 #define WAYCLEANER_H
@@ -106,7 +106,7 @@ class WayCleaner
      * @param map the map owning the ways to be cleaned
      * @return a collection of unmodifiable cleaned ways
      */
-    static vector<ConstWayPtr> cleanWays(const vector<ConstWayPtr>& ways, const ConstOsmMapPtr& map);
+    static std::vector<ConstWayPtr> cleanWays(const std::vector<ConstWayPtr>& ways, const ConstOsmMapPtr& map);
 };
 
 }

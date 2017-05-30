@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NoInformationCriterion.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
@@ -38,12 +38,31 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NoInformationCriterion)
 
-bool NoInformationCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool NoInformationCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
-  const int informationCount = e->getTags().getInformationCount();
-  LOG_VART(e->getElementId());
+  const Tags tags = e->getTags();
+  const int informationCount = tags.getInformationCount();
+  const int reviewTagCount =
+    tags.getList("regex?" + MetadataTags::HootReviewTagPrefix() + ".*").size();
+
+  LOG_VART(e);
   LOG_VART(informationCount);
-  return informationCount == 0;
+  LOG_VART(_treatReviewTagsAsMetadata);
+  LOG_VART(reviewTagCount);
+
+  bool isSatisified = informationCount == 0;
+  if (!_treatReviewTagsAsMetadata)
+  {
+    isSatisified &= reviewTagCount == 0;
+  }
+  LOG_VART(isSatisified);
+  return isSatisified;
+}
+
+void NoInformationCriterion::setConfiguration(const Settings& conf)
+{
+  _treatReviewTagsAsMetadata = ConfigOptions(conf).getWriterCleanReviewTags();
+  //LOG_VART(_treatReviewTagsAsMetadata);
 }
 
 }

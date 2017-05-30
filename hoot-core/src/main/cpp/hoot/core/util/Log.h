@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOG_H
@@ -51,6 +51,11 @@
 
 namespace hoot
 {
+/**
+ * The following 'using namespace std' is required to be here.  If it is removed, the software compiles
+ * BUT it doesn't run correctly.  Removing it causes multiple unit tests fail.
+ * See
+ */
 using namespace std;
 
 /**
@@ -114,16 +119,16 @@ public:
 
   bool isInfoEnabled() { return _level <= Info; }
 
-  void log(WarningLevel level, const string& str);
+  void log(WarningLevel level, const std::string& str);
 
-  void log(WarningLevel level, const string& str, const string& filename,
-           const string &functionName, int lineNumber);
+  void log(WarningLevel level, const std::string& str, const std::string& filename,
+           const std::string &functionName, int lineNumber);
 
   void log(WarningLevel level, const QString& str, const QString& filename,
     const QString& functionName, int lineNumber);
 
-  void progress(WarningLevel level, const string& str, const string& filename,
-    const string& functionName, int lineNumber);
+  void progress(WarningLevel level, const std::string& str, const std::string& filename,
+    const std::string& functionName, int lineNumber);
 
   void setLevel(WarningLevel l);
 
@@ -131,7 +136,7 @@ public:
   log4cxx::LoggerPtr _logger;
 #endif
 
-  static string ellipsisStr(const string& str, uint count = 33);
+  static std::string ellipsisStr(const std::string& str, uint count = 33);
 
 private:
   WarningLevel _level;
@@ -183,6 +188,7 @@ private:
   }}
 
 #define PROGRESS_INFO(str) { PROGRESS_LEVEL(hoot::Log::Info, str) }
+#define PROGRESS_DEBUG(str) { PROGRESS_LEVEL(hoot::Log::Debug, str) }
 
 /// print out a variable along w/ it's value. E.g. int a = 3; LOG_VAR(a); => logs "a: 3"
 #define LOG_VART(var) LOG_TRACE(#var << ": " << (var))

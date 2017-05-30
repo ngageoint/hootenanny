@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMATCH_H
 #define BUILDINGMATCH_H
@@ -45,8 +45,6 @@ namespace Tgs
 namespace hoot
 {
 
-using namespace Tgs;
-
 class BuildingRfClassifier;
 
 /**
@@ -56,13 +54,13 @@ class BuildingRfClassifier;
 class BuildingMatch : public Match, public MatchDetails
 {
 public:
-  BuildingMatch(const ConstOsmMapPtr& map, shared_ptr<const BuildingRfClassifier> rf,
+  BuildingMatch(const ConstOsmMapPtr& map, boost::shared_ptr<const BuildingRfClassifier> rf,
                 const ElementId& eid1, const ElementId& eid2,
                 ConstMatchThresholdPtr mt);
 
   virtual const MatchClassification& getClassification() const { return _p; }
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   virtual MatchMembers getMatchMembers() const { return MatchMembers::Polygon; }
 
@@ -78,7 +76,7 @@ public:
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   virtual QString toString() const;
 
@@ -89,7 +87,7 @@ private:
   ElementId _eid1, _eid2;
   static QString _matchName;
   MatchClassification _p;
-  shared_ptr<const BuildingRfClassifier> _rf;
+  boost::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
   void _calculateClassification(const ConstOsmMapPtr& map);

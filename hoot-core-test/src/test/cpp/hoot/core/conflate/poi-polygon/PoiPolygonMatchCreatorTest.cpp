@@ -30,10 +30,13 @@
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -83,7 +86,7 @@ public:
     {
       PoiPolygonMatchCreator uut;
       vector<const Match*> matches;
-      shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
+      boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
       uut.createMatches(map, matches, threshold);
       HOOT_STR_EQUALS(2, matches.size());
       HOOT_STR_EQUALS("PoiPolygonMatch Node:1 Way:-1 P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: -1, name score: 1, address score: -1",
@@ -98,8 +101,10 @@ public:
     PoiPolygonMatchCreator uut;
 
     OsmMapPtr map = getTestMap1();
-    CPPUNIT_ASSERT(uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
+    CPPUNIT_ASSERT(
+      uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
+    CPPUNIT_ASSERT(
+      !uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
 
     OsmXmlReader reader;
     OsmMap::resetCounters();
@@ -107,7 +112,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
+    CPPUNIT_ASSERT(
+      !uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
   }
 };
 

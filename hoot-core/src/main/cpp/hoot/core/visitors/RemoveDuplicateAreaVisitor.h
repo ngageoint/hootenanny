@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEDUPLICATEAREAVISITOR_H
 #define REMOVEDUPLICATEAREAVISITOR_H
@@ -56,24 +56,24 @@ class RemoveDuplicateAreaVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveDuplicateAreaVisitor"; }
+  static std::string className() { return "hoot::RemoveDuplicateAreaVisitor"; }
 
   RemoveDuplicateAreaVisitor();
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual void visit(const shared_ptr<Element>& e1);
+  virtual void visit(const boost::shared_ptr<Element>& e1);
 
 private:
 
-  shared_ptr<Geometry> _convertToGeometry(const shared_ptr<Element>& e1);
+  boost::shared_ptr<geos::geom::Geometry> _convertToGeometry(const boost::shared_ptr<Element>& e1);
 
-  bool _equals(const shared_ptr<Element>& e1, const shared_ptr<Element> &e2);
+  bool _equals(const boost::shared_ptr<Element>& e1, const boost::shared_ptr<Element> &e2);
 
-  void _removeOne(shared_ptr<Element> e1, shared_ptr<Element> e2);
+  void _removeOne(boost::shared_ptr<Element> e1,boost::shared_ptr<Element> e2);
 
-  auto_ptr<TagDifferencer> _diff;
-  QHash<ElementId, shared_ptr<Geometry> > _geoms;
+  std::auto_ptr<TagDifferencer> _diff;
+  QHash<ElementId,boost::shared_ptr<geos::geom::Geometry> > _geoms;
 };
 
 }

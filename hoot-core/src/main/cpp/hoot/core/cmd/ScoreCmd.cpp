@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/splitter/DualWaySplitter.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
@@ -40,6 +40,8 @@
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -54,7 +56,7 @@ public:
 
   virtual QString getName() const { return "score"; }
 
-  void attributeCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, shared_ptr<OsmMap> outMap,
+  void attributeCompare(OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap,
                         int& mean, int& confidence)
   {
     Tgs::Random::instance()->seed(100);
@@ -93,7 +95,7 @@ public:
     }
   }
 
-  void graphCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, double& mean,
+  void graphCompare(OsmMapPtr map1, OsmMapPtr map2, double& mean,
                     double& confidence)
   {
     Tgs::Random::instance()->seed(0);
@@ -109,7 +111,7 @@ public:
     mean += thisMean;
   }
 
-  void rasterCompare(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2, double& mean)
+  void rasterCompare(OsmMapPtr map1, OsmMapPtr map2, double& mean)
   {
     RasterComparator raster(map1, map2);
     raster.setPixelSize(5);
@@ -118,13 +120,13 @@ public:
 
   int compareMaps(QString in1, QString in2, QString out)
   {
-    shared_ptr<OsmMap> map1 = loadMap(in1);
-    shared_ptr<OsmMap> map2;
+    OsmMapPtr map1 = loadMap(in1);
+    OsmMapPtr map2;
     if (in2 != "")
     {
       map2 = loadMap(in2);
     }
-    shared_ptr<OsmMap> outMap = loadMap(out);
+    OsmMapPtr outMap = loadMap(out);
 
     int aic, aim;
     attributeCompare(map1, map2, outMap, aim, aic);
@@ -178,9 +180,9 @@ public:
     return 0;
   }
 
-  shared_ptr<OsmMap> loadMap(QString p)
+  OsmMapPtr loadMap(QString p)
   {
-    shared_ptr<OsmMap> result(new OsmMap());
+    OsmMapPtr result(new OsmMap());
     BaseCommand::loadMap(result, p, false);
 
     SuperfluousWayRemover(result).removeWays();

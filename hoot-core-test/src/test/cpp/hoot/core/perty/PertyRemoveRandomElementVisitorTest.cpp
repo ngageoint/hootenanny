@@ -36,8 +36,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -62,7 +62,7 @@ public:
 
   void runBasicTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -83,7 +83,7 @@ public:
     v.setRng(rng);
     map->visitRw(v);
 
-    CPPUNIT_ASSERT_EQUAL(96, (int)map->getNodeMap().size());
+    CPPUNIT_ASSERT_EQUAL(96, (int)map->getNodes().size());
   }
 
 };

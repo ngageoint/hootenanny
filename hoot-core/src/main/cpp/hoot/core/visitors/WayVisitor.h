@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYVISITOR_H
 #define WAYVISITOR_H
@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Base class to ease OsmMapConsumer usage.
@@ -43,7 +42,7 @@ class WayVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::WayVisitor"; }
+  static std::string className() { return "hoot::WayVisitor"; }
 
   WayVisitor() {}
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GETTAGVALUESVISITOR_H
 #define GETTAGVALUESVISITOR_H
@@ -32,7 +32,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Puts all values for the given key into a bag. If you want to filter based on type see
@@ -46,7 +45,7 @@ public:
    * @param split If split is set to true then the values in the tag are split before they're placed
    *  in the bag.
    */
-  GetTagValuesVisitor(QString key, set<QString>& bag, bool split=false) :
+  GetTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false) :
     _key(key),
     _bag(bag),
     _split(split)
@@ -59,7 +58,7 @@ public:
 private:
 
   QString _key;
-  set<QString>& _bag;
+  std::set<QString>& _bag;
   bool _split;
 };
 

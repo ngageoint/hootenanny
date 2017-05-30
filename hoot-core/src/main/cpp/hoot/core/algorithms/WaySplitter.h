@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYSPLITTER_H
@@ -38,18 +38,16 @@
 #include <tgs/SharedPtr.h>
 
 // Hoot
-#include <hoot/core/Units.h>
+#include <hoot/core/util/Units.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
-  // Standard
-  using namespace std;
 
-  class WaySubline;
-  class FindNodesInWayFactory;
-  class WayLocation;
+class WaySubline;
+class FindNodesInWayFactory;
+class WayLocation;
 
 class WaySplitter
 {
@@ -58,7 +56,7 @@ public:
   /**
    * Find the subline in a based on b
    */
-  WaySplitter(const OsmMapPtr& map, shared_ptr<Way> a);
+  WaySplitter(const OsmMapPtr& map, WayPtr a);
 
   /**
    * Creates a split for each way location (+1) and returns the new ways. The first result in the
@@ -71,20 +69,20 @@ public:
    *
    * @param wl A sorted list of split points. There may be duplicate split points.
    */
-  vector<WayPtr> createSplits(const vector<WayLocation>& wl);
+  std::vector<WayPtr> createSplits(const std::vector<WayLocation>& wl);
 
   /**
    * Given an input subline, break the way up into up to 3 pieces where one is the way that covers
    * the subline and the remaining pieces are put into the scraps vector.
    */
-  WayPtr createSubline(const WaySubline& subline, vector<WayPtr>& scraps);
+  WayPtr createSubline(const WaySubline& subline, std::vector<WayPtr>& scraps);
 
   /**
    * Given a split point on a way break the way into two smaller ways and return those ways as
    * an array. The old way will be removed from the source map and the two new ones will be added.
    * No nodes will be removed or replaced, but a new node may be added.
    */
-  vector< shared_ptr<Way> > split(WayLocation& splitPoint);
+  std::vector< WayPtr > split(WayLocation& splitPoint);
 
   /**
    * Splits way into smaller ways no bigger than maxSize. If a is smaller than maxSize already
@@ -93,17 +91,17 @@ public:
    * @param w The way to split.
    * @param maxSize the maximum size of the way in map units.
    */
-  static void split(const OsmMapPtr& map, const shared_ptr<Way>& w, double maxSize);
+  static void split(const OsmMapPtr& map, const WayPtr& w, double maxSize);
 
-  static vector< shared_ptr<Way> > split(const OsmMapPtr& map, shared_ptr<Way> a,
+  static std::vector< WayPtr > split(const OsmMapPtr& map, WayPtr a,
     WayLocation& splitPoint);
 
 private:
   OsmMapPtr _map;
-  shared_ptr<Way> _a;
-  auto_ptr<FindNodesInWayFactory> _nf;
+  WayPtr _a;
+  std::auto_ptr<FindNodesInWayFactory> _nf;
 
-  shared_ptr<Node> _createNode(const Coordinate& c);
+  NodePtr _createNode(const geos::geom::Coordinate& c);
 };
 
 }

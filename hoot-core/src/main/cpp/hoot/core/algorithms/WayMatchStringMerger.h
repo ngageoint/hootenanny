@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYSTRINGMERGER_H
 #define WAYSTRINGMERGER_H
@@ -105,7 +105,7 @@ public:
       inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
         const WayMatchStringMerger::SublineMappingPtr &t2) const
       {
-          return min(t1->getStart1(), t1->getEnd1()) < min(t2->getStart1(), t2->getEnd1());
+          return std::min(t1->getStart1(), t1->getEnd1()) < std::min(t2->getStart1(), t2->getEnd1());
       }
   };
 
@@ -116,12 +116,12 @@ public:
       inline bool operator()(const WayMatchStringMerger::SublineMappingPtr &t1,
         const WayMatchStringMerger::SublineMappingPtr &t2) const
       {
-        return min(t1->getStart2(), t1->getEnd2()) < min(t2->getStart2(), t2->getEnd2());
+        return std::min(t1->getStart2(), t1->getEnd2()) < std::min(t2->getStart2(), t2->getEnd2());
       }
   };
 
   WayMatchStringMerger(const OsmMapPtr& map, WayMatchStringMappingPtr mapping,
-    vector< pair<ElementId, ElementId> >& replaced);
+    std::vector< std::pair<ElementId, ElementId> >& replaced);
 
   /**
    * Alternative constructor. If this is used operations that modify the map will fail.
@@ -177,7 +177,7 @@ private:
 
   OsmMapPtr _map;
   WayMatchStringMappingPtr _mapping;
-  vector< pair<ElementId, ElementId> >& _replaced;
+  std::vector< std::pair<ElementId, ElementId> >& _replaced;
   QList<SublineMappingPtr> _sublineMappingOrder;
   QMap<ElementId, WayLocation> _nodeToWayLocation2;
   ConstTagMergerPtr _tagMerger;

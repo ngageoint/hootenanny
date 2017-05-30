@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayReviewCleanerOp.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/OsmMap.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -41,9 +43,9 @@ HighwayReviewCleanerOp::HighwayReviewCleanerOp()
 {
 }
 
-void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
+void HighwayReviewCleanerOp::apply(OsmMapPtr& map)
 {
-  RelationMap relations = map->getRelationMap();
+  RelationMap relations = map->getRelations();
 
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
@@ -63,7 +65,7 @@ void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
   }
 }
 
-bool HighwayReviewCleanerOp::_isBadHighwayReview(shared_ptr<OsmMap>& map,
+bool HighwayReviewCleanerOp::_isBadHighwayReview(OsmMapPtr& map,
   ReviewMarker::ReviewUid review)
 {
   if (ReviewMarker::getReviewType(map, review) == HighwayMatch::getHighwayMatchName())

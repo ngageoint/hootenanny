@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Python
@@ -33,8 +33,8 @@
 #include "PythonTranslator.h"
 
 // hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
 
@@ -127,7 +127,7 @@ bool PythonTranslator::isValidScript()
       _init();
       _initialized = true;
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
       // pass
     }
@@ -149,7 +149,7 @@ void PythonTranslator::_translateToOsm(Tags& tags, const char* layerName, const 
   PyObject* geomTypePy = PyString_FromString(geomType);
   PyObject* attrs = PyDict_New();
 
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); it++)
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
     QByteArray keyUtf8 = it.key().toUtf8();
     QByteArray valueUtf8 = it.value().toUtf8();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MapStatsWriter.h"
 
@@ -30,9 +30,9 @@
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/ops/stats/SingleStat.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/StatsComposer.h>
@@ -47,6 +47,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
+
+using namespace std;
 
 namespace hoot
 {
@@ -66,12 +68,14 @@ void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList n
   ConfigOptions configOptions;
   QString statsFormat = configOptions.getStatsFormat();
   QString statsOutput = configOptions.getStatsOutput();
-  QString statsClassName = configOptions.getStatsClass();
+  //no point in making this class configurable unless there ends up being more than one
+  //implementation available
+  QString statsClassName = "hoot::ScriptStatsComposer";
   QString statsScript = configOptions.getStatsScript();
-  LOG_DEBUG("stats format = " << statsFormat << endl);
-  LOG_DEBUG("stats outfile= " << statsOutput << endl);
-  LOG_DEBUG("stats className= " << statsClassName << endl);
-  LOG_DEBUG("stats script= " << statsScript << endl);
+  LOG_DEBUG("stats format = " << statsFormat << std::endl);
+  LOG_DEBUG("stats outfile= " << statsOutput << std::endl);
+  LOG_DEBUG("stats className= " << statsClassName << std::endl);
+  LOG_DEBUG("stats script= " << statsScript << std::endl);
 
   if(statsOutput=="") return; // just need to specify only output file, rest of args have default values
 
@@ -196,7 +200,7 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
     }
     pt::write_json(statsOutputFilePath.toStdString(), pt);
   }
-  catch (std::exception e)
+  catch (const std::exception& e)
   {
     QString reason = e.what();
     LOG_ERROR("Error writing JSON " + reason);
@@ -233,12 +237,12 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
 
   // read the conflation status from the file.
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-  shared_ptr<OsmMap> map(new OsmMap());
+  OsmMapPtr map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;
-  shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
   cso->apply(map);
   allStats.append(cso->getStats());
 

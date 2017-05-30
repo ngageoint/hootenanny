@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,14 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OpList.h"
 
 // hoot
 #include <hoot/core/io/ObjectInputStream.h>
 #include <hoot/core/io/ObjectOutputStream.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -40,7 +42,7 @@ OpList::OpList()
 {
 }
 
-void OpList::apply(shared_ptr<OsmMap>& map)
+void OpList::apply(boost::shared_ptr<OsmMap> &map)
 {
   for (size_t i = 0; i < _ops.size(); i++)
   {
@@ -59,7 +61,7 @@ void OpList::readObject(QDataStream& is)
   {
     LOG_INFO("Reading op.");
     OsmMapOperation* op = ois.readObject<OsmMapOperation>();
-    _ops.push_back(shared_ptr<OsmMapOperation>(op));
+    _ops.push_back(boost::shared_ptr<OsmMapOperation>(op));
   }
 }
 

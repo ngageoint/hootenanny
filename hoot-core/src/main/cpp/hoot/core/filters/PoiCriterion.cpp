@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiCriterion.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Element.h>
 
@@ -36,7 +36,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 
-bool PoiCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool PoiCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   return OsmSchema::getInstance().isPoi(*e);
 }

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveElementsVisitor.h"
 
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
@@ -44,7 +44,7 @@ RemoveElementsVisitor::RemoveElementsVisitor()
   setConfiguration(conf());
 }
 
-RemoveElementsVisitor::RemoveElementsVisitor(const shared_ptr<ElementCriterion>& filter) :
+RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter) :
   _filter(filter),
   _recursive(false)
 {
@@ -67,7 +67,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   assert(_filter);
   ElementType type = e->getElementType();
   long id = e->getId();
-  const shared_ptr<Element>& ee = _map->getElement(type, id);
+  const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
   if (_filter->isSatisfied(ee))
   {
@@ -82,8 +82,8 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void RemoveElementsVisitor::removeWays(shared_ptr<OsmMap> pMap,
-                       const shared_ptr<ElementCriterion>& pCrit)
+void RemoveElementsVisitor::removeWays(boost::shared_ptr<OsmMap> pMap,
+                       const boost::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v(pCrit);
   pMap->visitWaysRw(v);

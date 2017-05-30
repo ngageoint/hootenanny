@@ -1,0 +1,917 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5420599999999993" lon="-72.4840921979870387"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5420599999999993" lon="-72.4755191543535773"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5420599999999993" lon="-72.4804736216626537"/>
+    <node visible="true" id="2" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5419319760001002" lon="-72.4804290919999943"/>
+    <node visible="true" id="3" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5418378550000007" lon="-72.4803834579999062"/>
+    <node visible="true" id="4" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5417893679999999" lon="-72.4804005710000041"/>
+    <node visible="true" id="5" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5416353520000996" lon="-72.4803977179999066"/>
+    <node visible="true" id="6" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5414841879999983" lon="-72.4803834579999062"/>
+    <node visible="true" id="7" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5413216160001006" lon="-72.4803349709999054"/>
+    <node visible="true" id="8" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5412303470000985" lon="-72.4803349709999054"/>
+    <node visible="true" id="9" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5410506609999999" lon="-72.4803834579999062"/>
+    <node visible="true" id="10" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5409337229999984" lon="-72.4803806049998940"/>
+    <node visible="true" id="11" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5408224890000000" lon="-72.4803634929999987"/>
+    <node visible="true" id="12" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5407255160001014" lon="-72.4802864849999935"/>
+    <node visible="true" id="13" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5406741769999996" lon="-72.4802379979998932"/>
+    <node visible="true" id="14" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5406256910000984" lon="-72.4801666939999052"/>
+    <node visible="true" id="15" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5405715000001017" lon="-72.4800868340000051"/>
+    <node visible="true" id="16" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5404745270001001" lon="-72.4800212339999064"/>
+    <node visible="true" id="17" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5403747010001005" lon="-72.4799870089999985"/>
+    <node visible="true" id="18" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5402720240000995" lon="-72.4799898610000071"/>
+    <node visible="true" id="19" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5401836070000989" lon="-72.4799984169999050"/>
+    <node visible="true" id="20" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5400894860000989" lon="-72.4800012689998994"/>
+    <node visible="true" id="21" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5400210350000982" lon="-72.4799784519999974"/>
+    <node visible="true" id="22" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5398898360000004" lon="-72.4799214089999992"/>
+    <node visible="true" id="23" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5397443760000016" lon="-72.4798386969999058"/>
+    <node visible="true" id="24" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5395019430001007" lon="-72.4797360190000006"/>
+    <node visible="true" id="25" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5393336660001005" lon="-72.4796333419999002"/>
+    <node visible="true" id="26" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5392395450000009" lon="-72.4795506299999062"/>
+    <node visible="true" id="27" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5391169030000000" lon="-72.4794593609999964"/>
+    <node visible="true" id="28" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390028170000001" lon="-72.4793680920000014"/>
+    <node visible="true" id="29" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5274045449999996" lon="-72.4805859599999991"/>
+    <node visible="true" id="30" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5274587359999998" lon="-72.4805488819998942"/>
+    <node visible="true" id="31" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5276241600001015" lon="-72.4805032479999056"/>
+    <node visible="true" id="32" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5277553590000004" lon="-72.4804319440000029"/>
+    <node visible="true" id="33" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5278109760001009" lon="-72.4803977179999066"/>
+    <node visible="true" id="34" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5278665930000983" lon="-72.4803634929999987"/>
+    <node visible="true" id="35" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5280234610000001" lon="-72.4803178580000065"/>
+    <node visible="true" id="36" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5281375470000000" lon="-72.4803064499999010"/>
+    <node visible="true" id="37" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5282145559999982" lon="-72.4802665189998976"/>
+    <node visible="true" id="38" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5283115290000993" lon="-72.4802893370000021"/>
+    <node visible="true" id="39" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5283657200000995" lon="-72.4802437019998962"/>
+    <node visible="true" id="40" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5284370229999986" lon="-72.4802636670000027"/>
+    <node visible="true" id="41" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5285140310000003" lon="-72.4802322940000039"/>
+    <node visible="true" id="42" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5286224130000008" lon="-72.4802037719999959"/>
+    <node visible="true" id="43" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5286937170000989" lon="-72.4801952159999985"/>
+    <node visible="true" id="44" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5287621690000002" lon="-72.4801381729999008"/>
+    <node visible="true" id="45" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5287992460001014" lon="-72.4800469039999058"/>
+    <node visible="true" id="46" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5288192119999984" lon="-72.4799955649999958"/>
+    <node visible="true" id="47" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5288448810001007" lon="-72.4799927129999020"/>
+    <node visible="true" id="48" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5289133329999984" lon="-72.4800183819999972"/>
+    <node visible="true" id="49" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5289190370000014" lon="-72.4799927129999020"/>
+    <node visible="true" id="50" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5289190370000014" lon="-72.4799527830000017"/>
+    <node visible="true" id="51" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5289247410000009" lon="-72.4798900360000005"/>
+    <node visible="true" id="52" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5289447060001002" lon="-72.4798187319998988"/>
+    <node visible="true" id="53" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5289646710000007" lon="-72.4797673930000030"/>
+    <node visible="true" id="54" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5289988970001005" lon="-72.4797074979999962"/>
+    <node visible="true" id="55" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5290388270000008" lon="-72.4796647159999026"/>
+    <node visible="true" id="56" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5290816090001016" lon="-72.4796304900000052"/>
+    <node visible="true" id="57" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5291614700001013" lon="-72.4795620379999974"/>
+    <node visible="true" id="58" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5292099559999990" lon="-72.4794650649998999"/>
+    <node visible="true" id="59" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5292413300001009" lon="-72.4793680920000014"/>
+    <node visible="true" id="60" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5292841119999991" lon="-72.4792682669999948"/>
+    <node visible="true" id="61" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5293040770000985" lon="-72.4791855539999972"/>
+    <node visible="true" id="62" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5292898160001016" lon="-72.4791256590000046"/>
+    <node visible="true" id="63" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5293040770000985" lon="-72.4791085460000062"/>
+    <node visible="true" id="64" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5293354510001009" lon="-72.4790828769998967"/>
+    <node visible="true" id="65" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5293383029999994" lon="-72.4790315380000010"/>
+    <node visible="true" id="66" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5293497120001014" lon="-72.4789659390000054"/>
+    <node visible="true" id="67" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5293953460001006" lon="-72.4788689649999043"/>
+    <node visible="true" id="68" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5294381279999989" lon="-72.4787406189998933"/>
+    <node visible="true" id="69" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5294752060000008" lon="-72.4786322369998999"/>
+    <node visible="true" id="70" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5294809110000998" lon="-72.4785495249999059"/>
+    <node visible="true" id="71" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5294809110000998" lon="-72.4784810729999975"/>
+    <node visible="true" id="72" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5294980229999986" lon="-72.4784639599998997"/>
+    <node visible="true" id="73" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5295636230001008" lon="-72.4784953339999021"/>
+    <node visible="true" id="74" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5296577440001009" lon="-72.4785808980000041"/>
+    <node visible="true" id="75" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5297490130000995" lon="-72.4786693149999053"/>
+    <node visible="true" id="76" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5298060560000017" lon="-72.4787520269999987"/>
+    <node visible="true" id="77" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5298802119999984" lon="-72.4787805490000068"/>
+    <node visible="true" id="78" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5299572200000000" lon="-72.4787719920000058"/>
+    <node visible="true" id="79" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5300427839999990" lon="-72.4787548789999931"/>
+    <node visible="true" id="80" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5301254970000002" lon="-72.4787834010000012"/>
+    <node visible="true" id="81" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5301796880000005" lon="-72.4788261829999954"/>
+    <node visible="true" id="82" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5302823650001010" lon="-72.4788518529999948"/>
+    <node visible="true" id="83" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5304877200000995" lon="-72.4788375919999055"/>
+    <node visible="true" id="84" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5306103620001004" lon="-72.4788204790000066"/>
+    <node visible="true" id="85" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5307101880000999" lon="-72.4787862529999956"/>
+    <node visible="true" id="86" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5308299779999999" lon="-72.4786921319999067"/>
+    <node visible="true" id="87" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5308642040000997" lon="-72.4786065680000036"/>
+    <node visible="true" id="88" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5308870210001011" lon="-72.4785523769999998"/>
+    <node visible="true" id="89" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5310096640000985" lon="-72.4785095939999024"/>
+    <node visible="true" id="90" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5310838190000986" lon="-72.4784411429998983"/>
+    <node visible="true" id="91" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5311237500000985" lon="-72.4783584300000001"/>
+    <node visible="true" id="92" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5311494189999983" lon="-72.4783327609999048"/>
+    <node visible="true" id="93" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5312520960000988" lon="-72.4782956829998994"/>
+    <node visible="true" id="94" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5313319570000985" lon="-72.4782243789999967"/>
+    <node visible="true" id="95" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5314061130000987" lon="-72.4781045889998978"/>
+    <node visible="true" id="96" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5315030860000007" lon="-72.4779905029999014"/>
+    <node visible="true" id="97" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5316000589999987" lon="-72.4779619810000071"/>
+    <node visible="true" id="98" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5317369620000001" lon="-72.4779277559999997"/>
+    <node visible="true" id="99" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5318481960001016" lon="-72.4778935299999034"/>
+    <node visible="true" id="100" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5319993600000998" lon="-72.4778307819999981"/>
+    <node visible="true" id="101" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5321448199999992" lon="-72.4777509219999985"/>
+    <node visible="true" id="102" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5322931320000990" lon="-72.4776682099999050"/>
+    <node visible="true" id="103" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5323473220000992" lon="-72.4776054630000033"/>
+    <node visible="true" id="104" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5323901050000011" lon="-72.4775341590000011"/>
+    <node visible="true" id="105" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5324471480000987" lon="-72.4773972560000033"/>
+    <node visible="true" id="106" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5325013390000990" lon="-72.4772746130000058"/>
+    <node visible="true" id="107" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5326097200000000" lon="-72.4771576749999014"/>
+    <node visible="true" id="108" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5327722930000007" lon="-72.4769979539999980"/>
+    <node visible="true" id="109" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5328778219999997" lon="-72.4768125650000030"/>
+    <node visible="true" id="110" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5330033170001016" lon="-72.4766243229998963"/>
+    <node visible="true" id="111" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5330375429999989" lon="-72.4765302019999069"/>
+    <node visible="true" id="112" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5330632120001013" lon="-72.4764474889999946"/>
+    <node visible="true" id="113" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5331174030001016" lon="-72.4763419599998997"/>
+    <node visible="true" id="114" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5331601849999998" lon="-72.4762877689999954"/>
+    <node visible="true" id="115" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5332115239999986" lon="-72.4762792119999943"/>
+    <node visible="true" id="116" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5332742709999998" lon="-72.4762963250000070"/>
+    <node visible="true" id="117" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5333284620000001" lon="-72.4763077340000024"/>
+    <node visible="true" id="118" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5333712450001009" lon="-72.4762906210000040"/>
+    <node visible="true" id="119" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5334111750000012" lon="-72.4762478389998961"/>
+    <node visible="true" id="120" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5334396960001015" lon="-72.4761736829999990"/>
+    <node visible="true" id="121" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5334511050000010" lon="-72.4760852659999983"/>
+    <node visible="true" id="122" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5334511050000010" lon="-72.4759997019999958"/>
+    <node visible="true" id="123" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5334596610001014" lon="-72.4759255459999991"/>
+    <node visible="true" id="124" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5334796259999983" lon="-72.4758856149999957"/>
+    <node visible="true" id="125" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5335423739999996" lon="-72.4758970239999059"/>
+    <node visible="true" id="126" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5336165300000992" lon="-72.4759084330000007"/>
+    <node visible="true" id="127" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5336935380000014" lon="-72.4759255459999991"/>
+    <node visible="true" id="128" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5337505810000991" lon="-72.4759426579999939"/>
+    <node visible="true" id="129" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5338047720000993" lon="-72.4759683279999933"/>
+    <node visible="true" id="130" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5338561099999986" lon="-72.4760111099999023"/>
+    <node visible="true" id="131" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5339274140001002" lon="-72.4760396319999955"/>
+    <node visible="true" id="132" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5341497110001008" lon="-72.4760287349999004"/>
+    <node visible="true" id="133" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5342183330001014" lon="-72.4760253709999063"/>
+    <node visible="true" id="134" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5344408010000983" lon="-72.4759825889999973"/>
+    <node visible="true" id="135" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5346404520001009" lon="-72.4759426579999939"/>
+    <node visible="true" id="136" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5348486590000014" lon="-72.4758827630000013"/>
+    <node visible="true" id="137" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5350853869999987" lon="-72.4758086070000047"/>
+    <node visible="true" id="138" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5352679249999994" lon="-72.4757743819998979"/>
+    <node visible="true" id="139" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5354105330000998" lon="-72.4757658249998968"/>
+    <node visible="true" id="140" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5355160620000987" lon="-72.4758086070000047"/>
+    <node visible="true" id="141" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5357727560000001" lon="-72.4759455110000061"/>
+    <node visible="true" id="142" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5359609980000997" lon="-72.4760196669999033"/>
+    <node visible="true" id="143" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5361777610000011" lon="-72.4761251959998987"/>
+    <node visible="true" id="144" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5364087849999990" lon="-72.4762050559999977"/>
+    <node visible="true" id="145" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5366112880000991" lon="-72.4762763600000000"/>
+    <node visible="true" id="146" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5368023820001007" lon="-72.4763105859999968"/>
+    <node visible="true" id="147" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5369649549999984" lon="-72.4763048819999938"/>
+    <node visible="true" id="148" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5372016829999993" lon="-72.4762592470000016"/>
+    <node visible="true" id="149" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5373385870000007" lon="-72.4761736829999990"/>
+    <node visible="true" id="150" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5375211240000013" lon="-72.4760852659999983"/>
+    <node visible="true" id="151" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5376009850000010" lon="-72.4760339269999037"/>
+    <node visible="true" id="152" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5377321840000988" lon="-72.4760054059999987"/>
+    <node visible="true" id="153" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378776430001011" lon="-72.4759825889999973"/>
+    <node visible="true" id="154" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379945810000990" lon="-72.4759939970000033"/>
+    <node visible="true" id="155" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5381172240001000" lon="-72.4760111099999023"/>
+    <node visible="true" id="156" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5382097940000996" lon="-72.4759934780000066"/>
+    <node visible="true" id="157" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5382234040000995" lon="-72.4759908850000016"/>
+    <node visible="true" id="158" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5382370140000994" lon="-72.4759882929999009"/>
+    <node visible="true" id="159" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5383967349999992" lon="-72.4759626240000046"/>
+    <node visible="true" id="160" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5384637600000985" lon="-72.4759626240000046"/>
+    <node visible="true" id="161" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385307859999990" lon="-72.4759626240000046"/>
+    <node visible="true" id="162" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386306109999985" lon="-72.4759455110000061"/>
+    <node visible="true" id="163" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387332889999996" lon="-72.4759055809999069"/>
+    <node visible="true" id="211" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5418292979999997" lon="-72.4841283319999974"/>
+    <node visible="true" id="212" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5414955970001003" lon="-72.4841853749999956"/>
+    <node visible="true" id="213" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5412331990000006" lon="-72.4842367140000050"/>
+    <node visible="true" id="214" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5410934430000012" lon="-72.4842823479999936"/>
+    <node visible="true" id="215" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5410306960000995" lon="-72.4843336869999035"/>
+    <node visible="true" id="216" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5409622450000988" lon="-72.4844306600000010"/>
+    <node visible="true" id="217" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5408823839999997" lon="-72.4846160499999002"/>
+    <node visible="true" id="218" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5407996719999986" lon="-72.4848214049999058"/>
+    <node visible="true" id="219" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5407055509999985" lon="-72.4848727429999968"/>
+    <node visible="true" id="220" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5404545620000007" lon="-72.4849754209999020"/>
+    <node visible="true" id="221" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5403119540000993" lon="-72.4850182029999957"/>
+    <node visible="true" id="222" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5400666690000016" lon="-72.4849754209999020"/>
+    <node visible="true" id="223" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5399069490000983" lon="-72.4849611599999974"/>
+    <node visible="true" id="224" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5397871579999993" lon="-72.4849868289999932"/>
+    <node visible="true" id="225" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5394220830000016" lon="-72.4850524289998930"/>
+    <node visible="true" id="226" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5392423970000984" lon="-72.4850809499998974"/>
+    <node visible="true" id="227" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5391340160001015" lon="-72.4850952110000009"/>
+    <node visible="true" id="228" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390712680000007" lon="-72.4850609850000041"/>
+    <node visible="true" id="229" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390541560000983" lon="-72.4849868289999932"/>
+    <node visible="true" id="230" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390741209999987" lon="-72.4848271089999940"/>
+    <node visible="true" id="231" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390684160000987" lon="-72.4847672140000014"/>
+    <node visible="true" id="232" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390370430000999" lon="-72.4846959099999992"/>
+    <node visible="true" id="233" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5389914080001006" lon="-72.4846588319999938"/>
+    <node visible="true" id="234" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5389001390000985" lon="-72.4846531279999056"/>
+    <node visible="true" id="235" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387404190000993" lon="-72.4846616839999029"/>
+    <node visible="true" id="236" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386092200001009" lon="-72.4846787970000008"/>
+    <node visible="true" id="237" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385122469999999" lon="-72.4846388669999016"/>
+    <node visible="true" id="238" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5384979859999994" lon="-72.4845647110000044"/>
+    <node visible="true" id="239" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385150990001009" lon="-72.4844506249999938"/>
+    <node visible="true" id="240" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385464730000997" lon="-72.4843479479998933"/>
+    <node visible="true" id="241" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385949590000010" lon="-72.4841540009999932"/>
+    <node visible="true" id="242" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386092200001009" lon="-72.4840056890000000"/>
+    <node visible="true" id="243" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386234810001014" lon="-72.4838402649999978"/>
+    <node visible="true" id="244" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386320370000988" lon="-72.4837033609999963"/>
+    <node visible="true" id="245" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386206290000004" lon="-72.4836377619999013"/>
+    <node visible="true" id="246" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385864030000995" lon="-72.4835949800000066"/>
+    <node visible="true" id="247" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385236550000982" lon="-72.4835721620000015"/>
+    <node visible="true" id="248" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5384466470001001" lon="-72.4835721620000015"/>
+    <node visible="true" id="249" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5383154479999988" lon="-72.4835493450000001"/>
+    <node visible="true" id="250" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5381015369999993" lon="-72.4834923019999025"/>
+    <node visible="true" id="251" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378990340001018" lon="-72.4834523720000021"/>
+    <node visible="true" id="252" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378505480000015" lon="-72.4834238509998983"/>
+    <node visible="true" id="253" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378305830001011" lon="-72.4833810679999999"/>
+    <node visible="true" id="254" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378419910001000" lon="-72.4832897999999943"/>
+    <node visible="true" id="255" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378762170001004" lon="-72.4831700089999060"/>
+    <node visible="true" id="256" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378904780001008" lon="-72.4829931759999937"/>
+    <node visible="true" id="257" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379047390001013" lon="-72.4828334549999056"/>
+    <node visible="true" id="258" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378591040000984" lon="-72.4826566219999933"/>
+    <node visible="true" id="259" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378419910001000" lon="-72.4824911969999022"/>
+    <node visible="true" id="260" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378562520000010" lon="-72.4823970759999980"/>
+    <node visible="true" id="261" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378790689999988" lon="-72.4822829900000016"/>
+    <node visible="true" id="262" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379075910000992" lon="-72.4821803130000006"/>
+    <node visible="true" id="263" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379189990001016" lon="-72.4820177399999039"/>
+    <node visible="true" id="264" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379104430000012" lon="-72.4818352029999033"/>
+    <node visible="true" id="265" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378876259999998" lon="-72.4816269949998997"/>
+    <node visible="true" id="266" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379189990001016" lon="-72.4814701269999944"/>
+    <node visible="true" id="267" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379389639999985" lon="-72.4813332239999966"/>
+    <node visible="true" id="268" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379389639999985" lon="-72.4811079039998987"/>
+    <node visible="true" id="269" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379332600000986" lon="-72.4809567399999963"/>
+    <node visible="true" id="270" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379275560000991" lon="-72.4807627940000003"/>
+    <node visible="true" id="271" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379475209999995" lon="-72.4805973689999945"/>
+    <node visible="true" id="272" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379960070000998" lon="-72.4804946919999935"/>
+    <node visible="true" id="273" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5380387900000017" lon="-72.4803749009999052"/>
+    <node visible="true" id="274" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5380844240000009" lon="-72.4801609899999022"/>
+    <node visible="true" id="275" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5380986850000014" lon="-72.4800269389999983"/>
+    <node visible="true" id="276" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5380929809999984" lon="-72.4798843309998944"/>
+    <node visible="true" id="277" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5380758680000994" lon="-72.4797531319999990"/>
+    <node visible="true" id="278" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5380986850000014" lon="-72.4796903849999978"/>
+    <node visible="true" id="279" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5381985100000009" lon="-72.4796048200000058"/>
+    <node visible="true" id="280" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5383724910001000" lon="-72.4795363690000016"/>
+    <node visible="true" id="281" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385921070000990" lon="-72.4794536560000040"/>
+    <node visible="true" id="282" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387774970001011" lon="-72.4793566829999065"/>
+    <node visible="true" id="283" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5389286610000994" lon="-72.4792568579999994"/>
+    <node visible="true" id="284" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5389971120001000" lon="-72.4791941109999982"/>
+    <node visible="true" id="285" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390313380000009" lon="-72.4791285109998995"/>
+    <node visible="true" id="286" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390113730001005" lon="-72.4790172769999970"/>
+    <node visible="true" id="287" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5389771470000007" lon="-72.4789345650000030"/>
+    <node visible="true" id="288" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5389229570001000" lon="-72.4788718180000018"/>
+    <node visible="true" id="289" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388174270000015" lon="-72.4787377659998953"/>
+    <node visible="true" id="290" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387889050000005" lon="-72.4786664629999962"/>
+    <node visible="true" id="291" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387318620000983" lon="-72.4785666370000001"/>
+    <node visible="true" id="292" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386833760001011" lon="-72.4784782210000031"/>
+    <node visible="true" id="293" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386634110001012" lon="-72.4784026389999951"/>
+    <node visible="true" id="294" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386434459999982" lon="-72.4783270569999019"/>
+    <node visible="true" id="295" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385978110000984" lon="-72.4782272309999058"/>
+    <node visible="true" id="296" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385464730000997" lon="-72.4780732149998954"/>
+    <node visible="true" id="297" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385008380001004" lon="-72.4779306079999941"/>
+    <node visible="true" id="298" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5384780210000990" lon="-72.4777794440000065"/>
+    <node visible="true" id="299" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5384894299999985" lon="-72.4776767659999024"/>
+    <node visible="true" id="300" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385122469999999" lon="-72.4775969060000023"/>
+    <node visible="true" id="301" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385635860001017" lon="-72.4775113419999997"/>
+    <node visible="true" id="302" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386177759999988" lon="-72.4773915509999966"/>
+    <node visible="true" id="303" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386548540001002" lon="-72.4772375350000004"/>
+    <node visible="true" id="304" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386748190001001" lon="-72.4771833439999966"/>
+    <node visible="true" id="305" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387404190000993" lon="-72.4770664059999064"/>
+    <node visible="true" id="306" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387746450000996" lon="-72.4769779890000052"/>
+    <node visible="true" id="307" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388231310001004" lon="-72.4768639029999946"/>
+    <node visible="true" id="308" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388373920001008" lon="-72.4767983039998995"/>
+    <node visible="true" id="309" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388459480001018" lon="-72.4767127389998933"/>
+    <node visible="true" id="310" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388231310001004" lon="-72.4765587229999966"/>
+    <node visible="true" id="311" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388031660000010" lon="-72.4764161159998963"/>
+    <node visible="true" id="312" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387917579999986" lon="-72.4763334029998987"/>
+    <node visible="true" id="313" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387889050000005" lon="-72.4761793869999025"/>
+    <node visible="true" id="314" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387917580001016" lon="-72.4760168139999053"/>
+    <node visible="true" id="315" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388102970001007" lon="-72.4758941719999967"/>
+    <node visible="true" id="316" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388174270000015" lon="-72.4758200159999006"/>
+    <node visible="true" id="317" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388316880001014" lon="-72.4757144860000011"/>
+    <node visible="true" id="318" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388145750000994" lon="-72.4756374779999959"/>
+    <node visible="true" id="319" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387546800000997" lon="-72.4755290969999066"/>
+    <node visible="true" id="320" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5387204539999999" lon="-72.4754406800000055"/>
+    <node visible="true" id="321" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386862280000990" lon="-72.4753522629999054"/>
+    <node visible="true" id="322" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5386263329999998" lon="-72.4752353249999999"/>
+    <node visible="true" id="323" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5385664380000001" lon="-72.4751240909998984"/>
+    <node visible="true" id="324" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5384951340001010" lon="-72.4750128569999958"/>
+    <node visible="true" id="325" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5384352389999982" lon="-72.4749158839999978"/>
+    <node visible="true" id="326" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5383610830000016" lon="-72.4748559889999058"/>
+    <node visible="true" id="327" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5382726660001005" lon="-72.4748303199999953"/>
+    <node visible="true" id="328" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5381386150000012" lon="-72.4747419029998952"/>
+    <node visible="true" id="329" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5380302330000006" lon="-72.4746249650000038"/>
+    <node visible="true" id="330" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5379589300001015" lon="-72.4744880610000024"/>
+    <node visible="true" id="331" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378676610000994" lon="-72.4743540099999990"/>
+    <node visible="true" id="332" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5378049130001017" lon="-72.4742427759999970"/>
+    <node visible="true" id="832" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5401180080000003" lon="-72.4742056989999952"/>
+    <node visible="true" id="833" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5401322690000008" lon="-72.4742770019999938"/>
+    <node visible="true" id="834" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5401807550001010" lon="-72.4743426019999930"/>
+    <node visible="true" id="835" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5402035720000988" lon="-72.4744024969999998"/>
+    <node visible="true" id="836" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5402263900000008" lon="-72.4744766529999964"/>
+    <node visible="true" id="837" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5402435020000986" lon="-72.4745764780000030"/>
+    <node visible="true" id="838" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5402777279999995" lon="-72.4746620429999950"/>
+    <node visible="true" id="839" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5403918139999995" lon="-72.4747732769998976"/>
+    <node visible="true" id="840" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5404802310000996" lon="-72.4748616929999940"/>
+    <node visible="true" id="841" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5405116050000984" lon="-72.4749301450000019"/>
+    <node visible="true" id="842" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5405372739999983" lon="-72.4750870129998930"/>
+    <node visible="true" id="843" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5405715000001017" lon="-72.4753066290000021"/>
+    <node visible="true" id="844" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5406142819999999" lon="-72.4755462090000009"/>
+    <node visible="true" id="855" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5418663760000015" lon="-72.4755433569999070"/>
+    <node visible="true" id="856" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5416125350001018" lon="-72.4755519139998938"/>
+    <node visible="true" id="857" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5414299970000016" lon="-72.4755747309998952"/>
+    <node visible="true" id="858" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5412474600000010" lon="-72.4755975479998966"/>
+    <node visible="true" id="859" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5409921920000009" lon="-72.4756389039998936"/>
+    <node visible="true" id="860" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5407369250000009" lon="-72.4756802609999937"/>
+    <node visible="true" id="861" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5406285749999995" lon="-72.4756865290000007"/>
+    <node visible="true" id="862" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5403918139999995" lon="-72.4757002260000007"/>
+    <node visible="true" id="863" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5401151560000983" lon="-72.4756631479999953"/>
+    <node visible="true" id="864" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5399411739999991" lon="-72.4756602959999015"/>
+    <node visible="true" id="865" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5397130019999992" lon="-72.4756888169999058"/>
+    <node visible="true" id="866" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5395390210000990" lon="-72.4757201909998940"/>
+    <node visible="true" id="867" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5393165529999990" lon="-72.4757116339998930"/>
+    <node visible="true" id="868" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5390341899999989" lon="-72.4757344509998944"/>
+    <node visible="true" id="869" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5388267669999998" lon="-72.4757508989999053"/>
+    <node visible="true" id="871" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5377945877409012" lon="-72.4741999999999962"/>
+    <node visible="true" id="873" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5401173241183983" lon="-72.4741999999999962"/>
+    <node visible="true" id="874" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445" lat="18.5274010000000011" lon="-72.4805895049999975"/>
+    <node visible="true" id="10964" timestamp="2016-12-02T19:54:29Z" version="1" changeset="5269" lat="18.5406254373243016" lon="-72.4814985829827947">
+        <tag k="denomination" v="catholic"/>
+        <tag k="religion" v="christian"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="10965" timestamp="2016-12-02T19:54:29Z" version="1" changeset="5269" lat="18.5414816997985987" lon="-72.4794084614196947"/>
+    <node visible="true" id="10966" timestamp="2016-12-02T19:54:29Z" version="1" changeset="5269" lat="18.5409434781728990" lon="-72.4794858733294944"/>
+    <node visible="true" id="10967" timestamp="2016-12-02T19:54:29Z" version="1" changeset="5269" lat="18.5410413367765017" lon="-72.4789955979011040"/>
+    <node visible="true" id="10968" timestamp="2016-12-02T19:54:29Z" version="1" changeset="5269" lat="18.5414083060403989" lon="-72.4789697939311992"/>
+    <node visible="true" id="10969" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5416440557884989" lon="-72.4785972285405933"/>
+    <node visible="true" id="10970" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5414930405820009" lon="-72.4779123112887049"/>
+    <node visible="true" id="10971" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5412665175219011" lon="-72.4778884188264954"/>
+    <node visible="true" id="10972" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5412589667480994" lon="-72.4774185337351042"/>
+    <node visible="true" id="10973" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5398545170091005" lon="-72.4774583545055009"/>
+    <node visible="true" id="10974" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5395524832986993" lon="-72.4777052432823012"/>
+    <node visible="true" id="10975" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5392428981914001" lon="-72.4778963829805036"/>
+    <node visible="true" id="10976" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5392579999170017" lon="-72.4791148985565030"/>
+    <node visible="true" id="10977" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5399375761858991" lon="-72.4797838875002043"/>
+    <node visible="true" id="10978" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5404585828279984" lon="-72.4792582533302010"/>
+    <node visible="true" id="10979" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5403981763422010" lon="-72.4790352570155960"/>
+    <node visible="true" id="10980" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5408210212941000" lon="-72.4791069344023953"/>
+    <node visible="true" id="10981" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5408965292110999" lon="-72.4790671136319986"/>
+    <node visible="true" id="10982" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270" lat="18.5408059197066990" lon="-72.4787883682387957"/>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="283"/>
+        <nd ref="282"/>
+        <nd ref="281"/>
+        <nd ref="280"/>
+        <nd ref="279"/>
+        <nd ref="278"/>
+        <nd ref="277"/>
+        <nd ref="276"/>
+        <nd ref="275"/>
+        <nd ref="274"/>
+        <nd ref="273"/>
+        <nd ref="272"/>
+        <nd ref="271"/>
+        <nd ref="270"/>
+        <nd ref="269"/>
+        <nd ref="268"/>
+        <nd ref="267"/>
+        <nd ref="266"/>
+        <nd ref="265"/>
+        <nd ref="264"/>
+        <nd ref="263"/>
+        <nd ref="262"/>
+        <nd ref="261"/>
+        <nd ref="260"/>
+        <nd ref="259"/>
+        <nd ref="258"/>
+        <nd ref="257"/>
+        <nd ref="256"/>
+        <nd ref="255"/>
+        <nd ref="254"/>
+        <nd ref="253"/>
+        <nd ref="252"/>
+        <nd ref="251"/>
+        <nd ref="250"/>
+        <nd ref="249"/>
+        <nd ref="248"/>
+        <nd ref="247"/>
+        <nd ref="246"/>
+        <nd ref="245"/>
+        <nd ref="244"/>
+        <nd ref="243"/>
+        <nd ref="242"/>
+        <nd ref="241"/>
+        <nd ref="240"/>
+        <nd ref="239"/>
+        <nd ref="238"/>
+        <nd ref="237"/>
+        <nd ref="236"/>
+        <nd ref="235"/>
+        <nd ref="234"/>
+        <nd ref="233"/>
+        <nd ref="232"/>
+        <nd ref="231"/>
+        <nd ref="230"/>
+        <nd ref="229"/>
+        <nd ref="228"/>
+        <nd ref="227"/>
+        <nd ref="226"/>
+        <nd ref="225"/>
+        <nd ref="224"/>
+        <nd ref="223"/>
+        <nd ref="222"/>
+        <nd ref="221"/>
+        <nd ref="220"/>
+        <nd ref="219"/>
+        <nd ref="218"/>
+        <nd ref="217"/>
+        <nd ref="216"/>
+        <nd ref="215"/>
+        <nd ref="214"/>
+        <nd ref="213"/>
+        <nd ref="212"/>
+        <nd ref="211"/>
+        <nd ref="-3"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="3"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="861"/>
+        <nd ref="860"/>
+        <nd ref="859"/>
+        <nd ref="858"/>
+        <nd ref="857"/>
+        <nd ref="856"/>
+        <nd ref="855"/>
+        <nd ref="-2"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="5"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="283"/>
+        <nd ref="28"/>
+        <nd ref="27"/>
+        <nd ref="26"/>
+        <nd ref="25"/>
+        <nd ref="24"/>
+        <nd ref="23"/>
+        <nd ref="22"/>
+        <nd ref="21"/>
+        <nd ref="20"/>
+        <nd ref="19"/>
+        <nd ref="18"/>
+        <nd ref="17"/>
+        <nd ref="16"/>
+        <nd ref="15"/>
+        <nd ref="14"/>
+        <nd ref="13"/>
+        <nd ref="12"/>
+        <nd ref="11"/>
+        <nd ref="10"/>
+        <nd ref="9"/>
+        <nd ref="8"/>
+        <nd ref="7"/>
+        <nd ref="6"/>
+        <nd ref="5"/>
+        <nd ref="4"/>
+        <nd ref="3"/>
+        <nd ref="2"/>
+        <nd ref="-1"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="3"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="8" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445">
+        <nd ref="869"/>
+        <nd ref="868"/>
+        <nd ref="867"/>
+        <nd ref="866"/>
+        <nd ref="865"/>
+        <nd ref="864"/>
+        <nd ref="863"/>
+        <nd ref="862"/>
+        <nd ref="861"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="5"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="9" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445">
+        <nd ref="869"/>
+        <nd ref="316"/>
+        <nd ref="315"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="3"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="13" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445">
+        <nd ref="871"/>
+        <nd ref="332"/>
+        <nd ref="331"/>
+        <nd ref="330"/>
+        <nd ref="329"/>
+        <nd ref="328"/>
+        <nd ref="327"/>
+        <nd ref="326"/>
+        <nd ref="325"/>
+        <nd ref="324"/>
+        <nd ref="323"/>
+        <nd ref="322"/>
+        <nd ref="321"/>
+        <nd ref="320"/>
+        <nd ref="319"/>
+        <nd ref="318"/>
+        <nd ref="317"/>
+        <nd ref="869"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="3"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="15" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445">
+        <nd ref="861"/>
+        <nd ref="844"/>
+        <nd ref="843"/>
+        <nd ref="842"/>
+        <nd ref="841"/>
+        <nd ref="840"/>
+        <nd ref="839"/>
+        <nd ref="838"/>
+        <nd ref="837"/>
+        <nd ref="836"/>
+        <nd ref="835"/>
+        <nd ref="834"/>
+        <nd ref="833"/>
+        <nd ref="832"/>
+        <nd ref="873"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="5"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="16" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445">
+        <nd ref="315"/>
+        <nd ref="163"/>
+        <nd ref="162"/>
+        <nd ref="161"/>
+        <nd ref="160"/>
+        <nd ref="159"/>
+        <nd ref="158"/>
+        <nd ref="157"/>
+        <nd ref="156"/>
+        <nd ref="155"/>
+        <nd ref="154"/>
+        <nd ref="153"/>
+        <nd ref="152"/>
+        <nd ref="151"/>
+        <nd ref="150"/>
+        <nd ref="149"/>
+        <nd ref="148"/>
+        <nd ref="147"/>
+        <nd ref="146"/>
+        <nd ref="145"/>
+        <nd ref="144"/>
+        <nd ref="143"/>
+        <nd ref="142"/>
+        <nd ref="141"/>
+        <nd ref="140"/>
+        <nd ref="139"/>
+        <nd ref="138"/>
+        <nd ref="137"/>
+        <nd ref="136"/>
+        <nd ref="135"/>
+        <nd ref="134"/>
+        <nd ref="133"/>
+        <nd ref="132"/>
+        <nd ref="131"/>
+        <nd ref="130"/>
+        <nd ref="129"/>
+        <nd ref="128"/>
+        <nd ref="127"/>
+        <nd ref="126"/>
+        <nd ref="125"/>
+        <nd ref="124"/>
+        <nd ref="123"/>
+        <nd ref="122"/>
+        <nd ref="121"/>
+        <nd ref="120"/>
+        <nd ref="119"/>
+        <nd ref="118"/>
+        <nd ref="117"/>
+        <nd ref="116"/>
+        <nd ref="115"/>
+        <nd ref="114"/>
+        <nd ref="113"/>
+        <nd ref="112"/>
+        <nd ref="111"/>
+        <nd ref="110"/>
+        <nd ref="109"/>
+        <nd ref="108"/>
+        <nd ref="107"/>
+        <nd ref="106"/>
+        <nd ref="105"/>
+        <nd ref="104"/>
+        <nd ref="103"/>
+        <nd ref="102"/>
+        <nd ref="101"/>
+        <nd ref="100"/>
+        <nd ref="99"/>
+        <nd ref="98"/>
+        <nd ref="97"/>
+        <nd ref="96"/>
+        <nd ref="95"/>
+        <nd ref="94"/>
+        <nd ref="93"/>
+        <nd ref="92"/>
+        <nd ref="91"/>
+        <nd ref="90"/>
+        <nd ref="89"/>
+        <nd ref="88"/>
+        <nd ref="87"/>
+        <nd ref="86"/>
+        <nd ref="85"/>
+        <nd ref="84"/>
+        <nd ref="83"/>
+        <nd ref="82"/>
+        <nd ref="81"/>
+        <nd ref="80"/>
+        <nd ref="79"/>
+        <nd ref="78"/>
+        <nd ref="77"/>
+        <nd ref="76"/>
+        <nd ref="75"/>
+        <nd ref="74"/>
+        <nd ref="73"/>
+        <nd ref="72"/>
+        <nd ref="71"/>
+        <nd ref="70"/>
+        <nd ref="69"/>
+        <nd ref="68"/>
+        <nd ref="67"/>
+        <nd ref="66"/>
+        <nd ref="65"/>
+        <nd ref="64"/>
+        <nd ref="63"/>
+        <nd ref="62"/>
+        <nd ref="61"/>
+        <nd ref="60"/>
+        <nd ref="59"/>
+        <nd ref="58"/>
+        <nd ref="57"/>
+        <nd ref="56"/>
+        <nd ref="55"/>
+        <nd ref="54"/>
+        <nd ref="53"/>
+        <nd ref="52"/>
+        <nd ref="51"/>
+        <nd ref="50"/>
+        <nd ref="49"/>
+        <nd ref="48"/>
+        <nd ref="47"/>
+        <nd ref="46"/>
+        <nd ref="45"/>
+        <nd ref="44"/>
+        <nd ref="43"/>
+        <nd ref="42"/>
+        <nd ref="41"/>
+        <nd ref="40"/>
+        <nd ref="39"/>
+        <nd ref="38"/>
+        <nd ref="37"/>
+        <nd ref="36"/>
+        <nd ref="35"/>
+        <nd ref="34"/>
+        <nd ref="33"/>
+        <nd ref="32"/>
+        <nd ref="31"/>
+        <nd ref="30"/>
+        <nd ref="29"/>
+        <nd ref="874"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="3"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="23" timestamp="2016-09-29T18:41:47Z" version="1" changeset="4445">
+        <nd ref="315"/>
+        <nd ref="314"/>
+        <nd ref="313"/>
+        <nd ref="312"/>
+        <nd ref="311"/>
+        <nd ref="310"/>
+        <nd ref="309"/>
+        <nd ref="308"/>
+        <nd ref="307"/>
+        <nd ref="306"/>
+        <nd ref="305"/>
+        <nd ref="304"/>
+        <nd ref="303"/>
+        <nd ref="302"/>
+        <nd ref="301"/>
+        <nd ref="300"/>
+        <nd ref="299"/>
+        <nd ref="298"/>
+        <nd ref="297"/>
+        <nd ref="296"/>
+        <nd ref="295"/>
+        <nd ref="294"/>
+        <nd ref="293"/>
+        <nd ref="292"/>
+        <nd ref="291"/>
+        <nd ref="290"/>
+        <nd ref="289"/>
+        <nd ref="288"/>
+        <nd ref="287"/>
+        <nd ref="286"/>
+        <nd ref="285"/>
+        <nd ref="284"/>
+        <nd ref="283"/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="status" v="functional"/>
+        <tag k="highway:min_width" v="3"/>
+        <tag k="source:date_time" v="2010-01-13"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="median" v="no"/>
+        <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="REF2" v="todo"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="location" v="surface"/>
+        <tag k="error:circular" v="28.65"/>
+    </way>
+    <way visible="true" id="10038" timestamp="2016-12-02T19:54:29Z" version="1" changeset="5269">
+        <nd ref="10965"/>
+        <nd ref="10966"/>
+        <nd ref="10967"/>
+        <nd ref="10968"/>
+        <nd ref="10965"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="source:datetime" v="2016-12-02T19:54:29Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="10039" timestamp="2016-12-02T19:55:19Z" version="1" changeset="5270">
+        <nd ref="10969"/>
+        <nd ref="10970"/>
+        <nd ref="10971"/>
+        <nd ref="10972"/>
+        <nd ref="10973"/>
+        <nd ref="10974"/>
+        <nd ref="10975"/>
+        <nd ref="10976"/>
+        <nd ref="10977"/>
+        <nd ref="10978"/>
+        <nd ref="10979"/>
+        <nd ref="10980"/>
+        <nd ref="10981"/>
+        <nd ref="10982"/>
+        <nd ref="10969"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="source:datetime" v="2016-12-02T19:55:19Z"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

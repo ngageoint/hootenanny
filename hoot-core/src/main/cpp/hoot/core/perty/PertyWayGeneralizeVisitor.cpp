@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyWayGeneralizeVisitor.h"
 
@@ -31,7 +31,7 @@
 #include <boost/random/uniform_int.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -86,7 +86,7 @@ void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
   _generalizer.reset(new RdpWayGeneralizer(_map->shared_from_this(), _epsilon));
 }
 
-void PertyWayGeneralizeVisitor::visit(const shared_ptr<Element>& element)
+void PertyWayGeneralizeVisitor::visit(const boost::shared_ptr<Element>& element)
 {
   if (element->getElementType() == ElementType::Way)
   {
@@ -102,7 +102,7 @@ void PertyWayGeneralizeVisitor::visit(const shared_ptr<Element>& element)
     if (randomNum <= _wayGeneralizeProbability)
     {
       LOG_TRACE(logMsg);
-      _generalizer->generalize(dynamic_pointer_cast<Way>(element));
+      _generalizer->generalize(boost::dynamic_pointer_cast<Way>(element));
     }
     else
     {

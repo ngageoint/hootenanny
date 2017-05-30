@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKEDGE_H
 #define NETWORKEDGE_H
@@ -83,8 +83,8 @@ private:
   QList<ConstElementPtr> _members;
 };
 
-typedef shared_ptr<NetworkEdge> NetworkEdgePtr;
-typedef shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
+typedef boost::shared_ptr<NetworkEdge> NetworkEdgePtr;
+typedef boost::shared_ptr<const NetworkEdge> ConstNetworkEdgePtr;
 
 // not implemented
 bool operator<(ConstNetworkEdgePtr, ConstNetworkEdgePtr);
@@ -109,7 +109,7 @@ inline uint qHash(const ConstNetworkEdgePtr& v)
 
 inline uint qHash(const NetworkEdgePtr& v)
 {
-  return qHash(dynamic_pointer_cast<const NetworkEdge>(v));
+  return qHash(boost::dynamic_pointer_cast<const NetworkEdge>(v));
 }
 
 }

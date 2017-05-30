@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VISITORJS_H
 #define VISITORJS_H
@@ -38,11 +38,8 @@
 
 namespace hoot
 {
+
 class ElementVisitor;
-
-using namespace std;
-using namespace v8;
-
 class OsmMapOperation;
 
 class ElementVisitorJs : public node::ObjectWrap
@@ -50,7 +47,7 @@ class ElementVisitorJs : public node::ObjectWrap
 public:
   static void Init(v8::Handle<v8::Object> target);
 
-  shared_ptr<ElementVisitor> getVisitor() { return _v; }
+ boost::shared_ptr<ElementVisitor> getVisitor() { return _v; }
 
 private:
   ElementVisitorJs(ElementVisitor* v) : _v(v) {}
@@ -60,7 +57,7 @@ private:
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
-  shared_ptr<ElementVisitor> _v;
+  boost::shared_ptr<ElementVisitor> _v;
 };
 
 }

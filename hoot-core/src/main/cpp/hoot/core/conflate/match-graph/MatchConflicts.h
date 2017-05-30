@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCONFLICTS_H
 #define MATCHCONFLICTS_H
@@ -38,28 +38,27 @@
 
 namespace hoot
 {
-class Match;
 
-using namespace std;
+class Match;
 
 class MatchConflicts
 {
 public:
   typedef QMultiHash<size_t, size_t> ConflictMap;
-  typedef multimap<ElementId, size_t> EidIndexMap;
+  typedef std::multimap<ElementId, size_t> EidIndexMap;
 
   MatchConflicts(const ConstOsmMapPtr& map);
 
-  EidIndexMap calculateEidIndexMap(const vector<const Match*>& matches) const;
+  EidIndexMap calculateEidIndexMap(const std::vector<const Match*>& matches) const;
 
   /**
    * Calculates all the conflicts between matches and puts the indexes to the conflicting pairs in
    * the provided conflicts set. conflicts is cleared before inserting conflicts.
    */
-  void calculateMatchConflicts(const vector<const Match *> &matches, ConflictMap& conflicts);
+  void calculateMatchConflicts(const std::vector<const Match *> &matches, ConflictMap& conflicts);
 
-  void calculateSubsetConflicts(const vector<const Match*>& matches, ConflictMap& conflicts,
-                                const vector<int>& matchSet);
+  void calculateSubsetConflicts(const std::vector<const Match*>& matches, ConflictMap& conflicts,
+                                const std::vector<int>& matchSet);
 
 private:
   const ConstOsmMapPtr& _map;

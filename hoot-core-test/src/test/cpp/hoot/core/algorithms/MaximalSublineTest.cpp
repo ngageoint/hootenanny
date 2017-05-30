@@ -35,7 +35,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
@@ -62,6 +62,9 @@ using namespace hoot;
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -87,14 +90,14 @@ public:
     TestUtils::resetEnvironment();
   }
 
-  void addEndNode(shared_ptr<OsmMap> map, Coordinate c, QString note)
+  void addEndNode(OsmMapPtr map, Coordinate c, QString note)
   {
-    shared_ptr<Node> n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
+    NodePtr n(new Node(Status::Unknown1, map->createNextNodeId(), c, 10));
     n->getTags()["note"] = note;
     map->addNode(n);
   }
 
-  void addEndNodes(shared_ptr<OsmMap> map, vector<WaySublineMatch>& m)
+  void addEndNodes(OsmMapPtr map, vector<WaySublineMatch>& m)
   {
     for (size_t i = 0; i < m.size(); i++)
     {
@@ -107,7 +110,7 @@ public:
 
   OsmMapPtr createMap()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     auto_ptr<OGREnvelope> env(GeometryUtils::toOGREnvelope(Envelope(0, 1, 0, 1)));
     MapProjector::projectToPlanar(map, *env);
@@ -125,7 +128,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
 
@@ -163,7 +166,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/algorithms/MaximalSublineTestIn.osm", map);
@@ -174,8 +177,8 @@ public:
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(40.0, M_PI / 1.0), 40.0);
 
-    shared_ptr<Way> w1 = map->getWay(wids[0]);
-    shared_ptr<Way> w2 = map->getWay(wids[1]);
+    WayPtr w1 = map->getWay(wids[0]);
+    WayPtr w2 = map->getWay(wids[1]);
 
     double score;
     vector<WaySublineMatch> m = uut.findAllMatches(map, w1, w2, score);
@@ -248,8 +251,8 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w52 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
-    WayPtr w812 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
+    WayPtr w52 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-52"));
+    WayPtr w812 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "-812"));
 
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(25.08, 1.0471975511965976), 5);
 
@@ -272,8 +275,8 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    WayPtr w1 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
-    WayPtr w2 = dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
+    WayPtr w1 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "1"));
+    WayPtr w2 = boost::dynamic_pointer_cast<Way>(TestUtils::getElementWithNote(map, "2"));
 
     //MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(36, 1.57079632679), 5);
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(46, 1.5708), 5);
@@ -409,7 +412,7 @@ public:
   void runToyTest()
   {
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       OsmXmlReader reader;
       OsmMap::resetCounters();
       reader.setDefaultStatus(Status::Unknown1);
@@ -525,16 +528,16 @@ public:
   {
     MaximalSubline uut(new MaximalSubline::ThresholdMatchCriteria(15.0, M_PI / 4.0), 15);
 
-    shared_ptr<Way> w1 = map->getWay(wid1);
-    shared_ptr<Way> w2 = map->getWay(wid2);
+    WayPtr w1 = map->getWay(wid1);
+    WayPtr w2 = map->getWay(wid2);
 
     vector<WayLocation> wl1, wl2;
     bool found = uut.findMaximalSubline(map, w1, w2, wl1, wl2);
     double result = 0.0;
     if (found)
     {
-      shared_ptr<Way> ws1 = WaySubline(wl1[0], wl1[1]).toWay(map);
-      shared_ptr<Way> ws2 = WaySubline(wl2[0], wl2[1]).toWay(map);
+      WayPtr ws1 = WaySubline(wl1[0], wl1[1]).toWay(map);
+      WayPtr ws2 = WaySubline(wl2[0], wl2[1]).toWay(map);
 
       map->addWay(ws1);
       map->addWay(ws2);

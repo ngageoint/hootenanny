@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyNameVisitor.h"
 
@@ -31,7 +31,7 @@
 #include <boost/random/uniform_real.hpp>
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -39,6 +39,8 @@
 
 // Standard
 #include <algorithm>
+
+using namespace std;
 
 namespace hoot
 {
@@ -113,7 +115,7 @@ QString PertyNameVisitor::toString()
   return "_p: " + QString::number(_p) + ", _changeP: " + QString::number(_changeP);
 }
 
-void PertyNameVisitor::visit(const shared_ptr<Element>& e)
+void PertyNameVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
   QStringList keys = e->getTags().getMatchingKeys(Tags::getNameKeys());

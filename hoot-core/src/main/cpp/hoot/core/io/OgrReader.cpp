@@ -36,8 +36,8 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
@@ -63,6 +63,8 @@ using namespace geos::geom;
 // #include "JavaScriptTranslator.h"
 #include "PythonTranslator.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -85,7 +87,7 @@ public:
   /**
    * See the associated configuration options text for details.
    */
-  shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
+  boost::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
 
   Meters getDefaultCircularError() const { return _circularError; }
 
@@ -106,12 +108,12 @@ public:
   /**
    * Reads all the features into the given map.
    */
-  void read(shared_ptr<OsmMap> map, Progress progress);
+  void read(OsmMapPtr map, Progress progress);
 
   /**
    * Reads the next feature into the given map.
    */
-  void readNext(const shared_ptr<OsmMap>& map);
+  void readNext(const OsmMapPtr& map);
 
   void setDefaultCircularError(Meters circularError) { _circularError = circularError; }
 
@@ -137,13 +139,13 @@ protected:
 
   Meters _circularError;
   Status _status;
-  shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   OGRLayer* _layer;
   long _limit;
   long _count;
   long _featureCount;
   bool _useFileId;
-  shared_ptr<GDALDataset> _dataSource;
+  boost::shared_ptr<GDALDataset> _dataSource;
   QString _path;
   QString _layerName;
   OGRCoordinateTransformation* _transform;
@@ -175,9 +177,9 @@ protected:
 
   void _addPoint(OGRPoint* p, Tags& t);
 
-  void _addPolygon(OGRPolygon* p, shared_ptr<Relation> r, Meters circularError);
+  void _addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError);
 
-  shared_ptr<Way> _createWay(OGRLinearRing* lr, Meters circularError);
+  WayPtr _createWay(OGRLinearRing* lr, Meters circularError);
 
   void _finalizeTranslate();
 
@@ -185,7 +187,7 @@ protected:
    * Use some hard coded rules to convert from projections that PROJ4 doesn't handle to projections
    * that it will handle.
    */
-  shared_ptr<OGRSpatialReference> _fixProjection(shared_ptr<OGRSpatialReference> srs);
+  boost::shared_ptr<OGRSpatialReference> _fixProjection(boost::shared_ptr<OGRSpatialReference> srs);
 
   void _initTranslate();
 
@@ -228,14 +230,14 @@ protected:
     _map->clear();
     _d->readNext(_map);
 
-    const NodeMap& nm = _map->getNodeMap();
-    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
+    const NodeMap& nm = _map->getNodes();
+    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       _addElement(_map->getNode(it->first));
     }
 
     const WayMap& wm = _map->getWays();
-    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
       _addElement(_map->getWay(it->first));
     }
@@ -243,7 +245,7 @@ protected:
   }
 
 private:
-  shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
   OgrReaderInternal* _d;
 };
 
@@ -287,9 +289,9 @@ ElementIterator* OgrReader::createIterator(QString path, QString layer) const
   return new OgrElementIterator(d);
 }
 
-shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(shared_ptr<OGRSpatialReference> srs)
+boost::shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(boost::shared_ptr<OGRSpatialReference> srs)
 {
-  shared_ptr<OGRSpatialReference> result;
+  boost::shared_ptr<OGRSpatialReference> result;
   int epsgOverride = ConfigOptions().getOgrReaderEpsgOverride();
   if (epsgOverride >= 0)
   {
@@ -346,7 +348,7 @@ shared_ptr<OGRSpatialReference> OgrReaderInternal::_fixProjection(shared_ptr<OGR
   return result;
 }
 
-shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
+boost::shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   return _d->getBoundingBoxFromConfig(s, srs);
@@ -358,7 +360,7 @@ shared_ptr<Envelope> OgrReader::getBoundingBoxFromConfig(const Settings& s,
 QStringList OgrReader::getLayerNames(QString path)
 {
   QStringList result;
-  shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
+  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -410,7 +412,7 @@ long OgrReader::getFeatureCount(QString path, QString layer)
   return _d->getFeatureCount();
 }
 
-void OgrReader::read(QString path, QString layer, shared_ptr<OsmMap> map, Progress progress)
+void OgrReader::read(QString path, QString layer, OsmMapPtr map, Progress progress)
 {
   _d->open(path, layer);
   _d->read(map, progress);
@@ -489,10 +491,10 @@ Progress OgrReader::streamGetProgress() const
 
 OgrReaderInternal::OgrReaderInternal()
 {
-  _map = boost::shared_ptr<OsmMap>(new OsmMap());
-  _nodesItr = _map->getNodeMap().begin();
+  _map = OsmMapPtr(new OsmMap());
+  _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
-  _relationsItr = _map->getRelationMap().begin();
+  _relationsItr = _map->getRelations().begin();
   _layer = NULL;
   _transform = NULL;
   _status = Status::Invalid;
@@ -515,7 +517,7 @@ OgrReaderInternal::~OgrReaderInternal()
 QStringList OgrReaderInternal::getLayersWithGeometry(QString path) const
 {
   QStringList result;
-  shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path);
+  boost::shared_ptr<GDALDataset> ds = OgrUtilities::getInstance().openDataSource(path, true);
   int count = ds->GetLayerCount();
   for (int i = 0; i < count; i++)
   {
@@ -638,7 +640,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
           throw HootException("Unsupported geometry type.");
       }
     }
-    catch (IllegalArgumentException& e)
+    catch (const IllegalArgumentException& e)
     {
       throw IllegalArgumentException(
         "Error projecting geometry with tags: " + t.toString() + " " + e.what());
@@ -650,7 +652,7 @@ void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
 {
   Meters circularError = _parseCircularError(t);
 
-  shared_ptr<Way> way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
 
   way->setTags(t);
   for (int i = 0; i < ls->getNumPoints(); i++)
@@ -658,7 +660,7 @@ void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
     double x = ls->getX(i);
     double y = ls->getY(i);
     _reproject(x, y);
-    shared_ptr<Node> n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -676,8 +678,8 @@ void OgrReaderInternal::_addMultiPolygon(OGRMultiPolygon* mp, Tags& t)
   }
   else
   {
-    shared_ptr<Relation> r(new Relation(_status, _map->createNextRelationId(), circularError,
-      Relation::MULTIPOLYGON));
+    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
+      MetadataTags::RelationMultiPolygon()));
     r->setTags(t);
 
     for (int i = 0; i < nParts; i++)
@@ -696,7 +698,7 @@ void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
   double x = p->getX();
   double y = p->getY();
   _reproject(x, y);
-  shared_ptr<Node> node(new Node(_status, _map->createNextNodeId(), x, y,
+  NodePtr node(new Node(_status, _map->createNextNodeId(), x, y,
     circularError));
 
   node->setTags(t);
@@ -709,7 +711,7 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
 
   if (p->getNumInteriorRings() == 0)
   {
-    shared_ptr<Way> outer = _createWay(p->getExteriorRing(), circularError);
+    WayPtr outer = _createWay(p->getExteriorRing(), circularError);
     if (OsmSchema::getInstance().isArea(t, ElementType::Way) == false)
     {
       t.setArea(true);
@@ -719,8 +721,8 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
   else
   {
-    shared_ptr<Relation> r(new Relation(_status, _map->createNextRelationId(), circularError,
-      Relation::MULTIPOLYGON));
+    RelationPtr r(new Relation(_status, _map->createNextRelationId(), circularError,
+      MetadataTags::RelationMultiPolygon()));
     if (OsmSchema::getInstance().isArea(t, ElementType::Relation) == false)
     {
       t.setArea(true);
@@ -731,17 +733,17 @@ void OgrReaderInternal::_addPolygon(OGRPolygon* p, Tags& t)
   }
 }
 
-void OgrReaderInternal::_addPolygon(OGRPolygon* p, shared_ptr<Relation> r, Meters circularError)
+void OgrReaderInternal::_addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError)
 {
-  shared_ptr<Way> outer = _createWay(p->getExteriorRing(), circularError);
+  WayPtr outer = _createWay(p->getExteriorRing(), circularError);
   _map->addWay(outer);
-  r->addElement(Relation::OUTER, outer);
+  r->addElement(MetadataTags::RoleOuter(), outer);
 
   for (int i = 0; i < p->getNumInteriorRings(); i++)
   {
-    shared_ptr<Way> inner = _createWay(p->getInteriorRing(i), circularError);
+    WayPtr inner = _createWay(p->getInteriorRing(i), circularError);
     _map->addWay(inner);
-    r->addElement(Relation::INNER, inner);
+    r->addElement(MetadataTags::RoleInner(), inner);
   }
 }
 
@@ -763,9 +765,9 @@ void OgrReaderInternal::close()
   }
 }
 
-shared_ptr<Way> OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
+WayPtr OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
 {
-  shared_ptr<Way> way(new Way(_status, _map->createNextWayId(), circularError));
+  WayPtr way(new Way(_status, _map->createNextWayId(), circularError));
 
   // make sure the ring is closed
   lr->closeRings();
@@ -776,7 +778,7 @@ shared_ptr<Way> OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circular
     double x = lr->getX(i);
     double y = lr->getY(i);
     _reproject(x, y);
-    shared_ptr<Node> n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -791,11 +793,11 @@ void OgrReaderInternal::_finalizeTranslate()
   _translator.reset();
 }
 
-shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
+boost::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
   OGRSpatialReference* srs)
 {
   ConfigOptions co(s);
-  shared_ptr<Envelope> result;
+  boost::shared_ptr<Envelope> result;
   QString bboxStrRaw = co.getOgrReaderBoundingBox();
   QString bboxStrLatLng = co.getOgrReaderBoundingBoxLatlng();
   QString bboxStr;
@@ -852,7 +854,7 @@ shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings&
     }
 
     result.reset(new Envelope());
-    shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
+    boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::getInstance().createWgs84Projection();
     auto_ptr<OGRCoordinateTransformation> transform(
       OGRCreateCoordinateTransformation(wgs84.get(), srs));
     const int steps = 8;
@@ -894,7 +896,7 @@ void OgrReaderInternal::open(QString path, QString layer)
   _initTranslate();
 
   _path = path;
-  _dataSource = OgrUtilities::getInstance().openDataSource(path);
+  _dataSource = OgrUtilities::getInstance().openDataSource(path, true);
   if (layer.isEmpty() == false)
   {
     _pendingLayers.append(layer);
@@ -923,7 +925,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     throw HootException("Failed to identify source layer from data source.");
   }
 
-  shared_ptr<OGRSpatialReference> sourceSrs;
+  boost::shared_ptr<OGRSpatialReference> sourceSrs;
 
   if (_layer->GetSpatialRef())
   {
@@ -948,7 +950,7 @@ void OgrReaderInternal::_openLayer(QString path, QString layer)
     }
   }
 
-  shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
+  boost::shared_ptr<Envelope> filter = getBoundingBoxFromConfig(conf(), sourceSrs.get());
   if (filter.get())
   {
     _layer->SetSpatialFilterRect(filter->getMinX(), filter->getMinY(), filter->getMaxX(),
@@ -988,7 +990,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::ErrorCircular()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -1010,7 +1012,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::Accuracy()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -1025,7 +1027,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
   return circularError;
 }
 
-void OgrReaderInternal::read(shared_ptr<OsmMap> map, Progress progress)
+void OgrReaderInternal::read(OsmMapPtr map, Progress progress)
 {
   _map = map;
   _count = 0;
@@ -1062,7 +1064,7 @@ void OgrReaderInternal::read(shared_ptr<OsmMap> map, Progress progress)
   }
 }
 
-void OgrReaderInternal::readNext(const shared_ptr<OsmMap>& map)
+void OgrReaderInternal::readNext(const OsmMapPtr& map)
 {
   bool done = false;
 
@@ -1176,9 +1178,9 @@ void OgrReaderInternal::_translate(Tags& t)
 void OgrReaderInternal::initializePartial()
 {
   _map.reset(new OsmMap());
-  _nodesItr = _map->getNodeMap().begin();
+  _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
-  _relationsItr = _map->getRelationMap().begin();
+  _relationsItr = _map->getRelations().begin();
 
   _useFileId = false;
 
@@ -1198,8 +1200,8 @@ bool OgrReaderInternal::hasMoreElements()
   }
 
   // Do we have data already in map from previous reads?
-  if ( (_nodesItr != _map->getNodeMap().end()) || (_waysItr != _map->getWays().end())
-      || (_relationsItr != _map->getRelationMap().end()) )
+  if ( (_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end())
+      || (_relationsItr != _map->getRelations().end()) )
   {
     return true;
   }
@@ -1209,16 +1211,16 @@ bool OgrReaderInternal::hasMoreElements()
   // Do a read if the element maps are empty
   populateElementMap();
 
-  bool result = ( (_nodesItr != _map->getNodeMap().end()) || (_waysItr != _map->getWays().end())
-      || (_relationsItr != _map->getRelationMap().end()) );
+  bool result = ( (_nodesItr != _map->getNodes().end()) || (_waysItr != _map->getWays().end())
+      || (_relationsItr != _map->getRelations().end()) );
 
   return result;
 }
 
 ElementPtr OgrReaderInternal::readNextElement()
 {
-  if ( (_nodesItr == _map->getNodeMap().end()) && (_waysItr == _map->getWays().end())
-      && (_relationsItr == _map->getRelationMap().end()) )
+  if ( (_nodesItr == _map->getNodes().end()) && (_waysItr == _map->getWays().end())
+      && (_relationsItr == _map->getRelations().end()) )
   {
     // Load the next OGR feature, with 1..N elemenents per feature, into the map of the various
     //    element types
@@ -1226,20 +1228,20 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
 
   ElementPtr returnElement;
-  if ( _nodesItr != _map->getNodeMap().end() )
+  if ( _nodesItr != _map->getNodes().end() )
   {
     returnElement.reset(new Node(*_nodesItr->second.get()));
-    _nodesItr++;
+    ++_nodesItr;
   }
   else if ( _waysItr != _map->getWays().end() )
   {
     returnElement.reset(new Way(*_waysItr->second.get()));
-    _waysItr++;
+    ++_waysItr;
   }
   else
   {
     returnElement.reset(new Relation(*_relationsItr->second.get()));
-    _relationsItr++;
+    ++_relationsItr;
   }
 
   return returnElement;
@@ -1251,9 +1253,9 @@ void OgrReaderInternal::populateElementMap()
 
   readNext(_map);
 
-  _nodesItr = _map->getNodeMap().begin();
+  _nodesItr = _map->getNodes().begin();
   _waysItr =  _map->getWays().begin();
-  _relationsItr = _map->getRelationMap().begin();
+  _relationsItr = _map->getRelations().begin();
 
   _streamFeatureCount++;
 }

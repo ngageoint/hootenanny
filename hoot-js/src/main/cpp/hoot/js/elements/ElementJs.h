@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTJS_H
 #define ELEMENTJS_H
@@ -41,8 +41,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -58,13 +56,13 @@ public:
   virtual ConstElementPtr getConstElement() const = 0;
   virtual ElementPtr getElement() = 0;
 
-  static Handle<Object> New(ConstElementPtr e);
-  static Handle<Object> New(ElementPtr e);
+  static v8::Handle<v8::Object> New(ConstElementPtr e);
+  static v8::Handle<v8::Object> New(ElementPtr e);
 
 protected:
   ElementJs();
   virtual ~ElementJs();
-  static void _addBaseFunctions(Local<FunctionTemplate> tpl);
+  static void _addBaseFunctions(v8::Local<v8::FunctionTemplate> tpl);
 
   static v8::Handle<v8::Value> getCircularError(const v8::Arguments& args);
   static v8::Handle<v8::Value> getElementId(const v8::Arguments& args);
@@ -77,7 +75,7 @@ protected:
 
 private:
   QString _className;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 };
 
 inline void toCpp(v8::Handle<v8::Value> v, ConstElementPtr& e)

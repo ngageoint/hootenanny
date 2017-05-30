@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ORCRITERION_H
 #define ORCRITERION_H
@@ -39,7 +39,7 @@ class OrCriterion : public ChainCriterion
 {
 public:
 
-  static string className() { return "hoot::OrCriterion"; }
+  static std::string className() { return "hoot::OrCriterion"; }
 
   OrCriterion() {}
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
@@ -47,7 +47,7 @@ public:
   {
   }
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone()
   { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }

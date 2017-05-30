@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CompletelyContainedByMapElementVisitor.h"
 
@@ -34,7 +34,9 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -83,12 +85,12 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
 
   if (type == ElementType::Way)
   {
-    shared_ptr<const Way> w = _map->getWay(id);
+   boost::shared_ptr<const Way> w = _map->getWay(id);
     _visit(w);
   }
   else if (type == ElementType::Relation)
   {
-    shared_ptr<const Relation> r = _map->getRelation(id);
+   ConstRelationPtr r = _map->getRelation(id);
     _visit(r);
   }
   else if (type != ElementType::Node)
@@ -97,7 +99,7 @@ void CompletelyContainedByMapElementVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Way>& w)
+void CompletelyContainedByMapElementVisitor::_visit(const boost::shared_ptr<const Way> &w)
 {
   const std::vector<long>& nids = w->getNodeIds();
   for (size_t i = 0; i < nids.size(); i++)
@@ -110,7 +112,7 @@ void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Way>&
   }
 }
 
-void CompletelyContainedByMapElementVisitor::_visit(const shared_ptr<const Relation>& r)
+void CompletelyContainedByMapElementVisitor::_visit(const boost::shared_ptr<const Relation>& r)
 {
   const vector<RelationData::Entry>& m = r->getMembers();
 

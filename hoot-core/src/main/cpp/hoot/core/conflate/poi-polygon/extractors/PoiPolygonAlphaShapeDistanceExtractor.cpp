@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,18 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonAlphaShapeDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 
 // geos
 #include <geos/util/TopologyException.h>
 #include <geos/geom/Geometry.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -54,17 +56,17 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
     DisableLog dl(Log::Warn);
 
     ElementConverter elementConverter(map.shared_from_this());
-    shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+    boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
     if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
     {
       throw geos::util::TopologyException();
     }
-    shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+    boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
     OsmMapPtr polyMap(new OsmMap());
     ElementPtr polyTemp(poly->clone());
     polyMap->addElement(polyTemp);
-    shared_ptr<Geometry> polyAlphaShape =
+    boost::shared_ptr<Geometry> polyAlphaShape =
       AlphaShapeGenerator(1000.0, 0.0).generateGeometry(polyMap);
     //oddly, even if the area is zero calc'ing the distance can have a positive effect - see #1170
     /*if (polyAlphaShape->getArea() == 0.0)

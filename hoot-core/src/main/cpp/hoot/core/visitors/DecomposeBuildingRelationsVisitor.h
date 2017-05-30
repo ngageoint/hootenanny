@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DECOMPOSEBUILDINGRELATIONSVISITOR_H
 #define DECOMPOSEBUILDINGRELATIONSVISITOR_H
@@ -64,7 +64,7 @@ private:
   OsmMap* _map;
   std::vector<long> _ids;
 
-  void _decomposeBuilding(const shared_ptr<Relation>& r);
+  void _decomposeBuilding(const boost::shared_ptr<Relation>& r);
 };
 
 }

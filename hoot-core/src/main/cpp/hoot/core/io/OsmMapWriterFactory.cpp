@@ -22,21 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapWriterFactory.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
+
 namespace hoot
 {
 
-shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
+boost::shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
 
 OsmMapWriterFactory::OsmMapWriterFactory()
 {
@@ -51,11 +53,14 @@ OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
   return *_theInstance;
 }
 
-shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
+boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
-  QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
+  LOG_VART(url);
 
-  shared_ptr<OsmMapWriter> writer;
+  QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
+  LOG_VART(writerOverride);
+
+  boost::shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
@@ -65,10 +70,11 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
     Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
+    LOG_VART(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
     if (writer->isSupported(url))
     {
-      LOG_DEBUG("Using writer: " << names[i]);
+      LOG_DEBUG("Using output writer: " << names[i]);
     }
     else
     {
@@ -87,8 +93,8 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 {
   bool result = false;
-  shared_ptr<OsmMapWriter> writer = createWriter(url);
-  shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+  boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
+  boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
     result = true;
@@ -97,45 +103,12 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-
-bool OsmMapWriterFactory::hasPartialWriter(QString url)
+void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap> &map, QString url)
 {
-  bool result = false;
-  shared_ptr<OsmMapWriter> writer = createWriter(url);
-  shared_ptr<PartialOsmMapWriter> streamWriter = dynamic_pointer_cast<PartialOsmMapWriter>(writer);
-  if (streamWriter)
-  {
-    result = true;
-  }
-
-  return result;
-}
-
-bool OsmMapWriterFactory::hasWriter(QString url)
-{
-  vector<std::string> names = Factory::getInstance().getObjectNamesByBase(
-    OsmMapWriter::className());
-
-  bool result = false;
-  for (size_t i = 0; i < names.size() && !result; ++i)
-  {
-    shared_ptr<OsmMapWriter> writer(Factory::getInstance().constructObject<OsmMapWriter>(names[i]));
-    if (writer->isSupported(url))
-    {
-      result = true;
-    }
-  }
-
-  return result;
-}
-
-void OsmMapWriterFactory::write(const shared_ptr<const OsmMap>& map, QString url)
-{
-  LOG_INFO("Writing map to " << url);
-  shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
+  LOG_INFO("Writing map to " << url << "...");
+  boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
   writer->open(url);
   writer->write(map);
 }
-
 
 }

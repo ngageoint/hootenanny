@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLICTSNETWORKMATCHER_H
 #define CONFLICTSNETWORKMATCHER_H
@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 class ConflictsNetworkMatcherTest;
 
 /**
@@ -54,7 +52,7 @@ class ConflictsNetworkMatcher : public NetworkMatcher
 {
 public:
 
-  static string className() { return "hoot::ConflictsNetworkMatcher"; }
+  static std::string className() { return "hoot::ConflictsNetworkMatcher"; }
 
   const static double EPSILON;
 
@@ -66,7 +64,7 @@ public:
   /**
    * Use this instead of a constructor.
    */
-  static shared_ptr<ConflictsNetworkMatcher> create();
+  static boost::shared_ptr<ConflictsNetworkMatcher> create();
 
   virtual double getMatchThreshold() const { return 0.35; }
 
@@ -111,8 +109,8 @@ private:
     bool _conflict;
     QSet<ConstEdgeMatchPtr> _throughStub;
   };
-  typedef shared_ptr<const MatchRelationship> ConstMatchRelationshipPtr;
-  typedef shared_ptr<MatchRelationship> MatchRelationshipPtr;
+  typedef boost::shared_ptr<const MatchRelationship> ConstMatchRelationshipPtr;
+  typedef boost::shared_ptr<MatchRelationship> MatchRelationshipPtr;
 
   typedef QHash<ConstEdgeMatchPtr, QList<ConstMatchRelationshipPtr> > MatchRelationshipMap;
 
@@ -162,8 +160,8 @@ private:
   void _printEdgeMatches();
 };
 
-typedef shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;
-typedef shared_ptr<const ConflictsNetworkMatcher> ConstConflictsNetworkMatcherPtr;
+typedef boost::shared_ptr<ConflictsNetworkMatcher> ConflictsNetworkMatcherPtr;
+typedef boost::shared_ptr<const ConflictsNetworkMatcher> ConstConflictsNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstConflictsNetworkMatcherPtr, ConstConflictsNetworkMatcherPtr);

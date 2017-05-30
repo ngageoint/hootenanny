@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGECREATOR_H
 #define MERGECREATOR_H
@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class Match;
 class Merger;
@@ -50,7 +49,7 @@ public:
   {
   public:
     Description() : experimental() {}
-    Description(string className, QString description, bool experimental)
+    Description(std::string className, QString description, bool experimental)
     {
       this->className = className;
       this->experimental = experimental;
@@ -64,11 +63,11 @@ public:
     }
 
     bool experimental;
-    string className;
+    std::string className;
     QString description;
   };
 
-  static string className() { return "hoot::MergerCreator"; }
+  static std::string className() { return "hoot::MergerCreator"; }
 
   virtual ~MergerCreator() {}
 
@@ -82,13 +81,13 @@ public:
    * @return Returns true if one or more mergers were created and added to the provided mergers
    *  vector.
    */
-  virtual bool createMergers(const MatchSet& matches, vector<Merger*>& mergers) const = 0;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const = 0;
 
   /**
    * Generally this just returns the class name of this creator. However, creators that take
    * arguments to specify scripts such as the ScriptMatchCreator may return multiple results.
    */
-  virtual vector<Description> getAllCreators() const = 0;
+  virtual std::vector<Description> getAllCreators() const = 0;
 
   /**
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two

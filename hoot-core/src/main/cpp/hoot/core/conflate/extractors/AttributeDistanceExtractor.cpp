@@ -23,19 +23,20 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AttributeDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/Factory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/TagComparator.h>
+
+using namespace std;
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AttributeDistanceExtractor)
-
 
 double AttributeDistanceExtractor::_extract(const OsmMap& /*map*/, const ConstWayPtr& w1,
                                             const ConstWayPtr& w2) const

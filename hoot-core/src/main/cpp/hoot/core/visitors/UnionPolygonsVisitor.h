@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIONPOLYGONSVISITOR_H
 #define UNIONPOLYGONSVISITOR_H
@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace geos::geom;
 
 /**
  * Unions all "area" elements that are visited to create a single geometry.
@@ -50,13 +49,13 @@ public:
 
   UnionPolygonsVisitor();
 
-  const shared_ptr<Geometry>& getUnion() const { return _result; }
+  const boost::shared_ptr<geos::geom::Geometry>& getUnion() const { return _result; }
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
 private:
 
-  shared_ptr<Geometry> _result;
+  boost::shared_ptr<geos::geom::Geometry> _result;
 };
 
 }

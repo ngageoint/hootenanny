@@ -61,7 +61,7 @@ inline QString toQString(const std::string& s)
 
 #define HOOT_STR_EQUALS(v1, v2) \
 { \
-  stringstream ss1, ss2; \
+  std::stringstream ss1, ss2; \
   ss1 << v1; \
   ss2 << v2; \
   CPPUNIT_ASSERT_EQUAL(ss1.str(), ss2.str()); \
@@ -88,7 +88,6 @@ inline QString toQString(const std::string& s)
 
 namespace hoot
 {
-using namespace std;
 
 class TestUtils
 {
@@ -101,18 +100,18 @@ public:
 
   TestUtils();
 
-  static void dumpString(const string& str);
+  static void dumpString(const std::string& str);
 
   static std::string readFile(QString f1);
 
-  static bool compareMaps(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  static bool compareMaps(OsmMapPtr map1, OsmMapPtr map2);
 
   static bool compareMaps(const QString& map1, const QString map2);
 
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
     double circularError = 15.0, Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, Status s, Coordinate c[], Meters ce = 15,
+  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[], Meters ce = 15,
                           const QString& note = "");
 
   static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
@@ -137,7 +136,7 @@ public:
   /**
    * Return the singleton instance.
    */
-  static shared_ptr<TestUtils> getInstance();
+  static boost::shared_ptr<TestUtils> getInstance();
 
   /**
    * Register a way to reset the environment. This is most useful in plugins to avoid circular
@@ -147,18 +146,23 @@ public:
 
   /**
    * Resets the test environment to a known state.
+   *
+   * @param confs custom confs to load during reset; if left blank the default config in
+   * ConfigOptions will be loaded
    */
-  static void resetEnvironment();
+  static void resetEnvironment(const QStringList confs = QStringList());
 
   /**
    * Converts a string into a format that can be cut/paste into c++ code.
    */
   static QString toQuotedString(QString str);
 
+  static void verifyStdMatchesOutputIgnoreDate(const QString stdFilePath, const QString outFilePath);
+
 private:
   QList<RegisteredReset*> _resets;
 
-  static shared_ptr<TestUtils> _theInstance;
+  static boost::shared_ptr<TestUtils> _theInstance;
 };
 
 /**

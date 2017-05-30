@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTERNALIDRESERVER_H
 #define INTERNALIDRESERVER_H
 
 // Qt
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 
 namespace hoot
 {

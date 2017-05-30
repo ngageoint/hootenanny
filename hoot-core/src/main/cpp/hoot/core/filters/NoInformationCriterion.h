@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NOINFORMATIONCRITERION_H
 #define NOINFORMATIONCRITERION_H
@@ -30,6 +30,10 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/Element.h>
 
 #include "ElementCriterion.h"
 
@@ -43,20 +47,18 @@ class NoInformationCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static string className() { return "hoot::NoInformationCriterion"; }
+  static std::string className() { return "hoot::NoInformationCriterion"; }
 
   NoInformationCriterion() { setConfiguration(conf()); }
   NoInformationCriterion(bool treatReviewTagsAsMetadata) :
     _treatReviewTagsAsMetadata(treatReviewTagsAsMetadata) { }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
-  virtual void setConfiguration(const Settings& conf)
-  {
-    _treatReviewTagsAsMetadata = ConfigOptions(conf).getReviewTagsTreatAsMetadata();
-  }
+  virtual void setConfiguration(const Settings& conf);
 
-  virtual ElementCriterion* clone() { return new NoInformationCriterion(_treatReviewTagsAsMetadata); }
+  virtual ElementCriterion* clone()
+  { return new NoInformationCriterion(_treatReviewTagsAsMetadata); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MaximalSubline.h"
 
@@ -40,6 +40,10 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+
+using namespace cv;
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

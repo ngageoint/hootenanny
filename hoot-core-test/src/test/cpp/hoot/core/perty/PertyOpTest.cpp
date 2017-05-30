@@ -32,8 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/Exception.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -63,7 +63,7 @@ public:
 
   void runDirectSequentialSimulationTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -97,11 +97,9 @@ public:
     // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
     ////
     QSet<long> nids;
-    NodeMap::const_iterator it = map->getNodeMap().begin();
-    while (it != map->getNodeMap().end()) {
+    const NodeMap& nodes = map->getNodes();
+    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
       nids.insert(it->first);
-      it++;
-    }
     QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
 
@@ -151,7 +149,7 @@ public:
    */
   void runDebugTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -181,7 +179,7 @@ public:
     OsmXmlWriter writer;
     QDir().mkpath("test-output/perty");
 
-    shared_ptr<OsmMap> original(new OsmMap(map));
+    OsmMapPtr original(new OsmMap(map));
     MapProjector::projectToWgs84(original);
     writer.write(original, "test-output/perty/Original.osm");
 
@@ -194,15 +192,15 @@ public:
     //uut.apply(map);
 //    for (int i = 0; i < 100; i++)
 //    {
-//      shared_ptr<OsmMap> tmp(new OsmMap(map));
+//      OsmMapPtr tmp(new OsmMap(map));
 //      uut.permute(tmp);
 //    }
     //tbs::SampleStats ss(uut._x);
     //LOG_TRACE("sd: " << ss.calculateUnbiasedStandardDeviation());
-    shared_ptr<OsmMap> debug = uut.generateDebugMap(map);
+    OsmMapPtr debug = uut.generateDebugMap(map);
     //    for (int i = 0; i < 100; i++)
     //    {
-    //      shared_ptr<OsmMap> tmp(new OsmMap(map));
+    //      OsmMapPtr tmp(new OsmMap(map));
     //      uut.permute(tmp);
     //    }
         //tbs::SampleStats ss(uut._x);

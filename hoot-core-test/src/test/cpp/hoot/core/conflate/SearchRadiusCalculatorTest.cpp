@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/SearchRadiusCalculator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -48,6 +48,9 @@
 
 #include "../TestUtils.h"
 
+using namespace boost;
+using namespace std;
+
 namespace hoot
 {
 
@@ -66,7 +69,7 @@ public:
   {
     OsmXmlReader reader;
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+   OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(
       "test-files/conflate/SearchRadiusCalculatorTest/Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);
@@ -132,7 +135,7 @@ public:
   {
     OsmXmlReader reader;
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+   OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(
       "test-files/conflate/SearchRadiusCalculatorTest/Haiti_CNIGS_Rivers_REF1-cropped-2.osm", map);

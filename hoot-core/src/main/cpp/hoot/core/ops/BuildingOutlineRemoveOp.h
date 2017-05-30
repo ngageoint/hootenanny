@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEREMOVEOP_H
 #define BUILDINGOUTLINEREMOVEOP_H
@@ -47,22 +47,22 @@ class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
 {
 public:
 
-  static string className() { return "hoot::BuildingOutlineRemoveOp"; }
+  static std::string className() { return "hoot::BuildingOutlineRemoveOp"; }
 
   BuildingOutlineRemoveOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap> &map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& /*is*/) {}
 
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
-  void _removeOutline(const shared_ptr<Relation>& building);
+  void _removeOutline(const boost::shared_ptr<Relation>& building);
 
 };
 

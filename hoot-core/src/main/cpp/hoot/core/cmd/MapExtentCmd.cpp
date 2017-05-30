@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -54,7 +56,7 @@ public:
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], true, Status::Invalid);
 
     cout << "Map extent (minx,miny,maxx,maxy): " <<

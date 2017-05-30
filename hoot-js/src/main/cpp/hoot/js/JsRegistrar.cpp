@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,11 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "JsRegistrar.h"
 
 #include <hoot/core/Hoot.h>
+#include <hoot/core/util/Log.h>
+
+using namespace v8;
 
 namespace hoot
 {
@@ -53,6 +56,7 @@ JsRegistrar& JsRegistrar::getInstance()
 
 void JsRegistrar::Init(Handle<Object> exports)
 {
+  LOG_DEBUG("JS registrar init...");
   Hoot::getInstance().init();
   getInstance().initAll(exports);
 }
@@ -68,7 +72,7 @@ void JsRegistrar::initAll(Handle<Object> exports)
   }
 }
 
-void JsRegistrar::registerInitializer(shared_ptr<ClassInitializer> ci)
+void JsRegistrar::registerInitializer(boost::shared_ptr<ClassInitializer> ci)
 {
   _initializers.push_back(ci);
 }

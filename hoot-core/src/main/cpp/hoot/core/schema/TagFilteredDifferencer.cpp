@@ -22,11 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagFilteredDifferencer.h"
 
 #include <hoot/core/schema/OsmSchema.h>
+
+using namespace std;
 
 namespace hoot
 {

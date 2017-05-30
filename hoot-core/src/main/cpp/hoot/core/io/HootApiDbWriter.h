@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBWRITER_H
 #define HOOTAPIDBWRITER_H
@@ -67,6 +67,13 @@ public:
 
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
 
+  void setIncludeDebug(bool includeDebug) { _includeDebug = includeDebug; }
+
+  void setTextStatus(bool textStatus) { _textStatus = textStatus; }
+
+  void setIncludeCircularError(bool includeCircularError)
+  { _includeCircularError = includeCircularError; }
+
   /**
    * If set to true (the default) then all IDs are remapped into new IDs. This is appropriate if
    * any of the input IDs are non-positive.
@@ -75,11 +82,11 @@ public:
 
   void setUserEmail(QString email) { _userEmail = email; }
 
-  virtual void writePartial(const shared_ptr<const Node>& n);
+  virtual void writePartial(const ConstNodePtr& n);
 
-  virtual void writePartial(const shared_ptr<const Way>& w);
+  virtual void writePartial(const ConstWayPtr& w);
 
-  virtual void writePartial(const shared_ptr<const Relation>& r);
+  virtual void writePartial(const ConstRelationPtr& r);
 
 protected:
 
@@ -93,9 +100,9 @@ protected:
    */
   virtual long _getRemappedElementId(const ElementId& eid);
 
-  virtual vector<long> _remapNodes(const vector<long>& nids);
+  virtual std::vector<long> _remapNodes(const std::vector<long>& nids);
 
-  void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
+  void _addElementTags(const boost::shared_ptr<const Element>& e, Tags& t);
 
   /**
    * Counts the change and if necessary closes the old changeset and starts a new one.
@@ -126,12 +133,16 @@ private:
   bool _createUserIfNotFound;
   bool _overwriteMap;
   QString _userEmail;
+  bool _includeDebug;
+  bool _includeIds;
+  bool _textStatus;
+  bool _includeCircularError;
 
   bool _open;
 
-  set<long> _openDb(QString& urlStr);
+  std::set<long> _openDb(QString& urlStr);
 
-  void _overwriteMaps(const QString& mapName, const set<long>& mapIds);
+  void _overwriteMaps(const QString& mapName, const std::set<long>& mapIds);
 
   /**
    * Close the current changeset and start a new one.

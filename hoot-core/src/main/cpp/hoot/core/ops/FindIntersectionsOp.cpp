@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindIntersectionsOp.h"
 
 // Hoot
-#include <hoot/core/Factory.h>
-#include <hoot/core/MapProjector.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/conflate/ImpliedDividedMarker.h>
@@ -60,18 +60,18 @@ FindIntersectionsOp::FindIntersectionsOp()
 {
 }
 
-void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
+void FindIntersectionsOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   // remove all relations
-  LOG_INFO(QString("%1 Relations found.").arg(map->getRelationMap().size()));
-  shared_ptr<ElementTypeCriterion> rFilter(new ElementTypeCriterion(ElementType::Relation));
+  LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
+  boost::shared_ptr<ElementTypeCriterion> rFilter(new ElementTypeCriterion(ElementType::Relation));
   VisitorOp(new RemoveElementsVisitor(rFilter)).apply(map);
-  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelationMap().size()));
+  LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
   /// @todo move this to a config file.
   // pragmatically remove "bad" data in OSM afghanistan
   //map->removeWays(TagFilter(Filter::FilterMatches, "source", "AIMS"));
-  shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
+  boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
   RemoveElementsVisitor::removeWays(map, pCrit);
 
   // reproject into a planar projection centered in the middle of bounding box.
@@ -99,16 +99,16 @@ void FindIntersectionsOp::apply(shared_ptr<OsmMap>& map)
 
   // find all intersections
 //  LOG_INFO("FindIntersectionsVisitor()");
-  shared_ptr<FindIntersectionsVisitor> v(new FindIntersectionsVisitor());
+  boost::shared_ptr<FindIntersectionsVisitor> v(new FindIntersectionsVisitor());
   VisitorOp(v).apply(map);
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
   // remove all ways first
-  shared_ptr<ElementTypeCriterion> wayFilter(new ElementTypeCriterion(ElementType::Way));
+  boost::shared_ptr<ElementTypeCriterion> wayFilter(new ElementTypeCriterion(ElementType::Way));
   VisitorOp(new RemoveElementsVisitor(wayFilter)).apply(map);
 
   // then remove everything except for the intersection that we found
-  shared_ptr<IntersectionFilter> intersectionFilter(new IntersectionFilter(v->getIntersections()));
+  boost::shared_ptr<IntersectionFilter> intersectionFilter(new IntersectionFilter(v->getIntersections()));
   VisitorOp(new RemoveElementsVisitor(intersectionFilter)).apply(map);
 
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TILEBOUNDSCALCULATOR_H
@@ -49,13 +49,10 @@
 
 namespace hoot
 {
+
 class TileBoundsCalculatorTest;
 class OsmMap;
 class Node;
-
-using namespace std;
-using namespace boost;
-using namespace geos::geom;
 
 /**
  * Caculates divisions as the center of pixels.
@@ -134,12 +131,13 @@ public:
 
     int getWidth() const { return maxX - minX + 1; }
 
-    void operator=(const PixelBox& pb)
+    PixelBox& operator=(const PixelBox& pb)
     {
       minX = pb.minX;
       maxX = pb.maxX;
       minY = pb.minY;
       maxY = pb.maxY;
+      return *this;
     }
 
     QString toString() const
@@ -150,11 +148,11 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
-  vector< vector<Envelope> > calculateTiles();
+  std::vector< std::vector<geos::geom::Envelope> > calculateTiles();
 
-  void renderImage(shared_ptr<OsmMap> map);
+  void renderImage(boost::shared_ptr<OsmMap> map);
 
-  void renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
+  void renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
 
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 
@@ -189,21 +187,21 @@ private:
 
   int _calculateSplitY(const PixelBox& b);
 
-  void _countNode(const shared_ptr<Node>& n);
+  void _countNode(const boost::shared_ptr<Node>& n);
 
   double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
 
   void _exportImage(cv::Mat& r, QString output);
 
-  void _exportResult(const vector<PixelBox>& boxes, QString output);
+  void _exportResult(const std::vector<PixelBox>& boxes, QString output);
 
-  bool _isDone(vector<PixelBox>& boxes);
+  bool _isDone(std::vector<PixelBox>& boxes);
 
   long _sumPixels(const PixelBox& pb, cv::Mat& r);
 
   long _sumPixels(const PixelBox& pb) { return _sumPixels(pb, _r1) + _sumPixels(pb, _r2); }
 
-  Envelope _toEnvelope(const PixelBox& pb);
+  geos::geom::Envelope _toEnvelope(const PixelBox& pb);
 
   // used for white box testing.
   friend class TileBoundsCalculatorTest;

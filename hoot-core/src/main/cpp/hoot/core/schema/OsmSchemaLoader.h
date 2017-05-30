@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_SCHEMAFILELOADER_H
 #define OSM_SCHEMAFILELOADER_H
@@ -35,7 +35,7 @@ namespace hoot
 class OsmSchemaLoader
 {
 public:
-  static string className() { return "hoot::OsmSchemaLoader"; }
+  static std::string className() { return "hoot::OsmSchemaLoader"; }
 
   OsmSchemaLoader() {}
 
@@ -59,7 +59,7 @@ public:
    * statements are used in the json file then all imported files are included in the dependency
    * list.
    */
-  virtual set<QString> getDependencies() = 0;
+  virtual std::set<QString> getDependencies() = 0;
 };
 
 }

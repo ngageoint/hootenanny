@@ -19,7 +19,7 @@
 
 #include <hoot/core/conflate/TileWorker.h>
 
-#include "MapStats.h"
+#include "stats/MapStats.h"
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ public:
 
   virtual void cleanup(QString mapIn, QString mapOut);
 
-  virtual void conflate(const vector<Envelope>& tiles, QString mapIn, QString mapOut);
+  virtual void conflate(const std::vector<geos::geom::Envelope>& tiles, QString mapIn, QString mapOut);
 
   virtual bool exists(QString dir);
 

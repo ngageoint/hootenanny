@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SchemaChecker.h"
@@ -38,8 +38,8 @@ namespace hoot
 unsigned int SchemaChecker::logWarnCount = 0;
 
 SchemaChecker::SchemaChecker(OsmSchema& osmSchema)
+  : _schemaVertexList(osmSchema.getAllTags())
 {
-  _schemaVertexList = osmSchema.getAllTags();
 }
 
 void SchemaChecker::checkUnknownVertexType()

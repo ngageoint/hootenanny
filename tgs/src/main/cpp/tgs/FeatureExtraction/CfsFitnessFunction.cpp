@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CfsFitnessFunction.h"
@@ -46,7 +46,7 @@ using namespace std;
 
 namespace Tgs
 {
-  CfsFitnessFunction::CfsFitnessFunction(shared_ptr<DataFrame> df, const std::vector<int>& uids)
+  CfsFitnessFunction::CfsFitnessFunction(boost::shared_ptr<DataFrame> df, const std::vector<int>& uids)
   {
     _baseCopy.reset(new DataFrame());
     std::vector<std::string> factorLabels;
@@ -84,9 +84,9 @@ namespace Tgs
 
   }
 
-  shared_ptr<DataFrame> CfsFitnessFunction::_addOneFactor(shared_ptr<DataFrame> df)
+  boost::shared_ptr<DataFrame> CfsFitnessFunction::_addOneFactor(boost::shared_ptr<DataFrame> df)
   {
-    shared_ptr<DataFrame> result(new DataFrame());
+    boost::shared_ptr<DataFrame> result(new DataFrame());
     std::vector<std::string> factorLabels = df->getFactorLabels();
     stringstream strm;
     strm << "f" << factorLabels.size();
@@ -103,9 +103,9 @@ namespace Tgs
     return result;
   }
 
-  void CfsFitnessFunction::addFeature(shared_ptr<Genome> genome)
+  void CfsFitnessFunction::addFeature(boost::shared_ptr<Genome> genome)
   {
-    shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
+    boost::shared_ptr<CalculatorGenome> cg = boost::dynamic_pointer_cast<CalculatorGenome>(genome);
     _baseScore = calculateFitness(*cg);
     _loadGenome(*cg);
     _baseCopy = _addOneFactor(_baseCopy);

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IDGENERATORJS_H
 #define IDGENERATORJS_H
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
-#include <hoot/core/IdGenerator.h>
+#include <hoot/core/util/IdGenerator.h>
 #include <hoot/js/util/DataConvertJs.h>
 
 // Qt
@@ -40,8 +40,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class IdGeneratorJs : public node::ObjectWrap
 {
@@ -50,7 +48,7 @@ public:
 
   IdGeneratorPtr getIdGeneratorOp() { return _idGen; }
 
-  static Handle<Object> New(const IdGeneratorPtr& idGen);
+  static v8::Handle<v8::Object> New(const IdGeneratorPtr& idGen);
 
 private:
   IdGeneratorJs(IdGeneratorPtr idGen);

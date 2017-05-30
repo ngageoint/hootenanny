@@ -47,6 +47,9 @@ using namespace hoot;
 
 const double epsilon = 1e-6;
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -65,6 +68,7 @@ class OsmSchemaTest : public CppUnit::TestFixture
   CPPUNIT_TEST(isAreaTest);
   CPPUNIT_TEST(isMetaDataTest);
   CPPUNIT_TEST(religionTest);
+  CPPUNIT_TEST(elementHasNameTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -471,8 +475,18 @@ public:
     CPPUNIT_ASSERT(d >= 0.8);
   }
 
+  void elementHasNameTest()
+  {
+    OsmSchema& uut = OsmSchema::getInstance();
 
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set("name", "blah");
+    CPPUNIT_ASSERT(uut.hasName(*node1));
 
+    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node2->getTags().set("blah", "blah");
+    CPPUNIT_ASSERT(!uut.hasName(*node2));
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmSchemaTest, "slow");
