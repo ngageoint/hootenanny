@@ -49,7 +49,7 @@ class CalculateTilesCmd : public BaseCommand
 
   public:
 
-    static string className() { return "hoot::CalculateTilesCmd"; }
+    static std::string className() { return "hoot::CalculateTilesCmd"; }
 
     CalculateTilesCmd() { }
 
@@ -59,7 +59,7 @@ class CalculateTilesCmd : public BaseCommand
     {
       if (args.size() != 2 && args.size() != 4)
       {
-        cout << getHelp() << endl << endl;
+        std::cout << getHelp() << std::endl << std::endl;
         throw HootException(QString("%1 takes either two or four parameters.").arg(getName()));
       }
 
