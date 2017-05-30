@@ -25,24 +25,17 @@
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
-#include <cppunit/TestResult.h>
-
 // Hoot
-#include <hoot/core/TestUtils.h>
-#include <hoot/core/test/ConflateCaseTestSuite.h>
-#include <hoot/rnd/conflate/network/ConflictsNetworkMatcher.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include "CaseTestFitnessFunction.h"
 
 // Qt
-#include <QTemporaryFile>
 #include <QTextStream>
 
 // Tgs
 #include <tgs/Optimization/SimulatedAnnealing.h>
-
-using namespace Tgs;
 
 namespace hoot
 {
@@ -63,279 +56,112 @@ class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 
 public:
 
-  class SimpleListener : public CppUnit::TestListener
-  {
-
-  public:
-
-    SimpleListener() : _failure(false) {}
-
-    virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-    bool isFailure() const { return _failure; }
-
-  private:
-
-    bool _failure;
-  };
-
-  class TempFileName
-  {
-  public:
-
-    TempFileName()
-    {
-      do
-      {
-        int r = Random::instance()->generateInt();
-        _name = QString("/tmp/HootConflictsTest-%1.conf").arg(r, 10, 10, QChar('0'));
-      }
-      while (QFile(_name).exists());
-    }
-
-    ~TempFileName()
-    {
-      if (QFile(_name).exists())
-      {
-        if (!QFile(_name).remove())
-        {
-          LOG_WARN("Failure removing: " << _name);
-        }
-      }
-    }
-
-    QString getFileName() const { return _name; }
-
-  private:
-
-    QString _name;
-  };
-
   //TODO: modify fitness function to give variable failure based on the number of reviews (#1092)
-  class CaseFitnessFunction : public Tgs::FitnessFunction
+
+  Tgs::StateDescriptionPtr initStateDescription()
   {
-  public:
-
-    CaseFitnessFunction() :
-    _testCount(0),
-    _lowestNumFailingTestsPerRun(-1)
-    {
-      _testSuite.reset(new ConflateCaseTestSuite("test-files/cases/hoot-rnd/network/conflicts/"));
-      _testCount = _testSuite->getChildTestCount();
-    }
-
-    virtual double f(const ConstStatePtr& s)
-    {
-      LOG_DEBUG("Running fitness function...");
-
-      Settings settings;
-      foreach (QString k, s->getAllValues().keys())
-      {
-        settings.set(k, s->get(k));
-      }
-      //if you need to add any other temporary custom settings for this test that wouldn't
-      //normally be used with the network conflation case tests, add those here
-      //settings.set("", "");
-      LOG_VART(settings);
-      TempFileName temp;
-      LOG_VARD(temp.getFileName());
-      settings.storeJson(temp.getFileName());
-
-      //this init will add the conflicts network case tests conf which is a subset of the overall
-      //network cases tests conf
-      QStringList failedTests;
-      for (int i = 0; i < _testCount; ++i)
-      {
-        ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(_testSuite->getChildTestAt(i));
-        const QString testName = QString::fromStdString(test->getName());
-        //LOG_ERROR("Running " << testName << "...");
-        //we still need to add the overall network cases tests conf
-        test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
-        //add our custom sa test option values
-        test->addConfig(temp.getFileName());
-        CppUnit::TestResult result;
-        SimpleListener listener;
-        result.addListener(&listener);
-        test->run(&result);
-
-        if (listener.isFailure())
-        {
-          //LOG_ERROR("Failure: " << testName);
-          failedTests.append(testName);
-        }
-      }
-
-      QString failedTestsStr;
-      if (failedTests.size() > 0)
-      {
-        failedTestsStr = _failedTestsToString(failedTests);
-      }
-      if (failedTests.size() < _lowestNumFailingTestsPerRun || _lowestNumFailingTestsPerRun == -1)
-      {
-        _lowestNumFailingTestsPerRun = failedTests.size();
-        _failingTestsForBestRuns.clear();
-        if (!failedTestsStr.isEmpty())
-        {
-          _failingTestsForBestRuns.append(failedTestsStr);
-        }
-      }
-      else if (failedTests.size() == _lowestNumFailingTestsPerRun &&
-               !failedTestsStr.isEmpty() && !_failingTestsForBestRuns.contains(failedTestsStr))
-      {
-        _failingTestsForBestRuns.append(failedTestsStr);
-      }
-
-      if (failedTests.size() == 0)
-      {
-        //This message will actually show if, by chance, the first selected random state
-        //is successful.  However, that state is just a starting point for the actual simulated
-        //annealing iterations.
-        LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
-      }
-      else
-      {
-        QString failureMsg =
-          QString::number(failedTests.size()) + "/" + QString::number(_testCount) +
-          " tests failed:\n\n";
-        for (int i = 0; i < failedTests.size(); i++)
-        {
-          failureMsg += "\t" + failedTests[i] + "\n";
-        }
-        LOG_ERROR(failureMsg);
-        LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
-        LOG_ERROR("");
-      }
-
-      return (double)failedTests.size() / (double)_testCount;
-    }
-
-    int getTestCount() { return _testCount; }
-
-    QStringList getFailingTestsForBestRuns() { return _failingTestsForBestRuns; }
-
-    private:
-
-      int _testCount;
-      int _lowestNumFailingTestsPerRun;
-      //list members are one or more test names joined by a ';'
-      QStringList _failingTestsForBestRuns;
-      boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
-
-      QString _failedTestsToString(const QStringList failedTests) const
-      {
-        QString concatTestNames;
-        for (int i = 0; i < failedTests.size(); i++)
-        {
-          concatTestNames += failedTests.at(i) + ";";
-        }
-        concatTestNames.chop(1);
-        return concatTestNames;
-      }
-  };
-
-  StateDescriptionPtr initStateDescription()
-  {
-    StateDescriptionPtr stateDescription(new StateDescription());
+    Tgs::StateDescriptionPtr stateDescription(new Tgs::StateDescription());
 
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
-        //VariableDescription::Real, 4.4, 4.4)); //original default
-        //VariableDescription::Real, 8.8, 8.8)); //current default
-        //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 4.0, 10.0)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkConflictsAggressionKey(),
+        //Tgs::VariableDescription::Real, 4.4, 4.4)); //original default
+        //Tgs::VariableDescription::Real, 8.8, 8.8)); //current default
+        //Tgs::VariableDescription::Real, 0.0, 10.0)); //min/max
+        Tgs::VariableDescription::Real, 4.0, 10.0)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
-        //VariableDescription::Real, 0.2, 0.2)); //original default
-        //VariableDescription::Real, 0.2, 0.2)); //current default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.1, 0.3)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkConflictsPartialHandicapKey(),
+        //Tgs::VariableDescription::Real, 0.2, 0.2)); //original default
+        //Tgs::VariableDescription::Real, 0.2, 0.2)); //current default
+        //Tgs::VariableDescription::Real, 0.0, 2.0)); //min/max
+        Tgs::VariableDescription::Real, 0.1, 0.3)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
-        //VariableDescription::Real, 0.86, 0.86)); //original default
-        //VariableDescription::Real, 1.7, 1.7)); //current default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.76, 0.96)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkConflictsStubHandicapKey(),
+        //Tgs::VariableDescription::Real, 0.86, 0.86)); //original default
+        //Tgs::VariableDescription::Real, 1.7, 1.7)); //current default
+        //Tgs::VariableDescription::Real, 0.0, 2.0)); //min/max
+        Tgs::VariableDescription::Real, 0.76, 0.96)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
-        //VariableDescription::Real, 0.0, 0.0)); //original default
-        //VariableDescription::Real, 0.0, 0.0)); //current default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.1)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkConflictsWeightInfluenceKey(),
+        //Tgs::VariableDescription::Real, 0.0, 0.0)); //original default
+        //Tgs::VariableDescription::Real, 0.0, 0.0)); //current default
+        //Tgs::VariableDescription::Real, 0.0, 2.0)); //min/max
+        Tgs::VariableDescription::Real, 0.0, 0.1)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
-        //VariableDescription::Real, 0.0, 0.0)); //original default
-        //VariableDescription::Real, 0.25, 0.25)); //current default
-        //VariableDescription::Real, 0.0, 2.0)); //min/max
-        VariableDescription::Real, 0.0, 0.1)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkConflictsOutboundWeightingKey(),
+        //Tgs::VariableDescription::Real, 0.0, 0.0)); //original default
+        //Tgs::VariableDescription::Real, 0.25, 0.25)); //current default
+        //Tgs::VariableDescription::Real, 0.0, 2.0)); //min/max
+        Tgs::VariableDescription::Real, 0.0, 0.1)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
-        //VariableDescription::Real, 0.59, 0.59)); //original default
-        //VariableDescription::Real, 0.5, 0.5)); //current default
-        //VariableDescription::Real, 0.0, 10.0)); //min/max
-        VariableDescription::Real, 0.49, 0.69)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkConflictsStubThroughWeightingKey(),
+        //Tgs::VariableDescription::Real, 0.59, 0.59)); //original default
+        //Tgs::VariableDescription::Real, 0.5, 0.5)); //current default
+        //Tgs::VariableDescription::Real, 0.0, 10.0)); //min/max
+        Tgs::VariableDescription::Real, 0.49, 0.69)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
-        //VariableDescription::Real, 20.0, 20.0)); //original default
-        //VariableDescription::Real, 20.0, 20.0)); //current default
-        //VariableDescription::Real, 1.0, 100.0));  //min/max??
-        VariableDescription::Real, 15.0, 25.0)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkMaxStubLengthKey(),
+        //Tgs::VariableDescription::Real, 20.0, 20.0)); //original default
+        //Tgs::VariableDescription::Real, 20.0, 20.0)); //current default
+        //Tgs::VariableDescription::Real, 1.0, 100.0));  //min/max??
+        Tgs::VariableDescription::Real, 15.0, 25.0)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
-        //VariableDescription::Real, 0.15, 0.15)); //original default
-        //VariableDescription::Real, 0.15, 0.15)); //current default
-        //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.05, 0.25)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkMatchThresholdKey(),
+        //Tgs::VariableDescription::Real, 0.15, 0.15)); //original default
+        //Tgs::VariableDescription::Real, 0.15, 0.15)); //current default
+        //Tgs::VariableDescription::Real, 0.01, 0.99));  //min/max
+        Tgs::VariableDescription::Real, 0.05, 0.25)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkMissThresholdKey(),
-        //VariableDescription::Real, 0.85, 0.85)); //original default
-        //VariableDescription::Real, 0.85, 0.85)); //current default
-        //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.75, 0.95)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkMissThresholdKey(),
+        //Tgs::VariableDescription::Real, 0.85, 0.85)); //original default
+        //Tgs::VariableDescription::Real, 0.85, 0.85)); //current default
+        //Tgs::VariableDescription::Real, 0.01, 0.99));  //min/max
+        Tgs::VariableDescription::Real, 0.75, 0.95)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkReviewThresholdKey(),
-        //VariableDescription::Real, 0.5, 0.5)); //original default
-        //VariableDescription::Real, 0.5, 0.5)); //current default
-        //VariableDescription::Real, 0.01, 0.99));  //min/max
-        VariableDescription::Real, 0.4, 0.6)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkReviewThresholdKey(),
+        //Tgs::VariableDescription::Real, 0.5, 0.5)); //original default
+        //Tgs::VariableDescription::Real, 0.5, 0.5)); //current default
+        //Tgs::VariableDescription::Real, 0.01, 0.99));  //min/max
+        Tgs::VariableDescription::Real, 0.4, 0.6)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getWayMergerMinSplitSizeKey(),
-        //VariableDescription::Real, 5.0, 5.0)); //original default
-        //VariableDescription::Real, 5.0, 5.0)); //current default
-        //VariableDescription::Real, 0.01, 100.0));  //min/max??
-        VariableDescription::Real, 4.0, 6.0)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getWayMergerMinSplitSizeKey(),
+        //Tgs::VariableDescription::Real, 5.0, 5.0)); //original default
+        //Tgs::VariableDescription::Real, 5.0, 5.0)); //current default
+        //Tgs::VariableDescription::Real, 0.01, 100.0));  //min/max??
+        Tgs::VariableDescription::Real, 4.0, 6.0)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getWayMatcherMaxAngleKey(),
-        //VariableDescription::Real, 60.0, 60.0)); //original default
-        //VariableDescription::Real, 60.0, 60.0)); //current default
-        //VariableDescription::Real, 0.01, 90.0));  //min/max
-        VariableDescription::Real, 50.0, 70.0)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getWayMatcherMaxAngleKey(),
+        //Tgs::VariableDescription::Real, 60.0, 60.0)); //original default
+        //Tgs::VariableDescription::Real, 60.0, 60.0)); //current default
+        //Tgs::VariableDescription::Real, 0.01, 90.0));  //min/max
+        Tgs::VariableDescription::Real, 50.0, 70.0)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getWayMatcherHeadingDeltaKey(),
-        //VariableDescription::Real, 5.0, 5.0)); //original default
-        //VariableDescription::Real, 5.0, 5.0)); //new default
-        //VariableDescription::Real, 0.01, 100.0));  //min/max??
-        VariableDescription::Real, 4.0, 6.0)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getWayMatcherHeadingDeltaKey(),
+        //Tgs::VariableDescription::Real, 5.0, 5.0)); //original default
+        //Tgs::VariableDescription::Real, 5.0, 5.0)); //new default
+        //Tgs::VariableDescription::Real, 0.01, 100.0));  //min/max??
+        Tgs::VariableDescription::Real, 4.0, 6.0)); //test values
     stateDescription->addVariable(
-      new VariableDescription(ConfigOptions::getNetworkOptimizationIterationsKey(),
-        //VariableDescription::Real, 10, 10)); //original default
-        VariableDescription::Real, 10, 10)); //new default
-        //VariableDescription::Real, 0, 100));  //min/max??
-        //VariableDescription::Real, 10, 20)); //test values
+      new Tgs::VariableDescription(ConfigOptions::getNetworkOptimizationIterationsKey(),
+        //Tgs::VariableDescription::Real, 10, 10)); //original default
+        Tgs::VariableDescription::Real, 10, 10)); //new default
+        //Tgs::VariableDescription::Real, 0, 100));  //min/max??
+        //Tgs::VariableDescription::Real, 10, 20)); //test values
 
     return stateDescription;
   }
 
-  QSet<ConstStatePtr> runOptimization(ConstStateDescriptionPtr stateDescription,
-                                      boost::shared_ptr<CaseFitnessFunction> fitnessFunction,
-                                      double& bestScore, const int numIterations)
+  QSet<Tgs::ConstStatePtr> runOptimization(Tgs::ConstStateDescriptionPtr stateDescription,
+                                           boost::shared_ptr<CaseTestFitnessFunction> fitnessFunction,
+                                           double& bestScore, const int numIterations)
   {
-    SimulatedAnnealing sa(stateDescription, fitnessFunction);
+    Tgs::SimulatedAnnealing sa(stateDescription, fitnessFunction);
     sa.setPickFromBestScores(true);
     bestScore = sa.iterate(numIterations);
     return sa.getBestStates();
   }
 
-  void writeOutput(boost::shared_ptr<CaseFitnessFunction> fitnessFunction,
-                   const QSet<ConstStatePtr>& bestStates, const double bestScore,
+  void writeOutput(boost::shared_ptr<CaseTestFitnessFunction> fitnessFunction,
+                   const QSet<Tgs::ConstStatePtr>& bestStates, const double bestScore,
                    const int numIterations)
   {
     QString output =
@@ -405,7 +231,7 @@ public:
     }
     output += "Best States (" + QString::number(bestStates.size()) + "):\n\n";
     int statesCtr = 1;
-    foreach (ConstStatePtr state, bestStates)
+    foreach (Tgs::ConstStatePtr state, bestStates)
     {
       output += "#" + QString::number(statesCtr) + ":\n\n";
       output += state->toString() + "\n\n";
@@ -416,10 +242,10 @@ public:
 
   void optimizeAgainstCaseDataTest()
   {
-    boost::shared_ptr<CaseFitnessFunction> fitnessFunction(new CaseFitnessFunction());
+    boost::shared_ptr<CaseTestFitnessFunction> fitnessFunction(new CaseTestFitnessFunction());
     const int numIterations = 50;
     double bestScore = -1.0;
-    const QSet<ConstStatePtr> bestStates =
+    const QSet<Tgs::ConstStatePtr> bestStates =
       runOptimization(initStateDescription(), fitnessFunction, bestScore, numIterations);
     writeOutput(fitnessFunction, bestStates, bestScore, numIterations);
   }
