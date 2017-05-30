@@ -63,8 +63,7 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.cpp
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
 
 HEADERS += \
 
@@ -105,7 +104,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/cmd/ConflateCumulativeCmd.cpp \
     src/main/cpp/hoot/rnd/conflate/CumulativeConflator.cpp \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.cpp \
-    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -146,7 +147,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/CumulativeConflator.h \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.h \
     src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.h \
-    src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.h
+    src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.h \
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.h
 
 FORMS +=
 

@@ -30,6 +30,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include "CaseTestFitnessFunction.h"
+#include "RegressionReleaseTestFitnessFunction.h"
 
 // Qt
 #include <QTextStream>
@@ -52,6 +53,7 @@ class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
   //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
+  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseTestDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -248,6 +250,11 @@ public:
     const QSet<Tgs::ConstStatePtr> bestStates =
       runOptimization(initStateDescription(), fitnessFunction, bestScore, numIterations);
     writeOutput(fitnessFunction, bestStates, bestScore, numIterations);
+  }
+
+  void optimizeAgainstRegressionReleaseTestDataTest()
+  {
+
   }
 };
 

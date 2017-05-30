@@ -25,19 +25,20 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef __CASETESTFITNESSFUNCTION_H__
-#define __CASETESTFITNESSFUNCTION_H__
+#ifndef __REGRESSIONRELEASETESTFITNESSFUNCTION_H__
+#define __REGRESSIONRELEASETESTFITNESSFUNCTION_H__
 
 // Cpp Unit
-#include <cppunit/TestListener.h>
-#include <cppunit/TestResult.h>
+//#include <cppunit/TestListener.h>
+//#include <cppunit/TestResult.h>
 
 // Hoot
-#include <hoot/core/test/ConflateCaseTestSuite.h>
+//#include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
 #include <QTemporaryFile>
+#include <QStringList>
 
 // Tgs
 #include <tgs/Optimization/FitnessFunction.h>
@@ -48,61 +49,61 @@ namespace hoot
 {
 
 /**
- * Fitness function which optimizes against Hootenanny conflate case test data
+ * Fitness function which optimizes against Hootenanny regression release test data
  */
-class CaseTestFitnessFunction : public Tgs::FitnessFunction
+class RegressionReleaseTestFitnessFunction : public Tgs::FitnessFunction
 {
 
 public:
 
-    class SimpleListener : public CppUnit::TestListener
-    {
+//    class SimpleListener : public CppUnit::TestListener
+//    {
 
-    public:
+//    public:
 
-      SimpleListener() : _failure(false) {}
+//      SimpleListener() : _failure(false) {}
 
-      virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-      bool isFailure() const { return _failure; }
+//      virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
+//      bool isFailure() const { return _failure; }
 
-    private:
+//    private:
 
-      bool _failure;
-    };
+//      bool _failure;
+//    };
 
-    class TempFileName
-    {
-    public:
+//    class TempFileName
+//    {
+//    public:
 
-      TempFileName()
-      {
-        do
-        {
-          int r = Tgs::Random::instance()->generateInt();
-          _name = QString("/tmp/HootConflictsTest-%1.conf").arg(r, 10, 10, QChar('0'));
-        }
-        while (QFile(_name).exists());
-      }
+//      TempFileName()
+//      {
+//        do
+//        {
+//          int r = Tgs::Random::instance()->generateInt();
+//          _name = QString("/tmp/HootConflictsTest-%1.conf").arg(r, 10, 10, QChar('0'));
+//        }
+//        while (QFile(_name).exists());
+//      }
 
-      ~TempFileName()
-      {
-        if (QFile(_name).exists())
-        {
-          if (!QFile(_name).remove())
-          {
-            LOG_WARN("Failure removing: " << _name);
-          }
-        }
-      }
+//      ~TempFileName()
+//      {
+//        if (QFile(_name).exists())
+//        {
+//          if (!QFile(_name).remove())
+//          {
+//            LOG_WARN("Failure removing: " << _name);
+//          }
+//        }
+//      }
 
-      QString getFileName() const { return _name; }
+//      QString getFileName() const { return _name; }
 
-    private:
+//    private:
 
-      QString _name;
-    };
+//      QString _name;
+//    };
 
-    CaseTestFitnessFunction();
+    RegressionReleaseTestFitnessFunction();
 
     virtual double f(const Tgs::ConstStatePtr& s);
 
@@ -116,11 +117,11 @@ private:
     int _lowestNumFailingTestsPerRun;
     //list members are one or more test names joined by a ';'
     QStringList _failingTestsForBestRuns;
-    boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
+    //boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
 
     QString _failedTestsToString(const QStringList failedTests) const;
 };
 
 }
 
-#endif // __CASETESTFITNESSFUNCTION_H__
+#endif // __REGRESSIONRELEASETESTFITNESSFUNCTION_H__
