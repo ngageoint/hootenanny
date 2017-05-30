@@ -106,7 +106,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.cpp \
     src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp \
     src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.cpp
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -148,7 +150,9 @@ HEADERS += \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.h \
     src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.h \
     src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.h \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.h
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.h \
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.h \
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.h
 
 FORMS +=
 

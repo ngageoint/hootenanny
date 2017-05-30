@@ -33,8 +33,8 @@
 //#include <cppunit/TestResult.h>
 
 // Hoot
-//#include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/Log.h>
+#include "RegressionReleaseTestSuite.h"
 
 // Qt
 #include <QTemporaryFile>
