@@ -279,26 +279,28 @@ class CalculateTilesCmd : public BaseCommand
               circularError));
           boundaryMap->addNode(lowerRight);
 
-          WayPtr left(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
-          left->addNode(lowerLeft->getId());
-          left->addNode(upperLeft->getId());
-          boundaryMap->addWay(left);
-          WayPtr top(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
-          top->addNode(upperLeft->getId());
-          top->addNode(upperRight->getId());
-          boundaryMap->addWay(top);
-          WayPtr right(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
-          right->addNode(upperRight->getId());
-          right->addNode(lowerRight->getId());
-          boundaryMap->addWay(right);
-          WayPtr bottom(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
-          bottom->addNode(lowerRight->getId());
-          bottom->addNode(lowerLeft->getId());
-          boundaryMap->addWay(bottom);
+          WayPtr bbox(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
+          bbox->addNode(lowerLeft->getId());
+          bbox->addNode(upperLeft->getId());
+          bbox->addNode(upperLeft->getId());
+          bbox->addNode(upperRight->getId());
+          bbox->addNode(upperRight->getId());
+          bbox->addNode(lowerRight->getId());
+          bbox->addNode(lowerRight->getId());
+          bbox->addNode(lowerLeft->getId());
+          boundaryMap->addWay(bbox);
         }
       }
 
       OsmMapWriterFactory::getInstance().write(boundaryMap, outputPath);
+
+      if (Log::getInstance().getLevel() <= Log::Debug)
+      {
+        const QString debugOutputPath = "tmp/calc-tiles-osm-debug.osm";
+        QFile outFile(outputPath);
+        LOG_DEBUG("writing debug output to " << debugOutputPath);
+        outFile.copy(debugOutputPath);
+      }
     }
 };
 
