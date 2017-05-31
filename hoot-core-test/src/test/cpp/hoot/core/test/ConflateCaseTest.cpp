@@ -34,35 +34,10 @@
 #include <hoot/core/util/Log.h>
 
 #include "../TestUtils.h"
+#include "TestSetup.h"
 
 namespace hoot
 {
-
-class SetupTest
-{
-public:
-
-  SetupTest(const QStringList confs) :
-  _confs(confs)
-  {
-    reset();
-  }
-
-  ~SetupTest()
-  {
-    reset();
-  }
-
-  void reset()
-  {
-    TestUtils::resetEnvironment(_confs);
-  }
-
-private:
-
-  QStringList _confs;
-
-};
 
 ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
   CppUnit::TestCase(d.absolutePath().toStdString()),
@@ -78,7 +53,7 @@ void ConflateCaseTest::runTest()
 
   // configures and cleans up the conf() environment
   LOG_VART(_confs);
-  SetupTest st(_confs);
+  TestSetup st(_confs);
 
   ConflateCmd cmd;
 

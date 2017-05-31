@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,56 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#ifndef __CASETESTFITNESSFUNCTION_H__
-#define __CASETESTFITNESSFUNCTION_H__
-
-// Cpp Unit
-#include <cppunit/TestResult.h>
+#include "TempFileName.h"
 
 // Hoot
-#include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/Log.h>
 
-// Qt
-#include <QTemporaryFile>
-
 // Tgs
-#include <tgs/Optimization/FitnessFunction.h>
-#include <tgs/Optimization/State.h>
+#include <tgs/Statistics/Random.h>
+
+// Qt
+#include <QFile>
 
 namespace hoot
 {
 
-/**
- * Fitness function which optimizes against Hootenanny conflate case test data
- */
-class CaseTestFitnessFunction : public Tgs::FitnessFunction
+TempFileName::TempFileName()
 {
-
-public:
-
-    CaseTestFitnessFunction();
-
-    virtual double f(const Tgs::ConstStatePtr& s);
-
-    int getTestCount() { return _testCount; }
-
-    QStringList getFailingTestsForBestRuns() { return _failingTestsForBestRuns; }
-
-private:
-
-    int _testCount;
-    int _lowestNumFailingTestsPerRun;
-    //list members are one or more test names joined by a ';'
-    QStringList _failingTestsForBestRuns;
-    boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
-
-    QString _failedTestsToString(const QStringList failedTests) const;
-};
-
+  do
+  {
+    int r = Tgs::Random::instance()->generateInt();
+    _name = QString("/tmp/HootConflictsTest-%1.conf").arg(r, 10, 10, QChar('0'));
+  }
+  while (QFile(_name).exists());
 }
 
-#endif // __CASETESTFITNESSFUNCTION_H__
+TempFileName::~TempFileName()
+{
+  if (QFile(_name).exists())
+  {
+    if (!QFile(_name).remove())
+    {
+      LOG_WARN("Failure removing: " << _name);
+    }
+  }
+}
+
+}

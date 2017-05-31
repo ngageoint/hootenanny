@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,56 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#ifndef __CASETESTFITNESSFUNCTION_H__
-#define __CASETESTFITNESSFUNCTION_H__
+#ifndef SIMPLETESTLISTENER_H
+#define SIMPLETESTLISTENER_H
 
 // Cpp Unit
-#include <cppunit/TestResult.h>
-
-// Hoot
-#include <hoot/core/test/ConflateCaseTestSuite.h>
-#include <hoot/core/util/Log.h>
-
-// Qt
-#include <QTemporaryFile>
-
-// Tgs
-#include <tgs/Optimization/FitnessFunction.h>
-#include <tgs/Optimization/State.h>
+#include <cppunit/TestListener.h>
 
 namespace hoot
 {
 
-/**
- * Fitness function which optimizes against Hootenanny conflate case test data
- */
-class CaseTestFitnessFunction : public Tgs::FitnessFunction
+class SimpleTestListener : public CppUnit::TestListener
 {
 
 public:
 
-    CaseTestFitnessFunction();
+  SimpleTestListener();
 
-    virtual double f(const Tgs::ConstStatePtr& s);
-
-    int getTestCount() { return _testCount; }
-
-    QStringList getFailingTestsForBestRuns() { return _failingTestsForBestRuns; }
+  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
+  bool isFailure() const { return _failure; }
 
 private:
 
-    int _testCount;
-    int _lowestNumFailingTestsPerRun;
-    //list members are one or more test names joined by a ';'
-    QStringList _failingTestsForBestRuns;
-    boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
+  bool _failure;
 
-    QString _failedTestsToString(const QStringList failedTests) const;
+
 };
 
 }
 
-#endif // __CASETESTFITNESSFUNCTION_H__
+#endif // SIMPLETESTLISTENER_H

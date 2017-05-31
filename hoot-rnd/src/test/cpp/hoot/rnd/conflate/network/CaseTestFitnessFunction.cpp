@@ -29,6 +29,8 @@
 
 // Hoot
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/test/SimpleTestListener.h>
+#include <hoot/core/test/TempFileName.h>
 
 namespace hoot
 {
@@ -71,7 +73,7 @@ double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     //add our custom sa test option values
     test->addConfig(temp.getFileName());
     CppUnit::TestResult result;
-    SimpleListener listener;
+    SimpleTestListener listener;
     result.addListener(&listener);
     test->run(&result);
 

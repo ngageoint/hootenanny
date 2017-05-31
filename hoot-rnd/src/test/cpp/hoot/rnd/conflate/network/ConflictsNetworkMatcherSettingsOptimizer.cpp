@@ -53,7 +53,7 @@ class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
   //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
-  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseTestDataTest);
+  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -252,7 +252,7 @@ public:
     writeOutput(fitnessFunction, bestStates, bestScore, numIterations);
   }
 
-  void optimizeAgainstRegressionReleaseTestDataTest()
+  void optimizeAgainstRegressionReleaseDataTest()
   {
 
   }
