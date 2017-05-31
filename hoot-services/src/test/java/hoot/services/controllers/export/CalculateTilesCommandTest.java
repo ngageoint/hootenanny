@@ -72,7 +72,6 @@ public class CalculateTilesCommandTest {
         CalculateTilesCommand command = new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
 
         List<String> options = new LinkedList<>();
-        options.add("id.generator=hoot::PositiveIdGenerator");
         options.add("api.db.email=test@test.com");
         options.add("convert.bounding.box=" + aoi);
 
@@ -131,7 +130,6 @@ public class CalculateTilesCommandTest {
         CalculateTilesCommand command = new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
 
         List<String> options = new LinkedList<>();
-        options.add("id.generator=hoot::PositiveIdGenerator");
         options.add("api.db.email=test@test.com");
         options.add("convert.bounding.box=" + aoi);
 

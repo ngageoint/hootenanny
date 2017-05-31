@@ -57,7 +57,6 @@ class CalculateTilesCommand extends ExportCommand {
         }
         
         List<String> options = new LinkedList<>();
-        options.add("id.generator=hoot::PositiveIdGenerator");
         options.add("api.db.email=test@test.com");
         //bounding box is optional for this command; if not specified, the command will calculate
         //for the combined extent of all input datasets which, of course, can be very expensive for
