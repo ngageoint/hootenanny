@@ -25,14 +25,23 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef __CASETESTFITNESSFUNCTION_H__
-#define __CASETESTFITNESSFUNCTION_H__
+#ifndef __ABSTRACTTESTFITNESSFUNCTION_H__
+#define __ABSTRACTTESTFITNESSFUNCTION_H__
+
+// Cpp Unit
+#include <cppunit/TestResult.h>
 
 // Hoot
-#include "AbstractTestFitnessFunction.h"
+#include <hoot/core/test/AbstractTestSuite.h>
+#include <hoot/core/test/AbstractTest.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QTemporaryFile>
+
+// Tgs
+#include <tgs/Optimization/FitnessFunction.h>
+#include <tgs/Optimization/State.h>
 
 namespace hoot
 {
@@ -40,16 +49,35 @@ namespace hoot
 /**
  * Fitness function which optimizes against Hootenanny conflate case test data
  */
-class CaseTestFitnessFunction : public AbstractTestFitnessFunction
+class AbstractTestFitnessFunction : public Tgs::FitnessFunction
 {
 
 public:
 
-    CaseTestFitnessFunction();
+    AbstractTestFitnessFunction();
 
-    virtual void initTest(AbstractTest* test);
+    virtual double f(const Tgs::ConstStatePtr& s);
+
+    int getTestCount() { return _testCount; }
+
+    QStringList getFailingTestsForBestRuns() { return _failingTestsForBestRuns; }
+
+    virtual void initTest(AbstractTest* test) = 0;
+
+protected:
+
+  int _testCount;
+  boost::shared_ptr<AbstractTestSuite> _testSuite;
+
+private:
+
+    int _lowestNumFailingTestsPerRun;
+    //list members are one or more test names joined by a ';'
+    QStringList _failingTestsForBestRuns;
+
+    QString _failedTestsToString(const QStringList failedTests) const;
 };
 
 }
 
-#endif // __CASETESTFITNESSFUNCTION_H__
+#endif // __ABSTRACTTESTFITNESSFUNCTION_H__

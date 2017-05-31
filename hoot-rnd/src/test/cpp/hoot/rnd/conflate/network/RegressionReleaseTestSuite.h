@@ -27,33 +27,19 @@
 #ifndef REGRESSIONRELEASETESTSUITE_H
 #define REGRESSIONRELEASETESTSUITE_H
 
-#include "RegressionReleaseTestSuite.h"
-
-// Hoot
-#include "RegressionReleaseTest.h"
-
-// Qt
-#include <QStringList>
-
-// Standard
-#include <vector>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include <hoot/core/test/AbstractTestSuite.h>
 
 namespace hoot
 {
 
-class RegressionReleaseTestSuite : public CppUnit::TestSuite
+class RegressionReleaseTestSuite : public AbstractTestSuite
 {
 
 public:
 
   RegressionReleaseTestSuite(QString dir);
 
-private:
-
-  void _loadDir(QString dir, QStringList confs);
+  virtual void loadDir(QString dir, QStringList confs);
 };
 
 }

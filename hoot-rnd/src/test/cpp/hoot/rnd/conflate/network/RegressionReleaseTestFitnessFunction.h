@@ -28,22 +28,8 @@
 #ifndef __REGRESSIONRELEASETESTFITNESSFUNCTION_H__
 #define __REGRESSIONRELEASETESTFITNESSFUNCTION_H__
 
-// Cpp Unit
-//#include <cppunit/TestListener.h>
-//#include <cppunit/TestResult.h>
-
 // Hoot
-#include <hoot/core/util/Log.h>
-#include "RegressionReleaseTestSuite.h"
-
-// Qt
-#include <QTemporaryFile>
-#include <QStringList>
-
-// Tgs
-#include <tgs/Optimization/FitnessFunction.h>
-#include <tgs/Optimization/State.h>
-#include <tgs/Statistics/Random.h>
+#include "AbstractTestFitnessFunction.h"
 
 namespace hoot
 {
@@ -51,75 +37,14 @@ namespace hoot
 /**
  * Fitness function which optimizes against Hootenanny regression release test data
  */
-class RegressionReleaseTestFitnessFunction : public Tgs::FitnessFunction
+class RegressionReleaseTestFitnessFunction : public AbstractTestFitnessFunction
 {
 
 public:
 
-//    class SimpleListener : public CppUnit::TestListener
-//    {
-
-//    public:
-
-//      SimpleListener() : _failure(false) {}
-
-//      virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-//      bool isFailure() const { return _failure; }
-
-//    private:
-
-//      bool _failure;
-//    };
-
-//    class TempFileName
-//    {
-//    public:
-
-//      TempFileName()
-//      {
-//        do
-//        {
-//          int r = Tgs::Random::instance()->generateInt();
-//          _name = QString("/tmp/HootConflictsTest-%1.conf").arg(r, 10, 10, QChar('0'));
-//        }
-//        while (QFile(_name).exists());
-//      }
-
-//      ~TempFileName()
-//      {
-//        if (QFile(_name).exists())
-//        {
-//          if (!QFile(_name).remove())
-//          {
-//            LOG_WARN("Failure removing: " << _name);
-//          }
-//        }
-//      }
-
-//      QString getFileName() const { return _name; }
-
-//    private:
-
-//      QString _name;
-//    };
-
     RegressionReleaseTestFitnessFunction();
 
-    virtual double f(const Tgs::ConstStatePtr& s);
-
-    int getTestCount() { return _testCount; }
-
-    QStringList getFailingTestsForBestRuns() { return _failingTestsForBestRuns; }
-
-private:
-
-    int _testCount;
-    int _lowestNumFailingTestsPerRun;
-    //list members are one or more test names joined by a ';'
-    QStringList _failingTestsForBestRuns;
-    //boost::shared_ptr<ConflateCaseTestSuite> _testSuite;
-
-    QString _failedTestsToString(const QStringList failedTests) const;
+    virtual void initTest(AbstractTest* test);
 };
 
 }

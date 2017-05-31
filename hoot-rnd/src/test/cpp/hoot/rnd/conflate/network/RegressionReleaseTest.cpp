@@ -29,47 +29,51 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/test/TestSetup.h>
 
 namespace hoot
 {
 
-class SetupTest
-{
-public:
-
-  SetupTest(const QStringList confs) :
-  _confs(confs)
-  {
-    reset();
-  }
-
-  ~SetupTest()
-  {
-    reset();
-  }
-
-  void reset()
-  {
-    TestUtils::resetEnvironment(_confs);
-  }
-
-private:
-
-  QStringList _confs;
-
-};
-
 RegressionReleaseTest::RegressionReleaseTest(QDir d, QStringList confs) :
-  CppUnit::TestCase(d.absolutePath().toStdString()),
-  _d(d),
-  _confs(confs)
+AbstractTest(d, confs)
 {
 }
 
 void RegressionReleaseTest::runTest()
 {
+  TestUtils::resetEnvironment();
+  LOG_DEBUG("Running regression release test...");
 
+  // configures and cleans up the conf() environment
+  LOG_VART(_confs);
+  TestSetup st(_confs);
+
+  QFileInfo makeFile(_d, "Makefile");
+  if (!makeFile.exists())
+  {
+    throw IllegalArgumentException(
+      "Unable to find Makefile for regression release test: " + _d.absolutePath());
+  }
+
+  const QString startingDir = QDir::currentPath();
+  if (!QDir::setCurrent(_d.absolutePath()))
+  {
+    throw IllegalArgumentException("Unable to change to test directory: " + _d.absolutePath());
+  }
+  const QString cmd = "make test";
+  const int retval = system(cmd.toStdString().c_str());
+  if (retval != 0)
+  {
+    CPPUNIT_ASSERT_MESSAGE(
+      QString("Failed executing regression release test.  Status: " +
+      QString::number(retval)).toStdString(),
+      false);
+  }
+  if (!QDir::setCurrent(startingDir))
+  {
+    throw HootException("Unable to change back to hoot tests directory: " + _d.absolutePath());
+  }
 }
 
 }

@@ -22,30 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETEST_H
-#define CONFLATECASETEST_H
-
-// Qt
-#include <QDir>
-#include <QStringList>
-
-#include "AbstractTest.h"
+#include "AbstractTestSuite.h"
 
 namespace hoot
 {
 
-class ConflateCaseTest : public AbstractTest
+AbstractTestSuite::AbstractTestSuite(QString dir) :
+TestSuite(dir.toStdString())
 {
-
-public:
-
-  ConflateCaseTest(QDir d, QStringList confs);
-
-  virtual void runTest();
-};
-
 }
 
-#endif // CONFLATECASETEST_H
+}

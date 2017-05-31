@@ -24,28 +24,17 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETEST_H
-#define CONFLATECASETEST_H
-
-// Qt
-#include <QDir>
-#include <QStringList>
-
 #include "AbstractTest.h"
+
 
 namespace hoot
 {
 
-class ConflateCaseTest : public AbstractTest
+AbstractTest::AbstractTest(QDir d, QStringList confs) :
+  CppUnit::TestCase(d.absolutePath().toStdString()),
+  _d(d),
+  _confs(confs)
 {
-
-public:
-
-  ConflateCaseTest(QDir d, QStringList confs);
-
-  virtual void runTest();
-};
-
 }
 
-#endif // CONFLATECASETEST_H
+}

@@ -27,11 +27,8 @@
 #ifndef REGRESSIONRELEASETEST_H
 #define REGRESSIONRELEASETEST_H
 
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+// Hoot
+#include <hoot/core/test/AbstractTest.h>
 
 // Qt
 #include <QDir>
@@ -40,21 +37,15 @@
 namespace hoot
 {
 
-class RegressionReleaseTest : public CppUnit::TestCase
+class RegressionReleaseTest : public AbstractTest
 {
 
 public:
 
   RegressionReleaseTest(QDir d, QStringList confs);
 
-  void addConfig(QString conf) { _confs << conf; }
-
   virtual void runTest();
 
-private:
-
-  QDir _d;
-  QStringList _confs;
 };
 
 }

@@ -24,28 +24,31 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETEST_H
-#define CONFLATECASETEST_H
+#ifndef ABSTRACTTESTSUITE_H
+#define ABSTRACTTESTSUITE_H
+
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
 
 // Qt
-#include <QDir>
 #include <QStringList>
-
-#include "AbstractTest.h"
 
 namespace hoot
 {
 
-class ConflateCaseTest : public AbstractTest
+class AbstractTestSuite : public CppUnit::TestSuite
 {
 
 public:
 
-  ConflateCaseTest(QDir d, QStringList confs);
+  AbstractTestSuite(QString dir);
 
-  virtual void runTest();
+  virtual void loadDir(QString dir, QStringList confs) = 0;
 };
 
 }
 
-#endif // CONFLATECASETEST_H
+#endif // ABSTRACTTESTSUITE_H

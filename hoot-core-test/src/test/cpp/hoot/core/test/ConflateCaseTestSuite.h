@@ -27,30 +27,19 @@
 #ifndef CONFLATECASETESTSUITE_H
 #define CONFLATECASETESTSUITE_H
 
-#include "ConflateCaseTest.h"
-
-// Qt
-#include <QStringList>
-
-// Standard
-#include <vector>
-
-// tgs
-#include <tgs/SharedPtr.h>
+#include "AbstractTestSuite.h"
 
 namespace hoot
 {
 
-class ConflateCaseTestSuite : public CppUnit::TestSuite
+class ConflateCaseTestSuite : public AbstractTestSuite
 {
 
 public:
 
   ConflateCaseTestSuite(QString dir);
 
-private:
-
-  void _loadDir(QString dir, QStringList confs);
+  virtual void loadDir(QString dir, QStringList confs);
 };
 
 }

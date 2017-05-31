@@ -24,28 +24,39 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETEST_H
-#define CONFLATECASETEST_H
+#ifndef ABSTRACTTEST_H
+#define ABSTRACTTEST_H
+
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
 
 // Qt
 #include <QDir>
 #include <QStringList>
 
-#include "AbstractTest.h"
-
 namespace hoot
 {
 
-class ConflateCaseTest : public AbstractTest
+class AbstractTest : public CppUnit::TestCase
 {
 
 public:
 
-  ConflateCaseTest(QDir d, QStringList confs);
+  AbstractTest(QDir d, QStringList confs);
 
-  virtual void runTest();
+  void addConfig(QString conf) { _confs << conf; }
+
+  virtual void runTest() = 0;
+
+protected:
+
+  QDir _d;
+  QStringList _confs;
 };
 
 }
 
-#endif // CONFLATECASETEST_H
+#endif // ABSTRACTTEST_H

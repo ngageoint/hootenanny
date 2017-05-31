@@ -30,6 +30,8 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/HootConfig.h>
+#include <hoot/core/cmd/ConflateCmd.h>
+#include "ConflateCaseTest.h"
 
 // Qt
 #include <QDir>
@@ -38,13 +40,12 @@
 namespace hoot
 {
 
-ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir) : TestSuite(dir.toStdString())
+ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir) :
+AbstractTestSuite(dir)
 {
-  QStringList confs;
-  _loadDir(dir, confs);
 }
 
-void ConflateCaseTestSuite::_loadDir(QString dir, QStringList confs)
+void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
 {
   if (dir.endsWith(".off"))
   {
@@ -93,7 +94,7 @@ void ConflateCaseTestSuite::_loadDir(QString dir, QStringList confs)
     }
     else
     {
-      _loadDir(path, confs);
+      loadDir(path, confs);
     }
   }
 

@@ -27,11 +27,9 @@
 #include "ConflateCaseTest.h"
 
 // hoot
-#include <hoot/core/cmd/ConflateCmd.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/cmd/ConflateCmd.h>
 
 #include "../TestUtils.h"
 #include "TestSetup.h"
@@ -40,9 +38,7 @@ namespace hoot
 {
 
 ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
-  CppUnit::TestCase(d.absolutePath().toStdString()),
-  _d(d),
-  _confs(confs)
+AbstractTest(d, confs)
 {
 }
 

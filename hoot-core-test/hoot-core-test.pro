@@ -249,7 +249,9 @@ SOURCES += \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
     src/test/cpp/hoot/core/test/SimpleTestListener.cpp \
     src/test/cpp/hoot/core/test/TempFileName.cpp \
-    src/test/cpp/hoot/core/test/TestSetup.cpp
+    src/test/cpp/hoot/core/test/TestSetup.cpp \
+    src/test/cpp/hoot/core/test/AbstractTest.cpp \
+    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
@@ -257,6 +259,8 @@ HEADERS += \
     src/test/cpp/hoot/core/io/TestOsmChangesetProvider.h \
     src/test/cpp/hoot/core/test/SimpleTestListener.h \
     src/test/cpp/hoot/core/test/TempFileName.h \
-    src/test/cpp/hoot/core/test/TestSetup.h
+    src/test/cpp/hoot/core/test/TestSetup.h \
+    src/test/cpp/hoot/core/test/AbstractTest.h \
+    src/test/cpp/hoot/core/test/AbstractTestSuite.h
 
 

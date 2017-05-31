@@ -27,27 +27,35 @@
 #include "RegressionReleaseTestSuite.h"
 
 // hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/HootConfig.h>
+#include "RegressionReleaseTest.h"
 
 // Qt
 #include <QDir>
-#include <QFileInfo>
 
 namespace hoot
 {
 
 RegressionReleaseTestSuite::RegressionReleaseTestSuite(QString dir) :
-TestSuite(dir.toStdString())
+AbstractTestSuite(dir)
 {
-  QStringList confs;
-  _loadDir(dir, confs);
 }
 
-void RegressionReleaseTestSuite::_loadDir(QString dir, QStringList confs)
+void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
 {
+  if (dir.endsWith(".off"))
+  {
+    return;
+  }
+  QDir d(dir);
 
+  QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+  for (int i = 0; i < dirs.size(); i++)
+  {
+    QString path = d.absoluteFilePath(dirs[i]);
+    loadDir(path, confs);
+  }
+
+  addTest(new RegressionReleaseTest(d, confs));
 }
 
 }

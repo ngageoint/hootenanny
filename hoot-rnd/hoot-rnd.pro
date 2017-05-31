@@ -108,7 +108,8 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.cpp \
     src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.cpp \
     src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.cpp
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/network/AbstractTestFitnessFunction.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -152,7 +153,8 @@ HEADERS += \
     src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.h \
     src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.h \
     src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.h \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.h
+    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.h \
+    src/test/cpp/hoot/rnd/conflate/network/AbstractTestFitnessFunction.h
 
 FORMS +=
 

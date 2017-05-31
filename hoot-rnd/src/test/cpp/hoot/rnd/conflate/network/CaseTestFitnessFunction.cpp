@@ -27,116 +27,24 @@
 
 #include "CaseTestFitnessFunction.h"
 
-// Hoot
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/test/SimpleTestListener.h>
-#include <hoot/core/test/TempFileName.h>
+#include <hoot/core/test/ConflateCaseTestSuite.h>
 
 namespace hoot
 {
 
 CaseTestFitnessFunction::CaseTestFitnessFunction() :
-_testCount(0),
-_lowestNumFailingTestsPerRun(-1)
+AbstractTestFitnessFunction()
 {
-  _testSuite.reset(new ConflateCaseTestSuite("test-files/cases/hoot-rnd/network/conflicts/"));
+  const QString dir = "test-files/cases/hoot-rnd/network/conflicts/";
+  _testSuite.reset(new ConflateCaseTestSuite(dir));
+  QStringList confs;
+  _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
 }
 
-double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
+void CaseTestFitnessFunction::initTest(AbstractTest* test)
 {
-  LOG_DEBUG("Running fitness function...");
-
-  Settings settings;
-  foreach (QString k, s->getAllValues().keys())
-  {
-    settings.set(k, s->get(k));
-  }
-  //if you need to add any other temporary custom settings for this test that wouldn't
-  //normally be used with the network conflation case tests, add those here
-  //settings.set("", "");
-  LOG_VART(settings);
-  TempFileName temp;
-  LOG_VARD(temp.getFileName());
-  settings.storeJson(temp.getFileName());
-
-  //this init will add the conflicts network case tests conf which is a subset of the overall
-  //network cases tests conf
-  QStringList failedTests;
-  for (int i = 0; i < _testCount; ++i)
-  {
-    ConflateCaseTest* test = dynamic_cast<ConflateCaseTest*>(_testSuite->getChildTestAt(i));
-    const QString testName = QString::fromStdString(test->getName());
-    //LOG_ERROR("Running " << testName << "...");
-    //we still need to add the overall network cases tests conf
-    test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
-    //add our custom sa test option values
-    test->addConfig(temp.getFileName());
-    CppUnit::TestResult result;
-    SimpleTestListener listener;
-    result.addListener(&listener);
-    test->run(&result);
-
-    if (listener.isFailure())
-    {
-      //LOG_ERROR("Failure: " << testName);
-      failedTests.append(testName);
-    }
-  }
-
-  QString failedTestsStr;
-  if (failedTests.size() > 0)
-  {
-    failedTestsStr = _failedTestsToString(failedTests);
-  }
-  if (failedTests.size() < _lowestNumFailingTestsPerRun || _lowestNumFailingTestsPerRun == -1)
-  {
-    _lowestNumFailingTestsPerRun = failedTests.size();
-    _failingTestsForBestRuns.clear();
-    if (!failedTestsStr.isEmpty())
-    {
-      _failingTestsForBestRuns.append(failedTestsStr);
-    }
-  }
-  else if (failedTests.size() == _lowestNumFailingTestsPerRun &&
-           !failedTestsStr.isEmpty() && !_failingTestsForBestRuns.contains(failedTestsStr))
-  {
-    _failingTestsForBestRuns.append(failedTestsStr);
-  }
-
-  if (failedTests.size() == 0)
-  {
-    //This message will actually show if, by chance, the first selected random state
-    //is successful.  However, that state is just a starting point for the actual simulated
-    //annealing iterations.
-    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
-  }
-  else
-  {
-    QString failureMsg =
-      QString::number(failedTests.size()) + "/" + QString::number(_testCount) +
-      " tests failed:\n\n";
-    for (int i = 0; i < failedTests.size(); i++)
-    {
-      failureMsg += "\t" + failedTests[i] + "\n";
-    }
-    LOG_ERROR(failureMsg);
-    LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
-    LOG_ERROR("");
-  }
-
-  return (double)failedTests.size() / (double)_testCount;
-}
-
-QString CaseTestFitnessFunction::_failedTestsToString(const QStringList failedTests) const
-{
-  QString concatTestNames;
-  for (int i = 0; i < failedTests.size(); i++)
-  {
-    concatTestNames += failedTests.at(i) + ";";
-  }
-  concatTestNames.chop(1);
-  return concatTestNames;
+  test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
 }
 
 }

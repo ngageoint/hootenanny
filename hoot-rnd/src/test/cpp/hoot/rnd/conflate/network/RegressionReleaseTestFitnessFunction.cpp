@@ -28,28 +28,24 @@
 #include "RegressionReleaseTestFitnessFunction.h"
 
 // Hoot
-#include <hoot/core/util/Settings.h>
+#include "RegressionReleaseTestSuite.h"
 
 namespace hoot
 {
 
 RegressionReleaseTestFitnessFunction::RegressionReleaseTestFitnessFunction() :
-_testCount(0),
-_lowestNumFailingTestsPerRun(-1)
+AbstractTestFitnessFunction()
 {
-  //_testSuite.reset(new ConflateCaseTestSuite("test-files/cases/hoot-rnd/network/conflicts/"));
-  //_testCount = _testSuite->getChildTestCount();
+  //TODO: make this configurable
+  const QString dir = "/home/bwitham/hoot-tests/network-tests.child/release_test.child";
+  _testSuite.reset(new RegressionReleaseTestSuite(dir));
+  QStringList confs;
+  _testSuite->loadDir(dir, confs);
+  _testCount = _testSuite->getChildTestCount();
 }
 
-double RegressionReleaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
+void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* /*test*/)
 {
-  return -1.0;
-}
-
-QString RegressionReleaseTestFitnessFunction::_failedTestsToString(
-  const QStringList failedTests) const
-{
-  return "";
 }
 
 }
