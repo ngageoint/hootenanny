@@ -213,8 +213,13 @@ class CalculateTilesCmd : public BaseCommand
       LOG_VARD(outputPath);
 
       //exporting as multipolygons, as that's what the Tasking Manager expects
+//      const QString cmd =
+//        "ogr2ogr -f GeoJSON -t_srs EPSG:4326 -sql \"select name, boundary from " +
+//        osmTempFile.fileName() + " \" " + outputPath + " " + osmTempFile.fileName() +
+//        " multipolygons";
       const QString cmd =
-        "ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " multipolygons";
+        "ogr2ogr -f GeoJSON -select \"name,boundary,osm_way_id\" " + outputPath + " " +
+        osmTempFile.fileName() + " multipolygons";
       LOG_VARD(cmd);
       LOG_INFO("Writing output to " << outputPath);
       const int retval = std::system(cmd.toStdString().c_str());
@@ -232,6 +237,7 @@ class CalculateTilesCmd : public BaseCommand
       LOG_VARD(outputPath);
 
       OsmMapPtr boundaryMap(new OsmMap());
+      int bboxCtr = 1;
       for (size_t tx = 0; tx < tiles.size(); tx++)
       {
         for (size_t ty = 0; ty < tiles[tx].size(); ty++)
@@ -281,7 +287,9 @@ class CalculateTilesCmd : public BaseCommand
           //for features recognized as polys configurable in osmconf.ini), which is the type of
           //output we want
           bbox->setTag("boundary", "task_grid_cell");
+          bbox->setTag("name", "Task Grid Cell #" + QString::number(bboxCtr));
           boundaryMap->addWay(bbox);
+          bboxCtr++;
         }
       }
 
