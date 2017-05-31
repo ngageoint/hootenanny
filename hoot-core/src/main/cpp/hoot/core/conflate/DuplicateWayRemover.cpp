@@ -297,9 +297,10 @@ void DuplicateWayRemover::_replaceMultiple(const ConstWayPtr& oldWay,
     return;
   }
 
-  boost::shared_ptr<RelationData::Entry[]> newValues(new RelationData::Entry[ways.size()]);
+  vector<RelationData::Entry> newValues;
+  newValues.reserve(ways.size());
   for (vector<WayPtr>::size_type i = 0; i < ways.size(); ++i)
-    newValues.get()[i].setElementId(ways[i]->getElementId());
+    newValues[i].setElementId(ways[i]->getElementId());
 
   RelationData::Entry old(oldWay->getElementId());
 
@@ -309,7 +310,7 @@ void DuplicateWayRemover::_replaceMultiple(const ConstWayPtr& oldWay,
   {
     const RelationPtr& r = _map->getRelation(*it);
     if (r)
-      r->replaceElements(old, newValues.get(), newValues.get() + ways.size());
+      r->replaceElements(old, newValues.begin(), newValues.end());
   }
 }
 
