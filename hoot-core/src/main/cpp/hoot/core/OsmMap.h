@@ -266,7 +266,6 @@ public:
   void visitWaysRo(ElementVisitor& visitor) const;
   void visitRelationsRo(ElementVisitor& visitor) const;
 
-
   /**
    * Calls the visitRw method on all elements. See Element::visitRw for a more
    * thorough description.
@@ -281,6 +280,10 @@ public:
    */
   void visitRw(ElementVisitor& visitor);
   void visitWaysRw(ElementVisitor& visitor);
+
+  long getNodeCount() const { return _nodes.size(); }
+  long getWayCount() const { return _ways.size(); }
+  long getRelationCount() const { return _relations.size(); }
 
 protected:
 
