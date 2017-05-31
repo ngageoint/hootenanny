@@ -942,3 +942,8 @@ Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |neg
   find('#datasettable').assert_selector('text',:text=>text, :match => :prefer_exact ,:maximum => expectation)
   Capybara.default_max_wait_time = oldTimeout
 end
+
+Then(/^I delete the "([^"]*)" translation/) do |txt|
+  el = find('a', :text=>txt)
+  el.find('button.trash').click
+end
