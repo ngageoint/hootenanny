@@ -31,7 +31,10 @@
 #include <hoot/core/util/Log.h>
 
 // opencv
-#include <opencv/cv.h>
+// #include <opencv/cv.h>
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
 
 using namespace cv;
 using namespace geos::geom;
