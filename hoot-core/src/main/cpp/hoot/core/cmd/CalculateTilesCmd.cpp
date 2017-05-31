@@ -212,19 +212,9 @@ class CalculateTilesCmd : public BaseCommand
       }
       LOG_VARD(outputPath);
 
-      //The "lines" part at the end is necessary to prevent a conversion error from osm to geojson.
-      //Not fully clear on what that's doing yet.
+      //exporting as multipolygons, as that's what the Tasking Manager expects
       const QString cmd =
-        "ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " lines";
-      //const QString cmd =
-        //"ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " other_relations";
-      //const QString cmd =
-        //"ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName();
-      //-skipfailures
-      //const QString cmd =
-        //"ogr2ogr -nlt POLYGON " + osmTempFile.fileName() + " " + outputPath + " OGRGeoJSON";
-      //const QString cmd =
-        //"ogr2ogr -nlt POLYGON " + outputPath + " " + osmTempFile.fileName() + " OGRGeoJSON";
+        "ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " multipolygons";
       LOG_VARD(cmd);
       LOG_INFO("Writing output to " << outputPath);
       const int retval = std::system(cmd.toStdString().c_str());
@@ -241,7 +231,6 @@ class CalculateTilesCmd : public BaseCommand
     {
       LOG_VARD(outputPath);
 
-      //write out a viewable version of the boundaries for debugging purposes
       OsmMapPtr boundaryMap(new OsmMap());
       for (size_t tx = 0; tx < tiles.size(); tx++)
       {
@@ -288,6 +277,10 @@ class CalculateTilesCmd : public BaseCommand
           bbox->addNode(lowerRight->getId());
           bbox->addNode(lowerRight->getId());
           bbox->addNode(lowerLeft->getId());
+          //gdal will recognize any closed way with the boundary tag as a polygon (tags
+          //for features recognized as polys configurable in osmconf.ini), which is the type of
+          //output we want
+          bbox->setTag("boundary", "task_grid_cell");
           boundaryMap->addWay(bbox);
         }
       }
