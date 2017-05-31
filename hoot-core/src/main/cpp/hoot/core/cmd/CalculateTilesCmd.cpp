@@ -217,7 +217,7 @@ class CalculateTilesCmd : public BaseCommand
       const QString cmd =
         "ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " lines";
       //const QString cmd =
-        //"ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " multipolygons";
+        //"ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName() + " other_relations";
       //const QString cmd =
         //"ogr2ogr -f GeoJSON " + outputPath + " " + osmTempFile.fileName();
       //-skipfailures
