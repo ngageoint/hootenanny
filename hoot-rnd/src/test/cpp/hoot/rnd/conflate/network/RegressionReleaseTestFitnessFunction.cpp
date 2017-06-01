@@ -28,6 +28,7 @@
 #include "RegressionReleaseTestFitnessFunction.h"
 
 // Hoot
+#include <hoot/core/util/HootException.h>
 #include "RegressionReleaseTestSuite.h"
 #include "RegressionReleaseTest.h"
 
@@ -37,17 +38,27 @@ namespace hoot
 RegressionReleaseTestFitnessFunction::RegressionReleaseTestFitnessFunction() :
 AbstractTestFitnessFunction()
 {
-  //TODO: make this configurable
-  const QString dir = "/fouo/hoot-tests/network-tests.child/release_test.child";
-  _testSuite.reset(new RegressionReleaseTestSuite(dir));
+  //TODO: make this configurable?
+  _dir = "/fouo/hoot-tests/network-tests.child/release_test.child";
+  _testSuite.reset(new RegressionReleaseTestSuite(_dir));
   QStringList confs;
-  _testSuite->loadDir(dir, confs);
+  _testSuite->loadDir(_dir, confs);
   _testCount = _testSuite->getChildTestCount();
   _highestOverallScores.clear();
 }
 
 void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
 {
+  QFile settingsFile(_settingsFileName);
+  //for now, this will only work with network conflation regression release tests, since
+  //they are set up to handle this configuration file
+  const QString settingsFileDest =
+    _dir + "/" + QString::fromStdString(test->getName()) + "/Config.conf";
+  if (!settingsFile.copy(settingsFileDest))
+  {
+    throw new HootException("Unable to copy configuration file to: " + settingsFileDest);
+  }
+
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
   LOG_VARD(QString::fromStdString(test->getName()));
   if (!_highestOverallScores.contains(QString::fromStdString(test->getName())))

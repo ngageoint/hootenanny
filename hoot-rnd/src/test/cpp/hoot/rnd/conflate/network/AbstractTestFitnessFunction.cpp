@@ -55,8 +55,9 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   //settings.set("", "");
   LOG_VART(settings);
   TempFileName temp;
-  LOG_VARD(temp.getFileName());
-  settings.storeJson(temp.getFileName());
+  _settingsFileName = temp.getFileName();
+  LOG_VARD(_settingsFileName);
+  settings.storeJson(_settingsFileName);
 
   QStringList failedTests;
   for (int i = 0; i < _testCount; ++i)
@@ -66,7 +67,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     //LOG_ERROR("Running " << testName << "...");
     initTest(test);
     //add our custom sa test option values
-    test->addConfig(temp.getFileName());
+    test->addConfig(_settingsFileName);
     CppUnit::TestResult result;
     SimpleTestListener listener;
     result.addListener(&listener);

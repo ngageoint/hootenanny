@@ -70,6 +70,7 @@ protected:
 
   int _testCount;
   boost::shared_ptr<AbstractTestSuite> _testSuite;
+  QString _settingsFileName;
 
 private:
 

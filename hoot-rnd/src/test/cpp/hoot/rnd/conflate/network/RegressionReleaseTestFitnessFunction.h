@@ -53,6 +53,7 @@ public:
 
 private:
 
+    QString _dir;
     QMap<QString, double> _highestOverallScores;
 };
 
