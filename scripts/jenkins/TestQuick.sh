@@ -9,4 +9,9 @@ hoot --version --debug
 
 export HOOT_TEST_DIFF=--diff
 make -s -f Makefile.old services-test-all
-HootTest --quick
+HootTest --exclude=.*ConflateAverageTest.sh \
+         --exclude=.*ExactMatchInputsTest.sh \
+         --exclude=.*RafahConflateTest.sh \
+         --exclude=.*HaitiDrConflateTest.sh \
+         --slow
+
