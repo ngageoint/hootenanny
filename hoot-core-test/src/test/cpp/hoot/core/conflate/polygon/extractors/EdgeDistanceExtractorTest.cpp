@@ -56,6 +56,8 @@
 
 #include "../../../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -78,7 +80,7 @@ public:
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -89,8 +91,8 @@ public:
     vector<long> r1 = FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "Target");
     vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "name", "Target Grocery");
 
-    shared_ptr<const Way> w1 = map->getWay(r1[0]);
-    shared_ptr<const Way> w2 = map->getWay(r2[0]);
+    ConstWayPtr w1 = map->getWay(r1[0]);
+    ConstWayPtr w2 = map->getWay(r2[0]);
 
     EdgeDistanceExtractor uut(new MeanAggregator(), 5.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(9.9833, uut.distance(*map, w1, w2), 0.01);
@@ -113,7 +115,7 @@ public:
     OsmXmlReader reader;
 
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/extractor/EdgeDistanceExtractor/ToyTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
@@ -126,8 +128,8 @@ public:
     vector<long> r1 = FindWaysVisitor::findWaysByTag(map, "note", "1");
     vector<long> r2 = FindWaysVisitor::findWaysByTag(map, "note", "b");
 
-    shared_ptr<const Way> w1 = map->getWay(r1[0]);
-    shared_ptr<const Way> w2 = map->getWay(r2[0]);
+    ConstWayPtr w1 = map->getWay(r1[0]);
+    ConstWayPtr w2 = map->getWay(r2[0]);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.50153, uut2.distance(*map, w1, w2), 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.978273, uut2.extract(*map, w1, w2), 0.01);
@@ -135,8 +137,8 @@ public:
     vector<long> r3 = FindWaysVisitor::findWaysByTag(map, "note", "25");
     vector<long> r4 = FindWaysVisitor::findWaysByTag(map, "note", "z");
 
-    shared_ptr<const Way> w3 = map->getWay(r3[0]);
-    shared_ptr<const Way> w4 = map->getWay(r4[0]);
+    ConstWayPtr w3 = map->getWay(r3[0]);
+    ConstWayPtr w4 = map->getWay(r4[0]);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0, uut2.distance(*map, w3, w4), 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, uut2.extract(*map, w3, w4), 0.01);

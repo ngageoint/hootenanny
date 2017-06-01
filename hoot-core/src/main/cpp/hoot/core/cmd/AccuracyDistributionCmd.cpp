@@ -35,6 +35,8 @@
 #include <QDebug>
 #include <QTime>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -61,20 +63,20 @@ public:
 
     // open up both OSM files.
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(args[0], map);
 
     const WayMap& ways = map->getWays();
 
     std::map<Meters, int> m;
-    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      const shared_ptr<Way>& w = it->second;
+      const WayPtr& w = it->second;
       m[w->getCircularError()]++;
     }
 
-    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); it++)
+    for (std::map<Meters, int>::iterator it = m.begin(); it != m.end(); ++it)
     {
       double p = (double)it->second / (double)ways.size();
       cout << it->first << " : " << it->second << " (" << p << ")" << endl;

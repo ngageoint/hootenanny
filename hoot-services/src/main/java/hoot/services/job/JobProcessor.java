@@ -22,36 +22,16 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
-import static hoot.services.HootProperties.INTERNAL_JOB_THREAD_SIZE;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 
-@Component
-public class JobProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(JobProcessor.class);
+@Service
+public interface JobProcessor {
 
-    // Shared thread pool for job processing
-    private static final ExecutorService jobThreadExecutor =
-            Executors.newFixedThreadPool(Integer.parseInt(INTERNAL_JOB_THREAD_SIZE));
-
-    @Autowired
-    private JobStatusManager jobStatusManager;
-
-    public void process(Job job) {
-        logger.debug("Current jobThreadExecutor's thread count: {}", ((ThreadPoolExecutor) jobThreadExecutor).getActiveCount());
-        Runnable work = new JobRunnable(job, jobStatusManager);
-        jobThreadExecutor.execute(work);
-    }
+    void submitAsync(Job job);
 }

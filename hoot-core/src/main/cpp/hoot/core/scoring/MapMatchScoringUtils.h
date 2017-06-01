@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAP_MATCH_SCORING_UTILS_H
 #define MAP_MATCH_SCORING_UTILS_H
@@ -35,9 +35,8 @@
 
 namespace hoot
 {
-  using namespace boost;
 
-  class MatchComparator;
+class MatchComparator;
 
 /**
  * Various utilities to be used when scoring matches after conflation
@@ -54,7 +53,7 @@ class MapMatchScoringUtils
       @param matchComparator a match comparator populated during scoring of conflation results
       @return a printable string with scoring results
       */
-    static QString getMatchScoringString(shared_ptr<const MatchComparator> matchComparator);
+    static QString getMatchScoringString(boost::shared_ptr<const MatchComparator> matchComparator);
 
 };
 

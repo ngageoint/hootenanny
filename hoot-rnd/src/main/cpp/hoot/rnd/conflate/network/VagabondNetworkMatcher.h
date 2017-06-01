@@ -67,7 +67,7 @@ class VagabondNetworkMatcher : public NetworkMatcher
 {
 public:
 
-  static string className() { return "hoot::VagabondNetworkMatcher"; }
+  static std::string className() { return "hoot::VagabondNetworkMatcher"; }
 
   /**
    * Use create instead.
@@ -77,7 +77,7 @@ public:
   /**
    * Use this instead of a constructor. To simplify life a shared pointer should always be used.
    */
-  static shared_ptr<VagabondNetworkMatcher> create();
+  static boost::shared_ptr<VagabondNetworkMatcher> create();
 
   virtual void iterate();
 
@@ -111,8 +111,8 @@ private:
   QSet<EdgeMatchPtr> _getConnectedEdges(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 };
 
-typedef shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
-typedef shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
+typedef boost::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcherPtr;
+typedef boost::shared_ptr<const VagabondNetworkMatcher> ConstVagabondNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstVagabondNetworkMatcherPtr, ConstVagabondNetworkMatcherPtr);

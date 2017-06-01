@@ -39,11 +39,14 @@
 // node.js
 #include <hoot/js/SystemNodeJs.h>
 
+using namespace node;
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
-using namespace node;
 
-ScriptMerger::ScriptMerger(shared_ptr<PluginContext> script, Persistent<Object> plugin,
+ScriptMerger::ScriptMerger(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
                            const set<pair<ElementId, ElementId> > &pairs) :
   _pairs(pairs),
   _plugin(plugin),
@@ -53,7 +56,7 @@ ScriptMerger::ScriptMerger(shared_ptr<PluginContext> script, Persistent<Object> 
   _eid2 = _pairs.begin()->second;
 }
 
-void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const
+void ScriptMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   bool hasMergeSet = hasFunction("mergeSets");
   bool hasMergePair = hasFunction("mergePair");

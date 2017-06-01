@@ -17,10 +17,10 @@
 #include "ConflateReducer.h"
 
 // Hoot
-#include <hoot/core/conflate/Conflator.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/conflate/Conflator.h>
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/conflate/DuplicateWayRemover.h>
 #include <hoot/core/conflate/ImpliedDividedMarker.h>
@@ -36,9 +36,10 @@
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/hadoop/Debug.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
@@ -48,6 +49,9 @@
 #include <pp/Hdfs.h>
 
 #include "ConflateMapper.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -61,9 +65,9 @@ class ReplacedNodeListener : public OsmMapListener
 public:
   ReplacedNodeListener(HashMap<long, long>& m) : _map(m) {}
 
-  virtual shared_ptr<OsmMapListener> clone() const
+  virtual boost::shared_ptr<OsmMapListener> clone() const
   {
-    return shared_ptr<OsmMapListener>(new ReplacedNodeListener(_map));
+    return boost::shared_ptr<OsmMapListener>(new ReplacedNodeListener(_map));
   }
 
   void replaceNodePre(long oldId, long newId) { _map[oldId] = newId; }
@@ -87,7 +91,7 @@ void ConflateReducer::close()
         arg(_partition, 5, 10, QChar('0'));
 
     pp::Hdfs fs;
-    shared_ptr<ostream> os(fs.create(path.toStdString()));
+    boost::shared_ptr<ostream> os(fs.create(path.toStdString()));
     LOG_VAR(_nr.getReplacements());
     _nr.write(*os);
     os.reset();
@@ -100,7 +104,7 @@ void ConflateReducer::close()
         arg(QString::fromStdString(_workDir)).
         arg(_partition, 5, 10, QChar('0'));
 
-    shared_ptr<ostream> osStats(fs.create(path.toStdString()));
+    boost::shared_ptr<ostream> osStats(fs.create(path.toStdString()));
 
     _stats.write(*osStats);
   }
@@ -110,7 +114,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 {
   LOG_INFO("Conflating a map. key: " << key);
   LOG_INFO("  Envelope: " << GeometryUtils::toString(_envelopes[key]));
-  shared_ptr<OsmMap> map(new OsmMap());
+  boost::shared_ptr<OsmMap> map(new OsmMap());
   map->setIdGenerator(_idGen);
 
   while (context.nextValue())
@@ -134,7 +138,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
 //  LOG_INFO("Writing input map out to temporary: " << tmp);
 //  OsmPbfWriter writer;
 //  pp::Hdfs fs;
-//  shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
+// boost::shared_ptr<ostream> strm(fs.create(tmp.toStdString()));
 //  writer.write(map, strm.get());
 //  strm->flush();
 //  strm.reset();
@@ -148,7 +152,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   }
 
   // keep track of all the nodes that get replaced.
-  shared_ptr<ReplacedNodeListener> rnl(new ReplacedNodeListener(_nr.getReplacements()));
+  boost::shared_ptr<ReplacedNodeListener> rnl(new ReplacedNodeListener(_nr.getReplacements()));
   map->registerListener(rnl);
 
   /// @todo consolidate this inside the conflator and make it easier to read.
@@ -181,7 +185,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   conflator.loadSource(map);
   conflator.conflate();
 
-  shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
+  boost::shared_ptr<OsmMap> result(new OsmMap(conflator.getBestMap()));
   MapProjector::projectToWgs84(result);
 
   for (HashMap<long, long>::const_iterator it = _nr.getReplacements().begin();
@@ -206,7 +210,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   const WayMap wm = result->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<Way>& w = result->getWay(it->first);
+    const boost::shared_ptr<Way>& w = result->getWay(it->first);
     WaySplitter::split(result, w, _maxWaySize);
   }
 
@@ -215,7 +219,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   const WayMap& wm2 = result->getWays();
   for (WayMap::const_iterator it = wm2.begin(); it != wm2.end(); ++it)
   {
-    const shared_ptr<const Way>& w = it->second;
+    const boost::shared_ptr<const Way>& w = it->second;
 
     const Envelope e = w->getEnvelopeInternal(result);
 
@@ -236,7 +240,7 @@ void ConflateReducer::_conflate(int key, HadoopPipes::ReduceContext& context)
   _emitMap(result);
 }
 
-void ConflateReducer::_emitMap(shared_ptr<OsmMap> map)
+void ConflateReducer::_emitMap(boost::shared_ptr<OsmMap> map)
 {
   Envelope* e = GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map));
   _stats.expandEnvelope(*e);
@@ -245,9 +249,9 @@ void ConflateReducer::_emitMap(shared_ptr<OsmMap> map)
   _writer->emitRecord(map);
 }
 
-const Envelope& ConflateReducer::_getContainingEnvelope(const shared_ptr<OsmMap>& map)
+const Envelope& ConflateReducer::_getContainingEnvelope(const boost::shared_ptr<OsmMap>& map)
 {
-  shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
+  boost::shared_ptr<Envelope> e(GeometryUtils::toEnvelope(CalculateMapBoundsVisitor::getBounds(map)));
 
   for (size_t i = 0; i < _envelopes.size(); i++)
   {
@@ -268,7 +272,7 @@ void ConflateReducer::_init(HadoopPipes::ReduceContext& context)
     throw InternalErrorException("Error getting RecordWriter.");
   }
 
-  shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _stats.read(*c);
 
   // set GDAL_DATA to the current working directory. This avoids some projection issues when
@@ -294,10 +298,10 @@ void ConflateReducer::_init(HadoopPipes::ReduceContext& context)
   _initialized = true;
 }
 
-shared_ptr<OsmMap> ConflateReducer::_readMap(const string& value)
+boost::shared_ptr<OsmMap> ConflateReducer::_readMap(const string& value)
 {
   // read the map from the given string.
-  shared_ptr<OsmMap> result(new OsmMap());
+  boost::shared_ptr<OsmMap> result(new OsmMap());
   stringstream ss(value, stringstream::in);
 
   OsmPbfReader reader(true);
@@ -330,13 +334,13 @@ void ConflateReducer::reduce(HadoopPipes::ReduceContext& context)
     // emit all the data right out to disk.
     while (context.nextValue())
     {
-      shared_ptr<OsmMap> map = _readMap(context.getInputValue());
+      boost::shared_ptr<OsmMap> map = _readMap(context.getInputValue());
       _emitMap(map);
     }
   }
 }
 
-void ConflateReducer::_validate(const shared_ptr<OsmMap>& map)
+void ConflateReducer::_validate(const boost::shared_ptr<OsmMap>& map)
 {
   LOG_INFO("Validating map.");
   Debug::printTroubled(map);

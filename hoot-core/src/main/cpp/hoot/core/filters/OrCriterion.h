@@ -39,7 +39,7 @@ class OrCriterion : public ChainCriterion
 {
 public:
 
-  static string className() { return "hoot::OrCriterion"; }
+  static std::string className() { return "hoot::OrCriterion"; }
 
   OrCriterion() {}
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
@@ -47,7 +47,7 @@ public:
   {
   }
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone()
   { return new OrCriterion(_filters[0]->clone(), _filters[1]->clone()); }

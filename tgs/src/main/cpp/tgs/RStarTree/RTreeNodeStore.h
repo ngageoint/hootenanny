@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__RTREE_NODE_STORE_H__
@@ -47,7 +47,7 @@ namespace Tgs
   {
   public:
 
-    RTreeNodeStore(int dimensions, shared_ptr<PageStore> ps);
+    RTreeNodeStore(int dimensions, boost::shared_ptr<PageStore> ps);
 
     ~RTreeNodeStore();
     
@@ -88,7 +88,7 @@ namespace Tgs
     // mutable cache
     NodeMap _availableNodes;
     int _dimensions;
-    shared_ptr<PageStore> _storeSp;
+    boost::shared_ptr<PageStore> _storeSp;
     /// pointer to the same thing as above, only faster. Zoom zoom!
     PageStore* _store;
 

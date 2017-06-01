@@ -59,7 +59,7 @@ class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
 
     virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-    virtual void visit(const shared_ptr<Element>& e);
+    virtual void visit(const boost::shared_ptr<Element>& e);
 
     void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
 
@@ -73,7 +73,7 @@ class PertyRemoveTagVisitor : public ElementOsmMapVisitor, public RngConsumer,
 
     double _p;
     boost::minstd_rand* _rng;
-    auto_ptr<boost::minstd_rand> _localRng;
+    std::auto_ptr<boost::minstd_rand> _localRng;
 
     QStringList _exemptTagKeys;
     QStringList _replacementTagKeys;

@@ -27,8 +27,9 @@
 package hoot.services.controllers.hgis;
 
 
-import static hoot.services.HootProperties.HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -41,28 +42,27 @@ public class HGISPrepareForValidationCommandTest {
     @Test
     @Category(UnitTest.class)
     public void testPrepareItemsForValidationCommand() throws Exception {
-        HGISPrepareForValidationCommandFactory hgisPrepareForValidationCommandFactory = new HGISPrepareForValidationCommandFactory();
-        HGISPrepareForValidationCommand command = hgisPrepareForValidationCommandFactory.build("testSrc1", "out1", this.getClass());
+        String jobId = UUID.randomUUID().toString();
+        String srcMap = "testSrc1";
+        String outputMap = "testOutput1";
 
-        String actualCaller = (String) command.get("caller");
-        String expectedCaller = this.getClass().getName();
-        assertEquals(expectedCaller, actualCaller);
+        HGISPrepareForValidationCommand hgisPrepareForValidationCommand = new HGISPrepareForValidationCommand(jobId, srcMap, outputMap, this.getClass());
 
-        String actualExec = (String) command.get("exec");
-        String expectedExec = HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
-        assertEquals(expectedExec, actualExec);
+        assertEquals(jobId, hgisPrepareForValidationCommand.getJobId());
+        assertEquals(true, hgisPrepareForValidationCommand.getTrackable());
+        assertNotNull(hgisPrepareForValidationCommand.getSubstitutionMap());
+        assertNotNull(hgisPrepareForValidationCommand.getWorkDir());
+        assertNotNull(hgisPrepareForValidationCommand.getCommand());
 
-        String actualExectype = (String) command.get("exectype");
-        String expectedExectype = "bash";
-        assertEquals(expectedExectype, actualExectype);
+        String expectedCommand = "${SCRIPT} ${SOURCE} ${OUTPUT}";
+        assertEquals(expectedCommand, hgisPrepareForValidationCommand.getCommand());
 
-        String expectedCommandArgs =
-                "[{\"SOURCE\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\\/testSrc1\"}," +
-                 "{\"OUTPUT\":\"hootapidb:\\/\\/${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}\\/${HOOTAPI_DB_NAME}\\/out1\"}]";
+        String expectedOutput = "hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/testOutput1";
+        assertEquals(expectedOutput, hgisPrepareForValidationCommand.getSubstitutionMap().get("OUTPUT"));
 
-        String actualCommandArgs = command.get("params").toString();
+        String expectedSource = "hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/testSrc1";
+        assertEquals(expectedSource, hgisPrepareForValidationCommand.getSubstitutionMap().get("SOURCE"));
 
-        assertEquals(expectedCommandArgs, actualCommandArgs);
+        assertTrue(hgisPrepareForValidationCommand.getSubstitutionMap().get("SCRIPT").toString().endsWith("PrepareForValidation.js"));
     }
-
 }

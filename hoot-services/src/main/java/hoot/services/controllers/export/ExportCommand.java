@@ -30,234 +30,151 @@ import static hoot.services.HootProperties.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.command.ExternalCommand;
+import hoot.services.command.common.UnTARFileCommand;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.osm.Map;
 import hoot.services.utils.DbUtils;
-import hoot.services.utils.JsonUtils;
 
 
 class ExportCommand extends ExternalCommand {
-
     private static final Logger logger = LoggerFactory.getLogger(ExportCommand.class);
 
-    //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
-    ExportCommand(String jobId, String params, Class<?> caller) {
-        JSONArray commandArgs;
-        JSONObject oParams;
-        try {
-            commandArgs = JsonUtils.parseParams(params);
-            JSONParser parser = new JSONParser();
-            oParams = (JSONObject) parser.parse(params);
+    private final ExportParams params;
+
+    ExportCommand(String jobId, ExportParams exportParams) {
+        super(jobId);
+        this.params = exportParams;
+    }
+
+    ExportCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
+        this(jobId, params);
+
+        if (params.getAppend()) {
+            appendToFGDB();
         }
-        catch (ParseException pe) {
-            throw new RuntimeException("Error parsing: " + params, pe);
+
+        List<String> hootOptions = toHootOptions(this.getCommonExportHootOptions());
+
+        java.util.Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("DEBUG_LEVEL", debugLevel);
+        substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("TRANSLATION_PATH", new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
+        substitutionMap.put("INPUT_PATH", this.getInput());
+        substitutionMap.put("OUTPUT_PATH", this.getOutputPath());
+
+        String command = "hoot osm2ogr --${DEBUG_LEVEL} -C RemoveReview2Pre.conf ${HOOT_OPTIONS} ${TRANSLATION_PATH} ${INPUT_PATH} ${OUTPUT_PATH}";
+
+        super.configureCommand(command, substitutionMap, caller);
+    }
+
+    private void appendToFGDB() {
+        //Appends data to a blank fgdb. The template is stored with the fouo translations.
+
+        //$(HOOT_HOME)/translations-local/template
+        File templateHome = new File(new File(HOME_FOLDER, "translations-local"), "template");
+
+        String translation = params.getTranslation();
+        File tdsTemplate = null;
+
+        if (translation.equalsIgnoreCase("translations/TDSv61.js")) {
+            tdsTemplate = new File(templateHome, "tds61.tgz");
+        }
+        else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
+            tdsTemplate = new File(templateHome, "tds40.tgz");
         }
 
-        JSONObject outputfolder = new JSONObject();
-        outputfolder.put("outputfolder", TEMP_OUTPUT_PATH + "/" + jobId);
-        commandArgs.add(outputfolder);
-
-        JSONObject output = new JSONObject();
-        output.put("output", jobId);
-        commandArgs.add(output);
-
-        JSONObject hootDBURL = new JSONObject();
-        hootDBURL.put("DB_URL", HOOTAPI_DB_URL);
-        commandArgs.add(hootDBURL);
-
-        JSONObject osmAPIDBURL = new JSONObject();
-        osmAPIDBURL.put("OSM_API_DB_URL", OSMAPI_DB_URL);
-        commandArgs.add(osmAPIDBURL);
-
-        String type = JsonUtils.getParameterValue("outputtype", oParams);
-
-        if ("wfs".equalsIgnoreCase(type)) {
-            JSONObject arg = new JSONObject();
-            arg.put("outputname", jobId);
-            commandArgs.add(arg);
-
-            String pgUrl = "host='" + HOOTAPI_DB_HOST + "' port='" + HOOTAPI_DB_PORT + "' user='" + HOOTAPI_DB_USER
-                    + "' password='" + HOOTAPI_DB_PASSWORD + "' dbname='" + WFS_STORE_DB + "'";
-
-            arg = new JSONObject();
-            arg.put("PG_URL", pgUrl);
-            commandArgs.add(arg);
-        }
-        else if ("osm_api_db".equalsIgnoreCase(type)) {
-            addExportToOsmApiDbCommandArgs(jobId, commandArgs, oParams);
-        }
-        else if ("osc".equalsIgnoreCase(type)) {
-            addExportToChangesetCommandArgs(commandArgs, oParams);
-        }
-        else {
-            // replace with with getParameterValue
-            boolean paramFound = false;
-            for (Object commandArg : commandArgs) {
-                JSONObject json = (JSONObject) commandArg;
-                Object oo = json.get("outputname");
-                if (oo != null) {
-                    String strO = (String) oo;
-                    if (!strO.isEmpty()) {
-                        paramFound = true;
-                        break;
-                    }
-                }
+        if ((tdsTemplate != null) && tdsTemplate.exists()) {
+            File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "."     + params.getOutputType().toLowerCase());
+            try {
+                FileUtils.forceMkdir(outputDir);
+            }
+            catch (IOException ioe) {
+                throw new RuntimeException("Error creating directory: " + outputDir.getAbsolutePath(), ioe);
             }
 
-            if (!paramFound) {
-                JSONObject arg = new JSONObject();
-                arg.put("outputname", jobId);
-                commandArgs.add(arg);
-            }
+            ExternalCommand untarFileCommand = new UnTARFileCommand(tdsTemplate, outputDir, this.getClass());
+            untarFileCommand.execute();
         }
-
-        super.configureAsMakeCommand(EXPORT_SCRIPT, caller, commandArgs);
     }
 
-    private static JSONArray addExportToOsmApiDbCommandArgs(String jobId, JSONArray commandArgs, JSONObject oParams) {
-        if (!OSM_API_DB_ENABLED) {
-            String msg = "Attempted to export to an OSM API database but OSM API database support is disabled";
-            throw new WebApplicationException(Response.serverError().entity(msg).build());
+    List<String> getCommonExportHootOptions() {
+        List<String> options = new LinkedList<>();
+        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("hootapi.db.writer.create.user=true");
+        options.add("api.db.email=" + params.getUserEmail());
+
+        //# Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
+        if (params.getTextStatus()) {
+            options.add("writer.text.status=true");
         }
 
-        if (!"db".equalsIgnoreCase(JsonUtils.getParameterValue("inputtype", oParams))) {
-            String msg = "When exporting to an OSM API database, the input type must be a Hootenanny API database.";
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+        //# Add the option to append
+        if (params.getAppend()) {
+            options.add("ogr.append.data=true");
         }
 
-        String translation = JsonUtils.getParameterValue("translation", oParams);
-        if ((StringUtils.trimToNull(translation) != null) && !translation.toUpperCase().equals("NONE")) {
-            String msg = "Custom translation not allowed when exporting to OSM API database.";
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
-        }
+        return options;
+    }
 
-        // This logic is a little out of line with the rest of ExportResource, but since this export option will
-        // probably go away completely soon, no point in changing it now.
+    String getOutputPath() {
+        File outputFolder = this.getWorkFolder();
+        File outputFile;
 
-        // ignoring outputname, since we're only going to have a single mapedit
-        // connection configured in the core for now
-        JSONObject arg = new JSONObject();
-
-        // services currently always write changeset with sql
-        File tempFile = null;
-        try {
-            File tempOutputDir = new File(TEMP_OUTPUT_PATH);
-            tempFile = Files.createFile(new File(tempOutputDir, "changeset-" + jobId + ".osc.sql").toPath()).toFile();
-            //tempFile = File.createTempFile("changeset-", ".osc.sql", tempOutputDir);
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Error occurred!", ioe);
-        }
-
-        arg.put("changesetoutput", tempFile.getAbsolutePath());
-        commandArgs.add(arg);
-
-        // This option allows the job executor return std out to the client.
-        // This is the only way I've found to get the conflation summary text back from hoot command line to the UI.
-        arg = new JSONObject();
-        arg.put("writeStdOutToStatusDetail", "true");
-        commandArgs.add(arg);
-
-        String mapName = JsonUtils.getParameterValue("input", oParams);
-        Map conflatedMap = getConflatedMap(mapName);
-
-        // pass the export timestamp to the export bash script
-        addMapForExportTag(conflatedMap, commandArgs);
-
-        // pass the export aoi to the export bash script
-        // if sent a bbox in the url (reflecting task grid bounds)
-        // use that, otherwise use the bounds of the conflated output
-        BoundingBox bbox;
-            if (oParams.get("TASK_BBOX") != null) {
-            bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
+        if (!StringUtils.isBlank(params.getOutputName())) {
+            outputFile = new File(outputFolder, params.getOutputName() + "." + params.getOutputType());
         }
         else {
-            bbox = conflatedMap.getBounds();
+            outputFile = new File(outputFolder, getJobId() + "." + params.getOutputType());
         }
 
-        setAoi(bbox, commandArgs);
-
-        // put the osm userid in the command args
-        if (oParams.get("USER_ID") != null) {
-            JSONObject uid = new JSONObject();
-            uid.put("userid", oParams.get("USER_ID"));
-            commandArgs.add(uid);
-        }
-
-        return commandArgs;
+        return outputFile.getAbsolutePath();
     }
 
-    private static void addExportToChangesetCommandArgs(JSONArray commandArgs, JSONObject oParams) {
-        //handling these inputs a little differently than the rest of ExportJResource as makes it
-        //it possible to test osm2ogrscript with file inputs
-
-        JSONObject commandArg = new JSONObject();
-        commandArg.put("input1", OSMAPI_DB_URL);
-        commandArgs.add(commandArg);
-
-        commandArg = new JSONObject();
-        commandArg.put("input2", HOOTAPI_DB_URL + "/" + oParams.get("input"));
-        commandArgs.add(commandArg);
-
-        if (oParams.get("TASK_BBOX") == null) {
-            String msg = "When exporting to a changeset, TASK_BBOX must be specified.";
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+    String getInput() {
+        if (! params.getInputType().equalsIgnoreCase("file")) {
+            return HOOTAPI_DB_URL + "/" + params.getInput();
         }
-        BoundingBox bbox = new BoundingBox(oParams.get("TASK_BBOX").toString());
-        setAoi(bbox, commandArgs);
 
-        // put the osm userid in the command args
-        if (oParams.get("USER_ID") != null) {
-            JSONObject uid = new JSONObject();
-            uid.put("userid", oParams.get("USER_ID"));
-            commandArgs.add(uid);
-        }
+        return params.getInput();
     }
 
-    private static Map getConflatedMap(String mapName) {
-        Long mapId = DbUtils.getMapIdByName(mapName);
-
-        if (mapId == null) {
-            String msg = "Error exporting data.  No map exists with name: " + mapName;
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
-        }
-
+    static Map getConflatedMap(Long mapId) {
         Map conflatedMap = new Map(mapId);
-        conflatedMap.setDisplayName(mapName);
         conflatedMap.setTags(DbUtils.getMapsTableTags(mapId));
-
         return conflatedMap;
     }
 
-    private static void addMapForExportTag(Map conflatedMap, JSONArray commandArgs) {
-        java.util.Map<String, String> tags = (java.util.Map<String, String>) conflatedMap.getTags();
-        if (!tags.containsKey("osm_api_db_export_time")) {
-            String msg = "Error exporting data.  Map with ID: " + conflatedMap.getId() + " has no osm_api_db_export_time tag.";
-            throw new WebApplicationException(Response.status(Response.Status.CONFLICT).entity(msg).build());
+    static String getAOI(ExportParams params, Map conflatedMap) {
+        // if sent a bbox in the url (reflecting task grid bounds)
+        // use that, otherwise use the bounds of the conflated output
+        BoundingBox boundingBox;
+        if (params.getBounds() != null) {
+            boundingBox = new BoundingBox(params.getBounds());
+        }
+        else {
+            boundingBox = conflatedMap.getBounds();
         }
 
-        JSONObject arg = new JSONObject();
-        arg.put("changesetsourcedatatimestamp", tags.get("osm_api_db_export_time"));
-        commandArgs.add(arg);
+        return boundingBox.getMinLon() + "," + boundingBox.getMinLat() + "," + boundingBox.getMaxLon() + "," + boundingBox.getMaxLat();
     }
 
-    private static void setAoi(BoundingBox bounds, JSONArray commandArgs) {
-        JSONObject arg = new JSONObject();
-        arg.put("aoi", bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
-        commandArgs.add(arg);
+    String getSQLChangesetPath() {
+        // Services currently always write changeset with sql
+        return new File(this.getWorkFolder(), "changeset-" + getJobId() + ".osc.sql").getAbsolutePath();
+    }
+
+    private File getWorkFolder() {
+        return new File(TEMP_OUTPUT_PATH, getJobId());
     }
 }

@@ -33,6 +33,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -54,7 +56,7 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], true, Status::Unknown1);
 
     PertyOp perty;

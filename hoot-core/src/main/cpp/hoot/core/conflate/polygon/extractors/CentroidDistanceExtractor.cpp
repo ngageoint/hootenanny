@@ -35,17 +35,20 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, CentroidDistanceExtractor)
 
 double CentroidDistanceExtractor::distance(const OsmMap &map,
-  const shared_ptr<const Element>& target, const shared_ptr<const Element> &candidate) const
+  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element> &candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
   {

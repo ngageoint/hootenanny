@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #define BUILDING_NODE_EXTENSION
 // #include <nodejs/node.h>
@@ -52,7 +52,7 @@ Persistent<Function> OsmMapJs::_constructor;
 
 OsmMapJs::OsmMapJs()
 {
-  _setMap(shared_ptr<OsmMap>(new OsmMap()));
+  _setMap(OsmMapPtr(new OsmMap()));
 }
 
 OsmMapJs::OsmMapJs(OsmMapPtr map)
@@ -109,7 +109,7 @@ Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-  shared_ptr<IdGenerator> idGen =  toCpp<shared_ptr<IdGenerator> >(args[0]);
+  boost::shared_ptr<IdGenerator> idGen =  toCpp<boost::shared_ptr<IdGenerator> >(args[0]);
 
   if (obj->getMap()) {
     obj->getMap()->setIdGenerator(idGen);
@@ -248,7 +248,7 @@ Handle<Value> OsmMapJs::visit(const Arguments& args)
     }
     else
     {
-      shared_ptr<ElementVisitor> v =
+      boost::shared_ptr<ElementVisitor> v =
           ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
 
       map->getMap()->visitRw(*v);

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PROJECTTOGEOGRAPHICVISITOR_H
 #define PROJECTTOGEOGRAPHICVISITOR_H
@@ -41,19 +41,19 @@ class ReprojectCoordinateFilter;
 class ProjectToGeographicVisitor : public ElementOsmMapVisitor
 {
 public:
-  static string className() { return "hoot::ProjectToGeographicVisitor"; }
+  static std::string className() { return "hoot::ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
   ~ProjectToGeographicVisitor();
 
-  void initialize(shared_ptr<OGRSpatialReference>& projection);
+  void initialize(boost::shared_ptr<OGRSpatialReference>& projection);
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
 private:
 
   OGRCoordinateTransformation* _transform;
-  shared_ptr<ReprojectCoordinateFilter> _rcf;
+  boost::shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }

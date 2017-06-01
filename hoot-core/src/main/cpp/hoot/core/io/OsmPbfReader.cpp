@@ -64,6 +64,9 @@ using namespace hoot::pb;
 
 #include "PbfConstants.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -136,7 +139,7 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
 }
 
-void OsmPbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
+void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString value)
 {
   if (key == MetadataTags::HootStatus())
   {
@@ -174,7 +177,7 @@ void OsmPbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
           isBad = true;
         }
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         isBad = true;
       }
@@ -375,7 +378,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     logWarnCount++;
   }
 
-  vector< shared_ptr<hoot::Node> > nodes;
+  vector< boost::shared_ptr<hoot::Node> > nodes;
   nodes.reserve(size);
 
   // the file uses delta encoding
@@ -390,7 +393,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     long newId = _getNodeId(id);
     double x = _convertLon(lon);
     double y = _convertLat(lat);
-    shared_ptr<Node> n(new hoot::Node(_status, newId, x, y, _circularError));
+    NodePtr n(new hoot::Node(_status, newId, x, y, _circularError));
     nodes.push_back(n);
     if (_map->containsNode(newId))
     {
@@ -467,7 +470,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-          nodes[i]->setTag("source:datetime", dts);
+          nodes[i]->setTag(MetadataTags::SourceDateTime(), dts);
         }
       }
     }
@@ -494,7 +497,7 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   double x = _convertLon(n.lon());
   double y = _convertLat(n.lat());
 
-  shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _circularError));
+  boost::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _circularError));
 
   for (int i = 0; i < n.keys().size() && i < n.vals().size(); i++)
   {
@@ -638,7 +641,7 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  shared_ptr<hoot::Relation> newRelation(new hoot::Relation(_status, newId, _circularError));
+  boost::shared_ptr<hoot::Relation> newRelation(new hoot::Relation(_status, newId, _circularError));
 
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
@@ -788,7 +791,7 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
-  shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _circularError));
+  boost::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _circularError));
 
   // if the cached envelope is valid
   if (w.has_bbox())
@@ -907,12 +910,12 @@ void OsmPbfReader::_loadWays()
   }
 }
 
-void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, shared_ptr<OsmMap> map)
+void OsmPbfReader::parseBlob(BlobLocation& bl, istream* strm, OsmMapPtr map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void OsmPbfReader::parseBlob(long headerOffset, istream* strm, shared_ptr<OsmMap> map)
+void OsmPbfReader::parseBlob(long headerOffset, istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
@@ -964,7 +967,7 @@ void OsmPbfReader::_parseBlobHeader()
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
-void OsmPbfReader::parseElements(istream* strm, const shared_ptr<OsmMap>& map)
+void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
 {
   _map = map;
   _in = strm;
@@ -1051,7 +1054,7 @@ Status OsmPbfReader::_parseStatus(QString s)
   return result;
 }
 
-void OsmPbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
+void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
@@ -1089,7 +1092,7 @@ void OsmPbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
 }
 
 /// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
-void OsmPbfReader::read(QString path, shared_ptr<OsmMap> map)
+void OsmPbfReader::read(QString path, OsmMapPtr map)
 {
   if (_status == Status::Invalid)
   {
@@ -1117,7 +1120,7 @@ void OsmPbfReader::read(QString path, shared_ptr<OsmMap> map)
   map->visitRw(v);
 }
 
-void OsmPbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
+void OsmPbfReader::_readFile(QString path, OsmMapPtr map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 
@@ -1129,7 +1132,7 @@ void OsmPbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
   parse(&input, map);
 }
 
-void OsmPbfReader::read(shared_ptr<OsmMap> map)
+void OsmPbfReader::read(OsmMapPtr map)
 {
   assert(map.get());
   if (_status == Status::Invalid)
@@ -1221,7 +1224,7 @@ bool OsmPbfReader::hasMoreElements()
   return false;
 }
 
-shared_ptr<Element> OsmPbfReader::readNextElement()
+boost::shared_ptr<Element> OsmPbfReader::readNextElement()
 {
   if (!hasMoreElements())
   {
@@ -1275,7 +1278,7 @@ shared_ptr<Element> OsmPbfReader::readNextElement()
   //read nodes, then ways, then relations
   //there's possibly a way to read the element in one code block instead of three...just wasn't
   //able to get it to work yet
-  shared_ptr<Element> element;
+  boost::shared_ptr<Element> element;
   if (_partialNodesRead < int(_map->getNodes().size()))
   {
     /// @optimize
@@ -1283,19 +1286,19 @@ shared_ptr<Element> OsmPbfReader::readNextElement()
     // need the reader to go faster.
 
     element.reset(new Node(*_nodesItr->second.get()));
-    _nodesItr++;
+    ++_nodesItr;
     _partialNodesRead++;
   }
   else if (_partialWaysRead < int(_map->getWays().size()))
   {
     element.reset(new Way(*_waysItr->second.get()));
-    _waysItr++;
+    ++_waysItr;
     _partialWaysRead++;
   }
   else if (_partialRelationsRead < int(_map->getRelations().size()))
   {
     element.reset(new Relation(*_relationsItr->second.get()));
-    _relationsItr++;
+    ++_relationsItr;
     _partialRelationsRead++;
   }
   assert(element.get());
@@ -1338,10 +1341,9 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
 {
   if (_addSourceDateTime && t.getInformationCount() > 0) // Make sure we actually have attributes
   {
-    long timestamp = 0;
     if (info.has_timestamp())
     {
-      timestamp = info.timestamp() * _dateGranularity;
+      long timestamp = info.timestamp() * _dateGranularity;
 
       if (timestamp != 0)
       {
@@ -1349,7 +1351,7 @@ void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)
         QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
         QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
 
-        t.set("source:datetime", dts);
+        t.set(MetadataTags::SourceDateTime(), dts);
       }
     }
   }

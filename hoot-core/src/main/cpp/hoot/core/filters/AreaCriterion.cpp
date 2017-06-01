@@ -39,7 +39,7 @@ AreaCriterion::AreaCriterion()
 {
 }
 
-bool AreaCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool AreaCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   return OsmSchema::getInstance().isArea(e);
 }

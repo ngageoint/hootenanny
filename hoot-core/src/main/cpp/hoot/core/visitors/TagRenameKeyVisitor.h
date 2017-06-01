@@ -42,7 +42,7 @@ class TagRenameKeyVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
-  static string className() { return "hoot::TagRenameKeyVisitor"; }
+  static std::string className() { return "hoot::TagRenameKeyVisitor"; }
 
   TagRenameKeyVisitor();
 
@@ -50,7 +50,7 @@ public:
 
   virtual ~TagRenameKeyVisitor() {}
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
   virtual void setConfiguration(const Settings& conf);
 

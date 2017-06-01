@@ -31,11 +31,14 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Element.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
 double AbstractDistanceExtractor::combinedEnvelopeDiagonalDistance(const OsmMap& map,
-  const shared_ptr<const Element>& target, const shared_ptr<const Element>& candidate) const
+  const boost::shared_ptr<const Element>& target, const boost::shared_ptr<const Element>& candidate) const
 {
   ConstOsmMapPtr m = map.shared_from_this();
   auto_ptr<Envelope> env(target->getEnvelope(m));
@@ -45,8 +48,8 @@ double AbstractDistanceExtractor::combinedEnvelopeDiagonalDistance(const OsmMap&
 }
 
 double AbstractDistanceExtractor::extract(const OsmMap& map,
-                                          const shared_ptr<const Element>& target,
-                                          const shared_ptr<const Element>& candidate) const
+                                          const boost::shared_ptr<const Element>& target,
+                                          const boost::shared_ptr<const Element>& candidate) const
 {
   return 1 - distance(map, target, candidate) /
     combinedEnvelopeDiagonalDistance(map, target, candidate);

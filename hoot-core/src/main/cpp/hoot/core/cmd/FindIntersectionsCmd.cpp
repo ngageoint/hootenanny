@@ -35,11 +35,10 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/FindIntersectionsOp.h>
 
+using namespace std;
 
 namespace hoot
 {
-
-
 
 class FindIntersectionsCmd : public BaseCommand
 {
@@ -59,7 +58,7 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], false, Status::Unknown1);
 
 //    MapCleaner().apply(map);

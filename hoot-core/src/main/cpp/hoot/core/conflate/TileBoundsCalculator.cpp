@@ -33,10 +33,14 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QImage>
 #include <QPainter>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -46,6 +50,7 @@ unsigned int TileBoundsCalculator::logWarnCount = 0;
 TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
 {
   _pixelSize = pixelSize;
+  LOG_VARD(_pixelSize);
   _slop = 0.1;
   setMaxNodesPerBox(1000);
 }
@@ -53,12 +58,15 @@ TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
 void TileBoundsCalculator::_calculateMin()
 {
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
+  LOG_VART(w);
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;
+  LOG_VART(h);
 
   assert(h == _r1.rows && w == _r1.cols);
   assert(_r1.rows == _r2.rows && _r1.cols == _r2.cols);
 
   _min = cv::Mat(cvSize(w, h), CV_32SC1);
+  LOG_VART(_min);
 
   _maxValue = 1.0;
   for (int py = 0; py < h; py++)
@@ -86,6 +94,7 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
   LOG_DEBUG("w: " << _r1.cols << " h: " << _r1.rows);
   LOG_DEBUG("Total node count: " << nodeCount);
 
+  LOG_VART(_maxNodesPerBox);
   while (!_isDone(boxes))
   {
     width *= 2;
@@ -121,6 +130,7 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
   vector< vector<Envelope> > result;
 
   long maxNodeCount = 0;
+  long minNodeCount = LONG_MAX;
   result.resize(width);
   for (size_t tx = 0; tx < width; tx++)
   {
@@ -128,7 +138,9 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     for (size_t ty = 0; ty < width; ty++)
     {
       PixelBox& pb = boxes[tx + ty * width];
-      maxNodeCount = std::max(maxNodeCount, _sumPixels(pb));
+      const long nodeCount = _sumPixels(pb);
+      maxNodeCount = std::max(maxNodeCount, nodeCount);
+      minNodeCount = std::min(minNodeCount, nodeCount);
       if (pb.getWidth() < 3 || pb.getHeight() < 3)
       {
         throw HootException("PixelBox must be at least 3 pixels wide and tall.");
@@ -137,6 +149,7 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
     }
   }
   LOG_DEBUG("Max node count in one tile: " << maxNodeCount);
+  LOG_DEBUG("Min node count in one tile: " << minNodeCount);
   _exportResult(boxes, "tmp/result.png");
 
   return result;
@@ -145,14 +158,18 @@ vector< vector<Envelope> >  TileBoundsCalculator::calculateTiles()
 int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
 {
   double total = _sumPixels(b);
+  LOG_VART(total);
 
   double left = _sumPixels(b.getColumnBox(b.minX));
+  LOG_VART(left);
 
   int best = (b.maxX + b.minX) / 2;
   double bestSum = numeric_limits<double>::max();
 
   double thisSlop = _slop + 1.0 / (double)(b.maxX - b.minX);
+  LOG_VART(thisSlop);
 
+  LOG_VART(b.getWidth());
   if (b.getWidth() < 6)
   {
     throw HootException("The input box must be at least six pixels high.");
@@ -161,8 +178,10 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
   for (int c = b.minX + 2; c < b.maxX - 2; c++)
   {
     double colSum = _sumPixels(b.getColumnBox(c));
-    double colSumMin = _sumPixels(b.getColumnBox(c), _min) +
-      _sumPixels(b.getColumnBox(c + 1), _min);
+    LOG_VART(colSum);
+    double colSumMin =
+      _sumPixels(b.getColumnBox(c), _min) + _sumPixels(b.getColumnBox(c + 1), _min);
+    LOG_VART(colSumMin);
     left += colSum;
 
     double slop = abs(0.5 - left / total);
@@ -172,6 +191,9 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
       bestSum = colSumMin;
     }
   }
+  LOG_VART(left);
+  LOG_VART(best);
+  LOG_VART(bestSum);
 
   if (bestSum == numeric_limits<double>::max())
   {
@@ -186,19 +208,23 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
     logWarnCount++;
   }
 
+  LOG_VART(best);
   return best;
 }
 
 int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 {
   double total = _sumPixels(b);
+  LOG_VART(total);
 
   double bottom = _sumPixels(b.getRowBox(b.minY));
+  LOG_VART(bottom);
 
   int best = (b.maxY + b.minY) / 2;
   double bestSum = numeric_limits<double>::max();
 
   double thisSlop = _slop + 1.0 / (double)(b.maxY - b.minY);
+  LOG_VART(thisSlop);
 
   if (b.getHeight() < 6)
   {
@@ -208,7 +234,9 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
   for (int r = b.minY + 2; r < b.maxY - 2; r++)
   {
     double rowSum = _sumPixels(b.getRowBox(r));
+    LOG_VART(rowSum);
     double rowSumMin = _sumPixels(b.getRowBox(r), _min) + _sumPixels(b.getRowBox(r + 1), _min);
+    LOG_VART(rowSumMin);
     bottom += rowSum;
 
     double slop = abs(0.5 - bottom / total);
@@ -218,6 +246,9 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
       bestSum = rowSumMin;
     }
   }
+  LOG_VART(bottom);
+  LOG_VART(best);
+  LOG_VART(bestSum);
 
   if (bestSum == numeric_limits<double>::max())
   {
@@ -233,16 +264,19 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
     logWarnCount++;
   }
 
+  LOG_VART(best);
   return best;
 }
 
-void TileBoundsCalculator::_countNode(const shared_ptr<Node>& n)
+void TileBoundsCalculator::_countNode(const boost::shared_ptr<Node> &n)
 {
   double x = n->getX();
   double y = n->getY();
 
   int px = (x - _envelope.MinX) / _pixelSize;
+  LOG_VART(px);
   int py = (y - _envelope.MinY) / _pixelSize;
+  LOG_VART(py);
 
   if (px < 0 || px >= _r1.cols || py < 0 || py >= _r1.rows)
   {
@@ -324,7 +358,7 @@ void TileBoundsCalculator::_exportImage(cv::Mat &r, QString output)
   pen.setColor(qRgb(1, 0, 0));
   pt.setPen(pen);
 
-  LOG_DEBUG("max value: " << _maxValue);
+  LOG_VART(_maxValue);
 
   for (int y = 0; y < r.rows; y++)
   {
@@ -391,6 +425,8 @@ void TileBoundsCalculator::_exportResult(const vector<PixelBox>& boxes, QString 
 
 bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 {
+  LOG_VART(boxes.size());
+
   bool smallEnough = true;
   bool minSize = false;
 
@@ -419,7 +455,7 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
   }
 }
 
-void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
+void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
 
@@ -432,12 +468,21 @@ void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map)
   _exportImage(_min, "tmp/min.png");
 }
 
-void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
+void TileBoundsCalculator::renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2)
 {
   _envelope = CalculateMapBoundsVisitor::getBounds(map);
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    boost::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
+    LOG_VARD(tempEnv->toString());
+  }
+  LOG_VART(_pixelSize);
+  LOG_VART(map->getNodeCount());
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
+  LOG_VART(w);
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;
+  LOG_VART(h)
 
   _r1 = cv::Mat(cvSize(w, h), CV_32SC1);
   _r2 = cv::Mat(cvSize(w, h), CV_32SC1);
@@ -455,9 +500,10 @@ void TileBoundsCalculator::renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::
   }
 
   const NodeMap& nm = map->getNodes();
-  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
+  LOG_VART(nm.size());
+  for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<Node>& n = it->second;
+    const boost::shared_ptr<Node>& n = it->second;
     _countNode(n);
   }
 
@@ -480,7 +526,10 @@ void TileBoundsCalculator::setImages(const cv::Mat& r1, const cv::Mat& r2)
 long TileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
 {
   long sum = 0.0;
-
+  LOG_VART(pb.minY);
+  LOG_VART(pb.maxY);
+  LOG_VART(pb.minX);
+  LOG_VART(pb.maxX);
   for (int py = pb.minY; py <= pb.maxY; py++)
   {
     int32_t* row = r.ptr<int32_t>(py);
@@ -490,7 +539,7 @@ long TileBoundsCalculator::_sumPixels(const PixelBox& pb, cv::Mat& r)
       sum += row[px];
     }
   }
-
+  LOG_VART(sum);
   return sum;
 }
 

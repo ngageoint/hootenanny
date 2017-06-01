@@ -37,6 +37,8 @@
 // Qt
 #include <QFile>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -60,7 +62,7 @@ public:
 
     QString transformPath = args[0];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[1], true, Status::Unknown1);
     QString outputPath = args[2];
 

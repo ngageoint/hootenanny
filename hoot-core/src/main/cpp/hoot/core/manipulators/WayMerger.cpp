@@ -69,7 +69,8 @@ using namespace Tgs;
 
 #include "WayMergeManipulation.h"
 
-namespace hoot {
+namespace hoot
+{
 
 #define SQR(x) ((x) * (x))
 
@@ -81,13 +82,13 @@ WayMerger::WayMerger()
 }
 
 Manipulation* WayMerger::_createManipulation(long leftId, long rightId,
-  shared_ptr<const OsmMap> map, Meters minSplitSize)
+  ConstOsmMapPtr map, Meters minSplitSize)
 {
   return new WayMergeManipulation(leftId, rightId, map, minSplitSize);
 }
 
-const vector< shared_ptr<Manipulation> >& WayMerger::findAllManipulations(
-        shared_ptr<const OsmMap> map)
+const vector< boost::shared_ptr<Manipulation> >& WayMerger::findAllManipulations(
+        ConstOsmMapPtr map)
 {
   LOG_INFO("Finding all way merge manipulations...");
 
@@ -99,8 +100,8 @@ const vector< shared_ptr<Manipulation> >& WayMerger::findAllManipulations(
   return findWayManipulations(map, unknown1);
 }
 
-const vector< shared_ptr<Manipulation> >& WayMerger::findWayManipulations(
-        shared_ptr<const OsmMap> map, const vector<long>& wids)
+const vector< boost::shared_ptr<Manipulation> >& WayMerger::findWayManipulations(
+        ConstOsmMapPtr map, const vector<long>& wids)
 {
   _result.clear();
   _map = map;
@@ -130,7 +131,7 @@ const vector< shared_ptr<Manipulation> >& WayMerger::findWayManipulations(
 
 void WayMerger::_findMatches(long baseWayId)
 {
-  shared_ptr<const Way> baseWay = _map->getWay(baseWayId);
+  ConstWayPtr baseWay = _map->getWay(baseWayId);
 
   // if it isn't a highway we can't merge it.
   if (OsmSchema::getInstance().isLinearHighway(baseWay->getTags(), ElementType::Way) == false)
@@ -144,20 +145,20 @@ void WayMerger::_findMatches(long baseWayId)
   // go through all the other ways
   for (size_t oi = 0; oi < otherWays.size(); oi++)
   {
-    shared_ptr<const Way> otherWay = _map->getWay(otherWays[oi]);
+    ConstWayPtr otherWay = _map->getWay(otherWays[oi]);
 
     if (otherWay->isUnknown() && baseWay->isUnknown() &&
         OsmSchema::getInstance().isLinearHighway(otherWay->getTags(), ElementType::Way))
     {
       // create a new manipulation and add it onto the result.
-      shared_ptr<Manipulation> m(_createManipulation(baseWay->getId(), otherWay->getId(),
+      boost::shared_ptr<Manipulation> m(_createManipulation(baseWay->getId(), otherWay->getId(),
                                                           _map, _minSplitSize));
       _result.push_back(m);
     }
   }
 }
 
-vector<long> WayMerger::_findOtherWays(shared_ptr<const Way> baseWayConst)
+vector<long> WayMerger::_findOtherWays(ConstWayPtr baseWayConst)
 {
   Status otherStatus = Status::Unknown2;
   if (baseWayConst->getStatus() == Status::Unknown2)
@@ -179,21 +180,21 @@ vector<long> WayMerger::_findOtherWays(shared_ptr<const Way> baseWayConst)
   CopySubsetOp(_map, allWays).apply(map);
 
 
-  shared_ptr<Way> baseWay = map->getWay(baseWayConst->getId());
+  WayPtr baseWay = map->getWay(baseWayConst->getId());
 
   vector<long> result;
   result.reserve(filtered.size());
   for (size_t i = 0; i < filtered.size(); i++)
   {
-    shared_ptr<Way> otherWay = map->getWay(filtered[i]);
+    WayPtr otherWay = map->getWay(filtered[i]);
 
     Meters circularError = otherWay->getCircularError() + baseWay->getCircularError();
     // use the maximal nearest subline code to find the best subline
-    shared_ptr<Way> mns1 = MaximalNearestSubline::getMaximalNearestSubline(map, baseWay,
+    WayPtr mns1 = MaximalNearestSubline::getMaximalNearestSubline(map, baseWay,
       otherWay, _minSplitSize, circularError);
     if (mns1 != 0)
     {
-      shared_ptr<Way> mns2 = MaximalNearestSubline::getMaximalNearestSubline(map,
+      WayPtr mns2 = MaximalNearestSubline::getMaximalNearestSubline(map,
         otherWay, mns1, _minSplitSize, circularError);
 
       if (mns2 != 0)

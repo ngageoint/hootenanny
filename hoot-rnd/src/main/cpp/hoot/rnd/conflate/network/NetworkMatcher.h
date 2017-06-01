@@ -41,8 +41,6 @@
 namespace hoot
 {
 
-using namespace Tgs;
-
 /**
  * Not to be confused with a NetworkMatch, the NetworkMatcher matches up a whole network.
  */
@@ -52,7 +50,7 @@ public:
 
   const static double EPSILON;
 
-  static string className() { return "hoot::NetworkMatcher"; }
+  static std::string className() { return "hoot::NetworkMatcher"; }
 
   virtual ~NetworkMatcher();
 
@@ -72,10 +70,10 @@ public:
 
 protected:
 
-  HilbertRTreePtr _edge2Index;
-  HilbertRTreePtr _vertex2Index;
-  deque<ConstNetworkEdgePtr> _index2Edge;
-  deque<ConstNetworkVertexPtr> _index2Vertex;
+  Tgs::HilbertRTreePtr _edge2Index;
+  Tgs::HilbertRTreePtr _vertex2Index;
+  std::deque<ConstNetworkEdgePtr> _index2Edge;
+  std::deque<ConstNetworkVertexPtr> _index2Vertex;
   ConstOsmMapPtr _map;
   OsmNetworkPtr _n1, _n2;
   NetworkDetailsPtr _details;
@@ -84,12 +82,12 @@ protected:
 
   void _createVertex2Index();
 
-  IntersectionIterator _createIterator(Envelope env, HilbertRTreePtr tree);
+  Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env, Tgs::HilbertRTreePtr tree);
 
 };
 
-typedef shared_ptr<NetworkMatcher> NetworkMatcherPtr;
-typedef shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
+typedef boost::shared_ptr<NetworkMatcher> NetworkMatcherPtr;
+typedef boost::shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstNetworkMatcherPtr, ConstNetworkMatcherPtr);

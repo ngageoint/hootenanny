@@ -32,11 +32,13 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/filters/TagCriterion.h>
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/scoring/MapComparator.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetElementIdsVisitor.h>
@@ -47,10 +49,13 @@
 // Qt
 #include <QFile>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
-shared_ptr<TestUtils> TestUtils::_theInstance;
+boost::shared_ptr<TestUtils> TestUtils::_theInstance;
 
 TestUtils::TestUtils()
 {
@@ -63,14 +68,14 @@ bool TestUtils::compareMaps(const QString& refPath, const QString testPath)
   reader.setUseDataSourceIds(true);
   reader.setUseStatusFromFile(true);
 
-  shared_ptr<OsmMap> ref(new OsmMap());
-  shared_ptr<OsmMap> test(new OsmMap());
+  OsmMapPtr ref(new OsmMap());
+  OsmMapPtr test(new OsmMap());
   reader.read(refPath, ref);
   reader.read(testPath, test);
   return compareMaps(ref, test);
 }
 
-bool TestUtils::compareMaps(shared_ptr<OsmMap> ref, shared_ptr<OsmMap> test)
+bool TestUtils::compareMaps(OsmMapPtr ref, OsmMapPtr test)
 {
   return MapComparator().isMatch(ref, test);
 }
@@ -142,9 +147,7 @@ void TestUtils::dumpString(const string& str)
     {
       cout << endl << "  ";
     }
-    //printf("%3d%c", (unsigned char)str.at(i),
-    //  str.at(i) >= 32 && str.at(i) <= 125 ? (char)(str.at(i)) : '#');
-    printf("%3d", (unsigned char)str.at(i));
+    printf("%3u", (unsigned char)str.at(i));
   }
   cout << "};" << endl;
   cout << "size_t dataSize = " << str.size() << ";" << endl;
@@ -172,7 +175,7 @@ ElementPtr TestUtils::getElementWithTag(OsmMapPtr map, const QString tagKey,
   return map->getElement(*bag.begin());
 }
 
-shared_ptr<TestUtils> TestUtils::getInstance()
+boost::shared_ptr<TestUtils> TestUtils::getInstance()
 {
   if (!_theInstance)
   {
@@ -189,12 +192,24 @@ std::string TestUtils::readFile(QString f1)
   return QString(fpTest.readAll()).toStdString();
 }
 
-void TestUtils::resetEnvironment()
+void TestUtils::resetEnvironment(const QStringList confs)
 {
+  LOG_DEBUG("Resetting test environment...");
+
   // provide the most basic configuration.
   OsmMap::resetCounters();
   conf().clear();
   ConfigOptions::populateDefaults(conf());
+  //The primary reason for allowing custom configs to be loaded here is in certain situaions to
+  //prevent the ConfigOptions defaults from being loaded, as they may be too bulky when running
+  //many hoot commands at once.
+  LOG_VART(confs.size());
+  for (int i = 0; i < confs.size(); i++)
+  {
+    LOG_VART(confs[i]);
+    conf().loadJson(confs[i]);
+  }
+  LOG_VART(conf());
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
 
   // Sometimes we add new projections to the MapProjector, when this happens it may pick a new
@@ -234,6 +249,20 @@ QString TestUtils::toQuotedString(QString str)
     }
   }
   return result;
+}
+
+void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString stdFilePath,
+                                                 const QString outFilePath)
+{
+  LOG_VART(stdFilePath);
+  LOG_VART(outFilePath);
+  const QStringList stdTokens = FileUtils::tokenizeOutputFileWithoutDates(stdFilePath);
+  const QStringList outputTokens = FileUtils::tokenizeOutputFileWithoutDates(outFilePath);
+  CPPUNIT_ASSERT_EQUAL(stdTokens.size(), outputTokens.size());
+  for (int i = 0; i < stdTokens.size(); i++)
+  {
+    HOOT_STR_EQUALS(stdTokens.at(i), outputTokens.at(i));
+  }
 }
 
 }

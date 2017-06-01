@@ -33,6 +33,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -43,13 +45,13 @@ SuperfluousWayRemover::SuperfluousWayRemover()
 
 }
 
-SuperfluousWayRemover::SuperfluousWayRemover(shared_ptr<OsmMap> map)
+SuperfluousWayRemover::SuperfluousWayRemover(boost::shared_ptr<OsmMap> map)
 {
   _inputMap = map;
 }
 
 
-void SuperfluousWayRemover::removeWays(shared_ptr<OsmMap> map)
+void SuperfluousWayRemover::removeWays(boost::shared_ptr<OsmMap> map)
 {
   SuperfluousWayRemover swr(map);
   return swr.removeWays();
@@ -57,20 +59,19 @@ void SuperfluousWayRemover::removeWays(shared_ptr<OsmMap> map)
 
 void SuperfluousWayRemover::removeWays()
 {
-  shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
+  boost::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
 
   // make a copy of the ways to avoid issues when removing.
   const WayMap ways = _inputMap->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const shared_ptr<const Way>& w = it->second;
+    const ConstWayPtr& w = it->second;
 
     bool same = true;
-    long firstId;
     const vector<long>& nodeIds = w->getNodeIds();
     if (nodeIds.size() > 0)
     {
-      firstId = nodeIds[0];
+      long firstId = nodeIds[0];
 
       for (size_t i = 1; i < nodeIds.size(); i++)
       {
@@ -91,7 +92,7 @@ void SuperfluousWayRemover::removeWays()
   }
 }
 
-void SuperfluousWayRemover::apply(shared_ptr<OsmMap>& map)
+void SuperfluousWayRemover::apply(boost::shared_ptr<OsmMap> &map)
 {
   removeWays(map);
 }

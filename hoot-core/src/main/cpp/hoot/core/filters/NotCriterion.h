@@ -37,7 +37,7 @@ class NotCriterion : public ElementCriterion, public ElementCriterionConsumer
 {
 public:
 
-  static string className() { return "hoot::NotCriterion"; }
+  static std::string className() { return "hoot::NotCriterion"; }
 
   NotCriterion() {}
   NotCriterion(ElementCriterion* c) : _child(c) {}
@@ -50,7 +50,7 @@ public:
   /**
    * Returns true if the element satisfies the criterion.
    */
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new NotCriterion(_child->clone()); }
 

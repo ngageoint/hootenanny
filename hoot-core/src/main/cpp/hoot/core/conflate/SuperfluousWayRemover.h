@@ -41,9 +41,8 @@
 
 namespace hoot
 {
-  using namespace std;
 
-  class OsmMap;
+class OsmMap;
 
 /**
  * Removes all ways that are not being used by relations that contain zero nodes, or all the nodes
@@ -53,24 +52,24 @@ class SuperfluousWayRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::SuperfluousWayRemover"; }
+  static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover();
 
-  SuperfluousWayRemover(shared_ptr<OsmMap> map);
+  SuperfluousWayRemover(boost::shared_ptr<OsmMap> map);
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    */
-  static void removeWays(shared_ptr<OsmMap> map);
+  static void removeWays(boost::shared_ptr<OsmMap> map);
 
   void removeWays();
 
 protected:
 
-  shared_ptr<OsmMap> _inputMap;
+  boost::shared_ptr<OsmMap> _inputMap;
 };
 
 }

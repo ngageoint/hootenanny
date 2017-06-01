@@ -66,9 +66,8 @@ void OsmApiDbAwareHootApiDbReader::open(QString urlStr)
 ElementId OsmApiDbAwareHootApiDbReader::_mapElementId(const OsmMap& /*map*/, ElementId oldId)
 {
   ElementId result;
-
-  long id = oldId.getId();
   LOG_VART(oldId);
+  long id = oldId.getId();
   switch (oldId.getType().getEnum())
   {
     case ElementType::Node:
@@ -112,7 +111,6 @@ ElementId OsmApiDbAwareHootApiDbReader::_mapElementId(const OsmMap& /*map*/, Ele
                                      QString::number(oldId.getType().getEnum()));
   }
   LOG_VART(result);
-
   return result;
 }
 

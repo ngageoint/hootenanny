@@ -36,6 +36,9 @@ maximumWayNodes=2000
 # amount to auto-expand changeset by after an update
 changesetBoundsExpansionFactorDeegrees=0.1
 
+# amount in degrees to expand the AOI by when derive changesets
+changesetDeriveBufferDegrees=0.001
+
 # maximum amount of time that may pass without a changeset being updated before it is closed
 changesetIdleTimeoutMinutes=60
 
@@ -48,40 +51,19 @@ testChangesetAutoClose=false
 # the folder location of the make file script for some endpoints
 coreScriptPath=$(homeFolder)/scripts/services
 
-# ETL make files script
-ETLMakefile=makeetl
-
-# Conflate make file script
-ConflateMakefilePath=makeconflate
-
-# ClipDataset make file script
-ClipDatasetMakefilePath=makeclipdataset
-
 # Translation header used for just function scanning
 dummyjsHeaderScriptPath=$(homeFolder)/scripts/services/empty_rh.js
 
 # Translation javascript path
 translationScriptPath=$(homeFolder)/translations
 
-# osm2ogr script used in export
-ExportScript=osm2ogrscript
-
 exportRenderDBScript=exportrenderdb.sh
-
-# WFS Store Connection Name
-wfsStoreConnName=WFS_Connection
-
-# WFS Store db name
-wfsStoreDb=${WFS_DB_NAME}
 
 # Enable access to a single OSM API database configured by DatabaseConfig.sh.
 osmApiDbEnabled=true
 
 # Translation extension install folder
 translationExtPath=$(homeFolder)/plugins-local/script/utp
-
-# Basemap Raster to tile make file
-BasemapRasterToTiles=makebasemaprastertotiles.sh
 
 # Supported basemap type extensions
 BasemapRasterExtensions=png,tif
@@ -109,9 +91,6 @@ translationServerThreadCount=0
 
 # Translation Server Script in scripts folder
 translationServerScript=/plugins/TranslationServer.js
-
-# Ogr Attributes script name
-GetOgrAttributeScript=makeGetOgrAttrib
 
 # Ingest size threshold
 ingestSizeThreshold=200000000
@@ -147,7 +126,7 @@ ElementMergeServerThreadCount=0
 ElementMergeServerScript=/plugins/ElementMergeServer.js
 
 # HGIS review prepare for validation script name
-hgisPrepareForValidationScript=PrepareForValidation.sh
+hgisPrepareForValidationScript=PrepareForValidation.js
 
 # HGIS filter script name
-hgisFilterScript=RemoveNonHgisPois.sh
+hgisFilterScript=RemoveNonHgisPois.js

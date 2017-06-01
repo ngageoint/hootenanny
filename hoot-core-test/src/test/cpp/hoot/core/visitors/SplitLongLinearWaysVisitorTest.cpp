@@ -7,10 +7,11 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
 
 #include "../TestUtils.h"
 
@@ -51,7 +52,7 @@ private:
     // Make sure way in question does not already exist in map
     CPPUNIT_ASSERT_EQUAL(_map->containsWay(wayId), false );
 
-    boost::shared_ptr<Way>newWay(new Way(Status::Unknown1, wayId, 1.0));
+    WayPtr newWay(new Way(Status::Unknown1, wayId, 1.0));
 
     // Make sure there are nodes to add
     if ( startNodeId <= endNodeId )
@@ -346,7 +347,6 @@ private:
 
     // Sanity checks on split
     _sanityCheckSplit(splitVisitor, startNode, numNodes, numWays);
-    startNode += numNodes;
   }
 
   void _sanityCheckSplit(SplitLongLinearWaysVisitor& /*splitVisitor*/, const int startNode,
@@ -371,7 +371,7 @@ private:
       LOG_TRACE("Looking for node ID " << searchId);
       bool madeProgress = false;
       bool hitError = false;
-      for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+      for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
       {
         // Does this way have the node we're looking for?
         WayPtr currWay = it->second;

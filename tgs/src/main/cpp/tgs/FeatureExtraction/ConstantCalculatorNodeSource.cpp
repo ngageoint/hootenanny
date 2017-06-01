@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConstantCalculatorNodeSource.h"
@@ -53,7 +53,7 @@ namespace Tgs
   void ConstantCalculatorNodeSource::_loadInternals(std::istream& s)
   {
     std::string buffer;
-    std::string str, tag, value;
+    std::string tag, value;
 
     std::getline(s, buffer);
     XmlHelper::parseTagValue(buffer, tag, value);
@@ -96,7 +96,7 @@ namespace Tgs
   }
 
   void ConstantCalculatorNodeSource::_saveInternals(std::ostream& s,
-    const std::string indent) const
+    const std::string& indent) const
   {
     s << indent << "<value>" << _v << "</value>" << endl;
     s << indent << "<sigma>" << _sigma << "</sigma>" << endl;

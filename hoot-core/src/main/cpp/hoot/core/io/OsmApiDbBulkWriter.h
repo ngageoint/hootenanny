@@ -48,31 +48,7 @@
 namespace hoot
 {
 
-using namespace boost;
-using namespace std;
-using namespace Tgs;
-
-//These match up exclusively with the v0.6 OSM API database and shouldn't be changed.
-static const QString CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
-static const QString CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
-static const QString HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
-static const QString CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
-static const QString CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t1\t%3\n";
-static const QString CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
-static const QString CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
-static const QString HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t1\t%5\n";
-static const QString CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\n";
-//for whatever strange reason, the historical node tags table column order in the API datbase
-//is different than the other historical tags tables; this makes a difference when using the
-//offline loader, since it is sensitive to ordering
-static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\t%2\t%3\n";
+class OsmApiDbSqlStatementFormatter;
 
 /**
  * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
@@ -118,15 +94,15 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   {
     unsigned long startingNodeId;
     unsigned long currentNodeId;
-    shared_ptr<BigMap<long, unsigned long> > nodeIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > nodeIdMap;
 
     unsigned long startingWayId;
     unsigned long currentWayId;
-    shared_ptr<BigMap<long, unsigned long> > wayIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > wayIdMap;
 
     unsigned long startingRelationId;
     unsigned long currentRelationId;
-    shared_ptr<BigMap<long, unsigned long> > relationIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > relationIdMap;
   };
 
   struct ChangesetData
@@ -135,7 +111,7 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
     unsigned long currentChangesetId;
     unsigned long changesetsWritten;
     unsigned int changesInChangeset;
-    Envelope changesetBounds;
+    geos::geom::Envelope changesetBounds;
   };
 
   struct UnresolvedRelationReference
@@ -149,12 +125,12 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   struct UnresolvedReferences
   {
     //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
-    shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
+    boost::shared_ptr<std::map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
 
 public:
 
-  static string className() { return "hoot::OsmApiDbBulkWriter"; }
+  static std::string className() { return "hoot::OsmApiDbBulkWriter"; }
 
   static unsigned int logWarnCount;
 
@@ -222,25 +198,22 @@ private:
   QString _outputFilesCopyLocation;
   QString _outputUrl;
   QString _outputDelimiter;
-  shared_ptr<QFile> _sqlOutputCombinedFile;
+  boost::shared_ptr<QFile> _sqlOutputCombinedFile;
   bool _reserveRecordIdsBeforeWritingData;
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
   bool _validateData;
 
-  QMap<QString, QString> _outputFormatStrings;
-
   //ended up not going with temp files here, since the file outputs aren't always temporary
-  map<QString, pair<shared_ptr<QFile>, shared_ptr<QTextStream> > > _outputSections;
+  std::map<QString, std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
+  boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
 
-  shared_ptr<QElapsedTimer> _timer;
+  boost::shared_ptr<QElapsedTimer> _timer;
 
-  unsigned int _convertDegreesToNanodegrees(const double degrees) const;
   QString _formatPotentiallyLargeNumber(const unsigned long number);
-  QString _escapeCopyToData(const QString stringToOutput) const;
   QString _secondsToDhms(const qint64 durationInMilliseconds) const;
 
   void _reset();
@@ -266,9 +239,8 @@ private:
                          const bool addByteOrderMarker = false);
   QString _getCombinedSqlFileName() const;
   QString _getTableOutputFileName(const QString tableName) const;
-  void _initOutputFormatStrings();
 
-  void _writeSequenceUpdatesToStream(unsigned long changesetId, const unsigned long nodeId,
+  void _writeSequenceUpdatesToStream(long changesetId, const unsigned long nodeId,
                                      const unsigned long wayId,
                                      const unsigned long relationId, QString& outputStr);
   void _writeChangesetToStream();
@@ -276,15 +248,15 @@ private:
   void _writeRelationMembersToStream(const ConstRelationPtr& relation,
                                      const unsigned long dbRelationId);
   void _writeRelationMemberToStream(const unsigned long sourceRelationDbId,
-                                    const RelationData::Entry& memberEntry,
+                                    const RelationData::Entry& member,
                                     const unsigned long memberDbId,
                                     const unsigned int memberSequenceIndex);
   void _writeWayToStream(const unsigned long wayDbId);
-  void _writeWayNodesToStream(const unsigned long wayId, const vector<long>& wayNodeIds);
+  void _writeWayNodesToStream(const unsigned long wayId, const std::vector<long>& wayNodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
-                          const unsigned long dbId, shared_ptr<QTextStream>& currentTable,
-                          shared_ptr<QTextStream>& historicalTable);
+                          const unsigned long dbId, boost::shared_ptr<QTextStream>& currentTable,
+                          boost::shared_ptr<QTextStream>& historicalTable);
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();

@@ -52,7 +52,7 @@ void KeepTagsVisitor::setConfiguration(const Settings& conf)
   _keys = ConfigOptions(conf).getKeepTagsVisitorKeys();
 }
 
-void KeepTagsVisitor::visit(const shared_ptr<Element>& e)
+void KeepTagsVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   //get a copy of the tags for modifying
   Tags tags;

@@ -17,9 +17,10 @@
 #include "ConflateDriver.h"
 
 // Hoot
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 #include <hoot/hadoop/stats/MapStats.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
@@ -35,6 +36,9 @@
 
 #include "ConflateMapper.h"
 #include "ConflateReducer.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

@@ -33,6 +33,10 @@
 
 #include "EdgeMatchSetFinder.h"
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -44,9 +48,9 @@ VagabondNetworkMatcher::VagabondNetworkMatcher() :
   _pr.reset(new IndexedEdgeMatchSet());
 }
 
-shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcher::create()
+boost::shared_ptr<VagabondNetworkMatcher> VagabondNetworkMatcher::create()
 {
-  return shared_ptr<VagabondNetworkMatcher>(new VagabondNetworkMatcher());
+  return boost::shared_ptr<VagabondNetworkMatcher>(new VagabondNetworkMatcher());
 }
 
 QList<NetworkEdgeScorePtr> VagabondNetworkMatcher::getAllEdgeScores() const

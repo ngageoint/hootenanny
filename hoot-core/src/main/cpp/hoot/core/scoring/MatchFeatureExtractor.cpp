@@ -46,6 +46,9 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -57,13 +60,13 @@ MatchFeatureExtractor::MatchFeatureExtractor(bool evenClasses)
   _matchFactory = &MatchFactory::getInstance();
 }
 
-void MatchFeatureExtractor::addMatchCreator(const shared_ptr<MatchCreator> &m)
+void MatchFeatureExtractor::addMatchCreator(const boost::shared_ptr<MatchCreator> &m)
 {
   _creators.push_back(m);
 }
 
 MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
-  const shared_ptr<const OsmMap>& map) const
+  const boost::shared_ptr<const OsmMap>& map) const
 {
   set<QString> ref1, ref2, review;
 
@@ -84,7 +87,7 @@ MatchType MatchFeatureExtractor::_getActualMatchType(const set<ElementId> &eids,
   // go through the set of provided ways
   for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
-    const shared_ptr<const Element>& e = map->getElement(*it);
+    const boost::shared_ptr<const Element>& e = map->getElement(*it);
     if (e->getStatus() == Status::Unknown1)
     {
       QString r = e->getTags()[MetadataTags::Ref1()];
@@ -243,12 +246,12 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
   return result;
 }
 
-void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
+void MatchFeatureExtractor::processMap(const boost::shared_ptr<const OsmMap> &map)
 {
   vector<const Match*> matches;
   Envelope bounds;
   bounds.setToNull();
-  shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
+  boost::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
   _matchFactory->createMatches(map, matches, bounds, mt);
   // go through all the manipulators
   LOG_INFO("Processing " << matches.size() << " matches...");
@@ -298,7 +301,7 @@ void MatchFeatureExtractor::processMap(const shared_ptr<const OsmMap>& map)
           _samples.push_back(s);
         }
       }
-      catch (const NeedsReviewException& e)
+      catch (const NeedsReviewException&)
       {
         // pass don't include the bad match pairs. A classifier won't impact those situations.
       }

@@ -44,10 +44,12 @@ using namespace hoot::elements;
 #include <iostream>
 #include <limits>
 
+using namespace std;
+
 namespace hoot
 {
 
-deque< pair< const WorkingMap*, shared_ptr<OsmMap> > > WorkingMap::_mapCache;
+deque< pair< const WorkingMap*, OsmMapPtr > > WorkingMap::_mapCache;
 
 WorkingMap::WorkingMap(const WorkingMap& map)
 {
@@ -55,15 +57,15 @@ WorkingMap::WorkingMap(const WorkingMap& map)
   _map.reset(new OsmMap(map.getMap()));
 }
 
-WorkingMap::WorkingMap(shared_ptr<const WorkingMap> baseWorking,
-                       shared_ptr<const Manipulation> manipulation)
+WorkingMap::WorkingMap(boost::shared_ptr<const WorkingMap> baseWorking,
+                       boost::shared_ptr<const Manipulation> manipulation)
 {
   _score = baseWorking->getScore() + manipulation->getScoreEstimate();
   _baseWorking = baseWorking;
   _manipulation = manipulation;
 }
 
-WorkingMap::WorkingMap(boost::shared_ptr<OsmMap> map)
+WorkingMap::WorkingMap(OsmMapPtr map)
 {
   _map = map;
   _score = std::numeric_limits<double>::min();
@@ -80,9 +82,9 @@ double WorkingMap::calculatePotential() const
   return std::max(_sumWayLengths(Status::Unknown1), _sumWayLengths(Status::Unknown2));
 }
 
-shared_ptr<const OsmMap> WorkingMap::getMap() const
+ConstOsmMapPtr WorkingMap::getMap() const
 {
-  shared_ptr<OsmMap> result;
+  OsmMapPtr result;
 
   if (_map)
   {
@@ -106,7 +108,7 @@ shared_ptr<const OsmMap> WorkingMap::getMap() const
         {
           _mapCache.pop_back();
         }
-        _mapCache.push_front(pair< const WorkingMap*, shared_ptr<OsmMap> >(this, result));
+        _mapCache.push_front(pair< const WorkingMap*, OsmMapPtr >(this, result));
       }
     }
     _map = result;
@@ -145,11 +147,11 @@ Meters WorkingMap::_sumWayLengths(Status status) const
   ElementConverter ec(_map);
   Meters result = 0;
   const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator it2 = ways.begin(); it2 != ways.end(); it2++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    if (it2->second->getStatus() == status)
+    if (it->second->getStatus() == status)
     {
-      result += ec.calculateLength(it2->second);
+      result += ec.calculateLength(it->second);
     }
   }
 
@@ -164,7 +166,7 @@ int WorkingMap::_countIntersections(Status status) const
   WayMap::const_iterator it2 = ways.begin();
   while (it2 != ways.end())
   {
-    const shared_ptr<Way>& way = it2->second;
+    const WayPtr& way = it2->second;
     if (way->getStatus() == status)
     {
       for (size_t j = 0; j < way->getNodeCount(); j++)
@@ -188,9 +190,9 @@ int WorkingMap::_countIntersections(Status status) const
   return result;
 }
 
-shared_ptr<OsmMap> WorkingMap::takeMap() const
+OsmMapPtr WorkingMap::takeMap() const
 {
-  shared_ptr<OsmMap> result = _map;
+  OsmMapPtr result = _map;
   _map.reset();
   return result;
 }

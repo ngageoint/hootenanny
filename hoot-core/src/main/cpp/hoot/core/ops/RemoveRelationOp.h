@@ -45,8 +45,8 @@ public:
    * @brief className gets the class name as a string
    * @return class name
    */
-  static string className() { return "hoot::RemoveRelationOp"; }
-  string getClassName() const { return className(); }
+  static std::string className() { return "hoot::RemoveRelationOp"; }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief RemoveRelationOp Default constructor
@@ -63,7 +63,7 @@ public:
    * @brief apply Peform the remove operation
    * @param map Map to operate on
    */
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * @brief setRelationId Set the ID of the relation to remove

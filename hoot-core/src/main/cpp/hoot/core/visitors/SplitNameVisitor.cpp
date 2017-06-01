@@ -124,7 +124,7 @@ QStringList SplitNameVisitor::_splitNames(const QString& v, QStringList& extras)
 }
 
 
-void SplitNameVisitor::visit(const shared_ptr<Element>& e)
+void SplitNameVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   Tags& t = e->getTags();
 

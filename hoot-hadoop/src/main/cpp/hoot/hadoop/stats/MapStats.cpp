@@ -34,6 +34,8 @@
 #include <memory>
 
 using namespace boost;
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -104,7 +106,7 @@ void MapStats::expandEnvelope(const Envelope& e)
   }
 }
 
-void MapStats::expandNodeRange(const shared_ptr<const Node>& n)
+void MapStats::expandNodeRange(const boost::shared_ptr<const Node> &n)
 {
   expandNodeRange(n->getId());
   expandEnvelope(n->getX(), n->getY());
@@ -222,7 +224,7 @@ void MapStats::readDir(QString dir)
       if (fn.endsWith(".stats"))
       {
         MapStats s;
-        shared_ptr<istream> is(fs.open(fn.toStdString()));
+        boost::shared_ptr<istream> is(fs.open(fn.toStdString()));
         s.read(*is);
         combine(s);
         is.reset();

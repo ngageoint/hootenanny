@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BaseInterpolator.h"
 
@@ -41,6 +41,7 @@
 #include <tgs/RStarTree/MemoryPageStore.h>
 #include <tgs/RandomForest/DataFrame.h>
 
+using namespace std;
 
 namespace Tgs
 {
@@ -74,7 +75,7 @@ HilbertRTree* BaseInterpolator::_getIndex() const
   {
     const DataFrame& df = *_df;
     // 8 children was picked experimentally with two dimensions.
-    shared_ptr<MemoryPageStore> mps(new MemoryPageStore(
+    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(
       BoxInternalData::size(_indColumns.size()) * 8 + sizeof(int) * 4));
     _index.reset(new HilbertRTree(mps, _indColumns.size()));
 
@@ -138,7 +139,7 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   ds >> qb;
   string str = QString::fromUtf8(qb.constData()).toStdString();
   stringstream ss(str);
-  shared_ptr<DataFrame> df(new DataFrame());
+  boost::shared_ptr<DataFrame> df(new DataFrame());
   df->import(ss);
   _df = df;
 
@@ -148,7 +149,7 @@ void BaseInterpolator::readInterpolator(QIODevice& is)
   _buildModel();
 }
 
-void BaseInterpolator::setData(const shared_ptr<const DataFrame>& df)
+void BaseInterpolator::setData(const boost::shared_ptr<const DataFrame>& df)
 {
   _df = df;
   _checkRebuild();

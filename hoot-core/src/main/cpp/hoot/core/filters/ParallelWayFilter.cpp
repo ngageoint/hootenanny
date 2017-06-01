@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ParallelWayFilter.h"
@@ -43,10 +43,12 @@ using namespace geos::operation::distance;
 // Qt
 #include <QDebug>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
-ParallelWayFilter::ParallelWayFilter(const ConstOsmMapPtr& map, shared_ptr<const Way> baseWay,
+ParallelWayFilter::ParallelWayFilter(const ConstOsmMapPtr& map, ConstWayPtr baseWay,
   bool filterUnparallel) :
   _map(map)
 {
@@ -83,9 +85,9 @@ ParallelWayFilter::~ParallelWayFilter()
   }
 }
 
-Radians ParallelWayFilter::calculateDifference(const shared_ptr<const Way>& w) const
+Radians ParallelWayFilter::calculateDifference(const ConstWayPtr& w) const
 {
-  shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
+  boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
 
   Radians deltaSum = 0.0;
   int count = 0;
@@ -125,7 +127,7 @@ Radians ParallelWayFilter::calculateDifference(const shared_ptr<const Way>& w) c
   }
 }
 
-bool ParallelWayFilter::isFiltered(const shared_ptr<const Way>& w) const
+bool ParallelWayFilter::isFiltered(const ConstWayPtr& w) const
 {
   double difference = calculateDifference(w);
   // if the mean "normals" are within 10 degrees of perpendicular.

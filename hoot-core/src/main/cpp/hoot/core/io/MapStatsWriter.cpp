@@ -48,6 +48,8 @@
 #include <boost/foreach.hpp>
 namespace pt = boost::property_tree;
 
+using namespace std;
+
 namespace hoot
 {
 void MapStatsWriter::_appendUnique(QList<SingleStat>& stats, QStringList& names)
@@ -66,12 +68,14 @@ void MapStatsWriter::writeStats(QList< QList<SingleStat> >& stats, QStringList n
   ConfigOptions configOptions;
   QString statsFormat = configOptions.getStatsFormat();
   QString statsOutput = configOptions.getStatsOutput();
-  QString statsClassName = configOptions.getStatsClass();
+  //no point in making this class configurable unless there ends up being more than one
+  //implementation available
+  QString statsClassName = "hoot::ScriptStatsComposer";
   QString statsScript = configOptions.getStatsScript();
-  LOG_DEBUG("stats format = " << statsFormat << endl);
-  LOG_DEBUG("stats outfile= " << statsOutput << endl);
-  LOG_DEBUG("stats className= " << statsClassName << endl);
-  LOG_DEBUG("stats script= " << statsScript << endl);
+  LOG_DEBUG("stats format = " << statsFormat << std::endl);
+  LOG_DEBUG("stats outfile= " << statsOutput << std::endl);
+  LOG_DEBUG("stats className= " << statsClassName << std::endl);
+  LOG_DEBUG("stats script= " << statsScript << std::endl);
 
   if(statsOutput=="") return; // just need to specify only output file, rest of args have default values
 
@@ -196,7 +200,7 @@ void MapStatsWriter::writeStatsToJson(QList< QList<SingleStat> >& stats, const Q
     }
     pt::write_json(statsOutputFilePath.toStdString(), pt);
   }
-  catch (std::exception e)
+  catch (const std::exception& e)
   {
     QString reason = e.what();
     LOG_ERROR("Error writing JSON " + reason);
@@ -233,12 +237,12 @@ void MapStatsWriter::writeStats(const QString& mapInputPath, const QString& stat
 
   // read the conflation status from the file.
   conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-  shared_ptr<OsmMap> map(new OsmMap());
+  OsmMapPtr map(new OsmMap());
   OsmUtils::loadMap(map, mapInputPath, true, Status::Invalid);
   MapProjector::projectToPlanar(map);
 
   QList< QList<SingleStat> > allStats;
-  shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+  boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
   cso->apply(map);
   allStats.append(cso->getStats());
 

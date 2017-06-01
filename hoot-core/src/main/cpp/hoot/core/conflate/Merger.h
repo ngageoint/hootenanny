@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGE_H
 #define MERGE_H
@@ -53,13 +53,15 @@ public:
    *
    * @param replaced A deque of all element Ids that were replaced as part of this Merger operation.
    */
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
-    const = 0;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector< std::pair<ElementId, ElementId> >& replaced) = 0;
 
   /**
    * Returns all the element ids that are impacted by this merger operation.
    */
-  virtual set<ElementId> getImpactedElementIds() const = 0;
+  virtual std::set<ElementId> getImpactedElementIds() const = 0;
+
+  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const = 0;
 
   /**
    * Returns true if this merge can be applied to the specified map.

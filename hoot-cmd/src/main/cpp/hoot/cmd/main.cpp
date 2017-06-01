@@ -48,6 +48,8 @@ using namespace hoot;
 // Standard
 #include <exception>
 
+using namespace std;
+
 int main(int argc, char *argv[])
 {
   Hoot::getInstance().init();
@@ -56,7 +58,7 @@ int main(int argc, char *argv[])
 
   vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
 
-  shared_ptr<Command> c;
+  boost::shared_ptr<Command> c;
   for (size_t i = 0; i < cmds.size(); i++)
   {
     c.reset(Factory::getInstance().constructObject<Command>(cmds[i]));
@@ -77,7 +79,7 @@ int main(int argc, char *argv[])
     {
       return c->run(argv, argc);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
       cerr << "Error running " << c->getName().toStdString() << ":" << endl;
       cerr << e.what() << endl;

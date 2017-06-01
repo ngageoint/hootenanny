@@ -34,6 +34,8 @@
 #include <geos/util/TopologyException.h>
 #include <geos/geom/Geometry.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -52,12 +54,12 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElemen
     DisableLog dl(Log::Warn);
 
     ElementConverter elementConverter(map.shared_from_this());
-    shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+    boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
     if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
     {
       throw geos::util::TopologyException();
     }
-    shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+    boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
     return polyGeom->distance(poiGeom.get());
   }
   catch (const geos::util::TopologyException& e)

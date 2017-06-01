@@ -50,13 +50,13 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
-  virtual Envelope calculateEnvelope() const;
+  virtual geos::geom::Envelope calculateEnvelope() const;
 
   virtual void close();
 
-  virtual bool isCorrectDbVersion();
+  virtual bool isCorrectHootDbVersion();
 
-  virtual QString getDbVersion();
+  virtual QString getHootDbVersion();
 
   virtual bool isSupported(const QUrl& url);
 
@@ -74,22 +74,22 @@ public:
    * Returns a results iterator to all OSM elements for a given map and element type in the services
    * database.
    */
-  virtual shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual vector<long> selectNodeIdsForWay(long wayId);
+  virtual std::vector<long> selectNodeIdsForWay(long wayId);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
+  boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId);
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  vector<RelationData::Entry> selectMembersForRelation(long relationId);
+  std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
 
   /**
    * Returns true if the map with the specified ID exists in the services database
@@ -184,7 +184,7 @@ public:
 
   bool insertWay( const long wayId, const Tags& tags);
 
-  void insertWayNodes(long wayId, const vector<long>& nodeIds);
+  void insertWayNodes(long wayId, const std::vector<long>& nodeIds);
 
   bool insertRelation(const Tags& tags, long& assignedId);
 
@@ -204,7 +204,7 @@ public:
 
   void insertRelationTag(long relationId, const QString& k, const QString& v);
 
-  set<long> selectMapIds(QString name);
+  std::set<long> selectMapIds(QString name);
 
   void updateNode(const long id, const double lat, const double lon, const long version,
                   const Tags& tags);
@@ -290,44 +290,44 @@ protected:
 private:
 
   bool _inTransaction;
-  shared_ptr<QSqlQuery> _closeChangeSet;
-  shared_ptr<QSqlQuery> _insertChangeSet;
-  shared_ptr<QSqlQuery> _insertChangeSetTag;
-  shared_ptr<QSqlQuery> _insertMap;
-  shared_ptr<QSqlQuery> _insertRelationMembers;
-  shared_ptr<QSqlQuery> _insertWayNodes;
-  shared_ptr<QSqlQuery> _selectDbVersion;
-  shared_ptr<QSqlQuery> _mapExists;
-  shared_ptr<QSqlQuery> _changesetExists;
-  shared_ptr<QSqlQuery> _numTypeElementsForMap;
-  shared_ptr<QSqlQuery> _selectReserveNodeIds;
-  shared_ptr<QSqlQuery> _selectElementsForMap;
-  shared_ptr<QSqlQuery> _selectMapIds;
-  shared_ptr<QSqlQuery> _selectMembersForRelation;
-  shared_ptr<QSqlQuery> _updateNode;
-  shared_ptr<QSqlQuery> _updateRelation;
-  shared_ptr<QSqlQuery> _updateWay;
-  shared_ptr<QSqlQuery> _updateJobStatus;
-  shared_ptr<QSqlQuery> _insertJobStatus;
-  shared_ptr<QSqlQuery> _jobStatusExists;
+  boost::shared_ptr<QSqlQuery> _closeChangeSet;
+  boost::shared_ptr<QSqlQuery> _insertChangeSet;
+  boost::shared_ptr<QSqlQuery> _insertChangeSetTag;
+  boost::shared_ptr<QSqlQuery> _insertMap;
+  boost::shared_ptr<QSqlQuery> _insertRelationMembers;
+  boost::shared_ptr<QSqlQuery> _insertWayNodes;
+  boost::shared_ptr<QSqlQuery> _selectHootDbVersion;
+  boost::shared_ptr<QSqlQuery> _mapExists;
+  boost::shared_ptr<QSqlQuery> _changesetExists;
+  boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
+  boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
+  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
+  boost::shared_ptr<QSqlQuery> _selectMapIds;
+  boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
+  boost::shared_ptr<QSqlQuery> _updateNode;
+  boost::shared_ptr<QSqlQuery> _updateRelation;
+  boost::shared_ptr<QSqlQuery> _updateWay;
+  boost::shared_ptr<QSqlQuery> _updateJobStatus;
+  boost::shared_ptr<QSqlQuery> _insertJobStatus;
+  boost::shared_ptr<QSqlQuery> _jobStatusExists;
 
-  shared_ptr<BulkInsert> _nodeBulkInsert;
+  boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
   double _nodesInsertElapsed;
-  shared_ptr<InternalIdReserver> _nodeIdReserver;
+  boost::shared_ptr<InternalIdReserver> _nodeIdReserver;
 
-  shared_ptr<BulkInsert> _wayBulkInsert;
+  boost::shared_ptr<BulkInsert> _wayBulkInsert;
   long _waysPerBulkInsert;
   double _wayInsertElapsed;
-  shared_ptr<InternalIdReserver> _wayIdReserver;
+  boost::shared_ptr<InternalIdReserver> _wayIdReserver;
 
-  shared_ptr<BulkInsert> _wayNodeBulkInsert;
+  boost::shared_ptr<BulkInsert> _wayNodeBulkInsert;
   long _wayNodesPerBulkInsert;
   double _wayNodesInsertElapsed;
 
-  shared_ptr<BulkInsert> _relationBulkInsert;
+  boost::shared_ptr<BulkInsert> _relationBulkInsert;
   long _relationsPerBulkInsert;
-  shared_ptr<InternalIdReserver> _relationIdReserver;
+  boost::shared_ptr<InternalIdReserver> _relationIdReserver;
 
   /// A vector of map ids that are pending index creation
   QVector<long> _pendingMapIndexes;
@@ -337,7 +337,7 @@ private:
   long _currUserId;
   long _currMapId;
   long _currChangesetId;
-  Envelope _changesetEnvelope;
+  geos::geom::Envelope _changesetEnvelope;
   long _changesetChangeCount;
 
   unsigned long _nodesAddedToCache;

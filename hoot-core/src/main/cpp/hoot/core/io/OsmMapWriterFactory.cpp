@@ -33,10 +33,12 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
+
 namespace hoot
 {
 
-shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
+boost::shared_ptr<OsmMapWriterFactory> OsmMapWriterFactory::_theInstance;
 
 OsmMapWriterFactory::OsmMapWriterFactory()
 {
@@ -51,14 +53,14 @@ OsmMapWriterFactory& OsmMapWriterFactory::getInstance()
   return *_theInstance;
 }
 
-shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
+boost::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 {
   LOG_VART(url);
 
   QString writerOverride = ConfigOptions().getOsmMapWriterFactoryWriter();
   LOG_VART(writerOverride);
 
-  shared_ptr<OsmMapWriter> writer;
+  boost::shared_ptr<OsmMapWriter> writer;
   if (writerOverride != "" && url != ConfigOptions().getDebugMapFilename())
   {
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
@@ -91,8 +93,8 @@ shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(QString url)
 bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 {
   bool result = false;
-  shared_ptr<OsmMapWriter> writer = createWriter(url);
-  shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+  boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
+  boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
     result = true;
@@ -101,10 +103,10 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
   return result;
 }
 
-void OsmMapWriterFactory::write(const shared_ptr<const OsmMap>& map, QString url)
+void OsmMapWriterFactory::write(const boost::shared_ptr<const OsmMap> &map, QString url)
 {
   LOG_INFO("Writing map to " << url << "...");
-  shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
+  boost::shared_ptr<OsmMapWriter> writer = getInstance().createWriter(url);
   writer->open(url);
   writer->write(map);
 }

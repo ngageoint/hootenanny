@@ -46,7 +46,7 @@ class MaximalSublineStringMatcher : public SublineStringMatcher
 {
 public:
 
-  static string className() { return "hoot::MaximalSublineStringMatcher"; }
+  static std::string className() { return "hoot::MaximalSublineStringMatcher"; }
 
   static unsigned int logWarnCount;
 
@@ -70,7 +70,7 @@ public:
 
   virtual void setHeadingDelta(Meters headingDelta);
 
-  virtual void setSublineMatcher(shared_ptr<SublineMatcher> sm);
+  virtual void setSublineMatcher(boost::shared_ptr<SublineMatcher> sm);
 
 private:
 
@@ -80,16 +80,16 @@ private:
   Radians _maxAngle;
   Meters _minSplitsize;
   Meters _headingDelta;
-  shared_ptr<SublineMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineMatcher> _sublineMatcher;
 
   class ScoredMatch
   {
   public:
     ScoredMatch() : score(0.0) {}
-    ScoredMatch(double s, const vector<WaySublineMatch>& m) : score(s), matches(m) {}
+    ScoredMatch(double s, const std::vector<WaySublineMatch>& m) : score(s), matches(m) {}
 
     double score;
-    vector<WaySublineMatch> matches;
+    std::vector<WaySublineMatch> matches;
 
     QString toString() const
     {
@@ -106,27 +106,27 @@ private:
     }
   };
 
-  vector<WayPtr> _changeMap(const vector<ConstWayPtr>& ways, OsmMapPtr map) const;
+  std::vector<WayPtr> _changeMap(const std::vector<ConstWayPtr>& ways, OsmMapPtr map) const;
 
-  int _countReverses(const vector<bool>& r) const;
+  int _countReverses(const std::vector<bool>& r) const;
 
   ScoredMatch _evaluateMatch(const ConstOsmMapPtr &map, Meters maxDistance,
-    const vector<ConstWayPtr>& ways1, const vector<ConstWayPtr>& ways2,
-    const vector<bool>& reversed1, const vector<bool>& reversed2) const;
+    const std::vector<ConstWayPtr>& ways1, const std::vector<ConstWayPtr>& ways2,
+    const std::vector<bool>& reversed1, const std::vector<bool>& reversed2) const;
 
-  vector<ConstWayPtr> _extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e) const;
+  std::vector<ConstWayPtr> _extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e) const;
 
   ScoredMatch _findBestMatch(const ConstOsmMapPtr &map, Meters maxDistance,
-    vector<ConstWayPtr>& ways1, vector<ConstWayPtr> &ways2, vector<bool>& reversed1,
-    vector<bool> &reversed2, size_t i = 0, size_t j = 0) const;
+    std::vector<ConstWayPtr>& ways1, std::vector<ConstWayPtr> &ways2, std::vector<bool>& reversed1,
+    std::vector<bool> &reversed2, size_t i = 0, size_t j = 0) const;
 
-  void _insertElementIds(const vector<ConstWayPtr>& ways, set<ElementId>& elements) const;
+  void _insertElementIds(const std::vector<ConstWayPtr>& ways, std::set<ElementId>& elements) const;
 
   /**
    * ways.size() == reversed.size()
    * If reversed is true then the nodes in the corresponding way are reversed.
    */
-  void _reverseWays(const vector<WayPtr>& ways, const vector<bool>& reversed) const;
+  void _reverseWays(const std::vector<WayPtr>& ways, const std::vector<bool>& reversed) const;
 
   void _configureSublineMatcher();
 

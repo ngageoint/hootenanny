@@ -29,8 +29,9 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
 
 #include "../TestUtils.h"
 
@@ -54,9 +55,9 @@ public:
   {
     DisableLog dl;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15));
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, 15));
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
     map->addElement(r2);
 
@@ -73,9 +74,9 @@ public:
   {
     DisableLog dl;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15));
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, 15));
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
     map->addElement(r2);
 
@@ -92,9 +93,9 @@ public:
   {
     DisableLog dl;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15));
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, 15));
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
     map->addElement(r2);
 
@@ -111,9 +112,9 @@ public:
   {
     DisableLog dl;
 
-    shared_ptr<OsmMap> map(new OsmMap());
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15));
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, 15));
+    OsmMapPtr map(new OsmMap());
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
+    RelationPtr r2(new Relation(Status::Unknown1, 2, 15));
     map->addElement(r1);
     map->addElement(r2);
 
@@ -131,7 +132,7 @@ public:
    */
   void runReplaceTest1()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));
@@ -166,7 +167,7 @@ public:
    */
   void runReplaceTest2()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     RelationPtr r1(new Relation(Status::Unknown1, 1, 15));
     WayPtr w1(new Way(Status::Unknown1, 1, 15));
     WayPtr w2(new Way(Status::Unknown1, 2, 15));

@@ -55,6 +55,9 @@
 
 #include "InternalIdReserver.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -478,29 +481,29 @@ void HootApiDb::_flushBulkInserts()
   }
 }
 
-bool HootApiDb::isCorrectDbVersion()
+bool HootApiDb::isCorrectHootDbVersion()
 {
-  return getDbVersion() == ApiDb::expectedDbVersion();
+  return getHootDbVersion() == ApiDb::expectedHootDbVersion();
 }
 
-QString HootApiDb::getDbVersion()
+QString HootApiDb::getHootDbVersion()
 {
-  if (_selectDbVersion == 0)
+  if (_selectHootDbVersion == 0)
   {
-    _selectDbVersion.reset(new QSqlQuery(_db));
-    _selectDbVersion->prepare("SELECT id || ':' || author AS version_id FROM databasechangelog "
-                             "ORDER BY dateexecuted DESC LIMIT 1");
+    _selectHootDbVersion.reset(new QSqlQuery(_db));
+    _selectHootDbVersion->prepare("SELECT id || ':' || author AS version_id FROM databasechangelog "
+                                  "ORDER BY dateexecuted DESC LIMIT 1");
   }
 
-  if (_selectDbVersion->exec() == false)
+  if (_selectHootDbVersion->exec() == false)
   {
-    throw HootException(_selectDbVersion->lastError().text());
+    throw HootException(_selectHootDbVersion->lastError().text());
   }
 
   QString result;
-  if (_selectDbVersion->next())
+  if (_selectHootDbVersion->next())
   {
-    result = _selectDbVersion->value(0).toString();
+    result = _selectHootDbVersion->value(0).toString();
   }
   else
   {
@@ -709,8 +712,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   _updateChangesetEnvelope(envelopeNode);
 
-  LOG_TRACE("Inserted node with ID: " << QString::number(id));
-  LOG_VART(QString::number(lat, 'g', 15));
+  LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
+  LOG_VART(QString::number(lat, 'g', 15))
   LOG_VART(QString::number(lon, 'g', 15));
 
   return true;
@@ -750,7 +753,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_TRACE("Inserted relation with ID: " << QString::number(relationId));
+  LOG_TRACE("Inserted relation: " << ElementId(ElementType::Relation, relationId));
 
   return true;
 }
@@ -925,11 +928,11 @@ void HootApiDb::open(const QUrl& url)
 
   ApiDb::open(url);
 
-  if (isCorrectDbVersion() == false)
+  if (isCorrectHootDbVersion() == false)
   {
-    const QString msg = "Running against an unexpected DB version.";
-    LOG_DEBUG("Expected: " << expectedDbVersion());
-    LOG_DEBUG("Actual: " << getDbVersion());
+    const QString msg = "Running against an unexpected Hootenanny DB version.";
+    LOG_DEBUG("Expected: " << expectedHootDbVersion());
+    LOG_DEBUG("Actual: " << getHootDbVersion());
     throw HootException(msg);
   }
 }
@@ -944,7 +947,7 @@ void HootApiDb::_resetQueries()
   _insertMap.reset();
   _insertWayNodes.reset();
   _insertRelationMembers.reset();
-  _selectDbVersion.reset();
+  _selectHootDbVersion.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
   _mapExists.reset();
@@ -1121,7 +1124,7 @@ long HootApiDb::numElements(const ElementType& elementType)
   return result;
 }
 
-shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
 {
   const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
@@ -1153,7 +1156,7 @@ vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
-shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
+boost::shared_ptr<QSqlQuery> HootApiDb::selectNodesForWay(long wayId)
 {
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
@@ -1219,7 +1222,7 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 }
 
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
-                            const Tags& tags)
+                           const Tags& tags)
 {
   const long mapId = _currMapId;
   _flushBulkInserts();
@@ -1253,7 +1256,7 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
 
   _updateNode->finish();
 
-  LOG_DEBUG("Updated node with ID: " << QString::number(id));
+  LOG_TRACE("Updated node: " << ElementId(ElementType::Node, id));
 }
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
@@ -1285,7 +1288,7 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
 
   _updateRelation->finish();
 
-  LOG_DEBUG("Updated relation with ID: " << QString::number(id));
+  LOG_TRACE("Updated relation: " << ElementId(ElementType::Relation, id));
 }
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
@@ -1317,7 +1320,7 @@ void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
 
   _updateWay->finish();
 
-  LOG_DEBUG("Updated way with ID: " << QString::number(id));
+  LOG_TRACE("Updated way: " << ElementId(ElementType::Way, id));
 }
 
 bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
@@ -1359,7 +1362,8 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
   _lazyFlushBulkInsert();
 
-  LOG_TRACE("Inserted way with ID: " << QString::number(wayId));
+  LOG_TRACE("Inserted way: " << ElementId(ElementType::Way, wayId));
+  LOG_TRACE(tags);
 
   return true;
 }

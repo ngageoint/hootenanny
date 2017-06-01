@@ -70,7 +70,7 @@ public:
   /**
    * The read command called after open.
    */
-  virtual void read(shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   virtual void finalizePartial();
 
@@ -80,7 +80,7 @@ public:
    * Called after open. This will read the bounds of the specified layer in a relatively efficient
    * manner. (e.g. SELECT min(x)...)
    */
-  virtual Envelope calculateEnvelope() const;
+  virtual geos::geom::Envelope calculateEnvelope() const;
 
   virtual void setConfiguration(const Settings &conf);
 
@@ -88,7 +88,7 @@ public:
 
   virtual bool hasMoreElements();
 
-  virtual shared_ptr<Element> readNextElement();
+  virtual boost::shared_ptr<Element> readNextElement();
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
@@ -98,28 +98,28 @@ protected:
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
   virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
-  virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
+  virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
 private:
 
-  shared_ptr<HootApiDb> _database;
-  shared_ptr<QSqlQuery> _elementResultIterator;
+  boost::shared_ptr<HootApiDb> _database;
+  boost::shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
   ElementType _selectElementType;
 
-  shared_ptr<Element> _nextElement;
+  boost::shared_ptr<Element> _nextElement;
 
   const ElementType _getCurrentSelectElementType() const;
 
-  void _read(shared_ptr<OsmMap> map, const ElementType& elementType);
+  void _read(OsmMapPtr map, const ElementType& elementType);
 
-  shared_ptr<Element> _getElementUsingIterator();
+  boost::shared_ptr<Element> _getElementUsingIterator();
 
   /**
    * Converts a query result to an OSM element
    */
-  shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator, const ElementType& elementType,
-                                       OsmMap& map);
+  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
+                                              const ElementType& elementType, OsmMap& map);
 };
 
 }

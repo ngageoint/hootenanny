@@ -36,10 +36,12 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/match-graph/MatchGraph.h>
 
+using namespace std;
+
 namespace hoot
 {
 
-shared_ptr<MergerFactory> MergerFactory::_theInstance;
+boost::shared_ptr<MergerFactory> MergerFactory::_theInstance;
 
 MergerFactory::MergerFactory()
 {

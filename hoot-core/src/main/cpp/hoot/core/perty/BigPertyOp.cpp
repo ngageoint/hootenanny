@@ -39,6 +39,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -56,7 +58,7 @@ BigPertyOp::~BigPertyOp()
 
 }
 
-void BigPertyOp::apply(shared_ptr<OsmMap>& map)
+void BigPertyOp::apply(boost::shared_ptr<OsmMap> &map)
 {
   MapProjector::projectToWgs84(map);
 

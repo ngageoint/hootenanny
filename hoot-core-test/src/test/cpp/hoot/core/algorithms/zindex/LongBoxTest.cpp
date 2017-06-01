@@ -36,8 +36,11 @@
 
 // Hoot
 #include <hoot/core/algorithms/zindex/LongBox.h>
+#include <hoot/core/util/Log.h>
 
 #include "../../TestUtils.h"
+
+using namespace std;
 
 namespace hoot
 {

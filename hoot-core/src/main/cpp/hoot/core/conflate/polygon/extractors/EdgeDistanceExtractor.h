@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
@@ -57,14 +57,14 @@ public:
    */
   EdgeDistanceExtractor(ValueAggregator* a = 0, Meters spacing = 5.0);
 
-  static string className() { return "hoot::EdgeDistanceExtractor"; }
+  static std::string className() { return "hoot::EdgeDistanceExtractor"; }
 
-  virtual double distance(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const;
+  virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const;
 
-  virtual string getClassName() const { return EdgeDistanceExtractor::className(); }
+  virtual std::string getClassName() const { return EdgeDistanceExtractor::className(); }
 
-  virtual string getName() const;
+  virtual std::string getName() const;
 
   virtual void setValueAggregator(const ValueAggregatorPtr& va) { _aggregator = va; }
 
@@ -77,12 +77,12 @@ private:
   ValueAggregatorPtr _aggregator;
   double _spacing;
 
-  double _oneDistance(const OsmMap& map, const shared_ptr<const Element>& e1,
-    const shared_ptr<const Element>& e2) const;
+  double _oneDistance(const OsmMap& map, const boost::shared_ptr<const Element>& e1,
+    const boost::shared_ptr<const Element>& e2) const;
 
-  vector<Coordinate> _discretize(const OsmMap &map, const shared_ptr<const Element> &e) const;
+  std::vector<geos::geom::Coordinate> _discretize(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
 
-  shared_ptr<Geometry> _toLines(const OsmMap &map, const shared_ptr<const Element> &e) const;
+  boost::shared_ptr<geos::geom::Geometry> _toLines(const OsmMap &map, const boost::shared_ptr<const Element> &e) const;
 };
 
 }

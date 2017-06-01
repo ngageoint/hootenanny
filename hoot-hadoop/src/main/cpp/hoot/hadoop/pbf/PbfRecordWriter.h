@@ -36,8 +36,6 @@ class Node;
 class Way;
 class OsmMap;
 
-using namespace boost;
-
 /**
  * Wraps another record writer to enable writing of OSM data types.
  */
@@ -45,7 +43,7 @@ class PbfRecordWriter : public pp::RecordWriter, public pp::ReduceContextConsume
 {
 public:
 
-  static string className() { return "hoot::PbfRecordWriter"; }
+  static std::string className() { return "hoot::PbfRecordWriter"; }
 
   PbfRecordWriter();
 
@@ -53,13 +51,13 @@ public:
 
   virtual void close();
 
-  virtual void emit(const string&, const string&);
+  virtual void emit(const std::string&, const std::string&);
 
-  void emitRecord(shared_ptr<OsmMap> map);
+  void emitRecord(OsmMapPtr map);
 
-  void emitRecord(const shared_ptr<const Node>& n);
+  void emitRecord(const ConstNodePtr& n);
 
-  void emitRecord(const shared_ptr<const Way>& w);
+  void emitRecord(const ConstWayPtr& w);
 
   OsmPbfWriter& getOsmPbfWriter() { return *_OsmPbfWriter; }
 
@@ -67,16 +65,16 @@ public:
 
   void setCompressionLevel(int z) { _OsmPbfWriter->setCompressionLevel(z); }
 
-  virtual void setMapContext(int part, string workDir);
+  virtual void setMapContext(int part, std::string workDir);
 
   virtual void setReduceContext(HadoopPipes::ReduceContext& context);
 
-  virtual void setReduceContext(int part, string workDir);
+  virtual void setReduceContext(int part, std::string workDir);
 
 private:
   OsmPbfWriter* _OsmPbfWriter;
-  string _path;
-  shared_ptr<ostream> _out;
+  std::string _path;
+  boost::shared_ptr<std::ostream> _out;
 };
 
 }

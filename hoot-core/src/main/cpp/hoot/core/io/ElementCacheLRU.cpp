@@ -25,32 +25,6 @@
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-/*
- * This file is part of Hootenanny.
- *
- * Hootenanny is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * --------------------------------------------------------------------
- *
- * The following copyright notices are generated automatically. If you
- * have a new notice to add, please use the format:
- * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
- *
- */
-
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Log.h>
 
@@ -99,7 +73,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
   switch ( newElement->getElementType().getEnum() )
   {
   case ElementType::Node:
-    newNode = dynamic_pointer_cast<const Node>(newElement);
+    newNode = boost::dynamic_pointer_cast<const Node>(newElement);
     if ( newNode != ConstNodePtr() )
     {
       // Do we have to replace an entry?
@@ -113,7 +87,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
     }
     break;
   case ElementType::Way:
-    newWay = dynamic_pointer_cast<const Way>(newElement);
+    newWay = boost::dynamic_pointer_cast<const Way>(newElement);
     if ( newWay != ConstWayPtr() )
     {
       // Do we have to replace an entry?
@@ -127,7 +101,7 @@ void ElementCacheLRU::addElement(ConstElementPtr &newElement)
 
     break;
   case ElementType::Relation:
-    newRelation = dynamic_pointer_cast<const Relation>(newElement);
+    newRelation = boost::dynamic_pointer_cast<const Relation>(newElement);
     if ( newRelation != ConstRelationPtr() )
     {
       // Do we have to replace an entry?
@@ -159,7 +133,7 @@ ConstNodePtr ElementCacheLRU::getNextNode()
   {
     _nodesIter->second.second = boost::posix_time::microsec_clock::universal_time();
     returnPtr = _nodesIter->second.first;
-    _nodesIter++;
+    ++_nodesIter;
   }
 
   return returnPtr;
@@ -241,7 +215,7 @@ ConstWayPtr ElementCacheLRU::getNextWay()
   {
     _waysIter->second.second = boost::posix_time::microsec_clock::universal_time();
     returnPtr = _waysIter->second.first;
-    _waysIter++;
+    ++_waysIter;
   }
 
   return returnPtr;
@@ -255,7 +229,7 @@ ConstRelationPtr ElementCacheLRU::getNextRelation()
   {
     _relationsIter->second.second = boost::posix_time::microsec_clock::universal_time();
     returnPtr = _relationsIter->second.first;
-    _relationsIter++;
+    ++_relationsIter;
   }
 
   return returnPtr;
@@ -281,7 +255,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
   switch (typeToRemove)
   {
   case ElementType::Node:
-    for (nodesIter = _nodes.begin(); nodesIter != _nodes.end(); nodesIter++)
+    for (nodesIter = _nodes.begin(); nodesIter != _nodes.end(); ++nodesIter)
     {
       if ( nodesIter->second.second < oldestTime )
       {
@@ -297,7 +271,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
     break;
 
   case ElementType::Way:
-    for (waysIter = _ways.begin(); waysIter != _ways.end(); waysIter++)
+    for (waysIter = _ways.begin(); waysIter != _ways.end(); ++waysIter)
     {
       if ( waysIter->second.second < oldestTime )
       {
@@ -313,7 +287,7 @@ void ElementCacheLRU::_removeOldest(const ElementType::Type typeToRemove)
     break;
 
   case ElementType::Relation:
-    for (relationsIter = _relations.begin(); relationsIter != _relations.end(); relationsIter++)
+    for (relationsIter = _relations.begin(); relationsIter != _relations.end(); ++relationsIter)
     {
       if ( relationsIter->second.second < oldestTime )
       {
@@ -414,32 +388,32 @@ ConstElementPtr ElementCacheLRU::getElement(const ElementId& eid) const
   return returnPtr;
 }
 
-const boost::shared_ptr<const Node> ElementCacheLRU::getNode(long id) const
+const ConstNodePtr ElementCacheLRU::getNode(long id) const
 {
   return _nodes.find(id)->second.first;
 }
 
-const boost::shared_ptr<Node> ElementCacheLRU::getNode(long id)
+const NodePtr ElementCacheLRU::getNode(long id)
 {
   return boost::const_pointer_cast<Node>(_nodes.find(id)->second.first);
 }
 
-const boost::shared_ptr<const Relation> ElementCacheLRU::getRelation(long id) const
+const ConstRelationPtr ElementCacheLRU::getRelation(long id) const
 {
   return _relations.find(id)->second.first;
 }
 
-const boost::shared_ptr<Relation> ElementCacheLRU::getRelation(long id)
+const RelationPtr ElementCacheLRU::getRelation(long id)
 {
   return boost::const_pointer_cast<Relation>(_relations.find(id)->second.first);
 }
 
-const boost::shared_ptr<const Way> ElementCacheLRU::getWay(long id) const
+const ConstWayPtr ElementCacheLRU::getWay(long id) const
 {
   return _ways.find(id)->second.first;
 }
 
-const boost::shared_ptr<Way> ElementCacheLRU::getWay(long id)
+const WayPtr ElementCacheLRU::getWay(long id)
 {
   return boost::const_pointer_cast<Way>(_ways.find(id)->second.first);
 }

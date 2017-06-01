@@ -55,6 +55,8 @@
 # include <tgs/BigContainers/Stxxl.h>
 #endif
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -76,18 +78,21 @@ Hoot& Hoot::getInstance()
 
 void Hoot::_init()
 {
-  LOG_TRACE("Hoot instance init...");
+  //lower this log level temporarily *only* for debugging init issues; some hoot services
+  //functionality that parses log output is sensitive to extra logged statements and will fail
+  //when this is lowered
+  Log::getInstance().setLevel(Log::Info);
+
+  LOG_DEBUG("Hoot instance init...");
 
 # ifdef TGS_HAVE_LIBSTXXL
-    // initialize the environment variable for loading STXXL configuration. If the environment
-    // variable has already been set then don't overwrite it (that is the 0 at the end).
-    QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/core/stxxl.conf";
-    Tgs::Stxxl::getInstance().setConfig(stxxlConf);
+  // initialize the environment variable for loading STXXL configuration. If the environment
+  // variable has already been set then don't overwrite it (that is the 0 at the end).
+  QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/core/stxxl.conf";
+  Tgs::Stxxl::getInstance().setConfig(stxxlConf);
 # endif
 
-  SignalCatcher::registerHandlers();
-
-  Log::getInstance().setLevel(Log::Info);
+  SignalCatcher::getInstance()->registerDefaultHandlers();
 
   // All streams will default to UTF-8. This makes supporting other scripts much easier.
   setlocale(LC_ALL, "en_US.UTF-8");
@@ -110,34 +115,36 @@ void Hoot::_init()
 
   // force load hoot hadoop if it is available.
 # ifdef HOOT_HAVE_HADOOP
-    loadLibrary("HootHadoop");
+  loadLibrary("HootHadoop");
 # endif
 # ifdef HOOT_HAVE_RND
-    loadLibrary("HootRnd");
+  loadLibrary("HootRnd");
 # endif
+  //TODO: I don't think hoot can operate at all now without nodejs due to the schema loader, so
+  //this should be reworked.
 # ifdef HOOT_HAVE_NODEJS
-    // sometimes HootJs is loaded by node.js before we get to init.
-    if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
-    {
-      loadLibrary("HootJs");
-    }
+  // sometimes HootJs is loaded by node.js before we get to init.
+  if (Factory::getInstance().hasClass(QString("hoot::HootJsLoaded")) == false)
+    loadLibrary("HootJs");
 # endif
 
+  Log::getInstance().setLevel(Log::Info);
 }
 
 void Hoot::loadLibrary(QString name)
 {
   // this library sticks around in ram even after the object is destroyed.
   QLibrary lib(name);
+  LOG_DEBUG("Loading library " << name);
   if (lib.load() == false)
   {
     // if the file doesn't exist, then we aren't too concerned.
     if (lib.errorString().contains("No such file or directory"))
     {
-      // no biggie.
-      LOG_WARN(lib.errorString());
-    // if the file does exist.
-    } else {
+      LOG_WARN(lib.errorString());  // no biggie.
+    }
+    else
+    {
       throw HootException("Error loading libary: " + lib.errorString());
     }
   }
@@ -145,7 +152,7 @@ void Hoot::loadLibrary(QString name)
 
 void Hoot::reinit()
 {
-  LOG_TRACE("Hoot instance reinit...");
+  LOG_DEBUG("Hoot instance reinit...");
 
   long max = _toBytes(ConfigOptions().getMaxMemoryUsage());
   if (max > 0l)
@@ -155,7 +162,7 @@ void Hoot::reinit()
     rl.rlim_cur = max;
     setrlimit(RLIMIT_AS, &rl);
     getrlimit(RLIMIT_AS, &rl);
-    LOG_DEBUG("Set max memory usage to: " << rl.rlim_cur << "bytes.");
+    LOG_INFO("Set max memory usage to: " << rl.rlim_cur << "bytes.");
   }
 
   Log::getInstance().init();

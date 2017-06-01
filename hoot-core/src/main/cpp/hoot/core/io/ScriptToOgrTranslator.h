@@ -43,8 +43,7 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace geos::geom;
+
 class Feature;
 class Schema;
 class Tags;
@@ -55,7 +54,7 @@ public:
   typedef struct TranslatedFeature
   {
   public:
-    shared_ptr<Feature> feature;
+    boost::shared_ptr<Feature> feature;
     QString tableName;
 
     QString toString() const
@@ -64,13 +63,13 @@ public:
     }
   } TranslatedFeature;
 
-  virtual shared_ptr<const Schema> getOgrOutputSchema() = 0;
+  virtual boost::shared_ptr<const Schema> getOgrOutputSchema() = 0;
 
-  virtual vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
-    GeometryTypeId geometryType) = 0;
+  virtual std::vector<TranslatedFeature> translateToOgr(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) = 0;
 
-  virtual vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
-    GeometryTypeId geometryType) = 0;
+  virtual std::vector<Tags> translateToOgrTags(Tags& tags, ElementType elementType,
+    geos::geom::GeometryTypeId geometryType) = 0;
 };
 
 }

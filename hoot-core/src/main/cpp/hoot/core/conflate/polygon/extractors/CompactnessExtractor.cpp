@@ -34,6 +34,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -60,8 +62,8 @@ double CompactnessExtractor::extract(const OsmMap& map, const ConstElementPtr& t
   const ConstElementPtr& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   double result;
   if (g1->isEmpty() || g2->isEmpty())

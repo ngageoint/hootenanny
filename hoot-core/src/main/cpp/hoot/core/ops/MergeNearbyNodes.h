@@ -42,8 +42,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace geos::geom;
-
 /**
  * This class works with four pass as long as distance is less than the four pass buffer.
  *
@@ -58,11 +56,11 @@ public:
 
   MergeNearbyNodes(Meters distance = -1);
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
-  static void mergeNodes(shared_ptr<OsmMap> map, Meters distance = -1);
+  static void mergeNodes(boost::shared_ptr<OsmMap> map, Meters distance = -1);
 
   virtual void readObject(QDataStream& is);
 
@@ -72,9 +70,9 @@ public:
 
 protected:
 
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
   Meters _distance;
-  Envelope _bounds;
+  geos::geom::Envelope _bounds;
 };
 
 }

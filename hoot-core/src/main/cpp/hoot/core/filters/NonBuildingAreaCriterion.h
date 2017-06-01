@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NONBUILDINGAREACRITERION_H
 #define NONBUILDINGAREACRITERION_H
@@ -43,11 +43,11 @@ class NonBuildingAreaCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::NonBuildingAreaCriterion"; }
+  static std::string className() { return "hoot::NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion();
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new NonBuildingAreaCriterion(); }
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DELAUNAYINTERPOLATOR_H
 #define DELAUNAYINTERPOLATOR_H
@@ -38,7 +38,6 @@
 
 namespace Tgs
 {
-using namespace std;
 
 /**
  * This calculates a delaunay triangulation, then determines which triangle an input point lies in
@@ -54,7 +53,7 @@ using namespace std;
 class DelaunayInterpolator : public BaseInterpolator
 {
 public:
-  static string className() { return "Tgs::DelaunayInterpolator"; }
+  static std::string className() { return "Tgs::DelaunayInterpolator"; }
 
   DelaunayInterpolator();
 
@@ -65,17 +64,17 @@ public:
    */
   virtual double estimateError();
 
-  virtual string getClassName() const { return DelaunayInterpolator::className(); }
+  virtual std::string getClassName() const { return DelaunayInterpolator::className(); }
 
-  virtual const vector<double>& interpolate(const vector<double>& point) const;
+  virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 
-  virtual string toString() const;
+  virtual std::string toString() const;
 
 protected:
   /// The number of folds in cross validation
   int _kFold;
-  auto_ptr<DelaunayTriangulation> _dt;
-  map<Point2d, int> _pointToIndex;
+  std::auto_ptr<DelaunayTriangulation> _dt;
+  std::map<Point2d, int> _pointToIndex;
   double _minX, _minY, _maxX, _maxY;
 
   /**
@@ -91,7 +90,7 @@ protected:
   /**
    * Calculate the squared error for a given fold.
    */
-  double _calculateFoldError(int fold, const vector<size_t> indexes) const;
+  double _calculateFoldError(int fold, const std::vector<size_t>& indexes) const;
 
   virtual double _estimateError(unsigned int /*index*/) const { throw Tgs::Exception("Not Implemented."); }
 

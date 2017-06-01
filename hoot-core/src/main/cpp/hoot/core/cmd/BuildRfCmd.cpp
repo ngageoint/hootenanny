@@ -46,6 +46,9 @@
 #include <tgs/Statistics/Random.h>
 #include <tgs/System/DisableCout.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -73,7 +76,7 @@ public:
 
     ArffReader ar(input);
 
-    shared_ptr<DataFrame> df = ar.read()->toDataFrame(-1);
+    boost::shared_ptr<DataFrame> df = ar.read()->toDataFrame(-1);
 
     Tgs::Random::instance()->seed(0);
     LOG_INFO("Building Random Forest...");

@@ -25,8 +25,6 @@ namespace hoot
 {
 class OsmMap;
 
-using namespace boost;
-
 class MapStatsMapper : public OsmMapMapper
 {
 public:
@@ -45,7 +43,7 @@ protected:
 
   HadoopPipes::MapContext* _context;
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
   void _writeStats(HadoopPipes::MapContext& context, const MapStats& stats);
 

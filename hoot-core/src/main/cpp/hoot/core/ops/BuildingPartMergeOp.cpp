@@ -45,6 +45,8 @@
 #include <tgs/StreamUtils.h>
 #include <tgs/System/Time.h>
 
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -66,25 +68,25 @@ BuildingPartMergeOp::BuildingPartMergeOp()
 }
 
 void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
-  const shared_ptr<Element>& neighbor)
+  const boost::shared_ptr<Element>& neighbor)
 {
   // merge with buildings that are contained by this polygon
   vector<long> intersectIds = _map->getIndex().findWays(*g.getEnvelopeInternal());
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
-    const shared_ptr<Way>& candidate = _map->getWay(intersectIds[i]);
+    const WayPtr& candidate = _map->getWay(intersectIds[i]);
     // if this is another building part totally contained by this building
     if (_isBuildingPart(candidate))
     {
       bool contains = false;
       try
       {
-        shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
+        boost::shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
         contains = g.contains(cg.get());
       }
-      catch (geos::util::TopologyException& e)
+      catch (const geos::util::TopologyException&)
       {
-        shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
+        boost::shared_ptr<Geometry> cg = ElementConverter(_map).convertToGeometry(candidate);
         auto_ptr<Geometry> cleanCandidate(GeometryUtils::validateGeometry(cg.get()));
         auto_ptr<Geometry> cleanG(GeometryUtils::validateGeometry(&g));
         contains = cleanG->contains(cleanCandidate.get());
@@ -98,21 +100,21 @@ void BuildingPartMergeOp::_addContainedWaysToGroup(const Geometry& g,
   }
 }
 
-void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Way>& w)
+void BuildingPartMergeOp::_addNeighborsToGroup(const WayPtr& w)
 {
   set<long> neighborIds = _calculateNeighbors(w, w->getTags());
   // go through each of the neighboring ways.
-  for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); it++)
+  for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
   {
-    shared_ptr<Way> neighbor = _map->getWay(*it);
+    WayPtr neighbor = _map->getWay(*it);
     // add these two buildings to a set.
     _ds.joinT(neighbor, w);
   }
 }
 
-void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Relation>& r)
+void BuildingPartMergeOp::_addNeighborsToGroup(const RelationPtr& r)
 {
-  shared_ptr<Geometry> mp;
+  boost::shared_ptr<Geometry> mp;
   mp = ElementConverter(_map).convertToGeometry(r);
   _addContainedWaysToGroup(*mp, r);
 
@@ -122,13 +124,13 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Relation>& r)
   {
     if (members[i].getElementId().getType() == ElementType::Way)
     {
-      const shared_ptr<Way>& member = _map->getWay(members[i].getElementId().getId());
+      const WayPtr& member = _map->getWay(members[i].getElementId().getId());
 
       set<long> neighborIds = _calculateNeighbors(member, r->getTags());
       // got through each of the neighboring ways.
-      for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); it++)
+      for (set<long>::const_iterator it = neighborIds.begin(); it != neighborIds.end(); ++it)
       {
-        shared_ptr<Way> neighbor = _map->getWay(*it);
+        WayPtr neighbor = _map->getWay(*it);
         // add these two buildings to a set.
         _ds.joinT(neighbor, r);
       }
@@ -148,11 +150,11 @@ void BuildingPartMergeOp::_addNeighborsToGroup(const shared_ptr<Relation>& r)
   }
 }
 
-void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
+void BuildingPartMergeOp::apply(OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
   ////
-  // treat the map as read only while we determine building parts.
+  /// treat the map as read only while we determine building parts.
   ////
   _ds.clear();
   _map = map;
@@ -161,20 +163,20 @@ void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
   i = 0;
   // go through all the ways
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
     {
       cout << "Ways: " << i << " / " << ways.size() << "        \r";
       cout << flush;
     }
-    const shared_ptr<Way>& w = it->second;
+    const WayPtr& w = it->second;
     // add the way to a building group if appropriate
     // if the way is part of a building
     if (_isBuildingPart(w))
     {
       _addNeighborsToGroup(w);
-      shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(w);
+      boost::shared_ptr<Geometry> g = ElementConverter(_map).convertToGeometry(w);
       _addContainedWaysToGroup(*g, w);
     }
     i++;
@@ -188,14 +190,14 @@ void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
   i = 0;
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     if (Log::getInstance().getLevel() <= Log::Info /* && i % 100 == 0 */)
     {
       cout << "Relations: " << i << " / " << relations.size() << "        \r";
       cout << flush;
     }
-    const shared_ptr<Relation>& r = it->second;
+    const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
     if (_isBuildingPart(r))
     {
@@ -210,13 +212,13 @@ void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
   }
 
   ////
-  // Time to start making changes to the map.
+  /// Time to start making changes to the map.
   ////
 
   // go through each of the grouped buildings
   i = 0;
-  const DisjointSetMap< shared_ptr<Element> >::AllGroups& groups = _ds.getAllGroups();
-  for (DisjointSetMap< shared_ptr<Element> >::AllGroups::const_iterator it = groups.begin();
+  const DisjointSetMap< boost::shared_ptr<Element> >::AllGroups& groups = _ds.getAllGroups();
+  for (DisjointSetMap< boost::shared_ptr<Element> >::AllGroups::const_iterator it = groups.begin();
        it != groups.end(); it++)
   {
     if (Log::getInstance().getLevel() <= Log::Info && i % 1000 == 0)
@@ -225,7 +227,7 @@ void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
       cout << flush;
     }
     // combine the group of building parts into a relation.
-    const vector< shared_ptr<Element> >& parts = it->second;
+    const vector< boost::shared_ptr<Element> >& parts = it->second;
     if (parts.size() > 1)
     {
       _combineParts(parts);
@@ -244,7 +246,7 @@ void BuildingPartMergeOp::apply(shared_ptr<OsmMap>& map)
   _map.reset();
 }
 
-set<long> BuildingPartMergeOp::_calculateNeighbors(const shared_ptr<Way>& w, const Tags& tags)
+set<long> BuildingPartMergeOp::_calculateNeighbors(const WayPtr& w, const Tags& tags)
 {
   set<long> neighborIds;
   const NodeToWayMap& n2w = *_map->getIndex().getNodeToWayMap();
@@ -256,9 +258,9 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const shared_ptr<Way>& w, con
     const set<long>& ways = n2w.getWaysByNode(w->getNodeId(i));
 
     // go through each of the neighboring ways.
-    for (set<long>::const_iterator it = ways.begin(); it != ways.end(); it++)
+    for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      shared_ptr<Way> neighbor = _map->getWay(*it);
+      WayPtr neighbor = _map->getWay(*it);
       // if the neighbor is a building and it also has the two contiguos nodes we're looking at
       if (neighbor != w &&
           _isBuildingPart(neighbor) &&
@@ -275,25 +277,25 @@ set<long> BuildingPartMergeOp::_calculateNeighbors(const shared_ptr<Way>& w, con
   return neighborIds;
 }
 
-shared_ptr<Relation> BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
-  const vector< shared_ptr<Element> >& parts)
+RelationPtr BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
+  const vector< boost::shared_ptr<Element> >& parts)
 {
   LOG_VART(parts.size());
   assert(parts.size() > 0);
 
-  shared_ptr<Relation> building(
+  RelationPtr building(
     new Relation(
       parts[0]->getStatus(),
       map->createNextRelationId(),
       -1,
-      "building"));
+      MetadataTags::RelationBuilding()));
 
   OsmSchema& schema = OsmSchema::getInstance();
   Tags& t = building->getTags();
 
   for (size_t i = 0; i < parts.size(); i++)
   {
-    building->addElement("part", parts[i]);
+    building->addElement(MetadataTags::RolePart(), parts[i]);
 
     Tags pt = parts[i]->getTags();
 
@@ -303,7 +305,7 @@ shared_ptr<Relation> BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
     t.set(names);
 
     // go through all the tags.
-    for (Tags::const_iterator it = pt.begin(); it != pt.end(); it++)
+    for (Tags::const_iterator it = pt.begin(); it != pt.end(); ++it)
     {
       // ignore all keys that are building:part specific.
       if (_buildingPartTagNames.find(it.key()) == _buildingPartTagNames.end())
@@ -330,7 +332,7 @@ shared_ptr<Relation> BuildingPartMergeOp::combineParts(const OsmMapPtr& map,
   // go through all the keys that were consistent for each of the parts and move them into the
   // relation.
   Tags tCopy = t;
-  for (Tags::const_iterator it = tCopy.begin(); it != tCopy.end(); it++)
+  for (Tags::const_iterator it = tCopy.begin(); it != tCopy.end(); ++it)
   {
     // if the value is empty, then the tag isn't needed, or it wasn't consistent between multiple
     // parts.
@@ -368,7 +370,7 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
 {
   // remove all the building tags that are building:part=yes specific.
   for (set<QString>::const_iterator it = _buildingPartTagNames.begin();
-    it != _buildingPartTagNames.end(); it++)
+    it != _buildingPartTagNames.end(); ++it)
   {
     t1.remove(*it);
     t2.remove(*it);
@@ -379,7 +381,7 @@ bool BuildingPartMergeOp::_compareTags(Tags t1, Tags t2)
   return fabs(1.0 - score) < 0.001;
 }
 
-bool BuildingPartMergeOp::_hasContiguousNodes(const shared_ptr<Way>& w, long n1, long n2)
+bool BuildingPartMergeOp::_hasContiguousNodes(const WayPtr& w, long n1, long n2)
 {
   const std::vector<long>& nodes = w->getNodeIds();
 
@@ -394,7 +396,7 @@ bool BuildingPartMergeOp::_hasContiguousNodes(const shared_ptr<Way>& w, long n1,
   return false;
 }
 
-bool BuildingPartMergeOp::_isBuildingPart(const shared_ptr<Way>& w)
+bool BuildingPartMergeOp::_isBuildingPart(const WayPtr& w)
 {
   bool result = false;
   if (OsmSchema::getInstance().isBuilding(w->getTags(), w->getElementType()))
@@ -404,7 +406,7 @@ bool BuildingPartMergeOp::_isBuildingPart(const shared_ptr<Way>& w)
   return result;
 }
 
-bool BuildingPartMergeOp::_isBuildingPart(const shared_ptr<Relation>& r)
+bool BuildingPartMergeOp::_isBuildingPart(const RelationPtr& r)
 {
   bool result = false;
   if (OsmSchema::getInstance().isBuilding(r->getTags(), r->getElementType()))

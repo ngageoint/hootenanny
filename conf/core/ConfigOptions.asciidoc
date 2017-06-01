@@ -77,6 +77,23 @@ The maximum number of values returned for each attribute by the attribute-count 
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
+=== big.convert.exec.sql.with.mapreduce
+
+* Data Type: bool
+* Default Value: `true`
+
+If set to true, when writing to an OSM API database from a PBF file using the big-convert command
+the writer will execute the OSM SQL statements using mapreduce.  If set to false, the writer will
+execute the OSM SQL statements in a single thread from a single Hootenanny instance.
+
+=== big.convert.num.reduce.tasks
+
+* Data Type: int
+* Default Value: `-1`
+
+Sets the number of reduce tasks spawned by big-convert command writer.  If set to -1, then Hadoop
+determines the number of tasks.  This setting is for testing purposes only.
+
 === big.perty.op.max.distance
 
 * Data Type: double
@@ -127,6 +144,24 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== changeset.buffer
+
+* Data Type: double
+* Default Value: `0.0`
+
+Value in degrees by which the specified AOI (convert.bounding.box) will be expanded when calculating
+changesets.  Setting this too large with some datasets may greatly increase the changeset
+derivation time.
+
+=== changeset.allow.deleting.reference.features
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, changesets derived can issue delete statements for the reference dataset (first dataset
+passed to the changeset deriver).  If false, no delete statements will be issued for the reference
+dataset.
+
 === changeset.max.size
 
 * Data Type: long
@@ -141,6 +176,15 @@ The maximum allowed element size of an OSM changeset written to an OSM API datab
 
 The user ID used by certain changeset writers when writing to an OSM API database.
 
+=== changeset.xml.writer.add.timestamp
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, XML changesets will add the 'timestamp' attribute to the element tags.  If false, the
+timestamp attribute will not be added.  This generally should only be set to false for testing
+purposes.
+
 === circular.error.default.value
 
 * Data Type: double
@@ -148,27 +192,6 @@ The user ID used by certain changeset writers when writing to an OSM API databas
 
 Set the circular error tag on features to this value, in meters, by default if the tag isn't already
 populated.
-
-=== conflate.add.review.detail
-
-* Data Type: bool
-* Default Value: `true`
-
-Add detailed review tags to review relations during conflation.  This setting allows for
-partitioning the level of detail in the review relation tags into two groups.  Turning this setting
-off can be useful during debugging in situations where you are comparing map outputs and want to
-see reviews in the output but are not concerned with a higher level of review detail.  Disabling
-this setting will also disable AddHilbertReviewSortOrderOp, the output of which is depended upon
-by the Hootenanny user interface.  So, this setting should only be disabled in debugging
-environments.
-
-=== conflate.add.score.tags
-
-* Data Type: bool
-* Default Value: `false`
-
-Add match/miss/review score values to elements with matches during Unifying Conflation. This is
-useful for debugging.
 
 === conflate.enable.old.roads
 
@@ -244,6 +267,7 @@ See also:
 ** `hoot::RemoveInvalidReviewRelationsVisitor` - Removes review relations whose members no longer exist after conflation.
 ** `hoot::RemoveDuplicateReviewsOp` - Removes any duplicate reviews
 ** `hoot::BuildingOutlineUpdateOp` - Updates any multi-part building outlines that may have changed during conflation.
+** `hoot::RemoveInvalidMultilineStringMembersVisitor` - Removes invalid multilinestring relations.
 ** `hoot::AddHilbertReviewSortOrderOp` - Adds a sorting value to all reviews.  By processing reviews in sorted order the results are a little more logically ordered.
 
 List of operations to run in the conflate command after data is conflated, after the ops in
@@ -280,14 +304,6 @@ See also:
 
 The string that lists the types of conflation used in the user interface.  The possible values
 are: reference, cookieCutter, average, and advancedConflation.
-
-=== conflate.use.data.source.ids
-
-* Data Type: bool
-* Default Value: `false`
-
-Determines whether the conflate command will use the element ID's specified by the input datasets
-(true) or use internal ID management for the inputs (false).
 
 === conflator.manipulators
 
@@ -662,7 +678,7 @@ List of library paths to check for hadoop.
 * Default Value: `5000000`
 
 The maximum number of nodes that can be processed by a single task tracker. See User Manual for
-details.",
+details.
 
 === hoot.hadoop.pixelSize
 
@@ -670,6 +686,31 @@ details.",
 * Default Value: `0.01`
 
 The size of a pixel when calculating node density. See User Manual for details.
+
+=== hootapi.db.writer.create.user
+
+* Data Type: bool
+* Default Value: `false`
+
+Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
+This is most useful when debugging and testing.
+
+=== hootapi.db.writer.output.id.mappings
+
+* Data Type: string
+* Default Value: ``
+
+If this value is set to a non-empty string, the system will attempt to open a file with the
+specified name and output all the ID mappings (source to destination) used for nodes, ways, and
+relations that were written to the database.
+
+=== hootapi.db.writer.overwrite.map
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true then if there is already a map with the specified name then it will be removed before
+a new map is written.
 
 === id.generator
 
@@ -992,6 +1033,14 @@ The threshold at which a network miss is called a miss.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== network.optimization.iterations
+
+* Data Type: int
+* Default Value: `10`
+
+The number of optimization iterations the network match creator will run when performing network
+conflation.
 
 === network.review.threshold
 
@@ -1329,13 +1378,14 @@ loading data that was previously validated in another OSM API database, all elem
 unique in the data you are loading, and the IDs will not conflict with any existing data in the
 destination database.
 
-=== osm.changeset.sql.file.writer.generate.new.ids
+=== osmapidb.id.aware.url
 
-* Data Type: bool
-* Default Value: `true`
+* Data Type: string
+* Default Value: ``
 
-If true, the OSM changeset sql file writer will generate new ID's for elements being created.
-Otherwise, it will use the ID's of the elements passed to it.
+This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter
+It forces database reading/writing use the specified OSM API database as master for determining the
+sequencing of element ID's.
 
 === osm.map.reader.factory.reader
 
@@ -1673,6 +1723,14 @@ The probability between 0.0 and 1.0 that a way will be split into multiple featu
 A list of scripts to include before loading the user's plugin script. The path will be search as:
 current directory (CWD), $CWD/rules, $HOOT_HOME/rules.
 
+=== poi.ignore.type.if.name.present
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, POI conflation will ignore the types of the features being compared completely as long as
+those being compared have a populated name field.
+
 === poi.match.threshold
 
 * Data Type: double
@@ -1712,6 +1770,16 @@ expensive when enabled.
 If true, POI to polygon conflation will attempt to reduce unnecessary reviews without increasing
 incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
 enabled.
+
+=== poi.polygon.review.if.matched.types
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of key value pairs (key=value) for features to always review if marked as matches with POI to
+polygon conflation.  When specifying the list from the command line, delimit the types with ';'
+and surround the entire value string in double quotes.
 
 === poi.polygon.match.threshold
 
@@ -1800,6 +1868,18 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== preserve.unknown1.element.id.when.modifying.features
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the element ID of features with status=unknown1 will be preserved when modifying features
+(merging, splitting, etc. during conflation, cleaning, etc.).  If false, the modified feature will
+be given a new, unique element ID.  This is useful when writing conflated data output back to a
+reference data store (associated with the unknown1 status) where modifying existing features is
+preferred over replacing them for provenance purposes.  Not honored by all visitors, map operations,
+or mergers which modify features.
+
 === progress.reporting.format
 
 * Data Type: string
@@ -1814,7 +1894,34 @@ reported.
 * Data Type: bool
 * Default Value: `true`
 
-By default add the `source:datetime` stamp when reading files. This is not honored by all readers.
+By default add the `source:datetime` stamp when reading files.  Not honored by all readers.
+
+=== reader.conflate.use.data.source.ids.1
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command to read the first input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
+=== reader.conflate.use.data.source.ids.2
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command to read the second input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
+=== reader.keep.file.status
+
+* Data Type: bool
+* Default Value: `false`
+
+If reader.use.file.status is true, the default action is to drop the status tag from the file
+during reading.  Setting reader.keep.file.status to true preserves the status tag.  Not honored by
+all readers.
 
 === reader.preserve.all.tags
 
@@ -1824,6 +1931,14 @@ By default add the `source:datetime` stamp when reading files. This is not honor
 If true, all tags from the input data will be preserved.  Not honored by all readers.  e.g.
 an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will be kept.
 
+=== reader.set.default.status
+
+* Data Type: string
+* Default Value: `unknown1`
+
+Sets the status on data being read.  Valid values are "unknown1" and "unknown2".  Not honored by all
+readers.
+
 === reader.use.file.status
 
 * Data Type: bool
@@ -1831,13 +1946,14 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 
 By default should a reader use the file status from the file. Not honored by all readers.
 
-=== reader.keep.file.status
+=== remove.attribute.visitor.types
 
-* Data Type: bool
-* Default Value: `false`
+* Data Type: list
+* Default Value:
+** ``
 
-If reader.use.file.status is true, the default action is to drop the status tag from the file during reading.
-Setting reader.keep.file.status to true preserves the status tag. Not honored by all readers.
+List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
+valid values.
 
 === remove.duplicate.areas.diff
 
@@ -1868,14 +1984,6 @@ Should the element remover remove the elements recursively?
 ** ``
 
 A list of tag keys the RemoveTagVisitor will remove on elements.
-
-=== review.tags.treat.as.metadata
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, Hootenanny review tags are treated as metadata tags and will be removed by the
-NoInformationElementRemover cleaning operation.
 
 === rubber.sheet.debug
 
@@ -1956,49 +2064,6 @@ The search radius to use when conflating highways.  See `search.radius.default`.
 The search radius to use when conflating waterways.  Not used if
 waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 
-=== hootapi.db.writer.create.user
-
-* Data Type: bool
-* Default Value: `false`
-
-Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
-This is most useful when debugging and testing.
-
-=== hootapi.db.writer.output.id.mappings
-
-* Data Type: string
-* Default Value: ``
-
-If this value is set to a non-empty string, the system will attempt to open a file with the
-specified name and output all the ID mappings (source to destination) used for nodes, ways, and
-relations that were written to the database.
-
-=== hootapi.db.writer.overwrite.map
-
-* Data Type: bool
-* Default Value: `false`
-
-If set to true then if there is already a map with the specified name then it will be removed before
-a new map is written.
-
-=== osmapidb.id.aware.url
-
-* Data Type: string
-* Default Value: ``
-
-This is required when using either the OsmApiDbAwareHootApiDbReader or the OsmApiDbAwareHootApiDbWriter 
-It forces database reading/writing use the specified OSM API database as master for determining the 
-sequencing of element ID's.
-
-=== remove.attribute.visitor.types
-
-* Data Type: list
-* Default Value:
-** ``
-
-List of element attributes to remove with the RemoveAttributeVisitor.  See ElementAttributeType for
-valid values.
-
 === script.test.max.exec.time
 
 * Data Type: int
@@ -2048,13 +2113,6 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
-
-=== stats.class
-
-* Data Type: string
-* Default Value: `hoot::ScriptStatsComposer`
-
-Class to instantiate from the factory for statistics writing.
 
 === status.criterion.status
 
@@ -2511,19 +2569,49 @@ https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
 The weight used will be `1.0 / (w ^ p)` where w is the frequency. Valid values are >= 0, but
 generally it should be `1 >= p >= 0`.
 
-=== writer.include.circular.error
+=== writer.include.circular.error.tags
 
 * Data Type: bool
 * Default Value: `true`
 
 When true, writers will include circular error information. Not honored by all writers.
 
-=== writer.include.debug
+=== writer.include.conflate.review.detail.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+Add detailed review tags to review relations during conflation.  Turning this setting off is
+generally only done in debugging environments.  This setting allows for partitioning the level of
+detail in the review relation tags into two groups.  Turning this setting off can be useful during
+debugging in situations where you are comparing map outputs and want to see reviews in the output
+but are not concerned with a higher level of review detail.  Disabling this setting will also
+disable AddHilbertReviewSortOrderOp, the output of which is depended upon by the Hootenanny user
+interface.
+
+=== writer.include.conflate.score.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-When true, writers will include debug information (e.g. status). Not honored by all writers.
+Add match/miss/review score values to elements with matches during Unifying Conflation. This is
+useful for debugging.
+
+=== writer.include.debug.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When true, writers will include debug information (hoot:* tags; e.g. status). Not honored by all
+writers.
+
+=== writer.clean.review.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, Hootenanny review tags are treated as metadata tags and will be removed by the
+NoInformationElementRemover cleaning operation.
 
 === writer.precision
 

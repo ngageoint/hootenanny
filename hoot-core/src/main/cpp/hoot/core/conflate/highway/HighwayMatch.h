@@ -48,7 +48,6 @@ namespace Tgs
 
 namespace hoot
 {
-using namespace Tgs;
 
 class HighwayClassifier;
 class SublineStringMatcher;
@@ -60,8 +59,8 @@ class ElementId;
 class HighwayMatch : public Match, public MatchDetails
 {
 public:
-  HighwayMatch(const shared_ptr<HighwayClassifier>& classifier,
-               const shared_ptr<SublineStringMatcher>& sublineMatcher,
+  HighwayMatch(const boost::shared_ptr<HighwayClassifier>& classifier,
+               const boost::shared_ptr<SublineStringMatcher>& sublineMatcher,
                const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
                ConstMatchThresholdPtr mt);
 
@@ -69,7 +68,7 @@ public:
 
   virtual const MatchClassification& getClassification() const { return _c; }
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   virtual QString getMatchName() const { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return _matchName; }
@@ -78,14 +77,14 @@ public:
 
   virtual double getScore() const { return _score; }
 
-  const shared_ptr<SublineStringMatcher>& getSublineMatcher() const { return _sublineMatcher; }
+  const boost::shared_ptr<SublineStringMatcher>& getSublineMatcher() const { return _sublineMatcher; }
 
   virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   const WaySublineMatchString& getSublineMatch() const { return _sublineMatch; }
 
@@ -93,9 +92,9 @@ public:
 
 private:
 
-  shared_ptr<HighwayClassifier> _classifier;
+  boost::shared_ptr<HighwayClassifier> _classifier;
   ElementId _eid1, _eid2;
-  shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   MatchClassification _c;
   double _minSplitSize;
   double _score;

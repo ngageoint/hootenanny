@@ -44,7 +44,7 @@ namespace hoot
   {
     public:
 
-      virtual void visit(const shared_ptr<Element>& e)
+      virtual void visit(const boost::shared_ptr<Element>& e)
       {
         if (!e->getTags().contains(MetadataTags::Ref1()) && !e->getTags().contains(MetadataTags::Ref2()) &&
             e->getTags().contains("uuid"))
@@ -75,7 +75,7 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
   map->visitRw(convertUuidToRef);
 
   // #5891 if the feature is marked as todo then there is no need to conflate & evaluate it.
-  shared_ptr<TagCriterion> isTodo(new TagCriterion(MetadataTags::Ref2(), "todo"));
+  boost::shared_ptr<TagCriterion> isTodo(new TagCriterion(MetadataTags::Ref2(), "todo"));
   RemoveElementsVisitor remover(isTodo);
   remover.setRecursive(true);
   map->visitRw(remover);

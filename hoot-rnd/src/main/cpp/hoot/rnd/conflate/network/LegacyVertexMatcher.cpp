@@ -29,11 +29,15 @@
 // hoot
 #include <hoot/core/conflate/NodeMatcher.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/SearchRadiusProvider.h>
 
 // tgs
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -106,7 +110,7 @@ void LegacyVertexMatcher::_createVertexIndex(const OsmNetwork::VertexMap& vm,
 {
   // No tuning was done, I just copied these settings from OsmMapIndex.
   // 10 children = 368 bytes
-  shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+  boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
   _vertex2Index.reset(new HilbertRTree(mps, 2));
 
   std::vector<Box> boxes;

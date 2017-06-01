@@ -41,10 +41,9 @@
 
 namespace hoot
 {
+
 class OsmMap;
 class NodeReplacements;
-
-using namespace boost;
 
 /**
  * A tile worker that performs all its operations locally. This is good for testing, but it is
@@ -63,7 +62,7 @@ public:
 
   virtual void cleanup(QString mapIn, QString mapOut);
 
-  virtual void conflate(const vector<Envelope>& tiles, QString mapIn, QString mapOut);
+  virtual void conflate(const std::vector<geos::geom::Envelope>& tiles, QString mapIn, QString mapOut);
 
   virtual bool exists(QString dir);
 
@@ -82,12 +81,12 @@ private:
   double _pixelSize;
   QString _in1, _in2;
 
-  shared_ptr<OsmMap> _conflate(shared_ptr<OsmMap> map, HashMap<long, long>& replacements);
+  boost::shared_ptr<OsmMap> _conflate(boost::shared_ptr<OsmMap> map, HashMap<long, long>& replacements);
 
   /**
    * Read all the part files from the specified directory into a single map.
    */
-  shared_ptr<OsmMap> _readAllParts(QString dir);
+  boost::shared_ptr<OsmMap> _readAllParts(QString dir);
 
   /**
    * Reads node replacements from the specified input directory. The result is a map that maps
@@ -95,9 +94,9 @@ private:
    */
   HashMap<long, long> _readNodeReplacements(QString inputDir);
 
-  shared_ptr<OsmMap> _readTile(QString input, const Envelope& e);
+  boost::shared_ptr<OsmMap> _readTile(QString input, const geos::geom::Envelope& e);
 
-  void _replaceNodes(shared_ptr<OsmMap> map, const HashMap<long, long>& replacements);
+  void _replaceNodes(boost::shared_ptr<OsmMap> map, const HashMap<long, long>& replacements);
 
   void _simplifyNodeReplacements(HashMap<long, long>& r);
 
@@ -105,12 +104,12 @@ private:
    * Stores the specified map as a file in the specified directory. The file will not overlap with
    * other existing files in the directory.
    */
-  void _storeMapPart(shared_ptr<OsmMap> map, QString dir);
+  void _storeMapPart(boost::shared_ptr<OsmMap> map, QString dir);
 
   void _writeNodeReplacements(QString dir, size_t i,
     NodeReplacements& replacements);
 
-  void _writeTheRest(QString dirIn, QString dirOut, const vector<Envelope>& conflatedBits);
+  void _writeTheRest(QString dirIn, QString dirOut, const std::vector<geos::geom::Envelope>& conflatedBits);
 
 };
 

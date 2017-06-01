@@ -77,7 +77,7 @@ public:
     }
   };
 
-  typedef shared_ptr<TiePointScore> TiePointScorePtr;
+  typedef boost::shared_ptr<TiePointScore> TiePointScorePtr;
 
   LegacyVertexMatcher(ConstOsmMapPtr map);
 
@@ -128,7 +128,7 @@ private:
 
   double _confidentThreshold;
 
-  Tgs::IntersectionIterator _createIterator(Envelope env);
+  Tgs::IntersectionIterator _createIterator(geos::geom::Envelope env);
 
   void _createVertexIndex(const OsmNetwork::VertexMap& vm, SearchRadiusProvider &srp);
 
@@ -171,8 +171,8 @@ inline uint qHash(const LegacyVertexMatcher::TiePointScorePtr& t)
   return qHash(std::pair<ElementId, ElementId>(t->v1->getElementId(), t->v2->getElementId()));
 }
 
-typedef shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
-typedef shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
+typedef boost::shared_ptr<LegacyVertexMatcher> LegacyVertexMatcherPtr;
+typedef boost::shared_ptr<const LegacyVertexMatcher> ConstLegacyVertexMatcherPtr;
 
 // not implemented
 bool operator<(ConstLegacyVertexMatcherPtr, ConstLegacyVertexMatcherPtr);

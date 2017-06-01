@@ -26,11 +26,9 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Due to the complexities of hadoop I'm not testing this class directly. There are indirect
- * test in place that excersize the class. Writing a unit test specific to this class that actually
+ * test in place that exercise the class. Writing a unit test specific to this class that actually
  * excersizes all the complexities in Hadoop is hard to jusitify.
  */
 class PbfInputSplit : public pp::InputSplit
@@ -49,7 +47,7 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  const vector<long>& getHeaders() const { return _headers; }
+  const std::vector<long>& getHeaders() const { return _headers; }
 
   virtual long long getLength() const { return _length; }
 
@@ -67,11 +65,11 @@ public:
 
   void reset();
 
-  void setLocations(const string& locations) { _locations = locations; }
+  void setLocations(const std::string& locations) { _locations = locations; }
 
   void setLength(long length) { _length = length; }
 
-  void setPath(const string& path) { _path = path; }
+  void setPath(const std::string& path) { _path = path; }
 
   void setStart(long start) { _start = start; }
 
@@ -79,11 +77,11 @@ public:
 
 private:
   long _length;
-  string _locations;
-  string _path;
+  std::string _locations;
+  std::string _path;
   long _start;
-  vector<long> _headers;
-  static string _className;
+  std::vector<long> _headers;
+  static std::string _className;
 
 
   void _copy(const PbfInputSplit& from);

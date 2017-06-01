@@ -24,8 +24,6 @@ namespace hoot
 {
 class OsmMap;
 
-using namespace boost;
-
 class WayJoin1Mapper : public OsmMapMapper
 {
 public:
@@ -55,7 +53,7 @@ public:
 
 protected:
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
 };
 

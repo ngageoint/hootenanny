@@ -27,15 +27,17 @@
 
 #include "PbfInputSplit.h"
 
+using namespace pp;
+using namespace std;
+
 namespace hoot
 {
-using namespace pp;
 
 PP_FACTORY_REGISTER(pp::RecordReader, PbfRecordReader)
 
-shared_ptr<OsmMap> PbfRecordReader::getMap()
+boost::shared_ptr<OsmMap> PbfRecordReader::getMap()
 {
-  shared_ptr<OsmMap> result(new OsmMap());
+  boost::shared_ptr<OsmMap> result(new OsmMap());
 
   Hdfs fs;
   auto_ptr<istream> is(fs.open(_path));

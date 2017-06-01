@@ -36,7 +36,10 @@
 #include <hoot/core/util/Configurable.h>
 
 // OpenCV
-#include <opencv/cv.h>
+// #include <opencv/cv.h>
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
 
 // Qt
 #include <QString>
@@ -44,8 +47,6 @@
 
 namespace hoot
 {
-using namespace cv;
-using namespace geos::geom;
 
 class PermuteGridCalculator;
 
@@ -63,7 +64,7 @@ class PertyOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static string className() { return "hoot::PertyOp"; }
+  static std::string className() { return "hoot::PertyOp"; }
 
   PertyOp();
 
@@ -74,14 +75,14 @@ public:
   /**
    * Permute the map and then apply all "perty.ops" to the map as well.
    */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Generates a map of all the grid offset vectors and permutes the given map.
    */
-  shared_ptr<OsmMap> generateDebugMap(shared_ptr<OsmMap>& map);
+  boost::shared_ptr<OsmMap> generateDebugMap(boost::shared_ptr<OsmMap>& map);
 
-  void permute(const shared_ptr<OsmMap>& map);
+  void permute(const boost::shared_ptr<OsmMap>& map);
 
   void setCsmParameters(double D) { _D = D; }
 
@@ -125,20 +126,20 @@ private:
   int _seed;
   Meters _sigmaRx, _sigmaRy;
   Meters _sigmaSx, _sigmaSy;
-  /*
-  * Previously the full covariance method was also supported as described in Doucette et al. However,
-  the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
-  the full covariance method we were able to simplify the build process and reduce maintenance cost.
-  */
+  /**
+   * Previously the full covariance method was also supported as described in Doucette et al. However,
+   * the newer DirectSequentialSimulation is more efficient and produces similar results. By removing
+   * the full covariance method we were able to simplify the build process and reduce maintenance cost.
+   */
   QString _permuteAlgorithm;
-  shared_ptr<PermuteGridCalculator> _gridCalculator;
+  boost::shared_ptr<PermuteGridCalculator> _gridCalculator;
   QStringList _namedOps;
 
   Settings& _settings;
 
   void _configure();
 
-  Mat _calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols);
+  cv::Mat _calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols);
 };
 
 }

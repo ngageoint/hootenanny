@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __FACTOR_SUBSET_EVALUATOR_H__
@@ -42,14 +42,14 @@ namespace Tgs
   {
   public:
 
-    virtual ~FactorSubsetEvaluator() {};
+    virtual ~FactorSubsetEvaluator() {}
 
     /**
-     * Evaluates the specified set of columns in the data frame and returns a value that 
+     * Evaluates the specified set of columns in the data frame and returns a value that
      * describes how "good" the data frame is. Higher values are better.
      * @returns the quality of the data frame.
      */
-    virtual double evaluateSubset(const std::vector<int>& columns, 
+    virtual double evaluateSubset(const std::vector<int>& columns,
       TgsProgress* progress = NULL) = 0;
 
     /**

@@ -34,7 +34,7 @@
 namespace hoot
 {
   class Relation;
-  typedef HashMap<long, boost::shared_ptr<Relation> > RelationMap;
+  typedef HashMap<long, RelationPtr > RelationMap;
 }
 
 #endif // RELATIONMAP_H

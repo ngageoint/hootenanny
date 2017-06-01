@@ -30,11 +30,15 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // CPP Unit
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
+
+// Qt
+#include <qnumeric.h>
 
 #include "../TestUtils.h"
 
@@ -65,14 +69,14 @@ public:
   //this is here just to prevent someone from adding a stat that doesn't get tested in this test
   void runStatsNumTest()
   {
-    shared_ptr<CalculateStatsOp> calcStatsOp =
+    boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
     CPPUNIT_ASSERT_EQUAL(85, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
   {
-    shared_ptr<CalculateStatsOp> calcStatsOp =
+    boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Node Count"));
@@ -187,12 +191,12 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
-      isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
+      int(::qIsNaN(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent"))), 1);
   }
 
   void runStatsTestWithReviews()
   {
-    shared_ptr<CalculateStatsOp> calcStatsOp =
+    boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types-with-reviews.osm");
 
     CPPUNIT_ASSERT_EQUAL(201.0, calcStatsOp->getSingleStat("Node Count"));
@@ -306,22 +310,22 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
-      isnan(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent")), 1);
+      int(::qIsNaN(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent"))), 1);
   }
 
 private:
 
-  shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
+  boost::shared_ptr<CalculateStatsOp> _calcStats(const QString& inputFile)
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseStatusFromFile(true);
     reader.setUseDataSourceIds(true);
     reader.read(inputFile, map);
 
-    shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
+    boost::shared_ptr<CalculateStatsOp> calcStatsOp(new CalculateStatsOp());
     //If we figure out the error messages logged by the script translator related stats are
     //invalid and fix them, then this log disablement can be removed.
     {

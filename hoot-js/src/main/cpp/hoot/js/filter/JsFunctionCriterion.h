@@ -43,20 +43,20 @@ class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
 public:
 
-  static string className() { return "hoot::JsFunctionCriterion"; }
+  static std::string className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() {}
 
-  virtual void addFunction(Persistent<Function> func) { _func = Persistent<Function>(func); }
+  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new JsFunctionCriterion(_func); }
 
 private:
-  JsFunctionCriterion(Persistent<Function> func) { _func = func; }
+  JsFunctionCriterion(v8::Persistent<v8::Function> func) { _func = func; }
 
-  Persistent<Function> _func;
+  v8::Persistent<v8::Function> _func;
 };
 
 }

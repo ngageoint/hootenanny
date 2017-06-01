@@ -38,6 +38,8 @@
 #include <fstream>
 #include <limits>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -100,10 +102,10 @@ public:
       PbfElementIterator it(input);
       while (it.hasNext())
       {
-        shared_ptr<Element> e = it.next();
-        shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-        shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
-        shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        boost::shared_ptr<Element> e = it.next();
+        WayPtr w = boost::dynamic_pointer_cast<Way>(e);
+        NodePtr n = boost::dynamic_pointer_cast<Node>(e);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (w != 0)
         {
           minWay[i - 1] = min(w->getId(), minWay[i - 1]);
@@ -143,10 +145,10 @@ public:
       PbfElementIterator it(input);
       while (it.hasNext())
       {
-        shared_ptr<Element> e = it.next();
-        shared_ptr<Way> w = dynamic_pointer_cast<Way>(e);
-        shared_ptr<Node> n = dynamic_pointer_cast<Node>(e);
-        shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
+        boost::shared_ptr<Element> e = it.next();
+        WayPtr w = boost::dynamic_pointer_cast<Way>(e);
+        NodePtr n = boost::dynamic_pointer_cast<Node>(e);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (w != 0)
         {
           writer.writePartial(w);

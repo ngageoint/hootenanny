@@ -37,6 +37,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MetadataTags.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -52,8 +54,8 @@ NameExtractor::NameExtractor(StringDistance* d)
   _d.reset(d);
 }
 
-double NameExtractor::extract(const OsmMap& /*map*/, const shared_ptr<const Element>& target,
-  const shared_ptr<const Element>& candidate) const
+double NameExtractor::extract(const OsmMap& /*map*/, const boost::shared_ptr<const Element>& target,
+  const boost::shared_ptr<const Element>& candidate) const
 {
   return extract(target, candidate);
 }

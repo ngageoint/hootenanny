@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RASTERCOMPARATOR_H
@@ -47,7 +47,7 @@ public:
   /**
    * Takes two maps for comparison as input
    */
-  RasterComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  RasterComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   virtual ~RasterComparator() {}
 
@@ -60,7 +60,7 @@ protected:
 
   void _dumpImage(cv::Mat& image);
 
-  void _renderImage(shared_ptr<OsmMap> map, cv::Mat& result);
+  void _renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& result);
 
 };
 

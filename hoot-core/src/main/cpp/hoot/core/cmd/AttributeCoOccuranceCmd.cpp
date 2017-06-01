@@ -57,6 +57,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/scoring/AttributeCoOccurence.h>
 
+using namespace std;
 
 namespace hoot
 {
@@ -92,7 +93,7 @@ public:
     }
 
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], false, Status::Unknown1);
     loadMap(map, args[1], false, Status::Unknown2);
 

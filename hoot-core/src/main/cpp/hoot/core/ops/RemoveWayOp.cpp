@@ -32,6 +32,8 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -48,7 +50,7 @@ RemoveWayOp::RemoveWayOp(long wId, bool removeFully):
 {
 }
 
-void RemoveWayOp::_removeWay(shared_ptr<OsmMap> &map, long wId)
+void RemoveWayOp::_removeWay(OsmMapPtr &map, long wId)
 {
   if (map->_ways.find(wId) != map->_ways.end())
   {
@@ -57,7 +59,7 @@ void RemoveWayOp::_removeWay(shared_ptr<OsmMap> &map, long wId)
   }
 }
 
-void RemoveWayOp::_removeWayFully(shared_ptr<OsmMap> &map, long wId)
+void RemoveWayOp::_removeWayFully(OsmMapPtr &map, long wId)
 {
   // copy the set because we may modify it later.
   set<long> rid = map->_index->getElementToRelationMap()->
@@ -71,7 +73,7 @@ void RemoveWayOp::_removeWayFully(shared_ptr<OsmMap> &map, long wId)
   VALIDATE(map->validate());
 }
 
-void RemoveWayOp::apply(shared_ptr<OsmMap>& map)
+void RemoveWayOp::apply(OsmMapPtr& map)
 {
   if (_removeFully)
     _removeWayFully(map, _wayIdToRemove);

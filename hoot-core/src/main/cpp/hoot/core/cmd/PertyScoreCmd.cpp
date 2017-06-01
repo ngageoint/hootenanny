@@ -31,6 +31,8 @@
 #include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -54,7 +56,7 @@ class PertyScoreCmd : public BaseCommand
         throw HootException(QString("%1 takes two parameters.").arg(getName()));
       }
 
-      shared_ptr<const MatchComparator> matchComparator =
+      boost::shared_ptr<const MatchComparator> matchComparator =
         PertyMatchScorer().scoreMatches(args[0], args[1]);
       cout << MapMatchScoringUtils::getMatchScoringString(matchComparator);
 

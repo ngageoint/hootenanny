@@ -36,13 +36,13 @@ class TransliterateNameVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::TransliterateNameVisitor"; }
+  static std::string className() { return "hoot::TransliterateNameVisitor"; }
 
   TransliterateNameVisitor();
 
   static bool isLatin(const QString& s);
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 
 };
 

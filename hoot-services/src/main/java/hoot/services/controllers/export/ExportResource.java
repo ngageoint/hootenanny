@@ -29,10 +29,12 @@ package hoot.services.controllers.export;
 import static hoot.services.HootProperties.*;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -50,7 +52,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
-import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.common.ZIPDirectoryContentsCommand;
+import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
-import hoot.services.utils.DbUtils;
-import hoot.services.utils.JsonUtils;
 import hoot.services.utils.XmlDocumentBuilder;
-import hoot.services.wfs.WFSManager;
 
 
 @Controller
@@ -78,11 +77,7 @@ public class ExportResource {
     private JobProcessor jobProcessor;
 
     @Autowired
-    private ExternalCommandManager externalCommandManager;
-
-    @Autowired
     private ExportCommandFactory exportCommandFactory;
-
 
     public ExportResource() {}
 
@@ -99,12 +94,12 @@ public class ExportResource {
      *                            //a file path will be specified.
      *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db.
      *                            //For inputtype=file, specify full path to a file.
-     *   "outputtype":"gdb",      //[gdb | shp | wfs | osm_api_db | osc]. gdb will produce file gdb,
-     *                            //shp will output shapefile. if outputtype = wfs then a wfs
-     *                            //front end will be created. osm_api_db will derive and apply a
-     *                            //changeset to an OSM API database, osc will derive changeset
+     *   "outputtype":"gdb",      //[gdb | shp | osm_api_db | osc | tiles]. gdb will produce an ESRI file 
+     *                             geodatabase, shp will output shapefile. osm_api_db will derive and apply a
+     *                            //changeset to an OSM API database . osc will derive changeset
      *                            //xml computing the the difference between the configured
-     *                            //OSM API database and the specified input layer
+     *                            //OSM API database and the specified input layer.  tiles outputs a GeoJSON file
+     *                            //containing partitioned concentrations of node tiles
      *   "removereview" : "false"
      * }
      *
@@ -113,51 +108,87 @@ public class ExportResource {
      */
     @POST
     @Path("/execute")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response export(String params) {
+    public Response export(ExportParams params,
+                           @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
 
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject oParams = (JSONObject) parser.parse(params);
+            String outputType = params.getOutputType();
+            String outputName = !StringUtils.isBlank(params.getOutputName()) ? params.getOutputName() : jobId;
 
-            String type = JsonUtils.getParameterValue("outputtype", oParams);
+            // Created scratch area for each export request.
+            // This is where downloadable files will be stored and other intermediate artifacts.
+            File workDir = new File(TEMP_OUTPUT_PATH, jobId);
+            FileUtils.forceMkdir(workDir);
 
-            Command[] commands;
+            List<Command> workflow = new LinkedList<>();
 
-            if ("wfs".equalsIgnoreCase(type)) {
-                commands = new Command[] {
-                    () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
-                        return externalCommandManager.exec(jobId, exportCommand);
-                    },
-                    () -> {
-                        try {
-                            return WFSManager.createWfsResource(jobId, jobId);
-                        }
-                        catch (Exception e) {
-                            throw new RuntimeException("Error creating WFS resource!", e);
-                        }
-                    }
-                };
+            if (outputType.equalsIgnoreCase("osm")) {
+                ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params, debugLevel,
+                        ExportOSMCommand.class, this.getClass());
+
+                workflow.add(exportOSMCommand);
+
+                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                if (zipCommand != null) {
+                    workflow.add(zipCommand);
+                }
             }
-            else {
-                commands = new Command [] {
-                    () -> {
-                        ExternalCommand exportCommand = exportCommandFactory.build(jobId, params, this.getClass());
-                        return externalCommandManager.exec(jobId, exportCommand);
-                    }
-                };
+            else if (outputType.equalsIgnoreCase("osm.pbf")) {
+                ExternalCommand exportOSMCommand = exportCommandFactory.build(jobId, params, debugLevel,
+                        ExportOSMCommand.class, this.getClass());
+
+                workflow.add(exportOSMCommand);
+            }
+            // As of 04/03/2017, OSC support is not fully implemented yet.  This REST controller might not
+            // even be the right place to host it.
+            else if (outputType.equalsIgnoreCase("osc")) {
+                ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, DeriveChangesetCommand.class, this.getClass());
+
+                workflow.add(deriveChangesetCommand);
+            }
+            //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
+            else if (outputType.equalsIgnoreCase("osm_api_db")) {
+                ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, DeriveChangesetCommand.class, this.getClass());
+
+                ExternalCommand applyChangesetCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, ApplyChangesetCommand.class, this.getClass());
+
+                workflow.add(deriveChangesetCommand);
+                workflow.add(applyChangesetCommand);
+            }
+            else if (outputType.equalsIgnoreCase("tiles")) {
+                ExternalCommand calculateTilesCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, CalculateTilesCommand.class, this.getClass());
+
+                workflow.add(calculateTilesCommand);
+            }
+            else { //else Shape/FGDB
+                ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, ExportCommand.class, this.getClass());
+
+                workflow.add(exportCommand);
+
+                Command zipCommand = getZIPCommand(workDir, outputName, outputType);
+                if (zipCommand != null) {
+                    workflow.add(zipCommand);
+                }
             }
 
-            jobProcessor.process(new Job(jobId, commands));
+            jobProcessor.submitAsync(new Job(jobId, workflow.toArray(new Command[workflow.size()])));
         }
         catch (WebApplicationException wae) {
             throw wae;
         }
+        catch (IllegalArgumentException iae) {
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+        }
         catch (Exception e) {
-            String msg = "Error exporting data!";
+            String msg = "Error exporting data!  Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -168,58 +199,48 @@ public class ExportResource {
     }
 
     /**
-     * To retrieve the output from job make Get request.
+     * To retrieve the output from job make GET request.
      *
-     * GET hoot-services/job/export/[job id from export job]?outputname=[user
-     * defined name]&removecache=[true | false]&ext=[file extension override
-     * from zip]
+     * GET hoot-services/job/export/[job id from export job]?outputname=[user defined name]&ext=[file extension override from zip]
      *
-     * @param id
+     * @param jobId
      *            job id
      * @param outputname
      *            parameter overrides the output file name with the user defined
      *            name. If not specified then defaults to job id as name.
-     * @param removeCache
-     *            parameter controls if the output file from export job should
-     *            be deleted when Get request completes. - DISABLED
      * @param ext
      *            parameter overrides the file extension of the file being
      *            downloaded
+     *
      * @return Octet stream
      */
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response exportFile(@PathParam("id") String id, @QueryParam("outputname") String outputname,
-            @QueryParam("removeCache") Boolean removeCache, @QueryParam("ext") String ext) {
-        Response response = null;
-        File out = null;
+    public Response exportFile(@PathParam("id") String jobId,
+                               @QueryParam("outputname") String outputname,
+                               @QueryParam("ext") String ext) {
+        Response response;
+
         try {
             String fileExt = StringUtils.isEmpty(ext) ? "zip" : ext;
-            out = getExportFile(id, outputname, fileExt);
+            File exportFile = getExportFile(jobId, outputname, fileExt);
 
-            String outFileName = id;
-            if ((outputname != null) && (!outputname.isEmpty())) {
+            String outFileName = jobId;
+            if (! StringUtils.isBlank(outputname)) {
                 outFileName = outputname;
             }
 
-            ResponseBuilder rBuild = Response.ok(out);
-            rBuild.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
+            ResponseBuilder responseBuilder = Response.ok(exportFile);
+            responseBuilder.header("Content-Disposition", "attachment; filename=" + outFileName + "." + fileExt);
 
-            response = rBuild.build();
+            response = responseBuilder.build();
         }
         catch (WebApplicationException e) {
             throw e;
         }
         catch (Exception e) {
             throw new WebApplicationException(e);
-        }
-        finally {
-            //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were
-            //made.  So, to keep from breaking some UI tests this will be left disabled for now.
-//            if (removeCache) {
-//                FileUtils.deleteQuietly(out);
-//            }
         }
 
         return response;
@@ -228,18 +249,14 @@ public class ExportResource {
     /**
      * Returns the contents of an XML job output file
      *
-     * * GET hoot-services/job/export/xml/[job id from export
-     * job]?removeCache=[true | false]&ext=[file extension override from xml]
+     * GET hoot-services/job/export/xml/[job id from exportjob]?ext=[file extension override from xml]
      *
-     * @param id
+     * @param jobId
      *            job id
-     * @param removeCache
-     *            parameter controls if the output file from export job should
-     *            be deleted when Get request completes. - DISABLED
      * @param ext
-     *            parameter overrides the file extension of the file being
-     *            downloaded
+     *            parameter overrides the file extension of the file being downloaded
      * @return job output XML
+     *
      * @throws WebApplicationException
      *             if the job with ID = id does not exist, the referenced job
      *             output file no longer exists, or the changeset is made up of
@@ -248,14 +265,13 @@ public class ExportResource {
     @GET
     @Path("/xml/{id}")
     @Produces(MediaType.TEXT_XML)
-    public Response getXmlOutput(@PathParam("id") String id, @QueryParam("removeCache") Boolean removeCache,
-            @QueryParam("ext") String ext) {
-        File out = null;
-        Response response = null;
+    public Response getXmlOutput(@PathParam("id") String jobId,
+                                 @QueryParam("ext") String ext) {
+        Response response;
+
         try {
-            out = getExportFile(id, id, StringUtils.isEmpty(ext) ? "xml" : ext);
-            response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8"))))
-                    .build();
+            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "xml" : ext);
+            response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8")))).build();
         }
         catch (WebApplicationException e) {
             throw e;
@@ -263,87 +279,8 @@ public class ExportResource {
         catch (Exception e) {
             throw new WebApplicationException(e);
         }
-        finally {
-            //TODO: removeCache didn't seem to be supported at all when the changes for #1263 were
-            //made.  So, to keep from breaking some UI tests this will be left disabled for now.
-//            if (removeCache) {
-//                FileUtils.deleteQuietly(out);
-//            }
-        }
 
         return response;
-    }
-
-    /**
-     * Removes specified WFS resource.
-     *
-     * GET
-     * hoot-services/job/export/wfs/remove/ex_eed379c0b9f7469d80ab32c71550883b
-     *
-     * //TODO: should be an HTTP DELETE
-     *
-     * @param id
-     *            id of the wfs resource to remove
-     * @return Removed id
-     */
-    @GET
-    @Path("/wfs/remove/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response removeWfsResource(@PathParam("id") String id) {
-        JSONObject entity = new JSONObject();
-
-        try {
-            WFSManager.removeWfsResource(id);
-
-            List<String> tbls = DbUtils.getTablesList(id);
-
-            DbUtils.deleteTables(tbls);
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception e) {
-            String msg = "Error removing WFS resource with id = " + id;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        entity.put("id", id);
-
-        return Response.ok(entity.toJSONString()).build();
-    }
-
-    /**
-     * Lists all wfs resources.
-     *
-     * GET hoot-services/job/export/wfs/resources
-     *
-     * @return List of wfs resources
-     */
-    @GET
-    @Path("/wfs/resources")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getWfsResources() {
-        JSONArray wfsResources = new JSONArray();
-        try {
-            List<String> list = WFSManager.getAllWfsServices();
-
-            if (list != null) {
-                for (String wfsResource : list) {
-                    JSONObject resource = new JSONObject();
-                    resource.put("id", wfsResource);
-                    wfsResources.add(resource);
-                }
-            }
-        }
-        catch (WebApplicationException wae) {
-            throw wae;
-        }
-        catch (Exception ex) {
-            String msg = "Error retrieving WFS resource list!";
-            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-        }
-
-        return Response.ok(wfsResources.toJSONString()).build();
     }
 
     /**
@@ -365,22 +302,22 @@ public class ExportResource {
 
         JSONArray exportResources = new JSONArray();
         try {
-            JSONObject o = new JSONObject();
-            o.put("name", "TDS");
-            o.put("description", "LTDS 4.0");
-            exportResources.add(o);
+            JSONObject json = new JSONObject();
+            json.put("name", "TDS");
+            json.put("description", "LTDS 4.0");
+            exportResources.add(json);
 
-            o = new JSONObject();
-            o.put("name", "MGCP");
-            o.put("description", "MGCP");
-            exportResources.add(o);
+            json = new JSONObject();
+            json.put("name", "MGCP");
+            json.put("description", "MGCP");
+            exportResources.add(json);
 
-            File f = new File(transExtPath);
-            if (f.exists() && f.isDirectory()) {
-                o = new JSONObject();
-                o.put("name", "UTP");
-                o.put("description", "UTP");
-                exportResources.add(o);
+            File file = new File(transExtPath);
+            if (file.exists() && file.isDirectory()) {
+                json = new JSONObject();
+                json.put("name", "UTP");
+                json.put("description", "UTP");
+                exportResources.add(json);
             }
         }
         catch (Exception e) {
@@ -391,14 +328,32 @@ public class ExportResource {
         return Response.ok(exportResources.toJSONString()).build();
     }
 
-    private static File getExportFile(String id, String outputname, String fileExt) {
-        File out = new File(new File(TEMP_OUTPUT_PATH, id), outputname + "." + fileExt);
+    private Command getZIPCommand(File workDir, String outputName, String outputType) {
+        File targetZIP = new File(workDir, outputName + ".zip");
 
-        if (!out.exists()) {
+        if (outputType.equalsIgnoreCase("SHP")) {
+            return new ZIPDirectoryContentsCommand(targetZIP,  new File(workDir, outputName), this.getClass());
+        }
+        else if (outputType.equalsIgnoreCase("OSM")) {
+            String fileToCompress = outputName + "." + outputType;
+            return new ZIPFileCommand(targetZIP, workDir, fileToCompress, this.getClass());
+        }
+        else if (outputType.equalsIgnoreCase("GDB")) {
+            return new ZIPDirectoryContentsCommand(targetZIP, workDir, this.getClass());
+        }
+        else {
+            return null;
+        }
+    }
+
+    private static File getExportFile(String jobId, String outputName, String fileExt) {
+        File exportFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputName + "." + fileExt);
+
+        if (!exportFile.exists()) {
             String errorMsg = "Error exporting data.  Missing output file.";
             throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(errorMsg).build());
         }
 
-        return out;
+        return exportFile;
     }
 }

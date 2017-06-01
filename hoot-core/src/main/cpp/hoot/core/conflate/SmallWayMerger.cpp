@@ -48,11 +48,11 @@
 // Tgs
 #include <tgs/StreamUtils.h>
 
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
 {
-  using namespace std;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SmallWayMerger)
 
@@ -70,27 +70,27 @@ SmallWayMerger::SmallWayMerger(Meters threshold)
     ConfigOptions().getSmallWayMergerDiff()));
 }
 
-void SmallWayMerger::apply(shared_ptr<OsmMap>& map)
+void SmallWayMerger::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
   // create a map from nodes to ways
-  shared_ptr<NodeToWayMap> n2wp = _map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2wp = _map->getIndex().getNodeToWayMap();
   _n2w = n2wp.get();
 
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     // if we haven't already merged the way
     if (_map->containsWay(it->first))
     {
-      shared_ptr<Way> w = it->second;
+      boost::shared_ptr<Way> w = it->second;
 
       // if the way is smaller than the threshold
       if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) &&
-        ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
+          ElementConverter(map).convertToLineString(w)->getLength() <= _threshold)
       {
         _mergeNeighbors(w);
       }
@@ -98,7 +98,7 @@ void SmallWayMerger::apply(shared_ptr<OsmMap>& map)
   }
 }
 
-void SmallWayMerger::_mergeNeighbors(shared_ptr<Way> w)
+void SmallWayMerger::_mergeNeighbors(boost::shared_ptr<Way> w)
 {
   NodeToWayMap& n2w = *_n2w;
 
@@ -123,8 +123,8 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
   assert(ids.size() == 2);
 
   set<long>::iterator it = ids.begin();
-  shared_ptr<Way> w1 = _map->getWay(*it);
-  shared_ptr<Way> w2 = _map->getWay(*(++it));
+  boost::shared_ptr<Way> w1 = _map->getWay(*it);
+  boost::shared_ptr<Way> w2 = _map->getWay(*(++it));
 
   // if either way is not a highway
   if (OsmSchema::getInstance().isLinearHighway(w1->getTags(), w1->getElementType()) == false ||
@@ -151,7 +151,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     }
 
     // Line the ways up so they're end to head and assign them to first and next.
-    shared_ptr<Way> first, next;
+    boost::shared_ptr<Way> first, next;
     if (w1->getLastNodeId() == w2->getNodeId(0))
     {
       first = w1;
@@ -179,7 +179,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       LOG_TRACE("w1: " << w1->toString());
       LOG_TRACE("w2: " << w2->toString());
       throw HootException("The ends of the ways don't touch. "
-                    "Did you run the intersection splitter first?");
+                          "Did you run the intersection splitter first?");
     }
 
     // if the ways share both ends (circle) then this causes bad weird things to happen so
@@ -191,6 +191,12 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     }
     else
     {
+      LOG_TRACE("Merging " << next->getElementId() << " into " << first->getElementId() << "...");
+      LOG_VART(first->getElementId());
+      LOG_VART(first->getStatus());
+      LOG_VART(next->getElementId());
+      LOG_VART(next->getStatus());
+
       // add next's nodes onto first's list.
       for (size_t i = 1; i < next->getNodeCount(); ++i)
       {
@@ -204,11 +210,29 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
       // just in case we can't delete it, clear the tags.
       next->getTags().clear();
       RecursiveElementRemover(next->getElementId()).apply(_map);
+
+      if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+          //since this is being run as a post conflation op, need to also check for a conflated
+          //status due to associated bookkeeping modifications made in
+          //UnifyingConflator::_mapUnknown1IdsBackToModifiedElements...not sure if the other classes
+          //with this same change should also check for the conflated status too ??
+          (next->getStatus() == Status::Unknown1 || next->getStatus() == Status::Conflated))
+      {
+        //see similar notes in HighwaySnapMerger::_mergePair
+
+        LOG_TRACE(
+          "Retaining reference ID by setting " << next->getElementId().getId() << " on " <<
+          first->getElementId() << "...");
+        ElementPtr newWaySegment(_map->getElement(first->getElementId())->clone());
+        newWaySegment->setId(next->getElementId().getId());
+        _map->replace(_map->getElement(first->getElementId()), newWaySegment);
+      }
+      LOG_VART(_map->containsElement(next->getElementId()));
     }
   }
 }
 
-void SmallWayMerger::mergeWays(shared_ptr<OsmMap> map, Meters threshold)
+void SmallWayMerger::mergeWays(boost::shared_ptr<OsmMap> map, Meters threshold)
 {
   SmallWayMerger a(threshold);
   a.apply(map);

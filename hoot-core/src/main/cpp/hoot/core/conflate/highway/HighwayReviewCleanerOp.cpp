@@ -32,6 +32,8 @@
 #include <hoot/core/ops/RemoveRelationOp.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -41,7 +43,7 @@ HighwayReviewCleanerOp::HighwayReviewCleanerOp()
 {
 }
 
-void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
+void HighwayReviewCleanerOp::apply(OsmMapPtr& map)
 {
   RelationMap relations = map->getRelations();
 
@@ -63,7 +65,7 @@ void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
   }
 }
 
-bool HighwayReviewCleanerOp::_isBadHighwayReview(shared_ptr<OsmMap>& map,
+bool HighwayReviewCleanerOp::_isBadHighwayReview(OsmMapPtr& map,
   ReviewMarker::ReviewUid review)
 {
   if (ReviewMarker::getReviewType(map, review) == HighwayMatch::getHighwayMatchName())

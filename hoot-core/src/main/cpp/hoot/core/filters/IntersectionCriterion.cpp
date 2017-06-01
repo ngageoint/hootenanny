@@ -32,6 +32,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -42,14 +44,14 @@ IntersectionCriterion::IntersectionCriterion(ConstOsmMapPtr map)
   setOsmMap(map.get());
 }
 
-bool IntersectionCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool IntersectionCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   if (e->getElementType() != ElementType::Node)
   {
     return false;
   }
 
-  shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);

@@ -51,10 +51,6 @@
 namespace hoot
 {
 
-using namespace boost;
-using namespace geos::geom;
-using namespace std;
-
 class OsmMap;
 class NodeReplacements;
 
@@ -67,7 +63,7 @@ class NodeReplacements;
 class FourPassManager
 {
 public:
-  FourPassManager(shared_ptr<TileWorker2> worker);
+  FourPassManager(boost::shared_ptr<TileWorker2> worker);
 
   virtual ~FourPassManager();
 
@@ -79,7 +75,7 @@ public:
    * Sets the operation that will be applied to the map. See OpList if you need to apply multiple
    * operations.
    */
-  void setOperation(shared_ptr<OsmMapOperation> op) { _op = op; }
+  void setOperation(boost::shared_ptr<OsmMapOperation> op) { _op = op; }
 
   /**
    * Used when there is only one input to the operation. E.g. MergeNearbyNodes.
@@ -100,7 +96,7 @@ private:
   OGREnvelope _envelope;
   QString _input1, _input2;
   QString _tmp;
-  shared_ptr<OsmMapOperation> _op;
+  boost::shared_ptr<OsmMapOperation> _op;
 
   /// The current input scratch space
   QString _scratchIn;
@@ -113,7 +109,7 @@ private:
   Degrees _buffer;
 
   // [x][y]
-  vector< vector<Envelope> > _tiles;
+  std::vector< std::vector<geos::geom::Envelope> > _tiles;
 
   int _mapPart;
 
@@ -121,7 +117,7 @@ private:
   int _nodeReplacementPart;
   int _iteration;
 
-  shared_ptr<TileWorker2> _worker;
+  boost::shared_ptr<TileWorker2> _worker;
 
   /**
    * The tile conflation works by creating and removing temporary copies of the input data. This

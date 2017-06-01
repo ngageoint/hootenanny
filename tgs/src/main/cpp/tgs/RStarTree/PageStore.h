@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__PAGE_STORE_H__
@@ -37,7 +37,7 @@ namespace Tgs
 
   /**
    * PageStore is an abstraction that allows the saving and retrieving of blocks of data. These
-   * blocks of data are typically stored out to file, but could conceivably be any form of 
+   * blocks of data are typically stored out to file, but could conceivably be any form of
    * persistent store.
    */
   class  TGS_EXPORT PageStore
@@ -47,13 +47,13 @@ namespace Tgs
     /**
      * All page shared pointers should be freed before the PageStore is destroyed.
      */
-    virtual ~PageStore() {};
+    virtual ~PageStore() {}
 
     /**
-     * Creates a new page w/ a new id and returns the page. All page shared pointers should be 
+     * Creates a new page w/ a new id and returns the page. All page shared pointers should be
      * freed before the PageStore is destroyed.
      */
-    virtual shared_ptr<Page> createPage() = 0;
+    virtual boost::shared_ptr<Page> createPage() = 0;
 
     /**
      * Saves all dirty pages and frees all memory.
@@ -63,7 +63,7 @@ namespace Tgs
     /**
      * Returns the page with the given id.
      */
-    virtual shared_ptr<Page> getPage(int id) = 0;
+    virtual boost::shared_ptr<Page> getPage(int id) = 0;
 
     /**
      * Returns the number of pages in this page store

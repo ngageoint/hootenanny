@@ -85,7 +85,7 @@ public class MapResourcesCleanerTest {
                 int count = stmt.executeUpdate();
             }
 
-            DeleteMapResourcesCommand deleteMapResourcesCommand = new DeleteMapResourcesCommand("map-with-id-" + mapId);
+            DeleteMapResourcesCommand deleteMapResourcesCommand = new DeleteMapResourcesCommand("map-with-id-" + mapId, this.getClass());
             deleteMapResourcesCommand.execute();
 
             sql = "SELECT 1 from pg_database WHERE datname='" + dbName + "'";

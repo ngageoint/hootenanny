@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCHEMA_H
 #define SCHEMA_H
@@ -37,24 +37,22 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
 
 class Schema
 {
 public:
   Schema();
 
-  void addLayer(shared_ptr<Layer> l) { _layers.push_back(l); }
+  void addLayer(boost::shared_ptr<Layer> l) { _layers.push_back(l); }
 
-  shared_ptr<const Layer> getLayer(size_t i) const { return _layers[i]; }
+  boost::shared_ptr<const Layer> getLayer(size_t i) const { return _layers[i]; }
 
-  shared_ptr<const Layer> getLayer(QString name) const;
+  boost::shared_ptr<const Layer> getLayer(QString name) const;
 
   size_t getLayerCount() const { return _layers.size(); }
 
 private:
-  vector< shared_ptr<Layer> > _layers;
+  std::vector< boost::shared_ptr<Layer> > _layers;
 };
 
 }

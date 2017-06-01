@@ -52,6 +52,8 @@ using namespace Tgs;
 
 #include "../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -67,7 +69,7 @@ public:
   {
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.read("test-files/manipulators/WayMergeManipulation.osm", map);
 
@@ -81,7 +83,7 @@ public:
 
     WayMergeManipulation uut(left, right, map, 10.0);
     set<ElementId> ignored1, ignored2;
-    shared_ptr<OsmMap> after(new OsmMap(map));
+    OsmMapPtr after(new OsmMap(map));
     uut.applyManipulation(after, ignored1, ignored2);
 
     MapProjector::projectToWgs84(after);

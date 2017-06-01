@@ -1,6 +1,9 @@
 #include "Debug.h"
 
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -18,13 +21,13 @@ void Debug::_init()
 }
 
 #ifdef DEBUG
-bool Debug::printTroubled(const shared_ptr<const OsmMap>& map)
+bool Debug::printTroubled(const boost::shared_ptr<const OsmMap>& map)
 {
   bool result = false;
   const NodeMap& nm = map->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<Node>& n = it->second;
+    const NodePtr& n = it->second;
     if (isTroubledNode(n->getId()))
     {
       LOG_WARN("Found troubled node: " << n->toString());
@@ -35,7 +38,7 @@ bool Debug::printTroubled(const shared_ptr<const OsmMap>& map)
   const WayMap& wm = map->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<Way>& w = it->second;
+    const WayPtr& w = it->second;
 
     if (isTroubledWay(w->getId()))
     {

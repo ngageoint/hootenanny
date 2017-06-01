@@ -55,7 +55,7 @@ public:
    * @brief className gets the name of the class
    * @return class name string
    */
-  static string className() { return "hoot::RemoveElementOp"; }
+  static std::string className() { return "hoot::RemoveElementOp"; }
 
   /**
    * @brief RemoveElementOp removes an element from the map
@@ -76,13 +76,13 @@ public:
    * @brief apply performs the removal operation
    * @param map to operate on
    */
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * @brief getClassName gest the name of the class
    * @return class name string
    */
-  string getClassName() const { return className(); }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief setElementId sets the id of the element to remove

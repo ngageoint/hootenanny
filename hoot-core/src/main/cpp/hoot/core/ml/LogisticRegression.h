@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 1998, 1999 Eibe Frank, Leonard Trigg, Mark Hall
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LOGISTICREGRESSION_H
@@ -44,7 +44,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Yet another logistic regression class. This one does not train on data (rely on Weka for that).
@@ -53,7 +52,7 @@ using namespace std;
 class LogisticRegression
 {
 public:
-  typedef map<QString, double> Coeff;
+  typedef std::map<QString, double> Coeff;
 
   LogisticRegression();
 
@@ -61,7 +60,7 @@ public:
 
   void setIntercept(double intercept) { _intercept = intercept; }
 
-  double evaluate(map<QString, double> sample);
+  double evaluate(std::map<QString, double> sample);
 
 private:
   Coeff _coeff;

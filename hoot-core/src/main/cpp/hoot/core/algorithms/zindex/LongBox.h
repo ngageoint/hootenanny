@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LONGBOX_H
 #define LONGBOX_H
@@ -39,9 +39,6 @@
 namespace hoot
 {
 
-using namespace std;
-using namespace boost;
-
 /**
  * Used to represent a bounding box in Z-Value space.
  */
@@ -49,13 +46,13 @@ class LongBox
 {
 public:
 
-  static string className() { return "hoot::LongBox"; }
+  static std::string className() { return "hoot::LongBox"; }
 
   LongBox() {}
 
-  LongBox(vector<long int> min, vector<long int> max);
+  LongBox(std::vector<long int> min, std::vector<long int> max);
 
-  shared_ptr<LongBox> copy();
+  boost::shared_ptr<LongBox> copy();
 
   virtual ~LongBox();
 
@@ -71,15 +68,15 @@ public:
 
   int getDimensions() { return getMin().size(); }
 
-  vector<long int> getMax() const { return _max; }
+  std::vector<long int> getMax() const { return _max; }
 
-  vector<long int> getMin() const { return _min; }
+  std::vector<long int> getMin() const { return _min; }
 
-  void setMax(vector<long int> max) { _max = max; }
+  void setMax(std::vector<long int> max) { _max = max; }
 
-  void setMin(vector<long int> min) { _min = min; }
+  void setMin(std::vector<long int> min) { _min = min; }
 
-  bool in(vector<long int> p);
+  bool in(std::vector<long int> p);
 
   bool intersects(LongBox b);
 
@@ -92,8 +89,8 @@ public:
   long getWidth(int d);
 
 private:
-  vector<long int> _min;
-  vector<long int> _max;
+  std::vector<long int> _min;
+  std::vector<long int> _max;
 };
 
 }

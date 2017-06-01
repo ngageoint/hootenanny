@@ -38,9 +38,6 @@
 namespace hoot
 {
 
-// GEOS
-using namespace geos::geom;
-
 class Way;
 class OsmMap;
 
@@ -55,10 +52,10 @@ class LocationOfPoint
 {
 public:
 
-  LocationOfPoint(const ConstOsmMapPtr& map, shared_ptr<const Way> way);
+  LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way);
 
-  static WayLocation locate(const ConstOsmMapPtr &map, shared_ptr<const Way> way,
-    const Coordinate &inputPt);
+  static WayLocation locate(const ConstOsmMapPtr &map, ConstWayPtr way,
+    const geos::geom::Coordinate &inputPt);
 
   /**
    * Find the nearest location along a {@link Way} to a given point.
@@ -66,7 +63,7 @@ public:
    * @param inputPt the coordinate to locate
    * @return the location of the nearest point
    */
-  WayLocation locate(const Coordinate& inputPt) const;
+  WayLocation locate(const geos::geom::Coordinate& inputPt) const;
 
   /**
    * Find the point on way that is d distance along the way.
@@ -74,7 +71,7 @@ public:
    * @param d the distance along way.
    * @return the location of the point d distance along the way.
    */
-  Coordinate locate(double d);
+  geos::geom::Coordinate locate(double d);
 
   /**
    * Find the nearest location along a {@link Way} to a given point
@@ -90,7 +87,7 @@ public:
    * @param minLocation the minimum location for the point location
    * @return the location of the nearest point
    */
-  WayLocation locateAfter(const Coordinate& inputPt, const WayLocation& minLocation) const;
+  WayLocation locateAfter(const geos::geom::Coordinate& inputPt, const WayLocation& minLocation) const;
 
   /**
    * Tests whether a location given by a <index, segmentFraction> pair
@@ -103,11 +100,11 @@ public:
    */
   bool isGreater(int i, double segFrac, const WayLocation& loc) const;
 
-  static double segmentFraction(const LineSegment& seg, const Coordinate& inputPt);
+  static double segmentFraction(const geos::geom::LineSegment& seg, const geos::geom::Coordinate& inputPt);
 
 private:
   ConstOsmMapPtr _map;
-  shared_ptr<const Way> _way;
+  ConstWayPtr _way;
   mutable double _length;
 
 };

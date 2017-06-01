@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DanglerRemoverManipulation.h"
@@ -37,10 +37,13 @@
 #include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/ElementConverter.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
-DanglerRemoverManipulation::DanglerRemoverManipulation(long wayId, shared_ptr<const OsmMap> map,
+DanglerRemoverManipulation::DanglerRemoverManipulation(long wayId, ConstOsmMapPtr map,
                                                        Meters errorPlus)
 {
   _wayId = wayId;
@@ -48,10 +51,10 @@ DanglerRemoverManipulation::DanglerRemoverManipulation(long wayId, shared_ptr<co
   updateEstimate(map);
 }
 
-void DanglerRemoverManipulation::applyManipulation(shared_ptr<OsmMap> map,
+void DanglerRemoverManipulation::applyManipulation(OsmMapPtr map,
   set<ElementId>& impactedElements, set<ElementId>&) const
 {
-  shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   // insert the impacted ways
   impactedElements = getImpactedElementIds(map);
@@ -60,11 +63,11 @@ void DanglerRemoverManipulation::applyManipulation(shared_ptr<OsmMap> map,
   RemoveWayOp::removeWay(result, _wayId);
 }
 
-double DanglerRemoverManipulation::calculateProbability(shared_ptr<const OsmMap> map) const
+double DanglerRemoverManipulation::calculateProbability(ConstOsmMapPtr map) const
 {
-  shared_ptr<const Way> baseWay = map->getWay(_wayId);
+  ConstWayPtr baseWay = map->getWay(_wayId);
 
-  shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(baseWay);
+  boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(baseWay);
 
   const OsmMapIndex& index = map->getIndex();
   const NodeToWayMap& n2w = *index.getNodeToWayMap();
@@ -109,7 +112,7 @@ double DanglerRemoverManipulation::calculateProbability(shared_ptr<const OsmMap>
   return score;
 }
 
-double DanglerRemoverManipulation::calculateScore(shared_ptr<const OsmMap> map) const
+double DanglerRemoverManipulation::calculateScore(ConstOsmMapPtr map) const
 {
   assert(isValid(map));
 
@@ -118,7 +121,7 @@ double DanglerRemoverManipulation::calculateScore(shared_ptr<const OsmMap> map) 
   return _p;
 }
 
-bool DanglerRemoverManipulation::isValid(shared_ptr<const OsmMap> map) const
+bool DanglerRemoverManipulation::isValid(ConstOsmMapPtr map) const
 {
   return map->containsWay(_wayId);
 }
@@ -131,16 +134,16 @@ const set<ElementId>& DanglerRemoverManipulation::getImpactedElementIds(const Co
 
   NodeToWayMap& n2w = *map->getIndex().getNodeToWayMap();
 
-  shared_ptr<const Way> way = map->getWay(_wayId);
+  ConstWayPtr way = map->getWay(_wayId);
 
   const set<long>& s1 = n2w.at(way->getNodeId(0));
-  for (set<long>::const_iterator it = s1.begin(); it != s1.end(); it++)
+  for (set<long>::const_iterator it = s1.begin(); it != s1.end(); ++it)
   {
     _impactedElements.insert(ElementId::way(*it));
   }
 
   const set<long>& s2 = n2w.at(way->getLastNodeId());
-  for (set<long>::const_iterator it = s2.begin(); it != s2.end(); it++)
+  for (set<long>::const_iterator it = s2.begin(); it != s2.end(); ++it)
   {
     _impactedElements.insert(ElementId::way(*it));
   }

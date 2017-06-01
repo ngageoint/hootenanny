@@ -43,12 +43,10 @@
 namespace hoot
 {
 
-using namespace std;
-
 class MostEnglishName;
 class Tags;
 
-typedef shared_ptr<MostEnglishName> MostEnglishNamePtr;
+typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 
 /**
  * Return a best guess at the "most english" name in the list. There are no guarantees. This is
@@ -68,7 +66,7 @@ typedef shared_ptr<MostEnglishName> MostEnglishNamePtr;
 class MostEnglishName : public Configurable
 {
 public:
-  static string className() { return "hoot::MostEnglishName"; }
+  static std::string className() { return "hoot::MostEnglishName"; }
 
   static unsigned int logWarnCount;
 

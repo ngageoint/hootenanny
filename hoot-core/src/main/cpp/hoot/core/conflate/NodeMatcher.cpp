@@ -42,6 +42,9 @@
 // Tgs
 #include <tgs/Statistics/Normal.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -61,7 +64,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
 
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
-    const shared_ptr<const Way>& w = map->getWay(*it);
+    const ConstWayPtr& w = map->getWay(*it);
 
     if (OsmSchema::getInstance().isLinearHighway(w->getTags(), w->getElementType()) == false &&
         OsmSchema::getInstance().isLinearWaterway(*w) == false)
@@ -109,7 +112,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid, const 
       LOG_VART(map->getWay(*it)->toString());
     }
 
-    //shared_ptr<OsmMap> copy(new OsmMap(*map));
+    //boost::shared_ptr<const OsmMap> copy(new OsmMap(*map));
     //MapProjector::reprojectToWgs84(copy);
     //OsmUtils::saveMap(copy, "/data/river-data/NodeMatcherMap-temp.osm");
 
@@ -161,8 +164,8 @@ int NodeMatcher::getDegree(ElementId nid)
 
 double NodeMatcher::scorePair(long nid1, long nid2)
 {
-  shared_ptr<const Node> n1 = _map->getNode(nid1);
-  shared_ptr<const Node> n2 = _map->getNode(nid2);
+  ConstNodePtr n1 = _map->getNode(nid1);
+  ConstNodePtr n2 = _map->getNode(nid2);
 
   const set<long>& wids1 = _map->getIndex().getNodeToWayMap()->at(nid1);
   const set<long>& wids2 = _map->getIndex().getNodeToWayMap()->at(nid2);

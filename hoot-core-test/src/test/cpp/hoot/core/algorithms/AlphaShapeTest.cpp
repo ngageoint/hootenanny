@@ -48,6 +48,7 @@
 // Tgs
 #include <tgs/Statistics/Random.h>
 
+using namespace geos::geom;
 using namespace hoot;
 using namespace std;
 
@@ -86,18 +87,18 @@ public:
     AlphaShape uut(16.0);
     uut.insert(points);
 
-    shared_ptr<OsmMap> map = uut.toOsmMap();
+    OsmMapPtr map = uut.toOsmMap();
 
     const WayMap ways = map->getWays();
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
-      const shared_ptr<Way>& w = it->second;
+      const WayPtr& w = it->second;
       w->setTag("highway", "motorway");
     }
 
     for (size_t i = 0; i < points.size(); i++)
     {
-      shared_ptr<Node> n(new Node(Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
+      NodePtr n(new Node(Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
       map->addNode(n);
     }
 
@@ -105,7 +106,7 @@ public:
     OsmXmlWriter writer;
     writer.write(map, "test-output/algorithms/AlphaDonut.osm");
 
-    shared_ptr<Geometry> g = uut.toGeometry();
+    boost::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3241.5, g->getArea(), 0.1);
   }
 
@@ -135,7 +136,7 @@ public:
     OsmXmlWriter writer;
     writer.write(uut.toOsmMap(), "test-output/algorithms/AlphaMap.osm");
 
-    shared_ptr<Geometry> g = uut.toGeometry();
+    boost::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, g->getArea(), 0.001);
   }
 };

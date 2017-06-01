@@ -39,9 +39,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Removes an element and all its children assuming the following condition is met:
@@ -63,7 +62,7 @@ using namespace std;
 class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
-  static string className() { return "hoot::RecursiveElementRemover"; }
+  static std::string className() { return "hoot::RecursiveElementRemover"; }
 
   /**
    * @param eid The element to recursively delete.
@@ -84,13 +83,13 @@ public:
   /**
    * Removes an element as defined by this object.
    */
-  virtual void apply(const shared_ptr<OsmMap>& map);
+  virtual void apply(const boost::shared_ptr<OsmMap>& map);
 
 private:
   ElementId _eid;
   const ElementCriterion* _filter;
 
-  void _remove(const shared_ptr<OsmMap> &map, ElementId eid, const set<ElementId>& removeSet);
+  void _remove(const boost::shared_ptr<OsmMap> &map, ElementId eid, const std::set<ElementId>& removeSet);
 };
 
 }

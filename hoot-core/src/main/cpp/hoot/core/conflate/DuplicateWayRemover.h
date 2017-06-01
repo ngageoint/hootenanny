@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,21 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATEWAYREMOVER_H
 #define DUPLICATEWAYREMOVER_H
 
 // Hoot
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
-  class OsmMap;
-  class Way;
-
 /**
  * Searches for multiple ways that share two or more consecutive nodes if they are found, then
  * it attempts to remove the duplicate bits of the longer way. There may be some scenarios that
@@ -50,16 +48,16 @@ class DuplicateWayRemover : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::DuplicateWayRemover"; }
+  static std::string className() { return "hoot::DuplicateWayRemover"; }
 
   DuplicateWayRemover();
 
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * Remove parts of ways that are duplicates.
    */
-  static void removeDuplicates(shared_ptr<OsmMap> map);
+  static void removeDuplicates(OsmMapPtr map);
 
   /**
    * see duplicate.way.remover.strict.tag.matching
@@ -76,16 +74,17 @@ public:
 
 protected:
 
-  shared_ptr<OsmMap> _map;
+  OsmMapPtr _map;
 
   bool _isCandidateWay(const ConstWayPtr& w) const;
 
-  void _removeDuplicateNodes(shared_ptr<Way> w1, shared_ptr<Way> w2);
+  void _splitDuplicateWays(WayPtr w1, WayPtr w2, bool rev1 = false, bool rev2 = false);
 
-  void _removeNodes(shared_ptr<const Way> w, int start, int length);
+  std::vector<WayPtr> _splitWay(WayPtr w, int start, int length, bool newIds = false);
 
-  void _replaceMultiple(const shared_ptr<const Way>& oldWay,
-    const shared_ptr<Way>& newWay1, const shared_ptr<Way>& newWay2);
+  WayPtr _getUpdatedWay(WayPtr way, const std::vector<long>& nodes, bool newIds);
+
+  void _replaceMultiple(const ConstWayPtr& oldWay, const std::vector<WayPtr>& ways);
 
  private:
 

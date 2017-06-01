@@ -71,7 +71,8 @@ public:
 
   void setTextStatus(bool textStatus) { _textStatus = textStatus; }
 
-  void setIncludeCircularError(bool includeCircularError) { _includeCircularError = includeCircularError; }
+  void setIncludeCircularError(bool includeCircularError)
+  { _includeCircularError = includeCircularError; }
 
   /**
    * If set to true (the default) then all IDs are remapped into new IDs. This is appropriate if
@@ -81,11 +82,11 @@ public:
 
   void setUserEmail(QString email) { _userEmail = email; }
 
-  virtual void writePartial(const shared_ptr<const Node>& n);
+  virtual void writePartial(const ConstNodePtr& n);
 
-  virtual void writePartial(const shared_ptr<const Way>& w);
+  virtual void writePartial(const ConstWayPtr& w);
 
-  virtual void writePartial(const shared_ptr<const Relation>& r);
+  virtual void writePartial(const ConstRelationPtr& r);
 
 protected:
 
@@ -99,9 +100,9 @@ protected:
    */
   virtual long _getRemappedElementId(const ElementId& eid);
 
-  virtual vector<long> _remapNodes(const vector<long>& nids);
+  virtual std::vector<long> _remapNodes(const std::vector<long>& nids);
 
-  void _addElementTags(const shared_ptr<const Element>& e, Tags& t);
+  void _addElementTags(const boost::shared_ptr<const Element>& e, Tags& t);
 
   /**
    * Counts the change and if necessary closes the old changeset and starts a new one.
@@ -139,9 +140,9 @@ private:
 
   bool _open;
 
-  set<long> _openDb(QString& urlStr);
+  std::set<long> _openDb(QString& urlStr);
 
-  void _overwriteMaps(const QString& mapName, const set<long>& mapIds);
+  void _overwriteMaps(const QString& mapName, const std::set<long>& mapIds);
 
   /**
    * Close the current changeset and start a new one.

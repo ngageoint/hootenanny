@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -64,7 +64,7 @@ public:
 
    void test1()
    {
-     shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
+    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
      RStarTree uut(mps, 2);
      int maxChildCount = uut.getRoot()->getMaxChildCount();
 
@@ -122,7 +122,7 @@ public:
 
    void test2()
    {
-     shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
      RStarTree uut(mps, 2);
 
      Box b(2);
@@ -148,7 +148,7 @@ public:
          QFile::remove("fileTest.dat");
        }
 
-       shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat"));
+      boost::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat"));
        RStarTree uut(mps, 2);
 
        Box b(2);
@@ -165,7 +165,7 @@ public:
        validateTreeBounds(uut);
      }
      {
-       shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat", true));
+      boost::shared_ptr<FilePageStore> mps(new FilePageStore(256, "fileTest.dat", true));
        RStarTree uut(mps, 2);
 
        validateTreeBounds(uut);
@@ -175,8 +175,8 @@ public:
 
    void timingTest()
    {
-     shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-     shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
+    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+    boost::shared_ptr<RStarTree> rst(new RStarTree(mps, 2));
      RStarTree& uut = *rst;
 
 //      Timer t;
@@ -197,11 +197,10 @@ public:
      std::cout << "Searching..." << std::endl;
 //      t.restart();
 
-     double x, y;
      for (int i = 0; i < 2000; i++)
      {
-       x = Tgs::Random::instance()->generateInt(20000) - 5000;
-       y = Tgs::Random::instance()->generateInt(20000) - 5000;
+       double x = Tgs::Random::instance()->generateInt(20000) - 5000;
+       double y = Tgs::Random::instance()->generateInt(20000) - 5000;
        KnnIterator it(rst.get(), x, y);
        it.next();
 //        if (i % 1000 == 0)

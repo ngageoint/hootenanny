@@ -39,33 +39,30 @@
 
 namespace hoot
 {
-  class Way;
-  class OsmMapIndex;
 
-  using namespace geos::geom;
-  using namespace Tgs;
-  using namespace std;
+class Way;
+class OsmMapIndex;
 
 /**
  */
-class KnnWayIterator : public KnnIterator
+class KnnWayIterator : public Tgs::KnnIterator
 {
 public:
-  KnnWayIterator(const OsmMap& map, shared_ptr<const Way> way, const RStarTree* tree,
-                 const vector<long>& treeIdToWid, bool addError = false);
+  KnnWayIterator(const OsmMap& map, ConstWayPtr way, const Tgs::RStarTree* tree,
+                 const std::vector<long>& treeIdToWid, bool addError = false);
 
   long getWayId() const { return _treeIdToWid[getId()]; }
 
-  shared_ptr<const Way> getWay() const { return _map.getWay(getWayId()); }
+  ConstWayPtr getWay() const { return _map.getWay(getWayId()); }
 
   virtual bool hasNext();
 
   int getDistanceCount() { return _distanceCount; }
 
 protected:
-  virtual double _calculateDistance(const BoxInternalData& box, int id) const;
+  virtual double _calculateDistance(const Tgs::BoxInternalData& box, int id) const;
 
-  virtual double _calculateDistance(const BoxInternalData& box) const;
+  virtual double _calculateDistance(const Tgs::BoxInternalData& box) const;
 
 private:
   const OsmMap& _map;
@@ -74,11 +71,11 @@ private:
   mutable int _distanceCount;
   bool _addError;
   double _baseAccuracy;
-  const vector<long>& _treeIdToWid;
+  const std::vector<long>& _treeIdToWid;
 
   long _wayId;
-  shared_ptr<LineString> _ls;
-  const LineString* _lsFast;
+  boost::shared_ptr<geos::geom::LineString> _ls;
+  const geos::geom::LineString* _lsFast;
 };
 
 }

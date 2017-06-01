@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OPLIST_H
@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace geos::geom;
 
 /**
  * Contains a list of OsmMapOperations that will be applied in order. It is possible to create
@@ -47,7 +46,7 @@ using namespace geos::geom;
  * self-referencing or loops of OpLists will result in undefined behaviour. E.g.
  *
  * // bad!
- * shared_ptr<OpList> a(new OpList());
+ * boost::shared_ptr<OpList> a(new OpList());
  * a->addOp(a);
  */
 class OpList : public OsmMapOperation, public Serializable, public Boundable
@@ -58,25 +57,25 @@ public:
 
   OpList();
 
-  void addOp(shared_ptr<OsmMapOperation> op) { _ops.push_back(op); }
+  void addOp(boost::shared_ptr<OsmMapOperation> op) { _ops.push_back(op); }
 
   /**
    * Applies the operations in the order they were added. If there are no operations then nothing
    * is done.
    */
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 
-  virtual void setBounds(const Envelope &bounds);
+  virtual void setBounds(const geos::geom::Envelope &bounds);
 
   virtual void writeObject(QDataStream& os) const;
 
 private:
 
-  vector< shared_ptr<OsmMapOperation> > _ops;
+  std::vector< boost::shared_ptr<OsmMapOperation> > _ops;
 };
 
 }

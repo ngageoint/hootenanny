@@ -30,6 +30,7 @@
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/util/Log.h>
 
 #include "../TestUtils.h"
 
@@ -49,10 +50,10 @@ public:
 
     void runTest()
     {
-      shared_ptr<OsmMap> map1(new OsmMap());
+      OsmMapPtr map1(new OsmMap());
       OsmMapReaderFactory::read(map1, "test-files/io/ChangesetDeriverTest/Map1.osm", true);
 
-      shared_ptr<OsmMap> map2(new OsmMap());
+      OsmMapPtr map2(new OsmMap());
       OsmMapReaderFactory::read(map2, "test-files/io/ChangesetDeriverTest/Map2.osm", true);
 
       ElementSorterPtr map1SortedElements(new ElementSorter(map1));
@@ -71,7 +72,7 @@ public:
 
       HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);
       HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::Modify]);
-      HOOT_STR_EQUALS("[3]{-6, -4, -1}", changeTypeToIds[Change::Delete]);
+      HOOT_STR_EQUALS("[2]{-6, -1}", changeTypeToIds[Change::Delete]);
     }
 };
 

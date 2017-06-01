@@ -64,7 +64,7 @@ EdgeMatch::EdgeMatch(ConstEdgeStringPtr es1, ConstEdgeStringPtr es2) :
   _resetHash();
 }
 
-shared_ptr<EdgeMatch> EdgeMatch::clone() const
+boost::shared_ptr<EdgeMatch> EdgeMatch::clone() const
 {
   EdgeMatchPtr result(new EdgeMatch);
   result->_edges1 = _edges1->clone();
@@ -73,7 +73,7 @@ shared_ptr<EdgeMatch> EdgeMatch::clone() const
   return result;
 }
 
-bool EdgeMatch::contains(const shared_ptr<const EdgeMatch>& other) const
+bool EdgeMatch::contains(const boost::shared_ptr<const EdgeMatch>& other) const
 {
   return getString1()->contains(other->getString1()) &&
     getString2()->contains(other->getString2());
@@ -113,7 +113,7 @@ int EdgeMatch::countPartialMatches() const
   return count;
 }
 
-bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
+bool EdgeMatch::overlaps(const boost::shared_ptr<const EdgeMatch> &other) const
 {
   if (other->getString1()->overlaps(getString1()))
   {
@@ -130,7 +130,7 @@ bool EdgeMatch::overlaps(const shared_ptr<const EdgeMatch> &other) const
   return false;
 }
 
-bool EdgeMatch::isVerySimilarTo(const shared_ptr<const EdgeMatch>& other) const
+bool EdgeMatch::isVerySimilarTo(const boost::shared_ptr<const EdgeMatch>& other) const
 {
   QString this1 = getString1()->toString();
   QString other1 = other->getString1()->toString();

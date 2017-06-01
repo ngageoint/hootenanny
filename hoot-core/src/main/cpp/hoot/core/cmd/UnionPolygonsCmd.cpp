@@ -39,6 +39,9 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Settings.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -62,7 +65,7 @@ public:
 
     QString output = args[0];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     for (int i = 1; i < args.size(); i++)
     {
@@ -70,7 +73,7 @@ public:
       loadMap(map, input, false);
     }
 
-    shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    boost::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     int count = 0;
     const RelationMap& rm = map->getRelations();
     for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
@@ -85,7 +88,7 @@ public:
       LOG_INFO("No polygons were found in the input.");
     }
 
-    shared_ptr<OsmMap> result(new OsmMap());
+    OsmMapPtr result(new OsmMap());
     GeometryConverter(result).convertGeometryToElement(g.get(), Status::Unknown1, -1);
 
     saveMap(result, output);

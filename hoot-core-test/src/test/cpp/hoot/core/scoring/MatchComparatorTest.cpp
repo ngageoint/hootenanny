@@ -26,12 +26,13 @@
  */
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/MatchComparator.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
@@ -54,6 +55,8 @@ using namespace boost;
 // Standard
 #include <stdio.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -71,7 +74,7 @@ public:
 
     OsmXmlReader reader;
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/ToyBuildingsTestA.osm", map);
@@ -92,7 +95,7 @@ public:
     FilteredVisitor v(filter, uuid);
     map->visitRw(v);
 
-    shared_ptr<OsmMap> copy(new OsmMap(map));
+    OsmMapPtr copy(new OsmMap(map));
 
     UnifyingConflator conflator;
     conflator.apply(copy);

@@ -53,15 +53,12 @@ namespace hoot {
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
-using namespace geos::geom;
 
 class WayDiscretizer
 {
 public:
 
-  WayDiscretizer(const ConstOsmMapPtr& map, shared_ptr<const hoot::Way> way);
+  WayDiscretizer(const ConstOsmMapPtr& map, boost::shared_ptr<const hoot::Way> way);
 
   /**
    * Given an input way, discretize the way out into discrete coordinates. The first and last nodes
@@ -69,7 +66,7 @@ public:
    *
    * @param spacing - The maximum distance between points
    */
-  void discretize(double spacing, vector<Coordinate>& result);
+  void discretize(double spacing, std::vector<geos::geom::Coordinate>& result);
 
   /**
    * The above function is much more efficient.
@@ -79,7 +76,7 @@ public:
    *
    * @optimize make this more efficient by using the _lengthNodes array.
    */
-  void discretize(double spacing, vector<WayLocation>& result);
+  void discretize(double spacing, std::vector<WayLocation>& result);
 
   /**
    * Interpolates the coordinate at the given distance d.
@@ -88,9 +85,9 @@ public:
 
 protected:
   ConstOsmMapPtr _map;
-  shared_ptr<const hoot::Way> _way;
+  boost::shared_ptr<const hoot::Way> _way;
   // The distance from the beginning of the way to each node that makes up the way.
-  vector<double> _lengthNodes;
+  std::vector<double> _lengthNodes;
 };
 
 }

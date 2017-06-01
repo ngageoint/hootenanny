@@ -35,6 +35,8 @@
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -93,12 +95,12 @@ public:
 
     for (int i = 0; i < inputs.size(); i++)
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       loadMap(map, inputs[i], true, Status::Invalid);
 
       MapProjector::projectToPlanar(map);
 
-      shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
+      boost::shared_ptr<CalculateStatsOp> cso(new CalculateStatsOp());
       cso->setQuickSubset(quick);
       cso->apply(map);
       allStats.append(cso->getStats());

@@ -37,21 +37,21 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ContainsNodeCriterion)
 
-bool ContainsNodeCriterion::isSatisfied(const shared_ptr<const Element>& e) const
+bool ContainsNodeCriterion::isSatisfied(const boost::shared_ptr<const Element>& e) const
 {
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     return w->hasNode(_nodeId);
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
     return r->contains(ElementId(ElementType::Node, _nodeId));
   }
   else if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
     return (n->getId() == _nodeId);
   }
   return false;

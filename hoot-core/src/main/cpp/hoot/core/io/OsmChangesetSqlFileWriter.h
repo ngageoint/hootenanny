@@ -38,7 +38,7 @@
 // Qt
 #include <QUrl>
 #include <QFile>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 #include <QString>
 #include <QSet>
 
@@ -109,12 +109,11 @@ private:
   QFile _outputSql;
 
   long _changesetId;
-  Envelope _changesetBounds;
+  geos::geom::Envelope _changesetBounds;
 
   /** Settings from the config file */
   long _changesetMaxSize;
   double _changesetUserId;
-  bool _changesetGenerateNewIds;
 
   friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
 

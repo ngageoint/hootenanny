@@ -32,11 +32,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -48,6 +49,8 @@
 #include <tgs/StreamUtils.h>
 
 #include "../../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -91,7 +94,7 @@ public:
   void runSimpleIntersectionTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -106,7 +109,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -126,7 +129,7 @@ public:
   void runSimpleOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -141,7 +144,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));
@@ -161,7 +164,7 @@ public:
   void runSmallOverlapTest()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -176,7 +179,7 @@ public:
     WayPtr w2 = createWay(map, w2c);
     w2->setStatus(Status::Unknown2);
 
-    shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
+    boost::shared_ptr<HighwayExpertClassifier> classifier(new HighwayExpertClassifier());
 
     WaySublineMatch match(WaySubline(WayLocation(map, w1, 0, 0.0), WayLocation(map, w1, 1, 0.0)),
                           WaySubline(WayLocation(map, w2, 0, 0.0), WayLocation(map, w2, 1, 0.0)));

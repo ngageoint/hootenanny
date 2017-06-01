@@ -41,6 +41,9 @@
 #include "extractors/PoiPolygonNameScoreExtractor.h"
 #include "extractors/PoiPolygonAddressScoreExtractor.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -74,7 +77,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
   DisableLog dl(Log::Warn);
 
   ElementConverter elementConverter(_map);
-  shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+  boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
   if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
   {
     throw geos::util::TopologyException();
@@ -86,8 +89,8 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
   {
     return false;
   }
-  set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
-  while (poiNeighborItr != _poiNeighborIds.end())
+  for (set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
+       poiNeighborItr != _poiNeighborIds.end(); ++poiNeighborItr)
   {
     ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
     if (poiNeighbor->getElementId() != poi->getElementId())
@@ -97,7 +100,7 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
         const QString poiNeighborName = PoiPolygonNameScoreExtractor::getElementName(poiNeighbor);
         if (!poiNeighborName.isEmpty() && poiNeighborName == poiAddress)
         {
-          shared_ptr<Geometry> poiNeighborGeom =
+          boost::shared_ptr<Geometry> poiNeighborGeom =
             ElementConverter(_map).convertToGeometry(poiNeighbor);
           //If a building in the area contains a another POI with a matching address to the
           //POI being examined, increase the evidence.
@@ -119,7 +122,6 @@ bool PoiPolygonAdvancedMatcher::triggersRule(ConstElementPtr poi, ConstElementPt
         }
       }
     }
-    poiNeighborItr++;
   }
 
   return false;

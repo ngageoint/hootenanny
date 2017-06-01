@@ -27,11 +27,13 @@
 
 #include "WayManipulator.h"
 
+using namespace std;
+
 namespace hoot
 {
 
-const vector< shared_ptr<Manipulation> >& WayManipulator::findManipulations(
-    shared_ptr<const OsmMap> map, const vector<ElementId>& ids)
+const vector< boost::shared_ptr<Manipulation> >& WayManipulator::findManipulations(
+    boost::shared_ptr<const OsmMap> map, const vector<ElementId>& ids)
 {
   vector<long> wids(ids.size());
 

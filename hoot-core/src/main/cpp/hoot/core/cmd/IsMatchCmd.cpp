@@ -33,6 +33,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -70,9 +72,9 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map1(new OsmMap());
+    OsmMapPtr map1(new OsmMap());
     loadMap(map1, args[0], true, Status::Unknown1);
-    shared_ptr<OsmMap> map2(new OsmMap());
+    OsmMapPtr map2(new OsmMap());
     loadMap(map2, args[1], true, Status::Unknown1);
 
     int result;

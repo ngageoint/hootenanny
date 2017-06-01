@@ -27,7 +27,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class WayJoin2Mapper : public pp::Mapper
 {
@@ -57,15 +56,15 @@ public:
     WayJoin1Reducer::Value rawWay;
   } __attribute__((packed));
 
-  static string className() { return "hoot::WayJoin2Mapper"; }
+  static std::string className() { return "hoot::WayJoin2Mapper"; }
 
-  static string elementStatusKey() { return "hoot.element.status"; }
+  static std::string elementStatusKey() { return "hoot.element.status"; }
 
-  static string nodeIdDeltaKey() { return "hoot.node.id.delta"; }
+  static std::string nodeIdDeltaKey() { return "hoot.node.id.delta"; }
 
-  static string wayIdDeltaKey() { return "hoot.way.id.delta"; }
+  static std::string wayIdDeltaKey() { return "hoot.way.id.delta"; }
 
-  static string relationIdDeltaKey() { return "hoot.relation.id.delta"; }
+  static std::string relationIdDeltaKey() { return "hoot.relation.id.delta"; }
 
   WayJoin2Mapper();
 
@@ -74,23 +73,23 @@ public:
 
   void map(HadoopPipes::MapContext& context);
 
-  void mapOsmMap(shared_ptr<OsmMap> map);
+  void mapOsmMap(boost::shared_ptr<OsmMap> map);
 
   void mapWayPoints(int64_t& k, WayJoin1Reducer::Value& v);
 
 private:
   WayJoin2RecordReader* _reader;
-  string _rawValueStr;
+  std::string _rawValueStr;
   RawValueStruct* _rawValue;
 
-  string _keyStr;
+  std::string _keyStr;
   KeyStruct* _key;
 
-  shared_ptr<OsmMap> _nodeMap;
+  boost::shared_ptr<OsmMap> _nodeMap;
 
   HadoopPipes::MapContext* _context;
 
-  void _emitNode(const shared_ptr<Node>& n);
+  void _emitNode(const boost::shared_ptr<Node>& n);
 
   void _flushNodes();
 };

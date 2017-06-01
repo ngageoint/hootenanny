@@ -29,17 +29,20 @@
 // hoot
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/BaseFilter.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/schema/OverwriteTagMerger.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -78,21 +81,18 @@ BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 {
 }
 
-void BuildingMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   //check if it is many to many
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
-  set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin();
-  while (sit != _pairs.end())
+  for (set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin(); sit != _pairs.end(); ++sit)
   {
     firstPairs.insert(sit->first);
     secondPairs.insert(sit->second);
     combined.insert(sit->first);
     combined.insert(sit->second);
-    sit++;
   }
   if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
   {
@@ -103,18 +103,18 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   else
   {
     // use node count as a surrogate for complexity of the geometry.
-    shared_ptr<Element> e1 = _buildBuilding1(map);
+    boost::shared_ptr<Element> e1 = _buildBuilding1(map);
     const int nodeCount1 =
       (int)FilteredVisitor::getStat(
         new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
 
-    shared_ptr<Element> e2 = _buildBuilding2(map);
+    boost::shared_ptr<Element> e2 = _buildBuilding2(map);
     const int nodeCount2 =
       (int)FilteredVisitor::getStat(
         new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
 
-    shared_ptr<Element> keeper;
-    shared_ptr<Element> scrap;
+    boost::shared_ptr<Element> keeper;
+    boost::shared_ptr<Element> scrap;
     // keep the more complex building geometry.
     if (nodeCount1 >= nodeCount2)
     {
@@ -161,7 +161,7 @@ void BuildingMerger::apply(const OsmMapPtr& map,
 
     set< pair<ElementId, ElementId> > replacedSet;
     for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
-      it != _pairs.end(); ++it)
+         it != _pairs.end(); ++it)
     {
       // if we replaced the second group of buildings
       if (it->second != keeper->getElementId())
@@ -177,7 +177,7 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   }
 }
 
-shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)
+boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)
 {
   assert(eid.size() > 0);
 
@@ -187,17 +187,17 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
   }
   else
   {
-    vector< shared_ptr<Element> > parts;
+    vector< boost::shared_ptr<Element> > parts;
     vector< ElementId > toRemove;
     parts.reserve(eid.size());
     for (set<ElementId>::const_iterator it = eid.begin(); it != eid.end(); ++it)
     {
-      shared_ptr<Element> e = map->getElement(*it);
+      boost::shared_ptr<Element> e = map->getElement(*it);
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
       {
-        shared_ptr<Relation> r = dynamic_pointer_cast<Relation>(e);
-        if (r->getType() == "building")
+        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
+        if (r->getType() == MetadataTags::RelationBuilding())
         {
           isBuilding = true;
 
@@ -208,9 +208,9 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
           vector<RelationData::Entry> m = r->getMembers();
           for (size_t i = 0; i < m.size(); ++i)
           {
-            if (m[i].getRole() == "part")
+            if (m[i].getRole() == MetadataTags::RolePart())
             {
-              shared_ptr<Element> em = map->getElement(m[i].getElementId());
+              boost::shared_ptr<Element> em = map->getElement(m[i].getElementId());
               // push any non-conflicing tags in the parent relation down into the building part.
               em->setTags(OverwriteTagMerger().mergeTags(em->getTags(), r->getTags(),
                 em->getElementType()));
@@ -228,7 +228,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
       }
     }
 
-    shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
+    boost::shared_ptr<Element> result = BuildingPartMergeOp().combineParts(map, parts);
 
     DeletableBuildingPart filter;
 
@@ -249,7 +249,7 @@ shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const se
   }
 }
 
-shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
+boost::shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
 {
   set<ElementId> e;
 
@@ -262,7 +262,7 @@ shared_ptr<Element> BuildingMerger::_buildBuilding1(const OsmMapPtr& map) const
   return buildBuilding(map, e);
 }
 
-shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
+boost::shared_ptr<Element> BuildingMerger::_buildBuilding2(const OsmMapPtr& map) const
 {
   set<ElementId> e;
 

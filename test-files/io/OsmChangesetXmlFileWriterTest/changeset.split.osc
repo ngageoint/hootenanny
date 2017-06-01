@@ -18,7 +18,7 @@
         </way>
     </delete>
     <create>
-        <node id="6" version="0" lat="46.0000000000000000" lon="-128.0000000000000000" timestamp=""/>
+        <node id="-1" version="0" lat="46.0000000000000000" lon="-128.0000000000000000" timestamp=""/>
     </create>
     <delete>
         <relation id="1" version="0" timestamp="">

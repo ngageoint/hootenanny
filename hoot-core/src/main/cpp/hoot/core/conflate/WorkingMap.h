@@ -46,9 +46,6 @@ namespace hoot
 class Manipulation;
 class Status;
 
-using namespace std;
-using namespace boost;
-
 /**
  * The WorkingMap represents one possible solution to the conflation problem. This should only be
  * modified by the initial creator of the WorkingMap.
@@ -61,7 +58,7 @@ public:
 
   WorkingMap(boost::shared_ptr<OsmMap> map);
 
-  WorkingMap(shared_ptr<const WorkingMap> map, shared_ptr<const Manipulation> manipulation);
+  WorkingMap(boost::shared_ptr<const WorkingMap> map, boost::shared_ptr<const Manipulation> manipulation);
 
   WorkingMap();
 
@@ -85,7 +82,7 @@ protected:
   boost::shared_ptr<const WorkingMap> _baseWorking;
   boost::shared_ptr<const Manipulation> _manipulation;
 
-  static deque< pair< const WorkingMap*, shared_ptr<OsmMap> > > _mapCache;
+  static std::deque< std::pair< const WorkingMap*, boost::shared_ptr<OsmMap> > > _mapCache;
 
   Meters _sumWayLengths(Status status) const;
 

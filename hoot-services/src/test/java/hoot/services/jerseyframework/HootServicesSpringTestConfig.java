@@ -35,19 +35,26 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import hoot.services.ApplicationContextUtils;
+import hoot.services.HootServicesSpringConfig;
+import hoot.services.command.ExternalCommandManager;
+import hoot.services.command.ExternalCommandManagerImplStub;
+import hoot.services.job.JobProcessorImplStub;
 
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"hoot.services"}
-        /*, excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE)*/)
-//@Profile("test")
+@ComponentScan(basePackages = {"hoot.services"},
+               excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
+@ActiveProfiles("test")
 public class HootServicesSpringTestConfig {
 
     @Bean
@@ -82,5 +89,17 @@ public class HootServicesSpringTestConfig {
     @Autowired
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
+    }
+
+    @Primary
+    @Bean
+    public JobProcessorImplStub jobProcessor() {
+        return new JobProcessorImplStub();
+    }
+
+    @Primary
+    @Bean
+    public ExternalCommandManager externalCommandManager() {
+        return new ExternalCommandManagerImplStub();
     }
 }

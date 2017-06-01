@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGDISTANCE_H
 #define STRINGDISTANCE_H
@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * An interface to determining the distance between two strings.
@@ -47,7 +46,7 @@ class StringDistance
 {
 public:
 
-  static string className() { return "hoot::StringDistance"; }
+  static std::string className() { return "hoot::StringDistance"; }
 
   virtual ~StringDistance() {}
 
@@ -60,7 +59,7 @@ public:
   virtual QString toString() const = 0;
 };
 
-typedef shared_ptr<StringDistance> StringDistancePtr;
+typedef boost::shared_ptr<StringDistance> StringDistancePtr;
 
 }
 

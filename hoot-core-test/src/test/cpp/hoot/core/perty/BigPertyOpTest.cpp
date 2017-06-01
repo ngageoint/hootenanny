@@ -45,6 +45,7 @@
 #include <QDir>
 #include <QSet>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -62,7 +63,7 @@ public:
   void runBasicTest()
   {
     TestUtils::resetEnvironment();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;
@@ -88,11 +89,9 @@ public:
     // Handy bit for regenerating the test values, _AFTER_ it has been visually verified.
     ////
     QSet<long> nids;
-    NodeMap::const_iterator it = map->getNodes().begin();
-    while (it != map->getNodes().end()) {
+    const NodeMap& nodes = map->getNodes();
+    for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
       nids.insert(it->first);
-      it++;
-    }
     QList<long> keys = QList<long>::fromSet(nids);
     qSort(keys);
 //    OsmXmlWriter writer;
@@ -191,7 +190,7 @@ public:
 
   void runMaxDistanceTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;

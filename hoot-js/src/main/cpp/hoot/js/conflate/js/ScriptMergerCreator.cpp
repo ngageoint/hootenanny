@@ -34,6 +34,9 @@
 #include <hoot/core/conflate/MarkForReviewMerger.h>
 #include <hoot/js/conflate/js/ScriptMatch.h>
 
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
 
@@ -52,7 +55,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
 
   set< pair<ElementId, ElementId> > eids;
 
-  shared_ptr<PluginContext> script;
+  boost::shared_ptr<PluginContext> script;
   Persistent<Object> plugin;
   QStringList matchType;
 

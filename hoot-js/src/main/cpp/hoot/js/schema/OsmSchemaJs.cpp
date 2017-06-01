@@ -32,6 +32,8 @@
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 
@@ -67,6 +69,7 @@ void OsmSchemaJs::Init(Handle<Object> exports)
   schema->Set(String::NewSymbol("isLinearHighway"), FunctionTemplate::New(isLinearHighway)->GetFunction());
   schema->Set(String::NewSymbol("score"), FunctionTemplate::New(score)->GetFunction());
   schema->Set(String::NewSymbol("scoreOneWay"), FunctionTemplate::New(scoreOneWay)->GetFunction());
+  schema->Set(String::NewSymbol("hasName"), FunctionTemplate::New(hasName)->GetFunction());
 }
 
 Handle<Value> OsmSchemaJs::getAllTags(const Arguments& /*args*/) {
@@ -182,6 +185,14 @@ Handle<Value> OsmSchemaJs::isPoi(const Arguments& args) {
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   return scope.Close(Boolean::New(OsmSchema::getInstance().isPoi(*e)));
+}
+
+Handle<Value> OsmSchemaJs::hasName(const Arguments& args) {
+  HandleScope scope;
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  return scope.Close(Boolean::New(OsmSchema::getInstance().hasName(*e)));
 }
 
 Handle<Value> OsmSchemaJs::isLinearHighway(const Arguments& args) {

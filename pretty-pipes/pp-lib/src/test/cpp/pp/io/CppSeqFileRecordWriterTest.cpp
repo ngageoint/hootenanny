@@ -53,6 +53,8 @@ using namespace pp;
 #include <pp/io/CppSeqFileRecordWriter.h>
 #include <pp/io/FileInputFormat.h>
 
+using namespace std;
+
 class DummyBlock2
 {
 public:

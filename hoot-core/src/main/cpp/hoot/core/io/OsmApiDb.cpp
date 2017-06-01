@@ -27,9 +27,6 @@
 #include "OsmApiDb.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
@@ -56,6 +53,8 @@
 #include <tgs/System/Time.h>
 
 #include "InternalIdReserver.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -100,7 +99,6 @@ void OsmApiDb::close()
 
 void OsmApiDb::deleteData()
 {
-  // delete ways data first
   DbUtils::execNoPrepare(
     _db,
     "DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
@@ -116,7 +114,6 @@ void OsmApiDb::deleteData()
     _db, "DELETE FROM " + ApiDb::getRelationTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getRelationsTableName() + " CASCADE");
 
-  // delete relations data 2nd
   DbUtils::execNoPrepare(
     _db, "DELETE FROM " + ApiDb::getCurrentWayNodesTableName() + " CASCADE");
   DbUtils::execNoPrepare(
@@ -129,7 +126,6 @@ void OsmApiDb::deleteData()
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWayTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getWaysTableName() + " CASCADE");
 
-  // delete nodes data 3rd
   DbUtils::execNoPrepare(
     _db, "DELETE FROM " + ApiDb::getCurrentNodeTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(
@@ -139,7 +135,6 @@ void OsmApiDb::deleteData()
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodeTagsTableName() + " CASCADE");
   DbUtils::execNoPrepare(_db, "DELETE FROM " + ApiDb::getNodesTableName() + " CASCADE");
 
-  // delete changesets
   DbUtils::execNoPrepare(
     _db, "DELETE FROM " + ApiDb::getChangesetsSubscribersTableName() + " CASCADE");
   DbUtils::execNoPrepare(
@@ -207,7 +202,7 @@ void OsmApiDb::_resetQueries()
   _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
-  for (QHash<QString, shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
     itr.value().reset();
@@ -406,7 +401,7 @@ vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
   return ApiDb::selectNodeIdsForWay(wayId, sql);
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodesForWay(long wayId)
 {
   QString sql =  QString("SELECT node_id, latitude, longitude FROM %1 INNER JOIN %2 ON "
                          "%1.node_id=%2.id AND way_id = :wayId ORDER BY sequence_id")
@@ -468,7 +463,7 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   return result;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
 {
   _selectNodeById.reset(new QSqlQuery(_db));
   _selectNodeById->setForwardOnly(true);
@@ -491,7 +486,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
 {
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
@@ -517,7 +512,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
   return _selectElementsForMap;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
 {
   if (!_selectTagsForRelation)
   {
@@ -541,7 +536,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)
   return _selectTagsForRelation;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
 {
   if (!_selectTagsForWay)
   {
@@ -563,7 +558,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForWay(long wayId)
   return _selectTagsForWay;
 }
 
-shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
 {
   if (!_selectTagsForNode)
   {
@@ -586,7 +581,7 @@ shared_ptr<QSqlQuery> OsmApiDb::selectTagsForNode(long nodeId)
   return _selectTagsForNode;
 }
 
-QString OsmApiDb::extractTagFromRow(shared_ptr<QSqlQuery> row, const ElementType::Type type)
+QString OsmApiDb::extractTagFromRow(boost::shared_ptr<QSqlQuery> row, const ElementType::Type type)
 {
   QString tag = "";
   int pos = -1;
@@ -615,6 +610,8 @@ long OsmApiDb::getNextId(const QString tableName)
 
 long OsmApiDb::_getIdFromSequence(const ElementType& elementType, const QString sequenceType)
 {
+  LOG_TRACE(
+    "Retrieving " << sequenceType << " " << elementType.toString() << " ID from sequence...");
   switch (elementType.getEnum())
   {
     case ElementType::Node:
@@ -643,7 +640,7 @@ long OsmApiDb::_getIdFromSequence(const QString tableName, const QString sequenc
     _seqQueries[tableName]->prepare(sql);
   }
 
-  shared_ptr<QSqlQuery> query = _seqQueries[tableName];
+  boost::shared_ptr<QSqlQuery> query = _seqQueries[tableName];
   if (query->exec() == false)
   {
     throw HootException("Error reserving IDs. type: " +
@@ -677,6 +674,66 @@ long OsmApiDb::toOsmApiDbCoord(const double x)
 double OsmApiDb::fromOsmApiDbCoord(const long x)
 {
   return (double)x / COORDINATE_SCALE;
+}
+
+QStringList OsmApiDb::_getTables()
+{
+  //The table ordering doesn't matter for constraint enabling/disabling.  It would, however,
+  //matter for constraint adding/removing (would need to reverse this ordering for dropping,
+  //I think).
+
+  QStringList tableNames;
+
+  tableNames.append(ApiDb::getCurrentRelationMembersTableName());
+  tableNames.append(ApiDb::getCurrentRelationTagsTableName());
+  tableNames.append(ApiDb::getCurrentRelationsTableName());
+  tableNames.append(ApiDb::getRelationMembersTableName());
+  tableNames.append(ApiDb::getRelationTagsTableName());
+  tableNames.append(ApiDb::getRelationsTableName());
+
+  tableNames.append(ApiDb::getCurrentWayNodesTableName());
+  tableNames.append(ApiDb::getCurrentWayTagsTableName());
+  tableNames.append(ApiDb::getCurrentWaysTableName());
+  tableNames.append(ApiDb::getWayNodesTableName());
+  tableNames.append(ApiDb::getWayTagsTableName());
+  tableNames.append(ApiDb::getWaysTableName());
+
+  tableNames.append(ApiDb::getCurrentNodeTagsTableName());
+  tableNames.append(ApiDb::getCurrentNodesTableName());
+  tableNames.append(ApiDb::getNodeTagsTableName());
+  tableNames.append(ApiDb::getNodesTableName());
+
+  tableNames.append(ApiDb::getChangesetCommentsTableName());
+  tableNames.append(ApiDb::getChangesetsSubscribersTableName());
+  tableNames.append(ApiDb::getChangesetTagsTableName());
+  tableNames.append(ApiDb::getChangesetsTableName());
+
+  return tableNames;
+}
+
+void OsmApiDb::disableConstraints()
+{
+  _modifyConstraints(_getTables(), true);
+}
+
+void OsmApiDb::enableConstraints()
+{
+  _modifyConstraints(_getTables(), false);
+}
+
+void OsmApiDb::_modifyConstraints(const QStringList tableNames, const bool disable)
+{
+  for (int i = 0; i < tableNames.size(); i++)
+  {
+    if (disable)
+    {
+      DbUtils::disableTableConstraints(getDB(), tableNames.at(i));
+    }
+    else
+    {
+      DbUtils::enableTableConstraints(getDB(), tableNames.at(i));
+    }
+  }
 }
 
 }

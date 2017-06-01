@@ -38,6 +38,8 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -61,7 +63,7 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
   // create a complex geometry representing the alpha shape
   UnionPolygonsVisitor v;
   cutterShapeMap->visitRo(v);
-  shared_ptr<Geometry> cutterShape = v.getUnion();
+  boost::shared_ptr<Geometry> cutterShape = v.getUnion();
 
   if (_outputBuffer != 0.0)
   {

@@ -35,7 +35,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ public class JobCancellationResource {
     /**
      * Cancel job.
      * 
-     * @param args
+     * @param params
      *            - json containing following parameters jobid: Target job id; mapid: Target map id.
      * 
      *            Example: {"jobid":"123", "mapid":"45"}
@@ -72,16 +71,14 @@ public class JobCancellationResource {
      * @return json containing cancel job id Example: {"jobid":"321"}
      */
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response process(String args) {
+    public Response process(JobCancellationParams params) {
         String jobIdToCancel = null;
 
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject command = (JSONObject) parser.parse(args);
-            jobIdToCancel = command.get("jobid").toString();
-            String mapDisplayName = command.get("mapid").toString();
+            jobIdToCancel = params.getJobId();
+            String mapDisplayName = params.getMapId();
 
             this.externalCommandInterface.terminate(jobIdToCancel);
             this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");

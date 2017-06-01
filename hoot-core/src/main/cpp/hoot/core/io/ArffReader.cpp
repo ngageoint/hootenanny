@@ -42,6 +42,8 @@
 // standard
 #include <set>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -84,9 +86,9 @@ bool ArffReader::_eof()
   return result;
 }
 
-shared_ptr<DataSamples> ArffReader::read()
+boost::shared_ptr<DataSamples> ArffReader::read()
 {
-  shared_ptr<DataSamples> result(new DataSamples());
+  boost::shared_ptr<DataSamples> result(new DataSamples());
   DataSamples& ds = *result;
   QStringList columnNames;
 

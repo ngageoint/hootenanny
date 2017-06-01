@@ -40,8 +40,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace std;
-
 /**
  * Calculates a conflation search radius using tie points from rubbersheeting.  If there
  * are not enough tie points to perform the calculation
@@ -50,13 +48,13 @@ class SearchRadiusCalculator : public OsmMapOperation, public Configurable
 {
 public:
 
-  static string className() { return "hoot::SearchRadiusCalculator"; }
+  static std::string className() { return "hoot::SearchRadiusCalculator"; }
 
   SearchRadiusCalculator();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual any getResult() { any result = _result; return result; }
+  virtual boost::any getResult() { boost::any result = _result; return result; }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -68,8 +66,8 @@ public:
 
 private:
 
-  void _calculateSearchRadius(const vector<double>& tiePointDistances);
-  double _calculateStandardDeviation(const vector<double>& samples);
+  void _calculateSearchRadius(const std::vector<double>& tiePointDistances);
+  double _calculateStandardDeviation(const std::vector<double>& samples);
 
   double _result;
 

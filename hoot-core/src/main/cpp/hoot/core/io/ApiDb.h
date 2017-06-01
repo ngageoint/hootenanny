@@ -52,9 +52,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace geos::geom;
-using namespace std;
 
 class BulkInsert;
 class InternalIdReserver;
@@ -105,7 +102,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedDbVersion() { return "18:dmitriy.mylov"; }
+  static QString expectedHootDbVersion() { return "18:dmitriy.mylov"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
@@ -147,26 +144,26 @@ public:
   /**
    * Returns a results iterator to all OSM elements for a given element type in the database.
    */
-  virtual shared_ptr<QSqlQuery> selectElements(const ElementType& elementType) = 0;
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType) = 0;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
    */
-  virtual vector<long> selectNodeIdsForWay(long wayId) = 0;
+  virtual std::vector<long> selectNodeIdsForWay(long wayId) = 0;
 
-  vector<long> selectNodeIdsForWay(long wayId, const QString sql);
+  std::vector<long> selectNodeIdsForWay(long wayId, const QString sql);
 
   /**
    * Returns a query results with node_id, lat, and long with all the OSM node ID's for a given way
    */
-  virtual shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
+  virtual boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId) = 0;
 
-  shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString sql);
+  boost::shared_ptr<QSqlQuery> selectNodesForWay(long wayId, const QString sql);
 
   /**
    * Returns a vector with all the relation members for a given relation
    */
-  virtual vector<RelationData::Entry> selectMembersForRelation(long relationId) = 0;
+  virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId) = 0;
 
   /**
    * Returns the user ID if the email is found. If throwWhenMissing is false then -1 is returned
@@ -211,7 +208,7 @@ public:
    * @param bounds the query bounds
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectNodesByBounds(const Envelope& bounds);
+  boost::shared_ptr<QSqlQuery> selectNodesByBounds(const geos::geom::Envelope& bounds);
 
   /**
    * Returns the IDs of all ways that own the input node IDs
@@ -219,7 +216,7 @@ public:
    * @param nodeIds a collection of node IDs
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
+  boost::shared_ptr<QSqlQuery> selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds);
 
   /**
    * Returns all elements by type with IDs in the input ID list
@@ -228,7 +225,7 @@ public:
    * @param tableType the type of database table to query
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
+  boost::shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                       const TableType& tableType);
 
   /**
@@ -237,7 +234,7 @@ public:
    * @param wayIds a collection of way IDs
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
+  boost::shared_ptr<QSqlQuery> selectWayNodeIdsByWayIds(const QSet<QString>& wayIds);
 
   /**
    * Returns the IDs of all relations which own the typed input member IDs
@@ -246,7 +243,7 @@ public:
    * @param memberElementType the element type of the associated relation member
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
+  boost::shared_ptr<QSqlQuery> selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                      const ElementType& memberElementType);
 
   virtual QString tableTypeToTableName(const TableType& tableType) const = 0;
@@ -258,7 +255,7 @@ public:
    * format specified by the TIME_FORMAT constant
    * @return a SQL results iterator
    */
-  shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
+  boost::shared_ptr<QSqlQuery> getChangesetsCreatedAfterTime(const QString timeStr);
 
   /**
    * Gets the next sequence ID for the given element type
@@ -271,6 +268,7 @@ public:
   QSqlError getLastError() const { return _db.lastError(); }
 
   inline static QString getChangesetsTableName()                { return "changesets"; }
+  inline static QString getChangesetCommentsTableName()         { return "changeset_comments"; }
   inline static QString getChangesetsSubscribersTableName()     { return "changesets_subscribers"; }
   inline static QString getChangesetTagsTableName()             { return "changeset_tags"; }
   inline static QString getCurrentNodeTagsTableName()           { return "current_node_tags"; }
@@ -306,8 +304,37 @@ public:
   inline static QString getMapsSequenceName()                   { return getMapsTableName() + getSequenceId(); }
   inline static QString getUsersSequenceName()                  { return getUsersTableName() + getSequenceId(); }
 
+  /**
+   * Decomposes an API database URL up into parts
+   *
+   * @param url URL to decompose
+   * @return a collection of URL parts mapped by name
+   */
   static QMap<QString, QString> getDbUrlParts(const QString url);
+
+  /**
+   * Converts an API database URL into the format needed by PSQL
+   *
+   * @param url URL to convert
+   * @return a PSQL command string
+   */
   static QString getPsqlString(const QString url);
+
+  /**
+   * Executes a SQL file using PSQL
+   *
+   * @param dbUrl URL of the target database
+   * @param sqlFile path to the file containing SQL statements to execute
+   */
+  static void execSqlFile(const QString dbUrl, const QString sqlFile);
+
+  /**
+   * Converts an API database URL into the format needed by libpq
+   *
+   * @param url URL to convert
+   * @return a libpq command string
+   */
+  static QString getPqString(const QString url);
 
 protected:
 
@@ -319,9 +346,9 @@ protected:
   bool _capitalizeRelationMemberType;
 
   QSqlDatabase _db;
-  shared_ptr<QSqlQuery> _selectUserByEmail;
-  shared_ptr<QSqlQuery> _insertUser;
-  shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+  boost::shared_ptr<QSqlQuery> _selectUserByEmail;
+  boost::shared_ptr<QSqlQuery> _insertUser;
+  boost::shared_ptr<QSqlQuery> _selectNodeIdsForWay;
 
   QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                   QVariant v3 = QVariant()) const;
@@ -333,16 +360,16 @@ protected:
 private:
 
   //element bounds related queries
-  shared_ptr<QSqlQuery> _selectNodesByBounds;
-  shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
-  shared_ptr<QSqlQuery> _selectElementsByElementIdList;
-  shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
-  shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
+  boost::shared_ptr<QSqlQuery> _selectNodesByBounds;
+  boost::shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
+  boost::shared_ptr<QSqlQuery> _selectElementsByElementIdList;
+  boost::shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
+  boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
 
-  shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+  boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
 
-  QString _getTileWhereCondition(const vector<Range>& tileIdRanges) const;
-  vector<Range> _getTileRanges(const Envelope& env) const;
+  QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
+  std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;
 };
 
 }

@@ -32,6 +32,10 @@
 
 #include "EdgeMatchSetFinder.h"
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -94,9 +98,9 @@ double IterativeNetworkMatcher::_calculateEdgeVertexScore(const VertexScoreMap& 
   return sqrt(sFrom * sTo);
 }
 
-shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
+boost::shared_ptr<IterativeNetworkMatcher> IterativeNetworkMatcher::create()
 {
-  return shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
+  return boost::shared_ptr<IterativeNetworkMatcher>(new IterativeNetworkMatcher());
 }
 
 void IterativeNetworkMatcher::_createEmptyStubEdges(OsmNetworkPtr na, OsmNetworkPtr nb)

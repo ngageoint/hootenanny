@@ -50,13 +50,13 @@ class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public 
 {
 public:
 
-  static string className() { return "hoot::PertyDuplicatePoiOp"; }
+  static std::string className() { return "hoot::PertyDuplicatePoiOp"; }
 
   PertyDuplicatePoiOp();
 
   virtual ~PertyDuplicatePoiOp() {}
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   void duplicateNode(const NodePtr& n, const OsmMapPtr& map);
 
@@ -93,7 +93,7 @@ private:
   double _p;
   double _duplicateSigma;
   boost::minstd_rand* _rng;
-  auto_ptr<boost::minstd_rand> _localRng;
+  std::auto_ptr<boost::minstd_rand> _localRng;
 };
 
 }

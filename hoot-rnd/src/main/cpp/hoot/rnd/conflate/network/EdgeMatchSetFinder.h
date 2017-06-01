@@ -107,8 +107,8 @@ private:
   EdgeMatchPtr _trimToEdge(ConstEdgeMatchPtr em);
 };
 
-typedef shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
-typedef shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
+typedef boost::shared_ptr<EdgeMatchSetFinder> EdgeMatchSetFinderPtr;
+typedef boost::shared_ptr<const EdgeMatchSetFinder> ConstEdgeMatchSetFinderPtr;
 
 // not implemented
 bool operator<(ConstEdgeMatchSetFinderPtr, ConstEdgeMatchSetFinderPtr);

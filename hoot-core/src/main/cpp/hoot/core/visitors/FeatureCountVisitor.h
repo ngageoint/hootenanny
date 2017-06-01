@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements with an information tag count greater than zero.
@@ -52,7 +51,7 @@ public:
 
   double getStat() const { return _count; }
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
 private:
 

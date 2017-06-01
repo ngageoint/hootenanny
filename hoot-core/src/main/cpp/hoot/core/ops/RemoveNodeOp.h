@@ -50,8 +50,8 @@ public:
    * @brief className the the class name as a string
    * @return the name of the class
    */
-  static string className() { return "hoot::RemoveNodeOp"; }
-  string getClassName() const { return className(); }
+  static std::string className() { return "hoot::RemoveNodeOp"; }
+  std::string getClassName() const { return className(); }
 
   /**
    * @brief RemoveNodeOp Removes a node from a map
@@ -74,7 +74,7 @@ public:
    * @brief apply Peform the op on the given map
    * @param map map upon which to operate
    */
-  void apply(shared_ptr<OsmMap>& map);
+  void apply(OsmMapPtr& map);
 
   /**
    * @brief setNodeId Sets the ID of the node to remove
@@ -110,9 +110,9 @@ private:
   bool _doCheck;
   bool _removeFully;
 
-  void _removeNodeNoCheck(shared_ptr<OsmMap>& map, long nId);
-  void _removeNode(shared_ptr<OsmMap>& map, long nId);
-  void _removeNodeFully(shared_ptr<OsmMap>& map, long nId);
+  void _removeNodeNoCheck(OsmMapPtr& map, long nId);
+  void _removeNode(OsmMapPtr& map, long nId);
+  void _removeNodeFully(OsmMapPtr& map, long nId);
 
 };
 

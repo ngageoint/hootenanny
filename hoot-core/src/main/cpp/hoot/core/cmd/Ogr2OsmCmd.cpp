@@ -36,6 +36,8 @@
 #include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -78,7 +80,7 @@ public:
     QString translation = args[a++];
     QString output = args[a++];
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OgrReader reader;
     reader.setLimit(limit);
     reader.setTranslationFile(translation);

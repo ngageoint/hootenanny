@@ -39,6 +39,8 @@
 #include <hoot/core/util/FindNodesInWayFactory.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -109,7 +111,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   {
     LOG_TRACE("multilinestring: multiple matches get relation");
     RelationPtr r(new Relation(matches[0]->getStatus(), map->createNextRelationId(),
-      matches[0]->getCircularError(), Relation::MULTILINESTRING));
+      matches[0]->getCircularError(), MetadataTags::RelationMultilineString()));
 
     for (size_t i = 0; i < matches.size(); i++)
     {

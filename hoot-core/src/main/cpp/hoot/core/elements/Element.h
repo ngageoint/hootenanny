@@ -36,10 +36,6 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 
-namespace hoot {
-  class OsmMap;
-}
-
 // Boost
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -57,14 +53,13 @@ namespace geos {
   }
 }
 
-namespace hoot {
-
-using namespace boost;
-using namespace geos::geom;
+namespace hoot
+{
 
 class ElementListener;
 class ElementProvider;
 class ElementVisitor;
+class OsmMap;
 
 /**
  * Base class for OSM elements -- node, way and relation.
@@ -73,7 +68,7 @@ class Element
 {
 public:
 
-  static string className() { return "hoot::Element"; }
+  static std::string className() { return "hoot::Element"; }
 
   virtual ~Element() {}
 
@@ -94,7 +89,7 @@ public:
    * empty or any of the child elements are missing. The caller gets ownership of the returned
    * envelope.
    */
-  virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
   void setId(long id) { _getElementData().setId(id); }

@@ -34,6 +34,8 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/MapProjector.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -50,26 +52,26 @@ ProjectToGeographicVisitor::~ProjectToGeographicVisitor()
     OGRCoordinateTransformation::DestroyCT(_transform);
 }
 
-void ProjectToGeographicVisitor::initialize(shared_ptr<OGRSpatialReference>& projection)
+void ProjectToGeographicVisitor::initialize(boost::shared_ptr<OGRSpatialReference>& projection)
 {
   _transform = OGRCreateCoordinateTransformation(projection.get(), MapProjector::createWgs84Projection().get());
-  _rcf = shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
+  _rcf = boost::shared_ptr<ReprojectCoordinateFilter>(new ReprojectCoordinateFilter(_transform));
 }
 
-void ProjectToGeographicVisitor::visit(const shared_ptr<Element>& e)
+void ProjectToGeographicVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (e->getElementType().getEnum() == ElementType::Node)
   {
-    boost::shared_ptr<Node> node = dynamic_pointer_cast<Node>(e);
+    NodePtr node = boost::dynamic_pointer_cast<Node>(e);
     Coordinate coord = node->toCoordinate();
     try
     {
       _rcf->project(&coord);
     }
-    catch(IllegalArgumentException& e)
+    catch(const IllegalArgumentException&)
     {
       LOG_ERROR("Failure projecting node: " << node->toString());
-      throw e;
+      throw;
     }
 
     node->setX(coord.x);

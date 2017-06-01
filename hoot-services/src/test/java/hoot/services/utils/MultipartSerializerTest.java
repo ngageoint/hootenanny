@@ -28,8 +28,10 @@ package hoot.services.utils;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
+import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
@@ -254,19 +256,30 @@ public class MultipartSerializerTest {
     @Test
     @Category(UnitTest.class)
     public void testValidatePath() throws Exception {
-        Method m = MultipartSerializer.class.getDeclaredMethod("validatePath", String.class, String.class);
+        Method m = MultipartSerializer.class.getDeclaredMethod("validatePath", File.class, File.class);
         m.setAccessible(true);
 
-        boolean isValid = (Boolean) m.invoke(null, //use null if the method is static
-                "/projects/hoot/upload/123456", "/projects/hoot/upload/123456/DcGisRoads.gdb");
-        Assert.assertTrue(isValid);
+        //use null if the method is static
+        m.invoke(null, new File("/projects/hoot/upload/123456"), new File("/projects/hoot/upload/123456/DcGisRoads.gdb"));
 
-        isValid = (Boolean) m.invoke(null, //use null if the method is static
-                "/projects/hoot/upload/123456", "/projects/hoot/upload/123456/../DcGisRoads.gdb");
-        Assert.assertFalse(isValid);
+        try {
+            m.invoke(null, new File("/projects/hoot/upload/123456"), new File("/projects/hoot/upload/123456/../DcGisRoads.gdb"));
+            fail("Invalid path should've been detected");
+        }
+        catch (InvocationTargetException ite) {
+            if (! (ite.getCause() instanceof RuntimeException)) {
+                fail("Expected RuntimeException!");
+            }
+        }
 
-        isValid = (Boolean) m.invoke(null, //use null if the method is static
-                "/projects/hoot/upload/123456", "\0//DcGisRoads.gdb");
-        Assert.assertFalse(isValid);
+        try {
+            m.invoke(null, new File("/projects/hoot/upload/123456"), new File("\0//DcGisRoads.gdb"));
+            fail("Invalid path should've been detected");
+        }
+        catch (InvocationTargetException ite) {
+            if (! (ite.getCause() instanceof RuntimeException)) {
+                fail("Expected RuntimeException!");
+            }
+        }
     }
 }

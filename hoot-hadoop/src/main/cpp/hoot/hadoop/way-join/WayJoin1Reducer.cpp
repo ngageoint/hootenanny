@@ -18,6 +18,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/Debug.h>
 
 // Pretty Pipes
@@ -30,6 +31,8 @@
 #include <limits>
 
 #include "WayJoin1Mapper.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -52,7 +55,7 @@ void WayJoin1Reducer::close()
       arg(QString::fromStdString(_workDir)).
       arg(_partition, 5, 10, QChar('0'));
 
-  shared_ptr<ostream> os(fs.create(path.toStdString()));
+  boost::shared_ptr<ostream> os(fs.create(path.toStdString()));
 
   if (_missingNodes > 0)
   {

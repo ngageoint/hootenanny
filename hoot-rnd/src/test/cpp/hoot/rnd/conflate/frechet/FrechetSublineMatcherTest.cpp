@@ -34,16 +34,16 @@
 // GEOS
 #include <geos/geom/LineString.h>
 // Hoot
-#include <hoot/rnd/conflate/frechet/FrechetSublineMatcher.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/rnd/conflate/frechet/FrechetSublineMatcher.h>
 
-#include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
-
-using namespace hoot;
-
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -127,7 +127,7 @@ public:
   void runCircleTest()
   {
     Settings s;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmXmlReader reader;
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);
@@ -135,20 +135,18 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    {
-      WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
-      WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
+    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
 
-      FrechetSublineMatcher uut;
-      uut.setConfiguration(s);
+    FrechetSublineMatcher uut;
+    uut.setConfiguration(s);
 
-      vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score).getMatches();
-      HOOT_STR_EQUALS(1, m.size());
-      HOOT_STR_EQUALS(
-        "subline 1: start: way: -1 index: 87 fraction: 0 end: way: -1 index: 90 fraction: 0\n"
-        "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 4 fraction: 0",
-        m[0].toString());
-    }
+    vector<WaySublineMatch> m = uut.findMatch(map, w1, w2, score).getMatches();
+    HOOT_STR_EQUALS(1, m.size());
+    HOOT_STR_EQUALS(
+      "subline 1: start: way: -1 index: 87 fraction: 0 end: way: -1 index: 90 fraction: 0\n"
+      "subline 2: start: way: -2 index: 0 fraction: 0 end: way: -2 index: 4 fraction: 0",
+      m[0].toString());
   }
 
   OsmMapPtr createMap()

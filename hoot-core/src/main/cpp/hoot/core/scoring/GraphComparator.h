@@ -35,17 +35,15 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  using namespace std;
 
-  class DirectedGraph;
-  class ShortestPath;
-  class Way;
+class DirectedGraph;
+class ShortestPath;
+class Way;
 
 class GraphComparator : public BaseComparator
 {
 public:
-  GraphComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
 
   virtual ~GraphComparator() {}
 
@@ -66,12 +64,12 @@ public:
 
   void setIterations(int i) { _iterations = i; }
 
-  void drawCostDistance(shared_ptr<OsmMap> map, vector<Coordinate>& c, QString output);
+  void drawCostDistance(OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output);
 
 private:
 
   int _iterations;
-  Coordinate _r;
+  geos::geom::Coordinate _r;
   double _median;
   double _mean;
   // confidence interval
@@ -81,18 +79,18 @@ private:
   double _maxGraphCost;
   bool _debugImages;
 
-  cv::Mat _calculateCostDistance(shared_ptr<OsmMap> map, Coordinate c);
+  cv::Mat _calculateCostDistance(OsmMapPtr map, geos::geom::Coordinate c);
 
   void _calculateRasterCost(cv::Mat& mat);
 
-  void _exportGraphImage(shared_ptr<OsmMap> map, DirectedGraph& graph, ShortestPath& sp,
+  void _exportGraphImage(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
                          QString path);
 
   void _init();
 
-  cv::Mat _paintGraph(shared_ptr<OsmMap> map, DirectedGraph& graph, ShortestPath& sp);
+  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp);
 
-  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map, shared_ptr<Way> way, double friction,
+  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
     double startCost, double endCost);
 };
 

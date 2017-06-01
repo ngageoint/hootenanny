@@ -39,6 +39,8 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/visitors/ExtractNodesVisitor.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -51,7 +53,7 @@ NetworkMerger::NetworkMerger(const set< pair<ElementId, ElementId> >& pairs,
   assert(_pairs.size() >= 1);
 }
 
-void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced) const
+void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   LOG_INFO("Applying network merger...");
 
@@ -79,7 +81,6 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     /// @todo add more logic in the match creator that handles this in a more elegant way.
 
     set<ElementId> eids;
-
     foreach (ConstElementPtr e, _edgeMatch->getString2()->getMembers())
     {
       eids.insert(e->getElementId());
@@ -128,7 +129,7 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
     QList<ConstNodePtr> scrapNodeList;
     ExtractNodesVisitor extractVisitor(scrapNodeList);
     str2->visitRo(*map, extractVisitor);
-    shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+    boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
     QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
     foreach (ConstNodePtr n, scrapNodeSet)
     {

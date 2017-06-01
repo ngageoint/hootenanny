@@ -42,7 +42,7 @@ public:
   /**
    * Constructs an element reader using the specified istream. This takes ownership of the istream.
    */
-  PbfElementIterator(istream* in);
+  PbfElementIterator(std::istream* in);
 
   /**
    * Similar to above, but opens the given path using an fstream.
@@ -50,13 +50,13 @@ public:
   PbfElementIterator(QString path);
 
 private:
-  auto_ptr<istream> _in;
-  auto_ptr<OsmPbfReader> _reader;
-  vector<OsmPbfReader::BlobLocation> _blobs;
-  shared_ptr<OsmMap> _map;
+  std::auto_ptr<std::istream> _in;
+  std::auto_ptr<OsmPbfReader> _reader;
+  std::vector<OsmPbfReader::BlobLocation> _blobs;
+  OsmMapPtr _map;
   int _blobIndex;
 
-  void _init(istream* in);
+  void _init(std::istream* in);
 
   virtual void _next();
 };

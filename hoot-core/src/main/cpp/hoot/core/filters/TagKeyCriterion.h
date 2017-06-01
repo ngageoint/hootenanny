@@ -43,7 +43,7 @@ class TagKeyCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::TagKeyCriterion"; }
+  static std::string className() { return "hoot::TagKeyCriterion"; }
 
   TagKeyCriterion() {}
   TagKeyCriterion(QString key);
@@ -52,7 +52,7 @@ public:
 
   void addKey(QString key);
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new TagKeyCriterion(_keys); }
 

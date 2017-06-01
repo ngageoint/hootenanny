@@ -52,23 +52,23 @@ class OsmMap;
 class AbstractDistanceExtractor : public FeatureExtractor
 {
 public:
-  static string className() { return "hoot::AbstractDistanceExtractor"; }
+  static std::string className() { return "hoot::AbstractDistanceExtractor"; }
 
   virtual double combinedEnvelopeDiagonalDistance(const OsmMap& map,
-    const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const;
+    const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const;
 
-  virtual double distance(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const = 0;
+  virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const;
+  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const;
 
-  virtual DataFrame::FactorType getFactorType() const { return DataFrame::Numerical; }
+  virtual Tgs::DataFrame::FactorType getFactorType() const { return Tgs::DataFrame::Numerical; }
 
-  virtual DataFrame::NullTreatment getNullTreatment() const
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const
   {
-    return DataFrame::NullAsMissingValue;
+    return Tgs::DataFrame::NullAsMissingValue;
   }
 
 };

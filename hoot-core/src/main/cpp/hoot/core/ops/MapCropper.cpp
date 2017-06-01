@@ -59,6 +59,9 @@
 
 // TGS
 #include <tgs/StreamUtils.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -79,7 +82,7 @@ MapCropper::MapCropper(const Envelope& envelope)
   _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
 }
 
-MapCropper::MapCropper(const shared_ptr<const Geometry> &g, bool invert)
+MapCropper::MapCropper(const boost::shared_ptr<const Geometry> &g, bool invert)
 {
   _envelopeG = g;
   _invert = invert;
@@ -114,10 +117,10 @@ void MapCropper::setConfiguration(const Settings& conf)
   }
 }
 
-void MapCropper::apply(shared_ptr<OsmMap>& map)
+void MapCropper::apply(OsmMapPtr& map)
 {
   LOG_INFO("Cropping map...");
-  shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
   {
@@ -129,10 +132,10 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
 
   // go through all the ways
   const WayMap ways = result->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const shared_ptr<Way>& w = it->second;
-    shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+    const boost::shared_ptr<Way>& w = it->second;
+    boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     const Envelope& e = *(ls->getEnvelopeInternal());
 
     // if the way is completely outside the region we're keeping
@@ -152,7 +155,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
     }
   }
 
-  shared_ptr<NodeToWayMap> n2wp = result->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2wp = result->getIndex().getNodeToWayMap();
   NodeToWayMap& n2w = *n2wp;
 
   LOG_INFO("  Removing nodes...");
@@ -160,7 +163,7 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   // go through all the nodes
   long nodesRemoved = 0;
   const NodeMap nodes = result->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Coordinate& c = it->second->toCoordinate();
 
@@ -215,33 +218,33 @@ void MapCropper::apply(shared_ptr<OsmMap>& map)
   map->visitRw(v);
 }
 
-void MapCropper::crop(shared_ptr<OsmMap> map, const Envelope& envelope)
+void MapCropper::crop(OsmMapPtr map, const Envelope& envelope)
 {
   MapCropper mc(envelope);
   mc.apply(map);
 }
 
-void MapCropper::crop(shared_ptr<OsmMap> map, const shared_ptr<const Geometry>& g, bool invert)
+void MapCropper::crop(OsmMapPtr map, const boost::shared_ptr<const Geometry>& g, bool invert)
 {
   MapCropper mc(g, invert);
   mc.apply(map);
 }
 
-void MapCropper::_cropWay(shared_ptr<OsmMap> map, long wid)
+void MapCropper::_cropWay(OsmMapPtr map, long wid)
 {
-  shared_ptr<Way> way = map->getWay(wid);
+  boost::shared_ptr<Way> way = map->getWay(wid);
 
-  shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
+  boost::shared_ptr<Geometry> fg = ElementConverter(map).convertToGeometry(way);
 
   // perform the intersection with the geometry
-  shared_ptr<Geometry> g;
+  boost::shared_ptr<Geometry> g;
   if (_invert == false)
   {
     try
     {
       g.reset(fg->intersection(_envelopeG.get()));
     }
-    catch (geos::util::GEOSException& e)
+    catch (const geos::util::GEOSException&)
     {
       // try cleaning up the geometry and try again.
       fg.reset(GeometryUtils::validateGeometry(fg.get()));
@@ -254,7 +257,7 @@ void MapCropper::_cropWay(shared_ptr<OsmMap> map, long wid)
     {
       g.reset(fg->difference(_envelopeG.get()));
     }
-    catch (geos::util::GEOSException& e)
+    catch (const geos::util::GEOSException&)
     {
       // try cleaning up the geometry and try again.
       fg.reset(GeometryUtils::validateGeometry(fg.get()));
@@ -262,10 +265,10 @@ void MapCropper::_cropWay(shared_ptr<OsmMap> map, long wid)
     }
   }
 
-  shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
+  boost::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
   GeometryConverter gc(map);
   gc.setNodeFactory(nodeFactory);
-  shared_ptr<Element> e = gc.convertGeometryToElement(g.get(), way->getStatus(),
+  boost::shared_ptr<Element> e = gc.convertGeometryToElement(g.get(), way->getStatus(),
     way->getCircularError());
 
   if (e == 0)
@@ -279,7 +282,7 @@ void MapCropper::_cropWay(shared_ptr<OsmMap> map, long wid)
   }
 }
 
-long MapCropper::_findNodeId(shared_ptr<const OsmMap> map, shared_ptr<const Way> w,
+long MapCropper::_findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w,
   const Coordinate& c)
 {
   long result = std::numeric_limits<long>::max();
@@ -287,7 +290,7 @@ long MapCropper::_findNodeId(shared_ptr<const OsmMap> map, shared_ptr<const Way>
 
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
-    shared_ptr<const Node> n = map->getNode(nodeIds[i]);
+    ConstNodePtr n = map->getNode(nodeIds[i]);
     if (n->toCoordinate() == c)
     {
       // if there are multiple corresponding nodes, throw an exception.
@@ -385,11 +388,11 @@ void MapCropper::readObject(QDataStream& is)
   }
 }
 
-shared_ptr<Way> MapCropper::_reintroduceWay(shared_ptr<OsmMap> map, shared_ptr<const Way> w,
+boost::shared_ptr<Way> MapCropper::_reintroduceWay(OsmMapPtr map, boost::shared_ptr<const Way> w,
   const LineString* ls)
 {
   // create a new way
-  shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
+  boost::shared_ptr<Way> newWay(new Way(w->getStatus(), map->createNextWayId(),
     w->getRawCircularError()));
   newWay->setTags(w->getTags());
 
@@ -411,7 +414,7 @@ shared_ptr<Way> MapCropper::_reintroduceWay(shared_ptr<OsmMap> map, shared_ptr<c
         throw InternalErrorException("Internal Error: An unexpected coordinate was found.");
       }
       // create a new node
-      shared_ptr<Node> node(new Node(w->getStatus(), map->createNextNodeId(), c,
+      NodePtr node(new Node(w->getStatus(), map->createNextNodeId(), c,
         w->getCircularError()));
       map->addNode(node);
       nid = node->getId();

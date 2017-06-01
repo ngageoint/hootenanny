@@ -34,17 +34,12 @@
 // Qt
 #include <QString>
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
 namespace hoot
 {
-  using namespace boost;
 
-  class OsmMap;
-  class Node;
-  class Way;
+class OsmMap;
+class Node;
+class Way;
 
 /**
  * Uses the Ramer-Douglas Peucker algorithm [1] to generalize a set of point.  This
@@ -81,14 +76,14 @@ public:
 
   RdpWayGeneralizer(double epsilon);
 
-  RdpWayGeneralizer(shared_ptr<OsmMap> map, double epsilon);
+  RdpWayGeneralizer(boost::shared_ptr<OsmMap> map, double epsilon);
 
   /**
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
 
     @param way the way whose points are to be reduced
     */
-  void generalize(shared_ptr<Way> way);
+  void generalize(boost::shared_ptr<Way> way);
 
   /**
     Generates a set of points that make up a generalized set of the input points
@@ -96,22 +91,14 @@ public:
     @param wayPoints the collection of points to be reduced
     @returns a reduced set of line points
     */
-  virtual QList<shared_ptr<const Node> > getGeneralizedPoints(
-    const QList<shared_ptr<const Node> >& wayPoints);
+  virtual QList<boost::shared_ptr<const Node> > getGeneralizedPoints(
+    const QList<boost::shared_ptr<const Node> >& wayPoints);
 
   /**
     Sets the distance parameter that determines to what degree the way is generalized; higher
     values result in more generalization (more nodes are removed)
     */
-  void setEpsilon(double epsilon)
-  {
-    if (epsilon <= 0.0)
-    {
-      throw HootException("Invalid epsilon value: " + QString::number(epsilon));
-    }
-    _epsilon = epsilon;
-    LOG_VART(_epsilon);
-  }
+  void setEpsilon(double epsilon);
 
 private:
 
@@ -119,7 +106,7 @@ private:
 
   double _epsilon;
 
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
   /*
     Finds the perpendicular distance between an imaginary line drawn from the first point on a line
@@ -132,8 +119,8 @@ private:
     point for the imaginary line drawn directly from start to end point on the line to be reduced
     */
   double _getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-    const shared_ptr<const Node> splitPoint, const shared_ptr<const Node> lineToBeReducedStartPoint,
-    const shared_ptr<const Node> lineToBeReducedEndPoint) const;
+    const boost::shared_ptr<const Node> splitPoint, const boost::shared_ptr<const Node> lineToBeReducedStartPoint,
+    const boost::shared_ptr<const Node> lineToBeReducedEndPoint) const;
 
 };
 

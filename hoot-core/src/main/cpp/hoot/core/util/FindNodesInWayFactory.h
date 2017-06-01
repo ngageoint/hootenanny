@@ -47,13 +47,13 @@ public:
 
   void addWay(const ConstWayPtr& w);
 
-  virtual shared_ptr<Node> createNode(const shared_ptr<OsmMap>& map, const Coordinate& c,
+  virtual NodePtr createNode(const OsmMapPtr& map, const geos::geom::Coordinate& c,
     Status s, double circularError);
 
 private:
 
   const ConstWayPtr _way;
-  set<long> _nodesToSearch;
+  std::set<long> _nodesToSearch;
 };
 
 }

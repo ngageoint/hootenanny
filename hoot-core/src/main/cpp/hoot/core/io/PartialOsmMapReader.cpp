@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PartialOsmMapReader.h"
 
@@ -36,18 +36,18 @@ PartialOsmMapReader::PartialOsmMapReader()
   _elementsRead = 0;
 }
 
-void PartialOsmMapReader::read(shared_ptr<OsmMap> map)
+void PartialOsmMapReader::read(OsmMapPtr map)
 {
   readPartial(map);
   finalizePartial();
 }
 
-void PartialOsmMapReader::readPartial(shared_ptr<OsmMap> map)
+void PartialOsmMapReader::readPartial(OsmMapPtr map)
 {
   _partialMap = map;
   while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))
   {
-    shared_ptr<Element> element = readNextElement();
+    boost::shared_ptr<Element> element = readNextElement();
     _partialMap->addElement(element);
   }
   _elementsRead = 0;

@@ -45,6 +45,9 @@
 
 #include <float.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -89,12 +92,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   DisableLog dl(Log::Warn);
 
   ElementConverter elementConverter(_map);
-  shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+  boost::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
   if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
   {
     throw geos::util::TopologyException();
   }
-  shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+  boost::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
   //The rules below are roughly ordered by increasing processing expense and by decreasing
   //likelihood of occurrence.
@@ -174,7 +177,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyIsBuilding = OsmSchema::getInstance().isBuilding(poly);
 
   //Similar to previous, except more focused for restrooms.
-  if (poiHasType && polyHasType && !_typeScore == 1.0 &&
+  if (poiHasType && polyHasType && _typeScore != 1.0 &&
       PoiPolygonTypeScoreExtractor::isRestroom(poi) &&
       !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
         OsmSchemaCategory::building()))
@@ -274,13 +277,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   PoiPolygonTypeScoreExtractor typeScorer;
   PoiPolygonNameScoreExtractor nameScorer;
 
-  set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
-  while (polyNeighborItr != _polyNeighborIds.end())
+  for (set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
+       polyNeighborItr != _polyNeighborIds.end(); ++polyNeighborItr)
   {
     ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
     if (polyNeighbor->getElementId() != poly->getElementId())
     {
-      shared_ptr<Geometry> polyNeighborGeom;
+      boost::shared_ptr<Geometry> polyNeighborGeom;
       try
       {
         polyNeighborGeom = ElementConverter(_map).convertToGeometry(polyNeighbor);
@@ -300,6 +303,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         {
           if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
           {
+            //TODO: should this be OsmSchema::elementHasName instead?
             otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
             otherParkPolyNameScore = nameScorer.extract(*_map, poi, polyNeighbor);
             otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
@@ -332,14 +336,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
                   //Calc the distance from the poi to the poly line instead of the poly itself.
                   //Calcing distance to the poly itself will always return 0 when the poi is in the
                   //poly.
-                  ConstWayPtr polyWay = dynamic_pointer_cast<const Way>(poly);
-                  shared_ptr<const LineString> polyLineStr =
-                      dynamic_pointer_cast<const LineString>(
+                  ConstWayPtr polyWay = boost::dynamic_pointer_cast<const Way>(poly);
+                  boost::shared_ptr<const LineString> polyLineStr =
+                      boost::dynamic_pointer_cast<const LineString>(
                         ElementConverter(_map).convertToLineString(polyWay));
                   poiToPolyNodeDist = polyLineStr->distance(poiGeom.get());
-                  ConstWayPtr polyNeighborWay = dynamic_pointer_cast<const Way>(polyNeighbor);
-                  shared_ptr<const LineString> polyNeighborLineStr =
-                      dynamic_pointer_cast<const LineString>(
+                  ConstWayPtr polyNeighborWay = boost::dynamic_pointer_cast<const Way>(polyNeighbor);
+                  boost::shared_ptr<const LineString> polyNeighborLineStr =
+                      boost::dynamic_pointer_cast<const LineString>(
                         ElementConverter(_map).convertToLineString(polyNeighborWay));
                   poiToOtherParkPolyNodeDist = polyNeighborLineStr->distance(poiGeom.get());
                 }
@@ -438,7 +442,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         }
       }
     }
-    polyNeighborItr++;
   }
 
   return false;

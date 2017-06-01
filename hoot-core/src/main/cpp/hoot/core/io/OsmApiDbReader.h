@@ -65,7 +65,7 @@ public:
   /**
    * The read command called after open.
    */
-  virtual void read(shared_ptr<OsmMap> map);
+  virtual void read(OsmMapPtr map);
 
   void close();
 
@@ -79,15 +79,17 @@ protected:
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map);
   virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map);
 
-  virtual shared_ptr<ApiDb> _getDatabase() const { return _database; }
+  virtual boost::shared_ptr<ApiDb> _getDatabase() const { return _database; }
 
 private:
 
   //for white box testing
   friend class ServiceOsmApiDbBulkWriterTest;
+  friend class ServicesDbTestUtils;
+  friend class ServiceWriteOsmSqlStatementsDriverTest;
 
-  shared_ptr<OsmApiDb> _database;
-  shared_ptr<QSqlQuery> _elementResultIterator;
+  boost::shared_ptr<OsmApiDb> _database;
+  boost::shared_ptr<QSqlQuery> _elementResultIterator;
   QString _email;
 
   long _osmElemId;
@@ -96,7 +98,7 @@ private:
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 
-  void _addNodesForWay(vector<long> nodeIds, OsmMap& map);
+  void _addNodesForWay(std::vector<long> nodeIds, OsmMap& map);
 
   void _parseAndSetTagsOnElement(ElementPtr element);
 };

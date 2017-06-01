@@ -38,11 +38,11 @@ namespace hoot
 class HighwayCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::HighwayCriterion"; }
+  static std::string className() { return "hoot::HighwayCriterion"; }
 
   HighwayCriterion() {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new HighwayCriterion(); }
 

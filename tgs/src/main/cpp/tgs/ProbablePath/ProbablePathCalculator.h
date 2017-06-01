@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __PROBABLE_PATH_CALCULATOR_H__
@@ -55,20 +55,9 @@ namespace Tgs
 
     PpPoint();
 
-    PpPoint(const PpPoint& p) { row = p.row; col = p.col; name = p.name; cost = p.cost; }
+    PpPoint(int row, int col) : row(row), col(col) { }
 
-    PpPoint(int row, int col) 
-    { 
-      this->row = row; 
-      this->col = col; 
-    }
-
-    PpPoint(int row, int col, std::string name) 
-    { 
-      this->row = row; 
-      this->col = col; 
-      this->name = name;
-    }
+    PpPoint(int row, int col, std::string name) : row(row), col(col), name(name) { }
 
     bool operator!=(const PpPoint& p)
     {
@@ -120,7 +109,7 @@ namespace Tgs
     void calculateProbablePaths(int iterations);
 
     /**
-     * Clears all the routes that have been generated to this point. The other setting 
+     * Clears all the routes that have been generated to this point. The other setting
      * (friction surface, variation, etc.) all stay the same.
      */
     void clearRoutes();
@@ -146,7 +135,7 @@ namespace Tgs
     void setDestinationMaxCost(const std::vector<float>& maxCost) { _destinationMaxCost = maxCost; }
 
     /**
-     * Set the friction surface for calculating destination as a raster input. Values in the 
+     * Set the friction surface for calculating destination as a raster input. Values in the
      * friction surface must be >= 0.
      */
     void setFriction(int rows, int cols, const std::vector<float>& values);
@@ -170,7 +159,7 @@ namespace Tgs
 
     /**
      * Given a partially calculated cost, updated the values in the cost surface to make them
-     * consistent. The cost surface should have either null values (-1) or values that are >= 
+     * consistent. The cost surface should have either null values (-1) or values that are >=
      * actual cost. This function is primarily useful when distributing cost surface calculation
      * over multiple processors or machines.
      */
@@ -272,8 +261,8 @@ namespace Tgs
     void _updateSurround(int index, MyHeap& q);
 
     /**
-     * Returns the appropriate output stream for the given verbosity. E.g. If verbosity is 
-     * Warning and I call _v(Verbose) I will get a null stream, but if verbosity is Debug I 
+     * Returns the appropriate output stream for the given verbosity. E.g. If verbosity is
+     * Warning and I call _v(Verbose) I will get a null stream, but if verbosity is Debug I
      * will get cout. This is a bit slow so don't call on frequent messages.
      */
     std::ostream& _v(int level = Verbose);

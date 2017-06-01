@@ -34,6 +34,8 @@
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -118,7 +120,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   return result;
 }
 
-map<QString, double> HighwayExpertClassifier::getFeatures(const shared_ptr<const OsmMap>& /*m*/,
+map<QString, double> HighwayExpertClassifier::getFeatures(const ConstOsmMapPtr& /*m*/,
   ElementId /*eid1*/, ElementId /*eid2*/, const WaySublineMatchString& /*match*/) const
 {
   return map<QString, double>();

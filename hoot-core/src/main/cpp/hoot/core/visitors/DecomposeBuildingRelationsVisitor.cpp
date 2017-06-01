@@ -32,6 +32,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -47,15 +49,15 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Relation)
   {
-    const shared_ptr<Relation>& r = _map->getRelation(e->getId());
-    if (r->getType() == "building")
+    const boost::shared_ptr<Relation>& r = _map->getRelation(e->getId());
+    if (r->getType() == MetadataTags::RelationBuilding())
     {
       _decomposeBuilding(r);
     }
   }
 }
 
-void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Relation>& r)
+void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_ptr<Relation> &r)
 {
   Tags baseTags = r->getTags();
 
@@ -79,11 +81,11 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Rela
       continue;
     }
     // we're dropping the outline. We only care about the parts.
-    else if (members[i].getRole() == "outline")
+    else if (members[i].getRole() == MetadataTags::RoleOutline())
     {
       continue;
     }
-    else if (members[i].getRole() != "part")
+    else if (members[i].getRole() != MetadataTags::RolePart())
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
@@ -97,12 +99,12 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const shared_ptr<Rela
     }
 
     // ok, we've got a building part. Recompose it as a building.
-    shared_ptr<Element> e = _map->getElement(members[i].getElementId());
+    boost::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
 
     Tags t = baseTags;
     t.addTags(e->getTags());
     // don't need the building:part tag anymore.
-    t.remove("building:part");
+    t.remove(MetadataTags::BuildingPart());
 
     if (!t.contains("building"))
     {

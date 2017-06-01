@@ -39,11 +39,11 @@ namespace hoot
 class PoiCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::PoiCriterion"; }
+  static std::string className() { return "hoot::PoiCriterion"; }
 
   PoiCriterion() {}
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new PoiCriterion(); }
 

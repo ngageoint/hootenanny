@@ -51,11 +51,8 @@
 
 namespace hoot
 {
-class OsmMap;
 
-  using namespace boost;
-  using namespace geos::geom;
-  using namespace std;
+class OsmMap;
 
 class MapProjector
 {
@@ -69,24 +66,24 @@ public:
    * Given a bounding box in WGS84, create a reasonable planar projection for that region. The
    * units are in meters.
    */
-  static shared_ptr<OGRSpatialReference> createAeacProjection(const OGREnvelope& env);
+  static boost::shared_ptr<OGRSpatialReference> createAeacProjection(const OGREnvelope& env);
 
-  static shared_ptr<OGRSpatialReference> createOrthographic(const OGREnvelope& env);
+  static boost::shared_ptr<OGRSpatialReference> createOrthographic(const OGREnvelope& env);
 
   /**
    * Given a bounding box in WGS84, create a reasonable planar projection for that region. The
    * units are in meters.
    */
-  static shared_ptr<OGRSpatialReference> createSinusoidalProjection(const OGREnvelope& env);
+  static boost::shared_ptr<OGRSpatialReference> createSinusoidalProjection(const OGREnvelope& env);
 
-  static shared_ptr<OGRSpatialReference> createWgs84Projection();
+  static boost::shared_ptr<OGRSpatialReference> createWgs84Projection();
 
-  static void project(shared_ptr<OsmMap> map, shared_ptr<OGRSpatialReference> ref);
+  static void project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRSpatialReference> ref);
 
   /**
    * Returns a vector of all candidate planar projections for a given envelope.
    */
-  vector< shared_ptr<OGRSpatialReference> > createAllPlanarProjections(const OGREnvelope& env);
+  std::vector<boost::shared_ptr<OGRSpatialReference> > createAllPlanarProjections(const OGREnvelope& env);
 
   /**
    * Using a predefined set of projections this method evaluates each one of them for both distance
@@ -97,7 +94,7 @@ public:
    *
    * Best is an internal heuristic that is subject to change.
    */
-  shared_ptr<OGRSpatialReference> createPlanarProjection(const OGREnvelope& env,
+  boost::shared_ptr<OGRSpatialReference> createPlanarProjection(const OGREnvelope& env,
     Radians maxAngleError = toRadians(2.0), Meters maxDistanceError = 10.0,
     Meters testDistance = 1000.0, bool warnOnFail = true);
 
@@ -115,46 +112,48 @@ public:
    * Reprojects the specified geometry from srs1 to srs2. The coordinates of g will change, but
    * nothing else will be modified.
    */
-  static void project(const shared_ptr<Geometry>& g, const shared_ptr<OGRSpatialReference>& srs1,
-    const shared_ptr<OGRSpatialReference>& srs2);
+  static void project(const boost::shared_ptr<geos::geom::Geometry>& g,
+                      const boost::shared_ptr<OGRSpatialReference>& srs1,
+                      const boost::shared_ptr<OGRSpatialReference>& srs2);
 
-  static void projectToAeac(shared_ptr<OsmMap> map);
+  static void projectToAeac(boost::shared_ptr<OsmMap> map);
 
   /**
    * Picks the center of the orthographic projection as the center of the map bounds. Should be
    * a reasonable projection for small areas. Units are in meters.
    */
-  static void projectToOrthographic(shared_ptr<OsmMap> map);
+  static void projectToOrthographic(boost::shared_ptr<OsmMap> map);
 
-  static void projectToOrthographic(shared_ptr<OsmMap> map, const OGREnvelope& env);
+  static void projectToOrthographic(boost::shared_ptr<OsmMap> map, const OGREnvelope& env);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the envelope of the map to determine the projection.
    */
-  static void projectToPlanar(shared_ptr<OsmMap> map);
+  static void projectToPlanar(boost::shared_ptr<OsmMap> map);
 
   /**
    * Uses createPlanarProjection to create a planar projection and then reprojects the given map.
    * Uses the provided envelope to determine the projection.
    */
-  static void projectToPlanar(shared_ptr<OsmMap> map, const OGREnvelope& env);
+  static void projectToPlanar(boost::shared_ptr<OsmMap> map, const OGREnvelope& env);
 
-  static void projectToWgs84(shared_ptr<OsmMap> map);
-
-  /**
-   * Very slow convenience function.
-   */
-  static Coordinate projectFromWgs84(const Coordinate& c,
-                                       shared_ptr<OGRSpatialReference> srs);
+  static void projectToWgs84(boost::shared_ptr<OsmMap> map);
 
   /**
    * Very slow convenience function.
    */
-  static Coordinate project(const Coordinate& c, shared_ptr<OGRSpatialReference> srs1,
-                              shared_ptr<OGRSpatialReference> srs2);
+  static geos::geom::Coordinate projectFromWgs84(const geos::geom::Coordinate& c,
+                                                 boost::shared_ptr<OGRSpatialReference> srs);
 
-  static QString toWkt(shared_ptr<OGRSpatialReference> srs) { return toWkt(srs.get()); }
+  /**
+   * Very slow convenience function.
+   */
+  static geos::geom::Coordinate project(const geos::geom::Coordinate& c,
+                                        boost::shared_ptr<OGRSpatialReference> srs1,
+                                        boost::shared_ptr<OGRSpatialReference> srs2);
+
+  static QString toWkt(boost::shared_ptr<OGRSpatialReference> srs) { return toWkt(srs.get()); }
   static QString toWkt(OGRSpatialReference* srs);
 
 private:
@@ -168,33 +167,33 @@ private:
 
   MapProjector() {}
 
-  static shared_ptr<MapProjector> _theInstance;
+  static boost::shared_ptr<MapProjector> _theInstance;
 
   static bool _angleLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
-  Radians _calculateAngle(Coordinate p1, Coordinate p2, Coordinate p3);
+  Radians _calculateAngle(geos::geom::Coordinate p1, geos::geom::Coordinate p2, geos::geom::Coordinate p3);
 
   static bool _distanceLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 
-  bool _evaluateProjection(const OGREnvelope& env, shared_ptr<OGRSpatialReference> srs,
+  bool _evaluateProjection(const OGREnvelope& env, boost::shared_ptr<OGRSpatialReference> srs,
     Meters testDistance, Meters& maxDistanceError, Radians& maxAngleError);
 
-  size_t _findBestResult(vector<PlanarTestResult>& results);
+  size_t _findBestResult(std::vector<PlanarTestResult>& results);
 
-  size_t _findBestScore(vector<PlanarTestResult>& results);
+  size_t _findBestScore(std::vector<PlanarTestResult>& results);
 
   static bool _scoreLessThan(const PlanarTestResult& p1, const PlanarTestResult& p2);
 };
 
-class ReprojectCoordinateFilter : public CoordinateFilter
+class ReprojectCoordinateFilter : public geos::geom::CoordinateFilter
 {
 public:
 
   ReprojectCoordinateFilter(OGRCoordinateTransformation* t);
 
-  virtual void filter_rw(Coordinate* c) const;
+  virtual void filter_rw(geos::geom::Coordinate* c) const;
 
-  void project(Coordinate* c) const;
+  void project(geos::geom::Coordinate* c) const;
 
 private:
   OGRCoordinateTransformation* _transform;

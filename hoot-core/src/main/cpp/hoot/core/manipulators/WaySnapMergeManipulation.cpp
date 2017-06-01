@@ -42,19 +42,21 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
 WaySnapMergeManipulation::WaySnapMergeManipulation(long leftId, long rightId,
-  shared_ptr<const OsmMap> map, Meters minSplitSize) :
+  ConstOsmMapPtr map, Meters minSplitSize) :
   WayMergeManipulation(leftId, rightId, map, minSplitSize)
 {
 }
 
-void WaySnapMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
+void WaySnapMergeManipulation::applyManipulation(OsmMapPtr map,
   set<ElementId>& impactedElements, set<ElementId>& newElements) const
 {
-  shared_ptr<OsmMap> result = map;
+  OsmMapPtr result = map;
 
   // insert the impacted ways
   impactedElements = getImpactedElementIds(map);
@@ -64,8 +66,8 @@ void WaySnapMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   // remove any ways that spanned the left & right
   _removeSpans(result, impactedElements);
 
-  shared_ptr<Way> w1 = result->getWay(_left);
-  shared_ptr<Way> w2 = result->getWay(_right);
+  WayPtr w1 = result->getWay(_left);
+  WayPtr w2 = result->getWay(_right);
 
   // make sure w1 is the Unknown1
   if (w1->getStatus() != Status::Unknown1)
@@ -87,17 +89,17 @@ void WaySnapMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   MaximalNearestSubline mnser1(result, w1, w2, minSplitSize,
     w1->getCircularError() + w2->getCircularError());
   int mns1Index;
-  vector< shared_ptr<Way> > splits1 = mnser1.splitWay(result, mns1Index);
+  vector< WayPtr > splits1 = mnser1.splitWay(result, mns1Index);
   assert(splits1.size() != 0);
-  shared_ptr<Way> mns1 = splits1[mns1Index];
+  WayPtr mns1 = splits1[mns1Index];
 
   // split right into its maximal nearest sublines
   MaximalNearestSubline mnser2(result, w2, mns1, minSplitSize,
     w1->getCircularError() + w2->getCircularError());
   int mns2Index;
-  vector< shared_ptr<Way> > splits2 = mnser2.splitWay(result, mns2Index);
+  vector< WayPtr > splits2 = mnser2.splitWay(result, mns2Index);
   assert(splits2.size() != 0);
-  shared_ptr<Way> mns2 = splits2[mns2Index];
+  WayPtr mns2 = splits2[mns2Index];
 
   for (size_t i = 0; i < splits1.size(); i++)
   {
@@ -128,7 +130,7 @@ void WaySnapMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   }
   RemoveWayOp::removeWay(result, w2->getId());
 
-  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
+  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); ++it)
   {
     if (result->containsElement(*it) == false)
     {
@@ -137,7 +139,7 @@ void WaySnapMergeManipulation::applyManipulation(shared_ptr<OsmMap> map,
   }
 }
 
-const set<long>& WaySnapMergeManipulation::getImpactedWayIds(shared_ptr<const OsmMap> /*map*/) const
+const set<long>& WaySnapMergeManipulation::getImpactedWayIds(ConstOsmMapPtr /*map*/) const
 {
   _impactedWays.clear();
   _impactedWays.insert(_left);

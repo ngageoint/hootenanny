@@ -30,7 +30,7 @@
 
 // Qt
 #include <QString>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
 
 namespace hoot
 {
@@ -57,6 +57,37 @@ public:
    * @return number of rows
    */
   static long getRowCount(const QSqlDatabase& database, const QString tableName);
+
+  static QStringList getConstraintsForTable(const QSqlDatabase& database, const QString tableName);
+
+  /**
+   * Disables all existing database constraints on the specified table
+   *
+   * @param database database to modify
+   * @param tableName table to modify
+   */
+  static void disableTableConstraints(QSqlDatabase& database, const QString tableName);
+
+  /**
+   * Enables all existing database constraints on the specified table
+   *
+   * @param database database to modify
+   * @param tableName table to modify
+   */
+  static void enableTableConstraints(QSqlDatabase& database, const QString tableName);
+
+  /**
+   * Returns the version of the Postgres database used
+   *
+   * @return a database version string
+   */
+  static QString getPostgresDbVersion(const QSqlDatabase& database);
+
+private:
+
+  static void _modifyTableConstraints(QSqlDatabase& database, const QString tableName,
+                                      const bool disable = true);
+
 };
 
 }

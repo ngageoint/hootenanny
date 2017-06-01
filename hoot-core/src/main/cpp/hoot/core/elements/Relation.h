@@ -34,16 +34,15 @@
 
 namespace geos
 {
-namespace geom
-{
-class Geometry;
-class LinearRing;
-}
+  namespace geom
+  {
+    class Geometry;
+    class LinearRing;
+  }
 }
 
 namespace hoot
 {
-using namespace geos::geom;
 
 class Way;
 
@@ -59,13 +58,7 @@ class Relation : public Element
 {
 public:
 
-  static QString INNER;
-  static QString MULTILINESTRING;
-  static QString MULTIPOLYGON;
-  static QString OUTER;
-  static QString REVIEW;
-
-  static string className() { return "hoot::Relation"; }
+  static std::string className() { return "hoot::Relation"; }
 
   static unsigned int logWarnCount;
 
@@ -80,7 +73,7 @@ public:
 
   virtual ~Relation() {}
 
-  void addElement(const QString& role, const shared_ptr<const Element>& e);
+  void addElement(const QString& role, const boost::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
   void addElement(const QString& role, ElementId);
 
@@ -97,9 +90,9 @@ public:
    */
   bool contains(ElementId eid) const;
 
-  const vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
+  const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
 
-  virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType::Relation; }
 
@@ -109,19 +102,19 @@ public:
    * Returns true if this is a multipolygon type. No checking is done to determine if the geometry
    * is valid.
    */
-  bool isMultiPolygon() const { return _relationData->getType() == MULTIPOLYGON; }
+  bool isMultiPolygon() const { return _relationData->getType() == MetadataTags::RelationMultiPolygon(); }
 
   /**
    * Returns true if this is a review.
    */
-  bool isReview() const { return _relationData->getType() == REVIEW; }
+  bool isReview() const { return _relationData->getType() == MetadataTags::RelationReview(); }
 
 
   /**
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
    * no changes are made.
    */
-  void removeElement(const QString& role, const shared_ptr<const Element>& e);
+  void removeElement(const QString& role, const boost::shared_ptr<const Element>& e);
   void removeElement(const QString& role, ElementId eid);
   void removeElement(ElementId eid);
 
@@ -129,7 +122,7 @@ public:
    * Replaces all instances of from in the relation with to. If from is not in the relation then
    * no changes are made.
    */
-  void replaceElement(const shared_ptr<const Element>& from, const shared_ptr<const Element>& to);
+  void replaceElement(const boost::shared_ptr<const Element>& from, const boost::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
 
   /**
@@ -146,7 +139,7 @@ public:
   template<typename IT>
   void replaceElements(RelationData::Entry old, IT start, IT end);
 
-  void setMembers(const vector<RelationData::Entry>& members);
+  void setMembers(const std::vector<RelationData::Entry>& members);
 
   /**
    * Sets the "type" of the relation. See the OSM wiki [1] for a detailed description. Example
@@ -191,7 +184,6 @@ void Relation::replaceElements(RelationData::Entry old, IT start, IT end)
 
 typedef boost::shared_ptr<Relation> RelationPtr;
 typedef boost::shared_ptr<const Relation> ConstRelationPtr;
-typedef const boost::shared_ptr<const Relation>& ConstRelationPtrR;
 
 }
 

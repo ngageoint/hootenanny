@@ -43,22 +43,22 @@ public:
   static std::string className() { return "hoot::ChainCriterion"; }
 
   ChainCriterion() {}
-  ChainCriterion(shared_ptr<ElementCriterion> child1, shared_ptr<ElementCriterion> child2);
+  ChainCriterion(boost::shared_ptr<ElementCriterion> child1, boost::shared_ptr<ElementCriterion> child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterionPtr child2);
   ChainCriterion(ElementCriterion* child1, ElementCriterion* child2, ElementCriterion* child3);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
 
   virtual ElementCriterion* clone() { return new ChainCriterion(_filters); }
 
 protected:
 
-  ChainCriterion(vector< shared_ptr<ElementCriterion> > filters);
+  ChainCriterion(std::vector< boost::shared_ptr<ElementCriterion> > filters);
 
-  vector< shared_ptr<ElementCriterion> > _filters;
+  std::vector< boost::shared_ptr<ElementCriterion> > _filters;
 
 };
 

@@ -34,7 +34,11 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/OsmUtils.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -44,13 +48,13 @@ RdpWayGeneralizer::RdpWayGeneralizer(double epsilon)
   setEpsilon(epsilon);
 }
 
-RdpWayGeneralizer::RdpWayGeneralizer(shared_ptr<OsmMap> map, double epsilon) :
+RdpWayGeneralizer::RdpWayGeneralizer(boost::shared_ptr<OsmMap> map, double epsilon) :
 _map(map)
 {
   setEpsilon(epsilon);
 }
 
-void RdpWayGeneralizer::generalize(shared_ptr<Way> way)
+void RdpWayGeneralizer::generalize(boost::shared_ptr<Way> way)
 {
   if (!_map.get())
   {
@@ -69,7 +73,7 @@ void RdpWayGeneralizer::generalize(shared_ptr<Way> way)
   //tried using hoot filters here at first, but it didn't end up making sense
   QList<long> wayNodeIdsAfterFiltering;
   for (QList<long>::const_iterator it = wayNodeIdsBeforeFiltering.begin();
-       it != wayNodeIdsBeforeFiltering.end(); it++)
+       it != wayNodeIdsBeforeFiltering.end(); ++it)
   {
     if (_map->getNode(*it)->getTags().getInformationCount() == 0)
     {
@@ -80,7 +84,7 @@ void RdpWayGeneralizer::generalize(shared_ptr<Way> way)
   LOG_VART(wayNodeIdsAfterFiltering);
 
   //get the generalized points
-  const QList<shared_ptr<const Node> >& generalizedPoints =
+  const QList<boost::shared_ptr<const Node> >& generalizedPoints =
     getGeneralizedPoints(OsmUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
   LOG_VART(generalizedPoints.size());
   OsmUtils::printNodes("generalizedPoints", generalizedPoints);
@@ -93,8 +97,8 @@ void RdpWayGeneralizer::generalize(shared_ptr<Way> way)
   LOG_VART(QVector<long>::fromStdVector(_map->getWay(way->getId())->getNodeIds()).toList());
 }
 
-QList<shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
-  const QList<shared_ptr<const Node> >& wayPoints)
+QList<boost::shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
+  const QList<boost::shared_ptr<const Node> >& wayPoints)
 {
   LOG_VART(wayPoints.size());
   if (wayPoints.size() < 3)
@@ -102,9 +106,9 @@ QList<shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
     return wayPoints;
   }
 
-  shared_ptr<const Node> firstPoint = wayPoints.at(0);
+  boost::shared_ptr<const Node> firstPoint = wayPoints.at(0);
   LOG_VART(firstPoint->toString());
-  shared_ptr<const Node> lastPoint = wayPoints.at(wayPoints.size() - 1);
+  boost::shared_ptr<const Node> lastPoint = wayPoints.at(wayPoints.size() - 1);
   LOG_VART(lastPoint->toString());
 
   int indexOfLargestPerpendicularDistance = -1;
@@ -127,22 +131,22 @@ QList<shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
   if (largestPerpendicularDistance > _epsilon)
   {
     //split the curve into two parts and recursively reduce the two lines
-    const QList<shared_ptr<const Node> > splitLine1 =
+    const QList<boost::shared_ptr<const Node> > splitLine1 =
       wayPoints.mid(0, indexOfLargestPerpendicularDistance + 1);
     OsmUtils::printNodes("splitLine1", splitLine1);
-    const QList<shared_ptr<const Node> > splitLine2 =
+    const QList<boost::shared_ptr<const Node> > splitLine2 =
       wayPoints.mid(indexOfLargestPerpendicularDistance);
     OsmUtils::printNodes("splitLine2", splitLine2);
 
-    const QList<shared_ptr<const Node> > recursivelySplitLine1 =
+    const QList<boost::shared_ptr<const Node> > recursivelySplitLine1 =
       getGeneralizedPoints(splitLine1);
     OsmUtils::printNodes("recursivelySplitLine1", recursivelySplitLine1);
-    const QList<shared_ptr<const Node> > recursivelySplitLine2 =
+    const QList<boost::shared_ptr<const Node> > recursivelySplitLine2 =
       getGeneralizedPoints(splitLine2);
     OsmUtils::printNodes("recursivelySplitLine2", recursivelySplitLine2);
 
     //concat r2 to r1 minus the end/start point that will be the same
-    QList<shared_ptr<const Node> > combinedReducedLines =
+    QList<boost::shared_ptr<const Node> > combinedReducedLines =
       recursivelySplitLine1.mid(0, recursivelySplitLine1.size() - 1);
     combinedReducedLines.append(recursivelySplitLine2);
     OsmUtils::printNodes("combinedReducedLines", combinedReducedLines);
@@ -151,7 +155,7 @@ QList<shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
   else
   {
     //reduce the line by remove all points between the first and last points
-    QList<shared_ptr<const Node> > reducedLine;
+    QList<boost::shared_ptr<const Node> > reducedLine;
     reducedLine.append(firstPoint);
     reducedLine.append(lastPoint);
     OsmUtils::printNodes("reducedLine", reducedLine);
@@ -159,9 +163,19 @@ QList<shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
   }
 }
 
+void RdpWayGeneralizer::setEpsilon(double epsilon)
+{
+  if (epsilon <= 0.0)
+  {
+    throw HootException("Invalid epsilon value: " + QString::number(epsilon));
+  }
+  _epsilon = epsilon;
+  LOG_VART(_epsilon);
+}
+
 double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-  const shared_ptr<const Node> splitPoint, const shared_ptr<const Node> lineToBeReducedStartPoint,
-  const shared_ptr<const Node> lineToBeReducedEndPoint) const
+  const boost::shared_ptr<const Node> splitPoint, const boost::shared_ptr<const Node> lineToBeReducedStartPoint,
+  const boost::shared_ptr<const Node> lineToBeReducedEndPoint) const
 {
   LOG_VART(lineToBeReducedStartPoint->getX());
   LOG_VART(lineToBeReducedEndPoint->getX());

@@ -46,6 +46,8 @@ using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -121,7 +123,7 @@ void Way::visitRw(ElementProvider& map, ElementVisitor& filter)
   visitRo(map, filter);
 }
 
-const Envelope& Way::getApproximateEnvelope(shared_ptr<const ElementProvider> ep) const
+const Envelope& Way::getApproximateEnvelope(boost::shared_ptr<const ElementProvider> ep) const
 {
   bool goodNodes = true;
   if (ep.get())
@@ -135,8 +137,8 @@ const Envelope& Way::getApproximateEnvelope(shared_ptr<const ElementProvider> ep
       }
       else
       {
-        shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-        ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+        boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+        ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
         assert(n.get());
         _cachedEnvelope.expandToInclude(n->getX(), n->getY());
       }
@@ -157,15 +159,15 @@ const Envelope& Way::getApproximateEnvelope(shared_ptr<const ElementProvider> ep
   }
 }
 
-const Envelope& Way::getEnvelopeInternal(shared_ptr<const ElementProvider> ep) const
+const Envelope& Way::getEnvelopeInternal(boost::shared_ptr<const ElementProvider> ep) const
 {
   _cachedEnvelope.init();
 
   const std::vector<long>& ids = _wayData->getNodeIds();
   for (size_t i = 0; i < ids.size(); i++)
   {
-    shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-    ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+    boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
     assert(n.get());
     _cachedEnvelope.expandToInclude(n->getX(), n->getY());
   }

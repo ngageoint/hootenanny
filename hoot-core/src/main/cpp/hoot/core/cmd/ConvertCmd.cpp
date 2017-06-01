@@ -45,6 +45,8 @@
 // Qt
 #include <QElapsedTimer>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -82,30 +84,24 @@ public:
 
     QElapsedTimer timer;
     timer.start();
-    LOG_INFO("Converting " << args[0] << " to " << args[1] << "...");
-
-    OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
-    OsmMapWriterFactory writerFactory = OsmMapWriterFactory::getInstance();
+    LOG_INFO("Converting " << args[0].right(100) << " to " << args[1].right(100) << "...");
 
     // This keeps the status and the tags.
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
-    if (readerFactory.hasElementInputStream(args[0]) &&
-        writerFactory.hasElementOutputStream(args[1]) &&
+    if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
+        OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
+        //TODO: Why can't we use convert ops with streaming?
         ConfigOptions().getConvertOps().size() == 0)
     {
       streamElements(args[0], args[1]);
     }
     else
     {
-      shared_ptr<OsmMap> map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
 
-      // This keeps the status and the tags.
-      conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
-      conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
-
-      loadMap(map, args[0], true, Status::Unknown1);
+      loadMap(map, args[0], true, Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
 
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
@@ -135,23 +131,25 @@ public:
   {
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
-    shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
+    boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
     reader->open(in);
-    shared_ptr<ElementInputStream> streamReader = dynamic_pointer_cast<ElementInputStream>(reader);
-    shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
+    boost::shared_ptr<ElementInputStream> streamReader =
+      boost::dynamic_pointer_cast<ElementInputStream>(reader);
+    boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
     writer->open(out);
-    shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+    boost::shared_ptr<ElementOutputStream> streamWriter =
+      boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
-    shared_ptr<PartialOsmMapReader> partialReader =
-      dynamic_pointer_cast<PartialOsmMapReader>(reader);
+    boost::shared_ptr<PartialOsmMapReader> partialReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
     if (partialReader.get())
     {
       partialReader->finalizePartial();
     }
-    shared_ptr<PartialOsmMapWriter> partialWriter =
-      dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
+      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
     if (partialWriter.get())
     {
       partialWriter->finalizePartial();

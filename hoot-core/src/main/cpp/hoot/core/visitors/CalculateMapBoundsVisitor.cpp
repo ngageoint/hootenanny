@@ -29,6 +29,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -37,7 +39,7 @@ CalculateMapBoundsVisitor::CalculateMapBoundsVisitor():
 {
 }
 
-void CalculateMapBoundsVisitor::visit(const shared_ptr<const Element>& e)
+void CalculateMapBoundsVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)

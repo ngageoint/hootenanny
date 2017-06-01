@@ -48,6 +48,8 @@ using namespace boost;
 #include <QFile>
 #include <QXmlStreamWriter>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -58,7 +60,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmXmlWriter)
 OsmXmlWriter::OsmXmlWriter() :
 _formatXml(ConfigOptions().getOsmMapWriterFormatXml()),
 _includeIds(false),
-_includeDebug(ConfigOptions().getWriterIncludeDebug()),
+_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
 _includePointInWays(false),
 _includeCompatibilityTags(true),
 _textStatus(ConfigOptions().getWriterTextStatus()),
@@ -69,6 +71,7 @@ _encodingErrorCount(0)
 
 }
 
+//TODO: refactor this
 QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.
@@ -154,13 +157,13 @@ QString OsmXmlWriter::_typeName(ElementType e)
   }
 }
 
-void OsmXmlWriter::write(boost::shared_ptr<const OsmMap> map, const QString& path)
+void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)
 {
   open(path);
   write(map);
 }
 
-void OsmXmlWriter::write(boost::shared_ptr<const OsmMap> map)
+void OsmXmlWriter::write(ConstOsmMapPtr map)
 {
   if (!_fp.get() || _fp->isWritable() == false)
   {
@@ -213,6 +216,8 @@ void OsmXmlWriter::write(boost::shared_ptr<const OsmMap> map)
 void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
   LOG_VART(e->getElementId());
+  LOG_VART(e->getVersion());
+  LOG_VART(e->getStatus());
 
   if (_includeCompatibilityTags)
   {
@@ -223,6 +228,7 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
       version = 1;
     }
     writer.writeAttribute("version", QString::number(version));
+    LOG_VART(version);
   }
   else
   {
@@ -251,14 +257,13 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   }
 }
 
-void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> nids;
-  NodeMap::const_iterator it = map->getNodes().begin();
-  while (it != map->getNodes().end())
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     nids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
@@ -275,7 +280,7 @@ void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& w
 
     const Tags& tags = n->getTags();
 
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key().isEmpty() == false && it.value().isEmpty() == false)
       {
@@ -327,7 +332,7 @@ void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& w
 
     // turn this on when we start using node circularError.
     if (n->hasCircularError() && tags.getNonDebugCount() > 0 &&
-        ConfigOptions().getWriterIncludeCircularError())
+        ConfigOptions().getWriterIncludeCircularErrorTags())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", MetadataTags::ErrorCircular());
@@ -346,14 +351,13 @@ void OsmXmlWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& w
   }
 }
 
-void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> wids;
-  WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     wids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
@@ -374,7 +378,7 @@ void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& wr
       writer.writeAttribute("ref", QString::number(w->getNodeId(j)));
       if (_includePointInWays)
       {
-        shared_ptr<const Node> n = map->getNode(nid);
+        ConstNodePtr n = map->getNode(nid);
         writer.writeAttribute("x", QString::number(n->getX(), 'g', _precision));
         writer.writeAttribute("y", QString::number(n->getY(), 'g', _precision));
       }
@@ -429,7 +433,7 @@ void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& wr
       }
     }
 
-    if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
+    if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", MetadataTags::ErrorCircular());
@@ -449,21 +453,20 @@ void OsmXmlWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& wr
   }
 }
 
-void OsmXmlWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> rids;
-  RelationMap::const_iterator it = map->getRelations().begin();
-  while (it != map->getRelations().end())
+  const RelationMap& relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     rids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
   qSort(rids.begin(), rids.end(), qLess<long>());
   for (int i = 0; i < rids.size(); i++)
   {
-    const shared_ptr<const Relation> r = map->getRelation(rids[i]);
+    const ConstRelationPtr r = map->getRelation(rids[i]);
     writer.writeStartElement("relation");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(r->getId()));
@@ -519,7 +522,7 @@ void OsmXmlWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWrite
       writer.writeEndElement();
     }
 
-    if (r->hasCircularError() && ConfigOptions().getWriterIncludeCircularError())
+    if (r->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", MetadataTags::ErrorCircular());

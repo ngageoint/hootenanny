@@ -68,114 +68,6 @@ class ServiceOsmApiDbBulkWriterTest : public CppUnit::TestFixture
 
 public:
 
-  shared_ptr<OsmMap> _map;
-
-  shared_ptr<Node> createNode(double x, double y)
-  {
-    shared_ptr<Node> n(new Node(Status::Unknown1, _map->createNextNodeId(), x, y, 10.0));
-    _map->addNode(n);
-    return n;
-  }
-
-  shared_ptr<OsmMap> createTestMap()
-  {
-    shared_ptr<OsmMap> map(new OsmMap());
-    _map = map;
-
-    shared_ptr<Node> n1 = createNode(-77.0, 38.0);
-    n1->setTag("building", "yes");
-    n1->setTag("name", "n1");
-
-    shared_ptr<Way> w1(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
-    w1->setTag("area", "yes");
-    w1->setTag("building", "yes");
-    w1->setTag("name", "w1");
-    w1->addNode(createNode(-77.1, 38.0)->getId());
-    w1->addNode(createNode(-77.2, 38.0)->getId());
-    w1->addNode(createNode(-77.2, 38.1)->getId());
-    w1->addNode(w1->getNodeId(0));
-    map->addWay(w1);
-
-    shared_ptr<Way> w2(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
-    w2->setTag("highway", "track");
-    w2->setTag("name", "w2");
-    w2->addNode(createNode(-77.3, 38.0)->getId());
-    w2->addNode(createNode(-77.3, 38.1)->getId());
-    map->addWay(w2);
-
-    shared_ptr<Way> w3(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
-    w3->setTag("highway", "road");
-    w3->setTag("name", "w3");
-    w3->addNode(createNode(-77.4, 38.0)->getId());
-    w3->addNode(createNode(-77.4, 38.1)->getId());
-    map->addWay(w3);
-
-    shared_ptr<Way> w4(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
-    w4->addNode(createNode(-77.5, 38.0)->getId());
-    w4->addNode(createNode(-77.7, 38.0)->getId());
-    w4->addNode(createNode(-77.6, 38.1)->getId());
-    w4->addNode(w4->getNodeId(0));
-    map->addWay(w4);
-
-    shared_ptr<Way> w5(new Way(Status::Unknown1, map->createNextWayId(), 13.0));
-    w5->addNode(createNode(-77.55, 38.01)->getId());
-    w5->addNode(createNode(-77.65, 38.01)->getId());
-    w5->addNode(createNode(-77.6, 38.05)->getId());
-    w5->addNode(w5->getNodeId(0));
-    map->addWay(w5);
-
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 15.0, "multipolygon"));
-    r1->setTag("building", "yes");
-    r1->setTag("name", "r1");
-    r1->addElement("outer", w4->getElementId());
-    r1->addElement("inner", w5->getElementId());
-    map->addRelation(r1);
-
-    return map;
-  }
-
-  QStringList tokenizeOutputFileWithoutDates(const QString filePath)
-  {
-    QStringList tokens;
-
-    //parse all the string tokens, except those containing dates, which we can't directly compare
-    const QRegExp reDate("[12][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]");
-    const QRegExp reTime("[0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9]");
-
-    QFile file(filePath);
-    if (file.open(QIODevice::ReadOnly))
-    {
-      QTextStream in(&file);
-      while (!in.atEnd())
-      {
-        QString line = in.readLine();
-        line = line.remove(reDate);
-        line = line.remove(reTime);
-        tokens << line;
-      }
-      file.close();
-    }
-    else
-    {
-      throw HootException("Unable to open file " + filePath + ".");
-    }
-
-    return tokens;
-  }
-
-  void verifySqlOutput(const QString stdFilePath, const QString outFilePath)
-  {
-    LOG_VART(stdFilePath);
-    LOG_VART(outFilePath);
-    const QStringList stdSqlTokens = tokenizeOutputFileWithoutDates(stdFilePath);
-    const QStringList outputSqlTokens = tokenizeOutputFileWithoutDates(outFilePath);
-    CPPUNIT_ASSERT_EQUAL(stdSqlTokens.size(), outputSqlTokens.size());
-    for (int i = 0; i < stdSqlTokens.size(); i++)
-    {
-      HOOT_STR_EQUALS(stdSqlTokens.at(i), outputSqlTokens.at(i));
-    }
-  }
-
   void verifyDatabaseOutputOffline()
   {
     OsmApiDbReader reader;
@@ -233,9 +125,9 @@ public:
       (long)4,
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
-    //verify sequences
-//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-//    //TODO: fix?
+    //verify sequences - sequences can't be updated b/c of a chicken egg situation with nextval; sql
+    //file validation will have to be good enough
+//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
 //    CPPUNIT_ASSERT_EQUAL((long)2, osmApiDb->getNextId(ElementType::Relation));
@@ -302,7 +194,7 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    //TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)15, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)6, osmApiDb->getNextId(ElementType::Way));
@@ -370,7 +262,7 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-//    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+//    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
 //    //TODO: fix?
 //    CPPUNIT_ASSERT_EQUAL((long)17, osmApiDb->getNextId(ElementType::Node));
 //    CPPUNIT_ASSERT_EQUAL((long)9, osmApiDb->getNextId(ElementType::Way));
@@ -438,64 +330,11 @@ public:
       DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
 
     //verify sequences
-    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
+    boost::shared_ptr<OsmApiDb> osmApiDb = boost::dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
     CPPUNIT_ASSERT_EQUAL((long)18, osmApiDb->getNextId(ElementType::Node));
     CPPUNIT_ASSERT_EQUAL((long)8, osmApiDb->getNextId(ElementType::Way));
     CPPUNIT_ASSERT_EQUAL((long)4, osmApiDb->getNextId(ElementType::Relation));
     CPPUNIT_ASSERT_EQUAL((long)7, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
-
-    reader.close();
-  }
-
-  void verifyDatabaseEmpty()
-  {
-    OsmApiDbReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    reader.read(map);
-
-    //verify current elements
-    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL((size_t)0, map->getRelations().size());
-
-    //verify historical element table sizes
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getNodeTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWaysTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getWayNodesTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationTagsTableName()));
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getRelationMembersTableName()));
-
-    //verify changeset table size
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      DbUtils::getRowCount(reader._getDatabase()->getDB(), ApiDb::getChangesetsTableName()));
-
-    //verify sequences
-    shared_ptr<OsmApiDb> osmApiDb = dynamic_pointer_cast<OsmApiDb>(reader._getDatabase());
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Node));
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Way));
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ElementType::Relation));
-    CPPUNIT_ASSERT_EQUAL((long)1, osmApiDb->getNextId(ApiDb::getChangesetsTableName()));
 
     reader.close();
   }
@@ -506,7 +345,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -519,10 +359,10 @@ public:
     writer.setFileOutputElementBufferSize(3);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
     verifyDatabaseOutputOffline();
   }
@@ -534,7 +374,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -548,12 +389,12 @@ public:
     writer.setValidateData(false);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
     //the element IDs will be reversed in the sql output with validation off, due to the way the
     //osm data reading works
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-validate-off.sql",
       outFile);
     verifyDatabaseOutputOfflineValidateOff();
@@ -565,7 +406,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -579,10 +421,10 @@ public:
     writer.setStxxlMapMinSize(3);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
     verifyDatabaseOutputOffline();
   }
@@ -593,7 +435,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -608,15 +451,19 @@ public:
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
     //write some data from somewhere else while before our writer starts writing data
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("changesets.sql"); //1 changeset
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("nodes.sql"); //2 nodes
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("ways.sql"); //1 way
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("relations.sql"); //1 relation
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/changesets.sql"); //1 changeset
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/nodes.sql"); //2 nodes
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/ways.sql"); //1 way
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/relations.sql"); //1 relation
 
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-online.sql", outFile);
     verifyDatabaseOutputOnline();
   }
@@ -627,7 +474,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -643,10 +491,10 @@ public:
     writer.setStartingRelationId(5);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline-starting-ids.sql",
       outFile);
 
@@ -659,7 +507,8 @@ public:
 
     //init db
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ServicesDbTestUtils::execOsmApiDbSqlTestScript("users.sql");
+    const QString scriptDir = "test-files/servicesdb";
+    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
     OsmApiDbBulkWriter writer;
     const QString outFile =
@@ -671,12 +520,12 @@ public:
     writer.setFileOutputElementBufferSize(3);
 
     writer.open(outFile);
-    writer.write(createTestMap());
+    writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();
 
-    verifySqlOutput(
+    TestUtils::verifyStdMatchesOutputIgnoreDate(
       "test-files/io/OsmApiDbBulkWriterTest/OsmApiDbBulkWriter-psql-offline.sql", outFile);
-    verifyDatabaseEmpty();
+    ServicesDbTestUtils::verifyTestDatabaseEmpty();
   }
 };
 

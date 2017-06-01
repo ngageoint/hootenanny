@@ -26,14 +26,18 @@
 
 #include <pp/HadoopPipesUtils.h>
 
+#include <sstream>
+
+using namespace std;
+
 namespace hoot
 {
 
-class OsmMapIterator : public pp::Iterator< shared_ptr<OsmMap> >
+class OsmMapIterator : public pp::Iterator<OsmMapPtr >
 {
 public:
 
-  OsmMapIterator(HadoopPipes::ReduceContext* context, shared_ptr<OsmMap>& map,
+  OsmMapIterator(HadoopPipes::ReduceContext* context, OsmMapPtr& map,
                  OsmPbfReader& reader) :
     _context(context),
     _map(map),
@@ -44,7 +48,7 @@ public:
 
   virtual bool hasNext() { return _hasNext; }
 
-  virtual const shared_ptr<OsmMap>& next()
+  virtual const OsmMapPtr& next()
   {
     const string& v = _context->getInputValue();
     stringstream ss(v, stringstream::in);
@@ -57,7 +61,7 @@ public:
 private:
   HadoopPipes::ReduceContext* _context;
   bool _hasNext;
-  shared_ptr<OsmMap>& _map;
+  OsmMapPtr& _map;
   OsmPbfReader& _reader;
 };
 

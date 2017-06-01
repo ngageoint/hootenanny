@@ -35,6 +35,8 @@
 #include <QFileInfo>
 #include <QDir>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -57,17 +59,17 @@ class PertyTestCmd : public BaseCommand
         throw HootException(QString("%1 takes two parameters.").arg(getName()));
       }
 
-      QList<shared_ptr<const PertyTestRunResult> > results =
+      QList<boost::shared_ptr<const PertyTestRunResult> > results =
         PertyTestRunner().runTest(args[0], args[1]);
 
       LOG_INFO("\n\nPERTY Test Results");
       LOG_INFO("\n\nNumber of Test Runs: " << results.size());
       bool anyTestFailed = false;
       bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
-      for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-           it != results.end(); it++)
+      for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+           it != results.end(); ++it)
       {
-        shared_ptr<const PertyTestRunResult> result = *it;
+        boost::shared_ptr<const PertyTestRunResult> result = *it;
         LOG_INFO(result->toString());
         anyTestFailed = !result->testPassed();
         //just checking here for test run scores that were higher than expected but allowed to pass;

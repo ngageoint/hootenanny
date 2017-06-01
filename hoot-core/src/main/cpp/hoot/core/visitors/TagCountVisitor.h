@@ -42,7 +42,7 @@ namespace hoot
 class TagCountVisitor : public ElementVisitor, public SingleStatistic
 {
 public:
-  static string className() { return "hoot::TagCountVisitor"; }
+  static std::string className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
 

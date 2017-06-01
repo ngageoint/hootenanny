@@ -32,6 +32,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -46,7 +48,7 @@ _map(map)
 {
 }
 
-bool BuildingWayNodeCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool BuildingWayNodeCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   bool result = false;
 

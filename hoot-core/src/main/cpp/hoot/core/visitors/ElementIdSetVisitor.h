@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Returns a set of the element ids visited.
  */
@@ -49,13 +47,13 @@ public:
   /**
    * Returns a set containing all the ElementIds visited.
    */
-  const set<ElementId>& getElementSet() const { return _elements; }
+  const std::set<ElementId>& getElementSet() const { return _elements; }
 
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
-  set<ElementId> _elements;
+  std::set<ElementId> _elements;
 };
 
 }

@@ -22,7 +22,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class PaintNodesMapper : public OsmMapMapper
 {
@@ -40,14 +39,13 @@ protected:
 
   virtual void _init(HadoopPipes::MapContext& context);
 
-  virtual void _map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context);
+  virtual void _map(OsmMapPtr& m, HadoopPipes::MapContext& context);
 
   NodeDensity _nd;
-  Envelope _envelope;
+  geos::geom::Envelope _envelope;
   double _pixelSize;
   int _width, _height;
-
-  HadoopPipes::MapContext* _context;
+  bool _initialized;
 };
 
 }

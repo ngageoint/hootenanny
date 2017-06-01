@@ -17,16 +17,18 @@
 #include "WayJoin1Mapper.h"
 
 // Hoot
-#include <hoot/core/filters/TagCriterion.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/hadoop/pbf/PbfRecordWriter.h>
-#include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/hadoop/Debug.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
 
+using namespace std;
 
 namespace hoot
 {
@@ -41,7 +43,7 @@ WayJoin1Mapper::~WayJoin1Mapper()
 {
 }
 
-void WayJoin1Mapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& context)
+void WayJoin1Mapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
   LOG_INFO("Starting map");
   string keyStr;
@@ -50,7 +52,7 @@ void WayJoin1Mapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
   int64_t* key = (int64_t*)keyStr.data();
 
   // Remove all non-roads.
-  shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
+  boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
   RemoveElementsVisitor::removeWays(m, pCrit);
 
   Debug::printTroubled(m);
@@ -61,7 +63,7 @@ void WayJoin1Mapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
   const NodeMap& nm = m->getNodes();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
-    const shared_ptr<const Node>& n = it->second;
+    const ConstNodePtr& n = it->second;
 
     *key = n->getId();
     valueNode->x = n->getX();
@@ -75,7 +77,7 @@ void WayJoin1Mapper::_map(shared_ptr<OsmMap>& m, HadoopPipes::MapContext& contex
   const WayMap& wm = m->getWays();
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    const shared_ptr<const Way>& w = it->second;
+    const ConstWayPtr& w = it->second;
 
     valueWay->id = w->getId();
 

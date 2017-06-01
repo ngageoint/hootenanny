@@ -51,10 +51,6 @@
 namespace hoot
 {
 
-using namespace boost;
-using namespace geos::geom;
-using namespace std;
-
 class OsmMap;
 class NodeReplacements;
 
@@ -67,7 +63,7 @@ class NodeReplacements;
 class TileConflator
 {
 public:
-  TileConflator(shared_ptr<TileWorker> worker);
+  TileConflator(boost::shared_ptr<TileWorker> worker);
 
   virtual ~TileConflator();
 
@@ -97,7 +93,7 @@ private:
   Degrees _buffer;
 
   // [x][y]
-  vector< vector<Envelope> > _tiles;
+  std::vector< std::vector<geos::geom::Envelope> > _tiles;
 
   int _mapPart;
 
@@ -105,7 +101,7 @@ private:
   int _nodeReplacementPart;
   int _iteration;
 
-  shared_ptr<TileWorker> _worker;
+  boost::shared_ptr<TileWorker> _worker;
 
   /**
    * The tile conflation works by creating and removing temporary copies of the input data. This

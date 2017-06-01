@@ -42,19 +42,19 @@ class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
+  static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
   AddHilbertReviewSortOrderOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
 private:
 
-  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const set<ElementId> eids);
+  int64_t _calculateHilbertValue(const ConstOsmMapPtr &map, const std::set<ElementId> eids);
 
-  Envelope::AutoPtr _mapEnvelope;
+  geos::geom::Envelope::AutoPtr _mapEnvelope;
 };
 
 }

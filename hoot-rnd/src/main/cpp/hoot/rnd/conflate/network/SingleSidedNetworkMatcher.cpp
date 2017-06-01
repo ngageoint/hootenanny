@@ -32,6 +32,10 @@
 
 #include "EdgeMatchSetFinder.h"
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -110,9 +114,9 @@ double SingleSidedNetworkMatcher::_calculateProbabilityOfMatch(ConstNetworkVerte
   return 1 - pOfWrong;
 }
 
-shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcher::create()
+boost::shared_ptr<SingleSidedNetworkMatcher> SingleSidedNetworkMatcher::create()
 {
-  return shared_ptr<SingleSidedNetworkMatcher>(new SingleSidedNetworkMatcher());
+  return boost::shared_ptr<SingleSidedNetworkMatcher>(new SingleSidedNetworkMatcher());
 }
 
 QList<NetworkEdgeScorePtr> SingleSidedNetworkMatcher::getAllEdgeScores() const

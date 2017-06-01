@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTY_TEST_RUNNER_H
 #define PERTY_TEST_RUNNER_H
@@ -42,10 +42,8 @@
 namespace hoot
 {
 
-  using namespace boost;
-
-  class PertyTestRunResult;
-  class PertyMatchScorer;
+class PertyTestRunResult;
+class PertyMatchScorer;
 
 /**
  * Runs a PERTY test to generate a PERTY score with an option to vary a single PERTY input variable
@@ -65,7 +63,7 @@ public:
       @param referenceMapInputPath Path to the input OSM map file to run PERTY against
       @param outputPath Output path for file and results
     */
-  QList<shared_ptr<const PertyTestRunResult> > runTest(const QString referenceMapInputPath,
+  QList<boost::shared_ptr<const PertyTestRunResult> > runTest(const QString referenceMapInputPath,
                                                        const QString outputPath);
 
   virtual void setConfiguration(const Settings &conf) { _settings = conf; }
@@ -193,11 +191,11 @@ private:
 
   Settings _settings;
 
-  shared_ptr<PertyMatchScorer> _matchScorer;
+  boost::shared_ptr<PertyMatchScorer> _matchScorer;
 
   void _writeStatsForOutputFiles(const QString& inputMapPath, QString sep);
   void _writePlotFile(const QString outputPath,
-                      const QList<shared_ptr<const PertyTestRunResult> >& testRunResults);
+                      const QList<boost::shared_ptr<const PertyTestRunResult> >& testRunResults);
 
   //for testing purposes only
   friend class PertyTestRunnerTest;

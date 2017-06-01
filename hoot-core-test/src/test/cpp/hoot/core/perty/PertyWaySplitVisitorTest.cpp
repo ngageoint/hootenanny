@@ -32,11 +32,12 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/perty/PertyWaySplitVisitor.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QString>
@@ -72,7 +73,7 @@ public:
 
     OsmMap::resetCounters();
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-1.osm", map);
@@ -115,7 +116,7 @@ public:
 
     OsmMap::resetCounters();
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
     reader.read("test-files/perty/PertyWaySplitVisitorTest/PertyWaySplitVisitorTest-in-2.osm", map);

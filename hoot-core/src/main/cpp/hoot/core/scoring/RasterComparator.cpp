@@ -48,10 +48,12 @@
 // TGS
 //using namespace Tgs;
 
+using namespace std;
+
 namespace hoot
 {
 
-RasterComparator::RasterComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2) :
+RasterComparator::RasterComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2) :
       BaseComparator(map1, map2)
 {
 }
@@ -139,7 +141,7 @@ private:
   QMatrix& _m;
 };
 
-void RasterComparator::_renderImage(shared_ptr<OsmMap> map, cv::Mat& image)
+void RasterComparator::_renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& image)
 {
   QImage qImage(_width, _height, QImage::Format_ARGB32);
   QPainter pt(&qImage);

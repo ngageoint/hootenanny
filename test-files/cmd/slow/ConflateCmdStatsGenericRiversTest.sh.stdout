@@ -1,8 +1,8 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Node Count	338	176	410	
 Way Count	14	15	110	
-Relation Count	0	0	23	
-Total Feature Count	14	15	79	
+Relation Count	0	0	8	
+Total Feature Count	14	15	118	
 Total Conflatable Features	14	15	0	
 Percentage of Total Features Conflatable	100	100	0	
 Untagged Feature Count	0	0	0	
@@ -11,12 +11,12 @@ Percentage of Total Features Unconflatable	0	0	0
 Number of Match Creators	1	1	1	
 Features Conflatable by: hoot::ScriptMatchCreator,LinearWaterway.js	14	15	0	
 Total Conflated Features	0	0	23	
-Percentage of Total Features Conflated	0	0	29.11392405063291	
+Percentage of Total Features Conflated	0	0	19.49152542372881	
 Total Features Marked for Review	0	0	0	
 Percentage of Total Features Marked for Review	0	0	0	
 Total Number of Reviews to be Made	0	0	0	
-Total Unmatched Features	14	15	56	
-Percentage of Total Features Unmatched	100	100	70.88607594936708	
+Total Unmatched Features	14	15	95	
+Percentage of Total Features Unmatched	100	100	80.50847457627118	
 POI Count	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
@@ -44,16 +44,17 @@ Unmatched Buildings	0	0	0
 Percentage of Buildings Conflated	0	0	0	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings	0	0	0	
-Waterway Count	14	15	79	
+Waterway Count	14	15	118	
 Conflatable Waterways	14	15	0	
 Conflated Waterways	0	0	23	
 Waterways Marked for Review	0	0	0	
 Number of Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	14	15	56	
+Unmatched Waterways	14	15	95	
 Meters of Waterway Processed by Conflation	0	0	7533.441935619483	
-Percentage of Waterways Conflated	0	0	29.11392405063291	
+Percentage of Waterways Conflated	0	0	19.49152542372881	
 Percentage of Waterways Marked for Review	0	0	0	
-Percentage of Unmatched Waterways	100	100	70.88607594936708	
-Difference Between Total Features in Output and Total Features in Inputs			50	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			172.4137931034483	
+Percentage of Unmatched Waterways	100	100	80.50847457627118	
+Difference Between Total Features in Output and Total Features in Inputs			89	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			306.896551724138	
 
+12:02:44.779 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 248) Conflation job completed.

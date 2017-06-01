@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__CFS_FITNESS_FUNCTION_H__
@@ -47,34 +47,34 @@ namespace Tgs
   {
   public:
 
-    CfsFitnessFunction(shared_ptr<DataFrame> df, const std::vector<int>& uids);
+    CfsFitnessFunction(boost::shared_ptr<DataFrame> df, const std::vector<int>& uids);
 
     virtual ~CfsFitnessFunction();
 
-    void addFeature(shared_ptr<Genome> genome);
+    void addFeature(boost::shared_ptr<Genome> genome);
 
     virtual double calculateFitness(const Genome& genome);
 
     double getBaseScore() const { return _baseScore; }
 
-    const std::vector< shared_ptr<CalculatorGenome> >& getGenomes() const { return _features; }
+    const std::vector<boost::shared_ptr<CalculatorGenome> >& getGenomes() const { return _features; }
 
     void initializeNewGeneration();
   
   private:
 
     double _baseScore;
-    shared_ptr<DataFrame> _baseCopy;
+    boost::shared_ptr<DataFrame> _baseCopy;
     std::vector<int> _baseUids;
-    shared_ptr<DataFrame> _workingCopy;
+    boost::shared_ptr<DataFrame> _workingCopy;
     std::vector<int> _workingUids;
-    std::vector< shared_ptr<CalculatorGenome> > _features;
+    std::vector<boost::shared_ptr<CalculatorGenome> > _features;
     int _workingFactor;
 
     /**
      * Add one empty factor to the specified data frame.
      */
-    shared_ptr<DataFrame> _addOneFactor(shared_ptr<DataFrame> df);
+    boost::shared_ptr<DataFrame> _addOneFactor(boost::shared_ptr<DataFrame> df);
 
     void _loadGenome(const CalculatorGenome& genome);
   };

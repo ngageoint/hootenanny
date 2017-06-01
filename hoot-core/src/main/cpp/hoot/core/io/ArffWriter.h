@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ARFFWRITER_H
@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * @brief The ArffWriter class
@@ -51,14 +50,14 @@ using namespace std;
 class ArffWriter
 {
 public:
-  typedef map<QString, double> Sample;
+  typedef std::map<QString, double> Sample;
 
   /**
    * @brief ArffWriter
    * @param strm Does not take ownership.
    * @param useNulls if true writes "?" for null values. Otherwise writes "-1".
    */
-  ArffWriter(ostream* strm, bool useNulls);
+  ArffWriter(std::ostream* strm, bool useNulls);
   ArffWriter(QString path, bool useNulls);
 
   /**
@@ -69,11 +68,11 @@ public:
    *
    * @param samples vector of samples to write.
    */
-  void write(const vector<Sample>& samples);
+  void write(const std::vector<Sample>& samples);
 
 private:
-  auto_ptr<fstream> _autoStrm;
-  ostream* _strm;
+  std::auto_ptr<std::fstream> _autoStrm;
+  std::ostream* _strm;
   bool _useNulls;
 
   void _w(const QString& s);

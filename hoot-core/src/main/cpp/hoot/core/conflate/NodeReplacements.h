@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NODEREPLACEMENTS_H
@@ -36,7 +36,7 @@
 
 namespace hoot
 {
-  using namespace std;
+
 /**
  * This class keeps track of all the node replacements that have occured in an OsmMap. It also
  * supports import/export and simplifying node replacements.
@@ -55,7 +55,7 @@ public:
 
   void read(QString file) { _read(file); simplify(); }
 
-  void read(istream& is) { _read(is); simplify(); }
+  void read(std::istream& is) { _read(is); simplify(); }
 
   /**
    * Removes extra references. For example a->b, b->c simplifies to: a->c, b->c.
@@ -66,7 +66,7 @@ public:
 
   void write(QString fn);
 
-  void write(ostream& os) { simplify(); _write(os); }
+  void write(std::ostream& os) { simplify(); _write(os); }
 
 private:
 
@@ -76,9 +76,9 @@ private:
 
   void _read(QString file);
 
-  void _read(istream& is);
+  void _read(std::istream& is);
 
-  void _write(ostream& os);
+  void _write(std::ostream& os);
 };
 
 }

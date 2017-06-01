@@ -85,8 +85,8 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
   }
 
   // Convert to a Way
-  boost::shared_ptr<Way> way = boost::dynamic_pointer_cast<Way>(element);
-  boost::shared_ptr<Way> emptyWay;
+  WayPtr way = boost::dynamic_pointer_cast<Way>(element);
+  WayPtr emptyWay;
 
   if ( way == emptyWay )
   {
@@ -135,8 +135,6 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
 
   unsigned int nodesRemaining = way->getNodeCount();
 
-  std::vector< boost::shared_ptr< Way > > newWays;
-
   unsigned int masterNodeIndex = 0;
   while ( nodesRemaining > 0 )
   {
@@ -150,7 +148,7 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     }
 
     // Create a new way
-    boost::shared_ptr<Way> newWay( new Way(Status::Unknown1, _map->createNextWayId(),
+    WayPtr newWay( new Way(Status::Unknown1, _map->createNextWayId(),
       way->getRawCircularError() ) );
     LOG_TRACE("Created new way w/ ID " << newWay->getId() << " that is going to hold " << nodesThisTime << " nodes");
     for ( unsigned int i = 0; i < nodesThisTime; ++i )

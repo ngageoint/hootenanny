@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__MIMIC_GA_H__
@@ -51,16 +51,16 @@ namespace Tgs
   {
   public:
 
-    MimicGa(shared_ptr<Genome> seed, shared_ptr<FitnessFunction> fitness);
+    MimicGa(boost::shared_ptr<Genome> seed, boost::shared_ptr<FitnessFunction> fitness);
 
     virtual ~MimicGa();
 
     void setParameters(const std::map<std::string, Parameter>& params);
 
   protected:
-    virtual void _initializeGenome(shared_ptr<Genome> genome);
+    virtual void _initializeGenome(boost::shared_ptr<Genome> genome);
 
-    virtual void _mutate(shared_ptr<Genome> genome);
+    virtual void _mutate(boost::shared_ptr<Genome> genome);
 
     virtual void _updateScores();
 
@@ -83,9 +83,9 @@ namespace Tgs
 
     void _normalize(WeightMap& wm);
 
-    void _setGenomeWeights(shared_ptr<CalculatorGenome> genome);
+    void _setGenomeWeights(boost::shared_ptr<CalculatorGenome> genome);
 
-    void _populateWeights(const shared_ptr<CalculatorGenomeNode> node);
+    void _populateWeights(const boost::shared_ptr<CalculatorGenomeNode> node);
   };
 }
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS_POINTS_H__
@@ -88,12 +88,12 @@ namespace Tgs
     double x, y, z;
     double r, g, b, i;
 
-    CloudPoint() {};
+    CloudPoint() {}
 
-    CloudPoint(const CloudPoint& cp) 
+    CloudPoint(const CloudPoint& cp)
     {
       *this = cp;
-    };
+    }
 
     CloudPoint(double x, double y, double z)
     {
@@ -102,7 +102,7 @@ namespace Tgs
       this->z = z;
     }
 
-    const CloudPoint& operator=(const CloudPoint& cp)
+    CloudPoint& operator=(const CloudPoint& cp)
     {
       x = cp.x;
       y = cp.y;
@@ -156,7 +156,7 @@ namespace Tgs
   class PointCloud
   {
   public:
-    PointCloud() {};
+    PointCloud() {}
 
     void addPoint(const CloudPoint& cp) { _points.push_back(cp); }
 
@@ -168,17 +168,16 @@ namespace Tgs
 
     const std::vector<CloudPoint>& getPoints() const { return _points; }
 
-    void load(const std::string fn)
+    void load(const std::string& fn)
     {
       std::fstream ins(fn.c_str(), std::fstream::in);
-
-      char inLine[512];
 
       if(ins.is_open())
       {
         while(!ins.eof())
         {
-          Tgs::CloudPoint cp; 
+          char inLine[512];
+          Tgs::CloudPoint cp;
           ins.getline(inLine, 512);
           std::stringstream ss;
           ss << inLine;
@@ -204,7 +203,7 @@ namespace Tgs
   class Point2d
   {
   public:
-    Point2d() {};
+    Point2d() {}
 
     Point2d(double p1, double p2) { this->p1 = p1; this->p2 = p2; }
 

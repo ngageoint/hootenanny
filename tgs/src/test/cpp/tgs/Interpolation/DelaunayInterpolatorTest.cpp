@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit Includes
@@ -59,12 +59,12 @@ class DelaunayInterpolatorTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 public:
 
-  shared_ptr<DelaunayInterpolator> buildRandom()
+  boost::shared_ptr<DelaunayInterpolator> buildRandom()
   {
-    shared_ptr<DelaunayInterpolator> result(new DelaunayInterpolator);
+    boost::shared_ptr<DelaunayInterpolator> result(new DelaunayInterpolator);
     DelaunayInterpolator& uut = *result;
 
-    shared_ptr<DataFrame> dfPtr(new DataFrame());
+    boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");
@@ -103,7 +103,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-    shared_ptr<DelaunayInterpolator> di = buildRandom();
+    boost::shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.025, uut.estimateError(), 0.001);
@@ -162,7 +162,7 @@ public:
   {
     Tgs::Random::instance()->seed(0);
 
-    shared_ptr<DelaunayInterpolator> di = buildRandom();
+    boost::shared_ptr<DelaunayInterpolator> di = buildRandom();
     DelaunayInterpolator& uut = *di;
 
     Tgs::Random::instance()->seed(0);
@@ -187,7 +187,7 @@ public:
     Tgs::Random::instance()->seed(0);
     DelaunayInterpolator uut;
 
-    shared_ptr<DataFrame> dfPtr(new DataFrame());
+    boost::shared_ptr<DataFrame> dfPtr(new DataFrame());
     DataFrame& df = *dfPtr;
     vector<string> labels;
     labels.push_back("x");

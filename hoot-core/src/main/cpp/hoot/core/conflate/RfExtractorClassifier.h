@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace Tgs;
 
 class FeatureExtractor;
 class WaySublineMatchString;
@@ -57,16 +56,16 @@ public:
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2) const;
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m,
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2) const;
 
   void import(QDomElement& docRoot);
 
 protected:
 
-  mutable vector< shared_ptr<const FeatureExtractor> > _extractors;
+  mutable std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
   QStringList _rfFactorLabels;
-  auto_ptr<RandomForest> _rf;
+  std::auto_ptr<Tgs::RandomForest> _rf;
 
   /**
    * Creates all the possible extractors for this classifier. Only the ones that are also listed
@@ -75,7 +74,7 @@ protected:
    */
   virtual void _createExtractors() const = 0;
 
-  const vector< shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 };
 
 }

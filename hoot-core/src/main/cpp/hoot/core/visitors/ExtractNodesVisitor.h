@@ -43,7 +43,7 @@ public:
 
   ExtractNodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
 private:
 

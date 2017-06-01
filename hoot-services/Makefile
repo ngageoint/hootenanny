@@ -29,6 +29,7 @@ config: src/main/webapp/WEB-INF/workspace/jdbc/WFS_Connection.xml src/main/resou
 
 run-liquibase:
 	rm -f ./src/main/resources/db/liquibase.properties
+	../scripts/ReplaceEnvironmentVariables.sh ../scripts/database/blank_osmapidb.sql.in ../scripts/database/blank_osmapidb.sql
 	../scripts/ReplaceEnvironmentVariables.sh ./src/main/resources/db/liquibase.properties.in ./src/main/resources/db/liquibase.properties
 	mvn $(MVN_QUIET) liquibase:update
 

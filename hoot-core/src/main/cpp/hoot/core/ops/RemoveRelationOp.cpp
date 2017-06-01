@@ -32,6 +32,8 @@
 #include <hoot/core/conflate/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -46,7 +48,7 @@ RemoveRelationOp::RemoveRelationOp(long rId):
 {
 }
 
-void RemoveRelationOp::apply(shared_ptr<OsmMap>& map)
+void RemoveRelationOp::apply(OsmMapPtr& map)
 {
   if (map->_relations.find(_rIdToRemove) != map->_relations.end())
   {

@@ -30,6 +30,8 @@
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -69,15 +71,15 @@ public:
       pp::Job::setDefaultJobTracker("local");
     }
 
-    shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
+    boost::shared_ptr<TileWorker2> worker(new HadoopTileWorker2());
     FourPassManager driver(worker);
     driver.setMaxNodesPerBox(maxNodeCount);
     driver.setBuffer(pixelSize);
     driver.setSource(in);
 
-    shared_ptr<BigPertyOp> perty(new BigPertyOp());
+    boost::shared_ptr<BigPertyOp> perty(new BigPertyOp());
     perty->setSigma(sigma);
-    shared_ptr<OpList> op(new OpList());
+    boost::shared_ptr<OpList> op(new OpList());
     op->addOp(perty);
     driver.setOperation(op);
 

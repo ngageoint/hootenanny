@@ -32,6 +32,8 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -54,7 +56,7 @@ public:
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     loadMap(map, args[0], true, Status::Invalid);
 
     cout << "Map extent (minx,miny,maxx,maxy): " <<

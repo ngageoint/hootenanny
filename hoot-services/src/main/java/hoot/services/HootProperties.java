@@ -29,8 +29,10 @@ package hoot.services;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -64,8 +66,6 @@ public final class HootProperties {
     public static final String CORE_SCRIPT_PATH;
     public static final String ERROR_LOG_PATH;
     public static final String TEMP_OUTPUT_PATH;
-    public static final String WFS_STORE_CONN_NAME;
-    public static final String WFS_STORE_DB;
     public static final String ELEMENT_MERGE_SERVER_PORT;
     public static final String ELEMENT_MERGE_SERVER_THREAD_COUNT;
     public static final String ELEMENT_MERGE_SERVER_SCRIPT;
@@ -82,20 +82,14 @@ public final class HootProperties {
     public static final String CONFLATE_SIZE_THRESHOLD;
     public static final String INGEST_SIZE_THRESHOLD;
     public static final String EXPORT_SIZE_THRESHOLD;
-    public static final String ETL_MAKEFILE;
     public static final String OSMAPI_DB_NAME;
-    public static final String EXPORT_SCRIPT;
     public static final Boolean OSM_API_DB_ENABLED;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
     public static final String MAX_QUERY_NODES;
     public static final String HGIS_PREPARE_FOR_VALIDATION_SCRIPT;
-    public static final String CLIP_DATASET_MAKEFILE_PATH;
-    public static final String GET_OGR_ATTRIBUTE_SCRIPT;
     public static final String EXPORT_RENDERDB_SCRIPT;
-    public static final String BASEMAP_RASTER_EXTENSIONS;
-    public static final String BASEMAP_RASTER_TO_TILES;
-    public static final String CONFLATE_MAKEFILE_PATH;
+    public static final List<String> BASEMAP_RASTER_EXTENSIONS;
     public static final String COPYRIGHT;
     public static final String ATTRIBUTION;
     public static final String LICENSE;
@@ -114,9 +108,9 @@ public final class HootProperties {
     public static final String INTERNAL_JOB_THREAD_SIZE;
     public static final String TRANSLATION_SCRIPT_PATH;
     public static final String UPLOAD_FOLDER;
-    public static final String DERIVE_CHANGESET_SCRIPT;
     public static final String HOOTAPI_DB_URL;
     public static final String OSMAPI_DB_URL;
+    public static final String CHANGESET_DERIVE_BUFFER;
 
     private static final String USERFILES_FOLDER;
     private static final String OSMAPI_DB_USER;
@@ -177,8 +171,6 @@ public final class HootProperties {
         DEFAULT_FOUO_TRANSLATIONS_CONFIG = getProperty("defaultFOUOTranslationsConfig");
         CORE_SCRIPT_PATH = getProperty("coreScriptPath");
         ERROR_LOG_PATH = getProperty("ErrorLogPath");
-        WFS_STORE_CONN_NAME = getProperty("wfsStoreConnName");
-        WFS_STORE_DB = getProperty("wfsStoreDb");
         ELEMENT_MERGE_SERVER_PORT = getProperty("ElementMergeServerPort");
         ELEMENT_MERGE_SERVER_THREAD_COUNT = getProperty("ElementMergeServerThreadCount");
         ELEMENT_MERGE_SERVER_SCRIPT = getProperty("ElementMergeServerScript");
@@ -190,19 +182,13 @@ public final class HootProperties {
         CONFLATE_SIZE_THRESHOLD = getProperty("conflateSizeThreshold");
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
-        ETL_MAKEFILE = getProperty("ETLMakefile");
-        EXPORT_SCRIPT = getProperty("ExportScript");
         OSM_API_DB_ENABLED = Boolean.parseBoolean(getProperty("osmApiDbEnabled"));
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");
         HGIS_PREPARE_FOR_VALIDATION_SCRIPT = getProperty("hgisPrepareForValidationScript");
-        CLIP_DATASET_MAKEFILE_PATH = getProperty("ClipDatasetMakefilePath");
-        GET_OGR_ATTRIBUTE_SCRIPT = getProperty("GetOgrAttributeScript");
         EXPORT_RENDERDB_SCRIPT = getProperty("exportRenderDBScript");
-        BASEMAP_RASTER_EXTENSIONS = getProperty("BasemapRasterExtensions");
-        BASEMAP_RASTER_TO_TILES = getProperty("BasemapRasterToTiles");
-        CONFLATE_MAKEFILE_PATH = getProperty("ConflateMakefilePath");
+        BASEMAP_RASTER_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(getProperty("BasemapRasterExtensions").toLowerCase().split(",")));
         COPYRIGHT = getProperty("copyright");
         ATTRIBUTION = getProperty("attribution");
         LICENSE = getProperty("license");
@@ -220,7 +206,7 @@ public final class HootProperties {
         SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
-        DERIVE_CHANGESET_SCRIPT = getProperty("deriveChangesetScript");
+        CHANGESET_DERIVE_BUFFER = getProperty("changesetDeriveBufferDegrees");
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";
@@ -322,12 +308,11 @@ public final class HootProperties {
         while (matcher.find()) {
             String token = matcher.group(1);
             String replacement = getProperty(token);
-            if (StringUtils.isBlank(replacement)) {
-                throw new RuntimeException("Could not resolve " + token + " token to a valid value!");
+            if (!StringUtils.isBlank(replacement)) {
+                result.append(text.substring(i, matcher.start()));
+                result.append(replacement);
+                i = matcher.end();
             }
-            result.append(text.substring(i, matcher.start()));
-            result.append(replacement);
-            i = matcher.end();
         }
 
         result.append(text.substring(i, text.length()));

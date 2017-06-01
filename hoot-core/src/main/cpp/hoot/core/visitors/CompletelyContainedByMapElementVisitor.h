@@ -42,10 +42,10 @@
 
 namespace hoot
 {
+
 class Relation;
 class Way;
 
-using namespace std;
 
 /**
  * Checks to see if the elements visited are completely contained by the specified map. This is
@@ -55,7 +55,7 @@ using namespace std;
 class CompletelyContainedByMapElementVisitor : public ElementVisitor, public ConstOsmMapConsumer
 {
 public:
-  static string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
+  static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
 
@@ -74,11 +74,11 @@ protected:
   const OsmMap* _map;
   bool _complete;
 
-  bool _isComplete(const shared_ptr<const Element>& e);
+  bool _isComplete(const boost::shared_ptr<const Element>& e);
 
-  void _visit(const shared_ptr<const Way>& w);
+  void _visit(const boost::shared_ptr<const Way>& w);
 
-  void _visit(const shared_ptr<const Relation>& r);
+  void _visit(const boost::shared_ptr<const Relation> &r);
 };
 
 }

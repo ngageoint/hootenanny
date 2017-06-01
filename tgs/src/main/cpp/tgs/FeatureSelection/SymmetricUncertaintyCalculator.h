@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__SYMMETRIC_UNCERTAINTY_CALCULATOR_H__
@@ -41,7 +41,7 @@ namespace Tgs
 
   /**
    * Calculates the symmetric uncertainty as described in [1] section 4.2.1
-   * 
+   *
    * [1] M. Hall 1999, Correlation-based Feature Selection for Machine Learning
    * (http://www.cs.waikato.ac.nz/~mhall/thesis.pdf)
    * [2] Wikipedia, Conditional Entropy (http://en.wikipedia.org/wiki/Conditional_entropy)
@@ -51,14 +51,14 @@ namespace Tgs
   {
   public:
 
-    SymmetricUncertaintyCalculator() {};
+    SymmetricUncertaintyCalculator() {}
 
-    virtual ~SymmetricUncertaintyCalculator() {};
+    virtual ~SymmetricUncertaintyCalculator() {}
 
-    virtual double calculateScore(const DataFrame& df1, int factorIndex1, 
+    virtual double calculateScore(const DataFrame& df1, int factorIndex1,
       const DataFrame& df2, int factorIndex2);
 
-    double calculateUncertainty(const DataFrame& df1, int factorIndex1, 
+    double calculateUncertainty(const DataFrame& df1, int factorIndex1,
       const DataFrame& df2, int factorIndex2);
 
   protected:
@@ -73,7 +73,7 @@ namespace Tgs
     /**
      * See [2] and [1] section 4.2.1
      */
-    double _calculateConditionalEntropy(const DataFrame& dfY, int factorIndexY, 
+    double _calculateConditionalEntropy(const DataFrame& dfY, int factorIndexY,
       const DataFrame& dfX, int factorIndexX);
 
   };

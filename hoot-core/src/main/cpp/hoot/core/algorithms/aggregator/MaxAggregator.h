@@ -32,17 +32,15 @@
 namespace hoot
 {
 
-using namespace std;
-
 class MaxAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::MaxAggregator"; }
+  static std::string className() { return "hoot::MaxAggregator"; }
 
   MaxAggregator();
 
-  virtual double aggregate(vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return "MaxAggregator"; }
 };

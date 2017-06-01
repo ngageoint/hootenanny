@@ -43,14 +43,14 @@ class BuildingCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::BuildingCriterion"; }
+  static std::string className() { return "hoot::BuildingCriterion"; }
 
   BuildingCriterion() {}
   BuildingCriterion(ConstOsmMapPtr map) : _map(map) {}
 
   bool isParentABuilding(ElementId eid) const;
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const;
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

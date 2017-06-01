@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RStarTree.h"
@@ -41,15 +41,15 @@ using namespace std;
 
 using namespace Tgs;
 
-RStarTree::RStarTree(shared_ptr<PageStore> ps, int dimensions) :
-  _store(dimensions, ps)
+RStarTree::RStarTree(boost::shared_ptr<PageStore> ps, int dimensions)
+  : _store(dimensions, ps)
 {
   RTreeNode* root;
 
   if (ps->getPageCount() > 0)
   {
     _header = ps->getPage(0);
-    _headerStruct = (Header*)(_header->getData());
+    _headerStruct = reinterpret_cast<Header*>(_header->getData());
     _dimensions = _headerStruct->dimensions;
     _rootId = _headerStruct->rootId;
     _height = _headerStruct->height;
@@ -58,7 +58,7 @@ RStarTree::RStarTree(shared_ptr<PageStore> ps, int dimensions) :
   else
   {
     _header = ps->createPage();
-    _headerStruct = (Header*)(_header->getData());
+    _headerStruct = reinterpret_cast<Header*>(_header->getData());
     _headerStruct->dimensions = dimensions;
     _headerStruct->height = 0;
     _height = _headerStruct->height;
@@ -373,11 +373,7 @@ public:
 
   Child() {}
 
-  Child(int id, const BoxInternalData& b)
-  {
-    this->id = id;
-    this->b = b.toBox();
-  }
+  Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
 };
 
 typedef std::pair<double, int> DistancePair;
@@ -647,4 +643,3 @@ void RStarTree::_updateBounds(RTreeNode* node)
     parentId = node->getParentId();
   }
 }
-

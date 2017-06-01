@@ -36,12 +36,11 @@
 
 namespace hoot
 {
+
 class MatchThreshold;
 class ElementId;
 class MatchType;
 class MatchClassification;
-
-using namespace std;
 
 /**
  * Describes a specific match between two sets of elements. For example the match between two
@@ -123,7 +122,7 @@ public:
    * In general Unknown1 should be the status of the first element and Unknown2 the status of the
    * second element.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const = 0;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const = 0;
 
   virtual QString toString() const = 0;
 
@@ -140,7 +139,7 @@ protected:
    * All of this order silliness maintains a consistent ordering of matches when they're placed
    * into a set as pointers.
    */
-  Match(const shared_ptr<const MatchThreshold> threshold) :
+  Match(const boost::shared_ptr<const MatchThreshold> threshold) :
     _order(_orderCount++), _threshold(threshold) {}
 
   friend class MatchPtrComparator;
@@ -148,7 +147,7 @@ protected:
   static long _orderCount;
   long _order;
 
-  const shared_ptr<const MatchThreshold> _threshold;
+  const boost::shared_ptr<const MatchThreshold> _threshold;
 };
 
 inline std::ostream& operator<<(std::ostream & o, const Match* m)

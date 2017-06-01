@@ -32,6 +32,9 @@
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
 
@@ -43,7 +46,7 @@ HootExceptionJs::HootExceptionJs()
 {
 }
 
-Handle<Object> HootExceptionJs::create(shared_ptr<HootException> e)
+Handle<Object> HootExceptionJs::create(boost::shared_ptr<HootException> e)
 {
   HandleScope scope;
 
@@ -125,7 +128,7 @@ void HootExceptionJs::throwAsHootException(TryCatch& tc)
 
   if (isHootException(exception))
   {
-    shared_ptr<HootException> e = toCpp< shared_ptr<HootException> >(exception);
+    boost::shared_ptr<HootException> e = toCpp<boost::shared_ptr<HootException> >(exception);
     HootExceptionThrower::getInstance().rethrowPointer(e);
   }
   else
@@ -175,7 +178,7 @@ v8::Handle<v8::Value> HootExceptionJs::toJSON(const v8::Arguments& args)
 {
   HandleScope scope;
 
-  shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+  boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
   QVariantMap m;
   m["message"] = e->getWhat();
@@ -188,7 +191,7 @@ v8::Handle<v8::Value> HootExceptionJs::toString(const v8::Arguments& args)
 {
   HandleScope scope;
 
-  shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
+  boost::shared_ptr<HootException> e = ObjectWrap::Unwrap<HootExceptionJs>(args.This())->getException();
 
   return scope.Close(toV8(e->getWhat()));
 }

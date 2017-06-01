@@ -41,8 +41,6 @@ namespace hoot
 
 class OsmMap;
 
-using namespace geos::geom;
-
 class BaseCommand : public Command
 {
 public:
@@ -52,13 +50,13 @@ public:
 
   virtual QString getHelp() const;
 
-  void loadMap(shared_ptr<OsmMap> map, QString path, bool useFileId,
+  void loadMap(boost::shared_ptr<OsmMap> map, QString path, bool useFileId,
     Status defaultStatus = Status::Invalid);
 
   /**
    * Parses a comma delimited envelope in the form minx,miny,maxx,maxy.
    */
-  Envelope parseEnvelope(QString envStr) const;
+  geos::geom::Envelope parseEnvelope(QString envStr) const;
 
   /**
    * This method will pull out common arguments (e.g. --conf), convert the args to a QStringList
@@ -71,7 +69,7 @@ public:
    */
   virtual int runSimple(QStringList args) = 0;
 
-  void saveMap(shared_ptr<const OsmMap> map, QString path);
+  void saveMap(boost::shared_ptr<const OsmMap> map, QString path);
 
   QStringList toQStringList(char* argv[], int argc);
 

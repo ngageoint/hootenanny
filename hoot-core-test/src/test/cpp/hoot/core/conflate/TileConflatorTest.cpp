@@ -74,7 +74,7 @@ public:
 
     FileUtils::removeDir("test-output/conflate/TileConflatorTest.osm-cache");
 
-    shared_ptr<TileWorker> worker(new LocalTileWorker());
+    boost::shared_ptr<TileWorker> worker(new LocalTileWorker());
     TileConflator uut(worker);
     // ~240m
     uut.setBuffer(8.0 / 3600.0);
@@ -84,8 +84,8 @@ public:
 
     uut.conflate("test-output/conflate/TileConflatorTest.osm");
 
-    CPPUNIT_ASSERT_EQUAL(true, TestUtils::compareMaps("test-files/conflate/TileConflatorTest.osm",
-      "test-output/conflate/TileConflatorTest.osm"));
+    HOOT_FILE_EQUALS("test-files/conflate/TileConflatorTest.osm",
+                     "test-output/conflate/TileConflatorTest.osm");
   }
 
   virtual void tearDown()

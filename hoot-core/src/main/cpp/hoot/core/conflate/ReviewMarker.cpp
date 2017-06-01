@@ -33,11 +33,12 @@
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
 
+using namespace std;
+
 namespace hoot
 {
 
 QString ReviewMarker::_complexGeometryType = "Bad Geometry";
-QString ReviewMarker::_revieweeKey = "reviewee";
 
 ReviewMarker::ReviewMarker()
 {
@@ -71,7 +72,7 @@ set<ElementId> ReviewMarker::_getReviewRelations(const ConstOsmMapPtr &map, Elem
     set<ElementId>::iterator current = it++;
     ElementId p = *current;
     if (p.getType() != ElementType::Relation ||
-        map->getRelation(p.getId())->getType() != Relation::REVIEW)
+        map->getRelation(p.getId())->getType() != MetadataTags::RelationReview())
     {
       result.erase(current);
     }
@@ -96,8 +97,8 @@ set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &m
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    shared_ptr<Relation> relation = it->second;
-    if (relation->getElementType() == ElementType::Relation || relation->getType() == Relation::REVIEW)
+    RelationPtr relation = it->second;
+    if (relation->getElementType() == ElementType::Relation || relation->getType() == MetadataTags::RelationReview())
     {
       result.insert(relation->getElementId());
     }
@@ -166,16 +167,16 @@ void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const Elemen
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getConflateAddReviewDetail())
+  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
-  r->addElement(_revieweeKey, e1->getElementId());
-  r->addElement(_revieweeKey, e2->getElementId());
+  r->addElement(MetadataTags::RoleReviewee(), e1->getElementId());
+  r->addElement(MetadataTags::RoleReviewee(), e2->getElementId());
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 
@@ -201,20 +202,18 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getConflateAddReviewDetail())
+  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
-  set<ElementId>::iterator it = ids.begin();
-  while (it != ids.end())
+  for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
   {
     ElementId id = *it;
-    r->addElement(_revieweeKey, id);
-    it++;
+    r->addElement(MetadataTags::RoleReviewee(), id);
   }
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
@@ -241,15 +240,15 @@ void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString
     throw IllegalArgumentException("You must specify a review note.");
   }
 
-  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, Relation::REVIEW));
+  RelationPtr r(new Relation(Status::Conflated, map->createNextRelationId(), 0, MetadataTags::RelationReview()));
   r->getTags().set(MetadataTags::HootReviewNeeds(), true);
   r->getTags().appendValueIfUnique(MetadataTags::HootReviewType(), reviewType);
-  if (ConfigOptions().getConflateAddReviewDetail())
+  if (ConfigOptions().getWriterIncludeConflateReviewDetailTags())
   {
     r->getTags().appendValueIfUnique(MetadataTags::HootReviewNote(), note);
     r->getTags().set(MetadataTags::HootReviewScore(), score);
   }
-  r->addElement(_revieweeKey, e->getElementId());
+  r->addElement(MetadataTags::RoleReviewee(), e->getElementId());
   r->getTags().set(MetadataTags::HootReviewMembers(), (int)r->getMembers().size());
   r->setCircularError(-1);
 

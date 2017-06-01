@@ -32,6 +32,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 using namespace hoot;
 
@@ -76,7 +77,7 @@ public:
   void runBuildingMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -101,7 +102,7 @@ public:
   void runHighwayMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -126,7 +127,7 @@ public:
   void runCombinedMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -162,7 +163,7 @@ public:
   void runScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -190,7 +191,7 @@ public:
   void runMultipleScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -220,7 +221,7 @@ public:
   void runDualPoiScriptMatchCreatorTest()
   {
     OsmXmlReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);

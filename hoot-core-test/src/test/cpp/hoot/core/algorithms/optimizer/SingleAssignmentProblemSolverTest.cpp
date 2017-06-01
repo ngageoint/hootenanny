@@ -30,6 +30,8 @@
 #include <hoot/core/util/Log.h>
 #include "../../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -69,14 +71,14 @@ class SingleAssignmentProblemSolverTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-  vector< shared_ptr<ActorTask> > toDelete;
+  vector< boost::shared_ptr<ActorTask> > toDelete;
 
   void addActors(SingleAssignmentProblemSolver<ActorTask, ActorTask>& solver, int* v)
   {
     int i = 0;
     while (v[i] >= 0)
     {
-      shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      boost::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
       toDelete.push_back(ptr);
       solver.addActor(ptr.get());
     }
@@ -87,7 +89,7 @@ public:
     int i = 0;
     while (v[i] >= 0)
     {
-      shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
+      boost::shared_ptr<ActorTask> ptr(new ActorTask(v[i++]));
       toDelete.push_back(ptr);
       solver.addTask(ptr.get());
     }
@@ -98,7 +100,7 @@ public:
     CostFunction costFunction;
     double totalCost = 0.0;
     for (vector<SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair>::const_iterator it = pairs.begin();
-         it != pairs.end(); it++)
+         it != pairs.end(); ++it)
     {
       SingleAssignmentProblemSolver<ActorTask, ActorTask>::ResultPair pair = *it;
       if (pair.actor != NULL && pair.task != NULL)

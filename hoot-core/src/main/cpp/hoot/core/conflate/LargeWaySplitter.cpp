@@ -40,29 +40,30 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
 unsigned int LargeWaySplitter::logWarnCount = 0;
-
-using namespace geos::geom;
 
 LargeWaySplitter::LargeWaySplitter(double threshold)
 {
   _threshold = threshold;
 }
 
-void LargeWaySplitter::apply(shared_ptr<OsmMap> map)
+void LargeWaySplitter::apply(boost::shared_ptr<OsmMap> map)
 {
   _map = map;
 
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
-    shared_ptr<Way> w = it->second;
-    shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+    boost::shared_ptr<Way> w = it->second;
+    boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     double len = ls->getLength();
     // if the way is larger than the threshold
     if (len > _threshold)
@@ -73,13 +74,13 @@ void LargeWaySplitter::apply(shared_ptr<OsmMap> map)
   }
 }
 
-void LargeWaySplitter::_divideWay(shared_ptr<Way> way, int numPieces)
+void LargeWaySplitter::_divideWay(boost::shared_ptr<Way> way, int numPieces)
 {
   double startLength = ElementConverter(_map).convertToLineString(way)->getLength();
   double pieceLength = startLength / (double)numPieces;
 
   // iteratively carve off pieceLength sized ways from the beginning
-  shared_ptr<Way> tmp = way;
+  boost::shared_ptr<Way> tmp = way;
   for (int i = 0; i < numPieces; i++)
   {
     WayLocation wl(_map, tmp, pieceLength);
@@ -98,7 +99,7 @@ void LargeWaySplitter::_divideWay(shared_ptr<Way> way, int numPieces)
     }
     else
     {
-      vector< shared_ptr<Way> > pieces = WaySplitter::split(_map, tmp, wl);
+      vector< boost::shared_ptr<Way> > pieces = WaySplitter::split(_map, tmp, wl);
       assert(pieces.size() == 1 || pieces.size() == 2);
       pieces[0]->setTags(tmp->getTags());
       if (pieces.size() > 1)
@@ -114,7 +115,7 @@ void LargeWaySplitter::_divideWay(shared_ptr<Way> way, int numPieces)
   }
 }
 
-void LargeWaySplitter::splitWays(shared_ptr<OsmMap> map, double threshold)
+void LargeWaySplitter::splitWays(boost::shared_ptr<OsmMap> map, double threshold)
 {
   LargeWaySplitter a(threshold);
   a.apply(map);

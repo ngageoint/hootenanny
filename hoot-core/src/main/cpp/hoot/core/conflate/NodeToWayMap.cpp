@@ -32,6 +32,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -42,12 +44,12 @@ NodeToWayMap::NodeToWayMap(const OsmMap& map)
   const WayMap& ways = map.getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    shared_ptr<Way> w = it->second;
+    boost::shared_ptr<Way> w = it->second;
     addWay(w);
   }
 }
 
-void NodeToWayMap::addWay(shared_ptr<const Way> w)
+void NodeToWayMap::addWay(boost::shared_ptr<const Way> w)
 {
   const std::vector<long>& nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
@@ -69,7 +71,7 @@ const set<long>& NodeToWayMap::getWaysByNode(long nid) const
   }
 }
 
-void NodeToWayMap::removeWay(shared_ptr<const Way> w)
+void NodeToWayMap::removeWay(boost::shared_ptr<const Way> w)
 {
   const std::vector<long>& nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
@@ -91,7 +93,7 @@ bool NodeToWayMap::validate(const OsmMap& map)
   const WayMap& ways = map.getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const shared_ptr<Way>& w = it->second;
+    const boost::shared_ptr<Way>& w = it->second;
     assert(w->getId() != 0);
     const std::vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)
@@ -104,7 +106,7 @@ bool NodeToWayMap::validate(const OsmMap& map)
   }
 
   // verify that the map doesn't contain anything it shouldn't.
-  for (const_iterator it = begin(); it != end(); it++)
+  for (const_iterator it = begin(); it != end(); ++it)
   {
     long nid = it->first;
     const set<long>& s = it->second;
@@ -112,7 +114,7 @@ bool NodeToWayMap::validate(const OsmMap& map)
     // this assumption causes problems when a OsmMap is incomplete (think map reduce)
     //assert(map.containsNode(nid) || s.size() == 0);
 
-    for (set<long>::const_iterator it = s.begin(); it != s.end(); it++)
+    for (set<long>::const_iterator it = s.begin(); it != s.end(); ++it)
     {
       assert(*it != 0);
       if (map.containsWay(*it) == false)

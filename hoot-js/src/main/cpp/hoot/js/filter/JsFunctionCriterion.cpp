@@ -33,12 +33,14 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, JsFunctionCriterion)
 
-bool JsFunctionCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool JsFunctionCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   HandleScope handleScope;
   Context::Scope context_scope(Context::GetCalling());
@@ -65,7 +67,7 @@ bool JsFunctionCriterion::isSatisfied(const shared_ptr<const Element> &e) const
     Local<Value> exception = trycatch.Exception();
     if (HootExceptionJs::isHootException(exception))
     {
-      shared_ptr<HootException> e = toCpp< shared_ptr<HootException> >(exception);
+      boost::shared_ptr<HootException> e = toCpp<boost::shared_ptr<HootException> >(exception);
       HootExceptionThrower::getInstance().rethrowPointer(e);
     }
     else

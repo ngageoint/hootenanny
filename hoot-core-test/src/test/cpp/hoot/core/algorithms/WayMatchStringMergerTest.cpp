@@ -43,6 +43,8 @@
 // Qt
 #include <QDir>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -140,7 +142,7 @@ public:
     uut.mergeIntersection(getNode(map, "n3")->getElementId());
 
     MapProjector::projectToWgs84(map);
-    shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    boost::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
     writer->write(map,
       "test-output/algorithms/WayMatchStringMergerTestMergeNode.osm");
@@ -170,7 +172,7 @@ public:
     uut.setKeeperStatus(Status::Conflated);
 
     MapProjector::projectToWgs84(map);
-    shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
+    boost::shared_ptr<OsmXmlWriter> writer(new OsmXmlWriter());
     writer->setIncludeHootInfo(true);
     writer->write(map,
       "test-output/algorithms/WayMatchStringMergerTestMergeTags.osm");

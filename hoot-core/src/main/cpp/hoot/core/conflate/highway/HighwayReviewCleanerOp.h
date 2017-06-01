@@ -45,17 +45,17 @@ class HighwayReviewCleanerOp : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::HighwayReviewCleanerOp"; }
+  static std::string className() { return "hoot::HighwayReviewCleanerOp"; }
 
   HighwayReviewCleanerOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(OsmMapPtr& map);
 
   virtual QString toString() const { return QString::fromStdString(className()); }
 
 private:
 
-  bool _isBadHighwayReview(shared_ptr<OsmMap>& map, ReviewMarker::ReviewUid review);
+  bool _isBadHighwayReview(OsmMapPtr& map, ReviewMarker::ReviewUid review);
 };
 
 }

@@ -32,6 +32,8 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/HootApiDbWriter.h>
@@ -39,11 +41,10 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/RemoveAttributeVisitor.h>
-#include <hoot/core/elements/ElementAttributeType.h>
 
 // Qt
 #include <QDir>
@@ -51,6 +52,7 @@
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
+using namespace std;
 
 namespace hoot
 {
@@ -101,42 +103,42 @@ public:
 
   long populateMap()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
-    shared_ptr<Node> n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
+    NodePtr n1(new Node(Status::Unknown1, 1, 0.0, 0.0, 10.0));
     map->addNode(n1);
-    shared_ptr<Node> n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
+    NodePtr n2(new Node(Status::Unknown2, 2, 0.1, 0.0, 11.0));
     n2->setTag("noteb", "n2b");
     map->addNode(n2);
-    shared_ptr<Node> n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
+    NodePtr n3(new Node(Status::Conflated, 3, 0.2, 0.0, 12.0));
     n3->setTag("note", "n3");
     map->addNode(n3);
-    shared_ptr<Node> n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
+    NodePtr n4(new Node(Status::Conflated, 4, 0.3, 0.0, 13.0));
     n4->setTag("note", "n4");
     map->addNode(n4);
-    shared_ptr<Node> n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
+    NodePtr n5(new Node(Status::Invalid, 5, 0.4, 0.0, 14.0));
     map->addNode(n5);
 
-    shared_ptr<Way> w1(new Way(Status::Unknown1, 1, 15.0));
+    WayPtr w1(new Way(Status::Unknown1, 1, 15.0));
     w1->addNode(1);
     w1->addNode(2);
     w1->setTag("noteb", "w1b");
     map->addWay(w1);
-    shared_ptr<Way> w2(new Way(Status::Unknown2, 2, 16.0));
+    WayPtr w2(new Way(Status::Unknown2, 2, 16.0));
     w2->addNode(2);
     w2->addNode(3);
     w2->setTag("note", "w2");
     map->addWay(w2);
-    shared_ptr<Way> w3(new Way(Status::Unknown2, 3, 17.0));
+    WayPtr w3(new Way(Status::Unknown2, 3, 17.0));
     w3->addNode(2);
     map->addWay(w3);
 
-    shared_ptr<Relation> r1(new Relation(Status::Unknown1, 1, 18.1, "collection"));
+    RelationPtr r1(new Relation(Status::Unknown1, 1, 18.1, MetadataTags::RelationCollection()));
     r1->addElement("n1", n1->getElementId());
     r1->addElement("w1", w1->getElementId());
     r1->setTag("note", "r1");
     map->addRelation(r1);
-    shared_ptr<Relation> r2(new Relation(Status::Unknown1, 2, -1.0));
+    RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0));
     r2->addElement("n2", n2->getElementId());
     map->addRelation(r2);
 
@@ -194,7 +196,7 @@ public:
     HootApiDbReader reader;
     // make sure all the element ids start with -1
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.setUseDataSourceIds(false);
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
@@ -225,7 +227,7 @@ public:
       reader.open(
         ServicesDbTestUtils::getDbReadUrl(mapId).toString().replace("/" + QString::number(mapId), ""));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -246,7 +248,7 @@ public:
         ServicesDbTestUtils::getDbReadUrl(mapId).toString().replace(
           "/" + QString::number(mapId), "/" + QString::number(invalidMapId)));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -254,13 +256,13 @@ public:
       QString("No map exists with ID: " + QString::number(invalidMapId)).toStdString(), exceptionMsg.toStdString());
   }
 
-  void verifyFullReadOutput(shared_ptr<OsmMap> map)
+  void verifyFullReadOutput(OsmMapPtr map)
   {
     //nodes
 
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
 
-    shared_ptr<Node> node = map->getNode(1);
+    NodePtr node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
@@ -322,7 +324,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getWays().size());
 
-    shared_ptr<Way> way = map->getWay(1);
+    WayPtr way = map->getWay(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
@@ -360,11 +362,11 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
-    shared_ptr<Relation> relation = map->getRelation(1);
+    RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     CPPUNIT_ASSERT_EQUAL(18.1, relation->getCircularError());
-    HOOT_STR_EQUALS("collection", relation->getType());
+    HOOT_STR_EQUALS(MetadataTags::RelationCollection(), relation->getType());
     vector<RelationData::Entry> relationMembers = relation->getMembers();
     CPPUNIT_ASSERT_EQUAL(size_t(2), relationMembers.size());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
@@ -397,13 +399,13 @@ public:
     HOOT_STR_EQUALS("2", relation->getTags().get(MetadataTags::HootId()));
   }
 
-  void verifySingleReadOutput(shared_ptr<OsmMap> map)
+  void verifySingleReadOutput(OsmMapPtr map)
   {
     //nodes
 
     CPPUNIT_ASSERT_EQUAL(5, (int)map->getNodes().size());
 
-    shared_ptr<Node> node = map->getNode(3);
+    NodePtr node = map->getNode(3);
     CPPUNIT_ASSERT_EQUAL(Status::Conflated, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)3, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.2, node->getX());
@@ -419,7 +421,7 @@ public:
     mapId = populateMap();
 
     HootApiDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.read(map);
     verifyFullReadOutput(map);
@@ -431,7 +433,7 @@ public:
     mapId = populateMap();
 
     HootApiDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId,3,"node").toString());
     reader.read(map);
     verifySingleReadOutput(map);
@@ -442,7 +444,7 @@ public:
   {
     mapId = populateMap();
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     verifyFullReadOutput(map);
   }
@@ -458,7 +460,7 @@ public:
     reader.initializePartial();
 
     int ctr = 0;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
 
     //3 nodes
 
@@ -472,7 +474,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
-    shared_ptr<Node> node = map->getNode(1);
+    NodePtr node = map->getNode(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, node->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, node->getId());
     CPPUNIT_ASSERT_EQUAL(0.0, node->getX());
@@ -534,7 +536,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, node->getTags().size());
     HOOT_STR_EQUALS("5", node->getTags().get(MetadataTags::HootId()));
 
-    shared_ptr<Way> way = map->getWay(1);
+    WayPtr way = map->getWay(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, way->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, way->getId());
     CPPUNIT_ASSERT_EQUAL(15.0, way->getCircularError());
@@ -576,11 +578,11 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, way->getTags().size());
     HOOT_STR_EQUALS("3", way->getTags().get(MetadataTags::HootId()));
 
-    shared_ptr<Relation> relation = map->getRelation(1);
+    RelationPtr relation = map->getRelation(1);
     CPPUNIT_ASSERT_EQUAL(Status::Unknown1, relation->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL((long)1, relation->getId());
     CPPUNIT_ASSERT_EQUAL(18.1, relation->getCircularError());
-    HOOT_STR_EQUALS("collection", relation->getType());
+    HOOT_STR_EQUALS(MetadataTags::RelationCollection(), relation->getType());
     CPPUNIT_ASSERT_EQUAL(size_t(2), relation->getMembers().size());
     CPPUNIT_ASSERT(relation->contains(ElementId::node(1)));
     CPPUNIT_ASSERT(relation->contains(ElementId::way(1)));
@@ -634,7 +636,7 @@ public:
     mapId = insertDataForBoundTest();
 
     HootApiDbReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
 
     reader.setBoundingBox(

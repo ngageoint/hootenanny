@@ -37,6 +37,9 @@
 #include <QString>
 #include <QStringList>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -50,22 +53,17 @@ public:
 
   virtual QString getName() const { return "big-paint-nodes"; }
 
-  //int BigPaintNodesCmd::run(char *argv[], int argc)
   virtual int runSimple(QStringList args)
   {
-    //if (argc != 5)
     if (args.size() != 3)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes exactly three parameters.").arg(getName()));
     }
-    //QString in = argv[2];
-    //QString out = argv[4];
     QString in = args[0];
     QString out = args[2];
 
     bool ok;
-    //double pixelSize = QString(argv[3]).toDouble(&ok);
     double pixelSize = QString(args[1]).toDouble(&ok);
     if (ok == false)
     {
@@ -105,7 +103,7 @@ public:
       const int32_t* row = mat.ptr<int32_t>(y);
       for (int x = 0; x < qImage.width(); x++)
       {
-        int c = (255 * log(row[x] + 1)) / log(max);
+        int c = (255 * log1p(row[x])) / log(max);
         rgb = qRgb(c, c, c);
         qImage.setPixel(x, qImage.height() - y - 1, rgb);
       }

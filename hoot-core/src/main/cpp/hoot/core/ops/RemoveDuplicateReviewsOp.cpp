@@ -34,6 +34,8 @@
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -43,14 +45,14 @@ RemoveDuplicateReviewsOp::RemoveDuplicateReviewsOp()
 {
 }
 
-void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
+void RemoveDuplicateReviewsOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
   // go through all the relations to get duplicate reviews
   const RelationMap& relations = map->getRelations();
   QMap< set<ElementId>, QList<ReviewMarker::ReviewUid> > membersToReview;
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementId eid = ElementId::relation(it->first);
     if (ReviewMarker::isReviewUid(map, eid))
@@ -84,7 +86,7 @@ void RemoveDuplicateReviewsOp::apply(shared_ptr<OsmMap>& map)
       ElementId beid = *eids.begin();
       ElementId eeid = *eids.rbegin();
 
-      OsmMapPtr copy(new OsmMap());
+      boost::shared_ptr<OsmMap> copy(new OsmMap());
       CopySubsetOp(map, beid, eeid).apply(copy);
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);

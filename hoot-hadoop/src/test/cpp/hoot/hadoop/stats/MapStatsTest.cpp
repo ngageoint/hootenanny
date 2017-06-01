@@ -21,10 +21,13 @@
 #include <cppunit/TestFixture.h>
 
 // hoot
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/TestUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/stats/MapStats.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {

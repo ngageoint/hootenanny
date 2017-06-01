@@ -32,7 +32,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Removes all elements that have a status of Unknown1.
@@ -41,13 +40,13 @@ class RemoveUnknown1Visitor : public ElementOsmMapVisitor
 {
 public:
 
-  static string className() { return "hoot::RemoveUnknown1Visitor"; }
+  static std::string className() { return "hoot::RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() {}
 
   virtual ~RemoveUnknown1Visitor() {}
 
-  virtual void visit(const shared_ptr<Element>& e);
+  virtual void visit(const boost::shared_ptr<Element>& e);
 };
 
 }

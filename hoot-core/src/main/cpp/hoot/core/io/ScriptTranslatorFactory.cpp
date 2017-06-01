@@ -31,10 +31,12 @@
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/util/Settings.h>
 
+using namespace std;
+
 namespace hoot
 {
 
-shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
+boost::shared_ptr<ScriptTranslatorFactory> ScriptTranslatorFactory::_theInstance;
 
 ScriptTranslatorFactory::ScriptTranslatorFactory()
 {

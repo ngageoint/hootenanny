@@ -34,7 +34,7 @@ if [ "$flag" = "1" ]; then
             SELECT checkDbTime();"
 
   # exec SQL
-  db_date_str=`echo $SQL_SCRIPT | psql $AUTH`
+  db_date_str=`echo $SQL_SCRIPT | psql $AUTH -d $DB_NAME_OSMAPI`
 
   # clean date string
   db_date_str=${db_date_str#*[}

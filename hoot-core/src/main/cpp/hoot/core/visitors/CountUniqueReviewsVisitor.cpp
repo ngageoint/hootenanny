@@ -29,6 +29,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 namespace hoot
 {
 

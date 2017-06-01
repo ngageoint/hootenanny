@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class OsmMap;
 class ElementVisitor;
@@ -52,11 +51,11 @@ class VisitorOp :
 {
 public:
 
-  static string className() { return "hoot::VisitorOp"; }
+  static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
 
-  VisitorOp(const shared_ptr<ElementVisitor>& v) { _visitor = v; }
+  VisitorOp(const boost::shared_ptr<ElementVisitor>& v) { _visitor = v; }
 
   /**
    * Takes ownership of the visitor.
@@ -67,10 +66,10 @@ public:
 
   virtual void addVisitor(const ElementVisitorPtr& e);
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
 private:
-  shared_ptr<ElementVisitor> _visitor;
+  boost::shared_ptr<ElementVisitor> _visitor;
 };
 
 }

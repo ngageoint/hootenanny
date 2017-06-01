@@ -35,6 +35,7 @@
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
 
 namespace hoot
 {
@@ -66,7 +67,7 @@ public:
     }
 
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(printScript));
+    boost::shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(printScript));
 
     if (!uut)
     {

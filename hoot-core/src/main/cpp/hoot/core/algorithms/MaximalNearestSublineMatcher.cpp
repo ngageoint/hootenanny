@@ -36,6 +36,9 @@
 
 #include "MaximalNearestSubline.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -89,7 +92,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
 
   if (subline1->getNodeCount() > 1)
   {
-    shared_ptr<LineString> ls = ElementConverter(mapCopy).convertToLineString(subline1);
+    boost::shared_ptr<LineString> ls = ElementConverter(mapCopy).convertToLineString(subline1);
     if (ls->isValid())
     {
       score = ls->getLength();

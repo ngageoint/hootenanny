@@ -26,12 +26,13 @@
  */
 
 // Hoot
+#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/perty/PertyTestRunner.h>
 #include <hoot/core/perty/PertyMatchScorer.h>
 #include <hoot/core/perty/PertyTestRunResult.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QString>
@@ -106,17 +107,17 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<shared_ptr<const PertyTestRunResult> > results =
+    const QList<boost::shared_ptr<const PertyTestRunResult> > results =
       testRunner.runTest(
         "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
         "test-output/perty/PertyTestRunnerTest");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
+    for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+         it != results.end(); ++it)
     {
-      shared_ptr<const PertyTestRunResult> result = *it;
+      boost::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
       testRunPlotResultsStr +=
         QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
@@ -146,7 +147,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(2, results.size());
 
-    shared_ptr<const PertyTestRunResult> result = results[0];
+    boost::shared_ptr<const PertyTestRunResult> result = results[0];
     CPPUNIT_ASSERT_EQUAL(1, result->getTestRunNum());
     CPPUNIT_ASSERT(result->testPassed());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, result->getScore(), 0.00001);
@@ -221,15 +222,15 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<shared_ptr<const PertyTestRunResult> > results =
+    const QList<boost::shared_ptr<const PertyTestRunResult> > results =
       testRunner.runTest(
         "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
         "test-output/perty/PertyTestRunnerTest");
     QString testRunResultsStr = "";
-    for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
+    for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+         it != results.end(); ++it)
     {
-      shared_ptr<const PertyTestRunResult> result = *it;
+      boost::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
     }
 
@@ -247,7 +248,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(2, results.size());
 
-    shared_ptr<const PertyTestRunResult> result = results[0];
+    boost::shared_ptr<const PertyTestRunResult> result = results[0];
     CPPUNIT_ASSERT_EQUAL(1, result->getTestRunNum());
     CPPUNIT_ASSERT(result->testPassed());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, result->getScore(), 0.00001);
@@ -322,17 +323,17 @@ public:
     testRunner._testScores.append(0.75);
     testRunner._testScores.append(0.85);
 
-    const QList<shared_ptr<const PertyTestRunResult> > results =
+    const QList<boost::shared_ptr<const PertyTestRunResult> > results =
       testRunner.runTest(
         "test-files/perty/PertyTestRunnerTest/PertyTestRunnerTest-reference-in-1.osm",
         "test-output/perty/PertyTestRunnerTest");
     QString testRunResultsStr = "";
     QString testRunPlotResultsStr = "";
     double dynamicVariableValue = testRunner._dynamicVariableStartValue;
-    for (QList<shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
-         it != results.end(); it++)
+    for (QList<boost::shared_ptr<const PertyTestRunResult> >::const_iterator it = results.begin();
+         it != results.end(); ++it)
     {
-      shared_ptr<const PertyTestRunResult> result = *it;
+      boost::shared_ptr<const PertyTestRunResult> result = *it;
       testRunResultsStr += result->toString();
       testRunPlotResultsStr +=
         QString::number(dynamicVariableValue) + " " + QString::number(result->getScore()) + "\n";
@@ -353,7 +354,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(2, results.size());
 
-    shared_ptr<const PertyTestRunResult> result = results[0];
+    boost::shared_ptr<const PertyTestRunResult> result = results[0];
     CPPUNIT_ASSERT_EQUAL(1, result->getTestRunNum());
     CPPUNIT_ASSERT(result->testPassed());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, result->getScore(), 0.00001);
@@ -399,7 +400,7 @@ public:
     {
       PertyTestRunner().setNumTestRuns(0);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -417,7 +418,7 @@ public:
     {
       testRunner.runTest("", "");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -433,7 +434,7 @@ public:
     {
       PertyTestRunner().setNumTestSimulations(0);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -455,7 +456,7 @@ public:
     {
       testRunner.runTest("", "");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -471,7 +472,7 @@ public:
     {
       PertyTestRunner().setAllowedScoreVariance(-0.1);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -483,7 +484,7 @@ public:
     {
       PertyTestRunner().setAllowedScoreVariance(1.1);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -503,7 +504,7 @@ public:
     {
       testRunner.setDynamicVariables(dynamicVariables);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -523,7 +524,7 @@ public:
     {
       testRunner.setExpectedScores(expectedScores);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

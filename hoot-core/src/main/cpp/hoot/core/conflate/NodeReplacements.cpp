@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NodeReplacements.h"
@@ -35,11 +35,12 @@
 #include <QDir>
 #include <QFile>
 #include <QStringList>
-#include <QTextStream>
 
 // Standard
 #include <fstream>
 #include <set>
+
+using namespace std;
 
 namespace hoot
 {
@@ -118,7 +119,7 @@ void NodeReplacements::readDir(QString inputDir)
 void NodeReplacements::simplify()
 {
   HashMap<long, long> copy = _r;
-  for (HashMap<long, long>::const_iterator it = copy.begin(); it != copy.end(); it++)
+  for (HashMap<long, long>::const_iterator it = copy.begin(); it != copy.end(); ++it)
   {
     long oldId = it->first;
     long newId = _getFinalReplacement(oldId);
@@ -130,7 +131,7 @@ QString NodeReplacements::toString() const
 {
   QString result = "";
 
-  for (HashMap<long, long>::const_iterator it = _r.begin(); it != _r.end(); it++)
+  for (HashMap<long, long>::const_iterator it = _r.begin(); it != _r.end(); ++it)
   {
     result += QString("%1 : %2\n").arg(it->first).arg(it->second);
   }
@@ -154,7 +155,7 @@ void NodeReplacements::_write(ostream& os)
   // change this format please address that class as well.
   ////
   int64_t ids[2];
-  for (HashMap<long, long>::const_iterator it = _r.begin(); it != _r.end(); it++)
+  for (HashMap<long, long>::const_iterator it = _r.begin(); it != _r.end(); ++it)
   {
     ids[0] = it->first;
     ids[1] = it->second;

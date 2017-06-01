@@ -17,9 +17,10 @@
 #include "PaintNodesDriver.h"
 
 // hoot
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/hadoop/stats/MapStats.h>
 
@@ -38,6 +39,8 @@ using namespace std;
 #include "PaintNodesReducer.h"
 #include "../pbf/PbfInputFormat.h"
 #include "../pbf/PbfRecordReader.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {

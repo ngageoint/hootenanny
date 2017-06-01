@@ -61,12 +61,12 @@ public:
 
   virtual ~BigPertyOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   /**
    * Returns the name of the class. Typically just returns the result of className().
    */
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   /**
    * Reads the information for this object from the stream.
@@ -91,7 +91,7 @@ public:
 
 private:
   geos::geom::Envelope _bounds;
-  auto_ptr<boost::minstd_rand> _rngAuto;
+  std::auto_ptr<boost::minstd_rand> _rngAuto;
   boost::minstd_rand* _rng;
   Meters _sigma;
   Meters _maxDistance;

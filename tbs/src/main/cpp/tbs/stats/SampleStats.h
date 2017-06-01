@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SAMPLESTATS_H
 #define SAMPLESTATS_H
 
 // Qt
 #include <QString>
+#include <qnumeric.h>
 
 // Standard
 #include <vector>
 
 namespace tbs
 {
-using namespace std;
 
 class SampleStats
 {
@@ -44,7 +44,7 @@ public:
    * Uses a reference to samples. If samples changes while performing calculations the results are
    * undefined.
    */
-  SampleStats(const vector<double>& samples);
+  SampleStats(const std::vector<double>& samples);
 
   double calculateCi90Upper();
   double calculateCi90Lower();
@@ -71,7 +71,7 @@ public:
   QString toString();
 
 private:
-  const vector<double> &_samples;
+  const std::vector<double> &_samples;
   double _max;
   double _min;
   double _mean;

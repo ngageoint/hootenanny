@@ -46,6 +46,8 @@
 
 #include "MaximalSubline.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -111,6 +113,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   vector<bool> reversed1(ways1.size(), false), reversed2(ways2.size(), false);
   ScoredMatch scoredResult = _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1,
     reversed2);
+  LOG_VARD(scoredResult);
 
   // convert the best match into a WaySublineStringMatch and return.
   try
@@ -120,7 +123,7 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
     result.removeEmptyMatches();
     return result;
   }
-  catch(OverlappingMatchesException &e)
+  catch(const OverlappingMatchesException &e)
   {
     throw NeedsReviewException("Internal Error: Multiple overlapping way matches were found within "
       "one set of ways.  Please report this to hootenanny.help@digitalglobe.com.");
@@ -328,7 +331,7 @@ void MaximalSublineStringMatcher::setHeadingDelta(Meters headingDelta)
   _configureSublineMatcher();
 }
 
-void MaximalSublineStringMatcher::setSublineMatcher(shared_ptr<SublineMatcher> sm)
+void MaximalSublineStringMatcher::setSublineMatcher(boost::shared_ptr<SublineMatcher> sm)
 {
   _sublineMatcher = sm;
   _configureSublineMatcher();
@@ -336,11 +339,14 @@ void MaximalSublineStringMatcher::setSublineMatcher(shared_ptr<SublineMatcher> s
 
 void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, ElementId eid) const
 {
+  LOG_TRACE("Validating element " << eid << "...");
+
   ConstElementPtr e = map->getElement(eid);
+  LOG_VART(e.get());
 
   if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
     if (OsmSchema::getInstance().isMultiLineString(*r) == false)
     {
@@ -361,7 +367,8 @@ void MaximalSublineStringMatcher::_validateElement(const ConstOsmMapPtr& map, El
   }
   if (e->getElementType() == ElementType::Way)
   {
-    ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
+    LOG_VART(w.get());
 
     if (w->getNodeCount() <= 1)
     {

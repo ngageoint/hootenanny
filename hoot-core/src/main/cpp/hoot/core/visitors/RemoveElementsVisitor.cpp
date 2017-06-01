@@ -45,7 +45,7 @@ RemoveElementsVisitor::RemoveElementsVisitor()
   _count = 0;
 }
 
-RemoveElementsVisitor::RemoveElementsVisitor(const shared_ptr<ElementCriterion>& filter) :
+RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter) :
   _filter(filter),
   _recursive(false)
 {
@@ -69,7 +69,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   assert(_filter);
   ElementType type = e->getElementType();
   long id = e->getId();
-  const shared_ptr<Element>& ee = _map->getElement(type, id);
+  const boost::shared_ptr<Element>& ee = _map->getElement(type, id);
 
   if (_filter->isSatisfied(ee))
   {
@@ -85,8 +85,8 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-void RemoveElementsVisitor::removeWays(shared_ptr<OsmMap> pMap,
-                       const shared_ptr<ElementCriterion>& pCrit)
+void RemoveElementsVisitor::removeWays(boost::shared_ptr<OsmMap> pMap,
+                       const boost::shared_ptr<ElementCriterion>& pCrit)
 {
   RemoveElementsVisitor v(pCrit);
   pMap->visitWaysRw(v);

@@ -64,6 +64,8 @@
 #include <hoot/core/io/ScriptTranslator.h>
 
 #include <math.h>
+
+using namespace boost;
 using namespace std;
 
 namespace hoot
@@ -86,12 +88,12 @@ CalculateStatsOp::CalculateStatsOp(ElementCriterionPtr criterion, QString mapNam
   LOG_VART(_inputIsConflatedMapOutput);
 }
 
-shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
-    const vector< shared_ptr<MatchCreator> > &matchCreators,
+boost::shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
+    const vector< boost::shared_ptr<MatchCreator> > &matchCreators,
     const QString &matchCreatorName,
     MatchCreator::BaseFeatureType &featureType)
 {
-  for (vector< shared_ptr<MatchCreator> >::const_iterator matchIt = matchCreators.begin();
+  for (vector< boost::shared_ptr<MatchCreator> >::const_iterator matchIt = matchCreators.begin();
        matchIt != matchCreators.end(); ++matchIt)
   {
     vector<MatchCreator::Description> desc = (*matchIt)->getAllCreators();
@@ -108,10 +110,10 @@ shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
       }
     }
   }
-  return shared_ptr<MatchCreator>(); // empty if not found
+  return boost::shared_ptr<MatchCreator>(); // empty if not found
 }
 
-void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
+void CalculateStatsOp::apply(const OsmMapPtr& map)
 {
   QString logMsg = "Calculating map statistics";
   if (!_mapName.isEmpty())
@@ -124,7 +126,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
 
   MapProjector::projectToPlanar(map);
 
-  shared_ptr<const OsmMap> constMap = map;
+  boost::shared_ptr<const OsmMap> constMap = map;
 
   _stats.append(SingleStat("Node Count",
     _applyVisitor(constMap, FilteredVisitor(ElementTypeCriterion(ElementType::Node),
@@ -184,7 +186,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     _applyVisitor(constMap, &featureCountVisitor);
     const long featureCount = featureCountVisitor.getCount();
     _stats.append(SingleStat("Total Feature Count", featureCount));
-    vector< shared_ptr<MatchCreator> > matchCreators = MatchFactory::getInstance().getCreators();
+    vector< boost::shared_ptr<MatchCreator> > matchCreators = MatchFactory::getInstance().getCreators();
     const double conflatedFeatureCount =
       _applyVisitor(
         constMap,
@@ -202,9 +204,8 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     {
       _inputIsConflatedMapOutput = true;
     }
-    double conflatableFeatureCount = -1.0;
     any matchCandidateCountsData;
-    conflatableFeatureCount =
+    double conflatableFeatureCount =
       _applyVisitor(
         constMap,
         FilteredVisitor(
@@ -271,7 +272,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
       const QString matchCreatorName = iterator.key();
       LOG_VARD(matchCreatorName);
       MatchCreator::BaseFeatureType featureType = MatchCreator::Unknown;
-      /*shared_ptr<MatchCreator> matchCreator =*/
+      /*boost::shared_ptr<MatchCreator> matchCreator =*/
         getMatchCreator(matchCreators, iterator.key(), featureType);
 
       double conflatableFeatureCountForFeatureType = 0.0;
@@ -330,7 +331,7 @@ void CalculateStatsOp::apply(const shared_ptr<OsmMap>& map)
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
-      shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+      boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
         ConfigOptions().getStatsTranslateScript()));
       st->setErrorTreatment(StrictOff);
       TranslatedTagCountVisitor tcv(st);
@@ -374,13 +375,13 @@ bool CalculateStatsOp::_matchDescriptorCompare(const MatchCreator::Description& 
   return m1.className > m2.className;
 }
 
-double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const FilteredVisitor& v)
+double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map, const FilteredVisitor& v)
 {
   any emptyVisitorData;
   return _applyVisitor(map, v, emptyVisitorData);
 }
 
-double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const FilteredVisitor& v,
+double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map, const FilteredVisitor& v,
                                        any& visitorData)
 {
   // this is a hack to let C++ pass v as a temporary. Bad Jason.
@@ -405,7 +406,7 @@ double CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap> &map, const Filt
   return ss->getStat();
 }
 
-void CalculateStatsOp::_applyVisitor(shared_ptr<const OsmMap>& map, ElementVisitor *v)
+void CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap>& map, ElementVisitor *v)
 {
   auto_ptr<FilteredVisitor> critFv;
   if (_criterion)
@@ -461,12 +462,12 @@ void CalculateStatsOp::printStats()
   }
 }
 
-void CalculateStatsOp::_generateFeatureStats(shared_ptr<const OsmMap> &map, QString description,
+void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap> &map, QString description,
                                              float conflatableCount,
                                              MatchCreator::FeatureCalcType type,
                                              ElementCriterion* criterion)
 {
-  shared_ptr<ElementCriterion> e_criterion(criterion);
+  boost::shared_ptr<ElementCriterion> e_criterion(criterion);
   const double totalFeatures =
     _applyVisitor(map, FilteredVisitor(e_criterion->clone(), new FeatureCountVisitor()));
   _stats.append(SingleStat(QString("%1 Count").arg(description), totalFeatures));

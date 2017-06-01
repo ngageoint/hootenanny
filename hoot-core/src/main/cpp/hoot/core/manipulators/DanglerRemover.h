@@ -40,15 +40,13 @@ namespace geos {
 
 // Hoot
 #include <hoot/core/util/Units.h>
-namespace hoot {
-  class OsmMap;
-  class Node;
-  class Way;
-}
 
-namespace hoot {
+namespace hoot
+{
 
-  using namespace std;
+class OsmMap;
+class Node;
+class Way;
 
 /**
  * This removes short stubby roads and unusual loops that are likely a leftover from a previous
@@ -66,16 +64,16 @@ public:
 
   virtual ~DanglerRemover() {}
 
-  virtual const vector< shared_ptr<Manipulation> >& findAllManipulations(
-          shared_ptr<const OsmMap> map);
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+          ConstOsmMapPtr map);
 
-  virtual const vector< shared_ptr<Manipulation> >& findWayManipulations(
-          shared_ptr<const OsmMap> map, const vector<long>& wids);
+  virtual const std::vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
+          ConstOsmMapPtr map, const std::vector<long>& wids);
 
 private:
 
-  vector< shared_ptr<Manipulation> > _result;
-  boost::shared_ptr<const OsmMap> _map;
+  std::vector< boost::shared_ptr<Manipulation> > _result;
+  ConstOsmMapPtr _map;
 
   double _errorPlus;
 

@@ -41,9 +41,12 @@
 #include <limits>
 #include <numeric>
 
-namespace hoot {
+using namespace geos::geom;
 
-LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, shared_ptr<const Way> way) :
+namespace hoot
+{
+
+LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, ConstWayPtr way) :
   _map(map),
   _way(way)
 {
@@ -98,7 +101,7 @@ Coordinate LocationOfPoint::locate(double d)
   return result;
 }
 
-WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, shared_ptr<const Way> way,
+WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, ConstWayPtr way,
   const Coordinate& inputPt)
 {
   LocationOfPoint locater(map, way);

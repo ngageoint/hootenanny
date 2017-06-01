@@ -35,12 +35,10 @@ class PbfInputSplit;
 class PbfRecordReader;
 class OsmMap;
 
-using namespace boost;
-
 class WayJoin2RecordReader : public pp::RecordReader
 {
 public:
-  static string className() { return "hoot::WayJoin2RecordReader"; }
+  static std::string className() { return "hoot::WayJoin2RecordReader"; }
 
   WayJoin2RecordReader() {}
 
@@ -48,7 +46,7 @@ public:
 
   char getRecordType();
 
-  shared_ptr<OsmMap> getMap();
+  boost::shared_ptr<OsmMap> getMap();
 
   bool next(int64_t& key, WayJoin1Reducer::Value& value);
 
@@ -63,13 +61,13 @@ public:
   virtual void initialize(pp::InputSplit* split, HadoopPipes::MapContext& context);
 
 private:
-  shared_ptr<WayJoin2InputSplit> _split;
-  shared_ptr<RecordReader> _reader;
+  boost::shared_ptr<WayJoin2InputSplit> _split;
+  boost::shared_ptr<RecordReader> _reader;
 
   const pp::FileInputSplit* _csqSplit;
   const PbfInputSplit* _pbfSplit;
-  shared_ptr<pp::CppSeqFileRecordReader> _csqReader;
-  shared_ptr<PbfRecordReader> _OsmPbfReader;
+  boost::shared_ptr<pp::CppSeqFileRecordReader> _csqReader;
+  boost::shared_ptr<PbfRecordReader> _OsmPbfReader;
 };
 
 

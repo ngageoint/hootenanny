@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__FEATURE_SCORE_FITNESS_FUNCTION_H__
@@ -43,7 +43,7 @@ namespace Tgs
   {
   public:
 
-    FeatureScoreFitnessFunction(shared_ptr<DataFrame> df, shared_ptr<FeatureScoreCalculator> fsc);
+    FeatureScoreFitnessFunction(boost::shared_ptr<DataFrame> df, boost::shared_ptr<FeatureScoreCalculator> fsc);
 
     virtual ~FeatureScoreFitnessFunction();
 
@@ -51,8 +51,8 @@ namespace Tgs
   
   private:
 
-    shared_ptr<DataFrame> _workingCopy;
-    shared_ptr<FeatureScoreCalculator> _fsc;
+    boost::shared_ptr<DataFrame> _workingCopy;
+    boost::shared_ptr<FeatureScoreCalculator> _fsc;
   };
 }
 

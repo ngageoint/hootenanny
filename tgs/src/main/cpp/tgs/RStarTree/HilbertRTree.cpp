@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HilbertRTree.h"
@@ -44,7 +44,7 @@ using namespace Tgs;
 #include <tgs/Statistics/Random.h>
 
 
-HilbertRTree::HilbertRTree(shared_ptr<PageStore> ps, int dimensions) :
+HilbertRTree::HilbertRTree(boost::shared_ptr<PageStore> ps, int dimensions) :
   RStarTree(ps, dimensions)
 {
   _hilbertCurve = new HilbertCurve(dimensions, 8);
@@ -123,7 +123,6 @@ void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
 double HilbertRTree::_calculateArea(int parentId)
 {
   const RTreeNode* parent = _getNode(parentId);
-  std::vector<double> tmp;
   double result = 0.0;
   for (int i = 0; i < parent->getChildCount(); i++)
   {
@@ -198,10 +197,7 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
   {
     incr += weights[i];
     if (r <= incr)
-    {
       return i;
-      break;
-    }
   }
   assert(result != -1);
   return result;
@@ -281,7 +277,6 @@ void HilbertRTree::_greedyShuffle(int parentId)
   // swap children two levels down
   if (parent->getChildCount() >= 2)
   {
-    std::vector<double> tmp;
     double netImprovement = 0.0;
     // randomly choose child based on overlap weight
     for (int i = 0; i < _shuffleSize; i++)

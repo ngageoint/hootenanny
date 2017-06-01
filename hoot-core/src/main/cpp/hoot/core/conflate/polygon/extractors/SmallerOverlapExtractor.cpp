@@ -37,6 +37,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -50,8 +53,8 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
   const ConstElementPtr& candidate) const
 {
   ElementConverter ec(map.shared_from_this());
-  shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
-  shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  boost::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  boost::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
   if (g1->isEmpty() || g2->isEmpty())
   {
@@ -63,7 +66,7 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
   {
     overlap.reset(g1->intersection(g2.get()));
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));

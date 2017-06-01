@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 //Boost
@@ -42,8 +42,11 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
+#include <hoot/core/util/Log.h>
 
 #include <hoot/core/TestUtils.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
@@ -61,10 +64,10 @@ public:
   void runToOsmTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
                                       "test-files/io/SampleTranslation.js"));
 
-    shared_ptr<ScriptToOgrTranslator>uut = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    boost::shared_ptr<ScriptToOgrTranslator>uut = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
 
     if (!uut)
     {
@@ -72,7 +75,7 @@ public:
                           "converting to OGR.");
     }
 
-    shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
+    boost::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
 //    JavaScriptTranslator::TranslatedFeature tf;
     ScriptToOgrTranslator::TranslatedFeature tf;
@@ -148,7 +151,7 @@ public:
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
     // We just need a standard ScriptTranslator for this test.
-    shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> uut(ScriptTranslatorFactory::getInstance().createTranslator(
                                       "test-files/io/SampleTranslation.js"));
 
     if (!uut)
@@ -163,17 +166,17 @@ public:
   void runSchemaTest()
   {
     // Great bit of code taken from TranslatedTagDifferencer.cpp
-    shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
+    boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
                                       "test-files/io/SampleTranslation.js"));
 
-    shared_ptr<ScriptToOgrTranslator>uut = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    boost::shared_ptr<ScriptToOgrTranslator>uut = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
 
     if (!uut)
     {
       throw HootException("Error allocating translator");
     }
 
-    shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
+    boost::shared_ptr<const Schema> schema = uut->getOgrOutputSchema();
 
     QString result;
     // handy for creating the c formatted version.
@@ -182,12 +185,12 @@ public:
     QString sep1, sep2;
     for (size_t i = 0; i < schema->getLayerCount(); i++)
     {
-      shared_ptr<const Layer> l = schema->getLayer(i);
+      boost::shared_ptr<const Layer> l = schema->getLayer(i);
       result += sep1 + l->getName() + sep2 + "\n";
-      shared_ptr<const FeatureDefinition> fd = l->getFeatureDefinition();
+      boost::shared_ptr<const FeatureDefinition> fd = l->getFeatureDefinition();
       for (size_t j = 0; j < fd->getFieldCount(); j++)
       {
-        shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(j);
+        boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(j);
         result += sep1 + "  " + f->toString() + sep2 + "\n";
       }
     }

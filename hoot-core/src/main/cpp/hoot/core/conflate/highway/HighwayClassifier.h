@@ -47,7 +47,7 @@ public:
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) = 0;
 
-  virtual map<QString, double> getFeatures(const shared_ptr<const OsmMap>& m,
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const = 0;
 
 };

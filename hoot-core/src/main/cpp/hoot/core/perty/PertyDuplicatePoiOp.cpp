@@ -65,7 +65,7 @@ QString PertyDuplicatePoiOp::toString()
     ", _moveMultiplier: "  + QString::number(_moveMultiplier);
 }
 
-void PertyDuplicatePoiOp::apply(shared_ptr<OsmMap>& map)
+void PertyDuplicatePoiOp::apply(OsmMapPtr& map)
 {
   MapProjector::projectToPlanar(map);
   boost::uniform_real<> uni(0.0, 1.0);

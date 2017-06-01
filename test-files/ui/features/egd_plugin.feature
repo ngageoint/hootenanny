@@ -32,13 +32,13 @@ Feature: DG G-EGD plugin
         Then I should not see an image footprint on the map
         When I click on the first thumbnail
         Then I should see an image overlay on the map
-        When I click on the first thumbnail
-        Then I should not see an image overlay on the map
         When I double click on the first thumbnail
         Then I should see "Image Metadata"
         Then I click on "span.carousel-close"
         When I select the "dgarrow.up" div
         When I select the "dgarrow.down" div
+        When I click on the first active thumbnail
+        Then I should not see an image overlay on the map
         When I click on "button.zoom-out"
         And I wait 1 seconds
         When I click on "button.zoom-out"
