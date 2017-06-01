@@ -46,8 +46,8 @@ void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
   {
     return;
   }
-  QDir d(dir);
 
+  QDir d(dir);
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
   for (int i = 0; i < dirs.size(); i++)
   {

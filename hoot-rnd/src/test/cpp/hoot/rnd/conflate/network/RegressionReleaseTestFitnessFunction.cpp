@@ -35,32 +35,41 @@ namespace hoot
 {
 
 RegressionReleaseTestFitnessFunction::RegressionReleaseTestFitnessFunction() :
-AbstractTestFitnessFunction(),
-_highestOverallScore(-1.0)
+AbstractTestFitnessFunction()
 {
   //TODO: make this configurable
-  const QString dir = "/home/bwitham/hoot-tests/network-tests.child/release_test.child";
+  const QString dir = "/fouo/hoot-tests/network-tests.child/release_test.child";
   _testSuite.reset(new RegressionReleaseTestSuite(dir));
   QStringList confs;
   _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
+  _highestOverallScores.clear();
 }
 
 void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
 {
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
-  if (_highestOverallScore != -1.0)
+  if (!_highestOverallScores.contains(QString::fromStdString(test->getName())))
   {
-    regressionReleaseTest->setMinPassingScore(_highestOverallScore);
+    _highestOverallScores[QString::fromStdString(test->getName())] = -1.0;
+  }
+  LOG_VARD(_highestOverallScores[QString::fromStdString(test->getName())]);
+  if (_highestOverallScores[QString::fromStdString(test->getName())] != -1.0)
+  {
+    regressionReleaseTest->setMinPassingScore(
+      _highestOverallScores[QString::fromStdString(test->getName())]);
   }
 }
 
 void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
 {
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
-  if (regressionReleaseTest->getMinPassingScore() > _highestOverallScore)
+  LOG_VARD(regressionReleaseTest->getMinPassingScore());
+  if (regressionReleaseTest->getMinPassingScore() >
+      _highestOverallScores[QString::fromStdString(test->getName())])
   {
-    _highestOverallScore = regressionReleaseTest->getMinPassingScore();
+    _highestOverallScores[QString::fromStdString(test->getName())] =
+      regressionReleaseTest->getMinPassingScore();
   }
 }
 

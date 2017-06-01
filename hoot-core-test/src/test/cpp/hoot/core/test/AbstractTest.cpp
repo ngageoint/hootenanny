@@ -26,6 +26,8 @@
  */
 #include "AbstractTest.h"
 
+// Hoot
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -35,6 +37,7 @@ AbstractTest::AbstractTest(QDir d, QStringList confs) :
   _d(d),
   _confs(confs)
 {
+  LOG_DEBUG("Registering test: " << d.absolutePath());
 }
 
 }

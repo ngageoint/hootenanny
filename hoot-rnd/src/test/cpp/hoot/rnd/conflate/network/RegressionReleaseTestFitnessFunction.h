@@ -31,6 +31,9 @@
 // Hoot
 #include "AbstractTestFitnessFunction.h"
 
+// Qt
+#include <QMap>
+
 namespace hoot
 {
 
@@ -50,7 +53,7 @@ public:
 
 private:
 
-    double _highestOverallScore;
+    QMap<QString, double> _highestOverallScores;
 };
 
 }

@@ -32,6 +32,9 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/test/TestSetup.h>
 
+// Qt
+#include <QTextStream>
+
 namespace hoot
 {
 
@@ -43,12 +46,12 @@ _minPassingScore(-1.0)
 
 void RegressionReleaseTest::runTest()
 {
-  TestUtils::resetEnvironment();
+  //TestUtils::resetEnvironment();
   LOG_DEBUG("Running regression release test...");
 
   // configures and cleans up the conf() environment
-  LOG_VART(_confs);
-  TestSetup st(_confs);
+  //LOG_VART(_confs);
+  //TestSetup st(_confs);
 
   QFileInfo makeFile(_d, "Makefile");
   if (!makeFile.exists())
@@ -73,12 +76,60 @@ void RegressionReleaseTest::runTest()
       false);
   }
 
-  //TODO: check test score and pass if >= _minPassingScore; fail otherwise
+  //check test score and pass if >= _minPassingScore; fail otherwise
+  QDir scoresDir("scores");
+  QStringList nameFilters;
+  nameFilters.append("*scores.txt");
+  const QStringList scoresDirContents = scoresDir.entryList(nameFilters, QDir::Files);
+  if (scoresDirContents.size() != 1)
+  {
+    throw HootException(
+      "Found " + QString::number(scoresDirContents.size()) + " score files and expected to " +
+      "find one scores file.");
+  }
+  LOG_VARD(scoresDirContents[0]);
+  QFile scoresFile(scoresDirContents[0]);
+  if (!scoresFile.open(QIODevice::ReadOnly))
+  {
+    throw HootException("Unable to open scores file: " + scoresDirContents[0]);
+  }
+  QTextStream inStream(&scoresFile);
+  QString line;
+  bool foundConflatedScoreLine = false;
+  unsigned int overallScore = -1;
+  do
+  {
+    line = inStream.readLine();
+    LOG_VART(line);
+    if (line.toLower().contains("conflated"))
+    {
+      foundConflatedScoreLine = true;
+    }
+    else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
+    {
+      overallScore = line.split("\s")[1].toInt();
+      LOG_VARD(overallScore);
+    }
+  }
+  while (!line.isNull() && overallScore == -1);
 
+  LOG_VARD(_minPassingScore);
+  if (overallScore >= _minPassingScore)
+  {
+    _minPassingScore = overallScore;
+  }
+  else
+  {
+    CPPUNIT_ASSERT_MESSAGE(
+      QString("Failed executing regression release test: " +
+        QString::fromStdString(getName())).toStdString(),
+      false);
+  }
+  LOG_VARD(_minPassingScore);
 
   if (!QDir::setCurrent(startingDir))
   {
-    throw HootException("Unable to change back to hoot tests directory: " + _d.absolutePath());
+    throw HootException("Unable to change back to hoot tests directory: " + startingDir);
   }
 }
 
