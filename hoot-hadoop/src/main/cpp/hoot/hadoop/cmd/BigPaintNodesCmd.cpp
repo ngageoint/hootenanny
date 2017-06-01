@@ -53,22 +53,17 @@ public:
 
   virtual QString getName() const { return "big-paint-nodes"; }
 
-  //int BigPaintNodesCmd::run(char *argv[], int argc)
   virtual int runSimple(QStringList args)
   {
-    //if (argc != 5)
     if (args.size() != 3)
     {
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes exactly three parameters.").arg(getName()));
     }
-    //QString in = argv[2];
-    //QString out = argv[4];
     QString in = args[0];
     QString out = args[2];
 
     bool ok;
-    //double pixelSize = QString(argv[3]).toDouble(&ok);
     double pixelSize = QString(args[1]).toDouble(&ok);
     if (ok == false)
     {

@@ -46,7 +46,8 @@ unsigned int ApiDbReader::logWarnCount = 0;
 ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
-_open(false)
+_open(false),
+_returnNodesOnly(false)
 {
 
 }
@@ -292,103 +293,106 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   }
   LOG_VARD(nodeIds.size());
 
-  if (nodeIds.size() > 0)
+  if (!_returnNodesOnly)
   {
-    LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-    QSet<QString> wayIds;
-    boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
-    while (wayIdItr->next())
+    if (nodeIds.size() > 0)
     {
-      const long wayId = (*wayIdItr).value(0).toLongLong();
-      LOG_VART(ElementId(ElementType::Way, wayId));
-      wayIds.insert(QString::number(wayId));
-    }
-    LOG_VARD(wayIds.size());
-
-    if (wayIds.size() > 0)
-    {
-      LOG_DEBUG("Retrieving ways by way ID...");
-      boost::shared_ptr<QSqlQuery> wayItr =
-        _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
-      while (wayItr->next())
+      LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
+      QSet<QString> wayIds;
+      boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
+      while (wayIdItr->next())
       {
-        //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
-        //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
-        //the problem yet with test data, but will continue to keep an eye on it.
-        WayPtr way = _resultToWay(*wayItr, *map);
-        map->addElement(way);
-        LOG_VART(way);
-        boundedWayCount++;
+        const long wayId = (*wayIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Way, wayId));
+        wayIds.insert(QString::number(wayId));
       }
+      LOG_VARD(wayIds.size());
 
-      LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-      QSet<QString> additionalWayNodeIds;
-      boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
-        _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
-      while (additionalWayNodeIdItr->next())
+      if (wayIds.size() > 0)
       {
-        const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
-        LOG_VART(ElementId(ElementType::Node, nodeId));
-        additionalWayNodeIds.insert(QString::number(nodeId));
-      }
-
-      //subtract nodeIds from additionalWayNodeIds so no dupes get added
-      LOG_VARD(nodeIds.size());
-      LOG_VARD(additionalWayNodeIds.size());
-      additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
-      LOG_VARD(additionalWayNodeIds.size());
-
-      if (additionalWayNodeIds.size() > 0)
-      {
-        nodeIds.unite(additionalWayNodeIds);
-        LOG_DEBUG(
-          "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
-        boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
-          _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
-        while (additionalWayNodeItr->next())
+        LOG_DEBUG("Retrieving ways by way ID...");
+        boost::shared_ptr<QSqlQuery> wayItr =
+          _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
+        while (wayItr->next())
         {
-          NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
-          map->addElement(node);
-          LOG_VART(node);
-          boundedNodeCount++;
+          //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
+          //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
+          //the problem yet with test data, but will continue to keep an eye on it.
+          WayPtr way = _resultToWay(*wayItr, *map);
+          map->addElement(way);
+          LOG_VART(way);
+          boundedWayCount++;
+        }
+
+        LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
+        QSet<QString> additionalWayNodeIds;
+        boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+          _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
+        while (additionalWayNodeIdItr->next())
+        {
+          const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Node, nodeId));
+          additionalWayNodeIds.insert(QString::number(nodeId));
+        }
+
+        //subtract nodeIds from additionalWayNodeIds so no dupes get added
+        LOG_VARD(nodeIds.size());
+        LOG_VARD(additionalWayNodeIds.size());
+        additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
+        LOG_VARD(additionalWayNodeIds.size());
+
+        if (additionalWayNodeIds.size() > 0)
+        {
+          nodeIds.unite(additionalWayNodeIds);
+          LOG_DEBUG(
+            "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
+          boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
+            _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
+          while (additionalWayNodeItr->next())
+          {
+            NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
+            map->addElement(node);
+            LOG_VART(node);
+            boundedNodeCount++;
+          }
         }
       }
-    }
 
-    LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
-    QSet<QString> relationIds;
-    assert(nodeIds.size() > 0);
-    boost::shared_ptr<QSqlQuery> relationIdItr =
-      _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
-    while (relationIdItr->next())
-    {
-      const long relationId = (*relationIdItr).value(0).toLongLong();
-      LOG_VART(ElementId(ElementType::Relation, relationId));
-      relationIds.insert(QString::number(relationId));
-    }
-    if (wayIds.size() > 0)
-    {
-      relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+      LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
+      QSet<QString> relationIds;
+      assert(nodeIds.size() > 0);
+      boost::shared_ptr<QSqlQuery> relationIdItr =
+        _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
       while (relationIdItr->next())
       {
         const long relationId = (*relationIdItr).value(0).toLongLong();
         LOG_VART(ElementId(ElementType::Relation, relationId));
         relationIds.insert(QString::number(relationId));
       }
-    }
-    LOG_VARD(relationIds.size());
-
-    if (relationIds.size() > 0)
-    {
-      LOG_DEBUG("Retrieving relations by relation ID...");
-      boost::shared_ptr<QSqlQuery> relationItr =
-        _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
-      while (relationItr->next())
+      if (wayIds.size() > 0)
       {
-        RelationPtr relation = _resultToRelation(*relationItr, *map);
-        map->addElement(relation);
-        LOG_VART(relation);
-        boundedRelationCount++;
+        relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+        while (relationIdItr->next())
+        {
+          const long relationId = (*relationIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Relation, relationId));
+          relationIds.insert(QString::number(relationId));
+        }
+      }
+      LOG_VARD(relationIds.size());
+
+      if (relationIds.size() > 0)
+      {
+        LOG_DEBUG("Retrieving relations by relation ID...");
+        boost::shared_ptr<QSqlQuery> relationItr =
+          _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
+        while (relationItr->next())
+        {
+          RelationPtr relation = _resultToRelation(*relationItr, *map);
+          map->addElement(relation);
+          LOG_VART(relation);
+          boundedRelationCount++;
+        }
       }
     }
   }
