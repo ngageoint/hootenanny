@@ -284,6 +284,43 @@ public class ExportResource {
     }
 
     /**
+     * Returns the contents of a geojson job output file
+     *
+     * GET hoot-services/job/export/geojson/[job id from exportjob]
+     *
+     * @param jobId
+     *            job id
+     * @param ext
+     *            parameter overrides the file extension of the file being downloaded
+     *            but is also used to identify the export file on the server, so not really!
+     * @return job output geojson
+     *
+     * @throws WebApplicationException
+     *             if the job with ID = id does not exist, the referenced job
+     *             output file no longer exists.
+     */
+    @GET
+    @Path("/geojson/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getGeoJsonOutput(@PathParam("id") String jobId,
+                                 @QueryParam("ext") String ext) {
+        Response response;
+
+        try {
+            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "geojson" : ext);
+            response = Response.ok(FileUtils.readFileToString(out, "UTF-8")).build();
+        }
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+
+        return response;
+    }
+
+    /**
      * Based on the existence of translation script extension, it will send the
      * list of available translations script for export.
      *

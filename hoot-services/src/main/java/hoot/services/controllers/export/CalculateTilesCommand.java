@@ -88,6 +88,6 @@ class CalculateTilesCommand extends ExportCommand {
           command += " ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
         }
 
-        super.configureCommand(command, substitutionMap, caller);
+        super.configureCommand(command, substitutionMap, caller, new File("/tmp"));
     }
 }
