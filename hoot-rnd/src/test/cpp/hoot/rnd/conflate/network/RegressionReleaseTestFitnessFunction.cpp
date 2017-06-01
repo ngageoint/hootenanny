@@ -49,6 +49,7 @@ AbstractTestFitnessFunction()
 void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
 {
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
+  LOG_VARD(QString::fromStdString(test->getName()));
   if (!_highestOverallScores.contains(QString::fromStdString(test->getName())))
   {
     _highestOverallScores[QString::fromStdString(test->getName())] = -1.0;
@@ -64,6 +65,7 @@ void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
 void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
 {
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
+  LOG_VARD(QString::fromStdString(test->getName()));
   LOG_VARD(regressionReleaseTest->getMinPassingScore());
   if (regressionReleaseTest->getMinPassingScore() >
       _highestOverallScores[QString::fromStdString(test->getName())])
