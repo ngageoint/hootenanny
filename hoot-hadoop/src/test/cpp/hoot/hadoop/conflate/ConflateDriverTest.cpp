@@ -122,6 +122,6 @@ public:
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ConflateDriverTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ConflateDriverTest, "glacial");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::ConflateDriverTest, "current");
 
