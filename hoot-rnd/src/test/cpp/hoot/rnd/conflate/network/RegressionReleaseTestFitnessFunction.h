@@ -45,6 +45,12 @@ public:
     RegressionReleaseTestFitnessFunction();
 
     virtual void initTest(AbstractTest* test);
+
+    virtual void afterTestRun(AbstractTest* test);
+
+private:
+
+    double _highestOverallScore;
 };
 
 }

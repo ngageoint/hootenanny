@@ -29,12 +29,14 @@
 
 // Hoot
 #include "RegressionReleaseTestSuite.h"
+#include "RegressionReleaseTest.h"
 
 namespace hoot
 {
 
 RegressionReleaseTestFitnessFunction::RegressionReleaseTestFitnessFunction() :
-AbstractTestFitnessFunction()
+AbstractTestFitnessFunction(),
+_highestOverallScore(-1.0)
 {
   //TODO: make this configurable
   const QString dir = "/home/bwitham/hoot-tests/network-tests.child/release_test.child";
@@ -44,8 +46,22 @@ AbstractTestFitnessFunction()
   _testCount = _testSuite->getChildTestCount();
 }
 
-void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* /*test*/)
+void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
 {
+  RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
+  if (_highestOverallScore != -1.0)
+  {
+    regressionReleaseTest->setMinPassingScore(_highestOverallScore);
+  }
+}
+
+void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
+{
+  RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
+  if (regressionReleaseTest->getMinPassingScore() > _highestOverallScore)
+  {
+    _highestOverallScore = regressionReleaseTest->getMinPassingScore();
+  }
 }
 
 }

@@ -48,6 +48,8 @@ public:
     CaseTestFitnessFunction();
 
     virtual void initTest(AbstractTest* test);
+
+    virtual void afterTestRun(AbstractTest* test);
 };
 
 }

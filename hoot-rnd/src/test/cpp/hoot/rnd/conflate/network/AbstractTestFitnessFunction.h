@@ -64,6 +64,8 @@ public:
 
     virtual void initTest(AbstractTest* test) = 0;
 
+    virtual void afterTestRun(AbstractTest* test) = 0;
+
 protected:
 
   int _testCount;

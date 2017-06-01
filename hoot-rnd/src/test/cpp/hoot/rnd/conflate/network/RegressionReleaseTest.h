@@ -46,6 +46,13 @@ public:
 
   virtual void runTest();
 
+  double getMinPassingScore() const { return _minPassingScore; }
+  void setMinPassingScore(double score) { _minPassingScore = score; }
+
+private:
+
+  double _minPassingScore;
+
 };
 
 }

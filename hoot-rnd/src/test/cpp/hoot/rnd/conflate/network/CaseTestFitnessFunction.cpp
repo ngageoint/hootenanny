@@ -42,9 +42,15 @@ AbstractTestFitnessFunction()
   _testCount = _testSuite->getChildTestCount();
 }
 
+//this init will add the conflicts network case tests conf which is a subset of the overall
+//network cases tests conf
 void CaseTestFitnessFunction::initTest(AbstractTest* test)
 {
   test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
+}
+
+void CaseTestFitnessFunction::afterTestRun(AbstractTest* /*test*/)
+{
 }
 
 }

@@ -36,7 +36,8 @@ namespace hoot
 {
 
 RegressionReleaseTest::RegressionReleaseTest(QDir d, QStringList confs) :
-AbstractTest(d, confs)
+AbstractTest(d, confs),
+_minPassingScore(-1.0)
 {
 }
 
@@ -61,6 +62,7 @@ void RegressionReleaseTest::runTest()
   {
     throw IllegalArgumentException("Unable to change to test directory: " + _d.absolutePath());
   }
+
   const QString cmd = "make test";
   const int retval = system(cmd.toStdString().c_str());
   if (retval != 0)
@@ -70,6 +72,10 @@ void RegressionReleaseTest::runTest()
       QString::number(retval)).toStdString(),
       false);
   }
+
+  //TODO: check test score and pass if >= _minPassingScore; fail otherwise
+
+
   if (!QDir::setCurrent(startingDir))
   {
     throw HootException("Unable to change back to hoot tests directory: " + _d.absolutePath());

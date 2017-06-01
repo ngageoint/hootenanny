@@ -58,16 +58,12 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   LOG_VARD(temp.getFileName());
   settings.storeJson(temp.getFileName());
 
-  //this init will add the conflicts network case tests conf which is a subset of the overall
-  //network cases tests conf
   QStringList failedTests;
   for (int i = 0; i < _testCount; ++i)
   {
     AbstractTest* test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
     const QString testName = QString::fromStdString(test->getName());
     //LOG_ERROR("Running " << testName << "...");
-    //we still need to add the overall network cases tests conf
-    //test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
     initTest(test);
     //add our custom sa test option values
     test->addConfig(temp.getFileName());
@@ -75,6 +71,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     SimpleTestListener listener;
     result.addListener(&listener);
     test->run(&result);
+    afterTestRun(test);
 
     if (listener.isFailure())
     {
