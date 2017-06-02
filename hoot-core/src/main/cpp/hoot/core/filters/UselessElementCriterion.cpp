@@ -38,27 +38,27 @@
 namespace hoot
 {
 
-bool UselessElementCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool UselessElementCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   ElementId eid = e->getElementId();
 
-  const shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
+  const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
 
   // Is this element part of a relation? If so, it's not useless!
-  const set<long>& parentRels = e2r->getRelationByElement(eid);
+  const std::set<long>& parentRels = e2r->getRelationByElement(eid);
   if (parentRels.size() > 0)
     return false;
 
   if (ElementType::Node == eid.getType().getEnum())
   {
     // Check ways
-    const set<long>& parentWays = _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
+    const std::set<long>& parentWays = _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
     if (parentWays.size() > 0)
       return false;
   }
   else if (ElementType::Way == eid.getType().getEnum())
   {
-    ConstWayPtr pWay = dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr pWay = boost::dynamic_pointer_cast<const Way>(e);
 
     // Check for kids
     if (pWay->getNodeCount() > 0)
@@ -66,7 +66,7 @@ bool UselessElementCriterion::isSatisfied(const shared_ptr<const Element> &e) co
   }
   else if (ElementType::Relation == eid.getType().getEnum())
   {
-    ConstRelationPtr pRel = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr pRel = boost::dynamic_pointer_cast<const Relation>(e);
     if (pRel->getMembers().size() > 0)
       return false;
   }

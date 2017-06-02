@@ -45,14 +45,14 @@ class UselessElementCriterion : public ElementCriterion, public ConstOsmMapConsu
 {
 public:
 
-  static string className() { return "hoot::UselessElementCriterion"; }
+  static std::string className() { return "hoot::UselessElementCriterion"; }
 
   UselessElementCriterion() { }
   UselessElementCriterion(ConstOsmMapPtr map) : _map(map) {}
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const;
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const;
 
   virtual ElementCriterion* clone() { return new UselessElementCriterion(); }
 

@@ -41,7 +41,7 @@ CriterionCountVisitor::CriterionCountVisitor():
   setConfiguration(conf());
 }
 
-CriterionCountVisitor::CriterionCountVisitor(const shared_ptr<ElementCriterion>& pCrit):
+CriterionCountVisitor::CriterionCountVisitor(const boost::shared_ptr<ElementCriterion>& pCrit):
   _map(NULL),
   _count(0),
   _visited(0),
@@ -61,7 +61,7 @@ void CriterionCountVisitor::visit(const ConstElementPtr& e)
   assert(_pCrit);
   ElementType type = e->getElementType();
   long id = e->getId();
-  const shared_ptr<const Element>& ee = _map->getElement(type, id);
+  const boost::shared_ptr<const Element>& ee = _map->getElement(type, id);
 
   if (_pCrit->isSatisfied(ee))
   {

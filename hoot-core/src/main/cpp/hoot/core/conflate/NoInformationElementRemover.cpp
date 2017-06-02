@@ -52,9 +52,9 @@ void NoInformationElementRemover::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
-  shared_ptr<NoInformationCriterion> pNoInfoCrit(new NoInformationCriterion());
-  shared_ptr<UselessElementCriterion> pUselessCrit(new UselessElementCriterion(map));
-  shared_ptr<ChainCriterion> pCrit(new ChainCriterion(pNoInfoCrit, pUselessCrit));
+  boost::shared_ptr<NoInformationCriterion> pNoInfoCrit(new NoInformationCriterion());
+  boost::shared_ptr<UselessElementCriterion> pUselessCrit(new UselessElementCriterion(map));
+  boost::shared_ptr<ChainCriterion> pCrit(new ChainCriterion(pNoInfoCrit, pUselessCrit));
   RemoveElementsVisitor removeElementsVisitor(pCrit);
   removeElementsVisitor.setRecursive(false);
   _map->visitRw(removeElementsVisitor);

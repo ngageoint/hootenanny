@@ -76,7 +76,7 @@ private:
   const OsmMap* _map;
   uint64_t _count;
   uint64_t _visited;
-  shared_ptr<ElementCriterion> _pCrit;
+  boost::shared_ptr<ElementCriterion> _pCrit;
 };
 
 }

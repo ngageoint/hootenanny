@@ -237,7 +237,6 @@ SOURCES += \
     src/main/cpp/hoot/core/algorithms/aggregator/QuantileAggregator.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatch.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatchCreator.cpp \
-    src/main/cpp/hoot/core/conflate/highway/HighwayMerger.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwaySnapMerger.cpp \
     src/main/cpp/hoot/core/conflate/highway/HighwaySnapMergerCreator.cpp \
     src/main/cpp/hoot/core/manipulators/WaySnapMerger.cpp \
@@ -753,7 +752,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/zindex/ZValue.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatch.h \
     src/main/cpp/hoot/core/conflate/highway/HighwayMatchCreator.h \
-    src/main/cpp/hoot/core/conflate/highway/HighwayMerger.h \
     src/main/cpp/hoot/core/conflate/highway/HighwaySnapMerger.h \
     src/main/cpp/hoot/core/conflate/highway/HighwaySnapMergerCreator.h \
     src/main/cpp/hoot/core/manipulators/WaySnapMerger.h \
