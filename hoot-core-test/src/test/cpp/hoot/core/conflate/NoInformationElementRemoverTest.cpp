@@ -90,7 +90,6 @@ public:
 
     //No elements should be removed.  Node 2 should not be removed, even though it has no info,
     //since its still owned by the way.
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
 
@@ -114,7 +113,6 @@ public:
     NoInformationElementRemover().apply(map);
 
     //Node 2 has no info and isn't owned by a way, so it should be removed.
-
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
 
     ConstNodePtr parsedNode1 = map->getNode(node1->getElementId().getId());
@@ -147,7 +145,6 @@ public:
 
     // Because the way contains nodes (even though they don't have any useful metadata)
     // neither the way nor the nodes should be removed
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
   }
@@ -174,7 +171,6 @@ public:
     // Because the way doesn't contain any nodes or useful info, it should be removed.
     // Because the nodes don't belong to a way or relation, or have useful info, they should
     // be removed
-
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
   }
@@ -198,7 +194,6 @@ public:
 
     // Because the way contains nodes (even though they don't have any useful metadata)
     // neither the way nor the nodes should be removed
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
   }
@@ -239,7 +234,6 @@ public:
 
     //No elements should be removed.  The node 1 and way 2 should not be removed, even though they
     //have no info, since they are still owned by the relation.
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
@@ -278,7 +272,6 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All elements are interrelated - should not be removed
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
@@ -317,7 +310,6 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All elements are interrelated - should not be removed
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
@@ -357,7 +349,6 @@ public:
     NoInformationElementRemover().apply(map);
 
     // Nodes and Ways should not be removed, but relation should be
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
@@ -389,7 +380,6 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All map items are unrelated, and have no info. They should be removed.
-
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
@@ -429,7 +419,6 @@ public:
     NoInformationElementRemover().apply(map);
 
     // All map items are not related, but have info. They should not be removed.
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
