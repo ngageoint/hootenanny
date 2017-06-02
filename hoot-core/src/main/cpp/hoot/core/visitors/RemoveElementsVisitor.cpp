@@ -39,17 +39,17 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
 
-RemoveElementsVisitor::RemoveElementsVisitor()
+RemoveElementsVisitor::RemoveElementsVisitor():
+  _count(0)
 {
   setConfiguration(conf());
-  _count = 0;
 }
 
 RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter) :
   _filter(filter),
-  _recursive(false)
+  _recursive(false),
+  _count(0)
 {
-  _count = 0;
 }
 
 void RemoveElementsVisitor::setConfiguration(const Settings& conf)
