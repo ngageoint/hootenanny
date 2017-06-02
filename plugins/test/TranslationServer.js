@@ -283,6 +283,23 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should handle osmtotds POST and preserve bounds tag', function() {
+            //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="JOSM"><bounds minlat="39.35643172777992" minlon="-105.21811763904256" maxlat="39.35643172777992" maxlon="-105.21811763904256" origin="MapEdit server" /><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/osmtotds'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.bounds[0].$.minlat, "39.35643172777992");
+                assert.equal(result.osm.bounds[0].$.minlon, "-105.21811763904256");
+                assert.equal(result.osm.bounds[0].$.maxlat, "39.35643172777992");
+                assert.equal(result.osm.bounds[0].$.maxlon, "-105.21811763904256");
+            });
+        });
+
         it('should handle osmtotds POST of building area feature', function() {
             //http://localhost:8094/osmtotds
             var osm2trans = server.handleInputs({
