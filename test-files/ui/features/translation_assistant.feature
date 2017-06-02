@@ -71,7 +71,7 @@ Feature: Translation Assistant
         And I fill "translationName" input with "cali-Cucumber"
         And I fill "translationDescription" input with "cali-Cucumber"
         And I click on ".translationSave"
-        Then I wait 3 "seconds" to see "cali-Cucumber"
+        Then I wait 10 "seconds" to see "cali-Cucumber"
 
     Scenario: Ingest using custom translation
         When I click on the "Datasets" option in the "settingsSidebar"
