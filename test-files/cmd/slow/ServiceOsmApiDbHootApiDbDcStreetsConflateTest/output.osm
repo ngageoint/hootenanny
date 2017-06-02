@@ -17312,8 +17312,8 @@
         <tag k="hoot:id" v="4347"/>
     </node>
     <node visible="true" id="4348" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8929019999999994" lon="-77.0383688999999947">
-        <tag k="hoot:id" v="4348"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="4348"/>
         <tag k="hoot:id" v="4348"/>
     </node>
     <node visible="true" id="4349" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8928370000000001" lon="-77.0383958999999976">
@@ -17352,8 +17352,8 @@
         <tag k="hoot:id" v="4355"/>
     </node>
     <node visible="true" id="4356" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8923100000000019" lon="-77.0389478999999966">
-        <tag k="hoot:id" v="4356"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="4356"/>
         <tag k="hoot:id" v="4356"/>
     </node>
     <node visible="true" id="4357" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8922799999999995" lon="-77.0390098999999964">
@@ -17387,8 +17387,8 @@
         <tag k="hoot:id" v="4373"/>
     </node>
     <node visible="true" id="4374" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8928170000000009" lon="-77.0346629000000007">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4374"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4374"/>
     </node>
     <node visible="true" id="4375" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8927690000000013" lon="-77.0346329000000054">
@@ -17412,8 +17412,8 @@
         <tag k="hoot:id" v="4378"/>
     </node>
     <node visible="true" id="4379" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8924220000000034" lon="-77.0343378999999970">
-        <tag k="hoot:id" v="4379"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="4379"/>
         <tag k="hoot:id" v="4379"/>
     </node>
     <node visible="true" id="4380" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8923169999999985" lon="-77.0341889000000037">
@@ -17427,8 +17427,8 @@
         <tag k="hoot:id" v="4381"/>
     </node>
     <node visible="true" id="4490" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8954579999999979" lon="-77.0376569000000018">
-        <tag k="hoot:id" v="4490"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="4490"/>
         <tag k="hoot:id" v="4490"/>
     </node>
     <node visible="true" id="4492" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8954949999999968" lon="-77.0376389000000046">
@@ -17462,8 +17462,8 @@
         <tag k="hoot:id" v="4502"/>
     </node>
     <node visible="true" id="4503" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8948109999999971" lon="-77.0345248999999939">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4503"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4503"/>
     </node>
     <node visible="true" id="4504" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8949380000000033" lon="-77.0344549000000001">
@@ -17477,13 +17477,13 @@
         <tag k="hoot:id" v="4505"/>
     </node>
     <node visible="true" id="4506" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8950460000000007" lon="-77.0343639000000024">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4506"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4506"/>
     </node>
     <node visible="true" id="4507" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8951040000000035" lon="-77.0343009000000052">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4507"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4507"/>
     </node>
     <node visible="true" id="4508" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8951589999999996" lon="-77.0342339000000038">
@@ -17497,8 +17497,8 @@
         <tag k="hoot:id" v="4509"/>
     </node>
     <node visible="true" id="4510" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8952669999999969" lon="-77.0340889000000004">
-        <tag k="hoot:id" v="4510"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="4510"/>
         <tag k="hoot:id" v="4510"/>
     </node>
     <node visible="true" id="4511" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8953470000000010" lon="-77.0339678999999933">
@@ -17522,8 +17522,8 @@
         <tag k="hoot:id" v="4551"/>
     </node>
     <node visible="true" id="4552" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8983139999999992" lon="-77.0336439000000013">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4552"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4552"/>
     </node>
     <node visible="true" id="4553" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8984329999999972" lon="-77.0336429000000038">
@@ -17607,23 +17607,23 @@
         <tag k="hoot:id" v="4592"/>
     </node>
     <node visible="true" id="4593" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8921020000000013" lon="-77.0488488999999959">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4593"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4593"/>
     </node>
     <node visible="true" id="4594" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8921029999999988" lon="-77.0486958999999985">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4594"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4594"/>
     </node>
     <node visible="true" id="4595" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8921009999999967" lon="-77.0479718999999932">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4595"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4595"/>
     </node>
     <node visible="true" id="4596" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8921009999999967" lon="-77.0466758999999968">
-        <tag k="hoot:id" v="4596"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="4596"/>
         <tag k="hoot:id" v="4596"/>
     </node>
     <node visible="true" id="4597" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8921009999999967" lon="-77.0449378999999936">
@@ -17647,8 +17647,8 @@
         <tag k="hoot:id" v="4600"/>
     </node>
     <node visible="true" id="4616" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8985709999999969" lon="-77.0350659000000064">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4616"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4616"/>
     </node>
     <node visible="true" id="4617" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8986469999999969" lon="-77.0350669000000039">
@@ -17662,13 +17662,13 @@
         <tag k="hoot:id" v="4618"/>
     </node>
     <node visible="true" id="4623" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8964020000000019" lon="-77.0394619000000063">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4623"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4623"/>
     </node>
     <node visible="true" id="4624" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8966089999999980" lon="-77.0394608999999946">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4624"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4624"/>
     </node>
     <node visible="true" id="4625" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8969280000000026" lon="-77.0394598999999971">
@@ -17677,8 +17677,8 @@
         <tag k="hoot:id" v="4625"/>
     </node>
     <node visible="true" id="4626" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8972630000000024" lon="-77.0394679000000053">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4626"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4626"/>
     </node>
     <node visible="true" id="4627" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8973560000000020" lon="-77.0394729000000069">
@@ -17707,8 +17707,8 @@
         <tag k="hoot:id" v="4631"/>
     </node>
     <node visible="true" id="4632" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8983220000000003" lon="-77.0394718999999952">
-        <tag k="hoot:id" v="4632"/>
         <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="4632"/>
         <tag k="hoot:id" v="4632"/>
     </node>
     <node visible="true" id="4633" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.8986400000000003" lon="-77.0394718999999952">
@@ -17752,8 +17752,8 @@
         <tag k="hoot:id" v="4640"/>
     </node>
     <node visible="true" id="4641" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.9008460000000014" lon="-77.0394469000000015">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4641"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4641"/>
     </node>
     <node visible="true" id="4642" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.9013399999999976" lon="-77.0394469000000015">
@@ -17762,8 +17762,8 @@
         <tag k="hoot:id" v="4642"/>
     </node>
     <node visible="true" id="4643" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.9016829999999985" lon="-77.0394498999999939">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4643"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="4643"/>
     </node>
     <node visible="true" id="4644" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="38.9020110000000017" lon="-77.0394498999999939">
@@ -19315,8 +19315,8 @@
         <nd ref="3265"/>
         <nd ref="3263"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="62"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="62"/>
         <tag k="alt_name" v="17th St NW"/>
         <tag k="name" v="17TH ST NW"/>
         <tag k="highway" v="road"/>
@@ -19468,8 +19468,8 @@
         <nd ref="216"/>
         <nd ref="1950"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="70"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="70"/>
         <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
@@ -19552,7 +19552,7 @@
         <tag k="accuracy" v="5"/>
         <tag k="hoot:id" v="74"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
+        <tag k="alt_name" v="15th St NW"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="74"/>
@@ -19698,8 +19698,8 @@
         <nd ref="1180"/>
         <nd ref="3071"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="84"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="84"/>
         <tag k="alt_name" v="C St NW"/>
         <tag k="name" v="C ST NW"/>
         <tag k="highway" v="road"/>
@@ -21933,8 +21933,8 @@
         <nd ref="1491"/>
         <nd ref="4700"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="207"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="207"/>
@@ -21972,9 +21972,9 @@
         <nd ref="1923"/>
         <nd ref="1921"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="209"/>
-        <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="15th St NW"/>
         <tag k="name" v="15TH ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="hoot:id" v="209"/>
@@ -25531,7 +25531,20 @@
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="392"/>
     </way>
-    <way visible="true" id="402" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="400" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="1950"/>
+        <nd ref="3745"/>
+        <nd ref="3743"/>
+        <nd ref="4692"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="400"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
+        <tag k="name" v="CONSTITUTION AVE NW"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="400"/>
+    </way>
+    <way visible="true" id="404" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="209"/>
         <nd ref="4550"/>
         <nd ref="4551"/>
@@ -25551,26 +25564,25 @@
         <nd ref="4565"/>
         <nd ref="4566"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="402"/>
+        <tag k="hoot:id" v="404"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="alt_name" v="Raoul Wallenberg Pl SW"/>
         <tag k="name" v="15th St NW"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="402"/>
+        <tag k="hoot:id" v="404"/>
     </way>
-    <way visible="true" id="404" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="406" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4693"/>
         <nd ref="598"/>
         <nd ref="3556"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="404"/>
+        <tag k="hoot:id" v="406"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="404"/>
+        <tag k="hoot:id" v="406"/>
     </way>
-    <way visible="true" id="405" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="407" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3183"/>
         <nd ref="618"/>
         <nd ref="616"/>
@@ -25580,26 +25592,26 @@
         <nd ref="608"/>
         <nd ref="4694"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="405"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="407"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="405"/>
+        <tag k="hoot:id" v="407"/>
     </way>
-    <way visible="true" id="406" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="408" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="1921"/>
         <nd ref="636"/>
         <nd ref="4695"/>
         <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="408"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="406"/>
         <tag k="alt_name" v="E St NW"/>
         <tag k="name" v="E ST NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="406"/>
+        <tag k="hoot:id" v="408"/>
     </way>
-    <way visible="true" id="407" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="409" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="2687"/>
         <nd ref="2215"/>
         <nd ref="2214"/>
@@ -25626,13 +25638,25 @@
         <nd ref="4697"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="407"/>
+        <tag k="hoot:id" v="409"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="407"/>
+        <tag k="hoot:id" v="409"/>
     </way>
-    <way visible="true" id="408" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="410" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+        <nd ref="1519"/>
+        <nd ref="4616"/>
+        <nd ref="4617"/>
+        <nd ref="4618"/>
+        <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="410"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="name" v="E Executive Ave NW"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="410"/>
+    </way>
+    <way visible="true" id="411" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4696"/>
         <nd ref="2170"/>
         <nd ref="2168"/>
@@ -25647,26 +25671,14 @@
         <nd ref="2150"/>
         <nd ref="2148"/>
         <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="411"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="408"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="408"/>
+        <tag k="hoot:id" v="411"/>
     </way>
-    <way visible="true" id="409" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="1519"/>
-        <nd ref="4616"/>
-        <nd ref="4617"/>
-        <nd ref="4618"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="409"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="name" v="E Executive Ave NW"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="409"/>
-    </way>
-    <way visible="true" id="410" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="412" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4694"/>
         <nd ref="4490"/>
         <nd ref="4492"/>
@@ -25675,14 +25687,14 @@
         <nd ref="4498"/>
         <nd ref="4700"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="410"/>
+        <tag k="hoot:id" v="412"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="South Pl NW"/>
         <tag k="foot" v="designated"/>
         <tag k="highway" v="path"/>
-        <tag k="hoot:id" v="410"/>
+        <tag k="hoot:id" v="412"/>
     </way>
-    <way visible="true" id="412" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="414" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4698"/>
         <nd ref="3123"/>
         <nd ref="3121"/>
@@ -25702,14 +25714,14 @@
         <nd ref="3093"/>
         <nd ref="2687"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="412"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="414"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="412"/>
+        <tag k="hoot:id" v="414"/>
     </way>
-    <way visible="true" id="414" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="415" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3183"/>
         <nd ref="3181"/>
         <nd ref="3179"/>
@@ -25723,13 +25735,13 @@
         <nd ref="4699"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="414"/>
+        <tag k="hoot:id" v="415"/>
         <tag k="alt_name" v="Ellipse Rd NW"/>
         <tag k="name" v="ELLIPSE RD NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="414"/>
+        <tag k="hoot:id" v="415"/>
     </way>
-    <way visible="true" id="415" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="416" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="3547"/>
         <nd ref="4623"/>
         <nd ref="4624"/>
@@ -25757,13 +25769,13 @@
         <nd ref="4646"/>
         <nd ref="4647"/>
         <tag k="accuracy" v="5"/>
+        <tag k="hoot:id" v="416"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="hoot:id" v="415"/>
         <tag k="name" v="17th St NW"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="415"/>
+        <tag k="hoot:id" v="416"/>
     </way>
-    <way visible="true" id="416" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="417" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4700"/>
         <nd ref="1490"/>
         <nd ref="1489"/>
@@ -25771,15 +25783,15 @@
         <nd ref="1487"/>
         <nd ref="1486"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="416"/>
+        <tag k="hoot:id" v="417"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="South Pl NW"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
         <tag k="foot" v="designated"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="416"/>
+        <tag k="hoot:id" v="417"/>
     </way>
-    <way visible="true" id="417" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="418" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="1519"/>
         <nd ref="1518"/>
         <nd ref="1517"/>
@@ -25788,14 +25800,14 @@
         <nd ref="1514"/>
         <nd ref="4701"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="417"/>
+        <tag k="hoot:id" v="418"/>
         <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="Executive Ave NW;South Pl NW"/>
         <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
         <tag k="highway" v="road"/>
-        <tag k="hoot:id" v="417"/>
+        <tag k="hoot:id" v="418"/>
     </way>
-    <way visible="true" id="418" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
+    <way visible="true" id="419" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
         <nd ref="4591"/>
         <nd ref="4592"/>
         <nd ref="4593"/>
@@ -25808,29 +25820,16 @@
         <nd ref="4600"/>
         <nd ref="3723"/>
         <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="418"/>
+        <tag k="hoot:id" v="419"/>
         <tag k="hoot:status" v="2"/>
         <tag k="alt_name" v="Constitution Ave NW"/>
         <tag k="name" v="US Hwy 50"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:id" v="418"/>
-    </way>
-    <way visible="true" id="419" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="4691"/>
-        <nd ref="3263"/>
-        <tag k="accuracy" v="5"/>
-        <tag k="hoot:id" v="419"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
-        <tag k="highway" v="road"/>
         <tag k="hoot:id" v="419"/>
     </way>
     <way visible="true" id="420" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
-        <nd ref="1950"/>
-        <nd ref="3745"/>
-        <nd ref="3743"/>
-        <nd ref="4692"/>
+        <nd ref="4691"/>
+        <nd ref="3263"/>
         <tag k="accuracy" v="5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="420"/>

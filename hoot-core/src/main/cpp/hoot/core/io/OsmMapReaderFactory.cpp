@@ -81,7 +81,7 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
 }
 
 boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool useDataSourceIds,
-                                                           Status defaultStatus)
+                                                                  Status defaultStatus)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
