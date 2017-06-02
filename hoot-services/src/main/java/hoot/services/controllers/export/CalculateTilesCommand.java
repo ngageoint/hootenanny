@@ -26,21 +26,12 @@
  */
 package hoot.services.controllers.export;
 
-import static hoot.services.HootProperties.*;
-
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-
-import hoot.services.command.CommandResult;
-import hoot.services.command.ExternalCommand;
 import hoot.services.geo.BoundingBox;
 
 
@@ -48,46 +39,46 @@ class CalculateTilesCommand extends ExportCommand {
 
     CalculateTilesCommand(String jobId, ExportParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
-        
-        //if one of these is specified, then both must be
-        if ((params.getMaxNodeCountPerTile() == -1 && params.getPixelSize() != -1.0) ||
-        	(params.getPixelSize() == -1.0 && params.getMaxNodeCountPerTile() != -1))
-        {
-          throw new IllegalArgumentException("If either max node count per tile or pixel size is specified, then both input parameters must be specified.");
+
+        // if one of these is specified, then both must be
+        if (((params.getMaxNodeCountPerTile() == -1) && (params.getPixelSize() != -1.0))
+                || ((params.getPixelSize() == -1.0) && (params.getMaxNodeCountPerTile() != -1))) {
+            throw new IllegalArgumentException("If either max node count per tile or pixel size is specified, " +
+                    "then both input parameters must be specified.");
         }
-        
+
         List<String> options = new LinkedList<>();
         options.add("api.db.email=test@test.com");
-        //bounding box is optional for this command; if not specified, the command will calculate
-        //for the combined extent of all input datasets which, of course, can be very expensive for
-        //large datasets
-        if (params.getBounds() != null)
-        {
-          BoundingBox bounds = new BoundingBox(params.getBounds());
-          options.add("convert.bounding.box=" + bounds.getMinLon() + "," + bounds.getMinLat() + "," + bounds.getMaxLon() + "," + bounds.getMaxLat());
+
+        // bounding box is optional for this command; if not specified, the
+        // command will calculate for the combined extent of all input datasets which, of course, can
+        // be very expensive for large datasets
+        if (params.getBounds() != null) {
+            BoundingBox bounds = new BoundingBox(params.getBounds());
+            options.add("convert.bounding.box=" + bounds.getMinLon() + "," + bounds.getMinLat() + ","
+                    + bounds.getMaxLon() + "," + bounds.getMaxLat());
         }
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        //can specify multiple inputs with ';' delimiter
+        // can specify multiple inputs with ';' delimiter
         substitutionMap.put("INPUTS", super.getInput());
         substitutionMap.put("OUTPUT", super.getOutputPath());
-        //max node count per tile and pixel size are optional; core will use default params if both are
-        //missing; see the calculate-tiles command line documentation for more details
-        if (params.getMaxNodeCountPerTile() != -1 && params.getPixelSize() != -1.0)
-        {
-          substitutionMap.put("MAX_NODE_COUNT_PER_TILE", params.getMaxNodeCountPerTile());
-          substitutionMap.put("PIXEL_SIZE", params.getPixelSize());
+
+        // max node count per tile and pixel size are optional; core will use
+        // default params if both are missing; see the calculate-tiles command line documentation for more details
+        if ((params.getMaxNodeCountPerTile() != -1) && (params.getPixelSize() != -1.0)) {
+            substitutionMap.put("MAX_NODE_COUNT_PER_TILE", String.valueOf(params.getMaxNodeCountPerTile()));
+            substitutionMap.put("PIXEL_SIZE", String.valueOf(params.getPixelSize()));
         }
 
-        String command = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}"; 
-        if (params.getMaxNodeCountPerTile() != -1 && params.getPixelSize() != -1.0)
-        {
-          command += " ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
+        String command = "hoot calculate-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        if ((params.getMaxNodeCountPerTile() != -1) && (params.getPixelSize() != -1.0)) {
+            command += " ${MAX_NODE_COUNT_PER_TILE} ${PIXEL_SIZE}";
         }
 
-        super.configureCommand(command, substitutionMap, caller);
+        super.configureCommand(command, substitutionMap, caller, new File("/tmp"));
     }
 }
