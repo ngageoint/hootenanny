@@ -47,7 +47,7 @@ _minPassingScore(-1.0)
 void RegressionReleaseTest::runTest()
 {
   //TestUtils::resetEnvironment();
-  LOG_DEBUG("Running regression release test...");
+  LOG_DEBUG("Running regression release test: " << _d.absolutePath());
 
   // configures and cleans up the conf() environment
   //LOG_VART(_confs);
