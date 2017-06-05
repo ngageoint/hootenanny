@@ -66,9 +66,19 @@ void RegressionReleaseTest::runTest()
     throw IllegalArgumentException("Unable to change to test directory: " + _d.absolutePath());
   }
 
+  LOG_DEBUG("Cleaning test: " << getName());
+  QString cmd = "make clean";
+  int retval = system(cmd.toStdString().c_str());
+  if (retval != 0)
+  {
+    CPPUNIT_ASSERT_MESSAGE(
+      QString("Failed cleaning data for regression release test.  Status: " +
+      QString::number(retval)).toStdString(),
+      false);
+  }
   LOG_DEBUG("Running test: " << getName());
-  const QString cmd = "make test";
-  const int retval = system(cmd.toStdString().c_str());
+  cmd = "make test";
+  retval = system(cmd.toStdString().c_str());
   if (retval != 0)
   {
     CPPUNIT_ASSERT_MESSAGE(
@@ -121,7 +131,7 @@ void RegressionReleaseTest::runTest()
   }
   else
   {
-    LOG_DEBUG("test failed: " << getName());
+    LOG_DEBUG("Test: " << getName() << " failed with score: " << overallScore);
     CPPUNIT_ASSERT_MESSAGE(
       QString("Failed executing regression release test: " +
         QString::fromStdString(getName())).toStdString(),
@@ -133,6 +143,7 @@ void RegressionReleaseTest::runTest()
   {
     throw HootException("Unable to change back to hoot tests directory: " + startingDir);
   }
+  LOG_VARD(QDir::currentPath());
 }
 
 }
