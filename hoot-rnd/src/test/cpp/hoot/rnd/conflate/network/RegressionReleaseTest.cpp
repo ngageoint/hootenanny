@@ -117,7 +117,7 @@ void RegressionReleaseTest::runTest()
   QTextStream inStream(&scoresFile);
   QString line;
   bool foundConflatedScoreLine = false;
-  unsigned int overallScore = -1;
+  int overallScore = -1;
   do
   {
     line = inStream.readLine();
@@ -128,8 +128,8 @@ void RegressionReleaseTest::runTest()
     }
     else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
     {
-      LOG_VARD(line.split("\s"));
-      overallScore = line.split("\s")[1].trimmed().toInt();
+      LOG_VARD(line.split(" "));
+      overallScore = line.split(" ")[1].trimmed().toInt();
       LOG_VARD(overallScore);
     }
   }
