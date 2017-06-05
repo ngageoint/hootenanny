@@ -64,13 +64,13 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   {
     AbstractTest* test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
     const QString testName = QString::fromStdString(test->getName());
-    LOG_DEBUG("Running " << testName << "...");
     initTest(test);
     //add our custom sa test option values
     test->addConfig(_settingsFileName);
     CppUnit::TestResult result;
     SimpleTestListener listener;
     result.addListener(&listener);
+    LOG_DEBUG("Running " << testName << "...");
     test->run(&result);
     afterTestRun(test);
 

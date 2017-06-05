@@ -56,14 +56,18 @@ void RegressionReleaseTest::runTest()
   QFileInfo makeFile(_d, "Makefile");
   if (!makeFile.exists())
   {
-    throw IllegalArgumentException(
-      "Unable to find Makefile for regression release test: " + _d.absolutePath());
+    //for some reason, not seeing these exceptions logged at test time, so logging them here for now
+    const QString msg = "Unable to find Makefile for regression release test: " + _d.absolutePath();
+    LOG_ERROR(msg);
+    throw IllegalArgumentException(msg);
   }
 
   const QString startingDir = QDir::currentPath();
   if (!QDir::setCurrent(_d.absolutePath()))
   {
-    throw IllegalArgumentException("Unable to change to test directory: " + _d.absolutePath());
+    const QString msg = "Unable to change to test directory: " + _d.absolutePath();
+    LOG_ERROR(msg);
+    throw IllegalArgumentException(msg);
   }
 
   LOG_DEBUG("Cleaning test: " << getName());
@@ -71,20 +75,22 @@ void RegressionReleaseTest::runTest()
   int retval = system(cmd.toStdString().c_str());
   if (retval != 0)
   {
-    CPPUNIT_ASSERT_MESSAGE(
+    const QString msg =
       QString("Failed cleaning data for regression release test.  Status: " +
-      QString::number(retval)).toStdString(),
-      false);
+      QString::number(retval));
+    LOG_ERROR(msg);
+    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
   LOG_DEBUG("Running test: " << getName());
   cmd = "make test";
   retval = system(cmd.toStdString().c_str());
   if (retval != 0)
   {
-    CPPUNIT_ASSERT_MESSAGE(
+    const QString msg =
       QString("Failed executing regression release test.  Status: " +
-      QString::number(retval)).toStdString(),
-      false);
+      QString::number(retval));
+    LOG_ERROR(msg);
+    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
 
   //check test score and pass if >= _minPassingScore; fail otherwise
@@ -94,16 +100,19 @@ void RegressionReleaseTest::runTest()
   const QStringList scoresDirContents = scoresDir.entryList(nameFilters, QDir::Files);
   if (scoresDirContents.size() != 1)
   {
-    throw HootException(
+    const QString msg =
       "Found " + QString::number(scoresDirContents.size()) + " score files and expected to " +
-      "find one scores file.");
+      "find one scores file.";
+    LOG_ERROR(msg);
+    throw HootException(msg);
   }
   LOG_VARD(scoresDirContents[0]);
-  QFile scoresFile(scoresDirContents[0]);
+  QFile scoresFile("scores/" + scoresDirContents[0]);
   if (!scoresFile.open(QIODevice::ReadOnly))
   {
-    LOG_ERROR("test");
-    throw HootException("Unable to open scores file: " + scoresDirContents[0]);
+    const QString msg = "Unable to open scores file: scores/" + scoresDirContents[0];
+    LOG_ERROR(msg);
+    throw HootException(msg);
   }
   QTextStream inStream(&scoresFile);
   QString line;
@@ -144,7 +153,9 @@ void RegressionReleaseTest::runTest()
 
   if (!QDir::setCurrent(startingDir))
   {
-    throw HootException("Unable to change back to hoot tests directory: " + startingDir);
+    const QString msg = "Unable to change back to hoot tests directory: " + startingDir;
+    LOG_ERROR(msg);
+    throw HootException(msg);
   }
   LOG_VARD(QDir::currentPath());
 }
