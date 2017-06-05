@@ -44,7 +44,7 @@ AbstractTestSuite(dir)
 void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
 {
   LOG_VARD(dir);
-  if (!dir.endsWith(".release") && !dir.contains("release-test.child"))
+  if (!dir.endsWith(".release") && !dir.contains("release_test.child"))
   {
     return;
   }
