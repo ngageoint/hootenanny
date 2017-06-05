@@ -53,7 +53,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   //if you need to add any other temporary custom settings for this test that wouldn't
   //normally be used with the network conflation case tests, add those here
   //settings.set("", "");
-  LOG_VART(settings);
+  LOG_VARD(settings);
   TempFileName temp;
   _settingsFileName = temp.getFileName();
   LOG_VARD(_settingsFileName);
@@ -64,7 +64,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   {
     AbstractTest* test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
     const QString testName = QString::fromStdString(test->getName());
-    //LOG_ERROR("Running " << testName << "...");
+    LOG_DEBUG("Running " << testName << "...");
     initTest(test);
     //add our custom sa test option values
     test->addConfig(_settingsFileName);
@@ -76,7 +76,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 
     if (listener.isFailure())
     {
-      //LOG_ERROR("Failure: " << testName);
+      LOG_DEBUG("Failure: " << testName);
       failedTests.append(testName);
     }
   }

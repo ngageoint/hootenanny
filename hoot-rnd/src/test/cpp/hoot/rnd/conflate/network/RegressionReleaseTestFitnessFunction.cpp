@@ -29,6 +29,8 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Settings.h>
 #include "RegressionReleaseTestSuite.h"
 #include "RegressionReleaseTest.h"
 
@@ -38,7 +40,7 @@ namespace hoot
 RegressionReleaseTestFitnessFunction::RegressionReleaseTestFitnessFunction() :
 AbstractTestFitnessFunction()
 {
-  //TODO: make this configurable?
+  //TODO: make this configurable from the test class?
   _dir = "/fouo/hoot-tests/network-tests.child/release_test.child";
   _testSuite.reset(new RegressionReleaseTestSuite(_dir));
   QStringList confs;
@@ -47,18 +49,41 @@ AbstractTestFitnessFunction()
   _highestOverallScores.clear();
 }
 
-void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
+void RegressionReleaseTestFitnessFunction::_createConfig(const QString testName)
 {
-  QFile settingsFile(_settingsFileName);
+  //Calling test->addConfig with the network config file to add in the non-variable config options
+  //won't work here, since configs added in that manner have no effect on regression tests.
+  //Instead, we need to manually add those settings in.
+
+  //add the default network settings to the test settings
+  Settings testSettings;
+  testSettings.loadDefaults();
+  testSettings.loadJson(_settingsFileName);
+  Settings networkBaseSettings;
+  networkBaseSettings.loadDefaults();
+  //TODO: make this configurable from test
+  networkBaseSettings.loadJson("test-files/cases/hoot-rnd/network/Config.conf");
+  foreach (QString k, networkBaseSettings.getAll().keys())
+  {
+    testSettings.set(k, networkBaseSettings.get(k).toString());
+  }
+  LOG_VARD(testSettings);
+
   //for now, this will only work with network conflation regression release tests, since
   //they are the only ones set up to handle this configuration file management
-  const QString settingsFileDest =
-    _dir + "/" + QString::fromStdString(test->getName()) + "/Config.conf";
-  if (!settingsFile.copy(settingsFileDest))
+  const QString settingsFileDestName = testName + "/Config.conf";
+  QFile settingsFileDest(settingsFileDestName);
+  if (settingsFileDest.exists() && !settingsFileDest.remove())
   {
-    throw new HootException("Unable to copy configuration file to: " + settingsFileDest);
+    throw new HootException(
+      "Unable to remove previous test configuration file: " + settingsFileDestName);
   }
+  LOG_DEBUG("Writing test conf file to: " << settingsFileDestName << "...");
+  testSettings.storeJson(settingsFileDestName);
+}
 
+void RegressionReleaseTestFitnessFunction::_updateTestWithCurrentScore(AbstractTest* test)
+{
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
   LOG_VARD(QString::fromStdString(test->getName()));
   if (!_highestOverallScores.contains(QString::fromStdString(test->getName())))
@@ -71,19 +96,35 @@ void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
     regressionReleaseTest->setMinPassingScore(
       _highestOverallScores[QString::fromStdString(test->getName())]);
   }
+  LOG_VARD(regressionReleaseTest->getMinPassingScore());
+}
+
+void RegressionReleaseTestFitnessFunction::_updateCurrentScoreFromTest(const double score,
+                                                                       const QString testName)
+{
+  LOG_VARD(testName);
+  LOG_VARD(score);
+  if (score > _highestOverallScores[testName])
+  {
+    _highestOverallScores[testName] = score;
+  }
+  LOG_VARD(_highestOverallScores[testName]);
+}
+
+void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
+{
+  LOG_DEBUG("Initializing test: " << test->getName() << "...");
+  _createConfig(QString::fromStdString(test->getName()));
+  _updateTestWithCurrentScore(test);
 }
 
 void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
 {
+  LOG_DEBUG("Updating test after run: " << test->getName() << "...");
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
-  LOG_VARD(QString::fromStdString(test->getName()));
-  LOG_VARD(regressionReleaseTest->getMinPassingScore());
-  if (regressionReleaseTest->getMinPassingScore() >
-      _highestOverallScores[QString::fromStdString(test->getName())])
-  {
-    _highestOverallScores[QString::fromStdString(test->getName())] =
-      regressionReleaseTest->getMinPassingScore();
-  }
+  _updateCurrentScoreFromTest(
+    regressionReleaseTest->getMinPassingScore(),
+    QString::fromStdString(regressionReleaseTest->getName()));
 }
 
 }

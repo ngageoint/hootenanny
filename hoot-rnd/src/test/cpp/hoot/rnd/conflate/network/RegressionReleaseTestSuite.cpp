@@ -27,6 +27,7 @@
 #include "RegressionReleaseTestSuite.h"
 
 // hoot
+#include <hoot/core/util/Log.h>
 #include "RegressionReleaseTest.h"
 
 // Qt
@@ -42,7 +43,8 @@ AbstractTestSuite(dir)
 
 void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
 {
-  if (!dir.endsWith(".release"))
+  LOG_VARD(dir);
+  if (!dir.endsWith(".release") && !dir.endsWith("release_test.child"))
   {
     return;
   }
@@ -52,9 +54,16 @@ void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
   for (int i = 0; i < dirs.size(); i++)
   {
     QString path = d.absoluteFilePath(dirs[i]);
+    LOG_VARD(path);
     loadDir(path, confs);
   }
 
+  if (dir.endsWith("release_test.child"))
+  {
+    return;
+  }
+
+  LOG_DEBUG("Adding test: " << d.absolutePath());
   addTest(new RegressionReleaseTest(d, confs));
 }
 

@@ -55,6 +55,10 @@ private:
 
     QString _dir;
     QMap<QString, double> _highestOverallScores;
+
+    void _createConfig(const QString testName);
+    void _updateTestWithCurrentScore(AbstractTest* test);
+    void _updateCurrentScoreFromTest(const double score, const QString testName);
 };
 
 }
