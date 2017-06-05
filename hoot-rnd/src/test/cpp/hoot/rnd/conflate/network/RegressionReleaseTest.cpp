@@ -67,7 +67,7 @@ void RegressionReleaseTest::runTest()
   }
 
   LOG_DEBUG("Cleaning test: " << getName());
-  QString cmd = "make clean";
+  QString cmd = "make clean-output";
   int retval = system(cmd.toStdString().c_str());
   if (retval != 0)
   {
