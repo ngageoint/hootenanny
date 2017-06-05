@@ -57,10 +57,10 @@ void RegressionReleaseTestFitnessFunction::_createConfig(const QString testName)
 
   //add the default network settings to the test settings
   Settings testSettings;
-  //testSettings.loadDefaults();
+  testSettings.loadDefaults();
   testSettings.loadJson(_settingsFileName);
   Settings networkBaseSettings;
-  //networkBaseSettings.loadDefaults();
+  networkBaseSettings.loadDefaults();
   //TODO: make this configurable from test
   networkBaseSettings.loadJson("test-files/cases/hoot-rnd/network/Config.conf");
   foreach (QString k, networkBaseSettings.getAll().keys())
@@ -68,6 +68,8 @@ void RegressionReleaseTestFitnessFunction::_createConfig(const QString testName)
     testSettings.set(k, networkBaseSettings.get(k).toString());
   }
   LOG_VARD(testSettings);
+  LOG_VARD(testSettings.get("network.matcher"));
+  LOG_VARD(testSettings.get("match.creators"));
 
   //for now, this will only work with network conflation regression release tests, since
   //they are the only ones set up to handle this configuration file management
