@@ -42,25 +42,42 @@ namespace hoot
 {
 
 /*
- * This is used for network conflation parameter tuning only and isn't actually a unit test.
+ * This is used for network conflation parameter tuning only and isn't actually a unit test, so
+ * leave the test functions disabled by default.  Most of the time you want to run this at the
+ * error log level to reduce log clutter.  Also, temporarily uncomment cout lines in
+ * SimulatedAnnealing::iterate for better logging feedback.
  *
- * IMPORTANT: Most of the time you want to run this at the error log level to reduce log clutter.
- * Temporarily uncomment cout lines in SimulatedAnnealing::iterate for better logging feedback.
- *
- * TODO: come up with a better way to control logging inside SimulatedAnnealing than cout
+ * TODO: come up with a better way to control logging inside SimulatedAnnealing than uncommenting
+ * cout lines
  */
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
   //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
-  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
+  CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   //TODO: modify fitness function to give variable failure based on the number of reviews (#1092)
 
-  Tgs::StateDescriptionPtr initStateDescription()
+  void optimizeAgainstCaseDataTest()
+  {
+    LOG_ERROR("test");
+    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(new CaseTestFitnessFunction());
+    _runoptimizationTest(fitnessFunction);
+  }
+
+  void optimizeAgainstRegressionReleaseDataTest()
+  {
+    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
+      new RegressionReleaseTestFitnessFunction());
+    _runoptimizationTest(fitnessFunction);
+  }
+
+private:
+
+  Tgs::StateDescriptionPtr _initStateDescription()
   {
     Tgs::StateDescriptionPtr stateDescription(new Tgs::StateDescription());
 
@@ -152,9 +169,9 @@ public:
     return stateDescription;
   }
 
-  QSet<Tgs::ConstStatePtr> runOptimization(Tgs::ConstStateDescriptionPtr stateDescription,
-                                           boost::shared_ptr<CaseTestFitnessFunction> fitnessFunction,
-                                           double& bestScore, const int numIterations)
+  QSet<Tgs::ConstStatePtr> _runOptimization(Tgs::ConstStateDescriptionPtr stateDescription,
+                                            boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
+                                            double& bestScore, const int numIterations)
   {
     Tgs::SimulatedAnnealing sa(stateDescription, fitnessFunction);
     sa.setPickFromBestScores(true);
@@ -162,9 +179,9 @@ public:
     return sa.getBestStates();
   }
 
-  void writeOutput(boost::shared_ptr<CaseTestFitnessFunction> fitnessFunction,
-                   const QSet<Tgs::ConstStatePtr>& bestStates, const double bestScore,
-                   const int numIterations)
+  void _writeOutput(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
+                    const QSet<Tgs::ConstStatePtr>& bestStates, const double bestScore,
+                    const int numIterations)
   {
     QString output =
       "Results for Conflicts Network Matcher Configuration Option Optimization with Simulated Annealing\n\n";
@@ -242,20 +259,15 @@ public:
     FileUtils::writeFully(statesOutputPath, output);
   }
 
-  void optimizeAgainstCaseDataTest()
+  void _runoptimizationTest(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction)
   {
-    boost::shared_ptr<CaseTestFitnessFunction> fitnessFunction(new CaseTestFitnessFunction());
-    const int numIterations = 50;
+    const int numIterations = 3;
     double bestScore = -1.0;
     const QSet<Tgs::ConstStatePtr> bestStates =
-      runOptimization(initStateDescription(), fitnessFunction, bestScore, numIterations);
-    writeOutput(fitnessFunction, bestStates, bestScore, numIterations);
+      _runOptimization(_initStateDescription(), fitnessFunction, bestScore, numIterations);
+    _writeOutput(fitnessFunction, bestStates, bestScore, numIterations);
   }
 
-  void optimizeAgainstRegressionReleaseDataTest()
-  {
-
-  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherSettingsOptimizer, "glacial");
