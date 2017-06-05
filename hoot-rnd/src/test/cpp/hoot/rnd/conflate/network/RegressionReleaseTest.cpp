@@ -128,7 +128,8 @@ void RegressionReleaseTest::runTest()
     }
     else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
     {
-      overallScore = line.split("\s")[1].toInt();
+      LOG_VARD(line.split("\s"));
+      overallScore = line.split("\s")[1].trimmed().toInt();
       LOG_VARD(overallScore);
     }
   }
