@@ -42,7 +42,7 @@ AbstractTestSuite(dir)
 
 void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
 {
-  if (dir.endsWith(".off"))
+  if (!dir.endsWith(".release"))
   {
     return;
   }
