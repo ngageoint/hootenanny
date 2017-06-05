@@ -57,10 +57,10 @@ void RegressionReleaseTestFitnessFunction::_createConfig(const QString testName)
 
   //add the default network settings to the test settings
   Settings testSettings;
-  testSettings.loadDefaults();
+  //testSettings.loadDefaults();
   testSettings.loadJson(_settingsFileName);
   Settings networkBaseSettings;
-  networkBaseSettings.loadDefaults();
+  //networkBaseSettings.loadDefaults();
   //TODO: make this configurable from test
   networkBaseSettings.loadJson("test-files/cases/hoot-rnd/network/Config.conf");
   foreach (QString k, networkBaseSettings.getAll().keys())
