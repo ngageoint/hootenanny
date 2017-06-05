@@ -44,7 +44,7 @@ AbstractTestSuite(dir)
 void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
 {
   LOG_VARD(dir);
-  if (!dir.endsWith(".release") && !dir.contains("release_test.child"))
+  if (!dir.endsWith(".release") && !dir.endsWith("release_test.child"))
   {
     return;
   }
@@ -56,6 +56,11 @@ void RegressionReleaseTestSuite::loadDir(QString dir, QStringList confs)
     QString path = d.absoluteFilePath(dirs[i]);
     LOG_VARD(path);
     loadDir(path, confs);
+  }
+
+  if (dir.endsWith("release_test.child"))
+  {
+    return;
   }
 
   LOG_DEBUG("Adding test: " << d.absolutePath());

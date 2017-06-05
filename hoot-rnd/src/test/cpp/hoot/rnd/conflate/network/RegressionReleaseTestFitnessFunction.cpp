@@ -71,6 +71,7 @@ void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
     regressionReleaseTest->setMinPassingScore(
       _highestOverallScores[QString::fromStdString(test->getName())]);
   }
+  LOG_VARD(regressionReleaseTest->getMinPassingScore());
 }
 
 void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
@@ -84,6 +85,7 @@ void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
     _highestOverallScores[QString::fromStdString(test->getName())] =
       regressionReleaseTest->getMinPassingScore();
   }
+  LOG_VARD(_highestOverallScores[QString::fromStdString(test->getName())]);
 }
 
 }

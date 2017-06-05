@@ -66,6 +66,7 @@ void RegressionReleaseTest::runTest()
     throw IllegalArgumentException("Unable to change to test directory: " + _d.absolutePath());
   }
 
+  LOG_DEBUG("Running test: " << getName());
   const QString cmd = "make test";
   const int retval = system(cmd.toStdString().c_str());
   if (retval != 0)
@@ -120,6 +121,7 @@ void RegressionReleaseTest::runTest()
   }
   else
   {
+    LOG_DEBUG("test failed: " << getName());
     CPPUNIT_ASSERT_MESSAGE(
       QString("Failed executing regression release test: " +
         QString::fromStdString(getName())).toStdString(),
