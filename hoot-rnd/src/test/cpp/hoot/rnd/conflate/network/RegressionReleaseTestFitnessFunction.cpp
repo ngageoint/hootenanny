@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/FileUtils.h>
 #include "RegressionReleaseTestSuite.h"
 #include "RegressionReleaseTest.h"
 
@@ -53,11 +54,19 @@ void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
   QFile settingsFile(_settingsFileName);
   //for now, this will only work with network conflation regression release tests, since
   //they are the only ones set up to handle this configuration file management
-  const QString settingsFileDest = QString::fromStdString(test->getName()) + "/Config.conf";
-  LOG_DEBUG("Copying conf file from " << _settingsFileName << " to " << settingsFileDest << "...");
-  if (!settingsFile.copy(settingsFileDest))
+  const QString settingsFileDestName = QString::fromStdString(test->getName()) + "/Config.conf";
+  QFile settingsFileDest(settingsFileDestName);
+  if (settingsFileDest.exists() && !settingsFileDest.remove())
   {
-    throw new HootException("Unable to copy configuration file to: " + settingsFileDest);
+    throw new HootException(
+      "Unable to remove previous configuration file: " + settingsFileDestName);
+  }
+  LOG_DEBUG(
+    "Copying conf file from " << _settingsFileName << " to " << settingsFileDestName << "...");
+  LOG_VART(FileUtils::readFully(_settingsFileName));
+  if (!settingsFile.copy(settingsFileDestName))
+  {
+    throw new HootException("Unable to copy configuration file to: " + settingsFileDestName);
   }
 
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
