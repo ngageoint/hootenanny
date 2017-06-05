@@ -53,8 +53,7 @@ void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
   QFile settingsFile(_settingsFileName);
   //for now, this will only work with network conflation regression release tests, since
   //they are the only ones set up to handle this configuration file management
-  const QString settingsFileDest =
-    _dir + "/" + QString::fromStdString(test->getName()) + "/Config.conf";
+  const QString settingsFileDest = QString::fromStdString(test->getName()) + "/Config.conf";
   LOG_DEBUG("Copying conf file from " << _settingsFileName << " to " << settingsFileDest << "...");
   if (!settingsFile.copy(settingsFileDest))
   {
