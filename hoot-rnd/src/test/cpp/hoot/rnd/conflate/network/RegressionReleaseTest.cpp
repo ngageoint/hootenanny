@@ -102,6 +102,7 @@ void RegressionReleaseTest::runTest()
   QFile scoresFile(scoresDirContents[0]);
   if (!scoresFile.open(QIODevice::ReadOnly))
   {
+    LOG_ERROR("test");
     throw HootException("Unable to open scores file: " + scoresDirContents[0]);
   }
   QTextStream inStream(&scoresFile);
@@ -111,7 +112,7 @@ void RegressionReleaseTest::runTest()
   do
   {
     line = inStream.readLine();
-    LOG_VART(line);
+    LOG_VARD(line);
     if (line.toLower().contains("conflated"))
     {
       foundConflatedScoreLine = true;
@@ -123,10 +124,12 @@ void RegressionReleaseTest::runTest()
     }
   }
   while (!line.isNull() && overallScore == -1);
+  LOG_VARD(overallScore);
 
   LOG_VARD(_minPassingScore);
   if (overallScore >= _minPassingScore)
   {
+    LOG_DEBUG("Test: " << getName() << " passed with score: " << overallScore);
     _minPassingScore = overallScore;
   }
   else

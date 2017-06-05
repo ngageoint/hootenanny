@@ -116,6 +116,7 @@ void RegressionReleaseTestFitnessFunction::_updateCurrentScoreFromTest(const dou
 void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
 {
   LOG_DEBUG("Initializing test: " << test->getName() << "...");
+  LOG_VARD(QDir::currentPath());
   _createConfig(QString::fromStdString(test->getName()));
   _updateTestWithCurrentScore(test);
 }
@@ -123,6 +124,7 @@ void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
 void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
 {
   LOG_DEBUG("Updating test after run: " << test->getName() << "...");
+  LOG_VARD(QDir::currentPath());
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
   _updateCurrentScoreFromTest(
     regressionReleaseTest->getMinPassingScore(),
