@@ -63,7 +63,7 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
+    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizerTest.cpp
 
 HEADERS += \
 
@@ -105,11 +105,12 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/CumulativeConflator.cpp \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.cpp \
     src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/AbstractTestFitnessFunction.cpp
+    src/main/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/AbstractTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -150,11 +151,12 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/CumulativeConflator.h \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.h \
     src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.h \
-    src/test/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.h \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.h \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.h \
-    src/test/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.h \
-    src/test/cpp/hoot/rnd/conflate/network/AbstractTestFitnessFunction.h
+    src/main/cpp/hoot/rnd/conflate/network/CaseTestFitnessFunction.h \
+    src/main/cpp/hoot/rnd/conflate/network/RegressionReleaseTestFitnessFunction.h \
+    src/main/cpp/hoot/rnd/conflate/network/RegressionReleaseTestSuite.h \
+    src/main/cpp/hoot/rnd/conflate/network/RegressionReleaseTest.h \
+    src/main/cpp/hoot/rnd/conflate/network/AbstractTestFitnessFunction.h \
+    src/main/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
 
 FORMS +=
 
