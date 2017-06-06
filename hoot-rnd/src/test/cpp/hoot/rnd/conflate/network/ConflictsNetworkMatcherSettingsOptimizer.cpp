@@ -225,7 +225,10 @@ private:
     LOG_ERROR(temp);
     output += temp + "\n\n";
 
-    QDir().mkdir("test-output/algorithms");
+    if (!QDir().mkpath("test-output/algorithms"))
+    {
+      throw HootException("Unable to create test output directory.");
+    }
     const QString statesOutputPath =
       "test-output/algorithms/ConflictsNetworkMatcherSettingsOptimizer-states-out";
     LOG_ERROR("Writing best states and failing test groups to: " << statesOutputPath << "...");
