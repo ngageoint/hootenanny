@@ -138,7 +138,6 @@ double RegressionReleaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(_test);
   LOG_ERROR("Test score: " << regressionReleaseTest->getOverallScore());
-  LOG_ERROR(highestOverallScoresToString());
 
   return (double)(1 / regressionReleaseTest->getOverallScore());
 }
@@ -151,6 +150,7 @@ void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
   _updateCurrentScoreFromTest(
     regressionReleaseTest->getMinPassingScore(),
     QString::fromStdString(regressionReleaseTest->getName()));
+  LOG_ERROR(highestOverallScoresToString());
 }
 
 }

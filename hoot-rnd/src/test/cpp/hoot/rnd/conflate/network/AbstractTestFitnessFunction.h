@@ -75,12 +75,12 @@ protected:
   QString _settingsFileName;
   QStringList _failedTests;
   AbstractTest* _test;
-  int _lowestNumFailingTestsPerRun;
 
 private:
 
     //list members are one or more test names joined by a ';'
     QStringList _failingTestsForBestRuns;
+    int _lowestNumFailingTestsPerRun;
 
     QString _failedTestsToString(const QStringList failedTests) const;
 };

@@ -60,18 +60,6 @@ double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     //annealing iterations.
     LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
   }
-  else
-  {
-    QString failureMsg =
-      QString::number(_failedTests.size()) + "/" + QString::number(_testCount) +
-      " tests failed:\n\n";
-    for (int i = 0; i < _failedTests.size(); i++)
-    {
-      failureMsg += "\t" + _failedTests[i] + "\n";
-    }
-    LOG_ERROR(failureMsg);
-    LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
-  }
 
   return (double)_failedTests.size() / (double)_testCount;
 }

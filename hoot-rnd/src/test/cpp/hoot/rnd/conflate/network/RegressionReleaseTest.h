@@ -57,6 +57,8 @@ private:
   int _minPassingScore;
   int _overallScore;
 
+  void _parseScore();
+
 };
 
 }

@@ -43,7 +43,7 @@ _lowestNumFailingTestsPerRun(-1)
 
 double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 {
-  LOG_ERROR("Running fitness function...");
+  LOG_DEBUG("Running abstract fitness function...");
 
   Settings settings;
   foreach (QString k, s->getAllValues().keys())
@@ -100,6 +100,19 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
            !failedTestsStr.isEmpty() && !_failingTestsForBestRuns.contains(failedTestsStr))
   {
     _failingTestsForBestRuns.append(failedTestsStr);
+  }
+
+  if (_failedTests.size() > 0)
+  {
+    QString failureMsg =
+      QString::number(_failedTests.size()) + "/" + QString::number(_testCount) +
+      " tests failed:\n\n";
+    for (int i = 0; i < _failedTests.size(); i++)
+    {
+      failureMsg += "\t" + _failedTests[i] + "\n";
+    }
+    LOG_ERROR(failureMsg);
+    LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
   }
 
   //we're letting the child classes actually determine the fitness value...the code in this method

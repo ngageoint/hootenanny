@@ -45,57 +45,8 @@ _overallScore(-1)
 {
 }
 
-void RegressionReleaseTest::runTest()
+void RegressionReleaseTest::_parseScore()
 {
-  LOG_DEBUG("Running regression release test: " << _d.absolutePath());
-
-  QFileInfo makeFile(_d, "Makefile");
-  if (!makeFile.exists())
-  {
-    //for some reason, not seeing these exceptions logged at test time, so logging them here for now
-    const QString msg = "Unable to find Makefile for regression release test: " + _d.absolutePath();
-    LOG_ERROR(msg);
-    throw IllegalArgumentException(msg);
-  }
-
-  const QString startingDir = QDir::currentPath();
-  if (!QDir::setCurrent(_d.absolutePath()))
-  {
-    const QString msg = "Unable to change to test directory: " + _d.absolutePath();
-    LOG_ERROR(msg);
-    throw IllegalArgumentException(msg);
-  }
-
-  LOG_DEBUG("Cleaning test: " << getName());
-  QString cmd = "make clean-output";
-  int retval = system(cmd.toStdString().c_str());
-  if (retval != 0)
-  {
-    const QString msg =
-      QString("Failed cleaning data for regression release test.  Status: " +
-      QString::number(retval));
-    LOG_ERROR(msg);
-    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
-  }
-  LOG_DEBUG("Running test: " << getName());
-  if (Log::getInstance().getLevel() <= Log::Debug)
-  {
-    cmd = "make test";
-  }
-  else
-  {
-    cmd = "make -s test";
-  }
-  retval = system(cmd.toStdString().c_str());
-  if (retval != 0)
-  {
-    const QString msg =
-      QString("Failed executing regression release test.  Status: " +
-      QString::number(retval));
-    LOG_ERROR(msg);
-    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
-  }
-
   //check test score and pass if >= _minPassingScore; fail otherwise
   QDir scoresDir("scores");
   QStringList nameFilters;
@@ -117,48 +68,115 @@ void RegressionReleaseTest::runTest()
     LOG_ERROR(msg);
     throw HootException(msg);
   }
-  QTextStream inStream(&scoresFile);
-  QString line;
-  bool foundConflatedScoreLine = false;
-  _overallScore = -1;
-  do
+  try
   {
-    line = inStream.readLine();
-    LOG_VARD(line);
-    if (line.toLower().contains("conflated"))
+    QTextStream inStream(&scoresFile);
+    QString line;
+    bool foundConflatedScoreLine = false;
+    _overallScore = -1;
+    do
     {
-      foundConflatedScoreLine = true;
+      line = inStream.readLine();
+      LOG_VARD(line);
+      if (line.toLower().contains("conflated"))
+      {
+        foundConflatedScoreLine = true;
+      }
+      else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
+      {
+        LOG_VARD(line.split(" "));
+        _overallScore = line.split(" ")[1].trimmed().toInt();
+        LOG_VARD(_overallScore);
+      }
     }
-    else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
-    {
-      LOG_VARD(line.split(" "));
-      _overallScore = line.split(" ")[1].trimmed().toInt();
-      LOG_VARD(_overallScore);
-    }
+    while (!line.isNull() && _overallScore == -1);
   }
-  while (!line.isNull() && _overallScore == -1);
+  catch (const std::exception& e)
+  {
+    scoresFile.close();
+    throw e;
+  }
+  scoresFile.close();
   LOG_VARD(_overallScore);
 
+  LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
   LOG_VARD(_minPassingScore);
-  if (_overallScore >= _minPassingScore)
-  {
-    LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
+  //if (_overallScore >= _minPassingScore)
+  //{
+    //LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
     if (_overallScore > _minPassingScore)
     {
-      LOG_ERROR(_overallScore << " is a new high score.");
+      LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
+      LOG_ERROR(_overallScore << " is a new high score for: " << getName());
     }
     _minPassingScore = _overallScore;
+  //}
+//  else
+//  {
+//    const QString msg =
+//      "Test: " + QString::fromStdString(getName()) + " failed with too low of overall score: " +
+//      QString::number(_overallScore) + ".  The minimum allowed overall score is: " +
+//      QString::number(_minPassingScore);
+//    LOG_ERROR(msg);
+//    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
+//  }
+  LOG_VARD(_minPassingScore);
+}
+
+void RegressionReleaseTest::runTest()
+{
+  LOG_DEBUG("Running regression release test: " << _d.absolutePath());
+
+  QFileInfo makeFile(_d, "Makefile");
+  if (!makeFile.exists())
+  {
+    //for some reason, not seeing these exceptions logged at test time, so logging them here for now
+    const QString msg = "Unable to find Makefile for regression release test: " + _d.absolutePath();
+    LOG_ERROR(msg);
+    throw IllegalArgumentException(msg);
   }
-  else
+
+  const QString startingDir = QDir::currentPath();
+  if (!QDir::setCurrent(_d.absolutePath()))
   {
     const QString msg =
-      "Test: " + QString::fromStdString(getName()) + " failed with too low of overall score: " +
-      QString::number(_overallScore) + ".  The minimum allowed overall score is: " +
-      QString::number(_minPassingScore);
+      "Unable to change to regression release test directory: " + _d.absolutePath();
+    LOG_ERROR(msg);
+    throw IllegalArgumentException(msg);
+  }
+
+  LOG_DEBUG("Cleaning test: " << getName());
+  QString cmd = "make clean-output";
+  int retval = system(cmd.toStdString().c_str());
+  if (retval != 0)
+  {
+    const QString msg =
+      QString("Failed cleaning data for regression release test.  Status: " +
+      QString::number(retval));
     LOG_ERROR(msg);
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
-  LOG_VARD(_minPassingScore);
+
+  LOG_DEBUG("Running test: " << getName());
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    cmd = "make test";
+  }
+  else
+  {
+    cmd = "make -s test";
+  }
+  retval = system(cmd.toStdString().c_str());
+  if (retval != 0)
+  {
+    const QString msg =
+      QString("Failed executing regression release test.  Status: " +
+      QString::number(retval));
+    LOG_ERROR(msg);
+    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
+  }
+
+  _parseScore();
 
   if (!QDir::setCurrent(startingDir))
   {
