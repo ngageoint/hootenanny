@@ -101,25 +101,12 @@ void RegressionReleaseTest::_parseScore()
 
   LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
   LOG_VARD(_minPassingScore);
-  //if (_overallScore >= _minPassingScore)
-  //{
-    //LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
-    if (_overallScore > _minPassingScore)
-    {
-      LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
-      LOG_ERROR(_overallScore << " is a new high score for: " << getName());
-      _minPassingScore = _overallScore;
-    }
-  //}
-//  else
-//  {
-//    const QString msg =
-//      "Test: " + QString::fromStdString(getName()) + " failed with too low of overall score: " +
-//      QString::number(_overallScore) + ".  The minimum allowed overall score is: " +
-//      QString::number(_minPassingScore);
-//    LOG_ERROR(msg);
-//    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
-//  }
+  if (_overallScore > _minPassingScore)
+  {
+    LOG_ERROR(_overallScore << " is a new high score for: " << getName());
+    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
+    _minPassingScore = _overallScore;
+  }
   LOG_VARD(_minPassingScore);
 }
 

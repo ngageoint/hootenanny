@@ -63,7 +63,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   {
     _test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
     const QString testName = QString::fromStdString(_test->getName());
-    initTest(_test);
+    initTest();
     //add our custom sa test option values
     _test->addConfig(_settingsFileName);
     CppUnit::TestResult result;
@@ -71,7 +71,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     result.addListener(&listener);
     LOG_ERROR("Running " << testName << "...");
     _test->run(&result);
-    afterTestRun(_test);
+    afterTestRun();
 
     if (listener.isFailure())
     {

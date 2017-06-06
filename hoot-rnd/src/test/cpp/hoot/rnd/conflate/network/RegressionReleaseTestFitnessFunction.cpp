@@ -93,11 +93,8 @@ void RegressionReleaseTestFitnessFunction::_updateTestWithCurrentScore(AbstractT
     _highestOverallScores[QString::fromStdString(test->getName())] = -1;
   }
   LOG_VARD(_highestOverallScores[QString::fromStdString(test->getName())]);
-  //if (_highestOverallScores[QString::fromStdString(test->getName())] != -1)
-  //{
-    regressionReleaseTest->setMinPassingScore(
-      _highestOverallScores[QString::fromStdString(test->getName())]);
-  //}
+  regressionReleaseTest->setMinPassingScore(
+    _highestOverallScores[QString::fromStdString(test->getName())]);
   LOG_VARD(regressionReleaseTest->getMinPassingScore());
 }
 
@@ -123,17 +120,17 @@ QString RegressionReleaseTestFitnessFunction::highestOverallScoresToString() con
   for (QMap< QString, int >::const_iterator it = _highestOverallScores.begin();
        it != _highestOverallScores.end(); ++it)
   {
-    str += "\t" + it.key() + ": " + it.value() + "\n";
+    str += "\t" + it.key() + ": " + QString::number(it.value()) + "\n";
   }
   return str;
 }
 
-void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
+void RegressionReleaseTestFitnessFunction::initTest()
 {
-  LOG_DEBUG("Initializing test: " << test->getName() << "...");
+  LOG_DEBUG("Initializing test: " << _test->getName() << "...");
   LOG_VARD(QDir::currentPath());
-  _createConfig(QString::fromStdString(test->getName()));
-  _updateTestWithCurrentScore(test);
+  _createConfig(QString::fromStdString(_test->getName()));
+  _updateTestWithCurrentScore(_test);
 }
 
 double RegressionReleaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
@@ -146,11 +143,11 @@ double RegressionReleaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   return (double)(1 / regressionReleaseTest->getOverallScore());
 }
 
-void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
+void RegressionReleaseTestFitnessFunction::afterTestRun()
 {
-  LOG_DEBUG("Updating test after run: " << test->getName() << "...");
+  LOG_DEBUG("Updating test after run: " << _test->getName() << "...");
   LOG_VARD(QDir::currentPath());
-  RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
+  RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(_test);
   _updateCurrentScoreFromTest(
     regressionReleaseTest->getOverallScore(),
     QString::fromStdString(regressionReleaseTest->getName()));

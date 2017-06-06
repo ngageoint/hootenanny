@@ -64,9 +64,9 @@ public:
 
     int getLowestNumFailingTestsPerRun() const { return _lowestNumFailingTestsPerRun; }
 
-    virtual void initTest(AbstractTest* test) = 0;
+    virtual void initTest() = 0;
 
-    virtual void afterTestRun(AbstractTest* test) = 0;
+    virtual void afterTestRun() = 0;
 
 protected:
 

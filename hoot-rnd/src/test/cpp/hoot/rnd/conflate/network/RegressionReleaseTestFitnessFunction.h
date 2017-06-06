@@ -49,9 +49,9 @@ public:
 
     virtual double f(const Tgs::ConstStatePtr& s);
 
-    virtual void initTest(AbstractTest* test);
+    virtual void initTest();
 
-    virtual void afterTestRun(AbstractTest* test);
+    virtual void afterTestRun();
 
     QString highestOverallScoresToString() const;
 

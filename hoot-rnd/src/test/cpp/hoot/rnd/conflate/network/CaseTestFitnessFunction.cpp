@@ -44,9 +44,9 @@ AbstractTestFitnessFunction()
 
 //this init will add the conflicts network case tests conf which is a subset of the overall
 //network cases tests conf
-void CaseTestFitnessFunction::initTest(AbstractTest* test)
+void CaseTestFitnessFunction::initTest()
 {
-  test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
+  _test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
 }
 
 double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
@@ -64,7 +64,7 @@ double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   return (double)_failedTests.size() / (double)_testCount;
 }
 
-void CaseTestFitnessFunction::afterTestRun(AbstractTest* /*test*/)
+void CaseTestFitnessFunction::afterTestRun()
 {  
 }
 
