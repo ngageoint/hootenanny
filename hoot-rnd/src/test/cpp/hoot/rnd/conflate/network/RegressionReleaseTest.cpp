@@ -108,8 +108,8 @@ void RegressionReleaseTest::_parseScore()
     {
       LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
       LOG_ERROR(_overallScore << " is a new high score for: " << getName());
+      _minPassingScore = _overallScore;
     }
-    _minPassingScore = _overallScore;
   //}
 //  else
 //  {

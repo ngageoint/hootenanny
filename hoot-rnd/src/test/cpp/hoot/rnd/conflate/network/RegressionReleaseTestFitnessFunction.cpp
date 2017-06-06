@@ -93,11 +93,11 @@ void RegressionReleaseTestFitnessFunction::_updateTestWithCurrentScore(AbstractT
     _highestOverallScores[QString::fromStdString(test->getName())] = -1;
   }
   LOG_VARD(_highestOverallScores[QString::fromStdString(test->getName())]);
-  if (_highestOverallScores[QString::fromStdString(test->getName())] != -1)
-  {
+  //if (_highestOverallScores[QString::fromStdString(test->getName())] != -1)
+  //{
     regressionReleaseTest->setMinPassingScore(
       _highestOverallScores[QString::fromStdString(test->getName())]);
-  }
+  //}
   LOG_VARD(regressionReleaseTest->getMinPassingScore());
 }
 
@@ -152,7 +152,7 @@ void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)
   LOG_VARD(QDir::currentPath());
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(test);
   _updateCurrentScoreFromTest(
-    regressionReleaseTest->getMinPassingScore(),
+    regressionReleaseTest->getOverallScore(),
     QString::fromStdString(regressionReleaseTest->getName()));
   LOG_ERROR(highestOverallScoresToString());
 }
