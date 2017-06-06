@@ -43,7 +43,7 @@ _lowestNumFailingTestsPerRun(-1)
 
 double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 {
-  LOG_DEBUG("Running fitness function...");
+  LOG_ERROR("Running fitness function...");
 
   Settings settings;
   foreach (QString k, s->getAllValues().keys())
@@ -69,7 +69,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     CppUnit::TestResult result;
     SimpleTestListener listener;
     result.addListener(&listener);
-    LOG_DEBUG("Running " << testName << "...");
+    LOG_ERROR("Running " << testName << "...");
     _test->run(&result);
     afterTestRun(_test);
 
