@@ -142,16 +142,21 @@ void RegressionReleaseTest::runTest()
   LOG_VARD(_minPassingScore);
   if (_overallScore >= _minPassingScore)
   {
-    LOG_DEBUG("Test: " << getName() << " passed with score: " << _overallScore);
+    LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
+    if (_overallScore > _minPassingScore)
+    {
+      LOG_ERROR(_overallScore << " is a new high score.");
+    }
     _minPassingScore = _overallScore;
   }
   else
   {
-    LOG_DEBUG("Test: " << getName() << " failed with score: " << _overallScore);
-    CPPUNIT_ASSERT_MESSAGE(
-      QString("Failed executing regression release test: " +
-        QString::fromStdString(getName())).toStdString(),
-      false);
+    const QString msg =
+      "Test: " + QString::fromStdString(getName()) + " failed with too low of overall score: " +
+      QString::number(_overallScore) + ".  The minimum allowed overall score is: " +
+      QString::number(_minPassingScore);
+    LOG_ERROR(msg);
+    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
   LOG_VARD(_minPassingScore);
 
