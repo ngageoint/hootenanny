@@ -266,6 +266,7 @@ private:
       output += state->toString() + "\n\n";
       statesCtr++;
     }
+    LOG_VARD(QDir::currentPath());
     FileUtils::writeFully(statesOutputPath, output);
   }
 
