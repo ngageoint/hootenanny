@@ -179,7 +179,7 @@ private:
   }
 
   void _writeOutput(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
-                    const QSet<Tgs::ConstStatePtr>& bestStates, const double bestScore,
+                    const QSet<Tgs::ConstStatePtr>& bestStates, const double /*bestScore*/,
                     const int numIterations)
   {
     QString output =
@@ -195,7 +195,8 @@ private:
 
     temp =
       "Lowest number of test failures in test iteration: " +
-      QString::number((int)(fitnessFunction->getTestCount() * bestScore));
+      QString::number(/*(int)(fitnessFunction->getTestCount() * bestScore)*/
+                      fitnessFunction->getLowestNumFailingTestsPerRun());
     LOG_ERROR(temp);
     output += temp + "\n\n";
 
@@ -203,7 +204,17 @@ private:
     LOG_ERROR(temp);
     output += temp + "\n\n";
 
-    if (bestScore == 0.0)
+    boost::shared_ptr<RegressionReleaseTestFitnessFunction> regressionReleaseTestFitnessFunction =
+      boost::dynamic_pointer_cast<RegressionReleaseTestFitnessFunction>(fitnessFunction);
+    if (regressionReleaseTestFitnessFunction)
+    {
+      temp = regressionReleaseTestFitnessFunction->highestOverallScoresToString();
+      LOG_ERROR(temp);
+      output += temp + "\n\n";
+    }
+
+    //if (bestScore == 0.0)
+    if (fitnessFunction->getLowestNumFailingTestsPerRun() == 0)
     {
       temp = "***YOU FOUND A SOLUTION! :-)***";
     }

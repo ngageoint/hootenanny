@@ -53,6 +53,8 @@ public:
 
     virtual void afterTestRun(AbstractTest* test);
 
+    QString highestOverallScoresToString() const;
+
 private:
 
     QString _dir;

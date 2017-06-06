@@ -60,7 +60,9 @@ public:
 
     int getTestCount() { return _testCount; }
 
-    QStringList getFailingTestsForBestRuns() { return _failingTestsForBestRuns; }
+    QStringList getFailingTestsForBestRuns() const { return _failingTestsForBestRuns; }
+
+    int getLowestNumFailingTestsPerRun() const { return _lowestNumFailingTestsPerRun; }
 
     virtual void initTest(AbstractTest* test) = 0;
 
