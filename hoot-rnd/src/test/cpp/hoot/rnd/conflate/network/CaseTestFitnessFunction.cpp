@@ -49,8 +49,36 @@ void CaseTestFitnessFunction::initTest(AbstractTest* test)
   test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
 }
 
-void CaseTestFitnessFunction::afterTestRun(AbstractTest* /*test*/)
+double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 {
+  AbstractTestFitnessFunction::f(s);
+
+  if (_failedTests.size() == 0)
+  {
+    //This message will actually show if, by chance, the first selected random state
+    //is successful.  However, that state is just a starting point for the actual simulated
+    //annealing iterations.
+    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
+  }
+  else
+  {
+    QString failureMsg =
+      QString::number(_failedTests.size()) + "/" + QString::number(_testCount) +
+      " tests failed:\n\n";
+    for (int i = 0; i < _failedTests.size(); i++)
+    {
+      failureMsg += "\t" + _failedTests[i] + "\n";
+    }
+    LOG_ERROR(failureMsg);
+    LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
+    LOG_ERROR("");
+  }
+
+  return (double)_failedTests.size() / (double)_testCount;
+}
+
+void CaseTestFitnessFunction::afterTestRun(AbstractTest* /*test*/)
+{  
 }
 
 }

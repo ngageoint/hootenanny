@@ -47,6 +47,8 @@ public:
 
     RegressionReleaseTestFitnessFunction();
 
+    virtual double f(const Tgs::ConstStatePtr& s);
+
     virtual void initTest(AbstractTest* test);
 
     virtual void afterTestRun(AbstractTest* test);
@@ -54,11 +56,11 @@ public:
 private:
 
     QString _dir;
-    QMap<QString, double> _highestOverallScores;
+    QMap<QString, int> _highestOverallScores;
 
     void _createConfig(const QString testName);
     void _updateTestWithCurrentScore(AbstractTest* test);
-    void _updateCurrentScoreFromTest(const double score, const QString testName);
+    void _updateCurrentScoreFromTest(const int score, const QString testName);
 };
 
 }

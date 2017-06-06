@@ -40,7 +40,8 @@ namespace hoot
 
 RegressionReleaseTest::RegressionReleaseTest(QDir d, QStringList confs) :
 AbstractTest(d, confs),
-_minPassingScore(-1.0)
+_minPassingScore(-1),
+_overallScore(-1)
 {
 }
 
@@ -117,7 +118,7 @@ void RegressionReleaseTest::runTest()
   QTextStream inStream(&scoresFile);
   QString line;
   bool foundConflatedScoreLine = false;
-  int overallScore = -1;
+  _overallScore = -1;
   do
   {
     line = inStream.readLine();
@@ -129,22 +130,22 @@ void RegressionReleaseTest::runTest()
     else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
     {
       LOG_VARD(line.split(" "));
-      overallScore = line.split(" ")[1].trimmed().toInt();
-      LOG_VARD(overallScore);
+      _overallScore = line.split(" ")[1].trimmed().toInt();
+      LOG_VARD(_overallScore);
     }
   }
-  while (!line.isNull() && overallScore == -1);
-  LOG_VARD(overallScore);
+  while (!line.isNull() && _overallScore == -1);
+  LOG_VARD(_overallScore);
 
   LOG_VARD(_minPassingScore);
-  if (overallScore >= _minPassingScore)
+  if (_overallScore >= _minPassingScore)
   {
-    LOG_DEBUG("Test: " << getName() << " passed with score: " << overallScore);
-    _minPassingScore = overallScore;
+    LOG_DEBUG("Test: " << getName() << " passed with score: " << _overallScore);
+    _minPassingScore = _overallScore;
   }
   else
   {
-    LOG_DEBUG("Test: " << getName() << " failed with score: " << overallScore);
+    LOG_DEBUG("Test: " << getName() << " failed with score: " << _overallScore);
     CPPUNIT_ASSERT_MESSAGE(
       QString("Failed executing regression release test: " +
         QString::fromStdString(getName())).toStdString(),

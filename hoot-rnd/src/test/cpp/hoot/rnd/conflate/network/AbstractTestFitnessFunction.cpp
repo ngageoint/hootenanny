@@ -59,70 +59,52 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   LOG_VARD(_settingsFileName);
   settings.storeJson(_settingsFileName);
 
-  QStringList failedTests;
   for (int i = 0; i < _testCount; ++i)
   {
-    AbstractTest* test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
-    const QString testName = QString::fromStdString(test->getName());
-    initTest(test);
+    _test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
+    const QString testName = QString::fromStdString(_test->getName());
+    initTest(_test);
     //add our custom sa test option values
-    test->addConfig(_settingsFileName);
+    _test->addConfig(_settingsFileName);
     CppUnit::TestResult result;
     SimpleTestListener listener;
     result.addListener(&listener);
     LOG_DEBUG("Running " << testName << "...");
-    test->run(&result);
-    afterTestRun(test);
+    _test->run(&result);
+    afterTestRun(_test);
 
     if (listener.isFailure())
     {
       LOG_DEBUG("Failure: " << testName);
-      failedTests.append(testName);
+      _failedTests.append(testName);
     }
   }
 
+  //TODO: if this doesn't end up being important to RegressionReleaseTestFitnessFunction, then
+  //move it down to CaseTestFitnessFunction
   QString failedTestsStr;
-  if (failedTests.size() > 0)
+  if (_failedTests.size() > 0)
   {
-    failedTestsStr = _failedTestsToString(failedTests);
+    failedTestsStr = _failedTestsToString(_failedTests);
   }
-  if (failedTests.size() < _lowestNumFailingTestsPerRun || _lowestNumFailingTestsPerRun == -1)
+  if (_failedTests.size() < _lowestNumFailingTestsPerRun || _lowestNumFailingTestsPerRun == -1)
   {
-    _lowestNumFailingTestsPerRun = failedTests.size();
+    _lowestNumFailingTestsPerRun = _failedTests.size();
     _failingTestsForBestRuns.clear();
     if (!failedTestsStr.isEmpty())
     {
       _failingTestsForBestRuns.append(failedTestsStr);
     }
   }
-  else if (failedTests.size() == _lowestNumFailingTestsPerRun &&
+  else if (_failedTests.size() == _lowestNumFailingTestsPerRun &&
            !failedTestsStr.isEmpty() && !_failingTestsForBestRuns.contains(failedTestsStr))
   {
     _failingTestsForBestRuns.append(failedTestsStr);
   }
 
-  if (failedTests.size() == 0)
-  {
-    //This message will actually show if, by chance, the first selected random state
-    //is successful.  However, that state is just a starting point for the actual simulated
-    //annealing iterations.
-    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
-  }
-  else
-  {
-    QString failureMsg =
-      QString::number(failedTests.size()) + "/" + QString::number(_testCount) +
-      " tests failed:\n\n";
-    for (int i = 0; i < failedTests.size(); i++)
-    {
-      failureMsg += "\t" + failedTests[i] + "\n";
-    }
-    LOG_ERROR(failureMsg);
-    LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
-    LOG_ERROR("");
-  }
-
-  return (double)failedTests.size() / (double)_testCount;
+  //we're letting the child classes actually determine the fitness value...the code in this method
+  //is mainly intended to run the tests
+  return -1.0;
 }
 
 QString AbstractTestFitnessFunction::_failedTestsToString(const QStringList failedTests) const

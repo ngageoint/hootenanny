@@ -53,8 +53,8 @@ namespace hoot
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
-  //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
-  CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
+  CPPUNIT_TEST(optimizeAgainstCaseDataTest);
+  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -260,7 +260,7 @@ private:
 
   void _runoptimizationTest(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction)
   {
-    const int numIterations = 3;
+    const int numIterations = 2;
     double bestScore = -1.0;
     const QSet<Tgs::ConstStatePtr> bestStates =
       _runOptimization(_initStateDescription(), fitnessFunction, bestScore, numIterations);

@@ -46,12 +46,16 @@ public:
 
   virtual void runTest();
 
-  double getMinPassingScore() const { return _minPassingScore; }
-  void setMinPassingScore(double score) { _minPassingScore = score; }
+  int getMinPassingScore() const { return _minPassingScore; }
+  void setMinPassingScore(int score) { _minPassingScore = score; }
+
+  int getOverallScore() const { return _overallScore; }
+  void setOverallScore(int score) { _overallScore = score; }
 
 private:
 
-  double _minPassingScore;
+  int _minPassingScore;
+  int _overallScore;
 
 };
 

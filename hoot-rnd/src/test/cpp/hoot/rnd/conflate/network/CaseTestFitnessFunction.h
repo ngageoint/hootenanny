@@ -47,6 +47,8 @@ public:
 
     CaseTestFitnessFunction();
 
+    virtual double f(const Tgs::ConstStatePtr& s);
+
     virtual void initTest(AbstractTest* test);
 
     virtual void afterTestRun(AbstractTest* test);

@@ -90,10 +90,10 @@ void RegressionReleaseTestFitnessFunction::_updateTestWithCurrentScore(AbstractT
   LOG_VARD(QString::fromStdString(test->getName()));
   if (!_highestOverallScores.contains(QString::fromStdString(test->getName())))
   {
-    _highestOverallScores[QString::fromStdString(test->getName())] = -1.0;
+    _highestOverallScores[QString::fromStdString(test->getName())] = -1;
   }
   LOG_VARD(_highestOverallScores[QString::fromStdString(test->getName())]);
-  if (_highestOverallScores[QString::fromStdString(test->getName())] != -1.0)
+  if (_highestOverallScores[QString::fromStdString(test->getName())] != -1)
   {
     regressionReleaseTest->setMinPassingScore(
       _highestOverallScores[QString::fromStdString(test->getName())]);
@@ -101,7 +101,7 @@ void RegressionReleaseTestFitnessFunction::_updateTestWithCurrentScore(AbstractT
   LOG_VARD(regressionReleaseTest->getMinPassingScore());
 }
 
-void RegressionReleaseTestFitnessFunction::_updateCurrentScoreFromTest(const double score,
+void RegressionReleaseTestFitnessFunction::_updateCurrentScoreFromTest(const int score,
                                                                        const QString testName)
 {
   LOG_VARD(testName);
@@ -119,6 +119,22 @@ void RegressionReleaseTestFitnessFunction::initTest(AbstractTest* test)
   LOG_VARD(QDir::currentPath());
   _createConfig(QString::fromStdString(test->getName()));
   _updateTestWithCurrentScore(test);
+}
+
+double RegressionReleaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
+{
+  AbstractTestFitnessFunction::f(s);
+
+  RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(_test);
+  LOG_ERROR("Test score: " << regressionReleaseTest->getOverallScore());
+  LOG_ERROR("Best scores so far:");
+  for (QMap< QString, int >::const_iterator it = _highestOverallScores.begin();
+       it != _highestOverallScores.end(); ++it)
+  {
+    LOG_ERROR("\t" << it.key() << ": " << it.value());
+  }
+
+  return (double)regressionReleaseTest->getOverallScore();
 }
 
 void RegressionReleaseTestFitnessFunction::afterTestRun(AbstractTest* test)

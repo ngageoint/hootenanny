@@ -71,10 +71,12 @@ protected:
   int _testCount;
   boost::shared_ptr<AbstractTestSuite> _testSuite;
   QString _settingsFileName;
+  QStringList _failedTests;
+  AbstractTest* _test;
+  int _lowestNumFailingTestsPerRun;
 
 private:
 
-    int _lowestNumFailingTestsPerRun;
     //list members are one or more test names joined by a ';'
     QStringList _failingTestsForBestRuns;
 
