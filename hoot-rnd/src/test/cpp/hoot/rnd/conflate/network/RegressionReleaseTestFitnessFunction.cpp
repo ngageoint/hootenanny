@@ -122,6 +122,7 @@ QString RegressionReleaseTestFitnessFunction::highestOverallScoresToString() con
   {
     str += "\t" + it.key() + ": " + QString::number(it.value()) + "\n";
   }
+  str.chop(1);
   return str;
 }
 

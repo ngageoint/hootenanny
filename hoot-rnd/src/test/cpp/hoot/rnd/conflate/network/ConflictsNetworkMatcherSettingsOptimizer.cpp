@@ -239,7 +239,7 @@ private:
       "):\n\n";
     if (failingTestsForBestRuns.size() == 0)
     {
-      output += "no failing test groups\n";
+      output += "no failing test groups\n\n";
     }
     else
     {
