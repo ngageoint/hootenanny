@@ -38,14 +38,17 @@ namespace hoot
 {
 
 /**
- * Fitness function which optimizes against Hootenanny regression release test data
+ * Fitness function which optimizes against Hootenanny regression release test data.
+ *
+ * At this time, this will only work against the network versions of the regression tests but
+ * could easily be made to work against the unifying versions as well with some test refactoring.
  */
 class RegressionReleaseTestFitnessFunction : public AbstractTestFitnessFunction
 {
 
 public:
 
-    RegressionReleaseTestFitnessFunction();
+    RegressionReleaseTestFitnessFunction(QString dir, QString configFile);
 
     virtual double f(const Tgs::ConstStatePtr& s);
 
@@ -57,8 +60,8 @@ public:
 
 private:
 
-    QString _dir;
     QMap<QString, int> _highestOverallScores;
+    QString _configFile;
 
     void _createConfig(const QString testName);
     void _updateTestWithCurrentScore(AbstractTest* test);

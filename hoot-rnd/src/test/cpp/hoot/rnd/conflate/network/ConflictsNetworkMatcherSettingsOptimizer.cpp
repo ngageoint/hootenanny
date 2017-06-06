@@ -55,7 +55,7 @@ class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
   //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
-  CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
+  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,14 +64,20 @@ public:
 
   void optimizeAgainstCaseDataTest()
   {
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(new CaseTestFitnessFunction());
+    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
+      new CaseTestFitnessFunction(
+        "test-files/cases/hoot-rnd/network/conflicts",
+        "test-files/cases/hoot-rnd/network/Config.conf"));
     _runoptimizationTest(fitnessFunction);
   }
 
   void optimizeAgainstRegressionReleaseDataTest()
   {
     boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
-      new RegressionReleaseTestFitnessFunction());
+      new RegressionReleaseTestFitnessFunction(
+        //fill this in with the full path to the test dir
+        "hoot-tests/network-tests.child/release_test.child",
+        "test-files/cases/hoot-rnd/network/Config.conf"));
     _runoptimizationTest(fitnessFunction);
   }
 
@@ -180,8 +186,7 @@ private:
   }
 
   void _writeOutput(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
-                    const QSet<Tgs::ConstStatePtr>& bestStates, const double /*bestScore*/,
-                    const int numIterations)
+                    const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations)
   {
     QString output =
       "Results for Conflicts Network Matcher Configuration Option Optimization with Simulated Annealing\n\n";
@@ -196,8 +201,7 @@ private:
 
     temp =
       "Lowest number of test failures in test iteration: " +
-      QString::number(/*(int)(fitnessFunction->getTestCount() * bestScore)*/
-                      fitnessFunction->getLowestNumFailingTestsPerRun());
+      QString::number(fitnessFunction->getLowestNumFailingTestsPerRun());
     LOG_ERROR(temp);
     output += temp + "\n\n";
 
@@ -214,7 +218,6 @@ private:
       output += temp + "\n\n";
     }
 
-    //if (bestScore == 0.0)
     if (fitnessFunction->getLowestNumFailingTestsPerRun() == 0)
     {
       temp = "***YOU FOUND A SOLUTION! :-)***";
@@ -280,7 +283,7 @@ private:
     double bestScore = -1.0;
     const QSet<Tgs::ConstStatePtr> bestStates =
       _runOptimization(_initStateDescription(), fitnessFunction, bestScore, numIterations);
-    _writeOutput(fitnessFunction, bestStates, bestScore, numIterations);
+    _writeOutput(fitnessFunction, bestStates, numIterations);
   }
 
 };

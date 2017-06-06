@@ -37,14 +37,14 @@
 namespace hoot
 {
 
-RegressionReleaseTestFitnessFunction::RegressionReleaseTestFitnessFunction() :
-AbstractTestFitnessFunction()
+RegressionReleaseTestFitnessFunction::RegressionReleaseTestFitnessFunction(QString dir,
+                                                                           QString configFile) :
+AbstractTestFitnessFunction(),
+_configFile(configFile)
 {
-  //TODO: make this configurable from the test class?
-  _dir = "/fouo/hoot-tests/network-tests.child/release_test.child";
-  _testSuite.reset(new RegressionReleaseTestSuite(_dir));
+  _testSuite.reset(new RegressionReleaseTestSuite(dir));
   QStringList confs;
-  _testSuite->loadDir(_dir, confs);
+  _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
   _highestOverallScores.clear();
 }
@@ -61,8 +61,9 @@ void RegressionReleaseTestFitnessFunction::_createConfig(const QString testName)
   testSettings.loadJson(_settingsFileName);
   Settings networkBaseSettings;
   networkBaseSettings.loadDefaults();
-  //TODO: make this configurable from test
-  networkBaseSettings.loadJson("test-files/cases/hoot-rnd/network/Config.conf");
+  //this logic is custom to the network version of the regression tests and would need to be
+  //genericized if this was ever run against other versions
+  networkBaseSettings.loadJson(_configFile);
   foreach (QString k, networkBaseSettings.getAll().keys())
   {
     testSettings.set(k, networkBaseSettings.get(k).toString());

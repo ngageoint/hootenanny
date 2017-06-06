@@ -45,13 +45,17 @@ class CaseTestFitnessFunction : public AbstractTestFitnessFunction
 
 public:
 
-    CaseTestFitnessFunction();
+    CaseTestFitnessFunction(QString dir, QString configFile);
 
     virtual double f(const Tgs::ConstStatePtr& s);
 
     virtual void initTest();
 
     virtual void afterTestRun();
+
+private:
+
+    QString _configFile;
 };
 
 }

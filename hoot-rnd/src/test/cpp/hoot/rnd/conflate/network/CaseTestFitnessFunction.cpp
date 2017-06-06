@@ -32,10 +32,10 @@
 namespace hoot
 {
 
-CaseTestFitnessFunction::CaseTestFitnessFunction() :
-AbstractTestFitnessFunction()
+CaseTestFitnessFunction::CaseTestFitnessFunction(QString dir, QString configFile) :
+AbstractTestFitnessFunction(),
+_configFile(configFile)
 {
-  const QString dir = "test-files/cases/hoot-rnd/network/conflicts/";
   _testSuite.reset(new ConflateCaseTestSuite(dir));
   QStringList confs;
   _testSuite->loadDir(dir, confs);
@@ -46,7 +46,7 @@ AbstractTestFitnessFunction()
 //network cases tests conf
 void CaseTestFitnessFunction::initTest()
 {
-  _test->addConfig("test-files/cases/hoot-rnd/network/Config.conf");
+  _test->addConfig(_configFile);
 }
 
 double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)

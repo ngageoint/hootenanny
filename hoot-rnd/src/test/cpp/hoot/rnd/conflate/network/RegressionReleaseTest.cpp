@@ -47,7 +47,6 @@ _overallScore(-1)
 
 void RegressionReleaseTest::_parseScore()
 {
-  //check test score and pass if >= _minPassingScore; fail otherwise
   QDir scoresDir("scores");
   QStringList nameFilters;
   nameFilters.append("*scores.txt");

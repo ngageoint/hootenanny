@@ -37,6 +37,10 @@
 namespace hoot
 {
 
+/**
+ * At this time, this will only work against the network versions of the regression tests but
+ * could easily be made to work against the unifying versions as well with some test refactoring.
+ */
 class RegressionReleaseTest : public AbstractTest
 {
 
