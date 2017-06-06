@@ -106,6 +106,10 @@ void RegressionReleaseTestFitnessFunction::_updateCurrentScoreFromTest(const int
 {
   LOG_VARD(testName);
   LOG_VARD(score);
+  if (!_highestOverallScores.contains(testName))
+  {
+    _highestOverallScores[testName] = -1;
+  }
   if (score > _highestOverallScores[testName])
   {
     _highestOverallScores[testName] = score;
@@ -137,7 +141,7 @@ double RegressionReleaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   AbstractTestFitnessFunction::f(s);
 
   RegressionReleaseTest* regressionReleaseTest = dynamic_cast<RegressionReleaseTest*>(_test);
-  LOG_ERROR("Test score: " << regressionReleaseTest->getOverallScore());
+  LOG_VARD(regressionReleaseTest->getOverallScore());
 
   return (double)(1 / regressionReleaseTest->getOverallScore());
 }
