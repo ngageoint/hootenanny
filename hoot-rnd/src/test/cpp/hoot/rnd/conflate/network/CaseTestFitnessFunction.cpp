@@ -71,7 +71,6 @@ double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     }
     LOG_ERROR(failureMsg);
     LOG_ERROR("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
-    LOG_ERROR("");
   }
 
   return (double)_failedTests.size() / (double)_testCount;

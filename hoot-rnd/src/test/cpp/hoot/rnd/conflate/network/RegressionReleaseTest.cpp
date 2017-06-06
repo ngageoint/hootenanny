@@ -47,12 +47,7 @@ _overallScore(-1)
 
 void RegressionReleaseTest::runTest()
 {
-  //TestUtils::resetEnvironment();
   LOG_DEBUG("Running regression release test: " << _d.absolutePath());
-
-  // configures and cleans up the conf() environment
-  //LOG_VART(_confs);
-  //TestSetup st(_confs);
 
   QFileInfo makeFile(_d, "Makefile");
   if (!makeFile.exists())
@@ -83,7 +78,14 @@ void RegressionReleaseTest::runTest()
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
   LOG_DEBUG("Running test: " << getName());
-  cmd = "make test";
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    cmd = "make test";
+  }
+  else
+  {
+    cmd = "make -s test";
+  }
   retval = system(cmd.toStdString().c_str());
   if (retval != 0)
   {

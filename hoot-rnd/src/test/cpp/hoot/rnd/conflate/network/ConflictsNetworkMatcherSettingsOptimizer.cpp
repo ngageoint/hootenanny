@@ -53,8 +53,8 @@ namespace hoot
 class ConflictsNetworkMatcherSettingsOptimizer : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizer);
-  CPPUNIT_TEST(optimizeAgainstCaseDataTest);
-  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
+  //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
+  CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
