@@ -34,7 +34,7 @@ PertyTestFitnessFunction::PertyTestFitnessFunction(QString dir, QString configFi
 //these dir extensions are hardcoded since they're unlikely to change
 //TODO: should be able to get rid of the base dir input her and derive it from the input dir
 //in the parent class
-AbstractRegressionTestFitnessFunction(dir, configFile, ".child", "perty_tests.child")
+AbstractRegressionTestFitnessFunction(dir, configFile, ".child", "perty-tests.child")
 {
 }
 
