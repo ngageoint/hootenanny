@@ -96,7 +96,7 @@ void AbstractRegressionTestFitnessFunction::_getBestScoreFromTest(const double s
   LOG_VARD(score);
   if (!_testsToBestScores.contains(testName))
   {
-    _testsToBestScores[testName] = -1;
+    _testsToBestScores[testName] = -1.0;
   }
   if (score > _testsToBestScores[testName])
   {
