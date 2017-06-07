@@ -40,7 +40,7 @@ namespace hoot
  * The "optimizeAgainst*" tests are used for network conflation parameter tuning only and aren't
  * actually unit tests, so leave them disabled by default.  Most of the time you want to run those
  * at the error log level to reduce log clutter.  Also when running them, temporarily uncomment
- * cout lines in SimulatedAnnealing::iterate for better logging feedback.
+ * marked cout lines in SimulatedAnnealing::iterate for better logging feedback.
  *
  * TODO: come up with a better way to control logging inside SimulatedAnnealing than uncommenting
  * cout lines
@@ -48,56 +48,60 @@ namespace hoot
 class ConflictsNetworkMatcherSettingsOptimizerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizerTest);
-  //CPPUNIT_TEST(runSimpleCaseTest);
+  CPPUNIT_TEST(runSimpleCaseTest);
   //leave these disabled in source control
   //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
   //CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
-  CPPUNIT_TEST(optimizeAgainstRegressionPertyDataTest);
+  //CPPUNIT_TEST(optimizeAgainstRegressionPertyDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   //TODO: modify fitness function to give variable failure based on the number of reviews (#1092)
 
-  //we're not checking the output with this test...just that it doesn't error out
+  //we're not checking the output with this test...just checking that it doesn't error out
   void runSimpleCaseTest()
   {
      DisableLog dl(Log::Fatal);
 
-     boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
-       new CaseTestFitnessFunction(
-         "test-files/cases/hoot-rnd/network/conflicts",
-         "test-files/cases/hoot-rnd/network/Config.conf"));
-     ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 2);
+     ConflictsNetworkMatcherSettingsOptimizer().runOptimization(
+       boost::shared_ptr<AbstractTestFitnessFunction>(
+         new CaseTestFitnessFunction(
+           "test-files/cases/hoot-rnd/network/conflicts",
+           "test-files/cases/hoot-rnd/network/Config.conf")),
+       2);
   }
 
   void optimizeAgainstCaseDataTest()
   {
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
-      new CaseTestFitnessFunction(
-        "test-files/cases/hoot-rnd/network/conflicts",
-        "test-files/cases/hoot-rnd/network/Config.conf"));
-    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 2);
+    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(
+      boost::shared_ptr<AbstractTestFitnessFunction>(
+        new CaseTestFitnessFunction(
+          "test-files/cases/hoot-rnd/network/conflicts",
+          "test-files/cases/hoot-rnd/network/Config.conf")),
+      50);
   }
 
   void optimizeAgainstRegressionReleaseDataTest()
-  {
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
-      new ReleaseTestFitnessFunction(
-        //fill this in with the full path to the test dir
-        "/fouo/hoot-tests/network-tests.child/release_test.child",
-        "test-files/cases/hoot-rnd/network/Config.conf"));
-    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 1);
+  { 
+    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(
+      boost::shared_ptr<AbstractTestFitnessFunction>(
+        new ReleaseTestFitnessFunction(
+          //fill this in with the full path to the test dir
+          "hoot-tests/network-tests.child/release_test.child",
+          "test-files/cases/hoot-rnd/network/Config.conf")),
+      15);
   }
 
   void optimizeAgainstRegressionPertyDataTest()
   {
-    boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
-      new PertyTestFitnessFunction(
-        //fill this in with the full path to the test dir
-        "/fouo/hoot-tests/network-tests.child/perty-tests.child",
-        "test-files/cases/hoot-rnd/network/Config.conf"));
-    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 1);
+    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(
+      boost::shared_ptr<AbstractTestFitnessFunction>(
+        new PertyTestFitnessFunction(
+          //fill this in with the full path to the test dir
+          "hoot-tests/network-tests.child/perty-tests.child",
+          "test-files/cases/hoot-rnd/network/Config.conf")),
+      30);
   }
 
 };
