@@ -59,7 +59,7 @@ void RegressionTestSuite::loadDir(QString dir, QStringList confs)
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
   for (int i = 0; i < dirs.size(); i++)
   {
-    QString path = d.absoluteFilePath(dirs[i]);
+    const QString path = d.absoluteFilePath(dirs[i]);
     LOG_VARD(path);
     loadDir(path, confs);
   }

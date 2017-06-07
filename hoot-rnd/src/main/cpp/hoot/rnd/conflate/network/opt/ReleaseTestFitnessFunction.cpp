@@ -32,6 +32,8 @@ namespace hoot
 
 ReleaseTestFitnessFunction::ReleaseTestFitnessFunction(QString dir, QString configFile) :
 //these dir extensions are hardcoded since they're unlikely to change
+//TODO: should be able to get rid of the base dir input her and derive it from the input dir
+//in the parent class
 AbstractRegressionTestFitnessFunction(dir, configFile, ".release", "release_test.child")
 {
 }

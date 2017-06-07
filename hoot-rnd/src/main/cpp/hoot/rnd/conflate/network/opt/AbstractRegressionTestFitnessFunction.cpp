@@ -68,7 +68,7 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   {
     testSettings.set(k, baseSettings.get(k).toString());
   }
-  LOG_VARD(testSettings);
+  LOG_VART(testSettings);
   LOG_VARD(testSettings.get("network.matcher"));
   LOG_VARD(testSettings.get("match.creators"));
 
