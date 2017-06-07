@@ -34,17 +34,20 @@
 #include "RegressionTestSuite.h"
 #include "AbstractRegressionTest.h"
 
+// Qt
+#include <QFileInfo>
+
 namespace hoot
 {
 
 AbstractRegressionTestFitnessFunction::AbstractRegressionTestFitnessFunction(QString dir,
                                                                              QString configFile,
-                                                                             QString testDirExtension,
-                                                                             QString baseDirExtension) :
+                                                                             QString testDirExtension) :
 AbstractTestFitnessFunction(),
 _configFile(configFile)
 {
-  _testSuite.reset(new RegressionTestSuite(dir, testDirExtension, baseDirExtension));
+  QFileInfo dirInfo(dir);
+  _testSuite.reset(new RegressionTestSuite(dir, testDirExtension, dirInfo.baseName()));
   QStringList confs;
   _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
@@ -126,7 +129,7 @@ QString AbstractRegressionTestFitnessFunction::highestOverallScoresToString() co
   for (QMap< QString, double >::const_iterator it = _highestOverallScores.begin();
        it != _highestOverallScores.end(); ++it)
   {
-    str += "\t" + it.key() + ": " + QString::number(it.value()) + "\n";
+    str += "\t" + it.key() + ": " + QString::number((double)it.value(), 'g', 10) + "\n";
   }
   str.chop(1);
   return str;

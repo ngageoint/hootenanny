@@ -48,8 +48,7 @@ class AbstractRegressionTestFitnessFunction : public AbstractTestFitnessFunction
 
 public:
 
-    AbstractRegressionTestFitnessFunction(QString dir, QString configFile, QString testDirExtension,
-                                          QString baseDirExtension);
+    AbstractRegressionTestFitnessFunction(QString dir, QString configFile, QString testDirExtension);
 
     virtual double f(const Tgs::ConstStatePtr& s);
 
