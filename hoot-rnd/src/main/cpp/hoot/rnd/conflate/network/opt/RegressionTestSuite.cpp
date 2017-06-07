@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
 #include "ReleaseTest.h"
 #include "PertyTest.h"
 
@@ -37,12 +38,12 @@
 namespace hoot
 {
 
-RegressionTestSuite::RegressionTestSuite(QString dir, QString testDirExtension,
-                                         QString baseDirExtension) :
+RegressionTestSuite::RegressionTestSuite(QString dir, QString testDirExtension) :
 AbstractTestSuite(dir),
-_testDirExtension(testDirExtension),
-_baseDirExtension(baseDirExtension)
+_testDirExtension(testDirExtension)
 {
+  QFileInfo dirInfo(dir);
+  _baseDirExtension = dirInfo.completeBaseName();
 }
 
 void RegressionTestSuite::loadDir(QString dir, QStringList confs)
@@ -73,13 +74,17 @@ void RegressionTestSuite::loadDir(QString dir, QStringList confs)
   }
 
   LOG_DEBUG("Adding test: " << d.absolutePath());
-  if (_testDirExtension == ".release")
+  if (_testDirExtension.toLower() == ".release")
   {
     addTest(new ReleaseTest(d, confs));
   }
-  else
+  else if (_testDirExtension.toLower() == ".child")
   {
     addTest(new PertyTest(d, confs));
+  }
+  else
+  {
+    throw HootException("Invalid test dir extension: " + _testDirExtension);
   }
 }
 

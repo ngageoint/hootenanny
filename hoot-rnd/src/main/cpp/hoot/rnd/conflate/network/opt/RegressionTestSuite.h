@@ -37,7 +37,7 @@ class RegressionTestSuite : public AbstractTestSuite
 
 public:
 
-  RegressionTestSuite(QString dir, QString testDirExtension, QString baseDirExtension);
+  RegressionTestSuite(QString dir, QString testDirExtension);
 
   virtual void loadDir(QString dir, QStringList confs);
 
