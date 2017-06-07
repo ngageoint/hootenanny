@@ -87,7 +87,7 @@ public:
         //fill this in with the full path to the test dir
         "/fouo/hoot-tests/network-tests.child/release_test.child",
         "test-files/cases/hoot-rnd/network/Config.conf"));
-    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 2);
+    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 1);
   }
 
   void optimizeAgainstRegressionPertyDataTest()
@@ -97,7 +97,7 @@ public:
         //fill this in with the full path to the test dir
         "/fouo/hoot-tests/network-tests.child/perty-tests.child",
         "test-files/cases/hoot-rnd/network/Config.conf"));
-    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 2);
+    ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 1);
   }
 
 };

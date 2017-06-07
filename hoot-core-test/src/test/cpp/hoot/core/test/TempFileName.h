@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/**
+ * Represents a custom generated temporary file for use with test runs
+ */
 class TempFileName
 {
 

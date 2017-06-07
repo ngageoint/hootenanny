@@ -176,7 +176,7 @@ void ConflictsNetworkMatcherSettingsOptimizer::_writeOutput(
     boost::dynamic_pointer_cast<AbstractRegressionTestFitnessFunction>(fitnessFunction);
   if (regressionTestFitnessFunction)
   {
-    temp = regressionTestFitnessFunction->highestOverallScoresToString();
+    temp = regressionTestFitnessFunction->bestScoresPerTestToString();
     LOG_ERROR(temp);
     output += temp + "\n\n";
   }

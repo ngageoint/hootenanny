@@ -86,8 +86,6 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     }
   }
 
-  //TODO: if this doesn't end up being important to RegressionReleaseTestFitnessFunction, then
-  //move it down to CaseTestFitnessFunction
   QString failedTestsStr;
   if (_failedTests.size() > 0)
   {
@@ -122,7 +120,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   }
 
   //we're letting the child classes actually determine the fitness value...the code in this method
-  //is mainly intended to run the tests
+  //is mainly intended just to configure the tests, run the tests, and keep track of failures
   return -1.0;
 }
 

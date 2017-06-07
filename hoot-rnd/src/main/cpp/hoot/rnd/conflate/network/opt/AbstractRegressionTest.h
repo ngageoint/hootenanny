@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ABSTRACTREGRESSIONTEST_H
 #define ABSTRACTREGRESSIONTEST_H
@@ -38,8 +38,7 @@ namespace hoot
 {
 
 /**
- * At this time, this will only work against the network versions of the regression tests but
- * could easily be made to work against the unifying versions as well with some test refactoring.
+ * Abstract base class for hoot regression tests
  */
 class AbstractRegressionTest : public AbstractTest
 {
@@ -50,18 +49,15 @@ public:
 
   virtual void runTest();
 
-  double getMinPassingScore() const { return _minPassingScore; }
-  void setMinPassingScore(double score) { _minPassingScore = score; }
-
-  double getOverallScore() const { return _overallScore; }
-  void setOverallScore(double score) { _overallScore = score; }
+  double getScore() const { return _score; }
+  void setScore(double score) { _score = score; }
 
 protected:
 
   virtual void _parseScore() = 0;
 
-  double _minPassingScore;
-  double _overallScore;
+  //output score for this test
+  double _score;
 
 };
 

@@ -61,6 +61,7 @@ double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
   }
 
+  //optimize on the number of passing tests...no individual test scoring involved
   return (double)_failedTests.size() / (double)_testCount;
 }
 

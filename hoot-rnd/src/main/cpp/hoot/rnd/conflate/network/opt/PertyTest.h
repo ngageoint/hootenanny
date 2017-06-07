@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERTYTEST_H
 #define PERTYTEST_H
@@ -34,18 +34,33 @@ namespace hoot
 {
 
 /**
+ * Represents a hoot regression PERTY test to be run as part of a hoot tests suite.
+ *
+ * This class uses the error log setting to allow for more easily viewing the results of the
+ * optimization without having to view conflation log clutter...there may be a better way to
+ * handle this.
+ *
  * At this time, this will only work against the network versions of the regression tests but
- * could easily be made to work against the unifying versions as well with some test refactoring.
+ * could easily be made to work against the unifying versions of those same tests as well with some
+ * code and test refactoring.
  */
 class PertyTest : public AbstractRegressionTest
 {
 
 public:
 
+  /**
+   * @brief PertyTest
+   * @param d base dir containing the tests
+   * @param confs configuration file paths to pass along to the tests
+   */
   PertyTest(QDir d, QStringList confs);
 
 protected:
 
+  /*
+   * Parse the score output of a regression test from a file
+   */
   virtual void _parseScore();
 
 };

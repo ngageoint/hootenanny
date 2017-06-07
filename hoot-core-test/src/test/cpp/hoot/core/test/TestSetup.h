@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * Simple class to assist with setting up conflate case test runs
+ */
 class TestSetup
 {
 public:
@@ -40,6 +43,9 @@ public:
   TestSetup(const QStringList confs);
   ~TestSetup();
 
+  /**
+   * Resets the test environment
+   */
   void reset();
 
 private:

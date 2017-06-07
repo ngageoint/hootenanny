@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyTest.h"
 
@@ -67,19 +67,18 @@ void PertyTest::_parseScore()
   {
     QTextStream inStream(&resultsFile);
     QString line;
-    _overallScore = -1;
+    _score = -1;
     do
     {
       line = inStream.readLine();
-      LOG_VARD(line);
+      LOG_VART(line);
       if (line.toLower().startsWith("test run score (averaged)"))
       {
-        LOG_VARD(line.split(":"));
-        _overallScore = line.split(":")[1].trimmed().toDouble();
-        LOG_VARD(_overallScore);
+        _score = line.split(":")[1].trimmed().toDouble();
+        LOG_VARD(_score);
       }
     }
-    while (!line.isNull() && _overallScore == -1);
+    while (!line.isNull() && _score == -1);
   }
   catch (const std::exception& e)
   {
@@ -87,17 +86,8 @@ void PertyTest::_parseScore()
     throw e;
   }
   resultsFile.close();
-  LOG_VARD(_overallScore);
 
-  LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
-  LOG_VARD(_minPassingScore);
-  if (_overallScore > _minPassingScore)
-  {
-    LOG_ERROR(_overallScore << " is a new high score for: " << getName());
-    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
-    _minPassingScore = _overallScore;
-  }
-  LOG_VARD(_minPassingScore);
+  LOG_ERROR("Test: " << getName() << " passed with overall score: " << _score);
 }
 
 }

@@ -35,17 +35,20 @@ namespace hoot
 {
 
 /**
- * Fitness function which optimizes against Hootenanny regression release test data.
- *
- * At this time, this will only work against the network versions of the regression tests but
- * could easily be made to work against the unifying versions as well with some test refactoring.
+ * Fitness function which optimizes against Hootenanny regression PERTY test data.
  */
 class PertyTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 {
 
 public:
 
-    PertyTestFitnessFunction(QString dir, QString configFile);
+  /**
+   * Constructor
+   *
+   * @param dir base dir for the tests
+   * @param configFile custom config file to pass to the associated test suite
+   */
+  PertyTestFitnessFunction(QString dir, QString configFile);
 };
 
 }

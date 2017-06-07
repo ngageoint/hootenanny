@@ -38,7 +38,8 @@ namespace hoot
 {
 
 /**
- *
+ * Uses simulated annealing to attempt to determine the optimal configuration of network conflation
+ * conflicts related configuration options, given a fitness function
  */
 class ConflictsNetworkMatcherSettingsOptimizer
 {
@@ -46,13 +47,26 @@ public:
 
   ConflictsNetworkMatcherSettingsOptimizer();
 
+  /**
+   * Runs the optimization process
+   *
+   * @param fitnessFunction a user specified fitness function that determines the value of test
+   * outcome
+   * @param numIterations the number of iterations to run the optimization
+   */
   void runOptimization(
     boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations);
 
 private:
 
+  /*
+   * Configure hardcoded option value ranges here per test (could move this to a file)
+   */
   Tgs::StateDescriptionPtr _initStateDescription();
 
+  /*
+   * Writes a summary of the optimization results to file
+   */
   void _writeOutput(boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
     const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations);
 };

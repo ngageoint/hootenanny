@@ -48,38 +48,71 @@ namespace hoot
 
 /**
  * Fitness function which optimizes against Hootenanny conflate case test data
+ *
+ * This class uses the error log setting to allow for more easily viewing the results of the
+ * optimization without having to view conflation log clutter...there may be a better way to
+ * handle this.
  */
 class AbstractTestFitnessFunction : public Tgs::FitnessFunction
 {
 
 public:
 
-    AbstractTestFitnessFunction();
+  AbstractTestFitnessFunction();
 
-    virtual double f(const Tgs::ConstStatePtr& s);
+  virtual double f(const Tgs::ConstStatePtr& s);
 
-    int getTestCount() { return _testCount; }
+  int getTestCount() { return _testCount; }
 
-    QStringList getFailingTestsForBestRuns() const { return _failingTestsForBestRuns; }
+  /**
+   * Returns a list of test names that failed for the best test run(s) (test runs with lowest
+   * numbers of failures)
+   *
+   * @return a list of test names; or an empty list if there were no test failures for the best
+   * test run(s)
+   */
+  QStringList getFailingTestsForBestRuns() const { return _failingTestsForBestRuns; }
 
-    int getLowestNumFailingTestsPerRun() const { return _lowestNumFailingTestsPerRun; }
+  /**
+   * Returns the current number of failing tests for the best test runs(s) (lowest number of
+   * failures)
+   *
+   * @return count of test failures
+   */
+  int getLowestNumFailingTestsPerRun() const { return _lowestNumFailingTestsPerRun; }
 
-    virtual void initTest() = 0;
+  /**
+   * Executes just before the test runs
+   */
+  virtual void initTest() = 0;
 
-    virtual void afterTestRun() = 0;
+  /**
+   * Executes just after the test runs
+   */
+  virtual void afterTestRun() = 0;
 
 protected:
 
+  //number of tests in the test suite
   int _testCount;
+
+  //test suite run by this fitness function
   boost::shared_ptr<AbstractTestSuite> _testSuite;
+
+  //name of the temporary settings file generated for the current test run
   QString _settingsFileName;
+
+  //failed tests for the current test run
   QStringList _failedTests;
+
+  //current test being run
   AbstractTest* _test;
 
 private:
 
   //list members are one or more test names joined by a ';'
   QStringList _failingTestsForBestRuns;
+
   int _lowestNumFailingTestsPerRun;
 
   QString _failedTestsToString(const QStringList failedTests) const;

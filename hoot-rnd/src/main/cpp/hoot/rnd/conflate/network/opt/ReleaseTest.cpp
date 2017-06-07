@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReleaseTest.h"
 
@@ -68,23 +68,22 @@ void ReleaseTest::_parseScore()
     QTextStream inStream(&scoresFile);
     QString line;
     bool foundConflatedScoreLine = false;
-    _overallScore = -1;
+    _score = -1;
     do
     {
       line = inStream.readLine();
-      LOG_VARD(line);
+      LOG_VART(line);
       if (line.toLower().contains("conflated"))
       {
         foundConflatedScoreLine = true;
       }
       else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
       {
-        LOG_VARD(line.split(" "));
-        _overallScore = line.split(" ")[1].trimmed().toDouble();
-        LOG_VARD(_overallScore);
+        _score = line.split(" ")[1].trimmed().toDouble();
+        LOG_VARD(_score);
       }
     }
-    while (!line.isNull() && _overallScore == -1);
+    while (!line.isNull() && _score == -1);
   }
   catch (const std::exception& e)
   {
@@ -92,17 +91,8 @@ void ReleaseTest::_parseScore()
     throw e;
   }
   scoresFile.close();
-  LOG_VARD(_overallScore);
 
-  LOG_ERROR("Test: " << getName() << " passed with overall score: " << _overallScore);
-  LOG_VARD(_minPassingScore);
-  if (_overallScore > _minPassingScore)
-  {
-    LOG_ERROR(_overallScore << " is a new high score for: " << getName());
-    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
-    _minPassingScore = _overallScore;
-  }
-  LOG_VARD(_minPassingScore);
+  LOG_ERROR("Test: " << getName() << " passed with overall score: " << _score);;
 }
 
 }

@@ -40,6 +40,9 @@
 namespace hoot
 {
 
+/**
+ * An abstract test to be run as part of a hoot test suite
+ */
 class AbstractTest : public CppUnit::TestCase
 {
 

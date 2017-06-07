@@ -36,6 +36,9 @@
 namespace hoot
 {
 
+/**
+ * A conflate case test to be run as part of the hoot testing suite
+ */
 class ConflateCaseTest : public AbstractTest
 {
 
@@ -43,6 +46,9 @@ public:
 
   ConflateCaseTest(QDir d, QStringList confs);
 
+  /**
+   * Runs the test
+   */
   virtual void runTest();
 };
 

@@ -40,6 +40,10 @@ namespace hoot
 /**
  * Fitness function which optimizes against Hootenanny regression release test data.
  *
+ * This class uses the error log setting to allow for more easily viewing the results of the
+ * optimization without having to view conflation log clutter...there may be a better way to
+ * handle this.
+ *
  * At this time, this will only work against the network versions of the regression tests but
  * could easily be made to work against the unifying versions as well with some test refactoring.
  */
@@ -50,24 +54,40 @@ public:
 
     AbstractRegressionTestFitnessFunction(QString dir, QString configFile, QString testDirExtension);
 
+    /**
+     * Fitness function that determines the performance based on the test output
+     *
+     * @param s a simulated annealing state
+     * @return a fitness value (lower is better)
+     */
     virtual double f(const Tgs::ConstStatePtr& s);
 
+    /**
+     * Executes just before the test runs
+     */
     virtual void initTest();
 
+    /**
+     * Executes just after the test runs
+     */
     virtual void afterTestRun();
 
-    QString highestOverallScoresToString() const;
+    /**
+     * Pretty printed string for the best score for each test in the test suite
+     *
+     * @return a scores string
+     */
+    QString bestScoresPerTestToString() const;
 
 protected:
 
-    QMap<QString, double> _highestOverallScores;
+    QMap<QString, double> _testsToBestScores;
     QString _configFile;
 
 private:
 
     void _createConfig(const QString testName);
-    void _updateTestWithCurrentScore(AbstractTest* test);
-    void _updateCurrentScoreFromTest(const int score, const QString testName);
+    void _getBestScoreFromTest(const double score, const QString testName);
 };
 
 }

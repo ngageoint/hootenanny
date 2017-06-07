@@ -51,7 +51,7 @@ _configFile(configFile)
   _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
   LOG_VARD(_testCount);
-  _highestOverallScores.clear();
+  _testsToBestScores.clear();
 }
 
 void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName)
@@ -76,7 +76,8 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   LOG_VARD(testSettings.get("match.creators"));
 
   //for now, this will only work with network conflation regression release tests, since
-  //they are the only ones set up to handle this configuration file management
+  //they are the only ones set up to handle configuration file management in this fashion; changing
+  //the unifying version of the tests to do the same, if needed, wouldn't be too difficult
   const QString settingsFileDestName = testName + "/Config.conf";
   QFile settingsFileDest(settingsFileDestName);
   if (settingsFileDest.exists() && !settingsFileDest.remove())
@@ -88,47 +89,31 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   testSettings.storeJson(settingsFileDestName);
 }
 
-void AbstractRegressionTestFitnessFunction::_updateTestWithCurrentScore(AbstractTest* test)
-{
-  AbstractRegressionTest* regressionTest = dynamic_cast<AbstractRegressionTest*>(test);
-  if (!regressionTest)
-  {
-    throw HootException("Invalid test class.");
-  }
-  LOG_VARD(QString::fromStdString(test->getName()));
-  if (!_highestOverallScores.contains(QString::fromStdString(test->getName())))
-  {
-    _highestOverallScores[QString::fromStdString(test->getName())] = -1;
-  }
-  LOG_VARD(_highestOverallScores[QString::fromStdString(test->getName())]);
-  regressionTest->setMinPassingScore(
-    _highestOverallScores[QString::fromStdString(test->getName())]);
-  LOG_VARD(regressionTest->getMinPassingScore());
-}
-
-void AbstractRegressionTestFitnessFunction::_updateCurrentScoreFromTest(const int score,
-                                                                        const QString testName)
+void AbstractRegressionTestFitnessFunction::_getBestScoreFromTest(const double score,
+                                                                  const QString testName)
 {
   LOG_VARD(testName);
   LOG_VARD(score);
-  if (!_highestOverallScores.contains(testName))
+  if (!_testsToBestScores.contains(testName))
   {
-    _highestOverallScores[testName] = -1;
+    _testsToBestScores[testName] = -1;
   }
-  if (score > _highestOverallScores[testName])
+  if (score > _testsToBestScores[testName])
   {
-    _highestOverallScores[testName] = score;
+    LOG_ERROR(score << " is a new high score for: " << testName);
+    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
+    _testsToBestScores[testName] = score;
   }
-  LOG_VARD(_highestOverallScores[testName]);
+  LOG_VARD(_testsToBestScores[testName]);
 }
 
-QString AbstractRegressionTestFitnessFunction::highestOverallScoresToString() const
+QString AbstractRegressionTestFitnessFunction::bestScoresPerTestToString() const
 {
   QString str = "Best scores:\n";
-  for (QMap< QString, double >::const_iterator it = _highestOverallScores.begin();
-       it != _highestOverallScores.end(); ++it)
+  for (QMap< QString, double >::const_iterator it = _testsToBestScores.begin();
+       it != _testsToBestScores.end(); ++it)
   {
-    str += "\t" + it.key() + ": " + QString::number((double)it.value(), 'g', 10) + "\n";
+    str += "\t" + it.key() + ": " + QString::number(it.value()) + "\n";
   }
   str.chop(1);
   return str;
@@ -139,7 +124,6 @@ void AbstractRegressionTestFitnessFunction::initTest()
   LOG_ERROR("Initializing test: " << _test->getName() << "...");
   LOG_VARD(QDir::currentPath());
   _createConfig(QString::fromStdString(_test->getName()));
-  _updateTestWithCurrentScore(_test);
 }
 
 double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
@@ -151,9 +135,9 @@ double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   {
     throw HootException("Invalid test class.");
   }
-  LOG_VARD(regressionTest->getOverallScore());
+  LOG_VARD(regressionTest->getScore());
 
-  return 1 / regressionTest->getOverallScore();
+  return 1 / regressionTest->getScore();
 }
 
 void AbstractRegressionTestFitnessFunction::afterTestRun()
@@ -165,10 +149,9 @@ void AbstractRegressionTestFitnessFunction::afterTestRun()
   {
     throw HootException("Invalid test class.");
   }
-  _updateCurrentScoreFromTest(
-    regressionTest->getOverallScore(),
-    QString::fromStdString(regressionTest->getName()));
-  LOG_ERROR(highestOverallScoresToString());
+  _getBestScoreFromTest(
+    regressionTest->getScore(), QString::fromStdString(regressionTest->getName()));
+  LOG_ERROR(bestScoresPerTestToString());
 }
 
 }

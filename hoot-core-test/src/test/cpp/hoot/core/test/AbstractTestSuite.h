@@ -39,6 +39,9 @@
 namespace hoot
 {
 
+/**
+ * Abstract base class for hoot test suites
+ */
 class AbstractTestSuite : public CppUnit::TestSuite
 {
 

@@ -39,23 +39,40 @@ namespace hoot
 
 /**
  * Fitness function which optimizes against Hootenanny conflate case test data
+ *
+ * This class uses the error log setting to allow for more easily viewing the results of the
+ * optimization without having to view conflation log clutter...there may be a better way to
+ * handle this.
  */
 class CaseTestFitnessFunction : public AbstractTestFitnessFunction
 {
 
 public:
 
-    CaseTestFitnessFunction(QString dir, QString configFile);
+  CaseTestFitnessFunction(QString dir, QString configFile);
 
-    virtual double f(const Tgs::ConstStatePtr& s);
+  /**
+   * Fitness function that determines the performance based on the test output
+   *
+   * @param s a simulated annealing state
+   * @return a fitness value (lower is better)
+   */
+  virtual double f(const Tgs::ConstStatePtr& s);
 
-    virtual void initTest();
+  /**
+   * Executes just before the test runs
+   */
+  virtual void initTest();
 
-    virtual void afterTestRun();
+  /**
+   * Executes just after the test runs
+   */
+  virtual void afterTestRun();
 
 private:
 
-    QString _configFile;
+  // a custom config file to pass to the tests run by this fitness function
+  QString _configFile;
 };
 
 }
