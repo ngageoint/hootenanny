@@ -54,24 +54,22 @@ _configFile(configFile)
   _testsToBestScores.clear();
 }
 
-void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName)
+void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName,
+                                                          Settings& testSettings)
 {
   //Calling test->addConfig with the network config file to add in the non-variable config options
   //won't work here, since configs added in that manner have no effect on regression tests.
   //Instead, we need to manually add those settings in.
 
   //add the default network settings to the test settings
-  Settings testSettings;
-  //testSettings.loadDefaults();
-  testSettings.loadJson(_settingsFileName);
-  Settings baseSettings;
+  Settings updatedSettings = conf();
   //baseSettings.loadDefaults();
-  baseSettings.loadJson(_configFile);
-  foreach (QString k, baseSettings.getAll().keys())
+  updatedSettings.loadJson(_configFile);
+  foreach (QString k, testSettings.getAll().keys())
   {
-    testSettings.set(k, baseSettings.get(k).toString());
+    updatedSettings.set(k, testSettings.get(k).toString());
   }
-  LOG_VARD(testSettings);
+  LOG_VARD(updatedSettings);
   //LOG_VARD(testSettings.get("network.matcher"));
   //LOG_VARD(testSettings.get("match.creators"));
 
@@ -86,7 +84,7 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
       "Unable to remove previous test configuration file: " + settingsFileDestName);
   }
   LOG_DEBUG("Writing test conf file to: " << settingsFileDestName << "...");
-  testSettings.storeJson(settingsFileDestName);
+  updatedSettings.storeJson(settingsFileDestName);
 }
 
 void AbstractRegressionTestFitnessFunction::_getBestScoreFromTest(const double score,
@@ -119,11 +117,11 @@ QString AbstractRegressionTestFitnessFunction::bestScoresPerTestToString() const
   return str;
 }
 
-void AbstractRegressionTestFitnessFunction::initTest()
+void AbstractRegressionTestFitnessFunction::initTest(Settings& testSettings)
 {
   LOG_ERROR("Initializing test: " << _test->getName() << "...");
   LOG_VARD(QDir::currentPath());
-  _createConfig(QString::fromStdString(_test->getName()));
+  _createConfig(QString::fromStdString(_test->getName()), testSettings);
 }
 
 double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)

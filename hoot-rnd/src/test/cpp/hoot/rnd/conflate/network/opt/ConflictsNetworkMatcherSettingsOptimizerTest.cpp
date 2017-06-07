@@ -68,6 +68,9 @@ public:
        boost::shared_ptr<AbstractTestFitnessFunction>(
          new CaseTestFitnessFunction(
            "test-files/cases/hoot-rnd/network/conflicts",
+           /*this config adds in a few other tests necessary for the case tests to run correctly;
+           it does not specify the matcher, however, and assumes it to be the conflicts matcher,
+           which was the default when this test was written*/
            "test-files/cases/hoot-rnd/network/Config.conf")),
        2);
   }
@@ -78,6 +81,7 @@ public:
       boost::shared_ptr<AbstractTestFitnessFunction>(
         new CaseTestFitnessFunction(
           "test-files/cases/hoot-rnd/network/conflicts",
+          //see explanation in runSimpleCaseTest
           "test-files/cases/hoot-rnd/network/Config.conf")),
       50);
   }
@@ -89,7 +93,7 @@ public:
         new ReleaseTestFitnessFunction(
           //fill this in with the full path to the test dir
           "hoot-tests/network-tests.child/release_test.child",
-          "test-files/cases/hoot-rnd/network/Config.conf")),
+          "conf/core/Network.conf")),
       15);
   }
 
@@ -100,7 +104,7 @@ public:
         new PertyTestFitnessFunction(
           //fill this in with the full path to the test dir
           "hoot-tests/network-tests.child/perty-tests.child",
-          "test-files/cases/hoot-rnd/network/Config.conf")),
+          "conf/core/Network.conf")),
       30);
   }
 

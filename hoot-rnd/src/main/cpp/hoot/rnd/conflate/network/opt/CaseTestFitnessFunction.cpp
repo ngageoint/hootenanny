@@ -44,7 +44,7 @@ _configFile(configFile)
 
 //this init will add the conflicts network case tests conf which is a subset of the overall
 //network cases tests conf
-void CaseTestFitnessFunction::initTest()
+void CaseTestFitnessFunction::initTest(Settings& /*testSettings*/)
 {
   _test->addConfig(_configFile);
 }

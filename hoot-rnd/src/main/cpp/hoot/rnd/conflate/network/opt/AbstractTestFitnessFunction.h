@@ -46,6 +46,8 @@
 namespace hoot
 {
 
+class Settings;
+
 /**
  * Fitness function which optimizes against Hootenanny conflate case test data
  *
@@ -84,7 +86,7 @@ public:
   /**
    * Executes just before the test runs
    */
-  virtual void initTest() = 0;
+  virtual void initTest(Settings& testSettings) = 0;
 
   /**
    * Executes just after the test runs

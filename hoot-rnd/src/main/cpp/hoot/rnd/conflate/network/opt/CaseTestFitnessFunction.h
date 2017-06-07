@@ -62,7 +62,7 @@ public:
   /**
    * Executes just before the test runs
    */
-  virtual void initTest();
+  virtual void initTest(Settings& testSettings);
 
   /**
    * Executes just after the test runs

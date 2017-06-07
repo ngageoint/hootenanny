@@ -65,7 +65,7 @@ public:
     /**
      * Executes just before the test runs
      */
-    virtual void initTest();
+    virtual void initTest(Settings& testSettings);
 
     /**
      * Executes just after the test runs
@@ -86,7 +86,7 @@ protected:
 
 private:
 
-    void _createConfig(const QString testName);
+    void _createConfig(const QString testName, Settings& testSettings);
     void _getBestScoreFromTest(const double score, const QString testName);
 };
 

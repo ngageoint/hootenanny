@@ -69,7 +69,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   {
     _test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));
     const QString testName = QString::fromStdString(_test->getName());
-    initTest();
+    initTest(settings);
     //add our custom sa test option values
     _test->addConfig(_settingsFileName);
     CppUnit::TestResult result;
