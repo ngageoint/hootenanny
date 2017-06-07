@@ -95,7 +95,7 @@ public:
     boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
       new PertyTestFitnessFunction(
         //fill this in with the full path to the test dir
-        "/fouo/hoot-tests/network-tests.child/perty_test.child",
+        "/fouo/hoot-tests/network-tests.child/perty_tests.child",
         "test-files/cases/hoot-rnd/network/Config.conf"));
     ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 2);
   }

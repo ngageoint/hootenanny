@@ -48,6 +48,8 @@ _baseDirExtension(baseDirExtension)
 void RegressionTestSuite::loadDir(QString dir, QStringList confs)
 {
   LOG_VARD(dir);
+  LOG_VARD(_testDirExtension);
+  LOG_VARD(_baseDirExtension);
   if (!dir.endsWith(_testDirExtension) && !dir.endsWith(_baseDirExtension))
   {
     return;
