@@ -82,6 +82,15 @@ Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
   page.send(expectation, have_css(selector))
 end
 
+Then(/^I should see a paragraph with text "([^"]*)"$/) do |text|
+  find("p", :text => text)
+end
+
+Then(/^I should not see a paragraph with text "([^"]*)"$/) do |text|
+  string = find("p", :text => text)
+  expect(page).to_not have_content(string)
+end
+
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
   expect(page).to have_content(text)
@@ -168,6 +177,10 @@ end
 
 Then(/^I close the modal$/) do
   find('div.modal').find('div.x').click
+end
+
+Then(/^I close the modal window$/) do
+  find('div.detailModal').find('div.x').click
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -502,6 +515,15 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/)
   Capybara.default_max_wait_time = Float(timeout) * multiplier
   page.find(el, :text => text)
   Capybara.default_max_wait_time = oldTimeout
+end
+
+When(/^I see the UI alert$/) do
+  alerts = find('#alerts')
+end
+
+When(/^I should not see the UI alert$/) do
+  alerts = find('#alerts')
+  page.should have_no_css(alerts, :visible => true)
 end
 
 When(/^I close the UI alert$/) do
