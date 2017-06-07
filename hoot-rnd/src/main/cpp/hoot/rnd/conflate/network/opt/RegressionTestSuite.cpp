@@ -42,18 +42,18 @@ RegressionTestSuite::RegressionTestSuite(QString dir, QString testDirExtension) 
 AbstractTestSuite(dir),
 _testDirExtension(testDirExtension)
 {
-  QFileInfo dirInfo(dir);
-  _baseDirExtension = dirInfo.completeBaseName();
+  QDir dirInfo(dir);
+  _topLevelDir = dirInfo.dirName();
 }
 
 void RegressionTestSuite::loadDir(QString dir, QStringList confs)
 {
   LOG_VARD(dir);
   LOG_VARD(_testDirExtension);
-  LOG_VARD(_baseDirExtension);
+  LOG_VARD(_topLevelDir);
   LOG_VARD(dir.endsWith(_testDirExtension));
-  LOG_VARD(dir.endsWith(_baseDirExtension));
-  if (!dir.endsWith(_testDirExtension) && !dir.endsWith(_baseDirExtension))
+  LOG_VARD(dir.endsWith(_topLevelDir));
+  if (!dir.endsWith(_testDirExtension) && !dir.endsWith(_topLevelDir))
   {
     return;
   }
@@ -68,7 +68,7 @@ void RegressionTestSuite::loadDir(QString dir, QStringList confs)
     loadDir(path, confs);
   }
 
-  if (dir.endsWith(_baseDirExtension))
+  if (dir.endsWith(_topLevelDir))
   {
     return;
   }

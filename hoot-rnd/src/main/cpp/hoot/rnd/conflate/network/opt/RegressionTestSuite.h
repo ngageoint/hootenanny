@@ -44,7 +44,7 @@ public:
 private:
 
   QString _testDirExtension;
-  QString _baseDirExtension;
+  QString _topLevelDir;
 };
 
 }
