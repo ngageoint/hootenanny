@@ -80,7 +80,7 @@ void ReleaseTest::_parseScore()
       else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
       {
         LOG_VARD(line.split(" "));
-        _overallScore = line.split(" ")[1].trimmed().toInt();
+        _overallScore = line.split(" ")[1].trimmed().toDouble();
         LOG_VARD(_overallScore);
       }
     }

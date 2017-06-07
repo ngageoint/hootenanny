@@ -31,6 +31,7 @@ namespace hoot
 {
 
 ReleaseTestFitnessFunction::ReleaseTestFitnessFunction(QString dir, QString configFile) :
+//these dir extensions are hardcoded since they're unlikely to change
 AbstractRegressionTestFitnessFunction(dir, configFile, ".release", "release_test.child")
 {
 }

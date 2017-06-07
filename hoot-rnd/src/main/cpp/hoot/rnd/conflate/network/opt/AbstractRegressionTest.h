@@ -50,18 +50,18 @@ public:
 
   virtual void runTest();
 
-  int getMinPassingScore() const { return _minPassingScore; }
-  void setMinPassingScore(int score) { _minPassingScore = score; }
+  double getMinPassingScore() const { return _minPassingScore; }
+  void setMinPassingScore(double score) { _minPassingScore = score; }
 
-  int getOverallScore() const { return _overallScore; }
-  void setOverallScore(int score) { _overallScore = score; }
+  double getOverallScore() const { return _overallScore; }
+  void setOverallScore(double score) { _overallScore = score; }
 
 protected:
 
   virtual void _parseScore() = 0;
 
-  int _minPassingScore;
-  int _overallScore;
+  double _minPassingScore;
+  double _overallScore;
 
 };
 

@@ -51,8 +51,8 @@ class ConflictsNetworkMatcherSettingsOptimizerTest : public CppUnit::TestFixture
   //CPPUNIT_TEST(runSimpleCaseTest);
   //leave these disabled in source control
   //CPPUNIT_TEST(optimizeAgainstCaseDataTest);
-  CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
-  //CPPUNIT_TEST(optimizeAgainstRegressionPertyDataTest);
+  //CPPUNIT_TEST(optimizeAgainstRegressionReleaseDataTest);
+  CPPUNIT_TEST(optimizeAgainstRegressionPertyDataTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

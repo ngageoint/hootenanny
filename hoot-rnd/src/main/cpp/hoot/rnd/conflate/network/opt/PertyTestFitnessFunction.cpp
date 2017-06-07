@@ -31,6 +31,7 @@ namespace hoot
 {
 
 PertyTestFitnessFunction::PertyTestFitnessFunction(QString dir, QString configFile) :
+//these dir extensions are hardcoded since they're unlikely to change
 AbstractRegressionTestFitnessFunction(dir, configFile, ".child", "perty-tests.child")
 {
 }

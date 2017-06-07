@@ -122,7 +122,7 @@ void AbstractRegressionTestFitnessFunction::_updateCurrentScoreFromTest(const in
 QString AbstractRegressionTestFitnessFunction::highestOverallScoresToString() const
 {
   QString str = "Best scores:\n";
-  for (QMap< QString, int >::const_iterator it = _highestOverallScores.begin();
+  for (QMap< QString, double >::const_iterator it = _highestOverallScores.begin();
        it != _highestOverallScores.end(); ++it)
   {
     str += "\t" + it.key() + ": " + QString::number(it.value()) + "\n";
@@ -150,7 +150,7 @@ double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   }
   LOG_VARD(regressionTest->getOverallScore());
 
-  return (double)(1 / regressionTest->getOverallScore());
+  return 1 / regressionTest->getOverallScore();
 }
 
 void AbstractRegressionTestFitnessFunction::afterTestRun()

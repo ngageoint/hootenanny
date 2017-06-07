@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    QMap<QString, int> _highestOverallScores;
+    QMap<QString, double> _highestOverallScores;
     QString _configFile;
 
 private:

@@ -35,8 +35,8 @@ namespace hoot
 
 AbstractRegressionTest::AbstractRegressionTest(QDir d, QStringList confs) :
 AbstractTest(d, confs),
-_minPassingScore(-1),
-_overallScore(-1)
+_minPassingScore(-1.0),
+_overallScore(-1.0)
 {
 }
 
