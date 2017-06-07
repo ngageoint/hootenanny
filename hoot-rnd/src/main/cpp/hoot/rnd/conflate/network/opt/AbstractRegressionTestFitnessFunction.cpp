@@ -63,15 +63,26 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
 
   //add the default network settings to the test settings
   Settings updatedSettings = conf();
-  //baseSettings.loadDefaults();
   updatedSettings.loadJson(_configFile);
   foreach (QString k, testSettings.getAll().keys())
   {
     updatedSettings.set(k, testSettings.get(k).toString());
   }
-  LOG_VARD(updatedSettings);
-  //LOG_VARD(testSettings.get("network.matcher"));
-  //LOG_VARD(testSettings.get("match.creators"));
+  LOG_VART(updatedSettings);
+  LOG_VARD(updatedSettings.get("network.optimization.iterations"));
+  LOG_VARD(updatedSettings.get("way.matcher.max.angle"));
+  LOG_VARD(updatedSettings.get("network.conflicts.aggression"));
+  LOG_VARD(updatedSettings.get("network.conflicts.weight.influence"));
+  LOG_VARD(updatedSettings.get("network.conflicts.outbound.weighting"));
+  LOG_VARD(updatedSettings.get("way.matcher.heading.delta"));
+  LOG_VARD(updatedSettings.get("network.match.threshold"));
+  LOG_VARD(updatedSettings.get("network.miss.threshold"));
+  LOG_VARD(updatedSettings.get("way.merger.min.split.size"));
+  LOG_VARD(updatedSettings.get("network.conflicts.stub.through.weighting"));
+  LOG_VARD(updatedSettings.get("network.review.threshold"));
+  LOG_VARD(updatedSettings.get("network.conflicts.partial.handicap"));
+  LOG_VARD(updatedSettings.get("network.conflicts.stub.handicap"));
+  LOG_VARD(updatedSettings.get("network.max.stub.length"));
 
   //for now, this will only work with network conflation regression release tests, since
   //they are the only ones set up to handle configuration file management in this fashion; changing
