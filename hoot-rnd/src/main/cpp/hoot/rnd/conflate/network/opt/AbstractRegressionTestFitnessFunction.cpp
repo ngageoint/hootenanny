@@ -48,6 +48,7 @@ _configFile(configFile)
   QStringList confs;
   _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
+  LOG_VARD(_testCount);
   _highestOverallScores.clear();
 }
 

@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/test/SimpleTestListener.h>
 #include <hoot/core/test/TempFileName.h>
 
@@ -59,6 +60,11 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   LOG_VARD(_settingsFileName);
   settings.storeJson(_settingsFileName);
 
+  LOG_VARD(_testCount);
+  if (_testCount == 0)
+  {
+    throw HootException("No tests found for fitness function.");
+  }
   for (int i = 0; i < _testCount; ++i)
   {
     _test = dynamic_cast<AbstractTest*>(_testSuite->getChildTestAt(i));

@@ -85,7 +85,7 @@ public:
     boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction(
       new ReleaseTestFitnessFunction(
         //fill this in with the full path to the test dir
-        "hoot-tests/network-tests.child/release_test.child",
+        "/fouo/hoot-tests/network-tests.child/release_test.child",
         "test-files/cases/hoot-rnd/network/Config.conf"));
     ConflictsNetworkMatcherSettingsOptimizer().runOptimization(fitnessFunction, 2);
   }
