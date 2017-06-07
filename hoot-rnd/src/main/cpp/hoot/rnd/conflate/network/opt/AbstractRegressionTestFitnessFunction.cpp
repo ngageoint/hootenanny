@@ -62,18 +62,18 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
 
   //add the default network settings to the test settings
   Settings testSettings;
-  testSettings.loadDefaults();
+  //testSettings.loadDefaults();
   testSettings.loadJson(_settingsFileName);
   Settings baseSettings;
-  baseSettings.loadDefaults();
+  //baseSettings.loadDefaults();
   baseSettings.loadJson(_configFile);
   foreach (QString k, baseSettings.getAll().keys())
   {
     testSettings.set(k, baseSettings.get(k).toString());
   }
-  LOG_VART(testSettings);
-  LOG_VARD(testSettings.get("network.matcher"));
-  LOG_VARD(testSettings.get("match.creators"));
+  LOG_VARD(testSettings);
+  //LOG_VARD(testSettings.get("network.matcher"));
+  //LOG_VARD(testSettings.get("match.creators"));
 
   //for now, this will only work with network conflation regression release tests, since
   //they are the only ones set up to handle configuration file management in this fashion; changing
