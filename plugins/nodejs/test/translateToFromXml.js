@@ -1,3 +1,4 @@
+var fs      = require('fs');
 var chai    = require('chai');
 var expect  = require('chai').expect;
 var chaiXml = require('chai-xml');
@@ -19,4 +20,16 @@ describe('hoot osm xml translations', function () {
             expect(actual).xml.to.deep.equal(expected);
         });
     });
+
+    it('should translate a sample size 100kb osm file in less than 300ms', function(done) {
+        this.timeout(300);
+        fs.readFile(__dirname + '/bluemont.osm', function(err, data) {
+            if (err) console.log(err);
+            translator.translateTo(data, 'MGCP', function(actual) {
+                expect(actual).xml.to.be.valid();
+                done();
+            });
+        });
+    });
+
 });

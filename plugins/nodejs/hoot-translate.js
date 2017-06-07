@@ -18,13 +18,13 @@ function getTranslator(translation) {
     }
     return translator;
 }
-
 module.exports = {
     mgcp: mgcp,
     translateTo: function(osm, translation, callback) {
         var translator = getTranslator(translation);
         xml2js.parseString(osm, function (err, result) {
             //console.log(JSON.stringify(result));
+            if (err) console.error(err);
 
 //{"osm":{"$":{"version":"0.6","upload":"true","generator":"hootenanny"},"bounds":[{"$":{"minlat":"30.6425644","minlon":"34.2201805","maxlat":"30.6558557","maxlon":"34.2422819","origin":"MapEdit server"}}],"way":[{"$":{"id":"23","version":"0"},"nd":[{"$":{"ref":"6"}},{"$":{"ref":"7"}},{"$":{"ref":"8"}},{"$":{"ref":"9"}},{"$":{"ref":"7"}}],"tag":[{"$":{"k":"building","v":"yes"}},{"$":{"k":"uuid","v":"fee4529b-5ecc-4e5c-b06d-1b26a8e830e6"}}]}]}}
 
@@ -35,25 +35,27 @@ module.exports = {
                     result.osm[element].forEach(function(e) {
                         var area = false;
                         //gather tags
-                        var tags = e.tag.reduce(function(map, t) {
-                            //if (t.$.k === 'area' && t.$.v)
-                            map[t.$.k] = t.$.v;
-                            return map;
-                        }, {});
+                        if (e.tag) {
+                            var tags = e.tag.reduce(function(map, t) {
+                                //if (t.$.k === 'area' && t.$.v)
+                                map[t.$.k] = t.$.v;
+                                return map;
+                            }, {});
 
-                        console.log(tags);
-                        //translate them
-                        var translated = translator.OSMtoRaw(tags, '', 'Area')[0].attrs;
+                            //console.log(tags);
+                            //translate them
+                            var translated = translator.OSMtoRaw(tags, '', 'Area')[0].attrs;
 
-                        console.log(translated);
-                        //transform them
-                        var transformed = Object.keys(translated).map(function(k) {
-                            return {$: {k: k, v: translated[k]}};
-                        });
+                            //console.log(translated);
+                            //transform them
+                            var transformed = Object.keys(translated).map(function(k) {
+                                return {$: {k: k, v: translated[k]}};
+                            });
 
-                        console.log(transformed);
-                        //update element
-                        e.tag = transformed;
+                            //console.log(transformed);
+                            //update element
+                            e.tag = transformed;
+                        }
                     });
             });
 
