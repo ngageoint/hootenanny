@@ -50,6 +50,8 @@ void RegressionTestSuite::loadDir(QString dir, QStringList confs)
   LOG_VARD(dir);
   LOG_VARD(_testDirExtension);
   LOG_VARD(_baseDirExtension);
+  LOG_VARD(dir.endsWith(_testDirExtension));
+  LOG_VARD(dir.endsWith(_baseDirExtension));
   if (!dir.endsWith(_testDirExtension) && !dir.endsWith(_baseDirExtension))
   {
     return;
@@ -57,6 +59,7 @@ void RegressionTestSuite::loadDir(QString dir, QStringList confs)
 
   QDir d(dir);
   QStringList dirs = d.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+  LOG_VARD(dirs.size());
   for (int i = 0; i < dirs.size(); i++)
   {
     const QString path = d.absoluteFilePath(dirs[i]);
