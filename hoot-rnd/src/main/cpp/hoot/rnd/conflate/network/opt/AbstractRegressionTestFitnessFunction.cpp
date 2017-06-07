@@ -47,7 +47,7 @@ AbstractTestFitnessFunction(),
 _configFile(configFile)
 {
   QFileInfo dirInfo(dir);
-  _testSuite.reset(new RegressionTestSuite(dir, testDirExtension, dirInfo.baseName()));
+  _testSuite.reset(new RegressionTestSuite(dir, testDirExtension, dirInfo.completeBaseName()));
   QStringList confs;
   _testSuite->loadDir(dir, confs);
   _testCount = _testSuite->getChildTestCount();
