@@ -35,6 +35,9 @@
 #include <hoot/rnd/conflate/network/EdgeMatchSetFinder.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
 
+// Qt
+#include <QDir>
+
 namespace hoot
 {
 
@@ -54,6 +57,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map)
   {
+    QDir().mkpath("tmp");
     OsmMapPtr copy(new OsmMap(map));
 
     MapProjector::projectToWgs84(copy);
