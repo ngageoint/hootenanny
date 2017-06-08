@@ -82,14 +82,15 @@ Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
   page.send(expectation, have_css(selector))
 end
 
-Then(/^I should see a paragraph with text "([^"]*)"$/) do |text|
-  find("p", :text => text)
+Then(/^I should (not )?see a paragraph with text "([^"]*)"$/) do |negate, txt|
+  expectation = negate ? :should_not : :should
+  if negate
+    page.should_not have_selector('p', :text=> txt)
+  else
+    page.should have_selector('p', :text=> txt)
+  end
 end
 
-Then(/^I should not see a paragraph with text "([^"]*)"$/) do |text|
-  string = find("p", :text => text)
-  expect(page).to_not have_content(string)
-end
 
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
@@ -522,8 +523,7 @@ When(/^I see the UI alert$/) do
 end
 
 When(/^I should not see the UI alert$/) do
-  alerts = find('#alerts')
-  page.should have_no_css(alerts, :visible => true)
+  page.should have_no_css('#alerts', :visible => true)
 end
 
 When(/^I close the UI alert$/) do
