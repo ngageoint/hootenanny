@@ -108,7 +108,7 @@ double SimulatedAnnealing::iterate(int kmax)
 {
   if (_verbose)
   {
-    cout << endl << "Initializing simulated annealing state..." << endl << endl;
+    cout << "Initializing simulated annealing state..." << endl;
   }
 
   StatePtr s1 = _generateRandomState();
@@ -122,8 +122,7 @@ double SimulatedAnnealing::iterate(int kmax)
   {
     if (_verbose)
     {
-      cout << endl << "Running simulated annealing iteration: " << k+1 << "/" << kmax << " ..." <<
-      endl << endl;
+      cout << "Running simulated annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
     }
 
     double T = 1.0 - (double)k / (double)kmax;
