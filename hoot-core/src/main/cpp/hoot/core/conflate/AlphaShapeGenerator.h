@@ -43,8 +43,6 @@ public:
 
   static std::string className() { return "hoot::AlphaShapeGenerator"; }
 
-  static unsigned int logWarnCount;
-
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
