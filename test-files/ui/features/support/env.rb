@@ -9,7 +9,7 @@ require 'selenium-webdriver'
 # Chrome instance with timeout is set to 100 seconds
 Capybara.register_driver :chrome_timeout do |app|
   client = Selenium::WebDriver::Remote::Http::Default.new
-  client.read_timeout = 100
+  client.timeout = 100
   Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => client)
 end
 
@@ -37,5 +37,8 @@ end
 
 World(Capybara::DSL, Helpers)
 
+Capybara::Screenshot.register_driver(:chrome_timeout) do |driver, path|
+#noop
+end
 # Keep only the screenshots generated from the last failing test suite
 Capybara::Screenshot.prune_strategy = :keep_last_run
