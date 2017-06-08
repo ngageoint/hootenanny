@@ -26,25 +26,38 @@
  */
 
 // Hoot
+#include <hoot/core/util/HootException.h>
 #include <hoot/rnd/conflate/opt/ConflateSettingsOptimizer.h>
 #include <hoot/rnd/conflate/network/opt/CaseTestFitnessFunction.h>
 
 namespace hoot
 {
 
-class ConflictsNetworkMatcherSettingsOptimizerTest : public CppUnit::TestFixture
+/*
+ * only the case tests can be run from this unit tests; regression optimization testing is handled
+ * in the nightly tests
+ */
+class ConflateSettingsOptimizerTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ConflictsNetworkMatcherSettingsOptimizerTest);
+  CPPUNIT_TEST_SUITE(ConflateSettingsOptimizerTest);
   CPPUNIT_TEST(runSimpleCaseTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  //we're not checking the output with this test...just checking that it doesn't error out
+  //we're not verifying the output with this test...just checking that it doesn't error out and that
+  //it generates output
   void runSimpleCaseTest()
   {
      DisableLog dl(Log::Fatal);
+
      QDir().mkpath("test-output/algorithms");
+     const QString output = "test-output/algorithms/ConflateSettingsOptimizerTest-states-out";
+     QFile outputFile(output);
+     if (outputFile.exists() && !outputFile.remove())
+     {
+       throw HootException("Error removing output file: " + output);
+     }
 
      ConflateSettingsOptimizer().runOptimization(
        boost::shared_ptr<AbstractTestFitnessFunction>(
@@ -56,11 +69,14 @@ public:
            "test-files/cases/hoot-rnd/network/Config.conf")),
        2,
        "test-files/cmd/slow/OptimizeConflateSettingsCmd/testSettings.json",
-       "test-output/algorithms/ConflictsNetworkMatcherSettingsOptimizer-states-out");
+       output);
+
+
+     CPPUNIT_ASSERT(outputFile.exists());
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflictsNetworkMatcherSettingsOptimizerTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateSettingsOptimizerTest, "slow");
 
 }

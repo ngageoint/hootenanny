@@ -1,0 +1,64 @@
+16:33:56.163 ERROR ...bstractTestFitnessFunction.cpp( 118) 7/30 tests failed:
+
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-002
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-008
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-011
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-012
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-022
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-026
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-030
+
+16:33:56.163 ERROR ...bstractTestFitnessFunction.cpp( 119) Lowest number of tests failed so far: 7
+16:34:03.511 ERROR ...bstractTestFitnessFunction.cpp( 118) 15/30 tests failed:
+
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-002
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-008
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-011
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-012
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-022
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-026
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-030
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-002
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-008
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-011
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-017
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-019
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-022
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-026
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-030
+
+16:34:03.511 ERROR ...bstractTestFitnessFunction.cpp( 119) Lowest number of tests failed so far: 7
+16:34:11.011 ERROR ...bstractTestFitnessFunction.cpp( 118) 24/30 tests failed:
+
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-002
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-008
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-011
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-012
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-022
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-026
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-030
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-002
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-008
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-011
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-017
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-019
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-022
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-026
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-030
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-002
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-007
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-008
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-011
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-017
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-019
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-022
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-026
+	/ramdisk/hoot/test-files/cases/hoot-rnd/network/conflicts/highway-030
+
+16:34:11.011 ERROR ...bstractTestFitnessFunction.cpp( 119) Lowest number of tests failed so far: 7
+16:34:11.012 ERROR .../ConflateSettingsOptimizer.cpp( 120) Number of test iterations: 2
+16:34:11.012 ERROR .../ConflateSettingsOptimizer.cpp( 124) Number of tests in test suite: 30
+16:34:11.012 ERROR .../ConflateSettingsOptimizer.cpp( 130) Lowest number of test failures in test iteration: 7
+16:34:11.012 ERROR .../ConflateSettingsOptimizer.cpp( 134) Number of best states found: 1
+16:34:11.012 ERROR .../ConflateSettingsOptimizer.cpp( 154) No solution was found. :-(
+16:34:11.012 ERROR .../ConflateSettingsOptimizer.cpp( 157) Writing best states and failing test groups to: test-output/cmd/slow/OptimizeConflateSettingsCmdTest/OptimizeConflateSettingsCmdTest-states-out...

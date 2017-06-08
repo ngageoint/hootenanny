@@ -46,7 +46,10 @@ _configFile(configFile)
 //network cases tests conf
 void CaseTestFitnessFunction::initTest(Settings& /*testSettings*/)
 {
-  _test->addConfig(_configFile);
+  if (!_configFile.trimmed().isEmpty())
+  {
+    _test->addConfig(_configFile);
+  }
 }
 
 double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)

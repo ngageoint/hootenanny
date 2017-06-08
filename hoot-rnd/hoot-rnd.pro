@@ -63,7 +63,7 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/opt/ConflictsNetworkMatcherSettingsOptimizerTest.cpp
+    src/test/cpp/hoot/rnd/conflate/opt/ConflateSettingsOptimizerTest.cpp
 
 HEADERS += \
 
@@ -110,11 +110,12 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/network/opt/RegressionTestSuite.cpp \
     src/main/cpp/hoot/rnd/conflate/network/opt/AbstractRegressionTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/opt/AbstractTestFitnessFunction.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/opt/ConflictsNetworkMatcherSettingsOptimizer.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/ConflateSettingsOptimizer.cpp \
     src/main/cpp/hoot/rnd/conflate/network/opt/ReleaseTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/opt/PertyTest.cpp \
     src/main/cpp/hoot/rnd/conflate/network/opt/PertyTestFitnessFunction.cpp \
-    src/main/cpp/hoot/rnd/conflate/network/opt/ReleaseTestFitnessFunction.cpp
+    src/main/cpp/hoot/rnd/conflate/network/opt/ReleaseTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/cmd/OptimizeConflateSettingsCmd.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -160,7 +161,7 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/opt/RegressionTestSuite.h \
     src/main/cpp/hoot/rnd/conflate/network/opt/AbstractRegressionTest.h \
     src/main/cpp/hoot/rnd/conflate/network/opt/AbstractTestFitnessFunction.h \
-    src/main/cpp/hoot/rnd/conflate/network/opt/ConflictsNetworkMatcherSettingsOptimizer.h \
+    src/main/cpp/hoot/rnd/conflate/opt/ConflateSettingsOptimizer.h \
     src/main/cpp/hoot/rnd/conflate/network/opt/ReleaseTest.h \
     src/main/cpp/hoot/rnd/conflate/network/opt/PertyTest.h \
     src/main/cpp/hoot/rnd/conflate/network/opt/PertyTestFitnessFunction.h \

@@ -62,27 +62,19 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   //Instead, we need to manually add those settings in.
 
   //add the default network settings to the test settings
+  //TODO: starting from conf() makes the config files huge, when I only want to see the ones
+  //in _configFile plus those in testSettings, but if I don't start from an existing config (or
+  //call loadDefaults) then the config parser errors out...
   Settings updatedSettings = conf();
-  updatedSettings.loadJson(_configFile);
+  if (!_configFile.trimmed().isEmpty())
+  {
+    updatedSettings.loadJson(_configFile);
+  }
   foreach (QString k, testSettings.getAll().keys())
   {
     updatedSettings.set(k, testSettings.get(k).toString());
   }
   LOG_VART(updatedSettings);
-  LOG_VARD(updatedSettings.get("network.optimization.iterations"));
-  LOG_VARD(updatedSettings.get("way.matcher.max.angle"));
-  LOG_VARD(updatedSettings.get("network.conflicts.aggression"));
-  LOG_VARD(updatedSettings.get("network.conflicts.weight.influence"));
-  LOG_VARD(updatedSettings.get("network.conflicts.outbound.weighting"));
-  LOG_VARD(updatedSettings.get("way.matcher.heading.delta"));
-  LOG_VARD(updatedSettings.get("network.match.threshold"));
-  LOG_VARD(updatedSettings.get("network.miss.threshold"));
-  LOG_VARD(updatedSettings.get("way.merger.min.split.size"));
-  LOG_VARD(updatedSettings.get("network.conflicts.stub.through.weighting"));
-  LOG_VARD(updatedSettings.get("network.review.threshold"));
-  LOG_VARD(updatedSettings.get("network.conflicts.partial.handicap"));
-  LOG_VARD(updatedSettings.get("network.conflicts.stub.handicap"));
-  LOG_VARD(updatedSettings.get("network.max.stub.length"));
 
   //for now, this will only work with network conflation regression release tests, since
   //they are the only ones set up to handle configuration file management in this fashion; changing

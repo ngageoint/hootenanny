@@ -37,4 +37,10 @@ VariableDescription::VariableDescription(QString name, VariableType type, double
   _max = max;
 }
 
+QString VariableDescription::toString() const
+{
+  return
+    "Name: " + _name + ", min: " + QString::number(_min) + ", max: " + QString::number(_max);
+}
+
 }
