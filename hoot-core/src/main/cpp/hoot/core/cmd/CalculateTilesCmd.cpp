@@ -213,10 +213,6 @@ class CalculateTilesCmd : public BaseCommand
       LOG_VARD(outputPath);
 
       //exporting as multipolygons, as that's what the Tasking Manager expects
-//      const QString cmd =
-//        "ogr2ogr -f GeoJSON -t_srs EPSG:4326 -sql \"select name, boundary from " +
-//        osmTempFile.fileName() + " \" " + outputPath + " " + osmTempFile.fileName() +
-//        " multipolygons";
       const QString cmd =
         "ogr2ogr -f GeoJSON -select \"name,boundary,osm_way_id\" " + outputPath + " " +
         osmTempFile.fileName() + " multipolygons";
@@ -295,13 +291,13 @@ class CalculateTilesCmd : public BaseCommand
 
       OsmMapWriterFactory::getInstance().write(boundaryMap, outputPath);
 
-      if (Log::getInstance().getLevel() <= Log::Debug)
-      {
-        const QString debugOutputPath = "tmp/calc-tiles-osm-debug.osm";
-        QFile outFile(outputPath);
-        LOG_DEBUG("writing debug output to " << debugOutputPath);
-        outFile.copy(debugOutputPath);
-      }
+//      if (Log::getInstance().getLevel() <= Log::Debug)
+//      {
+//        const QString debugOutputPath = "tmp/calc-tiles-osm-debug.osm";
+//        QFile outFile(outputPath);
+//        LOG_DEBUG("writing debug output to " << debugOutputPath);
+//        outFile.copy(debugOutputPath);
+//      }
     }
 };
 
