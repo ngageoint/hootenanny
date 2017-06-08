@@ -21,8 +21,10 @@ Feature: Command detail modal window
     Then I see the UI alert
     And I click on ".alertDiv"
     And I click on ".detailLink"
+    Then I should see a paragraph with text "status : complete"
     Then I should see a paragraph with text "commandDetail"
     And I close the modal window
+    Then I should not see a paragraph with text "status : complete"
     Then I should not see a paragraph with text "commandDetail"
     And I close the UI alert
     Then I should not see the UI alert
