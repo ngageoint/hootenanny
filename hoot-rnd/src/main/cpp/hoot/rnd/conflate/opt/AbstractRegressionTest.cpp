@@ -89,6 +89,13 @@ void AbstractRegressionTest::runTest()
       QString("Failed executing regression release test.  Status: " +
       QString::number(retval));
     LOG_ERROR(msg);
+    if (!QDir::setCurrent(startingDir))
+    {
+      const QString msg = "Unable to change back to hoot tests directory: " + startingDir;
+      LOG_ERROR(msg);
+      throw HootException(msg);
+    }
+    LOG_VARD(QDir::currentPath());
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
 
