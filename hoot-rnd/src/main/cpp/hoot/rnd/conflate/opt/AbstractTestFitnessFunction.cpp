@@ -115,10 +115,8 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     {
       failureMsg += "\t" + _failedTests[i] + "\n";
     }
-    LOG_INFO("");
     LOG_INFO(failureMsg);
     LOG_INFO("Lowest number of tests failed so far: " << _lowestNumFailingTestsPerRun);
-    LOG_INFO("");
   }
 
   //we're letting the child classes actually determine the fitness value...the code in this method

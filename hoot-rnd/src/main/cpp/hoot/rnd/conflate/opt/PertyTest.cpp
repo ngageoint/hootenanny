@@ -87,9 +87,7 @@ void PertyTest::_parseScore()
   }
   resultsFile.close();
 
-  LOG_INFO("");
   LOG_INFO("Test: " << getName() << " passed with overall score: " << _score);
-  LOG_INFO("");
 }
 
 }

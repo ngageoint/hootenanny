@@ -70,7 +70,7 @@ void AbstractRegressionTest::runTest()
       QString("Failed cleaning data for regression release test.  Status: " +
       QString::number(retval));
     LOG_ERROR(msg);
-    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
+    throw HootException(msg);
   }
 
   LOG_DEBUG("Running test: " << getName());
@@ -96,6 +96,7 @@ void AbstractRegressionTest::runTest()
       throw HootException(msg);
     }
     LOG_VARD(QDir::currentPath());
+    //don't throw here, b/c test failures caused by low socres are expected happen occasionally
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
 

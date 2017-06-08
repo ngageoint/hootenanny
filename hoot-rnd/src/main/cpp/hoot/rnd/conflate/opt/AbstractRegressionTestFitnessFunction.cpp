@@ -101,10 +101,8 @@ void AbstractRegressionTestFitnessFunction::_getBestScoreFromTest(const double s
   }
   if (score > _testsToBestScores[testName])
   {
-    LOG_INFO("");
     LOG_INFO(score << " is a new high score for: " << testName);
     LOG_INFO("\n\n***BOOM GOES THE DYNAMITE!***\n");
-    LOG_INFO("");
     _testsToBestScores[testName] = score;
   }
   LOG_VARD(_testsToBestScores[testName]);
@@ -124,9 +122,7 @@ QString AbstractRegressionTestFitnessFunction::bestScoresPerTestToString() const
 
 void AbstractRegressionTestFitnessFunction::initTest(Settings& testSettings)
 {
-  LOG_INFO("");
   LOG_INFO("Initializing test: " << _test->getName() << "...");
-  LOG_INFO("");
   LOG_VARD(QDir::currentPath());
   _createConfig(QString::fromStdString(_test->getName()), testSettings);
 }
@@ -156,9 +152,7 @@ void AbstractRegressionTestFitnessFunction::afterTestRun()
   }
   _getBestScoreFromTest(
     regressionTest->getScore(), QString::fromStdString(regressionTest->getName()));
-  LOG_INFO("");
   LOG_INFO(bestScoresPerTestToString());
-  LOG_INFO("");
 }
 
 }

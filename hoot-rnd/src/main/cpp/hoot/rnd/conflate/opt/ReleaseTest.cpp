@@ -92,9 +92,7 @@ void ReleaseTest::_parseScore()
   }
   scoresFile.close();
 
-  LOG_INFO("");
   LOG_INFO("Test: " << getName() << " passed with overall score: " << _score);
-  LOG_INFO("");
 }
 
 }
