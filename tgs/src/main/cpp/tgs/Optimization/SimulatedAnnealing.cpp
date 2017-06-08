@@ -38,7 +38,7 @@ namespace Tgs
 using namespace std;
 
 SimulatedAnnealing::SimulatedAnnealing(ConstStateDescriptionPtr sd,
-  FitnessFunctionPtr fitness) : _rand(0)
+  FitnessFunctionPtr fitness) : _rand(0), _verbose(false)
 {
   _stateDescription = sd;
   _fitness = fitness;
@@ -106,8 +106,10 @@ StatePtr SimulatedAnnealing::_generateRandomState() const
 
 double SimulatedAnnealing::iterate(int kmax)
 {
-  //enable this log statement for better logging when calculating opts
-  //cout << "Initializing simulated annealing state..." << endl;
+  if (_verbose)
+  {
+    cout << endl << "Initializing simulated annealing state..." << endl << endl;
+  }
 
   StatePtr s1 = _generateRandomState();
   s1->setScore(_fitness->f(s1));
@@ -118,8 +120,11 @@ double SimulatedAnnealing::iterate(int kmax)
 
   for (int k = 0; k < kmax; ++k)
   {
-    //enable this log statement for better logging when calculating opts
-    //cout << "Running simulated annealing iteration: " << k+1 << "/" << kmax << " ..." << endl;
+    if (_verbose)
+    {
+      cout << endl << "Running simulated annealing iteration: " << k+1 << "/" << kmax << " ..." <<
+      endl << endl;
+    }
 
     double T = 1.0 - (double)k / (double)kmax;
     StatePtr sNew = _generateNeighbor(s, T);

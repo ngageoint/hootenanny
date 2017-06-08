@@ -37,14 +37,15 @@ namespace hoot
 class AbstractTestFitnessFunction;
 
 /**
- * Uses simulated annealing to attempt to determine the optimal configuration of network conflation
- * conflicts related configuration options, given a fitness function
+ * Uses simulated annealing to attempt to determine the optimal configuration for conflation
+ * related configuration options, given a fitness function that describes how well a conflation
+ * test performs.
  */
 class ConflateSettingsOptimizer
 {
 public:
 
-  ConflateSettingsOptimizer();
+  ConflateSettingsOptimizer(bool verbose);
 
   /**
    * Runs the optimization process
@@ -61,6 +62,8 @@ public:
     const QString testSettingsFile, const QString outputFile);
 
 private:
+
+  bool _verbose;
 
   /*
    * Configure hardcoded option value ranges here per test (could move this to a file)

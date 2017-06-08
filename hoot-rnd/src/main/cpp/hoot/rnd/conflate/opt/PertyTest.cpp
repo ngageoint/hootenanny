@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ReleaseTest.h"
+#include "PertyTest.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QTextStream>
@@ -36,50 +36,45 @@
 namespace hoot
 {
 
-ReleaseTest::ReleaseTest(QDir d, QStringList confs) :
+PertyTest::PertyTest(QDir d, QStringList confs) :
 AbstractRegressionTest(d, confs)
 {
 }
 
-void ReleaseTest::_parseScore()
+void PertyTest::_parseScore()
 {
-  QDir scoresDir("scores");
+  QDir outputDir("output");
   QStringList nameFilters;
-  nameFilters.append("*scores.txt");
-  const QStringList scoresDirContents = scoresDir.entryList(nameFilters, QDir::Files);
-  if (scoresDirContents.size() != 1)
+  nameFilters.append("results");
+  const QStringList outputDirContents = outputDir.entryList(nameFilters, QDir::Files);
+  if (outputDirContents.size() != 1)
   {
     const QString msg =
-      "Found " + QString::number(scoresDirContents.size()) + " score files and expected to " +
-      "find one scores file.";
+      "Found " + QString::number(outputDirContents.size()) + " results files and expected to " +
+      "find one results file.";
     LOG_ERROR(msg);
     throw HootException(msg);
   }
-  LOG_VARD(scoresDirContents[0]);
-  QFile scoresFile("scores/" + scoresDirContents[0]);
-  if (!scoresFile.open(QIODevice::ReadOnly))
+  LOG_VARD(outputDirContents[0]);
+  QFile resultsFile("output/" + outputDirContents[0]);
+  if (!resultsFile.open(QIODevice::ReadOnly))
   {
-    const QString msg = "Unable to open scores file: scores/" + scoresDirContents[0];
+    const QString msg = "Unable to open results file: output/" + outputDirContents[0];
     LOG_ERROR(msg);
     throw HootException(msg);
   }
   try
   {
-    QTextStream inStream(&scoresFile);
+    QTextStream inStream(&resultsFile);
     QString line;
-    bool foundConflatedScoreLine = false;
     _score = -1;
     do
     {
       line = inStream.readLine();
       LOG_VART(line);
-      if (line.toLower().contains("conflated"))
+      if (line.toLower().startsWith("test run score (averaged)"))
       {
-        foundConflatedScoreLine = true;
-      }
-      else if (foundConflatedScoreLine && line.toLower().startsWith("overall"))
-      {
-        _score = line.split(" ")[1].trimmed().toDouble();
+        _score = line.split(":")[1].trimmed().toDouble();
         LOG_VARD(_score);
       }
     }
@@ -87,12 +82,14 @@ void ReleaseTest::_parseScore()
   }
   catch (const std::exception& e)
   {
-    scoresFile.close();
+    resultsFile.close();
     throw e;
   }
-  scoresFile.close();
+  resultsFile.close();
 
-  LOG_ERROR("Test: " << getName() << " passed with overall score: " << _score);;
+  LOG_INFO("");
+  LOG_INFO("Test: " << getName() << " passed with overall score: " << _score);
+  LOG_INFO("");
 }
 
 }

@@ -10,6 +10,7 @@ of configuration options.
 * +testSettings+ - a JSON file containing configuration with min/max test values; see 'test-files/cmd/slow/OptimizeConflateSettingsCmd/testSettings.json' for an example
 * +numIterations+ - the number of test iterations to run
 * +output+ - file location to write the text summary of the optimization to
+* +verbose+ - if true; logs extra detail during the optimization run
 * +customConfig+ - file location of a custom Hootenanny configuration file containing 
 static configuration options to apply to the tests (configuration values remain constant for the 
 duration of the test run (optional)

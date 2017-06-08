@@ -61,7 +61,9 @@ double CaseTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     //This message will actually show if, by chance, the first selected random state
     //is successful.  However, that state is just a starting point for the actual simulated
     //annealing iterations.
-    LOG_ERROR("\n\n***BOOM GOES THE DYNAMITE!***\n");
+    LOG_INFO("");
+    LOG_INFO("\n\n***BOOM GOES THE DYNAMITE!***\n");
+    LOG_INFO("");
   }
 
   //optimize on the number of passing tests...no individual test scoring involved

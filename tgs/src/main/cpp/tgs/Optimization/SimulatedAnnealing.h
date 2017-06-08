@@ -55,6 +55,8 @@ public:
    */
   void setPickFromBestScores(bool best) { _pickFromBestScores = best; }
 
+  void setVerbose(bool verbose) { _verbose = verbose; }
+
 private:
 
   mutable Random _rand;
@@ -63,6 +65,7 @@ private:
   FitnessFunctionPtr _fitness;
   bool _pickFromBestScores;
   ConstStateDescriptionPtr _stateDescription;
+  bool _verbose;
 
   StatePtr _generateNeighbor(ConstStatePtr from, double T) const;
   StatePtr _generateRandomState() const;

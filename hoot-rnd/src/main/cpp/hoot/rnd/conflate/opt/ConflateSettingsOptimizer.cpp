@@ -31,14 +31,13 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/rnd/conflate/network/opt/AbstractRegressionTestFitnessFunction.h>
+#include "AbstractRegressionTestFitnessFunction.h"
 
 // Qt
 #include <QTextStream>
 
 // Tgs
 #include <tgs/Optimization/SimulatedAnnealing.h>
-//#include <tgs/Optimization/VariableDescription.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -50,7 +49,8 @@
 namespace hoot
 {
 
-ConflateSettingsOptimizer::ConflateSettingsOptimizer()
+ConflateSettingsOptimizer::ConflateSettingsOptimizer(bool verbose) :
+_verbose(verbose)
 {
 }
 
@@ -105,6 +105,7 @@ void ConflateSettingsOptimizer::runOptimization(
 {
   Tgs::SimulatedAnnealing sa(_initStateDescription(testSettingsFile), fitnessFunction);
   sa.setPickFromBestScores(true);
+  sa.setVerbose(_verbose);
   /*bestScore =*/ sa.iterate(numIterations);
   _writeOutput(fitnessFunction, sa.getBestStates(), numIterations, outputFile);
 }
@@ -117,21 +118,21 @@ void ConflateSettingsOptimizer::_writeOutput(
     "Results for Conflicts Network Matcher Configuration Option Optimization with Simulated Annealing\n\n";
 
   QString temp = "Number of test iterations: " + QString::number(numIterations);
-  LOG_ERROR(temp);
+  LOG_INFO(temp);
   output += temp + "\n\n";
 
   temp = "Number of tests in test suite: " + QString::number(fitnessFunction->getTestCount());
-  LOG_ERROR(temp);
+  LOG_INFO(temp);
   output += temp + "\n\n";
 
   temp =
     "Lowest number of test failures in test iteration: " +
     QString::number(fitnessFunction->getLowestNumFailingTestsPerRun());
-  LOG_ERROR(temp);
+  LOG_INFO(temp);
   output += temp + "\n\n";
 
   temp = "Number of best states found: " + QString::number(bestStates.size());
-  LOG_ERROR(temp);
+  LOG_INFO(temp);
   output += temp + "\n\n";
 
   boost::shared_ptr<AbstractRegressionTestFitnessFunction> regressionTestFitnessFunction =
@@ -151,10 +152,10 @@ void ConflateSettingsOptimizer::_writeOutput(
   {
     temp = "No solution was found. :-(";
   }
-  LOG_ERROR(temp);
+  LOG_INFO(temp);
   output += temp + "\n\n";
 
-  LOG_ERROR("Writing best states and failing test groups to: " << outputFile << "...");
+  LOG_INFO("Writing best states and failing test groups to: " << outputFile << "...");
   const QStringList failingTestsForBestRuns = fitnessFunction->getFailingTestsForBestRuns();
   output +=
     "Failing Test Groups For Best States (" + QString::number(failingTestsForBestRuns.size()) +

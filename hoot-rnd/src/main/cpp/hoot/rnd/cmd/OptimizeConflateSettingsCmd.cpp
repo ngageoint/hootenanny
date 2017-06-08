@@ -29,9 +29,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/conflate/opt/ConflateSettingsOptimizer.h>
-#include <hoot/rnd/conflate/network/opt/CaseTestFitnessFunction.h>
-#include <hoot/rnd/conflate/network/opt/ReleaseTestFitnessFunction.h>
-#include <hoot/rnd/conflate/network/opt/PertyTestFitnessFunction.h>
+#include <hoot/rnd/conflate/opt/CaseTestFitnessFunction.h>
+#include <hoot/rnd/conflate/opt/ReleaseTestFitnessFunction.h>
+#include <hoot/rnd/conflate/opt/PertyTestFitnessFunction.h>
 
 using namespace std;
 
@@ -48,20 +48,12 @@ public:
 
   virtual QString getName() const { return "optimize-conflate-settings"; }
 
-  /*
-   * Most of the time you want to run this at the error log level to reduce log clutter.
-   * Also when running them, temporarily uncomment marked cout lines in SimulatedAnnealing::iterate
-   * for better logging feedback.
-   *
-   * TODO: come up with a better way to control logging inside SimulatedAnnealing than uncommenting
-   * cout lines
-   */
   virtual int runSimple(QStringList args)
   {
-    if (args.size() < 5 || args.size() > 6)
+    if (args.size() < 6 || args.size() > 7)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes five or six parameters.").arg(getName()));
+      throw HootException(QString("%1 takes six or seven parameters.").arg(getName()));
     }
 
     const QString testsDir = args[0];
@@ -78,10 +70,15 @@ public:
       throw HootException("Invalid number of test iterations: " + args[3]);
     }
     const QString summaryFilePath = args[4];
-    QString configFilePath = "";
-    if (args.size() == 6)
+    bool verbose = false;
+    if (args[5].toLower() == "true")
     {
-      configFilePath = args[5];
+      verbose = true;
+    }
+    QString configFilePath = "";
+    if (args.size() == 7)
+    {
+      configFilePath = args[6];
     }
 
     boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction;
@@ -98,7 +95,7 @@ public:
       fitnessFunction.reset(new PertyTestFitnessFunction(testsDir, configFilePath));
     }
 
-    ConflateSettingsOptimizer().runOptimization(
+    ConflateSettingsOptimizer(verbose).runOptimization(
       fitnessFunction, numIterations, testSettingsPath, summaryFilePath);
 
     return 0;

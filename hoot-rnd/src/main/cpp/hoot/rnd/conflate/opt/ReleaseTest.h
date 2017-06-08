@@ -28,7 +28,7 @@
 #define RELEASETEST_H
 
 // Hoot
-#include <hoot/rnd/conflate/network/opt/AbstractRegressionTest.h>
+#include "AbstractRegressionTest.h"
 
 namespace hoot
 {
