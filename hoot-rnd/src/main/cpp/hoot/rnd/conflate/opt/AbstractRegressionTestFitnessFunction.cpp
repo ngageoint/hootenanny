@@ -90,20 +90,20 @@ void AbstractRegressionTestFitnessFunction::_createConfig(const QString testName
   updatedSettings.storeJson(settingsFileDestName);
 }
 
-void AbstractRegressionTestFitnessFunction::_getBestScoreFromTest(const double score,
-                                                                  const QString testName)
+void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(const double testScore,
+                                                                         const QString testName)
 {
   LOG_VARD(testName);
-  LOG_VARD(score);
+  LOG_VARD(testScore);
   if (!_testsToBestScores.contains(testName))
   {
     _testsToBestScores[testName] = -1.0;
   }
-  if (score > _testsToBestScores[testName])
+  if (testScore > _testsToBestScores[testName])
   {
-    LOG_INFO(score << " is a new high score for: " << testName);
+    LOG_INFO(testScore << " is a new high score for: " << testName);
     LOG_INFO("\n\n***BOOM GOES THE DYNAMITE!***\n");
-    _testsToBestScores[testName] = score;
+    _testsToBestScores[testName] = testScore;
   }
   LOG_VARD(_testsToBestScores[testName]);
 }
@@ -137,6 +137,12 @@ double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     throw HootException("Invalid test class.");
   }
   LOG_VARD(regressionTest->getScore());
+  LOG_VARD(regressionTest->getTestStatus());
+  if ((regressionTest->getTestStatus() == -1 || regressionTest->getTestStatus() == 0) &&
+      regressionTest->getScore() == -1)
+  {
+    throw HootException("invalid score");
+  }
 
   return 1 / regressionTest->getScore();
 }
@@ -150,7 +156,7 @@ void AbstractRegressionTestFitnessFunction::afterTestRun()
   {
     throw HootException("Invalid test class.");
   }
-  _getBestScoreFromTest(
+  _checkForBetterScoreFromTest(
     regressionTest->getScore(), QString::fromStdString(regressionTest->getName()));
   LOG_INFO(bestScoresPerTestToString());
 }

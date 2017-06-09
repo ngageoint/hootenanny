@@ -87,7 +87,7 @@ protected:
 private:
 
     void _createConfig(const QString testName, Settings& testSettings);
-    void _getBestScoreFromTest(const double score, const QString testName);
+    void _checkForBetterScoreFromTest(const double testScore, const QString testName);
 };
 
 }

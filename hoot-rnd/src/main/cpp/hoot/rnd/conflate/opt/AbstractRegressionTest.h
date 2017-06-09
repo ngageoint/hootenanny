@@ -52,12 +52,18 @@ public:
   double getScore() const { return _score; }
   void setScore(double score) { _score = score; }
 
+  int getTestStatus() const { return _testStatus; }
+  void setTestStatus(int status) { _testStatus = status; }
+
 protected:
 
   virtual void _parseScore() = 0;
 
-  //output score for this test
+  //output score
   double _score;
+
+  //returned makefile status value
+  int _testStatus;
 
 };
 

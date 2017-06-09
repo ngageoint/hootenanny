@@ -68,6 +68,7 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/opt/CaseTestFitnessFunction.cpp \
     src/main/cpp/hoot/rnd/conflate/opt/AbstractRegressionTestFitnessFunction.cpp \
     src/main/cpp/hoot/rnd/conflate/opt/RegressionTestSuite.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/AbstractRegressionTest.cpp \
     src/main/cpp/hoot/rnd/conflate/opt/ConflateSettingsOptimizer.cpp \
     src/main/cpp/hoot/rnd/conflate/opt/ReleaseTest.cpp \
     src/main/cpp/hoot/rnd/conflate/opt/PertyTest.cpp \

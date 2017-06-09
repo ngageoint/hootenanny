@@ -35,7 +35,8 @@ namespace hoot
 
 AbstractRegressionTest::AbstractRegressionTest(QDir d, QStringList confs) :
 AbstractTest(d, confs),
-_score(-1.0)
+_score(-1.0),
+_testStatus(-1)
 {
 }
 
@@ -63,12 +64,12 @@ void AbstractRegressionTest::runTest()
 
   LOG_DEBUG("Cleaning test: " << getName());
   QString cmd = "make clean-output";
-  int retval = system(cmd.toStdString().c_str());
-  if (retval != 0)
+  _testStatus = system(cmd.toStdString().c_str());
+  if (_testStatus != 0)
   {
     const QString msg =
       QString("Failed cleaning data for regression release test.  Status: " +
-      QString::number(retval));
+      QString::number(_testStatus));
     LOG_ERROR(msg);
     throw HootException(msg);
   }
@@ -82,25 +83,29 @@ void AbstractRegressionTest::runTest()
   {
     cmd = "make -s test";
   }
-  retval = system(cmd.toStdString().c_str());
-  if (retval != 0)
+  _testStatus = system(cmd.toStdString().c_str());
+  if (_testStatus != 0)
   {
     const QString msg =
       QString("Failed executing regression release test.  Status: " +
-      QString::number(retval));
-    LOG_ERROR(msg);
-    if (!QDir::setCurrent(startingDir))
+      QString::number(_testStatus));
+    if (_testStatus == -1)
     {
-      const QString msg = "Unable to change back to hoot tests directory: " + startingDir;
-      LOG_ERROR(msg);
-      throw HootException(msg);
+      LOG_INFO(msg); //failed on score; expected to happen occasionally
     }
-    LOG_VARD(QDir::currentPath());
-    //don't throw here, b/c test failures caused by low socres are expected happen occasionally
+    else
+    {
+      LOG_ERROR(msg);
+    }
+    //don't throw here, b/c test failures caused by low scores are expected happen occasionally
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
   }
 
-  _parseScore();
+  //only try to parse the score if the test completed
+  if (_testStatus == 0 || _testStatus == -1)
+  {
+    _parseScore();
+  }
 
   if (!QDir::setCurrent(startingDir))
   {
