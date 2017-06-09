@@ -138,8 +138,9 @@ double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   }
   LOG_VARD(regressionTest->getScore());
   LOG_VARD(regressionTest->getTestStatus());
-  if ((regressionTest->getTestStatus() == -1 || regressionTest->getTestStatus() == 0) &&
-      regressionTest->getScore() == -1)
+  //score should be positive if the test ran or zero if the test errored out; never = -1
+  assert(regressionTest->getScore() != -1);
+  if (regressionTest->getScore() == -1)
   {
     throw HootException("invalid score");
   }

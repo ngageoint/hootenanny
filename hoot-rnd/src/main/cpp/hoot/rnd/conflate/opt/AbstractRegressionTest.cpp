@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AbstractRegressionTest.h"
 
@@ -84,29 +84,23 @@ void AbstractRegressionTest::runTest()
     cmd = "make -s test";
   }
   _testStatus = system(cmd.toStdString().c_str());
-  if (_testStatus != 0)
-  {
-    const QString msg =
-      QString("Failed executing regression release test.  Status: " +
-      QString::number(_testStatus));
-    if (_testStatus == -1)
-    {
-      LOG_INFO(msg); //failed on score; expected to happen occasionally
-    }
-    else
-    {
-      LOG_ERROR(msg);
-    }
-    //don't throw here, b/c test failures caused by low scores are expected happen occasionally
-    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
-  }
 
   //only try to parse the score if the test completed
-  if (_testStatus == 0 || _testStatus == -1)
+  try
   {
-    _parseScore();
+    //if (_testStatus == 0 || _testStatus == -1)
+    //{
+      _parseScore();
+    //}
+  }
+  catch (const HootException& /*e*/)
+  {
+    //will throw if test errored out and didn't generate a scores file; since I can't nail down
+    //the exit status for that situation, this is the only way to handle it
+    _score = 0;
   }
 
+  //change back to the starting dir before issuing the cppunit failure to ensure it actually happens
   if (!QDir::setCurrent(startingDir))
   {
     const QString msg = "Unable to change back to hoot tests directory: " + startingDir;
@@ -114,6 +108,25 @@ void AbstractRegressionTest::runTest()
     throw HootException(msg);
   }
   LOG_VARD(QDir::currentPath());
+
+  if (_testStatus != 0)
+  {
+    const QString msg =
+      QString("Failed executing regression release test.  Status: " +
+      QString::number(_testStatus));
+    //thought I should always be getting status = -1 for score failures according to CheckScores.py,
+    //but am not
+    //if (_testStatus == -1)
+    //{
+      LOG_INFO(msg); //failed on score; expected to happen occasionally
+    //}
+    //else
+    //{
+      //LOG_ERROR(msg);
+    //}
+    //don't throw here, b/c test failures caused by low scores are expected happen occasionally
+    CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
+  } 
 }
 
 }
