@@ -72,9 +72,7 @@ public:
   }
 };
 
-// There hasn't seemed to be a continued interest in using this recently, so removing it
-// from the command menu for the time being...but don't want to remove the code just yet.
-//HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
+HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
 
 }
 
