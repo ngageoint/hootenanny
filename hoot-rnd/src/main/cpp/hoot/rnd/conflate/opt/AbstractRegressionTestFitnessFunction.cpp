@@ -99,7 +99,7 @@ void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(const d
   {
     _testsToBestScores[testName] = -1.0;
   }
-  if (testScore > _testsToBestScores[testName])
+  if (testScore > _testsToBestScores[testName] && testScore > 0)
   {
     LOG_INFO(testScore << " is a new high score for: " << testName);
     LOG_INFO("\n\n***BOOM GOES THE DYNAMITE!***\n");
@@ -145,7 +145,14 @@ double AbstractRegressionTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
     throw HootException("invalid score");
   }
 
-  return 1 / regressionTest->getScore();
+  if (regressionTest->getScore() == 0)
+  {
+    return regressionTest->getScore();
+  }
+  else
+  {
+    return 1 / regressionTest->getScore();
+  }
 }
 
 void AbstractRegressionTestFitnessFunction::afterTestRun()
