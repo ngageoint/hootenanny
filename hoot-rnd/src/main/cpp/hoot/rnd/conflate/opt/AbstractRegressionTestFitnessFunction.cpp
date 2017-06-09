@@ -106,20 +106,20 @@ void AbstractRegressionTestFitnessFunction::_checkForBetterScoreFromTest(
   if (regressionTest->getScore() > _testsToBestScores[testName])
   {
     _testsToBestScores[testName] = regressionTest->getScore();
-  }
 
-  if (regressionTest->getScore() != 0)  //zero means the test errored out
-  {
-    if (regressionTest->getTestStatus() == 0)
+    if (regressionTest->getScore() != 0)  //zero means the test errored out
     {
-      LOG_INFO(
-        regressionTest->getScore() << " is a new high score from passing test: " << testName);
-      LOG_INFO("\n\n***BOOM GOES THE DYNAMITE!***\n");
-    }
-    else
-    {
-      LOG_INFO(
-        regressionTest->getScore() << " is a new high score from failing test: " << testName);
+      if (regressionTest->getTestStatus() == 0)
+      {
+        LOG_INFO(
+          regressionTest->getScore() << " is a new high score from passing test: " << testName);
+        LOG_INFO("\n\n***BOOM GOES THE DYNAMITE!***\n");
+      }
+      else
+      {
+        LOG_INFO(
+          regressionTest->getScore() << " is a new high score from failing test: " << testName);
+      }
     }
   }
 
