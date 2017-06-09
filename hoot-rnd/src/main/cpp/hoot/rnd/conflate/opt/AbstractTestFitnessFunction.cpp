@@ -45,6 +45,7 @@ _lowestNumFailingTestsPerRun(-1)
 double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
 {
   LOG_DEBUG("Running abstract fitness function...");
+  _failedTests.clear();
 
   Settings settings;
   foreach (QString k, s->getAllValues().keys())
