@@ -37,6 +37,8 @@
 namespace hoot
 {
 
+class AbstractRegressionTest;
+
 /**
  * Fitness function which optimizes against Hootenanny regression release test data.
  *
@@ -87,7 +89,7 @@ protected:
 private:
 
     void _createConfig(const QString testName, Settings& testSettings);
-    void _checkForBetterScoreFromTest(const double testScore, const QString testName);
+    void _checkForBetterScoreFromTest(AbstractRegressionTest* regressionTest);
 };
 
 }
