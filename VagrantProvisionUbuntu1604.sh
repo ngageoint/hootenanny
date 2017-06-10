@@ -4,7 +4,12 @@
 # Initial basic provisioning script for Ubuntu1604
 #
 
-HOOT_HOME=$HOME/hoot
+VMUSER=`id -u -n`
+echo USER: $VMUSER
+VMGROUP=`groups | grep -o $VMUSER`
+echo GROUP: $VMGROUP
+
+HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
@@ -162,7 +167,7 @@ echo "### Configuring environment..."
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
+    echo "export HOOT_HOME=~/hoot" >> ~/.profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
@@ -177,14 +182,14 @@ fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
     echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.profile
+    echo "export HADOOP_HOME=~/hadoop" >> ~/.profile
     echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin:~/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -194,7 +199,6 @@ if ! ruby -v | grep --quiet 2.3.0; then
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
-    #source /home/vagrant/.rvm/scripts/rvm
     source ~/.rvm/scripts/rvm
 
     stdbuf -o L -e L rvm install ruby-2.3
@@ -259,20 +263,20 @@ fi
 
 if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f chromedriver_linux64.zip ]; then
       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     fi
-    unzip -d $HOME/bin chromedriver_linux64.zip
+    unzip -d ~/bin chromedriver_linux64.zip
 else
   LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
   if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
     echo "### Updating Chromedriver"
-    rm $HOME/bin/chromedriver
-    rm $HOME/chromedriver_linux64.zip
+    rm ~/bin/chromedriver
+    rm ~/chromedriver_linux64.zip
     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d $HOME/bin chromedriver_linux64.zip
+    unzip -o -d ~/bin chromedriver_linux64.zip
   fi
 fi
 
@@ -280,13 +284,13 @@ sudo apt-get autoremove -y
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f osmosis-latest.tgz ]; then
       wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
     fi
-    mkdir -p $HOME/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
-    ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
+    mkdir -p ~/bin/osmosis_src
+    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+    ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
 
@@ -336,7 +340,7 @@ if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
-    sudo rm -rf $HOME/tmp
+    sudo rm -rf ~/tmp
 fi
 
 # NOTE: These have been changed to pg9.5
@@ -413,7 +417,7 @@ fi
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-sudo $HOOT_HOME/scripts/tomcat8/ubuntu/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat8/ubuntu/tomcat8_install.sh
 
 # Configure Tomcat
 if ! grep --quiet TOMCAT8_HOME ~/.profile; then
@@ -445,7 +449,7 @@ sudo chmod a+x /etc/init.d/node-mapnik-server
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
@@ -454,7 +458,7 @@ sudo chmod a+x /etc/init.d/node-export-server
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 cd $HOOT_HOME
 
