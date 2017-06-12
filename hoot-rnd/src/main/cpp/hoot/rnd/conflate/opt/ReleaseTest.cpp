@@ -91,8 +91,6 @@ void ReleaseTest::_parseScore()
     throw e;
   }
   scoresFile.close();
-
-  LOG_INFO("Test: " << getName() << " passed with overall score: " << _score);
 }
 
 }

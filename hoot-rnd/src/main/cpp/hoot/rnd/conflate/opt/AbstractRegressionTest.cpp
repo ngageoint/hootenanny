@@ -126,7 +126,11 @@ void AbstractRegressionTest::runTest()
     //}
     //don't throw here, b/c test failures caused by low scores are expected happen occasionally
     CPPUNIT_ASSERT_MESSAGE(msg.toStdString(), false);
-  } 
+  }
+  else
+  {
+    LOG_INFO("Test: " << getName() << " passed with score: " << _score);
+  }
 }
 
 }
