@@ -43,6 +43,8 @@ namespace hoot
 ConflateCaseTestSuite::ConflateCaseTestSuite(QString dir) :
 AbstractTestSuite(dir)
 {
+  QStringList confs;
+  loadDir(dir, confs);
 }
 
 void ConflateCaseTestSuite::loadDir(QString dir, QStringList confs)
