@@ -9,7 +9,7 @@ require 'selenium-webdriver'
 # Chrome instance with timeout is set to 100 seconds
 Capybara.register_driver :selenium do |app|
   client = Selenium::WebDriver::Remote::Http::Default.new
-  client.timeout = 100
+  client.timeout = 150
   Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => client)
 end
 
