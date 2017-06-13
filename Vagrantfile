@@ -12,22 +12,22 @@ Vagrant.configure(2) do |config|
 
   tomcatPort = ENV['TOMCAT_PORT']
   if tomcatPort.nil?
-    tomcatPort = '9888'
+    tomcatPort = '8888'
   end
 
   transPort = ENV['NODEJS_PORT']
   if transPort.nil?
-    transPort = '9894'
+    transPort = '8094'
   end
 
   mergePort = ENV['P2P_PORT']
   if mergePort.nil?
-    mergePort = '9896'
+    mergePort = '8096'
   end
 
   mapnikPort = ENV['NODE_MAPNIK_SERVER_PORT']
   if mapnikPort.nil?
-    mapnikPort = '9800'
+    mapnikPort = '8000'
   end
 
   # tomcat service
@@ -44,15 +44,15 @@ Vagrant.configure(2) do |config|
 
   # Ubuntu1404 Box
   # This is the standard, working box
-  config.vm.define "hoot", primary: true do |hoot|
+  config.vm.define "default", primary: true do |hoot|
     hoot.vm.box = "ubuntu/trusty64"
     hoot.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
     hoot.vm.synced_folder ".", "/home/vagrant/hoot"
     hoot.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
-#      config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-#      config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-#      config.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
-#      config.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+    hoot.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    hoot.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    hoot.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
 
   # Ubuntu1604 Box

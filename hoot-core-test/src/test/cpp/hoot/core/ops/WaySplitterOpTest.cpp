@@ -59,6 +59,11 @@ class WaySplitterOpTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::resetEnvironment();
+  }
+
   void runTest()
   {
     QString inputPath  = "test-files/ops/WaySplitterOp/";
