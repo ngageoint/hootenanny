@@ -63,10 +63,29 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetDistanceTest.cpp \
     src/test/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcherTest.cpp \
     src/test/cpp/hoot/rnd/conflate/CumulativeConflatorTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/network/ConflictsNetworkMatcherSettingsOptimizer.cpp
+    src/main/cpp/hoot/rnd/cmd/OptimizeConflateSettingsCmd.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/AbstractTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/CaseTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/AbstractRegressionTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/RegressionTestSuite.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/AbstractRegressionTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/ConflateSettingsOptimizer.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/ReleaseTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/PertyTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/PertyTestFitnessFunction.cpp \
+    src/main/cpp/hoot/rnd/conflate/opt/ReleaseTestFitnessFunction.cpp
 
 HEADERS += \
-
+    src/main/cpp/hoot/rnd/conflate/opt/CaseTestFitnessFunction.h \
+    src/main/cpp/hoot/rnd/conflate/opt/AbstractRegressionTestFitnessFunction.h \
+    src/main/cpp/hoot/rnd/conflate/opt/RegressionTestSuite.h \
+    src/main/cpp/hoot/rnd/conflate/opt/AbstractRegressionTest.h \
+    src/main/cpp/hoot/rnd/conflate/opt/AbstractTestFitnessFunction.h \
+    src/main/cpp/hoot/rnd/conflate/opt/ConflateSettingsOptimizer.h \
+    src/main/cpp/hoot/rnd/conflate/opt/ReleaseTest.h \
+    src/main/cpp/hoot/rnd/conflate/opt/PertyTest.h \
+    src/main/cpp/hoot/rnd/conflate/opt/PertyTestFitnessFunction.h \
+    src/main/cpp/hoot/rnd/conflate/opt/ReleaseTestFitnessFunction.h
 }
 
 SOURCES += \

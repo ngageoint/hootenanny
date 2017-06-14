@@ -22,35 +22,44 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
+#ifndef ABSTRACTTEST_H
+#define ABSTRACTTEST_H
 
-#include "AbstractTestSuite.h"
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+
+// Qt
+#include <QDir>
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * An abstract test to be run as part of a hoot test suite
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class AbstractTest : public CppUnit::TestCase
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
+  AbstractTest(QDir d, QStringList confs);
 
-  /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
-   */
-  virtual void loadDir(QString dir, QStringList confs);
+  void addConfig(QString conf) { _confs << conf; }
+
+  virtual void runTest() = 0;
+
+protected:
+
+  QDir _d;
+  QStringList _confs;
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // ABSTRACTTEST_H

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,33 +24,51 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
 
-#include "AbstractTestSuite.h"
+#ifndef __REGRESSIONTESTFITNESSFUNCTION_H__
+#define __REGRESSIONTESTFITNESSFUNCTION_H__
+
+// Hoot
+#include "AbstractTestFitnessFunction.h"
+
+// Qt
+#include <QMap>
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * Fitness function which optimizes against Hootenanny regression release test data.
+ *
+ * At this time, this will only work against the network versions of the regression tests but
+ * could easily be made to work against the unifying versions as well with some test refactoring.
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class RegressionTestFitnessFunction : public AbstractTestFitnessFunction
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
+    RegressionTestFitnessFunction(QString dir, QString configFile, QString testDirExtension,
+                                  QString baseDirExtension);
 
-  /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
-   */
-  virtual void loadDir(QString dir, QStringList confs);
+    virtual double f(const Tgs::ConstStatePtr& s);
+
+    virtual void initTest();
+
+    virtual void afterTestRun();
+
+    QString highestOverallScoresToString() const;
+
+private:
+
+    QMap<QString, int> _highestOverallScores;
+    QString _configFile;
+
+    void _createConfig(const QString testName);
+    void _updateTestWithCurrentScore(AbstractTest* test);
+    void _updateCurrentScoreFromTest(const int score, const QString testName);
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // __REGRESSIONTESTFITNESSFUNCTION_H__

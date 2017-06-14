@@ -22,35 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
+#ifndef SIMPLETESTLISTENER_H
+#define SIMPLETESTLISTENER_H
 
-#include "AbstractTestSuite.h"
+// Cpp Unit
+#include <cppunit/TestListener.h>
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * Wrapper around CPPUnit test listener for test failure notification purposes
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class SimpleTestListener : public CppUnit::TestListener
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
+  SimpleTestListener();
 
-  /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
-   */
-  virtual void loadDir(QString dir, QStringList confs);
+  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
+  bool isFailure() const { return _failure; }
+
+private:
+
+  bool _failure;
+
+
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // SIMPLETESTLISTENER_H

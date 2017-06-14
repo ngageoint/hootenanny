@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,35 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
 
-#include "AbstractTestSuite.h"
+#ifndef __PERTYTESTFITNESSFUNCTION_H__
+#define __PERTYTESTFITNESSFUNCTION_H__
+
+// Hoot
+#include "AbstractRegressionTestFitnessFunction.h"
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * Fitness function which optimizes against Hootenanny regression PERTY test data.
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class PertyTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
-
   /**
-   * Attempts to load a conflate case test given a directory
+   * Constructor
    *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
+   * @param dir base dir for the tests
+   * @param configFile custom config file to pass to the associated test suite
    */
-  virtual void loadDir(QString dir, QStringList confs);
+  PertyTestFitnessFunction(QString dir, QString configFile);
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // __PERTYTESTFITNESSFUNCTION_H__

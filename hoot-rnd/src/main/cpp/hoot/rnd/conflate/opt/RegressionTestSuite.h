@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,23 +24,23 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
+#ifndef REGRESSIONTESTSUITE_H
+#define REGRESSIONTESTSUITE_H
 
-#include "AbstractTestSuite.h"
+#include <hoot/core/test/AbstractTestSuite.h>
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * Represents a collection of hoot regression tests
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class RegressionTestSuite : public AbstractTestSuite
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
+  RegressionTestSuite(QString dir, QString testDirExtension);
 
   /**
    * Attempts to load a conflate case test given a directory
@@ -49,8 +49,15 @@ public:
    * @param confs hoot configuration files to pass to the test
    */
   virtual void loadDir(QString dir, QStringList confs);
+
+private:
+
+  //the text the regression test directory is expected to end with (include the leading '.')
+  QString _testDirExtension;
+  //the top level dir for the tests to be run (is not a test itself)
+  QString _topLevelDir;
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // REGRESSIONTESTSUITE_H
