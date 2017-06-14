@@ -43,8 +43,6 @@ public:
 
   static std::string className() { return "hoot::CookieCutter"; }
 
-  static unsigned int logWarnCount;
-
   CookieCutter(bool crop, double outputBuffer = 0.0);
 
   /**

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,35 +22,51 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
+#ifndef ABSTRACTREGRESSIONTEST_H
+#define ABSTRACTREGRESSIONTEST_H
 
-#include "AbstractTestSuite.h"
+// Hoot
+#include <hoot/core/test/AbstractTest.h>
+
+// Qt
+#include <QDir>
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * Abstract base class for hoot regression tests
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class AbstractRegressionTest : public AbstractTest
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
+  AbstractRegressionTest(QDir d, QStringList confs);
 
-  /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
-   */
-  virtual void loadDir(QString dir, QStringList confs);
+  virtual void runTest();
+
+  double getScore() const { return _score; }
+  void setScore(double score) { _score = score; }
+
+  int getTestStatus() const { return _testStatus; }
+  void setTestStatus(int status) { _testStatus = status; }
+
+protected:
+
+  virtual void _parseScore() = 0;
+
+  //output score
+  double _score;
+
+  //returned makefile status value
+  int _testStatus;
+
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // ABSTRACTREGRESSIONTEST_H

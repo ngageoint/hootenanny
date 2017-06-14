@@ -22,35 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
+#include "TempFileName.h"
 
-#include "AbstractTestSuite.h"
+// Hoot
+#include <hoot/core/util/Log.h>
+
+// Tgs
+#include <tgs/Statistics/Random.h>
+
+// Qt
+#include <QFile>
 
 namespace hoot
 {
 
-/**
- * Manages the suite of conflate case tests
- */
-class ConflateCaseTestSuite : public AbstractTestSuite
+TempFileName::TempFileName()
 {
-
-public:
-
-  ConflateCaseTestSuite(QString dir);
-
-  /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
-   */
-  virtual void loadDir(QString dir, QStringList confs);
-};
-
+  do
+  {
+    int r = Tgs::Random::instance()->generateInt();
+    _name = QString("/tmp/HootConflictsTest-%1.conf").arg(r, 10, 10, QChar('0'));
+  }
+  while (QFile(_name).exists());
 }
 
-#endif // CONFLATECASETESTSUITE_H
+TempFileName::~TempFileName()
+{
+  if (QFile(_name).exists())
+  {
+    if (!QFile(_name).remove())
+    {
+      LOG_WARN("Failure removing: " << _name);
+    }
+  }
+}
+
+}

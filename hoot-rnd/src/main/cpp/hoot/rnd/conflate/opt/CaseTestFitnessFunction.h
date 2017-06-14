@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,33 +24,57 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
 
-#include "AbstractTestSuite.h"
+#ifndef __CASETESTFITNESSFUNCTION_H__
+#define __CASETESTFITNESSFUNCTION_H__
+
+// Hoot
+#include "AbstractTestFitnessFunction.h"
+
+// Qt
+#include <QTemporaryFile>
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * Fitness function which optimizes against Hootenanny conflate case test data
+ *
+ * This class uses the error log setting to allow for more easily viewing the results of the
+ * optimization without having to view conflation log clutter...there may be a better way to
+ * handle this.
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class CaseTestFitnessFunction : public AbstractTestFitnessFunction
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
+  CaseTestFitnessFunction(QString dir, QString configFile);
 
   /**
-   * Attempts to load a conflate case test given a directory
+   * Fitness function that determines the performance based on the test output
    *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
+   * @param s a simulated annealing state
+   * @return a fitness value (lower is better)
    */
-  virtual void loadDir(QString dir, QStringList confs);
+  virtual double f(const Tgs::ConstStatePtr& s);
+
+  /**
+   * Executes just before the test runs
+   */
+  virtual void initTest(Settings& testSettings);
+
+  /**
+   * Executes just after the test runs
+   */
+  virtual void afterTestRun();
+
+private:
+
+  // a custom config file to pass to the tests run by this fitness function
+  QString _configFile;
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // __CASETESTFITNESSFUNCTION_H__

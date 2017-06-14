@@ -22,52 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateCaseTest.h"
 
 // hoot
-#include <hoot/core/cmd/ConflateCmd.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/cmd/ConflateCmd.h>
 
 #include "../TestUtils.h"
+#include "TestSetup.h"
 
 namespace hoot
 {
 
-class SetupTest
-{
-public:
-
-  SetupTest(const QStringList confs) :
-  _confs(confs)
-  {
-    reset();
-  }
-
-  ~SetupTest()
-  {
-    reset();
-  }
-
-  void reset()
-  {
-    TestUtils::resetEnvironment(_confs);
-  }
-
-private:
-
-  QStringList _confs;
-
-};
-
 ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
-  CppUnit::TestCase(d.absolutePath().toStdString()),
-  _d(d),
-  _confs(confs)
+AbstractTest(d, confs)
 {
 }
 
@@ -78,7 +49,7 @@ void ConflateCaseTest::runTest()
 
   // configures and cleans up the conf() environment
   LOG_VART(_confs);
-  SetupTest st(_confs);
+  TestSetup st(_confs);
 
   ConflateCmd cmd;
 

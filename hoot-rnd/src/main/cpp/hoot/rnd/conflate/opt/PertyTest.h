@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,35 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATECASETESTSUITE_H
-#define CONFLATECASETESTSUITE_H
+#ifndef PERTYTEST_H
+#define PERTYTEST_H
 
-#include "AbstractTestSuite.h"
+// Hoot
+#include "AbstractRegressionTest.h"
 
 namespace hoot
 {
 
 /**
- * Manages the suite of conflate case tests
+ * Represents a hoot regression PERTY test to be run as part of a hoot tests suite.
+ *
+ * This class uses the error log setting to allow for more easily viewing the results of the
+ * optimization without having to view conflation log clutter...there may be a better way to
+ * handle this.
+ *
+ * At this time, this will only work against the network versions of the regression tests but
+ * could easily be made to work against the unifying versions of those same tests as well with some
+ * code and test refactoring.
  */
-class ConflateCaseTestSuite : public AbstractTestSuite
+class PertyTest : public AbstractRegressionTest
 {
 
 public:
 
-  ConflateCaseTestSuite(QString dir);
-
   /**
-   * Attempts to load a conflate case test given a directory
-   *
-   * @param dir directory to load the test from
-   * @param confs hoot configuration files to pass to the test
+   * @brief PertyTest
+   * @param d base dir containing the tests
+   * @param confs configuration file paths to pass along to the tests
    */
-  virtual void loadDir(QString dir, QStringList confs);
+  PertyTest(QDir d, QStringList confs);
+
+protected:
+
+  /*
+   * Parse the score output of a regression test from a file
+   */
+  virtual void _parseScore();
+
 };
 
 }
 
-#endif // CONFLATECASETESTSUITE_H
+#endif // PERTYTEST_H
