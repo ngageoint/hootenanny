@@ -50,7 +50,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual set< pair<ElementId, ElementId> > HighwaySnapMerger::getImpactedUnknown1ElementIds() const
+  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
   { return _unknown1Replacements; }
 
 protected:
@@ -94,7 +94,7 @@ private:
   void _splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
                      const std::vector<bool>& reverse,
                      std::vector< std::pair<ElementId, ElementId> >& replaced,
-    const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
+                     const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 

@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BUILDINGMERGE_H
-#define BUILDINGMERGE_H
+#ifndef BUILDINGMERGER_H
+#define BUILDINGMERGER_H
 
 // hoot
 #include <hoot/core/conflate/MergerBase.h>
@@ -39,6 +39,7 @@ namespace hoot
 class BuildingMerger : public MergerBase
 {
 public:
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -52,14 +53,16 @@ public:
 
   virtual QString toString() const;
 
-  virtual set< pair<ElementId, ElementId> > HighwaySnapMerger::getImpactedUnknown1ElementIds() const
+  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
   { return _unknown1Replacements; }
 
 protected:
+
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
 private:
+
   std::set< std::pair<ElementId, ElementId> > _pairs;
   std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
@@ -69,4 +72,4 @@ private:
 
 }
 
-#endif // BUILDINGMERGE_H
+#endif // BUILDINGMERGER_H

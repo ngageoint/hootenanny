@@ -140,7 +140,7 @@ Change ChangesetDeriver::_nextChange()
       _fromE = _from->readNextElement();
       if (_fromE)
       {
-        LOG_TRACE("Next 'from' element: " << _toE->getElementId());
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
 
@@ -178,7 +178,7 @@ Change ChangesetDeriver::_nextChange()
       _fromE = _from->readNextElement();
       if (_fromE)
       {
-        LOG_TRACE("Next 'from' element: " << _toE->getElementId());
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
     else if (_fromE->getElementId() == _toE->getElementId())

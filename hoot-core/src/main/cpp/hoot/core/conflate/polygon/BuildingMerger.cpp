@@ -155,7 +155,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
 
     LOG_VART(keeper->getElementId());
     LOG_VART(scrap->getElementId());
-    const ElementId scrapId = scrap->getId();
+    const ElementId scrapId = scrap->getElementId();
     const Status scrapStatus = scrap->getStatus();
 
     // remove the duplicate element
@@ -169,7 +169,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
         ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
     {
       LOG_TRACE(
-        "Retaining reference ID by mapping unknown1 id " << scrapId << " to scrap: " <<
+        "Retaining reference ID by mapping unknown1 ID: " << scrapId << " to ID: " <<
         keeper->getElementId() << "...");
       _unknown1Replacements.insert(pair<ElementId, ElementId>(scrapId, keeper->getElementId()));
     }

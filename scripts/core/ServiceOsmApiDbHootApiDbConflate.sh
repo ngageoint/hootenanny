@@ -27,7 +27,7 @@ echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 echo "TEST_NAME: " $TEST_NAME
 
-RUN_DEBUG_STEPS=true
+RUN_DEBUG_STEPS=false
 
 # set to false for testing only
 LOAD_REF_DATA=true
@@ -40,7 +40,7 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # generic debugging options applicable to multiple commands
-HOOT_OPTS="--trace -D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
+HOOT_OPTS="--info -D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
