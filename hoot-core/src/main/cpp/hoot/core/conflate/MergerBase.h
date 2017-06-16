@@ -45,6 +45,8 @@ public:
 
   virtual std::set<ElementId> getImpactedElementIds() const;
 
+  //after this gets implemented every where it needs to be, roll the child implementations up to
+  //here
   virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
   {  return std::set< std::pair<ElementId, ElementId> >(); }
 

@@ -30,6 +30,9 @@
 // hoot
 #include <hoot/core/conflate/MergerBase.h>
 
+// Standard
+#include <set>
+
 namespace hoot
 {
 
@@ -49,12 +52,16 @@ public:
 
   virtual QString toString() const;
 
+  virtual set< pair<ElementId, ElementId> > HighwaySnapMerger::getImpactedUnknown1ElementIds() const
+  { return _unknown1Replacements; }
+
 protected:
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
 private:
   std::set< std::pair<ElementId, ElementId> > _pairs;
+  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
   boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
   boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;

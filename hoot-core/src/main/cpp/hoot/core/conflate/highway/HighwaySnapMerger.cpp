@@ -346,11 +346,6 @@ void HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   }
 }
 
-set< pair<ElementId, ElementId> > HighwaySnapMerger::getImpactedUnknown1ElementIds() const
-{
-  return _unknown1Replacements;
-}
-
 void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
   const ElementPtr& e2) const
 {

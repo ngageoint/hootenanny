@@ -50,7 +50,8 @@ public:
 
   virtual QString toString() const;
 
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const;
+  virtual set< pair<ElementId, ElementId> > HighwaySnapMerger::getImpactedUnknown1ElementIds() const
+  { return _unknown1Replacements; }
 
 protected:
 
