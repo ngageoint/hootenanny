@@ -192,7 +192,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   }
 }
 
-boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)
+boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
+                                                         const set<ElementId>& eid)
 {
   assert(eid.size() > 0);
 

@@ -1,8 +1,8 @@
 reference dataset:  test-files/DcGisRoads.osm
 secondary dataset:  test-files/DcTigerRoads.osm
 AOI:  -77.04,38.8916,-77.03324,38.8958
-CONFLATION TYPE:  unifying
-TEST_NAME:  ServiceOsmApiDbHootApiDbDcStreetsConflateTest
+CONFLATION TYPE:  network
+TEST_NAME:  ServiceOsmApiDbHootApiDbDcStreetsNetworkConflateTest
 
 STEP 1: Cleaning out the osm api db and initializing it for use...
 
@@ -39,8 +39,8 @@ STEP 11b: Writing a XML changeset file that is the difference between the croppe
 STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=38.892093, max_lat=38.902523, min_lon=-77.050159, max_lon=-77.033632, num_changes=154
-Node(s) Created: 109
+Changeset Details: min_lat=38.892093, max_lat=38.902523, min_lon=-77.050159, max_lon=-77.033632, num_changes=153
+Node(s) Created: 108
 Node(s) Modified: 0
 Node(s) Deleted: 0
 Way(s) Created: 20
