@@ -467,9 +467,6 @@ void DualWaySplitter::_splitWay(long wid)
     LOG_TRACE(
       "Setting unknown1 " << _working->getElementId().getId() << " on " <<
       _left->getElementId() << "...");
-    //ElementPtr newWaySegment(_left->clone());
-    //newWaySegment->setId(_working->getElementId().getId());
-    //arbitrarily set the original id on the left one
     _left->setId(_working->getElementId().getId());
   }
 
