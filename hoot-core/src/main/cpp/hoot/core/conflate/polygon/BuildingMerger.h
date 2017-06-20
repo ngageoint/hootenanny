@@ -53,9 +53,6 @@ public:
 
   virtual QString toString() const;
 
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
-  { return _unknown1Replacements; }
-
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }
@@ -64,7 +61,6 @@ protected:
 private:
 
   std::set< std::pair<ElementId, ElementId> > _pairs;
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
   boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
   boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;

@@ -35,6 +35,7 @@ namespace hoot
 class MergerBase : public Merger
 {
 public:
+
   static std::string className() { return "hoot::MergerBase"; }
 
   typedef std::set< std::pair<ElementId, ElementId> > PairsSet;
@@ -45,10 +46,8 @@ public:
 
   virtual std::set<ElementId> getImpactedElementIds() const;
 
-  //after this gets implemented every where it needs to be, roll the child implementations up to
-  //here
   virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
-  {  return std::set< std::pair<ElementId, ElementId> >(); }
+  { return _unknown1Replacements; }
 
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
@@ -57,6 +56,9 @@ public:
   virtual QString toString() const { return QString("Unimplemented toString()"); }
 
 protected:
+
+  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
+
   virtual PairsSet& getPairs() = 0;
   virtual const PairsSet& getPairs() const = 0;
 

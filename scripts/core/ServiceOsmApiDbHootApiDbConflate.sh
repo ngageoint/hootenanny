@@ -70,12 +70,12 @@ if [ "$LOAD_REF_DATA" == "true" ]; then
   hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=true -D osmapidb.bulk.writer.output.files.copy.location=$OUTPUT_DIR/2-ref-raw-complete.sql $OUTPUT_DIR/2-ref-raw-complete.osm $OSM_API_DB_URL
 fi
 
-#if [ "$RUN_DEBUG_STEPS" == "true" ]; then
+if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 3: Reading the complete reference dataset out of the osm api db and writing it into a file (debug)..."
   echo ""
   hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/3-ref-complete-PulledFromOsmApiDb.osm
-#fi
+fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
@@ -97,12 +97,12 @@ if [ "$LOAD_SEC_DATA" == "true" ]; then
   hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true $OUTPUT_DIR/5-secondary-raw-complete.osm "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
-#if [ "$RUN_DEBUG_STEPS" == "true" ]; then
+if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 6: Reading the complete secondary dataset out of the hoot api db and writing it into a file (debug)..."
   echo ""
   hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" $OUTPUT_DIR/6-secondary-complete-PulledFromHootApiDb.osm
-#fi
+fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
@@ -126,7 +126,7 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   hoot conflate $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D convert.bounding.box=$AOI -D reader.conflate.use.data.source.ids.1=true -D reader.conflate.use.data.source.ids.2=false -D id.generator=hoot::PositiveIdGenerator -D osm.map.writer.factory.writer=hoot::NonIdRemappingHootApiDbWriter -D preserve.unknown1.element.id.when.modifying.features=true $OSM_API_DB_URL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME" "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi
 
-#if [ "$RUN_DEBUG_STEPS" == "true" ]; then
+if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""
   echo "STEP 9a: Reading the complete conflated dataset with the SQL changeset workflow out of the hoot api db and writing it into a file (debug)..."
   echo ""
@@ -136,7 +136,7 @@ fi
   echo "STEP 9b: Reading the complete conflated dataset with the XML changeset workflow out of the hoot api db and writing it into a file (debug)..."
   echo ""
   hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D writer.include.circular.error.tags=false "$HOOT_DB_URL/8b-conflated-$TEST_NAME" $OUTPUT_DIR/9b-conflated-complete-PulledFromHootApiDb.osm
-#fi
+fi
 
 if [ "$RUN_DEBUG_STEPS" == "true" ]; then
   echo ""

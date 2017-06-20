@@ -50,9 +50,6 @@ public:
 
   virtual QString toString() const;
 
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
-  { return _unknown1Replacements; }
-
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }
@@ -63,7 +60,6 @@ private:
   double _minSplitSize;
   std::set< std::pair<ElementId, ElementId> > _pairs;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance

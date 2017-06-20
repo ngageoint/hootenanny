@@ -284,27 +284,23 @@ WayPtr DuplicateWayRemover::_getUpdatedWay(WayPtr way, const vector<long>& nodes
     if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
         way->getStatus() == Status::Unknown1)
     {
-      LOG_DEBUG(
+      LOG_TRACE(
         "Setting unknown1 " << way->getElementId().getId() << " on " <<
         newWay->getElementId() << "...");
       newWay->setId(way->getElementId().getId());
     }
 
     _map->addWay(newWay);
-
-    LOG_DEBUG(
+    LOG_TRACE(
       "Created new way: " << newWay->getElementId() << " from old way: " << way->getElementId() <<
       " with status: " << newWay->getStatus());
-
     return newWay;
   }
   else
   {
     //  Update the current way
     way->setNodes(nodes);
-
-    LOG_DEBUG("Updating way: " << way->getElementId() << " with status: " << way->getStatus());
-
+    LOG_TRACE("Updating way: " << way->getElementId() << " with status: " << way->getStatus());
     return way;
   }
 }

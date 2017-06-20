@@ -65,9 +65,6 @@ public:
 
   virtual QString toString() const;
 
-  virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const
-  { return _unknown1Replacements; }
-
 protected:
 
   virtual PairsSet& getPairs() { return _pairs; }
@@ -81,7 +78,6 @@ private:
   QHash<ElementId, ElementId> _substitions;
   mutable QList<WayMatchStringMerger::SublineMappingPtr> _allSublineMappings;
   mutable QList<WayMatchStringMergerPtr> _mergerList;
-  std::set< std::pair<ElementId, ElementId> > _unknown1Replacements;
 
   void _appendSublineMappings(QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 
