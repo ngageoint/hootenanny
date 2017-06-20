@@ -20,7 +20,7 @@ STEP 3: Reading the complete reference dataset out of the osm api db and writing
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
-21:07:19.035 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:1838255 in Relation:1354957.
+14:23:36.215 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:1838255 in Relation:1354957.
 
 STEP 6: Reading the complete secondary dataset out of the hoot api db and writing it into a file (debug)...
 
@@ -29,6 +29,12 @@ STEP 8a: Conflating the two datasets over the specified AOI with the SQL changes
 
 
 STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
+
+
+STEP 9a: Reading the complete conflated dataset with the SQL changeset workflow out of the hoot api db and writing it into a file (debug)...
+
+
+STEP 9b: Reading the complete conflated dataset with the XML changeset workflow out of the hoot api db and writing it into a file (debug)...
 
 
 STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
