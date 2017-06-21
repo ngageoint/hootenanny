@@ -14,37 +14,25 @@ STEP 1: Cleaning out the osm api db and initializing it for use...
 
 STEP 2: Writing the complete reference dataset to the osm api db...
 
-14:24:13.571 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (52900).
-14:24:13.572 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (53432).
-14:24:13.572 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (315342451) in relation (307828).
-14:24:13.572 WARN  .../hoot/core/io/OsmXmlReader.cpp( 556) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-14:24:13.820 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
-14:24:13.820 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244310
-14:24:13.821 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
-14:24:13.821 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244336
-14:24:13.832 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
-14:24:13.832 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1240526 (DB ID=113) has ref to Entry: role: tributary, eid: Relation:1241599
-14:24:13.835 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1413) hoot::OsmApiDbBulkWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-
-STEP 3: Reading the complete reference dataset out of the osm api db and writing it into a file (debug)...
-
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (52900).
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (53432).
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (315342451) in relation (307828).
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 556) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+13:20:52.388 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+13:20:52.389 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244310
+13:20:52.389 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+13:20:52.389 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244336
+13:20:52.402 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+13:20:52.402 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1240526 (DB ID=113) has ref to Entry: role: tributary, eid: Relation:1241599
+13:20:52.404 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1413) hoot::OsmApiDbBulkWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
-
-
-STEP 6: Reading the complete secondary dataset out of the hoot api db and writing it into a file (debug)...
 
 
 STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
 
 
 STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
-
-
-STEP 9a: Reading the complete conflated dataset with the SQL changeset workflow out of the hoot api db and writing it into a file (debug)...
-
-
-STEP 9b: Reading the complete conflated dataset with the XML changeset workflow out of the hoot api db and writing it into a file (debug)...
 
 
 STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...

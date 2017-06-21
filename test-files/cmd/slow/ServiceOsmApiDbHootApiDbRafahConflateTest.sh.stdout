@@ -14,41 +14,29 @@ STEP 1: Cleaning out the osm api db and initializing it for use...
 
 STEP 2: Writing the complete reference dataset to the osm api db...
 
-14:24:36.122 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (505134642) in relation (3934458).
-14:24:36.126 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (330666964) in relation (3934458).
-14:24:36.126 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (2995490953) in relation (3934458).
-14:24:36.126 WARN  .../hoot/core/io/OsmXmlReader.cpp( 556) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:4103404 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3824513 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3061827 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3062185 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3726175 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3061826 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3062184 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3584607 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3726124 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3726170 in Relation:1473947.
-14:24:36.126 WARN  ...portMissingElementsVisitor.cpp(  69) Reached maximum number of missing reports. No longer reporting.
-
-STEP 3: Reading the complete reference dataset out of the osm api db and writing it into a file (debug)...
-
+13:21:15.315 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (505134642) in relation (3934458).
+13:21:15.315 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (330666964) in relation (3934458).
+13:21:15.315 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (2995490953) in relation (3934458).
+13:21:15.316 WARN  .../hoot/core/io/OsmXmlReader.cpp( 556) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:4103404 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3824513 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3061827 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3062185 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3726175 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3061826 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3062184 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3584607 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3726124 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:3726170 in Relation:1473947.
+13:21:15.316 WARN  ...portMissingElementsVisitor.cpp(  69) Reached maximum number of missing reports. No longer reporting.
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
-
-
-STEP 6: Reading the complete secondary dataset out of the hoot api db and writing it into a file (debug)...
 
 
 STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
 
 
 STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
-
-
-STEP 9a: Reading the complete conflated dataset with the SQL changeset workflow out of the hoot api db and writing it into a file (debug)...
-
-
-STEP 9b: Reading the complete conflated dataset with the XML changeset workflow out of the hoot api db and writing it into a file (debug)...
 
 
 STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
