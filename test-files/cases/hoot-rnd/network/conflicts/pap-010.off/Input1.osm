@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='1' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5373721' lon='-72.312098' />
+  <node id='2' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5373344' lon='-72.3121598' />
+  <node id='3' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5372823' lon='-72.31221' />
+  <node id='4' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5371978' lon='-72.312244' />
+  <node id='5' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5370973' lon='-72.3122117' />
+  <node id='6' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5370178' lon='-72.3121214' />
+  <node id='7' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5369097' lon='-72.311918'>
+    <tag k='attribution' v='osm;osm' />
+    <tag k='barrier' v='gate' />
+    <tag k='error:circular' v='15' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='survey;osm;osm' />
+    <tag k='uuid' v='{1ee32bed-f687-482a-b253-c04584c47d72}' />
+  </node>
+  <node id='8' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5323713' lon='-72.3033022' />
+  <node id='9' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5324324' lon='-72.3034152' />
+  <node id='10' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5325475' lon='-72.3036365' />
+  <node id='11' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5327206' lon='-72.3039424' />
+  <node id='12' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5328344' lon='-72.3041822' />
+  <node id='13' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5329805' lon='-72.304724' />
+  <node id='14' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5331697' lon='-72.305512' />
+  <node id='15' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5335529' lon='-72.3070283' />
+  <node id='16' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5337856' lon='-72.307971' />
+  <node id='17' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.534066' lon='-72.3089937' />
+  <node id='18' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5343605' lon='-72.3100087' />
+  <node id='19' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5344453' lon='-72.3101817' />
+  <node id='20' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5345464' lon='-72.310274' />
+  <node id='21' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5348532' lon='-72.310466' />
+  <node id='22' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5349771' lon='-72.3105479' />
+  <node id='23' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5351616' lon='-72.3106734' />
+  <node id='24' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5352875' lon='-72.3107614' />
+  <node id='25' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5353708' lon='-72.3108248' />
+  <node id='26' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5354894' lon='-72.3109117' />
+  <node id='27' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5358527' lon='-72.3111511' />
+  <node id='28' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5359828' lon='-72.3112368' />
+  <node id='29' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5364544' lon='-72.3115475' />
+  <node id='30' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5366001' lon='-72.3116519' />
+  <node id='31' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5366995' lon='-72.3117661' />
+  <node id='32' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5367198' lon='-72.3118027' />
+  <node id='33' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5367364' lon='-72.3118419' />
+  <node id='34' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5367663' lon='-72.3119399' />
+  <node id='35' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5368089' lon='-72.3121208' />
+  <node id='36' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5369089' lon='-72.313106' />
+  <node id='37' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5368703' lon='-72.3126183' />
+  <node id='38' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5368078' lon='-72.3126234' />
+  <node id='39' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5367685' lon='-72.3126015' />
+  <node id='40' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5366384' lon='-72.3124298' />
+  <node id='41' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5364393' lon='-72.3122406' />
+  <node id='42' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5363224' lon='-72.3121965' />
+  <node id='43' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5361623' lon='-72.3122117' />
+  <node id='44' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5360561' lon='-72.3122675' />
+  <node id='45' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5359776' lon='-72.312335' />
+  <node id='46' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5358232' lon='-72.3127154' />
+  <node id='47' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5357352' lon='-72.3128265' />
+  <node id='48' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5356327' lon='-72.3129026' />
+  <node id='49' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.535487' lon='-72.3129087' />
+  <node id='50' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5353542' lon='-72.31286' />
+  <node id='51' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5349026' lon='-72.3125709' />
+  <node id='52' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5347944' lon='-72.3125024' />
+  <node id='53' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5347064' lon='-72.312475' />
+  <node id='54' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.534604' lon='-72.3125115' />
+  <node id='55' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5344885' lon='-72.3125998' />
+  <node id='56' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5343442' lon='-72.3128265' />
+  <node id='57' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5342145' lon='-72.3129282' />
+  <node id='58' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5341166' lon='-72.312981' />
+  <node id='59' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5374023' lon='-72.3126561' />
+  <node id='60' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5371904' lon='-72.3126343' />
+  <node id='61' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5368776' lon='-72.3127148' />
+  <node id='62' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.537589' lon='-72.31200075288' />
+  <node id='63' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.537589' lon='-72.31166137459' />
+  <node id='64' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.537589' lon='-72.31270121459' />
+  <node id='65' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5323089135' lon='-72.303172' />
+  <node id='66' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.53690421861' lon='-72.313396' />
+  <node id='67' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5373537' lon='-72.3119656' />
+  <node id='68' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5373431' lon='-72.3118811' />
+  <node id='69' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.537365' lon='-72.3118082' />
+  <node id='70' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5374029' lon='-72.3117396' />
+  <node id='71' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5375525' lon='-72.3116765' />
+  <node id='72' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5375302' lon='-72.3120087' />
+  <node id='73' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5373724' lon='-72.3120423' />
+  <node id='74' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5373914' lon='-72.3120334' />
+  <node id='75' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5374164' lon='-72.3120403' />
+  <node id='76' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5374308' lon='-72.3120685' />
+  <node id='77' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5374197' lon='-72.3120973' />
+  <node id='78' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.5373882' lon='-72.3121066' />
+  <node id='79' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125' lat='18.537361' lon='-72.3120629' />
+  <way id='1' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
+    <tag k='access' v='private' />
+    <tag k='attribution' v='osm;osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='service' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Entrée BID' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{419a2b2f-8fa7-4cfc-bb00-2022dbaf2ff1}' />
+  </way>
+  <way id='2' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
+    <nd ref='58' />
+    <nd ref='57' />
+    <nd ref='56' />
+    <nd ref='55' />
+    <nd ref='54' />
+    <nd ref='53' />
+    <nd ref='52' />
+    <nd ref='51' />
+    <nd ref='50' />
+    <nd ref='49' />
+    <nd ref='48' />
+    <nd ref='47' />
+    <nd ref='46' />
+    <nd ref='45' />
+    <nd ref='44' />
+    <nd ref='43' />
+    <nd ref='42' />
+    <nd ref='41' />
+    <nd ref='40' />
+    <nd ref='39' />
+    <nd ref='38' />
+    <nd ref='37' />
+    <tag k='attribution' v='osm;osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Dalencourt' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{ba5b4659-0214-467f-8a2d-e2c26069d0ac}' />
+  </way>
+  <way id='3' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
+    <tag k='access' v='private' />
+    <tag k='attribution' v='osm;osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='service' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{ff2f5705-3a7b-4730-be4e-fce1481afaf4}' />
+  </way>
+  <way id='4' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
+    <tag k='access' v='private' />
+    <tag k='attribution' v='osm;osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='service' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{757e77a3-f2f0-4f34-a36c-d567d35666fb}' />
+  </way>
+  <way id='5' action='delete' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
+    <tag k='access' v='private' />
+    <tag k='attribution' v='osm;osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='service' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='source' v='WorldBank, 2010-01-22;osm;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='uuid' v='{fa8c1fde-561b-4905-9666-9610948c288c}' />
+  </way>
+  <way id='6' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
+    <nd ref='61' />
+    <nd ref='60' />
+    <nd ref='59' />
+    <nd ref='64' />
+    <tag k='attribution' v='osm;osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='residential' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Rue Théodule' />
+    <tag k='operational_status' v='open' />
+    <tag k='operational_status_quality' v='confirmed' />
+    <tag k='practicability' v='heavy_truck_less_than_20mt' />
+    <tag k='smoothness' v='intermediate' />
+    <tag k='source' v='survey; CNIGS/OIM/FOCS;osm;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{b3412275-50ba-41b5-9baf-3a0ef9200f57}' />
+  </way>
+  <way id='7' timestamp='2017-06-07T15:24:11Z' visible='true' version='1' changeset='125'>
+    <nd ref='66' />
+    <nd ref='36' />
+    <nd ref='61' />
+    <nd ref='37' />
+    <nd ref='35' />
+    <nd ref='34' />
+    <nd ref='33' />
+    <nd ref='32' />
+    <nd ref='31' />
+    <nd ref='30' />
+    <nd ref='29' />
+    <nd ref='28' />
+    <nd ref='27' />
+    <nd ref='26' />
+    <nd ref='25' />
+    <nd ref='24' />
+    <nd ref='23' />
+    <nd ref='22' />
+    <nd ref='21' />
+    <nd ref='20' />
+    <nd ref='19' />
+    <nd ref='18' />
+    <nd ref='17' />
+    <nd ref='16' />
+    <nd ref='15' />
+    <nd ref='14' />
+    <nd ref='13' />
+    <nd ref='12' />
+    <nd ref='11' />
+    <nd ref='10' />
+    <nd ref='9' />
+    <nd ref='8' />
+    <nd ref='65' />
+    <tag k='alt_name' v='Route de Bourdon' />
+    <tag k='attribution' v='osm;osm' />
+    <tag k='error:circular' v='15' />
+    <tag k='fixme' v='find out what part of Ave. John brown is Lalue?' />
+    <tag k='highway' v='secondary' />
+    <tag k='license' v='This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.' />
+    <tag k='name' v='Avenue John Brown' />
+    <tag k='source' v='osm;osm' />
+    <tag k='source:datetime' v='2016-03-16T16:50:52Z' />
+    <tag k='source:haiti' v='CNIGS and CartONG' />
+    <tag k='type:haiti' v='Autre Route' />
+    <tag k='uuid' v='{31b011c0-0cc8-46ef-9381-24e38cc7358d}' />
+  </way>
+</osm>
