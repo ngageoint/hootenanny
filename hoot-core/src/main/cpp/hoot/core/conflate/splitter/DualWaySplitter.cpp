@@ -251,8 +251,9 @@ bool DualWaySplitter::_onRight(long intersectionId, boost::shared_ptr<Way> inbou
   }
 }
 
-boost::shared_ptr<OsmMap> DualWaySplitter::splitAll(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
-                                             Meters defaultSplitSize)
+boost::shared_ptr<OsmMap> DualWaySplitter::splitAll(boost::shared_ptr<const OsmMap> map,
+                                                    DrivingSide drivingSide,
+                                                    Meters defaultSplitSize)
 {
   DualWaySplitter dws(map, drivingSide, defaultSplitSize);
   return dws.splitAll();
@@ -458,6 +459,16 @@ void DualWaySplitter::_splitWay(long wid)
   _reconnectEnd(nids[nids.size() - 1], _right);
 
   RemoveWayOp::removeWay(_result, wid);
+
+  // see comments for similar functionality in HighwaySnapMerger::_mergePair
+  if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+      _working->getStatus() == Status::Unknown1)
+  {
+    LOG_TRACE(
+      "Setting unknown1 " << _working->getElementId().getId() << " on " <<
+      _left->getElementId() << "...");
+    _left->setId(_working->getElementId().getId());
+  }
 
   // add the results to the map
   _result->addWay(_left);

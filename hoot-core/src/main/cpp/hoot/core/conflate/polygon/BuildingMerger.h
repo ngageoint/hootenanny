@@ -24,11 +24,14 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BUILDINGMERGE_H
-#define BUILDINGMERGE_H
+#ifndef BUILDINGMERGER_H
+#define BUILDINGMERGER_H
 
 // hoot
 #include <hoot/core/conflate/MergerBase.h>
+
+// Standard
+#include <set>
 
 namespace hoot
 {
@@ -36,6 +39,7 @@ namespace hoot
 class BuildingMerger : public MergerBase
 {
 public:
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
@@ -50,10 +54,12 @@ public:
   virtual QString toString() const;
 
 protected:
+
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
 private:
+
   std::set< std::pair<ElementId, ElementId> > _pairs;
 
   boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
@@ -62,4 +68,4 @@ private:
 
 }
 
-#endif // BUILDINGMERGE_H
+#endif // BUILDINGMERGER_H

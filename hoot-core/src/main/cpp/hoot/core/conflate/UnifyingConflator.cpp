@@ -305,6 +305,8 @@ bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
 
 void UnifyingConflator::_mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map)
 { 
+  LOG_TRACE("Mapping unknown 1 IDs back to modified elements...");
+
   for (size_t i = 0; i < _mergers.size(); ++i)
   {
     set< pair<ElementId, ElementId> > impactedUnknown1ElementIds =

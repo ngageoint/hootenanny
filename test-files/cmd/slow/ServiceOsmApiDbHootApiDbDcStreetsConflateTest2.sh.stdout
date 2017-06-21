@@ -1,0 +1,54 @@
+reference dataset:  test-files/DcGisRoads.osm
+secondary dataset:  test-files/DcTigerRoads.osm
+AOI:  -77.0535,38.8865,-77.0477,38.8913
+CONFLATION TYPE:  unifying
+TEST_NAME:  ServiceOsmApiDbHootApiDbDcStreetsConflateTest2
+
+STEP 1: Cleaning out the osm api db and initializing it for use...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+STEP 2: Writing the complete reference dataset to the osm api db...
+
+
+STEP 5: Writing the complete secondary dataset to the hoot api db...
+
+
+STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
+
+
+STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
+
+
+STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 12: Executing the SQL changeset on the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=38.886432, max_lat=38.901987, min_lon=-77.053228, max_lon=-77.031986, num_changes=438
+Node(s) Created: 378
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 41
+Way(s) Modified: 19
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
+
+
+STEP 15a: Verifying the SQL changeset...
+
+
+STEP 15b: Verifying the XML changeset...
+
