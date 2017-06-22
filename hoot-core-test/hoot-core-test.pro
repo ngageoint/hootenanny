@@ -252,6 +252,9 @@ SOURCES += \
     src/test/cpp/hoot/core/test/TestSetup.cpp \
     src/test/cpp/hoot/core/test/AbstractTest.cpp \
     src/test/cpp/hoot/core/test/AbstractTestSuite.cpp
+    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmGeoJsonWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmGeoJsonReaderTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
