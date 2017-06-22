@@ -51,7 +51,7 @@ namespace Tgs
   {
   public:
 
-    MimicGa(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness);
+    MimicGa(boost::shared_ptr<Genome> seed, boost::shared_ptr<FitnessFunction> fitness);
 
     virtual ~MimicGa();
 

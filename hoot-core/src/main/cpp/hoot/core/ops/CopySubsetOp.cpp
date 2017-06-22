@@ -27,6 +27,9 @@
 #include "CopySubsetOp.h"
 
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/util/Log.h>
+
+using namespace std;
 
 namespace hoot
 {

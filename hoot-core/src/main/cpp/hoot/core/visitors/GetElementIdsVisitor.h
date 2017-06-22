@@ -33,8 +33,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Puts all the visited elementIds into a bag.
  */
@@ -42,7 +40,7 @@ class GetElementIdsVisitor : public ElementVisitor
 {
 public:
 
-  GetElementIdsVisitor(set<ElementId>& bag) : _bag(bag) {}
+  GetElementIdsVisitor(std::set<ElementId>& bag) : _bag(bag) {}
 
   virtual ~GetElementIdsVisitor() {}
 
@@ -50,7 +48,7 @@ public:
 
 private:
 
-  set<ElementId>& _bag;
+  std::set<ElementId>& _bag;
 };
 
 }

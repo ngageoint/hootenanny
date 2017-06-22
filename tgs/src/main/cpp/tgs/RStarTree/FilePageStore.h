@@ -69,7 +69,7 @@ namespace Tgs
 
     int _pageSize;
     
-    typedef HashMap<int, weak_ptr<Page> > PageMap;
+    typedef HashMap<int, boost::weak_ptr<Page> > PageMap;
     PageMap _pagesMap;
     bool _readOnly;
     int _pageCount;

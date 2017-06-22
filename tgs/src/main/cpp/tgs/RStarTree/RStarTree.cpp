@@ -41,15 +41,15 @@ using namespace std;
 
 using namespace Tgs;
 
-RStarTree::RStarTree(boost::shared_ptr<PageStore> ps, int dimensions) :
-  _store(dimensions, ps)
+RStarTree::RStarTree(boost::shared_ptr<PageStore> ps, int dimensions)
+  : _store(dimensions, ps)
 {
   RTreeNode* root;
 
   if (ps->getPageCount() > 0)
   {
     _header = ps->getPage(0);
-    _headerStruct = (Header*)(_header->getData());
+    _headerStruct = reinterpret_cast<Header*>(_header->getData());
     _dimensions = _headerStruct->dimensions;
     _rootId = _headerStruct->rootId;
     _height = _headerStruct->height;
@@ -58,7 +58,7 @@ RStarTree::RStarTree(boost::shared_ptr<PageStore> ps, int dimensions) :
   else
   {
     _header = ps->createPage();
-    _headerStruct = (Header*)(_header->getData());
+    _headerStruct = reinterpret_cast<Header*>(_header->getData());
     _headerStruct->dimensions = dimensions;
     _headerStruct->height = 0;
     _height = _headerStruct->height;
@@ -373,11 +373,7 @@ public:
 
   Child() {}
 
-  Child(int id, const BoxInternalData& b)
-  {
-    this->id = id;
-    this->b = b.toBox();
-  }
+  Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
 };
 
 typedef std::pair<double, int> DistancePair;
@@ -647,4 +643,3 @@ void RStarTree::_updateBounds(RTreeNode* node)
     parentId = node->getParentId();
   }
 }
-

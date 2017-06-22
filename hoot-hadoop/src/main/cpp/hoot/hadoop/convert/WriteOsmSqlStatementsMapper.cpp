@@ -26,11 +26,14 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QStringBuilder>
+
+using namespace std;
 
 namespace hoot
 {

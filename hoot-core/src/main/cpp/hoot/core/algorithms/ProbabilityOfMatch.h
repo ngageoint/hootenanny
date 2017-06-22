@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
 
 class Way;
 
@@ -57,7 +56,7 @@ public:
     const ConstWayPtr& w2);
 
   double distanceScore(const hoot::ConstOsmMapPtr &map, const ConstWayPtr &w1,
-    const boost::shared_ptr<const LineString> &ls2, Meters circularError);
+    const boost::shared_ptr<const geos::geom::LineString> &ls2, Meters circularError);
 
   double lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
     const ConstWayPtr& w2);

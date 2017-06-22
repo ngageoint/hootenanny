@@ -50,7 +50,7 @@ namespace Tgs
 
     GreedyStepwiseSearch();
 
-    virtual ~GreedyStepwiseSearch() {};
+    virtual ~GreedyStepwiseSearch() {}
 
     enum {
       /// Start w/ 0 factors and add the best one iteratively
@@ -77,7 +77,7 @@ namespace Tgs
   private:
 
     int _direction;
-   boost::shared_ptr<FactorSubsetEvaluator> _fse;
+    boost::shared_ptr<FactorSubsetEvaluator> _fse;
     int _iteration;
     int _totalIterations;
     Tgs::TgsProgress* _progress;

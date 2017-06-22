@@ -44,6 +44,7 @@ public:
 
   inline static const QString Accuracy()                { return "accuracy"; }
   inline static const QString ErrorCircular()           { return "error:circular"; }
+  inline static const QString SourceDateTime()          { return "source:datetime"; }
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 

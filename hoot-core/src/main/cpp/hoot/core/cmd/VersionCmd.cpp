@@ -59,6 +59,9 @@
 // tgs
 #include <tgs/System/SystemInfo.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

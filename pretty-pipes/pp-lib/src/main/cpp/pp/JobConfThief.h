@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef JOBCONFTHIEF_H
@@ -39,7 +39,6 @@
 
 namespace pp
 {
-using namespace std;
 
 #warning Use HadoopPipesUtils instead of a thief.
 /**
@@ -48,25 +47,25 @@ using namespace std;
  */
 class JobConfThief : public HadoopPipes::JobConf {
 private:
-  map<string, string> values;
+  std::map<std::string, std::string> values;
 public:
-  void set(const string&, const string& value) {
+  void set(const std::string&, const std::string& value) {
     throw Exception("Not Implemented");
   }
 
-  virtual bool hasKey(const string& key) const {
+  virtual bool hasKey(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
-  virtual const string& get(const string& key) const {
+  virtual const std::string& get(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
-  virtual int getInt(const string& key) const {
+  virtual int getInt(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
-  virtual float getFloat(const string& key) const {
+  virtual float getFloat(const std::string& key) const {
     throw Exception("Not Implemented");
   }
 
@@ -74,7 +73,7 @@ public:
     throw Exception("Not Implemented");
   }
 
-  const map<string, string>& getMap() const { return values; }
+  const std::map<std::string, std::string>& getMap() const { return values; }
 };
 
 }

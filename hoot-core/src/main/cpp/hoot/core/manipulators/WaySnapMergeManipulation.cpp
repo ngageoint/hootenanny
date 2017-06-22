@@ -42,6 +42,8 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -128,7 +130,7 @@ void WaySnapMergeManipulation::applyManipulation(OsmMapPtr map,
   }
   RemoveWayOp::removeWay(result, w2->getId());
 
-  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); it++)
+  for (set<ElementId>::iterator it = impactedElements.begin(); it != impactedElements.end(); ++it)
   {
     if (result->containsElement(*it) == false)
     {

@@ -39,6 +39,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

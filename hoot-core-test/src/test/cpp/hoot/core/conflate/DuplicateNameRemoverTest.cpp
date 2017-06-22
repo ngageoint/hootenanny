@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/conflate/DuplicateNameRemover.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 using namespace hoot;
 
 
@@ -44,6 +45,8 @@ using namespace boost;
 #include <QDebug>
 
 #include "../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {

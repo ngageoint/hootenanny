@@ -37,12 +37,15 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/WayMap.h>
+#include <hoot/core/util/DefaultIdGenerator.h>
+#include <hoot/core/util/Units.h>
 namespace hoot
 {
     namespace elements
@@ -58,16 +61,8 @@ namespace hoot
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
 
-#include <hoot/core/util/DefaultIdGenerator.h>
-#include <hoot/core/elements/RelationMap.h>
-#include <hoot/core/elements/WayMap.h>
-#include <hoot/core/elements/NodeMap.h>
-
-
 namespace hoot
 {
-
-using namespace std;
 
 class OsmMapIndex;
 class OsmMapListener;
@@ -92,7 +87,7 @@ class OsmMap : public boost::enable_shared_from_this<OsmMap>, public ElementProv
 
 public:
 
-  static string className() { return "hoot::OsmMap"; }
+  static std::string className() { return "hoot::OsmMap"; }
 
   OsmMap();
 
@@ -159,7 +154,7 @@ public:
 
   size_t getElementCount() const;
 
-  const vector< boost::shared_ptr<OsmMapListener> >& getListeners() const { return _listeners; }
+  const std::vector< boost::shared_ptr<OsmMapListener> >& getListeners() const { return _listeners; }
 
   const IdGenerator& getIdGenerator() const { return *_idGen; }
 
@@ -179,7 +174,7 @@ public:
 
   const NodeMap& getNodes() const { return _nodes; }
 
-  set<ElementId> getParents(ElementId eid) const;
+  std::set<ElementId> getParents(ElementId eid) const;
 
   /**
    * Returns the SRS for this map. The SRS should never be changed and defaults to WGS84.
@@ -271,7 +266,6 @@ public:
   void visitWaysRo(ElementVisitor& visitor) const;
   void visitRelationsRo(ElementVisitor& visitor) const;
 
-
   /**
    * Calls the visitRw method on all elements. See Element::visitRw for a more
    * thorough description.
@@ -286,6 +280,10 @@ public:
    */
   void visitRw(ElementVisitor& visitor);
   void visitWaysRw(ElementVisitor& visitor);
+
+  long getNodeCount() const { return _nodes.size(); }
+  long getWayCount() const { return _ways.size(); }
+  long getRelationCount() const { return _relations.size(); }
 
 protected:
 
@@ -311,7 +309,7 @@ protected:
   mutable WayMap::const_iterator _tmpWayIt;
   std::vector< boost::shared_ptr<OsmMapListener> > _listeners;
 
-  vector< boost::shared_ptr<Element> > _replaceTmpArray;
+  std::vector< boost::shared_ptr<Element> > _replaceTmpArray;
 
   void _copy(boost::shared_ptr<const OsmMap> from);
 

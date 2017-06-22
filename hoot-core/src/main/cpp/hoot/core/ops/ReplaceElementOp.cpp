@@ -32,6 +32,8 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -68,9 +70,12 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
     throw IllegalArgumentException("You must specify a valid 'from' and 'to' element ID.");
   }
 
+  LOG_TRACE("Replacing " << _from << " with " << _to << "...");
+
   // if from isn't in the map, there is nothing to do.
   if (map->containsElement(_from) == false)
   {
+    LOG_TRACE(_from << " doesn't exist in map.");
     return;
   }
 

@@ -38,6 +38,8 @@
 #include <QFile>
 #include <QDir>
 
+using namespace v8;
+
 namespace hoot
 {
 

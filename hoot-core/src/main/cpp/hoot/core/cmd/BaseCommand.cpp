@@ -46,6 +46,8 @@
 // Qt
 #include <QFileInfo>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

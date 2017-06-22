@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DelaunayTriangulation.h"
@@ -76,7 +76,7 @@ public:
   void EndPoints(Point2d *, Point2d *);
   QuadEdge *Qedge()
   {
-    return (QuadEdge *) (this - num);
+    return reinterpret_cast<QuadEdge *>(this - num);
   }
 
 };
@@ -611,7 +611,14 @@ Edge EdgeIterator::operator*()
   return _e;
 }
 
-void EdgeIterator::operator++(int)
+Edge EdgeIterator::operator++(int)
+{
+  Edge tmp(_e);
+  operator++();
+  return tmp;
+}
+
+Edge& EdgeIterator::operator++()
 {
   while (_todo.size() == 0 && _it != _edges->end())
   {
@@ -629,13 +636,19 @@ void EdgeIterator::operator++(int)
   if (_todo.size() == 0 && _it == _edges->end())
   {
     _atEnd = true;
-    return;
+    return _e;
   }
 
   _e = Edge(*_todo.begin());
   _todo.pop_front();
+
+  return _e;
 }
 
+Face::Face(Face& other)
+{
+  *this = other;
+}
 
 Face::Face(const Face& other)
 {
@@ -716,13 +729,14 @@ bool Face::operator<(const Face& other) const
   return false;
 }
 
-void Face::operator=(const Face& other)
+Face& Face::operator=(const Face& other)
 {
   _id = other._id;
   for (int i = 0; i < 6; i++)
   {
     _edges[i] = other._edges[i];
   }
+  return *this;
 }
 
 bool Face::overlaps(const Point2d& p) const
@@ -756,20 +770,20 @@ std::string Face::toString() const
 
 
 FaceIterator::FaceIterator(const FaceIterator& from)
+  : _it(from._it),
+    _end(from._end),
+    _done(from._done),
+    _atEnd(from._atEnd)
 {
-  _it = from._it;
-  _end = from._end;
-  _atEnd = from._atEnd;
   _f = new Face(*_it);
-  _done = from._done;
 }
 
 FaceIterator::FaceIterator(EdgeIterator it, EdgeIterator end)
+  : _f(new Face(*it)),
+    _it(it),
+    _end(end),
+    _atEnd(false)
 {
-  _it = it;
-  _end = end;
-  _atEnd = false;
-  _f = new Face(*it);
   _done.insert(_f);
 }
 
@@ -786,7 +800,14 @@ const Face& FaceIterator::operator*()
   return *_f;
 }
 
-void FaceIterator::operator++(int)
+Face FaceIterator::operator ++(int)
+{
+  Face tmp(*_f);
+  operator++();
+  return tmp;
+}
+
+Face& FaceIterator::operator++()
 {
   if (_it == _end)
   {
@@ -798,7 +819,7 @@ void FaceIterator::operator++(int)
     do
     {
       _f = new Face(*_it);
-      _it++;
+      ++_it;
 
       alreadyDone = _done.find(_f) != _done.end();
       if (alreadyDone)
@@ -817,6 +838,7 @@ void FaceIterator::operator++(int)
       _atEnd = true;
     }
   }
+  return *_f;
 }
 
 DelaunayTriangulation::DelaunayTriangulation()

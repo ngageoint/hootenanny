@@ -33,6 +33,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayOp.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -66,11 +68,10 @@ void SuperfluousWayRemover::removeWays()
     const ConstWayPtr& w = it->second;
 
     bool same = true;
-    long firstId;
     const vector<long>& nodeIds = w->getNodeIds();
     if (nodeIds.size() > 0)
     {
-      firstId = nodeIds[0];
+      long firstId = nodeIds[0];
 
       for (size_t i = 1; i < nodeIds.size(); i++)
       {

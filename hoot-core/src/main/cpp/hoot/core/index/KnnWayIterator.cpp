@@ -39,6 +39,10 @@
 // Standard
 #include <limits>
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 

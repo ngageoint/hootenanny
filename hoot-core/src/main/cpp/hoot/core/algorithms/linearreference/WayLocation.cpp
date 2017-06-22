@@ -38,6 +38,8 @@
 // Standard
 #include <iomanip>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

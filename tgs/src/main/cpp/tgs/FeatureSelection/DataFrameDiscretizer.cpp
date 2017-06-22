@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DataFrameDiscretizer.h"
@@ -119,18 +119,15 @@ namespace Tgs
     assert(splits.size() == 0 || splits[splits.size() - 1] < (int)indices.size() - 1);
     splits.push_back(indices.size() - 1);
 
-    string upper, lower;
     int lowerIndex = 0;
-    int upperIndex;
     for (unsigned int i = 0; i < splits.size(); i++)
     {
-      upperIndex = splits[i];
+      int upperIndex = splits[i];
       for (int j = lowerIndex; j <= upperIndex; j++)
       {
         // add one, we're reserving zero for null values
         df.setDataElement(indices[j], column, i + 1);
       }
-      lower = upper;
       lowerIndex = upperIndex + 1;
     }
   }

@@ -40,7 +40,7 @@ class AreaCriterion : public ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::AreaCriterion"; }
+  static std::string className() { return "hoot::AreaCriterion"; }
 
   AreaCriterion();
 

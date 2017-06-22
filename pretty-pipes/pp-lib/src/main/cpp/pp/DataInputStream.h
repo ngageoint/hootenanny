@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DATAINPUTSTREAM_H
@@ -41,12 +41,11 @@
 
 namespace pp
 {
-using namespace std;
 
 class DataInputStream
 {
 public:
-  DataInputStream(istream& in) : _in(in) {}
+  DataInputStream(std::istream& in) : _in(in) {}
 
   int read(char* data, int length);
 
@@ -71,7 +70,7 @@ public:
    * reads an unsigned 16bit value and then uses that to determine the length of the string. The
    * string is then read into a std::string object and returned.
    */
-  string readString();
+  std::string readString();
 
   uint32_t readUnsignedInt();
 
@@ -80,7 +79,7 @@ public:
   QString readUTF();
 
 private:
-  istream& _in;
+  std::istream& _in;
 
   void _checkEof(int s)
   {
@@ -134,11 +133,11 @@ inline long DataInputStream::readLong()
   return qFromBigEndian((quint64)v);
 }
 
-inline string DataInputStream::readString()
+inline std::string DataInputStream::readString()
 {
   unsigned short v = readUnsignedShort();
 
-  string result;
+  std::string result;
   result.resize(v);
   _in.read((char*)result.data(), v);
   _checkEof(v);
@@ -165,7 +164,7 @@ inline QString DataInputStream::readUTF()
 {
   unsigned short v = readUnsignedShort();
 
-  string result;
+  std::string result;
   result.resize(v);
   _in.read((char*)result.data(), v);
   _checkEof(v);

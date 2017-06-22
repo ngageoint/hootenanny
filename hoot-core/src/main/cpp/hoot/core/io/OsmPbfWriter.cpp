@@ -30,15 +30,17 @@
 #include <arpa/inet.h>
 
 // Hoot Includes
-#include <hoot/core/Version.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/OsmMap.h>
+
+//  Version must be included last
+#include <hoot/core/Version.h>
 
 using namespace hoot::pb;
 
@@ -52,6 +54,9 @@ using namespace hoot::pb;
 #include <zlib.h>
 
 #include "PbfConstants.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

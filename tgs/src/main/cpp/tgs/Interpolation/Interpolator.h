@@ -39,17 +39,16 @@ class QIODevice;
 
 namespace Tgs
 {
-using namespace std;
 
 class Interpolator
 {
 public:
 
-  static string className() { return "Tgs::Interpolator"; }
+  static std::string className() { return "Tgs::Interpolator"; }
 
   virtual ~Interpolator() {}
 
-  virtual string getClassName() const = 0;
+  virtual std::string getClassName() const = 0;
 
   /**
    * Returns the estimated RMSE for the interpolator.
@@ -60,7 +59,7 @@ public:
    * Interpolates the value at a given point and returns the resulting vector. The point uses the
    * same ordering as the labels in setIndependentColumns.
    */
-  virtual const vector<double>& interpolate(const vector<double>& point) const = 0;
+  virtual const std::vector<double>& interpolate(const std::vector<double>& point) const = 0;
 
   /**
    * Set the data frame to be used by this interpolator.
@@ -71,13 +70,13 @@ public:
    * Sets a list of columns that represent the data to be interpolated. Each column is interpolated
    * independently of the other columns.
    */
-  virtual void setDependentColumns(const vector<string>& labels) = 0;
+  virtual void setDependentColumns(const std::vector<std::string>& labels) = 0;
 
   /**
    * Sets a list of columns that represent the dimensions in which the data exists.
    * In most cases the data space is assumed to be euclidean and all labels must be numeric.
    */
-  virtual void setIndependentColumns(const vector<string>& labels) = 0;
+  virtual void setIndependentColumns(const std::vector<std::string>& labels) = 0;
 
   /**
    * Read the interpolator from the specified input stream.
@@ -87,7 +86,7 @@ public:
   /**
    * Returns a human readable summary of the interpolator.
    */
-  virtual string toString() const = 0;
+  virtual std::string toString() const = 0;
 
   /**
    * Write the interpolator to the specified output stream.

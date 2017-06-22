@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FILEINPUTSPLIT_H
@@ -36,13 +36,12 @@
 
 namespace pp
 {
-using namespace std;
 
 class FileInputSplit : public InputSplit
 {
 public:
 
-  static string className() { return "pp::FileInputSplit"; }
+  static std::string className() { return "pp::FileInputSplit"; }
 
   FileInputSplit();
 
@@ -60,9 +59,9 @@ public:
 
   void setLength(long length) { _length = length; }
 
-  void setLocations(const string& locations) { _locations = locations; }
+  void setLocations(const std::string& locations) { _locations = locations; }
 
-  void setPath(const string& path) { _path = path; }
+  void setPath(const std::string& path) { _path = path; }
 
   void setStart(long start) { _start = start; }
 
@@ -77,10 +76,10 @@ public:
 
 private:
 
-  string _path;
+  std::string _path;
   long _start;
   long _length;
-  string _locations;
+  std::string _locations;
 };
 
 }

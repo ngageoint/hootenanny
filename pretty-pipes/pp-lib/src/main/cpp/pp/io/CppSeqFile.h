@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CPPSEQFILE_H
@@ -47,7 +47,6 @@
 
 namespace pp
 {
-using namespace std;
 
 /**
  * Implements a simplified version of Hadoop's SequenceFile class. No attempt has been made to be
@@ -67,14 +66,14 @@ public:
   {
   public:
 
-    Reader(istream& in, long start = 0, long length = -1);
+    Reader(std::istream& in, long start = 0, long length = -1);
 
     long getPosition() { return _in.tellg(); }
 
     template<class KeyClass, class ValueClass>
     bool next(KeyClass& key, ValueClass& value);
 
-    bool nextRaw(string& key, string& value);
+    bool nextRaw(std::string& key, std::string& value);
 
     template<class KeyClass, class ValueClass>
     bool nextFixed(KeyClass& key, ValueClass& value);
@@ -86,7 +85,7 @@ public:
     bool syncSeen() { return _syncSeen; }
 
   private:
-    istream& _in;
+    std::istream& _in;
     DataInputStream _dis;
     QByteArray _sync;
     QByteArray _syncBuf;
@@ -103,12 +102,12 @@ public:
   {
   public:
 
-    Writer(ostream& out);
+    Writer(std::ostream& out);
 
     template<class KeyClass, class ValueClass>
     void append(const KeyClass& key, const ValueClass& value);
 
-    void appendRaw(const string& key, const string& value);
+    void appendRaw(const std::string& key, const std::string& value);
 
     /**
      * Append fixed sized objects. This works well for simple object types such as elementary data
@@ -129,10 +128,10 @@ public:
     virtual void sync();
 
   private:
-    ostream& _out;
+    std::ostream& _out;
     DataOutputStream _dos;
     QByteArray _sync;
-    streampos _lastSync;
+    std::streampos _lastSync;
 
     void _init();
   };
@@ -144,7 +143,7 @@ public:
 template<class KeyClass, class ValueClass>
 bool CppSeqFile::Reader::next(KeyClass& key, ValueClass& value)
 {
-  string keyBytes, valueBytes;
+  std::string keyBytes, valueBytes;
   if (nextRaw(keyBytes, valueBytes))
   {
     key.readFields((char*)keyBytes.data(), keyBytes.size());

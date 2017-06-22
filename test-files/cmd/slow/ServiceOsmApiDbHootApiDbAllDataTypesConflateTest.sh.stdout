@@ -1,6 +1,7 @@
-reference dataset:  test-files/conflate/unified/AllDataTypesA.osm
-secondary dataset:  test-files/conflate/unified/AllDataTypesB.osm
-AOI:  -104.8192,38.8162,-104.6926,38.9181
+reference dataset:  test-files/cmd/slow/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/AllDataTypesA-with-divided-highway.osm
+secondary dataset:  test-files/cmd/slow/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/AllDataTypesB-with-divided-highway.osm
+AOI:  -104.9132,38.8242,-104.6926,38.9181
+CONFLATION TYPE:  unifying
 TEST_NAME:  ServiceOsmApiDbHootApiDbAllDataTypesConflateTest
 
 STEP 1: Cleaning out the osm api db and initializing it for use...
@@ -17,27 +18,37 @@ STEP 2: Writing the complete reference dataset to the osm api db...
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
 
-STEP 8: Conflating the two datasets over the specified AOI...
+STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
 
 
-STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
 
 
-STEP 12: Executing the changeset SQL on the osm api db...
+STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+
+
+STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=38.858051, max_lat=38.910969, min_lon=-104.786929, max_lon=-104.714569, num_changes=22
-Node(s) Created: 10
-Node(s) Modified: 0
-Node(s) Deleted: 6
-Way(s) Created: 0
-Way(s) Modified: 0
+Changeset Details: min_lat=38.846722, max_lat=38.910969, min_lon=-104.901478, max_lon=-104.714569, num_changes=38
+Node(s) Created: 23
+Node(s) Modified: 2
+Node(s) Deleted: 0
+Way(s) Created: 10
+Way(s) Modified: 3
 Way(s) Deleted: 0
-Relation(s) Created: 6
+Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
 
-STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
 
-17:33:03.943 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-files/cmd/slow/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/output.osm ...
-17:33:03.957 INFO  ...ore/io/OsmMapReaderFactory.cpp( 135) Loading map from test-output/cmd/slow/ServiceOsmApiDbHootApiDbAllDataTypesConflateTest/14-complete-output-PulledFromOsmApiDb.osm ...
+
+STEP 15a: Verifying the SQL changeset...
+
+
+STEP 15b: Verifying the XML changeset...
+

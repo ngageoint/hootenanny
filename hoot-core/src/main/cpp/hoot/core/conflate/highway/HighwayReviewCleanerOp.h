@@ -45,7 +45,7 @@ class HighwayReviewCleanerOp : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::HighwayReviewCleanerOp"; }
+  static std::string className() { return "hoot::HighwayReviewCleanerOp"; }
 
   HighwayReviewCleanerOp();
 

@@ -38,14 +38,12 @@
 
 namespace pp
 {
-using namespace boost;
-using namespace std;
 
 class CppSeqFileRecordWriter : public pp::RecordWriter, public pp::ReduceContextConsumer
 {
 public:
 
-  static string className() { return "pp::CppSeqFileRecordWriter"; }
+  static std::string className() { return "pp::CppSeqFileRecordWriter"; }
 
   CppSeqFileRecordWriter();
 
@@ -57,8 +55,8 @@ public:
   virtual void setReduceContext(HadoopPipes::ReduceContext& context);
 
 private:
-  string _path;
- boost::shared_ptr<ostream> _out;
+  std::string _path;
+  boost::shared_ptr<std::ostream> _out;
   CppSeqFile::Writer* _writer;
 };
 

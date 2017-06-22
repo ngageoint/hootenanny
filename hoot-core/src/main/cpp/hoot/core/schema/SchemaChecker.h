@@ -39,8 +39,6 @@ namespace hoot
 
 class OsmSchema;
 
-using namespace std;
-
 /**
  * The SchemaChecker checks if SchemaVertex is an unknown type or has no geometries listed.
  */
@@ -85,7 +83,7 @@ public:
 
 private:
 
-  vector<SchemaVertex> _schemaVertexList;
+  std::vector<SchemaVertex> _schemaVertexList;
 };
 
 }

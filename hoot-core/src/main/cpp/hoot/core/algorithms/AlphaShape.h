@@ -55,9 +55,6 @@ class Face;
 
 namespace hoot
 {
-using namespace boost;
-using namespace geos;
-using namespace std;
 
 class FaceGroup;
 class OsmMap;
@@ -91,7 +88,7 @@ private:
   double _alpha;
 
   std::auto_ptr<Tgs::DelaunayTriangulation> _dt;
-  set< pair<double, double> > _outsidePoint;
+  std::set< std::pair<double, double> > _outsidePoint;
 
   boost::shared_ptr<hoot::Way> _addFaceAsWay(const Tgs::Face *face, boost::shared_ptr<OsmMap> map);
 

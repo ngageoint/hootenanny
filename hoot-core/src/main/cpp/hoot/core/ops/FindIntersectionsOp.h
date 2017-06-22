@@ -44,7 +44,7 @@ class FindIntersectionsOp : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::FindIntersectionsOp"; }
+  static std::string className() { return "hoot::FindIntersectionsOp"; }
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 

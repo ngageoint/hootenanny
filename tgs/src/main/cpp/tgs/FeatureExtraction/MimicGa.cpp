@@ -41,7 +41,7 @@ using namespace std;
 
 namespace Tgs
 {
-  MimicGa::MimicGa(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness) :
+  MimicGa::MimicGa(boost::shared_ptr<Genome> seed, boost::shared_ptr<FitnessFunction> fitness) :
     GeneticAlgorithm(seed, fitness)
   {
     _thetaPercentile = .5;
@@ -56,7 +56,7 @@ namespace Tgs
 
   void MimicGa::_initializeGenome(boost::shared_ptr<Genome> genome)
   {
-   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
+    boost::shared_ptr<CalculatorGenome> cg = boost::dynamic_pointer_cast<CalculatorGenome>(genome);
     assert(cg);
     _setGenomeWeights(cg);
     genome->initialize();
@@ -64,7 +64,7 @@ namespace Tgs
 
   void MimicGa::_mutate(boost::shared_ptr<Genome> genome)
   {
-   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(genome);
+    boost::shared_ptr<CalculatorGenome> cg = boost::dynamic_pointer_cast<CalculatorGenome>(genome);
     assert(cg);
     _setGenomeWeights(cg);
     genome->mutate(1.0);
@@ -103,7 +103,7 @@ namespace Tgs
     for (std::map<std::string, std::string>::const_iterator it = inputs.begin(); 
       it != inputs.end(); ++it)
     {
-     boost::shared_ptr<CalculatorGenomeNode> child = node->getInput(it->first);
+      boost::shared_ptr<CalculatorGenomeNode> child = node->getInput(it->first);
       _populateWeights(child);
     }
   }
@@ -153,7 +153,7 @@ namespace Tgs
 //       _normalize(oldWeights);
 //     }
 
-   boost::shared_ptr<CalculatorGenome> cg = dynamic_pointer_cast<CalculatorGenome>(_population[0]);
+    boost::shared_ptr<CalculatorGenome> cg = boost::dynamic_pointer_cast<CalculatorGenome>(_population[0]);
 
     const CalculatorGenome::AvailableNodeMap& anm = cg->getAvailableNodes();
     for (CalculatorGenome::AvailableNodeMap::const_iterator it = anm.begin(); it != anm.end(); 
@@ -164,7 +164,7 @@ namespace Tgs
 
     for (unsigned int i = 0; i < _population.size() * _thetaPercentile; i++)
     {
-      cg = dynamic_pointer_cast<CalculatorGenome>(_population[i]);
+      cg = boost::dynamic_pointer_cast<CalculatorGenome>(_population[i]);
       assert(cg);
       _populateWeights(cg->getRoot());
     }

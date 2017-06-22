@@ -32,6 +32,8 @@
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 

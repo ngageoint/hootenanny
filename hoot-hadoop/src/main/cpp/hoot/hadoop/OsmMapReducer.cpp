@@ -26,6 +26,10 @@
 
 #include <pp/HadoopPipesUtils.h>
 
+#include <sstream>
+
+using namespace std;
+
 namespace hoot
 {
 
@@ -33,7 +37,7 @@ class OsmMapIterator : public pp::Iterator<OsmMapPtr >
 {
 public:
 
-  OsmMapIterator(HadoopPipes::ReduceContext* context,OsmMapPtr& map,
+  OsmMapIterator(HadoopPipes::ReduceContext* context, OsmMapPtr& map,
                  OsmPbfReader& reader) :
     _context(context),
     _map(map),
@@ -57,7 +61,7 @@ public:
 private:
   HadoopPipes::ReduceContext* _context;
   bool _hasNext;
- OsmMapPtr& _map;
+  OsmMapPtr& _map;
   OsmPbfReader& _reader;
 };
 

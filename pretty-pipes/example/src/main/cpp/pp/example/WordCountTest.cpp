@@ -44,6 +44,8 @@ using namespace pp;
 #include "WordCountMapper.h"
 #include "WordCountReducer.h"
 
+using namespace std;
+
 class WordCountTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(WordCountTest);

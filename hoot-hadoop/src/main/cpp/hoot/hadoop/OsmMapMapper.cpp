@@ -28,6 +28,10 @@
 #include <pp/Factory.h>
 #include <pp/Hdfs.h>
 
+#include <sstream>
+
+using namespace std;
+
 namespace hoot
 {
 
@@ -42,11 +46,34 @@ void OsmMapMapper::map(HadoopPipes::MapContext& context)
     throw HootException("Error parsing start value.");
   }
 
- OsmMapPtr m(new OsmMap());
+  OsmMapPtr m(new OsmMap());
 
   _loadMap(m);
 
   _map(m, context);
+}
+
+void OsmMapMapper::emitRecord(HadoopPipes::MapContext& context, const std::string& k,
+  const ConstOsmMapPtr& m)
+{
+  std::stringstream ss(std::stringstream::out);
+  _OsmPbfWriter.writePb(m, &ss);
+  context.emit(k, ss.str());
+}
+
+void OsmMapMapper::emitRecord(HadoopPipes::MapContext& context, const std::string& k, const ConstWayPtr& w)
+{
+  std::stringstream ss(std::stringstream::out);
+  _OsmPbfWriter.writePb(w, &ss);
+  context.emit(k, ss.str());
+}
+
+void OsmMapMapper::emitRecord(HadoopPipes::MapContext& context, const std::string& k,
+  const ConstNodePtr& n)
+{
+  std::stringstream ss(std::stringstream::out);
+  _OsmPbfWriter.writePb(n, &ss);
+  context.emit(k, ss.str());
 }
 
 void OsmMapMapper::_loadMap(OsmMapPtr& m)

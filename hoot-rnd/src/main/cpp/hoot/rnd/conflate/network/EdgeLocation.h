@@ -77,7 +77,7 @@ public:
 
   bool isValid() const { return _portion >= 0.0 && _portion <= 1.0; }
 
- boost::shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
+  boost::shared_ptr<EdgeLocation> move(const ConstElementProviderPtr& provider, Meters distance) const;
 
   QString toString() const;
 

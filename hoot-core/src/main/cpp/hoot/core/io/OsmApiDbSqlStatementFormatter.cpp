@@ -33,6 +33,9 @@
 // Qt
 #include <QDateTime>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -328,7 +331,7 @@ QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElemen
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return nodeToSqlStrings(dynamic_pointer_cast<const Node>(element), elementId, changesetId);
+      return nodeToSqlStrings(boost::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
 
     case ElementType::Way:
       return wayToSqlStrings(elementId, changesetId);

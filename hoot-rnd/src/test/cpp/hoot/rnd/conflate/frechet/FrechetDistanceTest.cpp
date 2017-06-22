@@ -45,6 +45,9 @@
 
 #include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 

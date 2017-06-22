@@ -34,6 +34,7 @@
 // Qt
 #include <QMultiHash>
 #include <QSet>
+#include <QMap>
 
 namespace hoot
 {
@@ -53,7 +54,7 @@ class IntersectionSplitter : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::IntersectionSplitter"; }
+  static std::string className() { return "hoot::IntersectionSplitter"; }
 
   IntersectionSplitter();
 
@@ -69,6 +70,7 @@ private:
   boost::shared_ptr<OsmMap> _map;
   QMultiHash<long, long> _nodeToWays;
   QSet<long> _todoNodes;
+  QMap<long, long> _wayReplacements;
 
   void _mapNodesToWays();
 

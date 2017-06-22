@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // The Hadoop "emit" function overlaps with Qt's emit keyword.
@@ -79,13 +79,8 @@ public:
   {
     if (_init == false)
     {
-      const char* ldLibChar = getenv("LD_LIBRARY_PATH");
-      cout << "LD_LIBRARY_PATH start: " << ldLibChar << endl;
-      QString ldLib;
-      if (ldLibChar != NULL)
-      {
-        ldLib = ldLibChar;
-      }
+      QString ldLib(getenv("LD_LIBRARY_PATH"));
+      cout << "LD_LIBRARY_PATH start: " << ldLib.toStdString() << endl;
       const char* javaHome = getenv("JAVA_HOME");
       if (javaHome == NULL)
       {
@@ -341,8 +336,9 @@ void terminateHandler()
   try
   {
     // try once to re-throw currently active exception
-    if (!tried_throw++)
+    if (!tried_throw)
     {
+      tried_throw = true;
       throw;
     }
   }

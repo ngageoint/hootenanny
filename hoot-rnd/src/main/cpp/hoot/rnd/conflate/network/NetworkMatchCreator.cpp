@@ -54,12 +54,13 @@
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(MatchCreator, NetworkMatchCreator)
-
-using namespace Tgs;
 
 NetworkMatchCreator::NetworkMatchCreator()
 {
@@ -111,7 +112,14 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
 
   LOG_INFO("Optimizing network...");
 
-  const size_t numIterations = 10; //TODO: should this be an option?
+  const size_t numIterations = ConfigOptions().getNetworkOptimizationIterations();
+  LOG_VARD(numIterations);
+  if (numIterations < 1)
+  {
+    throw HootException(
+      "Invalid value: " + QString::number(numIterations) + " for setting " +
+      ConfigOptions::getNetworkOptimizationIterationsKey());
+  }
   for (size_t i = 0; i < numIterations; ++i)
   {
     if (ConfigOptions().getNetworkMatchWriteDebugMaps())

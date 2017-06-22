@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace geos::geom;
 
 class BufferedLineSegmentIntersector
 {
@@ -48,13 +47,14 @@ public:
    * @optimize This was done with very little tuning. A bit of tuning will likely make it
    *  significantly faster.
    */
-  bool intersect(const LineSegment& a, Meters buffer, const LineSegment& b, LineSegment& result);
+  bool intersect(const geos::geom::LineSegment& a, Meters buffer,
+                 const geos::geom::LineSegment& b, geos::geom::LineSegment& result);
 
   /**
    * Determines if the coordinate c is within the endpoints of ls. It is assumed that c falls on
    * or approximately on the line formed by ls (as in the line that goes to inifite).
    */
-  bool isWithinLineSegment(const LineSegment& ls, const Coordinate& c);
+  bool isWithinLineSegment(const geos::geom::LineSegment& ls, const geos::geom::Coordinate& c);
 
   /**
    * Intersect a circle with a line segment and returns the intersecting points in p1 and p2. If
@@ -63,8 +63,8 @@ public:
    *
    * 1. http://mathworld.wolfram.com/Circle-LineIntersection.html
    */
-  void circleIntersection(const Coordinate& origin, Meters radius, const LineSegment& l,
-    Coordinate& p1, Coordinate& p2);
+  void circleIntersection(const geos::geom::Coordinate& origin, Meters radius, const geos::geom::LineSegment& l,
+    geos::geom::Coordinate& p1, geos::geom::Coordinate& p2);
 
 };
 

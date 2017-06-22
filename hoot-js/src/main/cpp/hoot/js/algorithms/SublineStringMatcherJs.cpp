@@ -50,6 +50,9 @@
 // Tgs
 #include <tgs/SharedPtr.h>
 
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
 
@@ -111,13 +114,13 @@ Handle<Value> SublineStringMatcherJs::extractMatchingSublines(const Arguments& a
       MultiLineStringSplitter().split(copiedMap, string2, copiedMatch.getReverseVector2(), match2,
         scraps2);
     }
-    catch (const IllegalArgumentException& e)
+    catch (const IllegalArgumentException&)
     {
       // this is unusual print out some information useful to debugging.
       MapProjector::projectToWgs84(copiedMap);
       LOG_TRACE(OsmXmlWriter::toString(copiedMap));
       logWarnCount++;
-      throw e;
+      throw;
     }
 
     if (!match1 || !match2)

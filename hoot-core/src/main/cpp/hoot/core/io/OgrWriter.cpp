@@ -69,6 +69,9 @@
 
 #include "OgrOptions.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -160,7 +163,7 @@ void OgrWriter::_addFeature(OGRLayer* layer, boost::shared_ptr<Feature> f, boost
   }
 
   // convert the geometry.
-  boost::shared_ptr<GeometryCollection> gc = dynamic_pointer_cast<GeometryCollection>(g);
+  boost::shared_ptr<GeometryCollection> gc = boost::dynamic_pointer_cast<GeometryCollection>(g);
   if (gc.get() != 0)
   {
     for (size_t i = 0; i < gc->getNumGeometries(); i++)
@@ -335,7 +338,7 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
   } // End layer does not exist
 }
 
-OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
+OGRLayer* OgrWriter::_getLayerByName(const QString& layerName)
 {
   // Check if the layer exists in the output.
   int layerCount = _ds->GetLayerCount();
@@ -354,7 +357,7 @@ OGRLayer* OgrWriter::_getLayerByName(const QString layerName)
   return NULL;
 }
 
-OGRLayer* OgrWriter::_getLayer(const QString layerName)
+OGRLayer* OgrWriter::_getLayer(const QString& layerName)
 {
   if (!_layers.contains(layerName))
   {
@@ -399,7 +402,7 @@ void OgrWriter::open(QString url)
     boost::shared_ptr<ScriptTranslator> st(ScriptTranslatorFactory::getInstance().createTranslator(
          _scriptPath));
     st->setErrorTreatment(_strictChecking);
-    _translator = dynamic_pointer_cast<ScriptToOgrTranslator>(st);
+    _translator = boost::dynamic_pointer_cast<ScriptToOgrTranslator>(st);
   }
 
   if (!_translator)
@@ -414,13 +417,13 @@ void OgrWriter::open(QString url)
   {
     _ds = OgrUtilities::getInstance().openDataSource(url, false);
   }
-  catch(HootException& openException)
+  catch(const HootException& openException)
   {
     try
     {
       _ds = OgrUtilities::getInstance().createDataSource(url);
     }
-    catch(HootException& createException)
+    catch(const HootException& createException)
     {
       throw HootException(QString("Error opening or creating data source. Opening error: \"%1\" "
         "Creating error: \"%2\"").arg(openException.what()).arg(createException.what()));
@@ -546,7 +549,7 @@ void OgrWriter::write(ConstOsmMapPtr map)
   _failOnSkipRelation = true;
   LOG_DEBUG("Writing second pass relations...");
   for (QList<long>::const_iterator relationIdIter = _unwrittenFirstPassRelationIds.begin();
-       relationIdIter != _unwrittenFirstPassRelationIds.end(); relationIdIter++)
+       relationIdIter != _unwrittenFirstPassRelationIds.end(); ++relationIdIter)
   {
     _writePartial(provider, map->getRelation(*relationIdIter));
   }
@@ -571,7 +574,7 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     {
       g = ElementConverter(provider).convertToGeometry(e);
     }
-    catch (IllegalArgumentException& err)
+    catch (const IllegalArgumentException& err)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
@@ -662,7 +665,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Way>& newWay)
   const std::vector<long> wayNodeIds = newWay->getNodeIds();
   std::vector<long>::const_iterator nodeIdIterator;
 
-  for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); nodeIdIterator++)
+  for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); ++nodeIdIterator)
   {
     if (_elementCache->containsNode(*nodeIdIterator) == false)
     {
@@ -697,7 +700,7 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
   unsigned long relationCount = 0;
 
   for (std::vector<RelationData::Entry>::const_iterator relationElementIter = relationEntries.begin();
-       relationElementIter != relationEntries.end(); relationElementIter++)
+       relationElementIter != relationEntries.end(); ++relationElementIter)
   {
     switch (relationElementIter->getElementId().getType().getEnum())
     {

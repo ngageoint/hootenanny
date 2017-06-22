@@ -17,13 +17,17 @@
 #include "PaintNodesMapper.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
 #include <pp/Hdfs.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -31,8 +35,8 @@ namespace hoot
 PP_FACTORY_REGISTER(pp::Mapper, PaintNodesMapper)
 
 PaintNodesMapper::PaintNodesMapper()
+  : _initialized(false)
 {
-  _context = NULL;
 }
 
 void PaintNodesMapper::close()
@@ -74,7 +78,7 @@ void PaintNodesMapper::flush()
 void PaintNodesMapper::_init(HadoopPipes::MapContext& context)
 {
   _context = &context;
- boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+  boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
   _envelope = Envelope(c->get("hoot.envelope"));
   LOG_INFO("_envelope: " << _envelope.toString());
   _pixelSize = c->getDouble("hoot.pixel.size");
@@ -82,11 +86,12 @@ void PaintNodesMapper::_init(HadoopPipes::MapContext& context)
   _height = ceil(_envelope.getHeight() / _pixelSize) + 1;
   LOG_INFO("w: " << _width << " h: " << _height);
   _nd.reset(_width, _height);
+  _initialized = true;
 }
 
 void PaintNodesMapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
 {
-  if (_context == NULL)
+  if (!_initialized)
   {
     _init(context);
   }

@@ -34,17 +34,12 @@
 // Qt
 #include <QString>
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-
 namespace hoot
 {
-  using namespace boost;
 
-  class OsmMap;
-  class Node;
-  class Way;
+class OsmMap;
+class Node;
+class Way;
 
 /**
  * Uses the Ramer-Douglas Peucker algorithm [1] to generalize a set of point.  This
@@ -103,15 +98,7 @@ public:
     Sets the distance parameter that determines to what degree the way is generalized; higher
     values result in more generalization (more nodes are removed)
     */
-  void setEpsilon(double epsilon)
-  {
-    if (epsilon <= 0.0)
-    {
-      throw HootException("Invalid epsilon value: " + QString::number(epsilon));
-    }
-    _epsilon = epsilon;
-    LOG_VART(_epsilon);
-  }
+  void setEpsilon(double epsilon);
 
 private:
 

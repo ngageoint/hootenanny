@@ -133,7 +133,7 @@ public:
       if (OsmMapReaderFactory::getInstance().hasPartialReader(args[i]))
       {
         boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(args[i]);
-        boost::shared_ptr<PartialOsmMapReader> pomr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+        boost::shared_ptr<PartialOsmMapReader> pomr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
         pomr->open(args[i]);
 
@@ -154,7 +154,7 @@ public:
     long total = 0;
     QVector<WordCount> wc;
     wc.reserve(counts.size());
-    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); it++)
+    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); ++it)
     {
       wc.push_back(WordCount(it->first, it->second));
       total += it->second;

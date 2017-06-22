@@ -50,19 +50,19 @@ public:
   virtual MatchClassification classify(const ConstOsmMapPtr& map,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match);
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m,
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m,
     ElementId eid1, ElementId eid2, const WaySublineMatchString& match) const;
 
 private:
   // these are mutable because we do a lazy load.
   mutable boost::shared_ptr<Tgs::RandomForest> _rf;
   mutable QStringList _rfFactorLabels;
-  mutable vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
+  mutable std::vector< boost::shared_ptr<const FeatureExtractor> > _extractors;
 
   void _createAllExtractors() const;
   void _createTestExtractors() const;
 
-  const vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
+  const std::vector< boost::shared_ptr<const FeatureExtractor> >& _getExtractors() const;
 
   /**
    * This provides a lazy load and should be called before any private members are accessed. This

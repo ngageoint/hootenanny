@@ -57,8 +57,8 @@ void AreaMerger::merge(OsmMapPtr map)
   ElementPtr element2;
   int parsedElementCount = 0;
 
-  WayMap::const_iterator wayItr = map->getWays().begin();
-  while (wayItr != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const int wayId = wayItr->first;
     if (PoiPolygonMatch::isArea(*map->getWay(wayId)))
@@ -73,13 +73,12 @@ void AreaMerger::merge(OsmMapPtr map)
       }
       parsedElementCount++;
     }
-    wayItr++;
   }
 
   if (parsedElementCount < 2)
   {
-    RelationMap::const_iterator relItr = map->getRelations().begin();
-    while (relItr != map->getRelations().end())
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != map->getRelations().end(); ++relItr)
     {
       const int relationId = relItr->first;
       if (PoiPolygonMatch::isArea(*map->getRelation(relationId)))
@@ -94,7 +93,6 @@ void AreaMerger::merge(OsmMapPtr map)
         }
         parsedElementCount++;
       }
-      relItr++;
     }
   }
 

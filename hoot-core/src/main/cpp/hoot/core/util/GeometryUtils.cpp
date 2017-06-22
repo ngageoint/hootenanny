@@ -47,6 +47,9 @@
 // Standard
 #include <stdint.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -294,6 +297,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
 
 Envelope GeometryUtils::envelopeFromConfigString(const QString boundsStr)
 {
+  LOG_VART(boundsStr);
   const QString errMsg = "Invalid envelope string: " + boundsStr;
   if (boundsStr.contains(","))
   {

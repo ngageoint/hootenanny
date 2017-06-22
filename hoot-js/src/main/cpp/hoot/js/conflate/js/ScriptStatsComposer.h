@@ -42,7 +42,7 @@ class ScriptStatsComposer : public StatsComposer
 {
 public:
 
-  static string className() { return "hoot::ScriptStatsComposer"; }
+  static std::string className() { return "hoot::ScriptStatsComposer"; }
 
   ScriptStatsComposer();
 
@@ -54,7 +54,7 @@ public:
   virtual QString compose(QList<QList<SingleStat> >& stats, const QStringList& names);
 
 private:
- boost::shared_ptr<PluginContext> _script;
+  boost::shared_ptr<PluginContext> _script;
   QString _format;
   QString _outputPath;
   QString _path;

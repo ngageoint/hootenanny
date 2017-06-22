@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class IntegerProgrammingSolver;
 class Match;
@@ -74,7 +73,7 @@ public:
    * scores. All matches will be considered so if you don't want matches below a threshold included
    * then don't add them.
    */
-  virtual vector<const Match*> calculateSubset() = 0;
+  virtual std::vector<const Match*> calculateSubset() = 0;
 
   /**
    * Returns the score for the last calculateSubset operation.
@@ -87,7 +86,7 @@ public:
 
 protected:
   const ConstOsmMapPtr& _map;
-  vector<const Match*> _matches;
+  std::vector<const Match*> _matches;
 
   MatchConflicts::ConflictMap _conflicts;
   double _score;

@@ -24,11 +24,14 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BUILDINGMERGE_H
-#define BUILDINGMERGE_H
+#ifndef BUILDINGMERGER_H
+#define BUILDINGMERGER_H
 
 // hoot
 #include <hoot/core/conflate/MergerBase.h>
+
+// Standard
+#include <set>
 
 namespace hoot
 {
@@ -36,25 +39,28 @@ namespace hoot
 class BuildingMerger : public MergerBase
 {
 public:
+
   /**
    * Constructed with a set of element matching pairs. The pairs are generally Unknown1 as first
    * and Unknown2 as second.
    */
-  BuildingMerger(const set< pair<ElementId, ElementId> >& pairs);
+  BuildingMerger(const std::set< std::pair<ElementId, ElementId> >& pairs);
 
-  virtual void apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
-    const;
+  virtual void apply(const OsmMapPtr& map, std::vector< std::pair<ElementId, ElementId> >& replaced);
 
-  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map, const set<ElementId>& eids);
+  static boost::shared_ptr<Element> buildBuilding(const OsmMapPtr& map,
+                                                  const std::set<ElementId>& eids);
 
   virtual QString toString() const;
 
 protected:
+
   virtual PairsSet& getPairs() { return _pairs; }
   virtual const PairsSet& getPairs() const { return _pairs; }
 
 private:
-  set< pair<ElementId, ElementId> > _pairs;
+
+  std::set< std::pair<ElementId, ElementId> > _pairs;
 
   boost::shared_ptr<Element> _buildBuilding1(const OsmMapPtr& map) const;
   boost::shared_ptr<Element> _buildBuilding2(const OsmMapPtr& map) const;
@@ -62,4 +68,4 @@ private:
 
 }
 
-#endif // BUILDINGMERGE_H
+#endif // BUILDINGMERGER_H

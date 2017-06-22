@@ -30,6 +30,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 
+using namespace std;
+
 namespace hoot
 {
 

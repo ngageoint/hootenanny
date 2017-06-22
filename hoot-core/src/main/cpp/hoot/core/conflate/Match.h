@@ -36,12 +36,11 @@
 
 namespace hoot
 {
+
 class MatchThreshold;
 class ElementId;
 class MatchType;
 class MatchClassification;
-
-using namespace std;
 
 /**
  * Describes a specific match between two sets of elements. For example the match between two
@@ -123,7 +122,7 @@ public:
    * In general Unknown1 should be the status of the first element and Unknown2 the status of the
    * second element.
    */
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const = 0;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const = 0;
 
   virtual QString toString() const = 0;
 

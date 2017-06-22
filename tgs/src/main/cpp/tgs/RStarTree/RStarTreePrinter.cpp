@@ -30,6 +30,8 @@
 #include "RStarTree.h"
 #include "RTreeNode.h"
 
+using namespace std;
+
 namespace Tgs
 {
 

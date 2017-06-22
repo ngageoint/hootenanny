@@ -43,7 +43,7 @@ namespace Tgs
   {
   public:
 
-    FeatureScoreFitnessFunction(boost::shared_ptr<DataFrame> df,boost::shared_ptr<FeatureScoreCalculator> fsc);
+    FeatureScoreFitnessFunction(boost::shared_ptr<DataFrame> df, boost::shared_ptr<FeatureScoreCalculator> fsc);
 
     virtual ~FeatureScoreFitnessFunction();
 
@@ -51,8 +51,8 @@ namespace Tgs
   
   private:
 
-   boost::shared_ptr<DataFrame> _workingCopy;
-   boost::shared_ptr<FeatureScoreCalculator> _fsc;
+    boost::shared_ptr<DataFrame> _workingCopy;
+    boost::shared_ptr<FeatureScoreCalculator> _fsc;
   };
 }
 

@@ -36,7 +36,6 @@
 
 namespace tbs
 {
-using namespace std;
 
 class SampleStats
 {
@@ -45,7 +44,7 @@ public:
    * Uses a reference to samples. If samples changes while performing calculations the results are
    * undefined.
    */
-  SampleStats(const vector<double>& samples);
+  SampleStats(const std::vector<double>& samples);
 
   double calculateCi90Upper();
   double calculateCi90Lower();
@@ -72,7 +71,7 @@ public:
   QString toString();
 
 private:
-  const vector<double> &_samples;
+  const std::vector<double> &_samples;
   double _max;
   double _min;
   double _mean;

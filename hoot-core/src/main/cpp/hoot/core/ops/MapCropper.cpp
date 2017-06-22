@@ -59,6 +59,9 @@
 
 // TGS
 #include <tgs/StreamUtils.h>
+
+using namespace geos::geom;
+using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -129,7 +132,7 @@ void MapCropper::apply(OsmMapPtr& map)
 
   // go through all the ways
   const WayMap ways = result->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const boost::shared_ptr<Way>& w = it->second;
     boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
@@ -160,7 +163,7 @@ void MapCropper::apply(OsmMapPtr& map)
   // go through all the nodes
   long nodesRemoved = 0;
   const NodeMap nodes = result->getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Coordinate& c = it->second->toCoordinate();
 
@@ -241,7 +244,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
     {
       g.reset(fg->intersection(_envelopeG.get()));
     }
-    catch (geos::util::GEOSException& e)
+    catch (const geos::util::GEOSException&)
     {
       // try cleaning up the geometry and try again.
       fg.reset(GeometryUtils::validateGeometry(fg.get()));
@@ -254,7 +257,7 @@ void MapCropper::_cropWay(OsmMapPtr map, long wid)
     {
       g.reset(fg->difference(_envelopeG.get()));
     }
-    catch (geos::util::GEOSException& e)
+    catch (const geos::util::GEOSException&)
     {
       // try cleaning up the geometry and try again.
       fg.reset(GeometryUtils::validateGeometry(fg.get()));

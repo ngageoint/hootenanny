@@ -49,7 +49,7 @@ namespace Tgs
   {
   public:
 
-    virtual ~SearchMethod() {};
+    virtual ~SearchMethod() {}
 
     /**
      * Searches for a good subset of factors.
@@ -62,6 +62,5 @@ namespace Tgs
     virtual void setEvaluator(boost::shared_ptr<FactorSubsetEvaluator> fe) = 0;
   };
 }
-
 
 #endif

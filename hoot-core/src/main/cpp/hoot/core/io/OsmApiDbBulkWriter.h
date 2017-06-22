@@ -48,10 +48,6 @@
 namespace hoot
 {
 
-using namespace boost;
-using namespace std;
-using namespace Tgs;
-
 class OsmApiDbSqlStatementFormatter;
 
 /**
@@ -98,15 +94,15 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   {
     unsigned long startingNodeId;
     unsigned long currentNodeId;
-    boost::shared_ptr<BigMap<long, unsigned long> > nodeIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > nodeIdMap;
 
     unsigned long startingWayId;
     unsigned long currentWayId;
-    boost::shared_ptr<BigMap<long, unsigned long> > wayIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > wayIdMap;
 
     unsigned long startingRelationId;
     unsigned long currentRelationId;
-    boost::shared_ptr<BigMap<long, unsigned long> > relationIdMap;
+    boost::shared_ptr<Tgs::BigMap<long, unsigned long> > relationIdMap;
   };
 
   struct ChangesetData
@@ -115,7 +111,7 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
     unsigned long currentChangesetId;
     unsigned long changesetsWritten;
     unsigned int changesInChangeset;
-    Envelope changesetBounds;
+    geos::geom::Envelope changesetBounds;
   };
 
   struct UnresolvedRelationReference
@@ -129,12 +125,12 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
   struct UnresolvedReferences
   {
     //keeps track of unresolved relations, which aren't a deal breaker when writing to the db
-    boost::shared_ptr<map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
+    boost::shared_ptr<std::map<ElementId, UnresolvedRelationReference> > unresolvedRelationRefs;
   };
 
 public:
 
-  static string className() { return "hoot::OsmApiDbBulkWriter"; }
+  static std::string className() { return "hoot::OsmApiDbBulkWriter"; }
 
   static unsigned int logWarnCount;
 
@@ -209,7 +205,7 @@ private:
   bool _validateData;
 
   //ended up not going with temp files here, since the file outputs aren't always temporary
-  map<QString, pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  std::map<QString, std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
@@ -256,7 +252,7 @@ private:
                                     const unsigned long memberDbId,
                                     const unsigned int memberSequenceIndex);
   void _writeWayToStream(const unsigned long wayDbId);
-  void _writeWayNodesToStream(const unsigned long wayId, const vector<long>& wayNodeIds);
+  void _writeWayNodesToStream(const unsigned long wayId, const std::vector<long>& wayNodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
                           const unsigned long dbId, boost::shared_ptr<QTextStream>& currentTable,

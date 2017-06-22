@@ -32,6 +32,9 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -261,8 +264,9 @@ void WayMatchStringMerger::mergeTags()
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
     // merge the tags (order matters)
-    Tags mergedTags = _tagMerger->mergeTags(sm->newWay1->getTags(),
-      sm->getNewWay2()->getTags(), sm->newWay1->getElementType());
+    Tags mergedTags =
+      _tagMerger->mergeTags(
+        sm->newWay1->getTags(), sm->getNewWay2()->getTags(), sm->newWay1->getElementType());
     // set the new tags.
     sm->newWay1->setTags(mergedTags);
   }
@@ -378,10 +382,12 @@ void WayMatchStringMerger::replaceScraps()
 
   foreach (SublineMappingPtr sm, _sublineMappingOrder)
   {
-    LOG_VART(sm->subline2);
-
     ElementPtr w1 = _map->getElement(sm->newWay1->getElementId());
+    LOG_VART(w1->getElementId());
+    LOG_VART(w1->getStatus());
     WayPtr w2 = _map->getWay(sm->getNewWay2()->getId());
+    LOG_VART(w2->getElementId());
+    LOG_VART(w2->getStatus());
 
     // w1 should only occur once.
     assert(w2ToW1[w2].contains(w1) == false);
@@ -391,6 +397,7 @@ void WayMatchStringMerger::replaceScraps()
 
   for (QMap< WayPtr, QList<ElementPtr> >::iterator it = w2ToW1.begin(); it != w2ToW1.end(); ++it)
   {
+    LOG_TRACE("Replacing: " << it.key() << " with value: " << it.value());
     _map->replace(it.key(), it.value());
 
     // clean up any bits that might be left over.

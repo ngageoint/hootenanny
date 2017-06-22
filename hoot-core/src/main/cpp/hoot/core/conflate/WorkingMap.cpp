@@ -44,6 +44,8 @@ using namespace hoot::elements;
 #include <iostream>
 #include <limits>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -145,11 +147,11 @@ Meters WorkingMap::_sumWayLengths(Status status) const
   ElementConverter ec(_map);
   Meters result = 0;
   const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator it2 = ways.begin(); it2 != ways.end(); it2++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    if (it2->second->getStatus() == status)
+    if (it->second->getStatus() == status)
     {
-      result += ec.calculateLength(it2->second);
+      result += ec.calculateLength(it->second);
     }
   }
 

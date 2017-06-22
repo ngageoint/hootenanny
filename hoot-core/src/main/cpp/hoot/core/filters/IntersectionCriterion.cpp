@@ -32,6 +32,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -29,6 +29,8 @@
 // Standard
 #include <fstream>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -45,15 +47,15 @@ PbfElementIterator::PbfElementIterator(QString path)
     }
     _init(fp);
   }
-  catch (const HootException& e)
+  catch (const HootException&)
   {
     delete fp;
-    throw e;
+    throw;
   }
   catch (const std::exception& e)
   {
     delete fp;
-    throw e;
+    throw HootException(e.what());
   }
 }
 

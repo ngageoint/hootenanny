@@ -38,6 +38,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 
+using namespace cv;
+
 namespace hoot
 {
 

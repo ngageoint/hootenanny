@@ -64,9 +64,9 @@ namespace Tgs
   private:
 
     double _baseScore;
-   boost::shared_ptr<DataFrame> _baseCopy;
+    boost::shared_ptr<DataFrame> _baseCopy;
     std::vector<int> _baseUids;
-   boost::shared_ptr<DataFrame> _workingCopy;
+    boost::shared_ptr<DataFrame> _workingCopy;
     std::vector<int> _workingUids;
     std::vector<boost::shared_ptr<CalculatorGenome> > _features;
     int _workingFactor;
@@ -74,7 +74,7 @@ namespace Tgs
     /**
      * Add one empty factor to the specified data frame.
      */
-   boost::shared_ptr<DataFrame> _addOneFactor(boost::shared_ptr<DataFrame> df);
+    boost::shared_ptr<DataFrame> _addOneFactor(boost::shared_ptr<DataFrame> df);
 
     void _loadGenome(const CalculatorGenome& genome);
   };

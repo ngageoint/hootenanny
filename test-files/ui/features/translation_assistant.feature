@@ -68,7 +68,37 @@ Feature: Translation Assistant
         And I wait 5 seconds
         Then the download file pattern "*-translation.js" should exist
         Then I accept the alert
-        Then I select the "x" div
+        And I fill "translationName" input with "cali-Cucumber"
+        And I fill "translationDescription" input with "cali-Cucumber"
+        And I click on ".translationSave"
+        Then I wait 10 "seconds" to see "cali-Cucumber"
+
+    Scenario: Ingest using custom translation
+        When I click on the "Datasets" option in the "settingsSidebar"
+        And I wait
+        And I press "Import Single Dataset"
+        And I select the "File (shp,zip,gdb.zip)" option in the "Select Import Type" combobox
+        And I select "/test-files/translation_assistant/cali-test.zip" dataset
+        Then I should see element "[id='importDatasetLayerName']" with value "cali-test"
+        Then I type "cali_shp_Cucumber" in input "importDatasetLayerName"
+        And I select the "cali-Cucumber" option in the "Select Data Translation Schema" combobox
+        When I press "big.loud" span with text "Import"
+        Then I wait 60 "seconds" to not see "Add Data"
+        Then I wait 10 "seconds" to see "cali_shp_Cucumber"
+
+    Scenario: Delete custom translation
+        When I click on the "Translations" option in the "settingsSidebar"
+        And I wait
+        Then I delete the "cali-Cucumber" translation
+        Then I accept the alert
+
+    Scenario: Delete Dataset
+        When I click on the "Datasets" option in the "settingsSidebar"
+        Then I click the "cali_shp_Cucumber" Dataset
+        And I context click the "cali_shp_Cucumber" Dataset
+        And I click the "Delete" context menu item
+        And I accept the alert
+        # Then I wait 30 "seconds" to not see "cali_shp_Cucumber"
 
     Scenario: Build an TDS translation mapping for gdb
         Then I click on the "Translation Assistant" option in the "settingsSidebar"

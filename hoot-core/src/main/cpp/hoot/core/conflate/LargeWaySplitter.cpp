@@ -40,12 +40,13 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
 unsigned int LargeWaySplitter::logWarnCount = 0;
-
-using namespace geos::geom;
 
 LargeWaySplitter::LargeWaySplitter(double threshold)
 {
@@ -59,7 +60,7 @@ void LargeWaySplitter::apply(boost::shared_ptr<OsmMap> map)
   // make a copy so we can make changes.
   WayMap wm = _map->getWays();
   // go through each way
-  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+  for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     boost::shared_ptr<Way> w = it->second;
     boost::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);

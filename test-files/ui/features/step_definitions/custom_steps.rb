@@ -82,6 +82,16 @@ Then (/^I should (not )?see the element (.*)$/) do |negate, selector|
   page.send(expectation, have_css(selector))
 end
 
+Then(/^I should (not )?see a paragraph with text "([^"]*)"$/) do |negate, txt|
+  expectation = negate ? :should_not : :should
+  if negate
+    page.should_not have_selector('p', :text=> txt)
+  else
+    page.should have_selector('p', :text=> txt)
+  end
+end
+
+
 Then(/^I should see "([^"]*)"$/) do |text|
   #page.should have_content(text)
   expect(page).to have_content(text)
@@ -168,6 +178,10 @@ end
 
 Then(/^I close the modal$/) do
   find('div.modal').find('div.x').click
+end
+
+Then(/^I close the modal window$/) do
+  find('div.detailModal').find('div.x').click
 end
 
 When(/^I select the first "([^"]*)" div$/) do |cls|
@@ -504,6 +518,14 @@ When(/^I wait ([0-9]*) "([^"]*)" to see "([^"]*)" element with text "([^"]*)"$/)
   Capybara.default_max_wait_time = oldTimeout
 end
 
+When(/^I see the UI alert$/) do
+  alerts = find('#alerts')
+end
+
+When(/^I should not see the UI alert$/) do
+  page.should have_no_css('#alerts', :visible => true)
+end
+
 When(/^I close the UI alert$/) do
   alerts = find('#alerts')
   alerts.all('.x')[0].click unless alerts.nil?
@@ -652,6 +674,11 @@ end
 Then(/^I click on the first thumbnail$/) do
   list = page.find('ul.carousel-metadata-list')
   list.first('li').click
+end
+
+Then(/^I click on the first active thumbnail$/) do
+  list = page.find('ul.carousel-metadata-list')
+  list.first('li.active').click unless list.first('li.active').nil?
 end
 
 Then(/^I double click on the first thumbnail$/) do
@@ -936,4 +963,9 @@ Then(/^I should (not )?see "([^"]*)" dataset after ([0-9]*) "([^"]*)"$/) do |neg
   expectation = negate ? 0 : 1
   find('#datasettable').assert_selector('text',:text=>text, :match => :prefer_exact ,:maximum => expectation)
   Capybara.default_max_wait_time = oldTimeout
+end
+
+Then(/^I delete the "([^"]*)" translation/) do |txt|
+  el = find('a', :text=>txt)
+  el.find('button.trash').click
 end

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BBOX_H
 #define BBOX_H
@@ -33,29 +33,25 @@
 namespace hoot
 {
 
-using namespace std;
-
-using namespace geos::geom;
-
 class BBox
 {
 public:
 
-  static string className() { return "hoot::BBox"; }
+  static std::string className() { return "hoot::BBox"; }
 
-  BBox(vector<double> min, vector<double> max);
+  BBox(const std::vector<double>& min, const std::vector<double>& max);
 
-  BBox(Envelope envelope);
+  BBox(geos::geom::Envelope envelope);
 
   virtual ~BBox();
 
   int getDimensions() { return _max.size(); }
 
-  vector<double> getMax() { return _max; }
+  std::vector<double> getMax() { return _max; }
 
-  vector<double> getMin() { return _min; }
+  std::vector<double> getMin() { return _min; }
 
-  bool in(vector<double> p);
+  bool in(std::vector<double> p);
 
   bool in(BBox container);
 
@@ -77,8 +73,8 @@ public:
 
 private:
   void _check();
-  vector<double> _min;
-  vector<double> _max;
+  std::vector<double> _min;
+  std::vector<double> _max;
 };
 
 }

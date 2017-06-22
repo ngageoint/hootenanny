@@ -31,8 +31,11 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/CriterionCountVisitor.h>
+#include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/filters/NoInformationCriterion.h>
+#include <hoot/core/filters/UselessElementCriterion.h>
 
 namespace hoot
 {
@@ -49,9 +52,11 @@ void NoInformationElementRemover::apply(boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
 
-  ElementCriterionPtr elementCriterion(new NoInformationCriterion());
-  RemoveElementsVisitor removeElementsVisitor(elementCriterion);
-  removeElementsVisitor.setRecursive(true);
+  boost::shared_ptr<NoInformationCriterion> pNoInfoCrit(new NoInformationCriterion());
+  boost::shared_ptr<UselessElementCriterion> pUselessCrit(new UselessElementCriterion(map));
+  boost::shared_ptr<ChainCriterion> pCrit(new ChainCriterion(pNoInfoCrit, pUselessCrit));
+  RemoveElementsVisitor removeElementsVisitor(pCrit);
+  removeElementsVisitor.setRecursive(false);
   _map->visitRw(removeElementsVisitor);
 }
 

@@ -43,10 +43,9 @@
 
 namespace hoot
 {
-  using namespace std;
 
-  class OsmMap;
-  class WorkingMap;
+class OsmMap;
+class WorkingMap;
 
 class Manipulation
 {
@@ -76,8 +75,8 @@ public:
    * @param newElements Set of all substantive elements created by this manipulation. Nodes that
    *  make up a road don't need to be included.
    */
-  virtual void applyManipulation(OsmMapPtr wm, set<ElementId>& impactedElements,
-                                               set<ElementId>& newElements) const = 0;
+  virtual void applyManipulation(OsmMapPtr wm, std::set<ElementId>& impactedElements,
+                                               std::set<ElementId>& newElements) const = 0;
 
   /**
    * Calculates an approximation of the probability of this being a valid match.
@@ -94,7 +93,7 @@ public:
    * Returns all the elements that are significantly impacted by this manipulation. If the way is
    * simply connected to the endpoint then it is not considered significant in most cases.
    */
-  virtual const set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const = 0;
+  virtual const std::set<ElementId>& getImpactedElementIds(const ConstOsmMapPtr& map) const = 0;
 
   /**
    * Returns the estimated probability that this manipulation is correct.

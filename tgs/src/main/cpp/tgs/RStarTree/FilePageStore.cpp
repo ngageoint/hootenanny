@@ -37,12 +37,11 @@ namespace Tgs
 {
 
   FilePageStore::FilePageStore(int pageSize,  const char * fileName, bool readOnly)
+    : _pageSize(pageSize),
+      _readOnly(readOnly),
+      _bDestructing(false),
+      _fileName(fileName)
   {
-    _bDestructing = false;
-    _pageSize = pageSize;
-    _readOnly = readOnly;
-    _fileName = fileName;
-
     if (readOnly == true)
     {
       _pageFile = fopen(fileName, "rb");
@@ -56,7 +55,7 @@ namespace Tgs
       _pageFile = fopen(fileName, "wb+");
       if(_pageFile != NULL)
       {
-        _pageCount = _determinePageCount();    
+        _pageCount = _determinePageCount();
       }
     }
     if (_pageFile == NULL)
@@ -72,7 +71,7 @@ namespace Tgs
     fclose(_pageFile);
   }
 
- boost::shared_ptr<Page> FilePageStore::createPage()
+  boost::shared_ptr<Page> FilePageStore::createPage()
   {
     if (_readOnly == true)
     {
@@ -81,7 +80,7 @@ namespace Tgs
     // first create in file
     char * pData = Page::allocateAligned(_pageSize);
     _writePage(_pageCount, pData);
-   boost::shared_ptr<Page> newPage(_createPage(this, _pageCount, pData, 
+    boost::shared_ptr<Page> newPage(_createPage(this, _pageCount, pData,
       _pageSize));
 
     _pagesMap[_pageCount] = newPage;
@@ -94,9 +93,9 @@ namespace Tgs
   {
     if(_fseeki64(_pageFile, 0, SEEK_END) == 0)
     {
-      __int64 fileSize64 = _ftelli64(_pageFile); 
+      __int64 fileSize64 = _ftelli64(_pageFile);
       assert(fileSize64 % (__int64)getPageSize() == 0);
-      return (int)(fileSize64 / (__int64)getPageSize()); 
+      return (int)(fileSize64 / (__int64)getPageSize());
     }
     else
     {
@@ -105,7 +104,7 @@ namespace Tgs
     return 0;
   }
 
- boost::shared_ptr<Page> FilePageStore::getPage(int id)
+  boost::shared_ptr<Page> FilePageStore::getPage(int id)
   {
     // If the page does not resides in memory then get it from file and call createPage()
 
@@ -119,14 +118,14 @@ namespace Tgs
 
     char * pData = Page::allocateAligned(_pageSize);
     _readPage(id, pData);
-   boost::shared_ptr<Page> newPage(_createPage(this, id, pData, _pageSize));
+    boost::shared_ptr<Page> newPage(_createPage(this, id, pData, _pageSize));
     _pagesMap[id] = newPage;
     return newPage;
   }
 
-  int FilePageStore::getPageCount() const 
-  { 
-    return _pageCount; 
+  int FilePageStore::getPageCount() const
+  {
+    return _pageCount;
   }
 
   int FilePageStore::getPageSize() const
@@ -148,7 +147,7 @@ namespace Tgs
     if (!_readOnly)
     {
       PageMap::const_iterator it;
-      for (it = _pagesMap.begin(); it != _pagesMap.end(); it++)
+      for (it = _pagesMap.begin(); it != _pagesMap.end(); ++it)
       {
         if(!(*it).second.expired())
         {
@@ -203,13 +202,10 @@ namespace Tgs
   {
     bool bRet = false;
     char * buffer = new char[_pageSize];
-    size_t result;
-
-
     __int64 i64 = ((__int64)id)*((__int64)_pageSize);
     if(_fseeki64(_pageFile, i64, SEEK_SET) == 0)
     {
-      result = fread(buffer, 1, _pageSize, _pageFile);
+      size_t result = fread(buffer, 1, _pageSize, _pageFile);
       if(result == _pageSize)
       {
         memcpy(data, buffer,_pageSize);

@@ -37,7 +37,8 @@
 // Hoot
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
-using namespace hoot;
+
+using namespace geos::geom;
 
 namespace hoot
 {

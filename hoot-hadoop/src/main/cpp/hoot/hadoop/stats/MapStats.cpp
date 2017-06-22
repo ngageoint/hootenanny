@@ -34,6 +34,8 @@
 #include <memory>
 
 using namespace boost;
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -222,7 +224,7 @@ void MapStats::readDir(QString dir)
       if (fn.endsWith(".stats"))
       {
         MapStats s;
-       boost::shared_ptr<istream> is(fs.open(fn.toStdString()));
+        boost::shared_ptr<istream> is(fs.open(fn.toStdString()));
         s.read(*is);
         combine(s);
         is.reset();

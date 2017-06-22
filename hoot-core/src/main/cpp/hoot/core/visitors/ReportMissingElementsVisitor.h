@@ -34,7 +34,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Reports references to missing elements in a given map. If removeMissing is set to true then
@@ -46,7 +45,7 @@ class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapCo
 {
 public:
 
-  static string className() { return "hoot::ReportMissingElementsVisitor"; }
+  static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
 
   ReportMissingElementsVisitor(bool removeMissing = false, int maxReport = 10);
 

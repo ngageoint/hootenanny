@@ -34,12 +34,15 @@
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
 #include "../TestUtils.h"
 #include "ServicesDbTestUtils.h"
 
 #include <QTextCodec>
+
+using namespace std;
 
 namespace hoot
 {
@@ -110,9 +113,9 @@ public:
   {
     HootApiDb db;
     db.open(getDbUrl());
-    QString version = db.getDbVersion();
+    QString version = db.getHootDbVersion();
     LOG_DEBUG("The version = " << version << ".");
-    CPPUNIT_ASSERT_EQUAL(ApiDb::expectedDbVersion().toStdString(), version.toStdString());
+    CPPUNIT_ASSERT_EQUAL(ApiDb::expectedHootDbVersion().toStdString(), version.toStdString());
   }
 
   void runDropMapTest()

@@ -35,6 +35,8 @@
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
+using namespace std;
+
 namespace hoot
 {
 

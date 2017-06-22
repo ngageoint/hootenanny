@@ -37,6 +37,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -65,7 +68,7 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
     a1 = g1->getArea();
     a2 = g2->getArea();
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));
@@ -82,7 +85,7 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
     g2.reset(g2->buffer(buffer));
     overlap.reset(g1->intersection(g2.get()));
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     g1.reset(GeometryUtils::validateGeometry(g1.get()));
     g2.reset(GeometryUtils::validateGeometry(g2.get()));

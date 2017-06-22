@@ -37,8 +37,8 @@
 
 namespace Tgs
 {
-  class TGS_EXPORT CalculatorGenome : 
-    public TreeGenome, 
+  class TGS_EXPORT CalculatorGenome :
+    public TreeGenome,
     public CalculatorGenomeNodeFactory
   {
   public:
@@ -60,7 +60,7 @@ namespace Tgs
         weight = an.weight;
       }
 
-     boost::shared_ptr<CalculatorGenomeNode> node;
+      boost::shared_ptr<CalculatorGenomeNode> node;
       double weight;
     };
 
@@ -92,10 +92,10 @@ namespace Tgs
 
     int countNodes() const;
 
-   boost::shared_ptr<CalculatorGenomeNode> createNode(const std::string& id) const;
+    boost::shared_ptr<CalculatorGenomeNode> createNode(const std::string& id) const;
 
-    virtual void crossoverSexually(const Genome& father, const Genome& mother, 
-     boost::shared_ptr<Genome>& brother,boost::shared_ptr<Genome>& sister);
+    virtual void crossoverSexually(const Genome& father, const Genome& mother,
+      boost::shared_ptr<Genome>& brother, boost::shared_ptr<Genome>& sister);
 
     const AvailableNodeMap& getAvailableNodes() const { return _availableNodes; }
 
@@ -110,7 +110,7 @@ namespace Tgs
     virtual void mutate(double p);
 
     /**
-     * Resets all the weights to v. If at least one terminal weight isn't a positive, non-zero 
+     * Resets all the weights to v. If at least one terminal weight isn't a positive, non-zero
      * values before a mutation or initialization bad things will happen.
      */
     void resetWeights(double v);
@@ -118,9 +118,9 @@ namespace Tgs
     /**
      * Save this genome to the specified stream as XML.
      */
-    void save(std::ostream& s, const std::string indent = "") const;
+    void save(std::ostream& s, const std::string& indent = "") const;
 
-    void setInitializationDepth(int depth) { _depth = depth; };
+    void setInitializationDepth(int depth) { _depth = depth; }
 
     void setWeight(const std::string& label, double weight);
 
@@ -128,38 +128,38 @@ namespace Tgs
 
   private:
     AvailableNodeMap _availableNodes;
-    
-   boost::shared_ptr<CalculatorGenomeNode> _root;
+
+    boost::shared_ptr<CalculatorGenomeNode> _root;
 
     double _totalWeight, _sourceWeight;
     int _depth;
 
     void _calculateWeights();
 
-   boost::shared_ptr<CalculatorGenomeNode> _chooseRandomNode();
+    boost::shared_ptr<CalculatorGenomeNode> _chooseRandomNode();
 
     /**
      * Returns the total number of nodes in this tree.
      */
     int _countNodes(const boost::shared_ptr<CalculatorGenomeNode> node) const;
 
-   boost::shared_ptr<CalculatorGenomeNode> _createNewNode(bool sourceOnly) const;
+    boost::shared_ptr<CalculatorGenomeNode> _createNewNode(bool sourceOnly) const;
 
-   boost::shared_ptr<CalculatorGenomeNode> _createNewTree(int maxDepth) const;
+    boost::shared_ptr<CalculatorGenomeNode> _createNewTree(int maxDepth) const;
 
     /**
-     * I realize this is inefficient, but it makes maintenance and creation of the 
+     * I realize this is inefficient, but it makes maintenance and creation of the
      * CalculatorGenomeNode much easier. Also, compared to the other computations that will be
      * occurring, this is small potatoes.
      */
-   boost::shared_ptr<CalculatorGenomeNode> _findParent(boost::shared_ptr<CalculatorGenomeNode> node) const;
+    boost::shared_ptr<CalculatorGenomeNode> _findParent(boost::shared_ptr<CalculatorGenomeNode> node) const;
 
-   boost::shared_ptr<CalculatorGenomeNode> _findParent(boost::shared_ptr<CalculatorGenomeNode> node, 
-     boost::shared_ptr<CalculatorGenomeNode> current) const;
+    boost::shared_ptr<CalculatorGenomeNode> _findParent(boost::shared_ptr<CalculatorGenomeNode> node,
+      boost::shared_ptr<CalculatorGenomeNode> current) const;
 
-   boost::shared_ptr<CalculatorGenomeNode> _findNode(int index) const;
+    boost::shared_ptr<CalculatorGenomeNode> _findNode(int index) const;
 
-    void _mutate(double p,boost::shared_ptr<CalculatorGenomeNode> node);
+    void _mutate(double p, boost::shared_ptr<CalculatorGenomeNode> node);
   };
 
   TGS_EXPORT std::ostream& operator<<(std::ostream& s, const CalculatorGenome& df);

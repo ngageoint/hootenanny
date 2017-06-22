@@ -35,12 +35,8 @@ using namespace boost;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MapCleaner.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/conflate/SuperfluousWayRemover.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/manipulators/DanglerRemover.h>
-#include <hoot/core/manipulators/DividedHighwayMerger.h>
-#include <hoot/core/manipulators/WayMerger.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
@@ -263,7 +259,7 @@ void Conflator::_createManipulations(OsmMapPtr map, const set<ElementId>& eids)
     if (newM[i]->isValid(map))
     {
       const set<ElementId> ids = newM[i]->getImpactedElementIds(map);
-      for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); it++)
+      for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
       {
         ElementId eid = *it;
         _impacted2Manipulation[eid].insert(newM[i]);
@@ -307,7 +303,7 @@ void Conflator::_createManipulations()
   for (size_t i = 0; i < _manipulations.size(); i++)
   {
     const set<ElementId> ids = _manipulations[i]->getImpactedElementIds(_map);
-    for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); it++)
+    for (set<ElementId>::iterator it = ids.begin(); it != ids.end(); ++it)
     {
       ElementId eid = *it;
       _impacted2Manipulation[eid].insert(_manipulations[i]);
@@ -338,13 +334,13 @@ void Conflator::_updateManipulationEstimates(ConstOsmMapPtr map,
   const set<ElementId>& eids)
 {
   set< boost::shared_ptr<Manipulation>, LessThanManipulation > found;
-  for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); it++)
+  for (set<ElementId>::const_iterator it = eids.begin(); it != eids.end(); ++it)
   {
     const set< boost::shared_ptr<Manipulation>, LessThanManipulation >& s = _impacted2Manipulation[*it];
     found.insert(s.begin(), s.end());
   }
 
-  for (set< boost::shared_ptr<Manipulation> >::iterator it = found.begin(); it != found.end(); it++)
+  for (set< boost::shared_ptr<Manipulation> >::iterator it = found.begin(); it != found.end(); ++it)
   {
     boost::shared_ptr<Manipulation> m = *it;
     if (m->isValid(map))

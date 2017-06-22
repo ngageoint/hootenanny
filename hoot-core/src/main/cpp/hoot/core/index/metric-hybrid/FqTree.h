@@ -27,9 +27,6 @@
 #ifndef FQTREE_H
 #define FQTREE_H
 
-// hoot
-#include <hoot/core/util/Log.h>
-
 // Standard
 #include <assert.h>
 #include <vector>
@@ -43,7 +40,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 namespace hybrid
 {
@@ -151,11 +147,11 @@ public:
   virtual QString toString(QString indent = QString()) const
   {
     std::stringstream ss;
-    ss << indent << "FqNode: " << endl;
+    ss << indent << "FqNode: " << std::endl;
     size_t c = getChildCount();
     for (size_t i = 0; i < c; ++i)
     {
-      ss << indent << "  d: " << getChildDistance(i) << endl;
+      ss << indent << "  d: " << getChildDistance(i) << std::endl;
       ss << getChild(i)->toString(indent + "  ");
     }
     return QString::fromUtf8(ss.str().data());
@@ -190,9 +186,9 @@ public:
 
   virtual Leaf<KeyType, DataType>* buildLeaf(size_t start, size_t end)
   {
-    const vector<KeyType>& keys = *_keys;
-    const vector<DataType>& values = *_values;
-    vector<size_t>& order = *_order;
+    const std::vector<KeyType>& keys = *_keys;
+    const std::vector<DataType>& values = *_values;
+    std::vector<size_t>& order = *_order;
 
     Leaf<KeyType, DataType>* result = new Leaf<KeyType, DataType>();
 
@@ -221,8 +217,8 @@ public:
       LOG_TRACE(_q.size() - 1 << ": " << _q[_q.size() - 1]);
     }
 
-    const vector<KeyType>& keys = *_keys;
-    vector<size_t>& order = *_order;
+    const std::vector<KeyType>& keys = *_keys;
+    std::vector<size_t>& order = *_order;
 
     // if we've reached the bottom then create a leaf node.
     if (depth == _depth || (_depth == -1 && (int)(end - start) <= _bucketSize))
@@ -273,7 +269,7 @@ public:
   /**
    * Recursively search the tree for any keys that are within radius distance of c.
    */
-  void find(const Node<KeyType, DataType>* n, int depth, set<DataType>& result) const
+  void find(const Node<KeyType, DataType>* n, int depth, std::set<DataType>& result) const
   {
     if (_d[depth] == -1)
     {
@@ -303,11 +299,11 @@ public:
     }
   }
 
-  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, set<DataType>& result) const
+  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, std::set<DataType>& result) const
   {
     for (size_t i = 0; i < leaf->getSize(); ++i)
     {
-      const pair<KeyType, DataType>& p = leaf->get(i);
+      const std::pair<KeyType, DataType>& p = leaf->get(i);
       int d = _df(_query.getMetricElement(), p.first.getMetricElement());
       if (d <= _queryD)
       {
@@ -348,8 +344,8 @@ public:
    *  reference start/end values in this order. The order contains values from 0 to n-1, initially
    *  sorted.
    */
-  void setKeysValues(const vector<KeyType>& keys, const vector<DataType>& values,
-                     vector<size_t>& order)
+  void setKeysValues(const std::vector<KeyType>& keys, const std::vector<DataType>& values,
+                     std::vector<size_t>& order)
   {
     _keys = &keys;
     _values = &values;
@@ -385,7 +381,7 @@ private:
   mutable KeyType _query;
   // "D" in [1]
   mutable int _queryD;
-  mutable vector<short> _d;
+  mutable std::vector<short> _d;
 
   DistanceFunction _df;
   int _bucketSize;
@@ -393,11 +389,11 @@ private:
   int _depth;
   mutable int _distanceCount;
   /// q as defined in [1].
-  vector<KeyType> _q;
-  const vector<KeyType>* _keys;
-  const vector<DataType>* _values;
-  vector<int> _distanceValues;
-  vector<size_t>* _order;
+  std::vector<KeyType> _q;
+  const std::vector<KeyType>* _keys;
+  const std::vector<DataType>* _values;
+  std::vector<int> _distanceValues;
+  std::vector<size_t>* _order;
 
   const KeyType& _pickKey() const
   {
@@ -437,7 +433,7 @@ public:
 
   virtual ~FqTree() { delete _root; }
 
-  void buildIndex(const vector<KeyType>& keys, const vector<DataType>& values)
+  void buildIndex(const std::vector<KeyType>& keys, const std::vector<DataType>& values)
   {
     assert(keys.size() == values.size());
     delete _root;
@@ -456,9 +452,9 @@ public:
     _order.clear();
   }
 
-  set<DataType> find(const KeyType& key, int maxDistance) const
+  std::set<DataType> find(const KeyType& key, int maxDistance) const
   {
-    set<DataType> result;
+    std::set<DataType> result;
     _layer.setQuery(key, maxDistance);
     _layer.find(_root, 0, result);
 
@@ -477,7 +473,7 @@ protected:
 
   int _bucketSize;
   // As the tree is built we re-order
-  vector<size_t> _order;
+  std::vector<size_t> _order;
   int _depth;
   FqTreeLayer<KeyType, DataType, DistanceFunction> _layer;
 };

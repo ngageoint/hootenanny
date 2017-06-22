@@ -1,6 +1,7 @@
-reference dataset:  tmp/haiti-and-domrep-latest-cropped.osm
-secondary dataset:  tmp/PapMgcpClip.osm
+reference dataset:  test-files/cmd/slow/ServiceOsmApiDbHootApiDbHaitiDrConflateTest/haiti-and-domrep-latest-cropped.osm
+secondary dataset:  test-files/cmd/slow/ServiceOsmApiDbHootApiDbHaitiDrConflateTest/PapMgcpClip-cropped.osm
 AOI:  -72.4822997917,18.5264918926,-72.4768066276,18.531700324028872
+CONFLATION TYPE:  unifying
 TEST_NAME:  ServiceOsmApiDbHootApiDbHaitiDrConflateTest
 
 STEP 1: Cleaning out the osm api db and initializing it for use...
@@ -13,51 +14,52 @@ STEP 1: Cleaning out the osm api db and initializing it for use...
 
 STEP 2: Writing the complete reference dataset to the osm api db...
 
-12:13:55.512 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (250651104) in relation (52900).
-12:13:55.512 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (250651104) in relation (53432).
-12:13:55.512 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (315342451) in relation (307828).
-12:13:55.512 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (246422158) in relation (307828).
-12:13:55.513 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (289141966) in relation (307829).
-12:13:55.513 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (424297281) in relation (307829).
-12:13:55.514 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (614227864) in relation (385829).
-12:13:55.514 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (614138209) in relation (385924).
-12:13:55.514 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (614366922) in relation (385933).
-12:13:55.514 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 549) Missing node (614381035) in relation (385991).
-12:13:55.514 WARN  ...cpp/hoot/core/io/OsmReader.cpp( 553) Found 10 missing nodes, no longer reporting missing nodes.
- setval 
---------
-      2
-(1 row)
-
- setval 
---------
-  13984
-(1 row)
-
- setval 
---------
-   1372
-(1 row)
-
- setval 
---------
-    675
-(1 row)
-
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (52900).
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (53432).
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (315342451) in relation (307828).
+13:20:52.028 WARN  .../hoot/core/io/OsmXmlReader.cpp( 556) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+13:20:52.388 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+13:20:52.389 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244310
+13:20:52.389 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+13:20:52.389 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244336
+13:20:52.402 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+13:20:52.402 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1240526 (DB ID=113) has ref to Entry: role: tributary, eid: Relation:1241599
+13:20:52.404 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1413) hoot::OsmApiDbBulkWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
 
-STEP 8: Conflating the two datasets over the specified AOI...
+STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
 
 
-STEP 11: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
+STEP 8b: Conflating the two datasets over the specified AOI with the XML changeset workflow...
 
 
-STEP 12: Executing the changeset SQL on the osm api db...
+STEP 11a: Writing a SQL changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
 
 
-STEP 14: Reading the entire contents of the osm api db, writing it into a file, and verifying it...
+STEP 11b: Writing a XML changeset file that is the difference between the cropped reference input dataset specified AOI and the conflated output specified AOI...
 
-12:14:10.975 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ServiceOsmApiDbHootApiDbHaitiDrConflateTest/output.osm ...
-12:14:11.268 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/slow/ServiceOsmApiDbHootApiDbHaitiDrConflateTest/14-complete-output-PulledFromOsmApiDb.osm ...
+
+STEP 12: Executing the SQL changeset on the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=18.527401, max_lat=18.538810, min_lon=-72.480594, max_lon=-72.475766, num_changes=72
+Node(s) Created: 67
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 4
+Way(s) Modified: 1
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
+
+
+STEP 15a: Verifying the SQL changeset...
+
+
+STEP 15b: Verifying the XML changeset...
+
