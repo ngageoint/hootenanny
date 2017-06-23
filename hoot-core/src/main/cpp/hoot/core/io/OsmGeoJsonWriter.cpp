@@ -45,6 +45,7 @@ using namespace boost;
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -53,6 +54,7 @@ using namespace boost;
 #include <QXmlStreamWriter>
 #include <QtCore/QStringBuilder>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot {
@@ -72,8 +74,9 @@ void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
   }
 
   _write("{");
-  _write("\"generator\": \"Hootenanny\",");
-  _write("\"type\": \"FeatureCollection\",");
+  _writeKvp("generator", "Hootenanny"); _write(",");
+  _writeKvp("type", "FeatureCollection"); _write(",");
+  _write("\"bbox\": "); _write(_getBbox()); _write(",");
   _write("\"features\": [", true);
   _firstElement = true;
   _writeNodes();
@@ -82,6 +85,15 @@ void OsmGeoJsonWriter::write(ConstOsmMapPtr map)
   _writeLn("]");
   _writeLn("}");
   _fp.close();
+}
+
+QString OsmGeoJsonWriter::_getBbox()
+{
+  Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_map);
+  return QString("[%1, %2, %3, %4]").arg(QString::number(bounds.getMinX(), 'g', _precision))
+                                    .arg(QString::number(bounds.getMinY(), 'g', _precision))
+                                    .arg(QString::number(bounds.getMaxX(), 'g', _precision))
+                                    .arg(QString::number(bounds.getMaxY(), 'g', _precision));
 }
 
 void OsmGeoJsonWriter::_writeMeta(ConstElementPtr e)
