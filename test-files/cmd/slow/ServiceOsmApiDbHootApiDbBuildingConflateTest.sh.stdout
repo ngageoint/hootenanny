@@ -17,7 +17,7 @@ STEP 2: Writing the complete reference dataset to the osm api db...
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
-13:19:58.514 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:1838255 in Relation:1354957.
+19:48:32.179 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:1838255 in Relation:1354957.
 
 STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
 
@@ -46,10 +46,4 @@ Relation(s) Modified: 0
 Relation(s) Deleted: 0
 
 STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
-
-
-STEP 15a: Verifying the SQL changeset...
-
-
-STEP 15b: Verifying the XML changeset...
 
