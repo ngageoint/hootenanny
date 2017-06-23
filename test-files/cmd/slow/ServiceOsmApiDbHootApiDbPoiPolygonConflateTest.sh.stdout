@@ -46,9 +46,3 @@ Relation(s) Deleted: 0
 
 STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data...
 
-
-STEP 15a: Verifying the SQL changeset...
-
-
-STEP 15b: Verifying the XML changeset...
-
