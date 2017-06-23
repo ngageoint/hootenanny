@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMGEOJSONWRITER_H
-#define OSMGEOJSONWRITER_H
+#ifndef OSM_GEOJSON_WRITER_H
+#define OSM_GEOJSON_WRITER_H
 
 // hoot
 #include <hoot/core/io/OsmJsonWriter.h>
@@ -68,8 +68,9 @@ protected:
   void _writeGeometry(ConstNodePtr n);
   void _writeGeometry(ConstWayPtr w);
   void _writeGeometry(ConstRelationPtr r);
+  QString _getBbox();
 };
 
 } // hoot
 
-#endif // OSMGEOJSONWRITER_H
+#endif // OSM_GEOJSON_WRITER_H

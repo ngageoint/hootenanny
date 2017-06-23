@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef OSM_JSON_READER_H
-#define OSM_JSON_READER_H
+#ifndef OSM_GEOJSON_READER_H
+#define OSM_GEOJSON_READER_H
 
 // Qt
 #include <QUrl>
@@ -40,8 +40,8 @@
 #include <boost/property_tree/ptree.hpp>
 
 // Hoot
-#include "hoot/core/OsmMap.h"
-#include "hoot/core/io/OsmMapReader.h"
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 namespace hoot
 {
@@ -102,16 +102,14 @@ namespace hoot
  * Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader
+class OsmGeoJsonReader : public OsmJsonReader
 {
 public:
 
-  static std::string className() { return "hoot::OsmJsonReader"; }
+  static std::string className() { return "hoot::OsmGeoJsonReader"; }
 
-  static unsigned int logWarnCount;
-
-  OsmJsonReader();
-  virtual ~OsmJsonReader();
+  OsmGeoJsonReader()          { }   //  Taken care of in OsmJsonReader
+  virtual ~OsmGeoJsonReader() { }   //  Taken care of in OsmJsonReader
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't
@@ -123,39 +121,12 @@ public:
   virtual bool isSupported(QString url);
 
   /**
-   * @brief open Specifies the URL to read from. Can be a file (file://some/path/to/a/file)
-   *        or a json provider like:
-   *    http://overpass-api.de/api/interpreter?data=[out:json];way(35.2097,-120.6207,35.2241,-120.5955);out;
-   * @param url
-   */
-  virtual void open(QString url);
-
-  /**
-   * @brief close close internal filehandle, if needed
-   */
-  void close();
-
-  /**
    * @brief read Reads the data specified by the last call to open(...)
    *        and adds the elements to the provided map. Input data source
    *        will likely be closed after this call
    * @param map
    */
   virtual void read(OsmMapPtr map);
-
-  /**
-   * @brief setDefaultStatus Sets the default status to use for elements
-   *        in the map
-   * @param status
-   */
-  virtual void setDefaultStatus(Status status) { _defaultStatus = status; }
-
-  /**
-   * @brief setUseDataSourceIds Sets whether the reader should use the element IDs
-   *        from the data being read, or self-generate unique IDs
-   * @param useDataSourceIds true to use source IDs
-   */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
@@ -173,50 +144,7 @@ public:
    */
   OsmMapPtr loadFromFile(QString path);
 
-  /**
-   * @brief getVersion Overpass API version, if that's where JSON comes from
-   * @return version string
-   */
-  QString getVersion() { return _version; }
-
-  /**
-   * @brief getGenerator Map generator name, if supplied in JSON
-   * @return generator name string
-   */
-  QString getGenerator() { return _generator; }
-
-  /**
-   * @brief getTimestampBase OSM timestamp base, if supplied in JSON
-   * @return timestamp base string
-   */
-  QString getTimestampBase() { return _timestamp_base; }
-
-  /**
-   * @brief getCopyright Copyright statement, if supplied in JSON
-   * @return copyright string
-   */
-  QString getCopyright() { return _copyright; }
-
-protected:
-
-  // Items to conform to OsmMapReader ifc
-  Status _defaultStatus;
-  bool _useDataSourceIds;
-  Meters _defaultCircErr;
-
-  // Our property tree that holds JSON
-  boost::property_tree::ptree _propTree;
-
-  // Store these items from overpass api
-  QString _version;
-  QString _generator;
-  QString _timestamp_base;
-  QString _copyright;
-
-  QUrl _url;
-  bool _isFile;
-  bool _isWeb;
-  QFile _file;
+private:
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
@@ -267,23 +195,8 @@ protected:
   void _addTags(const boost::property_tree::ptree &item,
                 hoot::ElementPtr pElement);
 
-  /**
-   * @brief _scrubQuotes Converts single quotes to double quotes, and escaped
-   *         apostrophes to regular apostrophes
-   * @param jsonStr proper JSON string
-   */
-  void _scrubQuotes(QString &jsonStr);
-
-  /**
-   * @brief _scrubBigInts Ensures that we have quotes around big integers.
-   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
-   *        json parser in boost 1.41
-   * @param jsonStr string upon which we operate
-   */
-  void _scrubBigInts(QString &jsonStr);
-
 };
 
 } // end namespace hoot
 
-#endif // OSM_JSON_READER_H
+#endif // OSM_GEOJSON_READER_H
