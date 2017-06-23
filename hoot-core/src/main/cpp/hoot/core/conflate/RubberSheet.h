@@ -76,7 +76,7 @@ public:
     double p;
   };
 
-  RubberSheet();
+  RubberSheet(bool logNotEnoughTiePointsAsWarning = true);
 
   void apply(boost::shared_ptr<OsmMap>& map);
 
@@ -133,10 +133,6 @@ private:
 
   typedef std::map<long, std::list<Match> > MatchList;
 
-  bool _debug;
-
-  Match _emptyMatch;
-
   class Tie
   {
     public:
@@ -156,6 +152,7 @@ private:
   MatchList _matches;
   std::vector<Match> _finalPairs;
   bool _ref;
+  bool _debug;
   int _minimumTies;
   std::vector<Tie> _ties;
   boost::shared_ptr<Tgs::Interpolator> _interpolator1to2, _interpolator2to1;
@@ -167,6 +164,10 @@ private:
   double _searchRadius;
 
   NodeMatcher _nm;
+
+  bool _logNotEnoughTiePointsAsWarning;
+
+  Match _emptyMatch;
 
   void _findTies();
 
@@ -185,7 +186,8 @@ private:
 
   geos::geom::Coordinate _translate(const geos::geom::Coordinate& c, Status s);
 
-  void _writeInterpolator(boost::shared_ptr<const Tgs::Interpolator> interpolator, QIODevice& os) const;
+  void _writeInterpolator(boost::shared_ptr<const Tgs::Interpolator> interpolator,
+                          QIODevice& os) const;
 
   friend class SearchRadiusCalculatorTest;
   friend class RubberSheetTest;
