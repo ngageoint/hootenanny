@@ -54,7 +54,7 @@ public:
 
   virtual void write(ConstOsmMapPtr map);
 
-  virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
+  virtual bool isSupported(QString url) { return url.toLower().endsWith(".geojson"); }
 
 protected:
 

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
  */
-/*
+
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Point.h>
@@ -32,7 +32,7 @@
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
-#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -47,35 +47,46 @@
 namespace hoot
 {
 
-class OsmGeoJsonWriterTest : public CppUnit::TestFixture
+class OsmGeoJsonReaderTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(OsmGeoJsonWriterTest);
-  CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST_SUITE(OsmGeoJsonReaderTest);
+  CPPUNIT_TEST(runAllDataTypesTest);
+  CPPUNIT_TEST(runDcTigerTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runToyTest()
+  void runAllDataTypesTest()
   {
-    OsmXmlReader reader;
+    runTest("test-files/io/GeoJson/AllDataTypes.geojson", "AllDataTypes.osm");
+  }
+
+  void runDcTigerTest()
+  {
+    runTest("test-files/io/GeoJson/DcTigerRoads.geojson", "DcTigerRoads.osm");
+  }
+
+  void runTest(const QString& input, const QString& output)
+  {
+    OsmGeoJsonReader reader;
 
     OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/ops/RefRemoveOp/Toy.osm", map);
+    reader.open(input);
+    reader.read(map);
 
-    LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
-
-    QDir().mkpath("test-output/ops/RefRemoveOp/");
+    QDir().mkpath("test-output/io/GeoJson/");
     OsmXmlWriter writer;
-    writer.write(map, "test-output/ops/RefRemoveOp/Toy.osm");
-    HOOT_FILE_EQUALS("test-files/ops/RefRemoveOp/ToyOutput.osm",
-                     "test-output/ops/RefRemoveOp/Toy.osm");
+    writer.open(QString("test-output/io/GeoJson/%1").arg(output));
+    writer.write(map);
+    HOOT_FILE_EQUALS(QString("test-files/io/GeoJson/%1").arg(output),
+                     QString("test-output/io/GeoJson/%1").arg(output));
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RefRemoveOpTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "current");
 
 }
-*/

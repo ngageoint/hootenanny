@@ -37,7 +37,7 @@
 // Boost
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-namespace pt = boost::property_tree;
+#include <boost/lexical_cast.hpp>
 
 // Qt
 #include <QTextStream>
@@ -49,27 +49,39 @@ namespace pt = boost::property_tree;
 #include <QtNetwork/QNetworkAccessManager>
 
 // Standard
+#include <string>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+
+namespace pt = boost::property_tree;
 using namespace std;
+using namespace geos::geom;
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmJsonReader, OsmGeoJsonReader)
 
+OsmGeoJsonReader::OsmGeoJsonReader() : OsmJsonReader()
+{
+}
+
+OsmGeoJsonReader::~OsmGeoJsonReader()
+{
+}
+
 bool OsmGeoJsonReader::isSupported(QString url)
 {
   QUrl myUrl(url);
 
   // Is it a file?
-  if (myUrl.isLocalFile())
+  if (myUrl.isRelative() || myUrl.isLocalFile())
   {
     QString filename = myUrl.toLocalFile();
 
-    if (QFile::exists(filename) && url.endsWith(".json", Qt::CaseInsensitive))
+    if (QFile::exists(filename) && url.endsWith(".geojson", Qt::CaseInsensitive))
       return true;
   }
 
@@ -89,12 +101,12 @@ bool OsmGeoJsonReader::isSupported(QString url)
  */
 void OsmGeoJsonReader::read(OsmMapPtr map)
 {
+  _map = map;
+  QString jsonStr;
   if (_isFile)
   {
     QTextStream instream(&_file);
-    QString jsonStr = instream.readAll();
-    _loadJSON(jsonStr);
-    _parseOverpassJson(map);
+    jsonStr = instream.readAll();
   }
   else
   {
@@ -116,57 +128,18 @@ void OsmGeoJsonReader::read(OsmMapPtr map)
     }
 
     QByteArray data = pReply->readAll();
-    QString jsonStr = QString::fromAscii(data.data());
-
-    // This will throw a hoot exception if JSON is invalid
-    _loadJSON(jsonStr);
-    _parseOverpassJson(map);
+    jsonStr = QString::fromAscii(data.data());
   }
-}
-
-// Throws HootException on error
-void OsmGeoJsonReader::_loadJSON(QString jsonStr)
-{
-  // Clear out anything that might be hanging around
-  _propTree.clear();
-
-  // Handle single or double quotes
-  _scrubQuotes(jsonStr);
-
-  // Handle IDs
-  _scrubBigInts(jsonStr);
-
-  // Convert string to stringstream
-  stringstream ss(jsonStr.toUtf8().constData(), ios::in);
-
-  if (!ss.good())
-  {
-    throw HootException(QString("Error reading from JSON string:\n%1").arg(jsonStr));
-  }
-
-  try
-  {
-    pt::read_json(ss, _propTree);
-  }
-  catch (pt::json_parser::json_parser_error& e)
-  {
-    QString reason = QString::fromStdString(e.message());
-    QString line = QString::number(e.line());
-    throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
-  }
-  catch (const std::exception& e)
-  {
-    QString reason = e.what();
-    throw HootException("Error parsing JSON " + reason);
-  }
+  _loadJSON(jsonStr);
+  _parseGeoJson();
 }
 
 OsmMapPtr OsmGeoJsonReader::loadFromString(QString jsonStr)
 {
   _loadJSON(jsonStr);
-  OsmMapPtr pMap(new OsmMap());
-  _parseOverpassJson(pMap);
-  return pMap;
+  _map.reset(new OsmMap());
+  _parseGeoJson();
+  return _map;
 }
 
 OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
@@ -174,127 +147,182 @@ OsmMapPtr OsmGeoJsonReader::loadFromFile(QString path)
   QFile infile(path);
   if (!infile.open(QFile::ReadOnly | QFile::Text))
   {
-    throw HootException("Unable to read JSON file: " + path);
+    throw HootException("Unable to read GeoJSON file: " + path);
   }
 
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  OsmMapPtr pMap(new OsmMap());
-  _parseOverpassJson(pMap);
-  return pMap;
+  _map.reset(new OsmMap());
+  _parseGeoJson();
+  return _map;
 }
 
-void OsmGeoJsonReader::_parseOverpassJson(OsmMapPtr pMap)
+void OsmGeoJsonReader::_parseGeoJson()
 {
   // Overpass has 4 top level items: version, generator, osm3s, elements
-  _version = QString::fromStdString(_propTree.get("version", string("")));
   _generator = QString::fromStdString(_propTree.get("generator", string("")));
-  _timestamp_base = QString::fromStdString(_propTree.get("osm3s.timestamp_osm_base", string("")));
-  _copyright = QString::fromStdString(_propTree.get("osm3s.copyright", string("")));
+  QString type = QString::fromStdString(_propTree.get("type", string("")));
+  Envelope env = _parseBbox(_propTree.get_child("bbox"));
 
-  // Make a map, and iterate through all of our elements, adding them
-  pt::ptree elements = _propTree.get_child("elements");
-  pt::ptree::const_iterator elementIt = elements.begin();
-  while (elementIt != elements.end())
+  // Make a map, and iterate through all of our features, adding them
+  pt::ptree features = _propTree.get_child("features");
+  for (pt::ptree::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt)
   {
-    // Type can be node, way, or relation
-    string typeStr = elementIt->second.get("type", string("--"));
+    const pt::ptree& feature = featureIt->second;
+    string id = feature.get("id", string(""));
+    if (feature.not_found() != feature.find("properties"))
+    {
+      pt::ptree properties = feature.get_child("properties");
 
-    if ("node" == typeStr)
-    {
-      _parseOverpassNode(elementIt->second, pMap);
+      if (feature.not_found() != feature.find("geometry"))
+      {
+        pt::ptree geometry = feature.get_child("geometry");
+
+        // Type can be node, way, or relation
+        string typeStr = properties.get("type", string("--"));
+        if ("node" == typeStr)
+        {
+          _parseGeoJsonNode(id, properties, geometry);
+        }
+        else if ("way" == typeStr)
+        {
+          _parseGeoJsonWay(id, properties, geometry);
+        }
+        else if ("relation" == typeStr)
+        {
+          _parseGeoJsonRelation(id, properties, geometry);
+        }
+        else
+        {
+          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN("Unknown JSON elment type (" << typeStr << ") when parsing GeoJSON");
+          }
+          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
+        }
+      }
     }
-    else if ("way" == typeStr)
+  }
+}
+
+geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox)
+{
+  for (pt::ptree::const_iterator bboxIt = bbox.begin(); bboxIt != bbox.end(); ++bboxIt)
+  {
+    double minX = bboxIt->second.get_value<double>();
+    ++bboxIt;
+    double minY = bboxIt->second.get_value<double>();
+    ++bboxIt;
+    double maxX = bboxIt->second.get_value<double>();
+    ++bboxIt;
+    double maxY = bboxIt->second.get_value<double>();
+    return Envelope(minX, minY, maxX, maxY);
+  }
+  return Envelope();
+}
+
+void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
+{
+  // Get info we need to construct our node
+  long node_id = -1;
+  if (_useDataSourceIds)
+    node_id = boost::lexical_cast<long>(id);
+  else
+    node_id = _map->createNextNodeId();
+
+  vector<Coordinate> coords = _parseGeometry(geometry);
+  double lat = coords[0].y;
+  double lon = coords[0].x;
+
+  // Construct node
+  NodePtr pNode(new Node(_defaultStatus, node_id, lon, lat, _defaultCircErr));
+
+  // Add tags
+  _addTags(properties, pNode);
+
+  // Add node to map
+  _map->addNode(pNode);
+}
+
+void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
+{
+  // Get info we need to construct our way
+  long way_id = -1;
+  if (_useDataSourceIds)
+    way_id = boost::lexical_cast<long>(id);
+  else
+    way_id = _map->createNextWayId();
+
+  // Construct Way
+  WayPtr pWay(new Way(_defaultStatus, way_id, _defaultCircErr));
+
+  bool isPoly = (geometry.get("type", "").compare("Polygon") == 0);
+  // Add nodes
+  vector<Coordinate> coords = _parseGeometry(geometry);
+  for (vector<Coordinate>::iterator it = coords.begin(); it != coords.end(); ++it)
+  {
+    if (isPoly && (it + 1) == coords.end())
     {
-      _parseOverpassWay(elementIt->second, pMap);
-    }
-    else if ("relation" == typeStr)
-    {
-      _parseOverpassRelation(elementIt->second, pMap);
+      //  Don't create another node to close the polygon, just use the first one
+      pWay->addNode(pWay->getNodeId(0));
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-      {
-        LOG_WARN("Unknown JSON elment type (" << typeStr << ") when parsing json osm");
-      }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-    }
-    ++elementIt;
-  }
-}
-
-void OsmGeoJsonReader::_parseOverpassNode(const pt::ptree &item, OsmMapPtr pMap)
-{
-  // Get info we need to construct our node
-  long id = -1;
-  if (_useDataSourceIds)
-    id = item.get("id", id);
-  else
-    id = pMap->createNextNodeId();
-
-  double lat = item.get("lat", 0.0);
-  double lon = item.get("lon", 0.0);
-
-  // Construct node
-  NodePtr pNode(new Node(_defaultStatus, id, lon, lat, _defaultCircErr));
-
-  // Add tags
-  _addTags(item, pNode);
-
-  // Add node to map
-  pMap->addNode(pNode);
-}
-
-void OsmGeoJsonReader::_parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
-{
-  // Get info we need to construct our way
-  long id = -1;
-  if (_useDataSourceIds)
-    id = item.get("id", id);
-  else
-    id = pMap->createNextWayId();
-
-  // Construct Way
-  WayPtr pWay(new Way(_defaultStatus, id, _defaultCircErr));
-
-  // Add nodes
-  if (item.not_found() != item.find("nodes"))
-  {
-    pt::ptree nodes = item.get_child("nodes");
-    pt::ptree::const_iterator nodeIt = nodes.begin();
-    while (nodeIt != nodes.end())
-    {
-      long v = nodeIt->second.get_value<long>();
-      pWay->addNode(v);
-      ++nodeIt;
+      long node_id = _map->createNextNodeId();
+      NodePtr pNode(new Node(_defaultStatus, node_id, *it, _defaultCircErr));
+      _map->addNode(pNode);
+      pWay->addNode(node_id);
     }
   }
 
   // Add tags
-  _addTags(item, pWay);
+  _addTags(properties, pWay);
 
   // Add way to map
-  pMap->addWay(pWay);
+  _map->addWay(pWay);
 }
 
-void OsmGeoJsonReader::_parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap)
+void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& properties, const pt::ptree& geometry)
 {
   // Get info we need to construct our relation
-  long id = -1;
+  long relation_id = -1;
   if (_useDataSourceIds)
-    id = item.get("id", id);
+    relation_id = boost::lexical_cast<long>(id);
   else
-    id = pMap->createNextRelationId();
+    relation_id = _map->createNextRelationId();
 
   // Construct Relation
-  RelationPtr pRelation(new Relation(_defaultStatus, id, _defaultCircErr));
+  RelationPtr pRelation(new Relation(_defaultStatus, relation_id, _defaultCircErr));
 
+  if (geometry.get("type", "").compare("GeometryCollection") == 0)
+  {
+    if (geometry.not_found() != geometry.find("geometries"))
+    {
+      pt::ptree geometries = geometry.get_child("geometries");
+      for (pt::ptree::const_iterator it = geometries.begin(); it != geometries.end(); ++it)
+      {
+        pt::ptree geo = it->second;
+        string type = geo.get("type", "");
+        if (type.compare("Point") == 0)
+        {
+          //  Node
+        }
+        else if (type.compare("Polygon") == 0 || type.compare("LineString") == 0)
+        {
+          //  Way
+        }
+        else if (type.compare("GeometryCollection") == 0)
+        {
+          //  Relation
+        }
+      }
+    }
+/*
   // Add members
   if (item.not_found() != item.find("members"))
   {
@@ -311,40 +339,68 @@ void OsmGeoJsonReader::_parseOverpassRelation(const pt::ptree &item, OsmMapPtr p
                             ref);
       ++memberIt;
     }
+*/
   }
 
   // Add tags
-  _addTags(item, pRelation);
+  _addTags(properties, pRelation);
 
   // Add relation to map
-  pMap->addRelation(pRelation);
+  _map->addRelation(pRelation);
 }
 
-void OsmGeoJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::ElementPtr pElement)
+vector<Coordinate> OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
 {
-  // Find tags and add them
-  if (item.not_found() != item.find("tags"))
-  {
-    pt::ptree tags = item.get_child("tags");
-    pt::ptree::const_iterator tagIt = tags.begin();
-    while (tagIt != tags.end())
-    {
-      QString k = QString::fromStdString(tagIt->first);
-      QString v = QString::fromStdString(tagIt->second.get_value<string>());
+  vector<Coordinate> results;
 
-      // If we are "error:circular", need to set it on the element object,
-      // rather than add it as a tag
-      if (k == MetadataTags::ErrorCircular())
-      {
-        pElement->setCircularError(Meters(v.toInt()));
-      }
-      else
-      {
-        pElement->setTag(k, v);
-      }
-      ++tagIt;
+  string type = geometry.get("type", "");
+  if (type.compare("Point") == 0)
+  {
+    pt::ptree coordinates = geometry.get_child("coordinates");
+    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    {
+      double x = it->second.get_value<double>();
+      ++it;
+      double y = it->second.get_value<double>();
+      results.push_back(Coordinate(x, y));
     }
   }
+  else if (type.compare("Polygon") == 0)
+  {
+    pt::ptree coordinates = geometry.get_child("coordinates");
+    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    {
+      for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+      {
+        for (pt::ptree::const_iterator coord = array->second.begin(); coord != array->second.end(); ++coord)
+        {
+          double x = coord->second.get_value<double>();
+          ++coord;
+          double y = coord->second.get_value<double>();
+          results.push_back(Coordinate(x, y));
+        }
+      }
+    }
+  }
+  else if (type.compare("LineString") == 0)
+  {
+    pt::ptree coordinates = geometry.get_child("coordinates");
+    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    {
+      for (pt::ptree::const_iterator coord = it->second.begin(); coord != it->second.end(); ++coord)
+      {
+        double x = coord->second.get_value<double>();
+        ++coord;
+        double y = coord->second.get_value<double>();
+        results.push_back(Coordinate(x, y));
+      }
+    }
+  }
+  else
+  {
+  }
+
+  return results;
 }
 
 } // namespace hoot

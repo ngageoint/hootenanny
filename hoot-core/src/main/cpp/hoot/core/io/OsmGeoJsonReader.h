@@ -47,59 +47,11 @@ namespace hoot
 {
 
 /**
- * This class is intended to create an OsmMap from a given json string. JSON
- * output from the overpass-api was used as the model for development
- * (http://overpass-api.de/output_formats.html#json).
+ * This class is intended to create an OsmMap from a given GeoJSON string.
  *
- * The input string must be well-formed JSON, with the exception that it can
- * be coded using single quotes, rather than double quotes... which makes
- * things a lot cleaner if you are hand-jamming the JSON string into c++ code.
- * If you are using single quotes, you may escape apostrophes with a backslash.
- * Consider this example:
- *
- * QString testJsonStr =
- *   "{                                      \n"
- *   " 'version': 0.6,                       \n"
- *   " 'generator': 'Overpass API',          \n"
- *   " 'osm3s': {                            \n"
- *   "   'timestamp_osm_base': 'date',       \n"
- *   "   'copyright': 'c 1999'               \n"
- *   " },                                    \n"
- *   " 'elements': [                         \n"
- *   " {                                     \n"
- *   "   'type': 'node',                     \n"
- *   "   'id': -1,                           \n"
- *   "   'lat': 2.0,                         \n"
- *   "   'lon': -3.0                         \n"
- *   " },                                    \n"
- *   " {                                     \n"
- *   "   'type': 'node',                     \n"
- *   "   'id': -2,                           \n"
- *   "   'lat': 3.0,                         \n"
- *   "   'lon': -3.0,                        \n"
- *   "   'timestamp': '2010-01-01T00:00:00Z',\n"
- *   "   'version': 4,                       \n"
- *   "   'changeset': 5,                     \n"
- *   "   'user': 'somebody',                 \n"
- *   "   'uid': 6                            \n"
- *   " },                                    \n"
- *   " {                                     \n"
- *   "   'type': 'node',                     \n"
- *   "   'id': -3,                           \n"
- *   "   'lat': 4.0,                         \n"
- *   "   'lon': -3.0,                        \n"
- *   "   'tags': {                           \n"
- *   "     'highway': 'bus_stop',            \n"
- *   "     'name': 'Micah\\'s Street'        \n"
- *   "   }                                   \n"
- *   " }                                     \n"
- *   "]                                      \n"
- *   "}                                      \n";
- *
- * It's all-or-nothing, though for the quotes - don't mix and match
- * singles and doubles! Also, be aware that this class doesn't do anything
- * clever to handle large datasets - it simply keeps everything in memory.
- * Be careful if you want to use it with large datasets.
+ * The input string must be well-formed GeoJSON.  Also, be aware that this
+ * class doesn't do anything clever to handle large datasets - it simply keeps
+ * everything in memory. Be careful if you want to use it with large datasets.
  */
 
 class OsmGeoJsonReader : public OsmJsonReader
@@ -108,8 +60,8 @@ public:
 
   static std::string className() { return "hoot::OsmGeoJsonReader"; }
 
-  OsmGeoJsonReader()          { }   //  Taken care of in OsmJsonReader
-  virtual ~OsmGeoJsonReader() { }   //  Taken care of in OsmJsonReader
+  OsmGeoJsonReader();
+  virtual ~OsmGeoJsonReader();
 
   /**
    * @brief isSupported returns true if the URL is likely supported. This isn't
@@ -147,53 +99,46 @@ public:
 private:
 
   /**
-   * @brief _loadJSON Loads JSON into a boost property tree
-   * @param jsonStr String to load
-   */
-  void _loadJSON(QString jsonStr);
-
-  /**
    * @brief parseOverpassJson Traverses our property tree and adds
    *        elements to the map
-   * @param pMap Append elements to this map
    */
-  void _parseOverpassJson(OsmMapPtr pMap);
+  void _parseGeoJson();
 
   /**
-   * @brief _parseOverpassNode Reads node info out of the property tree and
+   * @brief _parseGeoJsonNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
-   * @param item Property Tree (likely a sub-tree)
-   * @param pMap Map to which we add the node
+   * @param id Element ID string
+   * @param properties Property tree (including tags)
+   * @param geometry Geometry Tree of Point, LineString, Polygon, or GeometryCollection
    */
-  void _parseOverpassNode(const boost::property_tree::ptree &item,
-                          OsmMapPtr pMap);
+  void _parseGeoJsonNode(const std::string& id,
+                         const boost::property_tree::ptree& properties,
+                         const boost::property_tree::ptree& geometry);
 
   /**
-   * @brief _parseOverpassWay Reads way info out of the property tree and
+   * @brief _parseGeoJsonWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
-   * @param item Property Tree (or sub-tree)
-   * @param pMap Map to which we add the way
+   * @param id Element ID string
+   * @param properties Property tree (including tags)
+   * @param geometry Geometry Tree of Point, LineString, Polygon, or GeometryCollection
    */
-  void _parseOverpassWay(const boost::property_tree::ptree &item,
-                         OsmMapPtr pMap);
+  void _parseGeoJsonWay(const std::string& id,
+                        const boost::property_tree::ptree& properties,
+                        const boost::property_tree::ptree& geometry);
 
   /**
-   * @brief _parseOverpassRelation Reads relation info out of the property tree
+   * @brief _parseGeoJsonRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.
-   * @param item Property Tree (likely a subtree)
-   * @param pMap Map to which we add the Relation
+   * @param id Element ID string
+   * @param properties Property tree (including tags)
+   * @param geometry Geometry Tree of Point, LineString, Polygon, or GeometryCollection
    */
-  void _parseOverpassRelation(const boost::property_tree::ptree &item,
-                              OsmMapPtr pMap);
+  void _parseGeoJsonRelation(const std::string& id,
+                             const boost::property_tree::ptree& properties,
+                             const boost::property_tree::ptree& geometry);
 
-  /**
-   * @brief _addTags Reads tags from the given ptree, and adds them to the
-   *        supplied map element
-   * @param item Property Tree (subtree)
-   * @param pElement Element to which we will add the tags
-   */
-  void _addTags(const boost::property_tree::ptree &item,
-                hoot::ElementPtr pElement);
+  std::vector<geos::geom::Coordinate> _parseGeometry(const boost::property_tree::ptree& geometry);
+  geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox);
 
 };
 

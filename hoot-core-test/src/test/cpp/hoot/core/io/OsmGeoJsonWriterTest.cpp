@@ -58,12 +58,12 @@ public:
 
   void runAllDataTypesTest()
   {
-    runTest("test-files/conflate/unified/AllDataTypesA.osm", "AllDataTypes.json");
+    runTest("test-files/conflate/unified/AllDataTypesA.osm", "AllDataTypes.geojson");
   }
 
   void runDcTigerTest()
   {
-    runTest("test-files/DcTigerRoads.osm", "DcTigerRoads.json");
+    runTest("test-files/DcTigerRoads.osm", "DcTigerRoads.geojson");
   }
 
   void runTest(const QString& input, const QString& output)
@@ -85,8 +85,8 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonWriterTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonWriterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonWriterTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonWriterTest, "current");
 
 }
 

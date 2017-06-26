@@ -218,6 +218,8 @@ protected:
   bool _isWeb;
   QFile _file;
 
+  OsmMapPtr _map;
+
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param jsonStr String to load
@@ -227,36 +229,29 @@ protected:
   /**
    * @brief parseOverpassJson Traverses our property tree and adds
    *        elements to the map
-   * @param pMap Append elements to this map
    */
-  void _parseOverpassJson(OsmMapPtr pMap);
+  void _parseOverpassJson();
 
   /**
    * @brief _parseOverpassNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
    * @param item Property Tree (likely a sub-tree)
-   * @param pMap Map to which we add the node
    */
-  void _parseOverpassNode(const boost::property_tree::ptree &item,
-                          OsmMapPtr pMap);
+  void _parseOverpassNode(const boost::property_tree::ptree &item);
 
   /**
    * @brief _parseOverpassWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
    * @param item Property Tree (or sub-tree)
-   * @param pMap Map to which we add the way
    */
-  void _parseOverpassWay(const boost::property_tree::ptree &item,
-                         OsmMapPtr pMap);
+  void _parseOverpassWay(const boost::property_tree::ptree &item);
 
   /**
    * @brief _parseOverpassRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.
    * @param item Property Tree (likely a subtree)
-   * @param pMap Map to which we add the Relation
    */
-  void _parseOverpassRelation(const boost::property_tree::ptree &item,
-                              OsmMapPtr pMap);
+  void _parseOverpassRelation(const boost::property_tree::ptree &item);
 
   /**
    * @brief _addTags Reads tags from the given ptree, and adds them to the
