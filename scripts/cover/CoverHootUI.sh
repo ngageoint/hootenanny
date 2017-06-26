@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # create the mocha-coverage report
 cd $HOOT_HOME/hoot-ui
