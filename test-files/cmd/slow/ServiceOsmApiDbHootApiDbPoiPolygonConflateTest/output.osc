@@ -1090,7 +1090,7 @@
             <tag k="gnis:county_name" v="San Francisco"/>
             <tag k="hoot:id" v="3"/>
             <tag k="addr:city" v="San Francisco"/>
-            <tag k="hoot:status" v="1"/>
+            <tag k="hoot:status" v="3"/>
             <tag k="ele" v="14"/>
             <tag k="alt_name" v="MISSION POLICE STATION"/>
             <tag k="building" v="yes"/>
@@ -1473,7 +1473,7 @@
             <tag k="REF1" v="00435f"/>
             <tag k="REF2" v="00435f"/>
             <tag k="hoot:id" v="66"/>
-            <tag k="hoot:status" v="1"/>
+            <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="16TH &amp; HOFF ST. PARKING GARAGE"/>
             <tag k="name" v="Hoff Street Garage"/>
             <tag k="amenity" v="parking"/>

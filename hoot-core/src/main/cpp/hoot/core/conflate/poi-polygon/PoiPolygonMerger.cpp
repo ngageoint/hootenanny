@@ -104,6 +104,8 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
   }
   finalBuilding->setTags(finalBuildingTags);
 
+  finalBuilding->setStatus(Status::Conflated);
+
   // do some book keeping to remove the POIs and mark them as replaced.
   for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
