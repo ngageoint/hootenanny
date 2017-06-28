@@ -201,7 +201,7 @@ public:
   {
     //simpler logic to just examine each POI and check for surrounding polys, rather than check both
     //POIs and their surrounding polys and polys and their surrounding POIs
-    if (PoiPolygonMatch::isPoi(*e))
+    if (e->isUnknown() && PoiPolygonMatch::isPoi(*e))
     {
       //Technically, the density based density matches depends on this data too, but since that
       //code has been disabled, this check is good enough.
