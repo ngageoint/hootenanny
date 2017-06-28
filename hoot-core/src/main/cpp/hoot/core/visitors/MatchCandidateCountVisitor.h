@@ -61,9 +61,6 @@ private:
   QMap<QString, boost::shared_ptr<MatchCreator> > _matchCreatorsByName;
   long _totalCandidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
-  //true if PoiPolygonMatchCreator is present and either the POI script match creator is present or
-  //BuildingMatchCreator is present
-  //bool _containsPoiPolyAndEitherPoiOrBuildingMatchCreators;
 
   void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);
 };

@@ -36,8 +36,7 @@ namespace hoot
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
   const vector<boost::shared_ptr<MatchCreator> >& matchCreators) :
-_totalCandidateCount(0)//,
-//_containsPoiPolyAndEitherPoiOrBuildingMatchCreators(false)
+_totalCandidateCount(0)
 {
   _setupCreators(matchCreators);
 }
@@ -45,10 +44,6 @@ _totalCandidateCount(0)//,
 void MatchCandidateCountVisitor::_setupCreators(
   const vector<boost::shared_ptr<MatchCreator> >& matchCreators)
 {
-  //bool hasPoiPoly = false;
-  //bool hasPoi = false;
-  //bool hasBuilding = false;
-
   LOG_VARD(matchCreators.size());
   for (size_t i = 0; i < matchCreators.size(); i++)
   {
@@ -65,25 +60,7 @@ void MatchCandidateCountVisitor::_setupCreators(
     }
     LOG_VART(matchCreatorName);
     _matchCreatorsByName.insert(matchCreatorName, matchCreator);
-
-//    //This is a little brittle by not using the class name methods of the match creators, but was
-//    //trying to avoid a dependency on specific match creator child classes.
-//    if (matchCreatorName.toLower().contains("poipoly"))
-//    {
-//      hasPoiPoly = true;
-//    }
-//    else if (matchCreatorName.toLower().contains("poi"))
-//    {
-//      hasPoi = true;
-//    }
-//    else if (matchCreatorName.toLower().contains("building"))
-//    {
-//      hasBuilding = true;
-//    }
   }
-
-  //_containsPoiPolyAndEitherPoiOrBuildingMatchCreators = hasPoiPoly && (hasPoi || hasBuilding);
-
   LOG_VART(_matchCreatorsByName.size());
 }
 
@@ -111,16 +88,6 @@ void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e
         _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
       }
       LOG_VART(_matchCandidateCountsByMatchCreator[matchCreatorName]);
-
-//      //If poi or building match creators are present and also poi/poly is present, we'll get
-//      //duplicate candidate feature counts, so just skip counting poi/poly matches in the total
-//      //count.
-//      if (_containsPoiPolyAndEitherPoiOrBuildingMatchCreators &&
-//          matchCreatorName.toLower().contains("poipoly"))
-//      {
-//        continue;
-//      }
-//      _candidateCount++;
     }
   }
   LOG_VART(_matchCandidateCountsByMatchCreator.size());
