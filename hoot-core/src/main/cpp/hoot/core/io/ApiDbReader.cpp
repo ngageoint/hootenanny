@@ -56,7 +56,7 @@ void ApiDbReader::setBoundingBox(const QString bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
-    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+    setBounds(GeometryUtils::envelopeFromConfigString(bbox));
   }
 }
 

@@ -29,7 +29,9 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/ops/Boundable.h>
 
+// Boost
 #include <boost/shared_ptr.hpp>
 
 // Qt
@@ -48,7 +50,7 @@ class ApiDb;
 /**
  * Abstract parent class for reading from an API style OSM database
  */
-class ApiDbReader
+class ApiDbReader : public Boundable
 {
 public:
 
@@ -58,6 +60,8 @@ public:
 
   ApiDbReader();
   virtual ~ApiDbReader() {}
+
+  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
   void setBoundingBox(const QString bbox);
   void setOverrideBoundingBox(const QString bbox);
