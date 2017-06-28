@@ -322,7 +322,7 @@ ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile test-all
 endif
 
-ui-build:
+ui-build: HOOT_VERSION_FILE
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-ui && $(MAKE) -f Makefile clean && $(MAKE) -f Makefile all
 endif
