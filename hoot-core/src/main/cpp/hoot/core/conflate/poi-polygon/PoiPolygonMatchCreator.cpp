@@ -94,8 +94,8 @@ public:
 
     // find other nearby candidates
     set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                   getIndex(),
-                                                                   _indexToEid,
+                                                                   getPolyIndex(),
+                                                                   _polyIndexToEid,
                                                                    getMap());
     ElementId from(e->getElementType(), e->getId());
 
@@ -199,7 +199,9 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (isMatchCandidate(e))
+    //simpler logic to just examine each POI and check for surrounding polys, rather than check both
+    //POIs and their surrounding polys and polys and their surrounding POIs
+    if (PoiPolygonMatch::isPoi(*e))
     {
       //Technically, the density based density matches depends on this data too, but since that
       //code has been disabled, this check is good enough.
@@ -215,33 +217,8 @@ public:
 
   static bool isMatchCandidate(ConstElementPtr element)
   {
-    return element->isUnknown() && PoiPolygonMatch::isPoi(*element);
-  }
-
-  boost::shared_ptr<HilbertRTree>& getIndex()
-  {
-    if (!_index)
-    {
-      // No tuning was done, I just copied these settings from OsmMapIndex.
-      // 10 children - 368
-      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
-      _index.reset(new HilbertRTree(mps, 2));
-
-      boost::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
-
-      // Instantiate our visitor
-      IndexElementsVisitor v(_index,
-                             _indexToEid,
-                             crit,
-                             boost::bind(&PoiPolygonMatchVisitor::getSearchRadius, this, _1),
-                             getMap());
-
-      getMap()->visitWaysRo(v);
-      getMap()->visitRelationsRo(v);
-      v.finalizeIndex();
-    }
-
-    return _index;
+    return element->isUnknown() &&
+      (PoiPolygonMatch::isPoi(*element) || PoiPolygonMatch::isPoly(*element));
   }
 
   boost::shared_ptr<HilbertRTree>& getPolyIndex()
@@ -302,8 +279,6 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
 
-  boost::shared_ptr<HilbertRTree> _index; // Used for finding neighbors
-  deque<ElementId> _indexToEid;
   boost::shared_ptr<HilbertRTree> _polyIndex; // used for finding surrounding polys
   deque<ElementId> _polyIndexToEid;
   set<ElementId> _surroundingPolyIds;
@@ -361,10 +336,15 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<con
 vector<MatchCreator::Description> PoiPolygonMatchCreator::getAllCreators() const
 {
   vector<Description> result;
-
   result.push_back(
-    Description(className(), "POI to Polygon Match Creator", MatchCreator::POI, true));
-
+    Description(
+      className(),
+      "POI to Polygon Match Creator",
+      //this match creator has two conflatable types, so arbitrarily just picking one of them as
+      //the base feature type; stats class will handle the logic to deal with both poi and polygon
+      //input types
+      MatchCreator::Polygon,
+      false));
   return result;
 }
 
@@ -392,7 +372,6 @@ boost::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
   {
     _rf.reset(new PoiPolygonRfClassifier());
   }
-
   return _rf;
 }
 

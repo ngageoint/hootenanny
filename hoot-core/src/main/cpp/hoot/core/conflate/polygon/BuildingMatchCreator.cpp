@@ -261,9 +261,8 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const
 vector<MatchCreator::Description> BuildingMatchCreator::getAllCreators() const
 {
   vector<Description> result;
-
-  result.push_back(Description(className(), "Building Match Creator", MatchCreator::Building, false));
-
+  result.push_back(
+    Description(className(), "Building Match Creator", MatchCreator::Building, false));
   return result;
 }
 

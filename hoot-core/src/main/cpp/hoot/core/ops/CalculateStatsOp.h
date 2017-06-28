@@ -106,9 +106,11 @@ private:
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
 
-  void _generateFeatureStats(boost::shared_ptr<const OsmMap>& map, QString description,
-                             float conflatableCount, MatchCreator::FeatureCalcType type,
-                             ElementCriterion* criterion);
+  void _generateFeatureStats(boost::shared_ptr<const OsmMap>& map,
+                             const MatchCreator::BaseFeatureType& featureType,
+                             const float conflatableCount,
+                             const MatchCreator::FeatureCalcType& type,
+                             ElementCriterion* criterion, const long poisMergedIntoPolys);
 };
 
 }

@@ -36,13 +36,19 @@ namespace hoot
 
 MatchCandidateCountVisitor::MatchCandidateCountVisitor(
   const vector<boost::shared_ptr<MatchCreator> >& matchCreators) :
-_candidateCount(0)
+_totalCandidateCount(0)//,
+//_containsPoiPolyAndEitherPoiOrBuildingMatchCreators(false)
 {
   _setupCreators(matchCreators);
 }
 
-void MatchCandidateCountVisitor::_setupCreators(const vector<boost::shared_ptr<MatchCreator> >& matchCreators)
+void MatchCandidateCountVisitor::_setupCreators(
+  const vector<boost::shared_ptr<MatchCreator> >& matchCreators)
 {
+  //bool hasPoiPoly = false;
+  //bool hasPoi = false;
+  //bool hasBuilding = false;
+
   LOG_VARD(matchCreators.size());
   for (size_t i = 0; i < matchCreators.size(); i++)
   {
@@ -57,19 +63,40 @@ void MatchCandidateCountVisitor::_setupCreators(const vector<boost::shared_ptr<M
     {
       matchCreatorName = matchCreatorDescription;
     }
-     LOG_TRACE("Appending: " + matchCreatorName);
+    LOG_VART(matchCreatorName);
     _matchCreatorsByName.insert(matchCreatorName, matchCreator);
+
+//    //This is a little brittle by not using the class name methods of the match creators, but was
+//    //trying to avoid a dependency on specific match creator child classes.
+//    if (matchCreatorName.toLower().contains("poipoly"))
+//    {
+//      hasPoiPoly = true;
+//    }
+//    else if (matchCreatorName.toLower().contains("poi"))
+//    {
+//      hasPoi = true;
+//    }
+//    else if (matchCreatorName.toLower().contains("building"))
+//    {
+//      hasBuilding = true;
+//    }
   }
+
+  //_containsPoiPolyAndEitherPoiOrBuildingMatchCreators = hasPoiPoly && (hasPoi || hasBuilding);
+
   LOG_VART(_matchCreatorsByName.size());
 }
 
 void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
-  for (QMap<QString, boost::shared_ptr<MatchCreator> >::const_iterator iterator = _matchCreatorsByName.begin();
-       iterator != _matchCreatorsByName.end(); ++iterator)
+  _totalCandidateCount = 0;
+
+  for (QMap<QString, boost::shared_ptr<MatchCreator> >::const_iterator iterator =
+       _matchCreatorsByName.begin(); iterator != _matchCreatorsByName.end(); ++iterator)
   {
     const QString matchCreatorName = iterator.key();
     LOG_VART(matchCreatorName);
+
     boost::shared_ptr<MatchCreator> matchCreator = iterator.value();
     if (matchCreator->isMatchCandidate(e, _map->shared_from_this()))
     {
@@ -84,10 +111,52 @@ void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e
         _matchCandidateCountsByMatchCreator[matchCreatorName] = 1;
       }
       LOG_VART(_matchCandidateCountsByMatchCreator[matchCreatorName]);
-      _candidateCount++;
+
+//      //If poi or building match creators are present and also poi/poly is present, we'll get
+//      //duplicate candidate feature counts, so just skip counting poi/poly matches in the total
+//      //count.
+//      if (_containsPoiPolyAndEitherPoiOrBuildingMatchCreators &&
+//          matchCreatorName.toLower().contains("poipoly"))
+//      {
+//        continue;
+//      }
+//      _candidateCount++;
     }
   }
   LOG_VART(_matchCandidateCountsByMatchCreator.size());
+
+  for (QMap<QString, long>::const_iterator iterator = _matchCandidateCountsByMatchCreator.begin();
+       iterator != _matchCandidateCountsByMatchCreator.end(); ++iterator)
+  {
+    //We'll handle poi and building counts separately, since there could be overlap between poi,
+    //building, and poi/poly match creators.
+    const QString matchCreatorName = iterator.key().toLower();
+    if (!matchCreatorName.contains("poi") && !matchCreatorName.contains("building"))
+    {
+      _totalCandidateCount += iterator.value();
+    }
+  }
+  //If poi/poly match creator isn't present, then use each of the counts from the poi and building
+  //match creators, if they're present.
+  //This is a little brittle by not using the class name methods of the match creators, but was
+  //trying to avoid a dependency on specific match creator child classes.
+  if (!_matchCandidateCountsByMatchCreator.contains("hoot::PoiPolygonMatchCreator"))
+  {
+    if (_matchCandidateCountsByMatchCreator.contains("hoot::BuildingMatchCreator"))
+    {
+      _totalCandidateCount += _matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"];
+    }
+    if (_matchCandidateCountsByMatchCreator.contains("POI Generic"))
+    {
+      _totalCandidateCount += _matchCandidateCountsByMatchCreator["POI Generic"];
+    }
+  }
+  //otherwise, use the poi/poly count only to avoid overlap.  it will always be >= the sum of
+  //the poi and building counts
+  else
+  {
+    _totalCandidateCount += _matchCandidateCountsByMatchCreator["hoot::PoiPolygonMatchCreator"];
+  }
 }
 
 }
