@@ -140,7 +140,7 @@ void ConflateSettingsOptimizer::_writeOutput(
   if (regressionTestFitnessFunction)
   {
     temp = regressionTestFitnessFunction->bestScoresPerTestToString();
-    LOG_ERROR(temp);
+    LOG_INFO(temp);
     output += temp + "\n\n";
   }
 

@@ -95,6 +95,9 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, El
   // split each way in the subline mapping.
   foreach (WayPtr w1, wayMapping.uniqueKeys())
   {
+    LOG_VART(w1->getElementId());
+    LOG_VART(w1->getStatus());
+
     QList<WayMatchStringMerger::SublineMappingPtr> sm = wayMapping.values(w1);
     qStableSort(sm.begin(), sm.end(), WayMatchStringMerger::SublineMappingLessThan1());
 
@@ -102,6 +105,8 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, El
     if (sm.size() == 1 && sm[0]->getStart1().isExtreme(WayLocation::SLOPPY_EPSILON) &&
       sm[0]->getEnd1().isExtreme(WayLocation::SLOPPY_EPSILON))
     {
+      LOG_TRACE(
+        "Skipping splitting way 1 due to single entry in subline spanning the entire way...");
       sm[0]->newWay1 = w1;
       continue;
     }
@@ -169,6 +174,18 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, El
       }
     }
 
+    // see comments for similar functionality in HighwaySnapMerger::_mergePair
+    if (w1->getStatus() == Status::Unknown1 &&
+        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+    {
+      LOG_TRACE(
+        "Retaining reference ID by mapping unknown1 ID: " << w1->getElementId() << " to ID: " <<
+        newWays[0]->getElementId() << "...");
+      _unknown1Replacements.insert(
+        pair<ElementId, ElementId>(w1->getElementId(), newWays[0]->getElementId()));
+    }
+
+    LOG_TRACE("Replacing: " << w1->getElementId() << " with: " << newWays);
     map->replace(w1, newWays);
   }
 }
@@ -187,6 +204,9 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, El
   // split each way in the subline mapping.
   foreach (WayPtr w2, wayMapping.uniqueKeys())
   {
+    LOG_VART(w2->getElementId());
+    LOG_VART(w2->getStatus());
+
     QList<WayMatchStringMerger::SublineMappingPtr> sm = wayMapping.values(w2);
     qStableSort(sm.begin(), sm.end(), WayMatchStringMerger::SublineMappingLessThan2());
 
@@ -194,6 +214,8 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, El
     if (sm.size() == 1 && sm[0]->getStart2().isExtreme(WayLocation::SLOPPY_EPSILON) &&
       sm[0]->getEnd2().isExtreme(WayLocation::SLOPPY_EPSILON))
     {
+      LOG_TRACE(
+        "Skipping splitting way 2 due to single entry in subline spanning the entire way...");
       sm[0]->setNewWay2(w2);
       continue;
     }
@@ -263,9 +285,20 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, El
         newWays.append(w);
         replaced.push_back(pair<ElementId, ElementId>(w2->getElementId(), w->getElementId()));
       }
-
     }
 
+    // see comments for similar functionality in HighwaySnapMerger::_mergePair
+    if (w2->getStatus() == Status::Unknown1 &&
+        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+    {
+      LOG_TRACE(
+        "Retaining reference ID by mapping unknown1 ID: " << w2->getElementId() << " to ID: " <<
+        newWays[0]->getElementId() << "...");
+      _unknown1Replacements.insert(
+        pair<ElementId, ElementId>(w2->getElementId(), newWays[0]->getElementId()));
+    }
+
+    LOG_TRACE("Replacing: " << w2->getElementId() << " with: " << newWays);
     map->replace(w2, newWays);
   }
 }

@@ -20,11 +20,14 @@ REF_DATASET=$1
 SEC_DATASET=$2
 AOI=$3
 #AOI=-180,-90,180,90 # for debugging
-TEST_NAME=$4
+#'unifying' or 'network'
+CONFLATION_TYPE=$4
+TEST_NAME=$5
 
 echo "reference dataset: " $REF_DATASET
 echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
+echo "CONFLATION TYPE: " $CONFLATION_TYPE
 echo "TEST_NAME: " $TEST_NAME
 
 RUN_DEBUG_STEPS=false
@@ -40,7 +43,10 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # generic debugging options applicable to multiple commands
-HOOT_OPTS="--info -D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
+HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D writer.include.debug.tags=true"
+if [ "$CONFLATION_TYPE" == "network" ]; then
+  HOOT_OPTS=$HOOT_OPTS" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher"
+fi
 
 OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
 rm -rf $OUTPUT_DIR
@@ -174,16 +180,20 @@ echo ""
 echo "STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data..."
 echo ""
 hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
-hoot is-match test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot is-match $HOOT_OPTS test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 
-echo ""
-echo "STEP 15a: Verifying the SQL changeset..."
-echo ""
-diff test-files/cmd/slow/$TEST_NAME/output.osc.sql $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
+# The map comparison, step 14, should be enough to check the state of the changeset write.  Due to node coordinate
+# precision differences between Ubuntu and CentOS, we'd need the equivalent of the is-match command for changesets
+# to do a valid changeset comparison.
 
-echo ""
-echo "STEP 15b: Verifying the XML changeset..."
-echo ""
-diff test-files/cmd/slow/$TEST_NAME/output.osc $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
+#echo ""
+#echo "STEP 15a: Verifying the SQL changeset..."
+#echo ""
+#diff test-files/cmd/slow/$TEST_NAME/output.osc.sql $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
+
+#echo ""
+#echo "STEP 15b: Verifying the XML changeset..."
+#echo ""
+#diff test-files/cmd/slow/$TEST_NAME/output.osc $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
 
 
