@@ -65,10 +65,10 @@ void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
 
 void CornerSplitter::splitCorners()
 {
-  Meters testLen = 1.0;
+  Meters testLen = 0.1;
 
   // Get a list of ways in the map
-  for (WayMap::const_iterator it = map->getWays().begin(); it != map->getWays().end(); ++it)
+  for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
     _todoWays.push_back(it->first);
   }
@@ -83,136 +83,76 @@ void CornerSplitter::splitCorners()
     // If the way has just two nodes, there are no corners
     if (nodeCount > 2)
     {
-      for (long nodeIdx = 1; nodeIdx < nodeCount-1; nodeIdx++)
+      for (size_t nodeIdx = 1; nodeIdx < nodeCount-1; nodeIdx++)
       {
-        Radians prevHeading = WayHeading::calculateHeading(WayLocation(_map, w, nodeIdx-1), testLen);
-        Radians thisHeading = WayHeading::calculateHeading(WayLocation(_map, w, nodeIdx), testLen);
-        Radians nextHeading = WayHeading::calculateHeading(WayLocation(_map, w, nodeIdx+1), testLen);
+        Radians prevHeading = WayHeading::calculateHeading(WayLocation(_map, pWay, nodeIdx-1), testLen);
+        Radians thisHeading = WayHeading::calculateHeading(WayLocation(_map, pWay, nodeIdx), testLen);
+        Radians nextHeading = WayHeading::calculateHeading(WayLocation(_map, pWay, nodeIdx+1), testLen);
 
-        // If something something angles, split the way
-        if (false)
+        double threshold = toRadians(45.0);
+        double delta = fabs(thisHeading - prevHeading);
+        delta += fabs(nextHeading - thisHeading);
+
+        // If we make enough of a turn, split the way
+        if (delta > threshold)
         {
-          _splitWay(w->getId(), w->getNodeId(nodeIdx));
+          _splitWay(pWay->getId(), nodeIdx, pWay->getNodeId(nodeIdx));
         }
       }
     }
   }
 }
 
-void CornerSplitter::_splitWay(long wayId, long nodeId)
+void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
 {
-  boost::shared_ptr<Way> way = _map->getWay(wayId);
-  if (way == 0)
+  boost::shared_ptr<Way> pWay = _map->getWay(wayId);
+  if (!pWay)
   {
     LOG_TRACE("way at " << wayId << " does not exist.");
     return;
   }
 
-  LOG_TRACE(
-    "Splitting way: " << way->getElementId() << " at node: " <<
-    ElementId(ElementType::Node, nodeId));
+  LOG_TRACE("Splitting way: " << pWay->getElementId() << " at node: " <<
+            ElementId(ElementType::Node, nodeId));
 
-  // find the first index of the split node that isn't an endpoint.
-  int firstIndex = -1;
-  const std::vector<long>& nodeIds = way->getNodeIds();
-  for (size_t i = 1; i < nodeIds.size() - 1; i++)
+  // split the way and remove it from the map
+  WayLocation wayLoc(_map, pWay, nodeIdx, 0.0);
+  vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, pWay, wayLoc);
+
+  // Process splits
+  if (splits.size() > 1)
   {
-    if (nodeIds[i] == nodeId)
+    LOG_VART(pWay->getElementId());
+    LOG_VART(pWay->getStatus());
+    LOG_VART(splits[0]->getElementId());
+
+    const ElementId splitWayId = pWay->getElementId();
+
+    QList<ElementPtr> newWays;
+    foreach (const boost::shared_ptr<Way>& w, splits)
     {
-      firstIndex = i;
-      break;
-    }
-  }
-  LOG_VART(firstIndex);
-
-  // if the first index wasn't an endpoint.
-  if (firstIndex != -1)
-  {
-    QList<long> ways = _nodeToWays.values(nodeId);
-    LOG_VART(ways);
-    int concurrent_count = 0;
-    int otherWays_count = ways.count() - 1;
-    for (QList<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
-    {
-      long compWayId = *it;
-      LOG_VART(compWayId);
-      //  Don't compare it against itself
-      if (wayId == compWayId)
-        continue;
-
-      //  Get the way info to make the comparison
-      if (_wayReplacements.contains(compWayId))
-      {
-        compWayId = _wayReplacements[compWayId];
-      }
-      boost::shared_ptr<Way> comp = _map->getWay(compWayId);
-      LOG_VART(comp.get());
-      const std::vector<long>& compIds = comp->getNodeIds();
-      long idx = comp->getNodeIndex(nodeId);
-
-      //  Endpoints of the other way should be split
-      if (idx < 1 || idx > (long)compIds.size() - 1)
-        continue;
-
-      //  Check both in forward and reverse for shared nodes in the way
-      if ((nodeIds[firstIndex - 1] == compIds[idx - 1] && nodeIds[firstIndex + 1] == compIds[idx + 1]) ||
-          (nodeIds[firstIndex - 1] == compIds[idx + 1] && nodeIds[firstIndex + 1] == compIds[idx - 1]))
-        concurrent_count++;
+      newWays.append(w);
     }
 
-    // TODO: Need to figure out why this doesn't play nice with network conflation
-    //  A split point is found when there is at least one non-concurrent way at this node
-    if (concurrent_count < otherWays_count)
+    // make sure any ways that are part of relations continue to be part of those relations after
+    // they're split.
+    _map->replace(pWay, newWays);
+
+    if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
+        pWay->getStatus() == Status::Unknown1)
     {
-      // split the way and remove it from the map
-      WayLocation wl(_map, way, firstIndex, 0.0);
-      vector< boost::shared_ptr<Way> > splits = WaySplitter::split(_map, way, wl);
+      //see similar notes in HighwaySnapMerger::_mergePair
 
-      // if a split occurred.
-      if (splits.size() > 1)
-      {
-        LOG_VART(way->getElementId());
-        LOG_VART(way->getStatus());
-        LOG_VART(splits[0]->getElementId());
-
-        const ElementId splitWayId = way->getElementId();
-
-        QList<ElementPtr> newWays;
-        foreach (const boost::shared_ptr<Way>& w, splits)
-        {
-          newWays.append(w);
-        }
-
-        // make sure any ways that are part of relations continue to be part of those relations after
-        // they're split.
-        _map->replace(way, newWays);
-
-        if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
-            way->getStatus() == Status::Unknown1)
-        {
-          //see similar notes in HighwaySnapMerger::_mergePair
-
-          LOG_TRACE(
-            "Setting unknown1 " << way->getElementId().getId() << " on " <<
-            splits[0]->getElementId() << "...");
-          ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
-          newWaySegment->setId(way->getElementId().getId());
-          _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
-          _wayReplacements[splits[0]->getElementId().getId()] = way->getElementId().getId();
-        }
-
-        _removeWayFromMap(way);
-
-        // go through all the resulting splits
-        for (size_t i = 0; i < splits.size(); i++)
-        {
-          // add the new ways nodes just in case the way was self intersecting.
-          _mapNodesToWay(splits[i]);
-        }
-
-        LOG_VART(_map->containsElement(splitWayId));
-      }
+      LOG_TRACE("Setting unknown1 " << pWay->getElementId().getId() << " on " <<
+                splits[0]->getElementId() << "...");
+      ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
+      newWaySegment->setId(pWay->getElementId().getId());
+      _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
     }
+
+    //_removeWayFromMap(pWay);
+
+    LOG_VART(_map->containsElement(splitWayId));
   }
 }
 

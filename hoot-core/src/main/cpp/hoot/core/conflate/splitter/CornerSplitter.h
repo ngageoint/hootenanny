@@ -35,6 +35,7 @@
 #include <QMultiHash>
 #include <QSet>
 #include <QMap>
+#include <vector>
 
 namespace hoot
 {
@@ -72,7 +73,7 @@ private:
   /**
    * Given a way and a node, split the way at that node.
    */
-  void _splitWay(long wayId, long nodeId);
+  void _splitWay(long wayId, long nodeIdx, long nodeId);
 };
 
 }
