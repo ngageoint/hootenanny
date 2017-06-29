@@ -67,7 +67,7 @@ public:
     NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
     n->setTag("foo", "bar");
 
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, n->getStatus().getEnum());
+    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, (Status::TypeEnum)n->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(123l, n->getId());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.3, n->getY(), 1e-3);
@@ -75,7 +75,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(QString("bar"), n->getTags()["foo"]);
 
     NodePtr n2(new Node(*n));
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, n2->getStatus().getEnum());
+    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, (Status::TypeEnum)n2->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(123l, n2->getId());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n2->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.3, n2->getY(), 1e-3);
@@ -90,7 +90,7 @@ public:
     NodePtr n(new Node(Status::Unknown1, 123, 1.2, 2.3, 3.14));
     n->setTag("foo", "bar");
 
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, n->getStatus().getEnum());
+    CPPUNIT_ASSERT_EQUAL(Status::Unknown1, (Status::TypeEnum)n->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(123l, n->getId());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.3, n->getY(), 1e-3);
@@ -103,7 +103,7 @@ public:
     n->setTag("foo", "cheese");
     n->setStatus(Status::Unknown2);
 
-    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, n->getStatus().getEnum());
+    CPPUNIT_ASSERT_EQUAL(Status::Unknown2, (Status::TypeEnum)n->getStatus().getEnum());
     CPPUNIT_ASSERT_EQUAL(123l, n->getId());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.4, n->getX(), 1e-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4.5, n->getY(), 1e-3);
