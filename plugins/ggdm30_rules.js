@@ -35,10 +35,10 @@ ggdm30.rules = {
     // ##### Start of One2One Rules #####
 
     // FCODE rules for Import
-    // This is where anything "unique" to TDS goes.
+    // This is where anything "unique" to GGDM goes.
     fcodeOne2oneIn : [
      // ['F_CODE','AP030','highway','road'], // Road
-     ], // End fcodeOne2oneIn
+    ], // End fcodeOne2oneIn
 
     // These are for finding an FCODE for export.
     // Note: These get swapped around before being used
@@ -49,6 +49,7 @@ ggdm30.rules = {
      ['F_CODE','AK120','leisure','common'], // Park - close but not great
      ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
      ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
+     ['F_CODE','AL024','place','neighborhood'], // Neighbourhood - US spelling
      ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
      ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
      ['F_CODE','AL200','historic','ruins'], // Ruins

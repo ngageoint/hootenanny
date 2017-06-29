@@ -85,6 +85,8 @@ tds61.rules = {
      // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
      // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
      ['F_CODE','GB005','aeroway','sport_airport'], // Land Aerodrome
+     ['F_CODE','ZB050','survey:point:type','benchmark'], // GGDM3 now has this as an FCODE
+     ['F_CODE','ZB050','survey:point:type','geodetic'], // GGDM3 now has this as an FCODE
      ['F_CODE','ZD040','natural','hill'], // From GeoNames
      ['F_CODE','ZD040','natural','valley'], // From GeoNames
      ['F_CODE','ZD040','natural','cape'], // From OSM

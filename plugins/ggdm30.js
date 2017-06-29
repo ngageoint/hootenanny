@@ -26,15 +26,17 @@
  */
 
 /*
-    TDSv61 conversion script
-        TDSv61 -> OSM+, and
-        OSM+ -> TDSv61
+    GGDM30 conversion script
+        GGDM30 -> OSM+, and
+        OSM+ -> GGDM30
+
+    Also, this will import GGDM2.1
 
     Based on mgcp/__init__.js script
 */
 
 ggdm30 = {
-    // getDbSchema - Load the standard schema or modify it into the TDS structure.
+    // getDbSchema - Load the standard schema or modify it into the Thematic structure.
     getDbSchema: function() {
         layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
         ggdmAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
@@ -56,7 +58,7 @@ ggdm30 = {
         // translate.dumpLookup(ggdmAttrLookup);
         // print("ggdmAttrLookup: End");
 
-        // Decide if we are going to use TDS structure or 1 FCODE / File
+        // Decide if we are going to use the Thematic structure or 1 FCODE / File
         // if we DON't want the new structure, just return the ggdm30.rawSchema
         if (config.getOgrThematicStructure() == 'false')
         {
@@ -194,7 +196,6 @@ ggdm30 = {
         //print("ggdmThematicLookup: End");
 
         // Add the ESRI Feature Dataset name to the schema
-        //  newSchema = translate.addFdName(newSchema,'TDS');
         if (config.getOgrEsriFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
 
         // Now add the o2s feature to the ggdm30.rawSchema
@@ -763,7 +764,7 @@ ggdm30 = {
 // #####################################################################################################
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
-        // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
+        // Roads. GGDM30 is the same as TDSv61
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
              // Set a Default: "It is a road but we don't know what it is"
@@ -817,7 +818,7 @@ ggdm30 = {
         } // End if AP030
 
 
-        // New TDSv61 Attribute - ROR (Road Interchange Ramp)
+        // ROR (Road Interchange Ramp)
         if (tags.highway && tags.interchange_ramp == 'yes')
         {
             var roadList = ['motorway','trunk','primary','secondary','tertiary'];
@@ -825,7 +826,7 @@ ggdm30 = {
         }
 
         // Add the LayerName to the source
-        tags.source = 'tdsv61:' + layerName.toLowerCase();
+        tags.source = 'GGDM30:' + layerName.toLowerCase();
         
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         if (attrs.UFI)
@@ -873,6 +874,7 @@ ggdm30 = {
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
             ["t.pylon =='yes' && t['cable:type'] == 'cableway'"," t.aerialway = 'pylon'"],
             ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
+            ["t['seamark:mooring:category'] && !(t['seamark:type'])","t['seamark:type'] = 'mooring'"],
             ["t.sidetrack && !(t.railway)","t.railway = 'rail'"],
             ["t.sidetrack && !(t.service)","t.service = 'siding'"],
             ["t.social_facility","t.amenity = 'social_facility'; t['social_facility:for'] = t.social_facility; t.social_facility = 'shelter'"],
@@ -1293,7 +1295,6 @@ ggdm30 = {
                 case 'city':
                 case 'town':
                 case 'suburb':
-                case 'neighbourhood':
                 case 'quarter':
                 case 'village':
                     attrs.F_CODE = 'AL020'; // Built Up Area
@@ -1435,7 +1436,7 @@ ggdm30 = {
            if (tags.protect_class) delete tags.protect_class;
        }
 
-       // Split link roads. TDSv61 now has an attribute for this
+       // Split link roads. GGDM30 & TDSv61 now have an attribute for this
 //        if (tags.highway && (tags['highway'].indexOf('_link') !== -1))
 //        {
 //            tags.highway = tags['highway'].replace('_link','');
@@ -1691,6 +1692,7 @@ ggdm30 = {
         // If things have a height greater than 46m, tags them as being a "Navigation Landmark"
         if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
 
+// ### FIX ###
         // Alt_Name:  AL020 Built Up Area & ZD070 Water Measurement Location are the _ONLY_ features in TDS
         // that have a secondary name.
         if (attrs.ZI005_FNA2 && (attrs.F_CODE !== 'AL020' && attrs.F_CODE !== 'ZD070'))
@@ -1854,8 +1856,8 @@ ggdm30 = {
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
 
-        // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.  
-        // There is no way we can translate these to a single TDS feature.
+        // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line.
+        // There is no way we can translate these to a single GGDM30 feature.
         if (geometryType == 'Collection') return null;
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
