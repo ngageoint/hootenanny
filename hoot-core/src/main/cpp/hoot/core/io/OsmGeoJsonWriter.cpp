@@ -115,9 +115,10 @@ void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr n)
 void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
-  bool isBuilding = OsmSchema::getInstance().isBuilding(w) ||
-                    OsmSchema::getInstance().isBuildingPart(w);
-  _writeGeometry(nodes, (isBuilding) ? "Polygon" : "LineString");
+  bool isPolygon = OsmSchema::getInstance().isBuilding(w) ||
+                   OsmSchema::getInstance().isBuildingPart(w) ||
+                   nodes[0] == nodes[nodes.size() - 1];
+  _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
 }
 
 void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
@@ -128,12 +129,15 @@ void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
   bool first = true;
   for (vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
   {
+    ConstElementPtr e = _map->getElement(it->getElementId());
+    if (e.get() == NULL)
+      continue;
     if (first)
       first = false;
     else
       _write(",");
     _write("{");
-    _writeGeometry(_map->getElement(it->getElementId()));
+    _writeGeometry(e);
     _write("}");
   }
   _write("]");
@@ -159,6 +163,19 @@ void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e)
 
 void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
 {
+  //  Build a temporary vector of valid nodes
+  vector<long> temp_nodes;
+  for (vector<long>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  {
+    if (_map->getNode(*it).get() != NULL)
+      temp_nodes.push_back(*it);
+  }
+  if (temp_nodes.size() < 2 && type.compare("Point") != 0)
+    type = "Point";
+  if (temp_nodes.size() < 4 && type.compare("Polygon") == 0)
+    type = "LineString";
+  if (type.compare("Polygon") == 0 && temp_nodes[0] != temp_nodes[temp_nodes.size() - 1])
+    type = "LineString";
   _writeKvp("type", type.c_str());
   _write(",");
   _write("\"coordinates\": ");
@@ -169,7 +186,7 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
   if (polygon)
     _write("[");
   bool first = true;
-  for (vector<long>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  for (vector<long>::const_iterator it = temp_nodes.begin(); it != temp_nodes.end(); ++it)
   {
     if (first)
       first = false;
@@ -190,8 +207,16 @@ void OsmGeoJsonWriter::_writeFeature(ConstElementPtr e)
   _writeKvp("id", QString::number(e->getId())); _write(",");
   _write("\"properties\": {");
   _writeKvp("type", _typeName(e->getElementType()));
-  if (_hasTags(e)) _write(",");
-  _writeTags(e);
+  if (_hasTags(e))
+  {
+    _write(",");
+    _writeTags(e);
+  }
+  if (e->getElementType() == ElementType::Relation)
+  {
+    _write(",");
+    _writeRelationInfo(boost::dynamic_pointer_cast<const Relation>(e));
+  }
   _write("}");
 }
 
@@ -213,15 +238,21 @@ void OsmGeoJsonWriter::_writeNodes()
       _firstElement = false;
     else
       _write(",", true);
-    ConstNodePtr n = _map->getNode(nids[i]);
-    _write("{");
-    _writeFeature(n);
-    _write(",");
-    _write("\"geometry\": {");
-    _writeGeometry(n);
-    _write("}");
-    _write("}", false);
+    _writeNode(_map->getNode(nids[i]));
   }
+}
+
+void OsmGeoJsonWriter::_writeNode(ConstNodePtr node)
+{
+  if (node.get() == NULL)
+    return;
+  _write("{");
+  _writeFeature(node);
+  _write(",");
+  _write("\"geometry\": {");
+  _writeGeometry(node);
+  _write("}");
+  _write("}", false);
 }
 
 void OsmGeoJsonWriter::_writeWays()
@@ -234,19 +265,62 @@ void OsmGeoJsonWriter::_writeWays()
     set<ElementId> parents = _map->getParents(w->getElementId());
     if (parents.size() > 0)
       continue;
+    if (w.get() == NULL)
+      continue;
     if (_firstElement)
       _firstElement = false;
     else
       _write(",", true);
-    //  Write out the way in geojson
-    _write("{");
-    _writeFeature(w);
-    _write(",");
-    _write("\"geometry\": {");
-    _writeGeometry(w);
-    _write("}");
-    _write("}", false);
+    //  Make sure that building ways are "complete"
+    const vector<long>& nodes = w->getNodeIds();
+    bool valid = true;
+    if (OsmSchema::getInstance().isBuilding(w) ||
+        OsmSchema::getInstance().isBuildingPart(w))
+    {
+      for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
+      {
+        ConstNodePtr node = _map->getNode(*nodeIt);
+        if (node.get() == NULL)
+        {
+          valid = false;
+          break;
+        }
+      }
+    }
+    //  Write out the way in geojson if valid
+    if (valid)
+      _writeWay(w);
+    else
+    {
+      for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
+      {
+        ConstNodePtr node = _map->getNode(*nodeIt);
+        if (node.get() != NULL)
+        {
+          if (_firstElement)
+            _firstElement = false;
+          else
+            _write(",", true);
+          _writeNode(node);
+        }
+      }
+    }
   }
+}
+
+void OsmGeoJsonWriter::_writeWay(ConstWayPtr way)
+{
+  if (way.get() == NULL)
+    return;
+  //  Write out the way in geojson
+  _write("{");
+  _writeFeature(way);
+  _write(",");
+  _write("\"geometry\": {");
+  _writeGeometry(way);
+  _write("}");
+  _write("}", false);
+
 }
 
 void OsmGeoJsonWriter::_writeRelations()
@@ -268,6 +342,44 @@ void OsmGeoJsonWriter::_writeRelations()
     _write("}");
     _write("}", false);
   }
+}
+
+void OsmGeoJsonWriter::_writeRelationInfo(ConstRelationPtr r)
+{
+  _writeKvp("relation-type", r->getType()); _write(",");
+  QString roles = _buildRoles(r).c_str();
+  _writeKvp("roles", roles);
+}
+
+string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r)
+{
+  bool first = true;
+  return _buildRoles(r, first);
+}
+
+string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
+{
+  stringstream ss;
+  const vector<RelationData::Entry>& members = r->getMembers();
+  //  Iterate all members and concatenate the roles separated by a semicolon
+  for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
+  {
+    ConstElementPtr e = _map->getElement(it->getElementId());
+    if (e.get() == NULL)
+      continue;
+    if (first)
+      first = false;
+    else
+      ss << ";";
+    ss << it->getRole();
+    //  Recursively get the roles of the sub-relation that is valid
+    if (it->getElementId().getType() == ElementType::Relation &&
+        _map->getRelation(it->getElementId().getId()).get() != NULL)
+    {
+      ss << ";" << _buildRoles(_map->getRelation(it->getElementId().getId()), first);
+    }
+  }
+  return ss.str();
 }
 
 }

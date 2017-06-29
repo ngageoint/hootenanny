@@ -52,23 +52,124 @@ public:
 
   OsmGeoJsonWriter(int precision = 16);
 
+  /**
+   * @brief write Write the OsmMap out to a file in GeoJSON format, writer must be "open"
+   * @param map
+   */
   virtual void write(ConstOsmMapPtr map);
 
+  /**
+   * @brief isSupported returns true if the URL is likely supported
+   * @param url Filename ending in ".geojson"
+   * @return
+   */
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".geojson"); }
 
 protected:
 
+  /**
+   * @brief _writeNodes Iterates all nodes that aren't part of another element and writes
+   *   them out to the GeoJSON file
+   */
   void _writeNodes();
+
+  /**
+   * @brief _writeNode Writes a single node; metadata, tags, and geometry
+   * @param node
+   */
+  void _writeNode(ConstNodePtr node);
+
+  /**
+   * @brief _writeWays Iterates all ways that aren't part of another element and writes
+   *   them out to the GeoJSON file
+   */
   void _writeWays();
+
+  /**
+   * @brief _writeWay Writes a single way; metadata, tags, and geometry
+   * @param way
+   */
+  void _writeWay(ConstWayPtr way);
+
+  /**
+   * @brief _writeRelations Iterates all relations that aren't part of another element and writes
+   *   them out to the GeoJSON file
+   */
   void _writeRelations();
-  void _writeFeature(ConstElementPtr e);
-  void _writeMeta(ConstElementPtr e);
+
+  /**
+   * @brief _writeRelationInfo Writes relation specific information, relation-type and roles
+   * @param relation
+   */
+  void _writeRelationInfo(ConstRelationPtr relation);
+
+  /**
+   * @brief _writeFeature Calls _writeNode(), _writeWay(), or _writeRelation()
+   *   based on the type of element e
+   * @param element
+   */
+  void _writeFeature(ConstElementPtr element);
+
+  /**
+   * @brief _writeMeta Write node/way/relation metadata, i.e. timestamp, version, and visible
+   * @param element
+   */
+  void _writeMeta(ConstElementPtr element);
+
+  /**
+   * @brief _writeGeometry Write out the geometry in GeoJSON format based on the type
+   * @param nodes Vector of node ids in OsmMap
+   * @param type GeoJSON geometry type, i.e. Point, LineString, Polygon
+   */
   void _writeGeometry(const std::vector<long>& nodes, std::string type);
-  void _writeGeometry(ConstElementPtr e);
-  void _writeGeometry(ConstNodePtr n);
-  void _writeGeometry(ConstWayPtr w);
-  void _writeGeometry(ConstRelationPtr r);
+
+  /**
+   * @brief _writeGeometry Write out geometry for any element
+   * @param element
+   */
+  void _writeGeometry(ConstElementPtr element);
+
+  /**
+   * @brief _writeGeometry Write out geometry for a single node
+   * @param node
+   */
+  void _writeGeometry(ConstNodePtr node);
+
+  /**
+   * @brief _writeGeometry Write out geometry for a single way
+   * @param way
+   */
+  void _writeGeometry(ConstWayPtr way);
+
+  /**
+   * @brief _writeGeometry Write out geometry for a single relation
+   * @param relation
+   */
+  void _writeGeometry(ConstRelationPtr relation);
+
+  /**
+   * @brief _getBbox Create a bounding box array in GeoJSON format
+   * @return
+   */
   QString _getBbox();
+
+  /**
+   * @brief _buildRoles Iterates all members of relations (recurses super-relations) collecting roles
+   * @param relation
+   * @return Semicolon separated list of roles
+   */
+  std::string _buildRoles(ConstRelationPtr relation);
+
+private:
+
+  /**
+   * @brief _buildRoles Recursive version of _buildRoles, called my previous version
+   * @param relation
+   * @param first Flag used for semicolon separation
+   * @return Semicolon separated list of roles
+   */
+  std::string _buildRoles(ConstRelationPtr relation, bool& first);
+
 };
 
 } // hoot

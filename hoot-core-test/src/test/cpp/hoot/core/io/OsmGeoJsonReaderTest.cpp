@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -52,6 +52,7 @@ class OsmGeoJsonReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(OsmGeoJsonReaderTest);
   CPPUNIT_TEST(runAllDataTypesTest);
   CPPUNIT_TEST(runDcTigerTest);
+  CPPUNIT_TEST(runBostonSubsetRoadBuildingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,6 +65,11 @@ public:
   void runDcTigerTest()
   {
     runTest("test-files/io/GeoJson/DcTigerRoads.geojson", "DcTigerRoads.osm");
+  }
+
+  void runBostonSubsetRoadBuildingTest()
+  {
+    runTest("test-files/io/GeoJson/BostonSubsetRoadBuilding.geojson", "BostonSubsetRoadBuilding.osm");
   }
 
   void runTest(const QString& input, const QString& output)
@@ -86,7 +92,7 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "slow");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmGeoJsonReaderTest, "current");
 
 }

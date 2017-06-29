@@ -197,6 +197,21 @@ public:
    */
   QString getCopyright() { return _copyright; }
 
+  /**
+   * @brief scrubQuotes Converts single quotes to double quotes, and escaped
+   *         apostrophes to regular apostrophes
+   * @param jsonStr proper JSON string
+   */
+  static void scrubQuotes(QString &jsonStr);
+
+  /**
+   * @brief scrubBigInts Ensures that we have quotes around big integers.
+   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
+   *        json parser in boost 1.41
+   * @param jsonStr string upon which we operate
+   */
+  static void scrubBigInts(QString &jsonStr);
+
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -261,21 +276,6 @@ protected:
    */
   void _addTags(const boost::property_tree::ptree &item,
                 hoot::ElementPtr pElement);
-
-  /**
-   * @brief _scrubQuotes Converts single quotes to double quotes, and escaped
-   *         apostrophes to regular apostrophes
-   * @param jsonStr proper JSON string
-   */
-  void _scrubQuotes(QString &jsonStr);
-
-  /**
-   * @brief _scrubBigInts Ensures that we have quotes around big integers.
-   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
-   *        json parser in boost 1.41
-   * @param jsonStr string upon which we operate
-   */
-  void _scrubBigInts(QString &jsonStr);
 
 };
 

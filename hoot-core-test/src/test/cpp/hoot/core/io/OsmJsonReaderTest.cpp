@@ -52,6 +52,8 @@ class OsmJsonReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(wayTest);
   CPPUNIT_TEST(relationTest);
   CPPUNIT_TEST(urlTest);
+  CPPUNIT_TEST(scrubQuoteTest);
+  CPPUNIT_TEST(scrubBigIntsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -379,6 +381,69 @@ public:
 
     // Not failure == success
   }
+
+  void scrubQuoteTest()
+  {
+    QString singleQuoteTest =
+        "{\n"
+        " 'version': 0.6,\n"
+        " 'generator': 'Overpass API',\n"
+        " 'osm3s': {\n"
+        "   'timestamp_osm_base': 'date',\n"
+        "   'copyright': 'blah blah blah'\n"
+        " },\n"
+        " 'elements': [\n"
+        " {\n"
+        "   'type': 'node',\n"
+        "   'id': -1,\n"
+        "   'lat': 0,\n"
+        "   'lon': 0\n"
+        " }]\n"
+        "}";
+    QString doubleQuoteTest =
+        "{\n"
+        " \"version\": 0.6,\n"
+        " \"generator\": \"Overpass API\",\n"
+        " \"osm3s\": {\n"
+        "   \"timestamp_osm_base\": \"date\",\n"
+        "   \"copyright\": \"blah blah blah\"\n"
+        " },\n"
+        " \"elements\": [\n"
+        " {\n"
+        "   \"type\": \"node\",\n"
+        "   \"id\": -1,\n"
+        "   \"lat\": 0,\n"
+        "   \"lon\": 0\n"
+        " }]\n"
+        "}";
+    OsmJsonReader::scrubQuotes(singleQuoteTest);
+    HOOT_STR_EQUALS(doubleQuoteTest, singleQuoteTest);
+  }
+
+  void scrubBigIntsTest()
+  {
+    QString bigIntTest =
+        "{\n"
+        " \"test1\": 1.1,\n"
+        " \"test2\": 2222222222,\n"
+        " \"test3\": \"3333333333\",\n"
+        " \"test4\": -4444444444,\n"
+        " \"test5\": \"-5555555555\",\n"
+        " \"test6\": \"This is text with a big int 1111111111 right in the middle, don't break this.\"\n"
+        "}";
+    QString bigIntCorrect =
+        "{\n"
+        " \"test1\": 1.1,\n"
+        " \"test2\": \"2222222222\",\n"
+        " \"test3\": \"3333333333\",\n"
+        " \"test4\": \"-4444444444\",\n"
+        " \"test5\": \"-5555555555\",\n"
+        " \"test6\": \"This is text with a big int 1111111111 right in the middle, don't break this.\"\n"
+        "}";
+    OsmJsonReader::scrubBigInts(bigIntTest);
+    HOOT_STR_EQUALS(bigIntCorrect, bigIntTest);
+  }
+
 }; // class OsmJsonReaderTest
 } // namespace hoot
 

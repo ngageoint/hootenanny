@@ -34,6 +34,7 @@
 #include <QString>
 
 // Standard
+#include <queue>
 #include <string>
 
 // Boost
@@ -137,8 +138,24 @@ private:
                              const boost::property_tree::ptree& properties,
                              const boost::property_tree::ptree& geometry);
 
+  /**
+   * @brief _parseGeometry Parse the simple geometry object into a vector of coordinates
+   * @param geometry Tree of simple geometry in JSON format
+   * @return Vector of coordinates
+   */
   std::vector<geos::geom::Coordinate> _parseGeometry(const boost::property_tree::ptree& geometry);
+
+  /**
+   * @brief _parseBbox Parse the bounding box array in JSON format into Geos Envelope
+   * @param bbox Tree of bounding box JSON array
+   * @return Bounding box as a usable Envelope
+   */
   geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox);
+
+  /**
+   * @brief _roles List of roles for the current relation, saved for recursive relations
+   */
+  std::queue<std::string> _roles;
 
 };
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -52,6 +52,7 @@ class OsmGeoJsonWriterTest : public CppUnit::TestFixture
   CPPUNIT_TEST_SUITE(OsmGeoJsonWriterTest);
   CPPUNIT_TEST(runAllDataTypesTest);
   CPPUNIT_TEST(runDcTigerTest);
+  CPPUNIT_TEST(runBostonSubsetRoadBuildingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,6 +65,16 @@ public:
   void runDcTigerTest()
   {
     runTest("test-files/DcTigerRoads.osm", "DcTigerRoads.geojson");
+  }
+
+  void runBostonSubsetRoadBuildingTest()
+  {
+    //  Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
+    //  the log level.  We expect the nodes to be missing since the Boston data has issues
+    Log::WarningLevel loglLevel = Log::getInstance().getLevel();
+    Log::getInstance().setLevel(Log::Error);
+    runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson");
+    Log::getInstance().setLevel(loglLevel);
   }
 
   void runTest(const QString& input, const QString& output)
