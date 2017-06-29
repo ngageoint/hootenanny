@@ -37,6 +37,26 @@ using namespace std;
 namespace hoot
 {
 
+Status Status::fromInput(int i)
+{
+  Status result;
+
+  if (i < 0)
+  {
+    throw HootException("Invalid input offset.");
+  }
+  if (i <= 1)
+  {
+    result._type = i + 1;
+  }
+  else
+  {
+    result._type = i - 1 + Conflated;
+  }
+
+  return result;
+}
+
 int Status::getInput() const
 {
   int result;
@@ -60,6 +80,18 @@ int Status::getInput() const
   }
 
   return result;
+}
+
+QString Status::toCompatString() const
+{
+  if (_type <= Conflated)
+  {
+    return QString::number(_type);
+  }
+  else
+  {
+    return toString();
+  }
 }
 
 QString Status::toString() const

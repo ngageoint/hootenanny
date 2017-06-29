@@ -294,7 +294,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
+            writer.writeAttribute("v", n->getStatus().toCompatString());
           }
         }
         else
@@ -324,7 +324,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
         }
         else
         {
-          writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
+          writer.writeAttribute("v", n->getStatus().toCompatString());
         }
         writer.writeEndElement();
       }
@@ -402,7 +402,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+            writer.writeAttribute("v", w->getStatus().toCompatString());
           }
         }
         else
@@ -428,7 +428,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", MetadataTags::HootStatus());
-        writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+        writer.writeAttribute("v", w->getStatus().toCompatString());
         writer.writeEndElement();
       }
     }
@@ -502,8 +502,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute(
-              "v", removeInvalidCharacters(QString::number(r->getStatus().getEnum())));
+            writer.writeAttribute("v", r->getStatus().toCompatString());
           }
         }
         else
@@ -543,7 +542,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", MetadataTags::HootStatus());
-        writer.writeAttribute("v", QString("%1").arg(r->getStatus().getEnum()));
+        writer.writeAttribute("v", r->getStatus().toCompatString());
         writer.writeEndElement();
       }
     }

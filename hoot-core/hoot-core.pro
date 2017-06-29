@@ -546,7 +546,8 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/CalculateTilesCmd.cpp \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.cpp \
     src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
-    src/main/cpp/hoot/core/elements/Status.cpp
+    src/main/cpp/hoot/core/elements/Status.cpp \
+    src/main/cpp/hoot/core/cmd/MultiaryConflateCmd.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
