@@ -36,6 +36,9 @@
 // Hoot
 #include <hoot/core/elements/Status.h>
 
+// Tgs
+#include <tgs/SharedPtr.h>
+
 namespace hoot
 {
 
