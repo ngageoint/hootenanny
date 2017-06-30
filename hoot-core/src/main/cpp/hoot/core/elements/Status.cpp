@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Status.h"
@@ -147,10 +147,10 @@ Status::Type Status::fromString(QString typeString)
 {
   typeString = typeString.toLower();
 
-  bool ok;
-  int rawNum = typeString.toInt(&ok);
+  bool rawOk;
+  int rawNum = typeString.toInt(&rawOk);
 
-  if (ok)
+  if (rawOk)
   {
     return rawNum;
   }

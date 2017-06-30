@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="33.9008975" minlon="-83.0226543" maxlat="39.0008568" maxlon="-77.0224564"/>
     <node visible="true" id="2" version="1" lat="33.9008974999999992" lon="-83.0226542999999992">
         <tag k="node6" v="node6"/>
     </node>
