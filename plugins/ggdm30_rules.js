@@ -405,23 +405,23 @@ ggdm30.rules = {
      'WVL':'water:velocity:minimum', // Predominant Minimum Water Velocity
      'WWRL':'water:withdrawl_rate:lower', // Water Withdrawal Rate <lower value>
      'WWRU':'water:withdrawl_rate:upper', // Water Withdrawal Rate <upper value>
-     'ZI005_GNR':'raw:ZI005_GNR', // Geo Name Info : Geographic Name Rank
-     'ZI005_GNR2':'raw:ZI005_GNR2', // Geo Name Info : Geographic Name Rank [2]
-     'ZI005_GNR3':'raw:ZI005_GNR3', // Geo Name Info : Geographic Name Rank [3]
-     'ZI015_GCUL':'raw:ZI015_GCUL', // Geo Name Collection : Geographic Name Cartographic Usability Range <lower value>
-     'ZI015_GCUU':'raw:ZI015_GCUU', // Geo Name Collection : Geographic Name Cartographic Usability Range <upper value>
+     'ZI005_GNR':'gndb:rank', // Geo Name Info : Geographic Name Rank
+     'ZI005_GNR2':'gndb:rank:2', // Geo Name Info : Geographic Name Rank [2]
+     'ZI005_GNR3':'gndb:rank:3', // Geo Name Info : Geographic Name Rank [3]
+     'ZI015_GCUL':'cartographic_scale:name:lower', // Geo Name Collection : Geographic Name Cartographic Usability Range <lower value>
+     'ZI015_GCUU':'cartographic_scale:name:upper', // Geo Name Collection : Geographic Name Cartographic Usability Range <upper value>
      'ZI016_WD1':'width:minimum_traveled_way', // Route Pavement Information : Route Minimum Travelled Way Width
      'ZI017_GAW':'gauge', // Track Information : Railway Gauge
-     'ZI018_BRF':'raw:ZI018_BRF', // Wireless : Broadcast Frequency
+     // 'ZI018_BRF':'raw:ZI018_BRF', // Wireless : Broadcast Frequency - See BC034_BRF
      'ZI024_ASE':'water:arsnic_concentration', // Water : Arsenic Concentration
-     'ZI024_AWO':'raw:ZI024_AWO', // Water : Predominant Water Flow
-     'ZI024_AWOI':'raw:ZI024_AWOI', // Water : Predominant Water Flow - Maximum
-     'ZI024_AWOX':'raw:ZI024_AWOX', // Water : Predominant Water Flow - Minimum
+     'ZI024_AWO':'water:flow', // Water : Predominant Water Flow
+     'ZI024_AWOI':'water:flow:max', // Water : Predominant Water Flow - Maximum
+     'ZI024_AWOX':'water:flow:min', // Water : Predominant Water Flow - Minimum
      'ZI024_CFR':'water:coliform_concentration', // Water : Coliform Concentration
      'ZI024_CLO':'water:chloride_concentration', // Water : Chloride Concentration
      'ZI024_CYN':'water:cyanide_concentration', // Water : Cyanide Concentration
-     'ZI024_FMR':'raw:ZI024_FMR', // Water : Freshwater Production Maximum Rate
-     'ZI024_FRR':'raw:ZI024_FRR', // Water : Freshwater Production Rate
+     'ZI024_FMR':'water:freshwater_production:max', // Water : Freshwater Production Maximum Rate
+     'ZI024_FRR':'water:freshwater_production', // Water : Freshwater Production Rate
      'ZI024_HAR':'water:hardness', // Water : Water Hardness
      'ZI024_MGN':'water:magnesium_concentration', // Water : Magnesium Concentration
      'ZI024_PHW':'water:ph', // Water: pH
@@ -8596,14 +8596,14 @@ ggdm30.rules = {
      ['ZI014_PRW3','999','raw_material:3','other'], // Other
 
      // ZI015_GCUC - Geo Name Collection : Geographic Name Cartographic Usability Range <interval closure>
-     ['ZI015_GCUC','2','raw:ZI015_GCUC','open_interval'], // Open Interval
-     ['ZI015_GCUC','3','raw:ZI015_GCUC','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-     ['ZI015_GCUC','4','raw:ZI015_GCUC','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
-     ['ZI015_GCUC','5','raw:ZI015_GCUC','closed_interval'], // Closed Interval
-     ['ZI015_GCUC','6','raw:ZI015_GCUC','greater-than_semi-interval'], // Greater-than Semi-interval
-     ['ZI015_GCUC','7','raw:ZI015_GCUC','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
-     ['ZI015_GCUC','8','raw:ZI015_GCUC','less-than_semi-interval'], // Less-than Semi-interval
-     ['ZI015_GCUC','9','raw:ZI015_GCUC','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+     ['ZI015_GCUC','2','cartographic_scale:name:closure','open_interval'], // Open Interval
+     ['ZI015_GCUC','3','cartographic_scale:name:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+     ['ZI015_GCUC','4','cartographic_scale:name:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+     ['ZI015_GCUC','5','cartographic_scale:name:closure','closed_interval'], // Closed Interval
+     ['ZI015_GCUC','6','cartographic_scale:name:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+     ['ZI015_GCUC','7','cartographic_scale:name:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+     ['ZI015_GCUC','8','cartographic_scale:name:closure','less-than_semi-interval'], // Less-than Semi-interval
+     ['ZI015_GCUC','9','cartographic_scale:name:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
      // ZI016_ROC - Route Pavement Information : Route Surface Composition #####
      // ['ZI016_ROC','-999999',undefined,undefined], // No Information
