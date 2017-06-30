@@ -141,7 +141,7 @@ tds61.rules = {
      'SAX_RY2':'security:atomic_markings', // Security Attributes Group <resource atomic energy markings>
      'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
      'UFI':'uuid', // Unique Feature Identifier. This gets cleaned up in post processing
-     'URI':'source_ref', // Unique Resource Identifier
+     'URI':'source:ref', // Unique Resource Identifier
      'VCS_VCR':'max_clearance:note', // Vertical Clearance, Safe <reference level remark>
      'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description

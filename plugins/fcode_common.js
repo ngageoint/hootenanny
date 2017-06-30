@@ -255,8 +255,8 @@ fcodeCommon = {
       ['F_CODE','BB199','dock','floating'], // Floating Dry Dock
       ['F_CODE','BB201','amenity','small_craft_facility'], // Small Craft Facility
       ['F_CODE','BB241','seamark:harbour:category','shipyard'], // Shipyard
-      ['F_CODE','BC010','man_made','beacon'], // GGDM3/NAS7 Beacon
-      ['F_CODE','BC020','man_made','buoy'], // GGDM3/NAS7 BUOY
+      ['F_CODE','BC010','seamark:type','beacon'], // GGDM3/NAS7 Beacon
+      ['F_CODE','BC020','seamark:type','buoy'], // GGDM3/NAS7 BUOY
       ['F_CODE','BC034','seamark:type','radio_station'], // GGDM3/NAS7 MARITIME_RADIOBEACON
       ['F_CODE','BC040','seamark:type','light'], // GGDM3/NAS7 MARITIME_NAVIGATION_LIGHT
       ['F_CODE','BC041','seamark:type','light_support'], // GGDM3/NAS7 MARITIME_NAV_LIGHT_SUPPORT

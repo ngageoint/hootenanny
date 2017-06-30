@@ -113,7 +113,7 @@ tds.rules = {
      'RTN':'ref', // Route Designation
      'SSE':'seasonal_ice_limit', // Seasonal Ice Limit
      'UFI':'uuid', // Unique Feature Identifier. Handled in pre-processing
-     'URI':'source_ref', // Unique Resource Identifier
+     'URI':'source:ref', // Unique Resource Identifier
      'VOI':'vertical_obstruction_identifier', // Vertical Obstruction Identifier
      'WAD':'well:description', // Water Well Construction Description
      'WPI':'world_port_index', // World Port Index Identifier - This is part of Built Up Area. What??
@@ -844,9 +844,9 @@ tds.rules = {
 
      // CPA - Survey Control Point Type
      // ['CPA','-999999',undefined,undefined], // No Information
-     ['CPA','2','survey_point:control','horizontal_position'], // Horizontal Position
-     ['CPA','3','survey_point:control','horizontal_position_and_benchmark'], // Horizontal Position and Benchmark
-     ['CPA','5','survey_point:control','vertical_position'], // Vertical Position
+     ['CPA','2','survey_point:control','horizontal'], // Horizontal Position
+     ['CPA','3','survey_point:control','horizontal_and_benchmark'], // Horizontal Position and Benchmark
+     ['CPA','5','survey_point:control','vertical'], // Vertical Position
 
      // CPS - Cell Partition Scheme
      // ['CPS','-999999',undefined,undefined], // No Information
@@ -909,13 +909,13 @@ tds.rules = {
 
      // CUL - Cultural Context Type
      // ['CUL','-999999',undefined,undefined], // No Information
-     ['CUL','1','raw:CUL','national_identity'], // National Identity
-     ['CUL','2','raw:CUL','ethnic_group'], // Ethnic Group
-     ['CUL','3','raw:CUL','tribe'], // Tribe
-     ['CUL','4','raw:CUL','clan'], // Clan
-     ['CUL','5','raw:CUL','language'], // Language
-     ['CUL','6','raw:CUL','religion'], // Religion
-     ['CUL','999','raw:CUL','other'], // Other
+     ['CUL','1','cultural_context','national_identity'], // National Identity
+     ['CUL','2','cultural_context','ethnic_group'], // Ethnic Group
+     ['CUL','3','cultural_context','tribe'], // Tribe
+     ['CUL','4','cultural_context','clan'], // Clan
+     ['CUL','5','cultural_context','language'], // Language
+     ['CUL','6','cultural_context','religion'], // Religion
+     ['CUL','999','cultural_context','other'], // Other
 
      // CWT - Contained Within Tunnel
      // ['CWT','-999999',undefined,undefined],
@@ -4100,19 +4100,19 @@ tds.rules = {
 
      // BAL - BGN Administrative Level TDSv30
      // ['BAL','-999999',undefined,undefined], // No Information
-     ['BAL','1','raw:BAL','first-order'], // First-order
-     ['BAL','2','raw:BAL','second-order'], // Second-order
-     ['BAL','3','raw:BAL','third-order'], // Third-order
-     ['BAL','4','raw:BAL','fourth-order'], // Fourth-order
-     ['BAL','5','raw:BAL','undifferentiated'], // Undifferentiated
-     ['BAL','999','raw:BAL','other'], // Other
+     ['BAL','1','administrative_subdivision','first-order'], // First-order
+     ['BAL','2','administrative_subdivision','second-order'], // Second-order
+     ['BAL','3','administrative_subdivision','third-order'], // Third-order
+     ['BAL','4','administrative_subdivision','fourth-order'], // Fourth-order
+     ['BAL','5','administrative_subdivision','undifferentiated'], // Undifferentiated
+     ['BAL','999','administrative_subdivision','other'], // Other
 
      // BST - Boundary Status TDSv30
      // ['BST','-999999',undefined,undefined], // No Information
-     ['BST','1','raw:BST','definite'], // Definite
-     ['BST','2','raw:BST','indefinite'], // Indefinite
-     ['BST','3','raw:BST','in_dispute'], // In Dispute
-     ['BST','4','raw:BST','no_defined_boundary'], // No Defined Boundary
+     ['BST','1','boundary:status','definite'], // Definite
+     ['BST','2','boundary:status','indefinite'], // Indefinite
+     ['BST','3','boundary:status','in_dispute'], // In Dispute
+     ['BST','4','boundary:status','no_defined_boundary'], // No Defined Boundary
 
      // COS - Facility Operational Status TDSv30
      ['COS','1','operational_status','operational'], // Continuous
@@ -4120,10 +4120,10 @@ tds.rules = {
 
      // DSP - Boundary Dispute Type TDSv30
      // ['DSP','-999999',undefined,undefined], // No Information
-     ['DSP','1','raw:DSP','in_dispute'], // In Dispute
-     ['DSP','2','raw:DSP','undisputed'], // Undisputed
-     ['DSP','3','raw:DSP','de_facto'], // De Facto
-     ['DSP','4','raw:DSP','de_jure'], // De Jure
+     ['DSP','1','boundary:dispute_type','in_dispute'], // In Dispute
+     ['DSP','2','boundary:dispute_type','undisputed'], // Undisputed
+     ['DSP','3','boundary:dispute_type','de_facto'], // De Facto
+     ['DSP','4','boundary:dispute_type','de_jure'], // De Jure
 
      // FFN From TDSv30
      ['FFN','19','amenity','hunting'], // Hunting
@@ -4136,19 +4136,19 @@ tds.rules = {
 
      // GEC - Geopolitical Entity Type TDSv30
      // ['GEC','-999999',undefined,undefined], // No Information
-     ['GEC','5','raw:GEC','area_of_no_sovereignty'], // Area of No Sovereignty
-     ['GEC','7','raw:GEC','demilitarized_zone_(dmz)'], // Demilitarized Zone (DMZ)
-     ['GEC','8','raw:GEC','zone_of_occupation'], // Zone of Occupation
-     ['GEC','9','raw:GEC','leased_area'], // Leased Area
-     ['GEC','10','raw:GEC','political_entity'], // Political Entity
-     ['GEC','11','raw:GEC','dependent_political_entity'], // Dependent Political Entity
-     ['GEC','12','raw:GEC','freely_associated_state'], // Freely Associated State
-     ['GEC','13','raw:GEC','independent_political_entity'], // Independent Political Entity
-     ['GEC','14','raw:GEC','semi-independent_political_entity'], // Semi-independent Political Entity
-     ['GEC','15','raw:GEC','economic_region'], // Economic Region
-     ['GEC','16','raw:GEC','territory'], // Territory
-     ['GEC','17','raw:GEC','buffer_zone'], // Buffer Zone
-     ['GEC','999','raw:GEC','other'], // Other
+     ['GEC','5','geopolitical_entity','area_of_no_sovereignty'], // Area of No Sovereignty
+     ['GEC','7','geopolitical_entity','demilitarized_zone'], // Demilitarized Zone (DMZ)
+     ['GEC','8','geopolitical_entity','zone_of_occupation'], // Zone of Occupation
+     ['GEC','9','geopolitical_entity','leased_area'], // Leased Area
+     ['GEC','10','geopolitical_entity','political_entity'], // Political Entity
+     ['GEC','11','geopolitical_entity','dependent_political_entity'], // Dependent Political Entity
+     ['GEC','12','geopolitical_entity','freely_associated_state'], // Freely Associated State
+     ['GEC','13','geopolitical_entity','independent_political_entity'], // Independent Political Entity
+     ['GEC','14','geopolitical_entity','semi-independent_political_entity'], // Semi-independent Political Entity
+     ['GEC','15','geopolitical_entity','economic_region'], // Economic Region
+     ['GEC','16','geopolitical_entity','territory'], // Territory
+     ['GEC','17','geopolitical_entity','buffer_zone'], // Buffer Zone
+     ['GEC','999','geopolitical_entity','other'], // Other
 
      // LOC TDSv30
      ['LOC','1','location','raised'], // Raised
@@ -4157,37 +4157,37 @@ tds.rules = {
 
      // LSP - Geopolitical Line Type TDSv30
      // ['LSP','-999999',undefined,undefined], // No Information
-     ['LSP','1','raw:LSP','generic_administrative_boundary'], // Generic Administrative Boundary
-     ['LSP','2','raw:LSP','provisional_administrative_line'], // Provisional Administrative Line
-     ['LSP','3','raw:LSP','armistice_line'], // Armistice Line
-     ['LSP','4','raw:LSP','line_of_control'], // Line of Control
-     ['LSP','5','raw:LSP','demarcation_line'], // Demarcation Line
-     ['LSP','6','raw:LSP','line_of_convenience'], // Line of Convenience
-     ['LSP','7','raw:LSP','cease_fire_line'], // Cease Fire Line
-     ['LSP','8','raw:LSP','convention_line'], // Convention Line
-     ['LSP','9','raw:LSP','claim_line'], // Claim Line
-     ['LSP','10','raw:LSP','intercolonial_line'], // Intercolonial Line
-     ['LSP','11','raw:LSP','interentity_line'], // Interentity Line
-     ['LSP','12','raw:LSP','line_of_adjacency'], // Line of Adjacency
-     ['LSP','13','raw:LSP','line_of_withdrawal'], // Line of Withdrawal
-     ['LSP','14','raw:LSP','military_disengagement_line'], // Military Disengagement Line
-     ['LSP','15','raw:LSP','treaty_line'], // Treaty Line
-     ['LSP','16','raw:LSP','unclos_claim_boundary'], // UNCLOS Claim Boundary
-     ['LSP','17','raw:LSP','generic_international_boundary'], // Generic International Boundary
-     ['LSP','999','raw:LSP','other'], // Other
+     ['LSP','1','geopolitical_line','administrative'], // Generic Administrative Boundary
+     ['LSP','2','geopolitical_line','provisional_administrative'], // Provisional Administrative Line
+     ['LSP','3','geopolitical_line','armistice'], // Armistice Line
+     ['LSP','4','geopolitical_line','line_of_control'], // Line of Control
+     ['LSP','5','geopolitical_line','demarcation'], // Demarcation Line
+     ['LSP','6','geopolitical_line','line_of_convenience'], // Line of Convenience
+     ['LSP','7','geopolitical_line','cease_fire'], // Cease Fire Line
+     ['LSP','8','geopolitical_line','convention'], // Convention Line
+     ['LSP','9','geopolitical_line','claim'], // Claim Line
+     ['LSP','10','geopolitical_line','intercolonial'], // Intercolonial Line
+     ['LSP','11','geopolitical_line','interentity'], // Interentity Line
+     ['LSP','12','geopolitical_line','line_of_adjacency'], // Line of Adjacency
+     ['LSP','13','geopolitical_line','line_of_withdrawal'], // Line of Withdrawal
+     ['LSP','14','geopolitical_line','military_disengagement'], // Military Disengagement Line
+     ['LSP','15','geopolitical_line','treaty'], // Treaty Line
+     ['LSP','16','geopolitical_line','unclos_claim_boundary'], // UNCLOS Claim Boundary
+     ['LSP','17','geopolitical_line','international_boundary'], // Generic International Boundary
+     ['LSP','999','geopolitical_line','other'], // Other
 
      // MGL1 - Maritime Geopolitical Limit Type [1] TDSv30
      // ['MGL1','-999999',undefined,undefined], // No Information
-     ['MGL1','1','raw:MGL1','international_boundary'], // International Boundary
-     ['MGL1','2','raw:MGL1','territorial_sea_baseline'], // Territorial Sea Baseline
-     ['MGL1','3','raw:MGL1','three_nautical_mile_limit'], // Three Nautical Mile Limit
-     ['MGL1','4','raw:MGL1','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
-     ['MGL1','5','raw:MGL1','contiguous_zone_limit'], // Contiguous Zone Limit
-     ['MGL1','6','raw:MGL1','continental_shelf_limit'], // Continental Shelf Limit
-     ['MGL1','7','raw:MGL1','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
-     ['MGL1','8','raw:MGL1','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
-     ['MGL1','9','raw:MGL1','customs_boundary'], // Customs Boundary
-     ['MGL1','999','raw:MGL1','other'], // Other
+     ['MGL1','1','geopolitical_line:maritime1','international_boundary'], // International Boundary
+     ['MGL1','2','geopolitical_line:maritime1','territorial_sea_baseline'], // Territorial Sea Baseline
+     ['MGL1','3','geopolitical_line:maritime1','three_nautical_mile_limit'], // Three Nautical Mile Limit
+     ['MGL1','4','geopolitical_line:maritime1','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
+     ['MGL1','5','geopolitical_line:maritime1','contiguous_zone_limit'], // Contiguous Zone Limit
+     ['MGL1','6','geopolitical_line:maritime1','continental_shelf_limit'], // Continental Shelf Limit
+     ['MGL1','7','geopolitical_line:maritime1','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
+     ['MGL1','8','geopolitical_line:maritime1','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
+     ['MGL1','9','geopolitical_line:maritime1','customs_boundary'], // Customs Boundary
+     ['MGL1','999','geopolitical_line:maritime1','other'], // Other
 
      // PPC - Power Station Type TDSv30
      // ['PPC','-999999',undefined,undefined], // No Information
