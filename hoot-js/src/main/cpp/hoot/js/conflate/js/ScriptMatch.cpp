@@ -76,6 +76,7 @@ ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Obj
   _eid1(eid1),
   _eid2(eid2),
   _isWholeGroup(false),
+  _neverCausesConflict(false),
   _plugin(plugin),
   _script(script)
 {
@@ -95,6 +96,12 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
   {
     Handle<Value> v = _script->call(_plugin, "isWholeGroup");
     _isWholeGroup = v->BooleanValue();
+  }
+
+  if (_plugin->Has(String::NewSymbol("neverCausesConflict")))
+  {
+    Handle<Value> v = _script->call(_plugin, "neverCausesConflict");
+    _neverCausesConflict = v->BooleanValue();
   }
 
   try
@@ -151,6 +158,11 @@ double ScriptMatch::getProbability() const
 
 bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) const
 {
+  if (_neverCausesConflict)
+  {
+    return false;
+  }
+
   bool conflicting = true;
 
   const ScriptMatch* hm = dynamic_cast<const ScriptMatch*>(&other);

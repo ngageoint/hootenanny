@@ -762,6 +762,7 @@ default the first assigned id will be -1)
 ** `${HOOT_TRANSLATE_PATH}`
 ** `${HOOT_HOME}/plugins`
 ** `${HOOT_HOME}/plugins-local`
+** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.
 

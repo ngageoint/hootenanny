@@ -116,7 +116,9 @@ public:
 
     {
       MatchFactory::getInstance().reset();
+      MatchFactory::getInstance().registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
       MergerFactory::getInstance().reset();
+
       // call new conflation routine
       UnifyingConflator conflator;
       conflator.apply(result);

@@ -25,6 +25,7 @@ CONFIG += rtti \
 OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
     ../rules/LineStringGeneric.js \
+    ../rules/MultiaryPoiGeneric.js \
     ../rules/PoiGeneric.js \
     ../rules/lib/HootLib.js \
     ../rules/LinearWaterway.js \
