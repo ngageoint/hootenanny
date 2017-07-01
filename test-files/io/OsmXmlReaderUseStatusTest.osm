@@ -494,7 +494,7 @@
         <nd ref="-30"/>
         <tag k="hoot:id" v="-14"/>
         <tag k="hoot:accuracy" v="10"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:status" v="Input0003"/>
     </way>
     <way visible="true" id="-15">
         <nd ref="-35"/>
@@ -502,7 +502,7 @@
         <nd ref="-33"/>
         <tag k="hoot:id" v="-15"/>
         <tag k="hoot:accuracy" v="10"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="Input004"/>
     </way>
     <way visible="true" id="-16">
         <nd ref="-33"/>

@@ -32,6 +32,9 @@
 #include "Element.h"
 #include "RelationData.h"
 
+// hoot
+#include <hoot/core/util/MetadataTags.h>
+
 namespace geos
 {
   namespace geom
