@@ -327,7 +327,7 @@ ggdm30 = {
         }
         else
         {
-            hoot.logVerbose('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+            hoot.logTrace('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
         } // End Drop attrs
 
         // Repack the OTH field
@@ -379,7 +379,7 @@ ggdm30 = {
                     // Set the offending enumerated value to the default value
                     attrs[enumName] = feature.columns[i].defValue;
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
                     attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
                 }
@@ -388,7 +388,7 @@ ggdm30 = {
                     // Set the offending enumerated value to the "other" value
                     attrs[enumName] = '999';
 
-                    hoot.logVerbose('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+                    hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
                     attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
                 }
@@ -1105,9 +1105,27 @@ ggdm30 = {
 
                 tags.note = tObj.text;
             }
-
         } // End process tags.note
 
+        // Fix the ZI020_GE4X Values
+        var ge4meta = ['is_in:country_code','country_code:second','country_code:third','country_code:fourth',
+                        'country_code:first_side','country_code:second_side'];
+
+        for (var i=0, iLen=ge4meta.length; i < iLen; i++)
+        {
+            if (tags[ge4meta[i]])
+            {
+                if (ggdm30.rules.ge4List[tags[ge4meta[i]]])
+                {
+                    tags[ge4meta[i]] = ggdm30.rules.ge4List[tags[ge4meta[i]]];
+                }
+                else
+                {
+                    hoot.logWarn('Dropping invalid ' + ge4meta[i] + ' value: ' + tags[ge4meta[i]]);
+                    delete tags[ge4meta[i]];
+                }
+            }
+        } // End for GE4 loop
 
     }, // End of applyToOsmPostProcessing
   
@@ -1792,6 +1810,24 @@ ggdm30 = {
             attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
         }
 
+        // Fix the ZI020_GE4X Values
+        // NOTE: This is the opposite to what is done in the toOSM post processing
+        var ge4attr = ['ZI020_GE4','ZI020_GE42','ZI020_GE43','ZI020_GE44','ZI020_GE4A','ZI020_GE4B' ]
+        for (var i=0, iLen=ge4attr.length; i < iLen; i++)
+        {
+            if (attrs[ge4attr[i]])
+            {
+                if (ggdm30.ge4Lookup[attrs[ge4attr[i]]])
+                {
+                    attrs[ge4attr[i]] = ggdm30.ge4Lookup[attrs[ge4attr[i]]];
+                }
+                else
+                {
+                    hoot.logWarn('Dropping invalid ' + ge4attr[i] + ' value: ' + attrs[ge4attr[i]]);
+                    delete attrs[ge4attr[i]];
+                }
+            }
+        } // End for GE4 loop
 
     }, // End applyToOgrPostProcessing
 
@@ -1821,9 +1857,10 @@ ggdm30 = {
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ggdm30.rules.fcodeOne2oneIn);
 
             ggdm30.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
-            print('Start Dump FCODE:');
-            translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
-            print('End Dump FCODE:');
+            // Debug
+//             print('Start Dump FCODE:');
+//             translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
+//             print('End Dump FCODE:');
         }
 
         if (ggdm30.lookup == undefined)
@@ -1852,7 +1889,7 @@ ggdm30 = {
             }
             else
             {
-                hoot.logVerbose('Translation for F_CODE ' + attrs.F_CODE + ' not found');
+                hoot.logTrace('Translation for F_CODE ' + attrs.F_CODE + ' not found');
             }
         }
 
@@ -1924,6 +1961,16 @@ ggdm30 = {
         // The Nuke Option: "Collections" are groups of different geometry types: Point, Area and Line.
         // There is no way we can translate these to a single GGDM30 feature.
         if (geometryType == 'Collection') return null;
+
+        // Flip the ge4List table so we can use it for export
+        if (ggdm30.ge4Lookup == undefined)
+        {
+            ggdm30.ge4Lookup = {};
+            for (var i in ggdm30.rules.ge4List)
+            {
+                ggdm30.ge4Lookup[ggdm30.rules.ge4List[i]] = i;
+            }
+        }
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -2004,15 +2051,9 @@ ggdm30 = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        // Debug
-        print('gFcode: ' + gFcode);
-        print('ggdm: ' + ggdmAttrLookup[gFcode]);
-
-
-
         if (!(ggdmAttrLookup[gFcode]))
         {
-            hoot.logVerbose('FCODE and Geometry: ' + gFcode + ' is not in the schema');
+            hoot.logTrace('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             tableName = 'o2s_' + geometryType.toString().charAt(0);
 
@@ -2036,7 +2077,7 @@ ggdm30 = {
                 // Not good. Will fix with the rewrite of the tag splitting code
                 if (str.length > 1012)
                 {
-                    hoot.logVerbose('o2s tags truncated to fit in available space.');
+                    hoot.logTrace('o2s tags truncated to fit in available space.');
                     str = str.substring(0,1012);
                 }
 
@@ -2068,10 +2109,10 @@ ggdm30 = {
 
                 // Now set the FCSubtype.
                 // NOTE: If we export to shapefile, GAIT _will_ complain about this
-//                 if (config.getOgrEsriFcsubtype() == 'true')
-//                 {
-//                     returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
-//                 }
+                if (config.getOgrEsriFcsubtype() == 'true')
+                {
+                    returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                }
 
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
                 // If we are using the Thematic structre, fill the rest of the unused attrs in the schema

@@ -1143,6 +1143,26 @@ tds61 = {
             tags.area = 'yes';
         }
 
+        // Fix the ZI020_GE4X Values
+        var ge4meta = ['is_in:country_code','country_code:second','country_code:third','country_code:fourth'];
+
+        for (var i=0, iLen=ge4meta.length; i < iLen; i++)
+        {
+            if (tags[ge4meta[i]])
+            {
+                if (tds61.rules.ge4List[tags[ge4meta[i]]])
+                {
+                    tags[ge4meta[i]] = tds61.rules.ge4List[tags[ge4meta[i]]];
+                }
+                else
+                {
+                    hoot.logWarn('Dropping invalid ' + ge4meta[i] + ' value: ' + tags[ge4meta[i]]);
+                    delete tags[ge4meta[i]];
+                }
+            }
+        } // End for GE4 loop
+
+
     }, // End of applyToOsmPostProcessing
 
     // ##### End of the xxToOsmxx Block #####
@@ -1922,6 +1942,26 @@ tds61 = {
         {
             attrs.ZI001_SDV = translate.chopDateTime(attrs.ZI001_SDV);
         }
+
+        // Fix the ZI020_GE4X Values
+        // NOTE: This is the opposite to what is done in the toOSM post processing
+        var ge4attr = ['ZI020_GE4','ZI020_GE42','ZI020_GE43','ZI020_GE44']
+        for (var i=0, iLen=ge4attr.length; i < iLen; i++)
+        {
+            if (attrs[ge4attr[i]])
+            {
+                if (tds61.ge4Lookup[attrs[ge4attr[i]]])
+                {
+                    attrs[ge4attr[i]] = tds61.ge4Lookup[attrs[ge4attr[i]]];
+                }
+                else
+                {
+                    hoot.logWarn('Dropping invalid ' + ge4attr[i] + ' value: ' + attrs[ge4attr[i]]);
+                    delete attrs[ge4attr[i]];
+                }
+            }
+        } // End for GE4 loop
+
     }, // End applyToNfddPostProcessing
 
 // #####################################################################################################
@@ -2052,6 +2092,16 @@ tds61 = {
         // The Nuke Option: "Collections" are groups of different feature types: Point, Area and Line.
         // There is no way we can translate these to a single TDS feature.
         if (geometryType == 'Collection') return null;
+
+        // Flip the ge4List table so we can use it for export
+        if (tds61.ge4Lookup == undefined)
+        {
+            tds61.ge4Lookup = {};
+            for (var i in tds61.rules.ge4List)
+            {
+                tds61.ge4Lookup[tds61.rules.ge4List[i]] = i;
+            }
+        }
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules

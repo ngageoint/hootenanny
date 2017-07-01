@@ -422,8 +422,8 @@ translate = {
         {
             othVal = tmpList[i].split(':'); // Split into Key/Value
 
-            // If we have a Key then add it to the output
-            if (othVal[0]) outList[othVal[0]] = othVal[1];
+            // If we have a Key _and_ a value, then add it to the output
+            if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];
         }
 
         // Debug:
@@ -508,7 +508,7 @@ translate = {
                 }
                 else
                 {
-                    logError('OTH:: Did not find an "Other" value for ' + i);
+                    hoot.logError('OTH:: Did not find an "Other" value for ' + i);
                 }
             }
             else if (tAttrib in lookup)
@@ -527,12 +527,12 @@ translate = {
                 }
                 else
                 {
-                    logError('OTH:: Did not find an "Other" value for ' + i);
+                    hoot.logError('OTH:: Did not find an "Other" value for ' + i);
                 }
             }
             else // !tAttrib in lookup
             {
-                logError('OTH:: ' + i + ' does not exist in lookup');
+                hoot.logError('OTH:: ' + i + ' does not exist in lookup');
             }
         } // End for i
 
