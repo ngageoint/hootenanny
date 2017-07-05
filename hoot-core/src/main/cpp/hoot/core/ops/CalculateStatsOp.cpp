@@ -192,6 +192,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _stats.append(SingleStat("Total Feature Count", featureCount));
     vector< boost::shared_ptr<MatchCreator> > matchCreators =
       MatchFactory::getInstance().getCreators();
+    LOG_VARD(matchCreators.size());
     double conflatedFeatureCount =
       _applyVisitor(
         constMap,
@@ -220,6 +221,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
             new NotCriterion(new NeedsReviewCriterion(constMap))),
           new MatchCandidateCountVisitor(matchCreators)),
         matchCandidateCountsData);
+    LOG_VARD(matchCreators.size());
     SumNumericTagsVisitor tagSumVis(MetadataTags::HootPoiPolygonPoisMerged());
     constMap->visitRo(tagSumVis);
     long poisMergedIntoPolys = tagSumVis.getStat();
@@ -307,7 +309,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
           conflatablePolyCount =
             _applyVisitor(
               constMap,
-              FilteredVisitor(PoiPolygonPolyCriterion(), new FeatureCountVisitor()));
+              //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
+              //instead of FeatureCountVisitor
+              FilteredVisitor(PoiPolygonPolyCriterion(), new ElementCountVisitor()));
         }
         _stats.append(
           SingleStat(
@@ -320,7 +324,9 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
           conflatablePoiPolyPoiCount =
             _applyVisitor(
               constMap,
-              FilteredVisitor(PoiPolygonPoiCriterion(), new FeatureCountVisitor()));
+              //see comment in _generateFeatureStats as to why ElementCountVisitor is used here
+              //instead of FeatureCountVisitor
+              FilteredVisitor(PoiPolygonPoiCriterion(), new ElementCountVisitor()));
         }
         _stats.append(
           SingleStat(
@@ -370,6 +376,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _applyVisitor(constMap, &v2);
     _stats.append(SingleStat("Longest Tag", v2.getStat()));
 
+    //TODO: this should be moved into _generateFeatureStats
     LOG_DEBUG("config script: " + ConfigOptions().getStatsTranslateScript());
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -395,6 +402,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
           new TranslatedTagCountVisitor(st)))));
       _stats.append(SingleStat("Waterway Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(new WaterwayCriterion(),
+          new TranslatedTagCountVisitor(st)))));
+      _stats.append(SingleStat("PoiPolygonPOI Translated Populated Tag Percent",
+        _applyVisitor(constMap, FilteredVisitor(new PoiPolygonPoiCriterion(),
+          new TranslatedTagCountVisitor(st)))));
+      _stats.append(SingleStat("Polygon Translated Populated Tag Percent",
+        _applyVisitor(constMap, FilteredVisitor(new PoiPolygonPolyCriterion(),
           new TranslatedTagCountVisitor(st)))));
     }
     else

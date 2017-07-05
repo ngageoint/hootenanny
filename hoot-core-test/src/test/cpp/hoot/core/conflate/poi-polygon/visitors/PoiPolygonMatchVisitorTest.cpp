@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
+#include "../../../TestUtils.h"
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
+#include <hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -42,10 +42,9 @@ using namespace std;
 namespace hoot
 {
 
-class PoiPolygonMatchCreatorTest : public CppUnit::TestFixture
+class PoiPolygonMatchVisitorTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(PoiPolygonMatchCreatorTest);
-  CPPUNIT_TEST(basicTest);
+  CPPUNIT_TEST_SUITE(PoiPolygonMatchVisitorTest);
   CPPUNIT_TEST(runIsCandidateTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -80,32 +79,15 @@ private:
 
 public:
 
-  void basicTest()
-  {
-    OsmMapPtr map = getTestMap1();
-
-    {
-      PoiPolygonMatchCreator uut;
-      vector<const Match*> matches;
-      boost::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
-      uut.createMatches(map, matches, threshold);
-      HOOT_STR_EQUALS(2, matches.size());
-      HOOT_STR_EQUALS("PoiPolygonMatch Node:1 Way:-1 P: match: 1 miss: 0 review: 0, distance: 0, close match: 1, type score: -1, name score: 1, address score: -1",
-                      matches[0]->toString());
-      HOOT_STR_EQUALS("PoiPolygonMatch Node:2 Way:-1 P: match: 0 miss: 0 review: 1, distance: 0, close match: 1, type score: 0, name score: 0, address score: 0",
-                      matches[1]->toString());
-    }
-  }
-
   void runIsCandidateTest()
   {
-    PoiPolygonMatchCreator uut;
-
     OsmMapPtr map = getTestMap1();
     CPPUNIT_ASSERT(
-      uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
+      PoiPolygonMatchVisitor::_isMatchCandidate(
+        map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0])));
     CPPUNIT_ASSERT(
-      uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
+      !PoiPolygonMatchVisitor::_isMatchCandidate(
+        map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0])));
 
     OsmXmlReader reader;
     OsmMap::resetCounters();
@@ -114,11 +96,11 @@ public:
     reader.read("test-files/ToyTestA.osm", map);
     MapProjector::projectToPlanar(map);
     CPPUNIT_ASSERT(
-      !uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]), map));
+      !PoiPolygonMatchVisitor::_isMatchCandidate(
+        map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0])));
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMatchCreatorTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMatchCreatorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMatchVisitorTest, "quick");
 
 }
