@@ -36,7 +36,7 @@ unzip -oq cucumber-coverage/coverage.zip -d cucumber-coverage
 npm run combine
 
 # stop istanbul-middleware
-kill -9 $PID
+kill $PID
 
 # restore uninstrumented hoot-ui code to tomcat webapps
 sudo service tomcat8 stop
