@@ -403,7 +403,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _stats.append(SingleStat("Waterway Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(new WaterwayCriterion(),
           new TranslatedTagCountVisitor(st)))));
-      _stats.append(SingleStat("PoiPolygonPOI Translated Populated Tag Percent",
+      _stats.append(SingleStat("Polygon Conflatable POI Translated Populated Tag Percent",
         _applyVisitor(constMap, FilteredVisitor(new PoiPolygonPoiCriterion(),
           new TranslatedTagCountVisitor(st)))));
       _stats.append(SingleStat("Polygon Translated Populated Tag Percent",

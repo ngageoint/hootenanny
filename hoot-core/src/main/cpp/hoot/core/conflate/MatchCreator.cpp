@@ -51,7 +51,7 @@ QString MatchCreator::BaseFeatureTypeToString(BaseFeatureType t)
     case Waterway:
       return "Waterway";
     case PoiPolygonPOI:
-      return "PoiPolygonPOI";
+      return "Polygon Conflatable POI";
     case Polygon:
       return "Polygon";
     case Unknown:
@@ -71,7 +71,7 @@ MatchCreator::BaseFeatureType MatchCreator::StringToBaseFeatureType(QString s)
     return Building;
   else if (0 == s.compare("waterway"))
     return Waterway;
-  else if (0 == s.compare("poipolygonpoi"))
+  else if (0 == s.compare("polygon conflatable poi"))
     return PoiPolygonPOI;
   else if (0 == s.compare("polygon"))
     return Polygon;
