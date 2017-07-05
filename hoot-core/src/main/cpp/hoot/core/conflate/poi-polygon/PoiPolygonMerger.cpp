@@ -134,10 +134,14 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Eleme
       poisMerged++;
     }
   }
-  finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
+
+  if (poisMerged > 0)
+  {
+    finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
+    finalBuilding->setStatus(Status::Conflated);
+  }
 
   finalBuilding->setTags(finalBuildingTags);
-  finalBuilding->setStatus(Status::Conflated);
 }
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const

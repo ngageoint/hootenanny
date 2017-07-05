@@ -506,6 +506,24 @@ void CalculateStatsOp::printStats()
   }
 }
 
+ElementVisitor* CalculateStatsOp::_getElementVisitorForFeatureType(
+  const MatchCreator::BaseFeatureType& featureType)
+{
+  //only pass the output of this to methods which will take ownership of the visitor
+  //(criterion, etc.)
+
+  if (featureType == MatchCreator::PoiPolygonPOI || featureType == MatchCreator::Polygon)
+  {
+    //Poi/poly doesn't have the restriction that an element have a tag information count > 0 to
+    //be considered for conflation.
+    return new ElementCountVisitor();
+  }
+  else
+  {
+    return new FeatureCountVisitor();
+  }
+}
+
 void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& map,
                                              const MatchCreator::BaseFeatureType& featureType,
                                              const float conflatableCount,
@@ -513,22 +531,16 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
                                              ElementCriterion* criterion,
                                              const long poisMergedIntoPolys)
 {
+  LOG_VARD(poisMergedIntoPolys);
   const QString description = MatchCreator::BaseFeatureTypeToString(featureType);
-
+  LOG_VARD(description);
   boost::shared_ptr<ElementCriterion> e_criterion(criterion);
+
   double totalFeatures = 0.0;
-  if (featureType == MatchCreator::PoiPolygonPOI || featureType == MatchCreator::Polygon)
-  {
-    //Poi/poly doesn't have the restriction that an element have a tag information count > 0 to
-    //be considered for conflation (FeatureCountVisitor).  So, for those types total count =
-    //conflatable count
-    totalFeatures = conflatableCount;
-  }
-  else
-  {
-    totalFeatures =
-      _applyVisitor(map, FilteredVisitor(e_criterion->clone(), new FeatureCountVisitor()));
-  }
+  totalFeatures =
+    _applyVisitor(
+      map, FilteredVisitor(e_criterion->clone(), _getElementVisitorForFeatureType(featureType)));
+  LOG_VARD(totalFeatures);
   _stats.append(SingleStat(QString("%1 Count").arg(description), totalFeatures));
   _stats.append(SingleStat(QString("Conflatable %1s").arg(description), conflatableCount));
 
@@ -537,12 +549,15 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
       map,
       FilteredVisitor(
         ChainCriterion(
-          new StatusCriterion(Status::Conflated), e_criterion->clone()), new FeatureCountVisitor()));
+          new StatusCriterion(Status::Conflated), e_criterion->clone()),
+      _getElementVisitorForFeatureType(featureType)));
+  LOG_VARD(conflatedFeatureCount);
   if (featureType == MatchCreator::PoiPolygonPOI)
   {
     //we need to add any pois that may have been merged into polygons by poi/poly into the
     //conflated feature count for this feature type
     conflatedFeatureCount += poisMergedIntoPolys;
+    LOG_VARD(conflatedFeatureCount);
   }
 
   const double featuresMarkedForReview =
@@ -550,7 +565,9 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
       map,
       FilteredVisitor(
         ChainCriterion(
-          new NeedsReviewCriterion(map), e_criterion->clone()), new FeatureCountVisitor()));
+          new NeedsReviewCriterion(map),
+          e_criterion->clone()),
+      _getElementVisitorForFeatureType(featureType)));
   _stats.append(
     SingleStat(QString("Conflated %1s").arg(description), conflatedFeatureCount));
   _stats.append(
@@ -559,8 +576,8 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
     _applyVisitor(
       map,
        FilteredVisitor(
-        e_criterion->clone(),
-        new CountUniqueReviewsVisitor()));
+         e_criterion->clone(),
+         new CountUniqueReviewsVisitor()));
   _stats.append(
     SingleStat(
       QString("Number of %1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade));
@@ -572,12 +589,14 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
         ChainCriterion(
           new NotCriterion(new StatusCriterion(Status::Conflated)),
           e_criterion->clone()),
-        new FeatureCountVisitor()));
+      _getElementVisitorForFeatureType(featureType)));
+  LOG_VARD(unconflatedFeatureCount);
   if (featureType == MatchCreator::PoiPolygonPOI)
   {
     //we need to subtract any pois that may have been merged into polygons by poi/poly from the
     //unconflated feature count for this feature type
     unconflatedFeatureCount -= poisMergedIntoPolys;
+    LOG_VARD(unconflatedFeatureCount);
   }
   _stats.append(SingleStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount));
 
@@ -600,6 +619,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
     percentageOfTotalFeaturesConflated =
       ((double)conflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
+  LOG_VARD(percentageOfTotalFeaturesConflated);
   _stats.append(
     SingleStat(
       QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated));
@@ -620,6 +640,7 @@ void CalculateStatsOp::_generateFeatureStats(boost::shared_ptr<const OsmMap>& ma
     percentageOfTotalFeaturesUnconflated =
       ((double)unconflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
+  LOG_VARD(percentageOfTotalFeaturesUnconflated);
   _stats.append(
     SingleStat(
       QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated));

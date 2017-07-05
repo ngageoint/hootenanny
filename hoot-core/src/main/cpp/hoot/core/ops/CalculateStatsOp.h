@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include "ConstOsmMapOperation.h"
 #include "stats/SingleStat.h"
 
@@ -39,7 +40,6 @@
 
 namespace hoot
 {
-class ElementVisitor;
 class FilteredVisitor;
 
 class CalculateStatsOp : public ConstOsmMapOperation
@@ -111,6 +111,8 @@ private:
                              const float conflatableCount,
                              const MatchCreator::FeatureCalcType& type,
                              ElementCriterion* criterion, const long poisMergedIntoPolys);
+
+  ElementVisitor* _getElementVisitorForFeatureType(const MatchCreator::BaseFeatureType& featureType);
 };
 
 }
