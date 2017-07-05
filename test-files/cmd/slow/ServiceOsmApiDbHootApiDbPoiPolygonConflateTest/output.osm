@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.7622798" minlon="-122.4244" maxlat="37.7651" maxlon="-122.4201197"/>
     <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="37.7645003000000017" lon="-122.4216811999999948">
         <tag k="REF1" v="00074a"/>
         <tag k="addr:street" v="Valencia Street"/>
@@ -1124,18 +1125,19 @@
         <nd ref="500"/>
         <tag k="REF1" v="007037"/>
         <tag k="REF2" v="007037"/>
-        <tag k="addr:street" v="Valencia Street"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="wheelchair" v="yes"/>
         <tag k="gnis:county_name" v="San Francisco"/>
-        <tag k="hoot:id" v="3"/>
-        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:street" v="Valencia Street"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="hoot:id" v="3"/>
         <tag k="ele" v="14"/>
-        <tag k="alt_name" v="MISSION POLICE STATION"/>
         <tag k="building" v="yes"/>
-        <tag k="addr:state" v="CA"/>
+        <tag k="alt_name" v="MISSION POLICE STATION"/>
         <tag k="gnis:feature_id" v="2107373"/>
         <tag k="addr:housenumber" v="630"/>
+        <tag k="addr:state" v="CA"/>
         <tag k="name" v="Mission Police Station"/>
         <tag k="amenity" v="police"/>
         <tag k="hoot:id" v="3"/>
@@ -1632,6 +1634,7 @@
         <nd ref="438"/>
         <tag k="REF1" v="00435f"/>
         <tag k="REF2" v="00435f"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="66"/>
         <tag k="alt_name" v="16TH &amp; HOFF ST. PARKING GARAGE"/>
@@ -1787,10 +1790,10 @@
         <nd ref="519"/>
         <nd ref="514"/>
         <tag k="REF2" v="none"/>
-        <tag k="hoot:id" v="102"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="name" v="Kidpower Park"/>
+        <tag k="hoot:id" v="102"/>
         <tag k="area" v="yes"/>
+        <tag k="name" v="Kidpower Park"/>
         <tag k="hoot:id" v="102"/>
     </way>
     <way visible="true" id="103" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3">
@@ -1802,8 +1805,8 @@
         <tag k="REF2" v="none"/>
         <tag k="hoot:id" v="103"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="area" v="yes"/>
         <tag k="name" v="Dearborn Community Garden"/>
+        <tag k="area" v="yes"/>
         <tag k="hoot:id" v="103"/>
     </way>
 </osm>

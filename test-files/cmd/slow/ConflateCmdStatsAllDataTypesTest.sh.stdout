@@ -56,6 +56,26 @@ Meters of Waterway Processed by Conflation	0	0	0
 Percentage of Waterways Conflated	0	0	0	
 Percentage of Waterways Marked for Review	0	0	0	
 Percentage of Unmatched Waterways	0	0	0	
+PoiPolygonPOI Count	11	10	16	
+Conflatable PoiPolygonPOIs	0	0	0	
+Conflated PoiPolygonPOIs	0	0	5	
+PoiPolygonPOIs Marked for Review	0	0	11	
+Number of PoiPolygonPOI Reviews to be Made	0	0	8	
+Unmatched PoiPolygonPOIs	11	10	11	
+Percentage of PoiPolygonPOIs Conflated	0	0	31.25	
+Percentage of PoiPolygonPOIs Marked for Review	0	0	68.75	
+Percentage of Unmatched PoiPolygonPOIs	100	100	68.75	
+Polygon Count	10	8	12	
+Conflatable Polygons	0	0	0	
+Conflated Polygons	0	0	5	
+Polygons Marked for Review	0	0	0	
+Number of Polygon Reviews to be Made	0	0	0	
+Unmatched Polygons	10	8	7	
+Meters Squared of Polygons Processed by Conflation	0	0	14772.47276049599	
+Percentage of Polygons Conflated	0	0	41.66666666666667	
+Percentage of Polygons Marked for Review	0	0	0	
+Percentage of Unmatched Polygons	100	100	58.33333333333334	
 Difference Between Total Features in Output and Total Features in Inputs			-7	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-14.8936170212766	
 
+20:44:12.707 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 251) Conflation job completed.
