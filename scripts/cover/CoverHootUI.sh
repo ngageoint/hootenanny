@@ -1,8 +1,6 @@
 #!/bin/bash
-set -e
 
 export TOMCAT8_HOME=/usr/share/tomcat8
-
 # create the mocha-coverage report
 cd $HOOT_HOME/hoot-ui
 npm install -q

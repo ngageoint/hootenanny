@@ -215,7 +215,8 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp
+				src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+				src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
