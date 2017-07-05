@@ -71,6 +71,13 @@ Hootenanny conflates POIs with both building and area polygons.  It uses the dis
   
 See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
 
+[[PoiToPolygonStatistics]]
+==== Statistics
+
+Conflation statistics for POI to Polygon Conflation are available from the command line with the --stats option as well as in the User Interface, the same as all other types of conflation.  Note that POIs conflatable with polygons have a different
+definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features
+such as parks, parking lots, etc.  See the Feature Definitions section <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
+
 [[River-Conflation]]
 === River Conflation
 
