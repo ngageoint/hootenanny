@@ -687,7 +687,7 @@ Then(/^I double click on the first thumbnail$/) do
 end
 
 Then(/^I accept the alert$/) do
-  sleep 5
+  sleep 10
   page.driver.browser.switch_to.alert.accept
 end
 
