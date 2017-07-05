@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3627307999999124" lon="42.5556629000498532"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3626984999999123" lon="42.5557599000498357"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3624373999999118" lon="42.5556728000498552"/>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.3627307999999124" minlon="42.55557590004985" maxlat="-0.3624373999999118" maxlon="42.55575990004984"/>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3624696999999121" lon="42.5555759000498526"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3624373999999118" lon="42.5556728000498552"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3626984999999123" lon="42.5557599000498357"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3627307999999124" lon="42.5556629000498532"/>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-3"/>
@@ -11,6 +12,7 @@
         <nd ref="-1"/>
         <nd ref="-4"/>
         <tag k="note" v="building;POI"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>

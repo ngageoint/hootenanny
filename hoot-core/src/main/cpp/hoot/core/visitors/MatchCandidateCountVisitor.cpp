@@ -98,6 +98,7 @@ void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e
     //We'll handle poi and building counts separately, since there could be overlap between poi,
     //building, and poi/poly match creators.
     const QString matchCreatorName = iterator.key().toLower();
+    LOG_VART(matchCreatorName);
     if (!matchCreatorName.contains("poi") && !matchCreatorName.contains("building"))
     {
       _totalCandidateCount += iterator.value();
@@ -113,9 +114,10 @@ void MatchCandidateCountVisitor::visit(const boost::shared_ptr<const Element>& e
     {
       _totalCandidateCount += _matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"];
     }
-    if (_matchCandidateCountsByMatchCreator.contains("POI Generic"))
+    if (_matchCandidateCountsByMatchCreator.contains("hoot::ScriptMatchCreator,PoiGeneric.js"))
     {
-      _totalCandidateCount += _matchCandidateCountsByMatchCreator["POI Generic"];
+      _totalCandidateCount +=
+        _matchCandidateCountsByMatchCreator["hoot::ScriptMatchCreator,PoiGeneric.js"];
     }
   }
   //otherwise, use the poi/poly count only to avoid overlap.  it will always be >= the sum of
