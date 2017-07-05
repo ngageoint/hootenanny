@@ -1,6 +1,6 @@
  Feature: Network conflation
 
-  Scenario: I can conflate the AllDataTypes data
+  Scenario: I can conflate using Network Conflation
     Given I am on Hootenanny
     And I resize the window
     And I click Get Started
