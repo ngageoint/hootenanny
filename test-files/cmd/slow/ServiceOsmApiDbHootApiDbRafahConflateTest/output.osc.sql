@@ -7,17 +7,6 @@ INSERT INTO current_node_tags (node_id, k, v) VALUES (45, 'hoot:id', '45');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (45, 'hoot:id', '45', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (45, 'hoot:status', '2');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (45, 'hoot:status', '2', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (45, 'hoot', 'blank');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (45, 'hoot', 'blank', 1);
-/* create node 47*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (47, 311806916, 340508148, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (47, 311806916, 340508148, 3, true, (now() at time zone 'utc'), 3335527272, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (47, 'hoot:id', '47');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (47, 'hoot:id', '47', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (47, 'hoot:status', '2');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (47, 'hoot:status', '2', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (47, 'hoot', 'blank');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (47, 'hoot', 'blank', 1);
 /* create node 50*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (50, 311821476, 340507316, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (50, 311821476, 340507316, 3, true, (now() at time zone 'utc'), 3335527272, 1);
@@ -25,8 +14,6 @@ INSERT INTO current_node_tags (node_id, k, v) VALUES (50, 'hoot:id', '50');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (50, 'hoot:id', '50', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (50, 'hoot:status', '2');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (50, 'hoot:status', '2', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (50, 'hoot', 'blank');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (50, 'hoot', 'blank', 1);
 /* create node 51*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (51, 311832952, 340565418, 3, true, (now() at time zone 'utc'), 3335527275, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (51, 311832952, 340565418, 3, true, (now() at time zone 'utc'), 3335527275, 1);
@@ -48,15 +35,6 @@ INSERT INTO current_node_tags (node_id, k, v) VALUES (53, 'hoot:id', '53');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (53, 'hoot:id', '53', 1);
 INSERT INTO current_node_tags (node_id, k, v) VALUES (53, 'hoot:status', '2');
 INSERT INTO node_tags (node_id, k, v, version) VALUES (53, 'hoot:status', '2', 1);
-/* create node 54*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (54, 311790696, 340528372, 3, true, (now() at time zone 'utc'), 3335527231, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (54, 311790696, 340528372, 3, true, (now() at time zone 'utc'), 3335527231, 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (54, 'hoot:id', '54');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (54, 'hoot:id', '54', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (54, 'hoot:status', '2');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (54, 'hoot:status', '2', 1);
-INSERT INTO current_node_tags (node_id, k, v) VALUES (54, 'hoot', 'blank');
-INSERT INTO node_tags (node_id, k, v, version) VALUES (54, 'hoot', 'blank', 1);
 /* create node 55*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (55, 311806942, 340508435, 3, true, (now() at time zone 'utc'), 3335527272, 1);
 INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (55, 311806942, 340508435, 3, true, (now() at time zone 'utc'), 3335527272, 1);
@@ -350,4 +328,4 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (33, 50, 1,
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (33, 50, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (33, 29, 1, 2);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (33, 29, 2);
-UPDATE changesets SET min_lat=311790644, max_lat=311832952, min_lon=340472592, max_lon=340565418, num_changes=26 WHERE id=3;
+UPDATE changesets SET min_lat=311790644, max_lat=311832952, min_lon=340472592, max_lon=340565418, num_changes=24 WHERE id=3;

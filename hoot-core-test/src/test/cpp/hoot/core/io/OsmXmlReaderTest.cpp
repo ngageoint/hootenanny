@@ -29,6 +29,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/Log.h>
 using namespace hoot;
 
 
@@ -39,6 +40,9 @@ using namespace boost;
 #include <QDebug>
 
 #include "../TestUtils.h"
+
+namespace hoot
+{
 
 class OsmXmlReaderTest : public CppUnit::TestFixture
 {
@@ -114,9 +118,21 @@ public:
         CPPUNIT_ASSERT_EQUAL(104, (int)map->getNodes().size());
         CPPUNIT_ASSERT_EQUAL(17, (int)map->getWays().size());
 
-        CPPUNIT_ASSERT_EQUAL(Status::Unknown1, map->getWay(-12)->getStatus().getEnum());
-        CPPUNIT_ASSERT_EQUAL(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
-        CPPUNIT_ASSERT_EQUAL(Status::Unknown2, map->getWay(-51)->getStatus().getEnum());
+        HOOT_STR_EQUALS(Status::Unknown1, map->getWay(-12)->getStatus().getEnum());
+        HOOT_STR_EQUALS(Status::Conflated, map->getWay(-13)->getStatus().getEnum());
+        HOOT_STR_EQUALS(Status::Unknown2, map->getWay(-51)->getStatus().getEnum());
+        HOOT_STR_EQUALS(Status::Conflated + 1, map->getWay(-14)->getStatus().getEnum());
+        HOOT_STR_EQUALS(Status::Conflated + 2, map->getWay(-15)->getStatus().getEnum());
+
+        HOOT_STR_EQUALS(0, map->getWay(-12)->getStatus().getInput());
+        HOOT_STR_EQUALS(1, map->getWay(-51)->getStatus().getInput());
+        HOOT_STR_EQUALS(2, map->getWay(-14)->getStatus().getInput());
+        HOOT_STR_EQUALS(3, map->getWay(-15)->getStatus().getInput());
+
+        HOOT_STR_EQUALS("Unknown1", map->getWay(-12)->getStatus().toString());
+        HOOT_STR_EQUALS("Unknown2", map->getWay(-51)->getStatus().toString());
+        HOOT_STR_EQUALS("Input003", map->getWay(-14)->getStatus().toString());
+        HOOT_STR_EQUALS("Input004", map->getWay(-15)->getStatus().toString());
 
         OsmXmlWriter writer;
         writer.write(map, "output.osm");
@@ -125,3 +141,4 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OsmXmlReaderTest);
 
+}
