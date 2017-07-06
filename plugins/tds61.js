@@ -2203,7 +2203,12 @@ tds61 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true')
+            {
+                var kList = Object.keys(attrs).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            }
+
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);

@@ -1577,6 +1577,16 @@ ggdm30 = {
 
     applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
+        // Sort out :2, :3 attributes
+        for (var i in attrs)
+        {
+            if (i.indexOf(':') > -1)
+            {
+                attrs[i.replace(':','')] = attrs[i];
+                delete attrs[i]
+            }
+        } // End :2, :3 cleaning
+
         // Shoreline Construction (BB081) covers a lot of features
         if (attrs.PWC) attrs.F_CODE = 'BB081';
 
@@ -1992,7 +2002,8 @@ ggdm30 = {
             ggdm30.rules.one2one.push.apply(ggdm30.rules.one2one,ggdm30.rules.one2oneOut);
 
             ggdm30.lookup = translate.createBackwardsLookup(ggdm30.rules.one2one);
-            // translate.dumpOne2OneLookup(ggdm30.lookup);
+            // Debug
+            //translate.dumpOne2OneLookup(ggdm30.lookup);
             
             // Make the fuzzy lookup table
             ggdm30.fuzzy = schemaTools.generateToOgrTable(ggdm30.rules.fuzzyTable);
@@ -2059,7 +2070,11 @@ ggdm30 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('Converted Attrs:' + i + ': :' + attrs[i] + ':');
+            if (config.getOgrDebugDumptags() == 'true')
+            {
+                var kList = Object.keys(attrs).sort()
+                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
+            }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);

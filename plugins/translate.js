@@ -292,7 +292,18 @@ translate = {
 
             if (endChar == '2' || endChar == '3')
             {
-                tAttrib = col.slice(0,-1);
+                // print('Got 23: ' + col + ' end:' + endChar);
+                if (col.charAt(col.length - 2) == ':')
+                {
+                    // Debug
+                   // print('Got :');
+                    tAttrib = col.slice(0,-2);
+                    endChar = ':' + endChar;
+                }
+                else
+                {
+                    tAttrib = col.slice(0,-1);
+                }
             }
             else
             {
