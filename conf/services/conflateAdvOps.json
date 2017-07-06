@@ -260,7 +260,7 @@
             "id": "poipolygon_review_distance_threshold",
             "elem_type": "int",
             "description": "POI Polygon Review Distance Threshold",
-            "name": "POI Polygon review Distance Threshold",
+            "name": "POI Polygon Review Distance Threshold",
             "defaultvalue": "125",
             "minvalue": "0",
             "maxvalue": "5000"
