@@ -42,7 +42,7 @@ namespace hoot
 {
 
 /**
- * Searches the specified map for any poi/polygon match potentials
+ * Searches maps for any poi/polygon match potentials
  */
 class PoiPolygonMatchVisitor : public ElementVisitor
 {
@@ -52,9 +52,14 @@ public:
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
                          ConstMatchThresholdPtr threshold,
                          boost::shared_ptr<PoiPolygonRfClassifier> rf);
-
   ~PoiPolygonMatchVisitor();
 
+  /**
+   * Determines whether an element is a Poi/Polygon conflation match candidate and, if so,
+   * attempts to match it with another feature
+   *
+   * @param e element to examine
+   */
   virtual void visit(const ConstElementPtr& e);
 
 private:
