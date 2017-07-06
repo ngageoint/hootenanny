@@ -75,6 +75,7 @@ help:
 	@echo "test                    - Run slow tests.  Should take five to ten minutes."
 	@echo "test-all                - Run all tests.  Could take hours."
 	@echo "test-quick              - Run quick tests.  Should take less than five minutes."
+	@echo "ui-build                - Build the web UI js/css dist.  Must enable --with-services configuration options."
 	@echo "ui-test                 - Run user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-coverage             - Generate coverage reports for mocha and cucumber user interface tests.  May take several minutes.  Must enable --with-uitests and --with-services configuration options."
 	@echo "ui-clean-coverage       - Removes the coverage reports for mocha and cucumber user interface tests."
@@ -99,6 +100,9 @@ services-test:
 
 services-test-all:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old services-test-all
+
+ui-build:
+	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-build
 
 ui-test:
 	scripts/HootEnv.sh $(MAKE) -f Makefile.old ui-test

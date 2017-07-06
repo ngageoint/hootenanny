@@ -548,6 +548,7 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
+    src/main/cpp/hoot/core/elements/Status.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
