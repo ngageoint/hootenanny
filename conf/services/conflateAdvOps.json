@@ -283,7 +283,8 @@
             "defaultvalue": "false",
             "description": "POI Ignore Type If Name Present",
             "name": "POI Ignore Type If Name Present",
-            "hoot_key": "poi.ignore.type.if.name.present"
+            "hoot_key": "poi.ignore.type.if.name.present",
+            "onchange": "true"
           }
         ]
       },
