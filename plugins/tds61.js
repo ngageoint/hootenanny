@@ -1990,6 +1990,7 @@ tds61 = {
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.rules.fcodeOne2oneIn);
 
             tds61.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            // Debug
             // translate.dumpOne2OneLookup(tds61.fcodeLookup);
         }
 
@@ -2035,7 +2036,11 @@ tds61 = {
         translate.applySimpleTxtBiased(notUsedAttrs, tags, tds61.rules.txtBiased, 'forward');
 
         // one 2 one
-        translate.applyOne2One(notUsedAttrs, tags, tds61.lookup, {'k':'v'});
+        //translate.applyOne2One(notUsedAttrs, tags, tds61.lookup, {'k':'v'});
+        translate.applyOne2OneQuiet(notUsedAttrs, tags, tds61.lookup);
+
+        // Translate the XXX2, XXX3 etc attributes
+        translate.fix23Attr(notUsedAttrs, tags, tds61.lookup);
 
         // Crack open the OTH field and populate the appropriate attributes
         // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
@@ -2050,7 +2055,8 @@ tds61 = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+            var kList = Object.keys(notUsedAttrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
 
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
@@ -2111,6 +2117,7 @@ tds61 = {
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.rules.fcodeOne2oneOut);
 
             tds61.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+            // Debug
             // translate.dumpOne2OneLookup(tds61.fcodeLookup);
         }
 
@@ -2120,6 +2127,7 @@ tds61 = {
             tds61.rules.one2one.push.apply(tds61.rules.one2one,tds61.rules.one2oneOut);
 
             tds61.lookup = translate.createBackwardsLookup(tds61.rules.one2one);
+            // Debug
             // translate.dumpOne2OneLookup(tds61.lookup);
 
             // Make the fuzzy lookup table
@@ -2155,6 +2163,10 @@ tds61 = {
         // NOTE: This deletes tags as they are used
         translate.applyOne2OneQuiet(notUsedTags, attrs, tds61.fuzzy);
 
+        // Translate the XXX:2, XXX2, XXX:3 etc attributes
+        // Note: This deletes tags as they are used
+        translate.fix23Tags(notUsedTags, attrs, tds61.lookup);
+
         // one 2 one: we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
         translate.applyNfddOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
@@ -2165,7 +2177,11 @@ tds61 = {
         tds61.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(notUsedTags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
+        }
 
         // If we have unused tags, add them to the memo field.
         if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')

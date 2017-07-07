@@ -538,7 +538,6 @@ ggdm30 = {
     },
 
 
-
 // #####################################################################################################
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
@@ -1245,6 +1244,7 @@ ggdm30 = {
         // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that 
         // are not buildings.
         // Taking "place_of_worship" out of this and making it a building
+        // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
         var notBuildingList = [
             'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
             'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
@@ -1253,7 +1253,7 @@ ggdm30 = {
             'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
             'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
             'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding'
+            'trailer_park','game_feeding','fuel'
             ]; // End notBuildingList
 
         if (tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
@@ -1785,28 +1785,6 @@ ggdm30 = {
         // If things have a height greater than 46m, tags them as being a "Navigation Landmark"
         if (attrs.HGT > 46 && !(attrs.LMC)) attrs.LMC = '1001';
 
-// ### FIX ###
-        // Alt_Name:  AL020 Built Up Area & ZD070 Water Measurement Location are the _ONLY_ features in TDS
-        // that have a secondary name.
-        if (attrs.ZI005_FNA2 && (attrs.F_CODE !== 'AL020' && attrs.F_CODE !== 'ZD070'))
-        {
-            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
-            // but this causes problems so until the customer gives us more direction, we are going to drop it.
-            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
-            delete attrs.ZI005_FNA2;
-        }
-
-        // Alt_Name2:  ZD070 Water Measurement Location is the _ONLY_ feature in TDS that has a
-        // third name.
-        if (attrs.ZI005_FNA3 && attrs.F_CODE !== 'ZD070')
-        {
-            // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
-            // but this causes problems so until the customer gives us more direction, we are going to drop it.
-            // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
-            delete attrs.ZI005_FNA3;
-        }
-
-
         // The ZI001_SDV (source date time) field can only be 20 characters long. When we conflate features,
         // we concatenate the tag values for this field.
         // We are getting guidance from the customer on what value they would like in this field:
@@ -1907,6 +1885,7 @@ ggdm30 = {
         // isn't used in the translation - this should end up empty.
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+        delete notUsedAttrs.F_CODE; // Not needed since we have it in attrs.
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
@@ -1914,7 +1893,11 @@ ggdm30 = {
         translate.applySimpleTxtBiased(notUsedAttrs, tags, ggdm30.rules.txtBiased, 'forward');
 
         // one 2 one
-        translate.applyOne2One(notUsedAttrs, tags, ggdm30.lookup, {'k':'v'});
+        //translate.applyOne2One(notUsedAttrs, tags, ggdm30.lookup, {'k':'v'});
+        translate.applyOne2OneQuiet(notUsedAttrs, tags, ggdm30.lookup);
+
+        // Translate the XXX2, XXX3 etc attributes
+        translate.fix23Attr(notUsedAttrs, tags, ggdm30.lookup);
 
         // Crack open the OTH field and populate the appropriate attributes
         if (attrs.OTH) translate.processOTH(attrs, tags, ggdm30.lookup);
@@ -1922,15 +1905,14 @@ ggdm30 = {
         // post processing
         ggdm30.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
-        // Debug
-        // for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
-
         // Debug: Add the FCODE to the tags
         if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
+            var kList = Object.keys(notUsedAttrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
             print('');
@@ -1991,9 +1973,7 @@ ggdm30 = {
 
             ggdm30.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
             // Debug
-            // print('Start Dump FCODE:');
             // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
-            // print('End Dump FCODE:');
         }
 
         if (ggdm30.lookup == undefined)
@@ -2038,6 +2018,10 @@ ggdm30 = {
         // NOTE: This deletes tags as they are used
         translate.applyOne2OneQuiet(notUsedTags, attrs, ggdm30.fuzzy);
 
+        // Translate the XXX:2, XXX2, XXX:3 etc attributes
+        // Note: This deletes tags as they are used
+        translate.fix23Tags(notUsedTags, attrs, ggdm30.lookup);
+
         // one 2 one: we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
         translate.applyNfddOne2One(notUsedTags, attrs, ggdm30.lookup, ggdm30.fcodeLookup);
@@ -2048,7 +2032,11 @@ ggdm30 = {
         ggdm30.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(notUsedTags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
+        }
 
         // If we have unused tags, add them to the memo field.
         if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')

@@ -279,7 +279,6 @@ translate = {
     { 
         var endChar = '',
             tAttrib = '',
-            row = [],
             otherVal = '',
             othVal = '',
             value = '';
@@ -288,34 +287,11 @@ translate = {
         {
             var value = inList[col];
 
-            endChar = col.charAt(col.length - 1) // Going to look for a 2 or a 3
-
-            if (endChar == '2' || endChar == '3')
+            if (col in lookup)
             {
-                // print('Got 23: ' + col + ' end:' + endChar);
-                if (col.charAt(col.length - 2) == ':')
+                if (value in lookup[col])
                 {
-                    // Debug
-                   // print('Got :');
-                    tAttrib = col.slice(0,-2);
-                    endChar = ':' + endChar;
-                }
-                else
-                {
-                    tAttrib = col.slice(0,-1);
-                }
-            }
-            else
-            {
-                tAttrib = col;
-                endChar = '';
-            }
-
-            if (tAttrib in lookup)
-            {
-                if (value in lookup[tAttrib])
-                {
-                    row = lookup[tAttrib][value];
+                    var row = lookup[col][value];
 
                     // Debug:
                     // print('row[0]=' + row[0] + '  row[0]+endChar=' + row[0] + endChar);
@@ -323,15 +299,15 @@ translate = {
                     // Drop all of the undefined values
                     if (row[0])
                     {
-                        outList[row[0] + endChar] = row[1];
+                        outList[row[0]] = row[1];
                         // Debug
-                        // print('Used:' + col + ' = ' + inList[col]);
+                        //print('Used:' + col + ' = ' + inList[col]);
                         delete inList[col];
                     }
                     else
                     {
                         // Debug
-                        // print('UsedUndef:' + col + ' = ' + inList[col]);
+                        //print('UsedUndef:' + col + ' = ' + inList[col]);
                         delete inList[col];
                     }
 
@@ -342,49 +318,49 @@ translate = {
                 else if (value !== '')
                 {
                     // If these tags are used to find an FCODE, ignore them
-                    if ((tAttrib in fCodeList) && (value in fCodeList[tAttrib]))
+                    if ((col in fCodeList) && (value in fCodeList[col]))
                     {
                         // Debug
-                        // print('UsedFCode:' + col + ' = ' + inList[col]);
+                        //print('UsedFCode:' + col + ' = ' + inList[col]);
                         delete inList[col];
                         continue;
                     }
-                        
-                    hoot.logTrace('Lookup value not found for column:: (' + tAttrib + '=' + value + ')');
+
+                    hoot.logTrace('Lookup value not found for column:: (' + col + '=' + value + ')');
 
                     // The following is used for export. If we have an attribute value that can't
                     // find a rule for, we add it to the OTH Field.
-                    otherVal = lookup[tAttrib]['other'];
+                    otherVal = lookup[col]['other'];
 
                     if (otherVal)
                     { 
                         // Build the OTH value
-                        othVal = '(' + otherVal[0] + endChar + ':' + value + ')';
+                        othVal = '(' + otherVal[0] + ':' + value + ')';
                         outList.OTH = translate.appendValue(outList.OTH,othVal,' ');
 
                         hoot.logTrace('Adding to OTH field:: ' + othVal);
 
                         // Set the output attribute to "other"
-                        outList[otherVal[0] + endChar] = otherVal[1];
+                        outList[otherVal[0]] = otherVal[1];
 
                         // Debug
-                        // print('UsedOTH:' + col + ' = ' + inList[col]);
+                        //print('UsedOTH:' + col + ' = ' + inList[col]);
                         delete inList[col];
 
                     } // End if otherVal
                     else
                     {
-                        hoot.logTrace('Could not add ::' + tAttrib + '=' + value + ':: to the OTH field');
+                        hoot.logTrace('Could not add ::' + col + '=' + value + ':: to the OTH field');
                     }
                 } // End value != ''
-            } // End tAttrib in lookup
+            } // End col in lookup
             else
             {
                 // If we didn't find the tag, check if it is used to find an FCODE. If so, mark it as used
-                if ((tAttrib in fCodeList) && (value in fCodeList[tAttrib]))
+                if ((col in fCodeList) && (value in fCodeList[col]))
                 {
                     // Debug
-                    // print('UsedX:' + col + ' = ' + inList[col]);
+                    //print('UsedX:' + col + ' = ' + inList[col]);
                     delete inList[col];
                 }
                 else
@@ -395,6 +371,108 @@ translate = {
         } // End for col in inList
     }, // End applyNfddOne2One
 
+
+    // Translate XX2, XX3 etc attributes
+    fix23Attr: function (inAttrs, outTags, lookup)
+    {
+        for (var col in inAttrs)
+        {
+            if (col == 'F_CODE') continue;
+
+            // The OTH unpacker handles these
+            if (inAttrs[col] == '999') continue;
+
+            var endChar = col.charAt(col.length - 1)
+            var value = inAttrs[col];
+
+            // Yes, there are attributes that go to 5. But, not to 11
+            if (['2','3','4','5'].indexOf(endChar) > -1)
+            {
+                var tAttrib = col.slice(0,-1);
+
+                if (tAttrib in lookup && value in lookup[tAttrib])
+                {
+                    var row = lookup[tAttrib][value];
+
+                    if (row[0])
+                    {
+                        outTags[row[0] + ':' + endChar] = row[1];
+                        // Debug
+                        //print('New Tag:' + row[0] + ':' + endChar+ ' = ' + outTags[row[0] + ':' + endChar] );
+                        delete inAttrs[col];
+                    }
+                }
+
+            } // End 2,3,4,5
+        } // End for inAttrs
+    }, // End fix23Attr
+
+    // Translate XXX:2, XXX:3 etc tags and populate the OTH when appropriate
+    // NOTE: We also handle XXX2, XXX3 etc since we need to be backwards compatible
+    fix23Tags: function (inTags, outAttrs, lookup)
+    {
+        for (var col in inTags)
+        {
+            var endChar = col.charAt(col.length - 1)
+            var value = inTags[col];
+
+            // Yes, there are attributes that go to 5. But, not to 11
+            if (['2','3','4','5'].indexOf(endChar) > -1)
+            {
+                var tAttrib = '';
+
+                if (col.charAt(col.length - 2) == ':')
+                {
+                    tAttrib = col.slice(0,-2);
+                }
+                else
+                {
+                    tAttrib = col.slice(0,-1);
+                }
+
+                if (tAttrib in lookup)
+                {
+                    if (value in lookup[tAttrib])
+                    {
+                        var row = lookup[tAttrib][value];
+
+                        if (row[0])
+                        {
+                            outAttrs[row[0] + endChar] = row[1];
+                            delete inTags[col];
+                            // Debug
+                            //print('New Attr:' + row[0] + endChar+ ' = ' + outAttrs[row[0] + endChar] );
+                        }
+                    } // End value in lookup
+                    else if (value !== '') // Being defensive...
+                    {
+                        var otherVal = lookup[tAttrib]['other'];
+
+                        if (otherVal)
+                        {
+                            // Build the OTH value
+                            othVal = '(' + otherVal[0] + endChar + ':' + value + ')';
+                            outAttrs.OTH = translate.appendValue(outAttrs.OTH,othVal,' ');
+
+                            hoot.logTrace('Adding to OTH field:: ' + othVal);
+
+                            // Set the output attribute to "other"
+                            outAttrs[otherVal[0] + endChar] = otherVal[1];
+
+                            // Debug
+                            //print('UsedOTH:' + col + ' = ' + inTags[col]);
+                            delete inTags[col];
+                        }
+                        else
+                        {
+                            hoot.logTrace('Could not add ::' + col + '=' + value + ':: to the OTH field');
+                        }
+                    } // End value != ''
+                }
+            } // End 2,3,4,5
+        } // End for inTags
+
+    }, // End fix23Tags
 
     // Parse the note:extra tag and return an associative array of key/value pairs
     parseNoteExtra : function(rawNote)
@@ -531,7 +609,7 @@ translate = {
                 if (key)
                 {
                     // Add a 2 or a 3 to the "key"
-                    tags[key[0] + endChar] = othList[i];
+                    tags[key[0] + ':' + endChar] = othList[i];
                     // Debug:
                     // print('OTH:: adding :' + othList[i] + ': to tag :' + key[0] + endChar + ': (From ' + i + ')');
                     delete othList[i];

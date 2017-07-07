@@ -12,6 +12,9 @@ rm -f $outputDir/*
 #  jam all of the shapefiles into one OSM file
 hoot --ogr2osm $HOOT_HOME/translations/TDSv40.js $outputDir/nfdd.osm $inputDir/*.shp
 
+# When the translation changes, uncomment this to update the OSM file
+#cp $outputDir/nfdd.osm $inputDir
+
 # compareFiles. Test taken from MGCP test
 hoot --is-match $outputDir/nfdd.osm $inputDir/nfdd.osm || diff $outputDir/nfdd.osm $inputDir/nfdd.osm
 
