@@ -81,8 +81,8 @@ std::vector<MergerCreator::Description> MultiaryPoiMergerCreator::getAllCreators
   return result;
 }
 
-bool MultiaryPoiMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
-  const Match* m2) const
+bool MultiaryPoiMergerCreator::isConflicting(const ConstOsmMapPtr&, const Match*,
+  const Match*) const
 {
   // Any relevant matches that contain conflicts will be resolved during the clustering phase.
   return false;
