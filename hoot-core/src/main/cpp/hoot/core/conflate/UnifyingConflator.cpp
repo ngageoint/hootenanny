@@ -227,7 +227,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_DEBUG("Post constraining match count: " << _matches.size());
   LOG_INFO("Match count: " << _matches.size());
 
-#warning this can go away, right?
   {
     // search the matches for groups (subgraphs) of matches. In other words, groups where all the
     // matches are interrelated by element id
