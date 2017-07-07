@@ -163,7 +163,10 @@ void OsmGeoJsonReader::_parseGeoJson()
 {
   _generator = QString::fromStdString(_propTree.get("generator", string("")));
   QString type = QString::fromStdString(_propTree.get("type", string("")));
-  Envelope env = _parseBbox(_propTree.get_child("bbox"));
+  if (_propTree.not_found() != _propTree.find("bbox"))
+  {
+    Envelope env = _parseBbox(_propTree.get_child("bbox"));
+  }
 
   //  Make a map, and iterate through all of our features, adding them
   pt::ptree features = _propTree.get_child("features");
@@ -181,7 +184,7 @@ void OsmGeoJsonReader::_parseGeoJson()
 
         //  Type can be node, way, or relation
         string typeStr = properties.get("type", string("--"));
-        string geoType = geometry.get("", string("---"));
+        string geoType = geometry.get("type", string("--"));
         if ("node" == typeStr ||
             "Point" == geoType)
         {
@@ -236,6 +239,8 @@ void OsmGeoJsonReader::_parseGeoJson()
 geos::geom::Envelope OsmGeoJsonReader::_parseBbox(const boost::property_tree::ptree& bbox)
 {
   pt::ptree::const_iterator bboxIt = bbox.begin();
+  if (bboxIt == bbox.end())
+    return Envelope();
   double minX = bboxIt->second.get_value<double>();
   bboxIt++;
   double minY = bboxIt->second.get_value<double>();
@@ -330,7 +335,8 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
       _roles.push("");
   }
   //  Make sure that we have the 'GeometryCollection' with the 'geometries' tree inside
-  if (geometry.get("type", "").compare("GeometryCollection") == 0)
+  string geo_type = geometry.get("type", "");
+  if (geo_type == "GeometryCollection")
   {
     if (geometry.not_found() != geometry.find("geometries"))
     {
@@ -346,7 +352,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           _roles.push("");
         QString role(_roles.front().c_str());
         _roles.pop();
-        if (type.compare("Point") == 0)
+        if (type == "Point")
         {
           //  Node
           long node_id = _map->createNextNodeId();
@@ -354,7 +360,8 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           _parseGeoJsonNode(node, empty, geo);
           relation->addElement(role, ElementType::Node, node_id);
         }
-        else if (type.compare("Polygon") == 0 || type.compare("LineString") == 0)
+        else if (type == "Polygon" ||
+                 type == "LineString")
         {
           //  Way
           long way_id = _map->createNextWayId();
@@ -362,13 +369,30 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
           _parseGeoJsonWay(way, empty, geo);
           relation->addElement(role, ElementType::Way, way_id);
         }
-        else if (type.compare("GeometryCollection") == 0)
+        else if (type == "GeometryCollection")
         {
           //  Relation
           long relation_id = _map->createNextRelationId();
           string rel = boost::lexical_cast<string>(relation_id);
           _parseGeoJsonRelation(rel, empty, geo);
           relation->addElement(role, ElementType::Relation, relation_id);
+        }
+        else if (type == "MultiPoint" ||
+                 type == "MultiLineString" ||
+                 type == "MultiPolygon")
+        {
+          //  Also a Relation but cannot be a relation of relations
+          long rid = _map->createNextRelationId();
+          //  Construct Relation
+          RelationPtr r(new Relation(_defaultStatus, rid, _defaultCircErr));
+          if (type == "MultiPoint")
+            _parseMultiPointGeometry(geo, r);
+          else if(type == "MultiLineString")
+            _parseMultiLineGeometry(geo, r);
+          else if (type == "MultiPolygon")
+            _parseMultiPolygonGeometry(geo, r);
+          _map->addRelation(r);
+          relation->addElement(role, ElementType::Relation, rid);
         }
         else
         {
@@ -378,18 +402,93 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
       _useDataSourceIds = use_old;
     }
   }
+  else if (geo_type == "MultiPoint")
+    _parseMultiPointGeometry(geometry, relation);
+  else if(geo_type == "MultiLineString")
+    _parseMultiLineGeometry(geometry, relation);
+  else if (geo_type == "MultiPolygon")
+    _parseMultiPolygonGeometry(geometry, relation);
+  else
+  {
+    LOG_WARN("Unsupported JSON geometry type (" << geo_type << ") when parsing GeoJSON");
+  }
   //  Add tags
   _addTags(properties, relation);
   //  Add relation to map
   _map->addRelation(relation);
 }
 
-vector<Coordinate> OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
+void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
 {
-  vector<Coordinate> results;
+  vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
+  vector<JsonCoordinates>::const_iterator multi = multigeo.begin();
+  for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
+  {
+    long node_id = _map->createNextNodeId();
+    double lat = coord[0].y;
+    double lon = coord[0].x;
+    //  Construct node
+    NodePtr pNode(new Node(_defaultStatus, node_id, lon, lat, _defaultCircErr));
+    //  Add node to map
+    _map->addNode(pNode);
+    relation->addElement("", ElementType::Node, node_id);
+  }
+}
 
+void OsmGeoJsonReader::_parseMultiLineGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
+{
+  vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
+  for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
+  {
+    long way_id = _map->createNextWayId();
+    WayPtr way(new Way(_defaultStatus, way_id, _defaultCircErr));
+    for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
+    {
+      long node_id = _map->createNextNodeId();
+      double lat = coord[0].y;
+      double lon = coord[0].x;
+      //  Construct node
+      NodePtr node(new Node(_defaultStatus, node_id, lon, lat, _defaultCircErr));
+      //  Add node to map
+      _map->addNode(node);
+      way->addNode(node_id);
+    }
+    relation->addElement("", ElementType::Way, way_id);
+  }
+}
+
+void OsmGeoJsonReader::_parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation)
+{
+  vector<JsonCoordinates> multigeo = _parseMultiGeometry(geometry);
+  for (vector<JsonCoordinates>::const_iterator multi = multigeo.begin(); multi != multigeo.end(); ++multi)
+  {
+    long way_id = _map->createNextWayId();
+    WayPtr way(new Way(_defaultStatus, way_id, _defaultCircErr));
+    for (JsonCoordinates::const_iterator coord = multi->begin(); coord != multi->end(); ++coord)
+    {
+      if ((coord + 1) == multi->end())
+      {
+        //  Don't create another node to close the polygon, just use the first one
+        way->addNode(way->getNodeId(0));
+      }
+      else
+      {
+        long node_id = _map->createNextNodeId();
+        NodePtr node(new Node(_defaultStatus, node_id, *coord, _defaultCircErr));
+        _map->addNode(node);
+        way->addNode(node_id);
+      }
+    }
+    _map->addWay(way);
+    relation->addElement("", ElementType::Way, way_id);
+  }
+}
+
+JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
+{
+  JsonCoordinates results;
   string type = geometry.get("type", "");
-  if (type.compare("Point") == 0)
+  if (type == "Point")
   {
     //  Single coordinate should only have two elements, lat/lon
     pt::ptree coordinates = geometry.get_child("coordinates");
@@ -399,7 +498,22 @@ vector<Coordinate> OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
     double y = it->second.get_value<double>();
     results.push_back(Coordinate(x, y));
   }
-  else if (type.compare("Polygon") == 0)
+  else if (type == "LineString")
+  {
+    //  Line string is a single array of coordinates (array)
+    pt::ptree coordinates = geometry.get_child("coordinates");
+    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    {
+      for (pt::ptree::const_iterator coord = it->second.begin(); coord != it->second.end(); ++coord)
+      {
+        double x = coord->second.get_value<double>();
+        ++coord;
+        double y = coord->second.get_value<double>();
+        results.push_back(Coordinate(x, y));
+      }
+    }
+  }
+  else if (type == "Polygon")
   {
     pt::ptree coordinates = geometry.get_child("coordinates");
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
@@ -416,27 +530,99 @@ vector<Coordinate> OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
       }
     }
   }
-  else if (type.compare("LineString") == 0)
+  else
   {
-    //  Line string is a single array of coordinates (array)z
+    LOG_WARN("Unsupported simple JSON geometry type (" << type << ") when parsing GeoJSON");
+  }
+
+  return results;
+}
+
+vector<JsonCoordinates> OsmGeoJsonReader::_parseMultiGeometry(const pt::ptree& geometry)
+{
+  vector<JsonCoordinates> results;
+  string type = geometry.get("type", "");
+  if (type == "MultiPoint")
+  {
+    //  MultiPoint is a single array of coordinates (array)
     pt::ptree coordinates = geometry.get_child("coordinates");
     for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
     {
+      JsonCoordinates point;
       for (pt::ptree::const_iterator coord = it->second.begin(); coord != it->second.end(); ++coord)
       {
         double x = coord->second.get_value<double>();
         ++coord;
         double y = coord->second.get_value<double>();
-        results.push_back(Coordinate(x, y));
+        point.push_back(Coordinate(x, y));
       }
+      results.push_back(point);
+    }
+  }
+  else if (type == "MultiLineString")
+  {
+    pt::ptree coordinates = geometry.get_child("coordinates");
+    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    {
+      JsonCoordinates line;
+      for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+      {
+        for (pt::ptree::const_iterator coord = array->second.begin(); coord != array->second.end(); ++coord)
+        {
+          double x = coord->second.get_value<double>();
+          ++coord;
+          double y = coord->second.get_value<double>();
+          line.push_back(Coordinate(x, y));
+        }
+      }
+      results.push_back(line);
+    }
+  }
+  else if (type == "MultiPolygon")
+  {
+    pt::ptree coordinates = geometry.get_child("coordinates");
+    for (pt::ptree::const_iterator it = coordinates.begin(); it != coordinates.end(); ++it)
+    {
+      JsonCoordinates polygon;
+      for (pt::ptree::const_iterator array = it->second.begin(); array != it->second.end(); ++array)
+      {
+        for (pt::ptree::const_iterator poly = array->second.begin(); poly != array->second.end(); ++poly)
+        {
+          for (pt::ptree::const_iterator coord = poly->second.begin(); coord != poly->second.end(); ++coord)
+          {
+            double x = coord->second.get_value<double>();
+            ++coord;
+            double y = coord->second.get_value<double>();
+            polygon.push_back(Coordinate(x, y));
+          }
+        }
+      }
+      results.push_back(polygon);
     }
   }
   else
   {
-    LOG_WARN("Unsupported JSON geometry type (" << type << ") when parsing GeoJSON");
+    LOG_WARN("Unsupported multi JSON geometry type (" << type << ") when parsing GeoJSON");
   }
-
   return results;
+}
+
+
+void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
+{
+  //  Starts with the "properties" tree, use the "tags" subtree if it exists
+  //  otherwise just use the "properties" tree as tags
+  if (item.not_found() != item.find("tags"))
+    OsmJsonReader::_addTags(item, element);
+  else
+  {
+    for (pt::ptree::const_iterator tagIt = item.begin(); tagIt != item.end(); ++tagIt)
+    {
+      QString k = QString::fromStdString(tagIt->first);
+      QString v = QString::fromStdString(tagIt->second.get_value<string>());
+      element->setTag(k, v);
+    }
+  }
 }
 
 } //  namespace hoot

@@ -55,6 +55,8 @@ namespace hoot
  * everything in memory. Be careful if you want to use it with large datasets.
  */
 
+typedef std::vector<geos::geom::Coordinate> JsonCoordinates;
+
 class OsmGeoJsonReader : public OsmJsonReader
 {
 public:
@@ -143,7 +145,24 @@ private:
    * @param geometry Tree of simple geometry in JSON format
    * @return Vector of coordinates
    */
-  std::vector<geos::geom::Coordinate> _parseGeometry(const boost::property_tree::ptree& geometry);
+  JsonCoordinates _parseGeometry(const boost::property_tree::ptree& geometry);
+
+  /**
+   * @brief _parseMulti*Geometry Parse the multi geometries into a vector of coordinates
+   *  for each geometry that is pushed into a vector
+   * @param geometry Tree of multi-geometry in JSON format
+   * @param relation OSM relation to represent the multi-geometry that all elements are added to
+   */
+  void _parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
+  void _parseMultiLineGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
+  void _parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
+
+  /**
+   * @brief _parseMultiGeometry Parse "Multi" geometry object into a vector of vectors of coordiantes
+   * @param geometry Three of "multi" geometry in JSON format
+   * @return Vector of vectors of coordinates
+   */
+  std::vector<JsonCoordinates> _parseMultiGeometry(const boost::property_tree::ptree& geometry);
 
   /**
    * @brief _parseBbox Parse the bounding box array in JSON format into Geos Envelope
@@ -151,6 +170,14 @@ private:
    * @return Bounding box as a usable Envelope
    */
   geos::geom::Envelope _parseBbox(const boost::property_tree::ptree& bbox);
+
+  /**
+   * @brief _addTags Reads tags or properties from the given ptree, and adds them to the
+   *        supplied map element
+   * @param item Property Tree (subtree)
+   * @param element Element to which we will add the tags
+   */
+  void _addTags(const boost::property_tree::ptree &item, ElementPtr element);
 
   /**
    * @brief _roles List of roles for the current relation, saved for recursive relations
