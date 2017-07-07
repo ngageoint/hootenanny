@@ -236,7 +236,8 @@
             "name": "POI Polygon Name Score Threshold",
             "defaultvalue": "0.8",
             "minvalue": "0.01",
-            "maxvalue": "1.0"
+            "maxvalue": "1.0",
+            "hoot_key": "poi.polygon.name.score.threshold"
           },
           {
             "id": "poipolygon_type_score_threshold",
@@ -245,7 +246,8 @@
             "name": "POI Polygon Type Score Threshold",
             "defaultvalue": "0.7",
             "minvalue": "0.01",
-            "maxvalue": "1.0"
+            "maxvalue": "1.0",
+            "hoot_key": "poi.polygon.type.score.threshold"
           },
           {
             "id": "poipolygon_match_distance_threshold",
@@ -254,7 +256,8 @@
             "name": "POI Polygon Match Distance Threshold",
             "defaultvalue": "5",
             "minvalue": "0",
-            "maxvalue": "5000"
+            "maxvalue": "5000",
+            "hoot_key": "poi.polygon.match.distance.threshold"
           },
           {
             "id": "poipolygon_review_distance_threshold",
@@ -263,21 +266,24 @@
             "name": "POI Polygon Review Distance Threshold",
             "defaultvalue": "125",
             "minvalue": "0",
-            "maxvalue": "5000"
+            "maxvalue": "5000",
+            "hoot_key": "poi.poi.polygon.review.distance.threshold"
           },
           {
             "id": "poipolygon_review_if_matched_types",
             "elem_type": "string",
             "description": "A list of key=value pairs, added as a semi-colon delimited list (poi.polygon.review.if.matched.types='key1=value1;key2=value2;'",
             "name": "POI Polygon Review If Matched Types",
-            "defaultvalue": ""
+            "defaultvalue": "",
+            "hoot_key": "poi.polygon.review.if.matched.types"
           },
           {
             "id": "poi_ignore_type_if_name_present",
             "elem_type": "bool",
             "defaultvalue": "false",
             "description": "POI Ignore Type If Name Present",
-            "name": "POI Ignore Type If Name Present"
+            "name": "POI Ignore Type If Name Present",
+            "hoot_key": "poi.ignore.type.if.name.present"
           }
         ]
       },
