@@ -42,7 +42,6 @@ namespace hoot
 class MultiaryPoiGenericTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(MultiaryPoiGenericTest);
-  //CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -50,6 +49,9 @@ public:
 
   /**
    * @brief basicTest Should conflate the three POIs into a single POI.
+   *
+   * This uses a dirt simple merge operation that merges all POIs into a single output POI (no
+   * clustering)
    */
   void basicTest()
   {

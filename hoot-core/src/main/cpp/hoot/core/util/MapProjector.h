@@ -68,7 +68,11 @@ public:
    */
   static boost::shared_ptr<OGRSpatialReference> createAeacProjection(const OGREnvelope& env);
 
+  /**
+   * Create an orthographic projection centered around env.
+   */
   static boost::shared_ptr<OGRSpatialReference> createOrthographic(const OGREnvelope& env);
+  static boost::shared_ptr<OGRSpatialReference> createOrthographic(double x, double y);
 
   /**
    * Given a bounding box in WGS84, create a reasonable planar projection for that region. The

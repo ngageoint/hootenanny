@@ -22,32 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIFILTER_H
-#define POIFILTER_H
+#include "MultiaryCluster.h"
 
-#include "ElementCriterion.h"
-
+// Qt
+#include <QStringBuilder>
 
 namespace hoot
 {
 
-/**
- * A criterion that is only satisified with POIs.
- */
-class PoiCriterion : public ElementCriterion
+QString MultiaryCluster::toString() const
 {
-public:
-  static std::string className() { return "hoot::PoiCriterion"; }
+  QString result;
 
-  PoiCriterion() {}
+  result += "{ ";
+  if (mergedElement.get())
+  {
+    result += "'merged': " + mergedElement->getElementId().toString() + ", ";
+  }
 
-  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const;
+  QStringList l;
+  for (int i = 0; i < length(); ++i)
+  {
+    l.append(at(i)->getElementId().toString());
+  }
+  result += "'members': [" + l.join(", ") + "] }";
 
-  virtual ElementCriterion* clone() { return new PoiCriterion(); }
-
-};
+  return result;
+}
 
 }
-#endif // POIFILTER_H

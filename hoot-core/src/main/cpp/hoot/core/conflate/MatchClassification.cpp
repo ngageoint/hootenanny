@@ -42,6 +42,13 @@ MatchClassification::MatchClassification()
   clear();
 }
 
+MatchClassification::MatchClassification(double match, double miss, double review) :
+  _match(match),
+  _miss(miss),
+  _review(review)
+{
+}
+
 bool MatchClassification::isValid() const
 {
   const double epsilon = 1e-5;

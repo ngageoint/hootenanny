@@ -91,6 +91,11 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
+  /**
+   * Set the factory to use when creating mergers. This method is likely only useful when testing.
+   */
+  void setMergerFactory(boost::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
+
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:

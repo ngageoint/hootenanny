@@ -82,6 +82,8 @@ public:
   virtual QString toString() const = 0;
 };
 
+typedef boost::shared_ptr<Merger> MergerPtr;
+typedef boost::shared_ptr<const Merger> ConstMergerPtr;
 
 }
 
