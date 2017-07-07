@@ -275,7 +275,8 @@
             "description": "A list of key=value pairs, added as a semi-colon delimited list (poi.polygon.review.if.matched.types='key1=value1;key2=value2;'",
             "name": "POI Polygon Review If Matched Types",
             "defaultvalue": "",
-            "hoot_key": "poi.polygon.review.if.matched.types"
+            "hoot_key": "poi.polygon.review.if.matched.types",
+            "onchange": "true"
           },
           {
             "id": "poi_ignore_type_if_name_present",
@@ -283,8 +284,7 @@
             "defaultvalue": "false",
             "description": "POI Ignore Type If Name Present",
             "name": "POI Ignore Type If Name Present",
-            "hoot_key": "poi.ignore.type.if.name.present",
-            "onchange": "true"
+            "hoot_key": "poi.ignore.type.if.name.present"
           }
         ]
       },
