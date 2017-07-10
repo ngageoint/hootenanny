@@ -46,7 +46,11 @@ exports.isWholeGroup = function()
 exports.matchScore = function(map, e1, e2)
 {
     var result;
-    if (isArea(e1) == false || isArea(e2) == false)
+
+    if (e1.getStatusString() == e2.getStatusString()) {
+        result = { miss: 1.0, explain:'Miss' };
+    }
+    else if (isArea(e1) == false || isArea(e2) == false)
     {
         result = { match: 0.0, miss: 1.0, review: 0.0 };
     }
