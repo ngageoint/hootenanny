@@ -937,11 +937,11 @@ ggdm30 = {
             {
                 tags.railway = 'crossing';
 
-                if (tags['transport:type2'] == 'road') tags.railway = 'level_crossing';
+                if (tags['transport:type:2'] == 'road') tags.railway = 'level_crossing';
             }
             else if (tags['transport:type'] == 'road')
             {
-                if (tags['transport:type2'] == 'railway')
+                if (tags['transport:type:2'] == 'railway')
                 {
                     tags.railway = 'level_crossing';
                 }

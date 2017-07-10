@@ -874,16 +874,16 @@ tds61 = {
             ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
             ["t.dock && !(t.waterway)","t.waterway = 'dock'"],
             ["t.drive_in == 'yes'","t.amenity = 'cinema'"],
-            ["t['generator:source']","t.power = 'generator'"],
+//             ["t['generator:source']","t.power = 'generator'"],
             ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
             ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
-            ["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
+            //["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
-            ["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
+            //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
@@ -919,11 +919,11 @@ tds61 = {
             {
                 tags.railway = 'crossing';
 
-                if (tags['transport:type2'] == 'road') tags.railway = 'level_crossing';
+                if (tags['transport:type:2'] == 'road') tags.railway = 'level_crossing';
             }
             else if (tags['transport:type'] == 'road')
             {
-                if (tags['transport:type2'] == 'railway')
+                if (tags['transport:type:2'] == 'railway')
                 {
                     tags.railway = 'level_crossing';
                 }
@@ -1235,7 +1235,7 @@ tds61 = {
             ["t.power == 'generator'","t.use = 'power_generation'; a.F_CODE = 'AL013'"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'; delete t.rapids"],
             ["t.railway == 'station'","t.public_transport = 'station';  t['transport:type'] = 'railway'"],
-            ["t.railway == 'level_crossing'","t['transport:type'] = 'railway';t['transport:type2'] = 'road'; a.F_CODE = 'AQ062'; delete t.railway"],
+            ["t.railway == 'level_crossing'","t['transport:type'] = 'railway';t['transport:type:2'] = 'road'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.resource","t.raw_material = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
@@ -1270,17 +1270,17 @@ tds61 = {
         // are not buildings.
         // Taking "place_of_worship" out of this and making it a building
         var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','marketplace','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding'
+            'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
+            'car_sharing', 'charging_station', 'clock', 'compressed_air', 'dog_bin', 'dog_waste_bin', 'drinking_water',
+            'drinking_water', 'emergency_phone', 'fire_hydrant', 'fountain', 'game_feeding', 'grass_strip', 'grit_bin',
+            'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'marketplace', 'nameplate', 'park', 'parking',
+            'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
+            'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
+            'water_point', 'watering_place', 'yes',
+            'fuel' // NOTE: Fuel goes to a different F_CODE
             ]; // End notBuildingList
 
-        if (tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+        if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
@@ -1298,7 +1298,13 @@ tds61 = {
             }
             else
             {
-                attrs.F_CODE = 'AL013'; // Building
+                // Make sure we don't turn point facilities into buildings
+                if (!(tags.facility = 'yes'))
+                {
+                    // Debug
+                    print('Making a building: ' + tags.facility);
+                    attrs.F_CODE = 'AL013'; // Building
+                }
             }
 
             // If we don't have a Feature Function then assign one.
@@ -1529,6 +1535,7 @@ tds61 = {
 
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
+
         if (!(attrs.F_CODE) && tds61.fcodeLookup)
         {
             for (var col in tags)

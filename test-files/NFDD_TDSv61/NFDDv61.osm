@@ -8,7 +8,7 @@
         <tag k="railway" v="station"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="name" v="Train Station"/>
-        <tag k="transport:type2" v="bus"/>
+        <tag k="transport:type:2" v="bus"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="addr:full" v="Another Station"/>
@@ -34,7 +34,7 @@
         <tag k="note" v="Underground Station"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="name" v="Station"/>
-        <tag k="transport:type2" v="bus"/>
+        <tag k="transport:type:2" v="bus"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="addr:full" v="A Station. Station Street"/>
@@ -136,13 +136,13 @@
         <tag k="navigation:landmark" v="yes"/>
         <tag k="roof:shape" v="conical"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="roof:shape2" v="star"/>
+        <tag k="roof:shape:2" v="star"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="t-frame"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.191Z"/>
         <tag k="ele:max" v="782.60809999000003"/>
         <tag k="source:spatial_source" v="yes"/>
-        <tag k="tower:type2" v="observation"/>
+        <tag k="tower:type:2" v="observation"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -222,10 +222,10 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="yes"/>
         <tag k="addr:full" v="In a garden"/>
-        <tag k="by_product2" v="no_byproduct"/>
+        <tag k="by_product:2" v="no_byproduct"/>
         <tag k="roof:shape" v="flat"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="roof:shape2" v="80"/>
+        <tag k="roof:shape:2" v="80"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.184Z"/>
         <tag k="source:spatial_source" v="yes"/>
@@ -239,7 +239,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-255" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617991846700015" lon="153.1727598307500102">
-        <tag k="material:vertical2" v="wood"/>
+        <tag k="material:vertical:2" v="wood"/>
         <tag k="source" v="tdsv61:shed_p"/>
         <tag k="condition" v="construction"/>
         <tag k="building" v="shed"/>
@@ -261,8 +261,8 @@
         <tag k="raw_material" v="plant_material"/>
         <tag k="product" v="coffee"/>
         <tag k="uuid" v="{b202f179-5156-4769-a5a0-031bb3468d10}"/>
-        <tag k="product2" v="aircraft"/>
-        <tag k="use2" v="meeting_place"/>
+        <tag k="product:2" v="aircraft"/>
+        <tag k="use:2" v="meeting_place"/>
         <tag k="use" v="warehouse"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -357,7 +357,7 @@
     <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916299994" lon="153.0914110288100005"/>
     <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106961420099999" lon="153.0915858127200124"/>
     <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495773578199959" lon="153.1729240297100034">
-        <tag k="cable:type2" v="load_bearing"/>
+        <tag k="cable:type:2" v="load_bearing"/>
         <tag k="source" v="tdsv61:pylon_p"/>
         <tag k="condition" v="construction"/>
         <tag k="cable:type" v="fibre-optic"/>
@@ -442,7 +442,7 @@
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="uuid" v="{aad37b05-3771-44b8-ace3-3f7933d18890}"/>
-        <tag k="use2" v="religious_activities"/>
+        <tag k="use:2" v="religious_activities"/>
         <tag k="use" v="leprosy_care"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -508,9 +508,9 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="addr:full" v="A Street"/>
         <tag k="facility" v="yes"/>
-        <tag k="by_product2" v="cinders"/>
+        <tag k="by_product:2" v="cinders"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="raw_material2" v="plant_material"/>
+        <tag k="raw_material:2" v="plant_material"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.160Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
@@ -526,7 +526,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-142" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553218837299994" lon="153.1477128779600037">
-        <tag k="material:vertical2" v="stone"/>
+        <tag k="material:vertical:2" v="stone"/>
         <tag k="source" v="tdsv61:facility_p"/>
         <tag k="condition" v="functional"/>
         <tag k="religion" v="muslim"/>
@@ -631,7 +631,7 @@
         <tag k="source" v="tdsv61:crossing_p"/>
         <tag k="name" v="Level Crossing"/>
         <tag k="railway" v="level_crossing"/>
-        <tag k="transport:type2" v="road"/>
+        <tag k="transport:type:2" v="road"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3851864758727999" lon="153.1526663026254766">
@@ -688,7 +688,7 @@
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="name" v="Transport Tower"/>
         <tag k="light:obstacle" v="yes"/>
-        <tag k="transport:type2" v="road"/>
+        <tag k="transport:type:2" v="road"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="no"/>
         <tag k="addr:full" v="The other side of the airfield"/>
@@ -707,7 +707,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554990691399986" lon="153.1600891370899831">
-        <tag k="material:vertical2" v="prestressed_concrete"/>
+        <tag k="material:vertical:2" v="prestressed_concrete"/>
         <tag k="source" v="tdsv61:control_tower_p"/>
         <tag k="condition" v="construction"/>
         <tag k="note" v="A good tower"/>
@@ -744,7 +744,7 @@
         <tag k="control_tower" v="yes"/>
         <tag k="roof:shape" v="pyramidal"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="roof:shape2" v="51"/>
+        <tag k="roof:shape:2" v="51"/>
         <tag k="transport:type" v="air"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.155Z"/>
@@ -1172,7 +1172,7 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="yes"/>
         <tag k="building:levels" v="1"/>
-        <tag k="by_product2" v="slag"/>
+        <tag k="by_product:2" v="slag"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.138Z"/>
@@ -1340,7 +1340,7 @@
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="product" v="bamboo"/>
         <tag k="uuid" v="{34788650-9dc2-45b0-95ee-42f28c23f8f4}"/>
-        <tag k="use2" v="Elf Store"/>
+        <tag k="use:2" v="Elf Store"/>
         <tag k="use" v="Smurf Factory"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -1518,8 +1518,8 @@
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="uuid" v="{c9e03c34-8ab5-4f9c-b31f-5f4d316bc61d}"/>
-        <tag k="use2" v="education"/>
-        <tag k="use3" v="healthcare"/>
+        <tag k="use:2" v="education"/>
+        <tag k="use:3" v="healthcare"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616567836900018" lon="153.1208365965200073">
@@ -1583,7 +1583,7 @@
         <tag k="by_product" v="cinders"/>
         <tag k="product" v="electric_power"/>
         <tag k="uuid" v="{09528206-90f4-4cbe-a616-1e5fb200d5ee}"/>
-        <tag k="product2" v="desalinated_water"/>
+        <tag k="product:2" v="desalinated_water"/>
         <tag k="building:manufactured" v="yes"/>
         <tag k="use" v="power_generation"/>
         <tag k="error:circular" v="15"/>
@@ -1836,7 +1836,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="uuid" v="{c253da4d-f6d4-41e1-a7ad-8bb6ea55d8f8}"/>
-        <tag k="use2" v="warehouse"/>
+        <tag k="use:2" v="warehouse"/>
         <tag k="hangar:type" v="underground"/>
         <tag k="use" v="cargo_handling"/>
         <tag k="error:circular" v="15"/>
@@ -2035,7 +2035,7 @@
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="uuid" v="{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}"/>
         <tag k="cover:type" v="moveable"/>
-        <tag k="use2" v="religious_activities"/>
+        <tag k="use:2" v="religious_activities"/>
         <tag k="use" v="sports_amusement_and_recreation"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -2045,7 +2045,7 @@
         <nd ref="-259"/>
         <nd ref="-260"/>
         <nd ref="-257"/>
-        <tag k="material:vertical2" v="mud-based_construction"/>
+        <tag k="material:vertical:2" v="mud-based_construction"/>
         <tag k="source" v="tdsv61:shed_s"/>
         <tag k="condition" v="functional"/>
         <tag k="building" v="shed"/>
@@ -2056,12 +2056,12 @@
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="yes"/>
         <tag k="addr:full" v="Downtown DC"/>
-        <tag k="by_product2" v="no_byproduct"/>
+        <tag k="by_product:2" v="no_byproduct"/>
         <tag k="roof:shape" v="sawtoothed"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="roof:shape2" v="78"/>
+        <tag k="roof:shape:2" v="78"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="raw_material2" v="tobacco"/>
+        <tag k="raw_material:2" v="tobacco"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.185Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
@@ -2071,8 +2071,8 @@
         <tag k="raw_material" v="gold"/>
         <tag k="product" v="biodiesel"/>
         <tag k="uuid" v="{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}"/>
-        <tag k="product2" v="wine"/>
-        <tag k="use2" v="meeting_place"/>
+        <tag k="product:2" v="wine"/>
+        <tag k="use:2" v="meeting_place"/>
         <tag k="use" v="agriculture"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -2317,7 +2317,7 @@
         <tag k="uuid" v="{d9d0703d-83d7-4874-ac98-1b323e5de301}"/>
         <tag k="on_bridge" v="no"/>
         <tag k="location" v="surface"/>
-        <tag k="ref:road:class2" v="Elf Road"/>
+        <tag k="ref:road:class:2" v="Elf Road"/>
         <tag k="ref:road:class" v="primary"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -2472,7 +2472,7 @@
         <tag k="highway:through_route" v="yes"/>
         <tag k="uuid" v="{c87f3ed7-5656-4f80-b556-5b85df1cb9be}"/>
         <tag k="location" v="surface"/>
-        <tag k="ref:road:class2" v="local"/>
+        <tag k="ref:road:class:2" v="local"/>
         <tag k="ref:road:class" v="national_motorway"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3019,11 +3019,11 @@
         <tag k="navigation:landmark" v="no"/>
         <tag k="addr:full" v="Yes it does"/>
         <tag k="facility" v="yes"/>
-        <tag k="by_product2" v="radioactive_material"/>
+        <tag k="by_product:2" v="radioactive_material"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="raw_material2" v="radioactive_material"/>
-        <tag k="raw_material3" v="plastic"/>
+        <tag k="raw_material:2" v="radioactive_material"/>
+        <tag k="raw_material:3" v="plastic"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.161Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="XE"/>
@@ -3034,8 +3034,8 @@
         <tag k="product" v="radioactive_material"/>
         <tag k="uuid" v="{ae014362-8c96-46b2-8149-d377ed03f334}"/>
         <tag k="man_made" v="works"/>
-        <tag k="product2" v="explosive"/>
-        <tag k="product3" v="ammunition"/>
+        <tag k="product:2" v="explosive"/>
+        <tag k="product:3" v="ammunition"/>
         <tag k="use" v="manufacturing"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -3475,7 +3475,7 @@
         <tag k="navigation:landmark" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="raw_material2" v="petroleum_and/or_natural_gas"/>
+        <tag k="raw_material:2" v="petroleum_and/or_natural_gas"/>
         <tag k="width" v="25"/>
         <tag k="source:ingest:datetime" v="2017-01-03T21:13:02.142Z"/>
         <tag k="source:spatial_source" v="no"/>

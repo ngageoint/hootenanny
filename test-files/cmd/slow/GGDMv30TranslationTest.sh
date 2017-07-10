@@ -6,21 +6,22 @@ set -e
 inputDir=test-files/GGDMv30
 outputDir=test-output/ggdm30_translation
 
+mkdir -p $outputDir
+rm -f $outputDir/*
+
 # Script to compare shapefiles. NOTE: This might not run on Jenkins.
 COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
+
+# Normal Hoot options
+HOOT_OPT="--info"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
 HOOT_OPT="--info -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
-# Normal Hoot options
-#HOOT_OPT="--info"
-
-mkdir -p $outputDir
-rm -f $outputDir/*
-
 # Cleanup debug output
 rm -f $inputDir/to_OSM.txt $inputDir/new_OSM.txt
+
 
 ##### Start of initial setup #####
 # Un-comment and run these commands when the source OSM file changes.
