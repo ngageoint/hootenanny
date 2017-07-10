@@ -21,7 +21,7 @@ default: build
 all: build
 always:
 
-build: js-make qt-make pp-build services-build model-build conf/dictionary/words.sqlite \
+build: js-make qt-make pp-build services-build ui-build model-build conf/dictionary/words.sqlite \
 	conf/dictionary/WordsAbridged.sqlite osmapidb
 
 clean: Makefile.qmake services-clean clean-coverage
@@ -320,6 +320,11 @@ endif
 services-test-all: services-build
 ifeq ($(BUILD_SERVICES),services)
 	cd hoot-services && $(MAKE) -f Makefile test-all
+endif
+
+ui-build: HOOT_VERSION_FILE
+ifeq ($(BUILD_SERVICES),services)
+	cd hoot-ui && $(MAKE) -f Makefile clean && $(MAKE) -f Makefile all
 endif
 
 ui-test: services-build build
