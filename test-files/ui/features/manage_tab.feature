@@ -52,6 +52,7 @@ Feature: Manage Tab
         Then I fill "NewFolderName" input with "ManageTabTest"
         And I press "big.loud" span with text "Add Folder"
         # Move datasets into folder
+        And I wait
         And I hover over "#datasettable"
         When I click the "AllDataTypesACucumber" Dataset and the "AllDataTypesBCucumber" Dataset
         And I context click the "AllDataTypesACucumber" Dataset
@@ -66,7 +67,7 @@ Feature: Manage Tab
         And I should see "Delete (2)"
         Then I click the "Move (2)" context menu item
         And I press "big.loud" span with text "Update"
-    
+
     Scenario: Name and Rename folders
         Then I wait 5 "seconds" to see "tspan" element with text "ManageTabTest"
         Then I click the "ManageTabTest" Dataset
@@ -83,7 +84,7 @@ Feature: Manage Tab
         Then I wait 5 "seconds" to see "tspan" element with text "TestFolder"
         Then I context click the "TestFolder" Dataset
         And I click the "Add Folder" context menu item
-        # Test for invalid input 
+        # Test for invalid input
         Then I fill "NewFolderName" input with "#!*invalid chars"
         Then I click on the "Folder Name" label
         Then I should see an invalid name warning for ".NewFolderName" input
@@ -92,7 +93,7 @@ Feature: Manage Tab
         And I press "big.loud" span with text "Add Folder"
         Then I wait 30 "seconds" to not see "Folder Name"
 
-    Scenario: Add dataset into sub folder 
+    Scenario: Add dataset into sub folder
         # Add dataset into sub folder
         Then I expand the "TestFolder" folder
         Then I wait 5 "seconds" to see "tspan" element with text "TestSubFolder"
