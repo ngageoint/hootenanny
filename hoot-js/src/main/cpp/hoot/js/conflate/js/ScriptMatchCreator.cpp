@@ -92,7 +92,9 @@ public:
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
+    _elementCount = map->getElementCount();
     _elementsEvaluated = 0;
+    _elementsVisited = 0;
     _maxGroupSize = 0;
 
     HandleScope handleScope;
@@ -149,7 +151,6 @@ public:
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
-    int neighborCount = 0;
 
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
@@ -157,7 +158,7 @@ public:
       if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
-        ScriptMatch* m = new ScriptMatch(_script, getPlugin(), map, from, *it, _mt);
+        ScriptMatch* m = new ScriptMatch(_script, getPlugin(), map, _mapJs, from, *it, _mt);
         // if we're confident this is a miss
         if (m->getType() == MatchType::Miss)
         {
@@ -166,13 +167,12 @@ public:
         else
         {
           _result.push_back(m);
-          neighborCount++;
         }
       }
     }
 
-    _neighborCountSum += neighborCount;
-    _neighborCountMax = std::max(_neighborCountMax, neighborCount);
+    _neighborCountSum += neighbors.size();
+    _neighborCountMax = std::max(_neighborCountMax, (int)neighbors.size());
   }
 
   ConstOsmMapPtr getMap() const { return _map.lock(); }
@@ -244,15 +244,24 @@ public:
     }
     else
     {
-      Handle<Value> jsArgs[1];
+      if (_searchRadiusCache.contains(e->getElementId()))
+      {
+        result = _searchRadiusCache[e->getElementId()];
+      }
+      else
+      {
+        Handle<Value> jsArgs[1];
 
-      int argc = 0;
-      jsArgs[argc++] = ElementJs::New(e);
+        int argc = 0;
+        jsArgs[argc++] = ElementJs::New(e);
 
-      LOG_TRACE("Calling getSearchRadius...");
-      Handle<Value> f = _getSearchRadius->Call(getPlugin(), argc, jsArgs);
+        LOG_TRACE("Calling getSearchRadius...");
+        Handle<Value> f = _getSearchRadius->Call(getPlugin(), argc, jsArgs);
 
-      result = toCpp<Meters>(f) * _candidateDistanceSigma;
+        result = toCpp<Meters>(f) * _candidateDistanceSigma;
+
+        _searchRadiusCache[e->getElementId()] = result;
+      }
     }
 
     LOG_VART(result);
@@ -300,6 +309,11 @@ public:
     LOG_DEBUG("Search radius calculation complete for " << scriptFileInfo.fileName());
   }
 
+  void cleanMapCache()
+  {
+    _mapJs.Clear();
+  }
+
   boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
@@ -334,6 +348,15 @@ public:
     return _index;
   }
 
+  Persistent<Object> getOsmMapJs()
+  {
+    if (_mapJs.IsEmpty())
+    {
+      _mapJs = Persistent<Object>::New(OsmMapJs::create(getMap()));
+    }
+    return _mapJs;
+  }
+
   /**
    * Returns true if e1, e2 is in the correct ordering for matching. This does a few things:
    *
@@ -355,6 +378,11 @@ public:
 
   bool isMatchCandidate(ConstElementPtr e)
   {
+    if (_matchCandidateCache.contains(e->getElementId()))
+    {
+      return _matchCandidateCache[e->getElementId()];
+    }
+
     Context::Scope context_scope(_script->getContext());
     HandleScope handleScope;
     Persistent<Object> plugin = getPlugin();
@@ -372,12 +400,14 @@ public:
     Handle<Value> jsArgs[2];
 
     int argc = 0;
-    jsArgs[argc++] = OsmMapJs::create(getMap());
+    jsArgs[argc++] = getOsmMapJs();
     jsArgs[argc++] = ElementJs::New(e);
 
     Handle<Value> f = func->Call(plugin, argc, jsArgs);
 
-    return f->BooleanValue();
+    bool result = f->BooleanValue();
+    _matchCandidateCache[e->getElementId()] = result;
+    return result;
   }
 
   virtual void visit(const ConstElementPtr& e)
@@ -385,6 +415,13 @@ public:
     if (isMatchCandidate(e))
     {
       checkForMatch(e);
+    }
+    _elementsVisited++;
+    if (_elementsVisited % 10 == 0 && Log::getInstance().getLevel() <= Log::Info)
+    {
+      cout << "Progress: " << _elementsVisited << " of " << _elementCount <<
+              " _neighborCountSum: " << _neighborCountSum << "          \r";
+      cout << flush;
     }
   }
 
@@ -398,16 +435,22 @@ private:
 
   // don't hold on to the map.
   boost::weak_ptr<const OsmMap> _map;
+  Persistent<Object> _mapJs;
   vector<const Match*>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;
   int _neighborCountSum;
+  long _elementCount;
   int _elementsEvaluated;
+  long _elementsVisited;
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
   Meters _worstCircularError;
   boost::shared_ptr<PluginContext> _script;
   Persistent<v8::Function> _getSearchRadius;
+
+  QHash<ElementId, bool> _matchCandidateCache;
+  QHash<ElementId, double> _searchRadiusCache;
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;
@@ -454,9 +497,15 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
 {
   if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
   {
+    Context::Scope context_scope(_script->getContext());
+    HandleScope handleScope;
+
+    Handle<Object> mapJs = OsmMapJs::create(map);
+
     return
       new ScriptMatch(
-        _script, ScriptMatchVisitor::getPlugin(_script), map, eid1, eid2, getMatchThreshold());
+        _script, ScriptMatchVisitor::getPlugin(_script), map, mapJs, eid1, eid2,
+        getMatchThreshold());
   }
   else
   {
@@ -594,7 +643,9 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
     }
   }
 
-  return _matchCandidateChecker->isMatchCandidate(element);
+  bool result = _matchCandidateChecker->isMatchCandidate(element);
+  _matchCandidateChecker->cleanMapCache();
+  return result;
 }
 
 boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()

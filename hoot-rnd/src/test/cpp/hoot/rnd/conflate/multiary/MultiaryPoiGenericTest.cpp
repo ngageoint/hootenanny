@@ -55,6 +55,8 @@ public:
    */
   void basicTest()
   {
+    TestUtils::resetEnvironment();
+
     OGREnvelope env;
     env.MinX = -1;
     env.MinY = -1;

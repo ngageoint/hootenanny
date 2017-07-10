@@ -50,6 +50,12 @@ public:
    * Runs the test
    */
   virtual void runTest();
+
+protected:
+
+  void _runConflateCmd();
+
+  void _runMultiaryConflateCmd();
 };
 
 }
