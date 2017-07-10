@@ -14,5 +14,6 @@ HootTest --exclude=.*ConflateAverageTest.sh \
          --exclude=.*ExactMatchInputsTest.sh \
          --exclude=.*RafahConflateTest.sh \
          --exclude=.*HaitiDrConflateTest.sh \
+         --exclude=.*DcStreetsNetworkConflateTest.sh \
          --slow
 
