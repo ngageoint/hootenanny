@@ -3,7 +3,7 @@ set -e
 
 # Test the TDSv61 Translation
 
-inputDir=test-files/NFDD_TDSv61
+inputDir=test-files/TDSv61
 outputDir=test-output/tds61_translation
 
 mkdir -p $outputDir
@@ -23,7 +23,7 @@ rm -f $inputDir/toOSM.txt $inputDir/toTDS.txt
 hoot ogr2osm $HOOT_OPT $HOOT_HOME/translations/TDSv61.js $outputDir/tds61.osm $inputDir/*.shp > tmp/tds61toOSM.txt
 
 # compareFiles. Test taken from MGCP test
-hoot is-match $outputDir/tds61.osm $inputDir/NFDDv61.osm || diff $outputDir/tds61.osm $inputDir/NFDDv61.osm
+hoot is-match $outputDir/tds61.osm $inputDir/TDSv61.osm || diff $outputDir/tds61.osm $inputDir/TDSv61.osm
 
 # Make shapefiles
 # NOTE: These are 1 x FCODE / file
@@ -36,7 +36,7 @@ hoot ogr2osm $HOOT_OPT $HOOT_HOME/translations/TDSv61.js $outputDir/tds61_new.os
 # compareFiles. Test taken from MGCP test
 echo
 echo "Compare new with orig"
-hoot is-match $outputDir/tds61_new.osm $inputDir/NFDDv61.osm || diff $outputDir/tds61_new.osm $inputDir/NFDDv61.osm
+hoot is-match $outputDir/tds61_new.osm $inputDir/TDSv61.osm || diff $outputDir/tds61_new.osm $inputDir/TDSv61.osm
 
 echo
 echo "Compare new2 with new"
