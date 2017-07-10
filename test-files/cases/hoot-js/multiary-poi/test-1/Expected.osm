@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.74862374516" minlon="-105.00779937932" maxlat="39.74862374516" maxlon="-105.00779937932"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7486237451600033" lon="-105.0077993793200051">
+        <tag k="leisure" v="stadium"/>
+        <tag k="alt_name" v="Pepsi"/>
+        <tag k="source" v="wikimapia"/>
+        <tag k="name" v="Pepsi Center"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>
