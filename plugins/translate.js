@@ -369,6 +369,7 @@ translate = {
                 }
             } // End !col in lookup
         } // End for col in inList
+
     }, // End applyNfddOne2One
 
 
@@ -527,13 +528,15 @@ translate = {
         var othVal = '',
             othField = '';
 
-        for (var i in rawList)
+        // Now sort the list. Not needed for the spec but it makes life easier when comparing attributes in the output
+        var tList = Object.keys(rawList).sort();
+        for (var i = 0, fLen = tList.length; i < fLen; i++)
         {
-            othVal = '(' + i + ':' + rawList[i] + ')';
+            othVal = '(' + tList[i] + ':' + rawList[tList[i]] + ')';
             othField = translate.appendValue(othField, othVal, ' ');
         }
 
-        return othField;
+        return othField.trim();
     }, // End packOTH
 
 

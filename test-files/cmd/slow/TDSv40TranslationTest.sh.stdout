@@ -1,69 +1,69 @@
-17:06:05.783 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
-Loading test-files/NFDD_TDSv4/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P 0 / 2   
-17:06:05.807 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P
-Loading test-files/NFDD_TDSv4/BUILDING_P.shp BUILDING_P 0 / 38   
-17:06:05.831 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S
-17:06:05.834 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
-Loading test-files/NFDD_TDSv4/BUILDING_S.shp BUILDING_S 0 / 9   
-17:06:05.896 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
-Loading test-files/NFDD_TDSv4/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P 0 / 4   
-17:06:05.899 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P
-Loading test-files/NFDD_TDSv4/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P 0 / 5   
-17:06:05.903 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S
-Loading test-files/NFDD_TDSv4/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S 0 / 8   
-17:06:05.908 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C
-Loading test-files/NFDD_TDSv4/CART_TRACK_C.shp CART_TRACK_C 0 / 4   
-17:06:05.912 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P
-Loading test-files/NFDD_TDSv4/CONTROL_TOWER_P.shp CONTROL_TOWER_P 0 / 5   
-17:06:05.916 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P
-Loading test-files/NFDD_TDSv4/FACILITY_P.shp FACILITY_P 0 / 6   
-17:06:05.920 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S
-Loading test-files/NFDD_TDSv4/FACILITY_S.shp FACILITY_S 0 / 4   
-17:06:05.924 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/HUT_P.shp HUT_P
-Loading test-files/NFDD_TDSv4/HUT_P.shp HUT_P 0 / 5   
-17:06:05.927 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P
-Loading test-files/NFDD_TDSv4/PYLON_P.shp PYLON_P 0 / 3   
-17:06:05.931 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C
-Loading test-files/NFDD_TDSv4/RAILWAY_C.shp RAILWAY_C 0 / 7   
-17:06:05.935 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C
-Loading test-files/NFDD_TDSv4/RIVER_C.shp RIVER_C 0 / 16   
-17:06:05.943 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C
-Loading test-files/NFDD_TDSv4/ROAD_C.shp ROAD_C 0 / 7   
-17:06:05.950 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/SHED_P.shp SHED_P
-Loading test-files/NFDD_TDSv4/SHED_P.shp SHED_P 0 / 3   
-17:06:05.953 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/SHED_S.shp SHED_S
-Loading test-files/NFDD_TDSv4/SHED_S.shp SHED_S 0 / 2   
-17:06:05.956 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S
-Loading test-files/NFDD_TDSv4/STADIUM_S.shp STADIUM_S 0 / 2   
-17:06:05.959 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P
-Loading test-files/NFDD_TDSv4/TOWER_P.shp TOWER_P 0 / 6   
-17:06:05.966 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C
-Loading test-files/NFDD_TDSv4/TRAIL_C.shp TRAIL_C 0 / 7   
-17:06:05.970 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
-Loading test-files/NFDD_TDSv4/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P 0 / 3   
+22:21:47.647 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P
+Loading test-files/TDSv40/AIRCRAFT_HANGAR_P.shp AIRCRAFT_HANGAR_P 0 / 2   
+22:21:47.669 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/BUILDING_P.shp BUILDING_P
+Loading test-files/TDSv40/BUILDING_P.shp BUILDING_P 0 / 38   
+22:21:47.692 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/BUILDING_S.shp BUILDING_S
+22:21:47.697 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+Loading test-files/TDSv40/BUILDING_S.shp BUILDING_S 0 / 9   
+22:21:48.042 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P
+Loading test-files/TDSv40/BUILDING_SUPERSTRUCTURE_P.shp BUILDING_SUPERSTRUCTURE_P 0 / 4   
+22:21:48.057 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P
+Loading test-files/TDSv40/BUILT-UP_AREA_P.shp BUILT-UP_AREA_P 0 / 5   
+22:21:48.061 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S
+Loading test-files/TDSv40/BUILT-UP_AREA_S.shp BUILT-UP_AREA_S 0 / 8   
+22:21:48.067 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/CART_TRACK_C.shp CART_TRACK_C
+Loading test-files/TDSv40/CART_TRACK_C.shp CART_TRACK_C 0 / 4   
+22:21:48.071 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/CONTROL_TOWER_P.shp CONTROL_TOWER_P
+Loading test-files/TDSv40/CONTROL_TOWER_P.shp CONTROL_TOWER_P 0 / 5   
+22:21:48.074 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/FACILITY_P.shp FACILITY_P
+Loading test-files/TDSv40/FACILITY_P.shp FACILITY_P 0 / 6   
+22:21:48.078 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/FACILITY_S.shp FACILITY_S
+Loading test-files/TDSv40/FACILITY_S.shp FACILITY_S 0 / 4   
+22:21:48.082 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/HUT_P.shp HUT_P
+Loading test-files/TDSv40/HUT_P.shp HUT_P 0 / 5   
+22:21:48.086 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/PYLON_P.shp PYLON_P
+Loading test-files/TDSv40/PYLON_P.shp PYLON_P 0 / 3   
+22:21:48.089 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/RAILWAY_C.shp RAILWAY_C
+Loading test-files/TDSv40/RAILWAY_C.shp RAILWAY_C 0 / 7   
+22:21:48.093 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/RIVER_C.shp RIVER_C
+Loading test-files/TDSv40/RIVER_C.shp RIVER_C 0 / 16   
+22:21:48.104 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/ROAD_C.shp ROAD_C
+Loading test-files/TDSv40/ROAD_C.shp ROAD_C 0 / 7   
+22:21:48.112 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/SHED_P.shp SHED_P
+Loading test-files/TDSv40/SHED_P.shp SHED_P 0 / 3   
+22:21:48.116 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/SHED_S.shp SHED_S
+Loading test-files/TDSv40/SHED_S.shp SHED_S 0 / 2   
+22:21:48.119 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/STADIUM_S.shp STADIUM_S
+Loading test-files/TDSv40/STADIUM_S.shp STADIUM_S 0 / 2   
+22:21:48.122 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/TOWER_P.shp TOWER_P
+Loading test-files/TDSv40/TOWER_P.shp TOWER_P 0 / 6   
+22:21:48.128 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/TRAIL_C.shp TRAIL_C
+Loading test-files/TDSv40/TRAIL_C.shp TRAIL_C 0 / 7   
+22:21:48.133 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/TDSv40/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P
+Loading test-files/TDSv40/TRANSPORTATION_STATION_P.shp TRANSPORTATION_STATION_P 0 / 3   
 
-17:06:06.050 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
-17:06:06.050 INFO  .../core/ops/MergeNearbyNodes.cpp(  75) MergeNearbyNodes start
-MergeNearbyNodes 0 1    MergeNearbyNodes 279 elapsed: 1ms        
-17:06:06.051 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
+22:21:48.219 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
+22:21:48.219 INFO  .../core/ops/MergeNearbyNodes.cpp(  75) MergeNearbyNodes start
+MergeNearbyNodes 0 1    MergeNearbyNodes 279 elapsed: 3ms        
+22:21:48.222 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 66        Ways: 66 / 66        
 Relations: 0 / 0        
 Combining Parts: 0 / 13        Combining Parts: 13 / 13        
 
-17:06:06.057 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/nfdd_translation/nfdd.osm...
-17:06:06.396 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/nfdd_translation/nfdd.osm...
-17:06:06.415 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/NFDD_TDSv4/nfdd.osm...
-17:06:07.219 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/nfdd_translation/nfdd.osm...
-17:06:07.238 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
-17:06:07.318 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: FacilityPnt not found.  Creating layer...
-17:06:07.324 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: StructurePnt not found.  Creating layer...
-17:06:07.330 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: AeronauticPnt not found.  Creating layer...
-17:06:07.333 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: SettlementPnt not found.  Creating layer...
-17:06:07.369 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: TransportationGroundPnt not found.  Creating layer...
-17:06:07.383 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: UtilityInfrastructurePnt not found.  Creating layer...
-17:06:07.390 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: TransportationGroundCrv not found.  Creating layer...
-17:06:07.400 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: RecreationSrf not found.  Creating layer...
-17:06:07.403 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: StructureSrf not found.  Creating layer...
-17:06:07.413 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: HydrographyCrv not found.  Creating layer...
-17:06:07.437 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: FacilitySrf not found.  Creating layer...
-17:06:07.447 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: SettlementSrf not found.  Creating layer...
+22:21:48.233 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/TDSv40_translation/TDSv40.osm...
+22:21:48.484 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from test-output/TDSv40_translation/TDSv40.osm...
+22:21:48.510 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from test-files/TDSv40/TDSv40.osm...
+22:21:49.360 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from test-output/TDSv40_translation/TDSv40.osm...
+22:21:49.383 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+22:21:49.632 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: FacilityPnt not found.  Creating layer...
+22:21:49.642 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: StructurePnt not found.  Creating layer...
+22:21:49.644 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: AeronauticPnt not found.  Creating layer...
+22:21:49.654 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: SettlementPnt not found.  Creating layer...
+22:21:49.699 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: TransportationGroundPnt not found.  Creating layer...
+22:21:49.713 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: UtilityInfrastructurePnt not found.  Creating layer...
+22:21:49.727 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: TransportationGroundCrv not found.  Creating layer...
+22:21:49.739 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: RecreationSrf not found.  Creating layer...
+22:21:49.742 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: StructureSrf not found.  Creating layer...
+22:21:49.755 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: HydrographyCrv not found.  Creating layer...
+22:21:49.785 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: FacilitySrf not found.  Creating layer...
+22:21:49.795 INFO  ...cpp/hoot/core/io/OgrWriter.cpp( 310) Layer: SettlementSrf not found.  Creating layer...

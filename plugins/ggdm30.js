@@ -237,9 +237,9 @@ ggdm30 = {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
             if (config.getOgrDebugDumpvalidate() == 'true')
             {
-        	    for (var val in attrs) 
-        	    {
-            	    if (attrList.indexOf(val) == -1) 
+                for (var val in attrs)
+                {
+                    if (attrList.indexOf(val) == -1)
                     {
                         if (val in othList)
                         {
@@ -900,7 +900,7 @@ ggdm30 = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
-            ["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
+            //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
