@@ -115,8 +115,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr n)
 void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
-  bool isPolygon = OsmSchema::getInstance().isBuilding(w) ||
-                   OsmSchema::getInstance().isBuildingPart(w) ||
+  bool isPolygon = OsmSchema::getInstance().isArea(w) ||
                    nodes[0] == nodes[nodes.size() - 1];
   _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
 }
@@ -274,8 +273,7 @@ void OsmGeoJsonWriter::_writeWays()
     //  Make sure that building ways are "complete"
     const vector<long>& nodes = w->getNodeIds();
     bool valid = true;
-    if (OsmSchema::getInstance().isBuilding(w) ||
-        OsmSchema::getInstance().isBuildingPart(w))
+    if (OsmSchema::getInstance().isArea(w))
     {
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
