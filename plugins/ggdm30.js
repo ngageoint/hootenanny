@@ -894,7 +894,7 @@ ggdm30 = {
             ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
             ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
             ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
-            ["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
+            //["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
             ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
             ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
             ["t.leisure == 'stadium'","t.building = 'yes'"],

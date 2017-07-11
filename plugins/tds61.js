@@ -424,6 +424,7 @@ tds61 = {
         for (var i = 0, len = tdsAttrList.length; i < len; i++)
         {
             if (nfddAttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+            //if (nfddAttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
         }
     }, // End validateTDSAttrs
 
