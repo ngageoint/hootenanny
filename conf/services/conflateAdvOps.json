@@ -267,7 +267,7 @@
             "defaultvalue": "125",
             "minvalue": "0",
             "maxvalue": "5000",
-            "hoot_key": "poi.poi.polygon.review.distance.threshold"
+            "hoot_key": "poi.polygon.review.distance.threshold"
           },
           {
             "id": "poipolygon_review_if_matched_types",
