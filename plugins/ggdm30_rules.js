@@ -513,32 +513,7 @@ ggdm30.rules = {
      ['APT','999','aeroway:use','other'], // Other
 
      // APT2 - Airfield Use [2]
-     // ['APT2','-999999',undefined,undefined], // No Information
-//      ['APT2','1','aeroway:use2','major_airfield'], // Major Airfield
-//      ['APT2','2','aeroway:use2','minor_airfield'], // Minor Airfield
-//      ['APT2','3','aeroway:use2','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
-//      ['APT2','5','aeroway:use2','glider_site'], // Glider Site
-//      ['APT2','6','aeroway:use2','ultralight_site'], // Ultralight Site
-//      ['APT2','7','aeroway:use2','hang_glider_site'], // Hang Glider Site
-//      ['APT2','8','aeroway:use2','winch_launched_hang_glider_site'], // Winch Launched Hang Glider Site
-//      ['APT2','12','aeroway:use2','emergency'], // Emergency
-//      ['APT2','13','aeroway:use2','parascending_site'], // Parascending Site
-//      ['APT2','16','aeroway:use2','search_and_rescue_airfield'], // Search and Rescue Airfield
-//      ['APT2','999','aeroway:use2','other'], // Other
-
      // APT3 - Airfield Use [3]
-     // ['APT3','-999999',undefined,undefined], // No Information
-//      ['APT3','1','aeroway:use:3','major_airfield'], // Major Airfield
-//      ['APT3','2','aeroway:use:3','minor_airfield'], // Minor Airfield
-//      ['APT3','3','aeroway:use:3','general_aviation_aircraft_operating_only'], // General Aviation Aircraft Operating Only
-//      ['APT3','5','aeroway:use:3','glider_site'], // Glider Site
-//      ['APT3','6','aeroway:use:3','ultralight_site'], // Ultralight Site
-//      ['APT3','7','aeroway:use:3','hang_glider_site'], // Hang Glider Site
-//      ['APT3','8','aeroway:use:3','winch_launched_hang_glider_site'], // Winch Launched Hang Glider Site
-//      ['APT3','12','aeroway:use:3','emergency'], // Emergency
-//      ['APT3','13','aeroway:use:3','parascending_site'], // Parascending Site
-//      ['APT3','16','aeroway:use:3','search_and_rescue_airfield'], // Search and Rescue Airfield
-//      ['APT3','999','aeroway:use:3','other'], // Other
 
      // APU - Apron Usage
      // ['APU','-999999',undefined,undefined], // No Information
@@ -559,40 +534,7 @@ ggdm30.rules = {
      ['APU','999','apron:use','other'], // Other
 
      // APU2 - Apron Usage [2]
-     // ['APU2','-999999',undefined,undefined], // No Information
-//      ['APU2','1','apron:use2','parking'], // Parking
-//      ['APU2','2','apron:use2','loading_and/or_unloading'], // Loading and/or Unloading
-//      ['APU2','3','apron:use2','fuelling'], // Fuelling
-//      ['APU2','4','apron:use2','transient'], // Transient
-//      ['APU2','5','apron:use2','compass_rose'], // Compass Rose
-//      ['APU2','6','apron:use2','engine_run_up'], // Engine Run Up
-//      ['APU2','7','apron:use2','maintenance'], // Maintenance
-//      ['APU2','8','apron:use2','alert'], // Alert
-//      ['APU2','9','apron:use2','firing-in'], // Firing-In
-//      ['APU2','10','apron:use2','hot_refuelling'], // Hot Refuelling
-//      ['APU2','11','apron:use2','weapon_loading'], // Weapon Loading
-//      ['APU2','12','apron:use2','de-icing_and/or_anti-icing'], // De-icing and/or Anti-icing
-//      ['APU2','13','apron:use2','ins_alignment'], // INS Alignment
-//      ['APU2','14','apron:use2','decontamination'], // Decontamination
-//      ['APU2','999','apron:use2','other'], // Other
-
      // APU3 - Apron Usage [3]
-     // ['APU3','-999999',undefined,undefined], // No Information
-//      ['APU3','1','apron:use:3','parking'], // Parking
-//      ['APU3','2','apron:use:3','loading_and/or_unloading'], // Loading and/or Unloading
-//      ['APU3','3','apron:use:3','fuelling'], // Fuelling
-//      ['APU3','4','apron:use:3','transient'], // Transient
-//      ['APU3','5','apron:use:3','compass_rose'], // Compass Rose
-//      ['APU3','6','apron:use:3','engine_run_up'], // Engine Run Up
-//      ['APU3','7','apron:use:3','maintenance'], // Maintenance
-//      ['APU3','8','apron:use:3','alert'], // Alert
-//      ['APU3','9','apron:use:3','firing-in'], // Firing-In
-//      ['APU3','10','apron:use:3','hot_refuelling'], // Hot Refuelling
-//      ['APU3','11','apron:use:3','weapon_loading'], // Weapon Loading
-//      ['APU3','12','apron:use:3','de-icing_and/or_anti-icing'], // De-icing and/or Anti-icing
-//      ['APU3','13','apron:use:3','ins_alignment'], // INS Alignment
-//      ['APU3','14','apron:use:3','decontamination'], // Decontamination
-//      ['APU3','999','apron:use:3','other'], // Other
 
      // APY - Apron Type
      // ['APY','-999999',undefined,undefined], // No Information
@@ -639,52 +581,7 @@ ggdm30.rules = {
      ['AQO','999','aquifer:overburden','other'], // Other
 
      // AQO2 - Aquifer Overburden [2]
-     // ['AQO2','-999999',undefined,undefined], // No Information
-//      ['AQO2','1','aquifer:overburden2','basalt'], // Basalt
-//      ['AQO2','2','aquifer:overburden2','boulders'], // Boulders
-//      ['AQO2','3','aquifer:overburden2','clay'], // Clay
-//      ['AQO2','4','aquifer:overburden2','conglomerate'], // Conglomerate
-//      ['AQO2','5','aquifer:overburden2','dolomite'], // Dolomite
-//      ['AQO2','6','aquifer:overburden2','granite'], // Granite
-//      ['AQO2','7','aquifer:overburden2','gravel'], // Gravel
-//      ['AQO2','8','aquifer:overburden2','igneous_rock'], // Igneous Rock
-//      ['AQO2','9','aquifer:overburden2','karst'], // Karst
-//      ['AQO2','10','aquifer:overburden2','limestone'], // Limestone
-//      ['AQO2','11','aquifer:overburden2','marl'], // Marl
-//      ['AQO2','12','aquifer:overburden2','metamorphic_rock'], // Metamorphic Rock
-//      ['AQO2','13','aquifer:overburden2','mud'], // Mud
-//      ['AQO2','14','aquifer:overburden2','sand'], // Sand
-//      ['AQO2','15','aquifer:overburden2','schist'], // Schist
-//      ['AQO2','16','aquifer:overburden2','unconsolidated'], // Unconsolidated
-//      ['AQO2','17','aquifer:overburden2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['AQO2','18','aquifer:overburden2','volcanic_rock'], // Volcanic Rock
-//      ['AQO2','19','aquifer:overburden2','sandstone'], // Sandstone
-//      ['AQO2','20','aquifer:overburden2','shale'], // Shale
-//      ['AQO2','999','aquifer:overburden2','other'], // Other
-
      // AQO3 - Aquifer Overburden [3]
-     // ['AQO3','-999999',undefined,undefined], // No Information
-//      ['AQO3','1','aquifer:overburden3','basalt'], // Basalt
-//      ['AQO3','2','aquifer:overburden3','boulders'], // Boulders
-//      ['AQO3','3','aquifer:overburden3','clay'], // Clay
-//      ['AQO3','4','aquifer:overburden3','conglomerate'], // Conglomerate
-//      ['AQO3','5','aquifer:overburden3','dolomite'], // Dolomite
-//      ['AQO3','6','aquifer:overburden3','granite'], // Granite
-//      ['AQO3','7','aquifer:overburden3','gravel'], // Gravel
-//      ['AQO3','8','aquifer:overburden3','igneous_rock'], // Igneous Rock
-//      ['AQO3','9','aquifer:overburden3','karst'], // Karst
-//      ['AQO3','10','aquifer:overburden3','limestone'], // Limestone
-//      ['AQO3','11','aquifer:overburden3','marl'], // Marl
-//      ['AQO3','12','aquifer:overburden3','metamorphic_rock'], // Metamorphic Rock
-//      ['AQO3','13','aquifer:overburden3','mud'], // Mud
-//      ['AQO3','14','aquifer:overburden3','sand'], // Sand
-//      ['AQO3','15','aquifer:overburden3','schist'], // Schist
-//      ['AQO3','16','aquifer:overburden3','unconsolidated'], // Unconsolidated
-//      ['AQO3','17','aquifer:overburden3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['AQO3','18','aquifer:overburden3','volcanic_rock'], // Volcanic Rock
-//      ['AQO3','19','aquifer:overburden3','sandstone'], // Sandstone
-//      ['AQO3','20','aquifer:overburden3','shale'], // Shale
-//      ['AQO3','999','aquifer:overburden3','other'], // Other
 
      // AQP - Aquifer Composition
      // ['AQP','-999999',undefined,undefined], // No Information
@@ -711,52 +608,7 @@ ggdm30.rules = {
      ['AQP','999','aquifer:composition','other'], // Other
 
      // AQP2 - Aquifer Composition [2]
-     // ['AQP2','-999999',undefined,undefined], // No Information
-//      ['AQP2','1','aquifer:composition2','basalt'], // Basalt
-//      ['AQP2','2','aquifer:composition2','boulders'], // Boulders
-//      ['AQP2','3','aquifer:composition2','clay'], // Clay
-//      ['AQP2','4','aquifer:composition2','conglomerate'], // Conglomerate
-//      ['AQP2','5','aquifer:composition2','dolomite'], // Dolomite
-//      ['AQP2','6','aquifer:composition2','granite'], // Granite
-//      ['AQP2','7','aquifer:composition2','gravel'], // Gravel
-//      ['AQP2','8','aquifer:composition2','igneous_rock'], // Igneous Rock
-//      ['AQP2','9','aquifer:composition2','karst'], // Karst
-//      ['AQP2','10','aquifer:composition2','limestone'], // Limestone
-//      ['AQP2','11','aquifer:composition2','marl'], // Marl
-//      ['AQP2','12','aquifer:composition2','metamorphic_rock'], // Metamorphic Rock
-//      ['AQP2','13','aquifer:composition2','mud'], // Mud
-//      ['AQP2','14','aquifer:composition2','sand'], // Sand
-//      ['AQP2','15','aquifer:composition2','schist'], // Schist
-//      ['AQP2','16','aquifer:composition2','unconsolidated'], // Unconsolidated
-//      ['AQP2','17','aquifer:composition2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['AQP2','18','aquifer:composition2','volcanic_rock'], // Volcanic Rock
-//      ['AQP2','19','aquifer:composition2','sandstone'], // Sandstone
-//      ['AQP2','20','aquifer:composition2','shale'], // Shale
-//      ['AQP2','999','aquifer:composition2','other'], // Other
-
      // AQP3 - Aquifer Composition [3]
-     // ['AQP3','-999999',undefined,undefined], // No Information
-//      ['AQP3','1','aquifer:composition3','basalt'], // Basalt
-//      ['AQP3','2','aquifer:composition3','boulders'], // Boulders
-//      ['AQP3','3','aquifer:composition3','clay'], // Clay
-//      ['AQP3','4','aquifer:composition3','conglomerate'], // Conglomerate
-//      ['AQP3','5','aquifer:composition3','dolomite'], // Dolomite
-//      ['AQP3','6','aquifer:composition3','granite'], // Granite
-//      ['AQP3','7','aquifer:composition3','gravel'], // Gravel
-//      ['AQP3','8','aquifer:composition3','igneous_rock'], // Igneous Rock
-//      ['AQP3','9','aquifer:composition3','karst'], // Karst
-//      ['AQP3','10','aquifer:composition3','limestone'], // Limestone
-//      ['AQP3','11','aquifer:composition3','marl'], // Marl
-//      ['AQP3','12','aquifer:composition3','metamorphic_rock'], // Metamorphic Rock
-//      ['AQP3','13','aquifer:composition3','mud'], // Mud
-//      ['AQP3','14','aquifer:composition3','sand'], // Sand
-//      ['AQP3','15','aquifer:composition3','schist'], // Schist
-//      ['AQP3','16','aquifer:composition3','unconsolidated'], // Unconsolidated
-//      ['AQP3','17','aquifer:composition3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['AQP3','18','aquifer:composition3','volcanic_rock'], // Volcanic Rock
-//      ['AQP3','19','aquifer:composition3','sandstone'], // Sandstone
-//      ['AQP3','20','aquifer:composition3','shale'], // Shale
-//      ['AQP3','999','aquifer:composition3','other'], // Other
 
      // AQTC - Aquifer Thickness <interval closure>
      ['AQTC','2','aquifer:thickness:closure','open_interval'], // Open Interval
@@ -855,23 +707,7 @@ ggdm30.rules = {
      ['AZC','1000','artificial','no'],
      ['AZC','1001','artificial','yes'],
 
-     // BA000_VDC - Water Line : Sounding Datum
-     // ['BA000_VDC','-999999',undefined,undefined], // No Information
-     ['BA000_VDC','4','source:datum:sounding','indian_spring_low_water'], // Indian Spring Low Water
-     ['BA000_VDC','7','source:datum:sounding','mean_high_water'], // Mean High Water
-     ['BA000_VDC','9','source:datum:sounding','mean_high_water_springs'], // Mean High Water Springs
-     ['BA000_VDC','10','source:datum:sounding','mean_higher_high_water'], // Mean Higher High Water
-     ['BA000_VDC','11','source:datum:sounding','mean_low_water'], // Mean Low Water
-     ['BA000_VDC','13','source:datum:sounding','mean_low_water_springs'], // Mean Low Water Springs
-     ['BA000_VDC','14','source:datum:sounding','mean_lower_low_water'], // Mean Lower Low Water
-     ['BA000_VDC','15','source:datum:sounding','mean_sea_level'], // Mean Sea Level
-     ['BA000_VDC','19','source:datum:sounding','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
-     ['BA000_VDC','20','source:datum:sounding','lowest_astronomical_tide'], // Lowest Astronomical Tide
-     ['BA000_VDC','24','source:datum:sounding','mean_higher_high_water_springs'], // Mean Higher High Water Springs
-     ['BA000_VDC','28','source:datum:sounding','highest_high_water'], // Highest High Water
-     ['BA000_VDC','30','source:datum:sounding','indian_spring_high_water'], // Indian Spring High Water
-     ['BA000_VDC','90','source:datum:sounding','lowest_low_water'], // Lowest Low Water
-     ['BA000_VDC','999','source:datum:sounding','other'], // Other
+     // BA000_VDC - Water Line : Sounding Datum - See ZHDP_VDC
 
      // BAC - Built-up Area Density Category
      // ['BAC','-999999',undefined,undefined], // No Information
@@ -965,43 +801,7 @@ ggdm30.rules = {
      ['BBMCB','999','waterway:bank2:bottom','other'], // Other
 
      // BBMCB2 - Wtrbdy Bank (2) : Bottom Material Type (second bank) [2]
-     // ['BBMCB2','-999999',undefined,undefined], // No Information
-//      ['BBMCB2','1','waterway:bank2:bottom:2','clay_and_silt'], // Clay and Silt
-//      ['BBMCB2','2','waterway:bank2:bottom:2','silty_sands'], // Silty Sands
-//      ['BBMCB2','3','waterway:bank2:bottom:2','sand_and_gravel'], // Sand and Gravel
-//      ['BBMCB2','4','waterway:bank2:bottom:2','gravel_and_cobble'], // Gravel and Cobble
-//      ['BBMCB2','5','waterway:bank2:bottom:2','rocks_and_boulders'], // Rocks and Boulders
-//      ['BBMCB2','6','waterway:bank2:bottom:2','bedrock'], // Bedrock
-//      ['BBMCB2','7','waterway:bank2:bottom:2','paved'], // Paved
-//      ['BBMCB2','8','waterway:bank2:bottom:2','peat'], // Peat
-//      ['BBMCB2','9','waterway:bank2:bottom:2','sand_over_mud'], // Sand over Mud
-//      ['BBMCB2','11','waterway:bank2:bottom:2','coral'], // Coral
-//      ['BBMCB2','14','waterway:bank2:bottom:2','sand'], // Sand
-//      ['BBMCB2','15','waterway:bank2:bottom:2','concrete'], // Concrete
-//      ['BBMCB2','16','waterway:bank2:bottom:2','masonry'], // Masonry
-//      ['BBMCB2','17','waterway:bank2:bottom:2','reinforced_concrete'], // Reinforced Concrete
-//      ['BBMCB2','18','waterway:bank2:bottom:2','soil'], // Soil
-//      ['BBMCB2','999','waterway:bank2:bottom:2','other'], // Other
-
      // BBMCB3 - Wtrbdy Bank (2) : Bottom Material Type (second bank) [3]
-     // ['BBMCB3','-999999',undefined,undefined], // No Information
-//      ['BBMCB3','1','waterway:bank2:bottom:3','clay_and_silt'], // Clay and Silt
-//      ['BBMCB3','2','waterway:bank2:bottom:3','silty_sands'], // Silty Sands
-//      ['BBMCB3','3','waterway:bank2:bottom:3','sand_and_gravel'], // Sand and Gravel
-//      ['BBMCB3','4','waterway:bank2:bottom:3','gravel_and_cobble'], // Gravel and Cobble
-//      ['BBMCB3','5','waterway:bank2:bottom:3','rocks_and_boulders'], // Rocks and Boulders
-//      ['BBMCB3','6','waterway:bank2:bottom:3','bedrock'], // Bedrock
-//      ['BBMCB3','7','waterway:bank2:bottom:3','paved'], // Paved
-//      ['BBMCB3','8','waterway:bank2:bottom:3','peat'], // Peat
-//      ['BBMCB3','9','waterway:bank2:bottom:3','sand_over_mud'], // Sand over Mud
-//      ['BBMCB3','11','waterway:bank2:bottom:3','coral'], // Coral
-//      ['BBMCB3','14','waterway:bank2:bottom:3','sand'], // Sand
-//      ['BBMCB3','15','waterway:bank2:bottom:3','concrete'], // Concrete
-//      ['BBMCB3','16','waterway:bank2:bottom:3','masonry'], // Masonry
-//      ['BBMCB3','17','waterway:bank2:bottom:3','reinforced_concrete'], // Reinforced Concrete
-//      ['BBMCB3','18','waterway:bank2:bottom:3','soil'], // Soil
-//      ['BBMCB3','999','waterway:bank2:bottom:3','other'], // Other
-
      // BC010_REF - Mar Nav Bcn : Radar Reflector Present - See REF
      // BC010_TZP - Mar Nav Bcn : Topmark Shape - See TZP
 
@@ -1019,31 +819,7 @@ ggdm30.rules = {
      ['BC034_MRT','999','seamark:radio_station:category','other'], // Other
 
      // BC034_MRT2 - Mar Radiobeacon : Maritime Radiobeacon Type [2]
-     // ['BC034_MRT2','-999999',undefined,undefined], // No Information
-//      ['BC034_MRT2','1','seamark:radio_station:category:2','ais'], // Automated Identification System (AIS)
-//      ['BC034_MRT2','2','seamark:radio_station:category:2','omnidirectional'], // Circular Radiobeacon
-//      ['BC034_MRT2','3','seamark:radio_station:category:2','directional'], // Directional Radiobeacon
-//      ['BC034_MRT2','4','seamark:radio_station:category:2','loran'], // Long Range Air Navigation System (LORAN) C
-//      ['BC034_MRT2','5','seamark:radio_station:category:2','qtg'], // QTG Station
-//      ['BC034_MRT2','6','seamark:radio_station:category:2','ramark'], // Radar Marker (RAMARK)
-//      ['BC034_MRT2','7','seamark:radio_station:category:2','racon'], // Radar Responder Beacon (RACON)
-//      ['BC034_MRT2','8','seamark:radio_station:category:2','rdf'], // Radio Direction Finding Station
-//      ['BC034_MRT2','9','seamark:radio_station:category:2','rotating_pattern'], // Rotating Pattern Radiobeacon
-//      ['BC034_MRT2','999','seamark:radio_station:category:2','other'], // Other
-
      // BC034_MRT3 - Mar Radiobeacon : Maritime Radiobeacon Type [3]
-     // ['BC034_MRT3','-999999',undefined,undefined], // No Information
-//      ['BC034_MRT3','1','seamark:radio_station:category:3','ais'], // Automated Identification System (AIS)
-//      ['BC034_MRT3','2','seamark:radio_station:category:3','omnidirectional'], // Circular Radiobeacon
-//      ['BC034_MRT3','3','seamark:radio_station:category:3','directional'], // Directional Radiobeacon
-//      ['BC034_MRT3','4','seamark:radio_station:category:3','loran'], // Long Range Air Navigation System (LORAN) C
-//      ['BC034_MRT3','5','seamark:radio_station:category:3','qtg_station'], // QTG Station
-//      ['BC034_MRT3','6','seamark:radio_station:category:3','ramark'], // Radar Marker (RAMARK)
-//      ['BC034_MRT3','7','seamark:radio_station:category:3','racon'], // Radar Responder Beacon (RACON)
-//      ['BC034_MRT3','8','seamark:radio_station:category:3','rdf'], // Radio Direction Finding Station
-//      ['BC034_MRT3','9','seamark:radio_station:category:3','rotating_pattern'], // Rotating Pattern Radiobeacon
-//      ['BC034_MRT3','999','seamark:radio_station:category:3','other'], // Other
-
      // BC040_CAA - Mar Nav Lt : Controlling Authority - See CAA
 
      // BC101_SST - Fog Signal : Fog Signal Type
@@ -1242,42 +1018,7 @@ ggdm30.rules = {
      ['BMC','999','waterway:bottom','other'], // Other
 
      // BMC2 - Bottom Material Type [2]
-     // ['BMC2','-999999',undefined,undefined], // No Information
-//      ['BMC2','1','waterway:bottom:2','clay_and_silt'], // Clay and Silt
-//      ['BMC2','2','waterway:bottom:2','silty_sands'], // Silty Sands
-//      ['BMC2','3','waterway:bottom:2','sand_and_gravel'], // Sand and Gravel
-//      ['BMC2','4','waterway:bottom:2','gravel_and_cobble'], // Gravel and Cobble
-//      ['BMC2','5','waterway:bottom:2','rocks_and_boulders'], // Rocks and Boulders
-//      ['BMC2','6','waterway:bottom:2','bedrock'], // Bedrock
-//      ['BMC2','7','waterway:bottom:2','paved'], // Paved
-//      ['BMC2','8','waterway:bottom:2','peat'], // Peat
-//      ['BMC2','9','waterway:bottom:2','sand_over_mud'], // Sand over Mud
-//      ['BMC2','11','waterway:bottom:2','coral'], // Coral
-//      ['BMC2','14','waterway:bottom:2','sand'], // Sand
-//      ['BMC2','15','waterway:bottom:2','concrete'], // Concrete
-//      ['BMC2','16','waterway:bottom:2','masonry'], // Masonry
-//      ['BMC2','17','waterway:bottom:2','reinforced_concrete'], // Reinforced Concrete
-//      ['BMC2','18','waterway:bottom:2','soil'], // Soil
-//      ['BMC2','999','waterway:bottom:2','other'], // Other
-
      // BMC3 - Bottom Material Type [3]
-     // ['BMC3','-999999',undefined,undefined], // No Information
-//      ['BMC3','1','waterway:bottom:3','clay_and_silt'], // Clay and Silt
-//      ['BMC3','2','waterway:bottom:3','silty_sands'], // Silty Sands
-//      ['BMC3','3','waterway:bottom:3','sand_and_gravel'], // Sand and Gravel
-//      ['BMC3','4','waterway:bottom:3','gravel_and_cobble'], // Gravel and Cobble
-//      ['BMC3','5','waterway:bottom:3','rocks_and_boulders'], // Rocks and Boulders
-//      ['BMC3','6','waterway:bottom:3','bedrock'], // Bedrock
-//      ['BMC3','7','waterway:bottom:3','paved'], // Paved
-//      ['BMC3','8','waterway:bottom:3','peat'], // Peat
-//      ['BMC3','9','waterway:bottom:3','sand_over_mud'], // Sand over Mud
-//      ['BMC3','11','waterway:bottom:3','coral'], // Coral
-//      ['BMC3','14','waterway:bottom:3','sand'], // Sand
-//      ['BMC3','15','waterway:bottom:3','concrete'], // Concrete
-//      ['BMC3','16','waterway:bottom:3','masonry'], // Masonry
-//      ['BMC3','17','waterway:bottom:3','reinforced_concrete'], // Reinforced Concrete
-//      ['BMC3','18','waterway:bottom:3','soil'], // Soil
-//      ['BMC3','999','waterway:bottom:3','other'], // Other
 
      // BOC - Bog Type
      // ['BOC','-999999',undefined,undefined], // No Information
@@ -1377,44 +1118,7 @@ ggdm30.rules = {
      ['BSC','999','bridge:structure','other'], // Other
 
      // BSC2 - Bridge Structure Type [2]
-     // ['BSC2','-999999',undefined,undefined], // No Information
-//      ['BSC2','1','bridge:structure2','open_spandrel_arch'], // Open Spandrel Arch
-//      ['BSC2','2','bridge:structure2','cantilever'], // Cantilever
-//      ['BSC2','5','bridge:structure2','floating'], // Floating
-//      ['BSC2','6','bridge:structure2','girder'], // Girder
-//      ['BSC2','7','bridge:structure2','tower_suspension'], // Tower Suspension
-//      ['BSC2','8','bridge:structure2','truss'], // Truss
-//      ['BSC2','9','bridge:structure2','suspension'], // Suspension
-//      ['BSC2','12','bridge:structure2','transporter'], // Transporter
-//      ['BSC2','15','bridge:structure2','slab'], // Slab
-//      ['BSC2','16','bridge:structure2','stringer_beam'], // Stringer Beam
-//      ['BSC2','19','bridge:structure2','bowstring-bridge'], // Bowstring-bridge
-//      ['BSC2','22','bridge:structure2','covered'], // Covered
-//      ['BSC2','26','bridge:structure2','closed_spandrel_arch'], // Closed Spandrel Arch
-//      ['BSC2','27','bridge:structure2','cable_stayed'], // Cable Stayed
-//      ['BSC2','31','bridge:structure2','arch'], // Arch
-//      ['BSC2','32','bridge:structure2','trestle'], // Trestle
-//      ['BSC2','999','bridge:structure2','other'], // Other
-
      // BSC3 - Bridge Structure Type [3]
-     // ['BSC3','-999999',undefined,undefined], // No Information
-//      ['BSC3','1','bridge:structure:3','open_spandrel_arch'], // Open Spandrel Arch
-//      ['BSC3','2','bridge:structure:3','cantilever'], // Cantilever
-//      ['BSC3','5','bridge:structure:3','floating'], // Floating
-//      ['BSC3','6','bridge:structure:3','girder'], // Girder
-//      ['BSC3','7','bridge:structure:3','tower_suspension'], // Tower Suspension
-//      ['BSC3','8','bridge:structure:3','truss'], // Truss
-//      ['BSC3','9','bridge:structure:3','suspension'], // Suspension
-//      ['BSC3','12','bridge:structure:3','transporter'], // Transporter
-//      ['BSC3','15','bridge:structure:3','slab'], // Slab
-//      ['BSC3','16','bridge:structure:3','stringer_beam'], // Stringer Beam
-//      ['BSC3','19','bridge:structure:3','bowstring-bridge'], // Bowstring-bridge
-//      ['BSC3','22','bridge:structure:3','covered'], // Covered
-//      ['BSC3','26','bridge:structure:3','closed_spandrel_arch'], // Closed Spandrel Arch
-//      ['BSC3','27','bridge:structure:3','cable_stayed'], // Cable Stayed
-//      ['BSC3','31','bridge:structure:3','arch'], // Arch
-//      ['BSC3','32','bridge:structure:3','trestle'], // Trestle
-//      ['BSC3','999','bridge:structure:3','other'], // Other
 
      // BSM - Mobile Bridge Span
      // ['BSM','-999999',undefined,undefined], // No Information
@@ -1612,40 +1316,7 @@ ggdm30.rules = {
      ['CAB','999','cable:type','other'], // Other
 
      // CAB2 - Cable Type [2]
-     // ['CAB2','-999999',undefined,undefined], // No Information
-//      ['CAB2','2','cable:type2','power'], // Power Distribution Line
-//      ['CAB2','3','cable:type2','telephone'], // Telephone
-//      ['CAB2','4','cable:type2','telegraph'], // Telegraph
-//      ['CAB2','6','cable:type2','transmission'], // Power Transmission Line
-//      ['CAB2','7','cable:type2','digital_communication'], // Digital Communication Line
-//      ['CAB2','8','cable:type2','communication_line'], // Communication Line
-//      ['CAB2','9','cable:type2','fibre-optic'], // Fibre-optic
-//      ['CAB2','10','cable:type2','tethering'], // Tethering
-//      ['CAB2','11','cable:type2','load_bearing'], // Load Bearing
-//      ['CAB2','12','cable:type2','guide'], // Guide
-//      ['CAB2','13','cable:type2','barrier'], // Barrier
-//      ['CAB2','14','cable:type2','restraining'], // Restraining
-//      ['CAB2','15','cable:type2','towing'], // Towing
-//      ['CAB2','19','cable:type2','cableway'], // Cableway
-//      ['CAB2','999','cable:type2','other'], // Other
-
      // CAB3 - Cable Type [3]
-     // ['CAB3','-999999',undefined,undefined], // No Information
-//      ['CAB3','2','cable:type:3','power'], // Power Distribution Line
-//      ['CAB3','3','cable:type:3','telephone'], // Telephone
-//      ['CAB3','4','cable:type:3','telegraph'], // Telegraph
-//      ['CAB3','6','cable:type:3','transmission'], // Power Transmission Line
-//      ['CAB3','7','cable:type:3','digital_communication'], // Digital Communication Line
-//      ['CAB3','8','cable:type:3','communication_line'], // Communication Line
-//      ['CAB3','9','cable:type:3','fibre-optic'], // Fibre-optic
-//      ['CAB3','10','cable:type:3','tethering'], // Tethering
-//      ['CAB3','11','cable:type:3','load_bearing'], // Load Bearing
-//      ['CAB3','12','cable:type:3','guide'], // Guide
-//      ['CAB3','13','cable:type:3','barrier'], // Barrier
-//      ['CAB3','14','cable:type:3','restraining'], // Restraining
-//      ['CAB3','15','cable:type:3','towing'], // Towing
-//      ['CAB3','19','cable:type:3','cableway'], // Cableway
-//      ['CAB3','999','cable:type:3','other'], // Other
 
      // CAM - Conservation Area Management Category
      // ['CAM','-999999',undefined,undefined], // No Information
@@ -2012,26 +1683,7 @@ ggdm30.rules = {
      ['CVT','999','conveyor:type','other'], // Other
 
      // CVT2 - Conveyor Type [2]
-     // ['CVT2','-999999',undefined,undefined], // No Information
-//      ['CVT2','1','conveyor:type2','not_visible'], // Not Visible
-//      ['CVT2','2','conveyor:type2','belt'], // Belt
-//      ['CVT2','3','conveyor:type2','rollers'], // Rollers
-//      ['CVT2','4','conveyor:type2','bucket'], // Bucket
-//      ['CVT2','5','conveyor:type2','screw_auger'], // Screw Auger
-//      ['CVT2','6','conveyor:type2','apron'], // Apron
-//      ['CVT2','7','conveyor:type2','flight'], // Flight
-//      ['CVT2','999','conveyor:type2','other'], // Other
-
      // CVT3 - Conveyor Type [3]
-     // ['CVT3','-999999',undefined,undefined], // No Information
-//      ['CVT3','1','conveyor:type:3','not_visible'], // Not Visible
-//      ['CVT3','2','conveyor:type:3','belt'], // Belt
-//      ['CVT3','3','conveyor:type:3','rollers'], // Rollers
-//      ['CVT3','4','conveyor:type:3','bucket'], // Bucket
-//      ['CVT3','5','conveyor:type:3','screw_auger'], // Screw Auger
-//      ['CVT3','6','conveyor:type:3','apron'], // Apron
-//      ['CVT3','7','conveyor:type:3','flight'], // Flight
-//      ['CVT3','999','conveyor:type:3','other'], // Other
 
      // CWT - Contained within Tunnel
      // ['CWT','-999999',undefined,undefined], // No Information
@@ -2056,28 +1708,7 @@ ggdm30.rules = {
      ['DFU','999','dam:type','other'], // Other
 
      // DFU2 - Dam Function [2]
-     // ['DFU2','-999999',undefined,undefined], // No Information
-//      ['DFU2','1','dam:type2','impoundment'], // Impoundment
-//      ['DFU2','2','dam:type2','navigation'], // Navigation
-//      ['DFU2','3','dam:type2','flood_control'], // Flood Control
-//      ['DFU2','4','dam:type2','hydroelectric_power_generation'], // Hydroelectric Power Generation
-//      ['DFU2','5','dam:type2','weir'], // Weir
-//      ['DFU2','6','dam:type2','irrigation'], // Irrigation
-//      ['DFU2','7','dam:type2','recreation'], // Recreation
-//      ['DFU2','8','dam:type2','water_supply'], // Water Supply
-//      ['DFU2','999','dam:type2','other'], // Other
-
      // DFU3 - Dam Function [3]
-     // ['DFU3','-999999',undefined,undefined], // No Information
-//      ['DFU3','1','dam:type:3','impoundment'], // Impoundment
-//      ['DFU3','2','dam:type:3','navigation'], // Navigation
-//      ['DFU3','3','dam:type:3','flood_control'], // Flood Control
-//      ['DFU3','4','dam:type:3','hydroelectric_power_generation'], // Hydroelectric Power Generation
-//      ['DFU3','5','dam:type:3','weir'], // Weir
-//      ['DFU3','6','dam:type:3','irrigation'], // Irrigation
-//      ['DFU3','7','dam:type:3','recreation'], // Recreation
-//      ['DFU3','8','dam:type:3','water_supply'], // Water Supply
-//      ['DFU3','999','dam:type:3','other'], // Other
 
      // DGC - Transportation Block Type
      // ['DGC','-999999',undefined,undefined], // No Information
@@ -2174,24 +1805,7 @@ ggdm30.rules = {
      ['DPG','999','seamark:dumping_ground:category','other'], // Other
 
      // DPG2 - Dumping Ground Type [2]
-     // ['DPG2','-999999',undefined,undefined], // No Information
-//      ['DPG2','1','seamark:dumping_ground:category:2','hazardous_material'], // Hazardous Material
-//      ['DPG2','2','seamark:dumping_ground:category:2','chemical_waste'], // Chemical Waste
-//      ['DPG2','3','seamark:dumping_ground:category:2','nuclear_waste'], // Nuclear Waste
-//      ['DPG2','4','seamark:dumping_ground:category:2','explosives'], // Explosives
-//      ['DPG2','5','seamark:dumping_ground:category:2','spoil'], // Spoil
-//      ['DPG2','6','seamark:dumping_ground:category:2','vessels'], // Vessels
-//      ['DPG2','999','seamark:dumping_ground:category:2','other'], // Other
-
      // DPG3 - Dumping Ground Type [3]
-     // ['DPG3','-999999',undefined,undefined], // No Information
-//      ['DPG3','1','seamark:dumping_ground:category:3','hazardous_material'], // Hazardous Material
-//      ['DPG3','2','seamark:dumping_ground:category:3','chemical_waste'], // Chemical Waste
-//      ['DPG3','3','seamark:dumping_ground:category:3','nuclear_waste'], // Nuclear Waste
-//      ['DPG3','4','seamark:dumping_ground:category:3','explosives'], // Explosives
-//      ['DPG3','5','seamark:dumping_ground:category:3','spoil'], // Spoil
-//      ['DPG3','6','seamark:dumping_ground:category:3','vessels'], // Vessels
-//      ['DPG3','999','seamark:dumping_ground:category:3','other'], // Other
 
      // DSD - Dam Structural Design Type
      // ['DSD','-999999',undefined,undefined], // No Information
@@ -2685,674 +2299,7 @@ ggdm30.rules = {
      ['FFN','999','use','other'], // Other
 
      // FFN2 - Feature Function
-     // ['FFN2','-999999',undefined,undefined], // No Information
-//      ['FFN2','2','use:2','agriculture'], // Agriculture
-//      ['FFN2','3','use:2','growing_crops'], // Growing of Crops
-//      ['FFN2','9','use:2','raising_animals'], // Raising of Animals
-//      ['FFN2','14','use:2','grazing'], // Grazing
-//      ['FFN2','15','use:2','mixed_farming'], // Mixed Farming
-//      ['FFN2','16','camp:type:2','migrant_labour'], // Migrant Labour
-//      ['FFN2','19','amenity:2','hunting'], // Hunting
-//      ['FFN2','20','camp:type:2','forestry'], // Forestry and/or Logging
-//      ['FFN2','21','landuse:2','silviculture'], // Silviculture
-//      ['FFN2','27','amenity:2','forest_warden'], // Forest Warden
-//      ['FFN2','30','leisure:2','fishing'], // Fishing
-//      ['FFN2','35','use:2','aquaculture'], // Aquaculture
-//      ['FFN2','40','use:2','mining_and_quarrying'], // Mining and Quarrying
-//      ['FFN2','50','use:2','solid_mineral_fuel_mining'], // Solid Mineral Fuel Mining
-//      ['FFN2','60','use:2','petroleum_andor_gas_extraction'], // Petroleum and/or Gas Extraction
-//      ['FFN2','70','use:2','metal_ore_mining'], // Metal Ore Mining
-//      ['FFN2','83','use:2','chemical_mining'], // Chemical Mining
-//      ['FFN2','84','use:2','peat_mining'], // Peat Extraction
-//      ['FFN2','85','use:2','salt_mining'], // Salt Extraction
-//      ['FFN2','87','use:2','mineral_mining'], // Mineral Mining
-//      ['FFN2','91','use:2','gas_oil_separation'], // Gas Oil Separation
-//      ['FFN2','95','use:2','ore_dressing'], // Ore Dressing
-//      ['FFN2','99','use:2','manufacturing'], // Manufacturing
-//      ['FFN2','100','use:2','food_manufacturing'], // Food Product Manufacture
-//      ['FFN2','101','use:2','food_processing'], // Food Processing
-//      ['FFN2','102','use:2','meat_processing'], // Meat Processing
-//      ['FFN2','103','use:2','seafood_processing'], // Seafood Processing
-//      ['FFN2','104','use:2','fruit_vegetable_processing'], // Fruit and/or Vegetable Processing
-//      ['FFN2','105','use:2','oil-mill'], // Oil-mill
-//      ['FFN2','106','crop:2','dairy'], // Dairying
-//      ['FFN2','107','use:2','grain-milling'], // Grain Milling
-//      ['FFN2','110','use:2','baking'], // Baking
-//      ['FFN2','111','use:2','sugar_manufacturing'], // Sugar Manufacture
-//      ['FFN2','112','use:2','sugar_milling'], // Sugar Milling
-//      ['FFN2','113','use:2','sugar_refining'], // Sugar Refining
-//      ['FFN2','114','use:2','confectionry_manufacturing'], // Confection Manufacture
-//      ['FFN2','115','use:2','pasta_manufacturing'], // Pasta Manufacture
-//      ['FFN2','116','use:2','prepared_meals_manufacturing'], // Prepared Meal Manufacture
-//      ['FFN2','118','use:2','beverage_manufacturing'], // Beverage Manufacture
-//      ['FFN2','119','use:2','animal_feed_manufacturing'], // Animal Feed Manufacture
-//      ['FFN2','120','use:2','ice_manufacturing'], // Ice Manufacture
-//      ['FFN2','121','use:2','distillery'], // Spirit Distillery
-//      ['FFN2','122','use:2','winery'], // Winery
-//      ['FFN2','123','use:2','brewing'], // Brewing
-//      ['FFN2','124','use:2','soft_drink_manufacturing'], // Soft Drink Manufacture
-//      ['FFN2','125','use:2','tobacco_product_manufacturing'], // Tobacco Product Manufacture
-//      ['FFN2','129','use:2','textile_apparel_and_leather_manufacturing'], // Textile, Apparel and Leather Manufacture
-//      ['FFN2','130','use:2','textile_manufacturing'], // Textile Manufacture
-//      ['FFN2','140','use:2','apparel_manufacturing'], // Apparel Manufacture
-//      ['FFN2','150','use:2','leather_product_manufacturing'], // Leather Product Manufacture
-//      ['FFN2','155','use:2','footwear_manufacturing'], // Footwear Manufacturing
-//      ['FFN2','160','use:2','wood_product_manufacturing'], // Wood-based Manufacturing
-//      ['FFN2','161','craft:2','sawmilling'], // Sawmilling
-//      ['FFN2','165','use:2','wooden_construction_product_manufacturing'], // Wooden Construction Product Manufacture
-//      ['FFN2','171','use:2','paper_mill'], // Paper-mill
-//      ['FFN2','181','use:2','printing'], // Printing
-//      ['FFN2','190','use:2','petroleum_and_coal_product_manufacturing'], // Petroleum and Coal Products Manufacturing
-//      ['FFN2','191','use:2','coke_manufacturing'], // Coke Manufacture
-//      ['FFN2','192','use:2','petroleum_refining'], // Petroleum Refining
-//      ['FFN2','195','use:2','chemical_manufacturing'], // Chemical Manufacture
-//      ['FFN2','210','use:2','medicinal_manufacturing'], // Medicinal Product Manufacture
-//      ['FFN2','221','use:2','rubber_product_manufacturing'], // Rubber Product Manufacture
-//      ['FFN2','225','use:2','plastic_product_manufacturing'], // Plastic Product Manufacture
-//      ['FFN2','230','use:2','nonmetallic_mineral_product_manufacturing'], // Nonmetallic Mineral Product Manufacturing
-//      ['FFN2','231','use:2','glass_product_manufacturing'], // Glass Product Manufacture
-//      ['FFN2','232','use:2','refractory_product_manufacturing'], // Refractory Product Manufacture
-//      ['FFN2','233','use:2','clay_product_manufacturing'], // Clay Product Manufacture
-//      ['FFN2','234','use:2','ceramic_product_manufacturing'], // Ceramic Product Manufacture
-//      ['FFN2','235','use:2','cement_mill'], // Cement Mill
-//      ['FFN2','236','use:2','cement_product_manufacturing'], // Cement Product Manufacture
-//      ['FFN2','237','use:2','stone_product_manufacturing'], // Stone Product Manufacture
-//      ['FFN2','240','use:2','metal_manufacturing'], // Primary Metal Manufacturing
-//      ['FFN2','241','use:2','steel_mill'], // Steel Mill
-//      ['FFN2','242','use:2','metal_refining'], // Metal Refining
-//      ['FFN2','243','use:2','foundry'], // Foundry
-//      ['FFN2','250','use:2','metal_product_manufacturing'], // Metal Product Manufacturing
-//      ['FFN2','251','use:2','structural_metal_product_manufacturing'], // Structural Metal Product Manufacture
-//      ['FFN2','255','use:2','munitions_manufacturing'], // Munitions Manufacture
-//      ['FFN2','257','use:2','fabricated_metal_product_manufacturing'], // Fabricated Metal Product Manufacture
-//      ['FFN2','260','use:2','electronic_equipment_manufacturing'], // Electronic Equipment Manufacture
-//      ['FFN2','270','use:2','electrical_equipment_manufacturing'], // Electrical Equipment Manufacture
-//      ['FFN2','272','shop:2','gas'], // Propane Sale
-//      ['FFN2','280','use:2','machinery_manufacturing'], // Machinery Manufacture
-//      ['FFN2','289','use:2','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
-//      ['FFN2','290','use:2','motor_vehicle_manufacturing'], // Motor Vehicle Manufacture
-//      ['FFN2','301','use:2','ship_manufacturing'], // Ship Construction
-//      ['FFN2','304','use:2','railway_vehicle_manufacturing'], // Railway Vehicle Manufacture
-//      ['FFN2','305','use:2','aircraft_manufacturing'], // Aircraft Manufacture
-//      ['FFN2','306','use:2','military_vehicle_manufacturing'], // Military Vehicle Manufacture
-//      ['FFN2','310','use:2','furniture_manufacturing'], // Furniture Manufacture
-//      ['FFN2','320','use:2','miscellaneous_manufacturing'], // Miscellaneous Manufacturing
-//      ['FFN2','321','use:2','jewellery_manufacturing'], // Jewellery Manufacture
-//      ['FFN2','322','use:2','musical_instrument_manufacturing'], // Musical Instrument Manufacture
-//      ['FFN2','323','use:2','sports_goods_manufacturing'], // Sports Goods Manufacture
-//      ['FFN2','324','use:2','game_and_toy_manufacturing'], // Game and/or Toy Manufacture
-//      ['FFN2','325','use:2','medical_equipment_manufacturing'], // Medical and/or Dental Equipment Manufacture
-//      ['FFN2','330','repair:2','yes'], // General Repair
-//      ['FFN2','331','repair:2','fabricated_metal_products'], // Fabricated Metal Product Repair
-//      ['FFN2','332','repair:2','electronic_equipment'], // Electronic Equipment Repair
-//      ['FFN2','333','repair:2','electrical_equipment'], // Electrical Equipment Repair
-//      ['FFN2','334','repair:2','machinery'], // Machinery Repair
-//      ['FFN2','340','repair:2','ship'], // Ship Repair
-//      ['FFN2','341','repair:2','aircraft'], // Aircraft Repair
-//      ['FFN2','342','repair:2','railway_vehicle'], // Railway Vehicle Repair
-//      ['FFN2','343','shop:2','car_repair'], // Motor Vehicle Repair
-//      ['FFN2','350','use:2','utilities'], // Utilities
-//      ['FFN2','351','use:2','power_generation'], // Power Generation
-//      ['FFN2','352','use:2','climate_control'], // Climate Control
-//      ['FFN2','355','use:2','cooling'], // Cooling
-//      ['FFN2','356','use:2','heating'], // Heating
-//      ['FFN2','360','use:2','water_supply'], // Water Supply
-//      ['FFN2','361','use:2','water_collection'], // Water Collection
-//      ['FFN2','362','use:2','water_treatment'], // Water Treatment
-//      ['FFN2','363','use:2','water_distribution'], // Water Distribution
-//      ['FFN2','370','use:2','sewerage'], // Sewerage
-//      ['FFN2','372','use:2','sewerage_screening'], // Sewerage Screening
-//      ['FFN2','382','amenity:2','toilets'], // Restroom
-//      ['FFN2','383','use:2','waste_treatment_and_disposal'], // Waste Treatment and Disposal
-//      ['FFN2','385','use:2','materials_recovery'], // Materials Recovery
-//      ['FFN2','440','use:2','commercial'], // Commerce
-//      ['FFN2','459','shop:2','wholesale'], // Wholesale Merchant
-//      ['FFN2','460','shop:2','yes'], // Retail Sale
-//      ['FFN2','464','shop:2','specialized'], // Specialized Store
-//      ['FFN2','465','shop:2','non-specialized'], // Non-specialized Store
-//      ['FFN2','466','shop:2','convenience'], // Convenience Store
-//      ['FFN2','470','amenity:2','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
-//      ['FFN2','473','amenity:2','sales_yard'], // Sales Yard
-//      ['FFN2','474','shop:2','precious_metal'], // Precious Metal Merchant
-//      ['FFN2','475','amenity:2','marketplace'], // Market
-//      ['FFN2','476','shop:2','supermarket'], // Grocery
-//      ['FFN2','477','amenity:2','pharmacy'], // Pharmacy
-//      ['FFN2','478','shop:2','pet'], // Pet-shop
-//      ['FFN2','480','use:2','transportation'], // Transport
-//      ['FFN2','481','use:2','terminal'], // Terminal
-//      ['FFN2','482','public_transport:2','station'], // Station
-//      ['FFN2','483','amenity:2','stop'], // Stop
-//      ['FFN2','484','amenity:2','transfer_hub'], // Transfer Hub
-//      ['FFN2','486','use:2','signalling'], // Signalling
-//      ['FFN2','487','use:2','transport_system_maintenance'], // Transport System Maintenance
-//      ['FFN2','488','use:2','navigation'], // Navigation - Not great, used in a number of FCodes
-//      ['FFN2','489','use:2','transportation_hub'], // Transportation Hub
-//      ['FFN2','490','use:2','railway_transport'], // Railway Transport
-//      ['FFN2','491','use:2','railway_passenger_transport'], // Railway Passenger Transport
-//      ['FFN2','494','use:2','pedestrian_transport'], // Pedestrian Transport
-//      ['FFN2','495','use:2','road_transport'], // Road Transport
-//      ['FFN2','496','use:2','road_passenger_transport'], // Road Passenger Transport
-//      ['FFN2','497','use:2','road_freight_transport'], // Road Freight Transport
-//      ['FFN2','500','use:2','pipeline_transport'], // Pipeline Transport
-//      ['FFN2','501','use:2','pumping'], // Pumping
-//      ['FFN2','505','use:2','water_transport'], // Water Transport
-//      ['FFN2','507','use:2','inland_waters_transport'], // Inland Waters Transport
-//      ['FFN2','508','use:2','canal_transport'], // Canal Transport
-//      ['FFN2','510','use:2','port_control'], // Port Control
-//      ['FFN2','511','use:2','maritime_pilotage'], // Maritime Pilotage
-//      ['FFN2','512','use:2','pilot_station'], // Pilot Station
-//      ['FFN2','513','use:2','harbour_control'], // Harbour Control
-//      ['FFN2','520','use:2','air_transport'], // Air Transport
-//      ['FFN2','525','use:2','air_traffic_control'], // Air Traffic Control
-//      ['FFN2','529','use:2','transportation_support'], // Transportation Support
-//      ['FFN2','530','use:2','warehouse'], // Warehousing and Storage
-//      ['FFN2','535','use:2','garage'], // Motor Vehicle Parking
-//      ['FFN2','536','use:2','cargo_handling'], // Cargo Handling
-//      ['FFN2','537','amenity:2','customs'], // Customs Checkpoint
-//      ['FFN2','538','use:2','inspection_station'], // Inspection Station
-//      ['FFN2','539','use:2','inspection'], // Inspection
-//      ['FFN2','540','amenity:2','post_office'], // Postal Activities
-//      ['FFN2','541','use:2','mail_and_package_transport'], // Mail and Package Transport
-//      ['FFN2','545','use:2','courier_activities'], // Courier Activities
-//      ['FFN2','548','use:2','short-term_accommodation'], // Short-term Accommodation
-//      ['FFN2','549','use:2','long-term_accommodation'], // Long-term Accommodation
-//      ['FFN2','550','use:2','accommodation'], // Accommodation
-//      ['FFN2','551','tourism:2','hotel'], // Hotel
-//      ['FFN2','552','tourism:2','resort_hotel'], // Resort Hotel
-//      ['FFN2','553','tourism:2','motel'], // Motel
-//      ['FFN2','554','tourism:2','guest_house'], // Guest-house
-//      ['FFN2','555','tourism:2','hostel'], // Hostel
-//      ['FFN2','556','use:2','dormitory'], // Dormitory
-//      ['FFN2','557','use:2','vacation_cottage'], // Vacation Cottage
-//      ['FFN2','558','use:2','dependents_housing'], // Dependents Housing
-//      ['FFN2','559','amenity:2','public_bath'], // Communal Bath
-//      ['FFN2','563','use:2','residential'], // Residence
-//      ['FFN2','570','use:2','food_service'], // Food Service
-//      ['FFN2','572','amenity:2','restaurant'], // Restaurant
-//      ['FFN2','573','amenity:2','bar'], // Bar
-//      ['FFN2','574','amenity:2','dining_hall'], // Dining Hall
-//      ['FFN2','578','amenity:2','banquet_hall'], // Banquet Hall
-//      ['FFN2','579','amenity:2','convention_centre'], // Convention Centre
-//      ['FFN2','580','use:2','publishing_and_broadcasting'], // Publishing and Broadcasting
-//      ['FFN2','582','use:2','print_publishing'], // Print Publishing
-//      ['FFN2','594','amenity:2','cinema'], // Cinema
-//      ['FFN2','601','use:2','radio_broadcasting'], // Radio Broadcasting
-//      ['FFN2','604','use:2','television_broadcasting'], // Television Broadcasting
-//      ['FFN2','610','use:2','communication'], // Telecommunications
-//      ['FFN2','612','use:2','retail_telecommunications'], // Retail Telecommunications
-//      ['FFN2','614','use:2','wired_telecommunications'], // Wired Telecommunications
-//      ['FFN2','615','use:2','main_telephone_exchange'], // Main Telephone Exchange
-//      ['FFN2','616','use:2','branch_telephone_exchange'], // Branch Telephone Exchange
-//      ['FFN2','617','use:2','wired_repeater'], // Wired Repeater
-//      ['FFN2','620','use:2','wireless_telecommunications'], // Wireless Telecommunications
-//      ['FFN2','621','use:2','mobile_phone_service'], // Mobile Phone Service
-//      ['FFN2','622','use:2','wireless_repeater'], // Wireless Repeater
-//      ['FFN2','625','use:2','satellite_telecommunications'], // Satellite Telecommunications
-//      ['FFN2','626','man_made:2','ground_station'], // Satellite Ground Control
-//      ['FFN2','632','amenity:2','information_service'], // Information Service
-//      ['FFN2','633','amenity:2','public_records'], // Public Records
-//      ['FFN2','640','office:2','financial_services'], // Financial Services
-//      ['FFN2','642','office:2','central_banking'], // Central Banking
-//      ['FFN2','643','amenity:2','bank'], // Retail Banking
-//      ['FFN2','651','office:2','insurance'], // Insurance
-//      ['FFN2','662','office:2','financial_market_administration'], // Financial Market Administration
-//      ['FFN2','663','office:2','security_brokerage'], // Security Brokerage
-//      ['FFN2','671','office:2','fund_management'], // Fund Management
-//      ['FFN2','680','office:2','estate_agent'], // Real Estate Activities
-//      ['FFN2','681','office:2','professional_scientific_and_technical'], // Professional, Scientific and Technical
-//      ['FFN2','691','office:2','legal_activities'], // Legal Activities
-//      ['FFN2','696','office:2','accounting'], // Accounting
-//      ['FFN2','701','office:2','head_office'], // Head Office
-//      ['FFN2','706','office:2','business_management'], // Business Management
-//      ['FFN2','711','office:2','architecture_consulting'], // Architecture Consulting
-//      ['FFN2','714','office:2','engineering_design'], // Engineering Design
-//      ['FFN2','717','office:2','surveying'], // Surveying
-//      ['FFN2','720','use:2','research'], // Scientific Research and Development
-//      ['FFN2','721','use:2','observation_station'], // Observation Station
-//      ['FFN2','722','monitoring:weather:2','yes'], // Weather Station
-//      ['FFN2','725','use:2','nuclear_research_centre'], // Nuclear Research Centre
-//      ['FFN2','730','use:2','wind_tunnel'], // Wind Tunnel
-//      ['FFN2','741','amenity:2','advertising'], // Advertising
-//      ['FFN2','752','shop:2','photo'], // Photography
-//      ['FFN2','757','amenity:2','veterinary'], // Veterinary
-//      ['FFN2','760','office:2','business_support'], // Business and Personal Support Services
-//      ['FFN2','761','amenity:2','car_rental'], // Motor Vehicle Rental
-//      ['FFN2','770','office:2','employment_agency'], // Employment Agency
-//      ['FFN2','775','shop:2','travel_agency'], // Travel Agency
-//      ['FFN2','780','use:2','security_enforcement'], // Security Enforcement
-//      ['FFN2','781','use:2','guard'], // Guard
-//      ['FFN2','791','amenity:2','custodial_service'], // Custodial Service
-//      ['FFN2','795','amenity:2','landscaping_service'], // Landscaping Service
-//      ['FFN2','801','office:2','office_administration'], // Office Administration
-//      ['FFN2','807','use:2','call_centre'], // Call Centre
-//      ['FFN2','808','office:2','public_administration'], // Public Administration
-//      ['FFN2','809','use:2','headquarters'], // Headquarters
-//      ['FFN2','810','office:2','administrative'], // Administration
-//      ['FFN2','811','office:2','government'], // Government
-//      ['FFN2','812','office:2','local_government'], // Local Government
-//      ['FFN2','813','office:2','subnational_government'], // Subnational Government
-//      ['FFN2','814','office:2','national_government'], // National Government
-//      ['FFN2','815','use:2','palace'], // Palace
-//      ['FFN2','817','use:2','capitol'], // Capitol
-//      ['FFN2','818','office:2','executive_activities'], // Executive Activities
-//      ['FFN2','819','office:2','legislative_activities'], // Legislative Activities
-//      ['FFN2','821','use:2','polling_station'], // Polling Station
-//      ['FFN2','822','use:2','civil_activities'], // Civil Activities
-//      ['FFN2','825','amenity:2','diplomacy'], // Diplomacy
-//      ['FFN2','826','diplomatic:2','mission'], // Diplomatic Mission
-//      ['FFN2','827','diplomatic:2','embassy'], // Embassy
-//      ['FFN2','828','diplomatic:2','consulate'], // Consul
-//      ['FFN2','829','use:2','maritime_defense'], // Maritime Defense
-//      ['FFN2','830','use:2','public_order_safety_and_security_services'], // Public Order, Safety and Security Services
-//      ['FFN2','831','use:2','public_order'], // Public Order
-//      ['FFN2','832','use:2','safety'], // Safety
-//      ['FFN2','833','use:2','security_services'], // Security Services
-//      ['FFN2','835','use:2','military'], // Defence Activities
-//      ['FFN2','836','military:2','armory'], // Armory
-//      ['FFN2','837','military:2','reserve_activities'], // Military Reserve Activities
-//      ['FFN2','838','military:2','recruitment'], // Military Recruitment
-//      ['FFN2','839','military:2','cbrne_civilian_support'], // CBRNE Civilian Support
-//      ['FFN2','840','amenity:2','judicial_activities'], // Judicial Activities
-//      ['FFN2','841','amenity:2','police'], // Law Enforcement
-//      ['FFN2','842','amenity:2','immigration_control'], // Immigration Control
-//      ['FFN2','843','amenity:2','prison'], // Imprisonment
-//      ['FFN2','844','amenity:2','juvenile_corrections'], // Juvenile Corrections
-//      ['FFN2','845','amenity:2','fire_station'], // Firefighting
-//      ['FFN2','846','amenity:2','rescue_and_paramedical_services'], // Rescue and Paramedical Services
-//      ['FFN2','847','use:2','emergency_operations'], // Emergency Operations
-//      ['FFN2','848','use:2','civil_intelligence'], // Civil Intelligence
-//      ['FFN2','850','use:2','education'], // Education
-//      ['FFN2','851','isced:level:2','1'], // Primary Education
-//      ['FFN2','852','isced:level:2','2,3'], // Secondary Education
-//      ['FFN2','855','building:2','university'], // Higher Education
-//      ['FFN2','857','use:2','vocational_education'], // Vocational Education
-//      ['FFN2','860','use:2','healthcare'], // Human Health Activities
-//      ['FFN2','861','use:2','in-patient_care'], // In-patient Care
-//      ['FFN2','862','use:2','out-patient_care'], // Out-patient Care
-//      ['FFN2','863','use:2','urgent_medical_care'], // Urgent Medical Care
-//      ['FFN2','864','use:2','human_tissue_repository'], // Human Tissue Repository
-//      ['FFN2','865','use:2','public_health_activities'], // Public Health Activities
-//      ['FFN2','866','use:2','leprosy_care'], // Leprosy Care
-//      ['FFN2','871','use:2','intermediate_care'], // Intermediate Care
-//      ['FFN2','873','use:2','psychiatric_in-patient_care'], // Psychiatric In-patient Care
-//      ['FFN2','875','use:2','residential_care'], // Residential Care
-//      ['FFN2','881','social_facility:2','emergency'], // Emergency Shelter
-//      ['FFN2','882','social_facility:2','homeless'], // Homeless Shelter
-//      ['FFN2','883','social_facility:2','refugee'], // Refugee Shelter
-//      ['FFN2','884','social_facility:2','youth_emergency'], // Emergency Youth Shelter
-//      ['FFN2','885','amenity:2','child_care'], // Day Care
-//      ['FFN2','887','use:2','social_work'], // Social Work
-//      ['FFN2','888','use:2','emergency_relief_services'], // Emergency Relief Services
-//      ['FFN2','890','amenity:2','cultural_centre'], // Cultural, Arts and Entertainment
-//      ['FFN2','891','amenity:2','theatre'], // Theatre
-//      ['FFN2','892','amenity:2','auditorium'], // Auditorium
-//      ['FFN2','893','amenity:2','community_centre'], // Community Centre
-//      ['FFN2','894','tourism:2','opera_house'], // Opera House
-//      ['FFN2','895','amenity:2','nightclub'], // Night Club
-//      ['FFN2','900','use:2','sports_amusement_and_recreation'], // Sports, Amusement and Recreation
-//      ['FFN2','902','amenity:2','library'], // Library
-//      ['FFN2','905','tourism:2','museum'], // Museum
-//      ['FFN2','906','tourism:2','aquarium'], // Aquarium
-//      ['FFN2','907','use:2','botanical_and/or_zoological_reserve_activities'], // Botanical and/or Zoological Reserve Activities
-//      ['FFN2','909','leisure:2','gambling'], // Gambling
-//      ['FFN2','912','use:2','sports_centre'], // Sports Centre
-//      ['FFN2','913','leisure:2','fitness_centre'], // Fitness Centre
-//      ['FFN2','914','sport:2','shooting_range'], // Shooting Range
-//      ['FFN2','915','leisure:2','water_park'], // Water Park
-//      ['FFN2','919','use:2','animal_boarding'], // Animal Boarding
-//      ['FFN2','921','use:2','recreation'], // Recreation
-//      ['FFN2','922','use:2','amusement'], // Amusement
-//      ['FFN2','923','leisure:2','hobbies_andor_leisure_activities'], // Hobbies and/or Leisure Activities
-//      ['FFN2','930','use:2','religious_activities'], // Religious Activities
-//      ['FFN2','931','amenity:2','place_of_worship'], // Place of Worship
-//      ['FFN2','950','amenity:2','membership_organization'], // Membership Organization
-//      ['FFN2','954','amenity:2','club'], // Club
-//      ['FFN2','955','leisure:2','yacht_club'], // Yacht-club
-//      ['FFN2','961','shop:2','laundry'], // Laundry
-//      ['FFN2','962','shop:2','beauty'], // Beauty Treatment
-//      ['FFN2','963','shop:2','funeral_directors'], // Funeral Services
-//      ['FFN2','964','amenity:2','crematorium'], // Cremation
-//      ['FFN2','965','amenity:2','mortuary'], // Mortuary Services
-//      ['FFN2','966','amenity:2','adult_entertainment'], // Adult Entertainment
-//      ['FFN2','967','amenity:2','storage_of_human_remains'], // Storage of Human Remains
-//      ['FFN2','970','use:2','meeting_place'], // Meeting Place
-//      ['FFN2','980','amenity:2','death_care_services'], // Death Care Services
-//      ['FFN2','999','use:2','other'], // Other
-
      // FFN3 - Feature Function
-     // ['FFN3','-999999',undefined,undefined], // No Information
-//      ['FFN3','2','use:3','agriculture'], // Agriculture
-//      ['FFN3','3','use:3','growing_crops'], // Growing of Crops
-//      ['FFN3','9','use:3','raising_animals'], // Raising of Animals
-//      ['FFN3','14','use:3','grazing'], // Grazing
-//      ['FFN3','15','use:3','mixed_farming'], // Mixed Farming
-//      ['FFN3','16','camp:type:3','migrant_labour'], // Migrant Labour
-//      ['FFN3','19','amenity:3','hunting'], // Hunting
-//      ['FFN3','20','camp:type:3','forestry'], // Forestry and/or Logging
-//      ['FFN3','21','landuse:3','silviculture'], // Silviculture
-//      ['FFN3','27','amenity:3','forest_warden'], // Forest Warden
-//      ['FFN3','30','leisure:3','fishing'], // Fishing
-//      ['FFN3','35','use:3','aquaculture'], // Aquaculture
-//      ['FFN3','40','use:3','mining_and_quarrying'], // Mining and Quarrying
-//      ['FFN3','50','use:3','solid_mineral_fuel_mining'], // Solid Mineral Fuel Mining
-//      ['FFN3','60','use:3','petroleum_andor_gas_extraction'], // Petroleum and/or Gas Extraction
-//      ['FFN3','70','use:3','metal_ore_mining'], // Metal Ore Mining
-//      ['FFN3','83','use:3','chemical_mining'], // Chemical Mining
-//      ['FFN3','84','use:3','peat_mining'], // Peat Extraction
-//      ['FFN3','85','use:3','salt_mining'], // Salt Extraction
-//      ['FFN3','87','use:3','mineral_mining'], // Mineral Mining
-//      ['FFN3','91','use:3','gas_oil_separation'], // Gas Oil Separation
-//      ['FFN3','95','use:3','ore_dressing'], // Ore Dressing
-//      ['FFN3','99','use:3','manufacturing'], // Manufacturing
-//      ['FFN3','100','use:3','food_manufacturing'], // Food Product Manufacture
-//      ['FFN3','101','use:3','food_processing'], // Food Processing
-//      ['FFN3','102','use:3','meat_processing'], // Meat Processing
-//      ['FFN3','103','use:3','seafood_processing'], // Seafood Processing
-//      ['FFN3','104','use:3','fruit_vegetable_processing'], // Fruit and/or Vegetable Processing
-//      ['FFN3','105','use:3','oil-mill'], // Oil-mill
-//      ['FFN3','106','crop:3','dairy'], // Dairying
-//      ['FFN3','107','use:3','grain-milling'], // Grain Milling
-//      ['FFN3','110','use:3','baking'], // Baking
-//      ['FFN3','111','use:3','sugar_manufacturing'], // Sugar Manufacture
-//      ['FFN3','112','use:3','sugar_milling'], // Sugar Milling
-//      ['FFN3','113','use:3','sugar_refining'], // Sugar Refining
-//      ['FFN3','114','use:3','confectionry_manufacturing'], // Confection Manufacture
-//      ['FFN3','115','use:3','pasta_manufacturing'], // Pasta Manufacture
-//      ['FFN3','116','use:3','prepared_meals_manufacturing'], // Prepared Meal Manufacture
-//      ['FFN3','118','use:3','beverage_manufacturing'], // Beverage Manufacture
-//      ['FFN3','119','use:3','animal_feed_manufacturing'], // Animal Feed Manufacture
-//      ['FFN3','120','use:3','ice_manufacturing'], // Ice Manufacture
-//      ['FFN3','121','use:3','distillery'], // Spirit Distillery
-//      ['FFN3','122','use:3','winery'], // Winery
-//      ['FFN3','123','use:3','brewing'], // Brewing
-//      ['FFN3','124','use:3','soft_drink_manufacturing'], // Soft Drink Manufacture
-//      ['FFN3','125','use:3','tobacco_product_manufacturing'], // Tobacco Product Manufacture
-//      ['FFN3','129','use:3','textile_apparel_and_leather_manufacturing'], // Textile, Apparel and Leather Manufacture
-//      ['FFN3','130','use:3','textile_manufacturing'], // Textile Manufacture
-//      ['FFN3','140','use:3','apparel_manufacturing'], // Apparel Manufacture
-//      ['FFN3','150','use:3','leather_product_manufacturing'], // Leather Product Manufacture
-//      ['FFN3','155','use:3','footwear_manufacturing'], // Footwear Manufacturing
-//      ['FFN3','160','use:3','wood_product_manufacturing'], // Wood-based Manufacturing
-//      ['FFN3','161','craft:3','sawmilling'], // Sawmilling
-//      ['FFN3','165','use:3','wooden_construction_product_manufacturing'], // Wooden Construction Product Manufacture
-//      ['FFN3','171','use:3','paper_mill'], // Paper-mill
-//      ['FFN3','181','use:3','printing'], // Printing
-//      ['FFN3','190','use:3','petroleum_and_coal_product_manufacturing'], // Petroleum and Coal Products Manufacturing
-//      ['FFN3','191','use:3','coke_manufacturing'], // Coke Manufacture
-//      ['FFN3','192','use:3','petroleum_refining'], // Petroleum Refining
-//      ['FFN3','195','use:3','chemical_manufacturing'], // Chemical Manufacture
-//      ['FFN3','210','use:3','medicinal_manufacturing'], // Medicinal Product Manufacture
-//      ['FFN3','221','use:3','rubber_product_manufacturing'], // Rubber Product Manufacture
-//      ['FFN3','225','use:3','plastic_product_manufacturing'], // Plastic Product Manufacture
-//      ['FFN3','230','use:3','nonmetallic_mineral_product_manufacturing'], // Nonmetallic Mineral Product Manufacturing
-//      ['FFN3','231','use:3','glass_product_manufacturing'], // Glass Product Manufacture
-//      ['FFN3','232','use:3','refractory_product_manufacturing'], // Refractory Product Manufacture
-//      ['FFN3','233','use:3','clay_product_manufacturing'], // Clay Product Manufacture
-//      ['FFN3','234','use:3','ceramic_product_manufacturing'], // Ceramic Product Manufacture
-//      ['FFN3','235','use:3','cement_mill'], // Cement Mill
-//      ['FFN3','236','use:3','cement_product_manufacturing'], // Cement Product Manufacture
-//      ['FFN3','237','use:3','stone_product_manufacturing'], // Stone Product Manufacture
-//      ['FFN3','240','use:3','metal_manufacturing'], // Primary Metal Manufacturing
-//      ['FFN3','241','use:3','steel_mill'], // Steel Mill
-//      ['FFN3','242','use:3','metal_refining'], // Metal Refining
-//      ['FFN3','243','use:3','foundry'], // Foundry
-//      ['FFN3','250','use:3','metal_product_manufacturing'], // Metal Product Manufacturing
-//      ['FFN3','251','use:3','structural_metal_product_manufacturing'], // Structural Metal Product Manufacture
-//      ['FFN3','255','use:3','munitions_manufacturing'], // Munitions Manufacture
-//      ['FFN3','257','use:3','fabricated_metal_product_manufacturing'], // Fabricated Metal Product Manufacture
-//      ['FFN3','260','use:3','electronic_equipment_manufacturing'], // Electronic Equipment Manufacture
-//      ['FFN3','270','use:3','electrical_equipment_manufacturing'], // Electrical Equipment Manufacture
-//      ['FFN3','272','shop:3','gas'], // Propane Sale
-//      ['FFN3','280','use:3','machinery_manufacturing'], // Machinery Manufacture
-//      ['FFN3','289','use:3','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
-//      ['FFN3','290','use:3','motor_vehicle_manufacturing'], // Motor Vehicle Manufacture
-//      ['FFN3','301','use:3','ship_manufacturing'], // Ship Construction
-//      ['FFN3','304','use:3','railway_vehicle_manufacturing'], // Railway Vehicle Manufacture
-//      ['FFN3','305','use:3','aircraft_manufacturing'], // Aircraft Manufacture
-//      ['FFN3','306','use:3','military_vehicle_manufacturing'], // Military Vehicle Manufacture
-//      ['FFN3','310','use:3','furniture_manufacturing'], // Furniture Manufacture
-//      ['FFN3','320','use:3','miscellaneous_manufacturing'], // Miscellaneous Manufacturing
-//      ['FFN3','321','use:3','jewellery_manufacturing'], // Jewellery Manufacture
-//      ['FFN3','322','use:3','musical_instrument_manufacturing'], // Musical Instrument Manufacture
-//      ['FFN3','323','use:3','sports_goods_manufacturing'], // Sports Goods Manufacture
-//      ['FFN3','324','use:3','game_and_toy_manufacturing'], // Game and/or Toy Manufacture
-//      ['FFN3','325','use:3','medical_equipment_manufacturing'], // Medical and/or Dental Equipment Manufacture
-//      ['FFN3','330','repair:3','yes'], // General Repair
-//      ['FFN3','331','repair:3','fabricated_metal_products'], // Fabricated Metal Product Repair
-//      ['FFN3','332','repair:3','electronic_equipment'], // Electronic Equipment Repair
-//      ['FFN3','333','repair:3','electrical_equipment'], // Electrical Equipment Repair
-//      ['FFN3','334','repair:3','machinery'], // Machinery Repair
-//      ['FFN3','340','repair:3','ship'], // Ship Repair
-//      ['FFN3','341','repair:3','aircraft'], // Aircraft Repair
-//      ['FFN3','342','repair:3','railway_vehicle'], // Railway Vehicle Repair
-//      ['FFN3','343','shop:3','car_repair'], // Motor Vehicle Repair
-//      ['FFN3','350','use:3','utilities'], // Utilities
-//      ['FFN3','351','use:3','power_generation'], // Power Generation
-//      ['FFN3','352','use:3','climate_control'], // Climate Control
-//      ['FFN3','355','use:3','cooling'], // Cooling
-//      ['FFN3','356','use:3','heating'], // Heating
-//      ['FFN3','360','use:3','water_supply'], // Water Supply
-//      ['FFN3','361','use:3','water_collection'], // Water Collection
-//      ['FFN3','362','use:3','water_treatment'], // Water Treatment
-//      ['FFN3','363','use:3','water_distribution'], // Water Distribution
-//      ['FFN3','370','use:3','sewerage'], // Sewerage
-//      ['FFN3','372','use:3','sewerage_screening'], // Sewerage Screening
-//      ['FFN3','382','amenity:3','toilets'], // Restroom
-//      ['FFN3','383','use:3','waste_treatment_and_disposal'], // Waste Treatment and Disposal
-//      ['FFN3','385','use:3','materials_recovery'], // Materials Recovery
-//      ['FFN3','440','use:3','commercial'], // Commerce
-//      ['FFN3','459','shop:3','wholesale'], // Wholesale Merchant
-//      ['FFN3','460','shop:3','yes'], // Retail Sale
-//      ['FFN3','464','shop:3','specialized'], // Specialized Store
-//      ['FFN3','465','shop:3','non-specialized'], // Non-specialized Store
-//      ['FFN3','466','shop:3','convenience'], // Convenience Store
-//      ['FFN3','470','amenity:3','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
-//      ['FFN3','473','amenity:3','sales_yard'], // Sales Yard
-//      ['FFN3','474','shop:3','precious_metal'], // Precious Metal Merchant
-//      ['FFN3','475','amenity:3','marketplace'], // Market
-//      ['FFN3','476','shop:3','supermarket'], // Grocery
-//      ['FFN3','477','amenity:3','pharmacy'], // Pharmacy
-//      ['FFN3','478','shop:3','pet'], // Pet-shop
-//      ['FFN3','480','use:3','transportation'], // Transport
-//      ['FFN3','481','use:3','terminal'], // Terminal
-//      ['FFN3','482','public_transport:3','station'], // Station
-//      ['FFN3','483','amenity:3','stop'], // Stop
-//      ['FFN3','484','amenity:3','transfer_hub'], // Transfer Hub
-//      ['FFN3','486','use:3','signalling'], // Signalling
-//      ['FFN3','487','use:3','transport_system_maintenance'], // Transport System Maintenance
-//      ['FFN3','488','use:3','navigation'], // Navigation - Not great, used in a number of FCodes
-//      ['FFN3','489','use:3','transportation_hub'], // Transportation Hub
-//      ['FFN3','490','use:3','railway_transport'], // Railway Transport
-//      ['FFN3','491','use:3','railway_passenger_transport'], // Railway Passenger Transport
-//      ['FFN3','494','use:3','pedestrian_transport'], // Pedestrian Transport
-//      ['FFN3','495','use:3','road_transport'], // Road Transport
-//      ['FFN3','496','use:3','road_passenger_transport'], // Road Passenger Transport
-//      ['FFN3','497','use:3','road_freight_transport'], // Road Freight Transport
-//      ['FFN3','500','use:3','pipeline_transport'], // Pipeline Transport
-//      ['FFN3','501','use:3','pumping'], // Pumping
-//      ['FFN3','505','use:3','water_transport'], // Water Transport
-//      ['FFN3','507','use:3','inland_waters_transport'], // Inland Waters Transport
-//      ['FFN3','508','use:3','canal_transport'], // Canal Transport
-//      ['FFN3','510','use:3','port_control'], // Port Control
-//      ['FFN3','511','use:3','maritime_pilotage'], // Maritime Pilotage
-//      ['FFN3','512','use:3','pilot_station'], // Pilot Station
-//      ['FFN3','513','use:3','harbour_control'], // Harbour Control
-//      ['FFN3','520','use:3','air_transport'], // Air Transport
-//      ['FFN3','525','use:3','air_traffic_control'], // Air Traffic Control
-//      ['FFN3','529','use:3','transportation_support'], // Transportation Support
-//      ['FFN3','530','use:3','warehouse'], // Warehousing and Storage
-//      ['FFN3','535','use:3','garage'], // Motor Vehicle Parking
-//      ['FFN3','536','use:3','cargo_handling'], // Cargo Handling
-//      ['FFN3','537','amenity:3','customs'], // Customs Checkpoint
-//      ['FFN3','538','use:3','inspection_station'], // Inspection Station
-//      ['FFN3','539','use:3','inspection'], // Inspection
-//      ['FFN3','540','amenity:3','post_office'], // Postal Activities
-//      ['FFN3','541','use:3','mail_and_package_transport'], // Mail and Package Transport
-//      ['FFN3','545','use:3','courier_activities'], // Courier Activities
-//      ['FFN3','548','use:3','short-term_accommodation'], // Short-term Accommodation
-//      ['FFN3','549','use:3','long-term_accommodation'], // Long-term Accommodation
-//      ['FFN3','550','use:3','accommodation'], // Accommodation
-//      ['FFN3','551','tourism:3','hotel'], // Hotel
-//      ['FFN3','552','tourism:3','resort_hotel'], // Resort Hotel
-//      ['FFN3','553','tourism:3','motel'], // Motel
-//      ['FFN3','554','tourism:3','guest_house'], // Guest-house
-//      ['FFN3','555','tourism:3','hostel'], // Hostel
-//      ['FFN3','556','use:3','dormitory'], // Dormitory
-//      ['FFN3','557','use:3','vacation_cottage'], // Vacation Cottage
-//      ['FFN3','558','use:3','dependents_housing'], // Dependents Housing
-//      ['FFN3','559','amenity:3','public_bath'], // Communal Bath
-//      ['FFN3','563','use:3','residential'], // Residence
-//      ['FFN3','570','use:3','food_service'], // Food Service
-//      ['FFN3','572','amenity:3','restaurant'], // Restaurant
-//      ['FFN3','573','amenity:3','bar'], // Bar
-//      ['FFN3','574','amenity:3','dining_hall'], // Dining Hall
-//      ['FFN3','578','amenity:3','banquet_hall'], // Banquet Hall
-//      ['FFN3','579','amenity:3','convention_centre'], // Convention Centre
-//      ['FFN3','580','use:3','publishing_and_broadcasting'], // Publishing and Broadcasting
-//      ['FFN3','582','use:3','print_publishing'], // Print Publishing
-//      ['FFN3','594','amenity:3','cinema'], // Cinema
-//      ['FFN3','601','use:3','radio_broadcasting'], // Radio Broadcasting
-//      ['FFN3','604','use:3','television_broadcasting'], // Television Broadcasting
-//      ['FFN3','610','use:3','communication'], // Telecommunications
-//      ['FFN3','612','use:3','retail_telecommunications'], // Retail Telecommunications
-//      ['FFN3','614','use:3','wired_telecommunications'], // Wired Telecommunications
-//      ['FFN3','615','use:3','main_telephone_exchange'], // Main Telephone Exchange
-//      ['FFN3','616','use:3','branch_telephone_exchange'], // Branch Telephone Exchange
-//      ['FFN3','617','use:3','wired_repeater'], // Wired Repeater
-//      ['FFN3','620','use:3','wireless_telecommunications'], // Wireless Telecommunications
-//      ['FFN3','621','use:3','mobile_phone_service'], // Mobile Phone Service
-//      ['FFN3','622','use:3','wireless_repeater'], // Wireless Repeater
-//      ['FFN3','625','use:3','satellite_telecommunications'], // Satellite Telecommunications
-//      ['FFN3','626','man_made:3','ground_station'], // Satellite Ground Control
-//      ['FFN3','632','amenity:3','information_service'], // Information Service
-//      ['FFN3','633','amenity:3','public_records'], // Public Records
-//      ['FFN3','640','office:3','financial_services'], // Financial Services
-//      ['FFN3','642','office:3','central_banking'], // Central Banking
-//      ['FFN3','643','amenity:3','bank'], // Retail Banking
-//      ['FFN3','651','office:3','insurance'], // Insurance
-//      ['FFN3','662','office:3','financial_market_administration'], // Financial Market Administration
-//      ['FFN3','663','office:3','security_brokerage'], // Security Brokerage
-//      ['FFN3','671','office:3','fund_management'], // Fund Management
-//      ['FFN3','680','office:3','estate_agent'], // Real Estate Activities
-//      ['FFN3','681','office:3','professional_scientific_and_technical'], // Professional, Scientific and Technical
-//      ['FFN3','691','office:3','legal_activities'], // Legal Activities
-//      ['FFN3','696','office:3','accounting'], // Accounting
-//      ['FFN3','701','office:3','head_office'], // Head Office
-//      ['FFN3','706','office:3','business_management'], // Business Management
-//      ['FFN3','711','office:3','architecture_consulting'], // Architecture Consulting
-//      ['FFN3','714','office:3','engineering_design'], // Engineering Design
-//      ['FFN3','717','office:3','surveying'], // Surveying
-//      ['FFN3','720','use:3','research'], // Scientific Research and Development
-//      ['FFN3','721','use:3','observation_station'], // Observation Station
-//      ['FFN3','722','monitoring:weather:3','yes'], // Weather Station
-//      ['FFN3','725','use:3','nuclear_research_centre'], // Nuclear Research Centre
-//      ['FFN3','730','use:3','wind_tunnel'], // Wind Tunnel
-//      ['FFN3','741','amenity:3','advertising'], // Advertising
-//      ['FFN3','752','shop:3','photo'], // Photography
-//      ['FFN3','757','amenity:3','veterinary'], // Veterinary
-//      ['FFN3','760','office:3','business_support'], // Business and Personal Support Services
-//      ['FFN3','761','amenity:3','car_rental'], // Motor Vehicle Rental
-//      ['FFN3','770','office:3','employment_agency'], // Employment Agency
-//      ['FFN3','775','shop:3','travel_agency'], // Travel Agency
-//      ['FFN3','780','use:3','security_enforcement'], // Security Enforcement
-//      ['FFN3','781','use:3','guard'], // Guard
-//      ['FFN3','791','amenity:3','custodial_service'], // Custodial Service
-//      ['FFN3','795','amenity:3','landscaping_service'], // Landscaping Service
-//      ['FFN3','801','office:3','office_administration'], // Office Administration
-//      ['FFN3','807','use:3','call_centre'], // Call Centre
-//      ['FFN3','808','office:3','public_administration'], // Public Administration
-//      ['FFN3','809','use:3','headquarters'], // Headquarters
-//      ['FFN3','810','office:3','administrative'], // Administration
-//      ['FFN3','811','office:3','government'], // Government
-//      ['FFN3','812','office:3','local_government'], // Local Government
-//      ['FFN3','813','office:3','subnational_government'], // Subnational Government
-//      ['FFN3','814','office:3','national_government'], // National Government
-//      ['FFN3','815','use:3','palace'], // Palace
-//      ['FFN3','817','use:3','capitol'], // Capitol
-//      ['FFN3','818','office:3','executive_activities'], // Executive Activities
-//      ['FFN3','819','office:3','legislative_activities'], // Legislative Activities
-//      ['FFN3','821','use:3','polling_station'], // Polling Station
-//      ['FFN3','822','use:3','civil_activities'], // Civil Activities
-//      ['FFN3','825','amenity:3','diplomacy'], // Diplomacy
-//      ['FFN3','826','diplomatic:3','mission'], // Diplomatic Mission
-//      ['FFN3','827','diplomatic:3','embassy'], // Embassy
-//      ['FFN3','828','diplomatic:3','consulate'], // Consul
-//      ['FFN3','829','use:3','maritime_defense'], // Maritime Defense
-//      ['FFN3','830','use:3','public_order_safety_and_security_services'], // Public Order, Safety and Security Services
-//      ['FFN3','831','use:3','public_order'], // Public Order
-//      ['FFN3','832','use:3','safety'], // Safety
-//      ['FFN3','833','use:3','security_services'], // Security Services
-//      ['FFN3','835','use:3','military'], // Defence Activities
-//      ['FFN3','836','military:3','armory'], // Armory
-//      ['FFN3','837','military:3','reserve_activities'], // Military Reserve Activities
-//      ['FFN3','838','military:3','recruitment'], // Military Recruitment
-//      ['FFN3','839','military:3','cbrne_civilian_support'], // CBRNE Civilian Support
-//      ['FFN3','840','amenity:3','judicial_activities'], // Judicial Activities
-//      ['FFN3','841','amenity:3','police'], // Law Enforcement
-//      ['FFN3','842','amenity:3','immigration_control'], // Immigration Control
-//      ['FFN3','843','amenity:3','prison'], // Imprisonment
-//      ['FFN3','844','amenity:3','juvenile_corrections'], // Juvenile Corrections
-//      ['FFN3','845','amenity:3','fire_station'], // Firefighting
-//      ['FFN3','846','amenity:3','rescue_and_paramedical_services'], // Rescue and Paramedical Services
-//      ['FFN3','847','use:3','emergency_operations'], // Emergency Operations
-//      ['FFN3','848','use:3','civil_intelligence'], // Civil Intelligence
-//      ['FFN3','850','use:3','education'], // Education
-//      ['FFN3','851','isced:level:3','1'], // Primary Education
-//      ['FFN3','852','isced:level:3','2,3'], // Secondary Education
-//      ['FFN3','855','building:3','university'], // Higher Education
-//      ['FFN3','857','use:3','vocational_education'], // Vocational Education
-//      ['FFN3','860','use:3','healthcare'], // Human Health Activities
-//      ['FFN3','861','use:3','in-patient_care'], // In-patient Care
-//      ['FFN3','862','use:3','out-patient_care'], // Out-patient Care
-//      ['FFN3','863','use:3','urgent_medical_care'], // Urgent Medical Care
-//      ['FFN3','864','use:3','human_tissue_repository'], // Human Tissue Repository
-//      ['FFN3','865','use:3','public_health_activities'], // Public Health Activities
-//      ['FFN3','866','use:3','leprosy_care'], // Leprosy Care
-//      ['FFN3','871','use:3','intermediate_care'], // Intermediate Care
-//      ['FFN3','873','use:3','psychiatric_in-patient_care'], // Psychiatric In-patient Care
-//      ['FFN3','875','use:3','residential_care'], // Residential Care
-//      ['FFN3','881','social_facility:3','emergency'], // Emergency Shelter
-//      ['FFN3','882','social_facility:3','homeless'], // Homeless Shelter
-//      ['FFN3','883','social_facility:3','refugee'], // Refugee Shelter
-//      ['FFN3','884','social_facility:3','youth_emergency'], // Emergency Youth Shelter
-//      ['FFN3','885','amenity:3','child_care'], // Day Care
-//      ['FFN3','887','use:3','social_work'], // Social Work
-//      ['FFN3','888','use:3','emergency_relief_services'], // Emergency Relief Services
-//      ['FFN3','890','amenity:3','cultural_centre'], // Cultural, Arts and Entertainment
-//      ['FFN3','891','amenity:3','theatre'], // Theatre
-//      ['FFN3','892','amenity:3','auditorium'], // Auditorium
-//      ['FFN3','893','amenity:3','community_centre'], // Community Centre
-//      ['FFN3','894','tourism:3','opera_house'], // Opera House
-//      ['FFN3','895','amenity:3','nightclub'], // Night Club
-//      ['FFN3','900','use:3','sports_amusement_and_recreation'], // Sports, Amusement and Recreation
-//      ['FFN3','902','amenity:3','library'], // Library
-//      ['FFN3','905','tourism:3','museum'], // Museum
-//      ['FFN3','906','tourism:3','aquarium'], // Aquarium
-//      ['FFN3','907','use:3','botanical_and/or_zoological_reserve_activities'], // Botanical and/or Zoological Reserve Activities
-//      ['FFN3','909','leisure:3','gambling'], // Gambling
-//      ['FFN3','912','use:3','sports_centre'], // Sports Centre
-//      ['FFN3','913','leisure:3','fitness_centre'], // Fitness Centre
-//      ['FFN3','914','sport:3','shooting_range'], // Shooting Range
-//      ['FFN3','915','leisure:3','water_park'], // Water Park
-//      ['FFN3','919','use:3','animal_boarding'], // Animal Boarding
-//      ['FFN3','921','use:3','recreation'], // Recreation
-//      ['FFN3','922','use:3','amusement'], // Amusement
-//      ['FFN3','923','leisure:3','hobbies_andor_leisure_activities'], // Hobbies and/or Leisure Activities
-//      ['FFN3','930','use:3','religious_activities'], // Religious Activities
-//      ['FFN3','931','amenity:3','place_of_worship'], // Place of Worship
-//      ['FFN3','950','amenity:3','membership_organization'], // Membership Organization
-//      ['FFN3','954','amenity:3','club'], // Club
-//      ['FFN3','955','leisure:3','yacht_club'], // Yacht-club
-//      ['FFN3','961','shop:3','laundry'], // Laundry
-//      ['FFN3','962','shop:3','beauty'], // Beauty Treatment
-//      ['FFN3','963','shop:3','funeral_directors'], // Funeral Services
-//      ['FFN3','964','amenity:3','crematorium'], // Cremation
-//      ['FFN3','965','amenity:3','mortuary'], // Mortuary Services
-//      ['FFN3','966','amenity:3','adult_entertainment'], // Adult Entertainment
-//      ['FFN3','967','amenity:3','storage_of_human_remains'], // Storage of Human Remains
-//      ['FFN3','970','use:3','meeting_place'], // Meeting Place
-//      ['FFN3','980','amenity:3','death_care_services'], // Death Care Services
-//      ['FFN3','999','use:3','other'], // Other
 
      // FHC - Harbour Facility Function
      // ['FHC','-999999',undefined,undefined], // No Information
@@ -3370,34 +2317,7 @@ ggdm30.rules = {
      ['FHC','999','harbour:use','other'], // Other
 
      // FHC2 - Harbour Facility Function [2]
-     // ['FHC2','-999999',undefined,undefined], // No Information
-//      ['FHC2','1','harbour:use:2','ro-ro_terminal'], // Ro-Ro Terminal
-//      ['FHC2','2','harbour:use:2','timber-yard'], // Timber-yard
-//      ['FHC2','3','harbour:use:2','ferry_terminal'], // Ferry Terminal
-//      ['FHC2','4','harbour:use:2','fishing_harbour'], // Fishing Harbour
-//      ['FHC2','5','harbour:use:2','marina'], // Marina
-//      ['FHC2','6','harbour:use:2','naval_base'], // Naval Base
-//      ['FHC2','7','harbour:use:2','tanker_terminal'], // Tanker Terminal
-//      ['FHC2','8','harbour:use:2','passenger_terminal'], // Passenger Terminal
-//      ['FHC2','9','harbour:use:2','shipyard'], // Shipyard
-//      ['FHC2','10','harbour:use:2','container_terminal'], // Container Terminal
-//      ['FHC2','11','harbour:use:2','bulk_terminal'], // Bulk Terminal
-//      ['FHC2','999','harbour:use:2','other'], // Other
-
      // FHC3 - Harbour Facility Function [3]
-     // ['FHC3','-999999',undefined,undefined], // No Information
-//      ['FHC3','1','harbour:use:3','ro-ro_terminal'], // Ro-Ro Terminal
-//      ['FHC3','2','harbour:use:3','timber-yard'], // Timber-yard
-//      ['FHC3','3','harbour:use:3','ferry_terminal'], // Ferry Terminal
-//      ['FHC3','4','harbour:use:3','fishing_harbour'], // Fishing Harbour
-//      ['FHC3','5','harbour:use:3','marina'], // Marina
-//      ['FHC3','6','harbour:use:3','naval_base'], // Naval Base
-//      ['FHC3','7','harbour:use:3','tanker_terminal'], // Tanker Terminal
-//      ['FHC3','8','harbour:use:3','passenger_terminal'], // Passenger Terminal
-//      ['FHC3','9','harbour:use:3','shipyard'], // Shipyard
-//      ['FHC3','10','harbour:use:3','container_terminal'], // Container Terminal
-//      ['FHC3','11','harbour:use:3','bulk_terminal'], // Bulk Terminal
-//      ['FHC3','999','harbour:use:3','other'], // Other
 
      // FIC - Embankment Type
      // ['FIC','-999999',undefined,undefined], // No Information
@@ -3437,24 +2357,7 @@ ggdm30.rules = {
      ['FRT','999','range:type','other'], // Other
 
      // FRT2 - Weapons Range Type [2]
-     // ['FRT2','-999999',undefined,undefined], // No Information
-//      ['FRT2','1','range:type:2','small_arms'], // Small Arms
-//      ['FRT2','2','range:type:2','tank'], // Tank
-//      ['FRT2','3','range:type:2','artillery'], // Field Artillery
-//      ['FRT2','4','range:type:2','grenade'], // Grenade
-//      ['FRT2','5','range:type:2','demolition_area'], // Demolition Area
-//      ['FRT2','6','range:type:2','impact_area'], // Impact Area
-//      ['FRT2','999','range:type:2','other'], // Other
-
      // FRT3 - Weapons Range Type [3]
-     // ['FRT3','-999999',undefined,undefined], // No Information
-//      ['FRT3','1','range:type:3','small_arms'], // Small Arms
-//      ['FRT3','2','range:type:3','tank'], // Tank
-//      ['FRT3','3','range:type:3','artillery'], // Field Artillery
-//      ['FRT3','4','range:type:3','grenade'], // Grenade
-//      ['FRT3','5','range:type:3','demolition_area'], // Demolition Area
-//      ['FRT3','6','range:type:3','impact_area'], // Impact Area
-//      ['FRT3','999','range:type:3','other'], // Other
 
      // FRZ - Seasonally Frozen
      // ['FRZ','-999999',undefined,undefined], // No Information
@@ -3653,18 +2556,7 @@ ggdm30.rules = {
      ['HST','999','shelter:type','other'], // Other
 
      // HST2 - Hazard Shelter Intended Use [2]
-     // ['HST2','-999999',undefined,undefined], // No Information
-//      ['HST2','1','shelter:type:2','bomb'], // Bomb Shelter
-//      ['HST2','2','shelter:type:2','fallout'], // Fallout Shelter
-//      ['HST2','3','shelter:type:2','storm'], // Storm Shelter
-//      ['HST2','999','shelter:type:2','other'], // Other
-
      // HST3 - Hazard Shelter Intended Use [3]
-     // ['HST3','-999999',undefined,undefined], // No Information
-//      ['HST3','1','shelter:type:3','bomb'], // Bomb Shelter
-//      ['HST3','2','shelter:type:3','fallout'], // Fallout Shelter
-//      ['HST3','3','shelter:type:3','storm'], // Storm Shelter
-//      ['HST3','999','shelter:type:3','other'], // Other
 
      // HTP - Hangar Type Category
      // ['HTP','-999999',undefined,undefined], // No Information
@@ -4033,50 +2925,7 @@ ggdm30.rules = {
      ['LFC','999','seamark:light:category','other'], // Other
 
      // LFC2 - Maritime Light Type [2]
-     // ['LFC2','-999999',undefined,undefined], // No Information
-//      ['LFC2','1','seamark:light:category:2','directional'], // Directional Function
-//      ['LFC2','4','seamark:light:category:2','leading'], // Leading Light
-//      ['LFC2','6','seamark:light:category:2','air_obstruction'], // Air Obstruction Light
-//      ['LFC2','7','seamark:light:category:2','fog_detector'], // Fog Detector Light
-//      ['LFC2','8','seamark:light:category:2','flood_light'], // Flood Light
-//      ['LFC2','9','seamark:light:category:2','strip_light'], // Strip Light
-//      ['LFC2','10','seamark:light:category:2','subsidiary'], // Subsidiary Light
-//      ['LFC2','11','seamark:light:category:2','spotlight'], // Spotlight
-//      ['LFC2','12','seamark:light:category:2','emergency'], // Emergency Light
-//      ['LFC2','13','seamark:light:category:2','bearing'], // Bearing Light
-//      ['LFC2','14','seamark:light:category:2','upper'], // Upper
-//      ['LFC2','16','seamark:light:category:2','lower'], // Lower
-//      ['LFC2','17','seamark:light:category:2','horizontal'], // Horizontally Disposed
-//      ['LFC2','18','seamark:light:category:2','vertical'], // Vertically Disposed
-//      ['LFC2','19','seamark:light:category:2','front'], // Front
-//      ['LFC2','20','seamark:light:category:2','rear'], // Rear
-//      ['LFC2','21','seamark:light:category:2','moire'], // Moire Effect Light
-//      ['LFC2','22','seamark:light:category:2','sectored_light'], // Sectored Light
-//      ['LFC2','25','seamark:light:category:2','occasional_light'], // Occasional Light
-//      ['LFC2','999','seamark:light:category:2','other'], // Other
-
      // LFC3 - Maritime Light Type [3]
-     // ['LFC3','-999999',undefined,undefined], // No Information
-//      ['LFC3','1','seamark:light:category:3','directional'], // Directional Function
-//      ['LFC3','4','seamark:light:category:3','leading'], // Leading Light
-//      ['LFC3','6','seamark:light:category:3','air_obstruction'], // Air Obstruction Light
-//      ['LFC3','7','seamark:light:category:3','fog_detector'], // Fog Detector Light
-//      ['LFC3','8','seamark:light:category:3','flood_light'], // Flood Light
-//      ['LFC3','9','seamark:light:category:3','strip_light'], // Strip Light
-//      ['LFC3','10','seamark:light:category:3','subsidiary'], // Subsidiary Light
-//      ['LFC3','11','seamark:light:category:3','spotlight'], // Spotlight
-//      ['LFC3','12','seamark:light:category:3','emergency'], // Emergency Light
-//      ['LFC3','13','seamark:light:category:3','bearing'], // Bearing Light
-//      ['LFC3','14','seamark:light:category:3','upper'], // Upper
-//      ['LFC3','16','seamark:light:category:3','lower'], // Lower
-//      ['LFC3','17','seamark:light:category:3','horizontal'], // Horizontally Disposed
-//      ['LFC3','18','seamark:light:category:3','vertical'], // Vertically Disposed
-//      ['LFC3','19','seamark:light:category:3','front'], // Front
-//      ['LFC3','20','seamark:light:category:3','rear'], // Rear
-//      ['LFC3','21','seamark:light:category:3','moire'], // Moire Effect Light
-//      ['LFC3','22','seamark:light:category:3','sectored_light'], // Sectored Light
-//      ['LFC3','25','seamark:light:category:3','occasional_light'], // Occasional Light
-//      ['LFC3','999','seamark:light:category:3','other'], // Other
 
      // LMC - Navigation Landmark
      // ['LMC','-999999',undefined,undefined], // No Information
@@ -4444,80 +3293,7 @@ ggdm30.rules = {
      ['MCC','999','material','other'], // Other
 
      // MCC2 - Structural Material Type [2]
-     // ['MCC2','-999999',undefined,undefined], // No Information
-//      ['MCC2','2','material:2','aluminium'], // Aluminium
-//      ['MCC2','5','material:2','asphalt'], // Asphalt
-//      ['MCC2','7','material:2','bedrock'], // Bedrock
-//      ['MCC2','8','material:2','boulders'], // Boulders
-//      ['MCC2','9','material:2','brick'], // Brick
-//      ['MCC2','21','material:2','concrete'], // Concrete
-//      ['MCC2','23','material:2','copper'], // Copper
-//      ['MCC2','24','material:2','coral'], // Coral
-//      ['MCC2','25','material:2','coral_head'], // Coral Head
-//      ['MCC2','46','material:2','gravel'], // Gravel
-//      ['MCC2','51','material:2','iron'], // Iron
-//      ['MCC2','52','material:2','lava'], // Lava
-//      ['MCC2','54','material:2','lead'], // Lead
-//      ['MCC2','55','material:2','loess'], // Loess
-//      ['MCC2','62','material:2','masonry'], // Masonry
-//      ['MCC2','64','material:2','metal'], // Metal
-//      ['MCC2','65','material:2','mud'], // Mud
-//      ['MCC2','74','material:2','plastic'], // Plastic
-//      ['MCC2','77','material:2','prestressed_concrete'], // Prestressed Concrete
-//      ['MCC2','83','material:2','reinforced_concrete'], // Reinforced Concrete
-//      ['MCC2','84','material:2','rocks'], // Rocks
-//      ['MCC2','86','material:2','rubble'], // Rubble
-//      ['MCC2','88','material:2','sand'], // Sand
-//      ['MCC2','103','material:2','frozen_water'], // Frozen Water
-//      ['MCC2','104','material:2','soil'], // Soil
-//      ['MCC2','107','material:2','steel'], // Steel
-//      ['MCC2','108','material:2','stone'], // Stone
-//      ['MCC2','117','material:2','wood'], // Wood
-//      ['MCC2','119','material:2','evaporite'], // Evaporite
-//      ['MCC2','120','material:2','glass_reinforced_plastic_(grp)'], // Glass Reinforced Plastic (GRP)
-//      ['MCC2','131','material:2','ceramic'], // Ceramic
-//      ['MCC2','150','material:2','treated_timber'], // Treated Timber
-//      ['MCC2','152','material:2','fibreglass'], // Fibreglass
-//      ['MCC2','160','material:2','earthen'], // Earthen
-//      ['MCC2','999','material:2','other'], // Other
-
      // MCC3 - Structural Material Type [3]
-     // ['MCC3','-999999',undefined,undefined], // No Information
-//      ['MCC3','2','material:3','aluminium'], // Aluminium
-//      ['MCC3','5','material:3','asphalt'], // Asphalt
-//      ['MCC3','7','material:3','bedrock'], // Bedrock
-//      ['MCC3','8','material:3','boulders'], // Boulders
-//      ['MCC3','9','material:3','brick'], // Brick
-//      ['MCC3','21','material:3','concrete'], // Concrete
-//      ['MCC3','23','material:3','copper'], // Copper
-//      ['MCC3','24','material:3','coral'], // Coral
-//      ['MCC3','25','material:3','coral_head'], // Coral Head
-//      ['MCC3','46','material:3','gravel'], // Gravel
-//      ['MCC3','51','material:3','iron'], // Iron
-//      ['MCC3','52','material:3','lava'], // Lava
-//      ['MCC3','54','material:3','lead'], // Lead
-//      ['MCC3','55','material:3','loess'], // Loess
-//      ['MCC3','62','material:3','masonry'], // Masonry
-//      ['MCC3','64','material:3','metal'], // Metal
-//      ['MCC3','65','material:3','mud'], // Mud
-//      ['MCC3','74','material:3','plastic'], // Plastic
-//      ['MCC3','77','material:3','prestressed_concrete'], // Prestressed Concrete
-//      ['MCC3','83','material:3','reinforced_concrete'], // Reinforced Concrete
-//      ['MCC3','84','material:3','rocks'], // Rocks
-//      ['MCC3','86','material:3','rubble'], // Rubble
-//      ['MCC3','88','material:3','sand'], // Sand
-//      ['MCC3','103','material:3','frozen_water'], // Frozen Water
-//      ['MCC3','104','material:3','soil'], // Soil
-//      ['MCC3','107','material:3','steel'], // Steel
-//      ['MCC3','108','material:3','stone'], // Stone
-//      ['MCC3','117','material:3','wood'], // Wood
-//      ['MCC3','119','material:3','evaporite'], // Evaporite
-//      ['MCC3','120','material:3','glass_reinforced_plastic_(grp)'], // Glass Reinforced Plastic (GRP)
-//      ['MCC3','131','material:3','ceramic'], // Ceramic
-//      ['MCC3','150','material:3','treated_timber'], // Treated Timber
-//      ['MCC3','152','material:3','fibreglass'], // Fibreglass
-//      ['MCC3','160','material:3','earthen'], // Earthen
-//      ['MCC3','999','material:3','other'], // Other
 
      // MCX - Motorized Crossing
      // ['MCX','-999999',undefined,undefined], // No Information
@@ -4544,42 +3320,7 @@ ggdm30.rules = {
      ['MCY','999','seamark:precautionary_area','other'], // Other
 
      // MCY2 - Maritime Caution Type [2]
-     // ['MCY2','-999999',undefined,undefined], // No Information
-//      ['MCY2','1','seamark:precautionary_area:2','cargo_transshipment'], // Cargo Transshipment
-//      ['MCY2','2','seamark:precautionary_area:2','ice_advisory'], // Ice Advisory
-//      ['MCY2','3','seamark:precautionary_area:2','intake_area'], // Intake Area
-//      ['MCY2','4','seamark:precautionary_area:2','outfall_area'], // Outfall Area
-//      ['MCY2','5','seamark:precautionary_area:2','pollution_zone'], // Pollution Zone
-//      ['MCY2','6','seamark:precautionary_area:2','submarine_cable'], // Submarine Cable
-//      ['MCY2','7','seamark:precautionary_area:2','submarine_pipeline'], // Submarine Pipeline
-//      ['MCY2','8','seamark:precautionary_area:2','submarine_sewer'], // Submarine Sewer
-//      ['MCY2','9','seamark:precautionary_area:2','unexploded_ordnance'], // Unexploded Ordnance
-//      ['MCY2','10','seamark:precautionary_area:2','clearing_line'], // Clearing Line
-//      ['MCY2','11','seamark:precautionary_area:2','colregs_demarcation_line'], // COLREGS Demarcation Line
-//      ['MCY2','12','seamark:precautionary_area:2','harbour_area'], // Harbour Area
-//      ['MCY2','13','seamark:precautionary_area:2','ocean_current_margin'], // Ocean Current Margin
-//      ['MCY2','14','seamark:precautionary_area:2','works_in_progress_area'], // Works in Progress Area
-//      ['MCY2','15','seamark:precautionary_area:2','unsurveyed_area'], // Unsurveyed Area
-//      ['MCY2','999','seamark:precautionary_area:2','other'], // Other
-
      // MCY3 - Maritime Caution Type [3]
-     // ['MCY3','-999999',undefined,undefined], // No Information
-//      ['MCY3','1','seamark:precautionary_area:3','cargo_transshipment'], // Cargo Transshipment
-//      ['MCY3','2','seamark:precautionary_area:3','ice_advisory'], // Ice Advisory
-//      ['MCY3','3','seamark:precautionary_area:3','intake_area'], // Intake Area
-//      ['MCY3','4','seamark:precautionary_area:3','outfall_area'], // Outfall Area
-//      ['MCY3','5','seamark:precautionary_area:3','pollution_zone'], // Pollution Zone
-//      ['MCY3','6','seamark:precautionary_area:3','submarine_cable'], // Submarine Cable
-//      ['MCY3','7','seamark:precautionary_area:3','submarine_pipeline'], // Submarine Pipeline
-//      ['MCY3','8','seamark:precautionary_area:3','submarine_sewer'], // Submarine Sewer
-//      ['MCY3','9','seamark:precautionary_area:3','unexploded_ordnance'], // Unexploded Ordnance
-//      ['MCY3','10','seamark:precautionary_area:3','clearing_line'], // Clearing Line
-//      ['MCY3','11','seamark:precautionary_area:3','colregs_demarcation_line'], // COLREGS Demarcation Line
-//      ['MCY3','12','seamark:precautionary_area:3','harbour_area'], // Harbour Area
-//      ['MCY3','13','seamark:precautionary_area:3','ocean_current_margin'], // Ocean Current Margin
-//      ['MCY3','14','seamark:precautionary_area:3','works_in_progress_area'], // Works in Progress Area
-//      ['MCY3','15','seamark:precautionary_area:3','unsurveyed_area'], // Unsurveyed Area
-//      ['MCY3','999','seamark:precautionary_area:3','other'], // Other
 
      // MEL - Medical Service
      // ['MEL','-999999',undefined,undefined], // No Information
@@ -4669,30 +3410,7 @@ ggdm30.rules = {
      ['MGL','999','geopolitical_line:maritime','other'], // Other
 
      // MGL2 - Maritime Geopolitical Limit Type [2]
-     // ['MGL2','-999999',undefined,undefined], // No Information
-//      ['MGL2','1','geopolitical_line:maritime:2','international_boundary'], // International Boundary
-//      ['MGL2','2','geopolitical_line:maritime:2','territorial_sea_baseline'], // Territorial Sea Baseline
-//      ['MGL2','3','geopolitical_line:maritime:2','three_nautical_mile_limit'], // Three Nautical Mile Limit
-//      ['MGL2','4','geopolitical_line:maritime:2','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
-//      ['MGL2','5','geopolitical_line:maritime:2','contiguous_zone_limit'], // Contiguous Zone Limit
-//      ['MGL2','6','geopolitical_line:maritime:2','continental_shelf_limit'], // Continental Shelf Limit
-//      ['MGL2','7','geopolitical_line:maritime:2','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
-//      ['MGL2','8','geopolitical_line:maritime:2','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
-//      ['MGL2','9','geopolitical_line:maritime:2','customs_boundary'], // Customs Boundary
-//      ['MGL2','999','geopolitical_line:maritime:2','other'], // Other
-
      // MGL3 - Maritime Geopolitical Limit Type [3]
-     // ['MGL3','-999999',undefined,undefined], // No Information
-//      ['MGL3','1','geopolitical_line:maritime:3','international_boundary'], // International Boundary
-//      ['MGL3','2','geopolitical_line:maritime:3','territorial_sea_baseline'], // Territorial Sea Baseline
-//      ['MGL3','3','geopolitical_line:maritime:3','three_nautical_mile_limit'], // Three Nautical Mile Limit
-//      ['MGL3','4','geopolitical_line:maritime:3','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
-//      ['MGL3','5','geopolitical_line:maritime:3','contiguous_zone_limit'], // Contiguous Zone Limit
-//      ['MGL3','6','geopolitical_line:maritime:3','continental_shelf_limit'], // Continental Shelf Limit
-//      ['MGL3','7','geopolitical_line:maritime:3','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
-//      ['MGL3','8','geopolitical_line:maritime:3','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
-//      ['MGL3','9','geopolitical_line:maritime:3','customs_boundary'], // Customs Boundary
-//      ['MGL3','999','geopolitical_line:maritime:3','other'], // Other
 
      // MKSZ - Market Size
      // ['MKSZ','-999999',undefined,undefined], // No Information
@@ -4781,74 +3499,7 @@ ggdm30.rules = {
      ['MNR','999','seamark:precautionary_area:restriction','other'], // Other
 
      // MNR2 - Maritime Navigation Restriction [2]
-     // ['MNR2','-999999',undefined,undefined], // No Information
-//      ['MNR2','1','seamark:precautionary_area:restriction:2','anchoring_prohibited'], // Anchoring Prohibited
-//      ['MNR2','2','seamark:precautionary_area:restriction:2','anchoring_restricted'], // Anchoring Restricted
-//      ['MNR2','3','seamark:precautionary_area:restriction:2','fishing_prohibited'], // Fishing Prohibited
-//      ['MNR2','4','seamark:precautionary_area:restriction:2','fishing_restricted'], // Fishing Restricted
-//      ['MNR2','5','seamark:precautionary_area:restriction:2','trawling_prohibited'], // Trawling Prohibited
-//      ['MNR2','6','seamark:precautionary_area:restriction:2','trawling_restricted'], // Trawling Restricted
-//      ['MNR2','7','seamark:precautionary_area:restriction:2','entry_prohibited'], // Entry Prohibited
-//      ['MNR2','8','seamark:precautionary_area:restriction:2','entry_restricted'], // Entry Restricted
-//      ['MNR2','9','seamark:precautionary_area:restriction:2','dredging_prohibited'], // Dredging Prohibited
-//      ['MNR2','10','seamark:precautionary_area:restriction:2','dredging_restricted'], // Dredging Restricted
-//      ['MNR2','11','seamark:precautionary_area:restriction:2','diving_prohibited'], // Diving Prohibited
-//      ['MNR2','12','seamark:precautionary_area:restriction:2','diving_restricted'], // Diving Restricted
-//      ['MNR2','13','seamark:precautionary_area:restriction:2','reduced_wake_area'], // Reduced Wake Area
-//      ['MNR2','14','seamark:precautionary_area:restriction:2','avoidance_area'], // Avoidance Area
-//      ['MNR2','15','seamark:precautionary_area:restriction:2','construction_prohibited'], // Construction Prohibited
-//      ['MNR2','16','seamark:precautionary_area:restriction:2','discharging_prohibited'], // Discharging Prohibited
-//      ['MNR2','17','seamark:precautionary_area:restriction:2','discharging_restricted'], // Discharging Restricted
-//      ['MNR2','18','seamark:precautionary_area:restriction:2','exploration_and/or_development_prohibited'], // Exploration and/or Development Prohibited
-//      ['MNR2','19','seamark:precautionary_area:restriction:2','exploration_and/or_development_restricted'], // Exploration and/or Development Restricted
-//      ['MNR2','20','seamark:precautionary_area:restriction:2','drilling_prohibited'], // Drilling Prohibited
-//      ['MNR2','21','seamark:precautionary_area:restriction:2','drilling_restricted'], // Drilling Restricted
-//      ['MNR2','22','seamark:precautionary_area:restriction:2','artefact_removal_prohibited'], // Artefact Removal Prohibited
-//      ['MNR2','23','seamark:precautionary_area:restriction:2','cargo_transshipment_prohibited'], // Cargo Transshipment Prohibited
-//      ['MNR2','24','seamark:precautionary_area:restriction:2','dragging_prohibited'], // Dragging Prohibited
-//      ['MNR2','25','seamark:precautionary_area:restriction:2','stopping_prohibited'], // Stopping Prohibited
-//      ['MNR2','26','seamark:precautionary_area:restriction:2','landing_prohibited'], // Landing Prohibited
-//      ['MNR2','27','seamark:precautionary_area:restriction:2','limited_speed_area'], // Limited Speed Area
-//      ['MNR2','28','seamark:precautionary_area:restriction:2','navigational_aid_safety_zone'], // Navigational Aid Safety Zone
-//      ['MNR2','29','seamark:precautionary_area:restriction:2','offshore_safety_zone'], // Offshore Safety Zone
-//      ['MNR2','30','seamark:precautionary_area:restriction:2','shipping_prohibited'], // Shipping Prohibited
-//      ['MNR2','31','seamark:precautionary_area:restriction:2','swimming_prohibited'], // Swimming Prohibited
-//      ['MNR2','999','seamark:precautionary_area:restriction:2','other'], // Other
-
      // MNR3 - Maritime Navigation Restriction [3]
-     // ['MNR3','-999999',undefined,undefined], // No Information
-//      ['MNR3','1','seamark:precautionary_area:restriction:3','anchoring_prohibited'], // Anchoring Prohibited
-//      ['MNR3','2','seamark:precautionary_area:restriction:3','anchoring_restricted'], // Anchoring Restricted
-//      ['MNR3','3','seamark:precautionary_area:restriction:3','fishing_prohibited'], // Fishing Prohibited
-//      ['MNR3','4','seamark:precautionary_area:restriction:3','fishing_restricted'], // Fishing Restricted
-//      ['MNR3','5','seamark:precautionary_area:restriction:3','trawling_prohibited'], // Trawling Prohibited
-//      ['MNR3','6','seamark:precautionary_area:restriction:3','trawling_restricted'], // Trawling Restricted
-//      ['MNR3','7','seamark:precautionary_area:restriction:3','entry_prohibited'], // Entry Prohibited
-//      ['MNR3','8','seamark:precautionary_area:restriction:3','entry_restricted'], // Entry Restricted
-//      ['MNR3','9','seamark:precautionary_area:restriction:3','dredging_prohibited'], // Dredging Prohibited
-//      ['MNR3','10','seamark:precautionary_area:restriction:3','dredging_restricted'], // Dredging Restricted
-//      ['MNR3','11','seamark:precautionary_area:restriction:3','diving_prohibited'], // Diving Prohibited
-//      ['MNR3','12','seamark:precautionary_area:restriction:3','diving_restricted'], // Diving Restricted
-//      ['MNR3','13','seamark:precautionary_area:restriction:3','reduced_wake_area'], // Reduced Wake Area
-//      ['MNR3','14','seamark:precautionary_area:restriction:3','avoidance_area'], // Avoidance Area
-//      ['MNR3','15','seamark:precautionary_area:restriction:3','construction_prohibited'], // Construction Prohibited
-//      ['MNR3','16','seamark:precautionary_area:restriction:3','discharging_prohibited'], // Discharging Prohibited
-//      ['MNR3','17','seamark:precautionary_area:restriction:3','discharging_restricted'], // Discharging Restricted
-//      ['MNR3','18','seamark:precautionary_area:restriction:3','exploration_and/or_development_prohibited'], // Exploration and/or Development Prohibited
-//      ['MNR3','19','seamark:precautionary_area:restriction:3','exploration_and/or_development_restricted'], // Exploration and/or Development Restricted
-//      ['MNR3','20','seamark:precautionary_area:restriction:3','drilling_prohibited'], // Drilling Prohibited
-//      ['MNR3','21','seamark:precautionary_area:restriction:3','drilling_restricted'], // Drilling Restricted
-//      ['MNR3','22','seamark:precautionary_area:restriction:3','artefact_removal_prohibited'], // Artefact Removal Prohibited
-//      ['MNR3','23','seamark:precautionary_area:restriction:3','cargo_transshipment_prohibited'], // Cargo Transshipment Prohibited
-//      ['MNR3','24','seamark:precautionary_area:restriction:3','dragging_prohibited'], // Dragging Prohibited
-//      ['MNR3','25','seamark:precautionary_area:restriction:3','stopping_prohibited'], // Stopping Prohibited
-//      ['MNR3','26','seamark:precautionary_area:restriction:3','landing_prohibited'], // Landing Prohibited
-//      ['MNR3','27','seamark:precautionary_area:restriction:3','limited_speed_area'], // Limited Speed Area
-//      ['MNR3','28','seamark:precautionary_area:restriction:3','navigational_aid_safety_zone'], // Navigational Aid Safety Zone
-//      ['MNR3','29','seamark:precautionary_area:restriction:3','offshore_safety_zone'], // Offshore Safety Zone
-//      ['MNR3','30','seamark:precautionary_area:restriction:3','shipping_prohibited'], // Shipping Prohibited
-//      ['MNR3','31','seamark:precautionary_area:restriction:3','swimming_prohibited'], // Swimming Prohibited
-//      ['MNR3','999','seamark:precautionary_area:restriction:3','other'], // Other
 
      // MNS - Man-made Shoreline
      // ['MNS','-999999',undefined,undefined], // No Information
@@ -4911,105 +3562,7 @@ ggdm30.rules = {
      ['MRR','999','seamark:restricted_area:category','other'], // Other
 
      // MRR2 - Maritime Area Restriction [2]
-     // ['MRR2','-999999',undefined,undefined], // No Information
-//      ['MRR2','1','seamark:restricted_area:category:2','unrestricted_area'], // Unrestricted Area
-//      ['MRR2','2','seamark:restricted_area:category:2','bird_sanctuary'], // Bird Sanctuary
-//      ['MRR2','3','seamark:restricted_area:category:2','conservation_and_management_zone'], // Conservation and Management Zone
-//      ['MRR2','4','seamark:restricted_area:category:2','ecological_reserve'], // Ecological Reserve
-//      ['MRR2','5','seamark:restricted_area:category:2','fish_sanctuary'], // Fish Sanctuary
-//      ['MRR2','6','seamark:restricted_area:category:2','game_preserve'], // Game Preserve
-//      ['MRR2','7','seamark:restricted_area:category:2','marine_nature_reserve'], // Marine Nature Reserve
-//      ['MRR2','8','seamark:restricted_area:category:2','nature_reserve'], // Nature Reserve
-//      ['MRR2','9','seamark:restricted_area:category:2','seal_sanctuary'], // Seal Sanctuary
-//      ['MRR2','10','seamark:restricted_area:category:2','fishing_ground'], // Fishing Ground
-//      ['MRR2','11','seamark:restricted_area:category:2','fishery_zone'], // Fishery Zone
-//      ['MRR2','12','seamark:restricted_area:category:2','foreign_fishing_rights_zone'], // Foreign Fishing Rights Zone
-//      ['MRR2','13','seamark:restricted_area:category:2','unilateral_fishing_zone'], // Unilateral Fishing Zone
-//      ['MRR2','14','seamark:restricted_area:category:2','international_council_for_the_seas_(ices)_fishery_zone'], // International Council for the Seas (ICES) Fishery Zone
-//      ['MRR2','15','seamark:restricted_area:category:2','compass_adjustment'], // Compass Adjustment
-//      ['MRR2','16','seamark:restricted_area:category:2','degaussing_range'], // Degaussing Range
-//      ['MRR2','17','seamark:restricted_area:category:2','dredging_area'], // Dredging Area
-//      ['MRR2','18','seamark:restricted_area:category:2','fairway'], // Fairway
-//      ['MRR2','19','seamark:restricted_area:category:2','historic_wreck_area'], // Historic Wreck Area
-//      ['MRR2','20','seamark:restricted_area:category:2','incineration_area'], // Incineration Area
-//      ['MRR2','21','seamark:restricted_area:category:2','joint_economic_development_zone'], // Joint Economic Development Zone
-//      ['MRR2','22','seamark:restricted_area:category:2','maritime_mass_grave'], // Maritime Mass Grave
-//      ['MRR2','23','seamark:restricted_area:category:2','maritime_pollution_(marpol)_reporting_area'], // Maritime Pollution (MARPOL) Reporting Area
-//      ['MRR2','24','seamark:restricted_area:category:2','mine_danger_area'], // Mine Danger Area
-//      ['MRR2','25','seamark:restricted_area:category:2','former_mine_danger_area'], // Former Mine Danger Area
-//      ['MRR2','26','seamark:restricted_area:category:2','natural_gas_field'], // Natural Gas Field
-//      ['MRR2','27','seamark:restricted_area:category:2','petroleum_field'], // Petroleum Field
-//      ['MRR2','28','seamark:restricted_area:category:2','reclamation_area'], // Reclamation Area
-//      ['MRR2','29','seamark:restricted_area:category:2','research'], // Research Area
-//      ['MRR2','30','seamark:restricted_area:category:2','stranding_danger_area'], // Stranding Danger Area
-//      ['MRR2','31','seamark:restricted_area:category:2','swimming_area'], // Swimming Area
-//      ['MRR2','32','seamark:restricted_area:category:2','swinging_area'], // Swinging Area
-//      ['MRR2','33','seamark:restricted_area:category:2','waiting_area'], // Waiting Area
-//      ['MRR2','34','seamark:restricted_area:category:2','water_skiing_area'], // Water Skiing Area
-//      ['MRR2','35','seamark:restricted_area:category:2','exclusive_economic_zone'], // Exclusive Economic Zone
-//      ['MRR2','36','seamark:restricted_area:category:2','extended_continental_shelf_area'], // Extended Continental Shelf Area
-//      ['MRR2','37','seamark:restricted_area:category:2','continental_shelf_area'], // Continental Shelf Area
-//      ['MRR2','38','seamark:restricted_area:category:2','contiguous_zone'], // Contiguous Zone
-//      ['MRR2','39','seamark:restricted_area:category:2','territorial_sea_area'], // Territorial Sea Area
-//      ['MRR2','40','seamark:restricted_area:category:2','internal_waters'], // Internal Waters
-//      ['MRR2','41','seamark:restricted_area:category:2','no_wake_area'], // No Wake Area
-//      ['MRR2','42','seamark:restricted_area:category:2','traffic_services_limit'], // Traffic Services Limit
-//      ['MRR2','45','seamark:restricted_area:category:2','environmentally_sensitive_sea_area'], // Environmentally Sensitive Sea Area
-//      ['MRR2','46','seamark:restricted_area:category:2','particularly_sensitive_sea_area'], // Particularly Sensitive Sea Area
-//      ['MRR2','47','seamark:restricted_area:category:2','military_area'], // Military Area
-//      ['MRR2','52','seamark:restricted_area:category:2','disengagement_area'], // Disengagement Area
-//      ['MRR2','999','seamark:restricted_area:category:2','other'], // Other
-
      // MRR3 - Maritime Area Restriction [3]
-     // ['MRR3','-999999',undefined,undefined], // No Information
-//      ['MRR3','1','seamark:restricted_area:category:3','unrestricted_area'], // Unrestricted Area
-//      ['MRR3','2','seamark:restricted_area:category:3','bird_sanctuary'], // Bird Sanctuary
-//      ['MRR3','3','seamark:restricted_area:category:3','conservation_and_management_zone'], // Conservation and Management Zone
-//      ['MRR3','4','seamark:restricted_area:category:3','ecological_reserve'], // Ecological Reserve
-//      ['MRR3','5','seamark:restricted_area:category:3','fish_sanctuary'], // Fish Sanctuary
-//      ['MRR3','6','seamark:restricted_area:category:3','game_preserve'], // Game Preserve
-//      ['MRR3','7','seamark:restricted_area:category:3','marine_nature_reserve'], // Marine Nature Reserve
-//      ['MRR3','8','seamark:restricted_area:category:3','nature_reserve'], // Nature Reserve
-//      ['MRR3','9','seamark:restricted_area:category:3','seal_sanctuary'], // Seal Sanctuary
-//      ['MRR3','10','seamark:restricted_area:category:3','fishing_ground'], // Fishing Ground
-//      ['MRR3','11','seamark:restricted_area:category:3','fishery_zone'], // Fishery Zone
-//      ['MRR3','12','seamark:restricted_area:category:3','foreign_fishing_rights_zone'], // Foreign Fishing Rights Zone
-//      ['MRR3','13','seamark:restricted_area:category:3','unilateral_fishing_zone'], // Unilateral Fishing Zone
-//      ['MRR3','14','seamark:restricted_area:category:3','international_council_for_the_seas_(ices)_fishery_zone'], // International Council for the Seas (ICES) Fishery Zone
-//      ['MRR3','15','seamark:restricted_area:category:3','compass_adjustment'], // Compass Adjustment
-//      ['MRR3','16','seamark:restricted_area:category:3','degaussing_range'], // Degaussing Range
-//      ['MRR3','17','seamark:restricted_area:category:3','dredging_area'], // Dredging Area
-//      ['MRR3','18','seamark:restricted_area:category:3','fairway'], // Fairway
-//      ['MRR3','19','seamark:restricted_area:category:3','historic_wreck_area'], // Historic Wreck Area
-//      ['MRR3','20','seamark:restricted_area:category:3','incineration_area'], // Incineration Area
-//      ['MRR3','21','seamark:restricted_area:category:3','joint_economic_development_zone'], // Joint Economic Development Zone
-//      ['MRR3','22','seamark:restricted_area:category:3','maritime_mass_grave'], // Maritime Mass Grave
-//      ['MRR3','23','seamark:restricted_area:category:3','maritime_pollution_(marpol)_reporting_area'], // Maritime Pollution (MARPOL) Reporting Area
-//      ['MRR3','24','seamark:restricted_area:category:3','mine_danger_area'], // Mine Danger Area
-//      ['MRR3','25','seamark:restricted_area:category:3','former_mine_danger_area'], // Former Mine Danger Area
-//      ['MRR3','26','seamark:restricted_area:category:3','natural_gas_field'], // Natural Gas Field
-//      ['MRR3','27','seamark:restricted_area:category:3','petroleum_field'], // Petroleum Field
-//      ['MRR3','28','seamark:restricted_area:category:3','reclamation_area'], // Reclamation Area
-//      ['MRR3','29','seamark:restricted_area:category:3','research'], // Research Area
-//      ['MRR3','30','seamark:restricted_area:category:3','stranding_danger_area'], // Stranding Danger Area
-//      ['MRR3','31','seamark:restricted_area:category:3','swimming_area'], // Swimming Area
-//      ['MRR3','32','seamark:restricted_area:category:3','swinging_area'], // Swinging Area
-//      ['MRR3','33','seamark:restricted_area:category:3','waiting_area'], // Waiting Area
-//      ['MRR3','34','seamark:restricted_area:category:3','water_skiing_area'], // Water Skiing Area
-//      ['MRR3','35','seamark:restricted_area:category:3','exclusive_economic_zone'], // Exclusive Economic Zone
-//      ['MRR3','36','seamark:restricted_area:category:3','extended_continental_shelf_area'], // Extended Continental Shelf Area
-//      ['MRR3','37','seamark:restricted_area:category:3','continental_shelf_area'], // Continental Shelf Area
-//      ['MRR3','38','seamark:restricted_area:category:3','contiguous_zone'], // Contiguous Zone
-//      ['MRR3','39','seamark:restricted_area:category:3','territorial_sea_area'], // Territorial Sea Area
-//      ['MRR3','40','seamark:restricted_area:category:3','internal_waters'], // Internal Waters
-//      ['MRR3','41','seamark:restricted_area:category:3','no_wake_area'], // No Wake Area
-//      ['MRR3','42','seamark:restricted_area:category:3','traffic_services_limit'], // Traffic Services Limit
-//      ['MRR3','45','seamark:restricted_area:category:3','environmentally_sensitive_sea_area'], // Environmentally Sensitive Sea Area
-//      ['MRR3','46','seamark:restricted_area:category:3','particularly_sensitive_sea_area'], // Particularly Sensitive Sea Area
-//      ['MRR3','47','seamark:restricted_area:category:3','military_area'], // Military Area
-//      ['MRR3','52','seamark:restricted_area:category:3','disengagement_area'], // Disengagement Area
-//      ['MRR3','999','seamark:restricted_area:category:3','other'], // Other
-
      // MRT - Maritime Radiobeacon Type - See BC034_MRT
 
      // MST - Missile Site Type
@@ -5042,62 +3595,7 @@ ggdm30.rules = {
      ['MST','999','missile','other'], // Other
 
      // MST2 - Missile Site Type [2]
-     // ['MST2','-999999',undefined,undefined], // No Information
-//      ['MST2','1','missile:2','anti-ballistic_missile_(abm)'], // Anti-ballistic Missile (ABM)
-//      ['MST2','2','missile:2','intercontinental_ballistic_missile_(icbm)'], // Intercontinental Ballistic Missile (ICBM)
-//      ['MST2','3','missile:2','intermediate-range_ballistic_missile_(irbm)'], // Intermediate-range Ballistic Missile (IRBM)
-//      ['MST2','4','missile:2','sa-1_guild'], // SA-1 Guild
-//      ['MST2','5','missile:2','sa-2_guideline'], // SA-2 Guideline
-//      ['MST2','6','missile:2','sa-3_goa'], // SA-3 Goa
-//      ['MST2','7','missile:2','sa-4_ganef'], // SA-4 Ganef
-//      ['MST2','8','missile:2','sa-5_gammon'], // SA-5 Gammon
-//      ['MST2','9','missile:2','sa-6_gainful'], // SA-6 Gainful
-//      ['MST2','10','missile:2','sa-7_grail'], // SA-7 Grail
-//      ['MST2','11','missile:2','sa-8_gecko'], // SA-8 Gecko
-//      ['MST2','12','missile:2','sa-9_gaskin'], // SA-9 Gaskin
-//      ['MST2','13','missile:2','medium-range_ballistic_missile_(mrbm)'], // Medium-range Ballistic Missile (MRBM)
-//      ['MST2','14','missile:2','surface-to-surface_missile_(ssm)'], // Surface-to-surface Missile (SSM)
-//      ['MST2','15','missile:2','surface-to-air_missile_(sam)'], // Surface-to-air Missile (SAM)
-//      ['MST2','17','missile:2','sa-10_grumble'], // SA-10 Grumble
-//      ['MST2','18','missile:2','sa-11_gadfly'], // SA-11 Gadfly
-//      ['MST2','19','missile:2','sa-12_gladiator/giant'], // SA-12 Gladiator/Giant
-//      ['MST2','20','missile:2','sa-13_gopher'], // SA-13 Gopher
-//      ['MST2','21','missile:2','sa-14_gremlin'], // SA-14 Gremlin
-//      ['MST2','22','missile:2','sa-15_gauntlet'], // SA-15 Gauntlet
-//      ['MST2','23','missile:2','sa-16_gimlet'], // SA-16 Gimlet
-//      ['MST2','24','missile:2','sa-17_grizzly'], // SA-17 Grizzly
-//      ['MST2','25','missile:2','sa-18_grouse'], // SA-18 Grouse
-//      ['MST2','26','missile:2','sa-19_grisom'], // SA-19 Grisom
-//      ['MST2','999','missile:2','other'], // Other
-
      // MST3 - Missile Site Type [3]
-     // ['MST3','-999999',undefined,undefined], // No Information
-//      ['MST3','1','missile:3','anti-ballistic_missile_(abm)'], // Anti-ballistic Missile (ABM)
-//      ['MST3','2','missile:3','intercontinental_ballistic_missile_(icbm)'], // Intercontinental Ballistic Missile (ICBM)
-//      ['MST3','3','missile:3','intermediate-range_ballistic_missile_(irbm)'], // Intermediate-range Ballistic Missile (IRBM)
-//      ['MST3','4','missile:3','sa-1_guild'], // SA-1 Guild
-//      ['MST3','5','missile:3','sa-2_guideline'], // SA-2 Guideline
-//      ['MST3','6','missile:3','sa-3_goa'], // SA-3 Goa
-//      ['MST3','7','missile:3','sa-4_ganef'], // SA-4 Ganef
-//      ['MST3','8','missile:3','sa-5_gammon'], // SA-5 Gammon
-//      ['MST3','9','missile:3','sa-6_gainful'], // SA-6 Gainful
-//      ['MST3','10','missile:3','sa-7_grail'], // SA-7 Grail
-//      ['MST3','11','missile:3','sa-8_gecko'], // SA-8 Gecko
-//      ['MST3','12','missile:3','sa-9_gaskin'], // SA-9 Gaskin
-//      ['MST3','13','missile:3','medium-range_ballistic_missile_(mrbm)'], // Medium-range Ballistic Missile (MRBM)
-//      ['MST3','14','missile:3','surface-to-surface_missile_(ssm)'], // Surface-to-surface Missile (SSM)
-//      ['MST3','15','missile:3','surface-to-air_missile_(sam)'], // Surface-to-air Missile (SAM)
-//      ['MST3','17','missile:3','sa-10_grumble'], // SA-10 Grumble
-//      ['MST3','18','missile:3','sa-11_gadfly'], // SA-11 Gadfly
-//      ['MST3','19','missile:3','sa-12_gladiator/giant'], // SA-12 Gladiator/Giant
-//      ['MST3','20','missile:3','sa-13_gopher'], // SA-13 Gopher
-//      ['MST3','21','missile:3','sa-14_gremlin'], // SA-14 Gremlin
-//      ['MST3','22','missile:3','sa-15_gauntlet'], // SA-15 Gauntlet
-//      ['MST3','23','missile:3','sa-16_gimlet'], // SA-16 Gimlet
-//      ['MST3','24','missile:3','sa-17_grizzly'], // SA-17 Grizzly
-//      ['MST3','25','missile:3','sa-18_grouse'], // SA-18 Grouse
-//      ['MST3','26','missile:3','sa-19_grisom'], // SA-19 Grisom
-//      ['MST3','999','missile:3','other'], // Other
 
      // MUB - Multi-unit Building
      // ['MUB','-999999',undefined,undefined], // No Information
@@ -5132,26 +3630,7 @@ ggdm30.rules = {
      ['NDX','999','neighbourhood:characteristic','other'], // Other
 
      // NDX2 - Neighbourhood-defining Characteristic [2]
-     // ['NDX2','-999999',undefined,undefined], // No Information
-//      ['NDX2','1','neighbourhood:characteristic:2','economic_activity'], // Economic Activity
-//      ['NDX2','2','neighbourhood:characteristic:2','ethnicity'], // Ethnicity
-//      ['NDX2','3','neighbourhood:characteristic:2','historical'], // Historical
-//      ['NDX2','4','neighbourhood:characteristic:2','linguistics'], // Linguistics
-//      ['NDX2','5','neighbourhood:characteristic:2','physical_structure'], // Physical Structure
-//      ['NDX2','6','neighbourhood:characteristic:2','religion'], // Religion
-//      ['NDX2','7','neighbourhood:characteristic:2','socioeconomics'], // Socioeconomics
-//      ['NDX2','999','neighbourhood:characteristic:2','other'], // Other
-
      // NDX3 - Neighbourhood-defining Characteristic [3]
-     // ['NDX3','-999999',undefined,undefined], // No Information
-//      ['NDX3','1','neighbourhood:characteristic:3','economic_activity'], // Economic Activity
-//      ['NDX3','2','neighbourhood:characteristic:3','ethnicity'], // Ethnicity
-//      ['NDX3','3','neighbourhood:characteristic:3','historical'], // Historical
-//      ['NDX3','4','neighbourhood:characteristic:3','linguistics'], // Linguistics
-//      ['NDX3','5','neighbourhood:characteristic:3','physical_structure'], // Physical Structure
-//      ['NDX3','6','neighbourhood:characteristic:3','religion'], // Religion
-//      ['NDX3','7','neighbourhood:characteristic:3','socioeconomics'], // Socioeconomics
-//      ['NDX3','999','neighbourhood:characteristic:3','other'], // Other
 
      // NFP - Naval Firing and/or Practice Type
      // ['NFP','-999999',undefined,undefined], // No Information
@@ -5160,16 +3639,7 @@ ggdm30.rules = {
      ['NFP','999','naval:practice_type','other'], // Other
 
      // NFP2 - Naval Firing and/or Practice Type [2]
-     // ['NFP2','-999999',undefined,undefined], // No Information
-//      ['NFP2','4','naval:practice_type:2','firing_danger_area'], // Firing Danger Area
-//      ['NFP2','6','naval:practice_type:2','mine_laying_practice_area'], // Mine Laying Practice Area
-//      ['NFP2','999','naval:practice_type:2','other'], // Other
-
      // NFP3 - Naval Firing and/or Practice Type [3]
-     // ['NFP3','-999999',undefined,undefined], // No Information
-//      ['NFP3','4','naval:practice_type:3','firing_danger_area'], // Firing Danger Area
-//      ['NFP3','6','naval:practice_type:3','mine_laying_practice_area'], // Mine Laying Practice Area
-//      ['NFP3','999','naval:practice_type:3','other'], // Other
 
      // NLT - Named Location Type
      // ['NLT','-999999',undefined,undefined], // No Information
@@ -5198,38 +3668,7 @@ ggdm30.rules = {
      ['NMC','999','seamark:navigation_mark:colour','other'], // Other
 
      // NMC2 - Navigation Mark Colour [2]
-     // ['NMC2','-999999',undefined,undefined], // No Information
-//      ['NMC2','1','seamark:navigation_mark:colour:2','white'], // White
-//      ['NMC2','2','seamark:navigation_mark:colour:2','black'], // Black
-//      ['NMC2','3','seamark:navigation_mark:colour:2','red'], // Red
-//      ['NMC2','4','seamark:navigation_mark:colour:2','green'], // Green
-//      ['NMC2','5','seamark:navigation_mark:colour:2','blue'], // Blue
-//      ['NMC2','6','seamark:navigation_mark:colour:2','yellow'], // Yellow
-//      ['NMC2','7','seamark:navigation_mark:colour:2','grey'], // Grey
-//      ['NMC2','8','seamark:navigation_mark:colour:2','brown'], // Brown
-//      ['NMC2','9','seamark:navigation_mark:colour:2','amber'], // Amber
-//      ['NMC2','10','seamark:navigation_mark:colour:2','violet'], // Violet
-//      ['NMC2','11','seamark:navigation_mark:colour:2','orange'], // Orange
-//      ['NMC2','12','seamark:navigation_mark:colour:2','magenta'], // Magenta
-//      ['NMC2','13','seamark:navigation_mark:colour:2','pink'], // Pink
-//      ['NMC2','999','seamark:navigation_mark:colour:2','other'], // Other
-
      // NMC3 - Navigation Mark Colour [3]
-     // ['NMC3','-999999',undefined,undefined], // No Information
-//      ['NMC3','1','seamark:navigation_mark:colour:3','white'], // White
-//      ['NMC3','2','seamark:navigation_mark:colour:3','black'], // Black
-//      ['NMC3','3','seamark:navigation_mark:colour:3','red'], // Red
-//      ['NMC3','4','seamark:navigation_mark:colour:3','green'], // Green
-//      ['NMC3','5','seamark:navigation_mark:colour:3','blue'], // Blue
-//      ['NMC3','6','seamark:navigation_mark:colour:3','yellow'], // Yellow
-//      ['NMC3','7','seamark:navigation_mark:colour:3','grey'], // Grey
-//      ['NMC3','8','seamark:navigation_mark:colour:3','brown'], // Brown
-//      ['NMC3','9','seamark:navigation_mark:colour:3','amber'], // Amber
-//      ['NMC3','10','seamark:navigation_mark:colour:3','violet'], // Violet
-//      ['NMC3','11','seamark:navigation_mark:colour:3','orange'], // Orange
-//      ['NMC3','12','seamark:navigation_mark:colour:3','magenta'], // Magenta
-//      ['NMC3','13','seamark:navigation_mark:colour:3','pink'], // Pink
-//      ['NMC3','999','seamark:navigation_mark:colour:3','other'], // Other
 
      // NOA - Naval Operations Type
      // ['NOA','-999999',undefined,undefined], // No Information
@@ -5238,16 +3677,7 @@ ggdm30.rules = {
      ['NOA','999','naval:operation_type','other'], // Other
 
      // NOA2 - Naval Operations Type [2]
-     // ['NOA2','-999999',undefined,undefined], // No Information
-//      ['NOA2','14','naval:operation_type:2','submarine_exercise_area'], // Submarine Exercise Area
-//      ['NOA2','27','naval:operation_type:2','foracs_v_limit'], // FORACS V Limit
-//      ['NOA2','999','naval:operation_type:2','other'], // Other
-
      // NOA3 - Naval Operations Type [3]
-     // ['NOA3','-999999',undefined,undefined], // No Information
-//      ['NOA3','14','naval:operation_type:3','submarine_exercise_area'], // Submarine Exercise Area
-//      ['NOA3','27','naval:operation_type:3','foracs_v_limit'], // FORACS V Limit
-//      ['NOA3','999','naval:operation_type:3','other'], // Other
 
      // NSC - Hydrographic NAVAID System
      // ['NSC','-999999',undefined,undefined], // No Information
@@ -5338,28 +3768,7 @@ ggdm30.rules = {
      ['ORS','999','seamark:precautionary_area:operating_restriction','other'], // Other
 
      // ORS2 - Operating Restriction [2]
-     // ['ORS2','-999999',undefined,undefined], // No Information
-//      ['ORS2','3','seamark:precautionary_area:operating_restriction:2','no_restriction'], // No Restriction
-//      ['ORS2','4','seamark:precautionary_area:operating_restriction:2','snow'], // Snow
-//      ['ORS2','5','seamark:precautionary_area:operating_restriction:2','icing'], // Icing
-//      ['ORS2','6','seamark:precautionary_area:operating_restriction:2','flooding'], // Flooding
-//      ['ORS2','7','seamark:precautionary_area:operating_restriction:2','special_restriction'], // Special Restriction
-//      ['ORS2','8','seamark:precautionary_area:operating_restriction:2','wind'], // Wind
-//      ['ORS2','9','seamark:precautionary_area:operating_restriction:2','reduced_visibility'], // Reduced Visibility
-//      ['ORS2','10','seamark:precautionary_area:operating_restriction:2','time'], // Time
-//      ['ORS2','999','seamark:precautionary_area:operating_restriction:2','other'], // Other
-
      // ORS3 - Operating Restriction [3]
-     // ['ORS3','-999999',undefined,undefined], // No Information
-//      ['ORS3','3','seamark:precautionary_area:operating_restriction:3','no_restriction'], // No Restriction
-//      ['ORS3','4','seamark:precautionary_area:operating_restriction:3','snow'], // Snow
-//      ['ORS3','5','seamark:precautionary_area:operating_restriction:3','icing'], // Icing
-//      ['ORS3','6','seamark:precautionary_area:operating_restriction:3','flooding'], // Flooding
-//      ['ORS3','7','seamark:precautionary_area:operating_restriction:3','special_restriction'], // Special Restriction
-//      ['ORS3','8','seamark:precautionary_area:operating_restriction:3','wind'], // Wind
-//      ['ORS3','9','seamark:precautionary_area:operating_restriction:3','reduced_visibility'], // Reduced Visibility
-//      ['ORS3','10','seamark:precautionary_area:operating_restriction:3','time'], // Time
-//      ['ORS3','999','seamark:precautionary_area:operating_restriction:3','other'], // Other
 
      // OWO - Waterbody Overhead Obstruction
      // ['OWO','-999999',undefined,undefined], // No Information
@@ -5413,24 +3822,7 @@ ggdm30.rules = {
      ['PLT','999','pipeline:type','other'], // Other
 
      // PLT2 - Pipeline Type [2]
-     // ['PLT2','-999999',undefined,undefined], // No Information
-//      ['PLT2','1','pipeline:type:2','transport_pipe'], // Transport Pipe
-//      ['PLT2','2','pipeline:type:2','outfall_pipe'], // Outfall Pipe
-//      ['PLT2','3','pipeline:type:2','intake_pipe'], // Intake Pipe
-//      ['PLT2','4','pipeline:type:2','sewer'], // Sewer
-//      ['PLT2','5','pipeline:type:2','pipeline_valve'], // Pipeline Valve
-//      ['PLT2','7','pipeline:type:2','bubbler_system'], // Bubbler System
-//      ['PLT2','999','pipeline:type:2','other'], // Other
-
      // PLT3 - Pipeline Type [3]
-     // ['PLT3','-999999',undefined,undefined], // No Information
-//      ['PLT3','1','pipeline:type:3','transport_pipe'], // Transport Pipe
-//      ['PLT3','2','pipeline:type:3','outfall_pipe'], // Outfall Pipe
-//      ['PLT3','3','pipeline:type:3','intake_pipe'], // Intake Pipe
-//      ['PLT3','4','pipeline:type:3','sewer'], // Sewer
-//      ['PLT3','5','pipeline:type:3','pipeline_valve'], // Pipeline Valve
-//      ['PLT3','7','pipeline:type:3','bubbler_system'], // Bubbler System
-//      ['PLT3','999','pipeline:type:3','other'], // Other
 
      // PMPR - Pump Present
      // ['PMPR','-999999',undefined,undefined], // No Information
@@ -5447,23 +3839,7 @@ ggdm30.rules = {
      ['POS','999','generator:source','other'], // Other
 
      // POS2 - Power Source [2]
-     // ['POS2','-999999',undefined,undefined], // No Information
-//      ['POS2','1','generator:source:2','geothermal'], // Geothermal
-//      ['POS2','2','generator:source:2','hydro-electric'], // Hydro-electric
-//      ['POS2','3','generator:source:2','nuclear'], // Nuclear
-//      ['POS2','4','generator:source:2','thermal'], // Thermal
-//      ['POS2','5','generator:source:2','tidal'], // Tidal
-//      ['POS2','999','generator:source:2','other'], // Other
-
      // POS3 - Power Source [3]
-     // ['POS3','-999999',undefined,undefined], // No Information
-//      ['POS3','1','generator:source:3','geothermal'], // Geothermal
-//      ['POS3','2','generator:source:3','hydro-electric'], // Hydro-electric
-//      ['POS3','3','generator:source:3','nuclear'], // Nuclear
-//      ['POS3','4','generator:source:3','thermal'], // Thermal
-//      ['POS3','5','generator:source:3','tidal'], // Tidal
-//      ['POS3','999','generator:source:3','other'], // Other
-
      // PPO - Physical Product - See ZI014_PPO
      // PPO2 - Physical Product [2] - See ZI014_PPO2
      // PPO3 - Physical Product [3] - See ZI014_PPO3
@@ -5474,8 +3850,6 @@ ggdm30.rules = {
      ['PRM','1001','permanent','yes'],
 
      // PRW - Raw Material - See ZI014_PRW
-     // PRW2 - Raw Material [2] - See ZI014_PRW
-     // PRW3 - Raw Material [3] - See ZI014_PRW
 
      // PTG - Portage Use
      // ['PTG','-999999',undefined,undefined], // No Information
@@ -5593,22 +3967,7 @@ ggdm30.rules = {
      ['RIN_ROI','999','ref:road:class','other'], // Other
 
      // RIN_ROI2 - Route Identification [2] <route designation type>
-     // ['RIN_ROI2','-999999',undefined,undefined], // No Information
-//      ['RIN_ROI2','1','ref:road:class:2','international'], // International
-//      ['RIN_ROI2','2','ref:road:class:2','national_motorway'], // National Motorway
-//      ['RIN_ROI2','3','ref:road:class:2','national'], // National
-//      ['RIN_ROI2','4','ref:road:class:2','secondary'], // Secondary
-//      ['RIN_ROI2','5','ref:road:class:2','local'], // Local
-//      ['RIN_ROI2','999','ref:road:class:2','other'], // Other
-
      // RIN_ROI3 - Route Identification [3] <route designation type>
-     // ['RIN_ROI3','-999999',undefined,undefined], // No Information
-//      ['RIN_ROI3','1','ref:road:class:3','international'], // International
-//      ['RIN_ROI3','2','ref:road:class:3','national_motorway'], // National Motorway
-//      ['RIN_ROI3','3','ref:road:class:3','national'], // National
-//      ['RIN_ROI3','4','ref:road:class:3','secondary'], // Secondary
-//      ['RIN_ROI3','5','ref:road:class:3','local'], // Local
-//      ['RIN_ROI3','999','ref:road:class:3','other'], // Other
 
      // RIP - Rig Present
      // ['RIP','-999999',undefined,undefined], // No Information
@@ -5683,32 +4042,7 @@ ggdm30.rules = {
      ['RRC','999','railway','Other'], // Other
 
      // RRC2 - Railway Use [2]
-     // ['RRC2','-999999',undefined,undefined], // No Information
-//      ['RRC2','2','railway:2','carline'], // Carline
-//      ['RRC2','6','railway:2','subway'], // Underground Railway
-//      ['RRC2','8','railway:2','logging'], // Logging
-//      ['RRC2','11','railway:2','rapid_transit'], // Rail Rapid Transit
-//      ['RRC2','13','railway:2','marine_railway'], // Marine Railway
-//      ['RRC2','14','railway:2','tram'], // Tramway
-//      ['RRC2','15','railway:2','funicular'], // Funicular
-//      ['RRC2','24','railway:2','museum'], // Museum
-//      ['RRC2','32','railway:2','automated_transit_system'], // Automated Transit System
-//      ['RRC2','33','railway:2','longhaul'], // Long-haul
-//      ['RRC2','999','railway:2','other'], // Other
-
      // RRC3 - Railway Use [3]
-     // ['RRC3','-999999',undefined,undefined], // No Information
-//      ['RRC3','2','railway:3','carline'], // Carline
-//      ['RRC3','6','railway:3','subway'], // Underground Railway
-//      ['RRC3','8','railway:3','logging'], // Logging
-//      ['RRC3','11','railway:3','rapid_transit'], // Rail Rapid Transit
-//      ['RRC3','13','railway:3','marine_railway'], // Marine Railway
-//      ['RRC3','14','railway:3','tram'], // Tramway
-//      ['RRC3','15','railway:3','funicular'], // Funicular
-//      ['RRC3','24','railway:3','museum'], // Museum
-//      ['RRC3','32','railway:3','automated_transit_system'], // Automated Transit System
-//      ['RRC3','33','railway:3','longhaul'], // Long-haul
-//      ['RRC3','999','railway:3','other'], // Other
 
      // RSA - Branch Railway Type
      // ['RSA','-999999',undefined,undefined], // No Information
@@ -5783,18 +4117,7 @@ ggdm30.rules = {
      ['SBT','999','substation','other'], // Other
 
      // SBT2 - Substation Type [2]
-     // ['SBT2','-999999',undefined,undefined], // No Information
-//      ['SBT2','1','sunstation:2','switched_substation'], // Switched Substation
-//      ['SBT2','2','sunstation:2','transformer_substation'], // Transformer Substation
-//      ['SBT2','3','sunstation:2','converter_substation'], // Converter Substation
-//      ['SBT2','999','sunstation:2','other'], // Other
-
      // SBT3 - Substation Type [3]
-     // ['SBT3','-999999',undefined,undefined], // No Information
-//      ['SBT3','1','sunstation:3','switched_substation'], // Switched Substation
-//      ['SBT3','2','sunstation:3','transformer_substation'], // Transformer Substation
-//      ['SBT3','3','sunstation:3','converter_substation'], // Converter Substation
-//      ['SBT3','999','sunstation:3','other'], // Other
 
      // SCOG - Sample Collector Organization
      // ['SCOG','-999999',undefined,undefined], // No Information
@@ -6054,32 +4377,7 @@ ggdm30.rules = {
      ['SSR','999','roof:shape','other'], // Other
 
      // SSR2 - Roof Shape [2]
-     // ['SSR2','-999999',undefined,undefined], // No Information
-//      ['SSR2','6','roof:shape:2','conical'], // Conical
-//      ['SSR2','7','roof:shape:2','pyramidal'], // Pyramidal
-//      ['SSR2','38','roof:shape:2','semi-cylindrical'], // Semi-cylindrical
-//      ['SSR2','40','roof:shape:2','domed'], // Domed
-//      ['SSR2','41','roof:shape:2','flat'], // Flat
-//      ['SSR2','42','roof:shape:2','pitched'], // Pitched
-//      ['SSR2','47','roof:shape:2','sawtoothed'], // Sawtoothed
-//      ['SSR2','50','roof:shape:2','with_clerestory'], // With Clerestory
-//      ['SSR2','55','roof:shape:2','flat_with_clerestory'], // Flat with Clerestory
-//      ['SSR2','64','roof:shape:2','pitched_with_clerestory'], // Pitched with Clerestory
-//      ['SSR2','999','roof:shape:2','other'], // Other
-
      // SSR3 - Roof Shape [3]
-     // ['SSR3','-999999',undefined,undefined], // No Information
-//      ['SSR3','6','roof:shape:3','conical'], // Conical
-//      ['SSR3','7','roof:shape:3','pyramidal'], // Pyramidal
-//      ['SSR3','38','roof:shape:3','semi-cylindrical'], // Semi-cylindrical
-//      ['SSR3','40','roof:shape:3','domed'], // Domed
-//      ['SSR3','41','roof:shape:3','flat'], // Flat
-//      ['SSR3','42','roof:shape:3','pitched'], // Pitched
-//      ['SSR3','47','roof:shape:3','sawtoothed'], // Sawtoothed
-//      ['SSR3','50','roof:shape:3','with_clerestory'], // With Clerestory
-//      ['SSR3','55','roof:shape:3','flat_with_clerestory'], // Flat with Clerestory
-//      ['SSR3','64','roof:shape:3','pitched_with_clerestory'], // Pitched with Clerestory
-//      ['SSR3','999','roof:shape:3','other'], // Other
 
      // STA - Maritime Station Type
      // ['STA','-999999',undefined,undefined], // No Information
@@ -6124,88 +4422,7 @@ ggdm30.rules = {
      ['STA','999','seamark:signal_station','other'], // Other
 
      // STA2 - Maritime Station Type [2]
-     // ['STA2','-999999',undefined,undefined], // No Information
-//      ['STA2','1','seamark:signal_station:2','coast_guard_station'], // Coast Guard Station
-//      ['STA2','2','seamark:signal_station:2','fireboat_station'], // Fireboat Station
-//      ['STA2','3','seamark:signal_station:2','water-police_station'], // Water-police Station
-//      ['STA2','4','seamark:signal_station:2','ice_signal_station'], // Ice Signal Station
-//      ['STA2','5','seamark:signal_station:2','rescue_station'], // Rescue Station
-//      ['STA2','6','seamark:signal_station:2','port_control_station'], // Port Control Station
-//      ['STA2','11','seamark:signal_station:2','pilot_station'], // Pilot Station
-//      ['STA2','13','seamark:signal_station:2','signal_station'], // Signal Station
-//      ['STA2','14','seamark:signal_station:2','signal_mast'], // Signal Mast
-//      ['STA2','15','seamark:signal_station:2','storm_signal_station'], // Storm Signal Station
-//      ['STA2','17','seamark:signal_station:2','tide_station'], // Tide Station
-//      ['STA2','18','seamark:signal_station:2','time_ball_station'], // Time Ball Station
-//      ['STA2','19','seamark:signal_station:2','time_signal_station'], // Time Signal Station
-//      ['STA2','20','seamark:signal_station:2','unmanned_oceanographic_station'], // Unmanned Oceanographic Station
-//      ['STA2','21','seamark:signal_station:2','weather_signal_station'], // Weather Signal Station
-//      ['STA2','22','seamark:signal_station:2','fog_signal'], // Fog Signal
-//      ['STA2','27','seamark:signal_station:2','tidal_stream_station'], // Tidal Stream Station
-//      ['STA2','28','seamark:signal_station:2','traffic_signal_station'], // Traffic Signal Station
-//      ['STA2','29','seamark:signal_station:2','bridge_signal_station'], // Bridge Signal Station
-//      ['STA2','30','seamark:signal_station:2','lock_signal_station'], // Lock Signal Station
-//      ['STA2','32','seamark:signal_station:2','international_port_signals_station'], // International Port Signals Station
-//      ['STA2','33','seamark:signal_station:2','military_practice_signal_station'], // Military Practice Signal Station
-//      ['STA2','35','seamark:signal_station:2','warning_signal_station'], // Warning Signal Station
-//      ['STA2','36','seamark:signal_station:2','radar_surveillance_station'], // Radar Surveillance Station
-//      ['STA2','37','seamark:signal_station:2','pilot_lookout_station'], // Pilot Lookout Station
-//      ['STA2','48','seamark:signal_station:2','semaphore_station'], // Semaphore Station
-//      ['STA2','49','seamark:signal_station:2','berthing_control_station'], // Berthing Control Station
-//      ['STA2','50','seamark:signal_station:2','cable_warning_station'], // Cable Warning Station
-//      ['STA2','51','seamark:signal_station:2','clock_station'], // Clock Station
-//      ['STA2','52','seamark:signal_station:2','danger_warning_station'], // Danger Warning Station
-//      ['STA2','53','seamark:signal_station:2','distress_warning_station'], // Distress Warning Station
-//      ['STA2','54','seamark:signal_station:2','diving_warning_station'], // Diving Warning Station
-//      ['STA2','55','seamark:signal_station:2','dock_control_station'], // Dock Control Station
-//      ['STA2','56','seamark:signal_station:2','dredging_operations_station'], // Dredging Operations Station
-//      ['STA2','57','seamark:signal_station:2','flood_barrage_control_station'], // Flood Barrage Control Station
-//      ['STA2','58','seamark:signal_station:2','maritime_obstruction_warning_station'], // Maritime Obstruction Warning Station
-//      ['STA2','59','seamark:signal_station:2','port_entry_and_departure_control_station'], // Port Entry and Departure Control Station
-//      ['STA2','60','seamark:signal_station:2','tide_scale_station'], // Tide Scale Station
-//      ['STA2','999','seamark:signal_station:2','other'], // Other
-
      // STA3 - Maritime Station Type [3]
-     // ['STA3','-999999',undefined,undefined], // No Information
-//      ['STA3','1','seamark:signal_station:3','coast_guard_station'], // Coast Guard Station
-//      ['STA3','2','seamark:signal_station:3','fireboat_station'], // Fireboat Station
-//      ['STA3','3','seamark:signal_station:3','water-police_station'], // Water-police Station
-//      ['STA3','4','seamark:signal_station:3','ice_signal_station'], // Ice Signal Station
-//      ['STA3','5','seamark:signal_station:3','rescue_station'], // Rescue Station
-//      ['STA3','6','seamark:signal_station:3','port_control_station'], // Port Control Station
-//      ['STA3','11','seamark:signal_station:3','pilot_station'], // Pilot Station
-//      ['STA3','13','seamark:signal_station:3','signal_station'], // Signal Station
-//      ['STA3','14','seamark:signal_station:3','signal_mast'], // Signal Mast
-//      ['STA3','15','seamark:signal_station:3','storm_signal_station'], // Storm Signal Station
-//      ['STA3','17','seamark:signal_station:3','tide_station'], // Tide Station
-//      ['STA3','18','seamark:signal_station:3','time_ball_station'], // Time Ball Station
-//      ['STA3','19','seamark:signal_station:3','time_signal_station'], // Time Signal Station
-//      ['STA3','20','seamark:signal_station:3','unmanned_oceanographic_station'], // Unmanned Oceanographic Station
-//      ['STA3','21','seamark:signal_station:3','weather_signal_station'], // Weather Signal Station
-//      ['STA3','22','seamark:signal_station:3','fog_signal'], // Fog Signal
-//      ['STA3','27','seamark:signal_station:3','tidal_stream_station'], // Tidal Stream Station
-//      ['STA3','28','seamark:signal_station:3','traffic_signal_station'], // Traffic Signal Station
-//      ['STA3','29','seamark:signal_station:3','bridge_signal_station'], // Bridge Signal Station
-//      ['STA3','30','seamark:signal_station:3','lock_signal_station'], // Lock Signal Station
-//      ['STA3','32','seamark:signal_station:3','international_port_signals_station'], // International Port Signals Station
-//      ['STA3','33','seamark:signal_station:3','military_practice_signal_station'], // Military Practice Signal Station
-//      ['STA3','35','seamark:signal_station:3','warning_signal_station'], // Warning Signal Station
-//      ['STA3','36','seamark:signal_station:3','radar_surveillance_station'], // Radar Surveillance Station
-//      ['STA3','37','seamark:signal_station:3','pilot_lookout_station'], // Pilot Lookout Station
-//      ['STA3','48','seamark:signal_station:3','semaphore_station'], // Semaphore Station
-//      ['STA3','49','seamark:signal_station:3','berthing_control_station'], // Berthing Control Station
-//      ['STA3','50','seamark:signal_station:3','cable_warning_station'], // Cable Warning Station
-//      ['STA3','51','seamark:signal_station:3','clock_station'], // Clock Station
-//      ['STA3','52','seamark:signal_station:3','danger_warning_station'], // Danger Warning Station
-//      ['STA3','53','seamark:signal_station:3','distress_warning_station'], // Distress Warning Station
-//      ['STA3','54','seamark:signal_station:3','diving_warning_station'], // Diving Warning Station
-//      ['STA3','55','seamark:signal_station:3','dock_control_station'], // Dock Control Station
-//      ['STA3','56','seamark:signal_station:3','dredging_operations_station'], // Dredging Operations Station
-//      ['STA3','57','seamark:signal_station:3','flood_barrage_control_station'], // Flood Barrage Control Station
-//      ['STA3','58','seamark:signal_station:3','maritime_obstruction_warning_station'], // Maritime Obstruction Warning Station
-//      ['STA3','59','seamark:signal_station:3','port_entry_and_departure_control_station'], // Port Entry and Departure Control Station
-//      ['STA3','60','seamark:signal_station:3','tide_scale_station'], // Tide Scale Station
-//      ['STA3','999','seamark:signal_station:3','other'], // Other
 
      // STL - Nomadic Seasonal Location
      // ['STL','-999999',undefined,undefined], // No Information
@@ -6216,20 +4433,7 @@ ggdm30.rules = {
      ['STL','999','seasonal_location','other'], // Other
 
      // STL2 - Nomadic Seasonal Location [2]
-     // ['STL2','-999999',undefined,undefined], // No Information
-//      ['STL2','1','seasonal_location:2','winter'], // Winter
-//      ['STL2','2','seasonal_location:2','summer'], // Summer
-//      ['STL2','3','seasonal_location:2','spring'], // Spring
-//      ['STL2','4','seasonal_location:2','autumn'], // Autumn
-//      ['STL2','999','seasonal_location:2','other'], // Other
-
      // STL3 - Nomadic Seasonal Location [3]
-     // ['STL3','-999999',undefined,undefined], // No Information
-//      ['STL3','1','seasonal_location:3','winter'], // Winter
-//      ['STL3','2','seasonal_location:3','summer'], // Summer
-//      ['STL3','3','seasonal_location:3','spring'], // Spring
-//      ['STL3','4','seasonal_location:3','autumn'], // Autumn
-//      ['STL3','999','seasonal_location:3','other'], // Other
 
      // STP - Soil Type
      // ['STP','-999999',undefined,undefined], // No Information
@@ -6363,50 +4567,7 @@ ggdm30.rules = {
      ['TRS','999','transport:type','other'], // Other
 
      // TRS2 - Transportation System Type [2]
-     // ['TRS2','-999999',undefined,undefined], // No Information
-//      ['TRS2','1','transport:type:2','air'],
-//      ['TRS2','2','transport:type:2','aqueduct'], // Aqueduct
-//      ['TRS2','3','transport:type:2','automotive'], // Automotive
-//      ['TRS2','4','transport:type:2','bus'], // Bus
-//      ['TRS2','5','transport:type:2','canal'], // Canal
-//      ['TRS2','6','transport:type:2','caravan_route'], // Caravan Route
-//      ['TRS2','7','transport:type:2','maritime'],
-//      ['TRS2','8',undefined,undefined], // No Transportation System
-//      ['TRS2','9','transport:type:2','pedestrian'], // Pedestrian
-//      ['TRS2','10','transport:type:2','pipeline'], // Pipeline
-//      ['TRS2','11','transport:type:2','portage'], // Portage
-//      ['TRS2','12','transport:type:2','railway'], // Railway
-//      ['TRS2','13','transport:type:2','road'], // Road
-//      ['TRS2','16','transport:type:2','underground_railway'], // Underground Railway
-//      ['TRS2','17','transport:type:2','inland_waterway'], // Inland Waterway
-//      ['TRS2','18','transport:type:2','pack-road'], // Pack-road
-//      ['TRS2','20','transport:type:2','taxiway'], // Taxiway
-//      ['TRS2','23','transport:type:2','drove'], // Drove
-//      ['TRS2','25','transport:type:2','runway'], // Runway
-//      ['TRS2','999','transport:type:2','other'], // Other
-
      // TRS3 - Transportation System Type [3]
-     // ['TRS3','-999999',undefined,undefined], // No Information
-//      ['TRS3','1','transport:type:3','air'],
-//      ['TRS3','2','transport:type:3','aqueduct'], // Aqueduct
-//      ['TRS3','3','transport:type:3','automotive'], // Automotive
-//      ['TRS3','4','transport:type:3','bus'], // Bus
-//      ['TRS3','5','transport:type:3','canal'], // Canal
-//      ['TRS3','6','transport:type:3','caravan_route'], // Caravan Route
-//      ['TRS3','7','transport:type:3','maritime'],
-//      ['TRS3','8',undefined,undefined], // No Transportation System
-//      ['TRS3','9','transport:type:3','pedestrian'], // Pedestrian
-//      ['TRS3','10','transport:type:3','pipeline'], // Pipeline
-//      ['TRS3','11','transport:type:3','portage'], // Portage
-//      ['TRS3','12','transport:type:3','railway'], // Railway
-//      ['TRS3','13','transport:type:3','road'], // Road
-//      ['TRS3','16','transport:type:3','underground_railway'], // Underground Railway
-//      ['TRS3','17','transport:type:3','inland_waterway'], // Inland Waterway
-//      ['TRS3','18','transport:type:3','pack-road'], // Pack-road
-//      ['TRS3','20','transport:type:3','taxiway'], // Taxiway
-//      ['TRS3','23','transport:type:3','drove'], // Drove
-//      ['TRS3','25','transport:type:3','runway'], // Runway
-//      ['TRS3','999','transport:type:3','other'], // Other
 
      // TSCC - Tree Spacing <interval closure>
      ['TSCC','2','tree:spacing:closure','open_interval'], // Open Interval
@@ -6437,40 +4598,7 @@ ggdm30.rules = {
      ['TSM','999','desert_surface','other'], // Other
 
      // TSM2 - Terrain Surface Material [2]
-     // ['TSM2','-999999',undefined,undefined], // No Information
-//      ['TSM2','1','desert_surface:2','asphalt'], // Asphalt
-//      ['TSM2','2','desert_surface:2','bedrock'], // Bedrock
-//      ['TSM2','3','desert_surface:2','boulders'], // Boulders
-//      ['TSM2','4','desert_surface:2','concrete'], // Concrete
-//      ['TSM2','5','desert_surface:2','evaporite'], // Evaporite
-//      ['TSM2','6','desert_surface:2','frozen_water'], // Frozen Water
-//      ['TSM2','7','desert_surface:2','gravel'], // Gravel
-//      ['TSM2','8','desert_surface:2','lava_flow'], // Lava Flow
-//      ['TSM2','9','desert_surface:2','loess'], // Loess
-//      ['TSM2','10','desert_surface:2','mud'], // Mud
-//      ['TSM2','11','desert_surface:2','paved'], // Paved
-//      ['TSM2','12','desert_surface:2','rocks'], // Rocks
-//      ['TSM2','13','desert_surface:2','sand'], // Sand
-//      ['TSM2','14','desert_surface:2','soil'], // Soil
-//      ['TSM2','999','desert_surface:2','other'], // Other
-
      // TSM3 - Terrain Surface Material [3]
-     // ['TSM3','-999999',undefined,undefined], // No Information
-//      ['TSM3','1','desert_surface:3','asphalt'], // Asphalt
-//      ['TSM3','2','desert_surface:3','bedrock'], // Bedrock
-//      ['TSM3','3','desert_surface:3','boulders'], // Boulders
-//      ['TSM3','4','desert_surface:3','concrete'], // Concrete
-//      ['TSM3','5','desert_surface:3','evaporite'], // Evaporite
-//      ['TSM3','6','desert_surface:3','frozen_water'], // Frozen Water
-//      ['TSM3','7','desert_surface:3','gravel'], // Gravel
-//      ['TSM3','8','desert_surface:3','lava_flow'], // Lava Flow
-//      ['TSM3','9','desert_surface:3','loess'], // Loess
-//      ['TSM3','10','desert_surface:3','mud'], // Mud
-//      ['TSM3','11','desert_surface:3','paved'], // Paved
-//      ['TSM3','12','desert_surface:3','rocks'], // Rocks
-//      ['TSM3','13','desert_surface:3','sand'], // Sand
-//      ['TSM3','14','desert_surface:3','soil'], // Soil
-//      ['TSM3','999','desert_surface:3','other'], // Other
 
      // TSP - Maritime Traffic Separation Scheme Component
      // ['TSP','-999999',undefined,undefined], // No Information
@@ -6512,52 +4640,7 @@ ggdm30.rules = {
      ['TSSM','999','well:subsurface','other'], // Other
 
      // TSSM2 - Terrain Subsurface Material [2]
-     // ['TSSM2','-999999',undefined,undefined], // No Information
-//      ['TSSM2','1','well:subsurface:2','basalt'], // Basalt
-//      ['TSSM2','2','well:subsurface:2','boulders'], // Boulders
-//      ['TSSM2','3','well:subsurface:2','clay'], // Clay
-//      ['TSSM2','4','well:subsurface:2','conglomerate'], // Conglomerate
-//      ['TSSM2','5','well:subsurface:2','dolomite'], // Dolomite
-//      ['TSSM2','6','well:subsurface:2','granite'], // Granite
-//      ['TSSM2','7','well:subsurface:2','gravel'], // Gravel
-//      ['TSSM2','8','well:subsurface:2','igneous_rock'], // Igneous Rock
-//      ['TSSM2','9','well:subsurface:2','karst'], // Karst
-//      ['TSSM2','10','well:subsurface:2','limestone'], // Limestone
-//      ['TSSM2','11','well:subsurface:2','marl'], // Marl
-//      ['TSSM2','12','well:subsurface:2','metamorphic_rock'], // Metamorphic Rock
-//      ['TSSM2','13','well:subsurface:2','mud'], // Mud
-//      ['TSSM2','14','well:subsurface:2','sand'], // Sand
-//      ['TSSM2','15','well:subsurface:2','schist'], // Schist
-//      ['TSSM2','16','well:subsurface:2','unconsolidated'], // Unconsolidated
-//      ['TSSM2','17','well:subsurface:2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['TSSM2','18','well:subsurface:2','volcanic_rock'], // Volcanic Rock
-//      ['TSSM2','19','well:subsurface:2','sandstone'], // Sandstone
-//      ['TSSM2','20','well:subsurface:2','shale'], // Shale
-//      ['TSSM2','999','well:subsurface:2','other'], // Other
-
      // TSSM3 - Terrain Subsurface Material [3]
-     // ['TSSM3','-999999',undefined,undefined], // No Information
-//      ['TSSM3','1','well:subsurface:3','basalt'], // Basalt
-//      ['TSSM3','2','well:subsurface:3','boulders'], // Boulders
-//      ['TSSM3','3','well:subsurface:3','clay'], // Clay
-//      ['TSSM3','4','well:subsurface:3','conglomerate'], // Conglomerate
-//      ['TSSM3','5','well:subsurface:3','dolomite'], // Dolomite
-//      ['TSSM3','6','well:subsurface:3','granite'], // Granite
-//      ['TSSM3','7','well:subsurface:3','gravel'], // Gravel
-//      ['TSSM3','8','well:subsurface:3','igneous_rock'], // Igneous Rock
-//      ['TSSM3','9','well:subsurface:3','karst'], // Karst
-//      ['TSSM3','10','well:subsurface:3','limestone'], // Limestone
-//      ['TSSM3','11','well:subsurface:3','marl'], // Marl
-//      ['TSSM3','12','well:subsurface:3','metamorphic_rock'], // Metamorphic Rock
-//      ['TSSM3','13','well:subsurface:3','mud'], // Mud
-//      ['TSSM3','14','well:subsurface:3','sand'], // Sand
-//      ['TSSM3','15','well:subsurface:3','schist'], // Schist
-//      ['TSSM3','16','well:subsurface:3','unconsolidated'], // Unconsolidated
-//      ['TSSM3','17','well:subsurface:3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['TSSM3','18','well:subsurface:3','volcanic_rock'], // Volcanic Rock
-//      ['TSSM3','19','well:subsurface:3','sandstone'], // Sandstone
-//      ['TSSM3','20','well:subsurface:3','shale'], // Shale
-//      ['TSSM3','999','well:subsurface:3','other'], // Other
 
      // TST - Cable Suspended Shape
      // ['TST','-999999',undefined,undefined], // No Information
@@ -6588,28 +4671,7 @@ ggdm30.rules = {
      ['TTC','999','tower:type','other'], // Other
 
      // TTC2 - Tower Type [2]
-     // ['TTC2','-999999',undefined,undefined], // No Information
-//      ['TTC2','2','tower:type:2','observation'], // Observation Tower
-//      ['TTC2','10','tower:type:2','lookout'], // Lookout Tower
-//      ['TTC2','12','tower:type:2','fire'], // Fire Tower
-//      ['TTC2','20','tower:type:2','communication'], // Telecommunication Tower
-//      ['TTC2','21','tower:type:2','guard'], // Guard Tower
-//      ['TTC2','22','tower:type:2','industrial'], // Industrial Tower
-//      ['TTC2','23','tower:type:2','drop'], // Drop Tower
-//      ['TTC2','24','tower:type:2','solar_power'], // Solar Power Tower
-//      ['TTC2','999','tower:type:2','other'], // Other
-
      // TTC3 - Tower Type [3]
-     // ['TTC3','-999999',undefined,undefined], // No Information
-//      ['TTC3','2','tower:type:3','observation'], // Observation Tower
-//      ['TTC3','10','tower:type:3','lookout'], // Lookout Tower
-//      ['TTC3','12','tower:type:3','fire_tower'], // Fire Tower
-//      ['TTC3','20','tower:type:3','telecommunication'], // Telecommunication Tower
-//      ['TTC3','21','tower:type:3','guard'], // Guard Tower
-//      ['TTC3','22','tower:type:3','industrial'], // Industrial Tower
-//      ['TTC3','23','tower:type:3','drop'], // Drop Tower
-//      ['TTC3','24','tower:type:3','solar_power'], // Solar Power Tower
-//      ['TTC3','999','tower:type:3','other'], // Other
 
      // TTY - Tomb Type
      // ['TTY','-999999',undefined,undefined], // No Information
@@ -6712,38 +4774,7 @@ ggdm30.rules = {
      ['UTY','999','manhole','other'], // Other
 
      // UTY2 - Accessible Utility Type [2]
-     // ['UTY2','-999999',undefined,undefined], // No Information
-//      ['UTY2','1','manhole:2','cable_television'], // Cable Television
-//      ['UTY2','2','manhole:2','cooling_fluid_circulation'], // Cooling Fluid Circulation
-//      ['UTY2','3','manhole:2','digital_fibre-optic_system'], // Digital Fibre-optic System
-//      ['UTY2','4','manhole:2','electric_power_distribution'], // Electric Power Distribution
-//      ['UTY2','5','manhole:2','heating_fluid_circulation'], // Heating Fluid Circulation
-//      ['UTY2','6','manhole:2','natural_gas_distribution'], // Natural Gas Distribution
-//      ['UTY2','7','manhole:2','sewage:2'], // Sewage
-//      ['UTY2','8','manhole:2','storm_sewer'], // Storm Sewer
-//      ['UTY2','9','manhole:2','street_light'], // Street Light
-//      ['UTY2','10','manhole:2','telegraph'], // Telegraph
-//      ['UTY2','11','manhole:2','telephone:2'], // Telephone
-//      ['UTY2','12','manhole:2','traffic_light'], // Traffic Light
-//      ['UTY2','13','manhole:2','water_distribution'], // Water Distribution
-//      ['UTY2','999','manhole:2','other'], // Other
-
      // UTY3 - Accessible Utility Type [3]
-     // ['UTY3','-999999',undefined,undefined], // No Information
-//      ['UTY3','1','manhole:3','cable_television'], // Cable Television
-//      ['UTY3','2','manhole:3','cooling_fluid_circulation'], // Cooling Fluid Circulation
-//      ['UTY3','3','manhole:3','digital_fibre-optic_system'], // Digital Fibre-optic System
-//      ['UTY3','4','manhole:3','electric_power_distribution'], // Electric Power Distribution
-//      ['UTY3','5','manhole:3','heating_fluid_circulation'], // Heating Fluid Circulation
-//      ['UTY3','6','manhole:3','natural_gas_distribution'], // Natural Gas Distribution
-//      ['UTY3','7','manhole:3','sewage'], // Sewage
-//      ['UTY3','8','manhole:3','storm_sewer'], // Storm Sewer
-//      ['UTY3','9','manhole:3','street_light'], // Street Light
-//      ['UTY3','10','manhole:3','telegraph'], // Telegraph
-//      ['UTY3','11','manhole:3','telephone'], // Telephone
-//      ['UTY3','12','manhole:3','traffic_light'], // Traffic Light
-//      ['UTY3','13','manhole:3','water_distribution'], // Water Distribution
-//      ['UTY3','999','manhole:3','other'], // Other
 
      // VAVC - Magnetic Variation Anomaly <interval closure>
      ['VAVC','2','magnetic_variation:closure','open_interval'], // Open Interval
@@ -6772,36 +4803,7 @@ ggdm30.rules = {
      ['VCA','999','void_collection:reason','other'], // Other
 
      // VCA2 - Void Collection Reason [2]
-     // ['VCA2','-999999',undefined,undefined], // No Information
-//      ['VCA2','1','void_collection:reason:2','not_requested'], // Not Requested
-//      ['VCA2','2','void_collection:reason:2','inaccessible'], // Inaccessible
-//      ['VCA2','3','void_collection:reason:2','no_available_imagery'], // No Available Imagery
-//      ['VCA2','6','void_collection:reason:2','no_available_map_source'], // No Available Map Source
-//      ['VCA2','7','void_collection:reason:2','no_suitable_imagery'], // No Suitable Imagery
-//      ['VCA2','8','void_collection:reason:2','not_required'], // Not Required
-//      ['VCA2','9','void_collection:reason:2','cloud_cover'], // Cloud Cover
-//      ['VCA2','10','void_collection:reason:2','snow_cover'], // Snow Cover
-//      ['VCA2','11','void_collection:reason:2','dark_shade'], // Dark Shade
-//      ['VCA2','12','void_collection:reason:2','vegetation_cover'], // Vegetation Cover
-//      ['VCA2','13','void_collection:reason:2','flooded'], // Flooded
-//      ['VCA2','16','void_collection:reason:2','no_available_survey'], // No Available Survey
-//      ['VCA2','999','void_collection:reason:2','other'], // Other
-
      // VCA3 - Void Collection Reason [3]
-     // ['VCA3','-999999',undefined,undefined], // No Information
-//      ['VCA3','1','void_collection:reason:3','not_requested'], // Not Requested
-//      ['VCA3','2','void_collection:reason:3','inaccessible'], // Inaccessible
-//      ['VCA3','3','void_collection:reason:3','no_available_imagery'], // No Available Imagery
-//      ['VCA3','6','void_collection:reason:3','no_available_map_source'], // No Available Map Source
-//      ['VCA3','7','void_collection:reason:3','no_suitable_imagery'], // No Suitable Imagery
-//      ['VCA3','8','void_collection:reason:3','not_required'], // Not Required
-//      ['VCA3','9','void_collection:reason:3','cloud_cover'], // Cloud Cover
-//      ['VCA3','10','void_collection:reason:3','snow_cover'], // Snow Cover
-//      ['VCA3','11','void_collection:reason:3','dark_shade'], // Dark Shade
-//      ['VCA3','12','void_collection:reason:3','vegetation_cover'], // Vegetation Cover
-//      ['VCA3','13','void_collection:reason:3','flooded'], // Flooded
-//      ['VCA3','16','void_collection:reason:3','no_available_survey'], // No Available Survey
-//      ['VCA3','999','void_collection:reason:3','other'], // Other
 
      // VCM - Vertical Construction Material
      // ['VCM','-999999',undefined,undefined], // No Information
@@ -6826,48 +4828,7 @@ ggdm30.rules = {
      ['VCM','999','material:vertical','other'], // Other
 
      // VCM2 - Vertical Construction Material [2]
-     // ['VCM2','-999999',undefined,undefined], // No Information
-//      ['VCM2','1','material:vertical:2','adobe_brick'], // Adobe Brick
-//      ['VCM2','2','material:vertical:2','aluminium'], // Aluminium
-//      ['VCM2','3','material:vertical:2','brick'], // Brick
-//      ['VCM2','4','material:vertical:2','concrete'], // Concrete
-//      ['VCM2','5','material:vertical:2','fibreglass'], // Fibreglass
-//      ['VCM2','6','material:vertical:2','glass'], // Glass
-//      ['VCM2','7','material:vertical:2','iron'], // Iron
-//      ['VCM2','8','material:vertical:2','masonry'], // Masonry
-//      ['VCM2','9','material:vertical:2','metal'], // Metal
-//      ['VCM2','10','material:vertical:2','mud-based_construction'], // Mud-based Construction
-//      ['VCM2','11','material:vertical:2','plant_material'], // Plant Material
-//      ['VCM2','12','material:vertical:2','prestressed_concrete'], // Prestressed Concrete
-//      ['VCM2','13','material:vertical:2','reinforced_concrete'], // Reinforced Concrete
-//      ['VCM2','14','material:vertical:2','sod'], // Sod
-//      ['VCM2','15','material:vertical:2','steel'], // Steel
-//      ['VCM2','16','material:vertical:2','stone'], // Stone
-//      ['VCM2','17','material:vertical:2','treated_timber'], // Treated Timber
-//      ['VCM2','18','material:vertical:2','wood'], // Wood
-//      ['VCM2','999','material:vertical:2','other'], // Other
-
      // VCM3 - Vertical Construction Material [3]
-     // ['VCM3','-999999',undefined,undefined], // No Information
-//      ['VCM3','1','material:vertical:3','adobe_brick'], // Adobe Brick
-//      ['VCM3','2','material:vertical:3','aluminium'], // Aluminium
-//      ['VCM3','3','material:vertical:3','brick'], // Brick
-//      ['VCM3','4','material:vertical:3','concrete'], // Concrete
-//      ['VCM3','5','material:vertical:3','fibreglass'], // Fibreglass
-//      ['VCM3','6','material:vertical:3','glass'], // Glass
-//      ['VCM3','7','material:vertical:3','iron'], // Iron
-//      ['VCM3','8','material:vertical:3','masonry'], // Masonry
-//      ['VCM3','9','material:vertical:3','metal'], // Metal
-//      ['VCM3','10','material:vertical:3','mud-based_construction'], // Mud-based Construction
-//      ['VCM3','11','material:vertical:3','plant_material'], // Plant Material
-//      ['VCM3','12','material:vertical:3','prestressed_concrete'], // Prestressed Concrete
-//      ['VCM3','13','material:vertical:3','reinforced_concrete'], // Reinforced Concrete
-//      ['VCM3','14','material:vertical:3','sod'], // Sod
-//      ['VCM3','15','material:vertical:3','steel'], // Steel
-//      ['VCM3','16','material:vertical:3','stone'], // Stone
-//      ['VCM3','17','material:vertical:3','treated_timber'], // Treated Timber
-//      ['VCM3','18','material:vertical:3','wood'], // Wood
-//      ['VCM3','999','material:vertical:3','other'], // Other
 
      // VCS_VCD - Vertical Clearance, Safe <reference level>
      // ['VCS_VCD','-999999',undefined,undefined], // No Information
@@ -6888,18 +4849,7 @@ ggdm30.rules = {
      ['VCT','999','void_collection:type','other'], // Other
 
      // VCT2 - Void Collection Type [2]
-     // ['VCT2','-999999',undefined,undefined], // No Information
-//      ['VCT2','1','void_collection:type:2','hypsography'], // Hypsography
-//      ['VCT2','3','void_collection:type:2','bathymetry'], // Bathymetry
-//      ['VCT2','4','void_collection:type:2','waterbody_bottom_composition'], // Waterbody Bottom Composition
-//      ['VCT2','999','void_collection:type:2','other'], // Other
-
      // VCT3 - Void Collection Type [3]
-     // ['VCT3','-999999',undefined,undefined], // No Information
-//      ['VCT3','1','void_collection:type:3','hypsography'], // Hypsography
-//      ['VCT3','3','void_collection:type:3','bathymetry'], // Bathymetry
-//      ['VCT3','4','void_collection:type:3','waterbody_bottom_composition'], // Waterbody Bottom Composition
-//      ['VCT3','999','void_collection:type:3','other'], // Other
 
      // VDT - Vertical Datum
      // ['VDT','-999999',undefined,undefined], // No Information
@@ -6956,28 +4906,7 @@ ggdm30.rules = {
      ['VIS','999','light_visibility','other'], // Other
 
      // VIS2 - Light Visibility [2]
-     // ['VIS2','-999999',undefined,undefined], // No Information
-//      ['VIS2','1','light_visibility:2','high_intensity'], // High Intensity
-//      ['VIS2','2','light_visibility:2','low_intensity'], // Low Intensity
-//      ['VIS2','3','light_visibility:2','faint'], // Faint
-//      ['VIS2','4','light_visibility:2','intensified'], // Intensified
-//      ['VIS2','5','light_visibility:2','unintensified'], // Unintensified
-//      ['VIS2','6','light_visibility:2','visibility_deliberately_restricted'], // Visibility Deliberately Restricted
-//      ['VIS2','7','light_visibility:2','obscured'], // Obscured
-//      ['VIS2','8','light_visibility:2','partially_obscured'], // Partially Obscured
-//      ['VIS2','999','light_visibility:2','other'], // Other
-
      // VIS3 - Light Visibility [3]
-     // ['VIS3','-999999',undefined,undefined], // No Information
-//      ['VIS3','1','light_visibility:3','high_intensity'], // High Intensity
-//      ['VIS3','2','light_visibility:3','low_intensity'], // Low Intensity
-//      ['VIS3','3','light_visibility:3','faint'], // Faint
-//      ['VIS3','4','light_visibility:3','intensified'], // Intensified
-//      ['VIS3','5','light_visibility:3','unintensified'], // Unintensified
-//      ['VIS3','6','light_visibility:3','visibility_deliberately_restricted'], // Visibility Deliberately Restricted
-//      ['VIS3','7','light_visibility:3','obscured'], // Obscured
-//      ['VIS3','8','light_visibility:3','partially_obscured'], // Partially Obscured
-//      ['VIS3','999','light_visibility:3','other'], // Other
 
      // VOA - Volcanic Activity
      // ['VOA','-999999',undefined,undefined], // No Information
@@ -7003,38 +4932,7 @@ ggdm30.rules = {
      ['VSP','999','vegetation:type','other'], // Other
 
      // VSP2 - Vegetation Species [2]
-     // ['VSP2','-999999',undefined,undefined], // No Information
-//      ['VSP2','8','vegetation:type:2','cypress'], // Cypress
-//      ['VSP2','17','vegetation:type:2','kelp'], // Kelp
-//      ['VSP2','19','vegetation:type:2','mangrove'], // Mangrove
-//      ['VSP2','22','vegetation:type:2','nipa'], // Nipa
-//      ['VSP2','25','vegetation:type:2','palm'], // Palm
-//      ['VSP2','28','vegetation:type:2','posidonia'], // Posidonia
-//      ['VSP2','29','vegetation:type:2','reed'], // Reed
-//      ['VSP2','30','vegetation:type:2','sargassum'], // Sargassum
-//      ['VSP2','31','vegetation:type:2','sea-tangle'], // Sea-tangle
-//      ['VSP2','34','vegetation:type:2','bamboo'], // Bamboo
-//      ['VSP2','35','vegetation:type:2','water_hyacinth'], // Water Hyacinth
-//      ['VSP2','36','vegetation:type:2','algae'], // Algae
-//      ['VSP2','64','vegetation:type:2','swamp_cypress'], // Swamp Cypress
-//      ['VSP2','999','vegetation:type:2','other'], // Other
-
      // VSP3 - Vegetation Species [3]
-     // ['VSP3','-999999',undefined,undefined], // No Information
-//      ['VSP3','8','vegetation:type:3','cypress'], // Cypress
-//      ['VSP3','17','vegetation:type:3','kelp'], // Kelp
-//      ['VSP3','19','vegetation:type:3','mangrove'], // Mangrove
-//      ['VSP3','22','vegetation:type:3','nipa'], // Nipa
-//      ['VSP3','25','vegetation:type:3','palm'], // Palm
-//      ['VSP3','28','vegetation:type:3','posidonia'], // Posidonia
-//      ['VSP3','29','vegetation:type:3','reed'], // Reed
-//      ['VSP3','30','vegetation:type:3','sargassum'], // Sargassum
-//      ['VSP3','31','vegetation:type:3','sea-tangle'], // Sea-tangle
-//      ['VSP3','34','vegetation:type:3','bamboo'], // Bamboo
-//      ['VSP3','35','vegetation:type:3','water_hyacinth'], // Water Hyacinth
-//      ['VSP3','36','vegetation:type:3','algae'], // Algae
-//      ['VSP3','64','vegetation:type:3','swamp_cypress'], // Swamp Cypress
-//      ['VSP3','999','vegetation:type:3','other'], // Other
 
      // WCC - Watercourse Channel Type
      // ['WCC','-999999',undefined,undefined], // No Information
@@ -7083,32 +4981,7 @@ ggdm30.rules = {
      ['WEQ','999','well:equipment','other'], // Other
 
      // WEQ2 - Well Equipment [2]
-     // ['WEQ2','-999999',undefined,undefined], // No Information
-//      ['WEQ2','1','well:equipment:2','wellhead'], // Wellhead
-//      ['WEQ2','2','well:equipment:2','christmas_tree'], // Christmas Tree
-//      ['WEQ2','3','well:equipment:2','manifold'], // Manifold
-//      ['WEQ2','4','well:equipment:2','protective_structure'], // Protective Structure
-//      ['WEQ2','5','well:equipment:2','pump'], // Pump
-//      ['WEQ2','6','well:equipment:2','rod_pump'], // Rod Pump
-//      ['WEQ2','7','well:equipment:2','separator'], // Separator
-//      ['WEQ2','8','well:equipment:2','stock_tank'], // Stock Tank
-//      ['WEQ2','9','well:equipment:2','treater'], // Treater
-//      ['WEQ2','10','well:equipment:2','capped'], // Capped
-//      ['WEQ2','999','well:equipment:2','other'], // Other
-
      // WEQ3 - Well Equipment [3]
-     // ['WEQ3','-999999',undefined,undefined], // No Information
-//      ['WEQ3','1','well:equipment:3','wellhead'], // Wellhead
-//      ['WEQ3','2','well:equipment:3','christmas_tree'], // Christmas Tree
-//      ['WEQ3','3','well:equipment:3','manifold'], // Manifold
-//      ['WEQ3','4','well:equipment:3','protective_structure'], // Protective Structure
-//      ['WEQ3','5','well:equipment:3','pump'], // Pump
-//      ['WEQ3','6','well:equipment:3','rod_pump'], // Rod Pump
-//      ['WEQ3','7','well:equipment:3','separator'], // Separator
-//      ['WEQ3','8','well:equipment:3','stock_tank'], // Stock Tank
-//      ['WEQ3','9','well:equipment:3','treater'], // Treater
-//      ['WEQ3','10','well:equipment:3','capped'], // Capped
-//      ['WEQ3','999','well:equipment:3','other'], // Other
 
      // WFT - Well Type
      // ['WFT','-999999',undefined,undefined], // No Information
@@ -7174,16 +5047,7 @@ ggdm30.rules = {
      ['WPC','999','coastal_work_type','other'], // Other
 
      // WPC2 - Coastal Work Type [2]
-     // ['WPC2','-999999',undefined,undefined], // No Information
-//      ['WPC2','1','coastal_work_type:2','land_reclamation'], // Land Reclamation
-//      ['WPC2','2','coastal_work_type:2','construction_of_structures'], // Construction of Structures
-//      ['WPC2','999','coastal_work_type:2','other'], // Other
-
      // WPC3 - Coastal Work Type [3]
-     // ['WPC3','-999999',undefined,undefined], // No Information
-//      ['WPC3','1','coastal_work_type:3','land_reclamation'], // Land Reclamation
-//      ['WPC3','2','coastal_work_type:3','construction_of_structures'], // Construction of Structures
-//      ['WPC3','999','coastal_work_type:3','other'], // Other
 
      // WRCC - Water Recharge Rate <interval closure>
      ['WRCC','2','water:recharge_rate:closure','open_interval'], // Open Interval
@@ -7279,52 +5143,7 @@ ggdm30.rules = {
      ['WWM','999','well:subsurface_stratum','other'], // Other
 
      // WWM2 - Sub-Surface Stratum Type [2]
-     // ['WWM2','-999999',undefined,undefined], // No Information
-//      ['WWM2','1','well:subsurface_stratum:2','basalt'], // Basalt
-//      ['WWM2','2','well:subsurface_stratum:2','boulders'], // Boulders
-//      ['WWM2','3','well:subsurface_stratum:2','clay'], // Clay
-//      ['WWM2','4','well:subsurface_stratum:2','conglomerate'], // Conglomerate
-//      ['WWM2','5','well:subsurface_stratum:2','dolomite'], // Dolomite
-//      ['WWM2','6','well:subsurface_stratum:2','granite'], // Granite
-//      ['WWM2','7','well:subsurface_stratum:2','gravel'], // Gravel
-//      ['WWM2','8','well:subsurface_stratum:2','igneous_rock'], // Igneous Rock
-//      ['WWM2','9','well:subsurface_stratum:2','karst'], // Karst
-//      ['WWM2','10','well:subsurface_stratum:2','limestone'], // Limestone
-//      ['WWM2','11','well:subsurface_stratum:2','marl'], // Marl
-//      ['WWM2','12','well:subsurface_stratum:2','metamorphic_rock'], // Metamorphic Rock
-//      ['WWM2','13','well:subsurface_stratum:2','mud'], // Mud
-//      ['WWM2','14','well:subsurface_stratum:2','sand'], // Sand
-//      ['WWM2','15','well:subsurface_stratum:2','schist'], // Schist
-//      ['WWM2','16','well:subsurface_stratum:2','unconsolidated'], // Unconsolidated
-//      ['WWM2','17','well:subsurface_stratum:2','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['WWM2','18','well:subsurface_stratum:2','volcanic_rock'], // Volcanic Rock
-//      ['WWM2','19','well:subsurface_stratum:2','sandstone'], // Sandstone
-//      ['WWM2','20','well:subsurface_stratum:2','shale'], // Shale
-//      ['WWM2','999','well:subsurface_stratum:2','other'], // Other
-
      // WWM3 - Sub-Surface Stratum Type [3]
-     // ['WWM3','-999999',undefined,undefined], // No Information
-//      ['WWM3','1','well:subsurface_stratum:3','basalt'], // Basalt
-//      ['WWM3','2','well:subsurface_stratum:3','boulders'], // Boulders
-//      ['WWM3','3','well:subsurface_stratum:3','clay'], // Clay
-//      ['WWM3','4','well:subsurface_stratum:3','conglomerate'], // Conglomerate
-//      ['WWM3','5','well:subsurface_stratum:3','dolomite'], // Dolomite
-//      ['WWM3','6','well:subsurface_stratum:3','granite'], // Granite
-//      ['WWM3','7','well:subsurface_stratum:3','gravel'], // Gravel
-//      ['WWM3','8','well:subsurface_stratum:3','igneous_rock'], // Igneous Rock
-//      ['WWM3','9','well:subsurface_stratum:3','karst'], // Karst
-//      ['WWM3','10','well:subsurface_stratum:3','limestone'], // Limestone
-//      ['WWM3','11','well:subsurface_stratum:3','marl'], // Marl
-//      ['WWM3','12','well:subsurface_stratum:3','metamorphic_rock'], // Metamorphic Rock
-//      ['WWM3','13','well:subsurface_stratum:3','mud'], // Mud
-//      ['WWM3','14','well:subsurface_stratum:3','sand'], // Sand
-//      ['WWM3','15','well:subsurface_stratum:3','schist'], // Schist
-//      ['WWM3','16','well:subsurface_stratum:3','unconsolidated'], // Unconsolidated
-//      ['WWM3','17','well:subsurface_stratum:3','semi-consolidated_and_consolidated_volcanic_ash'], // Semi-consolidated and Consolidated Volcanic Ash
-//      ['WWM3','18','well:subsurface_stratum:3','volcanic_rock'], // Volcanic Rock
-//      ['WWM3','19','well:subsurface_stratum:3','sandstone'], // Sandstone
-//      ['WWM3','20','well:subsurface_stratum:3','shale'], // Shale
-//      ['WWM3','999','well:subsurface_stratum:3','other'], // Other
 
      // WWRC - Water Withdrawal Rate <interval closure>
      ['WWRC','2','water:withdrawl_rate:closure','open_interval'], // Open Interval
@@ -7355,126 +5174,16 @@ ggdm30.rules = {
      // ZHBH_DKC - Base Hgt : Snd Meta : Bathymetric Measurement Quality Category - See ZHDP_DKC
      // ZHBH_DKC2 - Base Hgt : Snd Meta : Bathymetric Measurement Quality Category [2]  - See ZHDP_DKC2
      // ZHBH_DKC3 - Base Hgt : Snd Meta : Bathymetric Measurement Quality Category [3] - See ZHDP_DKC3
-
-     // ZHBH_SVC - Base Hgt : Snd Meta : Sounding Velocity Correction Method
-     // ['ZHBH_SVC','-999999',undefined,undefined], // No Information
-     ['ZHBH_SVC','1','raw:ZHBH_SVC','sounder_4800_calibrated'], // Sounder 4800 Calibrated
-     ['ZHBH_SVC','2','raw:ZHBH_SVC','sounder_1500_calibrated'], // Sounder 1500 Calibrated
-     ['ZHBH_SVC','3','raw:ZHBH_SVC','mathews_tables'], // Mathews Tables
-     ['ZHBH_SVC','4','raw:ZHBH_SVC','sound_velocity_meter'], // Sound Velocity Meter
-     ['ZHBH_SVC','5','raw:ZHBH_SVC','sounder_other_calibrated'], // Sounder Other Calibrated
-     ['ZHBH_SVC','998','raw:ZHBH_SVC','not_applicable'], // Not Applicable
-     ['ZHBH_SVC','999','raw:ZHBH_SVC','other'], // Other
-
-     // ZHBH_TEC - Base Hgt : Snd Meta : Bathymetric Measurement Technique
-     // ['ZHBH_TEC','-999999',undefined,undefined], // No Information
-     ['ZHBH_TEC','1','raw:ZHBH_TEC','echo_sounder'], // Echo Sounder
-     ['ZHBH_TEC','2','raw:ZHBH_TEC','side-scan_sonar'], // Side-scan Sonar
-     ['ZHBH_TEC','3','raw:ZHBH_TEC','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-     ['ZHBH_TEC','4','raw:ZHBH_TEC','diver'], // Diver
-     ['ZHBH_TEC','5','raw:ZHBH_TEC','lead-line'], // Lead-line
-     ['ZHBH_TEC','6','raw:ZHBH_TEC','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-     ['ZHBH_TEC','8','raw:ZHBH_TEC','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-     ['ZHBH_TEC','9','raw:ZHBH_TEC','electromagnetic_sensor'], // Electromagnetic Sensor
-     ['ZHBH_TEC','10','raw:ZHBH_TEC','photogrammetry'], // Photogrammetry
-     ['ZHBH_TEC','11','raw:ZHBH_TEC','satellite_imagery'], // Satellite Imagery
-     ['ZHBH_TEC','12','raw:ZHBH_TEC','levelling'], // Levelling
-     ['ZHBH_TEC','13','raw:ZHBH_TEC','computer_generated'], // Computer Generated
-     ['ZHBH_TEC','14','raw:ZHBH_TEC','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-     ['ZHBH_TEC','15','raw:ZHBH_TEC','bathymetric_lidar'], // Bathymetric LiDAR
-     ['ZHBH_TEC','17','raw:ZHBH_TEC','singlebeam'], // Singlebeam
-     ['ZHBH_TEC','18','raw:ZHBH_TEC','underwater_utility_vehicle'], // Underwater Utility Vehicle
-     ['ZHBH_TEC','999','raw:ZHBH_TEC','other'], // Other
-
-     // ZHBH_TEC2 - Base Hgt : Snd Meta : Bathymetric Measurement Technique [2]
-     // ['ZHBH_TEC2','-999999',undefined,undefined], // No Information
-//      ['ZHBH_TEC2','1','raw:ZHBH_TEC2','echo_sounder'], // Echo Sounder
-//      ['ZHBH_TEC2','2','raw:ZHBH_TEC2','side-scan_sonar'], // Side-scan Sonar
-//      ['ZHBH_TEC2','3','raw:ZHBH_TEC2','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-//      ['ZHBH_TEC2','4','raw:ZHBH_TEC2','diver'], // Diver
-//      ['ZHBH_TEC2','5','raw:ZHBH_TEC2','lead-line'], // Lead-line
-//      ['ZHBH_TEC2','6','raw:ZHBH_TEC2','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-//      ['ZHBH_TEC2','8','raw:ZHBH_TEC2','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-//      ['ZHBH_TEC2','9','raw:ZHBH_TEC2','electromagnetic_sensor'], // Electromagnetic Sensor
-//      ['ZHBH_TEC2','10','raw:ZHBH_TEC2','photogrammetry'], // Photogrammetry
-//      ['ZHBH_TEC2','11','raw:ZHBH_TEC2','satellite_imagery'], // Satellite Imagery
-//      ['ZHBH_TEC2','12','raw:ZHBH_TEC2','levelling'], // Levelling
-//      ['ZHBH_TEC2','13','raw:ZHBH_TEC2','computer_generated'], // Computer Generated
-//      ['ZHBH_TEC2','14','raw:ZHBH_TEC2','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-//      ['ZHBH_TEC2','15','raw:ZHBH_TEC2','bathymetric_lidar'], // Bathymetric LiDAR
-//      ['ZHBH_TEC2','17','raw:ZHBH_TEC2','singlebeam'], // Singlebeam
-//      ['ZHBH_TEC2','18','raw:ZHBH_TEC2','underwater_utility_vehicle'], // Underwater Utility Vehicle
-//      ['ZHBH_TEC2','999','raw:ZHBH_TEC2','other'], // Other
-
-     // ZHBH_TEC3 - Base Hgt : Snd Meta : Bathymetric Measurement Technique [3]
-     // ['ZHBH_TEC3','-999999',undefined,undefined], // No Information
-//      ['ZHBH_TEC3','1','raw:ZHBH_TEC3','echo_sounder'], // Echo Sounder
-//      ['ZHBH_TEC3','2','raw:ZHBH_TEC3','side-scan_sonar'], // Side-scan Sonar
-//      ['ZHBH_TEC3','3','raw:ZHBH_TEC3','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-//      ['ZHBH_TEC3','4','raw:ZHBH_TEC3','diver'], // Diver
-//      ['ZHBH_TEC3','5','raw:ZHBH_TEC3','lead-line'], // Lead-line
-//      ['ZHBH_TEC3','6','raw:ZHBH_TEC3','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-//      ['ZHBH_TEC3','8','raw:ZHBH_TEC3','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-//      ['ZHBH_TEC3','9','raw:ZHBH_TEC3','electromagnetic_sensor'], // Electromagnetic Sensor
-//      ['ZHBH_TEC3','10','raw:ZHBH_TEC3','photogrammetry'], // Photogrammetry
-//      ['ZHBH_TEC3','11','raw:ZHBH_TEC3','satellite_imagery'], // Satellite Imagery
-//      ['ZHBH_TEC3','12','raw:ZHBH_TEC3','levelling'], // Levelling
-//      ['ZHBH_TEC3','13','raw:ZHBH_TEC3','computer_generated'], // Computer Generated
-//      ['ZHBH_TEC3','14','raw:ZHBH_TEC3','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-//      ['ZHBH_TEC3','15','raw:ZHBH_TEC3','bathymetric_lidar'], // Bathymetric LiDAR
-//      ['ZHBH_TEC3','17','raw:ZHBH_TEC3','singlebeam'], // Singlebeam
-//      ['ZHBH_TEC3','18','raw:ZHBH_TEC3','underwater_utility_vehicle'], // Underwater Utility Vehicle
-//      ['ZHBH_TEC3','999','raw:ZHBH_TEC3','other'], // Other
-
-     // ZHBH_VDC - Base Hgt : Snd Meta : Sounding Datum
-     // ['ZHBH_VDC','-999999',undefined,undefined], // No Information
-     ['ZHBH_VDC','2','raw:ZHBH_VDC','high_water'], // High Water
-     ['ZHBH_VDC','3','raw:ZHBH_VDC','higher_high_water'], // Higher High Water
-     ['ZHBH_VDC','4','raw:ZHBH_VDC','indian_spring_low_water'], // Indian Spring Low Water
-     ['ZHBH_VDC','5','raw:ZHBH_VDC','low_water'], // Low Water
-     ['ZHBH_VDC','6','raw:ZHBH_VDC','lower_low_water'], // Lower Low Water
-     ['ZHBH_VDC','7','raw:ZHBH_VDC','mean_high_water'], // Mean High Water
-     ['ZHBH_VDC','8','raw:ZHBH_VDC','mean_high_water_neaps'], // Mean High Water Neaps
-     ['ZHBH_VDC','9','raw:ZHBH_VDC','mean_high_water_springs'], // Mean High Water Springs
-     ['ZHBH_VDC','10','raw:ZHBH_VDC','mean_higher_high_water'], // Mean Higher High Water
-     ['ZHBH_VDC','11','raw:ZHBH_VDC','mean_low_water'], // Mean Low Water
-     ['ZHBH_VDC','12','raw:ZHBH_VDC','mean_low_water_neaps'], // Mean Low Water Neaps
-     ['ZHBH_VDC','13','raw:ZHBH_VDC','mean_low_water_springs'], // Mean Low Water Springs
-     ['ZHBH_VDC','14','raw:ZHBH_VDC','mean_lower_low_water'], // Mean Lower Low Water
-     ['ZHBH_VDC','15','raw:ZHBH_VDC','mean_sea_level'], // Mean Sea Level
-     ['ZHBH_VDC','16','raw:ZHBH_VDC','mean_tide_level'], // Mean Tide Level
-     ['ZHBH_VDC','17','raw:ZHBH_VDC','neap_tide'], // Neap Tide
-     ['ZHBH_VDC','18','raw:ZHBH_VDC','spring_tide'], // Spring Tide
-     ['ZHBH_VDC','19','raw:ZHBH_VDC','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
-     ['ZHBH_VDC','20','raw:ZHBH_VDC','lowest_astronomical_tide'], // Lowest Astronomical Tide
-     ['ZHBH_VDC','21','raw:ZHBH_VDC','chart_datum_(unspecified)'], // Chart Datum (Unspecified)
-     ['ZHBH_VDC','22','raw:ZHBH_VDC','highest_astronomical_tide'], // Highest Astronomical Tide
-     ['ZHBH_VDC','24','raw:ZHBH_VDC','mean_higher_high_water_springs'], // Mean Higher High Water Springs
-     ['ZHBH_VDC','28','raw:ZHBH_VDC','highest_high_water'], // Highest High Water
-     ['ZHBH_VDC','30','raw:ZHBH_VDC','indian_spring_high_water'], // Indian Spring High Water
-     ['ZHBH_VDC','90','raw:ZHBH_VDC','lowest_low_water'], // Lowest Low Water
-     ['ZHBH_VDC','91','raw:ZHBH_VDC','lowest_low_water_springs'], // Lowest Low Water Springs
-     ['ZHBH_VDC','92','raw:ZHBH_VDC','approximate_mean_low_water_springs'], // Approximate Mean Low Water Springs
-     ['ZHBH_VDC','93','raw:ZHBH_VDC','low_water_springs'], // Low Water Springs
-     ['ZHBH_VDC','94','raw:ZHBH_VDC','approximate_lowest_astronomical_tide'], // Approximate Lowest Astronomical Tide
-     ['ZHBH_VDC','95','raw:ZHBH_VDC','nearly_lowest_low_water'], // Nearly Lowest Low Water
-     ['ZHBH_VDC','96','raw:ZHBH_VDC','approximate_mean_low_water'], // Approximate Mean Low Water
-     ['ZHBH_VDC','97','raw:ZHBH_VDC','approximate_mean_lower_low_water'], // Approximate Mean Lower Low Water
-     ['ZHBH_VDC','98','raw:ZHBH_VDC','approximate_mean_sea_level'], // Approximate Mean Sea Level
-     ['ZHBH_VDC','99','raw:ZHBH_VDC','high_water_springs'], // High Water Springs
-     ['ZHBH_VDC','100','raw:ZHBH_VDC','equinoctial_spring_low_water'], // Equinoctial Spring Low Water
-     ['ZHBH_VDC','101','raw:ZHBH_VDC','local_datum'], // Local Datum
-     ['ZHBH_VDC','102','raw:ZHBH_VDC','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
-     ['ZHBH_VDC','103','raw:ZHBH_VDC','mean_water_level'], // Mean Water Level
-     ['ZHBH_VDC','104','raw:ZHBH_VDC','lower_low_water_large_tide'], // Lower Low Water Large Tide
-     ['ZHBH_VDC','105','raw:ZHBH_VDC','higher_high_water_large_tide'], // Higher High Water Large Tide
-     ['ZHBH_VDC','107','raw:ZHBH_VDC','nearly_highest_high_water'], // Nearly Highest High Water
-     ['ZHBH_VDC','999','raw:ZHBH_VDC','other'], // Other
+     // ZHBH_SVC - Base Hgt : Snd Meta : Sounding Velocity Correction Method - See ZHDP_SVC
+     // ZHBH_TEC - Base Hgt : Snd Meta : Bathymetric Measurement Technique - See ZHDP_TEC
+     // ZHBH_TEC2 - Base Hgt : Snd Meta : Bathymetric Measurement Technique [2] - See ZHDP_TEC2
+     // ZHBH_TEC3 - Base Hgt : Snd Meta : Bathymetric Measurement Technique [3] - See ZHDP_TEC3
+     // ZHBH_VDC - Base Hgt : Snd Meta : Sounding Datum - See ZHDP_VCD
 
      // ZHDP_DCR - Hydro Dpth : Snd Meta : Vessel Draft Correction
      // ['ZHDP_DCR','-999999',undefined,undefined], // No Information
-     ['ZHDP_DCR','1000','raw:ZHDP_DCR','no'],
-     ['ZHDP_DCR','1001','raw:ZHDP_DCR','yes'],
+     ['ZHDP_DCR','1000','source:datum:sounding:draft_correction','no'],
+     ['ZHDP_DCR','1001','source:datum:sounding:draft_correction','yes'],
 
      // ZHDP_DKC - Hydro Dpth : Snd Meta : Bathymetric Measurement Quality Category
      // ['ZHDP_DKC','-999999',undefined,undefined], // No Information
@@ -7493,151 +5202,85 @@ ggdm30.rules = {
      ['ZHDP_DKC','999','depth:hydrographic:quality','other'], // Other
 
      // ZHDP_DKC2 - Hydro Dpth : Snd Meta : Bathymetric Measurement Quality Category [2]
-     // ['ZHDP_DKC2','-999999',undefined,undefined], // No Information
-//      ['ZHDP_DKC2','1','depth:hydrographic:quality:2','depth_known'], // Depth Known
-//      ['ZHDP_DKC2','3','depth:hydrographic:quality:2','safe_clearance_known'], // Safe Clearance Known
-//      ['ZHDP_DKC2','4','depth:hydrographic:quality:2','depth_unknown'], // Depth Unknown
-//      ['ZHDP_DKC2','5','depth:hydrographic:quality:2','depth_doubtful'], // Depth Doubtful
-//      ['ZHDP_DKC2','6','depth:hydrographic:quality:2','depth_unreliable'], // Depth Unreliable
-//      ['ZHDP_DKC2','7','depth:hydrographic:quality:2','no_bottom'], // No Bottom
-//      ['ZHDP_DKC2','8','depth:hydrographic:quality:2','least_depth'], // Least Depth
-//      ['ZHDP_DKC2','9','depth:hydrographic:quality:2','reported_depth'], // Reported Depth
-//      ['ZHDP_DKC2','10','depth:hydrographic:quality:2','unconfirmed_depth'], // Unconfirmed Depth
-//      ['ZHDP_DKC2','11','depth:hydrographic:quality:2','maintained_depth'], // Maintained Depth
-//      ['ZHDP_DKC2','12','depth:hydrographic:quality:2','unmaintained_depth'], // Unmaintained Depth
-//      ['ZHDP_DKC2','998','depth:hydrographic:quality:2','not_applicable'], // Not Applicable
-//      ['ZHDP_DKC2','999','depth:hydrographic:quality:2','other'], // Other
-
      // ZHDP_DKC3 - Hydro Dpth : Snd Meta : Bathymetric Measurement Quality Category [3]
-     // ['ZHDP_DKC3','-999999',undefined,undefined], // No Information
-//      ['ZHDP_DKC3','1','depth:hydrographic:quality:3','depth_known'], // Depth Known
-//      ['ZHDP_DKC3','3','depth:hydrographic:quality:3','safe_clearance_known'], // Safe Clearance Known
-//      ['ZHDP_DKC3','4','depth:hydrographic:quality:3','depth_unknown'], // Depth Unknown
-//      ['ZHDP_DKC3','5','depth:hydrographic:quality:3','depth_doubtful'], // Depth Doubtful
-//      ['ZHDP_DKC3','6','depth:hydrographic:quality:3','depth_unreliable'], // Depth Unreliable
-//      ['ZHDP_DKC3','7','depth:hydrographic:quality:3','no_bottom'], // No Bottom
-//      ['ZHDP_DKC3','8','depth:hydrographic:quality:3','least_depth'], // Least Depth
-//      ['ZHDP_DKC3','9','depth:hydrographic:quality:3','reported_depth'], // Reported Depth
-//      ['ZHDP_DKC3','10','depth:hydrographic:quality:3','unconfirmed_depth'], // Unconfirmed Depth
-//      ['ZHDP_DKC3','11','depth:hydrographic:quality:3','maintained_depth'], // Maintained Depth
-//      ['ZHDP_DKC3','12','depth:hydrographic:quality:3','unmaintained_depth'], // Unmaintained Depth
-//      ['ZHDP_DKC3','998','depth:hydrographic:quality:3','not_applicable'], // Not Applicable
-//      ['ZHDP_DKC3','999','depth:hydrographic:quality:3','other'], // Other
 
      // ZHDP_SVC - Hydro Dpth : Snd Meta : Sounding Velocity Correction Method
      // ['ZHDP_SVC','-999999',undefined,undefined], // No Information
-     ['ZHDP_SVC','1','raw:ZHDP_SVC','sounder_4800_calibrated'], // Sounder 4800 Calibrated
-     ['ZHDP_SVC','2','raw:ZHDP_SVC','sounder_1500_calibrated'], // Sounder 1500 Calibrated
-     ['ZHDP_SVC','3','raw:ZHDP_SVC','mathews_tables'], // Mathews Tables
-     ['ZHDP_SVC','4','raw:ZHDP_SVC','sound_velocity_meter'], // Sound Velocity Meter
-     ['ZHDP_SVC','5','raw:ZHDP_SVC','sounder_other_calibrated'], // Sounder Other Calibrated
-     ['ZHDP_SVC','998','raw:ZHDP_SVC','not_applicable'], // Not Applicable
-     ['ZHDP_SVC','999','raw:ZHDP_SVC','other'], // Other
+     ['ZHDP_SVC','1','source:datum:sounding:correction','sounder_4800_calibrated'], // Sounder 4800 Calibrated
+     ['ZHDP_SVC','2','source:datum:sounding:correction','sounder_1500_calibrated'], // Sounder 1500 Calibrated
+     ['ZHDP_SVC','3','source:datum:sounding:correction','mathews_tables'], // Mathews Tables
+     ['ZHDP_SVC','4','source:datum:sounding:correction','sound_velocity_meter'], // Sound Velocity Meter
+     ['ZHDP_SVC','5','source:datum:sounding:correction','sounder_other_calibrated'], // Sounder Other Calibrated
+     ['ZHDP_SVC','998','source:datum:sounding:correction','not_applicable'], // Not Applicable
+     ['ZHDP_SVC','999','source:datum:sounding:correction','other'], // Other
 
      // ZHDP_TEC - Hydro Dpth : Snd Meta : Bathymetric Measurement Technique
      // ['ZHDP_TEC','-999999',undefined,undefined], // No Information
-     ['ZHDP_TEC','1','raw:ZHDP_TEC','echo_sounder'], // Echo Sounder
-     ['ZHDP_TEC','2','raw:ZHDP_TEC','side-scan_sonar'], // Side-scan Sonar
-     ['ZHDP_TEC','3','raw:ZHDP_TEC','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-     ['ZHDP_TEC','4','raw:ZHDP_TEC','diver'], // Diver
-     ['ZHDP_TEC','5','raw:ZHDP_TEC','lead-line'], // Lead-line
-     ['ZHDP_TEC','6','raw:ZHDP_TEC','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-     ['ZHDP_TEC','8','raw:ZHDP_TEC','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-     ['ZHDP_TEC','9','raw:ZHDP_TEC','electromagnetic_sensor'], // Electromagnetic Sensor
-     ['ZHDP_TEC','10','raw:ZHDP_TEC','photogrammetry'], // Photogrammetry
-     ['ZHDP_TEC','11','raw:ZHDP_TEC','satellite_imagery'], // Satellite Imagery
-     ['ZHDP_TEC','12','raw:ZHDP_TEC','levelling'], // Levelling
-     ['ZHDP_TEC','13','raw:ZHDP_TEC','computer_generated'], // Computer Generated
-     ['ZHDP_TEC','14','raw:ZHDP_TEC','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-     ['ZHDP_TEC','15','raw:ZHDP_TEC','bathymetric_lidar'], // Bathymetric LiDAR
-     ['ZHDP_TEC','17','raw:ZHDP_TEC','singlebeam'], // Singlebeam
-     ['ZHDP_TEC','18','raw:ZHDP_TEC','underwater_utility_vehicle'], // Underwater Utility Vehicle
-     ['ZHDP_TEC','999','raw:ZHDP_TEC','other'], // Other
+     ['ZHDP_TEC','1','source:datum:sounding:method','echo_sounder'], // Echo Sounder
+     ['ZHDP_TEC','2','source:datum:sounding:method','side-scan_sonar'], // Side-scan Sonar
+     ['ZHDP_TEC','3','source:datum:sounding:method','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
+     ['ZHDP_TEC','4','source:datum:sounding:method','diver'], // Diver
+     ['ZHDP_TEC','5','source:datum:sounding:method','lead-line'], // Lead-line
+     ['ZHDP_TEC','6','source:datum:sounding:method','area_swept_by_wire-drag'], // Area Swept by Wire-drag
+     ['ZHDP_TEC','8','source:datum:sounding:method','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
+     ['ZHDP_TEC','9','source:datum:sounding:method','electromagnetic_sensor'], // Electromagnetic Sensor
+     ['ZHDP_TEC','10','source:datum:sounding:method','photogrammetry'], // Photogrammetry
+     ['ZHDP_TEC','11','source:datum:sounding:method','satellite_imagery'], // Satellite Imagery
+     ['ZHDP_TEC','12','source:datum:sounding:method','levelling'], // Levelling
+     ['ZHDP_TEC','13','source:datum:sounding:method','computer_generated'], // Computer Generated
+     ['ZHDP_TEC','14','source:datum:sounding:method','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
+     ['ZHDP_TEC','15','source:datum:sounding:method','bathymetric_lidar'], // Bathymetric LiDAR
+     ['ZHDP_TEC','17','source:datum:sounding:method','singlebeam'], // Singlebeam
+     ['ZHDP_TEC','18','source:datum:sounding:method','underwater_utility_vehicle'], // Underwater Utility Vehicle
+     ['ZHDP_TEC','999','source:datum:sounding:method','other'], // Other
 
      // ZHDP_TEC2 - Hydro Dpth : Snd Meta : Bathymetric Measurement Technique [2]
-     // ['ZHDP_TEC2','-999999',undefined,undefined], // No Information
-//      ['ZHDP_TEC2','1','raw:ZHDP_TEC2','echo_sounder'], // Echo Sounder
-//      ['ZHDP_TEC2','2','raw:ZHDP_TEC2','side-scan_sonar'], // Side-scan Sonar
-//      ['ZHDP_TEC2','3','raw:ZHDP_TEC2','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-//      ['ZHDP_TEC2','4','raw:ZHDP_TEC2','diver'], // Diver
-//      ['ZHDP_TEC2','5','raw:ZHDP_TEC2','lead-line'], // Lead-line
-//      ['ZHDP_TEC2','6','raw:ZHDP_TEC2','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-//      ['ZHDP_TEC2','8','raw:ZHDP_TEC2','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-//      ['ZHDP_TEC2','9','raw:ZHDP_TEC2','electromagnetic_sensor'], // Electromagnetic Sensor
-//      ['ZHDP_TEC2','10','raw:ZHDP_TEC2','photogrammetry'], // Photogrammetry
-//      ['ZHDP_TEC2','11','raw:ZHDP_TEC2','satellite_imagery'], // Satellite Imagery
-//      ['ZHDP_TEC2','12','raw:ZHDP_TEC2','levelling'], // Levelling
-//      ['ZHDP_TEC2','13','raw:ZHDP_TEC2','computer_generated'], // Computer Generated
-//      ['ZHDP_TEC2','14','raw:ZHDP_TEC2','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-//      ['ZHDP_TEC2','15','raw:ZHDP_TEC2','bathymetric_lidar'], // Bathymetric LiDAR
-//      ['ZHDP_TEC2','17','raw:ZHDP_TEC2','singlebeam'], // Singlebeam
-//      ['ZHDP_TEC2','18','raw:ZHDP_TEC2','underwater_utility_vehicle'], // Underwater Utility Vehicle
-//      ['ZHDP_TEC2','999','raw:ZHDP_TEC2','other'], // Other
-
      // ZHDP_TEC3 - Hydro Dpth : Snd Meta : Bathymetric Measurement Technique [3]
-     // ['ZHDP_TEC3','-999999',undefined,undefined], // No Information
-//      ['ZHDP_TEC3','1','raw:ZHDP_TEC3','echo_sounder'], // Echo Sounder
-//      ['ZHDP_TEC3','2','raw:ZHDP_TEC3','side-scan_sonar'], // Side-scan Sonar
-//      ['ZHDP_TEC3','3','raw:ZHDP_TEC3','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-//      ['ZHDP_TEC3','4','raw:ZHDP_TEC3','diver'], // Diver
-//      ['ZHDP_TEC3','5','raw:ZHDP_TEC3','lead-line'], // Lead-line
-//      ['ZHDP_TEC3','6','raw:ZHDP_TEC3','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-//      ['ZHDP_TEC3','8','raw:ZHDP_TEC3','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-//      ['ZHDP_TEC3','9','raw:ZHDP_TEC3','electromagnetic_sensor'], // Electromagnetic Sensor
-//      ['ZHDP_TEC3','10','raw:ZHDP_TEC3','photogrammetry'], // Photogrammetry
-//      ['ZHDP_TEC3','11','raw:ZHDP_TEC3','satellite_imagery'], // Satellite Imagery
-//      ['ZHDP_TEC3','12','raw:ZHDP_TEC3','levelling'], // Levelling
-//      ['ZHDP_TEC3','13','raw:ZHDP_TEC3','computer_generated'], // Computer Generated
-//      ['ZHDP_TEC3','14','raw:ZHDP_TEC3','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-//      ['ZHDP_TEC3','15','raw:ZHDP_TEC3','bathymetric_lidar'], // Bathymetric LiDAR
-//      ['ZHDP_TEC3','17','raw:ZHDP_TEC3','singlebeam'], // Singlebeam
-//      ['ZHDP_TEC3','18','raw:ZHDP_TEC3','underwater_utility_vehicle'], // Underwater Utility Vehicle
-//      ['ZHDP_TEC3','999','raw:ZHDP_TEC3','other'], // Other
 
      // ZHDP_VDC - Hydro Dpth : Snd Meta : Sounding Datum
      // ['ZHDP_VDC','-999999',undefined,undefined], // No Information
-     ['ZHDP_VDC','2','raw:ZHDP_VDC','high_water'], // High Water
-     ['ZHDP_VDC','3','raw:ZHDP_VDC','higher_high_water'], // Higher High Water
-     ['ZHDP_VDC','4','raw:ZHDP_VDC','indian_spring_low_water'], // Indian Spring Low Water
-     ['ZHDP_VDC','5','raw:ZHDP_VDC','low_water'], // Low Water
-     ['ZHDP_VDC','6','raw:ZHDP_VDC','lower_low_water'], // Lower Low Water
-     ['ZHDP_VDC','7','raw:ZHDP_VDC','mean_high_water'], // Mean High Water
-     ['ZHDP_VDC','8','raw:ZHDP_VDC','mean_high_water_neaps'], // Mean High Water Neaps
-     ['ZHDP_VDC','9','raw:ZHDP_VDC','mean_high_water_springs'], // Mean High Water Springs
-     ['ZHDP_VDC','10','raw:ZHDP_VDC','mean_higher_high_water'], // Mean Higher High Water
-     ['ZHDP_VDC','11','raw:ZHDP_VDC','mean_low_water'], // Mean Low Water
-     ['ZHDP_VDC','12','raw:ZHDP_VDC','mean_low_water_neaps'], // Mean Low Water Neaps
-     ['ZHDP_VDC','13','raw:ZHDP_VDC','mean_low_water_springs'], // Mean Low Water Springs
-     ['ZHDP_VDC','14','raw:ZHDP_VDC','mean_lower_low_water'], // Mean Lower Low Water
-     ['ZHDP_VDC','15','raw:ZHDP_VDC','mean_sea_level'], // Mean Sea Level
-     ['ZHDP_VDC','16','raw:ZHDP_VDC','mean_tide_level'], // Mean Tide Level
-     ['ZHDP_VDC','17','raw:ZHDP_VDC','neap_tide'], // Neap Tide
-     ['ZHDP_VDC','18','raw:ZHDP_VDC','spring_tide'], // Spring Tide
-     ['ZHDP_VDC','19','raw:ZHDP_VDC','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
-     ['ZHDP_VDC','20','raw:ZHDP_VDC','lowest_astronomical_tide'], // Lowest Astronomical Tide
-     ['ZHDP_VDC','21','raw:ZHDP_VDC','chart_datum_(unspecified)'], // Chart Datum (Unspecified)
-     ['ZHDP_VDC','22','raw:ZHDP_VDC','highest_astronomical_tide'], // Highest Astronomical Tide
-     ['ZHDP_VDC','24','raw:ZHDP_VDC','mean_higher_high_water_springs'], // Mean Higher High Water Springs
-     ['ZHDP_VDC','28','raw:ZHDP_VDC','highest_high_water'], // Highest High Water
-     ['ZHDP_VDC','30','raw:ZHDP_VDC','indian_spring_high_water'], // Indian Spring High Water
-     ['ZHDP_VDC','90','raw:ZHDP_VDC','lowest_low_water'], // Lowest Low Water
-     ['ZHDP_VDC','91','raw:ZHDP_VDC','lowest_low_water_springs'], // Lowest Low Water Springs
-     ['ZHDP_VDC','92','raw:ZHDP_VDC','approximate_mean_low_water_springs'], // Approximate Mean Low Water Springs
-     ['ZHDP_VDC','93','raw:ZHDP_VDC','low_water_springs'], // Low Water Springs
-     ['ZHDP_VDC','94','raw:ZHDP_VDC','approximate_lowest_astronomical_tide'], // Approximate Lowest Astronomical Tide
-     ['ZHDP_VDC','95','raw:ZHDP_VDC','nearly_lowest_low_water'], // Nearly Lowest Low Water
-     ['ZHDP_VDC','96','raw:ZHDP_VDC','approximate_mean_low_water'], // Approximate Mean Low Water
-     ['ZHDP_VDC','97','raw:ZHDP_VDC','approximate_mean_lower_low_water'], // Approximate Mean Lower Low Water
-     ['ZHDP_VDC','98','raw:ZHDP_VDC','approximate_mean_sea_level'], // Approximate Mean Sea Level
-     ['ZHDP_VDC','99','raw:ZHDP_VDC','high_water_springs'], // High Water Springs
-     ['ZHDP_VDC','100','raw:ZHDP_VDC','equinoctial_spring_low_water'], // Equinoctial Spring Low Water
-     ['ZHDP_VDC','101','raw:ZHDP_VDC','local_datum'], // Local Datum
-     ['ZHDP_VDC','102','raw:ZHDP_VDC','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
-     ['ZHDP_VDC','103','raw:ZHDP_VDC','mean_water_level'], // Mean Water Level
-     ['ZHDP_VDC','104','raw:ZHDP_VDC','lower_low_water_large_tide'], // Lower Low Water Large Tide
-     ['ZHDP_VDC','105','raw:ZHDP_VDC','higher_high_water_large_tide'], // Higher High Water Large Tide
-     ['ZHDP_VDC','107','raw:ZHDP_VDC','nearly_highest_high_water'], // Nearly Highest High Water
-     ['ZHDP_VDC','999','raw:ZHDP_VDC','other'], // Other
+     ['ZHDP_VDC','2','source:datum:sounding','high_water'], // High Water
+     ['ZHDP_VDC','3','source:datum:sounding','higher_high_water'], // Higher High Water
+     ['ZHDP_VDC','4','source:datum:sounding','indian_spring_low_water'], // Indian Spring Low Water
+     ['ZHDP_VDC','5','source:datum:sounding','low_water'], // Low Water
+     ['ZHDP_VDC','6','source:datum:sounding','lower_low_water'], // Lower Low Water
+     ['ZHDP_VDC','7','source:datum:sounding','mean_high_water'], // Mean High Water
+     ['ZHDP_VDC','8','source:datum:sounding','mean_high_water_neaps'], // Mean High Water Neaps
+     ['ZHDP_VDC','9','source:datum:sounding','mean_high_water_springs'], // Mean High Water Springs
+     ['ZHDP_VDC','10','source:datum:sounding','mean_higher_high_water'], // Mean Higher High Water
+     ['ZHDP_VDC','11','source:datum:sounding','mean_low_water'], // Mean Low Water
+     ['ZHDP_VDC','12','source:datum:sounding','mean_low_water_neaps'], // Mean Low Water Neaps
+     ['ZHDP_VDC','13','source:datum:sounding','mean_low_water_springs'], // Mean Low Water Springs
+     ['ZHDP_VDC','14','source:datum:sounding','mean_lower_low_water'], // Mean Lower Low Water
+     ['ZHDP_VDC','15','source:datum:sounding','mean_sea_level'], // Mean Sea Level
+     ['ZHDP_VDC','16','source:datum:sounding','mean_tide_level'], // Mean Tide Level
+     ['ZHDP_VDC','17','source:datum:sounding','neap_tide'], // Neap Tide
+     ['ZHDP_VDC','18','source:datum:sounding','spring_tide'], // Spring Tide
+     ['ZHDP_VDC','19','source:datum:sounding','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
+     ['ZHDP_VDC','20','source:datum:sounding','lowest_astronomical_tide'], // Lowest Astronomical Tide
+     ['ZHDP_VDC','21','source:datum:sounding','chart_datum_(unspecified)'], // Chart Datum (Unspecified)
+     ['ZHDP_VDC','22','source:datum:sounding','highest_astronomical_tide'], // Highest Astronomical Tide
+     ['ZHDP_VDC','24','source:datum:sounding','mean_higher_high_water_springs'], // Mean Higher High Water Springs
+     ['ZHDP_VDC','28','source:datum:sounding','highest_high_water'], // Highest High Water
+     ['ZHDP_VDC','30','source:datum:sounding','indian_spring_high_water'], // Indian Spring High Water
+     ['ZHDP_VDC','90','source:datum:sounding','lowest_low_water'], // Lowest Low Water
+     ['ZHDP_VDC','91','source:datum:sounding','lowest_low_water_springs'], // Lowest Low Water Springs
+     ['ZHDP_VDC','92','source:datum:sounding','approximate_mean_low_water_springs'], // Approximate Mean Low Water Springs
+     ['ZHDP_VDC','93','source:datum:sounding','low_water_springs'], // Low Water Springs
+     ['ZHDP_VDC','94','source:datum:sounding','approximate_lowest_astronomical_tide'], // Approximate Lowest Astronomical Tide
+     ['ZHDP_VDC','95','source:datum:sounding','nearly_lowest_low_water'], // Nearly Lowest Low Water
+     ['ZHDP_VDC','96','source:datum:sounding','approximate_mean_low_water'], // Approximate Mean Low Water
+     ['ZHDP_VDC','97','source:datum:sounding','approximate_mean_lower_low_water'], // Approximate Mean Lower Low Water
+     ['ZHDP_VDC','98','source:datum:sounding','approximate_mean_sea_level'], // Approximate Mean Sea Level
+     ['ZHDP_VDC','99','source:datum:sounding','high_water_springs'], // High Water Springs
+     ['ZHDP_VDC','100','source:datum:sounding','equinoctial_spring_low_water'], // Equinoctial Spring Low Water
+     ['ZHDP_VDC','101','source:datum:sounding','local_datum'], // Local Datum
+     ['ZHDP_VDC','102','source:datum:sounding','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
+     ['ZHDP_VDC','103','source:datum:sounding','mean_water_level'], // Mean Water Level
+     ['ZHDP_VDC','104','source:datum:sounding','lower_low_water_large_tide'], // Lower Low Water Large Tide
+     ['ZHDP_VDC','105','source:datum:sounding','higher_high_water_large_tide'], // Higher High Water Large Tide
+     ['ZHDP_VDC','107','source:datum:sounding','nearly_highest_high_water'], // Nearly Highest High Water
+     ['ZHDP_VDC','999','source:datum:sounding','other'], // Other
 
      // ZI001_SPS - Source : Entity Spatial Source
      // ['ZI001_SPS','-999999',undefined,undefined], // No Information
@@ -7749,241 +5392,58 @@ ggdm30.rules = {
 
      // ZI005_GNT - Geo Name Info : Geographic Name Type
      // ['ZI005_GNT','-999999',undefined,undefined], // No Information
-     ['ZI005_GNT','1','raw:ZI005_GNT','conventional'], // Conventional
-     ['ZI005_GNT','2','raw:ZI005_GNT','native_transliterated'], // Native Transliterated
-     ['ZI005_GNT','3','raw:ZI005_GNT','variant_transliterated'], // Variant Transliterated
-     ['ZI005_GNT','4','raw:ZI005_GNT','unverified_transliterated'], // Unverified Transliterated
-     ['ZI005_GNT','5','raw:ZI005_GNT','native_original'], // Native Original
-     ['ZI005_GNT','6','raw:ZI005_GNT','variant_original'], // Variant Original
-     ['ZI005_GNT','7','raw:ZI005_GNT','unverified_original'], // Unverified Original
-     ['ZI005_GNT','8','raw:ZI005_GNT','historical_transliterated'], // Historical Transliterated
-     ['ZI005_GNT','9','raw:ZI005_GNT','historical_original'], // Historical Original
-     ['ZI005_GNT','10','raw:ZI005_GNT','provisional'], // Provisional
-     ['ZI005_GNT','999','raw:ZI005_GNT','other'], // Other
+     ['ZI005_GNT','1','name:type','conventional'], // Conventional
+     ['ZI005_GNT','2','name:type','native_transliterated'], // Native Transliterated
+     ['ZI005_GNT','3','name:type','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNT','4','name:type','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNT','5','name:type','native_original'], // Native Original
+     ['ZI005_GNT','6','name:type','variant_original'], // Variant Original
+     ['ZI005_GNT','7','name:type','unverified_original'], // Unverified Original
+     ['ZI005_GNT','8','name:type','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNT','9','name:type','historical_original'], // Historical Original
+     ['ZI005_GNT','10','name:type','provisional'], // Provisional
+     ['ZI005_GNT','999','name:type','other'], // Other
 
      // ZI005_GNT2 - Geo Name Info : Geographic Name Type [2]
-     // ['ZI005_GNT2','-999999',undefined,undefined], // No Information
-//      ['ZI005_GNT2','1','raw:ZI005_GNT2','conventional'], // Conventional
-//      ['ZI005_GNT2','2','raw:ZI005_GNT2','native_transliterated'], // Native Transliterated
-//      ['ZI005_GNT2','3','raw:ZI005_GNT2','variant_transliterated'], // Variant Transliterated
-//      ['ZI005_GNT2','4','raw:ZI005_GNT2','unverified_transliterated'], // Unverified Transliterated
-//      ['ZI005_GNT2','5','raw:ZI005_GNT2','native_original'], // Native Original
-//      ['ZI005_GNT2','6','raw:ZI005_GNT2','variant_original'], // Variant Original
-//      ['ZI005_GNT2','7','raw:ZI005_GNT2','unverified_original'], // Unverified Original
-//      ['ZI005_GNT2','8','raw:ZI005_GNT2','historical_transliterated'], // Historical Transliterated
-//      ['ZI005_GNT2','9','raw:ZI005_GNT2','historical_original'], // Historical Original
-//      ['ZI005_GNT2','10','raw:ZI005_GNT2','provisional'], // Provisional
-//      ['ZI005_GNT2','999','raw:ZI005_GNT2','other'], // Other
-
      // ZI005_GNT3 - Geo Name Info : Geographic Name Type [3]
-     // ['ZI005_GNT3','-999999',undefined,undefined], // No Information
-//      ['ZI005_GNT3','1','raw:ZI005_GNT3','conventional'], // Conventional
-//      ['ZI005_GNT3','2','raw:ZI005_GNT3','native_transliterated'], // Native Transliterated
-//      ['ZI005_GNT3','3','raw:ZI005_GNT3','variant_transliterated'], // Variant Transliterated
-//      ['ZI005_GNT3','4','raw:ZI005_GNT3','unverified_transliterated'], // Unverified Transliterated
-//      ['ZI005_GNT3','5','raw:ZI005_GNT3','native_original'], // Native Original
-//      ['ZI005_GNT3','6','raw:ZI005_GNT3','variant_original'], // Variant Original
-//      ['ZI005_GNT3','7','raw:ZI005_GNT3','unverified_original'], // Unverified Original
-//      ['ZI005_GNT3','8','raw:ZI005_GNT3','historical_transliterated'], // Historical Transliterated
-//      ['ZI005_GNT3','9','raw:ZI005_GNT3','historical_original'], // Historical Original
-//      ['ZI005_GNT3','10','raw:ZI005_GNT3','provisional'], // Provisional
-//      ['ZI005_GNT3','999','raw:ZI005_GNT3','other'], // Other
 
      // ZI005_GNTA - Geo Name Info (1) : Geographic Name Type (first side)
      // ['ZI005_GNTA','-999999',undefined,undefined], // No Information
-     ['ZI005_GNTA','1','raw:ZI005_GNTA','conventional'], // Conventional
-     ['ZI005_GNTA','2','raw:ZI005_GNTA','native_transliterated'], // Native Transliterated
-     ['ZI005_GNTA','3','raw:ZI005_GNTA','variant_transliterated'], // Variant Transliterated
-     ['ZI005_GNTA','4','raw:ZI005_GNTA','unverified_transliterated'], // Unverified Transliterated
-     ['ZI005_GNTA','5','raw:ZI005_GNTA','native_original'], // Native Original
-     ['ZI005_GNTA','6','raw:ZI005_GNTA','variant_original'], // Variant Original
-     ['ZI005_GNTA','7','raw:ZI005_GNTA','unverified_original'], // Unverified Original
-     ['ZI005_GNTA','8','raw:ZI005_GNTA','historical_transliterated'], // Historical Transliterated
-     ['ZI005_GNTA','9','raw:ZI005_GNTA','historical_original'], // Historical Original
-     ['ZI005_GNTA','10','raw:ZI005_GNTA','provisional'], // Provisional
-     ['ZI005_GNTA','999','raw:ZI005_GNTA','other'], // Other
+     ['ZI005_GNTA','1','name:type:first_side','conventional'], // Conventional
+     ['ZI005_GNTA','2','name:type:first_side','native_transliterated'], // Native Transliterated
+     ['ZI005_GNTA','3','name:type:first_side','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNTA','4','name:type:first_side','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNTA','5','name:type:first_side','native_original'], // Native Original
+     ['ZI005_GNTA','6','name:type:first_side','variant_original'], // Variant Original
+     ['ZI005_GNTA','7','name:type:first_side','unverified_original'], // Unverified Original
+     ['ZI005_GNTA','8','name:type:first_side','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNTA','9','name:type:first_side','historical_original'], // Historical Original
+     ['ZI005_GNTA','10','name:type:first_side','provisional'], // Provisional
+     ['ZI005_GNTA','999','name:type:first_side','other'], // Other
 
      // ZI005_GNTB - Geo Name Info (2) : Geographic Name Type (second side)
      // ['ZI005_GNTB','-999999',undefined,undefined], // No Information
-     ['ZI005_GNTB','1','raw:ZI005_GNTB','conventional'], // Conventional
-     ['ZI005_GNTB','2','raw:ZI005_GNTB','native_transliterated'], // Native Transliterated
-     ['ZI005_GNTB','3','raw:ZI005_GNTB','variant_transliterated'], // Variant Transliterated
-     ['ZI005_GNTB','4','raw:ZI005_GNTB','unverified_transliterated'], // Unverified Transliterated
-     ['ZI005_GNTB','5','raw:ZI005_GNTB','native_original'], // Native Original
-     ['ZI005_GNTB','6','raw:ZI005_GNTB','variant_original'], // Variant Original
-     ['ZI005_GNTB','7','raw:ZI005_GNTB','unverified_original'], // Unverified Original
-     ['ZI005_GNTB','8','raw:ZI005_GNTB','historical_transliterated'], // Historical Transliterated
-     ['ZI005_GNTB','9','raw:ZI005_GNTB','historical_original'], // Historical Original
-     ['ZI005_GNTB','10','raw:ZI005_GNTB','provisional'], // Provisional
-     ['ZI005_GNTB','999','raw:ZI005_GNTB','other'], // Other
+     ['ZI005_GNTB','1','name:type:second_side','conventional'], // Conventional
+     ['ZI005_GNTB','2','name:type:second_side','native_transliterated'], // Native Transliterated
+     ['ZI005_GNTB','3','name:type:second_side','variant_transliterated'], // Variant Transliterated
+     ['ZI005_GNTB','4','name:type:second_side','unverified_transliterated'], // Unverified Transliterated
+     ['ZI005_GNTB','5','name:type:second_side','native_original'], // Native Original
+     ['ZI005_GNTB','6','name:type:second_side','variant_original'], // Variant Original
+     ['ZI005_GNTB','7','name:type:second_side','unverified_original'], // Unverified Original
+     ['ZI005_GNTB','8','name:type:second_side','historical_transliterated'], // Historical Transliterated
+     ['ZI005_GNTB','9','name:type:second_side','historical_original'], // Historical Original
+     ['ZI005_GNTB','10','name:type:second_side','provisional'], // Provisional
+     ['ZI005_GNTB','999','name:type:second_side','other'], // Other
 
-     // ZI012_DCR - Dpth Crv : Snd Meta : Vessel Draft Correction
-     // ['ZI012_DCR','-999999',undefined,undefined], // No Information
-     ['ZI012_DCR','1000','raw:ZI012_DCR','no'],
-     ['ZI012_DCR','1001','raw:ZI012_DCR','yes'],
-
-     // ZI012_DKC - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category
-     // ['ZI012_DKC','-999999',undefined,undefined], // No Information
-     ['ZI012_DKC','1','raw:ZI012_DKC','depth_known'], // Depth Known
-     ['ZI012_DKC','3','raw:ZI012_DKC','safe_clearance_known'], // Safe Clearance Known
-     ['ZI012_DKC','4','raw:ZI012_DKC','depth_unknown'], // Depth Unknown
-     ['ZI012_DKC','5','raw:ZI012_DKC','depth_doubtful'], // Depth Doubtful
-     ['ZI012_DKC','6','raw:ZI012_DKC','depth_unreliable'], // Depth Unreliable
-     ['ZI012_DKC','7','raw:ZI012_DKC','no_bottom'], // No Bottom
-     ['ZI012_DKC','8','raw:ZI012_DKC','least_depth'], // Least Depth
-     ['ZI012_DKC','9','raw:ZI012_DKC','reported_depth'], // Reported Depth
-     ['ZI012_DKC','10','raw:ZI012_DKC','unconfirmed_depth'], // Unconfirmed Depth
-     ['ZI012_DKC','11','raw:ZI012_DKC','maintained_depth'], // Maintained Depth
-     ['ZI012_DKC','12','raw:ZI012_DKC','unmaintained_depth'], // Unmaintained Depth
-     ['ZI012_DKC','998','raw:ZI012_DKC','not_applicable'], // Not Applicable
-     ['ZI012_DKC','999','raw:ZI012_DKC','other'], // Other
-
-     // ZI012_DKC2 - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category [2]
-     // ['ZI012_DKC2','-999999',undefined,undefined], // No Information
-//      ['ZI012_DKC2','1','raw:ZI012_DKC2','depth_known'], // Depth Known
-//      ['ZI012_DKC2','3','raw:ZI012_DKC2','safe_clearance_known'], // Safe Clearance Known
-//      ['ZI012_DKC2','4','raw:ZI012_DKC2','depth_unknown'], // Depth Unknown
-//      ['ZI012_DKC2','5','raw:ZI012_DKC2','depth_doubtful'], // Depth Doubtful
-//      ['ZI012_DKC2','6','raw:ZI012_DKC2','depth_unreliable'], // Depth Unreliable
-//      ['ZI012_DKC2','7','raw:ZI012_DKC2','no_bottom'], // No Bottom
-//      ['ZI012_DKC2','8','raw:ZI012_DKC2','least_depth'], // Least Depth
-//      ['ZI012_DKC2','9','raw:ZI012_DKC2','reported_depth'], // Reported Depth
-//      ['ZI012_DKC2','10','raw:ZI012_DKC2','unconfirmed_depth'], // Unconfirmed Depth
-//      ['ZI012_DKC2','11','raw:ZI012_DKC2','maintained_depth'], // Maintained Depth
-//      ['ZI012_DKC2','12','raw:ZI012_DKC2','unmaintained_depth'], // Unmaintained Depth
-//      ['ZI012_DKC2','998','raw:ZI012_DKC2','not_applicable'], // Not Applicable
-//      ['ZI012_DKC2','999','raw:ZI012_DKC2','other'], // Other
-
-     // ZI012_DKC3 - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category [3]
-     // ['ZI012_DKC3','-999999',undefined,undefined], // No Information
-//      ['ZI012_DKC3','1','raw:ZI012_DKC3','depth_known'], // Depth Known
-//      ['ZI012_DKC3','3','raw:ZI012_DKC3','safe_clearance_known'], // Safe Clearance Known
-//      ['ZI012_DKC3','4','raw:ZI012_DKC3','depth_unknown'], // Depth Unknown
-//      ['ZI012_DKC3','5','raw:ZI012_DKC3','depth_doubtful'], // Depth Doubtful
-//      ['ZI012_DKC3','6','raw:ZI012_DKC3','depth_unreliable'], // Depth Unreliable
-//      ['ZI012_DKC3','7','raw:ZI012_DKC3','no_bottom'], // No Bottom
-//      ['ZI012_DKC3','8','raw:ZI012_DKC3','least_depth'], // Least Depth
-//      ['ZI012_DKC3','9','raw:ZI012_DKC3','reported_depth'], // Reported Depth
-//      ['ZI012_DKC3','10','raw:ZI012_DKC3','unconfirmed_depth'], // Unconfirmed Depth
-//      ['ZI012_DKC3','11','raw:ZI012_DKC3','maintained_depth'], // Maintained Depth
-//      ['ZI012_DKC3','12','raw:ZI012_DKC3','unmaintained_depth'], // Unmaintained Depth
-//      ['ZI012_DKC3','998','raw:ZI012_DKC3','not_applicable'], // Not Applicable
-//      ['ZI012_DKC3','999','raw:ZI012_DKC3','other'], // Other
-
-     // ZI012_SVC - Dpth Crv : Snd Meta : Sounding Velocity Correction Method
-     // ['ZI012_SVC','-999999',undefined,undefined], // No Information
-     ['ZI012_SVC','1','raw:ZI012_SVC','sounder_4800_calibrated'], // Sounder 4800 Calibrated
-     ['ZI012_SVC','2','raw:ZI012_SVC','sounder_1500_calibrated'], // Sounder 1500 Calibrated
-     ['ZI012_SVC','3','raw:ZI012_SVC','mathews_tables'], // Mathews Tables
-     ['ZI012_SVC','4','raw:ZI012_SVC','sound_velocity_meter'], // Sound Velocity Meter
-     ['ZI012_SVC','5','raw:ZI012_SVC','sounder_other_calibrated'], // Sounder Other Calibrated
-     ['ZI012_SVC','998','raw:ZI012_SVC','not_applicable'], // Not Applicable
-     ['ZI012_SVC','999','raw:ZI012_SVC','other'], // Other
-
-     // ZI012_TEC - Dpth Crv : Snd Meta : Bathymetric Measurement Technique
-     // ['ZI012_TEC','-999999',undefined,undefined], // No Information
-     ['ZI012_TEC','1','raw:ZI012_TEC','echo_sounder'], // Echo Sounder
-     ['ZI012_TEC','2','raw:ZI012_TEC','side-scan_sonar'], // Side-scan Sonar
-     ['ZI012_TEC','3','raw:ZI012_TEC','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-     ['ZI012_TEC','4','raw:ZI012_TEC','diver'], // Diver
-     ['ZI012_TEC','5','raw:ZI012_TEC','lead-line'], // Lead-line
-     ['ZI012_TEC','6','raw:ZI012_TEC','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-     ['ZI012_TEC','8','raw:ZI012_TEC','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-     ['ZI012_TEC','9','raw:ZI012_TEC','electromagnetic_sensor'], // Electromagnetic Sensor
-     ['ZI012_TEC','10','raw:ZI012_TEC','photogrammetry'], // Photogrammetry
-     ['ZI012_TEC','11','raw:ZI012_TEC','satellite_imagery'], // Satellite Imagery
-     ['ZI012_TEC','12','raw:ZI012_TEC','levelling'], // Levelling
-     ['ZI012_TEC','13','raw:ZI012_TEC','computer_generated'], // Computer Generated
-     ['ZI012_TEC','14','raw:ZI012_TEC','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-     ['ZI012_TEC','15','raw:ZI012_TEC','bathymetric_lidar'], // Bathymetric LiDAR
-     ['ZI012_TEC','17','raw:ZI012_TEC','singlebeam'], // Singlebeam
-     ['ZI012_TEC','18','raw:ZI012_TEC','underwater_utility_vehicle'], // Underwater Utility Vehicle
-     ['ZI012_TEC','999','raw:ZI012_TEC','other'], // Other
-
-     // ZI012_TEC2 - Dpth Crv : Snd Meta : Bathymetric Measurement Technique [2]
-     // ['ZI012_TEC2','-999999',undefined,undefined], // No Information
-//      ['ZI012_TEC2','1','raw:ZI012_TEC2','echo_sounder'], // Echo Sounder
-//      ['ZI012_TEC2','2','raw:ZI012_TEC2','side-scan_sonar'], // Side-scan Sonar
-//      ['ZI012_TEC2','3','raw:ZI012_TEC2','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-//      ['ZI012_TEC2','4','raw:ZI012_TEC2','diver'], // Diver
-//      ['ZI012_TEC2','5','raw:ZI012_TEC2','lead-line'], // Lead-line
-//      ['ZI012_TEC2','6','raw:ZI012_TEC2','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-//      ['ZI012_TEC2','8','raw:ZI012_TEC2','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-//      ['ZI012_TEC2','9','raw:ZI012_TEC2','electromagnetic_sensor'], // Electromagnetic Sensor
-//      ['ZI012_TEC2','10','raw:ZI012_TEC2','photogrammetry'], // Photogrammetry
-//      ['ZI012_TEC2','11','raw:ZI012_TEC2','satellite_imagery'], // Satellite Imagery
-//      ['ZI012_TEC2','12','raw:ZI012_TEC2','levelling'], // Levelling
-//      ['ZI012_TEC2','13','raw:ZI012_TEC2','computer_generated'], // Computer Generated
-//      ['ZI012_TEC2','14','raw:ZI012_TEC2','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-//      ['ZI012_TEC2','15','raw:ZI012_TEC2','bathymetric_lidar'], // Bathymetric LiDAR
-//      ['ZI012_TEC2','17','raw:ZI012_TEC2','singlebeam'], // Singlebeam
-//      ['ZI012_TEC2','18','raw:ZI012_TEC2','underwater_utility_vehicle'], // Underwater Utility Vehicle
-//      ['ZI012_TEC2','999','raw:ZI012_TEC2','other'], // Other
-
-     // ZI012_TEC3 - Dpth Crv : Snd Meta : Bathymetric Measurement Technique [3]
-     // ['ZI012_TEC3','-999999',undefined,undefined], // No Information
-//      ['ZI012_TEC3','1','raw:ZI012_TEC3','echo_sounder'], // Echo Sounder
-//      ['ZI012_TEC3','2','raw:ZI012_TEC3','side-scan_sonar'], // Side-scan Sonar
-//      ['ZI012_TEC3','3','raw:ZI012_TEC3','multi-beam_echo_sounder'], // Multi-beam Echo Sounder
-//      ['ZI012_TEC3','4','raw:ZI012_TEC3','diver'], // Diver
-//      ['ZI012_TEC3','5','raw:ZI012_TEC3','lead-line'], // Lead-line
-//      ['ZI012_TEC3','6','raw:ZI012_TEC3','area_swept_by_wire-drag'], // Area Swept by Wire-drag
-//      ['ZI012_TEC3','8','raw:ZI012_TEC3','area_swept_by_vertical_acoustic_system'], // Area Swept by Vertical Acoustic System
-//      ['ZI012_TEC3','9','raw:ZI012_TEC3','electromagnetic_sensor'], // Electromagnetic Sensor
-//      ['ZI012_TEC3','10','raw:ZI012_TEC3','photogrammetry'], // Photogrammetry
-//      ['ZI012_TEC3','11','raw:ZI012_TEC3','satellite_imagery'], // Satellite Imagery
-//      ['ZI012_TEC3','12','raw:ZI012_TEC3','levelling'], // Levelling
-//      ['ZI012_TEC3','13','raw:ZI012_TEC3','computer_generated'], // Computer Generated
-//      ['ZI012_TEC3','14','raw:ZI012_TEC3','area_swept_by_side-scan_sonar'], // Area Swept by Side-scan Sonar
-//      ['ZI012_TEC3','15','raw:ZI012_TEC3','bathymetric_lidar'], // Bathymetric LiDAR
-//      ['ZI012_TEC3','17','raw:ZI012_TEC3','singlebeam'], // Singlebeam
-//      ['ZI012_TEC3','18','raw:ZI012_TEC3','underwater_utility_vehicle'], // Underwater Utility Vehicle
-//      ['ZI012_TEC3','999','raw:ZI012_TEC3','other'], // Other
-
-     // ZI012_VDC - Dpth Crv : Snd Meta : Sounding Datum
-     // ['ZI012_VDC','-999999',undefined,undefined], // No Information
-     ['ZI012_VDC','2','raw:ZI012_VDC','high_water'], // High Water
-     ['ZI012_VDC','3','raw:ZI012_VDC','higher_high_water'], // Higher High Water
-     ['ZI012_VDC','4','raw:ZI012_VDC','indian_spring_low_water'], // Indian Spring Low Water
-     ['ZI012_VDC','5','raw:ZI012_VDC','low_water'], // Low Water
-     ['ZI012_VDC','6','raw:ZI012_VDC','lower_low_water'], // Lower Low Water
-     ['ZI012_VDC','7','raw:ZI012_VDC','mean_high_water'], // Mean High Water
-     ['ZI012_VDC','8','raw:ZI012_VDC','mean_high_water_neaps'], // Mean High Water Neaps
-     ['ZI012_VDC','9','raw:ZI012_VDC','mean_high_water_springs'], // Mean High Water Springs
-     ['ZI012_VDC','10','raw:ZI012_VDC','mean_higher_high_water'], // Mean Higher High Water
-     ['ZI012_VDC','11','raw:ZI012_VDC','mean_low_water'], // Mean Low Water
-     ['ZI012_VDC','12','raw:ZI012_VDC','mean_low_water_neaps'], // Mean Low Water Neaps
-     ['ZI012_VDC','13','raw:ZI012_VDC','mean_low_water_springs'], // Mean Low Water Springs
-     ['ZI012_VDC','14','raw:ZI012_VDC','mean_lower_low_water'], // Mean Lower Low Water
-     ['ZI012_VDC','15','raw:ZI012_VDC','mean_sea_level'], // Mean Sea Level
-     ['ZI012_VDC','16','raw:ZI012_VDC','mean_tide_level'], // Mean Tide Level
-     ['ZI012_VDC','17','raw:ZI012_VDC','neap_tide'], // Neap Tide
-     ['ZI012_VDC','18','raw:ZI012_VDC','spring_tide'], // Spring Tide
-     ['ZI012_VDC','19','raw:ZI012_VDC','mean_lower_low_water_springs'], // Mean Lower Low Water Springs
-     ['ZI012_VDC','20','raw:ZI012_VDC','lowest_astronomical_tide'], // Lowest Astronomical Tide
-     ['ZI012_VDC','21','raw:ZI012_VDC','chart_datum_(unspecified)'], // Chart Datum (Unspecified)
-     ['ZI012_VDC','22','raw:ZI012_VDC','highest_astronomical_tide'], // Highest Astronomical Tide
-     ['ZI012_VDC','24','raw:ZI012_VDC','mean_higher_high_water_springs'], // Mean Higher High Water Springs
-     ['ZI012_VDC','28','raw:ZI012_VDC','highest_high_water'], // Highest High Water
-     ['ZI012_VDC','30','raw:ZI012_VDC','indian_spring_high_water'], // Indian Spring High Water
-     ['ZI012_VDC','90','raw:ZI012_VDC','lowest_low_water'], // Lowest Low Water
-     ['ZI012_VDC','91','raw:ZI012_VDC','lowest_low_water_springs'], // Lowest Low Water Springs
-     ['ZI012_VDC','92','raw:ZI012_VDC','approximate_mean_low_water_springs'], // Approximate Mean Low Water Springs
-     ['ZI012_VDC','93','raw:ZI012_VDC','low_water_springs'], // Low Water Springs
-     ['ZI012_VDC','94','raw:ZI012_VDC','approximate_lowest_astronomical_tide'], // Approximate Lowest Astronomical Tide
-     ['ZI012_VDC','95','raw:ZI012_VDC','nearly_lowest_low_water'], // Nearly Lowest Low Water
-     ['ZI012_VDC','96','raw:ZI012_VDC','approximate_mean_low_water'], // Approximate Mean Low Water
-     ['ZI012_VDC','97','raw:ZI012_VDC','approximate_mean_lower_low_water'], // Approximate Mean Lower Low Water
-     ['ZI012_VDC','98','raw:ZI012_VDC','approximate_mean_sea_level'], // Approximate Mean Sea Level
-     ['ZI012_VDC','99','raw:ZI012_VDC','high_water_springs'], // High Water Springs
-     ['ZI012_VDC','100','raw:ZI012_VDC','equinoctial_spring_low_water'], // Equinoctial Spring Low Water
-     ['ZI012_VDC','101','raw:ZI012_VDC','local_datum'], // Local Datum
-     ['ZI012_VDC','102','raw:ZI012_VDC','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
-     ['ZI012_VDC','103','raw:ZI012_VDC','mean_water_level'], // Mean Water Level
-     ['ZI012_VDC','104','raw:ZI012_VDC','lower_low_water_large_tide'], // Lower Low Water Large Tide
-     ['ZI012_VDC','105','raw:ZI012_VDC','higher_high_water_large_tide'], // Higher High Water Large Tide
-     ['ZI012_VDC','107','raw:ZI012_VDC','nearly_highest_high_water'], // Nearly Highest High Water
-     ['ZI012_VDC','999','raw:ZI012_VDC','other'], // Other
+     // ZI012_DCR - Dpth Crv : Snd Meta : Vessel Draft Correction - See ZHDP_DCR
+     // ZI012_DKC - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category - See ZHDP_DKC
+     // ZI012_DKC2 - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category [2] - See ZHDP_DKC2
+     // ZI012_DKC3 - Dpth Crv : Snd Meta : Bathymetric Measurement Quality Category [3] - See ZHDP_DKC3
+     // ZI012_SVC - Dpth Crv : Snd Meta : Sounding Velocity Correction Method - See ZHDP_SVC
+     // ZI012_TEC - Dpth Crv : Snd Meta : Bathymetric Measurement Technique - See ZHDP_TEC
+     // ZI012_TEC2 - Dpth Crv : Snd Meta : Bathymetric Measurement Technique [2] - See ZHDP_TEC2
+     // ZI012_TEC3 - Dpth Crv : Snd Meta : Bathymetric Measurement Technique [3] - See ZHDP_TEC3
+     // ZI012_VDC - Dpth Crv : Snd Meta : Sounding Datum - See ZHDP_VDC
 
      // ZI013_CSP - Crop Information : Crop Species
      // ['ZI013_CSP','-999999',undefined,undefined], // No Information
@@ -8040,106 +5500,7 @@ ggdm30.rules = {
      ['ZI013_CSP','999','crop','other'], // Other
 
      // ZI013_CSP2 - Crop Information : Crop Species [2]
-     // ['ZI013_CSP2','-999999',undefined,undefined], // No Information
-//      ['ZI013_CSP2','1','crop:2','almond'], // Almond
-//      ['ZI013_CSP2','2','crop:2','apple'], // Apple
-//      ['ZI013_CSP2','3','crop:2','barley'], // Barley
-//      ['ZI013_CSP2','4','crop:2','berry'], // Berry
-//      ['ZI013_CSP2','5','crop:2','carob'], // Carob
-//      ['ZI013_CSP2','6','crop:2','chestnut'], // Chestnut
-//      ['ZI013_CSP2','7','crop:2','citrus'], // Citrus
-//      ['ZI013_CSP2','8','crop:2','cork-oak'], // Cork-Oak
-//      ['ZI013_CSP2','9','crop:2','cacao'], // Cacao
-//      ['ZI013_CSP2','10','crop:2','coffee'], // Coffee
-//      ['ZI013_CSP2','11','crop:2','maize'], // Maize
-//      ['ZI013_CSP2','13','crop:2','dry_crop'], // Dry Crop
-//      ['ZI013_CSP2','14','crop:2','fibre_crop'], // Fibre Crop
-//      ['ZI013_CSP2','15','crop:2','fruit_tree'], // Fruit Tree
-//      ['ZI013_CSP2','17','crop:2','hazelnut'], // Hazelnut
-//      ['ZI013_CSP2','19','crop:2','maple'], // Maple
-//      ['ZI013_CSP2','20','crop:2','millet'], // Millet
-//      ['ZI013_CSP2','21','crop:2','oat'], // Oat
-//      ['ZI013_CSP2','22','crop:2','oil_crop'], // Oil Crop
-//      ['ZI013_CSP2','23','crop:2','olive'], // Olive
-//      ['ZI013_CSP2','24','crop:2','peach'], // Peach
-//      ['ZI013_CSP2','25','crop:2','peanut'], // Peanut
-//      ['ZI013_CSP2','26','crop:2','potato'], // Potato
-//      ['ZI013_CSP2','27','crop:2','pulse'], // Pulse
-//      ['ZI013_CSP2','29','crop:2','rubber'], // Rubber
-//      ['ZI013_CSP2','30','crop:2','rye'], // Rye
-//      ['ZI013_CSP2','31','crop:2','sisal'], // Sisal
-//      ['ZI013_CSP2','32','crop:2','sorghum'], // Sorghum
-//      ['ZI013_CSP2','33','crop:2','sugar_crop'], // Sugar Crop
-//      ['ZI013_CSP2','34','crop:2','tea'], // Tea
-//      ['ZI013_CSP2','35','crop:2','tobacco'], // Tobacco
-//      ['ZI013_CSP2','36','crop:2','tuber'], // Tuber
-//      ['ZI013_CSP2','37','crop:2','vegetable_crop'], // Vegetable Crop
-//      ['ZI013_CSP2','38','crop:2','walnut'], // Walnut
-//      ['ZI013_CSP2','39','crop:2','wheat'], // Wheat
-//      ['ZI013_CSP2','40','crop:2','date'], // Date
-//      ['ZI013_CSP2','41','crop:2','banana'], // Banana
-//      ['ZI013_CSP2','42','crop:2','oil_palm'], // Oil Palm
-//      ['ZI013_CSP2','43','crop:2','coconut'], // Coconut
-//      ['ZI013_CSP2','44','crop:2','sugar_cane'], // Sugar Cane
-//      ['ZI013_CSP2','45','crop:2','cotton'], // Cotton
-//      ['ZI013_CSP2','46','crop:2','bamboo'], // Bamboo
-//      ['ZI013_CSP2','47','crop:2','palmetto'], // Palmetto
-//      ['ZI013_CSP2','48','crop:2','timber'], // Timber
-//      ['ZI013_CSP2','117','crop:2','opium_poppy'], // Opium Poppy
-//      ['ZI013_CSP2','152','crop:2','cannabis'], // Cannabis
-//      ['ZI013_CSP2','159','crop:2','ornamental_crop'], // Ornamental Crop
-//      ['ZI013_CSP2','999','crop:2','other'], // Other
-
      // ZI013_CSP3 - Crop Information : Crop Species [3]
-     // ['ZI013_CSP3','-999999',undefined,undefined], // No Information
-//      ['ZI013_CSP3','1','crop:3','almond'], // Almond
-//      ['ZI013_CSP3','2','crop:3','apple'], // Apple
-//      ['ZI013_CSP3','3','crop:3','barley'], // Barley
-//      ['ZI013_CSP3','4','crop:3','berry'], // Berry
-//      ['ZI013_CSP3','5','crop:3','carob'], // Carob
-//      ['ZI013_CSP3','6','crop:3','chestnut'], // Chestnut
-//      ['ZI013_CSP3','7','crop:3','citrus'], // Citrus
-//      ['ZI013_CSP3','8','crop:3','cork-oak'], // Cork-Oak
-//      ['ZI013_CSP3','9','crop:3','cacao'], // Cacao
-//      ['ZI013_CSP3','10','crop:3','coffee'], // Coffee
-//      ['ZI013_CSP3','11','crop:3','maize'], // Maize
-//      ['ZI013_CSP3','13','crop:3','dry_crop'], // Dry Crop
-//      ['ZI013_CSP3','14','crop:3','fibre_crop'], // Fibre Crop
-//      ['ZI013_CSP3','15','crop:3','fruit_tree'], // Fruit Tree
-//      ['ZI013_CSP3','17','crop:3','hazelnut'], // Hazelnut
-//      ['ZI013_CSP3','19','crop:3','maple'], // Maple
-//      ['ZI013_CSP3','20','crop:3','millet'], // Millet
-//      ['ZI013_CSP3','21','crop:3','oat'], // Oat
-//      ['ZI013_CSP3','22','crop:3','oil_crop'], // Oil Crop
-//      ['ZI013_CSP3','23','crop:3','olive'], // Olive
-//      ['ZI013_CSP3','24','crop:3','peach'], // Peach
-//      ['ZI013_CSP3','25','crop:3','peanut'], // Peanut
-//      ['ZI013_CSP3','26','crop:3','potato'], // Potato
-//      ['ZI013_CSP3','27','crop:3','pulse'], // Pulse
-//      ['ZI013_CSP3','29','crop:3','rubber'], // Rubber
-//      ['ZI013_CSP3','30','crop:3','rye'], // Rye
-//      ['ZI013_CSP3','31','crop:3','sisal'], // Sisal
-//      ['ZI013_CSP3','32','crop:3','sorghum'], // Sorghum
-//      ['ZI013_CSP3','33','crop:3','sugar_crop'], // Sugar Crop
-//      ['ZI013_CSP3','34','crop:3','tea'], // Tea
-//      ['ZI013_CSP3','35','crop:3','tobacco'], // Tobacco
-//      ['ZI013_CSP3','36','crop:3','tuber'], // Tuber
-//      ['ZI013_CSP3','37','crop:3','vegetable_crop'], // Vegetable Crop
-//      ['ZI013_CSP3','38','crop:3','walnut'], // Walnut
-//      ['ZI013_CSP3','39','crop:3','wheat'], // Wheat
-//      ['ZI013_CSP3','40','crop:3','date'], // Date
-//      ['ZI013_CSP3','41','crop:3','banana'], // Banana
-//      ['ZI013_CSP3','42','crop:3','oil_palm'], // Oil Palm
-//      ['ZI013_CSP3','43','crop:3','coconut'], // Coconut
-//      ['ZI013_CSP3','44','crop:3','sugar_cane'], // Sugar Cane
-//      ['ZI013_CSP3','45','crop:3','cotton'], // Cotton
-//      ['ZI013_CSP3','46','crop:3','bamboo'], // Bamboo
-//      ['ZI013_CSP3','47','crop:3','palmetto'], // Palmetto
-//      ['ZI013_CSP3','48','crop:3','timber'], // Timber
-//      ['ZI013_CSP3','117','crop:3','opium_poppy'], // Opium Poppy
-//      ['ZI013_CSP3','152','crop:3','cannabis'], // Cannabis
-//      ['ZI013_CSP3','159','crop:3','ornamental_crop'], // Ornamental Crop
-//      ['ZI013_CSP3','999','crop:3','other'], // Other
 
      // ZI013_FFP - Crop Information : Farming Pattern
      // ['ZI013_FFP','-999999',undefined,undefined], // No Information
@@ -8154,28 +5515,7 @@ ggdm30.rules = {
      ['ZI013_FFP','999','farm:pattern','other'], // Other
 
      // ZI013_FFP2 - Crop Information : Farming Pattern [2]
-     // ['ZI013_FFP2','-999999',undefined,undefined], // No Information
-//      ['ZI013_FFP2','1','farm:pattern:2','linear'], // Linear
-//      ['ZI013_FFP2','2','farm:pattern:2','regular'], // Regular
-//      ['ZI013_FFP2','3','farm:pattern:2','terraced'], // Terraced
-//      ['ZI013_FFP2','4','farm:pattern:2','intermingled_woods'], // Intermingled Woods
-//      ['ZI013_FFP2','5','farm:pattern:2','intermingled_trees'], // Intermingled Trees
-//      ['ZI013_FFP2','6','farm:pattern:2','treeless'], // Treeless
-//      ['ZI013_FFP2','7','farm:pattern:2','trellised'], // Trellised
-//      ['ZI013_FFP2','8','farm:pattern:2','irregular'], // Irregular
-//      ['ZI013_FFP2','999','farm:pattern:2','other'], // Other
-
      // ZI013_FFP3 - Crop Information : Farming Pattern [3]
-     // ['ZI013_FFP3','-999999',undefined,undefined], // No Information
-//      ['ZI013_FFP3','1','farm:pattern:3','linear'], // Linear
-//      ['ZI013_FFP3','2','farm:pattern:3','regular'], // Regular
-//      ['ZI013_FFP3','3','farm:pattern:3','terraced'], // Terraced
-//      ['ZI013_FFP3','4','farm:pattern:3','intermingled_woods'], // Intermingled Woods
-//      ['ZI013_FFP3','5','farm:pattern:3','intermingled_trees'], // Intermingled Trees
-//      ['ZI013_FFP3','6','farm:pattern:3','treeless'], // Treeless
-//      ['ZI013_FFP3','7','farm:pattern:3','trellised'], // Trellised
-//      ['ZI013_FFP3','8','farm:pattern:3','irregular'], // Irregular
-//      ['ZI013_FFP3','999','farm:pattern:3','other'], // Other
 
      // ZI013_FMM - Crop Information : Farming Method
      // ['ZI013_FMM','-999999',undefined,undefined], // No Information
@@ -8186,20 +5526,7 @@ ggdm30.rules = {
      ['ZI013_FMM','999','farm:method','other'], // Other
 
      // ZI013_FMM2 - Crop Information : Farming Method [2]
-     // ['ZI013_FMM2','-999999',undefined,undefined], // No Information
-//      ['ZI013_FMM2','1','farm:method:2','fallow'], // Fallow
-//      ['ZI013_FMM2','2','farm:method:2','grazing'], // Grazing
-//      ['ZI013_FMM2','3','farm:method:2','permanent'], // Permanent
-//      ['ZI013_FMM2','4','farm:method:2','slash_and_burn'], // Slash and Burn
-//      ['ZI013_FMM2','999','farm:method:2','other'], // Other
-
      // ZI013_FMM3 - Crop Information : Farming Method [3]
-     // ['ZI013_FMM3','-999999',undefined,undefined], // No Information
-//      ['ZI013_FMM3','1','farm:method:3','fallow'], // Fallow
-//      ['ZI013_FMM3','2','farm:method:3','grazing'], // Grazing
-//      ['ZI013_FMM3','3','farm:method:3','permanent'], // Permanent
-//      ['ZI013_FMM3','4','farm:method:3','slash_and_burn'], // Slash and Burn
-//      ['ZI013_FMM3','999','farm:method:3','other'], // Other
 
      // ZI013_IRG - Crop Information : Irrigation Method
      // ['ZI013_IRG','-999999',undefined,undefined], // No Information
@@ -8234,34 +5561,7 @@ ggdm30.rules = {
      ['ZI014_PBY','999','by_product','other'], // Other
 
      // ZI014_PBY2 - Manufacturing Information : By-product [2]
-     // ['ZI014_PBY2','-999999',undefined,undefined], // No Information
-//      ['ZI014_PBY2','1','by_product:2','ash'], // Ash
-//      ['ZI014_PBY2','2','by_product:2','cinders'], // Cinders
-//      ['ZI014_PBY2','6','by_product:2','no_byproduct'], // No Byproduct
-//      ['ZI014_PBY2','7','by_product:2','radioactive_material'], // Radioactive Material
-//      ['ZI014_PBY2','8','by_product:2','refuse'], // Refuse
-//      ['ZI014_PBY2','12','by_product:2','scrap-metal'], // Scrap-metal
-//      ['ZI014_PBY2','13','by_product:2','sewage'], // Sewage
-//      ['ZI014_PBY2','15','by_product:2','slag'], // Slag
-//      ['ZI014_PBY2','16','by_product:2','sludge'], // Sludge - PBY
-//      ['ZI014_PBY2','17','by_product:2','spoil'], // Spoil - PBY
-//      ['ZI014_PBY2','89','by_product:2','timber'], // Timber
-//      ['ZI014_PBY2','999','by_product:2','other'], // Other
-
      // ZI014_PBY3 - Manufacturing Information : By-product [3]
-     // ['ZI014_PBY3','-999999',undefined,undefined], // No Information
-//      ['ZI014_PBY3','1','by_product:3','ash'], // Ash
-//      ['ZI014_PBY3','2','by_product:3','cinders'], // Cinders
-//      ['ZI014_PBY3','6','by_product:3','no_byproduct'], // No Byproduct
-//      ['ZI014_PBY3','7','by_product:3','radioactive_material'], // Radioactive Material
-//      ['ZI014_PBY3','8','by_product:3','refuse'], // Refuse
-//      ['ZI014_PBY3','12','by_product:3','scrap-metal'], // Scrap-metal
-//      ['ZI014_PBY3','13','by_product:3','sewage'], // Sewage
-//      ['ZI014_PBY3','15','by_product:3','slag'], // Slag
-//      ['ZI014_PBY3','16','by_product:3','sludge'], // Sludge - PBY
-//      ['ZI014_PBY3','17','by_product:3','spoil'], // Spoil - PBY
-//      ['ZI014_PBY3','89','by_product:3','timber'], // Timber
-//      ['ZI014_PBY3','999','by_product:3','other'], // Other
 
      // ZI014_PPO - Manufacturing Information : Physical Product
      // ['ZI014_PPO','-999999',undefined,undefined], // No Information
@@ -8344,164 +5644,7 @@ ggdm30.rules = {
      ['ZI014_PPO','999','product','other'], // Other
 
      // ZI014_PPO2 - Manufacturing Information : Physical Product [2]
-     // ['ZI014_PPO2','-999999',undefined,undefined], // No Information
-//      ['ZI014_PPO2','1','product2','aircraft'], // Aircraft
-//      ['ZI014_PPO2','2','product2','aluminium'], // Aluminium
-//      ['ZI014_PPO2','3','product2','ammunition'], // Ammunition
-//      ['ZI014_PPO2','4','product2','asphalt'], // Asphalt
-//      ['ZI014_PPO2','5','product2','motor_vehicle'], // Motor Vehicle
-//      ['ZI014_PPO2','13','product2','brick'], // Brick
-//      ['ZI014_PPO2','15','product2','cement'], // Cement
-//      ['ZI014_PPO2','16','product2','chemical'], // Chemical
-//      ['ZI014_PPO2','18','product2','coal'], // Coal
-//      ['ZI014_PPO2','20','product2','coffee'], // Coffee
-//      ['ZI014_PPO2','21','product2','coke'], // Coke
-//      ['ZI014_PPO2','23','product2','concrete'], // Concrete
-//      ['ZI014_PPO2','25','product2','consumer_goods'], // Consumer Goods
-//      ['ZI014_PPO2','26','product2','copper'], // Copper
-//      ['ZI014_PPO2','28','product2','cotton'], // Cotton
-//      ['ZI014_PPO2','32','product2','desalinated_water'], // Desalinated Water
-//      ['ZI014_PPO2','37','product2','electric_power'], // Electric Power
-//      ['ZI014_PPO2','38','product2','explosive'], // Explosive
-//      ['ZI014_PPO2','39','product2','fish'], // Fish
-//      ['ZI014_PPO2','41','product2','food'], // Food
-//      ['ZI014_PPO2','43','product2','frozen_water'], // Frozen Water
-//      ['ZI014_PPO2','44','product2','fruit'], // Fruit
-//      ['ZI014_PPO2','45','product2','gas'], // Gas
-//      ['ZI014_PPO2','46','product2','petrol'], // Petrol
-//      ['ZI014_PPO2','47','product2','glass'], // Glass
-//      ['ZI014_PPO2','48','product2','gold'], // Gold
-//      ['ZI014_PPO2','57','product2','ice'], // Ice
-//      ['ZI014_PPO2','58','product2','iron'], // Iron
-//      ['ZI014_PPO2','59','product2','lead'], // Lead
-//      ['ZI014_PPO2','60','product2','lime'], // Lime
-//      ['ZI014_PPO2','61','product2','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
-//      ['ZI014_PPO2','62','product2','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
-//      ['ZI014_PPO2','63','product2','lumber'], // Lumber
-//      ['ZI014_PPO2','65','product2','manganese'], // Manganese
-//      ['ZI014_PPO2','69','product2','metal'], // Metal
-//      ['ZI014_PPO2','70','product2','milk'], // Milk
-//      ['ZI014_PPO2','73','product2','no_product'], // No Product
-//      ['ZI014_PPO2','74','product2','non-solid_hydrocarbon_fuel'], // Non-solid Hydrocarbon Fuel
-//      ['ZI014_PPO2','80','product2','paper'], // Paper
-//      ['ZI014_PPO2','83','product2','petroleum'], // Petroleum
-//      ['ZI014_PPO2','84','product2','plastic'], // Plastic
-//      ['ZI014_PPO2','87','product2','prestressed_concrete'], // Prestressed Concrete
-//      ['ZI014_PPO2','90','product2','radioactive_material'], // Radioactive Material
-//      ['ZI014_PPO2','92','product2','rice'], // Rice
-//      ['ZI014_PPO2','94','product2','rubber'], // Rubber
-//      ['ZI014_PPO2','95','product2','salt'], // Salt
-//      ['ZI014_PPO2','101','product2','sewage'], // Sewage
-//      ['ZI014_PPO2','105','product2','silver'], // Silver
-//      ['ZI014_PPO2','106','product2','snow'], // Snow
-//      ['ZI014_PPO2','109','product2','steel'], // Steel
-//      ['ZI014_PPO2','111','product2','sugar'], // Sugar
-//      ['ZI014_PPO2','114','product2','textile'], // Textile
-//      ['ZI014_PPO2','117','product2','tobacco'], // Tobacco
-//      ['ZI014_PPO2','120','product2','uranium'], // Uranium
-//      ['ZI014_PPO2','121','product2','vegetation_product'], // Vegetation Product
-//      ['ZI014_PPO2','122','product2','water'], // Water
-//      ['ZI014_PPO2','123','product2','wine'], // Wine
-//      ['ZI014_PPO2','126','product2','zinc'], // Zinc
-//      ['ZI014_PPO2','136','product2','biochemical'], // Biochemical
-//      ['ZI014_PPO2','137','product2','petrochemical'], // Petrochemical
-//      ['ZI014_PPO2','146','product2','heating_steam_and/or_water'], // Heating Steam and/or Water
-//      ['ZI014_PPO2','147','product2','electronic_equipment'], // Electronic Equipment
-//      ['ZI014_PPO2','148','product2','electrical_equipment'], // Electrical Equipment
-//      ['ZI014_PPO2','150','product2','fertilizer'], // Fertilizer
-//      ['ZI014_PPO2','154','product2','munitions'], // Munitions
-//      ['ZI014_PPO2','155','product2','olive_oil'], // Olive Oil
-//      ['ZI014_PPO2','156','product2','whale_products'], // Whale Products
-//      ['ZI014_PPO2','157','product2','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
-//      ['ZI014_PPO2','160','product2','milled_grain'], // Milled Grain
-//      ['ZI014_PPO2','165','product2','clothing'], // Clothing
-//      ['ZI014_PPO2','192','product2','petroleum_lubricant'], // Petroleum Lubricant
-//      ['ZI014_PPO2','200','product2','iron_ingot'], // Iron Ingot
-//      ['ZI014_PPO2','214','product2','biodiesel'], // Biodiesel
-//      ['ZI014_PPO2','279','product2','fluorine'], // Fluorine
-//      ['ZI014_PPO2','325','product2','phosphorus'], // Phosphorus
-//      ['ZI014_PPO2','435','product2','nuclear_fuel'], // Nuclear Fuel
-//      ['ZI014_PPO2','999','product2','other'], // Other
-
      // ZI014_PPO3 - Manufacturing Information : Physical Product [3]
-     // ['ZI014_PPO3','-999999',undefined,undefined], // No Information
-//      ['ZI014_PPO3','1','product3','aircraft'], // Aircraft
-//      ['ZI014_PPO3','2','product3','aluminium'], // Aluminium
-//      ['ZI014_PPO3','3','product3','ammunition'], // Ammunition
-//      ['ZI014_PPO3','4','product3','asphalt'], // Asphalt
-//      ['ZI014_PPO3','5','product3','motor_vehicle'], // Motor Vehicle
-//      ['ZI014_PPO3','13','product3','brick'], // Brick
-//      ['ZI014_PPO3','15','product3','cement'], // Cement
-//      ['ZI014_PPO3','16','product3','chemical'], // Chemical
-//      ['ZI014_PPO3','18','product3','coal'], // Coal
-//      ['ZI014_PPO3','20','product3','coffee'], // Coffee
-//      ['ZI014_PPO3','21','product3','coke'], // Coke
-//      ['ZI014_PPO3','23','product3','concrete'], // Concrete
-//      ['ZI014_PPO3','25','product3','consumer_goods'], // Consumer Goods
-//      ['ZI014_PPO3','26','product3','copper'], // Copper
-//      ['ZI014_PPO3','28','product3','cotton'], // Cotton
-//      ['ZI014_PPO3','32','product3','desalinated_water'], // Desalinated Water
-//      ['ZI014_PPO3','37','product3','electric_power'], // Electric Power
-//      ['ZI014_PPO3','38','product3','explosive'], // Explosive
-//      ['ZI014_PPO3','39','product3','fish'], // Fish
-//      ['ZI014_PPO3','41','product3','food'], // Food
-//      ['ZI014_PPO3','43','product3','frozen_water'], // Frozen Water
-//      ['ZI014_PPO3','44','product3','fruit'], // Fruit
-//      ['ZI014_PPO3','45','product3','gas'], // Gas
-//      ['ZI014_PPO3','46','product3','petrol'], // Petrol
-//      ['ZI014_PPO3','47','product3','glass'], // Glass
-//      ['ZI014_PPO3','48','product3','gold'], // Gold
-//      ['ZI014_PPO3','57','product3','ice'], // Ice
-//      ['ZI014_PPO3','58','product3','iron'], // Iron
-//      ['ZI014_PPO3','59','product3','lead'], // Lead
-//      ['ZI014_PPO3','60','product3','lime'], // Lime
-//      ['ZI014_PPO3','61','product3','liquefied_natural_gas_(lng)'], // Liquefied Natural Gas (LNG)
-//      ['ZI014_PPO3','62','product3','liquefied_petroleum_gas_(lpg)'], // Liquefied Petroleum Gas (LPG)
-//      ['ZI014_PPO3','63','product3','lumber'], // Lumber
-//      ['ZI014_PPO3','65','product3','manganese'], // Manganese
-//      ['ZI014_PPO3','69','product3','metal'], // Metal
-//      ['ZI014_PPO3','70','product3','milk'], // Milk
-//      ['ZI014_PPO3','73','product3','no_product'], // No Product
-//      ['ZI014_PPO3','74','product3','non-solid_hydrocarbon_fuel'], // Non-solid Hydrocarbon Fuel
-//      ['ZI014_PPO3','80','product3','paper'], // Paper
-//      ['ZI014_PPO3','83','product3','petroleum'], // Petroleum
-//      ['ZI014_PPO3','84','product3','plastic'], // Plastic
-//      ['ZI014_PPO3','87','product3','prestressed_concrete'], // Prestressed Concrete
-//      ['ZI014_PPO3','90','product3','radioactive_material'], // Radioactive Material
-//      ['ZI014_PPO3','92','product3','rice'], // Rice
-//      ['ZI014_PPO3','94','product3','rubber'], // Rubber
-//      ['ZI014_PPO3','95','product3','salt'], // Salt
-//      ['ZI014_PPO3','101','product3','sewage'], // Sewage
-//      ['ZI014_PPO3','105','product3','silver'], // Silver
-//      ['ZI014_PPO3','106','product3','snow'], // Snow
-//      ['ZI014_PPO3','109','product3','steel'], // Steel
-//      ['ZI014_PPO3','111','product3','sugar'], // Sugar
-//      ['ZI014_PPO3','114','product3','textile'], // Textile
-//      ['ZI014_PPO3','117','product3','tobacco'], // Tobacco
-//      ['ZI014_PPO3','120','product3','uranium'], // Uranium
-//      ['ZI014_PPO3','121','product3','vegetation_product'], // Vegetation Product
-//      ['ZI014_PPO3','122','product3','water'], // Water
-//      ['ZI014_PPO3','123','product3','wine'], // Wine
-//      ['ZI014_PPO3','126','product3','zinc'], // Zinc
-//      ['ZI014_PPO3','136','product3','biochemical'], // Biochemical
-//      ['ZI014_PPO3','137','product3','petrochemical'], // Petrochemical
-//      ['ZI014_PPO3','146','product3','heating_steam_and/or_water'], // Heating Steam and/or Water
-//      ['ZI014_PPO3','147','product3','electronic_equipment'], // Electronic Equipment
-//      ['ZI014_PPO3','148','product3','electrical_equipment'], // Electrical Equipment
-//      ['ZI014_PPO3','150','product3','fertilizer'], // Fertilizer
-//      ['ZI014_PPO3','154','product3','munitions'], // Munitions
-//      ['ZI014_PPO3','155','product3','olive_oil'], // Olive Oil
-//      ['ZI014_PPO3','156','product3','whale_products'], // Whale Products
-//      ['ZI014_PPO3','157','product3','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
-//      ['ZI014_PPO3','160','product3','milled_grain'], // Milled Grain
-//      ['ZI014_PPO3','165','product3','clothing'], // Clothing
-//      ['ZI014_PPO3','192','product3','petroleum_lubricant'], // Petroleum Lubricant
-//      ['ZI014_PPO3','200','product3','iron_ingot'], // Iron Ingot
-//      ['ZI014_PPO3','214','product3','biodiesel'], // Biodiesel
-//      ['ZI014_PPO3','279','product3','fluorine'], // Fluorine
-//      ['ZI014_PPO3','325','product3','phosphorus'], // Phosphorus
-//      ['ZI014_PPO3','435','product3','nuclear_fuel'], // Nuclear Fuel
-//      ['ZI014_PPO3','999','product3','other'], // Other
 
      // ZI014_PRW - Manufacturing Information : Raw Material
      // ['ZI014_PRW','-999999',undefined,undefined], // No Information
@@ -8553,102 +5696,7 @@ ggdm30.rules = {
      ['ZI014_PRW','999','raw_material','other'], // Other
 
      // ZI014_PRW2 - Manufacturing Information : Raw Material [2]
-     // ['ZI014_PRW2','-999999',undefined,undefined], // No Information
-//      ['ZI014_PRW2','1','raw_material:2','aluminium'], // Aluminium
-//      ['ZI014_PRW2','2','raw_material:2','asphalt'], // Asphalt
-//      ['ZI014_PRW2','5','raw_material:2','bauxite'], // Bauxite
-//      ['ZI014_PRW2','9','raw_material:2','cement'], // Cement
-//      ['ZI014_PRW2','10','raw_material:2','chemical'], // Chemical
-//      ['ZI014_PRW2','11','raw_material:2','clay'], // Clay
-//      ['ZI014_PRW2','12','raw_material:2','coal'], // Coal
-//      ['ZI014_PRW2','14','raw_material:2','coke'], // Coke
-//      ['ZI014_PRW2','16','raw_material:2','copper'], // Copper
-//      ['ZI014_PRW2','18','raw_material:2','cotton'], // Cotton
-//      ['ZI014_PRW2','27','raw_material:2','gas'], // Gas
-//      ['ZI014_PRW2','28','raw_material:2','glass'], // Glass
-//      ['ZI014_PRW2','29','raw_material:2','gold'], // Gold
-//      ['ZI014_PRW2','30','raw_material:2','grain'], // Grain
-//      ['ZI014_PRW2','33','raw_material:2','plant_material'], // Plant Material
-//      ['ZI014_PRW2','38','raw_material:2','ice'], // Ice
-//      ['ZI014_PRW2','39','raw_material:2','iron'], // Iron
-//      ['ZI014_PRW2','41','raw_material:2','lead'], // Lead
-//      ['ZI014_PRW2','45','raw_material:2','lumber'], // Lumber
-//      ['ZI014_PRW2','46','raw_material:2','manganese'], // Manganese
-//      ['ZI014_PRW2','48','raw_material:2','metal'], // Metal
-//      ['ZI014_PRW2','50','raw_material:2','no_raw_material'], // No Raw Material
-//      ['ZI014_PRW2','52','raw_material:2','oil'], // Oil
-//      ['ZI014_PRW2','54','raw_material:2','ore'], // Ore
-//      ['ZI014_PRW2','57','raw_material:2','paper'], // Paper
-//      ['ZI014_PRW2','60','raw_material:2','plastic'], // Plastic
-//      ['ZI014_PRW2','64','raw_material:2','radioactive_material'], // Radioactive Material
-//      ['ZI014_PRW2','66','raw_material:2','rubber'], // Rubber
-//      ['ZI014_PRW2','68','raw_material:2','sand'], // Sand
-//      ['ZI014_PRW2','70','raw_material:2','wood_fragments'], // Wood Fragments
-//      ['ZI014_PRW2','75','raw_material:2','sewage'], // Sewage
-//      ['ZI014_PRW2','78','raw_material:2','silver'], // Silver
-//      ['ZI014_PRW2','79','raw_material:2','snow'], // Snow
-//      ['ZI014_PRW2','83','raw_material:2','steel'], // Steel
-//      ['ZI014_PRW2','84','raw_material:2','stone'], // Stone
-//      ['ZI014_PRW2','85','raw_material:2','sugar'], // Sugar
-//      ['ZI014_PRW2','87','raw_material:2','textile'], // Textile
-//      ['ZI014_PRW2','90','raw_material:2','tobacco'], // Tobacco
-//      ['ZI014_PRW2','93','raw_material:2','uranium'], // Uranium
-//      ['ZI014_PRW2','94','raw_material:2','vegetation'], // Vegetation
-//      ['ZI014_PRW2','96','raw_material:2','water'], // Water
-//      ['ZI014_PRW2','97','raw_material:2','wood'], // Wood
-//      ['ZI014_PRW2','99','raw_material:2','zinc'], // Zinc
-//      ['ZI014_PRW2','118','raw_material:2','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
-//      ['ZI014_PRW2','119','raw_material:2','biodiesel'], // Biodiesel
-//      ['ZI014_PRW2','999','raw_material:2','other'], // Other
-
      // ZI014_PRW3 - Manufacturing Information : Raw Material [3]
-     // ['ZI014_PRW3','-999999',undefined,undefined], // No Information
-//      ['ZI014_PRW3','1','raw_material:3','aluminium'], // Aluminium
-//      ['ZI014_PRW3','2','raw_material:3','asphalt'], // Asphalt
-//      ['ZI014_PRW3','5','raw_material:3','bauxite'], // Bauxite
-//      ['ZI014_PRW3','9','raw_material:3','cement'], // Cement
-//      ['ZI014_PRW3','10','raw_material:3','chemical'], // Chemical
-//      ['ZI014_PRW3','11','raw_material:3','clay'], // Clay
-//      ['ZI014_PRW3','12','raw_material:3','coal'], // Coal
-//      ['ZI014_PRW3','14','raw_material:3','coke'], // Coke
-//      ['ZI014_PRW3','16','raw_material:3','copper'], // Copper
-//      ['ZI014_PRW3','18','raw_material:3','cotton'], // Cotton
-//      ['ZI014_PRW3','27','raw_material:3','gas'], // Gas
-//      ['ZI014_PRW3','28','raw_material:3','glass'], // Glass
-//      ['ZI014_PRW3','29','raw_material:3','gold'], // Gold
-//      ['ZI014_PRW3','30','raw_material:3','grain'], // Grain
-//      ['ZI014_PRW3','33','raw_material:3','plant_material'], // Plant Material
-//      ['ZI014_PRW3','38','raw_material:3','ice'], // Ice
-//      ['ZI014_PRW3','39','raw_material:3','iron'], // Iron
-//      ['ZI014_PRW3','41','raw_material:3','lead'], // Lead
-//      ['ZI014_PRW3','45','raw_material:3','lumber'], // Lumber
-//      ['ZI014_PRW3','46','raw_material:3','manganese'], // Manganese
-//      ['ZI014_PRW3','48','raw_material:3','metal'], // Metal
-//      ['ZI014_PRW3','50','raw_material:3','no_raw_material'], // No Raw Material
-//      ['ZI014_PRW3','52','raw_material:3','oil'], // Oil
-//      ['ZI014_PRW3','54','raw_material:3','ore'], // Ore
-//      ['ZI014_PRW3','57','raw_material:3','paper'], // Paper
-//      ['ZI014_PRW3','60','raw_material:3','plastic'], // Plastic
-//      ['ZI014_PRW3','64','raw_material:3','radioactive_material'], // Radioactive Material
-//      ['ZI014_PRW3','66','raw_material:3','rubber'], // Rubber
-//      ['ZI014_PRW3','68','raw_material:3','sand'], // Sand
-//      ['ZI014_PRW3','70','raw_material:3','wood_fragments'], // Wood Fragments
-//      ['ZI014_PRW3','75','raw_material:3','sewage'], // Sewage
-//      ['ZI014_PRW3','78','raw_material:3','silver'], // Silver
-//      ['ZI014_PRW3','79','raw_material:3','snow'], // Snow
-//      ['ZI014_PRW3','83','raw_material:3','steel'], // Steel
-//      ['ZI014_PRW3','84','raw_material:3','stone'], // Stone
-//      ['ZI014_PRW3','85','raw_material:3','sugar'], // Sugar
-//      ['ZI014_PRW3','87','raw_material:3','textile'], // Textile
-//      ['ZI014_PRW3','90','raw_material:3','tobacco'], // Tobacco
-//      ['ZI014_PRW3','93','raw_material:3','uranium'], // Uranium
-//      ['ZI014_PRW3','94','raw_material:3','vegetation'], // Vegetation
-//      ['ZI014_PRW3','96','raw_material:3','water'], // Water
-//      ['ZI014_PRW3','97','raw_material:3','wood'], // Wood
-//      ['ZI014_PRW3','99','raw_material:3','zinc'], // Zinc
-//      ['ZI014_PRW3','118','raw_material:3','petroleum_and/or_natural_gas'], // Petroleum and/or Natural Gas
-//      ['ZI014_PRW3','119','raw_material:3','biodiesel'], // Biodiesel
-//      ['ZI014_PRW3','999','raw_material:3','other'], // Other
 
      // ZI015_GCUC - Geo Name Collection : Geographic Name Cartographic Usability Range <interval closure>
      ['ZI015_GCUC','2','cartographic_scale:name:closure','open_interval'], // Open Interval
@@ -8748,28 +5796,7 @@ ggdm30.rules = {
      ['ZI019_ASP','999','aeroway:pavement:preparation','other'], // Other
 
      // ZI019_ASP2 - Aero Pvmt : Aerodrome Movement Area Surface Preparation Method [2]
-     // ['ZI019_ASP2','-999999',undefined,undefined], // No Information
-//      ['ZI019_ASP2','1','aeroway:pavement:preparation:2','aggregate_seal_coat'], // Aggregate Seal Coat
-//      ['ZI019_ASP2','2','aeroway:pavement:preparation:2','graded'], // Graded
-//      ['ZI019_ASP2','3','aeroway:pavement:preparation:2','grass'], // Grass
-//      ['ZI019_ASP2','4','aeroway:pavement:preparation:2','grooved'], // Grooved
-//      ['ZI019_ASP2','5','aeroway:pavement:preparation:2','oiled'], // Oiled
-//      ['ZI019_ASP2','6','aeroway:pavement:preparation:2','porous_friction_course'], // Porous Friction Course
-//      ['ZI019_ASP2','7','aeroway:pavement:preparation:2','rolled'], // Rolled
-//      ['ZI019_ASP2','8','aeroway:pavement:preparation:2','rubberized_seal_coat'], // Rubberized Seal Coat
-//      ['ZI019_ASP2','999','aeroway:pavement:preparation:2','other'], // Other
-
      // ZI019_ASP3 - Aero Pvmt : Aerodrome Movement Area Surface Preparation Method [3]
-     // ['ZI019_ASP3','-999999',undefined,undefined], // No Information
-//      ['ZI019_ASP3','1','aeroway:pavement:preparation:3','aggregate_seal_coat'], // Aggregate Seal Coat
-//      ['ZI019_ASP3','2','aeroway:pavement:preparation:3','graded'], // Graded
-//      ['ZI019_ASP3','3','aeroway:pavement:preparation:3','grass'], // Grass
-//      ['ZI019_ASP3','4','aeroway:pavement:preparation:3','grooved'], // Grooved
-//      ['ZI019_ASP3','5','aeroway:pavement:preparation:3','oiled'], // Oiled
-//      ['ZI019_ASP3','6','aeroway:pavement:preparation:3','porous_friction_course'], // Porous Friction Course
-//      ['ZI019_ASP3','7','aeroway:pavement:preparation:3','rolled'], // Rolled
-//      ['ZI019_ASP3','8','aeroway:pavement:preparation:3','rubberized_seal_coat'], // Rubberized Seal Coat
-//      ['ZI019_ASP3','999','aeroway:pavement:preparation:3','other'], // Other
 
      // ZI019_ASU - Aero Pvmt : Aerodrome Movement Area Surface Composition
      // ['ZI019_ASU','-999999',undefined,undefined], // No Information
@@ -8796,52 +5823,7 @@ ggdm30.rules = {
      ['ZI019_ASU','999','aeroway:surface','other'], // Other
 
      // ZI019_ASU2 - Aero Pvmt : Aerodrome Movement Area Surface Composition [2]
-     // ['ZI019_ASU2','-999999',undefined,undefined], // No Information
-//      ['ZI019_ASU2','1','aeroway:surface:2','asphalt'], // Asphalt
-//      ['ZI019_ASU2','2','aeroway:surface:2','bituminous_mix'], // Bituminous Mix
-//      ['ZI019_ASU2','3','aeroway:surface:2','brick'], // Brick
-//      ['ZI019_ASU2','4','aeroway:surface:2','clay'], // Clay
-//      ['ZI019_ASU2','5','aeroway:surface:2','concrete'], // Concrete
-//      ['ZI019_ASU2','6','aeroway:surface:2','coral'], // Coral
-//      ['ZI019_ASU2','7','aeroway:surface:2','earthen'], // Earthen
-//      ['ZI019_ASU2','8','aeroway:surface:2','gravel'], // Gravel
-//      ['ZI019_ASU2','9','aeroway:surface:2','ice'], // Ice
-//      ['ZI019_ASU2','10','aeroway:surface:2','landing_mat'], // Landing Mat
-//      ['ZI019_ASU2','11','aeroway:surface:2','laterite'], // Laterite
-//      ['ZI019_ASU2','12','aeroway:surface:2','macadam'], // Macadam
-//      ['ZI019_ASU2','13','aeroway:surface:2','membrane'], // Membrane
-//      ['ZI019_ASU2','14','aeroway:surface:2','non-bituminous_mix'], // Non-bituminous Mix
-//      ['ZI019_ASU2','15','aeroway:surface:2','pierced_steel_planking'], // Pierced Steel Planking
-//      ['ZI019_ASU2','16','aeroway:surface:2','sand'], // Sand
-//      ['ZI019_ASU2','17','aeroway:surface:2','snow'], // Snow
-//      ['ZI019_ASU2','18','aeroway:surface:2','stone'], // Stone
-//      ['ZI019_ASU2','20','aeroway:surface:2','wood'], // Wood
-//      ['ZI019_ASU2','21','aeroway:surface:2','asphalt_over_concrete'], // Asphalt Over Concrete
-//      ['ZI019_ASU2','999','aeroway:surface:2','other'], // Other
-
      // ZI019_ASU3 - Aero Pvmt : Aerodrome Movement Area Surface Composition [3]
-     // ['ZI019_ASU3','-999999',undefined,undefined], // No Information
-//      ['ZI019_ASU3','1','aeroway:surface:3','asphalt'], // Asphalt
-//      ['ZI019_ASU3','2','aeroway:surface:3','bituminous_mix'], // Bituminous Mix
-//      ['ZI019_ASU3','3','aeroway:surface:3','brick'], // Brick
-//      ['ZI019_ASU3','4','aeroway:surface:3','clay'], // Clay
-//      ['ZI019_ASU3','5','aeroway:surface:3','concrete'], // Concrete
-//      ['ZI019_ASU3','6','aeroway:surface:3','coral'], // Coral
-//      ['ZI019_ASU3','7','aeroway:surface:3','earthen'], // Earthen
-//      ['ZI019_ASU3','8','aeroway:surface:3','gravel'], // Gravel
-//      ['ZI019_ASU3','9','aeroway:surface:3','ice'], // Ice
-//      ['ZI019_ASU3','10','aeroway:surface:3','landing_mat'], // Landing Mat
-//      ['ZI019_ASU3','11','aeroway:surface:3','laterite'], // Laterite
-//      ['ZI019_ASU3','12','aeroway:surface:3','macadam'], // Macadam
-//      ['ZI019_ASU3','13','aeroway:surface:3','membrane'], // Membrane
-//      ['ZI019_ASU3','14','aeroway:surface:3','non-bituminous_mix'], // Non-bituminous Mix
-//      ['ZI019_ASU3','15','aeroway:surface:3','pierced_steel_planking'], // Pierced Steel Planking
-//      ['ZI019_ASU3','16','aeroway:surface:3','sand'], // Sand
-//      ['ZI019_ASU3','17','aeroway:surface:3','snow'], // Snow
-//      ['ZI019_ASU3','18','aeroway:surface:3','stone'], // Stone
-//      ['ZI019_ASU3','20','aeroway:surface:3','wood'], // Wood
-//      ['ZI019_ASU3','21','aeroway:surface:3','asphalt_over_concrete'], // Asphalt Over Concrete
-//      ['ZI019_ASU3','999','aeroway:surface:3','other'], // Other
 
      // ZI019_ASX - Aero Pvmt : Aerodrome Movement Area Surface Category
      // ['ZI019_ASX','-999999',undefined,undefined], // No Information
@@ -8926,64 +5908,9 @@ ggdm30.rules = {
      ['ZI024_PUR','999','raw:ZI024_PUR','other'], // Other
 
      // ZI024_PUR2 - Water : Purification Process [2]
-     // ['ZI024_PUR2','-999999',undefined,undefined], // No Information
-//      ['ZI024_PUR2','1','raw:ZI024_PUR2','desalination'], // Desalination
-//      ['ZI024_PUR2','2','raw:ZI024_PUR2','filtration'], // Filtration
-//      ['ZI024_PUR2','3','raw:ZI024_PUR2','sedimentation/coagulation'], // Sedimentation/coagulation
-//      ['ZI024_PUR2','4','raw:ZI024_PUR2','reverse_osmosis'], // Reverse Osmosis
-//      ['ZI024_PUR2','5','raw:ZI024_PUR2','electrolysis'], // Electrolysis
-//      ['ZI024_PUR2','6','raw:ZI024_PUR2','disinfection'], // Disinfection
-//      ['ZI024_PUR2','7','raw:ZI024_PUR2','blending'], // Blending
-//      ['ZI024_PUR2','8','raw:ZI024_PUR2','freezing'], // Freezing
-//      ['ZI024_PUR2','9','raw:ZI024_PUR2','multi-stage_flash'], // Multi-stage flash
-//      ['ZI024_PUR2','10','raw:ZI024_PUR2','multi-effect_evaporation'], // Multi-effect evaporation
-//      ['ZI024_PUR2','11','raw:ZI024_PUR2','vapor_compression'], // Vapor Compression
-//      ['ZI024_PUR2','999','raw:ZI024_PUR2','other'], // Other
-
      // ZI024_PUR3 - Water : Purification Process [3]
-     // ['ZI024_PUR3','-999999',undefined,undefined], // No Information
-//      ['ZI024_PUR3','1','raw:ZI024_PUR3','desalination'], // Desalination
-//      ['ZI024_PUR3','2','raw:ZI024_PUR3','filtration'], // Filtration
-//      ['ZI024_PUR3','3','raw:ZI024_PUR3','sedimentation/coagulation'], // Sedimentation/coagulation
-//      ['ZI024_PUR3','4','raw:ZI024_PUR3','reverse_osmosis'], // Reverse Osmosis
-//      ['ZI024_PUR3','5','raw:ZI024_PUR3','electrolysis'], // Electrolysis
-//      ['ZI024_PUR3','6','raw:ZI024_PUR3','disinfection'], // Disinfection
-//      ['ZI024_PUR3','7','raw:ZI024_PUR3','blending'], // Blending
-//      ['ZI024_PUR3','8','raw:ZI024_PUR3','freezing'], // Freezing
-//      ['ZI024_PUR3','9','raw:ZI024_PUR3','multi-stage_flash'], // Multi-stage flash
-//      ['ZI024_PUR3','10','raw:ZI024_PUR3','multi-effect_evaporation'], // Multi-effect evaporation
-//      ['ZI024_PUR3','11','raw:ZI024_PUR3','vapor_compression'], // Vapor Compression
-//      ['ZI024_PUR3','999','raw:ZI024_PUR3','other'], // Other
-
      // ZI024_PUR4 - Water : Purification Process [4]
-     // ['ZI024_PUR4','-999999',undefined,undefined], // No Information
-//      ['ZI024_PUR4','1','raw:ZI024_PUR4','desalination'], // Desalination
-//      ['ZI024_PUR4','2','raw:ZI024_PUR4','filtration'], // Filtration
-//      ['ZI024_PUR4','3','raw:ZI024_PUR4','sedimentation/coagulation'], // Sedimentation/coagulation
-//      ['ZI024_PUR4','4','raw:ZI024_PUR4','reverse_osmosis'], // Reverse Osmosis
-//      ['ZI024_PUR4','5','raw:ZI024_PUR4','electrolysis'], // Electrolysis
-//      ['ZI024_PUR4','6','raw:ZI024_PUR4','disinfection'], // Disinfection
-//      ['ZI024_PUR4','7','raw:ZI024_PUR4','blending'], // Blending
-//      ['ZI024_PUR4','8','raw:ZI024_PUR4','freezing'], // Freezing
-//      ['ZI024_PUR4','9','raw:ZI024_PUR4','multi-stage_flash'], // Multi-stage flash
-//      ['ZI024_PUR4','10','raw:ZI024_PUR4','multi-effect_evaporation'], // Multi-effect evaporation
-//      ['ZI024_PUR4','11','raw:ZI024_PUR4','vapor_compression'], // Vapor Compression
-//      ['ZI024_PUR4','999','raw:ZI024_PUR4','other'], // Other
-
      // ZI024_PUR5 - Water : Purification Process [5]
-     // ['ZI024_PUR5','-999999',undefined,undefined], // No Information
-//      ['ZI024_PUR5','1','raw:ZI024_PUR5','desalination'], // Desalination
-//      ['ZI024_PUR5','2','raw:ZI024_PUR5','filtration'], // Filtration
-//      ['ZI024_PUR5','3','raw:ZI024_PUR5','sedimentation/coagulation'], // Sedimentation/coagulation
-//      ['ZI024_PUR5','4','raw:ZI024_PUR5','reverse_osmosis'], // Reverse Osmosis
-//      ['ZI024_PUR5','5','raw:ZI024_PUR5','electrolysis'], // Electrolysis
-//      ['ZI024_PUR5','6','raw:ZI024_PUR5','disinfection'], // Disinfection
-//      ['ZI024_PUR5','7','raw:ZI024_PUR5','blending'], // Blending
-//      ['ZI024_PUR5','8','raw:ZI024_PUR5','freezing'], // Freezing
-//      ['ZI024_PUR5','9','raw:ZI024_PUR5','multi-stage_flash'], // Multi-stage flash
-//      ['ZI024_PUR5','10','raw:ZI024_PUR5','multi-effect_evaporation'], // Multi-effect evaporation
-//      ['ZI024_PUR5','11','raw:ZI024_PUR5','vapor_compression'], // Vapor Compression
-//      ['ZI024_PUR5','999','raw:ZI024_PUR5','other'], // Other
 
      // ZI024_RTP - Water : Reservoir Type
      // ['ZI024_RTP','-999999',undefined,undefined], // No Information
@@ -9044,49 +5971,8 @@ ggdm30.rules = {
      ['ZI024_WUR','999','raw:ZI024_WUR','other'], // Other
 
      // ZI024_WUR2 - Water : Water Use [2]
-     // ['ZI024_WUR2','-999999',undefined,undefined], // No Information
-//      ['ZI024_WUR2','1','raw:ZI024_WUR2','agricultural_irrigation'], // Agricultural Irrigation
-//      ['ZI024_WUR2','2','raw:ZI024_WUR2','commercial'], // Commercial
-//      ['ZI024_WUR2','3','raw:ZI024_WUR2','domestic_irrigation'], // Domestic Irrigation
-//      ['ZI024_WUR2','4','raw:ZI024_WUR2','industrial'], // Industrial
-//      ['ZI024_WUR2','5','raw:ZI024_WUR2','institutional'], // Institutional
-//      ['ZI024_WUR2','6','raw:ZI024_WUR2','livestock'], // Livestock
-//      ['ZI024_WUR2','7','raw:ZI024_WUR2','municipal'], // Municipal
-//      ['ZI024_WUR2','8','raw:ZI024_WUR2','power_generation'], // Power Generation
-//      ['ZI024_WUR2','9','raw:ZI024_WUR2','recreational'], // Recreational
-//      ['ZI024_WUR2','10','raw:ZI024_WUR2','sanitary_domestic'], // Sanitary Domestic
-//      ['ZI024_WUR2','11','raw:ZI024_WUR2','military'], // Military
-//      ['ZI024_WUR2','999','raw:ZI024_WUR2','other'], // Other
-
      // ZI024_WUR3 - Water : Water Use [3]
-     // ['ZI024_WUR3','-999999',undefined,undefined], // No Information
-//      ['ZI024_WUR3','1','raw:ZI024_WUR3','agricultural_irrigation'], // Agricultural Irrigation
-//      ['ZI024_WUR3','2','raw:ZI024_WUR3','commercial'], // Commercial
-//      ['ZI024_WUR3','3','raw:ZI024_WUR3','domestic_irrigation'], // Domestic Irrigation
-//      ['ZI024_WUR3','4','raw:ZI024_WUR3','industrial'], // Industrial
-//      ['ZI024_WUR3','5','raw:ZI024_WUR3','institutional'], // Institutional
-//      ['ZI024_WUR3','6','raw:ZI024_WUR3','livestock'], // Livestock
-//      ['ZI024_WUR3','7','raw:ZI024_WUR3','municipal'], // Municipal
-//      ['ZI024_WUR3','8','raw:ZI024_WUR3','power_generation'], // Power Generation
-//      ['ZI024_WUR3','9','raw:ZI024_WUR3','recreational'], // Recreational
-//      ['ZI024_WUR3','10','raw:ZI024_WUR3','sanitary_domestic'], // Sanitary Domestic
-//      ['ZI024_WUR3','11','raw:ZI024_WUR3','military'], // Military
-//      ['ZI024_WUR3','999','raw:ZI024_WUR3','other'], // Other
-
      // ZI024_WUR4 - Water : Water Use [4]
-     // ['ZI024_WUR4','-999999',undefined,undefined], // No Information
-//      ['ZI024_WUR4','1','raw:ZI024_WUR4','agricultural_irrigation'], // Agricultural Irrigation
-//      ['ZI024_WUR4','2','raw:ZI024_WUR4','commercial'], // Commercial
-//      ['ZI024_WUR4','3','raw:ZI024_WUR4','domestic_irrigation'], // Domestic Irrigation
-//      ['ZI024_WUR4','4','raw:ZI024_WUR4','industrial'], // Industrial
-//      ['ZI024_WUR4','5','raw:ZI024_WUR4','institutional'], // Institutional
-//      ['ZI024_WUR4','6','raw:ZI024_WUR4','livestock'], // Livestock
-//      ['ZI024_WUR4','7','raw:ZI024_WUR4','municipal'], // Municipal
-//      ['ZI024_WUR4','8','raw:ZI024_WUR4','power_generation'], // Power Generation
-//      ['ZI024_WUR4','9','raw:ZI024_WUR4','recreational'], // Recreational
-//      ['ZI024_WUR4','10','raw:ZI024_WUR4','sanitary_domestic'], // Sanitary Domestic
-//      ['ZI024_WUR4','11','raw:ZI024_WUR4','military'], // Military
-//      ['ZI024_WUR4','999','raw:ZI024_WUR4','other'], // Other
 
      // ZI024_YWQ - Water : Water Potability
      // ['ZI024_YWQ','-999999',undefined,undefined], // No Information
@@ -9220,29 +6106,9 @@ ggdm30.rules = {
      ['ZI071_CTX','7','cave:type','talus'], // Talus
      ['ZI071_CTX','999','cave:type','other'], // Other
 
-     // ZI071_FFN - Cave Information : Feature Function
-     // ['ZI071_FFN','-999999',undefined,undefined], // No Information
-     ['ZI071_FFN','530','raw:ZI071_FFN','warehousing_and_storage'], // Warehousing and Storage
-     ['ZI071_FFN','563','raw:ZI071_FFN','residence'], // Residence
-     ['ZI071_FFN','835','raw:ZI071_FFN','defence_activities'], // Defence Activities
-     ['ZI071_FFN','930','raw:ZI071_FFN','religious_activities'], // Religious Activities
-     ['ZI071_FFN','999','raw:ZI071_FFN','other'], // Other
-
-     // ZI071_FFN2 - Cave Information : Feature Function [2]
-     // ['ZI071_FFN2','-999999',undefined,undefined], // No Information
-//      ['ZI071_FFN2','530','raw:ZI071_FFN2','warehousing_and_storage'], // Warehousing and Storage
-//      ['ZI071_FFN2','563','raw:ZI071_FFN2','residence'], // Residence
-//      ['ZI071_FFN2','835','raw:ZI071_FFN2','defence_activities'], // Defence Activities
-//      ['ZI071_FFN2','930','raw:ZI071_FFN2','religious_activities'], // Religious Activities
-//      ['ZI071_FFN2','999','raw:ZI071_FFN2','other'], // Other
-
-     // ZI071_FFN3 - Cave Information : Feature Function [3]
-     // ['ZI071_FFN3','-999999',undefined,undefined], // No Information
-//      ['ZI071_FFN3','530','raw:ZI071_FFN3','warehousing_and_storage'], // Warehousing and Storage
-//      ['ZI071_FFN3','563','raw:ZI071_FFN3','residence'], // Residence
-//      ['ZI071_FFN3','835','raw:ZI071_FFN3','defence_activities'], // Defence Activities
-//      ['ZI071_FFN3','930','raw:ZI071_FFN3','religious_activities'], // Religious Activities
-//      ['ZI071_FFN3','999','raw:ZI071_FFN3','other'], // Other
+     // ZI071_FFN - Cave Information : Feature Function - See FFN
+     // ZI071_FFN2 - Cave Information : Feature Function [2] - See FFN2
+     // ZI071_FFN3 - Cave Information : Feature Function [3] - See FFN3
 
      // ZI071_UAO - Cave Information : Underground Access Orientation
      // ['ZI071_UAO','-999999',undefined,undefined], // No Information
@@ -9261,19 +6127,9 @@ ggdm30.rules = {
      ['ZSAX_RS0','noInformation','security:classification','no_information'], // No Information
      ['ZSAX_RS0','other','security:classification','other'], // Other
 
-     // ZVH_VDT - Highest Elevation <vertical datum>
-     // ['ZVH_VDT','-999999',undefined,undefined], // No Information
-     ['ZVH_VDT','1','raw:ZVH_VDT','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
-     ['ZVH_VDT','2','raw:ZVH_VDT','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
-     ['ZVH_VDT','3','raw:ZVH_VDT','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
-     ['ZVH_VDT','4','raw:ZVH_VDT','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
-     ['ZVH_VDT','5','raw:ZVH_VDT','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
-     ['ZVH_VDT','6','raw:ZVH_VDT','ground_level'], // Ground Level
-     ['ZVH_VDT','7','raw:ZVH_VDT','wgs_84_egm08_geoid'], // WGS 84 EGM08 Geoid
-     ['ZVH_VDT','998','raw:ZVH_VDT','not_applicable'], // Not Applicable
-     ['ZVH_VDT','999','raw:ZVH_VDT','other'], // Other
+     // ZVH_VDT - Highest Elevation <vertical datum> - See VDT
 
-     ], // End one2one
+    ], // End one2one
 
      // Input Translation Rules:
      // These are only used for IMPORT and get added to the standard one2one rules
@@ -9328,7 +6184,6 @@ ggdm30.rules = {
 
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
-
 
      // Extra road stuff - see similarTable
      // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
@@ -9406,11 +6261,6 @@ ggdm30.rules = {
      ['FFN','760','amenity','office'], // Business and Personal Support Services
      ['FFN','815','building','palace'], // Palace
    ], // End one2oneOut
-
-    // One2one translation table for converting XXX2, XXX3, XXX:2, XXX:3 etc attributes
-    one2oneMulti : [
-
-   ], // End one2oneMulti
 
     // ##### End of One2One Rules #####
 
