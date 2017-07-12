@@ -30,6 +30,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -195,7 +196,10 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       {
         if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {
-         LOG_WARN("Found a non-contiguous relation when extracting a network. Ignoring: " << e);
+          LOG_WARN(
+            "Found a non-contiguous relation when extracting a network. Ignoring: " <<
+            e->getElementId());
+          LOG_TRACE("Non-contiguous relation: " << e);
         }
         else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
         {

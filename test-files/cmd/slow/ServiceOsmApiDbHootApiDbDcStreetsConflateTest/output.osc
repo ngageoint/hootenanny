@@ -643,7 +643,7 @@
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="74"/>
             <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
+            <tag k="alt_name" v="15th St NW"/>
             <tag k="name" v="15TH ST NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
@@ -876,7 +876,7 @@
             <tag k="accuracy" v="5"/>
             <tag k="hoot:id" v="209"/>
             <tag k="hoot:status" v="3"/>
-            <tag k="alt_name" v="15th St NW;Raoul Wallenberg Pl SW"/>
+            <tag k="alt_name" v="15th St NW"/>
             <tag k="name" v="15TH ST NW"/>
             <tag k="highway" v="road"/>
             <tag k="error:circular" v="5"/>
@@ -1043,7 +1043,7 @@
             <nd ref="-27"/>
             <nd ref="-96"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="369"/>
+            <tag k="hoot:id" v="367"/>
             <tag k="hoot:status" v="2"/>
             <tag k="name" v="South Pl NW"/>
             <tag k="foot" v="designated"/>
@@ -1056,7 +1056,7 @@
             <nd ref="-68"/>
             <nd ref="-69"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="372"/>
+            <tag k="hoot:id" v="370"/>
             <tag k="hoot:status" v="2"/>
             <tag k="name" v="E Executive Ave NW"/>
             <tag k="highway" v="unclassified"/>
@@ -1071,7 +1071,7 @@
             <nd ref="1514"/>
             <nd ref="-95"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="911"/>
+            <tag k="hoot:id" v="907"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Executive Ave NW;South Pl NW"/>
             <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
@@ -1086,7 +1086,7 @@
             <nd ref="1487"/>
             <nd ref="1486"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="915"/>
+            <tag k="hoot:id" v="911"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="South Pl NW"/>
             <tag k="name" v="SOUTH EXECUTIVE AVE NW"/>
@@ -1122,7 +1122,7 @@
             <nd ref="-93"/>
             <nd ref="-94"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="930"/>
+            <tag k="hoot:id" v="926"/>
             <tag k="hoot:status" v="2"/>
             <tag k="name" v="17th St NW"/>
             <tag k="highway" v="unclassified"/>
@@ -1141,7 +1141,7 @@
             <nd ref="3165"/>
             <nd ref="-97"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="932"/>
+            <tag k="hoot:id" v="928"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
@@ -1168,7 +1168,7 @@
             <nd ref="3093"/>
             <nd ref="2687"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="936"/>
+            <tag k="hoot:id" v="932"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
@@ -1190,7 +1190,7 @@
             <nd ref="2150"/>
             <nd ref="2148"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="951"/>
+            <tag k="hoot:id" v="947"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
@@ -1223,7 +1223,7 @@
             <nd ref="2184"/>
             <nd ref="-99"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="954"/>
+            <tag k="hoot:id" v="950"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Ellipse Rd NW"/>
             <tag k="name" v="ELLIPSE RD NW"/>
@@ -1235,7 +1235,7 @@
             <nd ref="636"/>
             <nd ref="-101"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="957"/>
+            <tag k="hoot:id" v="953"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="E St NW"/>
             <tag k="name" v="E ST NW"/>
@@ -1252,7 +1252,7 @@
             <nd ref="608"/>
             <nd ref="-102"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="972"/>
+            <tag k="hoot:id" v="968"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="E St NW"/>
             <tag k="name" v="E ST NW"/>
@@ -1264,7 +1264,7 @@
             <nd ref="598"/>
             <nd ref="3556"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="975"/>
+            <tag k="hoot:id" v="971"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="E St NW"/>
             <tag k="name" v="E ST NW"/>
@@ -1291,9 +1291,8 @@
             <nd ref="-55"/>
             <nd ref="-56"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="996"/>
+            <tag k="hoot:id" v="992"/>
             <tag k="hoot:status" v="2"/>
-            <tag k="alt_name" v="Raoul Wallenberg Pl SW"/>
             <tag k="name" v="15th St NW"/>
             <tag k="highway" v="unclassified"/>
             <tag k="error:circular" v="5"/>
@@ -1304,7 +1303,7 @@
             <nd ref="3743"/>
             <nd ref="-104"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="1022"/>
+            <tag k="hoot:id" v="1018"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
             <tag k="name" v="CONSTITUTION AVE NW"/>
@@ -1315,7 +1314,7 @@
             <nd ref="-105"/>
             <nd ref="3263"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="1029"/>
+            <tag k="hoot:id" v="1025"/>
             <tag k="hoot:status" v="3"/>
             <tag k="alt_name" v="Constitution Ave NW;US Hwy 50"/>
             <tag k="name" v="CONSTITUTION AVE NW"/>
@@ -1335,7 +1334,7 @@
             <nd ref="-66"/>
             <nd ref="3723"/>
             <tag k="accuracy" v="5"/>
-            <tag k="hoot:id" v="1038"/>
+            <tag k="hoot:id" v="1034"/>
             <tag k="hoot:status" v="2"/>
             <tag k="alt_name" v="Constitution Ave NW"/>
             <tag k="name" v="US Hwy 50"/>

@@ -32,15 +32,16 @@
 #include <hoot/core/conflate/MatchFactory.h>
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/filters/TagCriterion.h>
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/scoring/MapComparator.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/GetElementIdsVisitor.h>
-#include <hoot/core/util/FileUtils.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-HOOT_HOME=$HOME/hoot
+HOOT_HOME=~/hoot
 TOMCAT_NAME=tomcat8
 TOMCAT_GROUP=tomcat8
 TOMCAT_USER=tomcat8
@@ -20,105 +20,105 @@ TOMCAT_CACHE_HOME_PERMISSIONS=775
 
 TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-8.5.8.tar.gz
 
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root"
-   exit 1
-fi
+# Find out what user we have: vagrant or ubuntu
+# This comes from a user difference in one of the Vagrant boxes
+VMUSER=`id -u -n`
 
 echo "######## Begin $TOMCAT_NAME installation ########"
 echo "SCRIPT_HOME=$SCRIPT_HOME"
 
 # Stop tomcat service if it already exists
-if service --status-all 2>&1 | grep -q ${TOMCAT_NAME}; then
-  service ${TOMCAT_NAME} stop
+if sudo service --status-all 2>&1 | grep -q ${TOMCAT_NAME}; then
+  sudo service ${TOMCAT_NAME} stop
 fi
 
 # Create tomcat group if not already created
-getent group ${TOMCAT_GROUP} >/dev/null || groupadd -r ${TOMCAT_GROUP}
+sudo getent group ${TOMCAT_GROUP} >/dev/null || sudo groupadd -r ${TOMCAT_GROUP}
 
 # Create tomcat user if not already created
-getent passwd ${TOMCAT_USER} >/dev/null || useradd --comment "$TOMCAT_NAME daemon user" --shell /bin/bash -M -r -g ${TOMCAT_GROUP} --home ${TOMCAT_HOME} ${TOMCAT_USER}
+sudo getent passwd ${TOMCAT_USER} >/dev/null || sudo useradd --comment "$TOMCAT_NAME daemon user" --shell /bin/bash -M -r -g ${TOMCAT_GROUP} --home ${TOMCAT_HOME} ${TOMCAT_USER}
 
-# Add tomcat and vagrant to each other's groups so we can get the group write working with nfs
-if ! groups vagrant | grep --quiet "\b$TOMCAT_GROUP\b"; then
-    echo "### Adding vagrant user to $TOMCAT_GROUP user group..."
-    usermod -a -G ${TOMCAT_GROUP} vagrant
+# Add tomcat and ubuntu to each other's groups so we can get the group write working with nfs
+if ! sudo groups $VMUSER | grep --quiet "\b$TOMCAT_GROUP\b"; then
+    echo "### Adding $VMUSER user to $TOMCAT_GROUP user group..."
+    sudo usermod -a -G ${TOMCAT_GROUP} ${VMUSER}
 fi
 
-# Add tomcat and vagrant to each other's groups so we can get the group write working with nfs
-if ! groups ${TOMCAT_GROUP} | grep --quiet "\bvagrant\b"; then
-    echo "### Adding $TOMCAT_GROUP user to vagrant user group..."
-    usermod -a -G vagrant ${TOMCAT_GROUP}
+# Add tomcat and ubuntu to each other's groups so we can get the group write working with nfs
+if ! sudo groups ${TOMCAT_GROUP} | grep --quiet "\b$VMUSER\b"; then
+    echo "### Adding $TOMCAT_GROUP user to $VMUSER user group..."
+    sudo usermod -a -G ${VMUSER} ${TOMCAT_GROUP}
 fi
 
-mkdir -p ${TOMCAT_HOME}
-tar -zxf ${TOMCAT_TAR_FILE} -C ${TOMCAT_HOME} --strip-components 1
-chmod -R ${TOMCAT_HOME_PERMISSIONS} ${TOMCAT_HOME}
 
-rm -rf ${TOMCAT_HOME}/webapps
-mkdir -p ${TOMCAT_USER_HOME}/webapps
+sudo mkdir -p ${TOMCAT_HOME}
+sudo tar -zxf ${TOMCAT_TAR_FILE} -C ${TOMCAT_HOME} --strip-components 1
+sudo chmod -R ${TOMCAT_HOME_PERMISSIONS} ${TOMCAT_HOME}
 
-ln -sf ${TOMCAT_USER_HOME}/webapps ${TOMCAT_HOME}/webapps
-chmod ${TOMCAT_USER_HOME_PERMISSIONS} ${TOMCAT_USER_HOME}
-chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_USER_HOME}/webapps
+sudo rm -rf ${TOMCAT_HOME}/webapps
+sudo mkdir -p ${TOMCAT_USER_HOME}/webapps
+
+sudo ln -sf ${TOMCAT_USER_HOME}/webapps ${TOMCAT_HOME}/webapps
+sudo chmod ${TOMCAT_USER_HOME_PERMISSIONS} ${TOMCAT_USER_HOME}
+sudo chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_USER_HOME}/webapps
 
 #We don't need .bat files lying around
-rm -f ${TOMCAT_HOME}/bin/*.bat
+sudo rm -f ${TOMCAT_HOME}/bin/*.bat
 
 echo "### Setting up Tomcat logs"
 # Put logging in /var/log and link back.
-rm -rf ${TOMCAT_HOME}/logs
-mkdir -p ${TOMCAT_LOGS_HOME}
-chmod -R ${TOMCAT_LOGS_HOME_PERMISSIONS} ${TOMCAT_LOGS_HOME}
-chown ${TOMCAT_GROUP}:adm ${TOMCAT_LOGS_HOME}
-ln -sf ${TOMCAT_LOGS_HOME} ${TOMCAT_HOME}/logs
+sudo rm -rf ${TOMCAT_HOME}/logs
+sudo mkdir -p ${TOMCAT_LOGS_HOME}
+sudo chmod -R ${TOMCAT_LOGS_HOME_PERMISSIONS} ${TOMCAT_LOGS_HOME}
+sudo chown ${TOMCAT_GROUP}:adm ${TOMCAT_LOGS_HOME}
+sudo ln -sf ${TOMCAT_LOGS_HOME} ${TOMCAT_HOME}/logs
 
 echo "### Done setting up Tomcat logs"
 
 if [ -d "$TOMCAT_CONFIG_HOME" ]; then
-    rm -rf ${TOMCAT_CONFIG_HOME}
+    sudo rm -rf ${TOMCAT_CONFIG_HOME}
 fi
 
-mkdir -p ${TOMCAT_CONFIG_HOME}
+sudo mkdir -p ${TOMCAT_CONFIG_HOME}
 
 # Put conf in /etc/ and link back.
 echo "### Setting up config"
-mkdir -p ${TOMCAT_HOME}/conf/policy.d
-cp ${SCRIPT_HOME}/../policy.d/* ${TOMCAT_HOME}/conf/policy.d
-mv ${TOMCAT_HOME}/conf/* ${TOMCAT_CONFIG_HOME}
-rm -rf ${TOMCAT_HOME}/conf
-ln -sf ${TOMCAT_CONFIG_HOME} ${TOMCAT_HOME}/conf
-mkdir -p ${TOMCAT_CONFIG_HOME}/Catalina
-chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CONFIG_HOME}/*
-chmod -R g+w ${TOMCAT_CONFIG_HOME}/*
+sudo mkdir -p ${TOMCAT_HOME}/conf/policy.d
+sudo cp ${SCRIPT_HOME}/../policy.d/* ${TOMCAT_HOME}/conf/policy.d
+sudo mv ${TOMCAT_HOME}/conf/* ${TOMCAT_CONFIG_HOME}
+sudo rm -rf ${TOMCAT_HOME}/conf
+sudo ln -sf ${TOMCAT_CONFIG_HOME} ${TOMCAT_HOME}/conf
+sudo mkdir -p ${TOMCAT_CONFIG_HOME}/Catalina
+sudo chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CONFIG_HOME}/*
+sudo chmod -R g+w ${TOMCAT_CONFIG_HOME}/*
 echo "### Finished setting up config"
 
-mkdir -p ${TOMCAT_HOME}/.deegree
-chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_HOME}/.deegree
+sudo mkdir -p ${TOMCAT_HOME}/.deegree
+sudo chown ${TOMCAT_GROUP}:${TOMCAT_USER} ${TOMCAT_HOME}/.deegree
 
 # Put temp and work to /var/cache and link back.
-mkdir -p ${TOMCAT_CACHE_HOME}
+sudo mkdir -p ${TOMCAT_CACHE_HOME}
 
 if [ -d "$TOMCAT_CACHE_HOME/temp" ]; then
-    rm -rf ${TOMCAT_CACHE_HOME}/temp
+    sudo rm -rf ${TOMCAT_CACHE_HOME}/temp
 fi
 
-mv ${TOMCAT_HOME}/temp ${TOMCAT_CACHE_HOME}
-ln -sf ${TOMCAT_CACHE_HOME}/temp ${TOMCAT_HOME}/temp
-chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/temp
-chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/temp
+sudo mv ${TOMCAT_HOME}/temp ${TOMCAT_CACHE_HOME}
+sudo ln -sf ${TOMCAT_CACHE_HOME}/temp ${TOMCAT_HOME}/temp
+sudo chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/temp
+sudo chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/temp
 
 if [ -d "$TOMCAT_CACHE_HOME/work" ]; then
-    rm -rf ${TOMCAT_CACHE_HOME}/work
+    sudo rm -rf ${TOMCAT_CACHE_HOME}/work
 fi
 
-mv ${TOMCAT_HOME}/work ${TOMCAT_CACHE_HOME}
-ln -sf ${TOMCAT_CACHE_HOME}/work ${TOMCAT_HOME}/work
-chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/work
-chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
+sudo mv ${TOMCAT_HOME}/work ${TOMCAT_CACHE_HOME}
+sudo ln -sf ${TOMCAT_CACHE_HOME}/work ${TOMCAT_HOME}/work
+sudo chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/work
+sudo chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
 
-cp ${SCRIPT_HOME}/etc/init.d/${TOMCAT_NAME} /etc/init.d
-cp ${SCRIPT_HOME}/etc/default/${TOMCAT_NAME} /etc/default
+sudo cp ${SCRIPT_HOME}/etc/init.d/${TOMCAT_NAME} /etc/init.d
+sudo cp ${SCRIPT_HOME}/etc/default/${TOMCAT_NAME} /etc/default
 
 if ! grep -i --quiet 'ingest/processed' ${TOMCAT_CONFIG_HOME}/server.xml; then
     echo "Adding Tomcat context path for tile images..."
@@ -131,9 +131,9 @@ if ! grep -i --quiet '<Resources allowLinking="true" />' ${TOMCAT_CONFIG_HOME}/c
 fi
 
 # Clean out tomcat logfile. We restart tomcat after provisioning.
-service ${TOMCAT_NAME} stop
-rm -f ${TOMCAT_LOGS_HOME}/catalina.out
+sudo service ${TOMCAT_NAME} stop
+sudo rm -f ${TOMCAT_LOGS_HOME}/catalina.out
 
-update-rc.d ${TOMCAT_NAME} defaults
+sudo update-rc.d ${TOMCAT_NAME} defaults
 
 echo "######## End $TOMCAT_NAME installation ########"

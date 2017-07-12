@@ -7,10 +7,11 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
 
 #include "../TestUtils.h"
 

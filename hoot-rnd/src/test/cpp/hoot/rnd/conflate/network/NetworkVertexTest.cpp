@@ -27,8 +27,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/conflate/network/NetworkVertex.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/rnd/conflate/network/NetworkVertex.h>
 
 using namespace geos::geom;
 

@@ -34,13 +34,13 @@
 // GEOS
 #include <geos/geom/LineString.h>
 // Hoot
-#include <hoot/rnd/conflate/frechet/FrechetSublineMatcher.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-
-#include <hoot-core-test/src/test/cpp/hoot/core/TestUtils.h>
+#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/rnd/conflate/frechet/FrechetSublineMatcher.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -127,7 +127,7 @@ public:
   void runCircleTest()
   {
     Settings s;
-   OsmMapPtr map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     OsmXmlReader reader;
     reader.read("test-files/algorithms/MaximalSublineCircleTestIn.osm", map);

@@ -30,9 +30,9 @@
 
 // hoot
 #include <hoot/core/algorithms/optimizer/IntegerProgrammingSolver.h>
-#include <hoot/core/util/Log.h>
 
 // standard
+#include <set>
 #include <vector>
 
 namespace hoot

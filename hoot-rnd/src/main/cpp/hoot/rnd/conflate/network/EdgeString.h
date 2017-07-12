@@ -108,7 +108,7 @@ public:
    */
   ConstEdgeLocationPtr calculateNearestLocation(ConstEdgeLocationPtr el) const;
 
- boost::shared_ptr<EdgeString> clone() const;
+  boost::shared_ptr<EdgeString> clone() const;
 
   /**
    * Returns true if the entire string in other is contained by this.

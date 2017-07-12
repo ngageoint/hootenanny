@@ -664,7 +664,7 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
   {
     if (it.key().contains(uuid))
     {
-     boost::shared_ptr<Element> eid = map->getElement(it.value());
+      boost::shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
     }
   }
@@ -678,7 +678,7 @@ void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
   {
     if (it.key().contains(uuid))
     {
-     boost::shared_ptr<Element> eid = map->getElement(it.value());
+      boost::shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
     }
   }

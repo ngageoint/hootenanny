@@ -42,6 +42,7 @@
 #include <hoot/core/io/schema/FeatureDefinition.h>
 #include <hoot/core/io/schema/FieldDefinition.h>
 #include <hoot/core/io/schema/Schema.h>
+#include <hoot/core/util/Log.h>
 
 #include <hoot/core/TestUtils.h>
 
@@ -189,7 +190,7 @@ public:
       boost::shared_ptr<const FeatureDefinition> fd = l->getFeatureDefinition();
       for (size_t j = 0; j < fd->getFieldCount(); j++)
       {
-       boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(j);
+        boost::shared_ptr<const FieldDefinition> f = fd->getFieldDefinition(j);
         result += sep1 + "  " + f->toString() + sep2 + "\n";
       }
     }

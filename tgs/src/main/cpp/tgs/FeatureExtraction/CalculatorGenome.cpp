@@ -215,7 +215,7 @@ namespace Tgs
   }
 
   void CalculatorGenome::crossoverSexually(const Genome& father, const Genome& mother, 
-    boost::shared_ptr<Genome>& brother,boost::shared_ptr<Genome>& sister)
+    boost::shared_ptr<Genome>& brother, boost::shared_ptr<Genome>& sister)
   {
     boost::shared_ptr<CalculatorGenome> bro = boost::dynamic_pointer_cast<CalculatorGenome>(father.clone());
     boost::shared_ptr<CalculatorGenome> sis = boost::dynamic_pointer_cast<CalculatorGenome>(mother.clone());
@@ -262,7 +262,7 @@ namespace Tgs
   }
 
   boost::shared_ptr<CalculatorGenomeNode> CalculatorGenome::_findParent(
-    boost::shared_ptr<CalculatorGenomeNode> node,boost::shared_ptr<CalculatorGenomeNode> current) const
+    boost::shared_ptr<CalculatorGenomeNode> node, boost::shared_ptr<CalculatorGenomeNode> current) const
   {
     if (current == NULL)
     {
@@ -371,7 +371,7 @@ namespace Tgs
     setInvalidScore();
   }
 
-  void CalculatorGenome::_mutate(double p,boost::shared_ptr<CalculatorGenomeNode> node)
+  void CalculatorGenome::_mutate(double p, boost::shared_ptr<CalculatorGenomeNode> node)
   {
     double r = Tgs::Random::instance()->generateUniform();
 

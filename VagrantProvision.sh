@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-HOOT_HOME=$HOME/hoot
+VMUSER=`id -u -n`
+echo USER: $VMUSER
+VMGROUP=`groups | grep -o $VMUSER`
+echo GROUP: $VMGROUP
+
+HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
@@ -96,7 +101,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
+    echo "export HOOT_HOME=~/hoot" >> ~/.profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
@@ -111,14 +116,14 @@ fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
     echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.profile
+    echo "export HADOOP_HOME=~/hadoop" >> ~/.profile
     echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin:~/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -142,7 +147,7 @@ if ! ruby -v | grep --quiet 2.3.0; then
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
-    source /home/vagrant/.rvm/scripts/rvm
+    source ~/.rvm/scripts/rvm
 
     stdbuf -o L -e L rvm install ruby-2.3
     rvm --default use 2.3
@@ -206,20 +211,20 @@ fi
 
 if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f chromedriver_linux64.zip ]; then
       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     fi
-    unzip -d $HOME/bin chromedriver_linux64.zip
+    unzip -d ~/bin chromedriver_linux64.zip
 else
   LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
   if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
     echo "### Updating Chromedriver"
-    rm $HOME/bin/chromedriver
-    rm $HOME/chromedriver_linux64.zip
+    rm ~/bin/chromedriver
+    rm ~/chromedriver_linux64.zip
     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d $HOME/bin chromedriver_linux64.zip
+    unzip -o -d ~/bin chromedriver_linux64.zip
   fi
 fi
 
@@ -227,13 +232,13 @@ sudo apt-get autoremove -y
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f osmosis-latest.tgz ]; then
       wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
     fi
-    mkdir -p $HOME/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
-    ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
+    mkdir -p ~/bin/osmosis_src
+    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+    ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
 
@@ -283,7 +288,7 @@ if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
-    sudo rm -rf $HOME/tmp
+    sudo rm -rf ~/tmp
 fi
 
 
@@ -380,7 +385,7 @@ fi
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-sudo $HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
 
 # Configure Tomcat
 if ! grep --quiet TOMCAT8_HOME ~/.profile; then
@@ -408,27 +413,26 @@ if ! hash hadoop >/dev/null 2>&1 ; then
     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
   fi
 
-  if [ ! -f $HOME/.ssh/id_rsa ]; then
-    ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
-    cat ~/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
-    ssh-keyscan -H localhost >> $HOME/.ssh/known_hosts
+  if [ ! -f ~/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    ssh-keyscan -H localhost >> ~/.ssh/known_hosts
   fi
-  chmod 600 $HOME/.ssh/authorized_keys
+  chmod 600 ~/.ssh/authorized_keys
 
   #cd /usr/local
   cd ~
-  sudo tar -zxf $HOME/hadoop-0.20.2.tar.gz
-  sudo chown -R vagrant:vagrant hadoop-0.20.2
+  sudo tar -zxf ~/hadoop-0.20.2.tar.gz
+  sudo chown -R $VMUSER:$VMGROUP hadoop-0.20.2
   sudo ln -s hadoop-0.20.2 hadoop
-  sudo chown -R vagrant:vagrant hadoop
+  sudo chown -R $VMUSER:$VMGROUP hadoop
   cd hadoop
   sudo find . -type d -exec chmod a+rwx {} \;
   sudo find . -type f -exec chmod a+rw {} \;
   cd ~
 
-#TODO: remove these home dir hardcodes
 sudo rm -f $HADOOP_HOME/conf/core-site.xml
-sudo bash -c "cat >> /home/vagrant/hadoop/conf/core-site.xml" <<EOT
+sudo bash -c "cat >> $HADOOP_HOME/conf/core-site.xml" <<EOT
 
 <configuration>
   <property>
@@ -438,7 +442,7 @@ sudo bash -c "cat >> /home/vagrant/hadoop/conf/core-site.xml" <<EOT
 </configuration>
 EOT
 sudo rm -f $HADOOP_HOME/conf/mapred-site.xml
-sudo bash -c "cat >> /home/vagrant/hadoop/conf/mapred-site.xml" <<EOT
+sudo bash -c "cat >> $HADOOP_HOME/conf/mapred-site.xml" <<EOT
 
 <configuration>
   <property>
@@ -476,7 +480,7 @@ sudo bash -c "cat >> /home/vagrant/hadoop/conf/mapred-site.xml" <<EOT
 </configuration>
 EOT
 sudo rm -f $HADOOP_HOME/conf/hdfs-site.xml
-sudo bash -c "cat >> /home/vagrant/hadoop/conf/hdfs-site.xml" <<EOT
+sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
 
 <configuration>
   <property>
@@ -517,15 +521,15 @@ sudo bash -c "cat >> /home/vagrant/hadoop/conf/hdfs-site.xml" <<EOT
   </property>
   <property>
     <name>fs.checkpoint.dir</name>
-    <value>/home/vagrant/hadoop/dfs/namesecondary</value>
+    <value>$HADOOP_HOME/dfs/namesecondary</value>
   </property>
   <property>
     <name>dfs.name.dir</name>
-    <value>/home/vagrant/hadoop/dfs/name</value>
+    <value>$HADOOP_HOME/dfs/name</value>
   </property>
   <property>
     <name>dfs.data.dir</name>
-    <value>/home/vagrant/hadoop/dfs/data</value>
+    <value>$HADOOP_HOME/dfs/data</value>
   </property>
 </configuration>
 EOT
@@ -533,10 +537,10 @@ EOT
   sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8/g' $HADOOP_HOME/conf/hadoop-env.sh
   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
-  sudo mkdir -p $HOME/hadoop/dfs/name/current
+  sudo mkdir -p $HADOOP_HOME/dfs/name/current
   # this could perhaps be more strict
-  sudo chmod -R 777 $HOME/hadoop
-  sudo chmod go-w $HOME/hadoop/bin $HOME/hadoop
+  sudo chmod -R 777 $HADOOP_HOME
+  sudo chmod go-w $HADOOP_HOME/bin $HADOOP_HOME
   echo 'Y' | hadoop namenode -format
 
   cd /lib
@@ -561,7 +565,7 @@ sudo chmod a+x /etc/init.d/node-mapnik-server
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
@@ -570,7 +574,7 @@ sudo chmod a+x /etc/init.d/node-export-server
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 cd $HOOT_HOME
 

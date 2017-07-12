@@ -72,11 +72,11 @@ QString AttributeCount::Count(QString input)
 
     LOG_DEBUG("Reading: " + input + " " + layers[i]);
 
-   boost::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
+    boost::shared_ptr<ElementIterator> iterator(reader.createIterator(input, layers[i]));
 
     while(iterator->hasNext())
     {
-     boost::shared_ptr<Element> e = iterator->next();
+      boost::shared_ptr<Element> e = iterator->next();
 
       //        // Interesting problem: If there are no elements in the file, e == 0
       //        // Need to look at the ElementIterator.cpp file to fix this.

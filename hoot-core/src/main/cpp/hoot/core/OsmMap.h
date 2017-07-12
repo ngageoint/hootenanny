@@ -37,12 +37,15 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/WayMap.h>
+#include <hoot/core/util/DefaultIdGenerator.h>
+#include <hoot/core/util/Units.h>
 namespace hoot
 {
     namespace elements
@@ -57,12 +60,6 @@ namespace hoot
 
 // TGS
 #include <tgs/RStarTree/HilbertRTree.h>
-
-#include <hoot/core/util/DefaultIdGenerator.h>
-#include <hoot/core/elements/RelationMap.h>
-#include <hoot/core/elements/WayMap.h>
-#include <hoot/core/elements/NodeMap.h>
-
 
 namespace hoot
 {
@@ -269,7 +266,6 @@ public:
   void visitWaysRo(ElementVisitor& visitor) const;
   void visitRelationsRo(ElementVisitor& visitor) const;
 
-
   /**
    * Calls the visitRw method on all elements. See Element::visitRw for a more
    * thorough description.
@@ -284,6 +280,10 @@ public:
    */
   void visitRw(ElementVisitor& visitor);
   void visitWaysRw(ElementVisitor& visitor);
+
+  long getNodeCount() const { return _nodes.size(); }
+  long getWayCount() const { return _ways.size(); }
+  long getRelationCount() const { return _relations.size(); }
 
 protected:
 

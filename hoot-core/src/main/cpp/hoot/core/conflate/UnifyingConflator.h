@@ -144,6 +144,10 @@ private:
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
 
+  /*
+   * This method is required for the preserve.unknown1.element.id.when.modifying.features setting
+   * to work.  It is run after conflation to prevent ID's of unknown1 features from being lost.
+   */
   void _mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map);
 };
 

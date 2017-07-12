@@ -60,7 +60,7 @@ namespace Tgs
       generatedData20(df);
 
       GreedyStepwiseSearch uut;
-     boost::shared_ptr<ConsistencySubsetEvaluator> evaluator(new ConsistencySubsetEvaluator());
+      boost::shared_ptr<ConsistencySubsetEvaluator> evaluator(new ConsistencySubsetEvaluator());
       uut.setEvaluator(evaluator);
 
       // this has been validated against weka

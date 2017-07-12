@@ -4,10 +4,15 @@ require 'capybara/dsl'
 require 'rspec'
 require 'capybara/webkit'
 require 'capybara-screenshot/cucumber'
+require 'selenium-webdriver'
 
+# Chrome instance with timeout is set to 100 seconds
 Capybara.register_driver :selenium do |app|
-  Capybara::Selenium::Driver.new(app, :browser => :chrome)
+  client = Selenium::WebDriver::Remote::Http::Default.new
+  client.timeout = 150
+  Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => client)
 end
+
 Capybara.javascript_driver = :selenium
 Capybara.default_driver = :selenium
 
@@ -31,4 +36,3 @@ World(Capybara::DSL, Helpers)
 
 # Keep only the screenshots generated from the last failing test suite
 Capybara::Screenshot.prune_strategy = :keep_last_run
-

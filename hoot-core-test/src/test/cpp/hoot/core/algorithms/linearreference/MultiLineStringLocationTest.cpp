@@ -35,11 +35,12 @@
 #include <geos/geom/Coordinate.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 #include "../../TestUtils.h"
 

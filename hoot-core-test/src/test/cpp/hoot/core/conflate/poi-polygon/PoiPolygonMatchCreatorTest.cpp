@@ -30,8 +30,9 @@
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
 

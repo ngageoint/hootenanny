@@ -4,7 +4,7 @@ To download Vagrant for supported platforms, see [here](https://www.vagrantup.co
 
 # Installing VirtualBox
 
-If choosing VirtualBox as your virtualization provider, see [here](https://www.virtualbox.org/wiki/Downloads).  
+If choosing VirtualBox as your virtualization provider, see [here](https://www.virtualbox.org/wiki/Downloads).
 
 You may have to enable hardware virtualization extensions in your BIOS before using it.
 
@@ -75,5 +75,5 @@ If you've updated the code, you must connect to the vm via ssh to build and rede
     cd hoot
     source ./SetupEnv.sh
     make -sj$(nproc)
-    sudo -u tomcat8 scripts/tomcat/vagrantDeployTomcat.sh 
+    sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh
 

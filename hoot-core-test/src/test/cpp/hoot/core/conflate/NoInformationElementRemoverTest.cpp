@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/conflate/NoInformationElementRemover.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 using namespace hoot;
-
 
 // Boost
 using namespace boost;
@@ -56,11 +56,14 @@ class NoInformationElementRemoverTest : public CppUnit::TestFixture
   CPPUNIT_TEST(runWayWithInfoOneNodeWithoutInfoTest);
   CPPUNIT_TEST(runStandAloneNodesWithAndWithoutInfoTest);
   CPPUNIT_TEST(runWayWithoutInfoOneNodeWithInfoTest);
+  CPPUNIT_TEST(runEmptyWayOrphanNodesTest);
   CPPUNIT_TEST(runWayWithoutInfoAllNodesWithoutInfoTest);
   CPPUNIT_TEST(runRelationWithInfoOneElementWithoutInfoTest);
   CPPUNIT_TEST(runRelationWithoutInfoOneNodeElementWithInfoTest);
   CPPUNIT_TEST(runRelationWithoutInfoOneWayElementWithInfoTest);
+  CPPUNIT_TEST(runEmptyRelationWithoutInfoTest);
   CPPUNIT_TEST(runRelationWithoutInfoAllElementsWithoutInfoTest);
+  CPPUNIT_TEST(runUnrelatedElementsWithInfoTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -87,7 +90,6 @@ public:
 
     //No elements should be removed.  Node 2 should not be removed, even though it has no info,
     //since its still owned by the way.
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
 
@@ -111,7 +113,6 @@ public:
     NoInformationElementRemover().apply(map);
 
     //Node 2 has no info and isn't owned by a way, so it should be removed.
-
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
 
     ConstNodePtr parsedNode1 = map->getNode(node1->getElementId().getId());
@@ -142,9 +143,34 @@ public:
 
     NoInformationElementRemover().apply(map);
 
-    //The way owning both nodes has no info and should be removed.  Since the nodes are not
-    //standalone and are part of a way being removed, they should be removed as well.
+    // Because the way contains nodes (even though they don't have any useful metadata)
+    // neither the way nor the nodes should be removed
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+  }
 
+  void runEmptyWayOrphanNodesTest()
+  {
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    QList<NodePtr> nodes;
+    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    node1->getTags().appendValue("hoot:test", "test1");
+    node1->getTags().appendValue("test", "test1");
+    nodes.append(node1);
+    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    node2->getTags().appendValue("hoot:test", "test2");
+    nodes.append(node2);
+    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    way1->getTags().appendValue("hoot:test", "test3");
+    map->addWay(way1);
+
+    NoInformationElementRemover().apply(map);
+
+    // Because the way doesn't contain any nodes or useful info, it should be removed.
+    // Because the nodes don't belong to a way or relation, or have useful info, they should
+    // be removed
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
   }
@@ -161,16 +187,15 @@ public:
     NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
     node2->getTags().appendValue("hoot:test", "test2");
     nodes.append(node2);
-
     WayPtr way1 = TestUtils::createWay(map, nodes);
     way1->getTags().appendValue("hoot:test", "test");
 
     NoInformationElementRemover().apply(map);
 
-    //Neither the way or its nodes have info, so all should be removed.
-
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    // Because the way contains nodes (even though they don't have any useful metadata)
+    // neither the way nor the nodes should be removed
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
   }
 
   void runRelationWithInfoOneElementWithoutInfoTest()
@@ -209,7 +234,6 @@ public:
 
     //No elements should be removed.  The node 1 and way 2 should not be removed, even though they
     //have no info, since they are still owned by the relation.
-
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
@@ -247,11 +271,10 @@ public:
 
     NoInformationElementRemover().apply(map);
 
-    //The relation and all of its elements should be removed.
-
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    // All elements are interrelated - should not be removed
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
   }
 
   void runRelationWithoutInfoOneWayElementWithInfoTest()
@@ -286,14 +309,13 @@ public:
 
     NoInformationElementRemover().apply(map);
 
-    //The relation and all of its elements should be removed.
-
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
-    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+    // All elements are interrelated - should not be removed
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
   }
 
-  void runRelationWithoutInfoAllElementsWithoutInfoTest()
+  void runEmptyRelationWithoutInfoTest()
   {
     OsmMap::resetCounters();
     OsmMapPtr map(new OsmMap());
@@ -313,22 +335,93 @@ public:
 
     WayPtr way1 = TestUtils::createWay(map, nodes);
     way1->getTags().appendValue("hoot:test", "test1");
+    way1->getTags().appendValue("test", "test1");
     elements.append(way1);
 
     WayPtr way2 = TestUtils::createWay(map, nodes);
     way2->getTags().appendValue("hoot:test", "test2");
     elements.append(way2);
 
-    RelationPtr relation = TestUtils::createRelation(map, elements);
-    relation->getTags().appendValue("hoot:test", "test");
+    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    map->addRelation(relation1);
+    relation1->getTags().appendValue("hoot:test", "test");
 
     NoInformationElementRemover().apply(map);
 
-    //The relation and all of its elements should be removed.
+    // Nodes and Ways should not be removed, but relation should be
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+  }
 
+  void runRelationWithoutInfoAllElementsWithoutInfoTest()
+  {
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    node1->getTags().appendValue("hoot:test", "test1");
+
+    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    node2->getTags().appendValue("hoot:test", "test2");
+
+    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    way1->getTags().appendValue("hoot:test", "test3");
+    map->addWay(way1);
+
+    WayPtr way2(new Way(Status::Unknown1, 15, 15));
+    way2->getTags().appendValue("hoot:test", "test4");
+    map->addWay(way2);
+
+    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    map->addRelation(relation1);
+    relation1->getTags().appendValue("hoot:test", "test");
+
+    NoInformationElementRemover().apply(map);
+
+    // All map items are unrelated, and have no info. They should be removed.
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+  }
+
+  void runUnrelatedElementsWithInfoTest()
+  {
+    OsmMap::resetCounters();
+    shared_ptr<OsmMap> map(new OsmMap());
+
+    NodePtr node1(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    node1->getTags().appendValue("hoot:test", "test1");
+    node1->getTags().appendValue("name", "red house");
+    map->addNode(node1);
+
+    NodePtr node2(new Node(Status::Unknown1, map->createNextNodeId(), Coordinate(0.0, 0.0), 15));
+    node2->getTags().appendValue("hoot:test", "test2");
+    node2->getTags().appendValue("name", "blue house");
+    map->addNode(node2);
+
+    WayPtr way1(new Way(Status::Unknown1, 15, 15));
+    way1->getTags().appendValue("hoot:test", "test3");
+    way1->getTags().appendValue("name", "some way");
+    map->addWay(way1);
+
+    WayPtr way2(new Way(Status::Unknown1, 16, 15));
+    way2->getTags().appendValue("hoot:test", "test4");
+    way2->getTags().appendValue("name", "some other way");
+    map->addWay(way2);
+
+
+    RelationPtr relation1(new Relation(Status::Unknown1, 15, 15));
+    map->addRelation(relation1);
+    relation1->getTags().appendValue("hoot:test", "test");
+    relation1->getTags().appendValue("name", "some relation");
+
+    NoInformationElementRemover().apply(map);
+
+    // All map items are not related, but have info. They should not be removed.
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getRelations().size());
   }
 };
 

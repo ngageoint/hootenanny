@@ -27,9 +27,6 @@
 #ifndef FQTREE_H
 #define FQTREE_H
 
-// hoot
-#include <hoot/core/util/Log.h>
-
 // Standard
 #include <assert.h>
 #include <vector>

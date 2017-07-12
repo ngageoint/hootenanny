@@ -185,7 +185,38 @@ SOURCES += \
     src/test/cpp/hoot/core/filters/AreaCriterionTest.cpp \
     src/test/cpp/hoot/core/filters/WayCriterionTest.cpp \
     src/test/cpp/hoot/core/filters/NonBuildingAreaCriterionTest.cpp \
-    src/test/cpp/hoot/core/visitors/CountManualMatchesVisitorTest.cpp
+    src/test/cpp/hoot/core/visitors/CountManualMatchesVisitorTest.cpp \
+    src/test/cpp/hoot/core/conflate/SearchRadiusCalculatorTest.cpp \
+    src/test/cpp/hoot/core/io/ElementCacheLruTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionaryTest.cpp \
+    src/test/cpp/hoot/core/schema/ScoreMatrixTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/WeightedWordDistanceTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/SqliteWeightedWordDistanceTest.cpp \
+    src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp \
+    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp \
+    src/test/cpp/hoot/core/elements/WayTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/StringTokenizerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
+    src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
+    src/test/cpp/hoot/core/elements/RelationTest.cpp \
+    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
+    src/test/cpp/hoot/core/visitors/MedianNodeVisitorTest.cpp \
+    src/test/cpp/hoot/core/ops/BuildingOutlineRemoveOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToGeographicOpTest.cpp \
+    src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
+    src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
+    src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
+    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
+    src/test/cpp/hoot/core/algorithms/WayMatchStringMergerTest.cpp \
+    src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp \
+    src/test/cpp/hoot/core/algorithms/KskipBigramDistanceTest.cpp \
+    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp \
+    src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
+				src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+				src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -215,42 +246,22 @@ nodejs:SOURCES += \
 }
 
 SOURCES += \
-    src/test/cpp/hoot/core/conflate/SearchRadiusCalculatorTest.cpp \
-    src/test/cpp/hoot/core/io/ElementCacheLruTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/TextFileWordWeightDictionaryTest.cpp \
-    src/test/cpp/hoot/core/schema/ScoreMatrixTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/WeightedWordDistanceTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/SqliteWeightedWordDistanceTest.cpp \
-    src/test/cpp/hoot/core/filters/BuildingCriterionTest.cpp \
-    src/test/cpp/hoot/core/visitors/SplitLongLinearWaysVisitorTest.cpp \
-    src/test/cpp/hoot/core/elements/WayTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/StringTokenizerTest.cpp \
-    src/test/cpp/hoot/core/schema/TagCategoryDifferencerTest.cpp \
-    src/test/cpp/hoot/core/schema/TagAncestorDifferencerTest.cpp \
-    src/test/cpp/hoot/core/elements/RelationTest.cpp \
-    src/test/cpp/hoot/core/algorithms/string/MostEnglishNameTest.cpp \
-    src/test/cpp/hoot/core/visitors/MedianNodeVisitorTest.cpp \
-    src/test/cpp/hoot/core/ops/BuildingOutlineRemoveOpTest.cpp \
-    src/test/cpp/hoot/core/ops/ReprojectToGeographicOpTest.cpp \
-    src/test/cpp/hoot/core/ops/ReprojectToPlanarOpTest.cpp \
-    src/test/cpp/hoot/core/ops/WaySplitterOpTest.cpp \
-    src/test/cpp/hoot/core/ops/TrivialOpTest.cpp \
-    src/test/cpp/hoot/core/conflate/extractors/HistogramTest.cpp \
-    src/test/cpp/hoot/core/algorithms/WayMatchStringMergerTest.cpp \
-    src/test/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmJsonReaderTest.cpp \
-    src/test/cpp/hoot/core/algorithms/KskipBigramDistanceTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
-    src/test/cpp/hoot/core/algorithms/linearreference/WayStringTest.cpp \
-    src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
-    src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
-    src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp
+    src/test/cpp/hoot/core/test/SimpleTestListener.cpp \
+    src/test/cpp/hoot/core/test/TempFileName.cpp \
+    src/test/cpp/hoot/core/test/TestSetup.cpp \
+    src/test/cpp/hoot/core/test/AbstractTest.cpp \
+    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.h \
-    src/test/cpp/hoot/core/io/TestOsmChangesetProvider.h
+    src/test/cpp/hoot/core/io/TestOsmChangesetProvider.h \
+    src/test/cpp/hoot/core/test/SimpleTestListener.h \
+    src/test/cpp/hoot/core/test/TempFileName.h \
+    src/test/cpp/hoot/core/test/TestSetup.h \
+    src/test/cpp/hoot/core/test/AbstractTest.h \
+    src/test/cpp/hoot/core/test/AbstractTestSuite.h
 
 

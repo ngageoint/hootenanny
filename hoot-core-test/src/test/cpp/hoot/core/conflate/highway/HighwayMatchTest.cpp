@@ -32,7 +32,6 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
@@ -42,6 +41,8 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QDebug>

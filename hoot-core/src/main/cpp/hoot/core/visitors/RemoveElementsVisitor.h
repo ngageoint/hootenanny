@@ -75,11 +75,14 @@ public:
   static void removeWays(boost::shared_ptr<OsmMap> pMap,
                          const boost::shared_ptr<ElementCriterion>& pCrit);
 
+  int getCount() { return _count; }
+
 private:
 
   OsmMap* _map;
- boost::shared_ptr<ElementCriterion> _filter;
+  boost::shared_ptr<ElementCriterion> _filter;
   bool _recursive;
+  int _count;
 };
 
 

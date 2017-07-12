@@ -30,6 +30,9 @@
 // Qt
 #include <QString>
 
+// hoot
+#include <hoot/core/util/Log.h>
+
 // Standard
 #include <sstream>
 
