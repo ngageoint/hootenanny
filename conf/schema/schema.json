@@ -126,6 +126,9 @@
         "import": "historic.json"
     },
     {
+        "import": "hoot.json"
+    },
+    {
         "import": "industrial.json"
     },
     {

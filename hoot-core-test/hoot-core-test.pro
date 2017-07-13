@@ -252,7 +252,8 @@ SOURCES += \
     src/test/cpp/hoot/core/test/TempFileName.cpp \
     src/test/cpp/hoot/core/test/TestSetup.cpp \
     src/test/cpp/hoot/core/test/AbstractTest.cpp \
-    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp
+    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp \
+    src/test/cpp/hoot/core/visitors/CalculateHashVisitorTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
