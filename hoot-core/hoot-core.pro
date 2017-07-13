@@ -25,6 +25,7 @@ CONFIG += rtti \
 OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
     ../rules/LineStringGeneric.js \
+    ../rules/MultiaryPoiGeneric.js \
     ../rules/PoiGeneric.js \
     ../rules/lib/HootLib.js \
     ../rules/LinearWaterway.js \
@@ -546,7 +547,7 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/CalculateTilesCmd.cpp \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.cpp \
     src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
-    src/main/cpp/hoot/core/elements/Status.cpp
+    src/main/cpp/hoot/core/elements/Status.cpp \
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \

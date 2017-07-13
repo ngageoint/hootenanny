@@ -52,6 +52,12 @@ public:
   bool operator==(Status t) const { return t._type == _type; }
   bool operator!=(Status t) const { return t._type != _type; }
 
+  /**
+   * @brief fromInput Create a status object from the zero-based input number
+   * @return Return Unknown1 for i=0, Unknown2 for i=1, Input003 for i=2, etc.
+   */
+  static Status fromInput(int i);
+
   Type getEnum() const { return _type; }
 
   /**
@@ -61,6 +67,13 @@ public:
    *   E.g. Unknown1 returns 0, Unknown2 return 1, etc.
    */
   int getInput() const;
+
+  /**
+   * @brief toCompatString
+   * @return A backwards compatible string for serializing and testing. Ultimately this
+   *   should be replaced with toString() when the proper refactoring is done.
+   */
+  QString toCompatString() const;
 
   QString toString() const;
 

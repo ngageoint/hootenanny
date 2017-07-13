@@ -86,6 +86,12 @@ public:
    */
   void registerCreator(boost::shared_ptr<MatchCreator> creator) { _creators.push_back(creator); }
 
+  /**
+   * @brief registerCreator Register the specified creator by string (constructs the creator)
+   * @param c @sa ConfigOptions::getMatchCreators()
+   */
+  void registerCreator(QString c);
+
   void reset() { _creators.clear(); }
 
   /**

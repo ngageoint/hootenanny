@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchClassification.h"
 
@@ -40,6 +40,13 @@ using namespace std;
 MatchClassification::MatchClassification()
 {
   clear();
+}
+
+MatchClassification::MatchClassification(double match, double miss, double review) :
+  _match(match),
+  _miss(miss),
+  _review(review)
+{
 }
 
 bool MatchClassification::isValid() const

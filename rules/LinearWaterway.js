@@ -81,6 +81,10 @@ exports.matchScore = function(map, e1, e2)
 {
   var result = { miss: 1.0, explain:"miss" };
 
+  if (e1.getStatusString() == e2.getStatusString()) {
+    return result;
+  }
+
   // extract the sublines needed for matching
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   if (sublines)

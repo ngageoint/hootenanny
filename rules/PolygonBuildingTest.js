@@ -49,7 +49,8 @@ exports.isWholeGroup = function()
 exports.matchScore = function(map, e1, e2)
 {
     var result;
-    if (isBuilding(e1) == false || isBuilding(e2) == false)
+    if (isBuilding(e1) == false || isBuilding(e2) == false ||
+        e1.getStatusString() == e2.getStatusString())
     {
         result = { match: 0.0, miss: 1.0, review: 0.0 };
     }

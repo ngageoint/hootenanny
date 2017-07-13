@@ -1,6 +1,6 @@
  Feature: Conflation Using Frechet Distance
 
-  Scenario: I can conflate using Frechet Distance 
+  Scenario: I can conflate using Frechet Distance
     Given I am on Hootenanny
     And I resize the window
     And I click Get Started
@@ -18,7 +18,7 @@
     And I press "confAdvOptsLnk"
     And I click the "label" with text "General Conflation Options"
     And I check the "Frechet Distance" checkbox
-    And I press span with text "Apply"
+    And I scroll "Apply" element into view and press it
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 3 "minutes" to see "DcRoadsFrechetCucumber"

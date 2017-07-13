@@ -228,6 +228,63 @@
             "override":{"defaultvalue":"hoot::PoiPolygonMergerCreator"},
             "hoot_key": "merger.creators",
             "required":"true"
+          },
+          {
+            "id": "poipolygon_name_score_threshold",
+            "elem_type": "double",
+            "description": "POI Polygon Name Score Threshold",
+            "name": "POI Polygon Name Score Threshold",
+            "defaultvalue": "0.8",
+            "minvalue": "0.01",
+            "maxvalue": "1.0",
+            "hoot_key": "poi.polygon.name.score.threshold"
+          },
+          {
+            "id": "poipolygon_type_score_threshold",
+            "elem_type": "double",
+            "description": "POI Polygon Type Score Threshold",
+            "name": "POI Polygon Type Score Threshold",
+            "defaultvalue": "0.7",
+            "minvalue": "0.01",
+            "maxvalue": "1.0",
+            "hoot_key": "poi.polygon.type.score.threshold"
+          },
+          {
+            "id": "poipolygon_match_distance_threshold",
+            "elem_type": "int",
+            "description": "POI Polygon Match Distance Threshold",
+            "name": "POI Polygon Match Distance Threshold",
+            "defaultvalue": "5",
+            "minvalue": "0",
+            "maxvalue": "5000",
+            "hoot_key": "poi.polygon.match.distance.threshold"
+          },
+          {
+            "id": "poipolygon_review_distance_threshold",
+            "elem_type": "int",
+            "description": "POI Polygon Review Distance Threshold",
+            "name": "POI Polygon Review Distance Threshold",
+            "defaultvalue": "125",
+            "minvalue": "0",
+            "maxvalue": "5000",
+            "hoot_key": "poi.polygon.review.distance.threshold"
+          },
+          {
+            "id": "poipolygon_review_if_matched_types",
+            "elem_type": "string",
+            "description": "A list of key=value pairs, added as a semi-colon delimited list (poi.polygon.review.if.matched.types='key1=value1;key2=value2;'",
+            "name": "POI Polygon Review If Matched Types",
+            "defaultvalue": "",
+            "hoot_key": "poi.polygon.review.if.matched.types",
+            "onchange": "true"
+          },
+          {
+            "id": "poi_ignore_type_if_name_present",
+            "elem_type": "bool",
+            "defaultvalue": "false",
+            "description": "POI Ignore Type If Name Present",
+            "name": "POI Ignore Type If Name Present",
+            "hoot_key": "poi.ignore.type.if.name.present"
           }
         ]
       },
