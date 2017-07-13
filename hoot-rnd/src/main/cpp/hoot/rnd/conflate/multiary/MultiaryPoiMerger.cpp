@@ -34,7 +34,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Factory.h>
 
-#include "MultiaryHierarchicalClusterer.h"
+#include "MultiaryHierarchicalClusterAlgorithm.h"
 
 namespace hoot
 {
@@ -80,11 +80,11 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
 
   MultiaryScoreCachePtr score(new MultiaryScoreCache(map, _matchCreator));
   MultiaryPoiMergeCachePtr merge(new MultiaryPoiMergeCache(map, _matchCreator, _mergerCreator));
-  MultiaryHierarchicalClusterer clusterer(merge, score,
+  MultiaryHierarchicalClusterAlgorithm clusterer(merge, score,
     _matchCreator->getMatchThreshold()->getMissThreshold());
 
-  MultiaryClusterer::ClusterList clusters = clusterer.cluster(map, _pairs);
-  QList<MultiaryClusterer::ClusterLinkPtr> reviews = clusterer.takeReviews();
+  MultiaryClusterAlgorithm::ClusterList clusters = clusterer.calculateClusters(map, _pairs);
+  QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews = clusterer.takeReviews();
 
   _mergeClusters(map, replaced, clusters);
 
@@ -92,9 +92,9 @@ void MultiaryPoiMerger::apply(const OsmMapPtr& map,
 }
 
 void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
-  QList<MultiaryClusterer::ClusterLinkPtr> reviews)
+  QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews)
 {
-  foreach (MultiaryClusterer::ClusterLinkPtr link, reviews)
+  foreach (MultiaryClusterAlgorithm::ClusterLinkPtr link, reviews)
   {
     // we aren't using the review score in the review mark b/c the review score is almost always
     // 0. We may be able to fudge a value based on the match/miss thresholds, but I'm not sure
@@ -109,7 +109,7 @@ void MultiaryPoiMerger::_createReviews(const OsmMapPtr& map,
 
 void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
   std::vector< std::pair<ElementId, ElementId> >& replaced,
-  MultiaryClusterer::ClusterList clusters)
+  MultiaryClusterAlgorithm::ClusterList clusters)
 {
   foreach (MultiaryClusterPtr mc, clusters)
   {

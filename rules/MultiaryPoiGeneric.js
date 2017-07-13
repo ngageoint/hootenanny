@@ -38,7 +38,7 @@ exports.matchScore = function(map, e1, e2) {
 
     var matchScore;
     var classification;
-    // convert the scores into fo-probabilities
+    // convert the scores into faux-probabilities
     if (score <= 0.5) {
         matchScore = {
             miss: 1 - (score / 0.5 * 0.4),

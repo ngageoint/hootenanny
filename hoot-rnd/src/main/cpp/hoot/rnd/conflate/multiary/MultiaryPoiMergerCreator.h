@@ -47,7 +47,7 @@ namespace hoot
  *
  * This merger is very aggressive and will merge pretty much any set of matches that are passed
  * in. This should generally be the last merger. The merger will also happily consume reviews
- * between elements. These reviews are a relevant aspect of the clustering. You should not use
+ * between elements. These reviews are a relevant aspect of the clustering.
  *
  * @sa MultiaryPoiMerger
  */

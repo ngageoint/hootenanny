@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MULTIARYCLUSTERER_H
-#define MULTIARYCLUSTERER_H
+#ifndef MULTIARYCLUSTERALGORITHM_H
+#define MULTIARYCLUSTERALGORITHM_H
 
 // hoot
 #include <hoot/core/conflate/MatchClassification.h>
@@ -47,7 +47,7 @@ namespace hoot
  *
  * The exact clustering technique is defined by the inheriting class.
  */
-class MultiaryClusterer
+class MultiaryClusterAlgorithm
 {
 public:
   /**
@@ -137,7 +137,7 @@ public:
    * @param scoreCache The cache to use when scoring POIs. This abstracts the actual score operation
    *  away from the clustering algorithm.
    */
-  MultiaryClusterer(MultiaryPoiMergeCachePtr mergeCache, MultiaryScoreCachePtr scoreCache);
+  MultiaryClusterAlgorithm(MultiaryPoiMergeCachePtr mergeCache, MultiaryScoreCachePtr scoreCache);
 
   /**
    * Cluster a subgraph of elements into a list of clusters. This will also populate the list of
@@ -150,7 +150,7 @@ public:
    * @param pairs The pairs of elements that make up the subgraph.
    * @return A list of clusters that were found in the 'pairs' subgraph.
    */
-  virtual ClusterList cluster(OsmMapPtr map,
+  virtual ClusterList calculateClusters(OsmMapPtr map,
     std::set<std::pair<ElementId, ElementId> > &pairs) = 0;
 
   /**
@@ -177,4 +177,4 @@ protected:
 
 }
 
-#endif // MULTIARYCLUSTERER_H
+#endif // MULTIARYCLUSTERALGORITHM_H

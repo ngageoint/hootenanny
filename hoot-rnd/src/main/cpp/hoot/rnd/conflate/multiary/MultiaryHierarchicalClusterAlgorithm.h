@@ -24,13 +24,13 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MULTIARYHIERARCHICALCLUSTERER_H
-#define MULTIARYHIERARCHICALCLUSTERER_H
+#ifndef MULTIARYHIERARCHICALCLUSTERALGORITHM_H
+#define MULTIARYHIERARCHICALCLUSTERALGORITHM_H
 
 // hoot
 #include <hoot/core/OsmMap.h>
 
-#include "MultiaryClusterer.h"
+#include "MultiaryClusterAlgorithm.h"
 
 namespace hoot
 {
@@ -42,7 +42,7 @@ namespace hoot
  * Reviews are only generated for the final clusters. Merge operations may suppress some reviews,
  * but that may be desirable.
  */
-class MultiaryHierarchicalClusterer : public MultiaryClusterer
+class MultiaryHierarchicalClusterAlgorithm : public MultiaryClusterAlgorithm
 {
 public:
   /**
@@ -51,13 +51,13 @@ public:
    * @param scoreCache Cache to use for scoring elements.
    * @param matchThreshold The threshold at which a score is called a match/miss/review.
    */
-  MultiaryHierarchicalClusterer(MultiaryPoiMergeCachePtr mergeCache,
+  MultiaryHierarchicalClusterAlgorithm(MultiaryPoiMergeCachePtr mergeCache,
     MultiaryScoreCachePtr scoreCache, const MatchThreshold& matchThreshold);
 
   /**
    * See parent class.
    */
-  virtual ClusterList cluster(OsmMapPtr map,
+  virtual ClusterList calculateClusters(OsmMapPtr map,
     std::set<std::pair<ElementId, ElementId> > &pairs);
 
   /**
@@ -87,4 +87,4 @@ protected:
 
 }
 
-#endif // MULTIARYHIERARCHICALCLUSTERER_H
+#endif // MULTIARYHIERARCHICALCLUSTERALGORITHM_H

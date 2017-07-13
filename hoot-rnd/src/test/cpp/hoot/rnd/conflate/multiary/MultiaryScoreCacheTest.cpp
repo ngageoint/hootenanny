@@ -91,7 +91,7 @@ public:
 
     MultiaryScoreCache cache(map, matchCreator);
 
-    // simple comparisons should return fo-probability values.
+    // simple comparisons should return faux-probability values.
     HOOT_STR_EQUALS("match: 0.757576 miss: 0.242424 review: 0",
       cache.getScore(map->getNode(-1), map->getNode(-2)));
     HOOT_STR_EQUALS("match: 0.542857 miss: 0.457143 review: 0",

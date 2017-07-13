@@ -34,16 +34,16 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterer.h>
+#include <hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class MultiaryHierarchicalClustererTest : public CppUnit::TestFixture
+class MultiaryHierarchicalClusterAlgorithmTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(MultiaryHierarchicalClustererTest);
+  CPPUNIT_TEST_SUITE(MultiaryHierarchicalClusterAlgorithmTest);
   CPPUNIT_TEST(basicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -99,7 +99,7 @@ public:
     MultiaryPoiMergeCachePtr mergeCache(
       new MultiaryPoiMergeCache(map, matchCreator, mergerCreator));
     MatchThreshold mt(0.6, 0.6, 0.4);
-    MultiaryHierarchicalClusterer uut(mergeCache, scoreCache, mt);
+    MultiaryHierarchicalClusterAlgorithm uut(mergeCache, scoreCache, mt);
 
     // compare a cluster of 2 to a cluster of 1. This isn't strictly the way it will operate
     // under real conditions, but it makes a reasonable test.
@@ -110,7 +110,7 @@ public:
       pairs.insert(pair<ElementId, ElementId>(ElementId::node(-2), ElementId::node(-3)));
       pairs.insert(pair<ElementId, ElementId>(ElementId::node(-3), ElementId::node(-4)));
       pairs.insert(pair<ElementId, ElementId>(ElementId::node(-4), ElementId::node(-5)));
-      MultiaryClusterer::ClusterList clusters = uut.cluster(map, pairs);
+      MultiaryClusterAlgorithm::ClusterList clusters = uut.calculateClusters(map, pairs);
 
       HOOT_STR_EQUALS("[3]{{ 'merged': Node:-5, 'members': [Node:-5] }, { 'merged': Node:-1, 'members': [Node:-2, Node:-1] }, { 'merged': Node:-3, 'members': [Node:-4, Node:-3] }}",
         clusters);
@@ -125,6 +125,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryHierarchicalClustererTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiaryHierarchicalClusterAlgorithmTest, "slow");
 
 }

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "MultiaryHierarchicalClusterer.h"
+#include "MultiaryHierarchicalClusterAlgorithm.h"
 
 // hoot
 #include <hoot/core/conflate/MatchClassification.h>
@@ -36,14 +36,15 @@
 namespace hoot
 {
 
-MultiaryHierarchicalClusterer::MultiaryHierarchicalClusterer(MultiaryPoiMergeCachePtr mergeCache,
-  MultiaryScoreCachePtr scoreCache, const MatchThreshold& matchThreshold) :
-  MultiaryClusterer(mergeCache, scoreCache),
+MultiaryHierarchicalClusterAlgorithm::MultiaryHierarchicalClusterAlgorithm(
+  MultiaryPoiMergeCachePtr mergeCache, MultiaryScoreCachePtr scoreCache,
+  const MatchThreshold& matchThreshold) :
+  MultiaryClusterAlgorithm(mergeCache, scoreCache),
   _matchThreshold(matchThreshold)
 {
 }
 
-void MultiaryHierarchicalClusterer::_addChildLinks(MultiaryClusterPtr parent,
+void MultiaryHierarchicalClusterAlgorithm::_addChildLinks(MultiaryClusterPtr parent,
   MultiaryClusterPtr child)
 {
   foreach (MultiaryClusterPtr other, child->links)
@@ -70,8 +71,8 @@ void MultiaryHierarchicalClusterer::_addChildLinks(MultiaryClusterPtr parent,
   }
 }
 
-MultiaryClusterer::ClusterList MultiaryHierarchicalClusterer::cluster(OsmMapPtr map,
-  std::set< std::pair<ElementId, ElementId> >& pairs)
+MultiaryClusterAlgorithm::ClusterList MultiaryHierarchicalClusterAlgorithm::calculateClusters(
+  OsmMapPtr map, std::set< std::pair<ElementId, ElementId> >& pairs)
 {
   // initialize the cluster list with one element per cluster.
   // Also initialize all the links between clusters in a priority queue.
@@ -112,12 +113,12 @@ MultiaryClusterer::ClusterList MultiaryHierarchicalClusterer::cluster(OsmMapPtr 
   return _clusters;
 }
 
-QList<MultiaryClusterer::ClusterLinkPtr> MultiaryHierarchicalClusterer::takeReviews()
+QList<MultiaryClusterAlgorithm::ClusterLinkPtr> MultiaryHierarchicalClusterAlgorithm::takeReviews()
 {
   // did you call cluster() first?
   assert(_clusters.size() > 0);
 
-  QList<MultiaryClusterer::ClusterLinkPtr> result;
+  QList<MultiaryClusterAlgorithm::ClusterLinkPtr> result;
 
   while (!_linkQueue.empty() &&
     (_matchThreshold.getType(_linkQueue.top()->score) == MatchType::Match ||
@@ -133,7 +134,7 @@ QList<MultiaryClusterer::ClusterLinkPtr> MultiaryHierarchicalClusterer::takeRevi
   return result;
 }
 
-void MultiaryHierarchicalClusterer::_initializeClusters(
+void MultiaryHierarchicalClusterAlgorithm::_initializeClusters(
   OsmMapPtr map,
   std::set< std::pair<ElementId, ElementId> >& pairs)
 {

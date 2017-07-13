@@ -31,7 +31,7 @@
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MergerBase.h>
 
-#include "MultiaryClusterer.h"
+#include "MultiaryClusterAlgorithm.h"
 
 namespace hoot
 {
@@ -77,7 +77,7 @@ private:
    * @param reviews List of links that should be reviewed.
    */
   void _createReviews(const OsmMapPtr& map,
-    QList<MultiaryClusterer::ClusterLinkPtr> reviews);
+    QList<MultiaryClusterAlgorithm::ClusterLinkPtr> reviews);
 
   /**
    * Merge all the elements that make up each of the clusters into a single element.
@@ -87,7 +87,7 @@ private:
    */
   void _mergeClusters(const OsmMapPtr& map,
     std::vector< std::pair<ElementId, ElementId> >& replaced,
-    MultiaryClusterer::ClusterList clusters);
+    MultiaryClusterAlgorithm::ClusterList clusters);
 };
 
 }

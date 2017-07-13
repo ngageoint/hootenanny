@@ -24,12 +24,12 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "MultiaryClusterer.h"
+#include "MultiaryClusterAlgorithm.h"
 
 namespace hoot
 {
 
-MultiaryClusterer::MultiaryClusterer(MultiaryPoiMergeCachePtr mergeCache,
+MultiaryClusterAlgorithm::MultiaryClusterAlgorithm(MultiaryPoiMergeCachePtr mergeCache,
   MultiaryScoreCachePtr scoreCache) :
   _mergeCache(mergeCache),
   _scoreCache(scoreCache)
