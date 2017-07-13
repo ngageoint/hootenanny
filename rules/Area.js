@@ -56,6 +56,10 @@ exports.matchScore = function(map, e1, e2)
 {
   var result = { match: 0.0, miss: 1.0, review: 0.0 };
 
+  if (e1.getStatusString() == e2.getStatusString()) {
+    return result;
+  }
+
   var smallerOverlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
   var overlap = new hoot.OverlapExtractor().extract(map, e1, e2);
   var bufferedOverlap = new hoot.BufferedOverlapExtractor().extract(map, e1, e2);
