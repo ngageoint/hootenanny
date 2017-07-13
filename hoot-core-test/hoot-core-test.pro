@@ -252,6 +252,7 @@ SOURCES += \
     src/test/cpp/hoot/core/test/SimpleTestListener.cpp \
     src/test/cpp/hoot/core/test/TempFileName.cpp \
     src/test/cpp/hoot/core/test/TestSetup.cpp \
+    src/test/cpp/hoot/core/visitors/CalculateHashVisitorTest.cpp \
     src/test/cpp/hoot/core/test/AbstractTest.cpp \
     src/test/cpp/hoot/core/test/AbstractTestSuite.cpp \
 

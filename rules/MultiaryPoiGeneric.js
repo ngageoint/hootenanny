@@ -131,5 +131,11 @@ exports.mergeSets = function(map, pairs, replaced)
             mergeElements(map, first, map.getElement(eid));
         }
     });
+    first.setStatusString("Conflated");
+
+    var tags = first.getTags();
+    tags.set("source:hash", first.getTags().get("hoot:hash"));
+    tags.set("hoot:hash", "");
+    first.setTags(tags);
 };
 
