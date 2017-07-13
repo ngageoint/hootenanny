@@ -20,7 +20,7 @@ Feature: Conflation using Frechet distance and network conflation
     And I select the "Network" option in the "Unify" combobox
     And I click the "label" with text "General Conflation Options"
     And I check the "Frechet Distance" checkbox
-    And I press span with text "Apply"
+    And I scroll "Apply" element into view and press it
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 3 "minutes" to see "DcRoadsFrechetNetworkCucumber"

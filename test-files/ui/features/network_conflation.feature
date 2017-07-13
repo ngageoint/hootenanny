@@ -18,7 +18,7 @@
     And I press "confAdvOptsLnk"
     And I click the "label" with text "Road Options"
     And I select the "Network" option in the "Unify" combobox
-    And I press span with text "Apply"
+    And I scroll "Apply" element into view and press it
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 3 "minutes" to see "DcRoadsNetworkCucumber"
