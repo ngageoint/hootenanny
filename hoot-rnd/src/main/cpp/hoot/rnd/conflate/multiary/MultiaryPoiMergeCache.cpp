@@ -172,8 +172,9 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryC
 
   assert(tmp->getNodeCount() == 1);
 
-  // Record the newly merged element
-  result->mergedElement = tmp->getNodes().begin()->second;
+  // Record the newly merged element as a clone. By cloning we don't have to worry about assigning
+  // this element to two maps and creating registerListener problems.
+  result->mergedElement.reset(tmp->getNodes().begin()->second->clone());
 
   return result;
 }
