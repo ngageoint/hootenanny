@@ -67,6 +67,11 @@ protected:
   static v8::Handle<v8::Value> getCircularError(const v8::Arguments& args);
   static v8::Handle<v8::Value> getElementId(const v8::Arguments& args);
   static v8::Handle<v8::Value> getId(const v8::Arguments& args);
+  /**
+   * Return the zero-based input number associated with this element. If this is not an input, throw
+   * an exception.
+   */
+  static v8::Handle<v8::Value> getStatusInput(const v8::Arguments& args);
   static v8::Handle<v8::Value> getStatusString(const v8::Arguments& args);
   static v8::Handle<v8::Value> getTags(const v8::Arguments& args);
   static v8::Handle<v8::Value> setStatusString(const v8::Arguments& args);

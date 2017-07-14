@@ -441,6 +441,14 @@ When(/^I press span with text "([^"]*)"$/) do |txt|
   find('span', :text=>txt).click
 end
 
+When(/^I scroll "([^"]*)" element into view and press it$/) do |txt|
+  include_hidden_fields do
+    element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
+    page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+    element.click
+  end
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
@@ -455,6 +463,7 @@ When(/^I wait$/) do
 end
 
 When(/^I remove the first layer$/) do
+
   trash_cans = all('button._icon.trash')
   trash_cans[0].click
   sleep 5

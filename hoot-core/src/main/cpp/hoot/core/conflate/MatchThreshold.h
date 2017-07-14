@@ -54,6 +54,12 @@ public:
   MatchThreshold(double matchThreshold = 0.5, double missThreshold = 0.5,
                  double reviewThreshold = 1.0);
 
+  double getMatchThreshold() const { return _matchThreshold; }
+
+  double getMissThreshold() const { return _missThreshold; }
+
+  double getReviewThreshold() const { return _reviewThreshold; }
+
   MatchType getType(const Match& m) const { return getType(m.getClassification()); }
   MatchType getType(const MatchClassification& mc) const;
 

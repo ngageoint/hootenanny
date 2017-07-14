@@ -25,6 +25,7 @@ CONFIG += rtti \
 OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
     ../rules/LineStringGeneric.js \
+    ../rules/MultiaryPoiGeneric.js \
     ../rules/PoiGeneric.js \
     ../rules/lib/HootLib.js \
     ../rules/LinearWaterway.js \
@@ -548,7 +549,7 @@ SOURCES += \
     src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
-    src/main/cpp/hoot/core/elements/Status.cpp
+    src/main/cpp/hoot/core/elements/Status.cpp \
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
