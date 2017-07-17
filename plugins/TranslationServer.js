@@ -6,37 +6,48 @@ to translate OSM to TDS and TDS to OSM.
 var http = require('http');
 var url = require('url');
 var serverPort = 8094;
-var availableTrans = {TDSv40: {isavailable: true}, TDSv61: {isavailable: true}, MGCP: {isavailable: true}};
+var availableTrans = {
+    TDSv40: {isavailable: true},
+    TDSv61: {isavailable: true},
+    MGCP: {isavailable: true},
+    GGDMv30: {isavailable: true}
+};
 var HOOT_HOME = process.env.HOOT_HOME;
 
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/plugins/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/plugins/tds61_full_schema.js'),
-    MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js')
+    MGCP: require(HOOT_HOME + '/plugins/mgcp_schema.js'),
+    GGDMv30: require(HOOT_HOME + '/plugins/ggdm30_schema.js')
 };
 
 var translationsMap = {
     TDSv40: '/translations/TDSv40.js',
     TDSv61: '/translations/TDSv61.js',
-    MGCP: '/translations/MGCP_TRD4.js'
+    MGCP: '/translations/MGCP_TRD4.js',
+    GGDMv30: '/translations/GGDMv30.js'
 };
 
 var osmToTdsMap = {
     TDSv40: '/translations/OSM_to_englishTDS.js',
     TDSv61: '/translations/OSM_to_englishTDS61.js',
-    MGCP: '/translations/OSM_to_englishMGCP.js'
+    MGCP: '/translations/OSM_to_englishMGCP.js',
+    GGDMv30: '/translations/OSM_to_englishGGDM30.js'
+
 };
 
 var tdsToOsmMap = {
     TDSv40: '/translations/englishTDS_to_OSM.js',
     TDSv61: '/translations/englishTDS61_to_OSM.js',
-    MGCP: '/translations/englishMGCP_to_OSM.js'
+    MGCP: '/translations/englishMGCP_to_OSM.js',
+    GGDMv30: '/translations/englishGGDM30_to_OSM.js'
 };
 
 var englishTranslationsMap = {
     TDSv40: '/plugins/etds40_osm.js',
     TDSv61: '/plugins/etds61_osm.js',
-    MGCP: '/plugins/emgcp_osm.js'
+    MGCP: '/plugins/emgcp_osm.js',
+    GGDMv30: '/plugins/eggdm30_osm.js'
 };
 
 
@@ -290,13 +301,8 @@ var tdstoosm = function(params) {
         //Get OSM tags for F_CODE
         hoot = require(HOOT_HOME + '/lib/HootJs');
         createUuid = hoot.UuidHelper.createUuid;
-        var englishToOsmMap = {
-            TDSv40: require(HOOT_HOME + '/plugins/etds40_osm.js'),
-            TDSv61: require(HOOT_HOME + '/plugins/etds61_osm.js'),
-            MGCP: require(HOOT_HOME + '/plugins/emgcp_osm.js')
-        };
 
-        var osm = englishToOsmMap[params.translation].toOSM({
+        var osm = require(HOOT_HOME + englishTranslationsMap[params.translation]).toOSM({
             'Feature Code': params.fcode
         }, '', '');
 
