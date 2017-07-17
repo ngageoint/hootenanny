@@ -136,7 +136,7 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithmTest.cpp \
-    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.cpp
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.cpp \
     src/main/cpp/hoot/rnd/cmd/MultiaryScoreMatchesCmd.cpp \
 
 HEADERS += \

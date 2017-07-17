@@ -1079,7 +1079,7 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
-    src/main/cpp/hoot/core/filters/UselessElementCriterion.h
+    src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
     src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
