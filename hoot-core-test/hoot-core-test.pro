@@ -215,8 +215,9 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
-				src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
-				src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp
+    src/test/cpp/hoot/core/scoring/multiary/MultiaryMatchComparatorTest.cpp \
+    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -252,7 +253,7 @@ SOURCES += \
     src/test/cpp/hoot/core/test/TempFileName.cpp \
     src/test/cpp/hoot/core/test/TestSetup.cpp \
     src/test/cpp/hoot/core/test/AbstractTest.cpp \
-    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp
+    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp \
 
 HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
