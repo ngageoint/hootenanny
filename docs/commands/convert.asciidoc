@@ -30,6 +30,7 @@ The supported input formats are:
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap JSON file (.json; similar to Overpass JSON)
+* GeoJSON file (.geojson)
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
 * OpenStreetMap API Database (osmapidb://)
@@ -43,6 +44,7 @@ The supported output formats are:
 * ESRI File Geodatabase (.gdb)
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap JSON file (.json; similar to Overpass JSON)
+* GeoJSON file (.geojson)
 * Hootenanny API Database (hootapidb://)
 * OpenStreetMap API Database (osmapidb://)
 

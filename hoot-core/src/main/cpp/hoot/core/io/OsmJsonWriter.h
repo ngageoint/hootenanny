@@ -65,7 +65,7 @@ public:
 
   OsmJsonWriter(int precision = 16);
 
-  virtual bool isSupported(QString /*url*/) { return false; /*url.toLower().endsWith(".json");*/ }
+  virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
 
   virtual void open(QString url);
 
