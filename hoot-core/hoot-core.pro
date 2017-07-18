@@ -547,6 +547,7 @@ SOURCES += \
     src/main/cpp/hoot/core/cmd/CalculateTilesCmd.cpp \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.cpp \
     src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
+    src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
     src/main/cpp/hoot/core/elements/Status.cpp \
@@ -1081,6 +1082,9 @@ HEADERS += \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
     src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
+    src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
+    src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
+    src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h

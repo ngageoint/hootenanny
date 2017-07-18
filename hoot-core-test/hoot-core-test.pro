@@ -215,6 +215,7 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
+    src/test/cpp/hoot/core/scoring/multiary/MultiaryMatchComparatorTest.cpp \
     src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \

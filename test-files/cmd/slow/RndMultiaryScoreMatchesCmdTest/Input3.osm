@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <bounds minlat='39.7492522' minlon='-105.0121307' maxlat='39.7492522' maxlon='-105.0121307' origin='hootenanny' />
+  <node id='-1967' action='modify' visible='true' version='1' lat='39.74925222519' lon='-105.01213074803'>
+    <tag k='ID' v='3-00000' />
+    <tag k='MATCH' v='1-00002' />
+    <tag k='REVIEW' v='none' />
+    <tag k='name' v='Elitch Gardens' />
+    <tag k='tourism' v='theme_park' />
+  </node>
+  <node id='-1986' action='modify' visible='true' lat='39.74837998869' lon='-105.00746109724'>
+    <tag k='ID' v='3-00001' />
+    <tag k='MATCH' v='2-00000' />
+    <tag k='REVIEW' v='none' />
+    <tag k='name' v='Pepsi Stadium' />
+  </node>
+</osm>
