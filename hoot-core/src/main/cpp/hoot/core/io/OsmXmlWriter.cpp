@@ -30,17 +30,18 @@
 using namespace boost;
 
 // Hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/elements/Tags.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -48,6 +49,7 @@ using namespace boost;
 #include <QFile>
 #include <QXmlStreamWriter>
 
+using namespace geos::geom;
 using namespace std;
 
 namespace hoot
@@ -201,6 +203,8 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     writer.writeAttribute("schema", _osmSchema);
   }
 
+  _writeBounds(map, writer);
+
   _timestamp = "1970-01-01T00:00:00Z";
 
   _writeNodes(map, writer);
@@ -294,7 +298,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
+            writer.writeAttribute("v", n->getStatus().toCompatString());
           }
         }
         else
@@ -324,7 +328,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
         }
         else
         {
-          writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
+          writer.writeAttribute("v", n->getStatus().toCompatString());
         }
         writer.writeEndElement();
       }
@@ -402,7 +406,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+            writer.writeAttribute("v", w->getStatus().toCompatString());
           }
         }
         else
@@ -428,7 +432,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", MetadataTags::HootStatus());
-        writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+        writer.writeAttribute("v", w->getStatus().toCompatString());
         writer.writeEndElement();
       }
     }
@@ -502,8 +506,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute(
-              "v", removeInvalidCharacters(QString::number(r->getStatus().getEnum())));
+            writer.writeAttribute("v", r->getStatus().toCompatString());
           }
         }
         else
@@ -543,7 +546,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", MetadataTags::HootStatus());
-        writer.writeAttribute("v", QString("%1").arg(r->getStatus().getEnum()));
+        writer.writeAttribute("v", r->getStatus().toCompatString());
         writer.writeEndElement();
       }
     }
@@ -558,6 +561,17 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 
     writer.writeEndElement();
   }
+}
+
+void OsmXmlWriter::_writeBounds(ConstOsmMapPtr map, QXmlStreamWriter& writer)
+{
+  Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
+  writer.writeStartElement("bounds");
+  writer.writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));
+  writer.writeAttribute("minlon", QString::number(bounds.getMinX(), 'g', _precision));
+  writer.writeAttribute("maxlat", QString::number(bounds.getMaxY(), 'g', _precision));
+  writer.writeAttribute("maxlon", QString::number(bounds.getMaxX(), 'g', _precision));
+  writer.writeEndElement();
 }
 
 }

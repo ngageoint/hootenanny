@@ -91,6 +91,11 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
+  /**
+   * Set the factory to use when creating mergers. This method is likely only useful when testing.
+   */
+  void setMergerFactory(boost::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
+
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
@@ -144,6 +149,10 @@ private:
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
 
+  /*
+   * This method is required for the preserve.unknown1.element.id.when.modifying.features setting
+   * to work.  It is run after conflation to prevent ID's of unknown1 features from being lost.
+   */
   void _mapUnknown1IdsBackToModifiedElements(OsmMapPtr& map);
 };
 

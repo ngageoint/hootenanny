@@ -174,7 +174,6 @@ Handle<Value> OsmMapJs::getElement(const Arguments& args)
   {
     OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-    LOG_VAR(args[0]->ToObject());
     ElementId eid = toCpp<ElementId>(args[0]);
 
     if (obj->isConst())

@@ -33,6 +33,7 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Validate.h>
+#include <hoot/core/ops/Boundable.h>
 
 using namespace std;
 
@@ -137,6 +138,13 @@ void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool 
   LOG_INFO("Loading map from " << url << "...");
   boost::shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
+  boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(reader);
+  if (!ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() && !boundable.get())
+  {
+    throw IllegalArgumentException(
+      ConfigOptions::getConvertBoundingBoxKey() +
+      " configuration option used with unsupported reader for data source: " + url);
+  }
   reader->open(url);
   reader->read(map);
   VALIDATE(map->validate(true));

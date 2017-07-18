@@ -73,7 +73,11 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/opt/ReleaseTest.cpp \
     src/main/cpp/hoot/rnd/conflate/opt/PertyTest.cpp \
     src/main/cpp/hoot/rnd/conflate/opt/PertyTestFitnessFunction.cpp \
-    src/main/cpp/hoot/rnd/conflate/opt/ReleaseTestFitnessFunction.cpp
+    src/main/cpp/hoot/rnd/conflate/opt/ReleaseTestFitnessFunction.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCacheTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCacheTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiGenericTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/opt/CaseTestFitnessFunction.h \
@@ -123,7 +127,18 @@ SOURCES += \
     src/main/cpp/hoot/rnd/cmd/ConflateCumulativeCmd.cpp \
     src/main/cpp/hoot/rnd/conflate/CumulativeConflator.cpp \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.cpp \
-    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMerger.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCache.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCache.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryCluster.cpp \
+    src/main/cpp/hoot/rnd/cmd/MultiaryConflateCmd.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithmTest.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.cpp \
+    src/main/cpp/hoot/rnd/cmd/MultiaryScoreMatchesCmd.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -163,7 +178,15 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/frechet/FrechetSublineMatcher.h \
     src/main/cpp/hoot/rnd/conflate/CumulativeConflator.h \
     src/main/cpp/hoot/rnd/visitors/KeepReviewsVisitor.h \
-    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.h
+    src/main/cpp/hoot/rnd/schema/ProvenanceAwareOverwriteTagMerger.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMerger.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCache.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCache.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryCluster.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.h
 
 FORMS +=
 

@@ -566,22 +566,26 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
   for (int i = 0; i < fieldDefn->GetFieldCount(); i++)
   {
     QString value;
+
+    // This skips NULL fields.
+    if (! f->IsFieldSet(i)) continue;
+
     if (f->GetDefnRef()->GetFieldDefn(i)->GetType() == OFTReal)
     {
-      value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
+        value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
     }
     else
     {
-      value = QString::fromUtf8(f->GetFieldAsString(i));
+        value = QString::fromUtf8(f->GetFieldAsString(i));
     }
 
     // Ticket 5833: make sure tag is only added if value is non-null
     if ( value.length() == 0 )
     {
-      LOG_TRACE(
-        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
-        " since the value field is empty");
-      continue;
+        LOG_TRACE(
+                    "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
+                    " since the value field is empty");
+        continue;
     }
 
     t[fieldDefn->GetFieldDefn(i)->GetNameRef()] = value;

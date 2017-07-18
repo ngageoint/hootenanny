@@ -294,28 +294,6 @@ int OsmXmlReader::_parseInt(QString s)
   return result;
 }
 
-Status OsmXmlReader::_parseStatus(QString s)
-{
-  Status result;
-
-  if (s.length() > 2)
-  {
-    // Try parsing the status as a string, not an int
-    result = Status::fromString(s);
-  }
-  else
-  {
-    result = Status((Status::Type)_parseInt(s));
-  }
-
-  if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
-  {
-    throw HootException(QObject::tr("Invalid status value: %1").arg(s));
-  }
-
-  return result;
-}
-
 void OsmXmlReader::open(QString url)
 {
   _path = url;
@@ -611,7 +589,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
 
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
-          _element->setStatus(_parseStatus(value));
+          _element->setStatus(Status::fromString(value));
 
           if (_keepFileStatus)  { _element->setTag(key, value); }
         }

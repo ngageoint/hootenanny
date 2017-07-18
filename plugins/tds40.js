@@ -43,13 +43,13 @@ tds = {
         tds.rawSchema = tds.schema.getDbSchema();
 
         // Add the Very ESRI specific FCSubtype attribute
-        if (config.getOgrTdsAddFcsubtype() == 'true') tds.rawSchema = translate.addFCSubtype(tds.rawSchema);
+        if (config.getOgrEsriFcsubtype() == 'true') tds.rawSchema = translate.addFCSubtype(tds.rawSchema);
 
         // Add the eLTDS attributes
         if (config.getOgrTdsAddEtds() == 'true') tds.rawSchema = translate.addEtds(tds.rawSchema);
 
         // Add empty "extra" feature layers if needed
-        if (config.getOgrTdsExtra() == 'file') tds.rawSchema = translate.addExtraFeature(tds.rawSchema);
+        if (config.getOgrNoteExtra() == 'file') tds.rawSchema = translate.addExtraFeature(tds.rawSchema);
 
      /*
         // This has been removed since we no longer have text enumerations in the schema
@@ -80,7 +80,7 @@ tds = {
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds.rawSchema
-        if (config.getOgrTdsStructure() == 'false')
+        if (config.getOgrThematicStructure() == 'false')
         {
             // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
             tds.layerNameLookup = translate.makeLayerNameLookup(tds.rawSchema);
@@ -216,7 +216,7 @@ tds = {
 
         // Add the ESRI Feature Dataset name to the schema
         // newSchema = translate.addFdName(newSchema,'TDS');
-        if (config.getOgrTdsFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrTdsFdname());
+        if (config.getOgrEsriFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
 
         // Now add the o2s feature to the tds.rawSchema
         // We can drop features but this is a nice way to see what we would drop
@@ -1796,12 +1796,6 @@ tds = {
     // This is the main routine to convert _TO_ OSM
     toOsm : function(attrs, layerName, geometryType)
     {
-        // This is filtered by the layerNameFilter function.
-        //
-        // The Nuke Option: Some of the ESRI FGDB have layers named SRC_Xxxxx
-        // We don't want these so we drop them
-        // if (layerName.toString().indexOf('SRC_') > -1) return null;
-
         tags = {};  // The final output Tag list
 
         // Debug:
@@ -1812,7 +1806,6 @@ tds = {
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
         }
 
-
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
         if (tds.fcodeLookup == undefined)
@@ -1821,6 +1814,7 @@ tds = {
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds.rules.fcodeOne2oneIn);
 
             tds.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            // Debug
             // translate.dumpOne2OneLookup(tds.fcodeLookup);
         }
 
@@ -1882,7 +1876,11 @@ tds = {
         translate.applySimpleTxtBiased(notUsedAttrs, tags, tds.rules.txtBiased, 'forward');
 
         // one 2 one
-        translate.applyOne2One(notUsedAttrs, tags, tds.lookup, {'k':'v'});
+        //translate.applyOne2One(notUsedAttrs, tags, tds.lookup, {'k':'v'});
+        translate.applyOne2OneQuiet(notUsedAttrs, tags, tds.lookup);
+
+        // Translate the XXX2, XXX3 etc attributes
+        translate.fix23Attr(notUsedAttrs, tags, tds.lookup);
 
         // Crack open the OTH field and populate the appropriate attributes
         // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
@@ -1897,7 +1895,8 @@ tds = {
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
-            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
+            var kList = Object.keys(notUsedAttrs).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
 
             var kList = Object.keys(tags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
@@ -1948,6 +1947,7 @@ tds = {
             fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds.rules.fcodeOne2oneOut);
 
             tds.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+            // Debug
             // translate.dumpOne2OneLookup(tds.fcodeLookup);
         }
 
@@ -1957,6 +1957,7 @@ tds = {
             tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.one2oneOut);
 
             tds.lookup = translate.createBackwardsLookup(tds.rules.one2one);
+            // Debug
             // translate.dumpOne2OneLookup(tds.lookup);
         }
 
@@ -1976,6 +1977,10 @@ tds = {
         translate.applySimpleNumBiased(attrs, notUsedTags, tds.rules.numBiased, 'backward',tds.rules.intList);
         translate.applySimpleTxtBiased(attrs, notUsedTags, tds.rules.txtBiased, 'backward');
 
+        // Translate the XXX:2, XXX2, XXX:3 etc attributes
+        // Note: This deletes tags as they are used
+        translate.fix23Tags(notUsedTags, attrs, tds.lookup);
+
         // one 2 one - we call the version that knows about OTH fields
         // NOTE: This deletes tags as they are used
         translate.applyNfddOne2One(notUsedTags, attrs, tds.lookup, tds.fcodeLookup);
@@ -1985,10 +1990,14 @@ tds = {
         tds.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        if (config.getOgrDebugDumptags() == 'true')
+        {
+            var kList = Object.keys(notUsedTags).sort()
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
+        }
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -2075,13 +2084,13 @@ tds = {
 
                     // Now set the FCSubtype.
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                    if (config.getOgrTdsAddFcsubtype() == 'true')
+                    if (config.getOgrEsriFcsubtype() == 'true')
                     {
                         returnData[i]['attrs']['FCSUBTYPE'] = tds.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                     }
 
                     // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                    if (config.getOgrTdsStructure() == 'true')
+                    if (config.getOgrThematicStructure() == 'true')
                     {
                         returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
                         tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
@@ -2099,7 +2108,7 @@ tds = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrTdsExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);

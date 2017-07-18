@@ -2,7 +2,6 @@ Feature: DG G-EGD plugin
 
     Scenario: The image carousel loads tiles
         Given I am on Hootenanny at location "10.00/151.21546/-33.85727"
-        And I resize the window
         And I click Get Started
         Given that the EGD plugin is available
         When I open the image carousel

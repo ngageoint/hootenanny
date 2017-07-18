@@ -61,6 +61,11 @@ public:
    */
   virtual std::set<ElementId> getImpactedElementIds() const = 0;
 
+  /**
+   * @brief Returns the IDs of all Unknown1 elements that were replaced by Unknown2 elements
+   * during merging.
+   * @return a collection of unknown1/unknown2 element ID pairs
+   */
   virtual std::set< std::pair<ElementId, ElementId> > getImpactedUnknown1ElementIds() const = 0;
 
   /**
@@ -77,6 +82,8 @@ public:
   virtual QString toString() const = 0;
 };
 
+typedef boost::shared_ptr<Merger> MergerPtr;
+typedef boost::shared_ptr<const Merger> ConstMergerPtr;
 
 }
 

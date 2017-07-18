@@ -147,7 +147,6 @@ protected:
   double _parseDouble(QString s);
   int _parseInt(QString s);
   long _parseLong(QString s);
-  Status _parseStatus(QString s);
 
   const QString& _saveMemory(const QString& s);
 };

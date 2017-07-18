@@ -159,7 +159,7 @@ ElementId PartialNetworkMerger::mapEid(const ElementId &oldEid) const
 }
 
 void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
-  vector<pair<ElementId, ElementId> > &replaced) const
+  vector<pair<ElementId, ElementId> > &replaced)
 {
   LOG_TRACE("Processing full match...");
 
@@ -205,7 +205,12 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   try
   {
     // split the ways in such a way that the mappings are updated appropriately.
-    WayMatchStringSplitter().applySplits(map, replaced, _allSublineMappings);
+    WayMatchStringSplitter splitter;
+    splitter.applySplits(map, replaced, _allSublineMappings);
+    std::set< std::pair<ElementId, ElementId> > splitUnknown1Replacements =
+      splitter.getUnknown1Replacements();
+    _unknown1Replacements.insert(splitUnknown1Replacements.begin(), splitUnknown1Replacements.end());
+    LOG_VART(_unknown1Replacements.size());
 
     // apply merge operations on the split ways.
     LOG_TRACE("Merging split ways...");
@@ -239,7 +244,6 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
       }
     }
 
-    LOG_TRACE("Adding review: " << e.getWhat() << "...");
     ReviewMarker::mark(map, reviews, e.getWhat(), HighwayMatch::getHighwayMatchName());
   }
 }
@@ -264,7 +268,6 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
   }
   else if (edgeMatch->getString2()->isStub())
   {
-    LOG_TRACE("Marking complex intersection match for review...");
     LOG_VART(edgeMatch->getString1()->getMembers().size());
     LOG_VART(edgeMatch->getString1()->getMembers());
     LOG_VART(edgeMatch->getString2()->getMembers().size());
@@ -290,7 +293,6 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
     }
     ReviewMarker().mark(map, eids, "Ambiguous intersection match. Possible dogleg? Very short "
       "segment? Please verify merge and fix as needed.", HighwayMatch::getHighwayMatchName());
-    LOG_TRACE("Review marked.");
   }
   else
   {
@@ -300,7 +302,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
 
 void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 {
-  LOG_TRACE("Replacing " << oldEid << " with " << newEid);
+  LOG_DEBUG("Replacing " << oldEid << " with " << newEid);
   MergerBase::replace(oldEid, newEid);
   _substitions[oldEid] = newEid;
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHCLASSIFICATION_H
 #define MATCHCLASSIFICATION_H
@@ -33,11 +33,32 @@
 namespace hoot
 {
 
+/**
+ * The match classification object represents the classification of a match. A match may be in
+ * one of three states:
+ *
+ *  - match - we're confident the two elements represent the same feature
+ *  - miss - we're confident the two elements do not represent the same feature
+ *  - review - we're confident the data is ambiguous or wrong and it requires human review
+ *
+ * Of course, there are different levels to each of those states. This class represents those
+ * varying levels of confidence.
+ *
+ * @sa MatchThreshold
+ */
 class MatchClassification
 {
 public:
   MatchClassification();
 
+  /**
+   * Construct the object with predefined values.
+   */
+  MatchClassification(double match, double miss, double review);
+
+  /**
+   * Reset the values to all zeros. This isn't valid, but it is a known state.
+   */
   void clear() { _match = 0.0; _miss = 0.0; _review = 0.0; }
 
   double getMatchP() const { return _match; }
