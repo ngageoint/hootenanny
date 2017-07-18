@@ -35,8 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/rnd/conflate/multiary/MultiaryPoiMergeCache.h>
-#include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
+#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 using namespace std;
 
@@ -51,23 +50,13 @@ class MultiaryPoiMergerTest : public CppUnit::TestFixture
 
 public:
 
-  void initMultiary()
-  {
-    TestUtils::resetEnvironment();
-
-    // have to do this or getInstance will re-register the default match creators.
-    MatchFactory& factory = MatchFactory::getInstance();
-    factory.reset();
-    factory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
-  }
-
   /**
    * Simple conflation test case. Should merge 1/2 and 3/4. There should be a review generated
    * between 1/2 and 3/4 due to the amenity=pub tag.
    */
   void basicTest()
   {
-    initMultiary();
+    TestUtils::resetEnvironment();
 
     QString testJsonStr =
       "{                                      \n"
@@ -91,14 +80,7 @@ public:
     map->getNode(-3)->setStatus(Status::fromInput(2));
     map->getNode(-4)->setStatus(Status::fromInput(3));
 
-    boost::shared_ptr<MergerFactory> mf(new MergerFactory());
-    mf->registerCreator(new MultiaryPoiMergerCreator());
-
-    MatchThresholdPtr mt(new MatchThreshold(0.39, 0.61, 1.1));
-    // call new conflation routine
-    UnifyingConflator conflator(mt);
-    conflator.setMergerFactory(mf);
-    conflator.apply(map);
+    MultiaryUtilities::conflate(map);
 
     //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"

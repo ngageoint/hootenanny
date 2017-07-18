@@ -59,9 +59,9 @@ public:
     QString inputJson =
       "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
       "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
-      "  'tags':{'hoot:status':'Input001', 'ID':'1-000000', 'poi':'yes'}},\n"
+      "  'tags':{'hoot:status':'Input001', 'ID':'1-000000', 'MATCH':'none', 'poi':'yes'}},\n"
       "{'type':'node','id': -2,'lat': 2.0,'lon': -3.0,\n"
-      "  'tags':{'hoot:status':'Input002', 'ID':'2-000000', 'poi':'yes'}}\n"
+      "  'tags':{'hoot:status':'Input002', 'ID':'2-000000', 'MATCH':'none', 'poi':'yes'}}\n"
       "]}\n";
 
     OsmMapPtr input = OsmJsonReader().loadFromString(inputJson);

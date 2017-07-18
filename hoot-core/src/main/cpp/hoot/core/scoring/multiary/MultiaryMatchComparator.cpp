@@ -96,6 +96,10 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const 
   // go through all the IDs in the in data set.
   foreach (QString id, _expectedIdToEid.keys())
   {
+//    LOG_VAR(id);
+    assert(_actualMatchGroups.contains(id));
+    assert(_expectedMatchGroups.contains(id));
+
     QSet<QString> actualMatchSet = *_actualMatchGroups[id];
     QSet<QString> expectedMatchSet = *_expectedMatchGroups[id];
     QSet<QString> actualReviewSet = *_actualReviews.getCluster(id);
@@ -191,31 +195,28 @@ void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated
 
     virtual void visit(const ConstElementPtr& e)
     {
-      if (e->getStatus().isInput())
+      QList<QString> ids = _getAllIds(e);
+
+      foreach (QString oneId, ids)
       {
-        QList<QString> ids = _getAllIds(e);
-
-        foreach (QString oneId, ids)
+        if (_expectedIdToEid.contains(oneId) == false)
         {
-          if (_expectedIdToEid.contains(oneId) == false)
-          {
-            LOG_WARN("Got an ID in the conflated output that was not in the expected input: " <<
-              oneId);
-          }
+          LOG_WARN("Got an ID in the conflated output that was not in the expected input: " <<
+            oneId);
         }
+      }
 
-        IdClusterPtr cluster(new IdCluster());
+      IdClusterPtr cluster(new IdCluster());
 
-        foreach (QString id, ids)
+      foreach (QString id, ids)
+      {
+        if (_matchGroups.contains(id))
         {
-          if (_matchGroups.contains(id))
-          {
-            LOG_WARN("One ID has appeared in multiple elements: " << id);
-          }
-          _actualIdToEid[id] = e->getElementId();
-          _matchGroups[id] = cluster;
-          cluster->insert(id);
+          LOG_WARN("One ID has appeared in multiple elements: " << id);
         }
+        _actualIdToEid[id] = e->getElementId();
+        _matchGroups[id] = cluster;
+        cluster->insert(id);
       }
     }
 
@@ -305,49 +306,46 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
 
     virtual void visit(const ConstElementPtr& e)
     {
-      if (e->getStatus().isInput())
+      const Tags& t = e->getTags();
+      QString id = MetadataTags::TrainingId();
+
+      if (t.contains(id))
       {
-        const Tags& t = e->getTags();
-        QString id = MetadataTags::TrainingId();
-
-        if (t.contains(id))
+        _idToEid[t[id]] = e->getElementId();
+        if (_matchGroups.contains(t[id]) == false)
         {
-          _idToEid[t[id]] = e->getElementId();
-          if (_matchGroups.contains(t[id]) == false)
-          {
-            _matchGroups.insert(t[id], IdClusterPtr(new IdCluster()));
-          }
-          _matchGroups[t[id]]->insert(t[id]);
+          _matchGroups.insert(t[id], IdClusterPtr(new IdCluster()));
         }
+        _matchGroups[t[id]]->insert(t[id]);
+      }
 
-        QString match = MetadataTags::TrainingMatch();
+      QString match = MetadataTags::TrainingMatch();
 
-        if (t.contains(match))
+      if (t.contains(match))
+      {
+        if (t[match] == "none")
         {
-          if (t[match] == "none")
+          // pass. No matches.
+        }
+        else if (t[match] == "todo")
+        {
+          LOG_WARN("Got an unexpected todo match. " << e->getElementId());
+        }
+        else if (t.contains(id))
+        {
+          if (_matchGroups.contains(t[match]) == false)
           {
-            // pass. No matches.
+            _matchGroups.insert(t[match], IdClusterPtr(new IdCluster()));
           }
-          else if (t[match] == "todo")
-          {
-            LOG_WARN("Got an unexpected todo match. " << e->getElementId());
-          }
-          else if (t.contains(id))
-          {
-            if (_matchGroups.contains(t[match]) == false)
-            {
-              _matchGroups.insert(t[match], IdClusterPtr(new IdCluster()));
-            }
-            // copy all the matches in t[id] into t[match]
-            *_matchGroups[t[match]] += *_matchGroups[t[id]];
+          // copy all the matches in t[id] into t[match]
+          *_matchGroups[t[match]] += *_matchGroups[t[id]];
 
-            // map this t[id] to the same group as t[match]
-            _matchGroups[t[id]] = _matchGroups[t[match]];
-          }
-          else
-          {
-            LOG_WARN("There is a match on an element without an ID tag. " << e->getElementId());
-          }
+          // map this t[id] to the same group as t[match]
+          _matchGroups[t[id]] = _matchGroups[t[match]];
+        }
+        else
+        {
+          LOG_WARN("There is a match on an element without an ID tag. " << e->getElementId());
         }
       }
     }

@@ -30,10 +30,13 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/multiary/MultiaryMatchComparator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 using namespace std;
 using namespace Tgs;
@@ -61,7 +64,8 @@ public:
 
     // Apply any user specified operations.
     NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
-    UnifyingConflator(mt).apply(copy);
+
+    MultiaryUtilities::conflate(copy);
     // Apply any user specified operations.
     NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
 
@@ -69,6 +73,9 @@ public:
 
     MapProjector::projectToWgs84(copy);
     saveMap(copy, output);
+    OsmXmlWriter writer;
+    writer.setIncludeHootInfo(true);
+    writer.write(copy, output);
 
     if (showConfusion)
     {
@@ -100,42 +107,42 @@ public:
       showConfusion = true;
     }
 
-    if (args.size() < 3 || args.size() % 2 != 1)
+    if (args.size() < 3)
     {
       LOG_VAR(args);
       cout << getHelp() << endl << endl;
       throw HootException(
-        QString("%1 takes at least three parameters: two or more input maps (even number) and an output map")
+        QString("%1 takes at least two parameters: two or more input maps")
           .arg(getName()));
     }
+
+    // modifying the schema is necessary to ensure the conflation concatenates values.
+    SchemaVertex id;
+    id.setName("ID");
+    id.setType(SchemaVertex::Tag);
+    id.valueType = Text;
+    OsmSchema::getInstance().updateOrCreateVertex(id);
+
+    SchemaVertex match;
+    id.setName("MATCH");
+    id.setType(SchemaVertex::Tag);
+    id.valueType = Text;
+    OsmSchema::getInstance().updateOrCreateVertex(match);
+
+    SchemaVertex review;
+    id.setName("REVIEW");
+    id.setType(SchemaVertex::Tag);
+    id.valueType = Text;
+    OsmSchema::getInstance().updateOrCreateVertex(review);
 
     QString output = args.last();
     OsmMapPtr map(new OsmMap());
 
     for (int i = 0; i < args.size() - 1; i++)
     {
-#warning "replace this when https://github.com/ngageoint/hootenanny/pull/1651 is merged"
-      Status s;
-      if (i <= 1)
-      {
-        s = Status(i);
-      }
-      else
-      {
-        s = Status(i + 1);
-      }
+      Status s = Status::fromInput(i);
 
       loadMap(map, args[i], false, s);
-
-#warning fix me
-//      if (!MapScoringStatusAndRefTagValidator::allTagsAreValid(map))
-//      {
-//        throw HootException(
-//          QString("score-matches requires that the first input file contains %1 tags (no %2 tags) "
-//                  "and the second input file contains %2 tags (no %1 tags).")
-//              .arg(MetadataTags::Ref1())
-//              .arg(MetadataTags::Ref2()));
-//      }
     }
 
     MapProjector::projectToWgs84(map);
