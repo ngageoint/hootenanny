@@ -215,8 +215,17 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
-				src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
-				src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp
+    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
+    src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
+    src/test/cpp/hoot/core/test/SimpleTestListener.cpp \
+    src/test/cpp/hoot/core/test/TempFileName.cpp \
+    src/test/cpp/hoot/core/test/TestSetup.cpp \
+    src/test/cpp/hoot/core/test/AbstractTest.cpp \
+    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp \
+    src/test/cpp/hoot/core/io/OsmGeoJsonWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmGeoJsonReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -234,27 +243,6 @@ HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
     src/test/cpp/hoot/core/TestUtils.h \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.h \
-
-
-nodejs:SOURCES += \
-    src/test/cpp/hoot/core/io/OgrReaderTest.cpp \
-    src/test/cpp/hoot/core/io/OgrWriterTest.cpp \
-    src/test/cpp/hoot/core/ops/CalculateStatsOpTest.cpp \
-    src/test/cpp/hoot/core/perty/PertyTestRunnerTest.cpp \
-    src/test/cpp/hoot/core/schema/TranslatedTagDifferencerTest.cpp \
-
-}
-
-SOURCES += \
-    src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
-    src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
-    src/test/cpp/hoot/core/test/SimpleTestListener.cpp \
-    src/test/cpp/hoot/core/test/TempFileName.cpp \
-    src/test/cpp/hoot/core/test/TestSetup.cpp \
-    src/test/cpp/hoot/core/test/AbstractTest.cpp \
-    src/test/cpp/hoot/core/test/AbstractTestSuite.cpp
-
-HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.h \
     src/test/cpp/hoot/core/io/TestOsmChangesetProvider.h \
@@ -264,4 +252,11 @@ HEADERS += \
     src/test/cpp/hoot/core/test/AbstractTest.h \
     src/test/cpp/hoot/core/test/AbstractTestSuite.h
 
+nodejs:SOURCES += \
+    src/test/cpp/hoot/core/io/OgrReaderTest.cpp \
+    src/test/cpp/hoot/core/io/OgrWriterTest.cpp \
+    src/test/cpp/hoot/core/ops/CalculateStatsOpTest.cpp \
+    src/test/cpp/hoot/core/perty/PertyTestRunnerTest.cpp \
+    src/test/cpp/hoot/core/schema/TranslatedTagDifferencerTest.cpp \
 
+}
