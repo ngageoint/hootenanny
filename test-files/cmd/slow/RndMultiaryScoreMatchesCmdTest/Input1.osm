@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <bounds minlat='39.7485099' minlon='-105.0479222' maxlat='39.7485099' maxlon='-105.0479222' origin='hootenanny' />
+  <node id='-1963' action='modify' visible='true' version='1' lat='39.74850988085' lon='-105.04792222023'>
+    <tag k='ID' v='1-00000' />
+    <tag k='MATCH' v='none' />
+    <tag k='REVIEW' v='none' />
+    <tag k='leisure' v='park' />
+    <tag k='name' v='Sloan&apos;s Lake Park' />
+  </node>
+  <node id='-1969' action='modify' visible='true' lat='39.74838823767' lon='-105.04620292425'>
+    <tag k='ID' v='1-00001' />
+    <tag k='MATCH' v='1-00001' />
+    <tag k='REVIEW' v='none' />
+    <tag k='name' v='Sloan&apos;s Lake' />
+    <tag k='natural' v='water' />
+  </node>
+  <node id='-1995' action='modify' visible='true' lat='39.74915323871' lon='-105.01257063031'>
+    <tag k='ID' v='1-00002' />
+    <tag k='MATCH' v='1-00002' />
+    <tag k='REVIEW' v='none' />
+    <tag k='name' v='Elitch Gardens' />
+    <tag k='tourism' v='theme_park' />
+  </node>
+</osm>

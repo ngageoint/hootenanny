@@ -282,6 +282,16 @@ boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OG
   return srs;
 }
 
+boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, double y)
+{
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
+  {
+    throw HootException("Error creating orthographic projection.");
+  }
+  return srs;
+}
+
 boost::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const OGREnvelope& env,
   Radians maxAngleError, Meters maxDistanceError, Meters testDistance, bool warnOnFail)
 {

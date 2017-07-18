@@ -94,6 +94,7 @@ Output.osm
 plugins/*_schema.js
 plugins/etds*_rules.js
 plugins/emgcp*_rules.js
+plugins/eggdm*_rules.js
 plugins-local
 translations-local
 **/*.pro.user*
@@ -154,8 +155,6 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
-plugins/eggdm30_osm_rules.js
-plugins/eggdm30_rules.js
 userfiles/
 
 ###### hoot-services ignores
