@@ -197,7 +197,22 @@ public:
    */
   QString getCopyright() { return _copyright; }
 
-private:
+  /**
+   * @brief scrubQuotes Converts single quotes to double quotes, and escaped
+   *         apostrophes to regular apostrophes
+   * @param jsonStr proper JSON string
+   */
+  static void scrubQuotes(QString &jsonStr);
+
+  /**
+   * @brief scrubBigInts Ensures that we have quotes around big integers.
+   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
+   *        json parser in boost 1.41
+   * @param jsonStr string upon which we operate
+   */
+  static void scrubBigInts(QString &jsonStr);
+
+protected:
 
   // Items to conform to OsmMapReader ifc
   Status _defaultStatus;
@@ -218,6 +233,8 @@ private:
   bool _isWeb;
   QFile _file;
 
+  OsmMapPtr _map;
+
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param jsonStr String to load
@@ -227,36 +244,29 @@ private:
   /**
    * @brief parseOverpassJson Traverses our property tree and adds
    *        elements to the map
-   * @param pMap Append elements to this map
    */
-  void _parseOverpassJson(OsmMapPtr pMap);
+  void _parseOverpassJson();
 
   /**
    * @brief _parseOverpassNode Reads node info out of the property tree and
    *        builds a Node object. Adds the node to the map.
    * @param item Property Tree (likely a sub-tree)
-   * @param pMap Map to which we add the node
    */
-  void _parseOverpassNode(const boost::property_tree::ptree &item,
-                          OsmMapPtr pMap);
+  void _parseOverpassNode(const boost::property_tree::ptree &item);
 
   /**
    * @brief _parseOverpassWay Reads way info out of the property tree and
    *        builds a Way object. Adds the way to the map.
    * @param item Property Tree (or sub-tree)
-   * @param pMap Map to which we add the way
    */
-  void _parseOverpassWay(const boost::property_tree::ptree &item,
-                         OsmMapPtr pMap);
+  void _parseOverpassWay(const boost::property_tree::ptree &item);
 
   /**
    * @brief _parseOverpassRelation Reads relation info out of the property tree
    *        and builds a Relation object. Adds relation to the map.
    * @param item Property Tree (likely a subtree)
-   * @param pMap Map to which we add the Relation
    */
-  void _parseOverpassRelation(const boost::property_tree::ptree &item,
-                              OsmMapPtr pMap);
+  void _parseOverpassRelation(const boost::property_tree::ptree &item);
 
   /**
    * @brief _addTags Reads tags from the given ptree, and adds them to the
@@ -266,21 +276,6 @@ private:
    */
   void _addTags(const boost::property_tree::ptree &item,
                 hoot::ElementPtr pElement);
-
-  /**
-   * @brief _scrubQuotes Converts single quotes to double quotes, and escaped
-   *         apostrophes to regular apostrophes
-   * @param jsonStr proper JSON string
-   */
-  void _scrubQuotes(QString &jsonStr);
-
-  /**
-   * @brief _scrubBigInts Ensures that we have quotes around big integers.
-   *        Numbers > 2^31 seem to cause trouble with the boost property_tree
-   *        json parser in boost 1.41
-   * @param jsonStr string upon which we operate
-   */
-  void _scrubBigInts(QString &jsonStr);
 
 };
 
