@@ -18,7 +18,6 @@ bin/
 callgrind.*
 conf/database/DatabaseConfigLocal.sh
 conf/LocalHoot.json
-conf/models/*.rf
 conf/dictionary/words*.sqlite
 conf/dictionary/WordsAbridged.sqlite
 config.h.in
