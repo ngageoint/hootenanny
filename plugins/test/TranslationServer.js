@@ -337,7 +337,7 @@ describe('TranslationServer', function () {
             });
         });
 
-        it('should handle OSM to GGDMv30 POST of road line feature with width', function() {
+        it('should handle OSM to GGDMv30 English POST of road line feature with width', function() {
             //http://localhost:8094/osmtotds
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
@@ -359,6 +359,32 @@ describe('TranslationServer', function () {
                 // assert.equal(result.osm.way[0].tag[3].$.v, "20");
                 // assert.equal(result.osm.way[0].tag[4].$.k, "Track or Lane Count");
                 // assert.equal(result.osm.way[0].tag[4].$.v, "2");
+            });
+        });
+
+        it('should handle OSM to GGDMv30 Raw POST of road line feature with width', function() {
+            //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
+                method: 'POST',
+                translation: 'GGDMv30',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "GGDMv30");
+                assert.equal(result.osm.way[0].tag[0].$.k, "LTN");
+                assert.equal(result.osm.way[0].tag[0].$.v, "2");
+                assert.equal(result.osm.way[0].tag[1].$.k, "RTY");
+                assert.equal(result.osm.way[0].tag[1].$.v, "-999999");
+                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[3].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[3].$.v, "AP030");
+                assert.equal(result.osm.way[0].tag[4].$.k, "ZI016_WD1");
+                assert.equal(result.osm.way[0].tag[4].$.v, "20");
+                assert.equal(result.osm.way[0].tag[5].$.k, "RIN_ROI");
+                assert.equal(result.osm.way[0].tag[5].$.v, "5");
             });
         });
 
