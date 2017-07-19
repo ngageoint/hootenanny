@@ -39,7 +39,7 @@
 
 namespace hoot
 {
-class ElementVisitor;
+class ConstElementVisitor;
 class FilteredVisitor;
 
 class CalculateStatsOp : public ConstOsmMapOperation
@@ -101,7 +101,7 @@ private:
   double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
                        boost::any& visitorData);
 
-  void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ElementVisitor *v);
+  void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ConstElementVisitor *v);
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);

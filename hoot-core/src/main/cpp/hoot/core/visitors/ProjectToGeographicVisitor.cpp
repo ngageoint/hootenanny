@@ -39,7 +39,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, ProjectToGeographicVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, ProjectToGeographicVisitor)
 
 ProjectToGeographicVisitor::ProjectToGeographicVisitor()
   : _transform(0)

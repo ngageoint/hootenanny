@@ -28,7 +28,7 @@
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include "Node.h"
@@ -104,7 +104,7 @@ bool Way::containsNodeId(long nid) const
   return false;
 }
 
-void Way::visitRo(const ElementProvider& map, ElementVisitor& filter) const
+void Way::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
 {
   filter.visit(map.getWay(getId()));
   const std::vector<long>& nids = getNodeIds();
@@ -118,7 +118,7 @@ void Way::visitRo(const ElementProvider& map, ElementVisitor& filter) const
   }
 }
 
-void Way::visitRw(ElementProvider& map, ElementVisitor& filter)
+void Way::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
   visitRo(map, filter);
 }

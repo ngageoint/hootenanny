@@ -33,7 +33,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ namespace hoot
 /**
  * Base class to ease OsmMapConsumer usage.
  */
-class ElementConstOsmMapVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class ElementConstOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

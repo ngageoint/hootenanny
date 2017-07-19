@@ -28,7 +28,7 @@
 #define ELEMENTVISITORCONSUMER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -40,7 +40,7 @@ class ElementVisitorConsumer
 {
 public:
 
-  virtual void addVisitor(const ElementVisitorPtr& e) = 0;
+  virtual void addVisitor(const ConstElementVisitorPtr& e) = 0;
 };
 
 }

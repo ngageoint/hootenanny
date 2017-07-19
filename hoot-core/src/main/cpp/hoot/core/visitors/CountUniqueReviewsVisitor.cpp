@@ -34,7 +34,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, CountUniqueReviewsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, CountUniqueReviewsVisitor)
 
 
 void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)

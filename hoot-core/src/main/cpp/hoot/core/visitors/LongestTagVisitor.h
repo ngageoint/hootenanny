@@ -28,7 +28,7 @@
 #define LONGESTTAGVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
 #include "SingleStatistic.h"
@@ -40,7 +40,7 @@ namespace hoot
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class LongestTagVisitor : public ElementVisitor, public SingleStatistic
+class LongestTagVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 

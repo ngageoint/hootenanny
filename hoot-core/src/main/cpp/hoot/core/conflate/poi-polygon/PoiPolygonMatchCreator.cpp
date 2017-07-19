@@ -31,7 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -66,7 +66,7 @@ HOOT_FACTORY_REGISTER(MatchCreator, PoiPolygonMatchCreator)
 /**
  * Searches the specified map for any poi/polygon match potentials
  */
-class PoiPolygonMatchVisitor : public ElementVisitor
+class PoiPolygonMatchVisitor : public ConstElementVisitor
 {
 
 public:

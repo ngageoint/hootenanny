@@ -406,7 +406,7 @@ double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map, con
   return ss->getStat();
 }
 
-void CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap>& map, ElementVisitor *v)
+void CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap>& map, ConstElementVisitor *v)
 {
   auto_ptr<FilteredVisitor> critFv;
   if (_criterion)

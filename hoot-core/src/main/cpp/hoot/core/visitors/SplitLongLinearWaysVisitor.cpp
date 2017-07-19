@@ -47,7 +47,7 @@ namespace hoot
 
 unsigned int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, SplitLongLinearWaysVisitor)
 
 SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
   _maxNodesPerWay(0)

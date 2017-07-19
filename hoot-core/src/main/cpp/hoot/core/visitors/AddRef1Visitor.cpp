@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, AddRef1Visitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, AddRef1Visitor)
 
 AddRef1Visitor::AddRef1Visitor()
 {

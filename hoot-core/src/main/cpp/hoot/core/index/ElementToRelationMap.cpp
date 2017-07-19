@@ -27,7 +27,7 @@
 #include "ElementToRelationMap.h"
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Log.h>
@@ -43,7 +43,7 @@ ElementToRelationMap::ElementToRelationMap()
 
 void ElementToRelationMap::addRelation(const OsmMap& map, const boost::shared_ptr<const Relation> &r)
 {
-  class AddMemberVisitor : public ElementVisitor
+  class AddMemberVisitor : public ConstElementVisitor
   {
   public:
 
@@ -96,7 +96,7 @@ const set<long>& ElementToRelationMap::getRelationByElement(const Element* e) co
 
 void ElementToRelationMap::removeRelation(const OsmMap& map, const boost::shared_ptr<const Relation>& r)
 {
-  class RemoveMemberVisitor : public ElementVisitor
+  class RemoveMemberVisitor : public ConstElementVisitor
   {
   public:
 
@@ -126,7 +126,7 @@ void ElementToRelationMap::removeRelation(const OsmMap& map, const boost::shared
 
 bool ElementToRelationMap::validate(const OsmMap& map) const
 {
-  class ContainsElementVisitor : public ElementVisitor
+  class ContainsElementVisitor : public ConstElementVisitor
   {
   public:
     ContainsElementVisitor(const OsmMap& map, const ElementId& eid) :
@@ -152,7 +152,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     bool _found;
   };
 
-  class CheckVisitor : public ElementVisitor
+  class CheckVisitor : public ConstElementVisitor
   {
   public:
     CheckVisitor(const OsmMap& map, const ElementToRelationMap& mapping) :

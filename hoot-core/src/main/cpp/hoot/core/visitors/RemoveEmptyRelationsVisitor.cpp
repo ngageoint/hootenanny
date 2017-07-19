@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveEmptyRelationsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveEmptyRelationsVisitor)
 
 RemoveEmptyRelationsVisitor::RemoveEmptyRelationsVisitor()
 {

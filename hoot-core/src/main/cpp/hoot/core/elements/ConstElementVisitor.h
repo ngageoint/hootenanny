@@ -40,12 +40,12 @@ namespace hoot
  *
  * This is also used by hoot::VisitorOp and hoot::NamedOp.
  */
-class ElementVisitor
+class ConstElementVisitor
 {
 public:
-  virtual ~ElementVisitor() {}
+  virtual ~ConstElementVisitor() {}
 
-  static std::string className() { return "hoot::ElementVisitor"; }
+  static std::string className() { return "hoot::ConstElementVisitor"; }
 
   virtual void visit(const ConstElementPtr& e) = 0;
 
@@ -56,7 +56,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;
+typedef boost::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;
 
 }
 
