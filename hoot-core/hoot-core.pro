@@ -1087,5 +1087,6 @@ HEADERS += \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.h \
-    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h
+    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
+    src/main/cpp/hoot/core/elements/ElementVisitor.h
 
