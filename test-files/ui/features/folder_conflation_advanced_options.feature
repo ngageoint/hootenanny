@@ -24,6 +24,9 @@ Feature: Folder and conflation options control
         When I fill "newfoldername" input with "@#&%^"
         Then I click on "#map"
         Then I should see an invalid name warning for ".newfoldername" input
+        When I fill "saveAs" input with "@#&%^"
+        Then I click on "#map"
+        Then I should see an invalid name warning for ".saveAs" input
         Then I remove the first layer
         Then I click the "trash" button
         Then I accept the alert
