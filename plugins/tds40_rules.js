@@ -4178,16 +4178,16 @@ tds.rules = {
 
      // MGL1 - Maritime Geopolitical Limit Type [1] TDSv30
      // ['MGL1','-999999',undefined,undefined], // No Information
-     ['MGL','1','geopolitical_line:maritime1','international_boundary'], // International Boundary
-     ['MGL','2','geopolitical_line:maritime1','territorial_sea_baseline'], // Territorial Sea Baseline
-     ['MGL','3','geopolitical_line:maritime1','three_nautical_mile_limit'], // Three Nautical Mile Limit
-     ['MGL','4','geopolitical_line:maritime1','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
-     ['MGL','5','geopolitical_line:maritime1','contiguous_zone_limit'], // Contiguous Zone Limit
-     ['MGL','6','geopolitical_line:maritime1','continental_shelf_limit'], // Continental Shelf Limit
-     ['MGL','7','geopolitical_line:maritime1','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
-     ['MGL','8','geopolitical_line:maritime1','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
-     ['MGL','9','geopolitical_line:maritime1','customs_boundary'], // Customs Boundary
-     ['MGL','999','geopolitical_line:maritime1','other'], // Other
+     ['MGL1','1','geopolitical_line:maritime1','international_boundary'], // International Boundary
+     ['MGL1','2','geopolitical_line:maritime1','territorial_sea_baseline'], // Territorial Sea Baseline
+     ['MGL1','3','geopolitical_line:maritime1','three_nautical_mile_limit'], // Three Nautical Mile Limit
+     ['MGL1','4','geopolitical_line:maritime1','territorial_waters_limit_of_sovereignty'], // Territorial Waters Limit of Sovereignty
+     ['MGL1','5','geopolitical_line:maritime1','contiguous_zone_limit'], // Contiguous Zone Limit
+     ['MGL1','6','geopolitical_line:maritime1','continental_shelf_limit'], // Continental Shelf Limit
+     ['MGL1','7','geopolitical_line:maritime1','extended_continental_shelf_limit'], // Extended Continental Shelf Limit
+     ['MGL1','8','geopolitical_line:maritime1','exclusive_economic_zone_limit'], // Exclusive Economic Zone Limit
+     ['MGL1','9','geopolitical_line:maritime1','customs_boundary'], // Customs Boundary
+     ['MGL1','999','geopolitical_line:maritime1','other'], // Other
 
      // PPC - Power Station Type TDSv30
      // ['PPC','-999999',undefined,undefined], // No Information
