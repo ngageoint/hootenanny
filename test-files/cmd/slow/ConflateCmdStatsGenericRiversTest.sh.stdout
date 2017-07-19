@@ -69,11 +69,10 @@ Conflated Polygons	0	0	0
 Polygons Marked for Review	0	0	0	
 Number of Polygon Reviews to be Made	0	0	0	
 Unmatched Polygons	0	0	0	
-Meters Squared of Polygons Processed by Conflation	0	0	0	
 Percentage of Polygons Conflated	0	0	0	
 Percentage of Polygons Marked for Review	0	0	0	
 Percentage of Unmatched Polygons	0	0	0	
 Difference Between Total Features in Output and Total Features in Inputs			89	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			306.896551724138	
 
-21:03:20.755 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 251) Conflation job completed.
+19:23:29.027 INFO  .../hoot/core/cmd/ConflateCmd.cpp( 251) Conflation job completed.
