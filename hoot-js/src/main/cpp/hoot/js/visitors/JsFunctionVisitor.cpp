@@ -39,7 +39,7 @@ using namespace v8;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, JsFunctionVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, JsFunctionVisitor)
 
 void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {

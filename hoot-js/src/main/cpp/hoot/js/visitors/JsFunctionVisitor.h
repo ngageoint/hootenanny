@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/SystemNodeJs.h>
 
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * A filter that will either keep or remove matches.
  */
-class JsFunctionVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class JsFunctionVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public JsFunctionConsumer
 {
 public:

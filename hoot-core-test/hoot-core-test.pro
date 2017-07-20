@@ -216,6 +216,10 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
     src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp \
+    src/test/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitorTest.cpp \
+    src/test/cpp/hoot/core/visitors/SumNumericTagsVisitorTest.cpp \
+    src/test/cpp/hoot/core/scoring/multiary/MultiaryMatchComparatorTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTest.cpp \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.cpp \
     src/test/cpp/hoot/core/test/SimpleTestListener.cpp \
@@ -225,7 +229,7 @@ SOURCES += \
     src/test/cpp/hoot/core/test/AbstractTestSuite.cpp \
     src/test/cpp/hoot/core/io/OsmGeoJsonWriterTest.cpp \
     src/test/cpp/hoot/core/io/OsmGeoJsonReaderTest.cpp \
-    src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp
+
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
@@ -257,6 +261,6 @@ nodejs:SOURCES += \
     src/test/cpp/hoot/core/io/OgrWriterTest.cpp \
     src/test/cpp/hoot/core/ops/CalculateStatsOpTest.cpp \
     src/test/cpp/hoot/core/perty/PertyTestRunnerTest.cpp \
-    src/test/cpp/hoot/core/schema/TranslatedTagDifferencerTest.cpp \
+				src/test/cpp/hoot/core/schema/TranslatedTagDifferencerTest.cpp
 
 }

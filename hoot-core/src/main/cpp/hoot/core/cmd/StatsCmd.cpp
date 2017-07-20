@@ -40,7 +40,7 @@ using namespace std;
 namespace hoot
 {
 
-class NameSizesVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class NameSizesVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 
 };

@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, TagRenameKeyVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, TagRenameKeyVisitor)
 
 TagRenameKeyVisitor::TagRenameKeyVisitor()
 {

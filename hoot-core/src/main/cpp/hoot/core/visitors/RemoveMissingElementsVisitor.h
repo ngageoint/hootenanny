@@ -35,7 +35,7 @@ namespace hoot
 
 class ReportMissingElementsVisitor;
 
-class RemoveMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class RemoveMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

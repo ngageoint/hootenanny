@@ -37,7 +37,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
+#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 // Qt
 #include <QFileInfo>
@@ -104,22 +104,7 @@ public:
 
     OsmMapPtr result = map;
 
-    {
-      MatchFactory& matchFactory = MatchFactory::getInstance();
-      matchFactory.reset();
-      matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
-      MergerFactory::getInstance().reset();
-
-      boost::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
-      mergerFactory->registerCreator(new MultiaryPoiMergerCreator());
-
-      MatchThresholdPtr mt(new MatchThreshold(0.39, 0.61, 1.1));
-
-      // call new conflation routine
-      UnifyingConflator conflator(mt);
-      conflator.setMergerFactory(mergerFactory);
-      conflator.apply(result);
-    }
+    MultiaryUtilities::conflate(result);
 
     // Apply any user specified operations.
     LOG_INFO("Applying post-conflation operations...");

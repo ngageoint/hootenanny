@@ -32,7 +32,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // standard
 #include <string>
@@ -52,7 +52,7 @@ class Way;
  * relevant during tile based operations because not all elements may be completely represented
  * within a tile.
  */
-class CompletelyContainedByMapElementVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class CompletelyContainedByMapElementVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
   static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
