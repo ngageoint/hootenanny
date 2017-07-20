@@ -284,7 +284,6 @@ describe('TranslationServer', function () {
         });
 
         it('should handle osmtotds POST of building area feature', function() {
-            //http://localhost:8094/osmtotds
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="building" v="yes"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
                 method: 'POST',
@@ -423,6 +422,57 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.node[0].tag[5].$.v, "built_up_area");
                 assert.equal(result.osm.node[0].tag[6].$.k, "source:accuracy:horizontal:category");
                 assert.equal(result.osm.node[0].tag[6].$.v, "accurate");
+            });
+        });
+
+        it('should untangle MGCP tags', function() {
+            //http://localhost:8094/osmtotds
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="FCODE" v="AL013"/><tag k="levels" v="3"/>/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateFrom'
+            });
+            xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "levels");
+                assert.equal(result.osm.way[0].tag[0].$.v, "3");
+                assert.equal(result.osm.way[0].tag[1].$.k, "building");
+                assert.equal(result.osm.way[0].tag[1].$.v, "yes");
+            });
+        });
+
+        it('should untangle TDSv61 tags', function() {
+            //http://localhost:8094/osmtotds
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="AL013" v="building"/><tag k="levels" v="3"/>/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateFrom'
+            });
+            xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "levels");
+                assert.equal(result.osm.way[0].tag[0].$.v, "3");
+                assert.equal(result.osm.way[0].tag[1].$.k, "building");
+                assert.equal(result.osm.way[0].tag[1].$.v, "yes");
+            });
+        });
+
+        it('should untangle TDSv30 tags', function() {
+            //http://localhost:8094/osmtotds
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="AL013" v="building"/><tag k="levels" v="3"/>/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv40',
+                path: '/translateFrom'
+            });
+            xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "levels");
+                assert.equal(result.osm.way[0].tag[0].$.v, "3");
+                assert.equal(result.osm.way[0].tag[1].$.k, "building");
+                assert.equal(result.osm.way[0].tag[1].$.v, "yes");
             });
         });
 
