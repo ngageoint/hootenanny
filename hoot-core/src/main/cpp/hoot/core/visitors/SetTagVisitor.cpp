@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, SetTagVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, SetTagVisitor)
 
 SetTagVisitor::SetTagVisitor()
 {

@@ -34,7 +34,7 @@ namespace hoot
 
 unsigned int SumNumericTagsVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, SumNumericTagsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, SumNumericTagsVisitor)
 
 SumNumericTagsVisitor::SumNumericTagsVisitor(const QString key) :
 _key(key),

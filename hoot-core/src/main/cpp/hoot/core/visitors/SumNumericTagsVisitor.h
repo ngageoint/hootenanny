@@ -28,7 +28,7 @@
 #define SUMNUMERICTAGSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Sums numeric tag values with a specified key
  */
-class SumNumericTagsVisitor : public ElementVisitor, public SingleStatistic
+class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
 {
   public:
 

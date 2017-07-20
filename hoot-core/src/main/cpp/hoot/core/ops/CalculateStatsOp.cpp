@@ -463,7 +463,7 @@ double CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap> &map,
   return ss->getStat();
 }
 
-void CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap>& map, ElementVisitor *v)
+void CalculateStatsOp::_applyVisitor(boost::shared_ptr<const OsmMap>& map, ConstElementVisitor *v)
 {
   auto_ptr<FilteredVisitor> critFv;
   if (_criterion)
@@ -519,7 +519,7 @@ void CalculateStatsOp::printStats()
   }
 }
 
-ElementVisitor* CalculateStatsOp::_getElementVisitorForFeatureType(
+ConstElementVisitor* CalculateStatsOp::_getElementVisitorForFeatureType(
   const MatchCreator::BaseFeatureType& featureType)
 {
   //only pass the output of this to methods which will take ownership of the visitor

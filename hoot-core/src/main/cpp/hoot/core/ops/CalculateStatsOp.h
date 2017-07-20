@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/conflate/MatchCreator.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include "ConstOsmMapOperation.h"
 #include "stats/SingleStat.h"
 
@@ -101,7 +101,7 @@ private:
   double _applyVisitor(boost::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
                        boost::any& visitorData);
 
-  void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ElementVisitor *v);
+  void _applyVisitor(boost::shared_ptr<const OsmMap> &map, ConstElementVisitor *v);
 
   static bool _matchDescriptorCompare(const MatchCreator::Description& m1,
                                       const MatchCreator::Description& m2);
@@ -112,7 +112,8 @@ private:
                              const MatchCreator::FeatureCalcType& type,
                              ElementCriterion* criterion, const long poisMergedIntoPolys);
 
-  ElementVisitor* _getElementVisitorForFeatureType(const MatchCreator::BaseFeatureType& featureType);
+  ConstElementVisitor* _getElementVisitorForFeatureType(
+      const MatchCreator::BaseFeatureType& featureType);
 };
 
 }

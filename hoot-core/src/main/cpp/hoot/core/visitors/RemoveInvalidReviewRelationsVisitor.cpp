@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidReviewRelationsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidReviewRelationsVisitor)
 
 RemoveInvalidReviewRelationsVisitor::RemoveInvalidReviewRelationsVisitor()
 {

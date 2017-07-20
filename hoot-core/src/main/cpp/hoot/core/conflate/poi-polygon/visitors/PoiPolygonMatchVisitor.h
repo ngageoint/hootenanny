@@ -28,7 +28,7 @@
 #define POIPOLYGONMATCHVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/OsmMap.h>
@@ -44,7 +44,7 @@ namespace hoot
 /**
  * Searches maps for any poi/polygon match potentials
  */
-class PoiPolygonMatchVisitor : public ElementVisitor
+class PoiPolygonMatchVisitor : public ConstElementVisitor
 {
 
 public:

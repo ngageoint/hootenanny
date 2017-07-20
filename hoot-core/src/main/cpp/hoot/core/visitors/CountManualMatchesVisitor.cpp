@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, CountManualMatchesVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, CountManualMatchesVisitor)
 
 CountManualMatchesVisitor::CountManualMatchesVisitor() :
 _numManualMatches(0)

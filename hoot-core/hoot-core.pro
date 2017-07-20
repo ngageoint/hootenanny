@@ -956,7 +956,7 @@ HEADERS += \
     src/main/cpp/hoot/core/scoring/AttributeCount.h \
     src/main/cpp/hoot/core/visitors/FeatureCountVisitor.h \
     src/main/cpp/hoot/core/conflate/SearchRadiusCalculator.h \
-    src/main/cpp/hoot/core/elements/ElementVisitor.h \
+    src/main/cpp/hoot/core/elements/ConstElementVisitor.h \
     src/main/cpp/hoot/core/io/ElementInputStream.h \
     src/main/cpp/hoot/core/io/ElementOutputStream.h \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.h \
@@ -1090,5 +1090,6 @@ HEADERS += \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.h \
-    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h
+    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
+    src/main/cpp/hoot/core/elements/ElementVisitorOff.h
 

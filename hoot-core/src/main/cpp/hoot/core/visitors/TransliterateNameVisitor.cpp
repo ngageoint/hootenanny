@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, TransliterateNameVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, TransliterateNameVisitor)
 
 TransliterateNameVisitor::TransliterateNameVisitor()
 {

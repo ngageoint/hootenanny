@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,24 +24,40 @@
  *
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "UniqueNamesVisitor.h"
 
-// hoot
-#include <hoot/core/util/Factory.h>
+#ifndef CONSTELEMENTVISITOR_H
+#define CONSTELEMENTVISITOR_H
+
+// hoot includes
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ConstElementVisitor, UniqueNamesVisitor)
-
-void UniqueNamesVisitor::visit(const ConstElementPtr& e)
+/**
+ * Visits elements in a collection. See Element::visit* and OsmMap::visit* for ways to use the
+ * class. See hoot::AddRefVisitor for an example implementation.
+ *
+ * This is also used by hoot::VisitorOp and hoot::NamedOp.
+ */
+class ConstElementVisitor
 {
-  QStringList names = e->getTags().getNames();
+public:
+  virtual ~ConstElementVisitor() {}
 
-  for (int i = 0; i < names.size(); i++)
-  {
-    _names.insert(names[i]);
-  }
+  static std::string className() { return "hoot::ConstElementVisitor"; }
+
+  virtual void visit(const ConstElementPtr& e) = 0;
+
+  /**
+    Returns a string representation of the visitor
+    */
+  virtual QString toString() { return ""; }
+
+};
+
+typedef boost::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;
+
 }
 
-}
+#endif // CONSTELEMENTVISITOR_H

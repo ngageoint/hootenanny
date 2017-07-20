@@ -53,7 +53,7 @@ HOOT_JS_REGISTER(ElementVisitorJs)
 void ElementVisitorJs::Init(Handle<Object> target)
 {
   vector<string> opNames =
-    Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
+    Factory::getInstance().getObjectNamesByBase(ConstElementVisitor::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
@@ -66,7 +66,7 @@ void ElementVisitorJs::Init(Handle<Object> target)
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::New(ElementVisitor::className().data()));
+                                  String::New(ConstElementVisitor::className().data()));
 
     Persistent<Function> constructor = Persistent<Function>::New(tpl->GetFunction());
     target->Set(String::NewSymbol(n), constructor);
@@ -78,11 +78,11 @@ Handle<Value> ElementVisitorJs::New(const Arguments& args) {
 
   QString className = str(args.This()->GetConstructorName());
 
-  ElementVisitor* c = Factory::getInstance().constructObject<ElementVisitor>(className);
+  ConstElementVisitor* c = Factory::getInstance().constructObject<ConstElementVisitor>(className);
   ElementVisitorJs* obj = new ElementVisitorJs(c);
   obj->Wrap(args.This());
 
-  PopulateConsumersJs::populateConsumers<ElementVisitor>(c, args);
+  PopulateConsumersJs::populateConsumers<ConstElementVisitor>(c, args);
 
   return args.This();
 }

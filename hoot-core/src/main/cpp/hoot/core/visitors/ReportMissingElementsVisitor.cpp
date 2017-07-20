@@ -36,7 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, ReportMissingElementsVisitor)
 
 ReportMissingElementsVisitor::ReportMissingElementsVisitor(bool removeMissing, int maxReport) :
 _maxReport(maxReport),

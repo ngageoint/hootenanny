@@ -44,7 +44,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, TranslatedTagCountVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, TranslatedTagCountVisitor)
 
 TranslatedTagCountVisitor::TranslatedTagCountVisitor(boost::shared_ptr<ScriptTranslator> t) :
   _map(),

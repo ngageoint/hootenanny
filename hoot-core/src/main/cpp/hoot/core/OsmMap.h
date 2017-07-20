@@ -261,10 +261,10 @@ public:
    * If the visitor implements OsmMapConsumer then setOsmMap will be called before visiting any
    * elements.
    */
-  void visitRo(ElementVisitor& visitor) const;
-  void visitNodesRo(ElementVisitor& visitor) const;
-  void visitWaysRo(ElementVisitor& visitor) const;
-  void visitRelationsRo(ElementVisitor& visitor) const;
+  void visitRo(ConstElementVisitor& visitor) const;
+  void visitNodesRo(ConstElementVisitor& visitor) const;
+  void visitWaysRo(ConstElementVisitor& visitor) const;
+  void visitRelationsRo(ConstElementVisitor& visitor) const;
 
   /**
    * Calls the visitRw method on all elements. See Element::visitRw for a more
@@ -278,8 +278,8 @@ public:
    * If the visitor implements OsmMapConsumer then setOsmMap will be called before
    * visiting any elements.
    */
-  void visitRw(ElementVisitor& visitor);
-  void visitWaysRw(ElementVisitor& visitor);
+  void visitRw(ConstElementVisitor& visitor);
+  void visitWaysRw(ConstElementVisitor& visitor);
 
   long getNodeCount() const { return _nodes.size(); }
   long getWayCount() const { return _ways.size(); }

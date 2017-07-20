@@ -45,7 +45,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyNameVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyNameVisitor)
 
 PertyNameVisitor::PertyNameVisitor()
 {

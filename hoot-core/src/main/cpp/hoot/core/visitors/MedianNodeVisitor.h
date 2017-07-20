@@ -28,7 +28,7 @@
 #define MEDIANNODEVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 
 namespace hoot
@@ -38,7 +38,7 @@ namespace hoot
  * Calculates the median node. This is very inefficient and shouldn't be used on large maps. E.g.
  * O(n^2).
  */
-class MedianNodeVisitor : public ElementVisitor
+class MedianNodeVisitor : public ConstElementVisitor
 {
 public:
 
