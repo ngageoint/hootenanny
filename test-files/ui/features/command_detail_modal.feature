@@ -17,7 +17,6 @@ Feature: Command detail modal window
     And I scroll element into view and press "conflate2"
     Then I wait 30 "seconds" to see "Conflating …"
     Then I wait 3 "minutes" to see "Merged_RoadsCucumber"
-    Then I wait 30 "seconds" to not see "Please wait while stepping to next review item."
     Then I see the UI alert
     And I click on ".alertDiv"
     And I click on ".detailLink"
@@ -26,6 +25,7 @@ Feature: Command detail modal window
     Then I should not see a paragraph with text "commandDetail"
     And I close the UI alert
     Then I should not see the UI alert
+    Then I wait 30 "seconds" to not see "Please wait while stepping to next review item."
     Then I click the "trash" button
     And I accept the alert
     And I wait 5 "seconds" to not see "Merged_RoadsCucumber"
