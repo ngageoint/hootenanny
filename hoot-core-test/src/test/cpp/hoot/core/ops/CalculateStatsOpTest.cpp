@@ -71,7 +71,7 @@ public:
   {
     boost::shared_ptr<CalculateStatsOp> calcStatsOp =
       _calcStats("test-files/ops/CalculateStatsOp/all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(85, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(108, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
@@ -126,7 +126,14 @@ public:
       61.29, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
+    //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::HighwayMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygons Conflatable by: hoot::PoiPolygonMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("POIs Conflatable by: hoot::PoiPolygonMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::PoiPolygonMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));
@@ -176,6 +183,29 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
 
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Polygon Conflatable POI Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      100.0, calcStatsOp->getSingleStat("Percentage of Unmatched Polygon Conflatable POIs"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Polygon Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygons"));
+    CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Conflated Polygons"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygons Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Number of Polygon Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      14810.8, calcStatsOp->getSingleStat("Meters Squared of Polygons Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(41.67, calcStatsOp->getSingleStat("Percentage of Polygons Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Polygons Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(58.33, calcStatsOp->getSingleStat("Percentage of Unmatched Polygons"), 1e-1);
+
     CPPUNIT_ASSERT_EQUAL(52.0, calcStatsOp->getSingleStat("Longest Tag"));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -192,6 +222,10 @@ public:
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
       int(::qIsNaN(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent"))), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.704545, calcStatsOp->getSingleStat("Polygon Conflatable POI Translated Populated Tag Percent"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.513888, calcStatsOp->getSingleStat("Polygon Translated Populated Tag Percent"), 1e-1);
   }
 
   void runStatsTestWithReviews()
@@ -246,7 +280,14 @@ public:
       62.07, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
     CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Number of Match Creators"));
+    //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
+    //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::BuildingMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::HighwayMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygons Conflatable by: hoot::PoiPolygonMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("POIs Conflatable by: hoot::PoiPolygonMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::PoiPolygonMatchCreator"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POI Count"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));
@@ -295,6 +336,28 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Waterways Marked for Review"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Unmatched Waterways"), 1e-1);
 
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Number of Polygon Conflatable POI Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, calcStatsOp->getSingleStat("Percentage of Unmatched Polygon Conflatable POIs"), 1e-1);
+
+    CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Polygon Count"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable Polygons"));
+    CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Conflated Polygons"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Polygons Marked for Review"));
+    CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Number of Polygon Reviews to be Made"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      13693.36, calcStatsOp->getSingleStat("Meters Squared of Polygons Processed by Conflation"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(33.33, calcStatsOp->getSingleStat("Percentage of Polygons Conflated"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(16.7, calcStatsOp->getSingleStat("Percentage of Polygons Marked for Review"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(66.7, calcStatsOp->getSingleStat("Percentage of Unmatched Polygons"), 1e-1);
+
     CPPUNIT_ASSERT_EQUAL(52.0, calcStatsOp->getSingleStat("Longest Tag"));
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -311,6 +374,10 @@ public:
       0.704545, calcStatsOp->getSingleStat("POI Translated Populated Tag Percent"), 1e-1);
     CPPUNIT_ASSERT_EQUAL(
       int(::qIsNaN(calcStatsOp->getSingleStat("Waterway Translated Populated Tag Percent"))), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.704545, calcStatsOp->getSingleStat("Polygon Conflatable POI Translated Populated Tag Percent"), 1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      0.513888, calcStatsOp->getSingleStat("Polygon Translated Populated Tag Percent"), 1e-1);
   }
 
 private:
