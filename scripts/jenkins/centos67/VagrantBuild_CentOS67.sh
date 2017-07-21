@@ -28,7 +28,6 @@ mkdir -p $HOOT_HOME/ingest/processed
 mkdir -p $HOOT_HOME/upload
 
 #make -sj$(nproc) docs &> /dev/null || true
-echo "Building Docs..."
 make -sj$(nproc) docs
 
 hoot version
