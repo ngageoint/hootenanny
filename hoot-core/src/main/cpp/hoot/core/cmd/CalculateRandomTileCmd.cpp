@@ -32,24 +32,24 @@
 namespace hoot
 {
 
-class CalculateTilesCmd : public BaseCalculateTilesCmd
+class CalculateRandomTileCmd : public BaseCalculateTilesCmd
 {
 
   public:
 
-    static std::string className() { return "hoot::CalculateTilesCmd"; }
+    static std::string className() { return "hoot::CalculateRandomTileCmd"; }
 
-    CalculateTilesCmd() { }
+    CalculateRandomTileCmd() { }
 
-    virtual QString getName() const { return "calculate-tiles"; }
+    virtual QString getName() const { return "calculate-random-tile"; }
 
     virtual int runSimple(QStringList args)
     {
-      if (args.size() != 2 && args.size() != 4)
+      if (args.size() != 2 && args.size() != 3 && args.size() != 5)
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw HootException(
-          QString("%1 takes either two or four parameters.").arg(getName()));
+          QString("%1 takes either two, three, or five parameters.").arg(getName()));
       }
 
       QStringList inputs;
@@ -75,28 +75,40 @@ class CalculateTilesCmd : public BaseCalculateTilesCmd
       }
       LOG_VARD(output);
 
-      //if either of max nodes per tile or pixel size is specified, then both must be specified
-
-      long maxNodesPerTile = 1000;
+      int randomSeed = -1;
       if (args.size() > 2)
       {
         bool parseSuccess = false;
-        maxNodesPerTile = args[2].toLong(&parseSuccess);
+        randomSeed = args[2].toInt(&parseSuccess);
+        if (!parseSuccess || randomSeed < 0)
+        {
+          throw HootException("Invalid random seed value: " + args[2]);
+        }
+      }
+      LOG_VARD(randomSeed);
+
+      //if either of max nodes per tile or pixel size is specified, then both must be specified
+
+      long maxNodesPerTile = 1000;
+      if (args.size() > 3)
+      {
+        bool parseSuccess = false;
+        maxNodesPerTile = args[3].toLong(&parseSuccess);
         if (!parseSuccess || maxNodesPerTile < 1)
         {
-          throw HootException("Invalid maximum nodes per tile value: " + args[2]);
+          throw HootException("Invalid maximum nodes per tile value: " + args[3]);
         }
       }
       LOG_VARD(maxNodesPerTile);
 
       double pixelSize = 0.001; //.1km?
-      if (args.size() > 2)
+      if (args.size() > 3)
       {
         bool parseSuccess = false;
-        pixelSize = args[3].toDouble(&parseSuccess);
+        pixelSize = args[4].toDouble(&parseSuccess);
         if (!parseSuccess || pixelSize <= 0.0)
         {
-          throw HootException("Invalid pixel size value: " + args[3]);
+          throw HootException("Invalid pixel size value: " + args[4]);
         }
       }
       LOG_VARD(pixelSize);
@@ -106,12 +118,16 @@ class CalculateTilesCmd : public BaseCalculateTilesCmd
       OsmMapPtr inputMap = _readInputs(inputs);
       const std::vector< std::vector<geos::geom::Envelope> > tiles =
         _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
-      _writeOutputAsGeoJson(tiles, output);
+      _writeOutputAsGeoJson(tiles, output, true, randomSeed);
 
       return 0;
     }
+
+  private:
+
+
 };
 
-HOOT_FACTORY_REGISTER(Command, CalculateTilesCmd)
+HOOT_FACTORY_REGISTER(Command, CalculateRandomTileCmd)
 
 }
