@@ -1240,7 +1240,7 @@ tds61 = {
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
             ["t.waterway == 'riverbank'","t.waterway = 'river'"],
-            ["t.waterway == 'vanishing_point' && t['water:sink:type'] = 'sinkhole'","t.natural = 'sinkhole'; delete t.waterway; delete t['water:sink:type']"]
+            ["t.waterway == 'vanishing_point' && t['water:sink:type'] == 'sinkhole'","t.natural = 'sinkhole'; delete t.waterway; delete t['water:sink:type']"]
             ];
 
             tds61.nfddPreRules = translate.buildComplexRules(rulesList);

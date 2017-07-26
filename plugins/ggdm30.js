@@ -545,7 +545,7 @@ ggdm30 = {
         for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
-            ggdm30.applyToNfddPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
+            ggdm30.applyToOgrPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
@@ -556,7 +556,7 @@ ggdm30 = {
             translate.applyNfddOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], ggdm30.lookup, ggdm30.fcodeLookup);
 
             // post processing
-            ggdm30.applyToNfddPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
+            ggdm30.applyToOgrPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
             returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
         }
@@ -816,7 +816,7 @@ ggdm30 = {
             ["t.use == 'islamic_prayer_hall' && !(t.amenity)","t.amenity = 'place_of_worship'"],
             ["t.water || t.landuse == 'basin'","t.natural = 'water'"],
             ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"],
-            ["t.waterway == 'vanishing_point' && t['water:sink:type'] = 'sinkhole'","t.natural = 'sinkhole'; delete t.waterway; delete t['water:sink:type']"],
+            ["t.waterway == 'vanishing_point' && t['water:sink:type'] == 'sinkhole'","t.natural = 'sinkhole'; delete t.waterway; delete t['water:sink:type']"],
             ["t.wetland && !(t.natural)","t.natural = 'wetland'"],
             ["t['width:minimum_traveled_way'] && !(t.width)","t.width = t['width:minimum_traveled_way']"]
             ];
