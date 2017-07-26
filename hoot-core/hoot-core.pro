@@ -1092,5 +1092,5 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/conflate/SearchRadiusProvider.h \
-    src/main/cpp/hoot/core/elements/ElementVisitorOff.h
+    src/main/cpp/hoot/core/elements/ElementVisitor.h
 

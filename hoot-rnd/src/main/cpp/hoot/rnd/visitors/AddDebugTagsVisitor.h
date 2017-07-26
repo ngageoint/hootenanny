@@ -27,7 +27,7 @@
 #ifndef ADDDEBUGTAGSVISITOR_H
 #define ADDDEBUGTAGSVISITOR_H
 
-#include "ModifyElementVisitor.h"
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -35,7 +35,7 @@ namespace hoot
 /**
  * Add the typical debug tags for export to a file.
  */
-class AddDebugTagsVisitor : ModifyElementVisitor
+class AddDebugTagsVisitor : ElementVisitor
 {
 public:
   AddDebugTagsVisitor();
