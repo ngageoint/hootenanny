@@ -30,6 +30,9 @@
 
     This script is the same as the standard "etds_osm" script but uses "ggdm30" instead of "tds"
 */
+if (typeof hoot === 'undefined') {
+    var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+}
 
 // For the new fuzy rules
 hoot.require('SchemaTools')
@@ -75,7 +78,7 @@ eggdm30_osm = {
         var nAttrs = {}; // the "new" GGDMv30 attrs
         var fCode2 = ''; // The second FCODE - if we have one
 
-		if (attrs['Feature Code'])
+        if (attrs['Feature Code'] && attrs['Feature Code'] !== 'Not found')
         {
             if (attrs['Feature Code'].indexOf(' & ') > -1)
             {
@@ -93,7 +96,15 @@ eggdm30_osm = {
                 var fcode = attrs['Feature Code'].split(':');
                 attrs['Feature Code'] = fcode[0];
             }
-		}
+        }
+        else
+        {
+            // No FCODE, throw error
+            // throw new Error('No Valid Feature Code');
+            // return null;
+            // return {attrs:{'error':'No Valid Feature Code'}, tableName: ''};
+            return {attrs:{}, tableName: ''};
+        }
 
         // Translate the single values from "English" to GGDMv30
         for (var val in attrs)
@@ -111,11 +122,16 @@ eggdm30_osm = {
 
         // Use a lookup table to convert the remaining attribute names from "English" to GGDMv30
         translate.applyOne2One(attrs, nAttrs, eggdm30_osm_rules.enumValues, {'k':'v'});
-
         var tags = {};
 
         // Now convert the attributes to tags.
         tags = ggdm30.toOsm(nAttrs,'',geometryType);
+
+        // Go looking for "OSM:XXX" values and copy them to the output
+        for (var i in attrs)
+        {
+            if (i.indexOf('OSM:') > -1) tags[i.replace('OSM:','')] = attrs[i];
+        }
 
         // Check if we have a second FCODE and if it can add any tags
         if (fCode2 !== '')
@@ -129,8 +145,10 @@ eggdm30_osm = {
                 }
                 else
                 {
-                    // Debug: Dump out the tags from the FCODE
-                    print('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                    if (ftag[1] !== tags[ftag[0]])
+                    {
+                        hoot.logTrace('fCode2: ' + fCode2 + ' tried to replace ' + ftag[0] + ' = ' + tags[ftag[0]] + ' with ' + ftag[1]);
+                    }
                 }
             }
         }
@@ -149,4 +167,10 @@ eggdm30_osm = {
 
 } // End of eggdm30_osm
 
-exports.toOSM = eggdm30_osm.toOSM;
+if (typeof exports !== 'undefined') {
+    exports.toOSM = eggdm30_osm.toOSM;
+    exports.EnglishtoOSM = eggdm30_osm.toOSM;
+    exports.RawtoOSM = ggdm30.toOsm;
+    exports.OSMtoEnglish = eggdm30.toEnglish;
+    exports.OSMtoRaw = ggdm30.toOgr;
+}

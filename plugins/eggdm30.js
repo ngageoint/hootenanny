@@ -52,8 +52,6 @@ eggdm30 = {
         }
 
         var eAttrs = {}; // The final English output
-
-        // Add a default value for the FCODE
         eAttrs['Feature Code'] = 'Not found';
 
         if (tdsData.length > 0)
@@ -62,28 +60,14 @@ eggdm30 = {
             {
                 var tFCODE = tdsData[fNum]['attrs']['F_CODE'];
 
-                // Go through the list of possible attributes and add the missing ones
-                var tmpList = eggdm30.rules.fcodeLookup[tFCODE]['enum'];
-
-                for (var i=0, elen = tmpList.length; i < elen; i++)
-                {
-                    // If we don't find one, add it with it's default value
-                    if (!(tdsData[fNum]['attrs'][tmpList[i]]))
-                    {
-                        tdsData[fNum]['attrs'][tmpList[i]] = eggdm30.rules.engDefault[tmpList[i]];
-                    }
-                }
+                delete tdsData[fNum]['attrs']['F_CODE'];
 
                 // Translate the single values
                 for (var val in tdsData[fNum]['attrs'])
                 {
                     if (val in eggdm30.rules.engSingle)
                     {
-                        if (tdsData[fNum]['attrs'][val] == undefined)
-                        {
-                            eAttrs[eggdm30.rules.engSingle[val]] = eggdm30.rules.engDefault[val];
-                        }
-                        else
+                        if (tdsData[fNum]['attrs'][val] !== undefined)
                         {
                             eAttrs[eggdm30.rules.engSingle[val]] = tdsData[fNum]['attrs'][val];
                         }
@@ -110,16 +94,6 @@ eggdm30 = {
                 }
             } // End for tdsData
 
-        }
-        else
-        {
-            // If we can't find an FCODE, just return the tags.
-
-            // Add "OSM:" to each of the tags
-            for (var i in tags)
-            {
-                eAttrs['OSM:' + i] = tags[i];
-            }
         }
 
         if (config.getOgrDebugDumptags() == 'true')
