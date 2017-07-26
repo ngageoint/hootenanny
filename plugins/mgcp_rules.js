@@ -1254,7 +1254,7 @@ mgcp.rules = {
         ['WCC','1','waterway','stream'],
         ['WCC','2','waterway','braided_stream'],
         ['WCC','3','waterway','gorge'],
-        ['WCC','4','waterway','wadi'],
+        ['WCC','4','wadi','yes'],
         ['WCC','7','waterway','river'],
 
         // WFT - Well Type

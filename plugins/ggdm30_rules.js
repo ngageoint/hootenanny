@@ -4939,7 +4939,7 @@ ggdm30.rules = {
      ['WCC','1','waterway','stream'], // Channelized Stream
      ['WCC','2','waterway','braided_stream'], // Braided Stream
      ['WCC','3','waterway','gorge'], // Gorge
-     ['WCC','4','waterway','wadi'], // Wadi
+     ['WCC','4','wadi','yes'], // Wadi
      ['WCC','7','waterway','river'], // Normal Channel
      ['WCC','999','waterway','other'], // Other
 
