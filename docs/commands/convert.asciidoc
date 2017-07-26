@@ -22,33 +22,7 @@ convert (input) (output)
 
 === Supported Formats
 
-The supported input formats are:
-
-* OpenStreetMap XML (.osm)
-* Shapefile (.shp)
-* ESRI File Geodatabase (.gdb)
-* Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
-* OpenStreetMap Protocol Buffers (.osm.pbf)
-* OpenStreetMap JSON file (.json; similar to Overpass JSON)
-* GeoJSON file (.geojson)
-* geonames.org (.geonames)
-* Hootenanny API Database (hootapidb://)
-* OpenStreetMap API Database (osmapidb://)
-
-The following input formats are memory bound: .osm, .shp, .json, and osmapidb://.
-
-The supported output formats are:
-
-* OpenStreetMap XML file (.osm)
-* Shapefile (.shp)
-* ESRI File Geodatabase (.gdb)
-* OpenStreetMap Protocol Buffers file (.osm.pbf)
-* OpenStreetMap JSON file (.json; similar to Overpass JSON)
-* GeoJSON file (.geojson)
-* Hootenanny API Database (hootapidb://)
-* OpenStreetMap API Database (osmapidb://)
-
-The following output formats are memory bound: .osm, .shp, .pbf, .json.
+See the README file for details.
 
 === Database URL Format
 
