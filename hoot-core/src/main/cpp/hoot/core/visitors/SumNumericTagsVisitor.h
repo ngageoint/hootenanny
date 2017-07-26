@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,42 +22,52 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef SUMNUMERICTAGSVISITOR_H
+#define SUMNUMERICTAGSVISITOR_H
 
-#ifndef ELEMENTVISITOR_H
-#define ELEMENTVISITOR_H
+// hoot
+#include <hoot/core/elements/ConstElementVisitor.h>
 
-// hoot includes
-#include <hoot/core/elements/Element.h>
+#include "SingleStatistic.h"
 
 namespace hoot
 {
 
 /**
- * Visits elements in a collection. See Element::visit* and OsmMap::visit* for ways to use the
- * class. See hoot::AddRefVisitor for an example implementation.
- *
- * This is also used by hoot::VisitorOp and hoot::NamedOp.
+ * Sums numeric tag values with a specified key
  */
-class ElementVisitor
+class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
 {
-public:
-  virtual ~ElementVisitor() {}
+  public:
 
-  static std::string className() { return "hoot::ElementVisitor"; }
+    static std::string className() { return "hoot::SumNumericTagsVisitor"; }
 
-  virtual void visit(const ConstElementPtr& e) = 0;
+    static unsigned int logWarnCount;
 
-  /**
-    Returns a string representation of the visitor
-    */
-  virtual QString toString() { return ""; }
+    SumNumericTagsVisitor() {}
+    SumNumericTagsVisitor(const QString key);
+
+    virtual ~SumNumericTagsVisitor() {}
+
+    /**
+     * Given a tag key and for all features having the tag, sums the values of those tags.  If
+     * the tag value cannot be converted to a number, a warning is logged and the tag is skipped.
+     *
+     * @param e element to check for tag on
+     */
+    virtual void visit(const ConstElementPtr& e);
+
+    virtual double getStat() const { return _sum; }
+
+  private:
+
+    QString _key;
+    long _sum;
 
 };
 
-typedef boost::shared_ptr<ElementVisitor> ElementVisitorPtr;
-
 }
 
-#endif // ELEMENTVISITOR_H
+#endif // SUMNUMERICTAGSVISITOR_H

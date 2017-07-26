@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/io/ScriptTranslator.h>
 
 // Qt
@@ -40,7 +40,7 @@ namespace hoot
 
 class ScriptToOgrTranslator;
 
-class TranslationVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class TranslationVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

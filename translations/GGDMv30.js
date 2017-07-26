@@ -37,6 +37,13 @@ hoot.require('config');
 hoot.require('translate');
 hoot.require('fcode_common');
 
+function initialize()
+{
+    // Set the schema type for the export
+    hoot.Settings.set({"osm.map.writer.schema":"GGDMv30"});
+}
+
+
 // Layer name filter - Filter out all layers that match this regexp
 function layerNameFilter()
 {

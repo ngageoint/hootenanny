@@ -40,7 +40,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyRemoveRandomElementVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyRemoveRandomElementVisitor)
 
 PertyRemoveRandomElementVisitor::PertyRemoveRandomElementVisitor()
 {

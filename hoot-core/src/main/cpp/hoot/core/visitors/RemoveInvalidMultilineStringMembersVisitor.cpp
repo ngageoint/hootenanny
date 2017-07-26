@@ -40,7 +40,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveInvalidMultilineStringMembersVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveInvalidMultilineStringMembersVisitor)
 
 RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersVisitor()
 {

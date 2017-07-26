@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
 
 // TGS
@@ -54,7 +54,7 @@ namespace hoot
 class ElementCriterion;
 
 class IndexElementsVisitor :
-    public ElementVisitor,
+    public ConstElementVisitor,
     public ElementCriterionConsumer
 {
 public:

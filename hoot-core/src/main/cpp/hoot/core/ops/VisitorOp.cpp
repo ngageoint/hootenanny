@@ -29,14 +29,14 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, VisitorOp)
 
-void VisitorOp::addVisitor(const ElementVisitorPtr& e)
+void VisitorOp::addVisitor(const ConstElementVisitorPtr& e)
 {
   if (_visitor)
   {

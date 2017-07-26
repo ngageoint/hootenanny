@@ -1,8 +1,8 @@
 ****Quick Stats****
-17:09:46.251 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+21:08:35.317 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-17:09:46.290 INFO  .../core/ops/CalculateStatsOp.cpp( 124) Calculating map statistics...
-17:09:46.290 INFO  ...oot/core/io/MapStatsWriter.cpp( 212) Writing stats to file: test-output/StatsAllDataTypesA.txt
+21:08:35.353 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+21:08:35.353 INFO  ...oot/core/io/MapStatsWriter.cpp( 212) Writing stats to file: test-output/StatsAllDataTypesA.txt
 Node Count	117
 Way Count	14
 Relation Count	0
@@ -13,18 +13,18 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-17:09:46.575 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
+21:08:35.496 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from test-files/conflate/unified/AllDataTypesA.osm...
 
-17:09:46.612 INFO  .../core/ops/CalculateStatsOp.cpp( 124) Calculating map statistics...
-17:09:46.614 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
-17:09:46.722 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-17:09:46.722 INFO  ...ate/SearchRadiusCalculator.cpp(  93) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+21:08:35.543 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+21:08:35.543 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+21:08:35.679 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+21:08:35.680 INFO  ...ate/SearchRadiusCalculator.cpp(  93) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
-17:09:47.796 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
+21:08:36.786 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from test-files/conflate/unified/AllDataTypesB.osm...
 
-17:09:47.825 INFO  .../core/ops/CalculateStatsOp.cpp( 124) Calculating map statistics...
-17:09:47.837 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
-17:09:47.838 INFO  ...ate/SearchRadiusCalculator.cpp(  93) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
+21:08:36.816 INFO  .../core/ops/CalculateStatsOp.cpp( 127) Calculating map statistics...
+21:08:36.820 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+21:08:36.826 INFO  ...ate/SearchRadiusCalculator.cpp(  93) Unable to automatically calculate search radius.  All features have already been conflated or have an invalid status.
  Using default search radius value = 15
 {
     "Node Count":
@@ -405,6 +405,101 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
+    "Polygon Conflatable POI Count":
+    [
+        "11",
+        "10"
+    ],
+    "Conflatable Polygon Conflatable POIs":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Polygon Conflatable POIs":
+    [
+        "0",
+        "0"
+    ],
+    "Polygon Conflatable POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Polygon Conflatable POI Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Polygon Conflatable POIs":
+    [
+        "11",
+        "10"
+    ],
+    "Percentage of Polygon Conflatable POIs Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Polygon Conflatable POIs Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygon Conflatable POIs":
+    [
+        "100",
+        "100"
+    ],
+    "Polygon Count":
+    [
+        "10",
+        "8"
+    ],
+    "Conflatable Polygons":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Polygons":
+    [
+        "0",
+        "0"
+    ],
+    "Polygons Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Number of Polygon Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Polygons":
+    [
+        "10",
+        "8"
+    ],
+    "Meters Squared of Polygons Processed by Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Polygons Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Polygons Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Polygons":
+    [
+        "100",
+        "100"
+    ],
     "Longest Tag":
     [
         "21",
@@ -449,5 +544,15 @@ Maximum Relation ID	-9.223372036854776e+18
     [
         "nan",
         "nan"
+    ],
+    "Polygon Conflatable POI Translated Populated Tag Percent":
+    [
+        "0.06600249066002491",
+        "0.06504065040650407"
+    ],
+    "Polygon Translated Populated Tag Percent":
+    [
+        "0.0505050505050505",
+        "0.04924242424242424"
     ]
 }

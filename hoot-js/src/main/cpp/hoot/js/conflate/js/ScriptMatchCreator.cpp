@@ -77,7 +77,7 @@ class ScriptMatchVisitor;
 /**
  * Searches the specified map for any match potentials.
  */
-class ScriptMatchVisitor : public ElementVisitor
+class ScriptMatchVisitor : public ConstElementVisitor
 {
 
 public:

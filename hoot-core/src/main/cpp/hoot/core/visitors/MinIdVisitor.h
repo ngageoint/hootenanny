@@ -29,7 +29,7 @@
 #define MINIDVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // Standard
 #include <limits>
@@ -42,7 +42,7 @@ namespace hoot
 /**
  * Counts the number of elements.
  */
-class MinIdVisitor : public ElementVisitor, public SingleStatistic
+class MinIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 

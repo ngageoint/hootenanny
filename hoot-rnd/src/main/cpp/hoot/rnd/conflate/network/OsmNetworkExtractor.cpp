@@ -27,7 +27,7 @@
 #include "OsmNetworkExtractor.h"
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
@@ -39,7 +39,7 @@ namespace hoot
 
 unsigned int OsmNetworkExtractor::logWarnCount = 0;
 
-class OsmNetworkExtractorVisitor : public ElementVisitor
+class OsmNetworkExtractorVisitor : public ConstElementVisitor
 {
 public:
 

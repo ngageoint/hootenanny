@@ -28,6 +28,6 @@ mkdir -p $HOOT_HOME/ingest/processed
 mkdir -p $HOOT_HOME/upload
 
 #make -sj$(nproc) docs &> /dev/null || true
-#make -sj$(nproc) docs
+make -sj$(nproc) docs
 
 hoot version

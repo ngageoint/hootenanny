@@ -66,7 +66,7 @@ public:
   /**
     Randomly and recursively applies a way generalize operation to each visited way
 
-    @see ElementVisitor
+    @see ConstElementVisitor
     */
   virtual void visit(const boost::shared_ptr<Element>& element);
 
@@ -95,7 +95,7 @@ public:
   void setEpsilon(double epsilon) { _epsilon = epsilon; }
 
   /**
-    @see ElementVisitor
+    @see ConstElementVisitor
     */
   virtual QString toString();
 
