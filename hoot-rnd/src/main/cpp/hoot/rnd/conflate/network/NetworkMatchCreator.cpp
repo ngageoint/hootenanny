@@ -32,7 +32,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/conflate/MatchType.h>
 #include <hoot/core/conflate/MatchThreshold.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ChainCriterion.h>
 #include <hoot/core/filters/HighwayCriterion.h>
 #include <hoot/core/filters/StatusCriterion.h>

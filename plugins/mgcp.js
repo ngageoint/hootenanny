@@ -56,7 +56,7 @@ mgcp = {
     mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
 
     // Add empty "extra" feature layers if needed
-    if (config.getOgrMgcpExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
+    if (config.getOgrNoteExtra() == 'file') mgcp.rawSchema = translate.addExtraFeature(mgcp.rawSchema);
 
     // This function dumps the schema to the screen for debugging
     // translate.dumpSchema(mgcp.rawSchema);
@@ -329,7 +329,7 @@ mgcp = {
     // Some people have been editing OSM files and inserting MGCP attributes
     untangleAttributes: function (attrs, tags)
     {
-        // If we use ogr2osm, the GDAL driver jams ant tag it doesn't know about into an "other_tags" tag.
+        // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
         // We need to unpack this before we can do anything.
         if (attrs.other_tags)
         {
@@ -1710,7 +1710,7 @@ mgcp = {
 
         // If we have unused tags, add them to the TXT field.
         // NOTE: We are not checking if this is longer than 255 characters
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'note')
+        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
@@ -1817,7 +1817,7 @@ mgcp = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrMgcpExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);

@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-class ElementVisitor;
+class ConstElementVisitor;
 
 /**
  * Represents a section of a way.
@@ -131,7 +131,7 @@ public:
   /**
    * Visit the way and all nodes on the way that intersect the WaySubline.
    */
-  void visitRo(const ElementProvider& ep, ElementVisitor& visitor) const;
+  void visitRo(const ElementProvider& ep, ConstElementVisitor& visitor) const;
 
 private:
 

@@ -74,7 +74,7 @@ public:
     Randomly and recursively applies the PERTY way split operation to each visited way or multi-line
     string relation while honoring a configurable minimum spacing between way nodes.
 
-    @see ElementVisitor
+    @see ConstElementVisitor
     */
   virtual void visit(const boost::shared_ptr<Element>& e);
 
@@ -108,7 +108,7 @@ public:
   }
 
   /**
-    @see ElementVisitor
+    @see ConstElementVisitor
     */
   virtual QString toString();
 

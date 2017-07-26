@@ -12,47 +12,50 @@ Vagrant.configure(2) do |config|
 
   tomcatPort = ENV['TOMCAT_PORT']
   if tomcatPort.nil?
-    tomcatPort = '9888'
+    tomcatPort = '8888'
   end
 
   transPort = ENV['NODEJS_PORT']
   if transPort.nil?
-    transPort = '9894'
+    transPort = '8094'
   end
 
   mergePort = ENV['P2P_PORT']
   if mergePort.nil?
-    mergePort = '9896'
+    mergePort = '8096'
   end
 
   mapnikPort = ENV['NODE_MAPNIK_SERVER_PORT']
   if mapnikPort.nil?
-    mapnikPort = '9800'
+    mapnikPort = '8000'
   end
 
-  # tomcat service
-  config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
-  # translation nodejs service
-  config.vm.network "forwarded_port", guest: 8094, host: transPort
-  # merge nodejs service
-  config.vm.network "forwarded_port", guest: 8096, host: mergePort
-  # node-mapnik-server nodejs service
-  config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
+  disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
+  if disableForwarding.nil?
+    # tomcat service
+    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
+    # translation nodejs service
+    config.vm.network "forwarded_port", guest: 8094, host: transPort
+    # merge nodejs service
+    config.vm.network "forwarded_port", guest: 8096, host: mergePort
+    # node-mapnik-server nodejs service
+    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
+  end
 
   # Global settings - default for Ubuntu1404
 
 
   # Ubuntu1404 Box
   # This is the standard, working box
-  config.vm.define "hoot", primary: true do |hoot|
+  config.vm.define "default", primary: true do |hoot|
     hoot.vm.box = "ubuntu/trusty64"
     hoot.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
     hoot.vm.synced_folder ".", "/home/vagrant/hoot"
     hoot.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
-#      config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-#      config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-#      config.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
-#      config.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+    hoot.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    hoot.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    hoot.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    hoot.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
 
   # Ubuntu1604 Box
@@ -114,6 +117,38 @@ Vagrant.configure(2) do |config|
   #   # Customize the amount of memory on the VM:
      vb.memory = 8192
      vb.cpus = 4
+  end
+
+  # This is a provider for KVM
+  # See https://github.com/pradels/vagrant-libvirt for install instructions
+  # Run "vagrant up --provider=libvirt" to spin up using KVM.
+  #
+  # On Ubuntu 14.04 I had to use v0.0.35 of the vagrant-libvirt plugin. -JRS
+  # https://github.com/vagrant-libvirt/vagrant-libvirt/issues/669
+  #
+  # vagrant plugin install --plugin-version 0.0.35 vagrant-libvirt
+  config.vm.provider "libvirt" do |libvirt, override|
+    override.nfs.map_uid = Process.uid
+    override.nfs.map_gid = Process.gid
+    # Disable the standard folders so we can use NFS
+    override.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+    override.vm.synced_folder '.', '/home/vagrant/hoot', disabled: true
+
+    # Configure some fancy NFS syncing
+    override.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs",
+      :mount_options => ['vers=3','udp','noatime','nodiratime','nocto', 'nolock'],
+      :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
+    override.bindfs.bind_folder "/home/vagrant/.hoot-nfs",
+      "/home/vagrant/hoot",
+      chgrp_ignore: true,
+      chown_ignore: true,
+      perms: nil
+    override.vm.box = "s3than/trusty64"
+    override.vm.box_url = "https://app.vagrantup.com/s3than/boxes/trusty64"
+    #override.vm.box = "iknite/trusty64"
+    #override.vm.box_url = "https://app.vagrantup.com/iknite/boxes/trusty64"
+    libvirt.memory = 8192
+    libvirt.cpus = 8
   end
 
   # This is a provider for the Parallels Virtualization Software

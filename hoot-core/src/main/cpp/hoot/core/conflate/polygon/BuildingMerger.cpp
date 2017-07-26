@@ -153,11 +153,26 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
     keeper->setTags(newTags);
     keeper->setStatus(Status::Conflated);
 
-    // remove the duplicate element.
+    LOG_VART(keeper->getElementId());
+    LOG_VART(scrap->getElementId());
+    const ElementId scrapId = scrap->getElementId();
+    const Status scrapStatus = scrap->getStatus();
+
+    // remove the duplicate element
     DeletableBuildingPart filter;
     ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
     RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
     scrap->getTags().clear();
+
+    // see comments for similar functionality in HighwaySnapMerger::_mergePair
+    if (scrapStatus == Status::Unknown1 &&
+        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+    {
+      LOG_TRACE(
+        "Retaining reference ID by mapping unknown1 ID: " << scrapId << " to ID: " <<
+        keeper->getElementId() << "...");
+      _unknown1Replacements.insert(pair<ElementId, ElementId>(scrapId, keeper->getElementId()));
+    }
 
     set< pair<ElementId, ElementId> > replacedSet;
     for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
@@ -177,7 +192,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, Element
   }
 }
 
-boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)
+boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
+                                                         const set<ElementId>& eid)
 {
   assert(eid.size() > 0);
 

@@ -18,7 +18,6 @@ bin/
 callgrind.*
 conf/database/DatabaseConfigLocal.sh
 conf/LocalHoot.json
-conf/models/*.rf
 conf/dictionary/words*.sqlite
 conf/dictionary/WordsAbridged.sqlite
 config.h.in
@@ -94,6 +93,7 @@ Output.osm
 plugins/*_schema.js
 plugins/etds*_rules.js
 plugins/emgcp*_rules.js
+plugins/eggdm*_rules.js
 plugins-local
 translations-local
 **/*.pro.user*
@@ -154,8 +154,6 @@ vagrant*-*
 MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
-plugins/eggdm30_osm_rules.js
-plugins/eggdm30_rules.js
 userfiles/
 
 ###### hoot-services ignores

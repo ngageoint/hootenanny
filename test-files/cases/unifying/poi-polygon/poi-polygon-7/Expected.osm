@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8074824999999777" lon="-122.4065645999999958">
-        <tag k="hoot:status" v="1"/>
-    </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8075291000000107" lon="-122.4066719000000063">
-        <tag k="hoot:status" v="1"/>
-    </node>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8074549999999974" lon="-122.4067363000000057">
-        <tag k="hoot:status" v="1"/>
-    </node>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8069866000000019" lon="-122.4058270000000022">
-        <tag k="hoot:status" v="1"/>
-    </node>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8070650000000015" lon="-122.4057652999999988">
-        <tag k="hoot:status" v="1"/>
-    </node>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8071901000000068" lon="-122.4059905999999955">
-        <tag k="hoot:status" v="1"/>
-    </node>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8100475000000031" lon="-122.4062249999999921">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.8069866" minlon="-122.406772" maxlat="37.8100475" maxlon="-122.4057653"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8097690000000028" lon="-122.4067496999999918">
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8100207999999895" lon="-122.4067720000000037">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8097690000000028" lon="-122.4067496999999918">
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8100475000000031" lon="-122.4062249999999921">
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8071901000000068" lon="-122.4059905999999955">
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8070650000000015" lon="-122.4057652999999988">
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8069866000000019" lon="-122.4058270000000022">
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8074549999999974" lon="-122.4067363000000057">
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8075291000000107" lon="-122.4066719000000063">
+        <tag k="hoot:status" v="1"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8074824999999777" lon="-122.4065645999999958">
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -40,8 +41,9 @@
         <nd ref="-9"/>
         <tag k="REF1" v="009cdc"/>
         <tag k="REF2" v="009cdc"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="hoot:mismatch" v="1"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="alt_name" v="PIER 35"/>
         <tag k="building" v="yes"/>
         <tag k="uuid" v="{f5cb9318-6902-464a-86fb-54bf5779bbb4};{4a6e0f71-9db8-49f1-8238-04dcd019aeea}"/>

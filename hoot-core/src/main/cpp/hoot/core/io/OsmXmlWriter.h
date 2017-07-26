@@ -121,6 +121,14 @@ private:
   void _writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer);
   void _writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer);
   void _writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer);
+
+  /**
+   * @brief _writeBounds Writes out the OSM <bounds> tag in the format:
+   *  <bounds minlat="xxx" minlon="xxx" maxlat="xxx" maxlong="xxx" />
+   * @param map - OsmMap to get the bounds from
+   * @param writer - XML writer to write the tag to
+   */
+  void _writeBounds(ConstOsmMapPtr map, QXmlStreamWriter& writer);
 };
 
 } // hoot

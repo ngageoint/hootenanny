@@ -88,6 +88,7 @@ private:
   ElementId _eid1, _eid2;
   bool _isWholeGroup;
   QString _matchName;
+  bool _neverCausesConflict;
   MatchClassification _p;
   v8::Persistent<v8::Object> _plugin;
   boost::shared_ptr<PluginContext> _script;

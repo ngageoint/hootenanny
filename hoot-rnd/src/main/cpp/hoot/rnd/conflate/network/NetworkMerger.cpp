@@ -90,7 +90,6 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
       eids.insert(e->getElementId());
     }
 
-    LOG_TRACE("Marking complex intersection match for review...");
     ReviewMarker().mark(map, eids, "Complex intersection match. Possible dogleg? "
       "Very short segment?", HighwayMatch::getHighwayMatchName());
   }

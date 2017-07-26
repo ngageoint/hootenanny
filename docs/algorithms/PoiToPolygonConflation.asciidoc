@@ -7,8 +7,7 @@
 
 POI to polygon conflation defines the following feature types:
 
-* Hootenanny defines a POI (Point of Interest) as any point feature with either a populated name tag or any other tag which causes 
-it to be classifed as a POI or a building by the Hootenanny schema definitions.
+* Hootenanny defines a POI (Point of Interest) as any point feature with either a populated name tag or any other tag which causes it to be classifed as a POI or a building by the Hootenanny schema definitions.
 * Hootenanny defines a polygon as any polygon feature that is either an area or a building and has either a populated name tag or
 any other tag which causes it to be classified as a POI or a building by the Hootenanny schema definitions.
 

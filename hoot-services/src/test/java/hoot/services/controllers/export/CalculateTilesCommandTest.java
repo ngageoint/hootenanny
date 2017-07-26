@@ -47,7 +47,7 @@ import hoot.services.UnitTest;
 
 
 public class CalculateTilesCommandTest {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(CalculateTilesCommandTest.class);
 
     @Test
@@ -102,14 +102,14 @@ public class CalculateTilesCommandTest {
 
         assertTrue(command.getSubstitutionMap().containsKey("OUTPUT"));
         assertEquals(expectedOutputPath, command.getSubstitutionMap().get("OUTPUT"));
-        
+
         assertTrue(command.getSubstitutionMap().containsKey("MAX_NODE_COUNT_PER_TILE"));
-        assertEquals(new Long(1000), command.getSubstitutionMap().get("MAX_NODE_COUNT_PER_TILE"));
-        
+        assertEquals("1000", command.getSubstitutionMap().get("MAX_NODE_COUNT_PER_TILE"));
+
         assertTrue(command.getSubstitutionMap().containsKey("PIXEL_SIZE"));
-        assertEquals(0.001, command.getSubstitutionMap().get("PIXEL_SIZE"));
+        assertEquals("0.001", command.getSubstitutionMap().get("PIXEL_SIZE"));
     }
-    
+
     @Test
     @Category(UnitTest.class)
     public void testCalculateTilesCommandNoMaxNodeCountOrPixelSize() {
@@ -161,7 +161,7 @@ public class CalculateTilesCommandTest {
         assertTrue(command.getSubstitutionMap().containsKey("OUTPUT"));
         assertEquals(expectedOutputPath, command.getSubstitutionMap().get("OUTPUT"));
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     @Category(UnitTest.class)
     public void testCalculateTilesCommandNoMaxNodeCountOrPixelSize1() {
@@ -182,14 +182,14 @@ public class CalculateTilesCommandTest {
             jobParams.setBounds(aoi);
             jobParams.setMaxNodeCountPerTile(1000);
 
-            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);	
+            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
     	}
     	catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("If either max node count per tile or pixel size is specified, then both input parameters must be specified."));
             throw e;
-        } 
+        }
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     @Category(UnitTest.class)
     public void testCalculateTilesCommandNoMaxNodeCountOrPixelSize2() {
@@ -210,11 +210,11 @@ public class CalculateTilesCommandTest {
             jobParams.setBounds(aoi);
             jobParams.setPixelSize(0.001);
 
-            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);	
+            new CalculateTilesCommand(jobId, jobParams, debugLevel, caller);
     	}
     	catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("If either max node count per tile or pixel size is specified, then both input parameters must be specified."));
             throw e;
-        } 
+        }
     }
 }

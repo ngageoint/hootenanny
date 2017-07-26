@@ -28,7 +28,7 @@
 #define GETELEMENTIDSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Puts all the visited elementIds into a bag.
  */
-class GetElementIdsVisitor : public ElementVisitor
+class GetElementIdsVisitor : public ConstElementVisitor
 {
 public:
 

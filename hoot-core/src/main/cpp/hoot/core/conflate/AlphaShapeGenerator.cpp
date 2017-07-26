@@ -39,8 +39,6 @@ using namespace std;
 namespace hoot
 {
 
-unsigned int AlphaShapeGenerator::logWarnCount = 0;
-
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer) :
 _alpha(alpha),
 _buffer(buffer)
@@ -52,15 +50,9 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   boost::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-    {
-      LOG_WARN("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
-    }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
+    //would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    //clients who are expecting the alpha shape to be generated
+    throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
 
   OsmMapPtr result;

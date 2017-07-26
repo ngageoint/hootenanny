@@ -19,31 +19,10 @@ fi
 # If has hadoop. If not, we avoid an unsightly, but harmless error
 #echo "Hadoop home: "  $HADOOP_HOME
 if [ -d "$HADOOP_HOME" ]; then
-    HADOOP_IS_CLOUDERA="false"
-    # only tested with CDH3u4
-    if [ -a $HADOOP_HOME/hadoop-*-cdh*-core.jar ]; then
-      #echo "Found Cloudera Hadoop"
-      HADOOP_IS_CLOUDERA="true"
-    fi
-    if [ "$HADOOP_IS_CLOUDERA" == "true" ]; then
-        export HADOOP_CLASSPATH=$PRETTY_PIPES_HOME/lib/PrettyPipesLib-0.0.1.jar
-        JAR_PATH=""
-    for jarf in $HADOOP_HOME/*.jar
-    do
-          JAR_PATH=$JAR_PATH":"$jarf
-        done
-        for jarf in $HADOOP_HOME/lib/*.jar
-        do
-          JAR_PATH=$JAR_PATH":"$jarf
-        done
-        export CLASSPATH=$HADOOP_HOME/conf:$JAVA_HOME/lib/tools.jar$JAR_PATH
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native/Linux-amd64-64:$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server
-    else
-        export HADOOP_CLASSPATH=""
-    export CLASSPATH=$HADOOP_HOME/conf:$HADOOP_HOME/lib/*:$HADOOP_HOME/*:$JAVA_HOME/lib/tools.jar
-        export CLASSPATH=$CLASSPATH:`ls $HADOOP_HOME/hadoop-*-core.jar`:`ls $HADOOP_HOME/lib/commons-logging-api-*.jar`
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/c++/Linux-amd64-64/lib/:$JAVA_HOME/jre/lib/amd64/:$JAVA_HOME/jre/lib/amd64/server
-    fi
+	export HADOOP_CLASSPATH=""
+  export CLASSPATH=$HADOOP_HOME/conf:$HADOOP_HOME/lib/*:$HADOOP_HOME/*:$JAVA_HOME/lib/tools.jar
+  export CLASSPATH=$CLASSPATH:`ls $HADOOP_HOME/hadoop-*-core.jar`:`ls $HADOOP_HOME/lib/commons-logging-api-*.jar`
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/c++/Linux-amd64-64/lib/:$JAVA_HOME/jre/lib/amd64/:$JAVA_HOME/jre/lib/amd64/server
 fi
 
 # Determine the library path for GDAL

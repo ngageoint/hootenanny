@@ -58,7 +58,7 @@ namespace hoot
 
 class ElementListener;
 class ElementProvider;
-class ElementVisitor;
+class ConstElementVisitor;
 class OsmMap;
 
 /**
@@ -159,7 +159,7 @@ public:
    * "this" is guaranteed to be visited last.
    */
 
-  virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const = 0;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const = 0;
 
   /**
    * Applies a read write visitor to this element and all child elements. The visitor will be called
@@ -177,7 +177,7 @@ public:
    *
    * "this" is guaranteed to be visited last.
    */
-  virtual void visitRw(ElementProvider& map, ElementVisitor& visitor) = 0;
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor) = 0;
 
 protected:
 

@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, UniqueNamesVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, UniqueNamesVisitor)
 
 void UniqueNamesVisitor::visit(const ConstElementPtr& e)
 {

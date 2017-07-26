@@ -79,7 +79,7 @@ geonames.rules = {
         'BAYS':{'natural':'bay'}, //  bays: coastal indentations between two capes or headlands, larger than a cove but smaller than a gulf
         'BCH':{'natural':'beach'}, //  beach: a shore zone of coarse unconsolidated sediment that extends from the low-water line to the highest reach of storm waves
         'BCHS':{'natural':'beach'}, //  beaches: a shore zone of coarse unconsolidated sediment that extends from the low-water line to the highest reach of storm waves
-        'BCN':{'seamark:type':'beacon'}, //  beacon: a fixed artificial navigation mark
+        'BCN':{'man_made':'beacon'}, //  beacon: a fixed artificial navigation mark
         'BDG':{'bridge':'yes'}, //  bridge: a structure erected across an obstacle such as a stream, road, etc., in order to carry roads, railroads, and pedestrians across
         'BDGQ':{'destroyed:bridge':'yes'}, //  ruined bridge: a destroyed or decayed bridge which is no longer functional
         'BDLD':{'geological':'badlands'}, //  badlands: an area characterized by a maze of very closely spaced, deep, narrow, steep-sided ravines, and sharp crests and pinnacles
