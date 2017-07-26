@@ -1,6 +1,7 @@
 var assert = require('assert'),
     http = require('http'),
-    xml2js = require('xml2js');
+    xml2js = require('xml2js'),
+    fs = require('fs');
 var httpMocks = require('node-mocks-http');
 var server = require('../TranslationServer.js');
 
@@ -364,16 +365,18 @@ describe('TranslationServer', function () {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "GGDMv30");
 
-                // assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
-                // assert.equal(result.osm.way[0].tag[0].$.v, "AP030:Road");
-                // assert.equal(result.osm.way[0].tag[1].$.k, "MGCP Feature universally unique identifier");
-                // assert.equal(result.osm.way[0].tag[1].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
-                // assert.equal(result.osm.way[0].tag[2].$.k, "Thoroughfare Class");
-                // assert.equal(result.osm.way[0].tag[2].$.v, "Unknown");
-                // assert.equal(result.osm.way[0].tag[3].$.k, "Route Minimum Travelled Way Width");
-                // assert.equal(result.osm.way[0].tag[3].$.v, "20");
-                // assert.equal(result.osm.way[0].tag[4].$.k, "Track or Lane Count");
-                // assert.equal(result.osm.way[0].tag[4].$.v, "2");
+                assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AP030:Road");
+                assert.equal(result.osm.way[0].tag[1].$.k, "Roadway Type");
+                assert.equal(result.osm.way[0].tag[1].$.v, "No Information");
+                assert.equal(result.osm.way[0].tag[2].$.k, "Unique Entity Identifier");
+                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[3].$.k, "Route Pavement Information : Route Minimum Travelled Way Width");
+                assert.equal(result.osm.way[0].tag[3].$.v, "20");
+                assert.equal(result.osm.way[0].tag[4].$.k, "Route Identification <route designation type>");
+                assert.equal(result.osm.way[0].tag[4].$.v, "Local");
+                assert.equal(result.osm.way[0].tag[5].$.k, "Track or Lane Count");
+                assert.equal(result.osm.way[0].tag[5].$.v, "2");
             });
         });
 
@@ -444,6 +447,24 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[0].$.v, "fee4529b-5ecc-4e5c-b06d-1b26a8e830e6");
                 assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
                 assert.equal(result.osm.way[0].tag[1].$.v, "AL010");
+            });
+        });
+
+        it('should handle OSM to TDSv61 Raw POST of a complete osm file and preserve bounds', function() {
+            var data = fs.readFileSync('../test-files/ToyTestA.osm', 'utf8');//, function(err, data) {
+            var osm2trans = server.handleInputs({
+                osm: data,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "TDSv61");
+                assert.equal(result.osm.bounds[0].$.minlat, "38.85324242720166");
+                assert.equal(result.osm.bounds[0].$.minlon, "-104.9024316099691");
+                assert.equal(result.osm.bounds[0].$.maxlat, "38.85496143739888");
+                assert.equal(result.osm.bounds[0].$.maxlon, "-104.8961823052624");
             });
         });
 
