@@ -1,3 +1,0 @@
-#!/bin/bash
-
-scripts/core/ServiceOsmApiDbHootApiDbConflate.sh tmp/rafah.osm tmp/Rafah_UTDS_5_FCODE_noemptyFC_v61.osm "" "unifying" ServiceOsmApiDbHootApiDbRafahConflateTest2 true 2
