@@ -306,10 +306,10 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.node[0].$.id, "777");
-                assert.equal(result.osm.bounds[0].$.minlat, "39.35643172777992");
-                assert.equal(result.osm.bounds[0].$.minlon, "-105.21811763904256");
-                assert.equal(result.osm.bounds[0].$.maxlat, "39.35643172777992");
-                assert.equal(result.osm.bounds[0].$.maxlon, "-105.21811763904256");
+                assert.equal(parseFloat(result.osm.bounds[0].$.minlat).toFixed(6), 39.356432);
+                assert.equal(parseFloat(result.osm.bounds[0].$.minlon).toFixed(6), -105.218118);
+                assert.equal(parseFloat(result.osm.bounds[0].$.maxlat).toFixed(6), 39.356432);
+                assert.equal(parseFloat(result.osm.bounds[0].$.maxlon).toFixed(6), -105.218118);
             });
         });
         it('should handle OSM to MGCP POST of building area feature', function() {
@@ -450,7 +450,7 @@ describe('TranslationServer', function () {
             });
         });
 
-        it('should handle OSM to TDSv61 Raw POST of a complete osm file and preserve bounds', function() {
+        it('should handle OSM to TDSv61 Raw POST of a complete osm file and preserve bounds tag and element ids', function() {
             var data = fs.readFileSync('../test-files/ToyTestA.osm', 'utf8');//, function(err, data) {
             var osm2trans = server.handleInputs({
                 osm: data,
@@ -461,10 +461,16 @@ describe('TranslationServer', function () {
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
                 assert.equal(result.osm.$.schema, "TDSv61");
+
                 assert.equal(result.osm.bounds[0].$.minlat, "38.85324242720166");
                 assert.equal(result.osm.bounds[0].$.minlon, "-104.9024316099691");
                 assert.equal(result.osm.bounds[0].$.maxlat, "38.85496143739888");
                 assert.equal(result.osm.bounds[0].$.maxlon, "-104.8961823052624");
+
+                assert.equal(result.osm.way[0].$.id, "-1669801");
+                assert.equal(result.osm.way[0].nd[0].$.ref, "-1669731");
+                assert.equal(result.osm.way[0].nd[1].$.ref, "-1669791");
+                assert.equal(result.osm.way[0].nd[2].$.ref, "-1669793");
             });
         });
 
