@@ -146,7 +146,7 @@ Vagrant.configure(2) do |config|
 
   # This is a provider for the Parallels Virtualization Software
   # Run "vagrant up --provider=parallels" to spin up using parallels.
-  # WARNING: Minamally tested
+  # WARNING: Minimally tested
   config.vm.provider "parallels" do |para, override|
         para.memory = 8192
         para.cpus = 4
