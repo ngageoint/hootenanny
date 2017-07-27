@@ -32,7 +32,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // standard
 #include <string>
@@ -42,20 +42,20 @@
 
 namespace hoot
 {
+
 class Relation;
 class Way;
 
-using namespace std;
 
 /**
  * Checks to see if the elements visited are completely contained by the specified map. This is
  * relevant during tile based operations because not all elements may be completely represented
  * within a tile.
  */
-class CompletelyContainedByMapElementVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class CompletelyContainedByMapElementVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
-  static string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
+  static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
 

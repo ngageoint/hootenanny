@@ -54,7 +54,7 @@ class ElementCriterion
 {
 public:
 
-  static string className() { return "hoot::ElementCriterion"; }
+  static std::string className() { return "hoot::ElementCriterion"; }
 
   virtual ~ElementCriterion() {}
 
@@ -86,7 +86,7 @@ class BaseElementFilter : public ElementCriterion, public Filter
 {
 public:
 
-  static string className() { return "hoot::BaseElementFilter"; }
+  static std::string className() { return "hoot::BaseElementFilter"; }
 
   virtual ~BaseElementFilter() {}
 

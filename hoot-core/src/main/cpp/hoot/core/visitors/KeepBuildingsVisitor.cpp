@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, KeepBuildingsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepBuildingsVisitor)
 
 void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
 {
@@ -44,7 +44,7 @@ void KeepBuildingsVisitor::visit(const ConstElementPtr& e)
 
   if (type != ElementType::Node)
   {
-   boost::shared_ptr<Element> ee = _map->getElement(type, id);
+    boost::shared_ptr<Element> ee = _map->getElement(type, id);
 
     if (OsmSchema::getInstance().isBuilding(ee->getTags(), type) == false)
     {

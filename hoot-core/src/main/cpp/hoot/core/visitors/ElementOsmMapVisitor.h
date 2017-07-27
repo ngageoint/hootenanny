@@ -28,7 +28,7 @@
 #define ELEMENTOSMMAPVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
 // tgs
@@ -36,12 +36,11 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Base class to ease OsmMapConsumer usage.
  */
-class ElementOsmMapVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class ElementOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

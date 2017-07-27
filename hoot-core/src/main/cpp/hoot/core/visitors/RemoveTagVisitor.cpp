@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveTagVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveTagVisitor)
 
 RemoveTagVisitor::RemoveTagVisitor()
 {

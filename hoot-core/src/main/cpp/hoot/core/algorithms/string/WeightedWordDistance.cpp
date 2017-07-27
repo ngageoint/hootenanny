@@ -45,6 +45,8 @@
 // Tgs
 #include <tbs/stats/SampleStats.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -65,7 +67,7 @@ WeightedWordDistance::WeightedWordDistance()
   {
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceDictionary());
   }
-  catch (FileNotFoundException& e)
+  catch (const FileNotFoundException&)
   {
     LOG_WARN("Unable to locate words.sqlite. This should be downloaded during the make "
       "process. It can be manually downloaded from "

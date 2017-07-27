@@ -35,6 +35,10 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMerger.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

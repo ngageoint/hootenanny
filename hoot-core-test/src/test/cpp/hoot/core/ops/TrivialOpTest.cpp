@@ -62,6 +62,8 @@ using namespace boost;
 
 #include "../TestUtils.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -76,7 +78,7 @@ public:
   void runTest()
   {
     QDataStream dataStream;
-    string className = "";
+    string className;
 
     // AddHilbertReviewSortOrderOp
     AddHilbertReviewSortOrderOp addHilbertReviewSortOrderOp;

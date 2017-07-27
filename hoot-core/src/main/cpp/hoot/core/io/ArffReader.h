@@ -43,10 +43,8 @@
 
 namespace hoot
 {
-class DataSamples;
 
-using namespace std;
-using namespace boost;
+class DataSamples;
 
 /**
  * @brief The ArffReader class
@@ -61,7 +59,7 @@ public:
    * @brief ArffReader
    * @param strm Does not take ownership.
    */
-  ArffReader(istream* strm);
+  ArffReader(std::istream* strm);
   ArffReader(QString path);
 
   /**
@@ -71,9 +69,9 @@ public:
 
 private:
 
-  auto_ptr<fstream> _autoStrm;
-  auto_ptr<boost::iostreams::filtering_istream> _bstrm;
-  istream* _strm;
+  std::auto_ptr<std::fstream> _autoStrm;
+  std::auto_ptr<boost::iostreams::filtering_istream> _bstrm;
+  std::istream* _strm;
   char _buffer[2048];
 
   bool _eof();

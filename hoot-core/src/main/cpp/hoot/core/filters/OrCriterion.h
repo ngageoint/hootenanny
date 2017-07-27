@@ -39,7 +39,7 @@ class OrCriterion : public ChainCriterion
 {
 public:
 
-  static string className() { return "hoot::OrCriterion"; }
+  static std::string className() { return "hoot::OrCriterion"; }
 
   OrCriterion() {}
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :

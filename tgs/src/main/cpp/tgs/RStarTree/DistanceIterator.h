@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -43,7 +43,7 @@ namespace Tgs
 
   /**
    * This class returns all items from an RStarTree that fall within a specified distance.
-   * Distance is calculated as a simple euclidean distance in n dimensional space. This is probably 
+   * Distance is calculated as a simple euclidean distance in n dimensional space. This is probably
    * not what you desire.
    */
   class TGS_EXPORT DistanceIterator : public Iterator
@@ -73,16 +73,9 @@ namespace Tgs
     {
     public:
 
-      Result()
-      {
-        id = -1;
-      }
+      Result() : id(-1) { }
 
-      Result(const Box& box, int id) 
-      { 
-        this->box = box;
-        this->id = id;
-      }
+      Result(const Box& box, int id) : box(box), id(id) { }
 
       Box box;
       int id;

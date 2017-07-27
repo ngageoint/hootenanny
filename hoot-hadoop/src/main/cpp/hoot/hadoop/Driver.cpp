@@ -40,6 +40,8 @@
 // Qt
 #include <QFileInfo>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -50,7 +52,7 @@ Driver::Driver()
 void Driver::_addDefaultJobSettings(pp::Job& job)
 {
   QString schemaPath = ConfPath::search("schema.json");
- boost::shared_ptr<OsmSchemaLoader> l =
+  boost::shared_ptr<OsmSchemaLoader> l =
     OsmSchemaLoaderFactory::getInstance().createLoader(schemaPath);
   OsmSchema tmp;
   LOG_INFO("Loading translation files...");

@@ -37,8 +37,6 @@
 namespace hoot
 {
 
-using namespace boost;
-
 class OsmMap;
 class Way;
 

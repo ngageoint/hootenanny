@@ -33,6 +33,8 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -92,7 +94,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapWriter> writer = createWriter(url);
-  boost::shared_ptr<ElementOutputStream> streamWriter = dynamic_pointer_cast<ElementOutputStream>(writer);
+  boost::shared_ptr<ElementOutputStream> streamWriter = boost::dynamic_pointer_cast<ElementOutputStream>(writer);
   if (streamWriter)
   {
     result = true;

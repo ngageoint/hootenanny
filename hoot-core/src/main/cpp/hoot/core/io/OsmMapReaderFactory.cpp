@@ -33,6 +33,9 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Validate.h>
+#include <hoot/core/ops/Boundable.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -56,7 +59,7 @@ bool OsmMapReaderFactory::hasElementInputStream(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  boost::shared_ptr<ElementInputStream> eis = dynamic_pointer_cast<ElementInputStream>(reader);
+  boost::shared_ptr<ElementInputStream> eis = boost::dynamic_pointer_cast<ElementInputStream>(reader);
   if (eis)
   {
     result = true;
@@ -69,7 +72,7 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
 {
   bool result = false;
   boost::shared_ptr<OsmMapReader> reader = createReader(url, true, Status::Unknown1);
-  boost::shared_ptr<PartialOsmMapReader> pr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+  boost::shared_ptr<PartialOsmMapReader> pr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
   if (pr)
   {
     result = true;
@@ -79,7 +82,7 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
 }
 
 boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool useDataSourceIds,
-                                                           Status defaultStatus)
+                                                                  Status defaultStatus)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);
@@ -135,6 +138,13 @@ void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool 
   LOG_INFO("Loading map from " << url << "...");
   boost::shared_ptr<OsmMapReader> reader =
     getInstance().createReader(url, useDataSourceIds, defaultStatus);
+  boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(reader);
+  if (!ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() && !boundable.get())
+  {
+    throw IllegalArgumentException(
+      ConfigOptions::getConvertBoundingBoxKey() +
+      " configuration option used with unsupported reader for data source: " + url);
+  }
   reader->open(url);
   reader->read(map);
   VALIDATE(map->validate(true));

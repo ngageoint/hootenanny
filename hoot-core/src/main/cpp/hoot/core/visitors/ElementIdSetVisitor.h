@@ -28,17 +28,15 @@
 #define ELEMENT_ID_SET_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Returns a set of the element ids visited.
  */
-class ElementIdSetVisitor : public ElementVisitor
+class ElementIdSetVisitor : public ConstElementVisitor
 {
 public:
 
@@ -49,13 +47,13 @@ public:
   /**
    * Returns a set containing all the ElementIds visited.
    */
-  const set<ElementId>& getElementSet() const { return _elements; }
+  const std::set<ElementId>& getElementSet() const { return _elements; }
 
   virtual void visit(const ConstElementPtr& e);
 
 private:
 
-  set<ElementId> _elements;
+  std::set<ElementId> _elements;
 };
 
 }

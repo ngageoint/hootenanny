@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SUBTREECALLBACK_H
 #define SUBTREECALLBACK_H
@@ -47,7 +47,7 @@ public:
 
   // default implementation inserts all children. You will likely want to do a final check depending
   // on the data.
-  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, set<DataType>& result) const
+  virtual void findLeaf(const Leaf<KeyType, DataType>* leaf, std::set<DataType>& result) const
   {
     for (size_t i = 0; i < leaf->getChildCount(); ++i)
     {
@@ -55,7 +55,7 @@ public:
     }
   }
 
-  virtual void find(const Node<KeyType, DataType>* n, int depth, set<DataType>& result) const = 0;
+  virtual void find(const Node<KeyType, DataType>* n, int depth, std::set<DataType>& result) const = 0;
 };
 
 }

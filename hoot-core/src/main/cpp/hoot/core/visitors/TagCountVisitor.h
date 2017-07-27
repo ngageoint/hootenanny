@@ -28,7 +28,7 @@
 #define TAGCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
@@ -39,10 +39,10 @@ namespace hoot
  * A visitor for counting element tags.  It distinguishes between metadata and information tags,
  * and both are included in the total count.  Debug tags are not included in the total count.
  */
-class TagCountVisitor : public ElementVisitor, public SingleStatistic
+class TagCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
-  static string className() { return "hoot::TagCountVisitor"; }
+  static std::string className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
 

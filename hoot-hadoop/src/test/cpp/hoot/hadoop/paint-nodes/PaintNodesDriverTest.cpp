@@ -27,14 +27,18 @@ using namespace pp;
 #include <iostream>
 #include <stdlib.h>
 
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/TestUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/paint-nodes/PaintNodesDriver.h>
 
 #include "../MapReduceTestFixture.h"
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {

@@ -36,7 +36,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/util/Exception.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Tags.h>
@@ -81,7 +81,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
        (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&
        (_addSourceDateTime == true) )
   {
-    _element->setTag("source:datetime",attributes.value("timestamp"));
+    _element->setTag(MetadataTags::SourceDateTime(),attributes.value("timestamp"));
   }
 
 }
@@ -289,28 +289,6 @@ int OsmXmlReader::_parseInt(QString s)
   if (ok == false)
   {
       throw Exception("Error parsing int: " + s);
-  }
-
-  return result;
-}
-
-Status OsmXmlReader::_parseStatus(QString s)
-{
-  Status result;
-
-  if (s.length() > 2)
-  {
-    // Try parsing the status as a string, not an int
-    result = Status::fromString(s);
-  }
-  else
-  {
-    result = Status((Status::Type)_parseInt(s));
-  }
-
-  if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
-  {
-    throw HootException(QObject::tr("Invalid status value: %1").arg(s));
   }
 
   return result;
@@ -529,7 +507,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         {
           long newRef = _nodeIdMap.value(ref);
 
-          WayPtr w = dynamic_pointer_cast<Way, Element>(_element);
+          WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
 
           w->addNode(newRef);
         }
@@ -540,7 +518,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         QString type = attributes.value("type");
         QString role = attributes.value("role");
 
-        RelationPtr r = dynamic_pointer_cast<Relation, Element>(_element);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
 
         if (type == "node")
         {
@@ -611,13 +589,13 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
 
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
-          _element->setStatus(_parseStatus(value));
+          _element->setStatus(Status::fromString(value));
 
           if (_keepFileStatus)  { _element->setTag(key, value); }
         }
         else if (key == "type" && _element->getElementType() == ElementType::Relation)
         {
-          RelationPtr r = dynamic_pointer_cast<Relation, Element>(_element);
+          RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
 
           if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
@@ -648,7 +626,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
                 isBad = true;
               }
             }
-            catch (const HootException& e)
+            catch (const HootException&)
             {
               isBad = true;
             }
@@ -698,17 +676,17 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
   {
     if (qName == "node")
     {
-        NodePtr n = dynamic_pointer_cast<Node, Element>(_element);
+        NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
         _map->addNode(n);
     }
     else if (qName == "way")
     {
-        WayPtr w = dynamic_pointer_cast<Way, Element>(_element);
+        WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
         _map->addWay(w);
     }
     else if (qName == "relation")
     {
-        RelationPtr r = dynamic_pointer_cast<Relation, Element>(_element);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
         _map->addRelation(r);
     }
   }

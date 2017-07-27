@@ -44,8 +44,6 @@ namespace hoot
 
 class Tags;
 
-  using namespace std;
-
 enum EdgeType
 {
   CanHave,
@@ -277,17 +275,17 @@ public:
    */
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
-  vector<SchemaVertex> getAssociatedTags(QString name);
+  std::vector<SchemaVertex> getAssociatedTags(QString name);
 
   OsmSchemaCategory getCategories(const Tags& t) const;
   OsmSchemaCategory getCategories(const QString& k, const QString& v) const;
   OsmSchemaCategory getCategories(const QString& kvp) const;
 
-  vector<SchemaVertex> getAllTags();
+  std::vector<SchemaVertex> getAllTags();
 
   QSet<QString> getAllTagKeys();
 
-  vector<SchemaVertex> getChildTags(QString name);
+  std::vector<SchemaVertex> getChildTags(QString name);
 
   static OsmSchema& getInstance();
 
@@ -298,9 +296,9 @@ public:
    *
    * minimumScore must be > 0.
    */
-  vector<SchemaVertex> getSimilarTags(QString name, double minimumScore);
+  std::vector<SchemaVertex> getSimilarTags(QString name, double minimumScore);
 
-  vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
+  std::vector<SchemaVertex> getTagByCategory(OsmSchemaCategory c) const;
 
   /**
    * Returns the tag vertex for a given kvp. If the vertex is compound then an empty vertex will
@@ -312,7 +310,7 @@ public:
    * Returns all schema vertices that are represented in the set of tags. This will return both
    * compound vertices and tag vertices.
    */
-  vector<SchemaVertex> getSchemaVertices(const Tags& tags) const;
+  std::vector<SchemaVertex> getSchemaVertices(const Tags& tags) const;
 
   /**
    * Returns all the schema vertices in the set of tags that do not also have parent vertices in the
@@ -321,7 +319,7 @@ public:
    * "Unique" may not be the best modifier in the method name, but "WithParentTagsRemoved" seemed
    * a bit verbose. Open to suggestions. -JRS
    */
-  vector<SchemaVertex> getUniqueSchemaVertices(const Tags& tags) const;
+  std::vector<SchemaVertex> getUniqueSchemaVertices(const Tags& tags) const;
 
   /**
    * Returns true if at least one tag in the set of specified tags is part of the specified
@@ -349,6 +347,7 @@ public:
    * Returns true if this is a building:part. This is mutually exclusive with isBuilding.
    */
   bool isBuildingPart(const Tags& t, ElementType type) const;
+  bool isBuildingPart(const ConstElementPtr& e) const;
 
   /**
    * Returns true if this is a geometry collection.

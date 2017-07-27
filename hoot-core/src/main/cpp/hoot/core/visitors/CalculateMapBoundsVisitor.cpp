@@ -29,6 +29,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/SingleStatistic.h>
 
+using namespace std;
+
 namespace hoot
 {
 

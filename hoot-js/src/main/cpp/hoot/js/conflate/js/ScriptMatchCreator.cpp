@@ -62,6 +62,11 @@
 
 #include "ScriptMatch.h"
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+using namespace v8;
+
 namespace hoot
 {
 
@@ -72,13 +77,13 @@ class ScriptMatchVisitor;
 /**
  * Searches the specified map for any match potentials.
  */
-class ScriptMatchVisitor : public ElementVisitor
+class ScriptMatchVisitor : public ConstElementVisitor
 {
 
 public:
 
   ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
-    ConstMatchThresholdPtr mt,boost::shared_ptr<PluginContext> script) :
+    ConstMatchThresholdPtr mt, boost::shared_ptr<PluginContext> script) :
     _map(map),
     _result(result),
     _mt(mt),
@@ -149,7 +154,7 @@ public:
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
-      if ((e->getStatus() != e2->getStatus() || from < *it) && isMatchCandidate(e2))
+      if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
         ScriptMatch* m = new ScriptMatch(_script, getPlugin(), map, from, *it, _mt);
@@ -295,28 +300,29 @@ public:
     LOG_DEBUG("Search radius calculation complete for " << scriptFileInfo.fileName());
   }
 
- boost::shared_ptr<HilbertRTree>& getIndex()
+  boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
     {
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368
-     boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
+      boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      // Only index elements that have Status::Unknown2 and
-     boost::shared_ptr<StatusCriterion> pC1(new StatusCriterion(Status::Unknown2));
+      // Only index elements that satisfy the isMatchCandidate
+      // previously we only indexed Unknown2, but that causes issues when wanting to conflate
+      // from n datasets and support intradataset conflation. This approach over-indexes a bit and
+      // will likely slow things down, but should give the same results.
+      // An option in the future would be to support an "isIndexedFeature" or similar function
+      // to speed the operation back up again.
       boost::function<bool (ConstElementPtr e)> f =
         boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-     boost::shared_ptr<ArbitraryCriterion> pC2(new ArbitraryCriterion(f));
-     boost::shared_ptr<ChainCriterion> pCC(new ChainCriterion());
-      pCC->addCriterion(pC1);
-      pCC->addCriterion(pC2);
+      boost::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
                              _indexToEid,
-                             pCC,
+                             pC,
                              boost::bind(&ScriptMatchVisitor::getSearchRadius, this, _1),
                              getMap());
 
@@ -326,6 +332,25 @@ public:
     }
 
     return _index;
+  }
+
+  /**
+   * Returns true if e1, e2 is in the correct ordering for matching. This does a few things:
+   *
+   *  - Avoid comparing e1 to e2 and e2 to e1
+   *  - The Unknown1/Input1 is always e1. This is a requirement for some of the older code.
+   *  - Gives a consistent ordering to allow backwards compatibility with system tests.
+   */
+  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2)
+  {
+    if (e1->getStatus().getEnum() == e2->getStatus().getEnum())
+    {
+      return e1->getElementId() < e2->getElementId();
+    }
+    else
+    {
+      return e1->getStatus().getEnum() < e2->getStatus().getEnum();
+    }
   }
 
   bool isMatchCandidate(ConstElementPtr e)
@@ -357,7 +382,7 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getStatus() == Status::Unknown1 && isMatchCandidate(e))
+    if (isMatchCandidate(e))
     {
       checkForMatch(e);
     }
@@ -381,11 +406,11 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
   Meters _worstCircularError;
- boost::shared_ptr<PluginContext> _script;
+  boost::shared_ptr<PluginContext> _script;
   Persistent<v8::Function> _getSearchRadius;
 
   // Used for finding neighbors
- boost::shared_ptr<HilbertRTree> _index;
+  boost::shared_ptr<HilbertRTree> _index;
   deque<ElementId> _indexToEid;
 
   double _candidateDistanceSigma;
@@ -485,7 +510,7 @@ vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
           "description.").arg(scripts[i]));
       }
     }
-    catch (HootException& e)
+    catch (const HootException& e)
     {
       LOG_WARN("Error loading script: " + scripts[i] + " exception: " + e.getWhat());
     }
@@ -499,7 +524,7 @@ MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path
   MatchCreator::Description result;
   result.experimental = true;
 
- boost::shared_ptr<PluginContext> script(new PluginContext());
+  boost::shared_ptr<PluginContext> script(new PluginContext());
   HandleScope handleScope;
   Context::Scope context_scope(script->getContext());
   script->loadScript(path, "plugin");

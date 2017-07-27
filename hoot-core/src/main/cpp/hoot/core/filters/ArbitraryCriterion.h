@@ -39,12 +39,11 @@
 
 namespace hoot
 {
-using namespace boost;
 
 class ArbitraryCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::ArbitraryCriterion"; }
+  static std::string className() { return "hoot::ArbitraryCriterion"; }
 
   // Do something like:
   // boost::function<bool (ConstElementPtr e)> f = boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);

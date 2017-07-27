@@ -36,6 +36,9 @@ maximumWayNodes=2000
 # amount to auto-expand changeset by after an update
 changesetBoundsExpansionFactorDeegrees=0.1
 
+# amount in degrees to expand the AOI by when derive changesets
+changesetDeriveBufferDegrees=0.001
+
 # maximum amount of time that may pass without a changeset being updated before it is closed
 changesetIdleTimeoutMinutes=60
 

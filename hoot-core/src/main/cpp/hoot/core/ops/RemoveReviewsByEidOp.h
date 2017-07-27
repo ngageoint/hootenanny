@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  *
@@ -46,7 +45,7 @@ using namespace std;
 class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
-  static string className() { return "hoot::RemoveReviewsByEidOp"; }
+  static std::string className() { return "hoot::RemoveReviewsByEidOp"; }
 
   /**
    */

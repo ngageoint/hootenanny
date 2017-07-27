@@ -64,6 +64,9 @@
 // Qt
 #include <QFile>
 
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -298,10 +301,10 @@ void HighwayRfClassifier::_init() const
       _rf->importModel(file);
       file.close();
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
       file.close();
-      throw e;
+      throw;
     }
 
     vector<string> factorLabels = _rf->getFactorLabels();

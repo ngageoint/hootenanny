@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SymmetricUncertaintyCalculator.h"
@@ -42,13 +42,13 @@ namespace Tgs
   double log2v = log(2.0);
   inline double log2(const double v) { return log(v) / log2v; }
 
-  double SymmetricUncertaintyCalculator::calculateScore(const DataFrame& df1, int factorIndex1, 
-    const DataFrame& df2, int factorIndex2) 
-  { 
-    return calculateUncertainty(df1, factorIndex1, df2, factorIndex2); 
+  double SymmetricUncertaintyCalculator::calculateScore(const DataFrame& df1, int factorIndex1,
+    const DataFrame& df2, int factorIndex2)
+  {
+    return calculateUncertainty(df1, factorIndex1, df2, factorIndex2);
   }
 
-  double SymmetricUncertaintyCalculator::calculateUncertainty(const DataFrame& df1, 
+  double SymmetricUncertaintyCalculator::calculateUncertainty(const DataFrame& df1,
     int factorIndex1, const DataFrame& df2, int factorIndex2)
   {
     assert(df1.isNominal(factorIndex1));
@@ -70,7 +70,7 @@ namespace Tgs
     return result;
   }
 
-  double SymmetricUncertaintyCalculator::_calculateConditionalEntropy(const DataFrame& dfY, 
+  double SymmetricUncertaintyCalculator::_calculateConditionalEntropy(const DataFrame& dfY,
     int factorIndexY, const DataFrame& dfX, int factorIndexX)
   {
     CondClassCounts ccc;
@@ -89,7 +89,7 @@ namespace Tgs
       if (DataFrame::isNull(vy) == true)
       {
         throw Tgs::Exception("Null values are not supported by SymmetricUncertaintyCalculator");
-      }      
+      }
       int ey = (int)(vy + 0.5); // y enumeration
 
       ccc[ex][ey]++;
@@ -98,13 +98,13 @@ namespace Tgs
 
     double sumX = 0.0;
     double totalSize = dfX.getNumDataVectors();
-    for (CondClassCounts::const_iterator condIt = ccc.begin(); condIt != ccc.end(); condIt++)
+    for (CondClassCounts::const_iterator condIt = ccc.begin(); condIt != ccc.end(); ++condIt)
     {
       const ClassCounts& classCounts = condIt->second;
       double px = (double)cc[condIt->first] / totalSize; // p(x)
       double sumY = 0.0;
-      for (ClassCounts::const_iterator classIt = classCounts.begin(); 
-        classIt != classCounts.end(); classIt++)
+      for (ClassCounts::const_iterator classIt = classCounts.begin();
+        classIt != classCounts.end(); ++classIt)
       {
         double count = classIt->second;
         double pyx = count / (double)cc[condIt->first]; // p(y | x)
@@ -118,9 +118,8 @@ namespace Tgs
 
   double SymmetricUncertaintyCalculator::_calculateEntropy(const DataFrame& df, int factorIndex)
   {
-    typedef HashMap<int, int> ClassCounts;
     ClassCounts cc;
-    
+
     for(unsigned int i = 0; i < df.getNumDataVectors(); i++)
     {
       double v = df.getDataElement(i, factorIndex);
@@ -134,7 +133,7 @@ namespace Tgs
 
     double sum = 0.0;
     double totalSize = df.getNumDataVectors();
-    for (ClassCounts::const_iterator classIt = cc.begin(); classIt != cc.end(); classIt++)
+    for (ClassCounts::const_iterator classIt = cc.begin(); classIt != cc.end(); ++classIt)
     {
       double count = classIt->second;
       sum += count / totalSize * log2(count / totalSize);
@@ -142,6 +141,5 @@ namespace Tgs
 
     return -sum;
   }
-  
-}
 
+}

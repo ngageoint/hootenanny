@@ -110,6 +110,7 @@ public final class HootProperties {
     public static final String UPLOAD_FOLDER;
     public static final String HOOTAPI_DB_URL;
     public static final String OSMAPI_DB_URL;
+    public static final String CHANGESET_DERIVE_BUFFER;
 
     private static final String USERFILES_FOLDER;
     private static final String OSMAPI_DB_USER;
@@ -205,6 +206,7 @@ public final class HootProperties {
         SEED_RANDOM_QUERIES = getProperty("seedRandomQueries");
         INTERNAL_JOB_THREAD_SIZE = getProperty("internalJobThreadSize");
         TRANSLATION_SCRIPT_PATH = getProperty("translationScriptPath");
+        CHANGESET_DERIVE_BUFFER = getProperty("changesetDeriveBufferDegrees");
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";

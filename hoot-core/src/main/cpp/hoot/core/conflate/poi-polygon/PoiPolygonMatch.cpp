@@ -45,6 +45,8 @@
 #include "extractors/PoiPolygonDistanceExtractor.h"
 #include "extractors/PoiPolygonAlphaShapeDistanceExtractor.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -67,6 +69,70 @@ _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _rf(rf)
 {
+}
+
+void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
+{
+  if (distance < 0.0 || distance > 5000.0)  //upper limit is arbitrary
+  {
+    throw IllegalArgumentException(
+      QString("Invalid POI/Polygon match distance configuration option value: ") + distance +
+      QString(".  0 <= value <= 5000"));
+  }
+  _matchDistanceThreshold = distance;
+}
+
+void PoiPolygonMatch::setReviewDistanceThreshold(double distance)
+{
+  if (distance < 0.0 || distance > 5000.0)  //upper limit is arbitrary
+  {
+    throw IllegalArgumentException(
+      QString("Invalid POI/Polygon review distance configuration option value: ") + distance +
+      QString(".  0 <= value <= 5000"));
+  }
+  _reviewDistanceThreshold = distance;
+}
+
+void PoiPolygonMatch::setNameScoreThreshold(double threshold)
+{
+  if (threshold < 0.01 || threshold > 1.0)
+  {
+    throw IllegalArgumentException(
+      QString("Invalid POI/Polygon name score threshold configuration option value: ") + threshold +
+      QString(".  0.01 <= value <= 1.0"));
+  }
+  _nameScoreThreshold = threshold;
+}
+
+void PoiPolygonMatch::setTypeScoreThreshold(double threshold)
+{
+  if (threshold < 0.01 || threshold > 1.0)
+  {
+    throw IllegalArgumentException(
+      QString("Invalid POI/Polygon type score threshold configuration option value: ") + threshold +
+      QString(".  0.01 <= value <= 1.0"));
+  }
+  _typeScoreThreshold = threshold;
+}
+
+void PoiPolygonMatch::setReviewIfMatchedTypes(const QStringList& types)
+{
+  for (int i = 0; i < types.size(); i++)
+  {
+    const QString kvp = types[i];
+    if (kvp.trimmed().isEmpty() || !kvp.contains("="))
+    {
+      throw IllegalArgumentException(
+        QString("Invalid POI/Polygon review if matched type configuration option value: ") + kvp);
+    }
+    const QStringList kvpList = kvp.split("=");
+    if (kvpList.size() != 2 || kvpList[0].trimmed().isEmpty() || kvpList[1].trimmed().isEmpty())
+    {
+      throw IllegalArgumentException(
+        QString("Invalid POI/Polygon review if matched type configuration option value: ") + kvp);
+    }
+  }
+  _reviewIfMatchedTypes = types;
 }
 
 void PoiPolygonMatch::setConfiguration(const Settings& conf)

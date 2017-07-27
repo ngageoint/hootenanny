@@ -1,33 +1,45 @@
-19:02:06.295 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/translation_assistant/cali-test.shp cali-test
+17:05:44.288 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+17:05:44.361 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/translation_assistant/cali-test.shp cali-test
 Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
-Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-19:02:06.522 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:02:06.522 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 17ms        
-19:02:06.540 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+
+17:05:44.543 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
+17:05:44.543 INFO  .../core/ops/MergeNearbyNodes.cpp(  75) MergeNearbyNodes start
+MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 12ms        
+17:05:44.556 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 357        Ways: 357 / 357        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
-Reprojecting 0 / 1413         Reprojecting 1000 / 1413         
-19:02:07.244 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/translation_assistant/cali-test.shp cali-test
+
+17:05:44.561 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/cmd/translation_assistant_ogr2osm/cali-test-tdsv61.osm...
+17:05:44.875 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/cmd/translation_assistant_ogr2osm/cali-test-tdsv61.osm...
+17:05:44.911 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/translation_assistant/cali-test-tdsv61.osm...
+17:05:45.284 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+17:05:45.359 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/translation_assistant/cali-test.shp cali-test
 Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
-Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-19:02:07.468 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:02:07.469 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 17ms        
-19:02:07.487 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+
+17:05:45.537 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
+17:05:45.537 INFO  .../core/ops/MergeNearbyNodes.cpp(  75) MergeNearbyNodes start
+MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 13ms        
+17:05:45.550 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 357        Ways: 357 / 357        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
-Reprojecting 0 / 1413         Reprojecting 1000 / 1413         
-19:02:08.186 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 178) Reading: test-files/translation_assistant/cali-test.shp cali-test
+
+17:05:45.556 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/cmd/translation_assistant_ogr2osm/cali-test-tdsv40.osm...
+17:05:45.835 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/cmd/translation_assistant_ogr2osm/cali-test-tdsv40.osm...
+17:05:45.872 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/translation_assistant/cali-test-tdsv40.osm...
+17:05:46.240 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+17:05:46.318 INFO  ...p/hoot/core/cmd/Ogr2OsmCmd.cpp( 172) Reading: test-files/translation_assistant/cali-test.shp cali-test
 Loading test-files/translation_assistant/cali-test.shp cali-test 0 / 357   
-Reprojecting 0 / 2339         Reprojecting 1000 / 2339         Reprojecting 2000 / 2339         
-19:02:08.408 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::MergeNearbyNodes
-19:02:08.408 INFO  .../core/ops/MergeNearbyNodes.cpp(  73) MergeNearbyNodes start
-MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 18ms        
-19:02:08.426 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::BuildingPartMergeOp
+
+17:05:46.500 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MergeNearbyNodes
+17:05:46.500 INFO  .../core/ops/MergeNearbyNodes.cpp(  75) MergeNearbyNodes start
+MergeNearbyNodes 0 2    MergeNearbyNodes 1000 741    MergeNearbyNodes 1413 elapsed: 12ms        
+17:05:46.512 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingPartMergeOp
 Ways: 0 / 357        Ways: 357 / 357        
 Relations: 0 / 0        
 Combining Parts: 0 / 0        
-Reprojecting 0 / 1413         Reprojecting 1000 / 1413         
+
+17:05:46.518 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to test-output/cmd/translation_assistant_ogr2osm/cali-test-tdsv61-fcode.osm...
+17:05:46.802 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-output/cmd/translation_assistant_ogr2osm/cali-test-tdsv61-fcode.osm...
+17:05:46.839 INFO  ...ore/io/OsmMapReaderFactory.cpp( 137) Loading map from test-files/translation_assistant/cali-test-tdsv61.osm...

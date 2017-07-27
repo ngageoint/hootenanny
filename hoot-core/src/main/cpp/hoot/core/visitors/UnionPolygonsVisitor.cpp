@@ -34,10 +34,12 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, UnionPolygonsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, UnionPolygonsVisitor)
 
 UnionPolygonsVisitor::UnionPolygonsVisitor()
 {
@@ -53,7 +55,7 @@ void UnionPolygonsVisitor::visit(const boost::shared_ptr<const Element>& e)
 
   if (OsmSchema::getInstance().isArea(e->getTags(), e->getElementType()))
   {
-   boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
+    boost::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
     _result.reset(g->Union(_result.get()));
   }
 }

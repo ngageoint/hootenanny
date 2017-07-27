@@ -43,8 +43,6 @@ public:
 
   static std::string className() { return "hoot::AlphaShapeGenerator"; }
 
-  static unsigned int logWarnCount;
-
   AlphaShapeGenerator(const double alpha, const double buffer = 0.0);
 
   /**
@@ -61,7 +59,7 @@ public:
    * @param inputMap
    * @return
    */
-  boost::shared_ptr<Geometry> generateGeometry(OsmMapPtr inputMap);
+  boost::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
 
 private:
 

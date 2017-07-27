@@ -35,6 +35,8 @@
 
 #include "MarkForReviewMerger.h"
 
+using namespace std;
+
 namespace hoot
 {
 

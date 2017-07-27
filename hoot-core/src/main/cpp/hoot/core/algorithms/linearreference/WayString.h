@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/Hoot.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QList>
@@ -95,7 +96,7 @@ public:
    * Only nodes that are part of the way string will be visited (e.g. if they intersect the
    * WaySubline).
    */
-  void visitRo(const ElementProvider& map, ElementVisitor& v) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& v) const;
 
 private:
 

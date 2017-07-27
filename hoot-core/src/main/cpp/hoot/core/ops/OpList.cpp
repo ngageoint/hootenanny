@@ -31,6 +31,8 @@
 #include <hoot/core/io/ObjectOutputStream.h>
 #include <hoot/core/util/Factory.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 

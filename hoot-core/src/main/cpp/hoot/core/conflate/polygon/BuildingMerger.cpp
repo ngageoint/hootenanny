@@ -29,17 +29,20 @@
 // hoot
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/filters/BaseFilter.h>
+#include <hoot/core/filters/ElementTypeCriterion.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/schema/OverwriteTagMerger.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/filters/ElementTypeCriterion.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -78,21 +81,18 @@ BuildingMerger::BuildingMerger(const set< pair<ElementId, ElementId> >& pairs) :
 {
 }
 
-void BuildingMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void BuildingMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   //check if it is many to many
   set<ElementId> firstPairs;
   set<ElementId> secondPairs;
   set<ElementId> combined;
-  set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin();
-  while (sit != _pairs.end())
+  for (set< pair<ElementId, ElementId> >::iterator sit = _pairs.begin(); sit != _pairs.end(); ++sit)
   {
     firstPairs.insert(sit->first);
     secondPairs.insert(sit->second);
     combined.insert(sit->first);
     combined.insert(sit->second);
-    sit++;
   }
   if (firstPairs.size() > 1 && secondPairs.size() > 1) //it is many to many
   {
@@ -153,15 +153,30 @@ void BuildingMerger::apply(const OsmMapPtr& map,
     keeper->setTags(newTags);
     keeper->setStatus(Status::Conflated);
 
-    // remove the duplicate element.
+    LOG_VART(keeper->getElementId());
+    LOG_VART(scrap->getElementId());
+    const ElementId scrapId = scrap->getElementId();
+    const Status scrapStatus = scrap->getStatus();
+
+    // remove the duplicate element
     DeletableBuildingPart filter;
     ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
     RecursiveElementRemover(scrap->getElementId(), &filter).apply(map);
     scrap->getTags().clear();
 
+    // see comments for similar functionality in HighwaySnapMerger::_mergePair
+    if (scrapStatus == Status::Unknown1 &&
+        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+    {
+      LOG_TRACE(
+        "Retaining reference ID by mapping unknown1 ID: " << scrapId << " to ID: " <<
+        keeper->getElementId() << "...");
+      _unknown1Replacements.insert(pair<ElementId, ElementId>(scrapId, keeper->getElementId()));
+    }
+
     set< pair<ElementId, ElementId> > replacedSet;
     for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin();
-      it != _pairs.end(); ++it)
+         it != _pairs.end(); ++it)
     {
       // if we replaced the second group of buildings
       if (it->second != keeper->getElementId())
@@ -177,7 +192,8 @@ void BuildingMerger::apply(const OsmMapPtr& map,
   }
 }
 
-boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, const set<ElementId>& eid)
+boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
+                                                         const set<ElementId>& eid)
 {
   assert(eid.size() > 0);
 
@@ -196,7 +212,7 @@ boost::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map, c
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
       {
-        RelationPtr r = dynamic_pointer_cast<Relation>(e);
+        RelationPtr r = boost::dynamic_pointer_cast<Relation>(e);
         if (r->getType() == MetadataTags::RelationBuilding())
         {
           isBuilding = true;

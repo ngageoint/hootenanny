@@ -56,7 +56,7 @@ SOURCES += \
 
 # These tests only succeed if the database has been populated by the java code.
 services:SOURCES += \
-    src/test/cpp/hoot/hadoop/convert/WriteOsmSqlStatementsDriverTest.cpp
+    src/test/cpp/hoot/hadoop/convert/ServiceWriteOsmSqlStatementsDriverTest.cpp
 }
 
 HEADERS += \

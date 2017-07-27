@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, AddUuidVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, AddUuidVisitor)
 
 AddUuidVisitor::AddUuidVisitor(QString key) : _key(key)
 {
@@ -42,7 +42,7 @@ AddUuidVisitor::AddUuidVisitor(QString key) : _key(key)
 
 void AddUuidVisitor::visit(const ConstElementPtr& e)
 {
- boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
+  boost::shared_ptr<Element> ee = _map->getElement(e->getElementId());
 
   ee->getTags()[_key] = UuidHelper::createUuid().toString();
 }

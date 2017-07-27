@@ -34,6 +34,8 @@
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
+using namespace std;
+
 namespace hoot
 {
 

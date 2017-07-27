@@ -28,7 +28,7 @@
 #define TAGKEYCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
@@ -38,11 +38,11 @@ namespace hoot
 /**
  * Counts the number of tags in all elements with the given key
  */
-class TagKeyCountVisitor : public ElementVisitor, public SingleStatistic
+class TagKeyCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
   public:
 
-    static string className() { return "hoot::TagKeyCountVisitor"; }
+    static std::string className() { return "hoot::TagKeyCountVisitor"; }
 
     TagKeyCountVisitor() {}
     TagKeyCountVisitor(const QString key);

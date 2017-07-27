@@ -47,6 +47,8 @@
 typedef int Py_ssize_t;
 #endif
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -127,7 +129,7 @@ bool PythonTranslator::isValidScript()
       _init();
       _initialized = true;
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
       // pass
     }
@@ -149,7 +151,7 @@ void PythonTranslator::_translateToOsm(Tags& tags, const char* layerName, const 
   PyObject* geomTypePy = PyString_FromString(geomType);
   PyObject* attrs = PyDict_New();
 
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); it++)
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
     QByteArray keyUtf8 = it.key().toUtf8();
     QByteArray valueUtf8 = it.value().toUtf8();

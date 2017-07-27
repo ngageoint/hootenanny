@@ -28,7 +28,7 @@
 #define LENGTHOFWAYSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/OsmMap.h>
 
@@ -36,20 +36,19 @@
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first projected into meters.
  */
-class LengthOfWaysVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class LengthOfWaysVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::LengthOfWaysVisitor"; }
+  static std::string className() { return "hoot::LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor() : _total(0) {}
 

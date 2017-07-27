@@ -31,9 +31,11 @@
 
 #include "MapStatsMapper.h"
 
+using namespace pp;
+using namespace std;
+
 namespace hoot
 {
-using namespace pp;
 
 MapStatsDriver::MapStatsDriver()
 {

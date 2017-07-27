@@ -34,6 +34,8 @@
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -79,7 +81,7 @@ MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map,
       throw HootException(
         "Feature splitting for multi-line string relations may only occur on relations which contain only ways.");
     }
-    ConstWayPtr way = dynamic_pointer_cast<const Way>(element);
+    ConstWayPtr way = boost::dynamic_pointer_cast<const Way>(element);
     _waySublineString.addSubline(
       WaySubline(
         WayLocation(map, way, 0, 0.0),

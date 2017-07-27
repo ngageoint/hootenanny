@@ -484,7 +484,7 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
+    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
     {
       result.push_back(_graph[*it]);
     }
@@ -499,7 +499,7 @@ public:
 
     vector<SchemaVertex> result;
 
-    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); it++)
+    for (set<VertexId>::iterator it = vids.begin(); it != vids.end(); ++it)
     {
       result.push_back(_graph[*it]);
     }
@@ -509,7 +509,7 @@ public:
 
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2)
   {
-    if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp1))
+    if (!_name2Vertex.contains(kvp1) || !_name2Vertex.contains(kvp2))
     {
       return empty;
     }
@@ -1211,7 +1211,7 @@ private:
       {
         set<VertexId> children;
         _getChildTags(*vi, children);
-        for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); it++)
+        for (set<VertexId>::const_iterator it = children.begin(); it != children.end(); ++it)
         {
           pair<EdgeId, EdgeId> p = addSimilarTo(_graph[*it].name, _graph[*vi].name,
                                                 _graph[*vi].childWeight);
@@ -1659,6 +1659,11 @@ bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
     result = true;
   }
   return result;
+}
+
+bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
+{
+  return isBuildingPart(e->getTags(), e->getElementType());
 }
 
 bool OsmSchema::isCollection(const Element& e) const

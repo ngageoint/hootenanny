@@ -46,7 +46,6 @@ class QXmlStreamWriter;
 
 namespace hoot
 {
-using namespace boost;
 
 /**
  * Writes an OsmMap to a .osm (XML) file format.
@@ -113,7 +112,7 @@ private:
   QString _osmSchema;
   QString _timestamp;
   int _precision;
-  auto_ptr<QIODevice> _fp;
+  std::auto_ptr<QIODevice> _fp;
   int _encodingErrorCount;
 
   static QString _typeName(ElementType e);
@@ -122,6 +121,14 @@ private:
   void _writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer);
   void _writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer);
   void _writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer);
+
+  /**
+   * @brief _writeBounds Writes out the OSM <bounds> tag in the format:
+   *  <bounds minlat="xxx" minlon="xxx" maxlat="xxx" maxlong="xxx" />
+   * @param map - OsmMap to get the bounds from
+   * @param writer - XML writer to write the tag to
+   */
+  void _writeBounds(ConstOsmMapPtr map, QXmlStreamWriter& writer);
 };
 
 } // hoot

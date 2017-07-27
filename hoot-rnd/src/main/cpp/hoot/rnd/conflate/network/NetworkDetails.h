@@ -112,9 +112,9 @@ public:
 
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
 
-  virtual Envelope getEnvelope(ConstNetworkEdgePtr e) const;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const;
 
-  virtual Envelope getEnvelope(ConstNetworkVertexPtr v) const;
+  virtual geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const;
 
   ConstOsmMapPtr getMap() const { return _map; }
 
@@ -179,10 +179,10 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
- boost::shared_ptr<HighwayClassifier> _classifier;
+  boost::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
- boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   LegacyVertexMatcherPtr _vertexMatcher;
 
   class SublineCache

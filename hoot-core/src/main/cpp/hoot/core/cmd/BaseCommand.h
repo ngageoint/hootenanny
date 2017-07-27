@@ -36,12 +36,13 @@
 // Hoot
 #include <hoot/core/elements/Status.h>
 
+// Tgs
+#include <tgs/SharedPtr.h>
+
 namespace hoot
 {
 
 class OsmMap;
-
-using namespace geos::geom;
 
 class BaseCommand : public Command
 {
@@ -58,7 +59,7 @@ public:
   /**
    * Parses a comma delimited envelope in the form minx,miny,maxx,maxy.
    */
-  Envelope parseEnvelope(QString envStr) const;
+  geos::geom::Envelope parseEnvelope(QString envStr) const;
 
   /**
    * This method will pull out common arguments (e.g. --conf), convert the args to a QStringList

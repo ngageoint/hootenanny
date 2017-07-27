@@ -34,10 +34,12 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/DataConvertJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, JsFunctionVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, JsFunctionVisitor)
 
 void JsFunctionVisitor::visit(const ConstElementPtr& e)
 {
@@ -71,7 +73,7 @@ void JsFunctionVisitor::visit(const ConstElementPtr& e)
     Local<Value> exception = trycatch.Exception();
     if (HootExceptionJs::isHootException(exception))
     {
-     boost::shared_ptr<HootException> e = toCpp<boost::shared_ptr<HootException> >(exception);
+      boost::shared_ptr<HootException> e = toCpp<boost::shared_ptr<HootException> >(exception);
       HootExceptionThrower::getInstance().rethrowPointer(e);
     }
     else

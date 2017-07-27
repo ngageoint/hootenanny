@@ -28,24 +28,23 @@
 #define LONGESTTAGVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
 #include "SingleStatistic.h"
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class LongestTagVisitor : public ElementVisitor, public SingleStatistic
+class LongestTagVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::LongestTagVisitor"; }
+  static std::string className() { return "hoot::LongestTagVisitor"; }
 
   LongestTagVisitor() : _longestTag() {}
 

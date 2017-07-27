@@ -30,23 +30,27 @@
 using namespace boost;
 
 // Hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/OsmUtils.h>
-#include <hoot/core/elements/Tags.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QBuffer>
 #include <QDateTime>
 #include <QFile>
 #include <QXmlStreamWriter>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -69,6 +73,7 @@ _encodingErrorCount(0)
 
 }
 
+//TODO: refactor this
 QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.
@@ -198,6 +203,8 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     writer.writeAttribute("schema", _osmSchema);
   }
 
+  _writeBounds(map, writer);
+
   _timestamp = "1970-01-01T00:00:00Z";
 
   _writeNodes(map, writer);
@@ -213,6 +220,8 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
 void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 {
   LOG_VART(e->getElementId());
+  LOG_VART(e->getVersion());
+  LOG_VART(e->getStatus());
 
   if (_includeCompatibilityTags)
   {
@@ -223,6 +232,7 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
       version = 1;
     }
     writer.writeAttribute("version", QString::number(version));
+    LOG_VART(version);
   }
   else
   {
@@ -254,11 +264,10 @@ void OsmXmlWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
 void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> nids;
-  NodeMap::const_iterator it = map->getNodes().begin();
-  while (it != map->getNodes().end())
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     nids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
@@ -275,7 +284,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 
     const Tags& tags = n->getTags();
 
-    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); it++)
+    for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       if (it.key().isEmpty() == false && it.value().isEmpty() == false)
       {
@@ -289,7 +298,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
+            writer.writeAttribute("v", n->getStatus().toCompatString());
           }
         }
         else
@@ -319,7 +328,7 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
         }
         else
         {
-          writer.writeAttribute("v", QString("%1").arg(n->getStatus().getEnum()));
+          writer.writeAttribute("v", n->getStatus().toCompatString());
         }
         writer.writeEndElement();
       }
@@ -349,11 +358,10 @@ void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> wids;
-  WayMap::const_iterator it = map->getWays().begin();
-  while (it != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     wids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
@@ -398,7 +406,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+            writer.writeAttribute("v", w->getStatus().toCompatString());
           }
         }
         else
@@ -424,7 +432,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", MetadataTags::HootStatus());
-        writer.writeAttribute("v", QString("%1").arg(w->getStatus().getEnum()));
+        writer.writeAttribute("v", w->getStatus().toCompatString());
         writer.writeEndElement();
       }
     }
@@ -452,11 +460,10 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 {
   QList<long> rids;
-  RelationMap::const_iterator it = map->getRelations().begin();
-  while (it != map->getRelations().end())
+  const RelationMap& relations = map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     rids.append(it->first);
-    ++it;
   }
 
   // sort the values to give consistent results.
@@ -499,8 +506,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
           }
           else
           {
-            writer.writeAttribute(
-              "v", removeInvalidCharacters(QString::number(r->getStatus().getEnum())));
+            writer.writeAttribute("v", r->getStatus().toCompatString());
           }
         }
         else
@@ -540,7 +546,7 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
       {
         writer.writeStartElement("tag");
         writer.writeAttribute("k", MetadataTags::HootStatus());
-        writer.writeAttribute("v", QString("%1").arg(r->getStatus().getEnum()));
+        writer.writeAttribute("v", r->getStatus().toCompatString());
         writer.writeEndElement();
       }
     }
@@ -555,6 +561,17 @@ void OsmXmlWriter::_writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer)
 
     writer.writeEndElement();
   }
+}
+
+void OsmXmlWriter::_writeBounds(ConstOsmMapPtr map, QXmlStreamWriter& writer)
+{
+  Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(map);
+  writer.writeStartElement("bounds");
+  writer.writeAttribute("minlat", QString::number(bounds.getMinY(), 'g', _precision));
+  writer.writeAttribute("minlon", QString::number(bounds.getMinX(), 'g', _precision));
+  writer.writeAttribute("maxlat", QString::number(bounds.getMaxY(), 'g', _precision));
+  writer.writeAttribute("maxlon", QString::number(bounds.getMaxX(), 'g', _precision));
+  writer.writeEndElement();
 }
 
 }

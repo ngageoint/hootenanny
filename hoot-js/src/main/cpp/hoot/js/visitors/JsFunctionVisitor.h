@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/SystemNodeJs.h>
 
@@ -39,16 +39,16 @@ namespace hoot
 /**
  * A filter that will either keep or remove matches.
  */
-class JsFunctionVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class JsFunctionVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public JsFunctionConsumer
 {
 public:
 
-  static string className() { return "hoot::JsFunctionVisitor"; }
+  static std::string className() { return "hoot::JsFunctionVisitor"; }
 
   JsFunctionVisitor() : _map(0) {}
 
-  virtual void addFunction(Persistent<Function> func) { _func = Persistent<Function>(func); }
+  virtual void addFunction(v8::Persistent<v8::Function> func) { _func = v8::Persistent<v8::Function>(func); }
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
@@ -57,7 +57,7 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
 private:
-  Persistent<Function> _func;
+  v8::Persistent<v8::Function> _func;
   OsmMap* _map;
 };
 

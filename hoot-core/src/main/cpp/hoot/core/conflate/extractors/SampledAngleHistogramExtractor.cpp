@@ -43,6 +43,8 @@ using namespace geos::geom;
 // Qt
 #include <qnumeric.h>
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -22,51 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateCaseTest.h"
 
 // hoot
-#include <hoot/core/cmd/ConflateCmd.h>
-#include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/cmd/ConflateCmd.h>
 
 #include "../TestUtils.h"
+#include "TestSetup.h"
 
 namespace hoot
 {
 
-class SetupTest
-{
-public:
-  SetupTest() { reset(); }
-  ~SetupTest() { reset(); }
-
-  void reset()
-  {
-    TestUtils::resetEnvironment();
-  }
-};
-
 ConflateCaseTest::ConflateCaseTest(QDir d, QStringList confs) :
-  CppUnit::TestCase(d.absolutePath().toStdString()),
-  _d(d),
-  _confs(confs)
+AbstractTest(d, confs)
 {
 }
 
 void ConflateCaseTest::runTest()
 {
+  TestUtils::resetEnvironment();
+  LOG_DEBUG("Running conflate case test...");
+
   // configures and cleans up the conf() environment
-  SetupTest st;
-
-  for (int i = 0; i < _confs.size(); i++)
-  {
-    conf().loadJson(_confs[i]);
-  }
-
-  bool failed = false;
+  LOG_VART(_confs);
+  TestSetup st(_confs);
 
   ConflateCmd cmd;
 
@@ -77,14 +60,14 @@ void ConflateCaseTest::runTest()
   QFileInfo in1(_d, "Input1.osm");
   if (in1.exists() == false)
   {
-    throw IllegalArgumentException("Unable to find Input1.osm in conflate case: " +
-      _d.absolutePath());
+    throw IllegalArgumentException(
+      "Unable to find Input1.osm in conflate case: " + _d.absolutePath());
   }
   QFileInfo in2(_d, "Input2.osm");
   if (in2.exists() == false)
   {
-    throw IllegalArgumentException("Unable to find Input2.osm in conflate case: " +
-      _d.absolutePath());
+    throw IllegalArgumentException(
+      "Unable to find Input2.osm in conflate case: " + _d.absolutePath());
   }
 
   QString testOutput = _d.absoluteFilePath("Output.osm");
@@ -98,7 +81,7 @@ void ConflateCaseTest::runTest()
   {
     result = cmd.runSimple(args);
   }
-  catch(HootException& e)
+  catch (const HootException& e)
   {
     CPPUNIT_ASSERT_MESSAGE(e.what(), false);
   }
@@ -112,15 +95,10 @@ void ConflateCaseTest::runTest()
 
   if (result != 0)
   {
-    failed = true;
+    CPPUNIT_ASSERT_MESSAGE(QString("Conflate command had nonzero exit status").toStdString(), false);
   }
 
   if (!TestUtils::compareMaps(expected.absoluteFilePath(), testOutput))
-  {
-    failed = true;
-  }
-
-  if (failed)
   {
     CPPUNIT_ASSERT_MESSAGE(QString("Maps do not match").toStdString(), false);
   }

@@ -29,6 +29,9 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/filters/ElementCriterion.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -42,7 +45,7 @@ void FindNodesVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr pNode = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr pNode = boost::dynamic_pointer_cast<const Node>(e);
     if (_pCrit->isSatisfied(e))
     {
       _nodeIds.push_back(e->getId());

@@ -30,10 +30,14 @@
 #include <hoot/core/conflate/Match.h>
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatchCreator.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
@@ -101,7 +105,7 @@ public:
     CPPUNIT_ASSERT(
       uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
     CPPUNIT_ASSERT(
-      !uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
+      uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
 
     OsmXmlReader reader;
     OsmMap::resetCounters();

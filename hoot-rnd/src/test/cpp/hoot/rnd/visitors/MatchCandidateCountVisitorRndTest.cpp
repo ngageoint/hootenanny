@@ -69,7 +69,7 @@ public:
   void runMatchCandidateCountTest()
   {
     OsmXmlReader reader;
-   OsmMapPtr map(new OsmMap());
+    OsmMapPtr map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -85,11 +85,11 @@ public:
     MatchFactory::_setMatchCreators(matchCreators);
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
-    CPPUNIT_ASSERT_EQUAL((int)21, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL((int)39, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       any_cast<QMap<QString, long> >(uut.getData());
     CPPUNIT_ASSERT_EQUAL(1, matchCandidateCountsByMatchCreator.size());
-    CPPUNIT_ASSERT_EQUAL((long)21, matchCandidateCountsByMatchCreator["hoot::PoiPolygonMatchCreator"]);
+    CPPUNIT_ASSERT_EQUAL((long)39, matchCandidateCountsByMatchCreator["hoot::PoiPolygonMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL(
       (long)0,
       matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);

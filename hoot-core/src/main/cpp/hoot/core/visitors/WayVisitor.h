@@ -29,21 +29,20 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Base class to ease OsmMapConsumer usage.
  */
-class WayVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class WayVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::WayVisitor"; }
+  static std::string className() { return "hoot::WayVisitor"; }
 
   WayVisitor() {}
 

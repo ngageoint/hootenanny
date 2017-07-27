@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/algorithms/MeanWordSetDistance.h>
 #include <hoot/core/conflate/polygon/extractors/NameExtractor.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TranslateStringDistance.h>
 #include <hoot/core/scoring/TextTable.h>
@@ -43,6 +43,7 @@
 // tgs
 #include <tgs/HashMap.h>
 
+using namespace std;
 
 namespace hoot
 {
@@ -50,7 +51,7 @@ namespace hoot
 /**
  * Traverses the OsmMap and creates a map from REF tags to ElementIds.
  */
-class RefToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class RefToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
   typedef map<QString, set<ElementId> > RefToEid;
@@ -91,7 +92,7 @@ private:
 /**
  * Traverses the OsmMap and build a hashmap of Attribute Co-Occurence values.
  */
-class CoOccurenceVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class CoOccurenceVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
   // CoOccurenceVisitor(RefToEidVisitor::RefToEid refSet) : _refSet(refSet) {}

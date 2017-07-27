@@ -227,7 +227,7 @@ void ShapefileWriter::writeLines(ConstOsmMapPtr map, const QString& path)
   }
 
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
 
@@ -442,7 +442,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
   }
 
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); it++)
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
 
@@ -453,7 +453,7 @@ void ShapefileWriter::writePolygons(ConstOsmMapPtr map, const QString& path)
   }
 
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
 

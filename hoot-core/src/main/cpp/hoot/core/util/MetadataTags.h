@@ -44,6 +44,7 @@ public:
 
   inline static const QString Accuracy()                { return "accuracy"; }
   inline static const QString ErrorCircular()           { return "error:circular"; }
+  inline static const QString SourceDateTime()          { return "source:datetime"; }
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
@@ -72,6 +73,8 @@ public:
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
+
+  inline static const QString HootPoiPolygonPoisMerged(){ return "hoot:poipolygon:poismerged"; }
 
   inline static const QString HootReviewTagPrefix()     { return "hoot:review:"; }
   inline static const QString HootReviewChoices()       { return "hoot:review:choices"; }
@@ -119,6 +122,22 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+
+  /**
+   * ID Unique to a training data set with multiary training data.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingId()              { return "ID"; }
+  /**
+   * Refers to a match between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingMatch()           { return "MATCH"; }
+  /**
+   * Refers to a review between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingReview()          { return "REVIEW"; }
 
 private:
 

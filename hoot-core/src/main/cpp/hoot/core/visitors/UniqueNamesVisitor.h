@@ -28,7 +28,7 @@
 #define UNIQUENAMESVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // Qt
 #include <QSet>
@@ -37,16 +37,15 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts all the unique names.
  */
-class UniqueNamesVisitor : public ElementVisitor, public SingleStatistic
+class UniqueNamesVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::UniqueNamesVisitor"; }
+  static std::string className() { return "hoot::UniqueNamesVisitor"; }
 
   UniqueNamesVisitor() {}
 

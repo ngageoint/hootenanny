@@ -37,7 +37,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -47,6 +47,9 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -54,7 +57,7 @@ unsigned int BuildingOutlineUpdateOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineUpdateOp)
 
-class NodeIdVisitor : public ElementVisitor
+class NodeIdVisitor : public ConstElementVisitor
 {
 public:
   set<long>& allNodes;
@@ -70,7 +73,7 @@ public:
   }
 };
 
-class NodeReplaceVisitor : public ElementVisitor
+class NodeReplaceVisitor : public ConstElementVisitor
 {
 public:
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo) : _fromTo(fromTo), _map(map)
@@ -122,7 +125,7 @@ void BuildingOutlineUpdateOp::apply(boost::shared_ptr<OsmMap> &map)
 
   // go through all the relations
   const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); it++)
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const RelationPtr& r = it->second;
     // add the relation to a building group if appropriate
@@ -142,7 +145,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
   {
     outline.reset(outline->Union(g.get()));
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException& e)
   {
     LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
     LOG_VART(buildingMember->toString());
@@ -151,7 +154,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& building,
     {
       outline.reset(outline->Union(cleanedGeom));
     }
-    catch (geos::util::TopologyException& e)
+    catch (const geos::util::TopologyException& e)
     {
       //couldn't clean, so mark parent relation for review (eventually we'll come up with
       //cleaning that works here)
@@ -200,7 +203,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
             {
               outline.reset(outline->Union(g.get()));
             }
-            catch (geos::util::TopologyException& e)
+            catch (const geos::util::TopologyException& e)
             {
               LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
               LOG_VART(way->toString());
@@ -209,7 +212,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
               {
                 outline.reset(outline->Union(cleanedGeom));
               }
-              catch (geos::util::TopologyException& e)
+              catch (const geos::util::TopologyException& e)
               {
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)
@@ -252,7 +255,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
             {
               outline.reset(outline->Union(g.get()));
             }
-            catch (geos::util::TopologyException& e)
+            catch (const geos::util::TopologyException& e)
             {
               LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
               LOG_VART(relation->toString());
@@ -261,7 +264,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& building)
               {
                 outline.reset(outline->Union(cleanedGeom));
               }
-              catch (geos::util::TopologyException& e)
+              catch (const geos::util::TopologyException& e)
               {
                 //couldn't clean, so mark parent relation for review (eventually we'll come up with
                 //cleaning that works here)
@@ -334,13 +337,13 @@ void BuildingOutlineUpdateOp::_mergeNodes(const boost::shared_ptr<Element>& chan
   map<long, long> nodeIdMap;
 
   double epsilon = 1e-9;
-  for (set<long>::const_iterator ci = changedNodes.begin(); ci != changedNodes.end(); ci++)
+  for (set<long>::const_iterator ci = changedNodes.begin(); ci != changedNodes.end(); ++ci)
   {
     double bestDistance = epsilon;
     // should never be used uninitialized
     long bestMatch = -9999;
     const NodePtr& cn = _map->getNode(*ci);
-    for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ri++)
+    for (set<long>::const_iterator ri = referenceNodes.begin(); ri != referenceNodes.end(); ++ri)
     {
       const NodePtr& rn = _map->getNode(*ri);
       double distance = cn->toCoordinate().distance(rn->toCoordinate());

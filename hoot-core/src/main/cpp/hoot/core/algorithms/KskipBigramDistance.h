@@ -82,7 +82,7 @@ public:
 
   KskipBigramDistance(int k = 2);
 
-  static string className() { return "hoot::KskipBigramDistance"; }
+  static std::string className() { return "hoot::KskipBigramDistance"; }
 
   virtual ~KskipBigramDistance() {}
 

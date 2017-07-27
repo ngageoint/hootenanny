@@ -30,26 +30,25 @@
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CountUniqueReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class CountUniqueReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
 public:
 
-  static string className() { return "hoot::CountUniqueReviewsVisitor"; }
+  static std::string className() { return "hoot::CountUniqueReviewsVisitor"; }
 
   CountUniqueReviewsVisitor() {}
 
@@ -64,7 +63,7 @@ public:
 private:
 
   const OsmMap* _map;
-  set<ReviewMarker::ReviewUid> _reviews;
+  std::set<ReviewMarker::ReviewUid> _reviews;
 };
 
 }

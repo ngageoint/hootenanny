@@ -38,7 +38,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 class Match;
 class Merger;
@@ -50,7 +49,7 @@ public:
   {
   public:
     Description() : experimental() {}
-    Description(string className, QString description, bool experimental)
+    Description(std::string className, QString description, bool experimental)
     {
       this->className = className;
       this->experimental = experimental;
@@ -64,11 +63,11 @@ public:
     }
 
     bool experimental;
-    string className;
+    std::string className;
     QString description;
   };
 
-  static string className() { return "hoot::MergerCreator"; }
+  static std::string className() { return "hoot::MergerCreator"; }
 
   virtual ~MergerCreator() {}
 
@@ -82,13 +81,13 @@ public:
    * @return Returns true if one or more mergers were created and added to the provided mergers
    *  vector.
    */
-  virtual bool createMergers(const MatchSet& matches, vector<Merger*>& mergers) const = 0;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const = 0;
 
   /**
    * Generally this just returns the class name of this creator. However, creators that take
    * arguments to specify scripts such as the ScriptMatchCreator may return multiple results.
    */
-  virtual vector<Description> getAllCreators() const = 0;
+  virtual std::vector<Description> getAllCreators() const = 0;
 
   /**
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two
@@ -98,6 +97,9 @@ public:
 
   virtual void setArguments(QStringList /*args*/) { throw IllegalArgumentException(); }
 };
+
+typedef boost::shared_ptr<MergerCreator> MergerCreatorPtr;
+typedef boost::shared_ptr<const MergerCreator> ConstMergerCreatorPtr;
 
 }
 

@@ -61,13 +61,13 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& /*e*/) {}
 
   /**
-    @see ElementVisitor
+    @see ConstElementVisitor
     */
   QString toString();
 
 private:
   boost::minstd_rand* _rng;
-  auto_ptr<boost::minstd_rand> _localRng;
+  std::auto_ptr<boost::minstd_rand> _localRng;
   double _p;
 };
 

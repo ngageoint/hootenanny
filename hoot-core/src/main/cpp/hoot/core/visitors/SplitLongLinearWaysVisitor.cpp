@@ -47,7 +47,7 @@ namespace hoot
 
 unsigned int SplitLongLinearWaysVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, SplitLongLinearWaysVisitor)
 
 SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
   _maxNodesPerWay(0)
@@ -134,8 +134,6 @@ void SplitLongLinearWaysVisitor::visit(const boost::shared_ptr<Element>& element
     " max of " << getMaxNumberOfNodes() << ", splitting this way!");
 
   unsigned int nodesRemaining = way->getNodeCount();
-
-  std::vector< boost::shared_ptr< Way > > newWays;
 
   unsigned int masterNodeIndex = 0;
   while ( nodesRemaining > 0 )

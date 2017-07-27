@@ -28,7 +28,7 @@
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include "Node.h"
@@ -45,6 +45,8 @@ using namespace boost;
 using namespace geos::geom;
 
 #include <tgs/StreamUtils.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -102,7 +104,7 @@ bool Way::containsNodeId(long nid) const
   return false;
 }
 
-void Way::visitRo(const ElementProvider& map, ElementVisitor& filter) const
+void Way::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
 {
   filter.visit(map.getWay(getId()));
   const std::vector<long>& nids = getNodeIds();
@@ -116,7 +118,7 @@ void Way::visitRo(const ElementProvider& map, ElementVisitor& filter) const
   }
 }
 
-void Way::visitRw(ElementProvider& map, ElementVisitor& filter)
+void Way::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
   visitRo(map, filter);
 }
@@ -136,7 +138,7 @@ const Envelope& Way::getApproximateEnvelope(boost::shared_ptr<const ElementProvi
       else
       {
         boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-        ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+        ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
         assert(n.get());
         _cachedEnvelope.expandToInclude(n->getX(), n->getY());
       }
@@ -165,7 +167,7 @@ const Envelope& Way::getEnvelopeInternal(boost::shared_ptr<const ElementProvider
   for (size_t i = 0; i < ids.size(); i++)
   {
     boost::shared_ptr<const Element> e = ep->getElement(ElementId::node(ids[i]));
-    ConstNodePtr n = dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
     assert(n.get());
     _cachedEnvelope.expandToInclude(n->getX(), n->getY());
   }

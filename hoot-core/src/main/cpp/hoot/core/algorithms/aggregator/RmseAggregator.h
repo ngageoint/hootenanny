@@ -35,8 +35,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * This class assumes that the values d are the error values.
  */
@@ -44,11 +42,11 @@ class RmseAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::RmseAggregator"; }
+  static std::string className() { return "hoot::RmseAggregator"; }
 
   RmseAggregator();
 
-  virtual double aggregate(vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return "RmseAggregator"; }
 };

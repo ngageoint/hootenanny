@@ -1,0 +1,54 @@
+21:22:25.823 INFO  ...re/cmd/MultiaryConflateCmd.cpp(  96) Conflating /home/vagrant/hoot/test-files/cmd/quick/MultiaryConflateCmdTest/Input1.osm, /home/vagrant/hoot/test-files/cmd/quick/MultiaryConflateCmdTest/Input2.osm, /home/vagrant/hoot/test-files/cmd/quick/MultiaryConflateCmdTest/Input3.osm and writing the output to utput/cmd/quick/MultiaryConflateCmdTest/Output.osm
+21:22:25.824 INFO  ...re/cmd/MultiaryConflateCmd.cpp( 104) Status::fromInput(i): Unknown1
+21:22:25.824 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from /home/vagrant/hoot/test-files/cmd/quick/MultiaryConflateCmdTest/Input1.osm...
+21:22:25.830 INFO  ...re/cmd/MultiaryConflateCmd.cpp( 104) Status::fromInput(i): Unknown2
+21:22:25.830 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from /home/vagrant/hoot/test-files/cmd/quick/MultiaryConflateCmdTest/Input2.osm...
+21:22:25.831 INFO  ...re/cmd/MultiaryConflateCmd.cpp( 104) Status::fromInput(i): Input003
+21:22:25.831 INFO  ...ore/io/OsmMapReaderFactory.cpp( 138) Loading map from /home/vagrant/hoot/test-files/cmd/quick/MultiaryConflateCmdTest/Input3.osm...
+21:22:25.832 INFO  ...re/cmd/MultiaryConflateCmd.cpp( 108) Applying pre-conflation operations...
+21:22:25.832 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
+21:22:25.832 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
+21:22:25.832 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
+
+21:22:25.846 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
+21:22:25.849 INFO  ...hoot/core/schema/OsmSchema.cpp(1851) Loading translation files...
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ImpliedDividedMarker
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateNameRemover
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+21:22:25.945 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveEmptyAreasVisitor
+21:22:25.946 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+21:22:25.946 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::NoInformationElementRemover
+21:22:26.043 INFO  ...conflate/UnifyingConflator.cpp( 126) Applying pre-unifying conflation operations...
+21:22:26.043 INFO  ...lygon/BuildingMatchCreator.cpp( 255) Creating matches with: hoot::BuildingMatchCreator...
+21:22:26.708 INFO  ...late/js/ScriptMatchCreator.cpp( 463) Creating matches with: hoot::ScriptMatchCreator; rules: PoiGeneric.js...
+21:22:26.709 INFO  ...ighway/HighwayMatchCreator.cpp( 276) Creating matches with: hoot::HighwayMatchCreator...
+21:22:26.710 INFO  .../hoot/rules/LinearWaterway.js"(  33) "Calculating search radius for waterway conflation..."
+21:22:26.711 INFO  .../core/conflate/RubberSheet.cpp( 412) Skipping rubbersheeting due to not finding enough tie points.  The minimum allowable tie points configured is 5 and 0 tie points were found.
+21:22:26.711 INFO  ...ate/SearchRadiusCalculator.cpp( 151) Unable to automatically calculate search radius.  Not enough tie points.  Using default search radius value = 15
+21:22:26.711 INFO  ...late/js/ScriptMatchCreator.cpp( 463) Creating matches with: hoot::ScriptMatchCreator; rules: LinearWaterway.js...
+21:22:26.711 INFO  ...gon/PoiPolygonMatchCreator.cpp( 347) Creating matches with: hoot::PoiPolygonMatchCreator...
+21:22:26.712 INFO  ...conflate/UnifyingConflator.cpp( 228) Match count: 0
+21:22:26.712 INFO  ...conflate/UnifyingConflator.cpp( 245) Creating mergers...
+21:22:26.712 INFO  ...conflate/UnifyingConflator.cpp( 262) Applying 0 mergers...
+21:22:26.712 INFO  ...conflate/UnifyingConflator.cpp( 294) Applying post-unifying conflation operations...
+21:22:26.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
+
+21:22:26.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
+21:22:26.712 INFO  ...re/cmd/MultiaryConflateCmd.cpp( 122) Applying post-conflation operations...
+21:22:26.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveMissingElementsVisitor
+21:22:26.712 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
+21:22:26.713 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
+21:22:26.713 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
+21:22:26.713 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  77) Applying visitor: hoot::RemoveInvalidMultilineStringMembersVisitor
+21:22:26.713 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
+
+21:22:26.714 INFO  ...ore/io/OsmMapWriterFactory.cpp( 108) Writing map to /home/vagrant/hoot/test-output/cmd/quick/MultiaryConflateCmdTest/Output.osm...
+21:22:26.716 INFO  ...re/cmd/MultiaryConflateCmd.cpp( 129) Total time elapsed: 0.892974
+21:22:26.716 INFO  ...re/cmd/MultiaryConflateCmd.cpp( 131) Conflation job completed.
+        <tag k="hoot:status" v="Input003"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>

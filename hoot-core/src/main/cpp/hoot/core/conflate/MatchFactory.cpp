@@ -35,6 +35,9 @@
 //Qt
 #include <QString>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -86,7 +89,7 @@ void MatchFactory::_checkMatchCreatorBoundable(boost::shared_ptr<MatchCreator> m
 {
   if (bounds.isNull() == false)
   {
-    boost::shared_ptr<Boundable> boundable = dynamic_pointer_cast<Boundable>(matchCreator);
+    boost::shared_ptr<Boundable> boundable = boost::dynamic_pointer_cast<Boundable>(matchCreator);
     if (boundable == 0)
     {
       throw HootException("One or more match creators is not boundable and cannot be used with "
@@ -116,27 +119,31 @@ vector<MatchCreator::Description> MatchFactory::getAllAvailableCreators() const
   return result;
 }
 
+void MatchFactory::registerCreator(QString c)
+{
+  QStringList args = c.split(",");
+  QString className = args[0];
+  LOG_VART(className);
+  if (className.length() > 0)
+  {
+    args.removeFirst();
+    boost::shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
+    _theInstance->registerCreator(mc);
+
+    if (args.size() > 0)
+    {
+      mc->setArguments(args);
+    }
+  }
+}
+
 void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 {
   LOG_DEBUG("MatchFactory creators: " << matchCreatorsList);
 
   for (int i = 0; i < matchCreatorsList.size(); i++)
   {
-    QString c = matchCreatorsList[i];
-    QStringList args = c.split(",");
-    QString className = args[0];
-    LOG_VART(className);
-    if (className.length() > 0)
-    {
-      args.removeFirst();
-      boost::shared_ptr<MatchCreator> mc(Factory::getInstance().constructObject<MatchCreator>(className));
-      _theInstance->registerCreator(mc);
-
-      if (args.size() > 0)
-      {
-        mc->setArguments(args);
-      }
-    }
+    _theInstance->registerCreator(matchCreatorsList[i]);
   }
 }
 

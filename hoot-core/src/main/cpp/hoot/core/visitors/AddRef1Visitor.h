@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,28 +22,27 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDREF1VISITOR_H
 #define ADDREF1VISITOR_H
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
-using namespace std;
 
 class AddRef1Visitor :
-    public ElementVisitor,
+    public ConstElementVisitor,
     public ConstOsmMapConsumer,
     public Configurable
 {
 public:
 
-  static string className() { return "hoot::AddRef1Visitor"; }
+  static std::string className() { return "hoot::AddRef1Visitor"; }
 
   AddRef1Visitor();
 

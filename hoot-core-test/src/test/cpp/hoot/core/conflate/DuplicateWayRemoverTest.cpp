@@ -109,7 +109,9 @@ public:
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined
-    map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
+    map->getWay(
+      FindWaysVisitor::findWaysByTag(
+        map, "name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(true);
@@ -138,7 +140,10 @@ public:
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined
-    map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
+    map->getWay(
+      FindWaysVisitor::findWaysByTag(
+        map, "name", "Constitution Ave NW")[0])->getTags()
+        .set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(false);

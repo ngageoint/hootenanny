@@ -36,7 +36,7 @@
 #include <hoot/core/util/Log.h>
 
 // OpenCV
-#include <opencv/cv.h>
+// #include <opencv/cv.h>
 
 // tbs
 #include <boost/random/normal_distribution.hpp>

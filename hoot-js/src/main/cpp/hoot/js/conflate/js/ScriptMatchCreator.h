@@ -44,7 +44,7 @@ class ScriptMatchCreator : public MatchCreator
 {
 public:
 
-  static string className() { return "hoot::ScriptMatchCreator"; }
+  static std::string className() { return "hoot::ScriptMatchCreator"; }
 
   ScriptMatchCreator();
 
@@ -58,10 +58,10 @@ public:
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
     ConstMatchThresholdPtr threshold);
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   virtual void setArguments(QStringList args);
 
@@ -78,14 +78,14 @@ public:
 
 private:
 
- boost::shared_ptr<PluginContext> _script;
+  boost::shared_ptr<PluginContext> _script;
   QString _scriptPath;
 
   Description _getScriptDescription(QString path) const;
 
- boost::shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
+  boost::shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
   double _worstCircularError;
- boost::shared_ptr<MatchThreshold> _matchThreshold;
+  boost::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
 };
 

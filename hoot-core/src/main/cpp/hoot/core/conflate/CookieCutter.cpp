@@ -38,10 +38,10 @@
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
-
-unsigned int CookieCutter::logWarnCount = 0;
 
 CookieCutter::CookieCutter(bool crop, double outputBuffer) :
 _crop(crop),
@@ -70,15 +70,9 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
 
   if (cutterShape->getArea() == 0.0)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
-    {
-      LOG_WARN("Cutter area is zero. Try increasing the buffer size or check the input.");
-    }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
-    {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-    }
-    logWarnCount++;
+    //would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    //clients who are expecting the cookie cutting to occur
+    throw HootException("Cutter area is zero. Try increasing the buffer size or check the input.");
   }
 
   // free up a little RAM

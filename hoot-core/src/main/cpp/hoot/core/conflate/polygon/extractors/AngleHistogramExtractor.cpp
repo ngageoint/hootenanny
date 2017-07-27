@@ -33,15 +33,18 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/extractors/Histogram.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/GeometryConverter.h>
+
+using namespace geos::geom;
+using namespace std;
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AngleHistogramExtractor)
 
-class HistogramVisitor : public ElementVisitor
+class HistogramVisitor : public ConstElementVisitor
 {
 public:
   static std::string className() { return "hoot::HistogramVisitor"; }
@@ -52,7 +55,7 @@ public:
   {
     if (e->getElementType() == ElementType::Way)
     {
-      const ConstWayPtr& w = dynamic_pointer_cast<const Way>(e);
+      const ConstWayPtr& w = boost::dynamic_pointer_cast<const Way>(e);
       //const ConstWayPtr& w = _map.getWay(e->getId());
 
       vector<long> nodes = w->getNodeIds();

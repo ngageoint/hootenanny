@@ -39,7 +39,6 @@
 
 namespace hoot
 {
-using namespace geos::geom;
 
 /**
  * Contains a list of OsmMapOperations that will be applied in order. It is possible to create
@@ -66,17 +65,17 @@ public:
    */
   virtual void apply(boost::shared_ptr<OsmMap>& map);
 
-  virtual string getClassName() const { return className(); }
+  virtual std::string getClassName() const { return className(); }
 
   virtual void readObject(QDataStream& is);
 
-  virtual void setBounds(const Envelope &bounds);
+  virtual void setBounds(const geos::geom::Envelope &bounds);
 
   virtual void writeObject(QDataStream& os) const;
 
 private:
 
-  vector< boost::shared_ptr<OsmMapOperation> > _ops;
+  std::vector< boost::shared_ptr<OsmMapOperation> > _ops;
 };
 
 }

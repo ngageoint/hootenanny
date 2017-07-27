@@ -63,6 +63,8 @@ using namespace geos::geom;
 // #include "JavaScriptTranslator.h"
 #include "PythonTranslator.h"
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -229,13 +231,13 @@ protected:
     _d->readNext(_map);
 
     const NodeMap& nm = _map->getNodes();
-    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); it++)
+    for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
     {
       _addElement(_map->getNode(it->first));
     }
 
     const WayMap& wm = _map->getWays();
-    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); it++)
+    for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
       _addElement(_map->getWay(it->first));
     }
@@ -564,22 +566,26 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
   for (int i = 0; i < fieldDefn->GetFieldCount(); i++)
   {
     QString value;
+
+    // This skips NULL fields.
+    if (! f->IsFieldSet(i)) continue;
+
     if (f->GetDefnRef()->GetFieldDefn(i)->GetType() == OFTReal)
     {
-      value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
+        value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
     }
     else
     {
-      value = QString::fromUtf8(f->GetFieldAsString(i));
+        value = QString::fromUtf8(f->GetFieldAsString(i));
     }
 
     // Ticket 5833: make sure tag is only added if value is non-null
     if ( value.length() == 0 )
     {
-      LOG_TRACE(
-        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
-        " since the value field is empty");
-      continue;
+        LOG_TRACE(
+                    "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
+                    " since the value field is empty");
+        continue;
     }
 
     t[fieldDefn->GetFieldDefn(i)->GetNameRef()] = value;
@@ -638,7 +644,7 @@ void OgrReaderInternal::_addGeometry(OGRGeometry* g, Tags& t)
           throw HootException("Unsupported geometry type.");
       }
     }
-    catch (IllegalArgumentException& e)
+    catch (const IllegalArgumentException& e)
     {
       throw IllegalArgumentException(
         "Error projecting geometry with tags: " + t.toString() + " " + e.what());
@@ -988,7 +994,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::ErrorCircular()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -1010,7 +1016,7 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
         a = t.getLength(MetadataTags::Accuracy()).value();
         ok = true;
       }
-      catch (const HootException& e)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -1229,17 +1235,17 @@ ElementPtr OgrReaderInternal::readNextElement()
   if ( _nodesItr != _map->getNodes().end() )
   {
     returnElement.reset(new Node(*_nodesItr->second.get()));
-    _nodesItr++;
+    ++_nodesItr;
   }
   else if ( _waysItr != _map->getWays().end() )
   {
     returnElement.reset(new Way(*_waysItr->second.get()));
-    _waysItr++;
+    ++_waysItr;
   }
   else
   {
     returnElement.reset(new Relation(*_relationsItr->second.get()));
-    _relationsItr++;
+    ++_relationsItr;
   }
 
   return returnElement;

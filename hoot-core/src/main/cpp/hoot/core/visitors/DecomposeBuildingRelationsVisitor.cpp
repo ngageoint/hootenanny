@@ -32,12 +32,14 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Relation.h>
 
+using namespace std;
+
 namespace hoot
 {
 
 unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, DecomposeBuildingRelationsVisitor)
 
 DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
 {
@@ -97,7 +99,7 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const boost::shared_p
     }
 
     // ok, we've got a building part. Recompose it as a building.
-   boost::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
+    boost::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
 
     Tags t = baseTags;
     t.addTags(e->getTags());

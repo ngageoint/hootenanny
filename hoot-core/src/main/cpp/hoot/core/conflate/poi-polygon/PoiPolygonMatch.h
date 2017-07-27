@@ -55,8 +55,8 @@ public:
 
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     boost::shared_ptr<const PoiPolygonRfClassifier> rf,
-    const set<ElementId>& polyNeighborIds = set<ElementId>(),
-    const set<ElementId>& poiNeighborIds = set<ElementId>());
+    const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
+    const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -69,7 +69,7 @@ public:
 
   virtual QString getMatchName() const { return _matchName; }
 
-  virtual set< pair<ElementId, ElementId> > getMatchPairs() const;
+  virtual std::set< std::pair<ElementId, ElementId> > getMatchPairs() const;
 
   virtual double getProbability() const { return _class.getMatchP(); }
 
@@ -80,7 +80,7 @@ public:
 
   virtual QString toString() const;
 
-  virtual map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
 
   /**
    * Determines criteria for a feature to be considered a polygon for matching by
@@ -119,11 +119,11 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  void setMatchDistanceThreshold(double distance) { _matchDistanceThreshold = distance; }
-  void setReviewDistanceThreshold(double distance) { _reviewDistanceThreshold = distance; }
-  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
-  void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
-  void setReviewIfMatchedTypes(const QStringList& types) { _reviewIfMatchedTypes = types; }
+  void setMatchDistanceThreshold(double distance);
+  void setReviewDistanceThreshold(double distance);
+  void setNameScoreThreshold(double threshold);
+  void setTypeScoreThreshold(double threshold);
+  void setReviewIfMatchedTypes(const QStringList& types);
   void setEnableAdvancedMatching(bool enabled) { _enableAdvancedMatching = enabled; }
   void setEnableReviewReduction(bool enabled) { _enableReviewReduction = enabled; }
 
@@ -137,11 +137,9 @@ private:
   ElementId _eid2;
   ConstElementPtr _poi;
   ConstElementPtr _poly;
-  boost::shared_ptr<Geometry> _poiGeom;
-  boost::shared_ptr<Geometry> _polyGeom;
+  boost::shared_ptr<geos::geom::Geometry> _poiGeom;
+  boost::shared_ptr<geos::geom::Geometry> _polyGeom;
   bool _e1IsPoi;
-
-  //Settings _settings;
 
   //measured distance between the two elements
   double _distance;
@@ -163,8 +161,8 @@ private:
   double _addressScore;
 
   //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
-  set<ElementId> _polyNeighborIds;
-  set<ElementId> _poiNeighborIds;
+  std::set<ElementId> _polyNeighborIds;
+  std::set<ElementId> _poiNeighborIds;
 
   MatchClassification _class;
 

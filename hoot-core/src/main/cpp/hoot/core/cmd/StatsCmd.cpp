@@ -35,10 +35,12 @@
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
+using namespace std;
+
 namespace hoot
 {
 
-class NameSizesVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class NameSizesVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 
 };

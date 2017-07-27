@@ -56,11 +56,11 @@ public:
    */
   const TagMerger& getDefault() { return *getDefaultPtr(); }
 
- boost::shared_ptr<const TagMerger> getDefaultPtr();
+  boost::shared_ptr<const TagMerger> getDefaultPtr();
 
   const TagMerger& getMerger(const QString& name) { return *getMergerPtr(name); }
 
- boost::shared_ptr<const TagMerger> getMergerPtr(const QString& name);
+  boost::shared_ptr<const TagMerger> getMergerPtr(const QString& name);
 
   /**
    * A convenience function for merging tags using the default mechanism. Equivalent to:
@@ -74,8 +74,8 @@ public:
   void reset();
 
 private:
-  QHash<QString,boost::shared_ptr<const TagMerger> > _mergers;
- boost::shared_ptr<const TagMerger> _default;
+  QHash<QString, boost::shared_ptr<const TagMerger> > _mergers;
+  boost::shared_ptr<const TagMerger> _default;
 
   static boost::shared_ptr<TagMergerFactory> _theInstance;
 };

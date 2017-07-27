@@ -61,6 +61,9 @@
 #include <tgs/System/Time.h>
 
 Q_DECLARE_METATYPE(hoot::JavaScriptTranslator*)
+
+using namespace geos::geom;
+using namespace std;
 using namespace v8;
 
 namespace hoot
@@ -126,11 +129,11 @@ boost::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, 
   tableName = vm["tableName"].toString();
 
   // figure out which layer this feature belongs in.
- boost::shared_ptr<const Layer> layer;
+  boost::shared_ptr<const Layer> layer;
 
   for (size_t i = 0; i < _schema->getLayerCount(); ++i)
   {
-   boost::shared_ptr<const Layer> l = _schema->getLayer(i);
+    boost::shared_ptr<const Layer> l = _schema->getLayer(i);
 
     if (l->getName() == tableName)
     {
@@ -151,7 +154,7 @@ boost::shared_ptr<Feature> JavaScriptTranslator::_createFeature(QVariantMap vm, 
 
   QVariantMap attrs = vm["attrs"].toMap();
 
- boost::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
+  boost::shared_ptr<Feature> result(new Feature(layer->getFeatureDefinition()));
 
 
   for (QVariantMap::const_iterator it = attrs.begin(); it != attrs.end(); ++it)
@@ -393,7 +396,7 @@ boost::shared_ptr<const Schema> JavaScriptTranslator::getOgrOutputSchema()
     if (schemaJs->IsArray())
     {
 
-     boost::shared_ptr<Schema> schema(new Schema());
+      boost::shared_ptr<Schema> schema(new Schema());
       QVariantList schemaV = toCpp<QVariant>(schemaJs).toList();
 
       for (int i = 0; i < schemaV.size(); ++i)
@@ -540,7 +543,7 @@ void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QV
 
 boost::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(QVariant fieldV) const
 {
- boost::shared_ptr<FieldDefinition> result;
+  boost::shared_ptr<FieldDefinition> result;
 
   if (fieldV.canConvert(QVariant::Map) == false)
   {
@@ -697,7 +700,7 @@ boost::shared_ptr<FieldDefinition> JavaScriptTranslator::_parseFieldDefinition(Q
 
 boost::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
 {
- boost::shared_ptr<Layer> newLayer(new Layer());
+  boost::shared_ptr<Layer> newLayer(new Layer());
 
   if (layer.canConvert(QVariant::Map) == false)
   {
@@ -751,15 +754,16 @@ boost::shared_ptr<Layer> JavaScriptTranslator::_parseLayer(QVariant layer) const
   }
   set<QString> names;
   QVariantList columns = columnsV.toList();
- boost::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
+  boost::shared_ptr<FeatureDefinition> dfd(new FeatureDefinition());
   for (int i = 0; i < columns.size(); i++)
   {
-   boost::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
+    boost::shared_ptr<FieldDefinition> fd = _parseFieldDefinition(columns[i]);
     if (names.find(fd->getName()) != names.end())
     {
       throw HootException("Found multiple fields with the same name. (" + fd->getName() + ")");
     }
     dfd->addField(fd);
+    names.insert(fd->getName());
   }
   newLayer->setFeatureDefinition(dfd);
 

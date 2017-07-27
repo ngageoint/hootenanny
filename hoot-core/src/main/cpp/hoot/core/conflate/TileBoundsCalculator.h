@@ -30,7 +30,9 @@
 
 
 // Hoot
+#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
+#undef int64
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -49,13 +51,10 @@
 
 namespace hoot
 {
+
 class TileBoundsCalculatorTest;
 class OsmMap;
 class Node;
-
-using namespace std;
-using namespace boost;
-using namespace geos::geom;
 
 /**
  * Caculates divisions as the center of pixels.
@@ -134,12 +133,13 @@ public:
 
     int getWidth() const { return maxX - minX + 1; }
 
-    void operator=(const PixelBox& pb)
+    PixelBox& operator=(const PixelBox& pb)
     {
       minX = pb.minX;
       maxX = pb.maxX;
       minY = pb.minY;
       maxY = pb.maxY;
+      return *this;
     }
 
     QString toString() const
@@ -150,7 +150,7 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
-  vector< vector<Envelope> > calculateTiles();
+  std::vector< std::vector<geos::geom::Envelope> > calculateTiles();
 
   void renderImage(boost::shared_ptr<OsmMap> map);
 
@@ -195,15 +195,15 @@ private:
 
   void _exportImage(cv::Mat& r, QString output);
 
-  void _exportResult(const vector<PixelBox>& boxes, QString output);
+  void _exportResult(const std::vector<PixelBox>& boxes, QString output);
 
-  bool _isDone(vector<PixelBox>& boxes);
+  bool _isDone(std::vector<PixelBox>& boxes);
 
   long _sumPixels(const PixelBox& pb, cv::Mat& r);
 
   long _sumPixels(const PixelBox& pb) { return _sumPixels(pb, _r1) + _sumPixels(pb, _r2); }
 
-  Envelope _toEnvelope(const PixelBox& pb);
+  geos::geom::Envelope _toEnvelope(const PixelBox& pb);
 
   // used for white box testing.
   friend class TileBoundsCalculatorTest;

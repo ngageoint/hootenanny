@@ -42,6 +42,9 @@
 //Qt
 #include <QDateTime>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -52,9 +55,9 @@ void OsmUtils::printNodes(const QString nodeCollectionName,
   {
     LOG_DEBUG(nodeCollectionName);
     LOG_VARD(nodes.size());
-    for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.begin(); it != nodes.end(); it++)
+    for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
-     boost::shared_ptr<const Node> node = *it;
+      boost::shared_ptr<const Node> node = *it;
       LOG_VARD(node->toString());
     }
   }
@@ -66,7 +69,7 @@ const QList<long> OsmUtils::nodesToNodeIds(const QList<boost::shared_ptr<const N
   for (QList<boost::shared_ptr<const Node> >::const_iterator it = nodes.constBegin();
        it != nodes.constEnd(); ++it)
   {
-   boost::shared_ptr<const Node> node = *it;
+    boost::shared_ptr<const Node> node = *it;
     nodeIds.append(node->getElementId().getId());
   }
   return nodeIds;
@@ -78,7 +81,7 @@ QList<boost::shared_ptr<const Node> > OsmUtils::nodeIdsToNodes(const QList<long>
   QList<boost::shared_ptr<const Node> > nodes;
   for (QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
   {
-    nodes.append(dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
+    nodes.append(boost::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
   }
   return nodes;
 }

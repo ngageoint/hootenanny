@@ -43,8 +43,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 class MostEnglishName;
 class Tags;
 
@@ -68,7 +66,7 @@ typedef boost::shared_ptr<MostEnglishName> MostEnglishNamePtr;
 class MostEnglishName : public Configurable
 {
 public:
-  static string className() { return "hoot::MostEnglishName"; }
+  static std::string className() { return "hoot::MostEnglishName"; }
 
   static unsigned int logWarnCount;
 

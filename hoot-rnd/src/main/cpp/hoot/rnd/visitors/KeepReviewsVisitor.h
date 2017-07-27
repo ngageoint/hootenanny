@@ -28,23 +28,22 @@
 #define KEEPREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Remove all elements that are not review relations.
  *
  * This could do bad things if the element is in use.
  */
-class KeepReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class KeepReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static string className() { return "hoot::KeepReviewsVisitor"; }
+  static std::string className() { return "hoot::KeepReviewsVisitor"; }
 
   KeepReviewsVisitor() {}
 

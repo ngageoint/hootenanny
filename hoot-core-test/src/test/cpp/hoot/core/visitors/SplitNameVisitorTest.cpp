@@ -28,6 +28,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/SplitNameVisitor.h>
 
 // Qt
@@ -35,6 +36,8 @@
 #include <QDir>
 
 #include "../TestUtils.h"
+
+using namespace geos::geom;
 
 namespace hoot
 {

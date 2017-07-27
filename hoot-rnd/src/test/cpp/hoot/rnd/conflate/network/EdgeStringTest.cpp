@@ -158,7 +158,7 @@ public:
     {
       edgeStr1.calculateLength(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -174,7 +174,7 @@ public:
     {
       edgeStr2.calculateLength(map);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -411,7 +411,7 @@ public:
     {
       edgeStr.appendEdge(edge2);
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

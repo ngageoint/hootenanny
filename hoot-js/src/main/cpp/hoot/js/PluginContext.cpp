@@ -37,6 +37,9 @@
 // Qt
 #include <QFile>
 
+using namespace std;
+using namespace v8;
+
 namespace hoot
 {
 
@@ -124,6 +127,7 @@ Local<Object> PluginContext::loadScript(QString filename, QString loadInto)
   Context::Scope context_scope(_context);
 
   QFile fp(filename);
+  LOG_TRACE("Loading script " << filename << "...");
   if (fp.open(QFile::ReadOnly) == false)
   {
     throw HootException("Error opening script: " + filename);

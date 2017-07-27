@@ -45,7 +45,7 @@ class MapCleaner : public OsmMapOperation
 {
 public:
 
-  static string className() { return "hoot::MapCleaner"; }
+  static std::string className() { return "hoot::MapCleaner"; }
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 

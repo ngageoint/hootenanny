@@ -49,6 +49,9 @@
 
 #include "../TestUtils.h"
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -181,8 +184,6 @@ public:
   void runCalculateTiePointDistancesNotEnoughTiePointsTest()
   {
     RubberSheet rubberSheet;
-    vector<RubberSheet::Tie> ties;
-    rubberSheet._ties = ties;
 
     QString exceptionMsg("");
     try

@@ -36,6 +36,9 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -43,7 +46,6 @@ MultiLineStringVisitor::MultiLineStringVisitor() :
   _provider(),
   _ls(0)
 {
-  ;
 }
 
 MultiLineString* MultiLineStringVisitor::createMultiLineString()
@@ -51,7 +53,6 @@ MultiLineString* MultiLineStringVisitor::createMultiLineString()
   if (_ls != 0)
   {
     return GeometryFactory::getDefaultInstance()->createMultiLineString(_ls);
-    _ls = 0;
   }
   else
   {
@@ -63,8 +64,8 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
-   //ConstWayPtr w = _provider->getWay(e->getId());
-   ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+    //ConstWayPtr w = _provider->getWay(e->getId());
+    ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
     visit(w);
   }
 }

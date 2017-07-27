@@ -36,8 +36,6 @@
 namespace Tgs
 {
 
-  using namespace std;
-
 class RStarTreePrinter
 {
 public:
@@ -50,7 +48,7 @@ public:
   void print(const RTreeNode* node, int indent);
 
 private:
- boost::shared_ptr<const RStarTree> _tree;
+  boost::shared_ptr<const RStarTree> _tree;
 
   int _indent;
 

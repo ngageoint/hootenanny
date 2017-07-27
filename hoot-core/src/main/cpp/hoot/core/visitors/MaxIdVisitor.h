@@ -29,7 +29,7 @@
 #define MAXIDVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // Standard
 #include <limits>
@@ -38,16 +38,15 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements.
  */
-class MaxIdVisitor : public ElementVisitor, public SingleStatistic
+class MaxIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  MaxIdVisitor() : _maxId(-numeric_limits<long>::max()) {}
+  MaxIdVisitor() : _maxId(-std::numeric_limits<long>::max()) {}
 
   virtual ~MaxIdVisitor() {}
 

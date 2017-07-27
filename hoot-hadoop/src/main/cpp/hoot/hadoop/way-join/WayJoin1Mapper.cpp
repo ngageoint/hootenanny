@@ -17,16 +17,18 @@
 #include "WayJoin1Mapper.h"
 
 // Hoot
-#include <hoot/core/filters/TagCriterion.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/hadoop/pbf/PbfRecordWriter.h>
-#include <hoot/hadoop/Debug.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/hadoop/Debug.h>
+#include <hoot/hadoop/pbf/PbfRecordWriter.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
 #include <pp/HadoopPipesUtils.h>
 
+using namespace std;
 
 namespace hoot
 {
@@ -50,7 +52,7 @@ void WayJoin1Mapper::_map(OsmMapPtr& m, HadoopPipes::MapContext& context)
   int64_t* key = (int64_t*)keyStr.data();
 
   // Remove all non-roads.
- boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
+  boost::shared_ptr<TagCriterion> pCrit(new TagCriterion("highway", ""));
   RemoveElementsVisitor::removeWays(m, pCrit);
 
   Debug::printTroubled(m);

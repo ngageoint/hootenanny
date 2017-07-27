@@ -59,7 +59,7 @@ public:
     {
       OsmXmlReader reader;
 
-     OsmMapPtr map(new OsmMap());
+      OsmMapPtr map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/conflate/SmallWayMergerInput1.osm", map);
 

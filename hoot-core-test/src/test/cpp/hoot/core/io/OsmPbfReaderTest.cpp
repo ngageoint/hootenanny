@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
 using namespace hoot;
@@ -52,6 +53,8 @@ using namespace boost;
 #include <zlib.h>
 
 #include "../TestUtils.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -362,7 +365,7 @@ public:
     {
       CPPUNIT_ASSERT(!reader.isSupported("test-files"));
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
@@ -385,7 +388,7 @@ public:
     {
       reader.open("test-files/fileDoesntExist.osm.pbf");
     }
-    catch (HootException e)
+    catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }

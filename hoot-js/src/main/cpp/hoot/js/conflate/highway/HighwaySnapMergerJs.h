@@ -42,8 +42,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace v8;
 
 class OsmMapOperation;
 
@@ -57,17 +55,17 @@ public:
 
   HighwaySnapMergerPtr getHighwaySnapMerger() { return _ptr; }
 
-  static Handle<Object> New(const HighwaySnapMergerPtr& ptr);
+  static v8::Handle<v8::Object> New(const HighwaySnapMergerPtr& ptr);
 
 private:
   HighwaySnapMergerJs();
   ~HighwaySnapMergerJs();
 
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
-  static Handle<Value> apply(const Arguments& args);
+  static v8::Handle<v8::Value> apply(const v8::Arguments& args);
 
   HighwaySnapMergerPtr _ptr;
-  static Persistent<Function> _constructor;
+  static v8::Persistent<v8::Function> _constructor;
 
 };
 

@@ -42,8 +42,6 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace Tgs;
 
 /**
  * Extracts a single feature (AKA factor) for a given element pair.
@@ -51,7 +49,7 @@ using namespace Tgs;
 class FeatureExtractor
 {
 public:
-  static string className() { return "hoot::FeatureExtractor"; }
+  static std::string className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }
 
@@ -62,19 +60,19 @@ public:
   virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
     const boost::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual string getClassName() const = 0;
+  virtual std::string getClassName() const = 0;
 
-  virtual string getName() const { return getClassName(); }
+  virtual std::string getName() const { return getClassName(); }
 
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).
    */
-  virtual DataFrame::FactorType getFactorType() const = 0;
+  virtual Tgs::DataFrame::FactorType getFactorType() const = 0;
 
   /**
    * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
    */
-  virtual DataFrame::NullTreatment getNullTreatment() const = 0;
+  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const = 0;
 
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
 

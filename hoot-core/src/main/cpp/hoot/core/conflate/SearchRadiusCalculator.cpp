@@ -38,6 +38,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 
+using namespace std;
+
 //TODO: a lot of the logging levels in this class need changed, as they've revealed issues
 //with the element status reading...will handle that in #1262
 namespace hoot
@@ -92,7 +94,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
     return;
   }
 
-  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
+  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet(false));
   rubberSheet->setReference(_rubberSheetRef);
   rubberSheet->setMinimumTies(_minTies);
   try
@@ -110,7 +112,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
     try
     {
       MapCleaner().apply(mapWithOnlyUnknown1And2);
-      rubberSheet.reset(new RubberSheet());
+      rubberSheet.reset(new RubberSheet(false));
       rubberSheet->setReference(_rubberSheetRef);
       rubberSheet->setMinimumTies(_minTies);
       rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
@@ -131,7 +133,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
   {
     tiePointDistances = rubberSheet->calculateTiePointDistances();
   }
-  catch (const HootException& /*e*/)
+  catch (const HootException&)
   {
     //unrecoverable error...we'll end up using the default search distance instead
   }

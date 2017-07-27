@@ -31,10 +31,10 @@
 #include <boost/any.hpp>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/NotImplementedException.h>
 
 // Qt
 #include <QDataStream>
@@ -45,8 +45,6 @@
 
 namespace hoot
 {
-using namespace boost;
-using namespace std;
 
 class ObjectOutputStream
 {
@@ -78,13 +76,13 @@ public:
     flush();
   }
 
-  void writeObject(any obj);
+  void writeObject(boost::any obj);
 
 public:
   QDataStream* _stream;
-  auto_ptr<QDataStream> _stream2Delete;
-  auto_ptr<QByteArray> _array;
-  ostream* _ostream;
+  std::auto_ptr<QDataStream> _stream2Delete;
+  std::auto_ptr<QByteArray> _array;
+  std::ostream* _ostream;
 };
 
 }

@@ -45,7 +45,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyWayGeneralizeVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyWayGeneralizeVisitor)
 
 PertyWayGeneralizeVisitor::PertyWayGeneralizeVisitor() :
 _epsilon(-1.0)
@@ -102,7 +102,7 @@ void PertyWayGeneralizeVisitor::visit(const boost::shared_ptr<Element>& element)
     if (randomNum <= _wayGeneralizeProbability)
     {
       LOG_TRACE(logMsg);
-      _generalizer->generalize(dynamic_pointer_cast<Way>(element));
+      _generalizer->generalize(boost::dynamic_pointer_cast<Way>(element));
     }
     else
     {

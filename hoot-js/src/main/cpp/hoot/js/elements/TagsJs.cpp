@@ -40,6 +40,8 @@
 // Tgs
 #include <tgs/SharedPtr.h>
 
+using namespace v8;
+
 namespace hoot
 {
 
@@ -81,12 +83,14 @@ void TagsJs::Init(Handle<Object> target)
       FunctionTemplate::New(get)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getCreateUuid"),
       FunctionTemplate::New(getCreateUuid)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getLengthInMeters"),
-      FunctionTemplate::New(getLengthInMeters)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("getVelocityInMeters"),
-      FunctionTemplate::New(getVelocityInMeters)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getInformationCount"),
       FunctionTemplate::New(getInformationCount)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getLengthInMeters"),
+      FunctionTemplate::New(getLengthInMeters)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getNames"),
+      FunctionTemplate::New(getNames)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getVelocityInMeters"),
+      FunctionTemplate::New(getVelocityInMeters)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("set"),
       FunctionTemplate::New(set)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("toDict"),
@@ -175,6 +179,15 @@ Handle<Value> TagsJs::getInformationCount(const Arguments& args)
   Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
 
   return scope.Close(toV8(t.getInformationCount()));
+}
+
+Handle<Value> TagsJs::getNames(const Arguments& args)
+{
+  HandleScope scope;
+
+  Tags& t = ObjectWrap::Unwrap<TagsJs>(args.This())->getTags();
+
+  return scope.Close(toV8(t.getNames()));
 }
 
 Handle<Value> TagsJs::set(const Arguments& args)

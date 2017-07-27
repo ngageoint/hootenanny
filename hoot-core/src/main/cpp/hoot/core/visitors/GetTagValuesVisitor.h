@@ -28,17 +28,16 @@
 #define GETTAGVALUESVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Puts all values for the given key into a bag. If you want to filter based on type see
  * FilteredVisitor. If the values are a list then they're split before they're put in the bag.
  */
-class GetTagValuesVisitor : public ElementVisitor
+class GetTagValuesVisitor : public ConstElementVisitor
 {
 public:
 
@@ -46,7 +45,7 @@ public:
    * @param split If split is set to true then the values in the tag are split before they're placed
    *  in the bag.
    */
-  GetTagValuesVisitor(QString key, set<QString>& bag, bool split=false) :
+  GetTagValuesVisitor(QString key, std::set<QString>& bag, bool split=false) :
     _key(key),
     _bag(bag),
     _split(split)
@@ -59,7 +58,7 @@ public:
 private:
 
   QString _key;
-  set<QString>& _bag;
+  std::set<QString>& _bag;
   bool _split;
 };
 

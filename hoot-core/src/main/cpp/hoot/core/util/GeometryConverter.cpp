@@ -50,6 +50,8 @@
 // Standard
 #include <stdint.h>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -61,7 +63,7 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Ge
   if (gc->getNumGeometries() > 1)
   {
     LOG_INFO("Creating relation. convertGeometryCollection");
-   RelationPtr r(new Relation(s, _map->createNextRelationId(), circularError));
+    RelationPtr r(new Relation(s, _map->createNextRelationId(), circularError));
     int count = gc->getNumGeometries();
 
     for (int i = 0; i < count; i++)
@@ -118,7 +120,7 @@ boost::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geo
 WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
   const OsmMapPtr& map, Status s, double circularError)
 {
- WayPtr way;
+  WayPtr way;
   if (ls->getNumPoints() > 0)
   {
     Coordinate c = ls->getCoordinateN(0);
@@ -140,11 +142,11 @@ boost::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(co
 {
   if (mls->getNumGeometries() > 1)
   {
-   RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
+    RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
       MetadataTags::RelationMultilineString()));
     for (size_t i = 0; i < mls->getNumGeometries(); i++)
     {
-     WayPtr w = convertLineStringToWay(
+      WayPtr w = convertLineStringToWay(
         dynamic_cast<const LineString*>(mls->getGeometryN(i)), map, s, circularError);
       r->addElement("", w);
     }
@@ -161,7 +163,7 @@ boost::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(co
 RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon* mp,
   const OsmMapPtr& map, Status s, double circularError)
 {
- RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
+  RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
     MetadataTags::RelationMultiPolygon()));
   for (size_t i = 0; i < mp->getNumGeometries(); i++)
   {
@@ -182,7 +184,7 @@ boost::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Poly
   }
   else if (polygon->getNumInteriorRing() == 0)
   {
-   WayPtr result = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
+    WayPtr result = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
     result->getTags()["area"] = "yes";
     return result;
   }
@@ -195,7 +197,7 @@ boost::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Poly
 RelationPtr GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
   const OsmMapPtr& map, Status s, double circularError)
 {
- RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
+  RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
     MetadataTags::RelationMultiPolygon()));
   convertPolygonToRelation(polygon, map, r, s, circularError);
   map->addRelation(r);
@@ -206,13 +208,13 @@ RelationPtr GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
 void GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
   const OsmMapPtr& map, const RelationPtr& r, Status s, double circularError)
 {
- WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
+  WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
   if (outer != NULL)
   {
     r->addElement(MetadataTags::RoleOuter(), outer);
     for (size_t i = 0; i < polygon->getNumInteriorRing(); i++)
     {
-     WayPtr inner = convertLineStringToWay(polygon->getInteriorRingN(i), map, s, circularError);
+      WayPtr inner = convertLineStringToWay(polygon->getInteriorRingN(i), map, s, circularError);
       r->addElement(MetadataTags::RoleInner(), inner);
     }
   }
@@ -223,7 +225,7 @@ NodePtr GeometryConverter::_createNode(const OsmMapPtr& map, const Coordinate& c
 {
   if (_nf == 0)
   {
-   NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
+    NodePtr n =NodePtr(new Node(s, map->createNextNodeId(), c, circularError));
     map->addNode(n);
     return n;
   }

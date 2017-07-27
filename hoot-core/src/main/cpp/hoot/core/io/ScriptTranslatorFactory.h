@@ -39,8 +39,7 @@
 
 namespace hoot
 {
-using namespace std;
-using namespace boost;
+
 class ScriptTranslator;
 
 class ScriptTranslatorFactory
@@ -63,7 +62,7 @@ private:
 
   ScriptTranslatorFactory();
 
-  vector<string> _translators;
+  std::vector<std::string> _translators;
 
   void _init();
 };

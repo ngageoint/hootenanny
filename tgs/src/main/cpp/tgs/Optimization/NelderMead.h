@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2012 Sebastian Morr <sebastian@morr.cc>
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NELDERMEAD_H
 #define NELDERMEAD_H
@@ -43,7 +43,6 @@
 #include <limits>
 #include <map>
 #include <vector>
-using namespace std;
 
 // Tgs
 #include <tgs/TgsException.h>
@@ -65,10 +64,7 @@ public:
       //cout << "~Vector()" << endl << flush;
     }
 
-    Vector(const Vector& v)
-    {
-      coords = v.coords;
-    }
+    Vector(const Vector& v) : coords(v.coords) { }
 
     Vector(double c0)
     {
@@ -160,7 +156,7 @@ public:
             coords[i] /= factor;
         }
     }
-    bool operator<(const Vector other) const {
+    bool operator<(const Vector& other) const {
         for (int i=0; i<dimension(); i++) {
             if (at(i) < other.at(i))
                 return false;
@@ -177,11 +173,11 @@ public:
         return pow(sum, 0.5);
     }
 
-    const vector<double>& getVector() { return coords; }
+    const std::vector<double>& getVector() { return coords; }
 
 private:
 
-    vector<double> coords;
+    std::vector<double> coords;
 };
 
 // This class stores known values for vectors. It throws unknown vectors.
@@ -208,7 +204,7 @@ public:
 
   bool contains(Vector vec)
   {
-    map<Vector, double>::iterator it = values.find(vec); // TODO add tolerance
+    std::map<Vector, double>::iterator it = values.find(vec); // TODO add tolerance
     return it != values.end();
   }
 
@@ -217,7 +213,7 @@ private:
   ValueDB(const ValueDB&);
   ValueDB& operator=(const ValueDB&);
 
-  map<Vector, double> values;
+  std::map<Vector, double> values;
 };
 
 class NelderMead {
@@ -260,7 +256,7 @@ public:
     rho = -0.5;
     sigma = 0.5;
     this->termination_distance = termination_distance;
-    _bestDistance = numeric_limits<double>::max();
+    _bestDistance = std::numeric_limits<double>::max();
     _noChange = 0;
     _maxNoChange = 4;
   }
@@ -408,11 +404,11 @@ private:
     return s;
   }
 
-  auto_ptr<Function> _function;
+  std::auto_ptr<Function> _function;
   size_t dimension;
   double alpha, gamma, rho, sigma;
   double termination_distance;
-  vector<Vector> vectors;
+  std::vector<Vector> vectors;
   ValueDB db;
   double _bestDistance;
   int _noChange;

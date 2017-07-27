@@ -39,7 +39,7 @@ class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 
 public:
 
-  static string className() { return "hoot::PoiPolygonMergerCreator"; }
+  static std::string className() { return "hoot::PoiPolygonMergerCreator"; }
 
   PoiPolygonMergerCreator();
 
@@ -48,9 +48,9 @@ public:
    * appended. If there is more than one match and at least one is a PoiPolygonMatch then a
    * MarkForReviewMerger is created.
    */
-  virtual bool createMergers(const MatchSet& matches, vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
 
-  virtual vector<Description> getAllCreators() const;
+  virtual std::vector<Description> getAllCreators() const;
 
   virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
 

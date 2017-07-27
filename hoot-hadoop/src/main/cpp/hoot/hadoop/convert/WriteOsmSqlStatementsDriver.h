@@ -28,8 +28,6 @@
 namespace hoot
 {
 
-using namespace std;
-
 class OsmApiDbSqlStatementFormatter;
 
 /**
@@ -76,7 +74,7 @@ private:
   /*
    * launches the hadoop job
    */
-  void _runElementSqlStatementsWriteJob(const string& input, const string& output);
+  void _runElementSqlStatementsWriteJob(const std::string& input, const std::string& output);
   /*
    * determines where the output sql file will go based on whether the output sql file is to be
    * retained or not

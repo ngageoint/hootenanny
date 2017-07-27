@@ -26,12 +26,15 @@
  */
 #include "CopySubsetOp.h"
 
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/Log.h>
+
+using namespace std;
 
 namespace hoot
 {
 
-class AddAllVisitor : public ElementVisitor
+class AddAllVisitor : public ConstElementVisitor
 {
 public:
   AddAllVisitor(ConstOsmMapPtr from, OsmMapPtr to, ElementId exempt = ElementId()) :

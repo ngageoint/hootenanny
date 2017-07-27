@@ -37,6 +37,8 @@ using namespace std;
 
 #include "Exception.h"
 
+using namespace boost;
+
 namespace hoot
 {
 

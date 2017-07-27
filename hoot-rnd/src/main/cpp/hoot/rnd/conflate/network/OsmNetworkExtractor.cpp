@@ -27,16 +27,19 @@
 #include "OsmNetworkExtractor.h"
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Log.h>
+
+using namespace std;
 
 namespace hoot
 {
 
 unsigned int OsmNetworkExtractor::logWarnCount = 0;
 
-class OsmNetworkExtractorVisitor : public ElementVisitor
+class OsmNetworkExtractorVisitor : public ConstElementVisitor
 {
 public:
 
@@ -123,7 +126,7 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
   }
   else if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
     if (OsmSchema::getInstance().isLinear(*e) == false)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -172,14 +175,14 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
     if (e->getElementType() == ElementType::Way)
     {
       members.append(e);
-      ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+      ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
       from = ElementId::node(w->getFirstNodeId());
       to = ElementId::node(w->getLastNodeId());
     }
     else if (e->getElementType() == ElementType::Relation)
     {
       members.append(e);
-      ConstRelationPtr r = dynamic_pointer_cast<const Relation>(e);
+      ConstRelationPtr r = boost::dynamic_pointer_cast<const Relation>(e);
 
       if (_isContiguous(r))
       {
@@ -193,7 +196,10 @@ void OsmNetworkExtractor::_visit(const ConstElementPtr& e)
       {
         if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
         {
-         LOG_WARN("Found a non-contiguous relation when extracting a network. Ignoring: " << e);
+          LOG_WARN(
+            "Found a non-contiguous relation when extracting a network. Ignoring: " <<
+            e->getElementId());
+          LOG_TRACE("Non-contiguous relation: " << e);
         }
         else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
         {

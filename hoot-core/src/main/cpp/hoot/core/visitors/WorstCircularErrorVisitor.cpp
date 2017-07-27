@@ -29,10 +29,12 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 
+using namespace std;
+
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, WorstCircularErrorVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, WorstCircularErrorVisitor)
 
 void WorstCircularErrorVisitor::visit(const boost::shared_ptr<const Element>& e)
 {

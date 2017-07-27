@@ -38,11 +38,8 @@
 
 namespace hoot
 {
-class ElementVisitor;
 
-using namespace std;
-using namespace v8;
-
+class ConstElementVisitor;
 class OsmMapOperation;
 
 class ElementVisitorJs : public node::ObjectWrap
@@ -50,17 +47,17 @@ class ElementVisitorJs : public node::ObjectWrap
 public:
   static void Init(v8::Handle<v8::Object> target);
 
- boost::shared_ptr<ElementVisitor> getVisitor() { return _v; }
+  boost::shared_ptr<ConstElementVisitor> getVisitor() { return _v; }
 
 private:
-  ElementVisitorJs(ElementVisitor* v) : _v(v) {}
+  ElementVisitorJs(ConstElementVisitor* v) : _v(v) {}
   ElementVisitorJs() {}
   ~ElementVisitorJs() {}
 
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
 
   QString _className;
- boost::shared_ptr<ElementVisitor> _v;
+  boost::shared_ptr<ConstElementVisitor> _v;
 };
 
 }

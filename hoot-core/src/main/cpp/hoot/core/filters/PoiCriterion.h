@@ -34,12 +34,12 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A criterion that is only satisified with POIs.
  */
 class PoiCriterion : public ElementCriterion
 {
 public:
-  static string className() { return "hoot::PoiCriterion"; }
+  static std::string className() { return "hoot::PoiCriterion"; }
 
   PoiCriterion() {}
 

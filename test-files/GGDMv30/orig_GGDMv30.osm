@@ -1,0 +1,3554 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-87832' version='1' lat='-25.36200221451' lon='153.13438018902'>
+    <tag k='addr:full' v='Another Station' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:multi_unit' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Train Station' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='note' v='Above Ground' />
+    <tag k='public_transport' v='station' />
+    <tag k='railway' v='station' />
+    <tag k='roof:shape' v='sawtoothed' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='bomb' />
+    <tag k='source' v='tdsv61:transportation_station_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.196Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='transport:type' v='railway' />
+    <tag k='transport:type2' v='bus' />
+    <tag k='underground' v='no' />
+    <tag k='uuid' v='{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}' />
+  </node>
+  <node id='-87834' version='1' lat='-25.35529873194' lon='153.13438018902'>
+    <tag k='addr:full' v='A Station. Station Street' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:multi_unit' v='no' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Station' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='note' v='Underground Station' />
+    <tag k='public_transport' v='station' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='bomb' />
+    <tag k='source' v='tdsv61:transportation_station_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.196Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='transport:type' v='underground_railway' />
+    <tag k='transport:type2' v='bus' />
+    <tag k='underground' v='yes' />
+    <tag k='uuid' v='{9e5f2b36-e9e5-4e61-8ccb-bffb08256dd9}' />
+  </node>
+  <node id='-87836' version='1' lat='-25.44073307116' lon='153.20011828879' />
+  <node id='-87838' version='1' lat='-25.42876387296' lon='153.20003089682' />
+  <node id='-87840' version='1' lat='-25.44047763679' lon='153.19173844229' />
+  <node id='-87842' version='1' lat='-25.42850841321' lon='153.19165105034' />
+  <node id='-87844' version='1' lat='-25.4063613414' lon='153.08275922533' />
+  <node id='-87846' version='1' lat='-25.39421385975' lon='153.08284661728' />
+  <node id='-87848' version='1' lat='-25.40592438162' lon='153.09551845066' />
+  <node id='-87850' version='1' lat='-25.39377689997' lon='153.09560584261' />
+  <node id='-87852' version='1' lat='-25.40627394944' lon='153.07270915058' />
+  <node id='-87854' version='1' lat='-25.39412646779' lon='153.07279654254' />
+  <node id='-87856' version='1' lat='-25.40618655749' lon='153.09184798858' />
+  <node id='-87858' version='1' lat='-25.39403907584' lon='153.09193538053' />
+  <node id='-87860' version='1' lat='-25.4063613414' lon='153.0780400598' />
+  <node id='-87862' version='1' lat='-25.39421385975' lon='153.07812745175' />
+  <node id='-87864' version='1' lat='-25.40609916553' lon='153.08739099891' />
+  <node id='-87866' version='1' lat='-25.39395168388' lon='153.08747839086' />
+  <node id='-87868' version='1' lat='-25.36707593468' lon='153.16019973942'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='communication:radio_broadcast' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='design' v='a-frame' />
+    <tag k='ele:max' v='304.98230000000001' />
+    <tag k='error:circular' v='15' />
+    <tag k='guyed' v='no' />
+    <tag k='height' v='57' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='man_made' v='tower' />
+    <tag k='material' v='aluminum' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='note' v='Another Tower' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.192Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tower:shape' v='truss' />
+    <tag k='uuid' v='{d8fae562-b5ce-4529-92e4-dd209f69ee31}' />
+  </node>
+  <node id='-87870' version='1' lat='-25.36776722984' lon='153.17939697507'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='communication:television' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='design' v='a-frame' />
+    <tag k='ele:max' v='306.32649999' />
+    <tag k='error:circular' v='15' />
+    <tag k='guyed' v='no' />
+    <tag k='height' v='59' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='man_made' v='tower' />
+    <tag k='material' v='metal' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='roof:shape' v='flat_with_parapet' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.191Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tower:shape' v='truss' />
+    <tag k='tower:type' v='industrial' />
+    <tag k='uuid' v='{8dde26f8-3143-4d7a-b021-65dade3722da}' />
+  </node>
+  <node id='-87872' version='1' lat='-25.36155111461' lon='153.17944674358'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='communication:radio_broadcast' v='yes' />
+    <tag k='condition' v='destroyed' />
+    <tag k='design' v='t-frame' />
+    <tag k='ele:max' v='782.60809999000003' />
+    <tag k='error:circular' v='15' />
+    <tag k='guyed' v='yes' />
+    <tag k='height' v='50' />
+    <tag k='height:object' v='500' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='man_made' v='tower' />
+    <tag k='material' v='masonry' />
+    <tag k='name' v='Barad Dur' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='note' v='Don&apos;t take the ring here' />
+    <tag k='roof:shape' v='conical' />
+    <tag k='roof:shape2' v='star' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.191Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='supported' v='yes' />
+    <tag k='tower:shape' v='mast' />
+    <tag k='tower:type' v='guard' />
+    <tag k='tower:type2' v='observation' />
+    <tag k='uuid' v='{3df8f982-d64a-4196-83d0-2c6c01dc6ec9}' />
+  </node>
+  <node id='-87874' version='1' lat='-25.35535015075' lon='153.17962510436'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='design' v='i-frame' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='man_made' v='tower' />
+    <tag k='material' v='wood' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.191Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tower:shape' v='pole' />
+    <tag k='tower:type' v='communication' />
+    <tag k='uuid' v='{59302be3-1415-48eb-96cc-c3d482af34e1}' />
+  </node>
+  <node id='-87876' version='1' lat='-25.34936327241' lon='153.17986191569'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='condition' v='construction' />
+    <tag k='design' v='a-frame' />
+    <tag k='error:circular' v='15' />
+    <tag k='guyed' v='no' />
+    <tag k='height:object' v='10' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='man_made' v='tower' />
+    <tag k='material' v='metal' />
+    <tag k='name' v='Tower 1' />
+    <tag k='roof:shape' v='domed' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.191Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='supported' v='no' />
+    <tag k='tower:shape' v='truss' />
+    <tag k='tower:type' v='observation' />
+    <tag k='uuid' v='{18021657-b6e6-4b01-b5a4-41329def51d5}' />
+  </node>
+  <node id='-87878' version='1' lat='-25.4405766034' lon='153.19549817451' />
+  <node id='-87880' version='1' lat='-25.42860738965' lon='153.19541078256' />
+  <node id='-87882' version='1' lat='-25.40631105968' lon='153.1471681745' />
+  <node id='-87884' version='1' lat='-25.39231089402' lon='153.14732465792' />
+  <node id='-87886' version='1' lat='-25.3922424529' lon='153.14091519348' />
+  <node id='-87888' version='1' lat='-25.40622885694' lon='153.14080447922' />
+  <node id='-87890' version='1' lat='-25.39016607144' lon='153.14701431785' />
+  <node id='-87892' version='1' lat='-25.37616403305' lon='153.14717080127' />
+  <node id='-87894' version='1' lat='-25.37609558277' lon='153.14076133683' />
+  <node id='-87896' version='1' lat='-25.3900838577' lon='153.14065062257' />
+  <node id='-87898' version='1' lat='-25.36741319285' lon='153.17256017433'>
+    <tag k='addr:full' v='In a garden' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='shed' />
+    <tag k='by_product2' v='no_byproduct' />
+    <tag k='condition' v='destroyed' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='concrete' />
+    <tag k='name' v='Another Shed' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='product' v='consumer_goods' />
+    <tag k='raw_material' v='no_raw_material' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='roof:shape2' v='80' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:shed_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.184Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='emergency_operations' />
+    <tag k='uuid' v='{7cc3f7a2-845b-441e-a89f-d6939fb0f5f0}' />
+  </node>
+  <node id='-87900' version='1' lat='-25.36179918467' lon='153.17275983075'>
+    <tag k='addr:full' v='Jason&apos;s Backyard' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='shed' />
+    <tag k='by_product' v='slag' />
+    <tag k='condition' v='construction' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='aluminum' />
+    <tag k='material:vertical2' v='wood' />
+    <tag k='name' v='Another Garden Shed' />
+    <tag k='note' v='In the backyard' />
+    <tag k='product' v='coffee' />
+    <tag k='product2' v='aircraft' />
+    <tag k='raw_material' v='plant_material' />
+    <tag k='roof:shape' v='with_smokestack' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:shed_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.184Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='warehouse' />
+    <tag k='use2' v='meeting_place' />
+    <tag k='uuid' v='{b202f179-5156-4769-a5a0-031bb3468d10}' />
+  </node>
+  <node id='-87902' version='1' lat='-25.43999359376' lon='153.17244944393' />
+  <node id='-87904' version='1' lat='-25.42802432209' lon='153.17236205197' />
+  <node id='-87906' version='1' lat='-25.43989188058' lon='153.15903915843' />
+  <node id='-87908' version='1' lat='-25.4279225988' lon='153.15895176647' />
+  <node id='-87910' version='1' lat='-25.43991140438' lon='153.16214277848' />
+  <node id='-87912' version='1' lat='-25.42794212455' lon='153.16205538652' />
+  <node id='-87914' version='1' lat='-25.43999359376' lon='153.17608903005' />
+  <node id='-87916' version='1' lat='-25.42802432209' lon='153.1760016381' />
+  <node id='-87918' version='1' lat='-25.43985664884' lon='153.16865820839' />
+  <node id='-87920' version='1' lat='-25.42788736356' lon='153.16857081644' />
+  <node id='-87922' version='1' lat='-25.43979291341' lon='153.15588602389' />
+  <node id='-87924' version='1' lat='-25.42782362181' lon='153.15579863193' />
+  <node id='-87926' version='1' lat='-25.44002101302' lon='153.16525695248' />
+  <node id='-87928' version='1' lat='-25.42805174408' lon='153.16516956051' />
+  <node id='-87930' version='1' lat='-25.44023163499' lon='153.17931815433' />
+  <node id='-87932' version='1' lat='-25.42826238697' lon='153.17923076237' />
+  <node id='-87934' version='1' lat='-25.44031779739' lon='153.18462773603' />
+  <node id='-87936' version='1' lat='-25.42834855792' lon='153.18454034407' />
+  <node id='-87938' version='1' lat='-25.44017595261' lon='153.18212124524' />
+  <node id='-87940' version='1' lat='-25.42820669906' lon='153.18203385329' />
+  <node id='-87942' version='1' lat='-25.40526317282' lon='153.16131649986' />
+  <node id='-87944' version='1' lat='-25.39329045283' lon='153.1612291079' />
+  <node id='-87946' version='1' lat='-25.40526317282' lon='153.15750936815' />
+  <node id='-87948' version='1' lat='-25.39329045283' lon='153.1574219762' />
+  <node id='-87950' version='1' lat='-25.40512563577' lon='153.15050424581' />
+  <node id='-87952' version='1' lat='-25.39315285877' lon='153.15041685386' />
+  <node id='-87954' version='1' lat='-25.4058134062' lon='153.12492032075' />
+  <node id='-87956' version='1' lat='-25.3938407408' lon='153.1248329288' />
+  <node id='-87958' version='1' lat='-25.40540073574' lon='153.15431137752' />
+  <node id='-87960' version='1' lat='-25.39342802072' lon='153.15422398556' />
+  <node id='-87962' version='1' lat='-25.40557481381' lon='153.11290944957' />
+  <node id='-87964' version='1' lat='-25.39360211607' lon='153.11282205761' />
+  <node id='-87966' version='1' lat='-25.40592438162' lon='153.0994510886' />
+  <node id='-87968' version='1' lat='-25.39395168388' lon='153.09936369665' />
+  <node id='-87970' version='1' lat='-25.40548742185' lon='153.12077472546' />
+  <node id='-87972' version='1' lat='-25.39351472411' lon='153.1206873335' />
+  <node id='-87974' version='1' lat='-25.40548742185' lon='153.10836506794' />
+  <node id='-87976' version='1' lat='-25.39351472411' lon='153.10827767599' />
+  <node id='-87978' version='1' lat='-25.40548742185' lon='153.11727904728' />
+  <node id='-87980' version='1' lat='-25.39351472411' lon='153.11719165533' />
+  <node id='-87982' version='1' lat='-25.40592438162' lon='153.10373329437' />
+  <node id='-87984' version='1' lat='-25.39395168388' lon='153.10364590241' />
+  <node id='-87986' version='1' lat='-25.39095351144' lon='153.0917627629' />
+  <node id='-87988' version='1' lat='-25.37613282204' lon='153.0917627629' />
+  <node id='-87990' version='1' lat='-25.39069133558' lon='153.12505909749' />
+  <node id='-87992' version='1' lat='-25.37587064617' lon='153.12505909749' />
+  <node id='-87994' version='1' lat='-25.39086611949' lon='153.11264943998' />
+  <node id='-87996' version='1' lat='-25.37604543008' lon='153.11264943998' />
+  <node id='-87998' version='1' lat='-25.39060394363' lon='153.07804222607' />
+  <node id='-88000' version='1' lat='-25.37578325422' lon='153.07804222607' />
+  <node id='-88002' version='1' lat='-25.3910409034' lon='153.1080176664' />
+  <node id='-88004' version='1' lat='-25.37622021399' lon='153.1080176664' />
+  <node id='-88006' version='1' lat='-25.3910409034' lon='153.09936586292' />
+  <node id='-88008' version='1' lat='-25.37622021399' lon='153.09936586292' />
+  <node id='-88010' version='1' lat='-25.39086611949' lon='153.12907912739' />
+  <node id='-88012' version='1' lat='-25.37604543008' lon='153.12907912739' />
+  <node id='-88014' version='1' lat='-25.39086611949' lon='153.11701903769' />
+  <node id='-88016' version='1' lat='-25.37604543008' lon='153.11701903769' />
+  <node id='-88018' version='1' lat='-25.39077872754' lon='153.08284878356' />
+  <node id='-88020' version='1' lat='-25.37595803813' lon='153.08284878356' />
+  <node id='-88022' version='1' lat='-25.39077872754' lon='153.09560800889' />
+  <node id='-88024' version='1' lat='-25.37595803813' lon='153.09560800889' />
+  <node id='-88026' version='1' lat='-25.39069133558' lon='153.12077689173' />
+  <node id='-88028' version='1' lat='-25.37587064617' lon='153.12077689173' />
+  <node id='-88030' version='1' lat='-25.39060394363' lon='153.07236174904' />
+  <node id='-88032' version='1' lat='-25.37578325422' lon='153.07236174904' />
+  <node id='-88034' version='1' lat='-25.39121568731' lon='153.10347328477' />
+  <node id='-88036' version='1' lat='-25.3763949979' lon='153.10347328477' />
+  <node id='-88038' version='1' lat='-25.39069133558' lon='153.1332739412' />
+  <node id='-88040' version='1' lat='-25.37587064617' lon='153.1332739412' />
+  <node id='-88042' version='1' lat='-25.39069133558' lon='153.08756794909' />
+  <node id='-88044' version='1' lat='-25.37587064617' lon='153.08756794909' />
+  <node id='-88046' version='1' lat='-25.42083342063' lon='153.08240965751' />
+  <node id='-88048' version='1' lat='-25.42083342063' lon='153.08258444142' />
+  <node id='-88050' version='1' lat='-25.41043397101' lon='153.08275922533' />
+  <node id='-88052' version='1' lat='-25.42118298196' lon='153.07227219081' />
+  <node id='-88054' version='1' lat='-25.42118298196' lon='153.07244697472' />
+  <node id='-88056' version='1' lat='-25.41078353235' lon='153.07262175863' />
+  <node id='-88058' version='1' lat='-25.42100820129' lon='153.0952562748' />
+  <node id='-88060' version='1' lat='-25.42100820129' lon='153.09543105871' />
+  <node id='-88062' version='1' lat='-25.41060875168' lon='153.09560584261' />
+  <node id='-88064' version='1' lat='-25.42109559163' lon='153.08669186327' />
+  <node id='-88066' version='1' lat='-25.42109559163' lon='153.08686664718' />
+  <node id='-88068' version='1' lat='-25.41069614201' lon='153.08704143109' />
+  <node id='-88070' version='1' lat='-25.42118298196' lon='153.07742831612' />
+  <node id='-88072' version='1' lat='-25.42118298196' lon='153.07760310003' />
+  <node id='-88074' version='1' lat='-25.41078353235' lon='153.07777788393' />
+  <node id='-88076' version='1' lat='-25.42109559163' lon='153.0912362449' />
+  <node id='-88078' version='1' lat='-25.42109559163' lon='153.09141102881' />
+  <node id='-88080' version='1' lat='-25.41069614201' lon='153.09158581272' />
+  <node id='-88082' version='1' lat='-25.34957735782' lon='153.17292402971'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='cable:type' v='fibre-optic' />
+    <tag k='cable:type2' v='load_bearing' />
+    <tag k='condition' v='construction' />
+    <tag k='error:circular' v='15' />
+    <tag k='guyed' v='no' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='fibreglass' />
+    <tag k='name' v='Fibre Optic' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='note' v='Google Fibre' />
+    <tag k='pylon' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:pylon_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.166Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tower:shape' v='pole' />
+    <tag k='uuid' v='{be171f7c-b9f1-47b6-8fcc-455508f11621}' />
+  </node>
+  <node id='-88084' version='1' lat='-25.35594089691' lon='153.17294783168'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='cable:type' v='power' />
+    <tag k='condition' v='functional' />
+    <tag k='design' v='t-frame' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='material' v='steel' />
+    <tag k='name' v='Power Cable' />
+    <tag k='note' v='Excel Energy' />
+    <tag k='power' v='tower' />
+    <tag k='pylon' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:pylon_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.165Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tower:shape' v='mast' />
+    <tag k='uuid' v='{64c05490-22b9-44d1-8fb9-7a3130c08f9b}' />
+  </node>
+  <node id='-88086' version='1' lat='-25.36715713627' lon='153.16697164986'>
+    <tag k='addr:full' v='Third village from the left' />
+    <tag k='amenity' v='social_facility' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='hut' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='name' v='The Hut' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='social_facility' v='shelter' />
+    <tag k='social_facility:for' v='refugee' />
+    <tag k='source' v='tdsv61:hut_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.164Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{9beacdca-869f-4188-b894-5ab18e6a4fe3}' />
+  </node>
+  <node id='-88088' version='1' lat='-25.36171507423' lon='153.16671064849'>
+    <tag k='addr:full' v='In a field' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='hut' />
+    <tag k='condition' v='abandoned' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='name' v='Clinic of some sort' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='note' v='Yes, a memo' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:hut_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.164Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='leprosy_care' />
+    <tag k='use2' v='religious_activities' />
+    <tag k='uuid' v='{aad37b05-3771-44b8-ace3-3f7933d18890}' />
+  </node>
+  <node id='-88090' version='1' lat='-25.3559810355' lon='153.1666839561'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='hut' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='name' v='Holiday House' />
+    <tag k='note' v='On the beach' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:hut_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.164Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='vacation_cottage' />
+    <tag k='uuid' v='{5a9c3bdc-49b6-44c9-ba88-81c6b10104fb}' />
+  </node>
+  <node id='-88092' version='1' lat='-25.34982294345' lon='153.16690647497'>
+    <tag k='addr:full' v='On a hill' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='hut' />
+    <tag k='condition' v='construction' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:hut_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.163Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='agriculture' />
+    <tag k='uuid' v='{21962f08-469a-4714-9080-e7362841c21f}' />
+  </node>
+  <node id='-88094' version='1' lat='-25.46076974728' lon='153.136991677' />
+  <node id='-88096' version='1' lat='-25.4609367048' lon='153.14968044846' />
+  <node id='-88098' version='1' lat='-25.44674531567' lon='153.14984740598' />
+  <node id='-88100' version='1' lat='-25.44691227319' lon='153.13682471948' />
+  <node id='-88102' version='1' lat='-25.46024527025' lon='153.1218694029' />
+  <node id='-88104' version='1' lat='-25.46041529642' lon='153.1218694029' />
+  <node id='-88106' version='1' lat='-25.46092537494' lon='153.13275107799' />
+  <node id='-88108' version='1' lat='-25.44630312405' lon='153.13309113033' />
+  <node id='-88110' version='1' lat='-25.44630312405' lon='153.1225495076' />
+  <node id='-88112' version='1' lat='-25.46024527025' lon='153.10435670707' />
+  <node id='-88114' version='1' lat='-25.46041529642' lon='153.10435670707' />
+  <node id='-88116' version='1' lat='-25.46092537494' lon='153.11523838215' />
+  <node id='-88118' version='1' lat='-25.44630312405' lon='153.1155784345' />
+  <node id='-88120' version='1' lat='-25.44630312405' lon='153.10503681176' />
+  <node id='-88122' version='1' lat='-25.34969456587' lon='153.14800905258'>
+    <tag k='addr:full' v='A Street' />
+    <tag k='by_product' v='ash' />
+    <tag k='by_product2' v='cinders' />
+    <tag k='condition' v='construction' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='height' v='2' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='man_made' v='works' />
+    <tag k='name' v='Brick Works' />
+    <tag k='note' v='Brick Works Memo' />
+    <tag k='product' v='brick' />
+    <tag k='raw_material' v='clay' />
+    <tag k='raw_material2' v='plant_material' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.160Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='manufacturing' />
+    <tag k='uuid' v='{c484012c-333d-4ae9-b995-8f2190be07fd}' />
+  </node>
+  <node id='-88124' version='1' lat='-25.35532188373' lon='153.14771287796'>
+    <tag k='addr:full' v='Yet another Street' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='mosque' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='prestressed_concrete' />
+    <tag k='material:vertical2' v='stone' />
+    <tag k='name' v='Religious Facility' />
+    <tag k='note' v='Big Facility' />
+    <tag k='religion' v='muslim' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.160Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{f9f1e2e7-7699-4dd7-8271-586970f42122}' />
+  </node>
+  <node id='-88126' version='1' lat='-25.36707152078' lon='153.14805334598'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='condition' v='destroyed' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='height' v='1' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='stone' />
+    <tag k='name' v='Unknown Facility' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.160Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{cf031628-1b2d-47e5-a715-d567ee5c4963}' />
+  </node>
+  <node id='-88128' version='1' lat='-25.34955121044' lon='153.15319847121'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='condition' v='construction' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='height' v='3' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='steel' />
+    <tag k='name' v='Health Care Facility' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.159Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='healthcare' />
+    <tag k='uuid' v='{2e21028a-196a-4abc-9235-e92296942756}' />
+  </node>
+  <node id='-88130' version='1' lat='-25.3616748649' lon='153.14781556301'>
+    <tag k='amenity' v='school' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='height' v='2' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='mud-based_construction' />
+    <tag k='name' v='Education Facility' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.159Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='education' />
+    <tag k='uuid' v='{964ac67b-8ae1-4320-8a68-f804510d076b}' />
+  </node>
+  <node id='-88132' version='1' lat='-25.38253115059' lon='153.15259254359'>
+    <tag k='crossing_point' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='intersection_control' v='stop_sign' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Level Crossing' />
+    <tag k='note' v='It is a crossing' />
+    <tag k='railway' v='level_crossing' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:crossing_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.158Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='transport:type' v='railway' />
+    <tag k='transport:type2' v='road' />
+    <tag k='uuid' v='{e4600f2b-ae94-4934-8d6e-e4a55fe12f28}' />
+  </node>
+  <node id='-88134' version='1' lat='-25.38518647587' lon='153.15266630263'>
+    <tag k='crossing_point' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:crossing_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.157Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{87b5b534-f724-47af-bc95-dc515692385c}' />
+  </node>
+  <node id='-88136' version='1' lat='-25.37685170486' lon='153.15259254359'>
+    <tag k='crossing_point' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='crossing' />
+    <tag k='intersection_control' v='stop_sign' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='A crossing' />
+    <tag k='note' v='It is a crossing' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:crossing_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.157Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{85d5644c-3347-403c-8479-31701bc34156}' />
+  </node>
+  <node id='-88138' version='1' lat='-25.3796437928' lon='153.15261867161'>
+    <tag k='crossing' v='uncontrolled' />
+    <tag k='crossing_point' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Another crossing' />
+    <tag k='railway' v='crossing' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:crossing_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.157Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='transport:type' v='railway' />
+    <tag k='uuid' v='{1eaea615-9a59-46d7-b0ae-1413898252aa}' />
+  </node>
+  <node id='-88140' version='1' lat='-25.36164632091' lon='153.16024304132'>
+    <tag k='addr:full' v='The other side of the airfield' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='control_tower' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='name' v='Transport Tower' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='roof:shape' v='semi-cylindrical' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:control_tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.156Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='transport:type' v='air' />
+    <tag k='transport:type2' v='road' />
+    <tag k='use' v='air_transport' />
+    <tag k='uuid' v='{a941263e-ca69-413d-9148-b2550cd5256d}' />
+  </node>
+  <node id='-88142' version='1' lat='-25.35549906914' lon='153.16008913709'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='construction' />
+    <tag k='control_tower' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='material' v='iron' />
+    <tag k='material:vertical2' v='prestressed_concrete' />
+    <tag k='name' v='Emergency Tower' />
+    <tag k='note' v='A good tower' />
+    <tag k='roof:shape' v='sawtoothed' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:control_tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.156Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='transport:type' v='inland_waterway' />
+    <tag k='use' v='emergency_operations' />
+    <tag k='uuid' v='{12d8e91e-46d3-4ef4-b66d-fea61c12aa20}' />
+  </node>
+  <node id='-88144' version='1' lat='-25.34981773615' lon='153.16029730979'>
+    <tag k='addr:full' v='On the left of the airfield' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='control_tower' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='man_made' v='tower' />
+    <tag k='material' v='brick' />
+    <tag k='name' v='Airport Control Tower' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='note' v='Yes it is' />
+    <tag k='roof:shape' v='pyramidal' />
+    <tag k='roof:shape2' v='51' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:control_tower_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.155Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tower:type' v='observation' />
+    <tag k='transport:type' v='air' />
+    <tag k='use' v='air_traffic_control' />
+    <tag k='uuid' v='{65322290-34e9-4b36-90d0-0cf930ec8142}' />
+  </node>
+  <node id='-88146' version='1' lat='-25.44031779739' lon='153.18826732214' />
+  <node id='-88148' version='1' lat='-25.42834855792' lon='153.18817993018' />
+  <node id='-88150' version='1' lat='-25.40535146451' lon='153.13797272221' />
+  <node id='-88152' version='1' lat='-25.39381580545' lon='153.13797272221' />
+  <node id='-88154' version='1' lat='-25.4051766818' lon='153.13369051645' />
+  <node id='-88156' version='1' lat='-25.39364102274' lon='153.13369051645' />
+  <node id='-88158' version='1' lat='-25.4057884213' lon='153.12949570264' />
+  <node id='-88160' version='1' lat='-25.39425276223' lon='153.12949570264' />
+  <node id='-88162' version='1' lat='-25.47945822781' lon='153.13615160145' />
+  <node id='-88164' version='1' lat='-25.47962825399' lon='153.13615160145' />
+  <node id='-88166' version='1' lat='-25.48013833251' lon='153.14703327653' />
+  <node id='-88168' version='1' lat='-25.46551608161' lon='153.14737332888' />
+  <node id='-88170' version='1' lat='-25.46551608161' lon='153.13683170614' />
+  <node id='-88172' version='1' lat='-25.47656778287' lon='153.08667398506' />
+  <node id='-88174' version='1' lat='-25.47673780904' lon='153.08667398506' />
+  <node id='-88176' version='1' lat='-25.47724788756' lon='153.09755566014' />
+  <node id='-88178' version='1' lat='-25.46262563667' lon='153.09789571249' />
+  <node id='-88180' version='1' lat='-25.46262563667' lon='153.08735408975' />
+  <node id='-88182' version='1' lat='-25.47690783522' lon='153.07171168182' />
+  <node id='-88184' version='1' lat='-25.47707786139' lon='153.07171168182' />
+  <node id='-88186' version='1' lat='-25.47758793991' lon='153.0825933569' />
+  <node id='-88188' version='1' lat='-25.46296568902' lon='153.08293340925' />
+  <node id='-88190' version='1' lat='-25.46296568902' lon='153.07239178651' />
+  <node id='-88192' version='1' lat='-25.4782680446' lon='153.10299649768' />
+  <node id='-88194' version='1' lat='-25.47843807078' lon='153.10299649768' />
+  <node id='-88196' version='1' lat='-25.47894814929' lon='153.11387817277' />
+  <node id='-88198' version='1' lat='-25.4643258984' lon='153.11421822511' />
+  <node id='-88200' version='1' lat='-25.4643258984' lon='153.10367660238' />
+  <node id='-88202' version='1' lat='-25.47809801843' lon='153.12067921969' />
+  <node id='-88204' version='1' lat='-25.4782680446' lon='153.12067921969' />
+  <node id='-88206' version='1' lat='-25.47877812312' lon='153.13156089477' />
+  <node id='-88208' version='1' lat='-25.46415587223' lon='153.13190094712' />
+  <node id='-88210' version='1' lat='-25.46415587223' lon='153.12135932438' />
+  <node id='-88212' version='1' lat='-25.46007524407' lon='153.07256181269' />
+  <node id='-88214' version='1' lat='-25.46024527025' lon='153.07256181269' />
+  <node id='-88216' version='1' lat='-25.46075534877' lon='153.08344348777' />
+  <node id='-88218' version='1' lat='-25.44613309787' lon='153.08378354012' />
+  <node id='-88220' version='1' lat='-25.44613309787' lon='153.07324191738' />
+  <node id='-88222' version='1' lat='-25.46024527025' lon='153.08718406358' />
+  <node id='-88224' version='1' lat='-25.46041529642' lon='153.08718406358' />
+  <node id='-88226' version='1' lat='-25.46092537494' lon='153.09806573866' />
+  <node id='-88228' version='1' lat='-25.44630312405' lon='153.09840579101' />
+  <node id='-88230' version='1' lat='-25.44630312405' lon='153.08786416827' />
+  <node id='-88232' version='1' lat='-25.36737298496' lon='153.14182343993'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:density' v='moderate' />
+    <tag k='condition' v='destroyed' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='landuse' v='commercial' />
+    <tag k='note' v='No More Information' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.149Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{ba0c8a94-7f45-4628-b15d-4dfb2ad3d1ca}' />
+  </node>
+  <node id='-88234' version='1' lat='-25.36197014216' lon='153.14194076391'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:density' v='dense' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='landuse' v='built_up_area' />
+    <tag k='name' v='Industrial Estate' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.149Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='manufacturing' />
+    <tag k='uuid' v='{7b0243f4-29f8-40af-85f6-85e3d923f37e}' />
+  </node>
+  <node id='-88236' version='1' lat='-25.35550072137' lon='153.14178520056'>
+    <tag k='attribution' v='u.s._army' />
+    <tag k='building:density' v='sparse' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='landuse' v='residential' />
+    <tag k='name' v='Residential Area' />
+    <tag k='note' v='Lots of houses' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.148Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{af7324fd-6e0b-4347-8072-5978df62dddb}' />
+  </node>
+  <node id='-88238' version='1' lat='-25.34982698257' lon='153.14184473589'>
+    <tag k='attribution' v='defence_imagery_and_geospatial_organisation_(australia)' />
+    <tag k='condition' v='construction' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='landuse' v='built_up_area' />
+    <tag k='name' v='Religious BUA' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='AUS' />
+    <tag k='source' v='tdsv61:built_up_area_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.148Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='religious_activities' />
+    <tag k='uuid' v='{6921f190-e551-465e-868c-2aaf4e0534ef}' />
+  </node>
+  <node id='-88240' version='1' lat='-25.36708814444' lon='153.15298773212'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:superstructure' v='yes' />
+    <tag k='building:superstructure:type' v='minaret' />
+    <tag k='ele:max' v='197' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='9' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='length' v='2' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_superstructure_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.147Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{04876e5f-f7c8-4836-8910-a7c35212a064}' />
+    <tag k='width' v='2' />
+  </node>
+  <node id='-88242' version='1' lat='-25.36172213137' lon='153.153052846'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:superstructure' v='yes' />
+    <tag k='building:superstructure:type' v='minaret' />
+    <tag k='ele:max' v='194' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='8' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='length' v='2' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_superstructure_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.147Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{4c2a2cf3-9dda-4a11-8f85-fde7797b92e6}' />
+    <tag k='width' v='2' />
+  </node>
+  <node id='-88244' version='1' lat='-25.35562763137' lon='153.15322766631'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:superstructure' v='yes' />
+    <tag k='building:superstructure:type' v='minaret' />
+    <tag k='ele:max' v='198' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='13' />
+    <tag k='is_in:country_code' v='EH' />
+    <tag k='length' v='3' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_superstructure_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.146Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{91b5cd10-c9a9-4573-983f-cd7eb41afbf5}' />
+    <tag k='width' v='3' />
+  </node>
+  <node id='-88246' version='1' lat='-25.43991806648' lon='153.07127657352' />
+  <node id='-88248' version='1' lat='-25.440085024' lon='153.08396534498' />
+  <node id='-88250' version='1' lat='-25.42589363487' lon='153.0841323025' />
+  <node id='-88252' version='1' lat='-25.42606059239' lon='153.071109616' />
+  <node id='-88254' version='1' lat='-25.42427565855' lon='153.13588651932' />
+  <node id='-88256' version='1' lat='-25.42444261607' lon='153.14857529078' />
+  <node id='-88258' version='1' lat='-25.41025122694' lon='153.1487422483' />
+  <node id='-88260' version='1' lat='-25.41041818445' lon='153.1357195618' />
+  <node id='-88262' version='1' lat='-25.44059817117' lon='153.12109424225' />
+  <node id='-88264' version='1' lat='-25.44076512869' lon='153.13378301371' />
+  <node id='-88266' version='1' lat='-25.42657373956' lon='153.13394997123' />
+  <node id='-88268' version='1' lat='-25.42674069708' lon='153.12092728473' />
+  <node id='-88270' version='1' lat='-25.44070602945' lon='153.08886045307' />
+  <node id='-88272' version='1' lat='-25.44087605563' lon='153.08886045307' />
+  <node id='-88274' version='1' lat='-25.44138613415' lon='153.09974212815' />
+  <node id='-88276' version='1' lat='-25.42676388325' lon='153.1000821805' />
+  <node id='-88278' version='1' lat='-25.42676388325' lon='153.08954055776' />
+  <node id='-88280' version='1' lat='-25.44093822352' lon='153.10528180815' />
+  <node id='-88282' version='1' lat='-25.44110518104' lon='153.11797057961' />
+  <node id='-88284' version='1' lat='-25.42691379191' lon='153.11813753713' />
+  <node id='-88286' version='1' lat='-25.42708074942' lon='153.10511485063' />
+  <node id='-88288' version='1' lat='-25.42427565855' lon='153.11650353558' />
+  <node id='-88290' version='1' lat='-25.42444261607' lon='153.12919230704' />
+  <node id='-88292' version='1' lat='-25.41025122694' lon='153.12935926456' />
+  <node id='-88294' version='1' lat='-25.41041818445' lon='153.11633657806' />
+  <node id='-88296' version='1' lat='-25.44161832821' lon='153.13741675488' />
+  <node id='-88298' version='1' lat='-25.44178528573' lon='153.15010552634' />
+  <node id='-88300' version='1' lat='-25.4275938966' lon='153.15027248386' />
+  <node id='-88302' version='1' lat='-25.42776085412' lon='153.13724979736' />
+  <node id='-88304' version='1' lat='-25.42410563238' lon='153.10035104913' />
+  <node id='-88306' version='1' lat='-25.4242725899' lon='153.11303982059' />
+  <node id='-88308' version='1' lat='-25.41008120076' lon='153.11320677811' />
+  <node id='-88310' version='1' lat='-25.41024815828' lon='153.10018409161' />
+  <node id='-88312' version='1' lat='-25.34972342894' lon='153.12762676206'>
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='mission' />
+    <tag k='building:manufactured' v='yes' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='denomination' v='protestant' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Mission' />
+    <tag k='note' v='We are on a Mission' />
+    <tag k='religion' v='christian' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='fallout' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.140Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='religious_activities' />
+    <tag k='uuid' v='{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}' />
+  </node>
+  <node id='-88314' version='1' lat='-25.36758011958' lon='153.12785791663'>
+    <tag k='addr:full' v='Third building on the Left' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='mosque' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='A Mosque' />
+    <tag k='note' v='Memo' />
+    <tag k='religion' v='muslim' />
+    <tag k='roof:shape' v='with_minaret' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.140Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='islamic_prayer_hall' />
+    <tag k='uuid' v='{fd5605a3-70b6-492b-896a-6bdb2e5e439c}' />
+  </node>
+  <node id='-88316' version='1' lat='-25.36741892506' lon='153.10876154999'>
+    <tag k='addr:full' v='Left of Main Street' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:manufactured' v='yes' />
+    <tag k='condition' v='abandoned' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='35' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Abandoned Hospital' />
+    <tag k='note' v='Closed for a long time' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.140Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='healthcare' />
+    <tag k='uuid' v='{5995970c-4266-429f-ae1e-5146a77eafee}' />
+  </node>
+  <node id='-88318' version='1' lat='-25.36682930567' lon='153.08007774'>
+    <tag k='addr:full' v='On another Street' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='material' v='brick' />
+    <tag k='name' v='A Barn' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='note' v='This is a barn' />
+    <tag k='product' v='milk' />
+    <tag k='roof:shape' v='with_steeple' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.139Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='raising_animals' />
+    <tag k='uuid' v='{26cb3035-d35e-4b09-aeba-ec27be6a0bb1}' />
+  </node>
+  <node id='-88320' version='1' lat='-25.3674807106' lon='153.12130935589'>
+    <tag k='addr:full' v='On a Street' />
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='building:manufactured' v='yes' />
+    <tag k='condition' v='construction' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='60' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='name' v='Healthcare - Hospital' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='bomb' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.139Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='healthcare' />
+    <tag k='uuid' v='{b14e13c0-5ea4-4b04-8ce9-422e15b3037e}' />
+  </node>
+  <node id='-88322' version='1' lat='-25.35531820808' lon='153.08796163581'>
+    <tag k='amenity' v='community_centre' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='material' v='adobe_brick' />
+    <tag k='name' v='Community Centre' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.139Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{97c3c816-d0cc-4416-a906-7ff94d1feeba}' />
+  </node>
+  <node id='-88324' version='1' lat='-25.34952151002' lon='153.1088703282'>
+    <tag k='amenity' v='police' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='71' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='material' v='glass' />
+    <tag k='name' v='Police Station' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='roof:shape' v='pitched' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.138Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{ada3fb8e-d49a-412a-a427-1df9fdbdde9b}' />
+  </node>
+  <node id='-88326' version='1' lat='-25.36193845875' lon='153.12776784785'>
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='pagoda' />
+    <tag k='building:manufactured' v='no' />
+    <tag k='communication:television' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='name' v='Place of Worship' />
+    <tag k='religion' v='buddhist' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.138Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{3cdd04f4-a468-4dfe-a564-7e0369a9832b}' />
+  </node>
+  <node id='-88328' version='1' lat='-25.36749529304' lon='153.10266738769'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='industrial' />
+    <tag k='building:levels' v='1' />
+    <tag k='building:multi_unit' v='no' />
+    <tag k='by_product' v='scrap-metal' />
+    <tag k='by_product2' v='slag' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='50' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='adobe_brick' />
+    <tag k='name' v='Metal Products' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='product' v='consumer_goods' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.138Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='metal_product_manufacturing' />
+    <tag k='uuid' v='{ada332ac-aeec-428c-8011-5241c94f4b8e}' />
+  </node>
+  <node id='-88330' version='1' lat='-25.34968171149' lon='153.11467485858'>
+    <tag k='amenity' v='prison' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:manufactured' v='no' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Prison' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.137Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{25fa4462-4fc9-4f15-8193-faafd0891f5f}' />
+  </node>
+  <node id='-88332' version='1' lat='-25.36100648001' lon='153.07212542065'>
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='2' />
+    <tag k='communication:television' v='yes' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='material' v='plant_material' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='fallout' />
+    <tag k='shop' v='pet' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.137Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{e68c306d-bd66-4a9c-896c-3a313a9c0a64}' />
+  </node>
+  <node id='-88334' version='1' lat='-25.3553774147' lon='153.10254755646'>
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='mosque' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='material' v='wood' />
+    <tag k='name' v='Public Order' />
+    <tag k='religion' v='muslim' />
+    <tag k='roof:shape' v='with_minaret' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.137Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='public_order' />
+    <tag k='uuid' v='{375f559b-1f8b-47c0-ad34-7f0df3e6a60e}' />
+  </node>
+  <node id='-88336' version='1' lat='-25.36154470518' lon='153.08787822725'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='school' />
+    <tag k='building:levels' v='3' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='material' v='glass' />
+    <tag k='name' v='Education' />
+    <tag k='roof:shape' v='pitched' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.136Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='education' />
+    <tag k='uuid' v='{38816f81-a5bc-4fff-954f-29423f09b76b}' />
+  </node>
+  <node id='-88338' version='1' lat='-25.36729863548' lon='153.09495353724'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='school' />
+    <tag k='building:levels' v='2' />
+    <tag k='building:manufactured' v='no' />
+    <tag k='building:multi_unit' v='no' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='isced:level' v='2,3' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='material' v='metal' />
+    <tag k='name' v='Secondary Education' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.136Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{08b347f2-0039-4bde-a17d-a456214f56e1}' />
+  </node>
+  <node id='-88340' version='1' lat='-25.36149146569' lon='153.10245252709'>
+    <tag k='amenity' v='restaurant' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='6' />
+    <tag k='communication:television' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Restaurant' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.136Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{3baf263f-4c66-4640-8a48-e98aeba77678}' />
+  </node>
+  <node id='-88342' version='1' lat='-25.34914028115' lon='153.07999697416'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='6' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='material' v='Smoke' />
+    <tag k='name' v='Many Funky Things' />
+    <tag k='note' v='4 x OTH' />
+    <tag k='product' v='bamboo' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='fallout' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.135Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='Smurf Factory' />
+    <tag k='use2' v='Elf Store' />
+    <tag k='uuid' v='{34788650-9dc2-45b0-95ee-42f28c23f8f4}' />
+  </node>
+  <node id='-88344' version='1' lat='-25.34956258925' lon='153.1345447'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='material' v='adobe_brick' />
+    <tag k='name' v='Wind tunnel' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.135Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='wind_tunnel' />
+    <tag k='uuid' v='{4c26fa83-efc1-41a7-9568-768a390e6e54}' />
+  </node>
+  <node id='-88346' version='1' lat='-25.3551316777' lon='153.11465940802'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:manufactured' v='no' />
+    <tag k='condition' v='construction' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='name' v='Government Office' />
+    <tag k='office' v='government' />
+    <tag k='roof:shape' v='pitched' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.135Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{9a518e65-127b-4f23-8d5f-38990fd6d667}' />
+  </node>
+  <node id='-88348' version='1' lat='-25.36758997621' lon='153.11502524761'>
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='condition' v='destroyed' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='name' v='Hotel' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.134Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='tourism' v='hotel' />
+    <tag k='uuid' v='{cdde649e-ab52-416b-aa26-6188d3641214}' />
+  </node>
+  <node id='-88350' version='1' lat='-25.36726817834' lon='153.08745596303'>
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='building:multi_unit' v='yes' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='crop' v='dairy' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='75' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='material' v='plant_material' />
+    <tag k='name' v='Dairy' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='product' v='milk' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='fallout' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.134Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{815aac0f-05fd-41b2-9881-65311103dbee}' />
+  </node>
+  <node id='-88352' version='1' lat='-25.35503029535' lon='153.07232000378'>
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='building:manufactured' v='yes' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='name' v='Residential House' />
+    <tag k='roof:shape' v='domed' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.133Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='residential' />
+    <tag k='uuid' v='{31a7d704-3216-44d3-a71c-0fb3ccf1e44f}' />
+  </node>
+  <node id='-88354' version='1' lat='-25.35518075714' lon='153.09512264922'>
+    <tag k='amenity' v='pharmacy' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='metal' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.132Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{1435a737-6a0c-431a-a964-be06ddb6122d}' />
+  </node>
+  <node id='-88356' version='1' lat='-25.34948461549' lon='153.08784507899'>
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='university' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='condition' v='dismantled' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='name' v='Higher Education' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.132Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{440884fb-8904-4333-9319-57451ac9fa38}' />
+  </node>
+  <node id='-88358' version='1' lat='-25.35503831861' lon='153.12765266284'>
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='cathedral' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='denomination' v='roman_catholic' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='wood' />
+    <tag k='name' v='Place of Worship' />
+    <tag k='religion' v='christian' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.132Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use2' v='education' />
+    <tag k='use3' v='healthcare' />
+    <tag k='uuid' v='{c9e03c34-8ab5-4f9c-b31f-5f4d316bc61d}' />
+  </node>
+  <node id='-88360' version='1' lat='-25.36165678369' lon='153.12083659652'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.131Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='water_transport' />
+    <tag k='uuid' v='{4ac17181-16e9-4be0-bd7b-8cc68bbeea59}' />
+  </node>
+  <node id='-88362' version='1' lat='-25.34987836905' lon='153.12082895677'>
+    <tag k='amenity' v='fuel' />
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:multi_unit' v='yes' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='metal' />
+    <tag k='name' v='Petrol Sale' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.131Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{cd706b59-6f0f-467b-8ff7-2bc5b22a8cea}' />
+  </node>
+  <node id='-88364' version='1' lat='-25.34946372137' lon='153.10256943012'>
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:manufactured' v='yes' />
+    <tag k='by_product' v='cinders' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='wood' />
+    <tag k='name' v='Power Plant' />
+    <tag k='product' v='electric_power' />
+    <tag k='product2' v='desalinated_water' />
+    <tag k='roof:shape' v='flat_with_parapet' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.130Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='power_generation' />
+    <tag k='uuid' v='{09528206-90f4-4cbe-a616-1e5fb200d5ee}' />
+  </node>
+  <node id='-88366' version='1' lat='-25.36118446432' lon='153.07997600678'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='6' />
+    <tag k='condition' v='destroyed' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='name' v='Agriculture' />
+    <tag k='product' v='fruit' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.130Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='agriculture' />
+    <tag k='uuid' v='{c9c1f4eb-32d4-438d-8c4b-1efabe1f0548}' />
+  </node>
+  <node id='-88368' version='1' lat='-25.36163938835' lon='153.10893237078'>
+    <tag k='amenity' v='fire_station' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='5' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='adobe_brick' />
+    <tag k='name' v='Fire Station' />
+    <tag k='roof:shape' v='with_steeple' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.130Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{19ab50f6-8ce7-4edd-892b-a59887739903}' />
+  </node>
+  <node id='-88370' version='1' lat='-25.34934325039' lon='153.09511276725'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='industrial' />
+    <tag k='building:levels' v='4' />
+    <tag k='condition' v='destroyed' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='wood' />
+    <tag k='name' v='Whiskey Distillery' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='product' v='oil' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.129Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='petroleum_and_coal_product_manufacturing' />
+    <tag k='uuid' v='{8b735764-25eb-4d52-b732-6c69ed0cd206}' />
+  </node>
+  <node id='-88372' version='1' lat='-25.3618249392' lon='153.11469855512'>
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='building:manufactured' v='yes' />
+    <tag k='building:multi_unit' v='no' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='name' v='Palace' />
+    <tag k='roof:shape' v='pitched' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.129Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='palace' />
+    <tag k='uuid' v='{ac05fed0-e5d2-40ea-9916-b979e1e2ff49}' />
+  </node>
+  <node id='-88374' version='1' lat='-25.35531776964' lon='153.12060118801'>
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Paper Mill' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.127Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='paper_mill' />
+    <tag k='uuid' v='{5f4211f0-ea5a-44df-8cd9-675bfdf37d00}' />
+  </node>
+  <node id='-88376' version='1' lat='-25.36714643421' lon='153.07221210361'>
+    <tag k='addr:full' v='On Main Street' />
+    <tag k='amenity' v='bank' />
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='21' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='material' v='wood' />
+    <tag k='name' v='Bank' />
+    <tag k='roof:shape' v='pitched' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.127Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{af4e3199-44c2-477d-bb18-758584294df8}' />
+  </node>
+  <node id='-88378' version='1' lat='-25.35540418205' lon='153.10887474356'>
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='2' />
+    <tag k='condition' v='dismantled' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='craft' v='sawmilling' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='25' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Sawmill' />
+    <tag k='product' v='explosive' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.127Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{5dc03ed7-7f8b-4006-a53f-40f4267664c8}' />
+  </node>
+  <node id='-88380' version='1' lat='-25.36132049727' lon='153.09513673046'>
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='metal' />
+    <tag k='name' v='Hostel' />
+    <tag k='roof:shape' v='pitched' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.126Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='tourism' v='hostel' />
+    <tag k='uuid' v='{01e8c028-8afb-4c30-88e4-fed176b8fd9a}' />
+  </node>
+  <node id='-88382' version='1' lat='-25.348917496' lon='153.07235232128'>
+    <tag k='amenity' v='embassy' />
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:multi_unit' v='yes' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='diplomatic' v='embassy' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='name' v='Embassy' />
+    <tag k='roof:shape' v='with_cupola' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.126Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{fb58f307-c7ed-4023-90d2-535b440bb474}' />
+  </node>
+  <node id='-88384' version='1' lat='-25.35519106098' lon='153.0798897138'>
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:manufactured' v='no' />
+    <tag k='building:multi_unit' v='yes' />
+    <tag k='condition' v='construction' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='BN' />
+    <tag k='material' v='adobe_brick' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='bomb' />
+    <tag k='source' v='tdsv61:building_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.125Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='uuid' v='{20599e44-9357-4b09-bc43-f3b5f7c47ac9}' />
+  </node>
+  <node id='-88386' version='1' lat='-25.36706694535' lon='153.13480886443'>
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='hangar' />
+    <tag k='condition' v='abandoned' />
+    <tag k='error:circular' v='15' />
+    <tag k='hangar:type' v='underground' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='material' v='metal' />
+    <tag k='name' v='My Hanger' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='note' v='Take a Memo' />
+    <tag k='roof:shape' v='pyramidal' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:aircraft_hangar_p' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.123Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='stereoscopic_imagery' />
+    <tag k='use' v='cargo_handling' />
+    <tag k='use2' v='warehouse' />
+    <tag k='uuid' v='{c253da4d-f6d4-41e1-a7ad-8bb6ea55d8f8}' />
+  </node>
+  <node id='-88579' action='modify' lat='-25.39130505755' lon='153.16898349543' />
+  <node id='-88580' action='modify' lat='-25.40526630651' lon='153.16889691278' />
+  <node id='-88581' action='modify' lat='-25.39289062086' lon='153.17307628487' />
+  <node id='-88582' action='modify' lat='-25.39295447502' lon='153.18120482577' />
+  <node id='-88583' action='modify' lat='-25.40444767365' lon='153.18131085021' />
+  <node id='-88584' action='modify' lat='-25.40435190152' lon='153.17307628487' />
+  <way id='-88388' version='1'>
+    <nd ref='-87838' />
+    <nd ref='-87836' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.195Z' />
+    <tag k='uuid' v='{21adaedc-37ce-4c2a-bb73-fe7ba76f4093}' />
+  </way>
+  <way id='-88390' version='1'>
+    <nd ref='-87842' />
+    <nd ref='-87840' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.194Z' />
+    <tag k='uuid' v='{93248830-b208-4dec-b4d5-971eec822645}' />
+  </way>
+  <way id='-88392' version='1'>
+    <nd ref='-87846' />
+    <nd ref='-87844' />
+    <tag k='attribution' v='defence_imagery_and_geospatial_organisation_(australia)' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='highway:through_route' v='no' />
+    <tag k='in_tunnel' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='layer' v='0' />
+    <tag k='name' v='Long' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='on_bridge' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.194Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{39d182e1-6088-4185-a1c4-7fc58b9c002c}' />
+  </way>
+  <way id='-88394' version='1'>
+    <nd ref='-87850' />
+    <nd ref='-87848' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.194Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{2728cc25-56fa-487f-801b-0d56bdacf98a}' />
+  </way>
+  <way id='-88396' version='1'>
+    <nd ref='-87854' />
+    <nd ref='-87852' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='bridge' v='yes' />
+    <tag k='condition' v='damaged' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='highway:through_route' v='yes' />
+    <tag k='in_tunnel' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='layer' v='1' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Big' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.194Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{389f4414-8e8c-45a7-9935-3401c2eaf29d}' />
+  </way>
+  <way id='-88398' version='1'>
+    <nd ref='-87858' />
+    <nd ref='-87856' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='highway:through_route' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='layer' v='-1' />
+    <tag k='name' v='Short' />
+    <tag k='seasonal' v='winter' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.193Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{da1025eb-d540-4a47-900d-3687d3cd0e37}' />
+  </way>
+  <way id='-88400' version='1'>
+    <nd ref='-87862' />
+    <nd ref='-87860' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='destroyed' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='layer' v='-1' />
+    <tag k='location' v='underground' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='on_bridge' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.193Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tunnel' v='yes' />
+    <tag k='uuid' v='{fa9cb0b5-6c5f-4353-874f-be27ecb5a9e5}' />
+  </way>
+  <way id='-88402' version='1'>
+    <nd ref='-87866' />
+    <nd ref='-87864' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='destroyed' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='path' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='location' v='underground' />
+    <tag k='seasonal' v='winter' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:trail_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.193Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tunnel' v='yes' />
+    <tag k='uuid' v='{9ecbc68c-79c6-4318-bab0-9942bcdc58fe}' />
+  </way>
+  <way id='-88404' version='1'>
+    <nd ref='-87880' />
+    <nd ref='-87878' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='steps' />
+    <tag k='source' v='tdsv61:stair_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.189Z' />
+    <tag k='uuid' v='{74f5436e-997b-472d-8bb4-a5ae953d2e5c}' />
+  </way>
+  <way id='-88406' version='1'>
+    <nd ref='-87888' />
+    <nd ref='-87886' />
+    <nd ref='-87884' />
+    <nd ref='-87882' />
+    <nd ref='-87888' />
+    <tag k='addr:full' v='Downtown Denver' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='cover:type' v='moveable' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='leisure' v='stadium' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='name' v='Broncos Stadium' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='note' v='Go watch the Broncos' />
+    <tag k='note:oth' v='(MCC:adobe_brick)' />
+    <tag k='roof:shape' v='domed' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:stadium_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.187Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='sports_amusement_and_recreation' />
+    <tag k='use2' v='religious_activities' />
+    <tag k='uuid' v='{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}' />
+  </way>
+  <way id='-88408' version='1'>
+    <nd ref='-87896' />
+    <nd ref='-87894' />
+    <nd ref='-87892' />
+    <nd ref='-87890' />
+    <nd ref='-87896' />
+    <tag k='addr:full' v='Downtown DC' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='shed' />
+    <tag k='by_product' v='radioactive_material' />
+    <tag k='by_product2' v='no_byproduct' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='material' v='adobe_brick' />
+    <tag k='material:vertical2' v='mud-based_construction' />
+    <tag k='name' v='The Shed' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='note' v='Where else would you be?' />
+    <tag k='product' v='biodiesel' />
+    <tag k='product2' v='wine' />
+    <tag k='raw_material' v='gold' />
+    <tag k='raw_material2' v='tobacco' />
+    <tag k='roof:shape' v='sawtoothed' />
+    <tag k='roof:shape2' v='78' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:shed_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.185Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='agriculture' />
+    <tag k='use2' v='meeting_place' />
+    <tag k='uuid' v='{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}' />
+  </way>
+  <way id='-88410' version='1'>
+    <nd ref='-87904' />
+    <nd ref='-87902' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='street' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.183Z' />
+    <tag k='uuid' v='{5632cd0a-d533-45b5-a873-049e718c0013}' />
+  </way>
+  <way id='-88412' version='1'>
+    <nd ref='-87908' />
+    <nd ref='-87906' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='trunk' />
+    <tag k='ref:road:class' v='primary' />
+    <tag k='ref:road:type' v='limited_access_motorway' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.182Z' />
+    <tag k='uuid' v='{e0d8b175-219b-4811-a59e-c44fd731de9b}' />
+  </way>
+  <way id='-88414' version='1'>
+    <nd ref='-87912' />
+    <nd ref='-87910' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='primary' />
+    <tag k='ref:road:class' v='primary' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.182Z' />
+    <tag k='uuid' v='{d2a441d2-5080-4c6b-9e05-b40ed6569ffd}' />
+  </way>
+  <way id='-88416' version='1'>
+    <nd ref='-87916' />
+    <nd ref='-87914' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='street' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.182Z' />
+    <tag k='uuid' v='{2bb9c4ae-def9-4fce-9ad2-f4f00bfc4537}' />
+  </way>
+  <way id='-88418' version='1'>
+    <nd ref='-87920' />
+    <nd ref='-87918' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.181Z' />
+    <tag k='uuid' v='{7f9b99dc-0c7a-4379-8010-c5fcd0e224f9}' />
+  </way>
+  <way id='-88420' version='1'>
+    <nd ref='-87924' />
+    <nd ref='-87922' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='motorway' />
+    <tag k='ref:road:class' v='national_motorway' />
+    <tag k='ref:road:type' v='motorway' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.181Z' />
+    <tag k='uuid' v='{5d83c96d-0f75-4626-8663-3ba50d8faf1b}' />
+  </way>
+  <way id='-88422' version='1'>
+    <nd ref='-87928' />
+    <nd ref='-87926' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='ref:road:class' v='secondary' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.181Z' />
+    <tag k='uuid' v='{0a4336be-41d4-4732-b495-791e2bec9bcb}' />
+  </way>
+  <way id='-88424' version='1'>
+    <nd ref='-87932' />
+    <nd ref='-87930' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='street' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.181Z' />
+    <tag k='uuid' v='{0bcde809-cddc-4409-b0b9-91273d57e736}' />
+  </way>
+  <way id='-88426' version='1'>
+    <nd ref='-87936' />
+    <nd ref='-87934' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='pedestrian' />
+    <tag k='ref:road:type' v='pedestrian' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.180Z' />
+    <tag k='uuid' v='{72bf2b85-d371-48b2-a5ef-54f45b492373}' />
+  </way>
+  <way id='-88428' version='1'>
+    <nd ref='-87940' />
+    <nd ref='-87938' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.180Z' />
+    <tag k='uuid' v='{0a51dd03-f3db-4b48-92e3-1f37a4e6cb16}' />
+  </way>
+  <way id='-88430' version='1'>
+    <nd ref='-87944' />
+    <nd ref='-87942' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary_link' />
+    <tag k='interchange_ramp' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.180Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{76cca591-23e3-4900-875f-5daf40457bd3}' />
+  </way>
+  <way id='-88432' version='1'>
+    <nd ref='-87948' />
+    <nd ref='-87946' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary_link' />
+    <tag k='interchange_ramp' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='ref:road:class' v='secondary' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.179Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{63da8b8f-6c7e-4c12-9cda-58163417fa41}' />
+  </way>
+  <way id='-88434' version='1'>
+    <nd ref='-87952' />
+    <nd ref='-87950' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='motorway_link' />
+    <tag k='interchange_ramp' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='ref:road:class' v='national_motorway' />
+    <tag k='ref:road:type' v='motorway' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.179Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tunnel' v='yes' />
+    <tag k='uuid' v='{e5b6f022-4b34-44cf-bef4-3bc1e170bb00}' />
+  </way>
+  <way id='-88436' version='1'>
+    <nd ref='-87956' />
+    <nd ref='-87954' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='unclassified' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='street' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.178Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tunnel' v='yes' />
+    <tag k='uuid' v='{8994f53f-6565-4d7c-852d-47cc75023ae0}' />
+  </way>
+  <way id='-88438' version='1'>
+    <nd ref='-87960' />
+    <nd ref='-87958' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='primary_link' />
+    <tag k='interchange_ramp' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='ref:road:class' v='primary' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.178Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{0b86cab4-aef6-4d13-aafb-83cb19e33950}' />
+  </way>
+  <way id='-88440' version='1'>
+    <nd ref='-87964' />
+    <nd ref='-87962' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='damaged' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='feature_configuration' v='different' />
+    <tag k='highway' v='primary' />
+    <tag k='is_divided' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='Beach' />
+    <tag k='on_bridge' v='no' />
+    <tag k='oneway' v='no' />
+    <tag k='ref' v='1' />
+    <tag k='ref:road:class' v='primary' />
+    <tag k='ref:road:class2' v='Elf Road' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='seasonal' v='winter' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.178Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='surface' v='Jello' />
+    <tag k='uuid' v='{d9d0703d-83d7-4874-ac98-1b323e5de301}' />
+    <tag k='width' v='4' />
+    <tag k='width:minimum_traveled_way' v='4' />
+  </way>
+  <way id='-88442' version='1'>
+    <nd ref='-87968' />
+    <nd ref='-87966' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='road' />
+    <tag k='in_tunnel' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Sesame' />
+    <tag k='note' v='Big Bird is here' />
+    <tag k='oneway' v='yes' />
+    <tag k='ref' v='25' />
+    <tag k='ref:road:type' v='other' />
+    <tag k='road:runway' v='yes' />
+    <tag k='seasonal' v='Spring' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.177Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{1432b382-1299-4aa7-af5f-c89e3c15234d}' />
+    <tag k='width' v='4' />
+    <tag k='width:minimum_traveled_way' v='4' />
+  </way>
+  <way id='-88444' version='1'>
+    <nd ref='-87972' />
+    <nd ref='-87970' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='tertiary' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.177Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='surface' v='wood' />
+    <tag k='uuid' v='{f0ecd77e-fdac-4deb-bd9c-d4f84dad328c}' />
+    <tag k='width' v='4' />
+    <tag k='width:minimum_traveled_way' v='4' />
+  </way>
+  <way id='-88446' version='1'>
+    <nd ref='-87976' />
+    <nd ref='-87974' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='secondary' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='lanes' v='2' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='underground' />
+    <tag k='median' v='no' />
+    <tag k='ref:road:class' v='secondary' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='seasonal' v='fair' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.177Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='surface' v='compacted' />
+    <tag k='uuid' v='{68d0dd28-6b60-468a-b33c-eaa663675dc8}' />
+    <tag k='width' v='4' />
+    <tag k='width:minimum_traveled_way' v='4' />
+  </way>
+  <way id='-88448' version='1'>
+    <nd ref='-87980' />
+    <nd ref='-87978' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='construction' v='tertiary' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='feature_configuration' v='same' />
+    <tag k='highway' v='construction' />
+    <tag k='in_tunnel' v='no' />
+    <tag k='is_divided' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='lanes' v='1' />
+    <tag k='layer' v='0' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='yes' />
+    <tag k='name' v='back' />
+    <tag k='on_bridge' v='no' />
+    <tag k='oneway' v='yes' />
+    <tag k='ref' v='470' />
+    <tag k='ref:road:class' v='local' />
+    <tag k='ref:road:type' v='road' />
+    <tag k='road:runway' v='no' />
+    <tag k='seasonal' v='not_winter' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.176Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='surface' v='asphalt' />
+    <tag k='uuid' v='{632db716-7256-4b2c-b27d-593bf9a2093e}' />
+    <tag k='width' v='4' />
+    <tag k='width:minimum_traveled_way' v='4' />
+  </way>
+  <way id='-88450' version='1'>
+    <nd ref='-87984' />
+    <nd ref='-87982' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='bridge' v='yes' />
+    <tag k='construction' v='motorway' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='construction' />
+    <tag k='highway:through_route' v='yes' />
+    <tag k='in_tunnel' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Main' />
+    <tag k='ref:road:class' v='national_motorway' />
+    <tag k='ref:road:class2' v='local' />
+    <tag k='ref:road:type' v='motorway' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:road_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.176Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='surface' v='asphalt' />
+    <tag k='uuid' v='{c87f3ed7-5656-4f80-b556-5b85df1cb9be}' />
+    <tag k='width' v='4' />
+    <tag k='width:minimum_traveled_way' v='4' />
+  </way>
+  <way id='-88452' version='1'>
+    <nd ref='-87988' />
+    <nd ref='-87986' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.175Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='no' />
+    <tag k='uuid' v='{e3fe79cc-cd87-4e44-9d76-62086136bb95}' />
+    <tag k='waterway' v='stream' />
+    <tag k='waterway:bottom' v='clay_and_silt' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88454' version='1'>
+    <nd ref='-87992' />
+    <nd ref='-87990' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.174Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{0b2a16ac-0689-4388-a422-3945de4ceeaf}' />
+    <tag k='water:morphology' v='canalized' />
+    <tag k='waterway' v='river' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88456' version='1'>
+    <nd ref='-87996' />
+    <nd ref='-87994' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Amazon' />
+    <tag k='navigation' v='yes_operational' />
+    <tag k='note' v='Very long river' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.174Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='yes' />
+    <tag k='uuid' v='{7eddcdf0-3e83-4658-88b5-c4da67b9bf82}' />
+    <tag k='waterway' v='braided_stream' />
+    <tag k='waterway:bottom' v='bedrock' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88458' version='1'>
+    <nd ref='-88000' />
+    <nd ref='-87998' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='dry' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.173Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='yes' />
+    <tag k='uuid' v='{5653d95b-3b19-4b75-8571-4c67c4597227}' />
+    <tag k='waterway' v='wadi' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88460' version='1'>
+    <nd ref='-88004' />
+    <nd ref='-88002' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.173Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='no' />
+    <tag k='uuid' v='{aea98498-70b6-4beb-9395-63f768f4f29e}' />
+    <tag k='waterway' v='wadi' />
+    <tag k='waterway:bottom' v='sand_and_gravel' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88462' version='1'>
+    <nd ref='-88008' />
+    <nd ref='-88006' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.173Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='no' />
+    <tag k='uuid' v='{2e82fbdf-171f-4a1e-ae7a-6cbe5a0922c7}' />
+    <tag k='waterway' v='river' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88464' version='1'>
+    <nd ref='-88012' />
+    <nd ref='-88010' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.172Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{48124b31-53ab-4ca1-a965-8480943dfb7d}' />
+    <tag k='water:morphology' v='anabrach' />
+    <tag k='waterway' v='river' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88466' version='1'>
+    <nd ref='-88016' />
+    <nd ref='-88014' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.172Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='no' />
+    <tag k='uuid' v='{ec56c1bd-cd9c-482b-9a0d-95a24282e305}' />
+    <tag k='water:morphology' v='headwaters' />
+    <tag k='waterway' v='braided_stream' />
+    <tag k='waterway:bottom' v='clay_and_silt' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88468' version='1'>
+    <nd ref='-88020' />
+    <nd ref='-88018' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Mighty' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.172Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='yes' />
+    <tag k='uuid' v='{6f588533-90a0-4928-b7b3-3e452d1144ab}' />
+    <tag k='waterway' v='gorge' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88470' version='1'>
+    <nd ref='-88024' />
+    <nd ref='-88022' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Covered Drain test' />
+    <tag k='navigation' v='yes' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.171Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='no' />
+    <tag k='uuid' v='{e0e597a8-f2fd-4982-b3f0-2dc6ffdea549}' />
+    <tag k='waterway' v='Raging Torrent' />
+    <tag k='waterway:bottom' v='sand_and_gravel' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88472' version='1'>
+    <nd ref='-88028' />
+    <nd ref='-88026' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.171Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='no' />
+    <tag k='uuid' v='{0cb16bc6-3c09-482f-b31a-8144b1fb7430}' />
+    <tag k='waterway' v='braided_stream' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88474' version='1'>
+    <nd ref='-88032' />
+    <nd ref='-88030' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='dry' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.171Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='no' />
+    <tag k='uuid' v='{b710f27a-0366-4a3b-805d-e111a52c971c}' />
+    <tag k='waterway' v='wadi' />
+    <tag k='waterway:bottom' v='bedrock' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88476' version='1'>
+    <nd ref='-88036' />
+    <nd ref='-88034' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Murray' />
+    <tag k='navigation' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.170Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='yes' />
+    <tag k='uuid' v='{5a1b64e8-d713-41fd-bd7e-252120ef275a}' />
+    <tag k='waterway' v='river' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88478' version='1'>
+    <nd ref='-88040' />
+    <nd ref='-88038' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='yes' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.170Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{db8db081-3262-434e-9772-e6ff47df657c}' />
+    <tag k='water:morphology' v='pool' />
+    <tag k='waterway' v='river' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88480' version='1'>
+    <nd ref='-88044' />
+    <nd ref='-88042' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='covered' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='intermittent' v='dry' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Nile' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:river_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.169Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='tidal' v='yes' />
+    <tag k='uuid' v='{93522adb-ba0c-4e44-9faa-ac6d2370741b}' />
+    <tag k='water:morphology' v='distributary' />
+    <tag k='waterway' v='stream' />
+    <tag k='width' v='3' />
+  </way>
+  <way id='-88482' version='1'>
+    <nd ref='-88050' />
+    <nd ref='-88048' />
+    <nd ref='-88046' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='destroyed' />
+    <tag k='electrified' v='contact_line' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='2' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='location' v='surface' />
+    <tag k='railway' v='automated_transit_system' />
+    <tag k='railway:in_road' v='separated' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:railway_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.168Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{c650708f-0984-4c35-a971-8154879af68f}' />
+  </way>
+  <way id='-88484' version='1'>
+    <nd ref='-88056' />
+    <nd ref='-88054' />
+    <nd ref='-88052' />
+    <tag k='arrangement' v='single' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='construction' v='logging' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='1' />
+    <tag k='gauge:type' v='narrow' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Santa Train' />
+    <tag k='railway' v='construction' />
+    <tag k='railway:in_road' v='separated' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:railway_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.168Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{cbcf9671-3825-46a9-8ef0-f1676648b43e}' />
+  </way>
+  <way id='-88486' version='1'>
+    <nd ref='-88062' />
+    <nd ref='-88060' />
+    <nd ref='-88058' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='electrified' v='unknown' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='2' />
+    <tag k='gauge:type' v='narrow' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='location' v='surface' />
+    <tag k='railway' v='carline' />
+    <tag k='railway:in_road' v='separated' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:railway_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.168Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{711b42ac-132c-44e5-8ecb-3f39451c41da}' />
+  </way>
+  <way id='-88488' version='1'>
+    <nd ref='-88068' />
+    <nd ref='-88066' />
+    <nd ref='-88064' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='dismantled' />
+    <tag k='electrified' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='4' />
+    <tag k='gauge:type' v='standard' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='location' v='surface' />
+    <tag k='railway' v='rail' />
+    <tag k='railway:in_road' v='yes' />
+    <tag k='railway:track' v='monorail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:railway_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.167Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{c0041728-2262-4969-bd62-4ca3607af853}' />
+  </way>
+  <way id='-88490' version='1'>
+    <nd ref='-88074' />
+    <nd ref='-88072' />
+    <nd ref='-88070' />
+    <tag k='arrangement' v='single' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='abandoned' />
+    <tag k='electrified' v='rail' />
+    <tag k='error:circular' v='15' />
+    <tag k='gauge' v='3' />
+    <tag k='gauge:type' v='broad' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Choo Choo Train' />
+    <tag k='note' v='A very long train' />
+    <tag k='railway' v='funicular' />
+    <tag k='railway:in_road' v='separated' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:railway_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.167Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{18ab8349-3fb0-48eb-917b-49995b451fc5}' />
+  </way>
+  <way id='-88492' version='1'>
+    <nd ref='-88080' />
+    <nd ref='-88078' />
+    <nd ref='-88076' />
+    <tag k='arrangement' v='single' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='construction' v='rail' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='location' v='surface' />
+    <tag k='name' v='Big Train' />
+    <tag k='railway' v='construction' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:railway_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.167Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{2df4f57e-69bd-468a-9113-35434c475dc9}' />
+  </way>
+  <way id='-88494' version='1'>
+    <nd ref='-88100' />
+    <nd ref='-88098' />
+    <nd ref='-88096' />
+    <nd ref='-88094' />
+    <nd ref='-88094' />
+    <nd ref='-88100' />
+    <tag k='area' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.162Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{998eb9e9-e6a0-4284-8aac-d4cc94e9a352}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88496' version='1'>
+    <nd ref='-88110' />
+    <nd ref='-88108' />
+    <nd ref='-88106' />
+    <nd ref='-88104' />
+    <nd ref='-88102' />
+    <nd ref='-88110' />
+    <tag k='area' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='name' v='HealthCare' />
+    <tag k='note' v='Hospital' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.162Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='healthcare' />
+    <tag k='uuid' v='{8f97a17a-a3df-40b4-9dc0-71228b65bf0a}' />
+  </way>
+  <way id='-88498' version='1'>
+    <nd ref='-88120' />
+    <nd ref='-88118' />
+    <nd ref='-88116' />
+    <nd ref='-88114' />
+    <nd ref='-88112' />
+    <nd ref='-88120' />
+    <tag k='addr:full' v='Yes it does' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='by_product' v='scrap-metal' />
+    <tag k='by_product2' v='radioactive_material' />
+    <tag k='communication:microwave_radio_relay' v='yes' />
+    <tag k='condition' v='construction' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='facility' v='yes' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='man_made' v='works' />
+    <tag k='material' v='adobe_brick' />
+    <tag k='name' v='Factory' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='note' v='Big Factory' />
+    <tag k='product' v='radioactive_material' />
+    <tag k='product2' v='explosive' />
+    <tag k='product3' v='ammunition' />
+    <tag k='raw_material' v='aluminum' />
+    <tag k='raw_material2' v='radioactive_material' />
+    <tag k='raw_material3' v='plastic' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:facility_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.161Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='manufacturing' />
+    <tag k='uuid' v='{ae014362-8c96-46b2-8149-d377ed03f334}' />
+  </way>
+  <way id='-88500' version='1'>
+    <nd ref='-88148' />
+    <nd ref='-88146' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='track' />
+    <tag k='source' v='tdsv61:cart_track_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.154Z' />
+    <tag k='uuid' v='{bc8d301f-0e78-43a3-b6ea-0fd0230c82b8}' />
+  </way>
+  <way id='-88502' version='1'>
+    <nd ref='-88152' />
+    <nd ref='-88150' />
+    <nd ref='-88150' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='track' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='layer' v='0' />
+    <tag k='name' v='Kokoda' />
+    <tag k='seasonal' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:cart_track_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.154Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{af12e7c5-c4b9-4db9-a11b-fe53910c9e0d}' />
+    <tag k='width' v='4' />
+    <tag k='width:minimum_traveled_way' v='4' />
+  </way>
+  <way id='-88504' version='1'>
+    <nd ref='-88156' />
+    <nd ref='-88154' />
+    <nd ref='-88154' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='abandoned' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='track' />
+    <tag k='in_tunnel' v='no' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='layer' v='0' />
+    <tag k='name' v='Jinglemoney' />
+    <tag k='note' v='What a trail' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:cart_track_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.154Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{275a5223-4adb-497d-9ba6-edac1dca6b6f}' />
+    <tag k='width' v='2.5' />
+    <tag k='width:minimum_traveled_way' v='2.5' />
+  </way>
+  <way id='-88506' version='1'>
+    <nd ref='-88160' />
+    <nd ref='-88158' />
+    <nd ref='-88158' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='track' />
+    <tag k='is_in:country_code' v='AU' />
+    <tag k='name' v='Dirt' />
+    <tag k='seasonal' v='fair' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:cart_track_c' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.153Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='yes' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{38bb77aa-444e-49aa-9585-1d56253f7b6e}' />
+    <tag k='width' v='3' />
+    <tag k='width:minimum_traveled_way' v='3' />
+  </way>
+  <way id='-88508' version='1'>
+    <nd ref='-88170' />
+    <nd ref='-88168' />
+    <nd ref='-88166' />
+    <nd ref='-88164' />
+    <nd ref='-88162' />
+    <nd ref='-88170' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:density' v='dense' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='landuse' v='built_up_area' />
+    <tag k='name' v='Manufacturing' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.152Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='manufacturing' />
+    <tag k='uuid' v='{843565f8-09e3-4f5b-9039-3f5341bd0841}' />
+  </way>
+  <way id='-88510' version='1'>
+    <nd ref='-88180' />
+    <nd ref='-88178' />
+    <nd ref='-88176' />
+    <nd ref='-88174' />
+    <nd ref='-88172' />
+    <nd ref='-88180' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='landuse' v='built_up_area' />
+    <tag k='name' v='Utilities' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.152Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='utilities' />
+    <tag k='uuid' v='{932b5e3e-f9a8-481d-9c6f-cdf9786bad19}' />
+  </way>
+  <way id='-88512' version='1'>
+    <nd ref='-88190' />
+    <nd ref='-88188' />
+    <nd ref='-88186' />
+    <nd ref='-88184' />
+    <nd ref='-88182' />
+    <nd ref='-88190' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:density' v='sparse' />
+    <tag k='condition' v='destroyed' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='landuse' v='residential' />
+    <tag k='name' v='Residential' />
+    <tag k='note' v='Small suburb' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.151Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{4c076d27-3ef4-4ad3-9137-920b4278ce6c}' />
+  </way>
+  <way id='-88514' version='1'>
+    <nd ref='-88200' />
+    <nd ref='-88198' />
+    <nd ref='-88196' />
+    <nd ref='-88194' />
+    <nd ref='-88192' />
+    <nd ref='-88200' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:density' v='sparse' />
+    <tag k='condition' v='damaged' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='landuse' v='residential' />
+    <tag k='name' v='Residential' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.151Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{0d490002-2c16-4659-8311-7b7c8b59b48e}' />
+  </way>
+  <way id='-88516' version='1'>
+    <nd ref='-88210' />
+    <nd ref='-88208' />
+    <nd ref='-88206' />
+    <nd ref='-88204' />
+    <nd ref='-88202' />
+    <nd ref='-88210' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='condition' v='destroyed' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='landuse' v='built_up_area' />
+    <tag k='name' v='Religious' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.151Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='religious_activities' />
+    <tag k='uuid' v='{8dedb86f-3331-41ef-bd39-63c5a809eabe}' />
+  </way>
+  <way id='-88518' version='1'>
+    <nd ref='-88220' />
+    <nd ref='-88218' />
+    <nd ref='-88216' />
+    <nd ref='-88214' />
+    <nd ref='-88212' />
+    <nd ref='-88220' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building:density' v='moderate' />
+    <tag k='condition' v='functional' />
+    <tag k='controlling_authority' v='joint_military_civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='landuse' v='built_up_area' />
+    <tag k='name' v='Defence' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.150Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='military' />
+    <tag k='uuid' v='{c5d722af-c570-42de-8ac6-4abea5a4983f}' />
+  </way>
+  <way id='-88520' version='1'>
+    <nd ref='-88230' />
+    <nd ref='-88228' />
+    <nd ref='-88226' />
+    <nd ref='-88224' />
+    <nd ref='-88222' />
+    <nd ref='-88230' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='XE' />
+    <tag k='landuse' v='built_up_area' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:built_up_area_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.150Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{e76b27ae-22e0-43b0-b269-ca024bc2ca03}' />
+  </way>
+  <way id='-88522' version='1'>
+    <nd ref='-88252' />
+    <nd ref='-88250' />
+    <nd ref='-88248' />
+    <nd ref='-88246' />
+    <nd ref='-88246' />
+    <nd ref='-88252' />
+    <tag k='addr:full' v='Left side of the street' />
+    <tag k='amenity' v='bank' />
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:multi_unit' v='no' />
+    <tag k='condition' v='destroyed' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='material' v='wood' />
+    <tag k='name' v='Bank' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='bomb' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.145Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{69d80b50-1eb2-4fe6-8db6-ea346395b285}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88524' version='1'>
+    <nd ref='-88260' />
+    <nd ref='-88258' />
+    <nd ref='-88256' />
+    <nd ref='-88254' />
+    <nd ref='-88254' />
+    <nd ref='-88260' />
+    <tag k='building' v='yes' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='condition' v='abandoned' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='light:obstacle' v='yes' />
+    <tag k='name' v='Barracks' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.145Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{f9f1e2e7-7699-4dd7-8271-586970f42122}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88526' version='1'>
+    <nd ref='-88268' />
+    <nd ref='-88266' />
+    <nd ref='-88264' />
+    <nd ref='-88262' />
+    <nd ref='-88262' />
+    <nd ref='-88268' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:multi_unit' v='yes' />
+    <tag k='controlling_authority' v='military' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='navigation:landmark' v='no' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.144Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{b9745971-a030-4956-ba12-1bcd926f0f78}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88528' version='1'>
+    <nd ref='-88278' />
+    <nd ref='-88276' />
+    <nd ref='-88274' />
+    <nd ref='-88272' />
+    <nd ref='-88270' />
+    <nd ref='-88278' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='monastery' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='religion' v='buddhist' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.144Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='Hobbit Hole' />
+    <tag k='uuid' v='{eea2047e-4a2d-449e-9def-8d1bc1765166}' />
+  </way>
+  <way id='-88530' version='1'>
+    <nd ref='-88286' />
+    <nd ref='-88284' />
+    <nd ref='-88282' />
+    <nd ref='-88280' />
+    <nd ref='-88280' />
+    <nd ref='-88286' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attached' v='no' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='mosque' />
+    <tag k='communication:mobile_phone' v='yes' />
+    <tag k='condition' v='functional' />
+    <tag k='denomination' v='sunni' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='material' v='stone' />
+    <tag k='name' v='Place of Worship' />
+    <tag k='religion' v='muslim' />
+    <tag k='roof:shape' v='with_minaret' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.143Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{c57bcb46-fabf-46f1-a3e6-2e77f4f5c32d}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88532' version='1'>
+    <nd ref='-88294' />
+    <nd ref='-88292' />
+    <nd ref='-88290' />
+    <nd ref='-88288' />
+    <nd ref='-88288' />
+    <nd ref='-88294' />
+    <tag k='amenity' v='prison' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='condition' v='construction' />
+    <tag k='controlling_authority' v='civilian' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.143Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{7a025070-c136-4e11-8e67-ef14135d50d6}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88534' version='1'>
+    <nd ref='-88302' />
+    <nd ref='-88300' />
+    <nd ref='-88298' />
+    <nd ref='-88296' />
+    <nd ref='-88296' />
+    <nd ref='-88302' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='building:multi_unit' v='yes' />
+    <tag k='by_product' v='ash' />
+    <tag k='condition' v='damaged' />
+    <tag k='controlling_authority' v='public' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='light:obstacle' v='no' />
+    <tag k='material' v='prestressed_concrete' />
+    <tag k='name' v='Petroleum Facility' />
+    <tag k='navigation:landmark' v='yes' />
+    <tag k='product' v='petroleum' />
+    <tag k='raw_material' v='oil' />
+    <tag k='raw_material2' v='petroleum_and/or_natural_gas' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='shelter:type' v='storm' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.142Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='use' v='petroleum_refining' />
+    <tag k='uuid' v='{a7694937-07d8-437b-8a03-384b8a3b7369}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88536' version='1'>
+    <nd ref='-88310' />
+    <nd ref='-88308' />
+    <nd ref='-88306' />
+    <nd ref='-88304' />
+    <nd ref='-88304' />
+    <nd ref='-88310' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='attached' v='yes' />
+    <tag k='attribution' v='u.s._national_geospatial-intelligence_agency_(nga)' />
+    <tag k='building' v='yes' />
+    <tag k='communication:cellular_phone' v='yes' />
+    <tag k='controlling_authority' v='private' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='US' />
+    <tag k='name' v='Place of Worship' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='security:dissemination_control:non_ic' v='DS' />
+    <tag k='security:resource_owner' v='USA' />
+    <tag k='source' v='tdsv61:building_s' />
+    <tag k='source:ingest:datetime' v='2017-01-03T21:13:02.142Z' />
+    <tag k='source:non_spatial_source:type' v='commercial_data' />
+    <tag k='source:spatial_source' v='no' />
+    <tag k='source:vertical_source:type' v='dted_2' />
+    <tag k='uuid' v='{e8cbc330-a431-4cf6-adcf-73a9c8f10fe9}' />
+    <tag k='width' v='25' />
+  </way>
+  <way id='-88577' action='modify'>
+    <nd ref='-88579' />
+    <nd ref='-88580' />
+    <tag k='boundary' v='administrative' />
+    <tag k='country_code:first_side' v='XM' />
+    <tag k='country_code:second_side' v='GL' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='QZ' />
+    <tag k='source' v='GGDM30:administrative_boundary_c' />
+    <tag k='source:ingest:datetime' v='2017-07-01T02:13:33.232Z' />
+    <tag k='uuid' v='{0da92afb-67cd-4dd6-9945-1d74dc8f7445}' />
+  </way>
+  <way id='-88578' action='modify'>
+    <nd ref='-88581' />
+    <nd ref='-88582' />
+    <nd ref='-88583' />
+    <nd ref='-88584' />
+    <nd ref='-88581' />
+    <tag k='area' v='yes' />
+    <tag k='country_code:fourth' v='IS' />
+    <tag k='country_code:second' v='XU' />
+    <tag k='country_code:third' v='IE' />
+    <tag k='error:circular' v='15' />
+    <tag k='is_in:country_code' v='HM' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='GGDM30:dataset_s' />
+    <tag k='source:ingest:datetime' v='2017-07-01T02:13:33.239Z' />
+    <tag k='source:metadata' v='dataset' />
+    <tag k='uuid' v='{0f9108bd-6e69-49d3-9071-40f9b060b469}' />
+  </way>
+</osm>

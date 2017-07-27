@@ -29,7 +29,7 @@
 #define MINIDVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // Standard
 #include <limits>
@@ -38,16 +38,15 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements.
  */
-class MinIdVisitor : public ElementVisitor, public SingleStatistic
+class MinIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  MinIdVisitor() : _minId(numeric_limits<long>::max()) {}
+  MinIdVisitor() : _minId(std::numeric_limits<long>::max()) {}
 
   virtual ~MinIdVisitor() {}
 

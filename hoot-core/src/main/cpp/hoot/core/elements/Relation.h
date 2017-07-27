@@ -32,18 +32,20 @@
 #include "Element.h"
 #include "RelationData.h"
 
+// hoot
+#include <hoot/core/util/MetadataTags.h>
+
 namespace geos
 {
-namespace geom
-{
-class Geometry;
-class LinearRing;
-}
+  namespace geom
+  {
+    class Geometry;
+    class LinearRing;
+  }
 }
 
 namespace hoot
 {
-using namespace geos::geom;
 
 class Way;
 
@@ -59,7 +61,7 @@ class Relation : public Element
 {
 public:
 
-  static string className() { return "hoot::Relation"; }
+  static std::string className() { return "hoot::Relation"; }
 
   static unsigned int logWarnCount;
 
@@ -91,9 +93,9 @@ public:
    */
   bool contains(ElementId eid) const;
 
-  const vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
+  const std::vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
 
-  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
+  virtual geos::geom::Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType::Relation; }
 
@@ -140,7 +142,7 @@ public:
   template<typename IT>
   void replaceElements(RelationData::Entry old, IT start, IT end);
 
-  void setMembers(const vector<RelationData::Entry>& members);
+  void setMembers(const std::vector<RelationData::Entry>& members);
 
   /**
    * Sets the "type" of the relation. See the OSM wiki [1] for a detailed description. Example
@@ -152,9 +154,9 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
 
-  virtual void visitRw(ElementProvider& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
 private:
 
@@ -166,10 +168,10 @@ private:
 
   void _makeWritable();
 
-  void _visitRo(const ElementProvider& map, ElementVisitor& filter,
+  void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
     QList<long>& visitedRelations) const;
 
-  void _visitRw(ElementProvider &map, ElementVisitor& filter,
+  void _visitRw(ElementProvider &map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
 
 };

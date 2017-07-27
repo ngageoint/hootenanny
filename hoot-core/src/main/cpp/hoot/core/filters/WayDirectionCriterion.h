@@ -40,8 +40,8 @@
 
 namespace hoot
 {
-  using namespace geos::geom;
-  class Way;
+
+class Way;
 
 class WayDirectionCriterion : public ElementCriterion
 {

@@ -57,6 +57,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/HootApiDbWriter.h>
 
+using namespace std;
+
 namespace hoot
 {
 

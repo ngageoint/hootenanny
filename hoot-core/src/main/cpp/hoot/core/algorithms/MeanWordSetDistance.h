@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MEANWORDSETDISTANCE_H
 #define MEANWORDSETDISTANCE_H
@@ -37,7 +37,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Calculates the mean distance between two sets of words. The mean distance is calculate by first
@@ -57,7 +56,7 @@ public:
   MeanWordSetDistance(StringDistance* d, double portion=1.0);
   MeanWordSetDistance();
 
-  static string className() { return "hoot::MeanWordSetDistance"; }
+  static std::string className() { return "hoot::MeanWordSetDistance"; }
 
   virtual double compare(const QString& s1, const QString& s2) const;
 

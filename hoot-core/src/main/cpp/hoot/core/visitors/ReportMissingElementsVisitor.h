@@ -28,25 +28,24 @@
 #define REPORTMISSINGELEMENTSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Reports references to missing elements in a given map. If removeMissing is set to true then
  * all missing references are removed. Note: This may not give desired results if your data
  * shouldn't contain missing references.
  */
-class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class ReportMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
     public Configurable
 {
 public:
 
-  static string className() { return "hoot::ReportMissingElementsVisitor"; }
+  static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
 
   ReportMissingElementsVisitor(bool removeMissing = false, int maxReport = 10);
 

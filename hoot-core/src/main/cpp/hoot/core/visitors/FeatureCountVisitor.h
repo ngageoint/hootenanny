@@ -35,7 +35,6 @@
 
 namespace hoot
 {
-using namespace std;
 
 /**
  * Counts the number of elements with an information tag count greater than zero.

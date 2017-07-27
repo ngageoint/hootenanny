@@ -29,26 +29,25 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
 namespace hoot
 {
-class OsmMap;
 
-using namespace std;
+class OsmMap;
 
 /**
  * Counts matches made with ref tags by a manual matcher
  */
-class CountManualMatchesVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class CountManualMatchesVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
 
 public:
 
-  static string className() { return "hoot::CountManualMatchesVisitor"; }
+  static std::string className() { return "hoot::CountManualMatchesVisitor"; }
 
   CountManualMatchesVisitor();
 

@@ -138,7 +138,7 @@ void OsmJsonReader::open(QString url)
 
     // Handle files or URLs
     _url = QUrl(url);
-    if (_url.isLocalFile())
+    if (_url.isRelative() || _url.isLocalFile())
     {
       _isFile = true;
       _file.setFileName(_url.toLocalFile());
@@ -149,7 +149,7 @@ void OsmJsonReader::open(QString url)
       _isWeb = true;
     }
   }
-  catch (std::exception ex)
+  catch (const std::exception& ex)
   {
     ostringstream oss;
     oss << "Exception opening URL (" << url << "): " << ex.what();
@@ -169,12 +169,12 @@ void OsmJsonReader::close()
  */
 void OsmJsonReader::read(OsmMapPtr map)
 {
+  _map = map;
+  QString jsonStr;
   if (_isFile)
   {
     QTextStream instream(&_file);
-    QString jsonStr = instream.readAll();
-    _loadJSON(jsonStr);
-    _parseOverpassJson(map);
+    jsonStr = instream.readAll();
   }
   else
   {
@@ -196,12 +196,11 @@ void OsmJsonReader::read(OsmMapPtr map)
     }
 
     QByteArray data = pReply->readAll();
-    QString jsonStr = QString::fromAscii(data.data());
-
-    // This will throw a hoot exception if JSON is invalid
-    _loadJSON(jsonStr);
-    _parseOverpassJson(map);
+    jsonStr = QString::fromAscii(data.data());
   }
+  // This will throw a hoot exception if JSON is invalid
+  _loadJSON(jsonStr);
+  _parseOverpassJson();
 }
 
 // Throws HootException on error
@@ -211,10 +210,10 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   _propTree.clear();
 
   // Handle single or double quotes
-  _scrubQuotes(jsonStr);
+  scrubQuotes(jsonStr);
 
   // Handle IDs
-  _scrubBigInts(jsonStr);
+  scrubBigInts(jsonStr);
 
   // Convert string to stringstream
   stringstream ss(jsonStr.toUtf8().constData(), ios::in);
@@ -228,13 +227,13 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   {
     pt::read_json(ss, _propTree);
   }
-  catch (pt::json_parser::json_parser_error e)
+  catch (pt::json_parser::json_parser_error& e)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
     throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
-  catch (std::exception e)
+  catch (const std::exception& e)
   {
     QString reason = e.what();
     throw HootException("Error parsing JSON " + reason);
@@ -244,9 +243,9 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
 OsmMapPtr OsmJsonReader::loadFromString(QString jsonStr)
 {
   _loadJSON(jsonStr);
-  OsmMapPtr pMap(new OsmMap());
-  _parseOverpassJson(pMap);
-  return pMap;
+  _map.reset(new OsmMap());
+  _parseOverpassJson();
+  return _map;
 }
 
 OsmMapPtr OsmJsonReader::loadFromFile(QString path)
@@ -260,12 +259,12 @@ OsmMapPtr OsmJsonReader::loadFromFile(QString path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  OsmMapPtr pMap(new OsmMap());
-  _parseOverpassJson(pMap);
-  return pMap;
+  _map.reset(new OsmMap());
+  _parseOverpassJson();
+  return _map;
 }
 
-void OsmJsonReader::_parseOverpassJson(OsmMapPtr pMap)
+void OsmJsonReader::_parseOverpassJson()
 {
   // Overpass has 4 top level items: version, generator, osm3s, elements
   _version = QString::fromStdString(_propTree.get("version", string("")));
@@ -275,23 +274,22 @@ void OsmJsonReader::_parseOverpassJson(OsmMapPtr pMap)
 
   // Make a map, and iterate through all of our elements, adding them
   pt::ptree elements = _propTree.get_child("elements");
-  pt::ptree::const_iterator elementIt = elements.begin();
-  while (elementIt != elements.end())
+  for (pt::ptree::const_iterator elementIt = elements.begin(); elementIt != elements.end(); ++elementIt)
   {
     // Type can be node, way, or relation
     string typeStr = elementIt->second.get("type", string("--"));
 
     if ("node" == typeStr)
     {
-      _parseOverpassNode(elementIt->second, pMap);
+      _parseOverpassNode(elementIt->second);
     }
     else if ("way" == typeStr)
     {
-      _parseOverpassWay(elementIt->second, pMap);
+      _parseOverpassWay(elementIt->second);
     }
     else if ("relation" == typeStr)
     {
-      _parseOverpassRelation(elementIt->second, pMap);
+      _parseOverpassRelation(elementIt->second);
     }
     else
     {
@@ -305,18 +303,17 @@ void OsmJsonReader::_parseOverpassJson(OsmMapPtr pMap)
       }
       logWarnCount++;
     }
-    ++elementIt;
   }
 }
 
-void OsmJsonReader::_parseOverpassNode(const pt::ptree &item, OsmMapPtr pMap)
+void OsmJsonReader::_parseOverpassNode(const pt::ptree &item)
 {
   // Get info we need to construct our node
   long id = -1;
   if (_useDataSourceIds)
     id = item.get("id", id);
   else
-    id = pMap->createNextNodeId();
+    id = _map->createNextNodeId();
 
   double lat = item.get("lat", 0.0);
   double lon = item.get("lon", 0.0);
@@ -328,17 +325,17 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree &item, OsmMapPtr pMap)
   _addTags(item, pNode);
 
   // Add node to map
-  pMap->addNode(pNode);
+  _map->addNode(pNode);
 }
 
-void OsmJsonReader::_parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
+void OsmJsonReader::_parseOverpassWay(const pt::ptree &item)
 {
   // Get info we need to construct our way
   long id = -1;
   if (_useDataSourceIds)
     id = item.get("id", id);
   else
-    id = pMap->createNextWayId();
+    id = _map->createNextWayId();
 
   // Construct Way
   WayPtr pWay(new Way(_defaultStatus, id, _defaultCircErr));
@@ -350,7 +347,6 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
     pt::ptree::const_iterator nodeIt = nodes.begin();
     while (nodeIt != nodes.end())
     {
-      string k = nodeIt->first;
       long v = nodeIt->second.get_value<long>();
       pWay->addNode(v);
       ++nodeIt;
@@ -361,17 +357,17 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree &item, OsmMapPtr pMap)
   _addTags(item, pWay);
 
   // Add way to map
-  pMap->addWay(pWay);
+  _map->addWay(pWay);
 }
 
-void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap)
+void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item)
 {
   // Get info we need to construct our relation
   long id = -1;
   if (_useDataSourceIds)
     id = item.get("id", id);
   else
-    id = pMap->createNextRelationId();
+    id = _map->createNextRelationId();
 
   // Construct Relation
   RelationPtr pRelation(new Relation(_defaultStatus, id, _defaultCircErr));
@@ -398,7 +394,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item, OsmMapPtr pMap
   _addTags(item, pRelation);
 
   // Add relation to map
-  pMap->addRelation(pRelation);
+  _map->addRelation(pRelation);
 }
 
 void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::ElementPtr pElement)
@@ -407,8 +403,7 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
   if (item.not_found() != item.find("tags"))
   {
     pt::ptree tags = item.get_child("tags");
-    pt::ptree::const_iterator tagIt = tags.begin();
-    while (tagIt != tags.end())
+    for (pt::ptree::const_iterator tagIt = tags.begin(); tagIt != tags.end(); ++tagIt)
     {
       QString k = QString::fromStdString(tagIt->first);
       QString v = QString::fromStdString(tagIt->second.get_value<string>());
@@ -423,16 +418,15 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
       {
         pElement->setTag(k, v);
       }
-      ++tagIt;
     }
   }
 }
 
-// We allow the use of single quotes, for ease of coding
-// test strings into c++. Single quotes within string literals
-// should be escaped as \'
-void OsmJsonReader::_scrubQuotes(QString &jsonStr)
+void OsmJsonReader::scrubQuotes(QString &jsonStr)
 {
+  // We allow the use of single quotes, for ease of coding
+  // test strings into c++. Single quotes within string literals
+  // should be escaped as \'
   // Detect if they are using single quotes or doubles
   if (jsonStr.indexOf("\"node\"", Qt::CaseInsensitive) > -1)
     return; // No need to scrub
@@ -448,13 +442,15 @@ void OsmJsonReader::_scrubQuotes(QString &jsonStr)
   }
 }
 
-void OsmJsonReader::_scrubBigInts(QString &jsonStr)
+void OsmJsonReader::scrubBigInts(QString &jsonStr)
 {
   // Boost 1.41 property tree json parser has trouble with
   // integers bigger than 2^31. So we put quotes around big
   // numbers, and that makes it all better
-  QRegExp rx("([^\"\\d\\.])(-?\\d{8,})([^\"\\d\\.])");
-  jsonStr.replace(rx, "\\1\"\\2\"\\3");
+  QRegExp rx1("(\"[^\"]+\"\\s*:\\s*)(-?\\d{8,})");
+  jsonStr.replace(rx1, "\\1\"\\2\"");
+  QRegExp rx2("([\\[:,\\s]\\s*)(-?\\d{8,})([,\\}\\]\\n])");
+  jsonStr.replace(rx2, "\\1\"\\2\"\\3");
 }
 
 } // namespace hoot

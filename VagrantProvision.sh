@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-HOOT_HOME=$HOME/hoot
+VMUSER=`id -u -n`
+echo USER: $VMUSER
+VMGROUP=`groups | grep -o $VMUSER`
+echo GROUP: $VMGROUP
+
+HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.profile
@@ -13,6 +18,8 @@ fi
 
 echo "Updating OS..."
 sudo apt-get -qq update > Ubuntu_upgrade.txt 2>&1
+# Don't automatically update the oracle jdk, we need to control the version
+sudo apt-mark -qq hold oracle-java8-installer oracle-java8-set-default >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y upgrade >> Ubuntu_upgrade.txt 2>&1
 sudo apt-get -q -y dist-upgrade >> Ubuntu_upgrade.txt 2>&1
 
@@ -22,21 +29,21 @@ sudo service ntp stop
 sudo ntpd -gq
 sudo service ntp start
 
-if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
+if ! java -version 2>&1 | grep --quiet 1.8.0_131; then
     echo "### Installing Java 8..."
 
     # jdk-8u112-linux-x64.tar.gz's official checksums:
-    #    sha256: 777bd7d5268408a5a94f5e366c2e43e720c6ce4fe8c59d9a71e2961e50d774a5
-    #    md5: de9b7a90f0f5a13cfcaa3b01451d0337
-    echo "de9b7a90f0f5a13cfcaa3b01451d0337  /tmp/jdk-8u112-linux-x64.tar.gz" > /tmp/jdk.md5
+    #    sha256:  62b215bdfb48bace523723cdbb2157c665e6a25429c73828a32f00e587301236
+    #    md5: 75b2cb2249710d822a60f83e28860053
+    echo "75b2cb2249710d822a60f83e28860053  /tmp/jdk-8u131-linux-x64.tar.gz " > /tmp/jdk.md5
 
-    if [ ! -f /tmp/jdk-8u112-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
-        echo "Downloading jdk-8u112-linux-x64.tar.gz ...."
-        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u112-b15/jdk-8u112-linux-x64.tar.gz -P /tmp
-        echo "Finished download of jdk-8u112-linux-x64.tar.gz"
+    if [ ! -f /tmp/jdk-8u131-linux-x64.tar.gz ] || ! md5sum -c /tmp/jdk.md5; then
+        echo "Downloading jdk-8u131-linux-x64.tar.gz ...."
+        sudo wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz -P /tmp
+        echo "Finished download of jdk-8u131-linux-x64.tar.gz"
     fi
 
-    sudo tar -xvzf /tmp/jdk-8u112-linux-x64.tar.gz --directory=/tmp >/dev/null
+    sudo tar -xvzf /tmp/jdk-8u131-linux-x64.tar.gz --directory=/tmp >/dev/null
 
     if [[ ! -e /usr/lib/jvm ]]; then
         sudo mkdir /usr/lib/jvm
@@ -46,7 +53,7 @@ if ! java -version 2>&1 | grep --quiet 1.8.0_112; then
         fi
     fi
 
-    sudo mv -f /tmp/jdk1.8.0_112 /usr/lib/jvm/oracle_jdk8
+    sudo mv -f /tmp/jdk1.8.0_131 /usr/lib/jvm/oracle_jdk8
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/oracle_jdk8/jre/bin/java 9999
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/oracle_jdk8/bin/javac 9999
     echo "### Done with Java 8 install..."
@@ -69,7 +76,7 @@ sudo apt-get -q -y install texinfo g++ libicu-dev libqt4-dev git-core libboost-d
  w3m texlive-lang-cyrillic graphviz python-setuptools python python-pip git ccache distcc libogdi3.2-dev \
  gnuplot python-matplotlib libqt4-sql-sqlite ruby ruby-dev xvfb zlib1g-dev patch x11vnc openssh-server \
  htop unzip postgresql-9.5 postgresql-client-9.5 postgresql-9.5-postgis-scripts postgresql-9.5-postgis-2.3 \
- libpango-1.0-0 libappindicator1 valgrind >> Ubuntu_upgrade.txt 2>&1
+ libpango-1.0-0 libappindicator1 valgrind dos2unix >> Ubuntu_upgrade.txt 2>&1
 
 if ! dpkg -l | grep --quiet dictionaries-common; then
     # See /usr/share/doc/dictionaries-common/README.problems for details
@@ -94,7 +101,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.profile
+    echo "export HOOT_HOME=~/hoot" >> ~/.profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
@@ -109,14 +116,14 @@ fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.profile; then
     echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.profile
+    echo "export HADOOP_HOME=~/hadoop" >> ~/.profile
     echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
 if ! grep --quiet "PATH=" ~/.profile; then
     echo "Adding path vars to profile..."
-    echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HOME/bin:$HOOT_HOME/bin" >> ~/.profile
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin:~/bin:$HOOT_HOME/bin" >> ~/.profile
     source ~/.profile
 fi
 
@@ -140,7 +147,7 @@ if ! ruby -v | grep --quiet 2.3.0; then
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
-    source /home/vagrant/.rvm/scripts/rvm
+    source ~/.rvm/scripts/rvm
 
     stdbuf -o L -e L rvm install ruby-2.3
     rvm --default use 2.3
@@ -204,20 +211,20 @@ fi
 
 if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f chromedriver_linux64.zip ]; then
       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     fi
-    unzip -d $HOME/bin chromedriver_linux64.zip
+    unzip -d ~/bin chromedriver_linux64.zip
 else
   LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
   if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
     echo "### Updating Chromedriver"
-    rm $HOME/bin/chromedriver
-    rm $HOME/chromedriver_linux64.zip
+    rm ~/bin/chromedriver
+    rm ~/chromedriver_linux64.zip
     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d $HOME/bin chromedriver_linux64.zip
+    unzip -o -d ~/bin chromedriver_linux64.zip
   fi
 fi
 
@@ -225,13 +232,13 @@ sudo apt-get autoremove -y
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f osmosis-latest.tgz ]; then
       wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
     fi
-    mkdir -p $HOME/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
-    ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
+    mkdir -p ~/bin/osmosis_src
+    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+    ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
 
@@ -282,7 +289,7 @@ if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
-    sudo rm -rf $HOME/tmp
+    sudo rm -rf ~/tmp
 fi
 
 
@@ -291,27 +298,27 @@ source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 # NOTE: These have been changed to pg9.5
 # See if we already have a dB user
-if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER; then
+if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER; then
     echo "### Adding a Services Database user..."
-    sudo -u postgres createuser --superuser $DB_USER
-    sudo -u postgres psql -c "alter user $DB_USER with password '$DB_PASSWORD';"
+    sudo -u postgres createuser --superuser "$DB_USER"
+    sudo -u postgres psql -c "alter user \"$DB_USER\" with password '$DB_PASSWORD';"
 fi
 
 # Check that the OsmApiDb user exists
 # NOTE:
 #  + The OsmAPI Db user _might_ be different to the Hoot Services Db user...
 #  + The SetupOsmApiDB.sh script expects that the DB_USER_OSMAPI account exists
-if ! sudo -u postgres psql -c "\du" | grep -iw --quiet $DB_USER_OSMAPI; then
-    sudo -u postgres createuser --superuser $DB_USER_OSMAPI
-    sudo -u postgres psql -c "alter user $DB_USER_OSMAPI with password '$DB_PASSWORD_OSMAPI';"
+if ! sudo -u postgres psql -c "\du" | awk -F"|" '{print $1}' | grep -iw --quiet $DB_USER_OSMAPI; then
+    sudo -u postgres createuser --superuser "$DB_USER_OSMAPI"
+    sudo -u postgres psql -c "alter user \"$DB_USER_OSMAPI\" with password '$DB_PASSWORD_OSMAPI';"
 fi
 
 
 # Check for a hoot Db
-if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
+if ! sudo -u postgres psql -lqt | awk -F"|" '{print $1}' | grep -iw --quiet $DB_NAME; then
     echo "### Creating Services Database..."
-    sudo -u postgres createdb $DB_NAME --owner=$DB_USER
-    sudo -u postgres createdb wfsstoredb --owner=$DB_USER
+    sudo -u postgres createdb $DB_NAME --owner="$DB_USER"
+    sudo -u postgres createdb wfsstoredb --owner="$DB_USER"
     sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
     sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
     sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
@@ -379,7 +386,7 @@ fi
 TOMCAT_HOME=/usr/share/tomcat8
 
 # Install Tomcat 8
-sudo $HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
+$HOOT_HOME/scripts/tomcat/tomcat8/ubuntu/tomcat8_install.sh
 
 # Configure Tomcat
 if ! grep --quiet TOMCAT8_HOME ~/.profile; then
@@ -407,27 +414,26 @@ if ! hash hadoop >/dev/null 2>&1 ; then
     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
   fi
 
-  if [ ! -f $HOME/.ssh/id_rsa ]; then
-    ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
-    cat ~/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
-    ssh-keyscan -H localhost >> $HOME/.ssh/known_hosts
+  if [ ! -f ~/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    ssh-keyscan -H localhost >> ~/.ssh/known_hosts
   fi
-  chmod 600 $HOME/.ssh/authorized_keys
+  chmod 600 ~/.ssh/authorized_keys
 
   #cd /usr/local
   cd ~
-  sudo tar -zxf $HOME/hadoop-0.20.2.tar.gz
-  sudo chown -R vagrant:vagrant hadoop-0.20.2
+  sudo tar -zxf ~/hadoop-0.20.2.tar.gz
+  sudo chown -R $VMUSER:$VMGROUP hadoop-0.20.2
   sudo ln -s hadoop-0.20.2 hadoop
-  sudo chown -R vagrant:vagrant hadoop
+  sudo chown -R $VMUSER:$VMGROUP hadoop
   cd hadoop
   sudo find . -type d -exec chmod a+rwx {} \;
   sudo find . -type f -exec chmod a+rw {} \;
   cd ~
 
-#TODO: remove these home dir hardcodes
 sudo rm -f $HADOOP_HOME/conf/core-site.xml
-sudo bash -c "cat >> /home/vagrant/hadoop/conf/core-site.xml" <<EOT
+sudo bash -c "cat >> $HADOOP_HOME/conf/core-site.xml" <<EOT
 
 <configuration>
   <property>
@@ -437,7 +443,7 @@ sudo bash -c "cat >> /home/vagrant/hadoop/conf/core-site.xml" <<EOT
 </configuration>
 EOT
 sudo rm -f $HADOOP_HOME/conf/mapred-site.xml
-sudo bash -c "cat >> /home/vagrant/hadoop/conf/mapred-site.xml" <<EOT
+sudo bash -c "cat >> $HADOOP_HOME/conf/mapred-site.xml" <<EOT
 
 <configuration>
   <property>
@@ -475,7 +481,7 @@ sudo bash -c "cat >> /home/vagrant/hadoop/conf/mapred-site.xml" <<EOT
 </configuration>
 EOT
 sudo rm -f $HADOOP_HOME/conf/hdfs-site.xml
-sudo bash -c "cat >> /home/vagrant/hadoop/conf/hdfs-site.xml" <<EOT
+sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
 
 <configuration>
   <property>
@@ -516,15 +522,15 @@ sudo bash -c "cat >> /home/vagrant/hadoop/conf/hdfs-site.xml" <<EOT
   </property>
   <property>
     <name>fs.checkpoint.dir</name>
-    <value>/home/vagrant/hadoop/dfs/namesecondary</value>
+    <value>$HADOOP_HOME/dfs/namesecondary</value>
   </property>
   <property>
     <name>dfs.name.dir</name>
-    <value>/home/vagrant/hadoop/dfs/name</value>
+    <value>$HADOOP_HOME/dfs/name</value>
   </property>
   <property>
     <name>dfs.data.dir</name>
-    <value>/home/vagrant/hadoop/dfs/data</value>
+    <value>$HADOOP_HOME/dfs/data</value>
   </property>
 </configuration>
 EOT
@@ -532,10 +538,10 @@ EOT
   sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/lib\/jvm\/oracle_jdk8/g' $HADOOP_HOME/conf/hadoop-env.sh
   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
 
-  sudo mkdir -p $HOME/hadoop/dfs/name/current
+  sudo mkdir -p $HADOOP_HOME/dfs/name/current
   # this could perhaps be more strict
-  sudo chmod -R 777 $HOME/hadoop
-  sudo chmod go-w $HOME/hadoop/bin $HOME/hadoop
+  sudo chmod -R 777 $HADOOP_HOME
+  sudo chmod go-w $HADOOP_HOME/bin $HADOOP_HOME
   echo 'Y' | hadoop namenode -format
 
   cd /lib
@@ -560,7 +566,7 @@ sudo chmod a+x /etc/init.d/node-mapnik-server
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
@@ -569,7 +575,7 @@ sudo chmod a+x /etc/init.d/node-export-server
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 cd $HOOT_HOME
 

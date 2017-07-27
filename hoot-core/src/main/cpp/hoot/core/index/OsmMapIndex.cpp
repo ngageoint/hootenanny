@@ -53,6 +53,10 @@
 #include <tgs/RStarTree/RStarTreePrinter.h>
 #include <tgs/RStarTree/IntersectionIterator.h>
 
+using namespace geos::geom;
+using namespace std;
+using namespace Tgs;
+
 namespace hoot
 {
 
@@ -458,7 +462,7 @@ boost::shared_ptr<const HilbertRTree> OsmMapIndex::getNodeTree() const
 
   OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
   for (set<long>::const_iterator it = _pendingNodeInsert.begin(); it != _pendingNodeInsert.end();
-       it++)
+       ++it)
   {
     if (_map.containsNode(*it))
     {
@@ -515,7 +519,7 @@ boost::shared_ptr<const HilbertRTree> OsmMapIndex::getWayTree() const
   }
 
   OsmMapIndex* t = const_cast<OsmMapIndex*>(this);
-  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end(); it++)
+  for (set<long>::const_iterator it = _pendingWayInsert.begin(); it != _pendingWayInsert.end(); ++it)
   {
     if (_map.containsWay(*it))
     {

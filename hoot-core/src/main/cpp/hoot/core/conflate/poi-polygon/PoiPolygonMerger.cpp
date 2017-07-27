@@ -31,8 +31,11 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MetadataTags.h>
 
 #include "PoiPolygonMatch.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -45,8 +48,7 @@ _pairs(pairs)
   assert(_pairs.size() >= 1);
 }
 
-void PoiPolygonMerger::apply(const OsmMapPtr& map,
-  vector< pair<ElementId, ElementId> >& replaced) const
+void PoiPolygonMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementId> >& replaced)
 {
   ////
   /// See "Hootenanny - POI to Building" powerpoint for more details.
@@ -101,9 +103,9 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
       TagMergerFactory::getInstance().mergeTags(finalBuildingTags, poiTags2,
                                                 finalBuilding->getElementType());
   }
-  finalBuilding->setTags(finalBuildingTags);
 
   // do some book keeping to remove the POIs and mark them as replaced.
+  long poisMerged = 0;
   for (set< pair<ElementId, ElementId> >::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -117,6 +119,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
         map->getElement(p.first)->getTags().clear();
         RecursiveElementRemover(p.first).apply(map);
       }
+      poisMerged++;
     }
 
     if (p.second.getType() == ElementType::Node)
@@ -128,8 +131,17 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map,
         map->getElement(p.second)->getTags().clear();
         RecursiveElementRemover(p.second).apply(map);
       }
+      poisMerged++;
     }
   }
+
+  if (poisMerged > 0)
+  {
+    finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
+    finalBuilding->setStatus(Status::Conflated);
+  }
+
+  finalBuilding->setTags(finalBuildingTags);
 }
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
@@ -245,8 +257,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
   int poiCount = 0;
   ElementId poiElementId;
   Status poiStatus;
-  NodeMap::const_iterator nodeItr = map->getNodes().begin();
-  while (nodeItr != map->getNodes().end())
+  const NodeMap& nodes = map->getNodes();
+  for (NodeMap::const_iterator nodeItr = nodes.begin(); nodeItr != nodes.end(); ++nodeItr)
   {
     const int nodeId = nodeItr->first;
     NodePtr node = map->getNode(nodeId);
@@ -262,7 +274,6 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
       poiElementId = ElementId::node(nodeId);
       poiCount++;
     }
-    nodeItr++;
   }
   if (poiCount == 0)
   {
@@ -275,8 +286,8 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
 
   int polyCount = 0;
   ElementId polyElementId;
-  WayMap::const_iterator wayItr = map->getWays().begin();
-  while (wayItr != map->getWays().end())
+  const WayMap& ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     const int wayId = wayItr->first;
     WayPtr way = map->getWay(wayId);
@@ -297,12 +308,11 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
       polyElementId = ElementId::way(wayId);
       polyCount++;
     }
-    wayItr++;
   }
   if (polyElementId.isNull())
   {
-    RelationMap::const_iterator relItr = map->getRelations().begin();
-    while (relItr != map->getRelations().end())
+    const RelationMap& relations = map->getRelations();
+    for (RelationMap::const_iterator relItr = relations.begin(); relItr != relations.end(); ++relItr)
     {
       const int relationId = relItr->first;
       RelationPtr relation = map->getRelation(relationId);
@@ -323,7 +333,6 @@ ElementId PoiPolygonMerger::merge(OsmMapPtr map)
         polyElementId = ElementId::relation(relationId);
         polyCount++;
       }
-      relItr++;
     }
   }
   if (polyCount == 0)

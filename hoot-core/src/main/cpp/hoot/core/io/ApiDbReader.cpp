@@ -36,6 +36,8 @@
 // Qt
 #include <QSet>
 
+using namespace geos::geom;
+
 namespace hoot
 {
 
@@ -44,7 +46,8 @@ unsigned int ApiDbReader::logWarnCount = 0;
 ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
-_open(false)
+_open(false),
+_returnNodesOnly(false)
 {
 
 }
@@ -53,7 +56,7 @@ void ApiDbReader::setBoundingBox(const QString bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
-    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+    setBounds(GeometryUtils::envelopeFromConfigString(bbox));
   }
 }
 
@@ -74,6 +77,7 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
   LOG_VART(oldId);
+  LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {
     result = oldId;
@@ -87,36 +91,42 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
       if (_nodeIdMap.count(id) > 0)
       {
         result = ElementId::node(_nodeIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextNodeId();
         _nodeIdMap[id] = newId;
         result = ElementId::node(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Way:
       if (_wayIdMap.count(id) > 0)
       {
         result = ElementId::way(_wayIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextWayId();
         _wayIdMap[id] = newId;
         result = ElementId::way(newId);
+        LOG_VART(result);
       }
       break;
     case ElementType::Relation:
       if (_relationIdMap.count(id) > 0)
       {
         result = ElementId::relation(_relationIdMap.at(id));
+        LOG_VART(result);
       }
       else
       {
         long newId = map.createNextRelationId();
         _relationIdMap[id] = newId;
         result = ElementId::relation(newId);
+        LOG_VART(result);
       }
       break;
     default:
@@ -124,7 +134,6 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
         QString::number(oldId.getType().getEnum()));
     }
   }
-  LOG_VART(result);
 
   return result;
 }
@@ -146,20 +155,28 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      try
       {
-        LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
-                 QString::number(element->getId()));
+        //  Try parsing the status in text form
+        element->setStatus(Status::fromString(statusStr));
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      catch (const HootException&)
       {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
+                   QString::number(element->getId()));
+        }
+        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
       }
-      logWarnCount++;
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    if (! ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
+    if (!ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
   }
 
   if (tags.contains("type"))
@@ -184,7 +201,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& /*e*/)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -218,7 +235,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         element->setCircularError(tv);
         ok = true;
       }
-      catch (const HootException& /*e*/)
+      catch (const HootException&)
       {
         ok = false;
       }
@@ -270,109 +287,112 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     boundedNodeCount++;
     //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
     //with any queries.  Mapped ids may not exist yet.
-    const QString nodeId = QString::number(resultIterator.value(0).toLongLong());
-    LOG_VART(nodeId);
-    nodeIds.insert(nodeId);
+    const long nodeId = resultIterator.value(0).toLongLong();
+    LOG_VART(ElementId(ElementType::Node, nodeId));
+    nodeIds.insert( QString::number(nodeId));
   }
   LOG_VARD(nodeIds.size());
 
-  if (nodeIds.size() > 0)
+  if (!_returnNodesOnly)
   {
-    LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-    QSet<QString> wayIds;
-    boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
-    while (wayIdItr->next())
+    if (nodeIds.size() > 0)
     {
-      const QString wayId = QString::number((*wayIdItr).value(0).toLongLong());
-      LOG_VART(wayId);
-      wayIds.insert(wayId);
-    }
-    LOG_VARD(wayIds.size());
-
-    if (wayIds.size() > 0)
-    {
-      LOG_DEBUG("Retrieving ways by way ID...");
-      boost::shared_ptr<QSqlQuery> wayItr =
-        _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
-      while (wayItr->next())
+      LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
+      QSet<QString> wayIds;
+      boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
+      while (wayIdItr->next())
       {
-        //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
-        //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
-        //the problem yet with test data, but will continue to keep an eye on it.
-        WayPtr way = _resultToWay(*wayItr, *map);
-        map->addElement(way);
-        LOG_VART(way);
-        boundedWayCount++;
+        const long wayId = (*wayIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Way, wayId));
+        wayIds.insert(QString::number(wayId));
       }
+      LOG_VARD(wayIds.size());
 
-      LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-      QSet<QString> additionalWayNodeIds;
-      boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
-        _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
-      while (additionalWayNodeIdItr->next())
+      if (wayIds.size() > 0)
       {
-        const QString nodeId = QString::number((*additionalWayNodeIdItr).value(0).toLongLong());
-        LOG_VART(nodeId);
-        additionalWayNodeIds.insert(nodeId);
-      }
-
-      //subtract nodeIds from additionalWayNodeIds so no dupes get added
-      LOG_VARD(nodeIds.size());
-      LOG_VARD(additionalWayNodeIds.size());
-      additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
-      LOG_VARD(additionalWayNodeIds.size());
-
-      if (additionalWayNodeIds.size() > 0)
-      {
-        nodeIds.unite(additionalWayNodeIds);
-        LOG_DEBUG(
-          "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
-        boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
-          _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
-        while (additionalWayNodeItr->next())
+        LOG_DEBUG("Retrieving ways by way ID...");
+        boost::shared_ptr<QSqlQuery> wayItr =
+          _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
+        while (wayItr->next())
         {
-          NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
-          map->addElement(node);
-          LOG_VART(node);
-          boundedNodeCount++;
+          //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
+          //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
+          //the problem yet with test data, but will continue to keep an eye on it.
+          WayPtr way = _resultToWay(*wayItr, *map);
+          map->addElement(way);
+          LOG_VART(way);
+          boundedWayCount++;
+        }
+
+        LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
+        QSet<QString> additionalWayNodeIds;
+        boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+          _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
+        while (additionalWayNodeIdItr->next())
+        {
+          const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Node, nodeId));
+          additionalWayNodeIds.insert(QString::number(nodeId));
+        }
+
+        //subtract nodeIds from additionalWayNodeIds so no dupes get added
+        LOG_VARD(nodeIds.size());
+        LOG_VARD(additionalWayNodeIds.size());
+        additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
+        LOG_VARD(additionalWayNodeIds.size());
+
+        if (additionalWayNodeIds.size() > 0)
+        {
+          nodeIds.unite(additionalWayNodeIds);
+          LOG_DEBUG(
+            "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
+          boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
+            _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
+          while (additionalWayNodeItr->next())
+          {
+            NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
+            map->addElement(node);
+            LOG_VART(node);
+            boundedNodeCount++;
+          }
         }
       }
-    }
 
-    LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
-    QSet<QString> relationIds;
-    assert(nodeIds.size() > 0);
-    boost::shared_ptr<QSqlQuery> relationIdItr =
-      _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
-    while (relationIdItr->next())
-    {
-      const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
-      LOG_VART(relationId);
-      relationIds.insert(relationId);
-    }
-    if (wayIds.size() > 0)
-    {
-      relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+      LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
+      QSet<QString> relationIds;
+      assert(nodeIds.size() > 0);
+      boost::shared_ptr<QSqlQuery> relationIdItr =
+        _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
       while (relationIdItr->next())
       {
-        const QString relationId = QString::number((*relationIdItr).value(0).toLongLong());
-        LOG_VART(relationId);
-        relationIds.insert(relationId);
+        const long relationId = (*relationIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Relation, relationId));
+        relationIds.insert(QString::number(relationId));
       }
-    }
-    LOG_VARD(relationIds.size());
-
-    if (relationIds.size() > 0)
-    {
-      LOG_DEBUG("Retrieving relations by relation ID...");
-      boost::shared_ptr<QSqlQuery> relationItr =
-        _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
-      while (relationItr->next())
+      if (wayIds.size() > 0)
       {
-        RelationPtr relation = _resultToRelation(*relationItr, *map);
-        map->addElement(relation);
-        LOG_VART(relation);
-        boundedRelationCount++;
+        relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+        while (relationIdItr->next())
+        {
+          const long relationId = (*relationIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Relation, relationId));
+          relationIds.insert(QString::number(relationId));
+        }
+      }
+      LOG_VARD(relationIds.size());
+
+      if (relationIds.size() > 0)
+      {
+        LOG_DEBUG("Retrieving relations by relation ID...");
+        boost::shared_ptr<QSqlQuery> relationItr =
+          _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
+        while (relationItr->next())
+        {
+          RelationPtr relation = _resultToRelation(*relationItr, *map);
+          map->addElement(relation);
+          LOG_VART(relation);
+          boundedRelationCount++;
+        }
       }
     }
   }

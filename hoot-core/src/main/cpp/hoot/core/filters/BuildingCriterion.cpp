@@ -31,11 +31,12 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 
+using namespace std;
+
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, BuildingCriterion)
-
 
 bool BuildingCriterion::isParentABuilding(ElementId eid) const
 {
@@ -44,7 +45,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
   const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
   const set<long>& parents = e2r->getRelationByElement(eid);
   for (set<long>::const_iterator it = parents.begin(); it != parents.end() && result == false;
-    it++)
+    ++it)
   {
     ConstElementPtr e = _map->getRelation(*it);
     if (OsmSchema::getInstance().isBuilding(e->getTags(), e->getElementType()))

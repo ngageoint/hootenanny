@@ -32,6 +32,7 @@ using namespace pp;
 #include <hoot/core/conflate/TileConflator.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/pbf/PbfInputFormat.h>
 #include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/hadoop/conflate/ConflateDriver.h>
@@ -41,6 +42,8 @@ using namespace pp;
 #include <tgs/Statistics/Random.h>
 
 #include "MapReduceTestFixture.h"
+
+using namespace std;
 
 namespace hoot
 {
@@ -70,7 +73,7 @@ public:
     fs.copyFromLocal("test-files/DcTigerRoads.pbf", outDir + "in1.pbf/DcTigerRoads.pbf");
     fs.copyFromLocal("test-files/DcGisRoads.pbf", outDir + "in2.pbf/DcGisRoads.pbf");
 
-   boost::shared_ptr<TileWorker> worker(new HadoopTileWorker());
+    boost::shared_ptr<TileWorker> worker(new HadoopTileWorker());
     TileConflator uut(worker);
     // ~240m
     uut.setBuffer(8.0 / 3600.0);
@@ -81,7 +84,7 @@ public:
 
     uut.conflate(QString::fromStdString(outDir) + "HadoopTileWorkerTest.pbf");
 
-   OsmMapPtr map(new OsmMap);
+    OsmMapPtr map(new OsmMap);
     OsmPbfReader reader(true);
     reader.setUseFileStatus(true);
     std::vector<FileStatus> status = fs.listStatus(outDir + "HadoopTileWorkerTest.pbf", true);
@@ -91,7 +94,7 @@ public:
       LOG_INFO(path);
       if (QString::fromStdString(path).endsWith(".pbf"))
       {
-       boost::shared_ptr<istream> is(fs.open(path));
+        boost::shared_ptr<istream> is(fs.open(path));
         reader.parse(is.get(), map);
       }
     }

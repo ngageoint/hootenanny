@@ -44,6 +44,8 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/js/util/HootExceptionJs.h>
 
+using namespace v8;
+
 namespace hoot
 {
 
@@ -88,7 +90,7 @@ v8::Handle<v8::Value> PoiMergerJs::jsPoiMerge(const v8::Arguments& args)
     OsmMapPtr map( mapJs->getMap() );
 
     // Instantiate script merger
-   boost::shared_ptr<PluginContext> script(new PluginContext());
+    boost::shared_ptr<PluginContext> script(new PluginContext());
     v8::HandleScope handleScope;
     v8::Context::Scope context_scope(script->getContext());
     script->loadScript(scriptPath, "plugin");

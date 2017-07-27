@@ -27,7 +27,6 @@
 #include "ChangesetDeriver.h"
 
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/io/ElementComparer.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 
@@ -74,14 +73,21 @@ Change ChangesetDeriver::_nextChange()
 {
   Change result;
 
+  LOG_VART(_fromE.get());
+  LOG_VART(_from->hasMoreElements());
+  LOG_VART(_toE.get());
+  LOG_VART(_to->hasMoreElements());
   if (!_fromE.get() && _from->hasMoreElements())
   {
     _fromE = _from->readNextElement();
+    LOG_TRACE("'from' element null and 'from'' has more elements...");
+    LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
   }
-
   if (!_toE.get() && _to->hasMoreElements())
   {
     _toE = _to->readNextElement();
+    LOG_TRACE("'to' element null and 'to'' has more elements...");
+    LOG_TRACE("Next 'to' element: " << _toE->getElementId());
   }
 
   // if we've run out of "from" elements, create all the remaining elements in "to"
@@ -90,43 +96,58 @@ Change ChangesetDeriver::_nextChange()
     result.type = Change::Create;
     result.e = _toE;
 
-    LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
-              _toE->getElementId() << "; creating 'to' element: ");
-    LOG_VART(result);
+    LOG_TRACE(
+      "run out of from elements; 'from' element null; 'to' element not null: " <<
+      _toE->getElementId() << "; creating 'to' element...");
 
     _toE = _to->readNextElement();
+    if (_toE)
+    {
+      LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+    }
   }
   // if we've run out of "to" elements, delete all the remaining elements in "from"
   else if (_fromE.get() && !_toE.get())
-  {
+  { 
     result.type = Change::Delete;
     result.e = _fromE;
 
-    LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
-              _fromE->getElementId() << "; deleting 'from' element: ");
-    LOG_VART(result);
+    LOG_TRACE(
+      "run out of 'to' elements; to' element null; 'from' element not null: " <<
+      _fromE->getElementId() << "; deleting 'from' element...");
 
     _fromE = _from->readNextElement();
+    if (_fromE)
+    {
+      LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+    }
   }
   else
   {
-    // while the elements are exactly the same there is nothing to do.
+    // while the elements are exactly the same, there is nothing to do.
     while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
-           ElementComparer().isSame(_fromE, _toE))
+           _elementComparer.isSame(_fromE, _toE))
     {
-      LOG_TRACE("skipping identical elements - 'from' element: " << _fromE->getElementId() <<
-                " 'to' element: " << _toE->getElementId());
-      LOG_VART(_fromE);
-      LOG_VART(_toE);
+      LOG_TRACE(
+        "skipping identical elements - 'from' element: " << _fromE->getElementId() <<
+        " and 'to' element: " << _toE->getElementId() << "...");
 
       _toE = _to->readNextElement();
+      if (_toE)
+      {
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+      }
       _fromE = _from->readNextElement();
+      if (_fromE)
+      {
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+      }
     }
 
     if (!_fromE.get() && !_toE.get())
     {
       // pass
-      LOG_TRACE("both are null elements; skipping");
+      LOG_TRACE("both are null elements; skipping...");
     }
     // if we've run out of "from" elements, create all the remaining elements in "to"
     else if (!_fromE.get() && _toE.get())
@@ -134,11 +155,15 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Create;
       result.e = _toE;
 
-      LOG_TRACE("run out of from elements; 'from' element null; 'to' element not null: " <<
-                _toE->getElementId() << "; creating 'to' element: ");
-      LOG_VART(result.e);
+      LOG_TRACE(
+        "run out of from elements; 'from' element null; 'to' element not null: " <<
+        _toE->getElementId() << "; creating 'to' element...");
 
       _toE = _to->readNextElement();
+      if (_toE)
+      {
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+      }
     }
     // if we've run out of "to" elements, delete all the remaining elements in "from"
     else if (_fromE.get() && !_toE.get())
@@ -146,47 +171,91 @@ Change ChangesetDeriver::_nextChange()
       result.type = Change::Delete;
       result.e = _fromE;
 
-      LOG_TRACE("run out of 'to' elements; to' element null; 'from' element not null: " <<
-                _fromE->getElementId() << "; deleting 'from' element: ");
-      LOG_VART(result.e);
+      LOG_TRACE(
+        "run out of 'to' elements; to' element null; 'from' element not null: " <<
+        _fromE->getElementId() << "; deleting 'from' element...");
 
       _fromE = _from->readNextElement();
+      if (_fromE)
+      {
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+      }
     }
     else if (_fromE->getElementId() == _toE->getElementId())
     {
       result.type = Change::Modify;
       result.e = _toE;
 
-      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
-                _toE->getElementId() << " modifying 'to' element: ");
-      //LOG_VART(_fromE);
-      LOG_VART(result.e);
+      LOG_TRACE(
+        "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
+        _toE->getElementId() << " modifying 'to' element: ");
 
       _toE = _to->readNextElement();
+      if (_toE)
+      {
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+      }
+      _fromE = _from->readNextElement(); //this line probably needs more testing
+      if (_fromE)
+      {
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+      }
     }
     else if (_fromE->getElementId() < _toE->getElementId())
     {
-      result.type = Change::Delete;
-      result.e = _fromE;
+      //I don't believe hoot conflation is going to delete reference features (could be wrong)...
+      //only modify them.  So, this is a safety feature.  We need to prove this by conflating a lot
+      //more data.
+      //TODO: this logic may need to ref the bounds to be more granular; i.e.  Only prevent deleting
+      //ref features crossing the changeset bounds or split features created from former ref
+      //features crossing the changeset bounds
 
-      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
-                _toE->getElementId() << " deleting 'from' element: ");
-      //LOG_VART(_toE);
-      LOG_VART(result.e);
+      if (ConfigOptions().getChangesetAllowDeletingReferenceFeatures() ||
+          //this assumes the 'from' dataset was loaded as unknown1
+          (!ConfigOptions().getChangesetAllowDeletingReferenceFeatures() &&
+           _fromE->getStatus() != Status::Unknown1))
+      {
+        result.type = Change::Delete;
+        result.e = _fromE;
+
+        LOG_TRACE(
+          "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
+          _toE->getElementId() << "; deleting 'from' element...");
+      }
+      else
+      {
+        //The changeset provider will return no more changes if a null change is returned here.  We
+        //want to force no changes for this particular element, so we're going to use the unknown
+        //change type, which ends up being a no-op.  Skipping an element delete in this situation
+        //minimizes the changeset impact on reference datasets in certain situations.
+        result.type = Change::Unknown;
+        result.e = _fromE;
+        LOG_TRACE(
+          "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
+          " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
+          "=true...");
+      }
 
       _fromE = _from->readNextElement();
+      if (_fromE)
+      {
+        LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+      }
     }
     else
     {
       result.type = Change::Create;
       result.e = _toE;
 
-      LOG_TRACE("'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
-                _toE->getElementId() << " creating 'to' element: ");
-      //LOG_VART(_fromE));
-      LOG_VART(result.e);
+      LOG_TRACE(
+        "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
+        _toE->getElementId() << "; creating 'to' element...");
 
       _toE = _to->readNextElement();
+      if (_toE)
+      {
+        LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+      }
     }
   }
 
@@ -201,9 +270,7 @@ Change ChangesetDeriver::readNextChange()
   }
 
   Change result = _next;
-
   _next.e.reset();
-
   return result;
 }
 

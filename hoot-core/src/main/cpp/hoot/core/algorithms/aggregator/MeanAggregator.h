@@ -32,17 +32,15 @@
 namespace hoot
 {
 
-using namespace std;
-
 class MeanAggregator : public ValueAggregator
 {
 public:
 
-  static string className() { return "hoot::MeanAggregator"; }
+  static std::string className() { return "hoot::MeanAggregator"; }
 
   MeanAggregator();
 
-  virtual double aggregate(vector<double>& d) const;
+  virtual double aggregate(std::vector<double>& d) const;
 
   virtual QString toString() const { return "MeanAggregator"; }
 };

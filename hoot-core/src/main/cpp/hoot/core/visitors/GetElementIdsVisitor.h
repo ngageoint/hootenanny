@@ -28,21 +28,19 @@
 #define GETELEMENTIDSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
 
-using namespace std;
-
 /**
  * Puts all the visited elementIds into a bag.
  */
-class GetElementIdsVisitor : public ElementVisitor
+class GetElementIdsVisitor : public ConstElementVisitor
 {
 public:
 
-  GetElementIdsVisitor(set<ElementId>& bag) : _bag(bag) {}
+  GetElementIdsVisitor(std::set<ElementId>& bag) : _bag(bag) {}
 
   virtual ~GetElementIdsVisitor() {}
 
@@ -50,7 +48,7 @@ public:
 
 private:
 
-  set<ElementId>& _bag;
+  std::set<ElementId>& _bag;
 };
 
 }

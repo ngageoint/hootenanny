@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SIMULATEDANNEALING_H
 #define SIMULATEDANNEALING_H
@@ -42,7 +42,8 @@ namespace Tgs
 class SimulatedAnnealing
 {
 public:
-  SimulatedAnnealing(ConstStateDescriptionPtr sd, ConstFitnessFunctionPtr fitness);
+
+  SimulatedAnnealing(ConstStateDescriptionPtr sd, FitnessFunctionPtr fitness);
 
   QSet<ConstStatePtr> getBestStates() const { return _bestStates; }
 
@@ -53,14 +54,18 @@ public:
    * best states found so far.
    */
   void setPickFromBestScores(bool best) { _pickFromBestScores = best; }
+
+  void setVerbose(bool verbose) { _verbose = verbose; }
+
 private:
 
   mutable Random _rand;
   double _bestScore;
   QSet<ConstStatePtr> _bestStates;
-  ConstFitnessFunctionPtr _fitness;
+  FitnessFunctionPtr _fitness;
   bool _pickFromBestScores;
   ConstStateDescriptionPtr _stateDescription;
+  bool _verbose;
 
   StatePtr _generateNeighbor(ConstStatePtr from, double T) const;
   StatePtr _generateRandomState() const;

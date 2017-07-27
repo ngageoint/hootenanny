@@ -38,9 +38,10 @@
 #include <QDir>
 #include <QFile>
 
+using namespace v8;
+
 namespace hoot
 {
-using namespace v8;
 
 HOOT_JS_REGISTER(RequireJs)
 
@@ -136,8 +137,17 @@ Handle<Value> RequireJs::jsRequire(const Arguments& args)
       HootExceptionJs::throwAsHootException(try_catch);
     }
 
+    Local<Value> oldExports = Context::GetCurrent()->Global()->Get(String::New("exports"));
+
+    Handle<Object> exports(Object::New());
+    Context::GetCurrent()->Global()->Set(String::New("exports"), exports);
+
+    Handle<Value> result = jsScript->Run();
+
+    Context::GetCurrent()->Global()->Set(String::New("exports"), oldExports);
+
     // Run the script to get the result.
-    HootExceptionJs::checkV8Exception(jsScript->Run(), try_catch);
+    HootExceptionJs::checkV8Exception(result, try_catch);
 
     // Debug: Dump the Object
     //  Handle<Object> tObj = Context::GetCurrent()->Global();
@@ -145,7 +155,7 @@ Handle<Value> RequireJs::jsRequire(const Arguments& args)
     //  cout << "tObj Properties: " << tObj->GetPropertyNames() << endl;
     //  cout << endl;
 
-    return scope.Close(Undefined());
+    return scope.Close(exports);
   }
   catch (const HootException& e)
   {

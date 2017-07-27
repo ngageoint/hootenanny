@@ -40,6 +40,9 @@
 // Qt
 #include <QDebug>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -74,7 +77,7 @@ bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) 
   if (e->getElementType() != ElementType::Way)
     return false;
 
-  ConstWayPtr w = dynamic_pointer_cast<const Way>(e);
+  ConstWayPtr w = boost::dynamic_pointer_cast<const Way>(e);
   try
   {
     bool result = true;
@@ -113,10 +116,10 @@ bool WayBufferCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) 
 
     return result;
   }
-  catch (geos::util::TopologyException& e)
+  catch (const geos::util::TopologyException&)
   {
     LOG_VART(ElementConverter(_map).convertToLineString(_map->getWay(w->getId())));
-    throw e;
+    throw;
   }
 }
 

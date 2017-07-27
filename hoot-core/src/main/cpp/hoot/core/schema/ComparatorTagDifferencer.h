@@ -39,7 +39,7 @@ class ComparatorTagDifferencer : public TagDifferencer
 {
 public:
 
-  static string className() { return "hoot::ComparatorTagDifferencer"; }
+  static std::string className() { return "hoot::ComparatorTagDifferencer"; }
 
   virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
     const ConstElementPtr& e2) const;

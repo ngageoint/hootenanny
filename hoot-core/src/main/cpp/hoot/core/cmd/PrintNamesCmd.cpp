@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/WordCount.h>
@@ -54,7 +54,7 @@ class PrintNamesCmd : public BaseCommand
 public:
   static string className() { return "hoot::PrintNamesCmd"; }
 
-  class NameCountVisitor : public ElementVisitor
+  class NameCountVisitor : public ConstElementVisitor
   {
   public:
     NameCountVisitor(std::map<QString, int>& counts) : _counts(counts)
@@ -133,7 +133,7 @@ public:
       if (OsmMapReaderFactory::getInstance().hasPartialReader(args[i]))
       {
         boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(args[i]);
-        boost::shared_ptr<PartialOsmMapReader> pomr = dynamic_pointer_cast<PartialOsmMapReader>(reader);
+        boost::shared_ptr<PartialOsmMapReader> pomr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
         pomr->open(args[i]);
 
@@ -154,7 +154,7 @@ public:
     long total = 0;
     QVector<WordCount> wc;
     wc.reserve(counts.size());
-    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); it++)
+    for (std::map<QString, int>::iterator it = counts.begin(); it != counts.end(); ++it)
     {
       wc.push_back(WordCount(it->first, it->second));
       total += it->second;

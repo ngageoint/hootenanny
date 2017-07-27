@@ -36,7 +36,6 @@
 
 namespace hoot
 {
-using namespace boost;
 
 /**
  * Returns true if k==v
@@ -45,7 +44,7 @@ class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static string className() { return "hoot::TagCriterion"; }
+  static std::string className() { return "hoot::TagCriterion"; }
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v) : _k(k), _v(v) {}

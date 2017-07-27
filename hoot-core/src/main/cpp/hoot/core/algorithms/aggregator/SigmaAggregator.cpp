@@ -26,10 +26,11 @@
  */
 #include "SigmaAggregator.h"
 
-
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <tbs/stats/SampleStats.h>
+
+using namespace std;
 
 namespace hoot
 {

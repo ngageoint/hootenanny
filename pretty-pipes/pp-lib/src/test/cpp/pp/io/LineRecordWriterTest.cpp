@@ -48,6 +48,8 @@ using namespace pp;
 #include <pp/Hdfs.h>
 #include <pp/io/LineRecordWriter.h>
 
+using namespace std;
+
 class LineRecordWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(LineRecordWriterTest);
@@ -77,7 +79,7 @@ public:
       uut.emitRecord(key.data(), key.size(), value.data(), value.size());
     }
 
-   boost::shared_ptr<istream> is(fs.open("test-output/LineRecordWriterTest/output/part-00000.txt"));
+    boost::shared_ptr<istream> is(fs.open("test-output/LineRecordWriterTest/output/part-00000.txt"));
     char buffer[1000] = { '\0' };
     is->read(buffer, 1000);
     string output(buffer);
@@ -88,4 +90,4 @@ public:
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordWriterTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LineRecordWriterTest, "glacial");

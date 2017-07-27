@@ -37,6 +37,9 @@
 // Tgs
 #include <tgs/RStarTree/HilbertCurve.h>
 
+using namespace geos::geom;
+using namespace std;
+
 namespace hoot
 {
 
@@ -84,10 +87,12 @@ void AddHilbertReviewSortOrderOp::apply(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr r = it->second;
+    LOG_VART(r->getElementId());
     if (ReviewMarker::isReviewUid(map, r->getElementId()))
     {
       const set<ElementId> eids = ReviewMarker::getReviewElements(map, r->getElementId());
       LOG_VART(eids.size());
+      LOG_VART(eids);
       if (eids.size() > 0)
       {
         int64_t hv = _calculateHilbertValue(map, eids);
