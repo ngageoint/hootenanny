@@ -37,7 +37,6 @@
 #include <hoot/core/conflate/TileBoundsCalculator.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/io/ApiDbReader.h>
-#include <hoot/core/io/TileBoundsWriter.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 
 // Qt

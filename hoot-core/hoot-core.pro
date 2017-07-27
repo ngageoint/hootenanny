@@ -554,7 +554,6 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
 				src/main/cpp/hoot/core/elements/Status.cpp \
 				src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
-				src/main/cpp/hoot/core/io/TileBoundsWriter.cpp \
 				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp
 
 HEADERS += \
@@ -1095,6 +1094,5 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
 				src/main/cpp/hoot/core/elements/ElementVisitorOff.h \
-				src/main/cpp/hoot/core/io/TileBoundsWriter.h \
 				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h
 
