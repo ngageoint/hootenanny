@@ -264,7 +264,8 @@ var postHandler = function(data) {
         'translation.direction': data.transDir});
 
     var map = new hoot.OsmMap();
-    hoot.loadMapFromString(map, data.osm);
+    // loadMapFromString arguments: map, XML, preserve ID's, hoot:status
+    hoot.loadMapFromString(map, data.osm, true);
     translation.apply(map);
     return hoot.OsmWriter.toString(map);
 };
