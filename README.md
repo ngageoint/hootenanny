@@ -50,12 +50,13 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * JSON file (.json; similar to Overpass JSON) (M)
 * OpenStreetMap XML changeset file (.osc)
 * OpenStreetMap SQL changeset file (.osc.sql)
-* OpenStreetMap XML file (.osm) (M)
+* OpenStreetMap XML file (.osm) (*)
 * OpenStreetMap Protocol Buffers file (.osm.pbf) (M)
 * OpenStreetMap API Database (osmapidb://)
 * Shapefile (.shp) (M)
 
-(M) = format currently requires reading entire dataset into memory during processing
+(M) = format requires reading entire dataset into memory during processing
+(*) = format requires reading entire dataset into memory during processing only if element ID output is sorted
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 

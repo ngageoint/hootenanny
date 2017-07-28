@@ -208,7 +208,7 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     throw HootException("Please open the file before attempting to write.");
   }
 
-  //TODO: the coord sys and schema entries currently won't get written during streaming writing
+  //TODO: The coord sys and schema entries won't get written to streamed output.
 
   int epsg = map->getProjection()->GetEPSGGeogCS();
   if (epsg > -1)
@@ -693,7 +693,9 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 
 void OsmXmlWriter::finalizePartial()
 {
-  _writeBounds(_bounds);    //bounds will be written at the end of output
+  //bounds will be written at the end of output instead of the beginning as with the non-streamed
+  //output
+  _writeBounds(_bounds);
   close();
 }
 
