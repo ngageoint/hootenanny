@@ -80,7 +80,7 @@ class CalculateRandomTileCmd : public BaseCalculateTilesCmd
       {
         bool parseSuccess = false;
         randomSeed = args[2].toInt(&parseSuccess);
-        if (!parseSuccess || randomSeed < 0)
+        if (!parseSuccess || randomSeed < -1)
         {
           throw HootException("Invalid random seed value: " + args[2]);
         }

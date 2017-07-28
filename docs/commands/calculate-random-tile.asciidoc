@@ -8,7 +8,7 @@
 * +output+ - output file to write the tile boundary to; valid formats are GeoJSON (*.geojson)
 * +random-seed+ - seeds the random number generator for consistent tile boundary selection; use -1 for no seeding; defaults to -1
 * +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
-* +pixelSize+ - The size of the pixels used in the calculation.  The default is 0.001; optional only if maxNodeCountPerTile is not specified
+* +pixelSize+ - The size of the pixels used in the calculation in degrees.  The default is 0.001; optional only if maxNodeCountPerTile is not specified
 
 See additional notes in the calculate-tiles command documentation.
 

@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
-# This is a base test script for conflating datasets where one dataset comes from an osm api database and the other from 
-# a hoot api database.  It simulates end to end at the command line level what one possible conflation workflow with MapEdit # data looks like (aka Holy Grail).  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an example of how to call 
-# this script.
+# This is a base test script for conflating datasets where one dataset comes from an osm api database and the other 
+# from a hoot api database.  It simulates end to end at the command line level what one possible conflation workflow 
+# with MapEdit # data looks like (aka Holy Grail).  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an 
+# example of how to call this script.
 # 
 # This script:
 #   - writes two datasets, one to an OSM API database and one to a Hoot API database; assumes the two have overlapping aoi's 

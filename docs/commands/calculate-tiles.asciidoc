@@ -8,7 +8,7 @@ the specified input(s) and writes the output to a file.
 * +input+ - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
 * +output+ - output file to write the tile boundaries to; valid formats are GeoJSON (*.geojson)
 * +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
-* +pixelSize+ - The size of the pixels used in the calculation.  The default is 0.001; optional only if maxNodeCountPerTile is not specified
+* +pixelSize+ - The size of the pixel used in the calculation in degrees.  The default is 0.001; optional only if maxNodeCountPerTile is not specified
 
 If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the 
 algorithm used may not be able to find a solution.  
