@@ -90,24 +90,26 @@ public:
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
+    const QString supportingWriterName = OsmMapWriterFactory::getWriterName(args[1]);
+    LOG_VARD(supportingWriterName);
+
     if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
         OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
-        //TODO: Why can't we use convert ops with streaming?
-        ConfigOptions().getConvertOps().size() == 0)
+        ConfigOptions().getConvertOps().size() == 0 &&
+        //the XML writer can't keep sorted output when streaming, so require an additional config
+        //option be specified in order to stream when writing that format
+        (supportingWriterName != "hoot::OsmXmlWriter" ||
+         (supportingWriterName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
     {
       streamElements(args[0], args[1]);
     }
     else
     {
       OsmMapPtr map(new OsmMap());
-
       loadMap(map, args[0], true, Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
-
       MapProjector::projectToWgs84(map);
-
       saveMap(map, args[1]);
     }
 
