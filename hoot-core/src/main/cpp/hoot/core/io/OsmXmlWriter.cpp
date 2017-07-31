@@ -220,7 +220,7 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
     _initWriter();
   }
 
-  //TODO: The coord sys and schema entries won't get written to streamed output.
+  //TODO: The coord sys and schema entries don't get written to streamed output.
 
   int epsg = map->getProjection()->GetEPSGGeogCS();
   if (epsg > -1)
