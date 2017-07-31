@@ -130,21 +130,9 @@ void OsmXmlWriter::open(QString url)
     throw Exception(QObject::tr("Error opening %1 for writing").arg(url));
   }
 
-  _writer.reset(new QXmlStreamWriter(_fp.get()));
-  _writer->setCodec("UTF-8");
+  _initWriter();
 
-  if (_formatXml)
-  {
-    _writer->setAutoFormatting(true);
-  }
-
-  _writer->writeStartDocument();
-
-  _writer->writeStartElement("osm");
-  _writer->writeAttribute("version", "0.6");
-  _writer->writeAttribute("generator", "hootenanny");
-
-   _bounds.init();
+  _bounds.init();
 }
 
 void OsmXmlWriter::close()
@@ -195,6 +183,23 @@ QString OsmXmlWriter::_typeName(ElementType e)
   }
 }
 
+void OsmXmlWriter::_initWriter()
+{
+  _writer.reset(new QXmlStreamWriter(_fp.get()));
+  _writer->setCodec("UTF-8");
+
+  if (_formatXml)
+  {
+    _writer->setAutoFormatting(true);
+  }
+
+  _writer->writeStartDocument();
+
+  _writer->writeStartElement("osm");
+  _writer->writeAttribute("version", "0.6");
+  _writer->writeAttribute("generator", "hootenanny");
+}
+
 void OsmXmlWriter::write(ConstOsmMapPtr map, const QString& path)
 {
   open(path);
@@ -206,6 +211,13 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
   if (!_fp.get() || _fp->isWritable() == false)
   {
     throw HootException("Please open the file before attempting to write.");
+  }
+
+  //Some code paths don't call the open method before invoking this write method, so make sure the
+  //writer has been initialized.
+  if (!_writer.get())
+  {
+    _initWriter();
   }
 
   //TODO: The coord sys and schema entries won't get written to streamed output.

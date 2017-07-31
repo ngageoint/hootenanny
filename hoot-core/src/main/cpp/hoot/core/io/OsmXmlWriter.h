@@ -129,6 +129,8 @@ private:
 
   static QString _typeName(ElementType e);
 
+  void _initWriter();
+
   void _writeMetadata(const Element* e);
   void _writeNodes(ConstOsmMapPtr map);
   void _writeWays(ConstOsmMapPtr map);
