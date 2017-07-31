@@ -324,97 +324,16 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map)
   qSort(wids.begin(), wids.end(), qLess<long>());
   for (int i = 0; i < wids.size(); i++)
   {
-    //_writePartial(map->getWay(wids[i]));
-
-    const Way* w = map->getWay(wids[i]).get();
-
-    //TODO: duplicated code below here with _writePartial here b/c of _includePointInWays
-
-    _writer->writeStartElement("way");
-    _writer->writeAttribute("visible", "true");
-    _writer->writeAttribute("id", QString::number(w->getId()));
-
-    _writeMetadata(w);
-
-    for (size_t j = 0; j < w->getNodeCount(); j++)
+    //I'm not really sure how to reconcile the duplicated code between these two version of
+    //partial way writing.
+    if (_includePointInWays)
     {
-      _writer->writeStartElement("nd");
-      long nid = w->getNodeId(j);
-      _writer->writeAttribute("ref", QString::number(w->getNodeId(j)));
-      if (_includePointInWays)
-      {
-        ConstNodePtr n = map->getNode(nid);
-        _writer->writeAttribute("x", QString::number(n->getX(), 'g', _precision));
-        _writer->writeAttribute("y", QString::number(n->getY(), 'g', _precision));
-      }
-      _writer->writeEndElement();
+      _writePartialIncludePoints(map->getWay(wids[i]), map);
     }
-
-    const Tags& tags = w->getTags();
-
-    for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
+    else
     {
-      if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
-      {
-        _writer->writeStartElement("tag");
-        _writer->writeAttribute("k", removeInvalidCharacters(tit.key()));
-
-        if (tit.key() == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
-        {
-          if (_textStatus)
-          {
-            _writer->writeAttribute("v", w->getStatus().toTextStatus());
-          }
-          else
-          {
-            _writer->writeAttribute("v", w->getStatus().toCompatString());
-          }
-        }
-        else
-        {
-          _writer->writeAttribute("v", removeInvalidCharacters(tit.value()));
-        }
-        _writer->writeEndElement();
-      }
+      writePartial(map->getWay(wids[i]));
     }
-
-    // If we already have a "hoot:status" tag, make sure it contains the actual
-    // status of the element. See writeNodes for more info
-    if (! tags.contains(MetadataTags::HootStatus()))
-    {
-      if (_textStatus)
-      {
-        _writer->writeStartElement("tag");
-        _writer->writeAttribute("k", MetadataTags::HootStatus());
-        _writer->writeAttribute("v", w->getStatus().toTextStatus());
-        _writer->writeEndElement();
-      }
-      else if (_includeDebug)
-      {
-        _writer->writeStartElement("tag");
-        _writer->writeAttribute("k", MetadataTags::HootStatus());
-        _writer->writeAttribute("v", w->getStatus().toCompatString());
-        _writer->writeEndElement();
-      }
-    }
-
-    if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
-    {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", MetadataTags::ErrorCircular());
-      _writer->writeAttribute("v", QString("%1").arg(w->getCircularError()));
-      _writer->writeEndElement();
-    }
-
-    if (_includeDebug || _includeIds)
-    {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", MetadataTags::HootId());
-      _writer->writeAttribute("v", QString("%1").arg(w->getId()));
-      _writer->writeEndElement();
-    }
-
-    _writer->writeEndElement();
   }
 }
 
@@ -528,8 +447,102 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _bounds.expandToInclude(n->getX(), n->getY());
 }
 
+void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
+{
+  _writer->writeStartElement("way");
+  _writer->writeAttribute("visible", "true");
+  _writer->writeAttribute("id", QString::number(w->getId()));
+
+  _writeMetadata(w.get());
+
+  for (size_t j = 0; j < w->getNodeCount(); j++)
+  {
+    _writer->writeStartElement("nd");
+    _writer->writeAttribute("ref", QString::number(w->getNodeId(j)));
+    const long nid = w->getNodeId(j);
+    if (_includePointInWays)
+    {
+      ConstNodePtr n = map->getNode(nid);
+      _writer->writeAttribute("x", QString::number(n->getX(), 'g', _precision));
+      _writer->writeAttribute("y", QString::number(n->getY(), 'g', _precision));
+    }
+    _writer->writeEndElement();
+  }
+
+  const Tags& tags = w->getTags();
+
+  for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
+  {
+    if (tit.key().isEmpty() == false && tit.value().isEmpty() == false)
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", removeInvalidCharacters(tit.key()));
+
+      if (tit.key() == MetadataTags::HootStatus() && w->getStatus() != Status::Invalid)
+      {
+        if (_textStatus)
+        {
+          _writer->writeAttribute("v", w->getStatus().toTextStatus());
+        }
+        else
+        {
+          _writer->writeAttribute("v", w->getStatus().toCompatString());
+        }
+      }
+      else
+      {
+        _writer->writeAttribute("v", removeInvalidCharacters(tit.value()));
+      }
+      _writer->writeEndElement();
+    }
+  }
+
+  // Logic: If we already have a "hoot:status" tag, make sure it contains the actual
+  // status of the element. See writeNodes for more info
+  if (! tags.contains(MetadataTags::HootStatus()))
+  {
+    if (_textStatus)
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", MetadataTags::HootStatus());
+      _writer->writeAttribute("v", w->getStatus().toTextStatus());
+      _writer->writeEndElement();
+    }
+    else if (_includeDebug)
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", MetadataTags::HootStatus());
+      _writer->writeAttribute("v", w->getStatus().toCompatString());
+      _writer->writeEndElement();
+    }
+  }
+
+  if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
+  {
+    _writer->writeStartElement("tag");
+    _writer->writeAttribute("k", MetadataTags::ErrorCircular());
+    _writer->writeAttribute("v", QString("%1").arg(w->getCircularError()));
+    _writer->writeEndElement();
+  }
+
+  if (_includeDebug || _includeIds)
+  {
+    _writer->writeStartElement("tag");
+    _writer->writeAttribute("k", MetadataTags::HootId());
+    _writer->writeAttribute("v", QString("%1").arg(w->getId()));
+    _writer->writeEndElement();
+  }
+
+  _writer->writeEndElement();
+}
+
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
+  if (_includePointInWays)
+  {
+    throw HootException("Adding points to way output is not supported in streaming output.");
+  }
+
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(w->getId()));

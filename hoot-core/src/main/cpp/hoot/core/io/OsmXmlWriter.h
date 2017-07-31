@@ -61,7 +61,7 @@ public:
   static unsigned int logWarnCount;
 
   OsmXmlWriter();
-  ~OsmXmlWriter();
+  virtual ~OsmXmlWriter();
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".osm"); }
 
@@ -133,6 +133,7 @@ private:
 
   void _writeMetadata(const Element* e);
   void _writeNodes(ConstOsmMapPtr map);
+  void _writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map);
   void _writeWays(ConstOsmMapPtr map);
   void _writeRelations(ConstOsmMapPtr map);
 
