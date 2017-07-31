@@ -131,6 +131,7 @@ private:
 
   void _initWriter();
 
+  void _writeTags(const ConstElementPtr& element);
   void _writeMetadata(const Element* e);
   void _writeNodes(ConstOsmMapPtr map);
   void _writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map);

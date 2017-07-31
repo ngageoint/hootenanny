@@ -294,6 +294,89 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
   }
 }
 
+void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
+{
+  const Tags& tags = element->getTags();
+
+  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  {
+    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", removeInvalidCharacters(it.key()));
+      //status check here only for nodes/ways
+      if (it.key() == MetadataTags::HootStatus() && element->getStatus() != Status::Invalid)
+      {
+        if (_textStatus)
+        {
+          _writer->writeAttribute("v", element->getStatus().toTextStatus());
+        }
+        else
+        {
+          _writer->writeAttribute("v", element->getStatus().toCompatString());
+        }
+      }
+      else
+      {
+        _writer->writeAttribute("v", removeInvalidCharacters(it.value()));
+      }
+      _writer->writeEndElement();
+    }
+  }
+
+  //relation has this additional logic
+//  if (r->getType() != "")
+//  {
+//    _writer->writeStartElement("tag");
+//    _writer->writeAttribute("k", "type");
+//    _writer->writeAttribute("v", removeInvalidCharacters(r->getType()));
+//    _writer->writeEndElement();
+//  }
+
+  if (!tags.contains(MetadataTags::HootStatus()))
+  {
+    if (_textStatus && tags.getNonDebugCount() > 0) //nondebug for nodes only
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", MetadataTags::HootStatus());
+      _writer->writeAttribute("v", element->getStatus().toTextStatus());
+      _writer->writeEndElement();
+    }
+    else if (_includeDebug)
+    {
+      _writer->writeStartElement("tag");
+      _writer->writeAttribute("k", MetadataTags::HootStatus());
+      if (_textStatus)
+      {
+        _writer->writeAttribute("v", element->getStatus().toTextStatus()); //this is only for nodes
+      }
+      else
+      {
+        _writer->writeAttribute("v", element->getStatus().toCompatString());
+      }
+      _writer->writeEndElement();
+    }
+  }
+
+  // turn this on when we start using node circularError.
+  if (element->hasCircularError() && tags.getNonDebugCount() > 0 &&
+      ConfigOptions().getWriterIncludeCircularErrorTags()) //nondebug for nodes only
+  {
+    _writer->writeStartElement("tag");
+    _writer->writeAttribute("k", MetadataTags::ErrorCircular());
+    _writer->writeAttribute("v", QString("%1").arg(element->getCircularError()));
+    _writer->writeEndElement();
+  }
+
+  if (_includeDebug || _includeIds)
+  {
+    _writer->writeStartElement("tag");
+    _writer->writeAttribute("k", MetadataTags::HootId());
+    _writer->writeAttribute("v", QString("%1").arg(element->getId()));
+    _writer->writeEndElement();
+  }
+}
+
 void OsmXmlWriter::_writeNodes(ConstOsmMapPtr map)
 {
   QList<long> nids;
@@ -367,81 +450,17 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
   _writer->writeStartElement("node");
+
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(n->getId()));
+
   _writeMetadata(n.get());
+
   _writer->writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
   _writer->writeAttribute("lon", QString::number(n->getX(), 'f', _precision));
 
-  const Tags& tags = n->getTags();
+  _writeTags(n);
 
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
-  {
-    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
-    {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(it.key()));
-      if (it.key() == MetadataTags::HootStatus() && n->getStatus() != Status::Invalid)
-      {
-        if (_textStatus)
-        {
-          _writer->writeAttribute("v", n->getStatus().toTextStatus());
-        }
-        else
-        {
-          _writer->writeAttribute("v", n->getStatus().toCompatString());
-        }
-      }
-      else
-      {
-        _writer->writeAttribute("v", removeInvalidCharacters(it.value()));
-      }
-      _writer->writeEndElement();
-    }
-  }
-
-  if (! tags.contains(MetadataTags::HootStatus()))
-  {
-    if (_textStatus && tags.getNonDebugCount() > 0)
-    {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", MetadataTags::HootStatus());
-      _writer->writeAttribute("v", n->getStatus().toTextStatus());
-      _writer->writeEndElement();
-    }
-    else if (_includeDebug)
-    {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", MetadataTags::HootStatus());
-      if (_textStatus)
-      {
-        _writer->writeAttribute("v", n->getStatus().toTextStatus());
-      }
-      else
-      {
-        _writer->writeAttribute("v", n->getStatus().toCompatString());
-      }
-      _writer->writeEndElement();
-    }
-  }
-
-  // turn this on when we start using node circularError.
-  if (n->hasCircularError() && tags.getNonDebugCount() > 0 &&
-      ConfigOptions().getWriterIncludeCircularErrorTags())
-  {
-    _writer->writeStartElement("tag");
-    _writer->writeAttribute("k", MetadataTags::ErrorCircular());
-    _writer->writeAttribute("v", QString("%1").arg(n->getCircularError()));
-    _writer->writeEndElement();
-  }
-
-  if (_includeDebug || _includeIds)
-  {
-    _writer->writeStartElement("tag");
-    _writer->writeAttribute("k", MetadataTags::HootId());
-    _writer->writeAttribute("v", QString("%1").arg(n->getId()));
-    _writer->writeEndElement();
-  }
   _writer->writeEndElement();
 
   _bounds.expandToInclude(n->getX(), n->getY());
