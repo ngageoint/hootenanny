@@ -109,6 +109,7 @@ OgrWriter::OgrWriter():
   setConfiguration(conf());
 
   _textStatus = ConfigOptions().getWriterTextStatus();
+  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
 
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
@@ -600,6 +601,11 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     else
     {
       t[MetadataTags::HootStatus()] = e->getStatusString();
+    }
+
+    if (_includeDebug)
+    {
+      t[MetadataTags::HootId()] = QString::number(e->getId());
     }
 
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
