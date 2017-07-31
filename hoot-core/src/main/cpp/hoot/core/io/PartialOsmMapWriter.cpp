@@ -29,6 +29,8 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Configurable.h>
 #include "ElementInputStream.h"
 
 namespace hoot
@@ -99,10 +101,15 @@ void PartialOsmMapWriter::writeElement(ElementInputStream& in)
   writePartial(ele);
 }
 
-void PartialOsmMapWriter::writeElement(ElementPtr &element)
+void PartialOsmMapWriter::writeElement(ElementPtr& element)
 {
   if (element != 0)
   {
+    if (_criterion.get() && !_criterion->isSatisfied(element))
+    {
+      //LOG_VART("Element did not satisfy filter: " << element);
+      return;
+    }
     writePartial(element);
   }
 }

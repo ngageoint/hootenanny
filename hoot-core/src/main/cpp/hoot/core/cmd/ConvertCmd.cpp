@@ -91,9 +91,7 @@ public:
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
     if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
-        OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
-        //TODO: Why can't we use convert ops with streaming?
-        ConfigOptions().getConvertOps().size() == 0)
+        OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]))
     {
       streamElements(args[0], args[1]);
     }
@@ -127,6 +125,41 @@ public:
     return 0;
   }
 
+void _initStreamingCriterion(const QStringList ops,
+                             boost::shared_ptr<PartialOsmMapWriter> partialWriter)
+{
+  LOG_VART(ops.size());
+  if (ops.size() > 1)
+  {
+    throw HootException(
+      "Only a convert operation can be applied during a streaming write operation.");
+  }
+
+  const QString criterionName = ops[0];
+  LOG_VART(criterionName);
+  if (!criterionName.trimmed().isEmpty())
+  {
+    Factory& factory = Factory::getInstance();
+    if (!factory.hasBase<ElementCriterion>(criterionName.toStdString()))
+    {
+      throw HootException(
+        QString("The convert operation applied to a streaming write operation must be of type ") +
+        QString("ElementCriterion.  Specified: " + criterionName));
+    }
+
+    boost::shared_ptr<ElementCriterion> criterion(
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName));
+    Configurable* c = dynamic_cast<Configurable*>(criterion.get());
+    if (c != 0)
+    {
+      c->setConfiguration(conf());
+    }
+    partialWriter->setCriterion(criterion);
+
+    LOG_INFO("Using criterion: " << criterionName);
+  }
+}
+
   void streamElements(QString in, QString out)
   {
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
@@ -140,6 +173,13 @@ public:
     boost::shared_ptr<ElementOutputStream> streamWriter =
       boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
+    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
+      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    if (partialWriter.get() && ConfigOptions().getConvertOps().size() > 0)
+    {
+      _initStreamingCriterion(ConfigOptions().getConvertOps(), partialWriter);
+    }
+
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
     boost::shared_ptr<PartialOsmMapReader> partialReader =
@@ -148,8 +188,6 @@ public:
     {
       partialReader->finalizePartial();
     }
-    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
     if (partialWriter.get())
     {
       partialWriter->finalizePartial();
