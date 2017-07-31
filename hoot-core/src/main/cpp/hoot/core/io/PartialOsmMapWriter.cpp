@@ -97,19 +97,19 @@ void PartialOsmMapWriter::writePartial(const RelationPtr& r)
 
 void PartialOsmMapWriter::writeElement(ElementInputStream& in)
 {
-  ElementPtr ele = in.readNextElement();
-  writePartial(ele);
+  ElementPtr element = in.readNextElement();
+  if (_criterion.get() && !_criterion->isSatisfied(element))
+  {
+    LOG_TRACE("Element did not satisfy filter: " << element->getElementId());
+    return;
+  }
+  writePartial(element);
 }
 
 void PartialOsmMapWriter::writeElement(ElementPtr& element)
 {
   if (element != 0)
   {
-    if (_criterion.get() && !_criterion->isSatisfied(element))
-    {
-      //LOG_VART("Element did not satisfy filter: " << element);
-      return;
-    }
     writePartial(element);
   }
 }

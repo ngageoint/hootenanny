@@ -135,7 +135,7 @@ void _initStreamingCriterion(const QStringList ops,
   if (ops.size() > 1)
   {
     throw HootException(
-      "Only a convert operation can be applied during a streaming write operation.");
+      "Only a single convert operation can be applied during a streaming write operation.");
   }
 
   const QString criterionName = ops[0];
