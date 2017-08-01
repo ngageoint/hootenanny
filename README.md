@@ -73,7 +73,7 @@ For custom translations, a specific mapping can be defined based on an uploaded 
 Instructions to launch an Ubuntu Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
 be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
-An RPM based installation is also available for CentOS 6.7. 
+An RPM based installation is also available for CentOS 6.x.  If you simply want to install and run Hootenanny, this is the recommended and easiest method.  The intsructions for installing from RPM can be found [here](https://https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc). 
 
 # Documentation
 Please read the documentation included with the latest release for details on installing and using Hootenanny, as well as the algorithmic concepts behind the software.
