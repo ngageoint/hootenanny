@@ -262,6 +262,8 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
     QString("\tUnresolved relation members: ") +
       _formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
   messages.append(
+    QString("\tTotal features: ") + _formatPotentiallyLargeNumber(_getTotalFeaturesWritten()));
+  messages.append(
     QString("\tChangesets: ") + _formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
   messages.append(
     QString("\tChangeset change size (each): ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
@@ -348,8 +350,9 @@ void OsmApiDbBulkWriter::_clearIdCollections()
 void OsmApiDbBulkWriter::finalizePartial()
 {
   LOG_INFO(
-    "Input records parsed (data pass #" << _fileDataPassCtr << " of " <<
-    _numberOfFileDataPasses() << ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    _formatPotentiallyLargeNumber(_getTotalFeaturesWritten()) << " input records parsed " <<
+    "(data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
+    ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _clearIdCollections();
@@ -733,6 +736,11 @@ void OsmApiDbBulkWriter::_reserveIdsInDb()
   DbUtils::execNoPrepare(_database.getDB(), reserveElementIdsSql);
   _database.commit();
   LOG_DEBUG("Sequence updates written to database.");
+}
+
+unsigned long OsmApiDbBulkWriter::_getTotalFeaturesWritten() const
+{
+  return _writeStats.nodesWritten + _writeStats.waysWritten + _writeStats.relationsWritten;
 }
 
 unsigned long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
