@@ -3,6 +3,8 @@ secondary dataset:  test-files/cmd/slow/ServiceOsmApiDbHootApiDbHaitiDrConflateT
 AOI:  -72.4822997917,18.5264918926,-72.4768066276,18.531700324028872
 CONFLATION TYPE:  unifying
 TEST_NAME:  ServiceOsmApiDbHootApiDbHaitiDrConflateTest
+SELECT_RANDOM_AOI:  false
+RANDOM_SEED:  -1
 
 STEP 1: Cleaning out the osm api db and initializing it for use...
 
@@ -14,17 +16,17 @@ STEP 1: Cleaning out the osm api db and initializing it for use...
 
 STEP 2: Writing the complete reference dataset to the osm api db...
 
-19:49:10.087 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (52900).
-19:49:10.088 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (250651104) in relation (53432).
-19:49:10.088 WARN  .../hoot/core/io/OsmXmlReader.cpp( 552) Missing node (315342451) in relation (307828).
-19:49:10.088 WARN  .../hoot/core/io/OsmXmlReader.cpp( 556) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-19:49:10.326 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
-19:49:10.326 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244310
-19:49:10.326 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
-19:49:10.326 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244336
-19:49:10.338 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
-19:49:10.338 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1240526 (DB ID=113) has ref to Entry: role: tributary, eid: Relation:1241599
-19:49:10.340 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1413) hoot::OsmApiDbBulkWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+17:41:25.085 WARN  .../hoot/core/io/OsmXmlReader.cpp( 530) Missing node (250651104) in relation (52900).
+17:41:25.087 WARN  .../hoot/core/io/OsmXmlReader.cpp( 530) Missing node (250651104) in relation (53432).
+17:41:25.087 WARN  .../hoot/core/io/OsmXmlReader.cpp( 530) Missing node (315342451) in relation (307828).
+17:41:25.087 WARN  .../hoot/core/io/OsmXmlReader.cpp( 534) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+17:41:25.323 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+17:41:25.324 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244310
+17:41:25.324 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+17:41:25.324 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1244309 (DB ID=81) has ref to Entry: role: tributary, eid: Relation:1244336
+17:41:25.335 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1406) Found unresolved relation member ref!:
+17:41:25.335 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1409) Relation ID 1240526 (DB ID=113) has ref to Entry: role: tributary, eid: Relation:1241599
+17:41:25.337 WARN  ...core/io/OsmApiDbBulkWriter.cpp(1413) hoot::OsmApiDbBulkWriter: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 

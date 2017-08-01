@@ -552,7 +552,9 @@ SOURCES += \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
-				src/main/cpp/hoot/core/elements/Status.cpp
+				src/main/cpp/hoot/core/elements/Status.cpp \
+				src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
+				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1019,7 +1021,7 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
-    src/main/cpp/hoot/core/io/OsmJsonReader.h \
+				src/main/cpp/hoot/core/io/OsmJsonReader.h \
     src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
@@ -1091,5 +1093,6 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
-    src/main/cpp/hoot/core/elements/ElementVisitorOff.h
+				src/main/cpp/hoot/core/elements/ElementVisitorOff.h \
+				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h
 
