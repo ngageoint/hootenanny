@@ -19,6 +19,7 @@ See the README.md Installation section.
 
 The recommended and easiest installation method is to install from RPMs.  This can be accomplished by the performing following steps:
 
+--
 . Create the following file: +/etc/yum.repos.d/hoot.repo+
 . Add the following content to the file:
 --------------------------------------
@@ -32,6 +33,7 @@ gpgcheck=0
 sudo yum update
 sudo yum install hootenanny-autostart
 --------------------------------------
+--
 
 `scripts/InstallHoot-CentOS-RHEL.sh` may also be used to install.  This script requires custom 
 configuration as described within it.  It may require updating if you have installed certain Hootenanny 
