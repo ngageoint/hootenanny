@@ -90,15 +90,19 @@ public:
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
-    const QString supportingWriterName = OsmMapWriterFactory::getWriterName(args[1]);
-    LOG_VARD(supportingWriterName);
+    QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
+    if (writerName.trimmed().isEmpty())
+    {
+      writerName = OsmMapWriterFactory::getWriterName(args[1]);
+    }
+    LOG_VARD(writerName);
 
     if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
         OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
         //the XML writer can't keep sorted output when streaming, so require an additional config
         //option be specified in order to stream when writing that format
-        (supportingWriterName != "hoot::OsmXmlWriter" ||
-         (supportingWriterName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
+        (writerName != "hoot::OsmXmlWriter" ||
+         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
     {
       streamElements(args[0], args[1]);
     }
@@ -131,36 +135,40 @@ public:
 void _initStreamingCriterion(const QStringList ops,
                              boost::shared_ptr<PartialOsmMapWriter> partialWriter)
 {
-  LOG_VART(ops.size());
-  if (ops.size() > 1)
+  QStringList criterionNames;
+  Factory& factory = Factory::getInstance();
+  for (int i = 0; i < ops.size(); i++)
   {
+    const QString opName = ops[i];
+    LOG_VART(opName);
+    if (!opName.trimmed().isEmpty())
+    {
+      if (factory.hasBase<ElementCriterion>(opName.toStdString()))
+      {
+        criterionNames.append(opName);
+      }
+    }
+  }
+  LOG_VART(criterionNames.size());
+  if (criterionNames.size() != 1)
+  {
+    //We eventually could apply more than one and allow some simple syntax for AND/OR operations,
+    //but that hasn't been needed so far.
     throw HootException(
       "Only a single convert operation can be applied during a streaming write operation.");
   }
 
-  const QString criterionName = ops[0];
-  LOG_VART(criterionName);
-  if (!criterionName.trimmed().isEmpty())
+  const QString criterionName = criterionNames[0];
+  boost::shared_ptr<ElementCriterion> criterion(
+    Factory::getInstance().constructObject<ElementCriterion>(criterionName));
+  Configurable* c = dynamic_cast<Configurable*>(criterion.get());
+  if (c != 0)
   {
-    Factory& factory = Factory::getInstance();
-    if (!factory.hasBase<ElementCriterion>(criterionName.toStdString()))
-    {
-      throw HootException(
-        QString("The convert operation applied to a streaming write operation must be of type ") +
-        QString("ElementCriterion.  Specified: " + criterionName));
-    }
-
-    boost::shared_ptr<ElementCriterion> criterion(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionName));
-    Configurable* c = dynamic_cast<Configurable*>(criterion.get());
-    if (c != 0)
-    {
-      c->setConfiguration(conf());
-    }
-    partialWriter->setCriterion(criterion);
-
-    LOG_INFO("Using criterion: " << criterionName);
+    c->setConfiguration(conf());
   }
+  partialWriter->setCriterion(criterion);
+
+  LOG_INFO("Filtering output with criterion: " << criterionName);
 }
 
   void streamElements(QString in, QString out)

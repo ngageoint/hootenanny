@@ -620,9 +620,8 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 
 void OsmXmlWriter::finalizePartial()
 {
-  //bounds will be written at the end of output instead of the beginning as with the non-streamed
-  //output
-  _writeBounds(_bounds);
+  //osmosis chokes on the bounds being written at the end of the file, so not writing it at all
+  //_writeBounds(_bounds);
   close();
 }
 

@@ -1,2 +1,0 @@
-Error running convert:
-The convert operation applied to a streaming write operation must be of type ElementCriterion.  Specified: hoot::MapCropper
