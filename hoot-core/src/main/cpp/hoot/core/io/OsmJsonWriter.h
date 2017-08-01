@@ -67,6 +67,11 @@ public:
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
 
+  /**
+   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
+   */
+  static QString markupString(const QString& str);
+
   virtual void open(QString url);
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
@@ -95,11 +100,6 @@ protected:
   bool _firstElement;
 
   static QString _typeName(ElementType e);
-
-  /**
-   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
-   */
-  QString _markupString(const QString& str);
 
   void _writeNodes();
   void _writeWays();
