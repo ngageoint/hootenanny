@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ADDDEBUGTAGSVISITOR_H
-#define ADDDEBUGTAGSVISITOR_H
+#ifndef ADDEXPORTTAGSVISITOR_H
+#define ADDEXPORTTAGSVISITOR_H
 
 #include <hoot/core/elements/ElementVisitor.h>
 
@@ -33,19 +33,28 @@ namespace hoot
 {
 
 /**
- * Add the typical debug tags for export to a file.
+ * Historically the tags for export have been added in the OsmMapWriter code. This creates
+ * duplicate code, is inconsistent and difficult to maintain/use. The intent of this visitor is
+ * to centralize the creation of these tags. This comes at the cost of cloning every element during
+ * the export/write operation (to avoid modifying the input element), but I think it is likely
+ * worth the cost.
+ *
+ * @todo refactor all existing writers to use this visitor.
  */
-class AddDebugTagsVisitor : ElementVisitor
+class AddExportTagsVisitor : ElementVisitor
 {
 public:
-  AddDebugTagsVisitor();
+  AddExportTagsVisitor();
 
-  static std::string className() { return "hoot::AddDebugTagsVisitor"; }
+  static std::string className() { return "hoot::AddExportTagsVisitor"; }
 
   virtual void visit(const ElementPtr& e);
 
+private:
+  bool _includeCircularError;
+  bool _includeDebug;
 };
 
 }
 
-#endif // ADDDEBUGTAGSVISITOR_H
+#endif // ADDEXPORTTAGSVISITOR_H

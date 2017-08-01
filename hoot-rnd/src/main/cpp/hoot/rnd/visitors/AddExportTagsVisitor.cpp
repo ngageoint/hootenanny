@@ -24,22 +24,32 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "AddDebugTagsVisitor.h"
+#include "AddExportTagsVisitor.h"
 
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
 
-AddDebugTagsVisitor::AddDebugTagsVisitor()
+AddExportTagsVisitor::AddExportTagsVisitor()
 {
+  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
+  _includeCircularError = ConfigOptions().getWriterIncludeCircularErrorTags();
 }
 
-void AddDebugTagsVisitor::visit(const ElementPtr& e)
+void AddExportTagsVisitor::visit(const ElementPtr& e)
 {
-  e->getTags()[MetadataTags::HootStatus()] = e->getStatus().toString();
-  e->getTags()[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
-  e->getTags()[MetadataTags::HootId()] = QString::number(e->getId());
+  if (_includeDebug)
+  {
+    e->getTags()[MetadataTags::HootStatus()] = e->getStatus().toString();
+    e->getTags()[MetadataTags::HootId()] = QString::number(e->getId());
+  }
+
+  if (_includeCircularError && e->hasCircularError())
+  {
+    e->getTags()[MetadataTags::ErrorCircular()] = QString::number(e->getCircularError());
+  }
 }
 
 }

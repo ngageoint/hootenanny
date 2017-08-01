@@ -140,8 +140,8 @@ SOURCES += \
     src/main/cpp/hoot/rnd/cmd/MultiaryScoreMatchesCmd.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.cpp \
     src/main/cpp/hoot/rnd/io/SparkJsonWriter.cpp \
-    src/main/cpp/hoot/rnd/visitors/AddDebugTagsVisitor.cpp \
-    src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.cpp
+    src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.cpp \
+    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -191,8 +191,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.h \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.h \
     src/main/cpp/hoot/rnd/io/SparkJsonWriter.h \
-    src/main/cpp/hoot/rnd/visitors/AddDebugTagsVisitor.h \
-    src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.h
+    src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.h \
+    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.h
 
 FORMS +=
 

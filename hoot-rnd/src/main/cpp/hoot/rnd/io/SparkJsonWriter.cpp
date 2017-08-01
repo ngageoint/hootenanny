@@ -39,7 +39,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
-#include "../visitors/AddDebugTagsVisitor.h"
+#include "../visitors/AddExportTagsVisitor.h"
 
 namespace hoot
 {
@@ -93,7 +93,7 @@ void SparkJsonWriter::open(QString fileName)
 void SparkJsonWriter::writePartial(const ConstNodePtr& n)
 {
   NodePtr copy(dynamic_cast<Node*>(n->clone()));
-  AddDebugTagsVisitor().visit(copy);
+  AddExportTagsVisitor().visit(copy);
   Envelope e = _bounds->calculateSearchBounds(OsmMapPtr(), copy);
 
   QString result = "{";
