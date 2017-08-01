@@ -3,6 +3,8 @@ secondary dataset:  test-files/DcTigerRoads.osm
 AOI:  -77.04,38.8916,-77.03324,38.8958
 CONFLATION TYPE:  unifying
 TEST_NAME:  ServiceOsmApiDbHootApiDbDcStreetsConflateTest
+SELECT_RANDOM_AOI:  false
+RANDOM_SEED:  -1
 
 STEP 1: Cleaning out the osm api db and initializing it for use...
 

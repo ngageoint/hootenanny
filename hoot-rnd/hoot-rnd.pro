@@ -77,6 +77,7 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCacheTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCacheTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithmTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiGenericTest.cpp
 
 HEADERS += \
@@ -135,7 +136,6 @@ SOURCES += \
     src/main/cpp/hoot/rnd/cmd/MultiaryConflateCmd.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.cpp \
-    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithmTest.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.cpp \
     src/main/cpp/hoot/rnd/cmd/MultiaryScoreMatchesCmd.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.cpp \

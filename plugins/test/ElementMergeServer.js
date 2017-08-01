@@ -210,12 +210,14 @@ describe('ElementMergeServer', function () {
                 if (err) console.error(err);
                 assert.equal(result.osm.way[0].tag[0].$.k, "note");
                 assert.equal(result.osm.way[0].tag[0].$.v, "poi1;building1");
-                assert.equal(result.osm.way[0].tag[1].$.k, "hoot:status");
-                assert.equal(result.osm.way[0].tag[1].$.v, "3");
-                assert.equal(result.osm.way[0].tag[2].$.k, "building");
-                assert.equal(result.osm.way[0].tag[2].$.v, "yes");
-                assert.equal(result.osm.way[0].tag[3].$.k, "amenity");
-                assert.equal(result.osm.way[0].tag[3].$.v, "prison");
+                assert.equal(result.osm.way[0].tag[1].$.k, "hoot:poipolygon:poismerged");
+                assert.equal(result.osm.way[0].tag[1].$.v, "1");
+                assert.equal(result.osm.way[0].tag[2].$.k, "hoot:status");
+                assert.equal(result.osm.way[0].tag[2].$.v, "3");
+                assert.equal(result.osm.way[0].tag[3].$.k, "building");
+                assert.equal(result.osm.way[0].tag[3].$.v, "yes");
+                assert.equal(result.osm.way[0].tag[4].$.k, "amenity");
+                assert.equal(result.osm.way[0].tag[4].$.v, "prison");
             });
         });
 
@@ -232,14 +234,16 @@ describe('ElementMergeServer', function () {
                 if (err) console.error(err);
                 assert.equal(result.osm.relation[0].tag[0].$.k, "note");
                 assert.equal(result.osm.relation[0].tag[0].$.v, "poi1;building1");
-                assert.equal(result.osm.relation[0].tag[1].$.k, "hoot:status");
-                assert.equal(result.osm.relation[0].tag[1].$.v, "3");
-                assert.equal(result.osm.relation[0].tag[2].$.k, "building");
-                assert.equal(result.osm.relation[0].tag[2].$.v, "yes");
-                assert.equal(result.osm.relation[0].tag[3].$.k, "amenity");
-                assert.equal(result.osm.relation[0].tag[3].$.v, "prison");
-                assert.equal(result.osm.relation[0].tag[4].$.k, "type");
-                assert.equal(result.osm.relation[0].tag[4].$.v, "multipolygon");
+                assert.equal(result.osm.relation[0].tag[1].$.k, "hoot:poipolygon:poismerged");
+                assert.equal(result.osm.relation[0].tag[1].$.v, "1");
+                assert.equal(result.osm.relation[0].tag[2].$.k, "hoot:status");
+                assert.equal(result.osm.relation[0].tag[2].$.v, "3");
+                assert.equal(result.osm.relation[0].tag[3].$.k, "building");
+                assert.equal(result.osm.relation[0].tag[3].$.v, "yes");
+                assert.equal(result.osm.relation[0].tag[4].$.k, "amenity");
+                assert.equal(result.osm.relation[0].tag[4].$.v, "prison");
+                assert.equal(result.osm.relation[0].tag[5].$.k, "type");
+                assert.equal(result.osm.relation[0].tag[5].$.v, "multipolygon");
             });
         });
 

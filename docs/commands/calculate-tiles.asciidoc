@@ -2,12 +2,13 @@
 
 === Description
 
-Calculates a collection of bounding boxes that contain roughly equal distributions of node data from the specified input(s).
++calculate-tiles+ calculates a collection of bounding boxes that contain roughly equal distributions of node data from 
+the specified input(s) and writes the output to a file.
 
 * +input+ - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
-* +output+ - output file to write the tile boundaries to; valid formats are OSM (*.osm) and GeoJSON (*.geojson)
-* +maxNodeCountPerTile+ The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
-* +pixelSize+ The size of the pixels used in the calculation.  The default is 0.001; optional only if maxNodeCountPerTile is not specified
+* +output+ - output file to write the tile boundaries to; valid formats are GeoJSON (*.geojson)
+* +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
+* +pixelSize+ - The size of the pixel used in the calculation in degrees.  The default is 0.001; optional only if maxNodeCountPerTile is not specified
 
 If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the 
 algorithm used may not be able to find a solution.  
@@ -24,9 +25,13 @@ hoot calculate-tiles (input(s)) (output) [maxNodeCountPerTile] [pixelSize]
 === Examples
 
 --------------------------------------
-hoot calculate-tiles test-files/MyInputFile.osm MyOutputFile.osm
+hoot calculate-tiles test-files/MyInputFile.osm MyOutputFile.geojson
 --------------------------------------
 
 --------------------------------------
 hoot calculate-tiles "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson 1000 0.001
+--------------------------------------
+
+--------------------------------------
+hoot calculate-tiles -D convert.bounding.box="34.04,31.17,34.05,31.18" hootapidb://hoot:hoottest@localhost:5432/hoot/MyInputDb MyOutputFile.geojson
 --------------------------------------

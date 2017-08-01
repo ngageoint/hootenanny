@@ -1,33 +1,39 @@
 [
-	{
-		"NAME" : "TDSv61",
-		"DESCRIPTION" : "NSG Topographic Data Store (TDS) v6.1",
-		"CANEXPORT" : true,
-		"PATH" : "translations/TDSv61.js"
-	},
-	{
-		"NAME" : "TDSv40",
-		"DESCRIPTION" : "NSG Topographic Data Store (TDS) v4.0",
-		"CANEXPORT" : true,
-		"PATH" : "translations/TDSv40.js"
-	},
-	{
-		"NAME" : "MGCP",
-		"DESCRIPTION" : "Multinational Geospatial Co-production Program (MGCP) TRD3&4",
-		"CANEXPORT" : true,
-		"PATH" : "translations/MGCP_TRD4.js"
-	},
-	{
-		"NAME" : "OSM",
-		"DESCRIPTION" : "OpenStreetMap.org (OSM)",
-		"CANEXPORT" : true,
-		"IMPORTPATH" : "translations/OSM_Ingest.js",
-		"EXPORTPATH" : "translations/RenderDb.js"
-	},
-	{
-		"NAME" : "GEONAMES",
-		"DESCRIPTION" : "GeoNames.org",
-		"CANEXPORT" : false,
-		"PATH" : "translations/GeoNames.js"
-	}
+    {
+        "NAME" : "TDSv61",
+        "DESCRIPTION" : "NSG Topographic Data Store (TDS) v6.1",
+        "CANEXPORT" : true,
+        "PATH" : "translations/TDSv61.js"
+    },
+    {
+        "NAME" : "TDSv40",
+        "DESCRIPTION" : "NSG Topographic Data Store (TDS) v4.0",
+        "CANEXPORT" : true,
+        "PATH" : "translations/TDSv40.js"
+    },
+    {
+        "NAME" : "MGCP",
+        "DESCRIPTION" : "Multinational Geospatial Co-production Program (MGCP) TRD3&4",
+        "CANEXPORT" : true,
+        "PATH" : "translations/MGCP_TRD4.js"
+    },
+    {
+        "NAME" : "GGDMv30",
+        "DESCRIPTION" : "Ground-Warfighter Geospatial Data Model (GGDM) v3.0",
+        "CANEXPORT" : true,
+        "PATH" : "translations/GGDMv30.js"
+    },
+    {
+        "NAME" : "OSM",
+        "DESCRIPTION" : "OpenStreetMap.org (OSM)",
+        "CANEXPORT" : true,
+        "IMPORTPATH" : "translations/OSM_Ingest.js",
+        "EXPORTPATH" : "translations/RenderDb.js"
+    },
+    {
+        "NAME" : "GEONAMES",
+        "DESCRIPTION" : "GeoNames.org",
+        "CANEXPORT" : false,
+        "PATH" : "translations/GeoNames.js"
+    }
 ]
