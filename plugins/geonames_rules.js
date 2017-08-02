@@ -680,20 +680,20 @@ geonames.rules = {
         'VINS':{'landuse':'vineyard'}, //  vineyards: plantings of grapevines
         'VLC':{'natural':'volcano'}, //  volcano: a conical elevation composed of volcanic materials with a crater at the top
         'VLSU':{'natural':'undersea_valleys'}, //  valleys: a relatively shallow, wide depression, the bottom of which usually has a continuous gradient
-        'WADB':{'waterway':'wadi','water:morphology':'bend'}, //  wadi bend: a conspicuously curved or bent segment of a wadi
+        'WADB':{'waterway':'river','intermittent':'yes','wadi':'yes','water:morphology':'bend'}, //  wadi bend: a conspicuously curved or bent segment of a wadi
         'WADJ':{'poi':'wadi_junction'}, //  wadi junction: a place where two or more wadies join
-        'WADM':{'waterway':'wadi','water:morphology':'mouth'}, //  wadi mouth: the lower terminus of a wadi where it widens into an adjoining floodplain, depression, or waterbody
-        'WADS':{'waterway':'wadi'}, //  wadies: valleys or ravines, bounded by relatively steep banks, which in the rainy season become watercourses; found primarily in North Africa and the Middle East
-        'WAD':{'waterway':'wadi'}, //  wadi: a valley or ravine, bounded by relatively steep banks, which in the rainy season becomes a watercourse; found primarily in North Africa and the Middle East
-        'WADX':{'waterway':'wadi_section'}, //  section of wadi:
+        'WADM':{'waterway':'river','intermittent':'yes','wadi':'yes','water:morphology':'mouth'}, //  wadi mouth: the lower terminus of a wadi where it widens into an adjoining floodplain, depression, or waterbody
+        'WADS':{'waterway':'river','intermittent':'yes','wadi':'yes'}, //  wadies: valleys or ravines, bounded by relatively steep banks, which in the rainy season become watercourses; found primarily in North Africa and the Middle East
+        'WAD':{'waterway':'river','intermittent':'yes','wadi':'yes'}, //  wadi: a valley or ravine, bounded by relatively steep banks, which in the rainy season becomes a watercourse; found primarily in North Africa and the Middle East
+        'WADX':{'poi':'wadi_section'}, //  section of wadi:
         'WALLA':{'historic':'wall'}, //  ancient wall: the remains of a linear defensive stone structure
         'WALL':{'barrier':'wall'}, //  wall: a thick masonry structure, usually enclosing a field or building, or forming the side of a structure
         'WEIR':{'waterway':'weir'}, //  weir(s): a small dam in a stream, designed to raise the water level or to divert stream flow through a desired channel
         'WHRF':{'waterway':'dock'}, //  wharf(-ves): a structure of open rather than solid construction along a shore or a bank which provides berthing for ships and cargo-handling facilities
         'WHRL':{'water':'whirlpool'}, //  whirlpool: a turbulent, rotating movement of water in a stream
         'WLLQ':{'abandoned:man_made':'well'}, //  abandoned well: 
-        'WLLS':{'waterway':'well'}, //  wells: cylindrical holes, pits, or tunnels drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
-        'WLL':{'waterway':'well'}, //  well: a cylindrical hole, pit, or tunnel drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
+        'WLLS':{'man_made':'well'}, //  wells: cylindrical holes, pits, or tunnels drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
+        'WLL':{'man_made':'well'}, //  well: a cylindrical hole, pit, or tunnel drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
         'WRCK':{'historic':'wreck'}, //  wreck: the site of the remains of a wrecked vessel
         'WTLDI':{'natural':'wetland','intermittent':'yes'}, //  intermittent wetland:
         'WTLD':{'natural':'wetland'}, //  wetland: an area subject to inundation, usually characterized by bog, marsh, or swamp vegetation

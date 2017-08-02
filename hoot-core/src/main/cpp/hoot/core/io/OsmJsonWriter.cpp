@@ -64,14 +64,14 @@ OsmJsonWriter::OsmJsonWriter(int precision)
   _pretty = false;
 }
 
-QString OsmJsonWriter::_markupString(const QString& str)
+QString OsmJsonWriter::markupString(const QString& str)
 {
   QString s = str;
   s.replace('\\', "\\\\");
   s.replace('\"', "\\\"");
-  s.replace('\n', "\\\n");
-  s.replace('\t', "\\\t");
-  s.replace('\r', "\\\r");
+  s.replace('\n', "\\n");
+  s.replace('\t', "\\t");
+  s.replace('\r', "\\r");
   return "\"" % s % "\"";
 }
 
@@ -140,17 +140,17 @@ void OsmJsonWriter::write(ConstOsmMapPtr map)
 
 void OsmJsonWriter::_writeKvp(const QString& key, const QString& value)
 {
-  _write(_markupString(key) % ":" % _markupString(value), false);
+  _write(markupString(key) % ":" % markupString(value), false);
 }
 
 void OsmJsonWriter::_writeKvp(const QString& key, long value)
 {
-  _write(_markupString(key) % ":" % QString::number(value), false);
+  _write(markupString(key) % ":" % QString::number(value), false);
 }
 
 void OsmJsonWriter::_writeKvp(const QString& key, double value)
 {
-  _write(_markupString(key) % ":" % QString::number(value, 'g', _precision), false);
+  _write(markupString(key) % ":" % QString::number(value, 'g', _precision), false);
 }
 
 void OsmJsonWriter::_writeNodes()
