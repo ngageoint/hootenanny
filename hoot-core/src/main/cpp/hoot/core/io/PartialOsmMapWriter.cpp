@@ -29,9 +29,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Configurable.h>
-#include "ElementInputStream.h"
+//#include "ElementInputStream.h"
 
 namespace hoot
 {
@@ -88,22 +86,6 @@ void PartialOsmMapWriter::writePartial(const boost::shared_ptr<const Element>& e
   default:
     throw HootException("Unexpected element type: " + e->getElementType().toString());
   }
-}
-
-void PartialOsmMapWriter::writePartial(const RelationPtr& r)
-{
-  writePartial((const ConstRelationPtr)r);
-}
-
-void PartialOsmMapWriter::writeElement(ElementInputStream& in)
-{
-  ElementPtr element = in.readNextElement();
-  if (_criterion.get() && !_criterion->isSatisfied(element))
-  {
-    LOG_TRACE("Element did not satisfy filter: " << element->getElementId());
-    return;
-  }
-  writePartial(element);
 }
 
 void PartialOsmMapWriter::writeElement(ElementPtr& element)

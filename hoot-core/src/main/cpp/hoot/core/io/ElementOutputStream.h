@@ -28,6 +28,7 @@
 #define ELEMENTOUTPUTSTREAM_H
 
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
@@ -53,14 +54,14 @@ public:
   /**
    * @brief writeElement
    */
-  virtual void writeElement(ElementInputStream& inputStream) = 0;
   virtual void writeElement(ElementPtr& element) = 0;
 
   /**
    * Read elements from the input stream and write to the output stream. There may be a better place
    * for this to live, but it works for now.
    */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos);
+  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos,
+    boost::shared_ptr<ElementCriterion> criterion = boost::shared_ptr<ElementCriterion>());
 };
 
 }

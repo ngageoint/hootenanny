@@ -27,7 +27,6 @@
 #ifndef PARTIALOSMMAPWRITER_H
 #define PARTIALOSMMAPWRITER_H
 
-#include <hoot/core/filters/ElementCriterion.h>
 #include "OsmMapWriter.h"
 #include "ElementOutputStream.h"
 
@@ -79,17 +78,9 @@ public:
   void writePartial(const WayPtr& w) { writePartial((const ConstWayPtr)w); }
 
   virtual void writePartial(const ConstRelationPtr& r) = 0;
-  void writePartial(const RelationPtr& r);
-
-  virtual void writeElement(ElementInputStream& in);
+  void writePartial(const RelationPtr& r) { writePartial((const ConstRelationPtr)r); }
 
   virtual void writeElement(ElementPtr& element);
-
-  void setCriterion(boost::shared_ptr<ElementCriterion> criterion) { _criterion = criterion; }
-
-private:
-
-  boost::shared_ptr<ElementCriterion> _criterion;
 
 };
 

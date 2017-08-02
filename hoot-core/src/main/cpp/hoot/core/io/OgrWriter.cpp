@@ -800,20 +800,6 @@ void OgrWriter::writeElement(ElementPtr &element)
   writeElement(element, false);
 }
 
-void OgrWriter::writeElement(ElementInputStream& inputStream)
-{
-  writeElement(inputStream, false);
-}
-
-void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
-{
-  // Make sure incoming element is in WGS84
-  assert( inputStream.getProjection()->IsSame(&_wgs84) == true );
-  ElementPtr nextElement = inputStream.readNextElement();
-
-  writeElement(nextElement, debug);
-}
-
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
   Tags sourceTags = element->getTags();

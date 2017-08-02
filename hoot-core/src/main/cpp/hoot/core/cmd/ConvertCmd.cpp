@@ -132,44 +132,49 @@ public:
     return 0;
   }
 
-void _initStreamingCriterion(const QStringList ops,
-                             boost::shared_ptr<PartialOsmMapWriter> partialWriter)
-{
-  QStringList criterionNames;
-  Factory& factory = Factory::getInstance();
-  for (int i = 0; i < ops.size(); i++)
+  boost::shared_ptr<ElementCriterion> _getStreamingCriterion(const QStringList ops)
   {
-    const QString opName = ops[i];
-    LOG_VART(opName);
-    if (!opName.trimmed().isEmpty())
+    QStringList criterionNames;
+    Factory& factory = Factory::getInstance();
+    for (int i = 0; i < ops.size(); i++)
     {
-      if (factory.hasBase<ElementCriterion>(opName.toStdString()))
+      const QString opName = ops[i];
+      LOG_VART(opName);
+      if (!opName.trimmed().isEmpty())
       {
-        criterionNames.append(opName);
+        if (factory.hasBase<ElementCriterion>(opName.toStdString()))
+        {
+          criterionNames.append(opName);
+        }
       }
     }
-  }
-  LOG_VART(criterionNames.size());
-  if (criterionNames.size() != 1)
-  {
-    //We eventually could apply more than one and allow some simple syntax for AND/OR operations,
-    //but that hasn't been needed so far.
-    throw HootException(
-      "Only a single convert operation can be applied during a streaming write operation.");
-  }
+    LOG_VART(criterionNames.size());
 
-  const QString criterionName = criterionNames[0];
-  boost::shared_ptr<ElementCriterion> criterion(
-    Factory::getInstance().constructObject<ElementCriterion>(criterionName));
-  Configurable* c = dynamic_cast<Configurable*>(criterion.get());
-  if (c != 0)
-  {
-    c->setConfiguration(conf());
-  }
-  partialWriter->setCriterion(criterion);
+    if (criterionNames.size() == 0)
+    {
+      return boost::shared_ptr<ElementCriterion>();
+    }
+    else if (criterionNames.size() != 1)
+    {
+      //We eventually could apply more than one and allow some simple syntax for AND/OR operations,
+      //but that hasn't been needed so far.
+      throw HootException(
+        "Only a single convert operation can be applied during a streaming write operation.");
+    }
 
-  LOG_INFO("Filtering output with criterion: " << criterionName);
-}
+    const QString criterionName = criterionNames[0];
+    boost::shared_ptr<ElementCriterion> criterion(
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName));
+    Configurable* c = dynamic_cast<Configurable*>(criterion.get());
+    if (c != 0)
+    {
+      c->setConfiguration(conf());
+    }
+
+    LOG_INFO("Filtering output with criterion: " << criterionName);
+
+    return criterion;
+  }
 
   void streamElements(QString in, QString out)
   {
@@ -186,12 +191,13 @@ void _initStreamingCriterion(const QStringList ops,
 
     boost::shared_ptr<PartialOsmMapWriter> partialWriter =
       boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    boost::shared_ptr<ElementCriterion> criterion;
     if (partialWriter.get() && ConfigOptions().getConvertOps().size() > 0)
     {
-      _initStreamingCriterion(ConfigOptions().getConvertOps(), partialWriter);
+      criterion = _getStreamingCriterion(ConfigOptions().getConvertOps());
     }
 
-    ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+    ElementOutputStream::writeAllElements(*streamReader, *streamWriter, criterion);
 
     boost::shared_ptr<PartialOsmMapReader> partialReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
