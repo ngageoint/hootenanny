@@ -132,7 +132,7 @@ bool HootApiDbReader::hasMoreElements()
   return _nextElement != NULL;
 }
 
-void  HootApiDbReader::initializePartial()
+void HootApiDbReader::initializePartial()
 {
   _partialMap.reset(new OsmMap());
 
@@ -172,10 +172,10 @@ void HootApiDbReader::read(OsmMapPtr map)
   }
 }
 
-//TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
-//this read performs better for some reason
 void HootApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
+  //This method could possibly be placed by the parent _readBounds method set to a global extent.
+
   long elementCount = 0; //TODO: break this out by element type
 
   // contact the DB and select all
@@ -274,10 +274,12 @@ void HootApiDbReader::close()
   finalizePartial();
 }
 
-//TODO: this method could probably be moved up to the parent class
 boost::shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
-                                                      const ElementType& elementType, OsmMap& map)
+                                                             const ElementType& elementType,
+                                                             OsmMap& map)
 {
+  //TODO: this method could probably be moved up to the parent class
+
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
   //method.  However, I was getting some initialization errors with QSqlQuery when the

@@ -173,10 +173,10 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
   }
 }
 
-//TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
-//this read performs better for some reason
 void OsmApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
+  //This method could possibly be placed by the parent _readBounds method set to a global extent.
+
   long elementCount = 0; //TODO: break this out by element type
   long long lastId = LLONG_MIN;
   boost::shared_ptr<Element> element;
@@ -354,41 +354,6 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   LOG_VART(way->getStatus());
 
   return way;
-}
-
-void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
-{
-  for (unsigned int i = 0; i < nodeIds.size(); i++)
-  {
-    LOG_VART(nodeIds[i]);
-    QStringList tags;
-    if (map.containsNode(nodeIds[i]) == false)
-    {
-      boost::shared_ptr<QSqlQuery> queryIterator = _database->selectNodeById(nodeIds[i]);
-      while (queryIterator->next())
-      {
-        NodePtr node = _resultToNode(*queryIterator.get(), map);
-        QString result = _database->extractTagFromRow(queryIterator, ElementType::Node);
-        if (result != "")
-        {
-          tags << result;
-        }
-
-        if (tags.size() > 0)
-        {
-          node->setTags(ApiDb::unescapeTags(tags.join(", ")));
-          _updateMetadataOnElement(node);
-        }
-        //we want the reader's status to always override any existing status
-        if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
-        {
-          node->setStatus(_status);
-        }
-        LOG_VART(node);
-        map.addElement(node);
-      }
-    }
-  }
 }
 
 RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map)

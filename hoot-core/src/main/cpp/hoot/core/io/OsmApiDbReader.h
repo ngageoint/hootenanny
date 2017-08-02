@@ -90,6 +90,7 @@ private:
 
   boost::shared_ptr<OsmApiDb> _database;
   boost::shared_ptr<QSqlQuery> _elementResultIterator;
+
   QString _email;
 
   long _osmElemId;
@@ -98,9 +99,9 @@ private:
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 
-  void _addNodesForWay(std::vector<long> nodeIds, OsmMap& map);
-
   void _parseAndSetTagsOnElement(ElementPtr element);
+
+  boost::shared_ptr<Element> _getElementUsingIterator();
 };
 
 }
