@@ -140,6 +140,13 @@ public:
     boost::shared_ptr<ElementOutputStream> streamWriter =
       boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
+    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
+      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    if (partialWriter.get())
+    {
+      partialWriter->initializePartial();
+    }
+
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
     boost::shared_ptr<PartialOsmMapReader> partialReader =
@@ -148,8 +155,6 @@ public:
     {
       partialReader->finalizePartial();
     }
-    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
     if (partialWriter.get())
     {
       partialWriter->finalizePartial();
