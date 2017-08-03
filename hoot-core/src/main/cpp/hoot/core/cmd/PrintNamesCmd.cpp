@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/WordCount.h>
@@ -54,7 +54,7 @@ class PrintNamesCmd : public BaseCommand
 public:
   static string className() { return "hoot::PrintNamesCmd"; }
 
-  class NameCountVisitor : public ElementVisitor
+  class NameCountVisitor : public ConstElementVisitor
   {
   public:
     NameCountVisitor(std::map<QString, int>& counts) : _counts(counts)

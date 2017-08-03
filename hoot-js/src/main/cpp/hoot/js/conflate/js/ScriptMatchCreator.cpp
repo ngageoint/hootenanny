@@ -77,7 +77,7 @@ class ScriptMatchVisitor;
 /**
  * Searches the specified map for any match potentials.
  */
-class ScriptMatchVisitor : public ElementVisitor
+class ScriptMatchVisitor : public ConstElementVisitor
 {
 
 public:
@@ -117,14 +117,6 @@ public:
     {
       _getSearchRadius = Persistent<Function>::New(Handle<Function>::Cast(value));
     }
-
-    boost::function<bool (ConstElementPtr e)> f =
-      boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-    ArbitraryCriterion crit(f);
-    WorstCircularErrorVisitor worstV;
-    FilteredVisitor filteredV(crit, worstV);
-    map->visitRo(filteredV);
-    _worstCircularError = worstV.getWorstCircularError();
   }
 
   ~ScriptMatchVisitor()
@@ -244,6 +236,9 @@ public:
     }
     else
     {
+      Context::Scope context_scope(_script->getContext());
+      HandleScope handleScope;
+
       Handle<Value> jsArgs[1];
 
       int argc = 0;
@@ -405,7 +400,6 @@ private:
   int _elementsEvaluated;
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
-  Meters _worstCircularError;
   boost::shared_ptr<PluginContext> _script;
   Persistent<v8::Function> _getSearchRadius;
 
@@ -420,14 +414,19 @@ private:
   QString _scriptPath;
 };
 
-ScriptMatchCreator::ScriptMatchCreator() :
-_worstCircularError(-1.0)
+ScriptMatchCreator::ScriptMatchCreator()
 {
-  _matchCandidateChecker.reset();
+  _cachedScriptVisitor.reset();
 }
 
 ScriptMatchCreator::~ScriptMatchCreator()
 {
+}
+
+Meters ScriptMatchCreator::calculateSearchRadius(const ConstOsmMapPtr& map,
+  const ConstElementPtr& e)
+{
+  return _getCachedVisitor(map)->getSearchRadius(e);
 }
 
 void ScriptMatchCreator::setArguments(QStringList args)
@@ -444,7 +443,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   _script->loadScript(_scriptPath, "plugin");
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
-  _matchCandidateChecker.reset();
+  _cachedScriptVisitor.reset();
 
   QFileInfo scriptFileInfo(_scriptPath);
   LOG_DEBUG("Set arguments for: " << className() << " - rules: " << scriptFileInfo.fileName());
@@ -519,6 +518,44 @@ vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
   return result;
 }
 
+boost::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
+  const ConstOsmMapPtr& map)
+{
+  if (!_cachedScriptVisitor.get() || _cachedScriptVisitor->getMap() != map)
+  {
+    LOG_VART(_cachedScriptVisitor.get());
+    QString scriptPath = _scriptPath;
+    if (_cachedScriptVisitor.get())
+    {
+      LOG_VART(_cachedScriptVisitor->getMap() == map);
+      scriptPath = _cachedScriptVisitor->getScriptPath();
+    }
+    LOG_VART(scriptPath);
+
+    QFileInfo scriptFileInfo(_scriptPath);
+    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
+
+    vector<const Match*> emptyMatches;
+    _cachedScriptVisitor.reset(
+      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script));
+    _cachedScriptVisitor->setScriptPath(scriptPath);
+    //If the search radius has already been calculated for this matcher once, we don't want to do
+    //it again due to the expense.
+    LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
+    if (!_cachedCustomSearchRadii.contains(scriptPath))
+    {
+      _cachedScriptVisitor->calculateSearchRadius();
+    }
+    else
+    {
+      LOG_VART(_cachedCustomSearchRadii[scriptPath]);
+      _cachedScriptVisitor->setCustomSearchRadius(_cachedCustomSearchRadii[scriptPath]);
+    }
+  }
+
+  return _cachedScriptVisitor;
+}
+
 MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path) const
 {
   MatchCreator::Description result;
@@ -562,39 +599,7 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
-  if (!_matchCandidateChecker.get() || _matchCandidateChecker->getMap() != map)
-  {
-    LOG_VART(_matchCandidateChecker.get());
-    QString scriptPath = _scriptPath;
-    if (_matchCandidateChecker.get())
-    {
-      LOG_VART(_matchCandidateChecker->getMap() == map);
-      scriptPath = _matchCandidateChecker->getScriptPath();
-    }
-    LOG_VART(scriptPath);
-
-    QFileInfo scriptFileInfo(_scriptPath);
-    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
-
-    vector<const Match*> emptyMatches;
-    _matchCandidateChecker.reset(
-      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script));
-    _matchCandidateChecker->setScriptPath(scriptPath);
-    //If the search radius has already been calculated for this matcher once, we don't want to do
-    //it again due to the expense.
-    LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
-    if (!_cachedCustomSearchRadii.contains(scriptPath))
-    {
-      _matchCandidateChecker->calculateSearchRadius();
-    }
-    else
-    {
-      LOG_VART(_cachedCustomSearchRadii[scriptPath]);
-      _matchCandidateChecker->setCustomSearchRadius(_cachedCustomSearchRadii[scriptPath]);
-    }
-  }
-
-  return _matchCandidateChecker->isMatchCandidate(element);
+  return _getCachedVisitor(map)->isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()

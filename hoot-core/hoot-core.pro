@@ -546,11 +546,15 @@ SOURCES += \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.cpp \
     src/main/cpp/hoot/core/cmd/CalculateTilesCmd.cpp \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.cpp \
-    src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
+				src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
+				src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.cpp \
+				src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.cpp \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
-    src/main/cpp/hoot/core/elements/Status.cpp \
+				src/main/cpp/hoot/core/elements/Status.cpp \
+				src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
+				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -954,7 +958,7 @@ HEADERS += \
     src/main/cpp/hoot/core/scoring/AttributeCount.h \
     src/main/cpp/hoot/core/visitors/FeatureCountVisitor.h \
     src/main/cpp/hoot/core/conflate/SearchRadiusCalculator.h \
-    src/main/cpp/hoot/core/elements/ElementVisitor.h \
+    src/main/cpp/hoot/core/elements/ConstElementVisitor.h \
     src/main/cpp/hoot/core/io/ElementInputStream.h \
     src/main/cpp/hoot/core/io/ElementOutputStream.h \
     src/main/cpp/hoot/core/visitors/TranslationVisitor.h \
@@ -1017,7 +1021,7 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbWriter.h \
     src/main/cpp/hoot/core/io/OsmApiDbAwareHootApiDbReader.h \
-    src/main/cpp/hoot/core/io/OsmJsonReader.h \
+				src/main/cpp/hoot/core/io/OsmJsonReader.h \
     src/main/cpp/hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h \
     src/main/cpp/hoot/core/filters/BuildingWayNodeCriterion.h \
     src/main/cpp/hoot/core/visitors/WorstCircularErrorVisitor.h \
@@ -1081,11 +1085,15 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
-    src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
+				src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
+				src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.h \
+				src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
-    src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.h \
-    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h
+    src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
+    src/main/cpp/hoot/core/conflate/SearchRadiusProvider.h \
+    src/main/cpp/hoot/core/elements/ElementVisitor.h \
+    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h
 

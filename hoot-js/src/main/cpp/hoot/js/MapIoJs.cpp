@@ -92,9 +92,18 @@ public:
   static Handle<Value> loadMapFromString(const Arguments& args) {
     HandleScope scope;
 
+    // Arguments: output_map map_xml bool:useIds int:Status
+
     OsmMapJs* map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
 
     QString mapXml = toCpp<QString>(args[1]);
+
+    OsmXmlReader reader;
+
+    if (args.Length() >= 3)
+    {
+      reader.setUseDataSourceIds(toCpp<bool>(args[2]));
+    }
 
     Status status = Status::Invalid;
     if (args.Length() >= 4)
@@ -102,11 +111,6 @@ public:
       status = (Status::Type)args[3]->ToInteger()->Value();
     }
 
-    OsmXmlReader reader;
-    if (args.Length() >= 5)
-    {
-      reader.setUseDataSourceIds(toCpp<bool>(args[4]));
-    }
     reader.readFromString(mapXml, map->getMap());
 
     return scope.Close(Undefined());

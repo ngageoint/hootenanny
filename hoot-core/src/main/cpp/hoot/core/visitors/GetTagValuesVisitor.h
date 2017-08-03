@@ -28,7 +28,7 @@
 #define GETTAGVALUESVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
  * Puts all values for the given key into a bag. If you want to filter based on type see
  * FilteredVisitor. If the values are a list then they're split before they're put in the bag.
  */
-class GetTagValuesVisitor : public ElementVisitor
+class GetTagValuesVisitor : public ConstElementVisitor
 {
 public:
 

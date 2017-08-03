@@ -27,14 +27,14 @@
 #include <boost/shared_ptr.hpp>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include "ElementVisitorInputStream.h"
 
 namespace hoot
 {
 
 ElementVisitorInputStream::ElementVisitorInputStream(
-    const boost::shared_ptr<ElementInputStream>& elementSource, const boost::shared_ptr<ElementVisitor>& visitor) :
+    const boost::shared_ptr<ElementInputStream>& elementSource, const boost::shared_ptr<ConstElementVisitor>& visitor) :
 _elementSource(elementSource),
 _visitor(visitor)
 {

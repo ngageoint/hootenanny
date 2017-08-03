@@ -48,7 +48,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyWaySplitVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyWaySplitVisitor)
 
 PertyWaySplitVisitor::PertyWaySplitVisitor() :
 _splitRecursionLevel(0)

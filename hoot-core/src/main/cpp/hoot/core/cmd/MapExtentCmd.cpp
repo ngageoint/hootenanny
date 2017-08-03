@@ -50,17 +50,34 @@ public:
 
   int runSimple(QStringList args)
   {
-    if (args.size() < 1)
+    if (args.size() < 1 || args.size() > 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes one parameter.").arg(getName()));
+      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
     }
 
-    OsmMapPtr map(new OsmMap());
-    loadMap(map, args[0], true, Status::Invalid);
+    bool verbose = true;
+    if (args.size() == 2 && args[1].toLower() == "false")
+    {
+      verbose = false;
+    }
+    LOG_VARD(verbose);
 
-    cout << "Map extent (minx,miny,maxx,maxy): " <<
-      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)) << endl;
+    const QString input = args[0];
+    LOG_VARD(input);
+    OsmMapPtr map(new OsmMap());
+    loadMap(map, input, true, Status::Invalid);
+
+    const QString bounds =
+      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));
+    if (verbose)
+    {
+      cout << "Map extent (minx,miny,maxx,maxy): " << bounds << endl;
+    }
+    else
+    {
+      cout << bounds << endl;
+    }
 
     return 0;
   }

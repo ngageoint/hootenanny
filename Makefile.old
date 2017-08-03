@@ -132,7 +132,7 @@ ifneq ($(HADOOP_HOME),)
 endif
 
 plugins-test:
-ifneq ($(shell hash mocha >/dev/null 2>&1),)
+ifneq ($(shell which mocha),)
 	cd plugins; npm install && npm test
 else
 	@echo Skipping mocha tests
@@ -268,13 +268,21 @@ js-make: $(SCHEMA_FILES) plugins/config.js
 # task for another time.
 ARFFS=$(wildcard conf/models/*.arff.bz2)
 RF_MODELS=$(ARFFS:.arff.bz2=.rf)
+BASE_MODELS=$(ARFFS:.arff.bz2=)
 model-build: $(RF_MODELS)
 
 # These are not cleaned b/c they take a long time to build and it would simply
 # be unnecessary. Use the appropriate git command if you want everything
 # cleaned.
-conf/models/%.rf: conf/models/%.arff.bz2 qt-make
-	[ $< -nt $@ ] && hoot build-rf $< $@ || true
+conf/models/%.rf: conf/models/%.arff.bz2 qt-make always
+	if test ! -e $@ || \
+	   test $< -nt $@ ||\
+	   (test -e $(@:.rf=.sha1sum) && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))"); then \
+	     test -e $(@:.rf=.sha1sum) || echo "Please create a sha1sum for $@."; \
+	     ( test -e $(@:.rf=.sha1sum) && test -e $@ && test "$$(sha1sum $@)" != "$$(cat $(@:.rf=.sha1sum))" ) && echo "Rebuilding $@ due to mismatched sha1sum." ; \
+	     hoot build-rf $< $@ ; \
+	     sha1sum $@ > $(@:.rf=.sha1sum); \
+	fi
 
 qt-make: HOOT_VERSION_FILE Makefile.qmake hoot-core/src/main/cpp/hoot/core/HootConfig.h tgs/src/main/cpp/tgs/TgsConfig.h hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h hoot-core/src/main/cpp/hoot/core/util/ConfigDefaults.h bin/hoot bin/HootTest
 	$(MAKE) -f Makefile.qmake 2>&1 | grep -v -e ".*WARNING: Failure to find: tmp/swig/HootSwig.cxx.*" \
@@ -383,7 +391,7 @@ archive: js-make services-build docs
 	cp docs/*.pdf docs/*.html docs/*.text $(HOOT_TARNAME)/docs/
 	# Put the docs in their own compressed file
 	tar czf hootenanny-documentation-$(HOOT_VERSION).tar.gz $(HOOT_TARNAME)
-	cp Makefile.in aclocal.m4 configure config.h.in $(HOOT_TARNAME)
+	cp Makefile.in missing aclocal.m4 configure config.h.in $(HOOT_TARNAME)
 	# Copy the protocol buffer generated files. Eases a dependency when building
 	# on CentOS
 	mkdir -p $(HOOT_TARNAME)/hoot-core/src/main/cpp/hoot/core/proto/

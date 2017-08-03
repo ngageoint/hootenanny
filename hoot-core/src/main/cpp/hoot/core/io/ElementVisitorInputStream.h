@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-class ElementVisitor;
+class ConstElementVisitor;
 
 class ElementVisitorInputStream : public ElementInputStream
 {
@@ -44,7 +44,7 @@ public:
    * @param visitor The operation that should be performed on elements that are read from the input source before being returned
    */
   ElementVisitorInputStream(const boost::shared_ptr<ElementInputStream>& elementSource,
-                            const boost::shared_ptr<ElementVisitor>& visitor);
+                            const boost::shared_ptr<ConstElementVisitor>& visitor);
 
   /**
    * @brief close
@@ -68,7 +68,7 @@ public:
 
 private:
   boost::shared_ptr<ElementInputStream> _elementSource;
-  boost::shared_ptr<ElementVisitor> _visitor;
+  boost::shared_ptr<ConstElementVisitor> _visitor;
 };
 
 }

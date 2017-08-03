@@ -40,7 +40,7 @@ namespace hoot
 
 /**
  * Applies a list of named operations to the given map. The named operations must implement either
- * OsmMapOperation or ElementVisitor and must be registered with the factory.
+ * OsmMapOperation or ConstElementVisitor and must be registered with the factory.
  */
 class NamedOp : public OsmMapOperation, public Configurable
 {
