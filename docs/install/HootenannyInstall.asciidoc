@@ -19,15 +19,17 @@ See the README.md Installation section.
 
 The recommended and easiest installation method is to install from RPMs.  This can be accomplished by the performing following steps:
 
-1. Create the following file: +/etc/yum.repos.d/hoot.repo+
-2. Add the following content to the file:
+* Create the following file: +/etc/yum.repos.d/hoot.repo+
+* Add the following content to the file:
++
 --------------------------------------
 [hoot]
 name=hoot
 baseurl=https://s3.amazonaws.com/hoot-rpms/snapshot/el6/
 gpgcheck=0
 --------------------------------------
-3. Run the following:
+* Run the following:
++
 --------------------------------------
 sudo yum update
 sudo yum install hootenanny-autostart
