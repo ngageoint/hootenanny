@@ -25,7 +25,7 @@ The recommended and easiest installation method is to install from RPMs.  This c
 --------------------------------------
 [hoot]
 name=hoot
-baseurl=https://s3.amazonaws.com/hoot-rpms/snapshot/el6/
+baseurl=https://s3.amazonaws.com/hoot-rpms/stable/el6/
 gpgcheck=0
 --------------------------------------
 . Run the following:
