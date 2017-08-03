@@ -17,7 +17,7 @@ See the README.md Installation section.
 [[fullinstall]]
 == CentOS/RHEL Install Instructions
 
-The recommended and easiest installation method is to install from RPMs.  This can be accomplished by the performing following steps:
+The recommended and easiest installation method is to install from RPMs.  This can be accomplished by performing the following steps:
 
 . Create the following file: +/etc/yum.repos.d/hoot.repo+
 . Add the following content to the file:
