@@ -1,4 +1,5 @@
 
+[[HootenannyManualConflation]]
 == Hootenanny Manual Conflation
 
 To train a conflation model for a particular data type when using Hootenanny, it often relies on data manually matched by a human.  This
@@ -42,7 +43,7 @@ hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput2.osm Ref2.osm
 
 You will need at least two datasets from the same general AOI to manually match features.  Normally, we are manually conflating an OSM dataset with an NGA provided dataset.  Sometimes in place of an NGA dataset we may use some reliable, publicly available data and convert it to the OSM format, if needed.  Adding more than one pair of datasets into the training pipeline is encouraged and can strengthen the resulting model if the additional datasets contain unique feature matching situations that are representative of the data you will be eventually conflating.
 
-After obtaining the data, look over its attribution.  It should have tags that clearly identify the feature types of the contained data.  In the case of OSM data, the tags should fall cleanly into the OSM tag specification (taginfo.openstreetmap.org) or can be translated into the OSM tag specification with either an existing translation or a new one that you write (see the following translation section).  If the tagging is poor, then the accuracy of the conflated data will also likely be poor.  However if the poor data quality accurately represents the quality of the datasets you eventually want to conflate with Hootenanny and you understand the possible shortcomings, then manually matching poor quality datasets may make sense. 
+After obtaining the data, look over its attribution.  It should have tags that clearly identify the feature types of the contained data.  In the case of OSM data, the tags should fall cleanly into the OSM tag specification (taginfo.openstreetmap.org) or can be translated into the OSM tag specification with either an existing translation or a new one that you write (see the following translation section).  If the tagging is poor, then the accuracy of the conflated data will also likely be poor.  However if the poor data quality accurately represents the quality of the datasets you eventually want to conflate with Hootenanny and you understand the possible shortcomings, then manually matching poor quality datasets may make sense.
 
 Also, examine the geometries of the features with a backdrop of accurate satellite imagery, if possible.  This should give you clues as to the geospatial accuracy of the mapped data.  The poorer the overall geospatial accuracy is, also likely the harder the data will be to conflate.  The same caveats apply here as described in the previous attribution quality section.
 
@@ -68,7 +69,7 @@ hoot crop-map Input.osm CroppedOutput.osm "-77.0551,38.8845,-77.0281,38.9031"
 
 ==== Cleaning the Test Data (optional)
 
-The Hootenanny cleanup command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it may result in more intutive input data to use during the process.  See the cleanup command documentation for more details.  
+The Hootenanny cleanup command can be used to perform useful cleaning operations on the data beforehand.  This is an optional step at this point but is always executed by Hootenanny on all input data before conflation.  The advantage of doing cleaning before manual conflation is that it may result in more intutive input data to use during the process.  See the cleanup command documentation for more details.
 
 An example:
 
@@ -80,7 +81,7 @@ hoot cleanup Input.osm CleanedOutput.osm
 
 If you have a dataset which contains features not relevant to the manual matching you are doing, you can use Hootenanny to remove them.  This step is optional, though, and can be done by a developer when later creating conflation regression tests using the same data.  The advantage to doing it before manual matching is that you will have less clutter on the screen during the process.
 
-There are two basic ways to prune various types of data.  
+There are two basic ways to prune various types of data.
 
 You can use the hoot convert command with a visitor operation.  This command line example filters a dataset down to just highways:
 
@@ -126,14 +127,14 @@ var copy2 = map.clone();
 // remove all of unknown2 from copy1
 hoot.debug("Removing all of unknown2 from copy1...");
 copy1.visit(
-    new hoot.RemoveElementsVisitor( 
+    new hoot.RemoveElementsVisitor(
         new hoot.StatusCriterion({'status.criterion.status':'Unknown2'}),
         {'remove.elements.visitor.recursive':true}));
 
 // remove all of unknown1 from copy2
 hoot.debug("Removing all of unknown1 from copy2...");
 copy2.visit(
-    new hoot.RemoveElementsVisitor( 
+    new hoot.RemoveElementsVisitor(
         new hoot.StatusCriterion({'status.criterion.status':'Unknown1'}),
         {'remove.elements.visitor.recursive':true}));
 
@@ -161,7 +162,7 @@ An example REF tag value: REF2=007be5
 
 The following are typical scenarios of data matching relationships:
 
-* one to one Points/Lines/Polygons 
+* one to one Points/Lines/Polygons
 * one to many Points/Lines/Polygons
 * many to one Points/Lines/Polygons
 
@@ -177,16 +178,16 @@ There are two files used as input:
 
 * REF1 - This is the file with a REF1 tag on all features.  Do not modify this file in any way.
 * REF2 - This is the file with a REF2 tag on all features.  Only modify the tags in this file.  Do not modify the geometries, remove elements, add elements, etc.
- 
+
 By default all features are marked with REF2=todo. The JOSM paint style given in an earlier section highlights the todo in blue, which tells Hootenanny that a human has not reviewed the record and to omit it from training and testing.
 
-* To create a match between a feature in the REF2 dataset with a feature in the REF1 dataset, you add the REF1 tag ID value of the feature in the REF1 dataset to the value of the REF2 tag of the feature in the REF2 dataset, replacing its current "todo" value. To signify that one feature matches multiple features, use a ';' delimiter between the REF ID.  Example: 
+* To create a match between a feature in the REF2 dataset with a feature in the REF1 dataset, you add the REF1 tag ID value of the feature in the REF1 dataset to the value of the REF2 tag of the feature in the REF2 dataset, replacing its current "todo" value. To signify that one feature matches multiple features, use a ';' delimiter between the REF ID.  Example:
 ** Single match: REF2=007be5
-** Two matches: REF2=007be5;007be6 
+** Two matches: REF2=007be5;007be6
 * To flag to features for review, do the same as in the previous step but populate the value of the REVIEW tag instead.  Example:
 **  Single review: REVIEW=007be5
 **  Two reviews: REVIEW=007be5;007be6
-* To communicate that a feature in the REF2 dataset matches no other feature in the REF1 dataset (a miss), change the REF2 tag value from "todo" to "none".  Example: 
+* To communicate that a feature in the REF2 dataset matches no other feature in the REF1 dataset (a miss), change the REF2 tag value from "todo" to "none".  Example:
 ** REF2=none
 
 Match/Miss/Review are the main match tagging types, but some feature types have additional options for tagging (Conflict, Divided, etc.).  Throughout the rest of this section, specific matching standards are presented for the all types of data that have been manually matched for use in Hootenanny model training at this time.
@@ -213,7 +214,7 @@ Due to the simplicity of conflating and mechanical nature, we are not interested
 
 * license
 * classification
-* GFID 
+* GFID
 * source
 
 ===== Divided Highways
@@ -228,7 +229,7 @@ When you have multiple different enough names in the two inputs sets the names m
 [width="50%"]
 |======
 | *Road 1* | *Road 2*
-| highway=primary  |  highway=secondary 
+| highway=primary  |  highway=secondary
 | name=Foo Street | name=Foo St
 | |  alt_name=Bar St
 |======
@@ -238,7 +239,7 @@ Even though we can say with reasonable confidence that Foo St is equivalent to F
 .*Example 1 Output*
 [width="25%"]
 |======
-| highway=primary 
+| highway=primary
 | name=Foo Street
 | alt_name=Bar St;Foo St
 |======
@@ -247,7 +248,7 @@ Even though we can say with reasonable confidence that Foo St is equivalent to F
 [width="50%"]
 |======
 | *Road 1* | *Road 2*
-| highway=primary  |  highway=tertiary 
+| highway=primary  |  highway=tertiary
 | name=Foo Street | name=Foo Ln
 |======
 
@@ -256,7 +257,7 @@ In this case we have two conflicting names so we'll keep the base name and turn 
 .*Example 2 Output*
 [width="25%"]
 |======
-| highway=secondary 
+| highway=secondary
 | name=Foo Street
 | alt_name=Foo Ln
 |======
@@ -338,7 +339,7 @@ The Hootenanny building conflation process is interested in the following things
 Building matching is the process of tagging building polygons with information that explicitly states the matching relationship between them.  In the OSM data model, buildings may be made up of ways and relations.  For more information on what consitutes a building in OSM terms, see taginfo.openstreetmap.org.
 
 * Match - The user is confident that the two buildings represent the same entity.
-* Miss - The user is confident that the two buildings do not represent the same entity. 
+* Miss - The user is confident that the two buildings do not represent the same entity.
 * Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
 
 ===== Building Match Tagging
@@ -435,7 +436,7 @@ The possible relationships between two POIs are below. A pair of POIs should onl
 
 * Match - The user is confident that the two POIs represent the same entity.
 * Miss - The user is confident that the two POIs do not represent the same entity.
-* Conflict - The user is confident that the POIs conflict. E.g. They can't both exist in the same data set. I don't have a good example for this, but it may come up. 
+* Conflict - The user is confident that the POIs conflict. E.g. They can't both exist in the same data set. I don't have a good example for this, but it may come up.
 * Review - The user is confused. This data requires more research to figure out which data set is right/wrong.
 
 ===== POI Match Tagging
@@ -461,7 +462,7 @@ The Hootenanny POI/Building conflation process is interested in the following th
 
 ==== POI/Building Matching Standards
 
-POI to building matching is the process of tagging POI's and buildings with information that explicitly states the matching relationship between them.  POI's and buildings are defined in the POI Matching Standards and Building Matching Standards sections. 
+POI to building matching is the process of tagging POI's and buildings with information that explicitly states the matching relationship between them.  POI's and buildings are defined in the POI Matching Standards and Building Matching Standards sections.
 
 * Match - The user is confident that the POI and building represent the same entity.
 * Miss - The user is confident that the POI and building do not represent the same entity.
