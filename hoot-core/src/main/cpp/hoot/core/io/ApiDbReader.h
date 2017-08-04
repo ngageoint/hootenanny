@@ -151,6 +151,8 @@ private:
 
   /**
    * Converts a query result to an OSM element
+   * 
+   * This will advance the results iterator *before* reading each element.
    */
   boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
                                               const ElementType& elementType, OsmMap& map);

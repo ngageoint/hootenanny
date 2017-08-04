@@ -470,7 +470,7 @@ void ApiDbReader::read(OsmMapPtr map)
 
 void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
-  //This method could possibly be placed by the parent _readBounds method set to a global extent.
+  //This method could possibly be replaced by the _readBounds method set to a global extent.
 
   long elementCount = 0;
 
@@ -478,8 +478,7 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   boost::shared_ptr<QSqlQuery> elementResultsIterator = _getDatabase()->selectElements(elementType);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
-  //it will always return an extra null node at the end, unfortunately (see comments in
-  //_resultToElement)
+  //it will always return an extra null node at the end (see comments in _resultToElement)
   while (elementResultsIterator->isActive())
   {
     boost::shared_ptr<Element> element =
