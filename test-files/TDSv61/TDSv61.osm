@@ -24,7 +24,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="transport:type" v="underground_railway"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.095Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.870Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="public_transport" v="station"/>
@@ -51,7 +51,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="transport:type" v="railway"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.094Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.870Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="public_transport" v="station"/>
@@ -87,7 +87,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="a-frame"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.083Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.865Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -111,7 +111,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="i-frame"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.082Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.864Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -140,7 +140,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="t-frame"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.081Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.864Z"/>
         <tag k="ele:max" v="782.60809999000003"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
@@ -167,7 +167,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="a-frame"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.080Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.863Z"/>
         <tag k="ele:max" v="306.32649999"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
@@ -192,7 +192,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="a-frame"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.079Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.863Z"/>
         <tag k="ele:max" v="304.98230000000001"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
@@ -230,7 +230,7 @@
         <tag k="use:2" v="meeting_place"/>
         <tag k="product:2" v="aircraft"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.063Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.855Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -257,7 +257,7 @@
         <tag k="roof:shape" v="flat"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.062Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.854Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="by_product:2" v="no_byproduct"/>
         <tag k="is_in:country_code" v="EH"/>
@@ -368,7 +368,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="design" v="t-frame"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.993Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.831Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -391,7 +391,7 @@
         <tag k="pylon" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.992Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.831Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -402,7 +402,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498783690499998" lon="153.1208289567699978">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.989Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.829Z"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -420,7 +420,7 @@
     </node>
     <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498229434500040" lon="153.1669064749700055">
         <tag k="addr:full" v="On a hill"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.985Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.828Z"/>
         <tag k="use" v="agriculture"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="construction"/>
@@ -438,7 +438,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559810355000010" lon="153.1666839561000018">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.985Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.827Z"/>
         <tag k="use" v="vacation_cottage"/>
         <tag k="note" v="On the beach"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -469,7 +469,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="use:2" v="religious_activities"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.984Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.827Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -481,7 +481,7 @@
     <node visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671571362699986" lon="153.1669716498599882">
         <tag k="addr:full" v="Third village from the left"/>
         <tag k="social_facility" v="shelter"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.983Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.827Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="social_facility:for" v="refugee"/>
@@ -524,7 +524,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="amenity" v="school"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.975Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.822Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -546,7 +546,7 @@
         <tag k="facility" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.974Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.822Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -557,7 +557,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670715207800015" lon="153.1480533459800029">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.973Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.822Z"/>
         <tag k="condition" v="destroyed"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -592,7 +592,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.972Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.821Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -613,7 +613,7 @@
         <tag k="facility" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="raw_material:2" v="plant_material"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.971Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.821Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="by_product:2" v="cinders"/>
         <tag k="is_in:country_code" v="EH"/>
@@ -629,7 +629,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3796437927999996" lon="153.1526186716100142">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.968Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.819Z"/>
         <tag k="crossing_point" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -646,7 +646,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3768517048599946" lon="153.1525925435900035">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.968Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.819Z"/>
         <tag k="crossing_point" v="yes"/>
         <tag k="note" v="It is a crossing"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -665,7 +665,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-139" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3851864758727963" lon="153.1526663026254766">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.967Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.818Z"/>
         <tag k="crossing_point" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -677,7 +677,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3825311505943887" lon="153.1525925435900035">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.966Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.818Z"/>
         <tag k="crossing_point" v="yes"/>
         <tag k="note" v="It is a crossing"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -714,7 +714,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="transport:type" v="air"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.963Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.817Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -737,7 +737,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="transport:type" v="inland_waterway"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.962Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.816Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -762,7 +762,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="transport:type" v="air"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.962Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.816Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="EH"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -815,7 +815,7 @@
     <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816100050" lon="153.1473733288800076"/>
     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816100050" lon="153.1368317061399864"/>
     <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498269825700007" lon="153.1418447358900039">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.945Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.807Z"/>
         <tag k="use" v="religious_activities"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="private"/>
@@ -834,7 +834,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3555007213699959" lon="153.1417852005600082">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.944Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.806Z"/>
         <tag k="note" v="Lots of houses"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="civilian"/>
@@ -854,7 +854,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619701421600077" lon="153.1419407639099859">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.943Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.806Z"/>
         <tag k="use" v="manufacturing"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="public"/>
@@ -874,7 +874,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3673729849599958" lon="153.1418234399299934">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.943Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.806Z"/>
         <tag k="note" v="No More Information"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="military"/>
@@ -894,7 +894,7 @@
     </node>
     <node visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3556276313700018" lon="153.1532276663099879">
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.940Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.804Z"/>
         <tag k="building:superstructure" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -914,7 +914,7 @@
     </node>
     <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617221313700014" lon="153.1530528460000085">
         <tag k="width" v="2"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.939Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.804Z"/>
         <tag k="building:superstructure" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -934,7 +934,7 @@
     </node>
     <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670881444399967" lon="153.1529877321200104">
         <tag k="width" v="2"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.938Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.803Z"/>
         <tag k="building:superstructure" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -996,7 +996,7 @@
         <tag k="navigation:landmark" v="no"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.924Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.796Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1019,7 +1019,7 @@
         <tag k="attached" v="no"/>
         <tag k="amenity" v="embassy"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.923Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.796Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1042,7 +1042,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.922Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.795Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1064,7 +1064,7 @@
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="craft" v="sawmilling"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.921Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.795Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1090,7 +1090,7 @@
         <tag k="attached" v="yes"/>
         <tag k="amenity" v="bank"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.920Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.794Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1112,7 +1112,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.919Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.794Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1134,7 +1134,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.918Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.793Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1158,7 +1158,7 @@
         <tag k="building:levels" v="4"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.916Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.793Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1183,7 +1183,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="amenity" v="fire_station"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.915Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.791Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1202,7 +1202,7 @@
         <tag k="building:levels" v="6"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.914Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.791Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1226,7 +1226,7 @@
         <tag k="attached" v="no"/>
         <tag k="product:2" v="desalinated_water"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.913Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.790Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1239,7 +1239,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616567836900018" lon="153.1208365965200073">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.912Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.790Z"/>
         <tag k="use" v="water_transport"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1272,7 +1272,7 @@
         <tag k="use:3" v="healthcare"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="denomination" v="roman_catholic"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.911Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.789Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1294,7 +1294,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.910Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.789Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1304,7 +1304,7 @@
     </node>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551807571400083" lon="153.0951226492200021">
         <tag k="building:levels" v="1"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.909Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.788Z"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1335,7 +1335,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.908Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.788Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1360,7 +1360,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.907Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.787Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1383,7 +1383,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.906Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.787Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1405,7 +1405,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="office" v="government"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.904Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.786Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1415,7 +1415,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495625892500094" lon="153.1345446999999922">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.903Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.786Z"/>
         <tag k="use" v="wind_tunnel"/>
         <tag k="controlling_authority" v="public"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1450,7 +1450,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="use:2" v="Elf Store"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.901Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.785Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1473,7 +1473,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="amenity" v="restaurant"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.900Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.785Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1495,7 +1495,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="isced:level" v="2,3"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.899Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.784Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1508,7 +1508,7 @@
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615447051799983" lon="153.0878782272500018">
         <tag k="building:levels" v="3"/>
         <tag k="roof:shape" v="pitched"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.897Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.784Z"/>
         <tag k="use" v="education"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1538,7 +1538,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.896Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.783Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1562,7 +1562,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="yes"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.894Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.783Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1571,7 +1571,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496817114899997" lon="153.1146748585799742">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.893Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.782Z"/>
         <tag k="condition" v="functional"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
@@ -1603,7 +1603,7 @@
         <tag k="building:levels" v="1"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.892Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.782Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="by_product:2" v="slag"/>
         <tag k="is_in:country_code" v="AU"/>
@@ -1630,7 +1630,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.891Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.781Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1654,7 +1654,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="amenity" v="police"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.890Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.780Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1664,7 +1664,7 @@
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553182080799999" lon="153.0879616358099895">
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.889Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.780Z"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1698,7 +1698,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.888Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.779Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1725,7 +1725,7 @@
         <tag k="roof:shape" v="with_steeple"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.885Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.779Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="BN"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1747,7 +1747,7 @@
         <tag k="addr:full" v="Left of Main Street"/>
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.884Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.778Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1774,7 +1774,7 @@
         <tag k="source:vertical_source:type" v="stereoscopic_imagery"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.883Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.778Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1797,7 +1797,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="denomination" v="protestant"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.881Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.777Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1827,7 +1827,7 @@
         <tag k="use:2" v="warehouse"/>
         <tag k="attached" v="no"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.872Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.772Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -1840,7 +1840,7 @@
     <way visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-300"/>
         <nd ref="-301"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.101Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.873Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1858,7 +1858,7 @@
     <way visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-298"/>
         <nd ref="-299"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.100Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.873Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1876,7 +1876,7 @@
     <way visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-296"/>
         <nd ref="-297"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.099Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.872Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1895,7 +1895,7 @@
     <way visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-294"/>
         <nd ref="-295"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.098Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.872Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1914,7 +1914,7 @@
     <way visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-296"/>
         <nd ref="-297"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.091Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.868Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="destroyed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1945,7 +1945,7 @@
         <tag k="layer" v="-1"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.090Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.868Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -1959,7 +1959,7 @@
     <way visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-286"/>
         <nd ref="-287"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.089Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.868Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -1992,7 +1992,7 @@
         <tag k="layer" v="1"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.088Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.867Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -2007,7 +2007,7 @@
     <way visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-282"/>
         <nd ref="-283"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.088Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.867Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="functional"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2040,7 +2040,7 @@
         <tag k="layer" v="0"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="defence_imagery_and_geospatial_organisation_(australia)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.087Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.867Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -2054,7 +2054,7 @@
     <way visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-278"/>
         <nd ref="-279"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.086Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.867Z"/>
         <tag k="seasonal" v="fair"/>
         <tag k="uuid" v="{93248830-b208-4dec-b4d5-971eec822645}"/>
         <tag k="source" v="tdsv61:trail_c"/>
@@ -2064,7 +2064,7 @@
     <way visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-276"/>
         <nd ref="-277"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.085Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.866Z"/>
         <tag k="seasonal" v="fair"/>
         <tag k="uuid" v="{21adaedc-37ce-4c2a-bb73-fe7ba76f4093}"/>
         <tag k="source" v="tdsv61:trail_c"/>
@@ -2074,7 +2074,7 @@
     <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-269"/>
         <nd ref="-270"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.076Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.861Z"/>
         <tag k="uuid" v="{74f5436e-997b-472d-8bb4-a5ae953d2e5c}"/>
         <tag k="source" v="tdsv61:stair_c"/>
         <tag k="highway" v="steps"/>
@@ -2102,7 +2102,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="use:2" v="religious_activities"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.073Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.860Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2135,7 +2135,7 @@
         <tag k="raw_material:2" v="tobacco"/>
         <tag k="product:2" v="wine"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.069Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.858Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="by_product:2" v="no_byproduct"/>
         <tag k="is_in:country_code" v="AU"/>
@@ -2167,7 +2167,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.059Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.853Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2205,7 +2205,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.058Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.852Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2234,7 +2234,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.056Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.852Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2262,7 +2262,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.055Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.851Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2294,7 +2294,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.054Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.851Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2327,7 +2327,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.053Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.850Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -2343,7 +2343,7 @@
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-245"/>
         <nd ref="-246"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.052Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.850Z"/>
         <tag k="interchange_ramp" v="yes"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="ref:road:class" v="primary"/>
@@ -2364,7 +2364,7 @@
     <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-300"/>
         <nd ref="-301"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.051Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.849Z"/>
         <tag k="ref:road:type" v="street"/>
         <tag k="ref:road:class" v="local"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2385,7 +2385,7 @@
     <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-298"/>
         <nd ref="-299"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.050Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.849Z"/>
         <tag k="interchange_ramp" v="yes"/>
         <tag k="ref:road:type" v="motorway"/>
         <tag k="ref:road:class" v="national_motorway"/>
@@ -2407,7 +2407,7 @@
     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-239"/>
         <nd ref="-240"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.035Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.848Z"/>
         <tag k="interchange_ramp" v="yes"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="ref:road:class" v="secondary"/>
@@ -2428,7 +2428,7 @@
     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-237"/>
         <nd ref="-238"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.034Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.848Z"/>
         <tag k="interchange_ramp" v="yes"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="ref:road:class" v="local"/>
@@ -2449,7 +2449,7 @@
     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-235"/>
         <nd ref="-236"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.032Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.848Z"/>
         <tag k="ref:road:class" v="local"/>
         <tag k="seasonal" v="no"/>
         <tag k="uuid" v="{0a51dd03-f3db-4b48-92e3-1f37a4e6cb16}"/>
@@ -2460,7 +2460,7 @@
     <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-233"/>
         <nd ref="-234"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.031Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.847Z"/>
         <tag k="ref:road:type" v="pedestrian"/>
         <tag k="seasonal" v="no"/>
         <tag k="uuid" v="{72bf2b85-d371-48b2-a5ef-54f45b492373}"/>
@@ -2471,7 +2471,7 @@
     <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-231"/>
         <nd ref="-232"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.030Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.847Z"/>
         <tag k="ref:road:type" v="street"/>
         <tag k="ref:road:class" v="local"/>
         <tag k="seasonal" v="no"/>
@@ -2483,7 +2483,7 @@
     <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-229"/>
         <nd ref="-230"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.030Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.847Z"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="ref:road:class" v="secondary"/>
         <tag k="seasonal" v="no"/>
@@ -2495,7 +2495,7 @@
     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-227"/>
         <nd ref="-228"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.029Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.846Z"/>
         <tag k="ref:road:type" v="motorway"/>
         <tag k="ref:road:class" v="national_motorway"/>
         <tag k="seasonal" v="no"/>
@@ -2507,7 +2507,7 @@
     <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-225"/>
         <nd ref="-226"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.028Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.846Z"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="ref:road:class" v="local"/>
         <tag k="seasonal" v="no"/>
@@ -2519,7 +2519,7 @@
     <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-223"/>
         <nd ref="-224"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.027Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.845Z"/>
         <tag k="ref:road:type" v="street"/>
         <tag k="ref:road:class" v="local"/>
         <tag k="seasonal" v="no"/>
@@ -2531,7 +2531,7 @@
     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-221"/>
         <nd ref="-222"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.026Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.845Z"/>
         <tag k="ref:road:type" v="road"/>
         <tag k="ref:road:class" v="primary"/>
         <tag k="seasonal" v="no"/>
@@ -2543,7 +2543,7 @@
     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-219"/>
         <nd ref="-220"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.025Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.845Z"/>
         <tag k="ref:road:type" v="limited_access_motorway"/>
         <tag k="ref:road:class" v="primary"/>
         <tag k="seasonal" v="no"/>
@@ -2555,7 +2555,7 @@
     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-217"/>
         <nd ref="-218"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.024Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.844Z"/>
         <tag k="ref:road:type" v="street"/>
         <tag k="ref:road:class" v="local"/>
         <tag k="seasonal" v="no"/>
@@ -2576,7 +2576,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.021Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.843Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="tidal" v="yes"/>
@@ -2591,7 +2591,7 @@
         <nd ref="-213"/>
         <nd ref="-214"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.019Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.842Z"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2620,7 +2620,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.018Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.842Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="tidal" v="yes"/>
@@ -2634,30 +2634,31 @@
     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-209"/>
         <nd ref="-210"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.017Z"/>
         <tag k="intermittent" v="dry"/>
-        <tag k="tidal" v="no"/>
-        <tag k="source:vertical_source:type" v="dted_2"/>
-        <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="source:non_spatial_source:type" v="commercial_data"/>
-        <tag k="waterway:bottom" v="bedrock"/>
-        <tag k="security:resource_owner" v="USA"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:spatial_source" v="no"/>
-        <tag k="covered" v="no"/>
-        <tag k="waterway" v="wadi"/>
-        <tag k="is_in:country_code" v="AU"/>
-        <tag k="uuid" v="{b710f27a-0366-4a3b-805d-e111a52c971c}"/>
         <tag k="source" v="tdsv61:river_c"/>
+        <tag k="waterway" v="river"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="width" v="3"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.841Z"/>
+        <tag k="source:spatial_source" v="no"/>
+        <tag k="is_in:country_code" v="AU"/>
+        <tag k="tidal" v="no"/>
+        <tag k="source:non_spatial_source:type" v="commercial_data"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="uuid" v="{b710f27a-0366-4a3b-805d-e111a52c971c}"/>
+        <tag k="waterway:bottom" v="bedrock"/>
+        <tag k="covered" v="no"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-207"/>
         <nd ref="-208"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.016Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.841Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2684,7 +2685,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.015Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.840Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="tidal" v="no"/>
@@ -2700,7 +2701,7 @@
         <nd ref="-203"/>
         <nd ref="-204"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.014Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.840Z"/>
         <tag k="intermittent" v="yes"/>
         <tag k="tidal" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2729,7 +2730,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.012Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.839Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="tidal" v="no"/>
@@ -2745,7 +2746,7 @@
         <nd ref="-199"/>
         <nd ref="-200"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.011Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.839Z"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2766,7 +2767,7 @@
         <nd ref="-197"/>
         <nd ref="-198"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.010Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.839Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2787,7 +2788,8 @@
         <nd ref="-195"/>
         <nd ref="-196"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.009Z"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.838Z"/>
         <tag k="tidal" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2797,7 +2799,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="uuid" v="{aea98498-70b6-4beb-9395-63f768f4f29e}"/>
         <tag k="source" v="tdsv61:river_c"/>
@@ -2808,7 +2810,8 @@
         <nd ref="-193"/>
         <nd ref="-194"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.007Z"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.838Z"/>
         <tag k="intermittent" v="dry"/>
         <tag k="tidal" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2818,7 +2821,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="uuid" v="{5653d95b-3b19-4b75-8571-4c67c4597227}"/>
         <tag k="source" v="tdsv61:river_c"/>
@@ -2836,7 +2839,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.006Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.837Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="tidal" v="yes"/>
@@ -2852,7 +2855,7 @@
         <nd ref="-189"/>
         <nd ref="-190"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.005Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.837Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2872,7 +2875,7 @@
         <nd ref="-187"/>
         <nd ref="-188"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.004Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.836Z"/>
         <tag k="intermittent" v="no"/>
         <tag k="tidal" v="no"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -2894,7 +2897,7 @@
         <nd ref="-184"/>
         <nd ref="-185"/>
         <nd ref="-186"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.001Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.835Z"/>
         <tag k="construction" v="rail"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -2929,7 +2932,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:43.000Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.834Z"/>
         <tag k="gauge:type" v="broad"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="US"/>
@@ -2953,7 +2956,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="railway:in_road" v="yes"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.999Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.834Z"/>
         <tag k="gauge:type" v="standard"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="railway:track" v="monorail"/>
@@ -2978,7 +2981,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.998Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.833Z"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="US"/>
@@ -3004,7 +3007,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="railway:in_road" v="separated"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.997Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.833Z"/>
         <tag k="gauge:type" v="narrow"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="US"/>
@@ -3018,7 +3021,7 @@
         <nd ref="-169"/>
         <nd ref="-170"/>
         <nd ref="-171"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.996Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.833Z"/>
         <tag k="electrified" v="contact_line"/>
         <tag k="gauge" v="2"/>
         <tag k="condition" v="destroyed"/>
@@ -3062,7 +3065,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="raw_material:3" v="plastic"/>
         <tag k="product:3" v="ammunition"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.980Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.825Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="by_product:2" v="radioactive_material"/>
         <tag k="is_in:country_code" v="XE"/>
@@ -3083,7 +3086,7 @@
         <nd ref="-155"/>
         <nd ref="-156"/>
         <nd ref="-152"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.979Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.825Z"/>
         <tag k="use" v="healthcare"/>
         <tag k="note" v="Hospital"/>
         <tag k="controlling_authority" v="military"/>
@@ -3110,7 +3113,7 @@
         <nd ref="-151"/>
         <nd ref="-147"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.978Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.824Z"/>
         <tag k="condition" v="functional"/>
         <tag k="controlling_authority" v="private"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3132,7 +3135,7 @@
         <nd ref="-134"/>
         <nd ref="-134"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.958Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.814Z"/>
         <tag k="width:minimum_traveled_way" v="3"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -3166,7 +3169,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="2.5"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.958Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.814Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -3190,7 +3193,7 @@
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.957Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.813Z"/>
         <tag k="source:spatial_source" v="yes"/>
         <tag k="is_in:country_code" v="AU"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -3202,7 +3205,7 @@
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-124"/>
         <nd ref="-125"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.956Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.812Z"/>
         <tag k="seasonal" v="limited"/>
         <tag k="uuid" v="{bc8d301f-0e78-43a3-b6ea-0fd0230c82b8}"/>
         <tag k="source" v="tdsv61:cart_track_c"/>
@@ -3216,7 +3219,7 @@
         <nd ref="-122"/>
         <nd ref="-123"/>
         <nd ref="-119"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.953Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.811Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -3238,7 +3241,7 @@
         <nd ref="-117"/>
         <nd ref="-118"/>
         <nd ref="-114"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.952Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.810Z"/>
         <tag k="use" v="military"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="joint_military_civilian"/>
@@ -3264,7 +3267,7 @@
         <nd ref="-112"/>
         <nd ref="-113"/>
         <nd ref="-109"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.951Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.810Z"/>
         <tag k="use" v="religious_activities"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="destroyed"/>
@@ -3288,7 +3291,7 @@
         <nd ref="-107"/>
         <nd ref="-108"/>
         <nd ref="-104"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.950Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.809Z"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="public"/>
         <tag k="condition" v="damaged"/>
@@ -3313,7 +3316,7 @@
         <nd ref="-102"/>
         <nd ref="-103"/>
         <nd ref="-99"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.950Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.809Z"/>
         <tag k="note" v="Small suburb"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="destroyed"/>
@@ -3338,7 +3341,7 @@
         <nd ref="-97"/>
         <nd ref="-98"/>
         <nd ref="-94"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.949Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.809Z"/>
         <tag k="use" v="utilities"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="controlling_authority" v="civilian"/>
@@ -3363,7 +3366,7 @@
         <nd ref="-92"/>
         <nd ref="-93"/>
         <nd ref="-89"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.948Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.808Z"/>
         <tag k="use" v="manufacturing"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="condition" v="functional"/>
@@ -3400,7 +3403,7 @@
         <tag k="amenity" v="place_of_worship"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.935Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.802Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="US"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -3430,7 +3433,7 @@
         <tag k="raw_material:2" v="petroleum_and/or_natural_gas"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.934Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.801Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="US"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -3451,7 +3454,7 @@
         <nd ref="-71"/>
         <nd ref="-67"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.933Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.801Z"/>
         <tag k="condition" v="construction"/>
         <tag k="controlling_authority" v="civilian"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3492,7 +3495,7 @@
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="25"/>
         <tag k="denomination" v="sunni"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.932Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.800Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="US"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
@@ -3507,7 +3510,7 @@
         <nd ref="-60"/>
         <nd ref="-61"/>
         <nd ref="-57"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.931Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.800Z"/>
         <tag k="use" v="Hobbit Hole"/>
         <tag k="condition" v="functional"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3534,7 +3537,7 @@
         <nd ref="-56"/>
         <nd ref="-52"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.930Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.799Z"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -3559,7 +3562,7 @@
         <nd ref="-51"/>
         <nd ref="-47"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.929Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.799Z"/>
         <tag k="condition" v="abandoned"/>
         <tag k="controlling_authority" v="military"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -3598,7 +3601,7 @@
         <tag k="amenity" v="bank"/>
         <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
         <tag k="width" v="25"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.927Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.798Z"/>
         <tag k="source:spatial_source" v="no"/>
         <tag k="is_in:country_code" v="US"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
@@ -3611,7 +3614,7 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.878Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.775Z"/>
         <tag k="condition" v="construction"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
@@ -3631,7 +3634,7 @@
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <tag k="source:ingest:datetime" v="2017-07-10T20:59:42.876Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:24:45.774Z"/>
         <tag k="condition" v="damaged"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>

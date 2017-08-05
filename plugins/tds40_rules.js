@@ -3273,7 +3273,7 @@ tds.rules = {
      ['WCC','1','waterway','stream'], // Channelized Stream
      ['WCC','2','waterway','braided_stream'], // Braided Stream
      ['WCC','3','waterway','gorge'], // Gorge
-     ['WCC','4','waterway','wadi'], // Wadi
+     ['WCC','4','wadi','yes'], // Wadi
      ['WCC','6','waterway','split_stream'], // Split Stream
      ['WCC','7','waterway','river'], // Normal Channel
      ['WCC','8','waterway','lost_watercourse'], // Lost Watercourse

@@ -27,51 +27,24 @@
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
 
-#include "OsmMapReader.h"
 #include "ApiDbReader.h"
 #include "OsmApiDb.h"
-
-// hoot
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class OsmApiDbReader : public ApiDbReader, public OsmMapReader, public Configurable
+class OsmApiDbReader : public ApiDbReader
 {
 public:
 
   static std::string className() { return "hoot::OsmApiDbReader"; }
 
   OsmApiDbReader();
-
   virtual ~OsmApiDbReader();
-
-  /**
-   * Determines the reader's default element status. By default this is Invalid which specifies that
-   * the file's status will be used.
-   */
-  virtual void setDefaultStatus(Status status) { _status = status; }
-
-  /**
-   * Determines whether the reader should use the element id's from the file being read
-   */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
-
-  virtual bool isSupported(QString urlStr);
 
   virtual void open(QString urlStr);
 
-  /**
-   * The read command called after open.
-   */
-  virtual void read(OsmMapPtr map);
-
-  void close();
-
   virtual void setConfiguration(const Settings &conf);
-
-  void setUserEmail(const QString email) { _email = email; }
 
 protected:
 
@@ -89,16 +62,6 @@ private:
   friend class ServiceWriteOsmSqlStatementsDriverTest;
 
   boost::shared_ptr<OsmApiDb> _database;
-  boost::shared_ptr<QSqlQuery> _elementResultIterator;
-  QString _email;
-
-  long _osmElemId;
-  ElementType _osmElemType;
-  ElementType _selectElementType;
-
-  void _read(OsmMapPtr map, const ElementType& elementType);
-
-  void _addNodesForWay(std::vector<long> nodeIds, OsmMap& map);
 
   void _parseAndSetTagsOnElement(ElementPtr element);
 };

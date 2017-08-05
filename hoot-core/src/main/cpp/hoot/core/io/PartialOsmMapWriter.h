@@ -47,6 +47,8 @@ public:
 
   virtual ~PartialOsmMapWriter() {}
 
+  virtual void initializePartial() {}
+
   /**
    * Finalize the writing of partial data. All records should be flushed and any connections/files
    * should be closed when this is complete.

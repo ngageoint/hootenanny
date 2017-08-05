@@ -192,9 +192,14 @@ public:
     boost::shared_ptr<PartialOsmMapWriter> partialWriter =
       boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
     boost::shared_ptr<ElementCriterion> criterion;
-    if (partialWriter.get() && ConfigOptions().getConvertOps().size() > 0)
+    if (partialWriter.get())
     {
-      criterion = _getStreamingCriterion(ConfigOptions().getConvertOps());
+      partialWriter->initializePartial();
+
+      if (ConfigOptions().getConvertOps().size() > 0)
+      {
+        criterion = _getStreamingCriterion(ConfigOptions().getConvertOps());
+      }
     }
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter, criterion);

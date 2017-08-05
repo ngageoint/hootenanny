@@ -39,7 +39,7 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * JSON file (.json; similar to Overpass JSON) (M)
 * OpenStreetMap XML (.osm) (M)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
-* OpenStreetMap API Database (osmapidb://) (M)
+* OpenStreetMap API Database (osmapidb://)
 * Shapefile (.shp) (M)
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
 
@@ -51,7 +51,7 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * OpenStreetMap XML changeset file (.osc)
 * OpenStreetMap SQL changeset file (.osc.sql)
 * OpenStreetMap XML file (.osm) (*)
-* OpenStreetMap Protocol Buffers file (.osm.pbf) (M)
+* OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
 * Shapefile (.shp) (M)
 
