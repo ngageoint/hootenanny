@@ -549,6 +549,8 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
     logWarnCount++;
   }
   _map->addNode(newNode);
+
+  LOG_TRACE("Loaded node: " << newNode->getElementId());
 }
 
 void OsmPbfReader::_loadNodes()
@@ -758,6 +760,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     logWarnCount++;
   }
   _map->addRelation(newRelation);
+
+  LOG_TRACE("Loaded relation: " << newRelation->getElementId());
 }
 
 void OsmPbfReader::_loadRelations()
@@ -894,6 +898,8 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
     logWarnCount++;
   }
   _map->addWay(newWay);
+
+  LOG_TRACE("Loaded way: " << newWay->getElementId());
 }
 
 void OsmPbfReader::_loadWays()

@@ -433,104 +433,147 @@ tds61 = {
     // This is generally for Roads, Railways, bridges, tunnels etc.
     manyFeatures: function(geometryType, tags, attrs)
     {
-        var newfeatures = [];
-
         // Add the first feature to the structure that we return
         var returnData = [{attrs:attrs, tableName:''}];
 
-        // Sort out Roads, Railways, Bridges, Tunnels, Embankments and Cuttings.
-        if (geometryType == 'Line' && (tags.highway || tags.railway))
+        // Quit early if we don't need to check anything. We are only looking at linework
+        if (geometryType !== 'Line') return returnData;
+
+        // Only looking at roads & railways with something else tacked on
+        if (!(tags.highway || tags.railway)) return returnData;
+
+        // Check the list of secondary/tertiary etc features
+        if (!(tags.bridge || tags.tunnel || tags.embankment || tags.cutting || tags.ford)) return returnData;
+
+        // We are going to make another feature so copy tags and trash the UUID so it gets a new one
+        var newFeatures = [];
+        var newAttributes = {};
+        var nTags = JSON.parse(JSON.stringify(tags));
+        delete nTags.uuid;
+        delete nTags['hoot:id'];
+
+        // Now drop the tags that made the FCODE
+        switch(attrs.F_CODE)
         {
-            // var tagList = ['bridge','tunnel','embankment','ford','cutting'];
-            var tagList = ['bridge','tunnel','embankment','cutting'];
+            case 'AN010': // Railway
+            case 'AN050': // Railway Sidetrack
+                delete nTags.railway;
+                newAttributes.TRS = '12'; // Transport Type = Railway
+                break;
 
-            // 1. Look at the fcodes
-            // Bridge, Tunnel, Ford, Embankment, Cut
-            if (['AQ040','AQ130','BH070','DB090','DB070'].indexOf(attrs.F_CODE) > -1)
-            {
-                var nTags = JSON.parse(JSON.stringify(tags));
-                delete nTags.uuid;
-
-                // Roads can go over a Ford, Railways can't
-                tagList.push('ford');
-
-                for (var i in tagList)
+            case 'AP010': // Cart Track
+            case 'AP030': // Road
+            case 'AP050': // Trail
+                switch (nTags.highway)
                 {
-                    if (nTags[tagList[i]] && nTags[tagList[i]] !== 'no')
-                    {
-                        delete nTags[tagList[i]];
-                    }
-                } // End for tag list
-
-                newfeatures.push({attrs: {}, tags: nTags});
-            }
-            // Now look for road type features
-            // Road, Cart Track, Trail
-            else if (['AP030','AP010','AP050'].indexOf(attrs.F_CODE) > -1)
-            {
-                // Roads can go over a Ford, Railways can't
-                tagList.push('ford');
-
-                for (var i in tagList)
-                {
-                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
-                    {
-                        var nTags = JSON.parse(JSON.stringify(tags));
-                        delete nTags.uuid;
-
-                        if (nTags.highway) // Paranoid.....
-                        {
-                            delete nTags.highway;
-                        }
-
-                        newfeatures.push({attrs: {'TRS':'13'}, tags: nTags});
+                    case 'pedestrian':
+                    case 'footway':
+                    case 'steps':
+                    case 'path':
+                    case 'bridleway':
+                        newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
-                    }
+
+                    default:
+                        newAttributes.TRS = '13'; // Transport Type = Road
                 }
-            }
-            // Now look for Railways
-            else if(['AN010','AN050'].indexOf(attrs.F_CODE) > -1)
-            {
-                for (var i in tagList)
-                {
-                    if (tags[tagList[i]] && tags[tagList[i]] !== 'no') // We have one of these...
-                    {
-                        var nTags = JSON.parse(JSON.stringify(tags));
-                        delete nTags.uuid;
+                delete nTags.highway;
+                break;
 
-                        if (nTags.railway) // Paranoid.....
-                        {
-                            delete nTags.railway;
-                        }
-                        newfeatures.push({attrs: {'TRS':'12'}, tags: nTags});
-                        break;
-                    }
-                }
+            case 'AQ040': // Bridge
+                delete nTags.bridge;
+                newAttributes.SBB = '1001'; // Supported By Bridge Span = True
+                break;
 
-            } // End Railway
+            case 'AQ130': // Tunnel
+                delete nTags.tunnel;
+                newAttributes.CWT = '1001'; // Contained Within Tunnel = True
+                break;
 
+            case 'BH070': // Ford
+                delete nTags.ford;
+                break;
 
-        } // End sort out Road, Railway, Bridge and Tunnel
+            case 'DB070': // Cutting
+                delete nTags.cutting;
+                break;
+
+            case 'DB090': // Embankment
+                delete nTags.embankment;
+                break;
+
+            default:
+                // Debug
+                hoot.logWarn('ManyFeatures: Should get to here');
+        } // end switch
+
+        // Now make new features based on what tags are left
+        if (nTags.railway)
+        {
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.railway;
+        }
+
+        if (nTags.highway)
+        {
+            if (nTags.highway == 'track') newAttributes.TRS = '3'; // Cart Track TRS = Automotive
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.highway;
+        }
+
+        if (nTags.cutting)
+        {
+            newAttributes.F_CODE = 'DB070';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.cutting;
+        }
+
+        if (nTags.bridge)
+        {
+            newAttributes.F_CODE = 'AQ040';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.bridge;
+        }
+
+        if (nTags.tunnel)
+        {
+            newAttributes.F_CODE = 'AQ130';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.tunnel;
+        }
+
+        if (nTags.ford)
+        {
+            newAttributes.F_CODE = 'BH070';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.ford;
+        }
+
+        if (nTags.embankment)
+        {
+            newAttributes.F_CODE = 'DB090';
+            newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+            delete nTags.embankment;
+        }
 
         // Loop through the new features and process them.
-        // Note: This is the same as we did for the main feature.
-        for (var i = 0, nFeat = newfeatures.length; i < nFeat; i++)
+        for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
-            tds61.applyToNfddPreProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType);
+            tds61.applyToNfddPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.numBiased, 'backward',tds61.rules.intList);
-            translate.applySimpleTxtBiased(newfeatures[i]['attrs'], newfeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds61.rules.numBiased, 'backward',tds61.rules.intList);
+            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(newfeatures[i]['tags'], newfeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup);
+            translate.applyNfddOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup);
 
             // post processing
-            tds61.applyToNfddPostProcessing(newfeatures[i]['tags'], newfeatures[i]['attrs'], geometryType, {});
+            tds61.applyToNfddPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
-            returnData.push({attrs: newfeatures[i]['attrs'],tableName: ''});
+            returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
         }
 
         return returnData;
@@ -1176,9 +1219,10 @@ tds61 = {
             ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
+            ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'sinkhole'; delete t.natural"],
             ["t.natural == 'wood'","t.landuse = 'forest'; delete t.natural"],
             ["t.power == 'pole'","t['cable:type'] = 'power'; t['tower:shape'] = 'pole'"],
-            ["t.power == 'tower'","t['cable:type'] = 'power'"],
+            ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
             ["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
             ["t.power == 'generator'","t.use = 'power_generation'; a.F_CODE = 'AL013'"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'; delete t.rapids"],
@@ -1195,7 +1239,8 @@ tds61 = {
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.wetland && t.natural == 'wetland'","delete t.natural"],
             ["t.water == 'river'","t.waterway = 'river'"],
-            ["t.waterway == 'riverbank'","t.waterway = 'river'"]
+            ["t.waterway == 'riverbank'","t.waterway = 'river'"],
+            ["t.waterway == 'vanishing_point' && t['water:sink:type'] == 'sinkhole'","t.natural = 'sinkhole'; delete t.waterway; delete t['water:sink:type']"]
             ];
 
             tds61.nfddPreRules = translate.buildComplexRules(rulesList);
@@ -1508,12 +1553,16 @@ tds61 = {
                 'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
                 'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
                 'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
-                'mine:access':'AA010'
+                'mine:access':'AA010', 'cutting':'DB070'
                            };
 
             for (var i in fcodeMap)
             {
-                if (i in tags) attrs.F_CODE = fcodeMap[i];
+                if (i in tags)
+                {
+                    attrs.F_CODE = fcodeMap[i];
+                    break;
+                }
             }
         }
 
@@ -1699,6 +1748,10 @@ tds61 = {
             var str = attrs['UFI'].split(';');
             attrs.UFI = str[0].replace('{','').replace('}','');
         }
+        else if (tags['hoot:id'])
+        {
+            attrs.UFI = 'raw_id:' + tags['hoot:id'];
+        }
         else
         {
             attrs.UFI = createUuid().replace('{','').replace('}','');
@@ -1852,6 +1905,8 @@ tds61 = {
         // Clean up Cart Track attributes
         if (attrs.F_CODE == 'AP010')
         {
+            if (attrs.TRS && attrs.TRS == '13') attrs.TRS = '3';
+
             if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
             {
                 var othVal = '(TRS:' + attrs.TRS + ')';
@@ -2122,6 +2177,8 @@ tds61 = {
         var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
         if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+        // Debug info. We use this in postprocessing via "tags"
+        if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
 
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
@@ -2195,6 +2252,11 @@ tds61 = {
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
             }
 
+            if (tags['hoot:id'])
+            {
+                tags.raw_id = tags['hoot:id'];
+                delete tags['hoot:id'];
+            }
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             var str = JSON.stringify(tags);
@@ -2228,7 +2290,7 @@ tds61 = {
         else // We have a feature
         {
             // Check if we need to make more features.
-            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
+            // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
             returnData = tds61.manyFeatures(geometryType,tags,attrs);
 
             // Debug: Add the first feature
@@ -2275,7 +2337,7 @@ tds61 = {
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
-                extraFeature.uuid = attrs.UID;
+                extraFeature.uuid = attrs.UFI;
 
                 var extraName = 'extra_' + geometryType.toString().charAt(0);
 

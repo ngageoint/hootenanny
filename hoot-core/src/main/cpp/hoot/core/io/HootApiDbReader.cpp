@@ -32,7 +32,6 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
-#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/DbUtils.h>
 
 // Qt
@@ -65,12 +64,6 @@ Envelope HootApiDbReader::calculateEnvelope() const
   return result;
 }
 
-bool HootApiDbReader::isSupported(QString urlStr)
-{
-  QUrl url(urlStr);
-  return _database->isSupported(url);
-}
-
 void HootApiDbReader::open(QString urlStr)
 {
   if (!isSupported(urlStr))
@@ -81,7 +74,7 @@ void HootApiDbReader::open(QString urlStr)
 
   QUrl url(urlStr);
   QStringList pList = url.path().split("/");
-  LOG_DEBUG("url path = "+url.path());
+  LOG_DEBUG("Opening database for reader at: " << url.path() << "...");
   bool ok;
   _database->open(url);
 
@@ -119,210 +112,12 @@ void HootApiDbReader::open(QString urlStr)
   //be invalid as a whole
   _database->transaction();
   _open = true;
-
-  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_database->getDB()));
-}
-
-bool HootApiDbReader::hasMoreElements()
-{
-  if (_nextElement == 0)
-  {
-    _nextElement = _getElementUsingIterator();
-  }
-  return _nextElement != NULL;
-}
-
-void  HootApiDbReader::initializePartial()
-{
-  _partialMap.reset(new OsmMap());
-
-  _elementResultIterator.reset();
-  _selectElementType = ElementType::Node;
-
-  _elementsRead = 0;
-}
-
-void HootApiDbReader::read(OsmMapPtr map)
-{
-  if (!_hasBounds())
-  {
-    LOG_DEBUG("Executing Hoot API read query...");
-    for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
-    {
-      if (_returnNodesOnly && ctr != ElementType::Node)
-      {
-        break;
-      }
-      _read(map, static_cast<ElementType::Type>(ctr));
-    }
-  }
-  else
-  {
-    Envelope bounds;
-    if (!_overrideBounds.isNull())
-    {
-      bounds = _overrideBounds;
-    }
-    else
-    {
-      bounds = _bounds;
-    }
-    LOG_DEBUG("Executing Hoot API bounded read query with bounds " << bounds.toString() << "...");
-    _readByBounds(map, bounds);
-  }
-}
-
-//TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
-//this read performs better for some reason
-void HootApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
-{
-  long elementCount = 0; //TODO: break this out by element type
-
-  // contact the DB and select all
-  boost::shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
-
-  //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
-  //it will always return an extra null node at the end, unfortunately (see comments in
-  //HootApiDb::resultToElement)
-  while (elementResultsIterator->isActive())
-  {
-    boost::shared_ptr<Element> element =
-      _resultToElement(*elementResultsIterator, elementType, *map );
-    //this check is necessary due to an inefficiency in HootApiDb::resultToElement
-    if (element.get())
-    {
-      map->addElement(element);
-      LOG_VART(element);
-      elementCount++;
-    }
-  }
-
-  LOG_DEBUG(
-    "Select all query read " << elementCount << " " << elementType.toString() << " elements.");
-  LOG_VARD(map->getNodes().size());
-  LOG_VARD(map->getWays().size());
-  LOG_VARD(map->getRelations().size());
-}
-
-boost::shared_ptr<Element> HootApiDbReader::_getElementUsingIterator()
-{
-  if (_selectElementType == ElementType::Unknown)
-  {
-    return boost::shared_ptr<Element>();
-  }
-
-  //see if another result is available
-  if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
-  {
-    //no results available, so request some more results
-    _elementResultIterator = _database->selectElements(_selectElementType);
-  }
-
-  //results still available, so keep parsing through them
-  boost::shared_ptr<Element> element =
-    _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
-
-  //QSqlQuery::next() in HootApiDbReader::_resultToElement will return null
-  //when end of records loop. The iterator will be reset and go to next element type
-  if (!element.get())
-  {
-    _elementResultIterator.reset();
-    const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
-    ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
-    ElementType t(nextType);
-    _selectElementType = t;
-    return _getElementUsingIterator();
-  }
-
-  assert(_selectElementType == element->getElementType());
-
-  return element;
-}
-
-boost::shared_ptr<Element> HootApiDbReader::readNextElement()
-{
-  if (hasMoreElements())
-  {
-    boost::shared_ptr<Element> result = _nextElement;
-    _nextElement.reset();
-    _elementsRead++;
-    return result;
-  }
-  else
-  {
-    throw HootException("readNextElement should not called if hasMoreElements returns false.");
-  }
-}
-
-void HootApiDbReader::finalizePartial()
-{
-  _elementResultIterator.reset();
-  _partialMap.reset();
-  if (_open)
-  {
-    //The exception thrown by this commit will mask exception text coming from failed queries.  Not
-    //sure yet how to prevent that from happening, so you may have to temporarily comment out the
-    //commit statement to see query error detail when debugging.
-    _database->commit();
-    _database->close();
-    _open = false;
-  }
-}
-
-void HootApiDbReader::close()
-{
-  finalizePartial();
-}
-
-//TODO: this method could probably be moved up to the parent class
-boost::shared_ptr<Element> HootApiDbReader::_resultToElement(QSqlQuery& resultIterator,
-                                                      const ElementType& elementType, OsmMap& map)
-{
-  assert(resultIterator.isActive());
-  //It makes much more sense to have callers call next on the iterator before passing it into this
-  //method.  However, I was getting some initialization errors with QSqlQuery when the
-  //reader called it in that way during a partial map read.  So, calling it inside here
-  //instead.  A side effect is that this method will return a NULL element during the last
-  //iteration.  Therefore, callers should check resultIterator->isActive in a loop in place of
-  //calling resultIterator->next() and also should check for the null element.
-  if (resultIterator.next())
-  {
-    boost::shared_ptr<Element> element;
-    switch (elementType.getEnum())
-    {
-      case ElementType::Node:
-        {
-          element = _resultToNode(resultIterator, map);
-        }
-        break;
-
-      case ElementType::Way:
-        {
-          element = _resultToWay(resultIterator, map);
-        }
-        break;
-
-      case ElementType::Relation:
-        {
-          element = _resultToRelation(resultIterator, map);
-        }
-        break;
-
-      default:
-        throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
-    }
-
-    return element;
-  }
-  else
-  {
-    resultIterator.finish();
-    return boost::shared_ptr<Element>();
-  }
 }
 
 NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
+  LOG_TRACE("Converting query result to node...");
+
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();
   LOG_VART(ElementId(ElementType::Node, nodeId));
 
@@ -355,6 +150,8 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
 
 WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
+  LOG_TRACE("Converting query result to way...");
+
   const long wayId = resultIterator.value(0).toLongLong();
   const long newWayId = _mapElementId(map, ElementId::way(wayId)).getId();
   LOG_VART(ElementId(ElementType::Way, wayId));
@@ -392,6 +189,8 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
 
 RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map)
 {
+  LOG_TRACE("Converting query result to relation...");
+
   const long relationId = resultIterator.value(0).toLongLong();
   const long newRelationId = _mapElementId(map, ElementId::relation(relationId)).getId();
   LOG_VART(ElementId(ElementType::Relation, relationId));
@@ -433,17 +232,6 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
   setOverrideBoundingBox(configOptions.getConvertBoundingBoxHootApiDatabase());
-}
-
-boost::shared_ptr<OGRSpatialReference> HootApiDbReader::getProjection() const
-{
-  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
-  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
-  {
-    throw HootException("Error creating EPSG:4326 projection.");
-  }
-
-  return wgs84;
 }
 
 }

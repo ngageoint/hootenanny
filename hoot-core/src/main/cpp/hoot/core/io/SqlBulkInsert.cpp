@@ -96,6 +96,9 @@ inline QString SqlBulkInsert::_escape(const QVariant& v) const
 
 void SqlBulkInsert::flush()
 {
+  LOG_TRACE("Flushing bulk insert...");
+  LOG_VART(_pending.size());
+
   if (_pending.size() > 0)
   {
     double start = Tgs::Time::getTime();
@@ -136,12 +139,12 @@ void SqlBulkInsert::flush()
       sql.append(closeParen);
     }
 
-    //LOG_VAR(sql);
-
-    //LOG_VAR(sql.size());
+    LOG_VART(sql);
     QSqlQuery q(_db);
     if (q.exec(sql) == false)
     {
+      LOG_ERROR(q.executedQuery());
+      LOG_ERROR(q.lastError().text());
       throw HootException(QString("Error executing bulk insert: %1 (%2)").arg(q.lastError().text()).
                           arg(sql));
     }

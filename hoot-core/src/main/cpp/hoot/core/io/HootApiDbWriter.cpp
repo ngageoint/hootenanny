@@ -66,6 +66,7 @@ HootApiDbWriter::~HootApiDbWriter()
 
 void HootApiDbWriter::_addElementTags(const boost::shared_ptr<const Element> &e, Tags& t)
 {
+  LOG_TRACE("Adding element tags to: " << e->getElementId());
   if (!t.contains(MetadataTags::HootStatus()))
   {
     if ((_textStatus && t.getNonDebugCount() > 0) || (_includeDebug && _textStatus))
@@ -81,6 +82,7 @@ void HootApiDbWriter::_addElementTags(const boost::shared_ptr<const Element> &e,
 
 void HootApiDbWriter::close()
 {
+  LOG_DEBUG("Closing database writer...");
   finalizePartial();
   if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
   {
@@ -98,6 +100,7 @@ void HootApiDbWriter::_countChange()
 
 void HootApiDbWriter::finalizePartial()
 {
+  LOG_DEBUG("Finalizing write operation...");
   if (_open)
   {
     _hootdb.endChangeset();
@@ -115,9 +118,9 @@ bool HootApiDbWriter::isSupported(QString urlStr)
 
 void HootApiDbWriter::open(QString urlStr)
 {
-  set<long> mapIds = _openDb(urlStr);
+  LOG_DEBUG("Opening database writer for: " << urlStr << "...");
 
-  LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_hootdb.getDB()));
+  set<long> mapIds = _openDb(urlStr);
 
   QUrl url(urlStr);
   QStringList pList = url.path().split("/");
@@ -129,6 +132,8 @@ void HootApiDbWriter::open(QString urlStr)
 
 void HootApiDbWriter::deleteMap(QString urlStr)
 {
+  LOG_TRACE("Deleting map at " + urlStr << "...");
+
   set<long> mapIds = _openDb(urlStr);
 
   for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
@@ -210,6 +215,8 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
 
 long HootApiDbWriter::_getRemappedElementId(const ElementId& eid)
 {
+  LOG_TRACE("Getting remapped ID for element ID: " << eid << "...");
+
   LOG_VART(_remapIds);
   if (_remapIds == false)
   {
@@ -326,6 +333,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
 
 void HootApiDbWriter::_startNewChangeSet()
 {
+  LOG_TRACE("Starting changeset...");
   _hootdb.endChangeset();
   Tags tags;
   tags["bot"] = "yes";
@@ -335,6 +343,8 @@ void HootApiDbWriter::_startNewChangeSet()
 
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 {
+  LOG_TRACE("Writing node: " << n->getElementId());
+
   Tags tags = n->getTags();
   _addElementTags(n, tags);
 
@@ -379,6 +389,8 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 
 void HootApiDbWriter::writePartial(const ConstWayPtr& w)
 {
+  LOG_TRACE("Writing way: " << w->getElementId());
+
   long wayId;
 
   Tags tags = w->getTags();
@@ -430,6 +442,8 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
 
 void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
 {
+  LOG_TRACE("Writing relation: " << r->getElementId());
+
   long relationId;
 
   Tags tags = r->getTags();

@@ -40,7 +40,7 @@
 #include <tgs/HashMap.h>
 
 // hoot
-#include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 
 namespace hoot
 {
@@ -57,7 +57,7 @@ class OsmPbfWriterData;
 /**
  * A writer for http://wiki.openstreetmap.org/wiki/PBF_Format
  */
-class OsmPbfWriter : public OsmMapWriter
+class OsmPbfWriter : public PartialOsmMapWriter
 {
 public:
 
@@ -74,13 +74,12 @@ public:
   static const char* const OSM_HEADER;
 
   OsmPbfWriter();
-
-  ~OsmPbfWriter();
+  virtual ~OsmPbfWriter();
 
   /**
    * Used to finalize a call to writePartial.
    */
-  void finalizePartial();
+  virtual void finalizePartial();
 
   /**
    * Returns the number of elements written by this class since it was instantiated.
@@ -92,11 +91,14 @@ public:
    */
   void includVersion(bool iv) { _includeVersion = iv; }
 
-  void intializePartial(std::ostream* strm);
+  void initializePartial(std::ostream* strm);
+
+  virtual void initializePartial();
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith("osm.pbf"); }
 
-  void open(QString url);
+  virtual void open(QString url);
+  virtual void close();
 
   /**
    * Set the compression level to a value of -1 to 9. -1 is "default" or equivalent to about 7.
@@ -135,21 +137,13 @@ public:
 
   /**
    * Write out a map in chunks. This may be called multiple times and must be precceded with a
-   * call to intializePartial and finalized with a call to finalizePartial.
+   * call to initializePartial and finalized with a call to finalizePartial.
    */
-  void writePartial(const ConstOsmMapPtr& map);
-  /**
-   * These silly non-const overloads are here to placate the old compiler in RHEL 5.8.
-   */
-  void writePartial(const OsmMapPtr& map) { writePartial((const ConstOsmMapPtr)map); }
+  virtual void writePartial(const ConstOsmMapPtr& map);
 
-  void writePartial(const ConstNodePtr& n);
-  void writePartial(const NodePtr& n) { writePartial((const ConstNodePtr)n); }
-
-  void writePartial(const ConstWayPtr& w);
-  void writePartial(const WayPtr& w) { writePartial((const ConstWayPtr)w); }
-
-  void writePartial(const ConstRelationPtr& r);
+  virtual void writePartial(const ConstNodePtr& n);
+  virtual void writePartial(const ConstWayPtr& w);
+  virtual void writePartial(const ConstRelationPtr& r);
 
   /**
    * Write out the map as a PrimitiveBlock to the specified stream. The size of the primitive

@@ -10,6 +10,9 @@ function compareFiles {
 hoot --osm2shp "LTN,WTC,HCT,UID" test-files/translation/MgcpTest.osm test-output/translation/MgcpTest.shp
 hoot --ogr2osm translations/MgcpTest.js test-output/translation/MgcpTranslated.osm test-output/translation/MgcpTestLines.shp
 
+# Un-comment this to update the OSM file
+#cp test-output/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
+
 compareFiles test-output/translation/MgcpTranslated.osm test-files/translation/MgcpTranslated.osm
 
 #
