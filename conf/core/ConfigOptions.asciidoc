@@ -2639,6 +2639,6 @@ Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3
 * Default Value: `true`
 
 If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setting this to true
-will require reading the entire source dataset into memory.  Setting it to false will result in
+will require reading the entire source dataset into memory.  Setting it to false may result in
 using smaller amounts of memory during writing if the data source being written is also a streamable
 format (see the "Supported Data Formats" section in README.md).

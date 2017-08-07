@@ -29,7 +29,6 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-//#include "ElementInputStream.h"
 
 namespace hoot
 {
