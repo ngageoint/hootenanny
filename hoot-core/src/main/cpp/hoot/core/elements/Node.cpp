@@ -69,7 +69,9 @@ _nodeData(from._nodeData)
 
 NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError)
 {
-  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+#warning
+  //NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+  NodePtr result(new Node());
 
   result->_nodeData.init(id, x, y);
   result->_getElementData().setCircularError(circularError);
@@ -85,7 +87,9 @@ void Node::clear()
 
 boost::shared_ptr<Node> Node::cloneSp() const
 {
-  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+#warning
+  //NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+  NodePtr result(new Node());
 
   result->_nodeData = _nodeData;
 

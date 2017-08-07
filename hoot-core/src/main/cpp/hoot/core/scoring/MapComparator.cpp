@@ -114,7 +114,6 @@ public:
       in2.set("source:ingest:datetime","None");
     }
 
-
     if (in1 != in2)
     {
       _matches = false;

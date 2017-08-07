@@ -23,6 +23,8 @@ CONFIG += rtti \
     debug
 
 OTHER_FILES = \
+    $$files(../plugins/*.js, true) \
+    $$files(../plugins/*.py, true) \
     $$files(../translations/*.js, true) \
     $$files(../translations/*.py, true) \
     $$files(../rules/*.js, true) \

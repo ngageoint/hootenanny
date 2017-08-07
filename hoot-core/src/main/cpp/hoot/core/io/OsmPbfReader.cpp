@@ -551,6 +551,8 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
     logWarnCount++;
   }
   _map->addNode(newNode);
+
+  LOG_TRACE("Loaded node: " << newNode->getElementId());
 }
 
 void OsmPbfReader::_loadNodes()
@@ -760,6 +762,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     logWarnCount++;
   }
   _map->addRelation(newRelation);
+
+  LOG_TRACE("Loaded relation: " << newRelation->getElementId());
 }
 
 void OsmPbfReader::_loadRelations()
@@ -896,6 +900,8 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
     logWarnCount++;
   }
   _map->addWay(newWay);
+
+  LOG_TRACE("Loaded way: " << newWay->getElementId());
 }
 
 void OsmPbfReader::_loadWays()
@@ -1012,7 +1018,10 @@ void OsmPbfReader::_parseOsmHeader()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
-  _d->headerBlock.ParseFromArray(inflated, size);
+  if (!_d->headerBlock.ParseFromArray(inflated, size))
+  {
+    throw IoException("Error reading headerBlock.");
+  }
 
   int optionalFeatureSize = _d->headerBlock.optional_features_size();
   for (int i = 0; i < optionalFeatureSize; i++)
@@ -1060,7 +1069,8 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
-  _firstPartialReadCompleted = false;
+#warning uncomment me.
+  //_firstPartialReadCompleted = false;
 
   // read blob header
   _parseBlobHeader();
@@ -1192,7 +1202,8 @@ void OsmPbfReader::initializePartial()
   _partialNodesRead = 0;
   _partialWaysRead = 0;
   _partialRelationsRead = 0;
-  _firstPartialReadCompleted = false;
+#warning uncomment me.
+  //_firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
   if ( _in != NULL )
