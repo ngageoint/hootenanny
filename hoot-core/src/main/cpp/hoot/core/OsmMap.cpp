@@ -666,6 +666,45 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   }
 }
 
+void OsmMap::visitRw(ElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const NodeMap allNodes = getNodes();
+  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
+  {
+    if (containsNode(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRelations = getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+}
+
 void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);

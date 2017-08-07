@@ -23,19 +23,13 @@ CONFIG += rtti \
     debug
 
 OTHER_FILES = \
+    $$files(../translations/*.js, true) \
+    $$files(../translations/*.py, true) \
+    $$files(../rules/*.js, true) \
+    $$files(../conf/schema/*.json, true) \
     ../conf/core/ConfigOptions.asciidoc \
-    ../rules/LineStringGeneric.js \
-    ../rules/MultiaryPoiGeneric.js \
-    ../rules/PoiGeneric.js \
-    ../rules/lib/HootLib.js \
-    ../rules/LinearWaterway.js \
     ../conf/LinearWaterway.conf \
     ../conf/LinearWaterway-match-scoring.conf \
-    ../conf/schema/all_weather.json \
-    ../conf/schema/highway.json \
-    ../conf/schema/natural.json \
-    ../conf/schema/public_transport.json \
-    ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
 
@@ -554,7 +548,9 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
 				src/main/cpp/hoot/core/elements/Status.cpp \
 				src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
-				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp
+				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp \
+    src/main/cpp/hoot/core/util/SharedPtrPool.cpp \
+    src/main/cpp/hoot/core/io/ElementCriterionInputStream.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1095,5 +1091,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/conflate/SearchRadiusProvider.h \
     src/main/cpp/hoot/core/elements/ElementVisitor.h \
-    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h
+    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h \
+    src/main/cpp/hoot/core/util/SharedPtrPool.h \
+    src/main/cpp/hoot/core/io/ElementCriterionInputStream.h
 

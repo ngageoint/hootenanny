@@ -159,9 +159,6 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
-  virtual void closeStream(
-      void );
-
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
   bool getSortedTypeThenId() { return _typeThenId; }

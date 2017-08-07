@@ -75,11 +75,12 @@ private:
   int _LATITUDE;
   int _LONGITUDE;
   int _GEONAMESID;
+  int _maxSaveMemoryStrings;
   bool _useDataSourceIds;
   mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
 
 
-  const QString& _saveMemory(const QString& s);
+  QString _saveMemory(const QString& s);
 };
 
 }

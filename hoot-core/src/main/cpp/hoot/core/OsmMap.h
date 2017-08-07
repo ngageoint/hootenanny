@@ -38,6 +38,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -278,6 +279,7 @@ public:
    * If the visitor implements OsmMapConsumer then setOsmMap will be called before
    * visiting any elements.
    */
+  void visitRw(ElementVisitor& visitor);
   void visitRw(ConstElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);
 

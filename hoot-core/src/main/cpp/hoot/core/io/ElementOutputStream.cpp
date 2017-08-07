@@ -43,7 +43,11 @@ void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutpu
 {
   while (eis.hasMoreElements())
   {
-    eos.writeElement(eis);
+    ElementPtr e = eis.readNextElement();
+    if (e.get())
+    {
+      eos.writeElement(e);
+    }
   }
 }
 

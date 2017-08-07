@@ -24,28 +24,29 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTVISITORINPUTSTREAM_H
-#define ELEMENTVISITORINPUTSTREAM_H
+#ifndef ELEMENTCRITERIONINPUTSTREAM_H
+#define ELEMENTCRITERIONINPUTSTREAM_H
 
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
 
 class ConstElementVisitor;
 
-class ElementVisitorInputStream : public ElementInputStream
+class ElementCriterionInputStream : public ElementInputStream
 {
 public:
   /**
-   * @brief ElementVisitorInputStream
+   * @brief ElementCriterionInputStream
    * @param elementSource The stream used to read elements from
-   * @param visitor The operation that should be performed on elements that are read from the input source before being returned
+   * @param criterion If this criterion is satisfied then the element is included, otherwise the
+   *    element is dropped.
    */
-  ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
-                            const ElementVisitorPtr& visitor);
+  ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
+                            const ElementCriterionPtr& criterion);
 
   /**
    * @brief close
@@ -66,17 +67,17 @@ public:
 
   /**
    * @brief readNextElement
-   * @return Pointer to an elemement which will have been read from the source elementinputstream
-   *    AND had the visitor's visit method applied to it before it is returned
+   * @return Pointer to an elemement that is read from elementSource and is satisfied by the
+   *    criterion.
    */
   virtual ElementPtr readNextElement();
 
 
 private:
   ElementInputStreamPtr _elementSource;
-  ElementVisitorPtr _visitor;
+  ElementCriterionPtr _criterion;
 };
 
 }
 
-#endif // ELEMENTVISITORINPUTSTREAM_H
+#endif // ELEMENTCRITERIONINPUTSTREAM_H

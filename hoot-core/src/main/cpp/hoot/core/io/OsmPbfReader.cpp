@@ -93,8 +93,7 @@ OsmPbfReader::OsmPbfReader(bool useFileId)
   _init(useFileId);
 }
 
-OsmPbfReader::OsmPbfReader(
-  const QString urlString )
+OsmPbfReader::OsmPbfReader(const QString urlString)
 {
   _init(false);
 
@@ -346,7 +345,10 @@ const char* OsmPbfReader::_inflate(const string& compressed, size_t rawSize)
   strm.zalloc = Z_NULL;
   strm.zfree = Z_NULL;
   strm.opaque = Z_NULL;
-  inflateInit(&strm);
+  if (inflateInit(&strm) != Z_OK)
+  {
+    throw HootException(QString("Error initializing zlib stream."));
+  }
   strm.next_in = (Bytef*)compressed.data();
   strm.avail_in = compressed.size();
   strm.avail_out = rawSize;
@@ -393,7 +395,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     long newId = _getNodeId(id);
     double x = _convertLon(lon);
     double y = _convertLat(lat);
-    NodePtr n(new hoot::Node(_status, newId, x, y, _circularError));
+    NodePtr n(Node::newSp(_status, newId, x, y, _circularError));
     nodes.push_back(n);
     if (_map->containsNode(newId))
     {
@@ -1058,6 +1060,7 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
+  _firstPartialReadCompleted = false;
 
   // read blob header
   _parseBlobHeader();
@@ -1189,6 +1192,7 @@ void OsmPbfReader::initializePartial()
   _partialNodesRead = 0;
   _partialWaysRead = 0;
   _partialRelationsRead = 0;
+  _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
   if ( _in != NULL )
@@ -1285,7 +1289,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
 
-    element.reset(new Node(*_nodesItr->second.get()));
+    element = _nodesItr->second->cloneSp();
     ++_nodesItr;
     _partialNodesRead++;
   }
@@ -1329,12 +1333,6 @@ void OsmPbfReader::close()
 
   // Either path, drop our pointer to the stream
   _in = NULL;
-}
-
-void OsmPbfReader::closeStream(
-  void )
-{
-  close();
 }
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)

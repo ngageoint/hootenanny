@@ -22,49 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-// Hoot
-#include <hoot/core/util/HootException.h>
-
-#include "Element.h"
-
-#include "ElementListener.h"
+#include <boost/shared_ptr.hpp>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include "ElementCriterionInputStream.h"
 
 namespace hoot
 {
 
-Element::Element() :
-  _status(Status::Invalid),
-  _listener(0)
+ElementCriterionInputStream::ElementCriterionInputStream(const ElementInputStreamPtr& elementSource,
+    const ElementCriterionPtr& criterion) :
+_elementSource(elementSource),
+_criterion(criterion)
 {
 }
 
-Element::Element(Status s) : _status(s)
+boost::shared_ptr<OGRSpatialReference> ElementCriterionInputStream::getProjection() const
 {
-  _listener = 0;
+  return _elementSource->getProjection();
 }
 
-QString Element::getStatusString() const
+ElementPtr ElementCriterionInputStream::readNextElement()
 {
-  return _status.toString().toLower();
+  do {
+    ElementPtr e = _elementSource->readNextElement();
+    if (_criterion->isSatisfied(e))
+    {
+      return e;
+    }
+  } while (hasMoreElements());
+
+  return ElementPtr();
 }
 
-void Element::_postGeometryChange()
-{
-  if (_listener != 0)
-  {
-    _listener->postGeometryChange(this);
-  }
-}
-
-void Element::_preGeometryChange()
-{
-  if (_listener != 0)
-  {
-    _listener->preGeometryChange(this);
-  }
-}
 
 }
