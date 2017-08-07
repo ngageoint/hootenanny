@@ -36,7 +36,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/util/Exception.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Tags.h>

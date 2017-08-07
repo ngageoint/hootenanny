@@ -182,7 +182,7 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const 
 
 void MultiaryMatchComparator::_findActualMatches(const ConstOsmMapPtr& conflated)
 {
-  class TmpVisitor : public ElementVisitor
+  class TmpVisitor : public ConstElementVisitor
   {
   public:
     TmpVisitor(const IdToEid& expectedIdToEid, IdToEid& actualIdToEid,
@@ -295,7 +295,7 @@ void MultiaryMatchComparator::_findActualReviews(const ConstOsmMapPtr& map)
 
 void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
 {
-  class TmpVisitor : public ElementVisitor
+  class TmpVisitor : public ConstElementVisitor
   {
   public:
     TmpVisitor(IdToEid& idToEid, QHash<QString, IdClusterPtr>& matchGroups) :
@@ -370,7 +370,7 @@ void MultiaryMatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
 
 void MultiaryMatchComparator::_findExpectedReviews(const ConstOsmMapPtr& in)
 {
-  class TmpVisitor : public ElementVisitor
+  class TmpVisitor : public ConstElementVisitor
   {
   public:
     TmpVisitor(ReviewClusterIndex& index) :

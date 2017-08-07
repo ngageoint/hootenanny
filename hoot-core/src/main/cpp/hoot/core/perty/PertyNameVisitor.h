@@ -67,7 +67,7 @@ public:
   virtual void visit(const boost::shared_ptr<Element>& e);
 
   /**
-    @see ElementVisitor
+    @see ConstElementVisitor
     */
   QString toString();
 

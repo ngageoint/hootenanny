@@ -52,14 +52,14 @@ public:
 
   virtual void visit(const boost::shared_ptr<const Element>& e);
 
-  double getStat() const { return _candidateCount; }
+  double getStat() const { return _totalCandidateCount; }
 
   boost::any getData() const { return _matchCandidateCountsByMatchCreator; }
 
 private:
 
   QMap<QString, boost::shared_ptr<MatchCreator> > _matchCreatorsByName;
-  long _candidateCount;
+  long _totalCandidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
   void _setupCreators(const std::vector<boost::shared_ptr<MatchCreator> >& matchCreators);

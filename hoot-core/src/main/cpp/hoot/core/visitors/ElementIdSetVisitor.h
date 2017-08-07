@@ -28,7 +28,7 @@
 #define ELEMENT_ID_SET_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Returns a set of the element ids visited.
  */
-class ElementIdSetVisitor : public ElementVisitor
+class ElementIdSetVisitor : public ConstElementVisitor
 {
 public:
 

@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -45,7 +45,7 @@ namespace hoot
  * code rather than re-using the GeoJson code in: https://github.com/ngageoint/hootenanny/pull/1658
  * When #1658 is merged it probably makes sense to refactor this to use the GeoJSON writer.
  */
-class CalculateHashVisitor : public ElementVisitor, public OsmMapConsumer
+class CalculateHashVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 

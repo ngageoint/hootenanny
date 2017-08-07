@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, CalculateHashVisitor)
 
 CalculateHashVisitor::~CalculateHashVisitor()
 {

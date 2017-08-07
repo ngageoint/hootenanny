@@ -28,6 +28,7 @@
 #define SCRIPTMATCHCREATOR_H
 
 #include <hoot/core/conflate/MatchCreator.h>
+#include <hoot/core/conflate/SearchRadiusProvider.h>
 #include <hoot/core/util/NotImplementedException.h>
 
 #include <hoot/js/PluginContext.h>
@@ -40,7 +41,7 @@ class ScriptMatchVisitor;
 /**
  * @sa ScriptMatch
  */
-class ScriptMatchCreator : public MatchCreator
+class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
 {
 public:
 
@@ -49,6 +50,11 @@ public:
   ScriptMatchCreator();
 
   virtual ~ScriptMatchCreator();
+
+  /**
+   * @see SearchRadiusProvider
+   */
+  virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e);
 
   /**
    * Not implemented.
@@ -83,10 +89,11 @@ private:
 
   Description _getScriptDescription(QString path) const;
 
-  boost::shared_ptr<ScriptMatchVisitor> _matchCandidateChecker;
-  double _worstCircularError;
+  boost::shared_ptr<ScriptMatchVisitor> _cachedScriptVisitor;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
   QMap<QString, Meters> _cachedCustomSearchRadii;
+
+  boost::shared_ptr<ScriptMatchVisitor> _getCachedVisitor(const ConstOsmMapPtr& map);
 };
 
 }

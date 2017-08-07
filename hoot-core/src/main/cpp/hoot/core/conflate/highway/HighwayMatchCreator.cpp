@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -71,7 +71,7 @@ HOOT_FACTORY_REGISTER(MatchCreator, HighwayMatchCreator)
 /**
  * Searches the specified map for any highway match potentials.
  */
-class HighwayMatchVisitor : public ElementVisitor
+class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
   /**

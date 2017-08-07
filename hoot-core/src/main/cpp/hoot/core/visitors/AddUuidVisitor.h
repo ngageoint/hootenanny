@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
  * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
  * into FilteredVisitor.
  */
-class AddUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class AddUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

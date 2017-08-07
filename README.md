@@ -24,34 +24,38 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * Create up-to-date routable transportation networks from multiple sources
 
 # Supported Geodata Types
-Hootenanny can conflate:
-* POIs
+**Hootenanny can conflate:**
+* Points of Interest (POIs)
 * Building polygons
 * Transportation polylines
 * Waterway polylines
 
 # Supported Data Formats
-Hootenanny can import from:
-* OpenStreetMap XML (.osm)
-* Shapefile (.shp)
+**Hootenanny can import from:**
 * ESRI File Geodatabase (.gdb)
-* Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
-* OpenStreetMap Protocol Buffers (.osm.pbf)
-* OpenStreetMap JSON file (.json; similar to Overpass JSON)
+* GeoJSON (.geojson) (M)
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
-* OpenStreetMap API Database (osmapidb://)
+* JSON file (.json; similar to Overpass JSON) (M)
+* OpenStreetMap XML (.osm) (M)
+* OpenStreetMap Protocol Buffers (.osm.pbf)
+* OpenStreetMap API Database (osmapidb://) (M)
+* Shapefile (.shp) (M)
+* Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
 
-Hootenanny can export to: 
-* OpenStreetMap XML file (.osm)
-* Shapefile (.shp)
+**Hootenanny can export to:** 
 * ESRI File Geodatabase (.gdb)
-* OpenStreetMap Protocol Buffers file (.osm.pbf)
-* OpenStreetMap JSON file (.json; similar to Overpass JSON)
+* GeoJSON (.geojson) (M)
 * Hootenanny API Database (hootapidb://)
-* OpenStreetMap API Database (osmapidb://)
+* JSON file (.json; similar to Overpass JSON) (M)
 * OpenStreetMap XML changeset file (.osc)
 * OpenStreetMap SQL changeset file (.osc.sql)
+* OpenStreetMap XML file (.osm) (M)
+* OpenStreetMap Protocol Buffers file (.osm.pbf) (M)
+* OpenStreetMap API Database (osmapidb://)
+* Shapefile (.shp) (M)
+
+(M) = format currently requires reading entire dataset into memory during processing
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
@@ -60,6 +64,8 @@ Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database 
 * Geonames
 * OSM
 * user defined "custom" translations 
+
+Additional translations are also provided.
 
 For custom translations, a specific mapping can be defined based on an uploaded dataset using a semi-automated Translation Assistant.  More detailed background on the translation capabilities of Hootenanny can be found in Hootenanny User Guide as well as specific examples from the UI in the Hootenanny User Interface Guide. These documents can accessed in your local Hootenanny instance in hoot/docs or on the [releases](https://github.com/ngageoint/hootenanny/releases) under each version e.g. hootenanny-0.2.22.tar.gz/docs. 
 

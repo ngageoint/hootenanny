@@ -4939,7 +4939,7 @@ ggdm30.rules = {
      ['WCC','1','waterway','stream'], // Channelized Stream
      ['WCC','2','waterway','braided_stream'], // Braided Stream
      ['WCC','3','waterway','gorge'], // Gorge
-     ['WCC','4','waterway','wadi'], // Wadi
+     ['WCC','4','wadi','yes'], // Wadi
      ['WCC','7','waterway','river'], // Normal Channel
      ['WCC','999','waterway','other'], // Other
 
@@ -6314,6 +6314,245 @@ ggdm30.rules = {
     ],
     // ##### End of intList #####
 
+    // ##### Start of swapListIn #####
+    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+    // but renamed in different features. We swap these so that there is only one
+    // set of rules needed in the One2One section.
+    // These get converted back on output - if we need to.
+    swapListIn : {
+        'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
+        'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+        'BA000_VDC':'ZHDP_VDC',
+        'BA000_VDR':'ZHDP_VDR',
+        'BC010_REF':'REF',
+        'BC010_TZP':'TZP',
+        'BC040_CAA':'CAA',
+        'BH010_TZP':'TZP',
+        'EOL':'BC040_EOL',
+        'BRF':'BC034_BRF',
+        'BRF2':'BC034_BRF2',
+        'COL':'BC040_COL',
+        'DKC':'ZHDP_DKC',
+        'DKC2':'ZHDP_DKC2',
+        'DKC3':'ZHDP_DKC3',
+        'HDP':'ZI025_HDP',
+        'HYP':'ZI024_HYP',
+        // 'LEN_':'LZN',
+        'LCN':'BC040_LCN',
+        'MEM':'ZI006_MEM',
+        'MLR':'BC040_MLR',
+        'MRT':'BC034_MRT',
+        'PFD':'PWA',
+        'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+        'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
+        'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+        'RCG':'ZI004_RCG',
+        'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
+        'SUR':'ZI026_SUR',
+        'WBD':'PWA',
+        'WD1':'ZI016_WD1',
+        'WTBB':'ZI024_WTBB',
+        'WTCA':'ZI024_WTCA',
+        'WTFE':'ZI024_WTFE',
+        'WTKK':'ZI024_WTKK',
+        'WTMN':'ZI024_WTMN',
+        'WTNA':'ZI024_WTNA',
+        'WTNO':'ZI024_WTNO',
+        'WTPO':'ZI024_WTPO',
+        'WTSI':'ZI024_WTSI',
+        'YWQ':'ZI024_YWQ',
+        'ZHBH_DCR':'ZHDP_DCR',
+        'ZHBH_SVC':'ZHDP_SVC',
+        'ZHBH_TEC':'ZHDP_TEC',
+        'ZHBH_TEC2':'ZHDP_TEC2',
+        'ZHBH_TEC3':'ZHDP_TEC3',
+        'ZHBH_VCD':'ZHDP_VCD',
+        'ZHBH_VDR':'ZHDP_VDR',
+        'ZI012_DCR':'ZHDP_DCR',
+        'ZI012_DKC':'ZHDP_DKC',
+        'ZI012_DKC2':'ZHDP_DKC2',
+        'ZI012_DKC3':'ZHDP_DKC3',
+        'ZI012_SVC':'ZHDP_SVC',
+        'ZI012_TEC':'ZHDP_TEC',
+        'ZI012_TEC2':'ZHDP_TEC2',
+        'ZI012_TEC3':'ZHDP_TEC3',
+        'ZI012_VDC':'ZHDP_VDC',
+        'ZI012_VDR':'ZHDP_VDR',
+        'ZI018_BRF':'BC034_BRF',
+        'ZI025_MAN':'MAN',
+        'ZI025_WLE':'WLE',
+        'ZI032_GUG':'GUG',
+        'ZI032_TOS':'TOS',
+        'ZI032_PYC':'PYC',
+        'ZI032_PYM':'PYM',
+        'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
+        'ZVH_VDT':'VDT'
+        },
+    // ##### End of swapListIn #####
+
+    // ##### Start of swapListOut #####
+    // Format is: <FCODE>:[<from>:<to>]
+    swapListOut : {
+        'AA010':['ZI014_PPO','PPO'], 'AA010':['ZI014_PPO2','PPO2'], 'AA010':['ZI014_PPO3','PPO3'],
+        'AA020':['ZI014_PPO','PPO'], 'AA020':['ZI014_PPO2','PPO2'], 'AA020':['ZI014_PPO3','PPO3'],
+        'AA040':['ZI014_PPO','PPO'], 'AA040':['ZI014_PPO2','PPO2'], 'AA040':['ZI014_PPO3','PPO3'],
+        'AA052':['ZI014_PPO','PPO'], 'AA052':['ZI014_PPO2','PPO2'], 'AA052':['ZI014_PPO3','PPO3'],
+        'AA054':['ZI014_PPO','PPO'], 'AA054':['ZI014_PPO2','PPO2'], 'AA054':['ZI014_PPO3','PPO3'],
+        'AB000':['ZI014_PBY','PBY'], 'AB000':['ZI014_PBY2','PBY2'], 'AB000':['ZI014_PBY3','PBY3'],
+        'AC060':['ZI014_PPO','PPO'], 'AC060':['ZI014_PPO2','PPO2'], 'AC060':['ZI014_PPO3','PPO3'],
+        'AD020':['ZI014_PPO','PPO'], 'AD020':['ZI014_PPO2','PPO2'], 'AD020':['ZI014_PPO3','PPO3'],
+        'AD025':['ZI014_PPO','PPO'], 'AD025':['ZI014_PPO2','PPO2'], 'AD025':['ZI014_PPO3','PPO3'],
+        'AJ050':['ZI014_PPO','PPO'], 'AJ050':['ZI014_PPO2','PPO2'], 'AJ050':['ZI014_PPO3','PPO3'],
+        'AL020':['ZI005_NFN','ZI005_NFN1'],
+        'AM010':['ZI014_PPO','PPO'], 'AM010':['ZI014_PPO2','PPO2'], 'AM010':['ZI014_PPO3','PPO3'],
+        'AM040':['ZI014_PRW','PRW'], 'AM040':['ZI014_PRW2','PRW2'], 'AM040':['ZI014_PRW3','PRW3'],
+        'AM060':['ZI014_PPO','PPO'], 'AM060':['ZI014_PPO2','PPO2'], 'AM060':['ZI014_PPO3','PPO3'],
+        'AM070':['ZI014_PPO','PPO'], 'AM070':['ZI014_PPO2','PPO2'], 'AM070':['ZI014_PPO3','PPO3'],
+        'AM071':['ZI014_PPO','PPO'], 'AM071':['ZI014_PPO2','PPO2'], 'AM071':['ZI014_PPO3','PPO3'],
+        'AM080':['ZI014_YWQ','YWQ'],
+        'AP010':['RIN_RTN','RTN'], 'AP010':['RIN_RTN2','RTN2'], 'AP010':['RIN_RTN3','RTN3'],
+        'AP055':['RIN_RTN','RTN'], 'AP055':['RIN_RTN2','RTN2'], 'AP055':['RIN_RTN3','RTN3'],
+        'AQ059':['ZI016_WD1','WD1'],
+        'AQ113':['ZI014_PPO','PPO'], 'AQ113':['ZI014_PPO2','PPO2'], 'AQ113':['ZI014_PPO3','PPO3'],
+        'AQ116':['ZI014_PPO','PPO'], 'AQ116':['ZI014_PPO2','PPO2'], 'AQ116':['ZI014_PPO3','PPO3'],
+        'AT005':['WLE','ZI025_WLE'],
+        'AT042':['GUG','ZI032_GUG'], 'AT042':['PYC','ZI032_PYC'], 'AT042':['PYM','ZI032_PYM'],
+        'AT042':['TOS','ZI032_TOS'], 'AT042':['CAB','AT005_CAB'],
+        'BA010':['ZHDP_VDR','BA000_VDR'],'BA010':['ZHDP_VDC','BA000_VDC'],
+        'BA030':['ZHDP_VDR','BA000_VDR'],'BA010':['ZHDP_VDC','BA000_VDC'],
+        'BB010':['ZI025_HDP','HDP'],
+        'BB155':['BC034_BRF','ZI018_BRF'],
+        'BC034':['BC034_BRF','BRF'], 'BC034':['BC034_BRF2','BRF2'], 'BC034':['BC010_REF','REF'],
+        'BC034':['BC010_TZP','TZP'], 'BC034':['BC034_MRT','MRT'],
+        'BC040':['BC040_EOL','EOL'], 'BC040':['BC010_REF','REF'], 'BC040':['BC040_COL','COL'],
+        'BC040':['BC040_MLR','MLR'], 'BC040':['BC010_TZP','TZP'],
+        'BC060':['BC040_COL','COL'], 'BC060':['CAA','BC040_CAA'],
+        'BC080':['ZHDP_VDR','ZHBH_VDR'], 'BC080':['ZHDP_DKC','ZHBH_DKC'], 'BC080':['ZHDP_DKC2','ZHBH_DKC2'],
+        'BC080':['ZHDP_DKC3','ZHBH_DKC3'], 'BC080':['ZHDP_DCR','ZHBH_DCR'], 'BC080':['ZHDP_VDC','ZHBH_VDC'],
+        'BC080':['ZHDP_SVC','ZHBH_SVC'],
+        'BC080':['ZHDP_TEC','ZHBH_TEC'], 'BC080':['ZHDP_TEC2','ZHBH_TEC2'], 'BC080':['ZHDP_TEC3','ZHBH_TEC3'],
+        'BD020':['ZHDP_TEC','ZHBH_TEC'], 'BD020':['ZHDP_TEC2','ZHBH_TEC2'], 'BD020':['ZHDP_TEC3','ZHBH_TEC3'],
+        'BD100':['WLE','ZI025_WLE'],
+        'BD115':['MAN','ZI025_MAN'],
+        'BD130':['ZHDP_TEC','ZHBH_TEC'], 'BD130':['ZHDP_TEC2','ZHBH_TEC2'], 'BD130':['ZHDP_TEC3','ZHBH_TEC3'],
+        'BE010':['ZHDP_VDR','ZI012_VDR'], 'BE010':['ZHDP_DKC','ZI012_DKC'], 'BE010':['ZHDP_DKC2','ZI012_DKC2'],
+        'BE010':['ZHDP_DKC3','ZI012_DKC3'], 'BE010':['ZHDP_DCR','ZI012_DCR'],
+        'BE010':['ZHDP_VDC','ZI012_VDC'], 'BE010':['ZHDP_SVC','ZI012_SVC'],
+        'BE010':['ZHDP_TEC','ZI012_TEC'], 'BE010':['ZHDP_TEC2','ZI012_TEC2'], 'BE010':['ZHDP_TEC3','ZI012_TEC3'],
+        'BE020':['ZI025_HDP','HDP'],
+        'BG010':['ZI025_HDP','HDP'],
+        'BH012':['CAA','BH010_CAA'],
+        'BH020':['ZI025_HDP','HDP'],
+        'BH030':['ZI025_HDP','HDP'],
+        'BH051':['ZI014_PPO','PPO'], 'BH051':['ZI014_PPO2','PPO2'], 'BH051':['ZI014_PPO3','PPO3'],
+        'BH070':['PWA','WBD'],
+        'BI030':['ZI025_HDP','HDP'],
+        'BI044':['ZI025_HDP','HDP'],
+        'BI045':['ZI025_HDP','HDP'],
+        'DB029':['FFN','ZI071_FFN'], 'DB029':['FFN2','ZI071_FFN2'], 'DB029':['FFN3','ZI071_FFN3'],
+        'DB070':['ZI025_HDP','HDP'],
+        'ED010':['ZI024_HYP','HYP'],
+        'ED020':['ZI025_HDP','HDP'],
+        'FC034':['ZI025_HDP','HDP'],
+        'FC165':['ZI025_HDP','HDP'],
+        'FC177':['ZI025_HDP','HDP'],
+        'GB013':['BC040_COL','COL'], 'GB013':['BC040_LCN','LCN'],
+        'GB045':['ZI019_ASU','ASU'], 'GB045':['ZI019_ASU2','ASU2'], 'GB045':['ZI019_ASU3','ASU3'],
+        'NM020':['ZI025_HDP','HDP'],
+        'ZD070':['ZI024_WTBB','WTBB'], 'ZD070':['ZI024_WTCA','WTCA'], 'ZD070':['ZI024_WTFE','WTFE'],
+        'ZD070':['ZI024_WTKK','WTKK'], 'ZD070':['ZI024_WTMN','WTMN'], 'ZD070':['ZI024_WTNA','WTNA'],
+        'ZD070':['ZI024_WTNO','WTNO'], 'ZD070':['ZI024_WTPO','WTPO'], 'ZD070':['ZI024_WTSI','WTSI'],
+        'ZI031':['ZI006_MEM','MEM'], 'ZI031':['ZI004_RCG','RCG'],
+        'ZI026':['ZI026_SUR','SUR']
+        },
+    // ##### End of swapListOut #####
+
+    // ##### Start of closureList #####
+    closureList : {
+        'AQTC':['AQTL','AQTU'],
+        'AYRC':['AYRL','AYRU'],
+        'BPWHAC':['BPWHAL','BPWHAU'],
+        'BPWHBC':['BPWHBL','BPWHBU'],
+        'BPWSAC':['BPWSAL','BPWSAU'],
+        'BPWSBC':['BPWSBL','BPWSBU'],
+        'BWVCAC':['BWVCAL','BWVCAU'],
+        'BWVCBC':['BWVCBL','BWVCBU'],
+        'DMBC':['DMBL','DMBU'],
+        'DPAC':['DPAL','DPAU'],
+        'GSGCHC':['GSGCHL','GSGCHU'],
+        'GSGCLC':['GSGCLL','GSGCLU'],
+        'PWAC':['PWAL','PWAU'],
+        'RMWC':['RMWL','RMWU'],
+        'SDCC':['SDCL','SDCU'],
+        'SDSC':['SDSL','SDSU'],
+        'SGCC':['SGCL','SGCU'],
+        'TSCC':['TSCL','TSCU'],
+        'WDAC':['WDAL','WDAU'],
+        'ZI026_CTUC':['ZI026_CTUL','ZI026_CTUU']
+        },
+    // ##### End of closureList #####
+
+    // ##### Start of fCodeMap #####
+    // This is a map of FCODE's and filenames
+    fCodeMap : [
+        ['AF010', ['af010','smokestack_p']], // Smokestack
+        ['AH025', ['ah025','engineered_earthwork_s','engineered_earthwork_p']], // Engineered Earthwork
+        ['AH060', ['ah060','underground_bunker_s','underground_bunker_p']], // Underground Bunker
+        ['AL010', ['al010','facility_s','facility_p']], // Facility
+        ['AL013', ['al013','building_s','building_p']], // Building
+        ['AL018', ['al018','building_superstructure_s','building_superstructure_c','building_superstructure_p']], // Building Superstructure
+        ['AL020', ['al020','built-up_area_s','built-up_area_p']], // Built up area
+        ['AL030', ['al030','cemetery_s','cemetery_p']], // Cemetary
+        ['AL070', ['al070','fence_c']], // Fence
+        ['AL099', ['al099','hut_p']], // Hut
+        ['AL105', ['al105','settlement_s','settlement_p']], // Settlement
+        ['AL130', ['al130','memorial_monument_s','memorial_monument_p']], // Memorial Monument
+        ['AL200', ['al200','ruins_s','ruins_p']], // Ruins
+        ['AL208', ['al208','shanty_town_s','shanty_town_p']], // Shanty Town
+        ['AL241', ['al241','tower_s','tower_p']], // Tower
+        ['AL260', ['al260','wall_c']], // Wall
+        ['AM080', ['am080','water_tower_p','water_tower_s']], // Water Tower
+        ['AN010', ['an010','railway_c']], // Railway
+        ['AN050', ['an050','railway_sidetrack_c']], // Railway Sidetrack
+        ['AN060', ['an060','railway_yard_s']], // Railway Yard
+        ['AN075', ['an075','railway_turntable_p','railway_turntable_p']], // Railway Turntable
+        ['AN076', ['an076','roundhouse_s','roundhouse_p']], // Roundhouse
+        ['AP010', ['ap010','cart_track_c']], // Cart Track
+        ['AP020', ['ap020','road_interchange_p']], // Interchange
+        ['AP030', ['ap030','road_c']], // Road
+        ['AP040', ['ap040','gate_c','gate_p']], // Gate
+        ['AP041', ['ap041','vehicle_barrier_c','vehicle_barrier_p']], // Vehicle Barrier
+        ['AP050', ['ap050','trail_c']], // Trail
+        ['AQ040', ['aq040','bridge_c','bridge_p']], // Bridge
+        ['AQ045', ['aq045','bridge_span_c','bridge_span_p']], // Bridge Span
+        ['AQ065', ['aq065','culvert_c','culvert_p']], // Culvert
+        ['AQ070', ['aq070','ferry_crossing_c']], // Ferry Crossing
+        ['AQ095', ['aq095','tunnel_mouth_p']], // Tunnel Mouth
+        ['AQ113', ['aq113','pipeline_c']], // Pipeline
+        ['AQ125', ['aq125','transportation_station_s','transportation_station_p']], // Transportation Station
+        ['AQ130', ['aq130','tunnel_c']], // Tunnel
+        ['AQ140', ['aq140','vehicle_lot_s']], // Vehicle Lot
+        ['AQ141', ['aq141','parking_garage_s','parking_garage_p']], // Parking Garage
+        ['AQ170', ['aq170','motor_vehicle_station_s','motor_vehicle_station_p']], // Motor Vehicle Station
+        ['AT010', ['at010','dish_aerial_p']], // Dish Aerial
+        ['AT042', ['at042','pylon_p']], // Pylon
+        ['BH010', ['bh010','aqueduct_s','aqueduct_c']], // Aqueduct
+        ['BH020', ['bh020','canal_s','canal_c']], // Canal
+        ['BH030', ['bh030','ditch_s','ditch_c']], // Ditch
+        ['BH070', ['bh070','ford_c','ford_p']], // Ford
+        ['BH082', ['bh082','inland_waterbody_s','inland_waterbody_p']], // Inland Waterbody
+        ['BH140', ['bh140', 'river_s','river_c']], // River
+        ['BH170', ['bh170','natural_pool_p']], // Natural Pool
+        ['BH230', ['bh230', 'water_well_p','water_well_s']], // Water Well
+        ['BI010', ['bi010', 'cistern_p']], // Cistern
+        ['DB070', ['db070','cut_c']], // Cut
+        ['DB150', ['db150','mountain_pass_p']], // Mountain Pass
+        ['GB050', ['gb050','aircraft_revetment_c']], // Aircraft Revetment
+        ['ZD040', ['zd040','named_location_s','named_location_c','named_location_p']], // Named Location
+        ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
+    ],
+    // ##### End of fCodeMap #####
+
     // ##### Start of ge4List #####
     // This list is for validateing the XXX_GE4XX values
     ge4List : {
@@ -6603,7 +6842,6 @@ ggdm30.rules = {
         'other':'other', // Other
     },
     // ##### End of ge4List #####
-
 
     // ##### Start of Thematic Group Rules #####
     thematicGroupList : {
@@ -7228,7 +7466,6 @@ ggdm30.rules = {
         'PZD045':'InformationPnt',  // ANNOTATED_LOCATION_P
         'PZD070':'HydrographyPnt',  // WATER_MEASUREMENT_LOCATION_P
        }, // End of thematicGroupList
-
     // ##### End of Thematic Group Rules #####
 
     // ##### Start of ESRI FCSubtype Rules #####

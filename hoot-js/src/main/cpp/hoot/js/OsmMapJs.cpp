@@ -247,7 +247,7 @@ Handle<Value> OsmMapJs::visit(const Arguments& args)
     }
     else
     {
-      boost::shared_ptr<ElementVisitor> v =
+      boost::shared_ptr<ConstElementVisitor> v =
           ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
 
       map->getMap()->visitRw(*v);

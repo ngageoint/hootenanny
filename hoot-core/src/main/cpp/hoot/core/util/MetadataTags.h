@@ -76,6 +76,8 @@ public:
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
+  inline static const QString HootPoiPolygonPoisMerged(){ return "hoot:poipolygon:poismerged"; }
+
   inline static const QString HootReviewTagPrefix()     { return "hoot:review:"; }
   inline static const QString HootReviewChoices()       { return "hoot:review:choices"; }
   inline static const QString HootReviewMembers()       { return "hoot:review:members"; }

@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveMissingElementsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveMissingElementsVisitor)
 
 RemoveMissingElementsVisitor::RemoveMissingElementsVisitor()
 {
