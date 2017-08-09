@@ -9,7 +9,7 @@
 
     <!--
         Jersey Framework looks specifically for applicationContext.xml on the classpath
-        when Jersey-Spring integration is enabled.
+        when Jersey-Spring integration is enabled.  webapp/WEB-INF/web.xml explicitly references this file.
     -->
 
     <context:annotation-config/>
