@@ -50,12 +50,13 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * JSON file (.json; similar to Overpass JSON) (M)
 * OpenStreetMap XML changeset file (.osc)
 * OpenStreetMap SQL changeset file (.osc.sql)
-* OpenStreetMap XML file (.osm) (M)
+* OpenStreetMap XML file (.osm) (*)
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
 * Shapefile (.shp) (M)
 
-(M) = format currently requires reading entire dataset into memory during processing
+(M) = format requires reading entire dataset into memory during processing
+(*) = format requires reading entire dataset into memory during processing only if element ID output is sorted
 
 # Tag Schemas
 Hootenanny leverages the OSM key value pair tag concept and PostgreSQL database structure to support translation between various data schemas.  By default, Hootenanny supports automated schema conversion between: 
@@ -73,7 +74,7 @@ For custom translations, a specific mapping can be defined based on an uploaded 
 Instructions to launch an Ubuntu Hootenanny virtual machine using [Vagrant](https://www.vagrantup.com/) may
 be found [here](https://github.com/ngageoint/hootenanny/blob/master/VAGRANT.md).
 
-An RPM based installation is also available for CentOS 6.7. 
+An RPM based installation is also available for CentOS 6.x.  If you simply want to install and run Hootenanny, this is the recommended and easiest method.  The instructions for installing from RPM can be found [here](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc). 
 
 # Documentation
 Please read the documentation included with the latest release for details on installing and using Hootenanny, as well as the algorithmic concepts behind the software.

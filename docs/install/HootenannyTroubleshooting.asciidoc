@@ -127,17 +127,17 @@ installations:
 	** sudo rm -f /var/lib/tomcat8/webapps/hoot*-services*.war
 	** sudo rm -rf /var/lib/tomcat8/webapps/hoot*-services*
 
-* *Do you want to see more granular services log output or redirect it to a file?* --> Edit +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/class/log4j.xml+ . See the log4j documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
+* *Do you want to see more granular services log output or redirect it to a file?* --> Edit +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/log4j2.xml+ . See the log4j2 documentation for details on how to edit the file. Restart Tomcat after any changes made to the file.
 
 * *Problems reading/writing from the database when using hoot?* --> Verify the database credentials in:
 	**  +$HOOT_HOME/conf/database/DatabaseConfigLocal.sh+
 	**  +$HOOT_HOME/conf/database/DatabaseConfigDefault.sh+
-	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+
+	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/db.properties+
 	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+
 	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+
-	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/spring-database.xml+
-		. maxActive=90
-		. maxIdle=30
+	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/db.properties+
+		. HOOTAPI_CONNECTION_POOL_MAX_ACTIVE=90
+		. HOOTAPI_CONNECTION_POOL_MAX_IDLE=30
 	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace+ has read and write permission so it can create WFS store config xml files.
 
 * *Having problems with the WFS?* -->

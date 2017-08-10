@@ -39,7 +39,7 @@ public class ZIPFileCommand extends ExternalCommand {
      * Compresses file into a ZIP file using system 'zip' utility
      *
      * @param targetZIP ZIP file to produce
-     * @param workDir present working directory (PWD) during execution
+     * @param workDir work directory during execution
      * @param file file to zip.  This file must be a child of workDir
      * @param caller class that identifies caller of the command
      */

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny">
+    <node visible="true" id="-1559825" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9109692000000038" lon="-104.7145693000000080">
+        <tag k="note" v="1-a"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="100"/>
+    </node>
+    <node visible="true" id="-1559824" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8467218000000045" lon="-104.8852148000000000">
+        <tag k="poi" v="yes"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Red Rock Canyon"/>
+        <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-1559823" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9239774000000054" lon="-104.8439481000000058">
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="50"/>
+    </node>
+    <node visible="true" id="-1559822" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8580512000000056" lon="-104.7869287000000043">
+        <tag k="place" v="city"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Colorado Springs"/>
+        <tag k="error:circular" v="20000"/>
+    </node>
+    <node visible="true" id="-1559821" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8745941000000030" lon="-104.7196458000000092">
+        <tag k="note" v="1-e"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-1559820" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8618556999999996" lon="-104.8786905000000047">
+        <tag k="poi" v="yes"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Garden of the Gods"/>
+        <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-1559819" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8940860000000015" lon="-104.7174958000000089">
+        <tag k="note" v="1-b"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="200"/>
+    </node>
+    <node visible="true" id="-1559818" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8571566000000033" lon="-104.9070371000000108">
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="error:circular" v="1500"/>
+    </node>
+    <node visible="true" id="-1559817" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8751955000000038" lon="-104.7179399000000046">
+        <tag k="note" v="1-d"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-1559816" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885119000000046" lon="-104.7175564000000065">
+        <tag k="note" v="1-c"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Starbucks"/>
+        <tag k="amenity" v="cafe"/>
+        <tag k="error:circular" v="1000"/>
+    </node>
+    <node visible="true" id="-1559815" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8593025000000054" lon="-104.9197586000000086">
+        <tag k="place" v="town"/>
+        <tag k="poi" v="yes"/>
+        <tag k="name" v="Manitou Springs"/>
+        <tag k="error:circular" v="2000"/>
+    </node>
+    <bounds minlat="38.8467218" minlon="-104.9197586" maxlat="38.92397740000001" maxlon="-104.7145693"/>
+</osm>
