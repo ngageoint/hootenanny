@@ -546,9 +546,10 @@ SOURCES += \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.cpp \
     src/main/cpp/hoot/core/cmd/CalculateTilesCmd.cpp \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.cpp \
-				src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
-				src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.cpp \
-				src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/CalculateHashVisitor.cpp \
+    src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.cpp \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
@@ -1087,9 +1088,10 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
-				src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
-				src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.h \
-				src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h \
+    src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
+    src/main/cpp/hoot/core/visitors/CalculateHashVisitor.h \
+    src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.h \

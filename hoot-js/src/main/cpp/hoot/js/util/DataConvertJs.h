@@ -114,7 +114,7 @@ void toCpp(v8::Handle<v8::Value> v, std::pair<T, U>& o)
  */
 inline void toCpp(v8::Handle<v8::Value> v, QString& s)
 {
-  if (v.IsEmpty())
+  if (v.IsEmpty() || v->IsUndefined() || v->IsNull())
   {
     throw IllegalArgumentException("Expected a string. Got an empty value.");
   }
