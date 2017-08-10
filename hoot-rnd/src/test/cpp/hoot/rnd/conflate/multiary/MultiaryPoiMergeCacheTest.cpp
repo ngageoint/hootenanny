@@ -58,15 +58,15 @@ public:
       "{                                      \n"
       " 'elements': [                         \n"
       " { 'type': 'node', 'id': -1, 'lat': 2.0, 'lon': -3.0, \n"
-      "   'tags': { 'amenity': 'pub', 'name': 'my restaurant' } },\n"
+      "   'tags': { 'amenity': 'pub', 'name': 'my restaurant', 'hoot:hash': 'AAA' } },\n"
       " { 'type': 'node', 'id': -2, 'lat': 3.0, 'lon': -3.0, \n"
-      "   'tags': { 'amenity': 'pub', 'name': 'My Restaurant' } },\n"
+      "   'tags': { 'amenity': 'pub', 'name': 'My Restaurant', 'hoot:hash': 'BBB' } },\n"
       " { 'type': 'node', 'id': -3, 'lat': 14.0, 'lon': -3.0, \n"
-      "   'tags': { 'amenity': 'pub', 'name': 'Not the same' } },\n"
+      "   'tags': { 'amenity': 'pub', 'name': 'Not the same', 'hoot:hash': 'CCC' } },\n"
       " { 'type': 'node', 'id': -4, 'lat': 14.0, 'lon': -3.0, \n"
-      "   'tags': { 'place': 'locality', 'name': 'Not the same' } },\n"
+      "   'tags': { 'place': 'locality', 'name': 'Not the same', 'hoot:hash': 'DDD' } },\n"
       " { 'type': 'node', 'id': -5, 'lat': 14.0, 'lon': -3.0, \n"
-      "   'tags': { 'military': 'yes', 'name': 'Not the same' } }\n"
+      "   'tags': { 'military': 'yes', 'name': 'Not the same', 'hoot:hash': 'EEE' } }\n"
       "]                                      \n"
       "}                                      \n";
 
@@ -112,8 +112,8 @@ public:
       // -1 is the first element by input number.
       HOOT_STR_EQUALS(-1, out->mergedElement->getId());
       // while the IDs are the same, the merged element should be a new instance.
-      HOOT_STR_EQUALS("name = my restaurant\namenity = pub\n", map->getNode(-1)->getTags());
-      HOOT_STR_EQUALS("alt_name = My Restaurant;Not the same\nname = my restaurant\namenity = pub\n",
+      HOOT_STR_EQUALS("hoot:hash = AAA\nname = my restaurant\namenity = pub\n", map->getNode(-1)->getTags());
+      HOOT_STR_EQUALS("hoot:hash = \nsource:hash = AAA;BBB;CCC\nalt_name = My Restaurant;Not the same\nname = my restaurant\namenity = pub\n",
         out->mergedElement->getTags());
     }
 

@@ -126,6 +126,10 @@
         "import": "historic.json"
     },
     {
+        "#": "hoot.json conflicts with a file in the conf dir and causes hadoop tests to fail.",
+        "import": "hoot_tags.json"
+    },
+    {
         "import": "industrial.json"
     },
     {
