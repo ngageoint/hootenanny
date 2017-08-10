@@ -71,10 +71,10 @@ public:
   //reading
 
   /**
-   * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database.
+   * @see ApiDb::selectElements
    */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
+                                                      const bool sorted = false);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way

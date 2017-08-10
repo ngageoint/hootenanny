@@ -475,7 +475,8 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   long elementCount = 0;
 
   // contact the DB and select all
-  boost::shared_ptr<QSqlQuery> elementResultsIterator = _getDatabase()->selectElements(elementType);
+  boost::shared_ptr<QSqlQuery> elementResultsIterator =
+    _getDatabase()->selectElements(elementType, ConfigOptions().getApiDbReaderSortById());
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end (see comments in _resultToElement)

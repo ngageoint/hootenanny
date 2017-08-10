@@ -494,7 +494,8 @@ boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType,
+                                                      const bool sorted)
 {
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
@@ -504,6 +505,11 @@ boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& element
 
   // sort them in descending order, set limit and offset
   sql += " WHERE visible = true";
+
+  if (sorted)
+  {
+    sql += " ORDER BY id ASCENDING";
+  }
 
   _selectElementsForMap->prepare(sql);
 

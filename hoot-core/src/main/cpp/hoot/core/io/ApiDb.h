@@ -142,9 +142,18 @@ public:
   virtual void close() = 0;
 
   /**
-   * Returns a results iterator to all OSM elements for a given element type in the database.
+   *
    */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType) = 0;
+
+  /**
+   * Returns a results iterator to all OSM elements for a given element type in the database.
+   *
+   * @param elementType the type of element to return
+   * @param sorted if true, elements are sorted by ID
+   * @return a result iterator to the elements
+   */
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
+                                                      const bool sorted = false) = 0;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way

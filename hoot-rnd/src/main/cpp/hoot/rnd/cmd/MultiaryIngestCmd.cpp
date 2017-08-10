@@ -130,6 +130,8 @@ public:
       }
     }
 
+    conf().set(ConfigOptions().getApiDbReaderSortByIdKey(), true);
+
     for (int i = 0; i < newDataInputs.size(); i++)
     {
       const QString newDataInput = newDataInputs[i];
@@ -140,14 +142,15 @@ public:
         "Streaming data ingest from " << newDataInput << " to database layer: " <<
         existingDbLayerOutput << " and changeset: " << changesetOutput << "...");
 
+      //If the user specified the input was already sorted, we believe it and move on.  The
+      //changeset derivation will fail miserably if it wasn't.
       QString sortedNewDataInput;
-      if (sorted[i].toLower() == "true")
+      if (sorted[i].toLower() == "true")  //TODO: if pbf, check pbf format flag
       {
         sortedNewDataInput = newDataInput;
       }
       else
       {
-        //TODO: if pbf, check pbf format flag
         //TODO: implement file based element sorter which returns the sorted element file output
         //path
         //sortedNewDataInput = ElementSorter.sort(input);
@@ -161,7 +164,6 @@ public:
       boost::shared_ptr<PartialOsmMapReader> existingDbLayerReader =
         boost::dynamic_pointer_cast<PartialOsmMapReader>(
           OsmMapReaderFactory::getInstance().createReader(existingDbLayerOutput));
-      //TODO: the db contents have to get sorted somehow too??
       existingDbLayerReader->open(existingDbLayerOutput);
 
       ChangesetDeriverPtr changesetDeriver(
@@ -201,6 +203,10 @@ public:
       existingDbLayerReader->finalizePartial();
       existingDbLayerWriter->finalizePartial();
       changesetFileWriter->finalizePartial();
+
+      LOG_INFO(
+        "Ingest complete for input: " << newDataInput << ", output database layer: " <<
+        existingDbLayerOutput << ", and output changeset: " << changesetOutput << "...");
     }
 
     return 0;

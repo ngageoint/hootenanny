@@ -1161,13 +1161,18 @@ long HootApiDb::numElements(const ElementType& elementType)
   return result;
 }
 
-boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
+                                                       const bool sorted)
 {
   const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
   QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType));
+  if (sorted)
+  {
+    sql += " ORDER BY id ASCENDING";
+  }
   LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
 
   _selectElementsForMap->prepare(sql);
