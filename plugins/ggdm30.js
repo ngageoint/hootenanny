@@ -50,7 +50,7 @@ ggdm30 = {
         // Add empty "extra" feature layers if needed
         if (config.getOgrNoteExtra() == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
 
-        // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
+        // Build the GGDM fcode/attrs lookup table. Note: This is <GLOBAL>
         ggdmAttrLookup = translate.makeAttrLookup(ggdm30.rawSchema);
 
         // Debug:
@@ -235,7 +235,7 @@ ggdm30 = {
         if (attrList != undefined)
         {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (config.getOgrDebugDumpvalidate() == 'true')
+            if (ggdm30.config.OgrDebugDumpvalidate == 'true')
             {
                 for (var val in attrs)
                 {
@@ -553,7 +553,7 @@ ggdm30 = {
             translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], ggdm30.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], ggdm30.lookup, ggdm30.fcodeLookup);
+            translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], ggdm30.lookup, ggdm30.fcodeLookup);
 
             // post processing
             ggdm30.applyToOgrPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
@@ -564,7 +564,7 @@ ggdm30 = {
         return returnData;
     }, // End manyFeatures
 
-    // Doesn't do much but saves typing the same code out a few times in the to NFDD Pre Processing
+    // Doesn't do much but saves typing the same code out a few times in the to GGDM Pre Processing
     fixTransType : function(tags)
     {
         if (tags.railway)
@@ -801,6 +801,7 @@ ggdm30 = {
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
             //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
+            ["t.product && t.man_made == 'storage_tank'","t.content = t.product; delete t.product"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
@@ -824,8 +825,12 @@ ggdm30 = {
             ggdm30.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,ggdm30.osmPostRules);
+        //translate.applyComplexRules(tags,attrs,ggdm30.osmPostRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = ggdm30.osmPostRules.length; i < rLen; i++)
+        {
+            if (ggdm30.osmPostRules[i][0](tags)) ggdm30.osmPostRules[i][1](tags,attrs);
+        }
 
         // ##############
 
@@ -1071,8 +1076,9 @@ ggdm30 = {
         {
         // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
-            ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
+            ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
             ["t.diplomatic && t.amenity == 'embassy'","delete t.amenity"],
@@ -1101,6 +1107,7 @@ ggdm30 = {
             // ["t.landuse == 'meadow'","a.F_CODE = 'EB010'; t['grassland:type'] = 'meadow';"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
+            ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
@@ -1127,12 +1134,16 @@ ggdm30 = {
             ["t.waterway == 'riverbank'","t.waterway = 'river'"]
             ];
 
-            ggdm30.preRules = translate.buildComplexRules(rulesList);
+            ggdm30.tdsPreRules = translate.buildComplexRules(rulesList);
         }
 
         // Apply the rulesList.
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,ggdm30.preRules);
+        //translate.applyComplexRules(tags,attrs,ggdm30.tdsPreRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = ggdm30.tdsPreRules.length; i < rLen; i++)
+        {
+            if (ggdm30.tdsPreRules[i][0](tags)) ggdm30.tdsPreRules[i][1](tags,attrs);
+        }
 
         // Fix up OSM 'walls' around facilities
         if (tags.barrier == 'wall' && geometryType == 'Area')
@@ -1479,6 +1490,7 @@ ggdm30 = {
 
     applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
+
         // Sort out :2, :3 attributes
         for (var i in attrs)
         {
@@ -1495,14 +1507,19 @@ ggdm30 = {
         // Inland Water Body (BH082) also covers a lot of features
         if (attrs.IWT && !(attrs.F_CODE)) attrs.F_CODE = 'BH082';
 
-
         // The follwing bit of ugly code is to account for the specs haveing two different attributes
         // with similar names and roughly the same attributes. Bleah!
         // Shorter but more ugly version of a set of if..else if statements
-        if (ggdm30.rules.swapListOut[attrs.F_CODE] && attrs[ggdm30.rules.swapListOut[attrs.F_CODE][0]])
+        if (ggdm30.rules.swapListOut[attrs.F_CODE])
         {
-            attrs[ggdm30.rules.swapListOut[attrs.F_CODE][1]] = attrs[ggdm30.rules.swapListOut[attrs.F_CODE][0]];
-            delete attrs[ggdm30.rules.swapListOut[attrs.F_CODE][0]];
+            for (var i in ggdm30.rules.swapListOut[attrs.F_CODE])
+            {
+                if (i in attrs)
+                {
+                    attrs[ggdm30.rules.swapListOut[attrs.F_CODE][i]] = attrs[i];
+                    delete attrs[i]
+                }
+            }
         }
 
         // Sort out the UUID
@@ -1725,6 +1742,15 @@ ggdm30 = {
     {
         tags = {};  // The final output Tag list
 
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (ggdm30.config == undefined)
+        {
+            ggdm30.config = {};
+            ggdm30.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+        }
+
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
         {
@@ -1802,10 +1828,10 @@ ggdm30 = {
         ggdm30.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
-        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (ggdm30.config.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (ggdm30.config.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedAttrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
@@ -1820,13 +1846,27 @@ ggdm30 = {
 
     // This gets called by translateToOGR and is where the main work gets done
     // We get Tags and return Attrs and a tableName
-    // This is the main routine to convert _TO_ NFDD
+    // This is the main routine to convert _TO_ GGDM
     toOgr : function(tags, elementType, geometryType)
     {
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
         attrs = {}; // The output attributes
         attrs.F_CODE = ''; // Initial setup
+
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (ggdm30.config == undefined)
+        {
+            ggdm30.config = {};
+            ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            ggdm30.config.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
+            ggdm30.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
+            ggdm30.config.OgrNoteExtra = config.getOgrNoteExtra();
+            ggdm30.config.OgrSplitO2s = config.getOgrSplitO2s();
+            ggdm30.config.OgrThematicStructure = config.getOgrThematicStructure();
+            ggdm30.config.OgrThrowError = config.getOgrThrowError();
+        }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
         if (ggdm30.rawSchema == undefined)
@@ -1836,7 +1876,7 @@ ggdm30 = {
 
         // Start processing here
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (ggdm30.config.OgrDebugDumptags == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -1922,7 +1962,7 @@ ggdm30 = {
 
         // one 2 one: we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
-        translate.applyNfddOne2One(notUsedTags, attrs, ggdm30.lookup, ggdm30.fcodeLookup);
+        translate.applyTdsOne2One(notUsedTags, attrs, ggdm30.lookup, ggdm30.fcodeLookup);
 
         // Post Processing.
         // We send the original list of tags and the list of tags we haven't used yet.
@@ -1930,14 +1970,14 @@ ggdm30 = {
         ggdm30.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (config.getOgrDebugDumptags() == 'true')
+        if (ggdm30.config.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedTags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')
+        if (Object.keys(notUsedTags).length > 0 && ggdm30.config.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -1956,7 +1996,7 @@ ggdm30 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true')
+            if (ggdm30.config.OgrDebugDumptags == 'true')
             {
                 var kList = Object.keys(attrs).sort()
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -1971,7 +2011,7 @@ ggdm30 = {
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false') 
+            if (str.length < 255 || ggdm30.config.OgrSplitO2s == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
                 attrs = {tag1:str};
@@ -2013,14 +2053,14 @@ ggdm30 = {
 
                 // Now set the FCSubtype.
                 // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                if (config.getOgrEsriFcsubtype() == 'true')
+                if (ggdm30.config.OgrEsriFcsubtype == 'true')
                 {
                     returnData[i]['attrs']['FCSUBTYPE'] = ggdm30.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                 }
 
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
                 // If we are using the Thematic structre, fill the rest of the unused attrs in the schema
-                if (config.getOgrThematicStructure() == 'true')
+                if (ggdm30.config.OgrThematicStructure == 'true')
                 {
                     returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
                     ggdm30.validateTDSAttrs(gFcode, returnData[i]['attrs']);
@@ -2032,7 +2072,7 @@ ggdm30 = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && ggdm30.config.OgrNoteExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -2060,7 +2100,7 @@ ggdm30 = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (ggdm30.config.OgrDebugDumptags == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {

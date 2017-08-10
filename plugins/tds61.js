@@ -37,7 +37,7 @@ tds61 = {
     // getDbSchema - Load the standard schema or modify it into the TDS structure.
     getDbSchema: function() {
         tds61.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-        tds61.nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+        tds61.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         tds61.rawSchema = tds61.schema.getDbSchema();
@@ -68,12 +68,12 @@ tds61 = {
         } // End For tds61.rawSchema.length
      */
 
-        // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
-        tds61.nfddAttrLookup = translate.makeAttrLookup(tds61.rawSchema);
+        // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
+        tds61.AttrLookup = translate.makeAttrLookup(tds61.rawSchema);
 
         // Debug:
-        // print("tds61.nfddAttrLookup");
-        // translate.dumpLookup(tds61.nfddAttrLookup);
+        // print("tds61.AttrLookup");
+        // translate.dumpLookup(tds61.AttrLookup);
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds61.rawSchema
@@ -237,7 +237,7 @@ tds61 = {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
         // This is quicker than going through the Schema due to the way the Schema is arranged
-        var attrList = tds61.nfddAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+        var attrList = tds61.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
         var othList = {};
 
@@ -250,7 +250,7 @@ tds61 = {
         if (attrList != undefined)
         {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (config.getOgrDebugDumpvalidate() == 'true')
+            if (tds61.config.OgrDebugDumpvalidate == 'true')
             {
         	    for (var val in attrs)
         	    {
@@ -419,12 +419,12 @@ tds61 = {
     validateTDSAttrs: function(gFcode, attrs) {
 
         var tdsAttrList = tdsAttrLookup[tds61.rules.thematicGroupList[gFcode]];
-        var nfddAttrList = tds61.nfddAttrLookup[gFcode];
+        var AttrList = tds61.AttrLookup[gFcode];
 
         for (var i = 0, len = tdsAttrList.length; i < len; i++)
         {
-            if (nfddAttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
-            //if (nfddAttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+            if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+            //if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
         }
     }, // End validateTDSAttrs
 
@@ -560,7 +560,7 @@ tds61 = {
         for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
-            tds61.applyToNfddPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
+            tds61.applyToTdsPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
@@ -568,10 +568,10 @@ tds61 = {
             translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds61.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup);
+            translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup);
 
             // post processing
-            tds61.applyToNfddPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
+            tds61.applyToTdsPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
             returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
         }
@@ -579,7 +579,7 @@ tds61 = {
         return returnData;
     }, // End manyFeatures
 
-    // Doesn't do much but saves typing the same code out a few times in the to NFDD Pre Processing
+    // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
     fixTransType : function(tags)
     {
         if (tags.railway)
@@ -621,12 +621,14 @@ tds61 = {
 
         for (var col in attrs)
         {
-            // Find an FCODE
-            if (col in tds61.fcodeLookup['F_CODE'])
-            {
-                attrs.F_CODE = col;
-                delete attrs[col];
+            // Sort out FCODE funkyness:  f_CODE, F_Code etc
+            var tKey = col.toLowerCase();
+            tKey = tKey.replace(/\s/g, '').replace(/_/g, '');;
 
+            if (tKey == 'fcode' && col !== 'F_CODE')
+            {
+                attrs.F_CODE = attrs[col];
+                delete attrs[col];
                 continue;
             }
 
@@ -705,10 +707,10 @@ tds61 = {
             }
 
             // Now see if we need to swap attr names
-            if (col in tds61.rules.swapList)
+            if (col in tds61.rules.swapListIn)
             {
-                // print('Swapped: ' + tds61.rules.swapList[i]); // debug
-                attrs[tds61.rules.swapList[col]] = attrs[col];
+                // print('Swapped: ' + tds61.rules.swapListIn[i]); // debug
+                attrs[tds61.rules.swapListIn[col]] = attrs[col];
                 delete attrs[col];
                 continue;
             }
@@ -877,6 +879,7 @@ tds61 = {
             //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
+            ["t.product && t.man_made == 'storage_tank'","t.content = t.product; delete t.product"],
             ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
             ["t.pylon =='yes' && t['cable:type'] == 'cableway'"," t.aerialway = 'pylon'"],
             ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
@@ -896,8 +899,12 @@ tds61 = {
             tds61.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,tds61.osmPostRules);
+        // translate.applyComplexRules(tags,attrs,tds61.osmPostRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = tds61.osmPostRules.length; i < rLen; i++)
+        {
+            if (tds61.osmPostRules[i][0](tags)) tds61.osmPostRules[i][1](tags,attrs);
+        }
 
         // ##############
 
@@ -1160,9 +1167,9 @@ tds61 = {
 
 // #####################################################################################################
 
-    // ##### Start of the xxToNfddxx Block #####
+    // ##### Start of the xxToTdsxx Block #####
 
-    applyToNfddPreProcessing: function(tags, attrs, geometryType)
+    applyToTdsPreProcessing: function(tags, attrs, geometryType)
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
@@ -1193,12 +1200,13 @@ tds61 = {
 
         } // End Cleanup loop
 
-        if (tds61.nfddPreRules == undefined)
+        if (tds61.tdsPreRules == undefined)
         {
         // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
-            ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
+            ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
             ["t.crossing == 'tank' && t.highway == 'crossing'","delete t.highway"],
             ["t.diplomatic && t.amenity == 'embassy'","delete t.amenity"],
@@ -1216,6 +1224,7 @@ tds61 = {
             ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
+            ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.man_made == 'embankment'","t.embankment = 'yes'; delete t.man_made"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
@@ -1243,12 +1252,16 @@ tds61 = {
             ["t.waterway == 'vanishing_point' && t['water:sink:type'] == 'sinkhole'","t.natural = 'sinkhole'; delete t.waterway; delete t['water:sink:type']"]
             ];
 
-            tds61.nfddPreRules = translate.buildComplexRules(rulesList);
+            tds61.tdsPreRules = translate.buildComplexRules(rulesList);
         }
 
         // Apply the rulesList.
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,tds61.nfddPreRules);
+        // translate.applyComplexRules(tags,attrs,tds61.tdsPreRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = tds61.tdsPreRules.length; i < rLen; i++)
+        {
+            if (tds61.tdsPreRules[i][0](tags)) tds61.tdsPreRules[i][1](tags,attrs);
+        }
 
         // Fix up OSM 'walls' around facilities
         if (tags.barrier == 'wall' && geometryType == 'Area')
@@ -1679,11 +1692,11 @@ tds61 = {
        // Debug
        // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
 
-    }, // End applyToNfddPreProcessing
+    }, // End applyToTdsPreProcessing
 
 // #####################################################################################################
 
-    applyToNfddPostProcessing : function (tags, attrs, geometryType, notUsedTags)
+    applyToTdsPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
         // Shoreline Construction (BB081) covers a lot of features
         if (attrs.PWC) attrs.F_CODE = 'BB081';
@@ -1691,52 +1704,15 @@ tds61 = {
         // Inland Water Body (BH082) also covers a lot of features
         if (attrs.IWT && !(attrs.F_CODE)) attrs.F_CODE = 'BH082';
 
-
         // The follwing bit of ugly code is to account for the specs haveing two different attributes
         // with similar names and roughly the same attributes. Bleah!
-        // Format is: <FCODE>:{<from>:<to>}
-        var swapList = {
-            'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
-            'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AL020':{'ZI005_NFN':'ZI005_NFN1'},
-            'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
-            'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM080':{'ZI014_YWQ':'YWQ'},
-            'AQ059':{'ZI016_WD1':'WD1'},
-            'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AT005':{'WLE':'ZI025_WLE'},
-            'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
-            'BD100':{'WLE':'ZI025_WLE'},
-            'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'BH070':{'PWA':'WBD'},
-            'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
-            'ED010':{'ZI024_HYP':'HYP'},
-            'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
-            'BD115':{'MAN':'ZI025_MAN'},
-            'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
-            'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
-            'ZI026':{'ZI026_SUR':'SUR'}
-                };
-
-        if (swapList[attrs.F_CODE])
+        if (tds61.rules.swapListOut[attrs.F_CODE])
         {
-            for (var i in swapList[attrs.F_CODE])
+            for (var i in tds61.rules.swapListOut[attrs.F_CODE])
             {
                 if (i in attrs)
                 {
-                    attrs[swapList[attrs.F_CODE][i]] = attrs[i];
+                    attrs[tds61.rules.swapListOut[attrs.F_CODE][i]] = attrs[i];
                     delete attrs[i]
                 }
             }
@@ -1972,11 +1948,11 @@ tds61 = {
             }
         } // End for GE4 loop
 
-    }, // End applyToNfddPostProcessing
+    }, // End applyToTdsPostProcessing
 
 // #####################################################################################################
 
-    // ##### End of the xxToNfddxx Block #####
+    // ##### End of the xxToTdsxx Block #####
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
@@ -1984,8 +1960,17 @@ tds61 = {
     {
         tags = {};  // The final output Tag list
 
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (tds61.config == undefined)
+        {
+            tds61.config = {};
+            tds61.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            tds61.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+        }
+
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds61.config.OgrDebugDumptags == 'true')
         {
             print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
@@ -2020,7 +2005,7 @@ tds61 = {
         tds61.untangleAttributes(attrs, tags);
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds61.config.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -2075,10 +2060,10 @@ tds61 = {
         tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
-        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (tds61.config.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds61.config.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedAttrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
@@ -2094,13 +2079,27 @@ tds61 = {
 
     // This gets called by translateToOGR and is where the main work gets done
     // We get Tags and return Attrs and a tableName
-    // This is the main routine to convert _TO_ NFDD
-    toNfdd : function(tags, elementType, geometryType)
+    // This is the main routine to convert _TO_ TDS
+    toTds : function(tags, elementType, geometryType)
     {
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
         attrs = {}; // The output attributes
         attrs.F_CODE = ''; // Initial setup
+
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (tds61.config == undefined)
+        {
+            tds61.config = {};
+            tds61.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            tds61.config.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
+            tds61.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
+            tds61.config.OgrNoteExtra = config.getOgrNoteExtra();
+            tds61.config.OgrSplitO2s = config.getOgrSplitO2s();
+            tds61.config.OgrThematicStructure = config.getOgrThematicStructure();
+            tds61.config.OgrThrowError = config.getOgrThrowError();
+        }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
         if (tds61.rawSchema == undefined)
@@ -2110,7 +2109,7 @@ tds61 = {
 
         // Start processing here
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds61.config.OgrDebugDumptags == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -2169,7 +2168,7 @@ tds61 = {
         } // End tds61.lookup Undefined
 
         // Pre Processing
-        tds61.applyToNfddPreProcessing(tags, attrs, geometryType);
+        tds61.applyToTdsPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
         // the not used tags.
@@ -2196,22 +2195,22 @@ tds61 = {
 
         // one 2 one: we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
-        translate.applyNfddOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
+        translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
 
         // Post Processing.
         // We send the original list of tags and the list of tags we haven't used yet.
-        // tds61.applyToNfddPostProcessing(tags, attrs, geometryType);
-        tds61.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
+        // tds61.applyToTdsPostProcessing(tags, attrs, geometryType);
+        tds61.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds61.config.getOgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedTags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')
+        if (Object.keys(notUsedTags).length > 0 && tds61.config.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -2222,10 +2221,10 @@ tds61 = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(tds61.nfddAttrLookup[gFcode.toUpperCase()]))
+        if (!(tds61.AttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (config.getOgrThrowError() == 'true')
+            if (tds61.config.getOgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {
@@ -2246,7 +2245,7 @@ tds61 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true')
+            if (tds61.config.OgrDebugDumptags == 'true')
             {
                 var kList = Object.keys(attrs).sort()
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -2264,7 +2263,7 @@ tds61 = {
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            if (str.length < 255 || tds61.config.OgrSplitO2s == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
                 attrs = {tag1:str};
@@ -2302,20 +2301,20 @@ tds61 = {
             {
                 // Make sure that we have a valid FCODE
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                if (tds61.nfddAttrLookup[gFcode.toUpperCase()])
+                if (tds61.AttrLookup[gFcode.toUpperCase()])
                 {
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     tds61.validateAttrs(geometryType,returnData[i]['attrs']);
 
                     // Now set the FCSubtype.
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                    if (config.getOgrEsriFcsubtype() == 'true')
+                    if (tds61.config.OgrEsriFcsubtype == 'true')
                     {
                         returnData[i]['attrs']['FCSUBTYPE'] = tds61.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                     }
 
                     // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                    if (config.getOgrThematicStructure() == 'true')
+                    if (tds61.config.OgrThematicStructure == 'true')
                     {
                         returnData[i]['tableName'] = tds61.rules.thematicGroupList[gFcode];
                         tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);
@@ -2333,7 +2332,7 @@ tds61 = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && tds61.config.OgrNoteExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -2361,7 +2360,7 @@ tds61 = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds61.config.OgrDebugDumptags == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
@@ -2374,6 +2373,6 @@ tds61 = {
 
         return returnData;
 
-    } // End of toNfdd
+    } // End of toTds
 
 } // End of tds61

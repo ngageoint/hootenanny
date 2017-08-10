@@ -37,7 +37,7 @@ etds61 = {
     {
         var tdsData = [];
 
-        tdsData = tds61.toNfdd(tags, elementType, geometryType)
+        tdsData = tds61.toTds(tags, elementType, geometryType)
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')

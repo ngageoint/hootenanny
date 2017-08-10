@@ -169,5 +169,5 @@ if (typeof exports !== 'undefined') {
     exports.EnglishtoOSM = etds40_osm.toOSM;
     exports.RawtoOSM = tds.toOsm;
     exports.OSMtoEnglish = etds40.toEnglish;
-    exports.OSMtoRaw = tds.toNfdd;
+    exports.OSMtoRaw = tds.toTds;
 }

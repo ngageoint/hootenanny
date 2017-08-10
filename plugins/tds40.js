@@ -37,7 +37,7 @@ tds = {
     // getDbSchema - Load the standard schema or modify it into the TDS structure.
     getDbSchema: function() {
         tds.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-        tds.nfddAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+        tds.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
         // Warning: This is <GLOBAL> so we can get access to it from other functions
         tds.rawSchema = tds.schema.getDbSchema();
@@ -71,12 +71,12 @@ tds = {
         } // End For tds.rawSchema.length
      */
 
-        // Build the NFDD fcode/attrs lookup table. Note: This is <GLOBAL>
-        tds.nfddAttrLookup = translate.makeAttrLookup(tds.rawSchema);
+        // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
+        tds.AttrLookup = translate.makeAttrLookup(tds.rawSchema);
 
         // Debug
-        // print("tds.nfddAttrLookup");
-        // translate.dumpLookup(tds.nfddAttrLookup);
+        // print("tds.AttrLookup");
+        // translate.dumpLookup(tds.AttrLookup);
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds.rawSchema
@@ -240,7 +240,7 @@ tds = {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature.
         // This is quicker than going through the Schema due to the way the Schema is arranged
-        var attrList = tds.nfddAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+        var attrList = tds.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
         var othList = {};
 
@@ -253,7 +253,7 @@ tds = {
         if (attrList != undefined)
         {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (config.getOgrDebugDumpvalidate() == 'true')
+            if (tds.config.OgrDebugDumpvalidate == 'true')
             {
                 for (var val in attrs)
                 {
@@ -419,11 +419,11 @@ tds = {
     validateTDSAttrs: function(gFcode, attrs) {
 
         var tdsAttrList = tdsAttrLookup[tds.rules.thematicGroupList[gFcode]];
-        var nfddAttrList = tds.nfddAttrLookup[gFcode];
+        var AttrList = tds.AttrLookup[gFcode];
 
         for (var i = 0, len = tdsAttrList.length; i < len; i++)
         {
-            if (nfddAttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+            if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
         }
     }, // End validateTDSAttrs
 
@@ -560,7 +560,7 @@ tds = {
         for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
-            tds.applyToNfddPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
+            tds.applyToTdsPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
@@ -568,10 +568,10 @@ tds = {
             translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyNfddOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds.lookup, tds.fcodeLookup);
+            translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds.lookup, tds.fcodeLookup);
 
             // post processing
-            tds.applyToNfddPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
+            tds.applyToTdsPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
             returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
         }
@@ -580,7 +580,7 @@ tds = {
     }, // End manyFeatures
 
 
-    // Doesn't do much but saves typing the same code out a few times in the to NFDD Pre Processing
+    // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
     fixTransType : function(tags)
     {
         if (tags.railway)
@@ -622,12 +622,14 @@ tds = {
 
         for (var col in attrs)
         {
-            // Find an FCODE
-            if (col in tds.fcodeLookup['F_CODE'])
-            {
-                attrs.F_CODE = col;
-                delete attrs[col];
+            // Sort out FCODE funkyness:  f_CODE, F_Code etc
+            var tKey = col.toLowerCase();
+            tKey = tKey.replace(/\s/g, '').replace(/_/g, '');;
 
+            if (tKey == 'fcode' && col !== 'F_CODE')
+            {
+                attrs.F_CODE = attrs[col];
+                delete attrs[col];
                 continue;
             }
 
@@ -653,7 +655,7 @@ tds = {
             delete attrs[col];
         }
 
-    }, // End attributeUntangle
+    }, // End untangleAttributes
 
 
     // ##### Start of the xxToOsmxx Block #####
@@ -879,6 +881,7 @@ tds = {
             ["t.leisure == 'stadium'","t.building = 'yes'"],
             ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
             ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+            ["t.product && t.man_made == 'storage_tank'","t.content = t.product; delete t.product"],
             ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
             ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
             ["t.pylon =='yes' && t['cable:type'] == 'cableway'"," t.aerialway = 'pylon'"],
@@ -899,7 +902,12 @@ tds = {
         }
 
         // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,tds.osmPostRules);
+        // translate.applyComplexRules(tags,attrs,tds.osmPostRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = tds.osmPostRules.length; i < rLen; i++)
+        {
+            if (tds.osmPostRules[i][0](tags)) tds.osmPostRules[i][1](tags,attrs);
+        }
 
         // ##############
 
@@ -1157,9 +1165,9 @@ tds = {
 
     // ##### End of the xxToOsmxx Block #####
 
-    // ##### Start of the xxToNfddxx Block #####
+    // ##### Start of the xxToTdsxx Block #####
 
-    applyToNfddPreProcessing: function(tags, attrs, geometryType)
+    applyToTdsPreProcessing: function(tags, attrs, geometryType)
     {
         // Remove Hoot assigned tags for the source of the data
         if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
@@ -1188,12 +1196,13 @@ tds = {
             }
         }
 
-        if (tds.nfddPreRules == undefined)
+        if (tds.PreRules == undefined)
         {
         // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
-            ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] == 'bus'"],
+            ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
             ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.content && !(t.product)","t.product = t.content; delete t.content"],
             ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
             ["t.control_tower && t.man_made == 'tower'","delete t.man_made"],
@@ -1212,6 +1221,7 @@ tds = {
             ["t.leisure == 'recreation_ground'","t.landuse = 'recreation_ground'; delete t.leisure"],
             ["t.leisure == 'sports_centre'","t.facility = 'yes'; t.use = 'recreation'; delete t.leisure"],
             ["t.leisure == 'stadium' && t.building","delete t.building"],
+            ["t.man_made && t.building == 'yes'","delete t.building"],
             ["t.median == 'yes'","t.is_divided = 'yes'"],
             ["t.natural == 'desert' && t.surface","t.desert_surface = t.surface; delete t.surface"],
             ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'sinkhole'; delete t.natural"],
@@ -1237,12 +1247,16 @@ tds = {
             ["t.waterway == 'riverbank'","t.waterway = 'river'"]
             ];
 
-            tds.nfddPreRules = translate.buildComplexRules(rulesList);
+            tds.PreRules = translate.buildComplexRules(rulesList);
         }
 
         // Apply the rulesList.
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,tds.nfddPreRules);
+        // translate.applyComplexRules(tags,attrs,tds.PreRules);
+        // Pulling this out of translate
+        for (var i = 0, rLen = tds.PreRules.length; i < rLen; i++)
+        {
+            if (tds.PreRules[i][0](tags)) tds.PreRules[i][1](tags,attrs);
+        }
 
         // Fix up OSM 'walls' around facilities
         if (tags.barrier == 'wall' && geometryType == 'Area')
@@ -1610,9 +1624,9 @@ tds = {
 
        } // End if highway || railway
 
-    }, // End applyToNfddPreProcessing
+    }, // End applyToTdsPreProcessing
 
-    applyToNfddPostProcessing : function (tags, attrs, geometryType, notUsedTags)
+    applyToTdsPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
         // Shoreline Construction (BB081) covers a lot of features
         if (attrs.PWC) attrs.F_CODE = 'BB081';
@@ -1837,15 +1851,24 @@ tds = {
             delete attrs.ZI005_FNA2;
         }
 
-    }, // End applyToNfddPostProcessing
+    }, // End applyToTdsPostProcessing
 
-    // ##### End of the xxToNfddxx Block #####
+    // ##### End of the xxToTdsxx Block #####
 
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert _TO_ OSM
     toOsm : function(attrs, layerName, geometryType)
     {
         tags = {};  // The final output Tag list
+
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (tds.config == undefined)
+        {
+            tds.config = {};
+            tds.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            tds.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+        }
 
         // Debug:
         if (config.getOgrDebugDumptags() == 'true')
@@ -1883,7 +1906,7 @@ tds = {
         tds.untangleAttributes(attrs, tags);
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds.config.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -1939,10 +1962,10 @@ tds = {
         tds.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
-        if (config.getOgrDebugAddfcode() == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (tds.config.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds.config.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedAttrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
@@ -1958,13 +1981,27 @@ tds = {
 
     // This gets called by translateToOGR and is where the main work gets done
     // We get Tags and return Attrs and a tableName
-    // This is the main routine to convert _TO_ NFDD
-    toNfdd : function(tags, elementType, geometryType)
+    // This is the main routine to convert _TO_ TDS
+    toTds : function(tags, elementType, geometryType)
     {
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
         attrs = {}; // The output
         attrs.F_CODE = ''; // Initial setup
+
+        // Setup config variables. We could do this in initialize() but some things don't call it :-(
+        // Doing this so we don't have to keep calling into Hoot core
+        if (tds.config == undefined)
+        {
+            tds.config = {};
+            tds.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            tds.config.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
+            tds.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
+            tds.config.OgrNoteExtra = config.getOgrNoteExtra();
+            tds.config.OgrSplitO2s = config.getOgrSplitO2s();
+            tds.config.OgrThematicStructure = config.getOgrThematicStructure();
+            tds.config.OgrThrowError = config.getOgrThrowError();
+        }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
         if (tds.rawSchema == undefined)
@@ -1974,7 +2011,7 @@ tds = {
 
         // Start processing here
         // Debug
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds.config.OgrDebugDumptags == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -2011,7 +2048,7 @@ tds = {
         }
 
         // Pre Processing
-        tds.applyToNfddPreProcessing(tags, attrs, geometryType);
+        tds.applyToTdsPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
         // the not used tags.
@@ -2034,21 +2071,21 @@ tds = {
 
         // one 2 one - we call the version that knows about OTH fields
         // NOTE: This deletes tags as they are used
-        translate.applyNfddOne2One(notUsedTags, attrs, tds.lookup, tds.fcodeLookup);
+        translate.applyTdsOne2One(notUsedTags, attrs, tds.lookup, tds.fcodeLookup);
 
         // post processing
-        // tds.applyToNfddPostProcessing(attrs, tableName, geometryType);
-        tds.applyToNfddPostProcessing(tags, attrs, geometryType, notUsedTags);
+        // tds.applyToTdsPostProcessing(attrs, tableName, geometryType);
+        tds.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds.config.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedTags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'attribute')
+        if (Object.keys(notUsedTags).length > 0 && tds.config.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -2059,10 +2096,10 @@ tds = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (!(tds.nfddAttrLookup[gFcode.toUpperCase()]))
+        if (!(tds.AttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (config.getOgrThrowError() == 'true')
+            if (tds.config.OgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {
@@ -2083,7 +2120,7 @@ tds = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.getOgrDebugDumptags() == 'true')
+            if (tds.config.getOgrDebugDumptags == 'true')
             {
                 var kList = Object.keys(attrs).sort()
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -2102,7 +2139,7 @@ tds = {
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || config.getOgrSplitO2s() == 'false')
+            if (str.length < 255 || tds.config.OgrSplitO2s == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
                 attrs = {tag1:str};
@@ -2140,20 +2177,20 @@ tds = {
             {
                 // Make sure that we have a valid FCODE
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                if (tds.nfddAttrLookup[gFcode.toUpperCase()])
+                if (tds.AttrLookup[gFcode.toUpperCase()])
                 {
                     // Validate attrs: remove all that are not supposed to be part of a feature
                     tds.validateAttrs(geometryType,returnData[i]['attrs']);
 
                     // Now set the FCSubtype.
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                    if (config.getOgrEsriFcsubtype() == 'true')
+                    if (tds.config.OgrEsriFcsubtype == 'true')
                     {
                         returnData[i]['attrs']['FCSUBTYPE'] = tds.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                     }
 
                     // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                    if (config.getOgrThematicStructure() == 'true')
+                    if (tds.config.OgrThematicStructure == 'true')
                     {
                         returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
                         tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
@@ -2171,7 +2208,7 @@ tds = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && config.getOgrNoteExtra() == 'file')
+            if (Object.keys(notUsedTags).length > 0 && tds.config.OgrNoteExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -2199,7 +2236,7 @@ tds = {
         } // End else We have a feature
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (tds.config.OgrDebugDumptags == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
@@ -2212,6 +2249,6 @@ tds = {
 
         return returnData;
 
-    } // End of toNfdd
+    } // End of toTds
 
 } // End of tds
