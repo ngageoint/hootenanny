@@ -104,14 +104,33 @@ QString toJson(const v8::Handle<T> object)
 
   v8::Handle<v8::Value> args[1];
   args[0] = object;
-  v8::Handle<v8::Value> result = JSON_stringify->Call(JSON, 1, args);
-  v8::Handle<v8::String> s = v8::Handle<v8::String>::Cast(result);
 
-  size_t utf8Length = s->Utf8Length() + 1;
-  std::auto_ptr<char> buffer(new char[utf8Length]);
-  s->WriteUtf8(buffer.get(), utf8Length);
+  QString result;
+  if (args[0].IsEmpty())
+  {
+    result = "";
+  }
+  else if (args[0]->IsNull())
+  {
+    result = "null";
+  }
+  else if (args[0]->IsUndefined())
+  {
+    result = "undefined";
+  }
+  else
+  {
+    v8::Handle<v8::Value> resultValue = JSON_stringify->Call(JSON, 1, args);
+    v8::Handle<v8::String> s = v8::Handle<v8::String>::Cast(resultValue);
 
-  return QString::fromUtf8(buffer.get());
+    size_t utf8Length = s->Utf8Length() + 1;
+    std::auto_ptr<char> buffer(new char[utf8Length]);
+    s->WriteUtf8(buffer.get(), utf8Length);
+
+    result = QString::fromUtf8(buffer.get());
+  }
+
+  return result;
 }
 
 std::ostream& operator<<(std::ostream& o, const v8::Handle<v8::Function>& f);

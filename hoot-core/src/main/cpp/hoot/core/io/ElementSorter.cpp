@@ -42,7 +42,7 @@ ElementSorter::ElementSorter(ConstOsmMapPtr source) :
   _relationIndex(0)
 {
   LOG_DEBUG(
-    "Sorting element by element type for map with element count: " << source->getElementCount());
+    "Sorting elements by element type for map with element count: " << source->getElementCount());
 
   _source = source;
 

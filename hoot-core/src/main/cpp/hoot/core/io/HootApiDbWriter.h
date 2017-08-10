@@ -46,7 +46,6 @@ public:
   static std::string className() { return "hoot::HootApiDbWriter"; }
 
   HootApiDbWriter();
-
   virtual ~HootApiDbWriter();
 
   void close();

@@ -98,7 +98,7 @@ void PbfRecordWriter::setMapContext(int part, string workDir)
   _path = path.toStdString();
   Hdfs fs;
   _out.reset(fs.create(_path));
-  _OsmPbfWriter->intializePartial(_out.get());
+  _OsmPbfWriter->initializePartial(_out.get());
 }
 
 void PbfRecordWriter::setReduceContext(HadoopPipes::ReduceContext& context)
@@ -117,7 +117,7 @@ void PbfRecordWriter::setReduceContext(int part, string workDir)
   _path = path.toStdString();
   Hdfs fs;
   _out.reset(fs.create(_path));
-  _OsmPbfWriter->intializePartial(_out.get());
+  _OsmPbfWriter->initializePartial(_out.get());
 }
 
 

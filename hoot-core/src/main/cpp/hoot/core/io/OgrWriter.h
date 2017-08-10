@@ -132,10 +132,6 @@ public:
 
   virtual void writeElement(ElementPtr& element, bool debug);
 
-  virtual void writeElement(ElementInputStream& inputStream);
-
-  virtual void writeElement(ElementInputStream& inputStream, bool debug);
-
 protected:
 
   bool _createAllLayers;
@@ -179,7 +175,7 @@ private:
 
 };
 
-} // hoot
+}
 
 
 #endif // OGRWRITER_H

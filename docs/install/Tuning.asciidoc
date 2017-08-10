@@ -13,9 +13,8 @@ The following information pertains to database tuning parameters in the postgres
 
 The Hootenanny services database is pre-configured with a database connection pool during the build process. If you want to tweak the connection pool you experiment with the following:
 
-.edit the properties for the "DataSource" bean in $HOOT_HOME/hoot-services/src/main/resources/db/spring-database.xml (see link:$$http://commons.apache.org/proper/commons-dbcp/configuration.html$$[BasicDataSource] configuration parameters.  Note that Hootenanny uses DBCP 1.4, not 2.x)
-.rebuild hoot
-.To make the settings permanent, add them to $HOOT_HOME/hoot-services/src/main/resources/db/spring-database.xml.in
+.edit properties in $TOMCAT8_HOME/webapps/hoot-services/WEB-INF/classes/db/db.properties
+.restart tomcat
 
 After making changes, you should be able to monitor the number of open Postgres connections while hoot is running using something like "ps aux | grep postgres: | wc -l" or use a "postgres" filter on processes with htop.
 
