@@ -119,11 +119,11 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  void setMatchDistanceThreshold(double distance) { _matchDistanceThreshold = distance; }
-  void setReviewDistanceThreshold(double distance) { _reviewDistanceThreshold = distance; }
-  void setNameScoreThreshold(double threshold) { _nameScoreThreshold = threshold; }
-  void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
-  void setReviewIfMatchedTypes(const QStringList& types) { _reviewIfMatchedTypes = types; }
+  void setMatchDistanceThreshold(double distance);
+  void setReviewDistanceThreshold(double distance);
+  void setNameScoreThreshold(double threshold);
+  void setTypeScoreThreshold(double threshold);
+  void setReviewIfMatchedTypes(const QStringList& types);
   void setEnableAdvancedMatching(bool enabled) { _enableAdvancedMatching = enabled; }
   void setEnableReviewReduction(bool enabled) { _enableReviewReduction = enabled; }
 
@@ -140,8 +140,6 @@ private:
   boost::shared_ptr<geos::geom::Geometry> _poiGeom;
   boost::shared_ptr<geos::geom::Geometry> _polyGeom;
   bool _e1IsPoi;
-
-  //Settings _settings;
 
   //measured distance between the two elements
   double _distance;

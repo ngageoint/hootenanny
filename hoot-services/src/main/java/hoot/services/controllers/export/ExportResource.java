@@ -142,15 +142,12 @@ public class ExportResource {
 
                 workflow.add(exportOSMCommand);
             }
-            // As of 04/03/2017, OSC support is not fully implemented yet.  This REST controller might not
-            // even be the right place to host it.
             else if (outputType.equalsIgnoreCase("osc")) {
                 ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
                         debugLevel, DeriveChangesetCommand.class, this.getClass());
 
                 workflow.add(deriveChangesetCommand);
             }
-            //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
                 ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
                         debugLevel, DeriveChangesetCommand.class, this.getClass());

@@ -76,7 +76,7 @@ public:
     {
       throw HootException("Error opening " + output + " for writing.");
     }
-    writer.intializePartial(&fp);
+    writer.initializePartial(&fp);
 
     int nodeCount = 0;
     int wayCount = 0;

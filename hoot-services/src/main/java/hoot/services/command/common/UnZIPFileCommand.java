@@ -40,7 +40,7 @@ public class UnZIPFileCommand extends ExternalCommand {
      * Decompresses a ZIP file using system 'unzip' utility
      *
      * @param sourceZIP ZIP file to decompress
-     * @param targetFolder directory where to store the contents of the ZIP
+     * @param targetFolder directory where to store the contents of the ZIP into
      * @param caller class that identifies caller of the command
      */
     public UnZIPFileCommand(File sourceZIP, File targetFolder, Class<?> caller) {

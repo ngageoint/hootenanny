@@ -38,7 +38,7 @@ using namespace boost;
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMapListener.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/filters/NodeFilter.h>
 #include <hoot/core/filters/WayFilter.h>
@@ -568,14 +568,14 @@ bool OsmMap::validate(bool strict) const
   return result;
 }
 
-void OsmMap::visitRo(ElementVisitor& visitor) const
+void OsmMap::visitRo(ConstElementVisitor& visitor) const
 {
   visitNodesRo(visitor);
   visitWaysRo(visitor);
   visitRelationsRo(visitor);
 }
 
-void OsmMap::visitNodesRo(ElementVisitor& visitor) const
+void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
   if (consumer != 0)
@@ -594,7 +594,7 @@ void OsmMap::visitNodesRo(ElementVisitor& visitor) const
   }
 }
 
-void OsmMap::visitWaysRo(ElementVisitor& visitor) const
+void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
   if (consumer != 0)
@@ -613,7 +613,7 @@ void OsmMap::visitWaysRo(ElementVisitor& visitor) const
   }
 }
 
-void OsmMap::visitRelationsRo(ElementVisitor& visitor) const
+void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
 {
   ConstOsmMapConsumer* consumer = dynamic_cast<ConstOsmMapConsumer*>(&visitor);
   if (consumer != 0)
@@ -632,7 +632,7 @@ void OsmMap::visitRelationsRo(ElementVisitor& visitor) const
   }
 }
 
-void OsmMap::visitRw(ElementVisitor& visitor)
+void OsmMap::visitRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
   if (consumer != 0)
@@ -671,7 +671,7 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   }
 }
 
-void OsmMap::visitWaysRw(ElementVisitor& visitor)
+void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
   if (consumer != 0)

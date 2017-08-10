@@ -39,7 +39,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, UnionPolygonsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, UnionPolygonsVisitor)
 
 UnionPolygonsVisitor::UnionPolygonsVisitor()
 {

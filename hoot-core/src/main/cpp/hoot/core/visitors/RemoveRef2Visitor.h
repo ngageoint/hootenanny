@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ElementCriterionConsumer.h>
 
 // Qt
@@ -48,7 +48,7 @@ namespace hoot
  *
  * This class is re-entrant, but not thread safe.
  */
-class RemoveRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer,
+class RemoveRef2Visitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public ElementCriterionConsumer
 {
 

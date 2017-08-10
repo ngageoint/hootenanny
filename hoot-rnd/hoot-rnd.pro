@@ -76,8 +76,8 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/opt/ReleaseTestFitnessFunction.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCacheTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClustererTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCacheTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithmTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiGenericTest.cpp
 
 HEADERS += \
@@ -132,11 +132,16 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMerger.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCache.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCache.cpp \
-    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterer.cpp \
-    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterer.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryCluster.cpp \
     src/main/cpp/hoot/rnd/cmd/MultiaryConflateCmd.cpp \
-    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.cpp
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.cpp \
+    src/main/cpp/hoot/rnd/cmd/MultiaryScoreMatchesCmd.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.cpp \
+    src/main/cpp/hoot/rnd/io/SparkJsonWriter.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.cpp \
+    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -180,10 +185,14 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMerger.h \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCache.h \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCache.h \
-    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterer.h \
-    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterer.h \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryCluster.h \
-    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryClusterAlgorithm.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithm.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.h \
+    src/main/cpp/hoot/rnd/io/SparkJsonWriter.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.h \
+    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.h
 
 FORMS +=
 

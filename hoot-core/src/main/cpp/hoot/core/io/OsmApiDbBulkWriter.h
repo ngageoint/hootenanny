@@ -223,6 +223,7 @@ private:
 
   void _logStats(const bool debug = false);
   unsigned long _getTotalRecordsWritten() const;
+  unsigned long _getTotalFeaturesWritten() const;
   void _verifyDependencies();
   void _verifyOutputCopySettings();
   void _verifyStartingIds();

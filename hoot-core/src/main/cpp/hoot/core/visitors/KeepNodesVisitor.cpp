@@ -39,9 +39,9 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, KeepNodesVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepNodesVisitor)
 
-class FindAllNodesVisitor : public ElementVisitor
+class FindAllNodesVisitor : public ConstElementVisitor
 {
 public:
   FindAllNodesVisitor(OsmMapPtr map) : _map(map) {}

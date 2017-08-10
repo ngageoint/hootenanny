@@ -76,6 +76,8 @@ public:
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
+  inline static const QString HootPoiPolygonPoisMerged(){ return "hoot:poipolygon:poismerged"; }
+
   inline static const QString HootReviewTagPrefix()     { return "hoot:review:"; }
   inline static const QString HootReviewChoices()       { return "hoot:review:choices"; }
   inline static const QString HootReviewMembers()       { return "hoot:review:members"; }
@@ -122,6 +124,22 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+
+  /**
+   * ID Unique to a training data set with multiary training data.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingId()              { return "ID"; }
+  /**
+   * Refers to a match between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingMatch()           { return "MATCH"; }
+  /**
+   * Refers to a review between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingReview()          { return "REVIEW"; }
 
 private:
 

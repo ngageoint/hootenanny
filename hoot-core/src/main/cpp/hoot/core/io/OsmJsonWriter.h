@@ -67,6 +67,11 @@ public:
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
 
+  /**
+   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
+   */
+  static QString markupString(const QString& str);
+
   virtual void open(QString url);
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
@@ -86,6 +91,7 @@ public:
   QString toString(ConstOsmMapPtr map);
 
 protected:
+  ConstOsmMapPtr _map;
   bool _includeDebug;
   int _precision;
   QFile _fp;
@@ -95,20 +101,16 @@ protected:
 
   static QString _typeName(ElementType e);
 
-  /**
-   * Mark up a string so it can be used in JSON. This will add double quotes around the string too.
-   */
-  QString _markupString(const QString& str);
-
-  void _writeNodes(ConstOsmMapPtr map);
-  void _writeWays(ConstOsmMapPtr map);
-  void _writeRelations(ConstOsmMapPtr map);
+  void _writeNodes();
+  void _writeWays();
+  void _writeRelations();
   void _write(const QString& str) { _write(str, _pretty); }
   void _write(const QString& str, bool newLine);
   void _writeLn(const QString& str) { _write(str, true); }
   void _writeKvp(const QString& key, const QString& value);
   void _writeKvp(const QString& key, long value);
   void _writeKvp(const QString& key, double value);
+  bool _hasTags(ConstElementPtr e);
   void _writeTag(const QString& key, const QString& value, bool& firstTag);
   void _writeTags(ConstElementPtr e);
 };

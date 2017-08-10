@@ -58,11 +58,11 @@ public:
 /**
  * Delete the MatchSet structure in a safe way.
  */
-struct DeleteMatches
+struct ScopedMatchDeleter
 {
-  DeleteMatches(MatchSet& ms) : _ms(ms) {}
+  ScopedMatchDeleter(MatchSet& ms) : _ms(ms) {}
 
-  ~DeleteMatches()
+  ~ScopedMatchDeleter()
   {
     foreach (const Match* m, _ms)
     {
@@ -76,11 +76,11 @@ struct DeleteMatches
 /**
  * Delete the Merger vector in a safe way.
  */
-struct DeleteMergers
+struct ScopedMergerDeleter
 {
-  DeleteMergers(std::vector<Merger*> ms) : _ms(ms) {}
+  ScopedMergerDeleter(std::vector<Merger*>& ms) : _ms(ms) {}
 
-  ~DeleteMergers()
+  ~ScopedMergerDeleter()
   {
     foreach (Merger* m, _ms)
     {
@@ -88,7 +88,7 @@ struct DeleteMergers
     }
   }
 
-  std::vector<Merger*> _ms;
+  std::vector<Merger*>& _ms;
 };
 
 MultiaryPoiMergeCache::MultiaryPoiMergeCache(ConstOsmMapPtr map,
@@ -121,7 +121,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryC
   // create a match set that we can populate with the provided match creator.
   MatchSet ms;
   // clean up the matches in a safe way.
-  DeleteMatches deleteMatches(ms);
+  ScopedMatchDeleter deleteMatches(ms);
 
   // go through the 2nd through the last element
   for (int i = 1; i < result->size(); ++i)
@@ -142,7 +142,7 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryC
 
   // create a merge vector and a clean way to clean it up.
   std::vector<Merger*> mergers;
-  DeleteMergers deleteMergers(mergers);
+  ScopedMergerDeleter deleteMergers(mergers);
 
   // create a merger with the provided merge creator.
   _mergerCreator->createMergers(ms, mergers);
@@ -172,8 +172,9 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(MultiaryClusterPtr c1, MultiaryC
 
   assert(tmp->getNodeCount() == 1);
 
-  // Record the newly merged element
-  result->mergedElement = tmp->getNodes().begin()->second;
+  // Record the newly merged element as a clone. By cloning we don't have to worry about assigning
+  // this element to two maps and creating registerListener problems.
+  result->mergedElement.reset(tmp->getNodes().begin()->second->clone());
 
   return result;
 }

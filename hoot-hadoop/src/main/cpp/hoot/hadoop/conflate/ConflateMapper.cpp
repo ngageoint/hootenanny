@@ -157,7 +157,7 @@ void ConflateMapper::_init(HadoopPipes::MapContext& context)
   {
     _writers[i] =boost::shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
     _buffers[i] =boost::shared_ptr<stringstream>(new stringstream(stringstream::out));
-    _writers[i]->intializePartial(_buffers[i].get());
+    _writers[i]->initializePartial(_buffers[i].get());
     LOG_INFO("key: " << i << " envelope: " << _envelopes[i].toString());
   }
   _reduceTaskCount = context.getJobConf()->getInt("mapred.reduce.tasks");
@@ -165,7 +165,7 @@ void ConflateMapper::_init(HadoopPipes::MapContext& context)
   {
     _writers[-1 - i] =boost::shared_ptr<OsmPbfWriter>(new OsmPbfWriter());
     _buffers[-1 - i] =boost::shared_ptr<stringstream>(new stringstream(stringstream::out));
-    _writers[-1 - i]->intializePartial(_buffers[-1 - i].get());
+    _writers[-1 - i]->initializePartial(_buffers[-1 - i].get());
     LOG_INFO("key: " << -1 - i << " dregs");
   }
 

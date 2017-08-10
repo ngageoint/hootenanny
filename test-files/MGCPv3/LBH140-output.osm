@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-25.39121568730733" minlon="153.0723617490377" maxlat="-25.37578325422032" maxlon="153.1332739411959"/>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1170190376930691"/>
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1170190376930691"/>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1126494399773321"/>
@@ -34,7 +35,7 @@
         <nd ref="-29"/>
         <nd ref="-30"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.546Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -51,7 +52,7 @@
         <nd ref="-27"/>
         <nd ref="-28"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.546Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="yes"/>
@@ -69,13 +70,14 @@
         <nd ref="-25"/>
         <nd ref="-26"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="dissipating"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="uuid" v="{17305d07-ec01-4a73-b77a-590a11ced055}"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -86,7 +88,7 @@
         <nd ref="-23"/>
         <nd ref="-24"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -104,7 +106,7 @@
         <nd ref="-21"/>
         <nd ref="-22"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.954Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -121,7 +123,7 @@
         <nd ref="-19"/>
         <nd ref="-20"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -140,7 +142,7 @@
         <nd ref="-17"/>
         <nd ref="-18"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.545Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="dry"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -160,7 +162,7 @@
         <nd ref="-15"/>
         <nd ref="-16"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -178,13 +180,14 @@
         <nd ref="-13"/>
         <nd ref="-14"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="dry"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="yes"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -195,14 +198,15 @@
         <nd ref="-11"/>
         <nd ref="-12"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.953Z"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="dry"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="no"/>
         <tag k="water:sink:type" v="disappearing"/>
         <tag k="covered" v="no"/>
-        <tag k="waterway" v="wadi"/>
+        <tag k="waterway" v="river"/>
         <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
         <tag k="source" v="mgcp:lbh140"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -213,7 +217,7 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.544Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -232,7 +236,7 @@
         <nd ref="-7"/>
         <nd ref="-8"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.543Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="yes"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -249,7 +253,7 @@
         <nd ref="-5"/>
         <nd ref="-6"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.543Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -269,7 +273,7 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.952Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.543Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="intermittent" v="no"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
@@ -285,7 +289,7 @@
         <nd ref="-1"/>
         <nd ref="-2"/>
         <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-08-19T03:46:27.951Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:15.542Z"/>
         <tag k="source:name" v="imagery_(other)"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="tidal" v="no"/>

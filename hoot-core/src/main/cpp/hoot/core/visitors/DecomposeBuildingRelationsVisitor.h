@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -43,7 +43,7 @@ class Relation;
  *
  * http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings
  */
-class DecomposeBuildingRelationsVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

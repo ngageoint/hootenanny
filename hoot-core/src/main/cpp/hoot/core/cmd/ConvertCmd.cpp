@@ -90,24 +90,29 @@ public:
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
+    QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
+    if (writerName.trimmed().isEmpty())
+    {
+      writerName = OsmMapWriterFactory::getWriterName(args[1]);
+    }
+    LOG_VARD(writerName);
+
     if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
         OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
-        //TODO: Why can't we use convert ops with streaming?
-        ConfigOptions().getConvertOps().size() == 0)
+        //the XML writer can't keep sorted output when streaming, so require an additional config
+        //option be specified in order to stream when writing that format
+        (writerName != "hoot::OsmXmlWriter" ||
+         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
     {
       streamElements(args[0], args[1]);
     }
     else
     {
       OsmMapPtr map(new OsmMap());
-
       loadMap(map, args[0], true, Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
-
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
-
       MapProjector::projectToWgs84(map);
-
       saveMap(map, args[1]);
     }
 
@@ -127,6 +132,50 @@ public:
     return 0;
   }
 
+  boost::shared_ptr<ElementCriterion> _getStreamingCriterion(const QStringList ops)
+  {
+    QStringList criterionNames;
+    Factory& factory = Factory::getInstance();
+    for (int i = 0; i < ops.size(); i++)
+    {
+      const QString opName = ops[i];
+      LOG_VART(opName);
+      if (!opName.trimmed().isEmpty())
+      {
+        if (factory.hasBase<ElementCriterion>(opName.toStdString()))
+        {
+          criterionNames.append(opName);
+        }
+      }
+    }
+    LOG_VART(criterionNames.size());
+
+    if (criterionNames.size() == 0)
+    {
+      return boost::shared_ptr<ElementCriterion>();
+    }
+    else if (criterionNames.size() != 1)
+    {
+      //We eventually could apply more than one and allow some simple syntax for AND/OR operations,
+      //but that hasn't been needed so far.
+      throw HootException(
+        "Only a single convert operation can be applied during a streaming write operation.");
+    }
+
+    const QString criterionName = criterionNames[0];
+    boost::shared_ptr<ElementCriterion> criterion(
+      Factory::getInstance().constructObject<ElementCriterion>(criterionName));
+    Configurable* c = dynamic_cast<Configurable*>(criterion.get());
+    if (c != 0)
+    {
+      c->setConfiguration(conf());
+    }
+
+    LOG_INFO("Filtering output with criterion: " << criterionName);
+
+    return criterion;
+  }
+
   void streamElements(QString in, QString out)
   {
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
@@ -140,7 +189,20 @@ public:
     boost::shared_ptr<ElementOutputStream> streamWriter =
       boost::dynamic_pointer_cast<ElementOutputStream>(writer);
 
-    ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
+    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
+      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+    boost::shared_ptr<ElementCriterion> criterion;
+    if (partialWriter.get())
+    {
+      partialWriter->initializePartial();
+
+      if (ConfigOptions().getConvertOps().size() > 0)
+      {
+        criterion = _getStreamingCriterion(ConfigOptions().getConvertOps());
+      }
+    }
+
+    ElementOutputStream::writeAllElements(*streamReader, *streamWriter, criterion);
 
     boost::shared_ptr<PartialOsmMapReader> partialReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
@@ -148,8 +210,6 @@ public:
     {
       partialReader->finalizePartial();
     }
-    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
     if (partialWriter.get())
     {
       partialWriter->finalizePartial();

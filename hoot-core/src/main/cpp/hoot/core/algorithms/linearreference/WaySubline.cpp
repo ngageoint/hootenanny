@@ -32,7 +32,7 @@
 // hoot
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/FindNodesInWayFactory.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -212,7 +212,7 @@ bool WaySubline::touches(const WaySubline& other) const
   return touches;
 }
 
-void WaySubline::visitRo(const ElementProvider& ep, ElementVisitor& visitor) const
+void WaySubline::visitRo(const ElementProvider& ep, ConstElementVisitor& visitor) const
 {
   visitor.visit(_start.getWay());
 
