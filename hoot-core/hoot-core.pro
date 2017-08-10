@@ -551,7 +551,7 @@ SOURCES += \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
     src/main/cpp/hoot/core/util/SharedPtrPool.cpp \
     src/main/cpp/hoot/core/io/ElementCriterionInputStream.cpp \
-    src/main/cpp/hoot/core/util/MetadataTags.cpp
+    src/main/cpp/hoot/core/util/MetadataTags.cpp \
     src/main/cpp/hoot/core/elements/Status.cpp \
     src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
     src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp

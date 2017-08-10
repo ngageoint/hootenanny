@@ -196,7 +196,7 @@ void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
     long minId = nodes[0]->getId();
     long maxId = minId;
 
-    int minBuckets = (int)(_nodes.size() + nodes.size() * 1.1);
+    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
     if (_nodes.bucket_count() < minBuckets)
     {
       _nodes.resize(minBuckets);

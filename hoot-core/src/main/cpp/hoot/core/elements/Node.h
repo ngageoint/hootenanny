@@ -125,18 +125,15 @@ public:
 
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
 
-#warning uncomment and move to protected
-//  friend class SharedPtrPool<Node>;
-//  friend class boost::object_pool<Node>;
+protected:
+
+  friend class SharedPtrPool<Node>;
   /**
    * The default constructor shouldn't really be used in typical code. We really _need_ the
    * parameters passed into the other constructors. However, the pool method requires a default
    * constructor. To work around this, the pool objects are friends (above).
    */
   Node() {}
-
-protected:
-
 
   NodeData _nodeData;
 

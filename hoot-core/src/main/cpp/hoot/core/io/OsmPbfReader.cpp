@@ -366,7 +366,7 @@ const char* OsmPbfReader::_inflate(const string& compressed, size_t rawSize)
 
 void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
 {
-  int size = std::min(dn.id_size(), std::min(dn.lat_size(), dn.lon_size()));
+  size_t size = std::min(dn.id_size(), std::min(dn.lat_size(), dn.lon_size()));
   if (dn.id_size() != dn.lat_size() || dn.id_size() != dn.lon_size())
   {
     if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -389,7 +389,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
   long lon = 0;
   long lat = 0;
   long id = 0;
-  for (int i = 0; i < size; i++)
+  for (size_t i = 0; i < size; i++)
   {
     id += dn.id().Get(i);
     lon += dn.lon().Get(i);
@@ -448,7 +448,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
   {
     const DenseInfo& di = dn.denseinfo();
     int timestampSize = di.timestamp_size();
-    if (timestampSize != size)
+    if ((size_t)timestampSize != size)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
@@ -459,7 +459,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      timestampSize = std::min(size, timestampSize);
+      timestampSize = std::min<int>(size, timestampSize);
     }
 
     if (_addSourceDateTime)
@@ -937,12 +937,10 @@ void OsmPbfReader::parseBlob(long headerOffset, istream* strm, OsmMapPtr map)
     throw HootException("The stream passed in is not \"good\".");
   }
 
-//  if (strm->tellg() != headerOffset)
-//  {
-#warning remove me
-    LOG_INFO("Seeking...");
+  if (strm->tellg() != headerOffset)
+  {
     strm->seekg(headerOffset, ios_base::beg);
-//  }
+  }
   _parseBlobHeader();
   // Did we hit OSM header?
   if (_d->blobHeader.type() == PBF_OSM_DATA)
@@ -975,9 +973,7 @@ void OsmPbfReader::_parseBlobHeader()
     return;
   }
 
-  LOG_VAR(_in->tellg());
   _in->read(_getBuffer(size), size);
-  LOG_VAR(size);
   if (_in->gcount() != size)
   {
     throw HootException(QString("Did not read the expected number of bytes from blob header. "
