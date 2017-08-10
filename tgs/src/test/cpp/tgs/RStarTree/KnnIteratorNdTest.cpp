@@ -118,8 +118,8 @@ public:
 
   void test1()
   {
-   boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
-   boost::shared_ptr<HilbertRTree> tree(new HilbertRTree(mps, 3));
+    boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(256));
+    boost::shared_ptr<HilbertRTree> tree(new HilbertRTree(mps, 3));
 
     createTestData(3, 4);
     tree->bulkInsert(testData, testId);

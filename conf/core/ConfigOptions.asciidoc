@@ -762,6 +762,7 @@ default the first assigned id will be -1)
 ** `${HOOT_TRANSLATE_PATH}`
 ** `${HOOT_HOME}/plugins`
 ** `${HOOT_HOME}/plugins-local`
+** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.
 
@@ -1118,19 +1119,6 @@ Geodatabase. The default is to import all layers from a FGDB.  Setting this vari
 override the filter value that can be set by the layerNameFilter function inside a translation
 script.
 
-=== ogr.mgcp.extra
-
-* Data Type: string
-* Default Value: `file`
-
-When exporting to MGCP:
-- "file" Save the unused tags in a new layer (extra_[PLA]).
-- "note" Add unused tags to the "TXT" field.
-- "none" Don't save the unused tags, just drop them.
-
-NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
-255 characters. Extra text will be truncated.
-
 === ogr.reader.bounding.box
 
 * Data Type: string
@@ -1210,14 +1198,14 @@ When exporting to TDSv40 and TDSv61:
 
 NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
 
-=== ogr.tds.add.fcsubtype
+=== ogr.esri.fcsubtype
 
 * Data Type: bool
 * Default Value: `true`
 
 Add the ESRI specific FCSUBTYPE field to the output.
 
-=== ogr.tds.fdname
+=== ogr.esri.fdname
 
 * Data Type: string
 * Default Value: `TDS`
@@ -1225,12 +1213,30 @@ Add the ESRI specific FCSUBTYPE field to the output.
 The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
 Geodatabases.
 
-=== ogr.tds.structure
+=== ogr.note.extra
+
+* Data Type: string
+* Default Value: `attribute`
+
+When exporting to TDSv40 and TDSv61:
+- "attribute" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+When exporting to MGCP:
+- "attribute" Add unused tags to the "TXT" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
+
+NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
+255 characters. Extra text will be truncated.
+
+=== ogr.thematic.structure
 
 * Data Type: bool
 * Default Value: `true`
 
-Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
+Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
 FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
 === ogr.throw.error
@@ -2626,3 +2632,13 @@ Set the output precision when writing. Not honored by all writers.
 * Default Value: `false`
 
 Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)
+
+=== writer.xml.sort.by.id
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setting this to true
+will require reading the entire source dataset into memory.  Setting it to false may result in
+using smaller amounts of memory during writing if the data source being written is also a streamable
+format (see the "Supported Data Formats" section in README.md).

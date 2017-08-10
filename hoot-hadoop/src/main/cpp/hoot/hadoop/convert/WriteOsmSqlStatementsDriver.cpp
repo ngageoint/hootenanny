@@ -15,14 +15,15 @@
  */
 
 // Hoot
-#include <hoot/core/util/ConfPath.h>
-#include <hoot/hadoop/pbf/PbfInputFormat.h>
-#include <hoot/hadoop/pbf/PbfRecordReader.h>
 #include <hoot/core/io/ApiDb.h>
-#include <hoot/core/util/UuidHelper.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/UuidHelper.h>
+#include <hoot/hadoop/pbf/PbfInputFormat.h>
+#include <hoot/hadoop/pbf/PbfRecordReader.h>
 
 // Pretty Pipes
 #include <pp/mapreduce/Job.h>

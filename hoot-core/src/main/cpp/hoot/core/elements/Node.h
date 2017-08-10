@@ -89,9 +89,9 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ElementVisitor& visitor) const;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const;
 
-  virtual void visitRw(ElementProvider& map, ElementVisitor& visitor);
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
 
 protected:
 

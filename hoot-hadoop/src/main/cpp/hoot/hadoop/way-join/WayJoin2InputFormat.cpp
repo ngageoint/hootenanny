@@ -63,7 +63,7 @@ void WayJoin2InputFormat::_addCsqSplits(const QString& p)
     fif.setPath(p.toStdString());
     for (int i = 0; i < fif.getSplitCount(); i++)
     {
-     boost::shared_ptr<pp::InputSplit> split(fif.getSplit(i).copy());
+      boost::shared_ptr<pp::InputSplit> split(fif.getSplit(i).copy());
 
       // create a parent split and add it to the list.
       WayJoin2InputSplit parentSplit;
@@ -79,7 +79,7 @@ void WayJoin2InputFormat::_addPbfSplits(const QString& p)
   pif.setPath(p.toStdString());
   for (int i = 0; i < pif.getSplitCount(); i++)
   {
-   boost::shared_ptr<pp::InputSplit> split(pif.getSplit(i).copy());
+    boost::shared_ptr<pp::InputSplit> split(pif.getSplit(i).copy());
 
     // create a parent split and add it to the list.
     WayJoin2InputSplit parentSplit;

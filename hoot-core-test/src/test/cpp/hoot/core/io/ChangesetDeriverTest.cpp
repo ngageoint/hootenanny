@@ -30,6 +30,7 @@
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/util/Log.h>
 
 #include "../TestUtils.h"
 

@@ -1,0 +1,75 @@
+{
+  "settings":
+  [
+    {
+      "name": "network.conflicts.aggression",
+      "min": 4.0,
+      "max": 10.0
+    },
+    {
+      "name": "network.conflicts.partial.handicap",
+      "min": 0.1,
+      "max": 0.3
+    },
+    {
+      "name": "network.conflicts.stub.handicap",
+      "min": 0.76,
+      "max": 0.96
+    },
+    {
+      "name": "network.conflicts.weight.influence",
+      "min": 0.0,
+      "max": 0.1
+    },
+    {
+      "name": "network.conflicts.outbound.weighting",
+      "min": 0.0,
+      "max": 0.1
+    },
+    {
+      "name": "network.conflicts.stub.through.weighting",
+      "min": 0.49,
+      "max": 0.69
+    },
+    {
+      "name": "network.max.stub.length",
+      "min": 15.0,
+      "max": 25.0
+    },
+    {
+      "name": "network.match.threshold",
+      "min": 0.05,
+      "max": 0.25
+    },
+    {
+      "name": "network.miss.threshold",
+      "min": 0.75,
+      "max": 0.95
+    },
+    {
+      "name": "network.review.threshold",
+      "min": 0.4,
+      "max": 0.6
+    },
+    {
+      "name": "way.merger.min.split.size",
+      "min": 4.0,
+      "max": 6.0
+    },
+    {
+      "name": "way.matcher.max.angle",
+      "min": 50.0,
+      "max": 70.0
+    },
+    {
+      "name": "way.matcher.heading.delta",
+      "min": 4.0,
+      "max": 6.0
+    },
+    {
+      "name": "network.optimization.iterations",
+      "min": 2,
+      "max": 2
+    }
+  ]
+}

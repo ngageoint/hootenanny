@@ -213,7 +213,7 @@ public:
     w->setTag("highway", "road");
     w->setTag("note", "test tag");
     map->addWay(w);
-    writer.intializePartial(&ss);
+    writer.initializePartial(&ss);
     writer.writePartial(map);
 
     map->clear();

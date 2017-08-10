@@ -191,7 +191,7 @@ private:
 
   Settings _settings;
 
- boost::shared_ptr<PertyMatchScorer> _matchScorer;
+  boost::shared_ptr<PertyMatchScorer> _matchScorer;
 
   void _writeStatsForOutputFiles(const QString& inputMapPath, QString sep);
   void _writePlotFile(const QString outputPath,

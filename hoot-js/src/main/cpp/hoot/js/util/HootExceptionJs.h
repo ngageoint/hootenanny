@@ -87,7 +87,7 @@ private:
 
 };
 
-inline void toCpp(v8::Handle<v8::Value> v,boost::shared_ptr<HootException>& e)
+inline void toCpp(v8::Handle<v8::Value> v, boost::shared_ptr<HootException>& e)
 {
   if (HootExceptionJs::isHootException(v))
   {

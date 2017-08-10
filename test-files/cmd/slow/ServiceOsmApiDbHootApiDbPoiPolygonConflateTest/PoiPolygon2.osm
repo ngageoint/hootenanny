@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="-4752" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641999999999953" lon="-122.4201999999999941">
+        <tag k="REF2" v="none"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="address" v="45 Hoff St"/>
+        <tag k="addr:state" v="CA"/>
+        <tag k="name" v="Kid Power Park Community Garden"/>
+        <tag k="addr:postcode" v="94110"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-4752"/>
+    </node>
+    <node visible="true" id="-4747" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7642000000000095" lon="-122.4202999999999975">
+        <tag k="REF2" v="009232"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="leisure" v="park"/>
+        <tag k="address" v="45 Hoff St"/>
+        <tag k="addr:state" v="CA"/>
+        <tag k="name" v="Kid Power Park"/>
+        <tag k="addr:postcode" v="94110"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-4747"/>
+    </node>
+    <node visible="true" id="-4745" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7640999999999991" lon="-122.4202999999999975">
+        <tag k="REF2" v="000d65"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="leisure" v="park"/>
+        <tag k="phone" v="(415) 203-1299"/>
+        <tag k="address" v="45 Hoff St"/>
+        <tag k="addr:state" v="CA"/>
+        <tag k="name" v="Kid Power Park Children�s Play Area"/>
+        <tag k="addr:postcode" v="94110"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-4745"/>
+    </node>
+    <node visible="true" id="-4729" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7640604044559538" lon="-122.4201254395568839">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4729"/>
+    </node>
+    <node visible="true" id="-4728" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641247800976814" lon="-122.4201313053116422">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4728"/>
+    </node>
+    <node visible="true" id="-4727" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7641891493961026" lon="-122.4201371787444259">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4727"/>
+    </node>
+    <node visible="true" id="-4726" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7642535177852352" lon="-122.4201430443321215">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4726"/>
+    </node>
+    <node visible="true" id="-4725" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7643275718567182" lon="-122.4201497985845748">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4725"/>
+    </node>
+    <node visible="true" id="-4724" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7643100394121589" lon="-122.4204399893393571">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4724"/>
+    </node>
+    <node visible="true" id="-4723" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7639810542913352" lon="-122.4204099912615789">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4723"/>
+    </node>
+    <node visible="true" id="-4722" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7639985856272631" lon="-122.4201198017578918">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4722"/>
+    </node>
+    <node visible="true" id="-4716" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7623016474913911" lon="-122.4225540447685034">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4716"/>
+    </node>
+    <node visible="true" id="-4715" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7624769082739888" lon="-122.4225708318495265">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4715"/>
+    </node>
+    <node visible="true" id="-4714" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7624550211999122" lon="-122.4229330181382807">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4714"/>
+    </node>
+    <node visible="true" id="-4713" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7622797615039758" lon="-122.4229162302347191">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="-4713"/>
+    </node>
+    <node visible="true" id="-4694" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7643533234119460" lon="-122.4208363559221482">
+        <tag k="REF2" v="00435f"/>
+        <tag k="name" v="16TH &amp; HOFF ST. PARKING GARAGE"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-4694"/>
+    </node>
+    <node visible="true" id="-4690" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7621472465912404" lon="-122.4196947200801020">
+        <tag k="REF2" v="none"/>
+        <tag k="name" v="2176-2178 MISSION ST"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-4690"/>
+    </node>
+    <node visible="true" id="-4682" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7626807028338334" lon="-122.4219696647950713">
+        <tag k="REF2" v="007037"/>
+        <tag k="name" v="MISSION POLICE STATION"/>
+        <tag k="amenity" v="police"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-4682"/>
+    </node>
+    <way visible="true" id="-799" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4713"/>
+        <nd ref="-4714"/>
+        <nd ref="-4715"/>
+        <nd ref="-4716"/>
+        <nd ref="-4713"/>
+        <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
+        <tag k="name" v="Dearborn Community Garden"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-799"/>
+    </way>
+    <way visible="true" id="-798" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4722"/>
+        <nd ref="-4723"/>
+        <nd ref="-4724"/>
+        <nd ref="-4725"/>
+        <nd ref="-4726"/>
+        <nd ref="-4727"/>
+        <nd ref="-4728"/>
+        <nd ref="-4729"/>
+        <nd ref="-4722"/>
+        <tag k="REF2" v="none"/>
+        <tag k="area" v="yes"/>
+        <tag k="name" v="Kidpower Park"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-798"/>
+    </way>
+</osm>

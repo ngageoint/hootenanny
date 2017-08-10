@@ -32,6 +32,7 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/UuidHelper.h>
 
 #include "../TestUtils.h"

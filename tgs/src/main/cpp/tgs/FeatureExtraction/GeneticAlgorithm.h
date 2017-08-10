@@ -81,7 +81,7 @@ namespace Tgs
   {
   public:
 
-    GeneticAlgorithm(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness);
+    GeneticAlgorithm(boost::shared_ptr<Genome> seed, boost::shared_ptr<FitnessFunction> fitness);
 
     virtual ~GeneticAlgorithm();
 
@@ -92,7 +92,7 @@ namespace Tgs
 
     void enableScoreCaching() { _scoreCaching = true; }
 
-   boost::shared_ptr<Genome> getBestGenome() const { return _best; }
+    boost::shared_ptr<Genome> getBestGenome() const { return _best; }
 
     const std::vector<boost::shared_ptr<Genome> >& getPopulation() const { return _population; }
 
@@ -138,12 +138,12 @@ namespace Tgs
 
   private:
     /// the very first genome
-   boost::shared_ptr<Genome> _seed;
+    boost::shared_ptr<Genome> _seed;
     /// the best genome
-   boost::shared_ptr<Genome> _best;
+    boost::shared_ptr<Genome> _best;
     /// number of new genomes to create at each iteration
     int _freshMeat;
-   boost::shared_ptr<FitnessFunction> _fitness;
+    boost::shared_ptr<FitnessFunction> _fitness;
     bool _initialized;
 
     int _populationSize;

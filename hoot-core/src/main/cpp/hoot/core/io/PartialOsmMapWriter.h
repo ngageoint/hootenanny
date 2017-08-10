@@ -47,6 +47,8 @@ public:
 
   virtual ~PartialOsmMapWriter() {}
 
+  virtual void initializePartial() {}
+
   /**
    * Finalize the writing of partial data. All records should be flushed and any connections/files
    * should be closed when this is complete.
@@ -78,9 +80,7 @@ public:
   void writePartial(const WayPtr& w) { writePartial((const ConstWayPtr)w); }
 
   virtual void writePartial(const ConstRelationPtr& r) = 0;
-  void writePartial(const RelationPtr& r);
-
-  virtual void writeElement(ElementInputStream& in);
+  void writePartial(const RelationPtr& r) { writePartial((const ConstRelationPtr)r); }
 
   virtual void writeElement(ElementPtr& element);
 

@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/MatchThreshold.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/filters/ArbitraryCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -71,14 +71,14 @@ HOOT_FACTORY_REGISTER(MatchCreator, HighwayMatchCreator)
 /**
  * Searches the specified map for any highway match potentials.
  */
-class HighwayMatchVisitor : public ElementVisitor
+class HighwayMatchVisitor : public ConstElementVisitor
 {
 public:
   /**
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   HighwayMatchVisitor(const ConstOsmMapPtr& map,
-    vector<const Match*>& result,boost::shared_ptr<HighwayClassifier> c,
+    vector<const Match*>& result, boost::shared_ptr<HighwayClassifier> c,
     boost::shared_ptr<SublineStringMatcher> sublineMatcher, Status matchStatus,
     ConstMatchThresholdPtr threshold,
     boost::shared_ptr<TagAncestorDifferencer> tagAncestorDiff):

@@ -25,6 +25,7 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
+#include <hoot/core/util/Log.h>
 #include "ElementInputStream.h"
 #include "ElementOutputStream.h"
 
@@ -39,11 +40,20 @@ ElementOutputStream::~ElementOutputStream()
 {
 }
 
-void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos)
+void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos,
+                                           boost::shared_ptr<ElementCriterion> criterion)
 {
   while (eis.hasMoreElements())
   {
-    eos.writeElement(eis);
+    ElementPtr element = eis.readNextElement();
+    if (!criterion.get() || criterion->isSatisfied(element))
+    {
+      eos.writeElement(element);
+    }
+    else
+    {
+      LOG_TRACE("Element did not satisfy filter: " << element->getElementId());
+    }
   }
 }
 

@@ -71,7 +71,7 @@ namespace Tgs
     {
       // load data frame
       cout << "Importing data frame... ";
-     boost::shared_ptr<DataFrame> df(new DataFrame);
+      boost::shared_ptr<DataFrame> df(new DataFrame);
       fstream fs("OttawaCars.xml", ios_base::in);
       if (fs.is_open() == false)
       {
@@ -80,14 +80,14 @@ namespace Tgs
       df->import(fs);
       cout << "done." << endl;
 
-     boost::shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
+      boost::shared_ptr<CalculatorGenome> genome(new CalculatorGenome());
       genome->setInitializationDepth(4);
       genome->addBasicMathNodeTypes();
 
       // create source node for each factor
       for (unsigned int i = 0; i < df->getNumFactors(); i++)
       {
-       boost::shared_ptr<DataFrameCalculatorNodeSource> src(new DataFrameCalculatorNodeSource(df, i));
+        boost::shared_ptr<DataFrameCalculatorNodeSource> src(new DataFrameCalculatorNodeSource(df, i));
         string label = df->getFactorLabelFromIndex(i);
         if (label != "MAX_Z_GROUND" && label != "MIN_Z_GROUND" && 
           label != "MAX_Z_AERIAL" && label != "MIN_Z_AERIAL")
@@ -97,8 +97,8 @@ namespace Tgs
       }
 
       // create a fitness function using symmetric uncertainty
-     boost::shared_ptr<FeatureScoreCalculator> fsc(new SymmetricUncertaintyCalculator());
-     boost::shared_ptr<FeatureScoreFitnessFunction> fitness(new FeatureScoreFitnessFunction(df, fsc));
+      boost::shared_ptr<FeatureScoreCalculator> fsc(new SymmetricUncertaintyCalculator());
+      boost::shared_ptr<FeatureScoreFitnessFunction> fitness(new FeatureScoreFitnessFunction(df, fsc));
 
       GeneticAlgorithm ga(genome, fitness);
       ga.setPopulationSize(500);
@@ -116,7 +116,7 @@ namespace Tgs
       {
         ga.step();
         c+= ga.getPopulation().size();
-       boost::shared_ptr<CalculatorGenome> best = 
+        boost::shared_ptr<CalculatorGenome> best =
           boost::dynamic_pointer_cast<CalculatorGenome>(ga.getBestGenome());
         cout << c << "\t" << best->getScore() << "\t" << best->toString() << endl;
 //         if (1 / best->getScore() < 1.0)

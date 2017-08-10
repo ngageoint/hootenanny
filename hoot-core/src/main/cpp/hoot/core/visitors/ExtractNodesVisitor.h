@@ -28,7 +28,7 @@
 #define EXTRACTNODESVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 
 // Qt
@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-class ExtractNodesVisitor :  public ElementVisitor
+class ExtractNodesVisitor :  public ConstElementVisitor
 {
 public:
 

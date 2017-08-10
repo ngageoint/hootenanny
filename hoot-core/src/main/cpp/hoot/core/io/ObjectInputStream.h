@@ -31,8 +31,8 @@
 #include <boost/any.hpp>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/Serializable.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 // Qt

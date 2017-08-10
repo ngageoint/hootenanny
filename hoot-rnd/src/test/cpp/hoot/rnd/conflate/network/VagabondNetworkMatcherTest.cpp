@@ -38,6 +38,9 @@
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/OsmNetworkExtractor.h>
 
+// Qt
+#include <QDir>
+
 namespace hoot
 {
 
@@ -51,6 +54,7 @@ public:
 
   void writeDebugMap(OsmMapPtr map, VagabondNetworkMatcher& uut, int index)
   {
+    QDir().mkpath("tmp");
     OsmMapPtr copy(new OsmMap(map));
     DebugNetworkMapCreator().addDebugElements(copy, uut.getAllEdgeScores(),
       uut.getAllVertexScores());

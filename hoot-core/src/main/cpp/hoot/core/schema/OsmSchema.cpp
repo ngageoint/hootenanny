@@ -1661,6 +1661,11 @@ bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
   return result;
 }
 
+bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
+{
+  return isBuildingPart(e->getTags(), e->getElementType());
+}
+
 bool OsmSchema::isCollection(const Element& e) const
 {
   bool result = false;

@@ -47,6 +47,8 @@
 typedef int Py_ssize_t;
 #endif
 
+using namespace std;
+
 namespace hoot
 {
 

@@ -27,8 +27,9 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/rnd/conflate/network/OsmNetwork.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/rnd/conflate/network/OsmNetwork.h>
 
 using namespace geos::geom;
 

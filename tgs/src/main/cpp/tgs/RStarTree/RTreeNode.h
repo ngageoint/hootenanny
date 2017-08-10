@@ -255,7 +255,7 @@ namespace Tgs
       char* getBox() { return ((char*)&id) + 4; }
     };
 
-    RTreeNode(int dimensions,boost::shared_ptr<Page> page);
+    RTreeNode(int dimensions, boost::shared_ptr<Page> page);
     /**
      * Return the start of the child's data. This includes the box (BoxInternalData) and the 
      * index.

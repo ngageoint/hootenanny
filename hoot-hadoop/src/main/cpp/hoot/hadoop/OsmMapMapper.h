@@ -40,27 +40,12 @@ public:
   void map(HadoopPipes::MapContext& context);
 
   void emitRecord(HadoopPipes::MapContext& context, const std::string& k,
-    const ConstOsmMapPtr& m)
-  {
-    std::stringstream ss(std::stringstream::out);
-    _OsmPbfWriter.writePb(m, &ss);
-    context.emit(k, ss.str());
-  }
+    const ConstOsmMapPtr& m);
 
-  void emitRecord(HadoopPipes::MapContext& context, const std::string& k, const ConstWayPtr& w)
-  {
-    std::stringstream ss(std::stringstream::out);
-    _OsmPbfWriter.writePb(w, &ss);
-    context.emit(k, ss.str());
-  }
+  void emitRecord(HadoopPipes::MapContext& context, const std::string& k, const ConstWayPtr& w);
 
   void emitRecord(HadoopPipes::MapContext& context, const std::string& k,
-    const ConstNodePtr& n)
-  {
-    std::stringstream ss(std::stringstream::out);
-    _OsmPbfWriter.writePb(n, &ss);
-    context.emit(k, ss.str());
-  }
+    const ConstNodePtr& n);
 
 protected:
   std::string _path;

@@ -27,10 +27,6 @@
 #ifndef STATUS_H
 #define STATUS_H
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/MetadataTags.h>
-
 // Qt
 #include <QString>
 
@@ -40,13 +36,15 @@ namespace hoot
 class Status
 {
 public:
-  typedef enum Type
+  typedef enum TypeEnum
   {
     Invalid = 0,
     Unknown1,
     Unknown2,
     Conflated
-  } Type;
+  } TypeEnum;
+
+  typedef int Type;
 
   Status() { _type = Invalid; }
   Status(Type type) { _type = type; }
@@ -54,71 +52,54 @@ public:
   bool operator==(Status t) const { return t._type == _type; }
   bool operator!=(Status t) const { return t._type != _type; }
 
+  /**
+   * @brief fromInput Create a status object from the zero-based input number
+   * @return Return Unknown1 for i=0, Unknown2 for i=1, Input003 for i=2, etc.
+   */
+  static Status fromInput(int i);
+
   Type getEnum() const { return _type; }
 
-  QString toString() const
-  {
-    switch (_type)
-    {
-    case Status::Invalid:
-      return "Invalid";
-    case Status::Unknown1:
-      return MetadataTags::Unknown1();
-    case Status::Unknown2:
-      return MetadataTags::Unknown2();
-    case Status::Conflated:
-      return "Conflated";
-    default:
-      return QString("Unknown (%1)").arg(_type);
-    }
-  }
+  /**
+   * @brief getInput Unlike the enumeration names and strings, this returns the zero-based number
+   *   for the input.
+   * @return The zero-based input for this status or throws an exception if this isn't an input.
+   *   E.g. Unknown1 returns 0, Unknown2 return 1, etc.
+   */
+  int getInput() const;
+
+  /**
+   * @brief toCompatString
+   * @return A backwards compatible string for serializing and testing. Ultimately this
+   *   should be replaced with toString() when the proper refactoring is done.
+   */
+  QString toCompatString() const;
+
+  QString toString() const;
 
   // This is not pretty and it is a copy of "toString".
   // It is a lot easier to change this when the users want different text output
   // instead of changing "toString" and all of code, unit tests etc that rely on it.
-  QString toTextStatus() const
-  {
-    switch (_type)
-    {
-    case Status::Invalid:
-      return "Invalid";
-    case Status::Unknown1:
-      return "Input1";
-    case Status::Unknown2:
-      return "Input2";
-    case Status::Conflated:
-      return "Conflated";
-    default:
-      return QString("Unknown (%1)").arg(_type);
-    }
-  }
+  QString toTextStatus() const;
 
+  /**
+   * @return Returns true if the status is one of any input value (multiary)
+   */
+  bool isInput() const { return _type == Unknown1 || _type == Unknown2 || _type > Conflated; }
+
+  /**
+   * @deprecated
+   * @brief isUnknown Provided for backwards compatibility.
+   * @return Returns true if the status is one of the first two inputs.
+   */
   bool isUnknown() { return _type == Unknown1 || _type == Unknown2; }
 
-  static Type fromString(QString typeString)
-  {
-    typeString = typeString.toLower();
-    if (typeString == "invalid")
-    {
-      return Invalid;
-    }
-    else if (typeString == "unknown1" || typeString == "input1")
-    {
-      return Unknown1;
-    }
-    else if (typeString == "unknown2" || typeString == "input2")
-    {
-      return Unknown2;
-    }
-    else if (typeString == "conflated")
-    {
-      return Conflated;
-    }
-    else
-    {
-      throw HootException("Invalid element type string: " + typeString);
-    }
-  }
+  /**
+   * @brief fromString Parses type from either a human readable string or the numeric string.
+   * @param typeString The string to parse.
+   * @return The type parsed, or throws an exception if it is an invalid string.
+   */
+  static Type fromString(QString typeString);
 
 private:
   Status::Type _type;

@@ -64,6 +64,8 @@ public:
   inline static const QString HootVertexScore12()       { return "hoot:vertex:score12"; }
   inline static const QString HootVertexScore21()       { return "hoot:vertex:score21"; }
 
+  inline static const QString HootHash()                { return "hoot:hash"; }
+
   inline static const QString HootId()                  { return "hoot:id"; }
 
   inline static const QString HootLayername()           { return "hoot:layername"; }
@@ -73,6 +75,8 @@ public:
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
+
+  inline static const QString HootPoiPolygonPoisMerged(){ return "hoot:poipolygon:poismerged"; }
 
   inline static const QString HootReviewTagPrefix()     { return "hoot:review:"; }
   inline static const QString HootReviewChoices()       { return "hoot:review:choices"; }
@@ -120,6 +124,22 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+
+  /**
+   * ID Unique to a training data set with multiary training data.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingId()              { return "ID"; }
+  /**
+   * Refers to a match between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingMatch()           { return "MATCH"; }
+  /**
+   * Refers to a review between two or more elements in a multiary training data set.
+   * @sa MultiaryMatchComparator
+   */
+  inline static const QString TrainingReview()          { return "REVIEW"; }
 
 private:
 

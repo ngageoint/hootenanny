@@ -17,9 +17,10 @@
 #include "MapStatsMapper.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Pretty Pipes
 #include <pp/Factory.h>
@@ -82,7 +83,7 @@ void MapStatsMapper::_writeStats(HadoopPipes::MapContext& context, const MapStat
         arg(partition, 5, 10, QChar('0'));
 
     LOG_INFO("Writing to: " << path);
-   boost::shared_ptr<ostream> osStats(fs.create(path.toStdString()));
+    boost::shared_ptr<ostream> osStats(fs.create(path.toStdString()));
 
     stats.write(*osStats);
   }

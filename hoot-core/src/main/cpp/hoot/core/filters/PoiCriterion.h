@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * A filter that will either keep or remove matches.
+ * A criterion that is only satisified with POIs.
  */
 class PoiCriterion : public ElementCriterion
 {

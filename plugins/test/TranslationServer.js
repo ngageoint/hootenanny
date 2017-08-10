@@ -1,6 +1,7 @@
 var assert = require('assert'),
     http = require('http'),
-    xml2js = require('xml2js');
+    xml2js = require('xml2js'),
+    fs = require('fs');
 var httpMocks = require('node-mocks-http');
 var server = require('../TranslationServer.js');
 
@@ -256,6 +257,16 @@ describe('TranslationServer', function () {
             assert.equal(attrs.waterway, 'river');
         });
 
+        it('should handle tdstoosm GET for MGCP', function() {
+            //http://localhost:8094/tdstoosm?fcode=AL013&translation=TDSv61
+            var attrs = server.handleInputs({
+                fcode: 'BH140',
+                translation: 'GGDMv30',
+                method: 'GET',
+                path: '/tdstoosm'
+            }).attrs;
+            assert.equal(attrs.waterway, 'river');
+        });
         it('should handle invalid F_CODE in tdstoosm GET for MGCP', function() {
             var attrs = server.handleInputs({
                 fcode: 'ZZTOP',
@@ -266,7 +277,7 @@ describe('TranslationServer', function () {
             assert.equal(attrs.error, 'Feature Code ZZTOP is not valid for MGCP');
         });
 
-        it('should handle osmtotds POST', function() {
+        it('should handle OSM to TDSv61 POST', function() {
             //http://localhost:8094/osmtotds
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
@@ -276,6 +287,7 @@ describe('TranslationServer', function () {
             });
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "TDSv61");
                 assert.equal(result.osm.node[0].tag[0].$.k, "Feature Code");
                 assert.equal(result.osm.node[0].tag[0].$.v, "AL013:Building");
                 assert.equal(result.osm.node[0].tag[1].$.k, "Unique Entity Identifier");
@@ -283,8 +295,24 @@ describe('TranslationServer', function () {
             });
         });
 
-        it('should handle osmtotds POST of building area feature', function() {
+        it('should handle osmtotds POST and preserve bounds tag and ids', function() {
             //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="JOSM"><bounds minlat="39.35643172777992" minlon="-105.21811763904256" maxlat="39.35643172777992" maxlon="-105.21811763904256" origin="MapEdit server" /><node id="777" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/osmtotds'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.node[0].$.id, "777");
+                assert.equal(parseFloat(result.osm.bounds[0].$.minlat).toFixed(6), 39.356432);
+                assert.equal(parseFloat(result.osm.bounds[0].$.minlon).toFixed(6), -105.218118);
+                assert.equal(parseFloat(result.osm.bounds[0].$.maxlat).toFixed(6), 39.356432);
+                assert.equal(parseFloat(result.osm.bounds[0].$.maxlon).toFixed(6), -105.218118);
+            });
+        });
+        it('should handle OSM to MGCP POST of building area feature', function() {
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="building" v="yes"/><tag k="uuid" v="{d7cdbdfe-88c6-4d8a-979d-ad88cfc65ef1}"/></way></osm>',
                 method: 'POST',
@@ -293,6 +321,7 @@ describe('TranslationServer', function () {
             });
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "MGCP");
                 assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
                 assert.equal(result.osm.way[0].tag[0].$.v, "AL015:General Building");
                 assert.equal(result.osm.way[0].tag[1].$.k, "MGCP Feature universally unique identifier");
@@ -300,7 +329,7 @@ describe('TranslationServer', function () {
             });
         });
 
-        it('should handle osmtotds POST of road line feature with width', function() {
+        it('should handle OSM to MGCP POST of road line feature with width', function() {
             //http://localhost:8094/osmtotds
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
@@ -310,6 +339,7 @@ describe('TranslationServer', function () {
             });
             xml2js.parseString(osm2trans, function(err, result) {
                 if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "MGCP");
                 assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
                 assert.equal(result.osm.way[0].tag[0].$.v, "AP030:Road");
                 assert.equal(result.osm.way[0].tag[1].$.k, "MGCP Feature universally unique identifier");
@@ -323,7 +353,88 @@ describe('TranslationServer', function () {
             });
         });
 
-        it('should handle osmtotds POST of facility area feature', function() {
+        it('should handle OSM to GGDMv30 English POST of road line feature with width', function() {
+            //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
+                method: 'POST',
+                translation: 'GGDMv30',
+                path: '/osmtotds'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "GGDMv30");
+
+                assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AP030:Road");
+                assert.equal(result.osm.way[0].tag[1].$.k, "Roadway Type");
+                assert.equal(result.osm.way[0].tag[1].$.v, "No Information");
+                assert.equal(result.osm.way[0].tag[2].$.k, "Unique Entity Identifier");
+                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[3].$.k, "Route Pavement Information : Route Minimum Travelled Way Width");
+                assert.equal(result.osm.way[0].tag[3].$.v, "20");
+                assert.equal(result.osm.way[0].tag[4].$.k, "Route Identification <route designation type>");
+                assert.equal(result.osm.way[0].tag[4].$.v, "Local");
+                assert.equal(result.osm.way[0].tag[5].$.k, "Track or Lane Count");
+                assert.equal(result.osm.way[0].tag[5].$.v, "2");
+            });
+        });
+
+        it('should handle OSM to GGDMv30 Raw POST of road line feature with width', function() {
+            //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
+                method: 'POST',
+                translation: 'GGDMv30',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "GGDMv30");
+                assert.equal(result.osm.way[0].tag[0].$.k, "LTN");
+                assert.equal(result.osm.way[0].tag[0].$.v, "2");
+                assert.equal(result.osm.way[0].tag[1].$.k, "RTY");
+                assert.equal(result.osm.way[0].tag[1].$.v, "-999999");
+                assert.equal(result.osm.way[0].tag[2].$.k, "UFI");
+                assert.equal(result.osm.way[0].tag[2].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[3].$.k, "F_CODE");
+                assert.equal(result.osm.way[0].tag[3].$.v, "AP030");
+                assert.equal(result.osm.way[0].tag[4].$.k, "ZI016_WD1");
+                assert.equal(result.osm.way[0].tag[4].$.v, "20");
+                assert.equal(result.osm.way[0].tag[5].$.k, "RIN_ROI");
+                assert.equal(result.osm.way[0].tag[5].$.v, "5");
+            });
+        });
+
+        it('should handle OSM to TDSv40 POST of road line feature with width', function() {
+            //http://localhost:8094/osmtotds
+            var osm2trans = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-8" version="0"><nd ref="-21"/><nd ref="-24"/><nd ref="-27"/><tag k="highway" v="road"/><tag k="uuid" v="{8cd72087-a7a2-43a9-8dfb-7836f2ffea13}"/><tag k="width" v="20"/><tag k="lanes" v="2"/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv40',
+                path: '/osmtotds'
+            });
+            //console.log(osm2trans);
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "TDSv40");
+
+                assert.equal(result.osm.way[0].tag[0].$.k, "Feature Code");
+                assert.equal(result.osm.way[0].tag[0].$.v, "AP030:Road");
+                assert.equal(result.osm.way[0].tag[1].$.k, "Width");
+                assert.equal(result.osm.way[0].tag[1].$.v, "20");
+                assert.equal(result.osm.way[0].tag[2].$.k, "Route Designation (route designation type)");
+                assert.equal(result.osm.way[0].tag[2].$.v, "No Information");
+                assert.equal(result.osm.way[0].tag[3].$.k, "Unique Entity Identifier");
+                assert.equal(result.osm.way[0].tag[3].$.v, "8cd72087-a7a2-43a9-8dfb-7836f2ffea13");
+                assert.equal(result.osm.way[0].tag[4].$.k, "Thoroughfare Type");
+                assert.equal(result.osm.way[0].tag[4].$.v, "No Information");
+                assert.equal(result.osm.way[0].tag[5].$.k, "Track or Lane Count");
+                assert.equal(result.osm.way[0].tag[5].$.v, "2");
+            });
+        });
+
+        it('should handle OSM to MGCP POST of facility area feature', function() {
             var osm2trans = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="facility" v="yes"/><tag k="uuid" v="{fee4529b-5ecc-4e5c-b06d-1b26a8e830e6}"/><tag k="area" v="yes"/></way></osm>',
                 method: 'POST',
@@ -336,6 +447,30 @@ describe('TranslationServer', function () {
                 assert.equal(result.osm.way[0].tag[0].$.v, "fee4529b-5ecc-4e5c-b06d-1b26a8e830e6");
                 assert.equal(result.osm.way[0].tag[1].$.k, "FCODE");
                 assert.equal(result.osm.way[0].tag[1].$.v, "AL010");
+            });
+        });
+
+        it('should handle OSM to TDSv61 Raw POST of a complete osm file and preserve bounds tag and element ids', function() {
+            var data = fs.readFileSync('../test-files/ToyTestA.osm', 'utf8');//, function(err, data) {
+            var osm2trans = server.handleInputs({
+                osm: data,
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateTo'
+            });
+            xml2js.parseString(osm2trans, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.$.schema, "TDSv61");
+
+                assert.equal(result.osm.bounds[0].$.minlat, "38.85324242720166");
+                assert.equal(result.osm.bounds[0].$.minlon, "-104.9024316099691");
+                assert.equal(result.osm.bounds[0].$.maxlat, "38.85496143739888");
+                assert.equal(result.osm.bounds[0].$.maxlon, "-104.8961823052624");
+
+                assert.equal(result.osm.way[0].$.id, "-1669801");
+                assert.equal(result.osm.way[0].nd[0].$.ref, "-1669731");
+                assert.equal(result.osm.way[0].nd[1].$.ref, "-1669791");
+                assert.equal(result.osm.way[0].nd[2].$.ref, "-1669793");
             });
         });
 
@@ -426,6 +561,56 @@ describe('TranslationServer', function () {
             });
         });
 
+        it('should untangle MGCP tags', function() {
+            //http://localhost:8094/osmtotds
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="FCODE" v="AL013"/><tag k="levels" v="3"/>/></way></osm>',
+                method: 'POST',
+                translation: 'MGCP',
+                path: '/translateFrom'
+            });
+            xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "levels");
+                assert.equal(result.osm.way[0].tag[0].$.v, "3");
+                assert.equal(result.osm.way[0].tag[1].$.k, "building");
+                assert.equal(result.osm.way[0].tag[1].$.v, "yes");
+            });
+        });
+
+        it('should untangle TDSv61 tags', function() {
+            //http://localhost:8094/osmtotds
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="AL013" v="building"/><tag k="levels" v="3"/>/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv61',
+                path: '/translateFrom'
+            });
+            xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "levels");
+                assert.equal(result.osm.way[0].tag[0].$.v, "3");
+                assert.equal(result.osm.way[0].tag[1].$.k, "building");
+                assert.equal(result.osm.way[0].tag[1].$.v, "yes");
+            });
+        });
+
+        it('should untangle TDSv30 tags', function() {
+            //http://localhost:8094/osmtotds
+            var trans2osm = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="AL013" v="building"/><tag k="levels" v="3"/>/></way></osm>',
+                method: 'POST',
+                translation: 'TDSv40',
+                path: '/translateFrom'
+            });
+            xml2js.parseString(trans2osm, function(err, result) {
+                if (err) console.error(err);
+                assert.equal(result.osm.way[0].tag[0].$.k, "levels");
+                assert.equal(result.osm.way[0].tag[0].$.v, "3");
+                assert.equal(result.osm.way[0].tag[1].$.k, "building");
+                assert.equal(result.osm.way[0].tag[1].$.v, "yes");
+            });
+        });
         it('should handle /taginfo/key/values GET with NO enums', function() {
             //http://localhost:8094/taginfo/key/values?fcode=AP030&filter=ways&key=SGCC&page=1&query=Clo&rp=25&sortname=count_ways&sortorder=desc&translation=TDSv61
 //http://localhost:8094/taginfo/key/values?fcode=AA040&filter=nodes&key=ZSAX_RX3&page=1&query=undefined&rp=25&sortname=count_nodes&sortorder=desc&translation=TDSv61
@@ -507,6 +692,7 @@ describe('TranslationServer', function () {
             assert.equal(capas.TDSv61.isavailable, true);
             assert.equal(capas.TDSv40.isavailable, true);
             assert.equal(capas.MGCP.isavailable, true);
+            assert.equal(capas.GGDMv30.isavailable, true);
         });
 
         it('should handle /schema GET', function() {
@@ -595,6 +781,22 @@ describe('TranslationServer', function () {
             var schm = server.handleInputs({
                 geometry: 'line',
                 translation: 'MGCP',
+                searchstr: '',
+                maxlevdst: 0, //This shouldn't be used when searchstr is ''
+                limit: 100,
+                method: 'GET',
+                path: '/schema'
+            });
+            assert(schm.length <= 100, 'Schema search results greater than requested');
+            assert(schm.some(function(d) {
+                return d.desc === 'Railway';
+            }));
+        });
+
+        it('should handle /schema GET', function() {
+            var schm = server.handleInputs({
+                geometry: 'line',
+                translation: 'GGDMv30',
                 searchstr: '',
                 maxlevdst: 0, //This shouldn't be used when searchstr is ''
                 limit: 100,

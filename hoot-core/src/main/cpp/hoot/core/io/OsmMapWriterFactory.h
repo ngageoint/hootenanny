@@ -55,6 +55,8 @@ public:
 
   static void write(const boost::shared_ptr<const OsmMap>& map, QString url);
 
+  static QString getWriterName(const QString url);
+
 private:
 
   static boost::shared_ptr<OsmMapWriterFactory> _theInstance;

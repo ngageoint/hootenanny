@@ -35,7 +35,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, KeepReviewsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, KeepReviewsVisitor)
 
 void KeepReviewsVisitor::visit(const ConstElementPtr& e)
 {

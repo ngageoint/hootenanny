@@ -68,8 +68,8 @@ public:
 
   boost::shared_ptr<OsmMap> splitAll();
 
-  static boost::shared_ptr<OsmMap> splitAll(boost::shared_ptr<const OsmMap> map, DrivingSide drivingSide,
-                                     Meters defaultSplitSize);
+  static boost::shared_ptr<OsmMap> splitAll(boost::shared_ptr<const OsmMap> map,
+                                            DrivingSide drivingSide, Meters defaultSplitSize);
 
   void apply(boost::shared_ptr<OsmMap>& map);
 

@@ -46,16 +46,22 @@ unsigned int ApiDbReader::logWarnCount = 0;
 ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
-_open(false)
+_open(false),
+_returnNodesOnly(false)
 {
+}
 
+bool ApiDbReader::isSupported(QString urlStr)
+{
+  QUrl url(urlStr);
+  return _getDatabase()->isSupported(url);
 }
 
 void ApiDbReader::setBoundingBox(const QString bbox)
 {
   if (!bbox.trimmed().isEmpty())
   {
-    _bounds = GeometryUtils::envelopeFromConfigString(bbox);
+    setBounds(GeometryUtils::envelopeFromConfigString(bbox));
   }
 }
 
@@ -74,6 +80,8 @@ bool ApiDbReader::_hasBounds()
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
+  LOG_TRACE("Mapping element ID: " << oldId << "...");
+
   ElementId result;
   LOG_VART(oldId);
   LOG_VART(_useDataSourceIds);
@@ -134,11 +142,15 @@ ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
     }
   }
 
+  LOG_TRACE("Mapped element ID: " << oldId << " to ID: " << result << "...");
+
   return result;
 }
 
 void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 {
+  LOG_TRACE("Updating metadata on element " << element->getElementId() << "...");
+
   bool ok;
   Tags& tags = element->getTags();
 
@@ -292,103 +304,106 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   }
   LOG_VARD(nodeIds.size());
 
-  if (nodeIds.size() > 0)
+  if (!_returnNodesOnly)
   {
-    LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-    QSet<QString> wayIds;
-    boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
-    while (wayIdItr->next())
+    if (nodeIds.size() > 0)
     {
-      const long wayId = (*wayIdItr).value(0).toLongLong();
-      LOG_VART(ElementId(ElementType::Way, wayId));
-      wayIds.insert(QString::number(wayId));
-    }
-    LOG_VARD(wayIds.size());
-
-    if (wayIds.size() > 0)
-    {
-      LOG_DEBUG("Retrieving ways by way ID...");
-      boost::shared_ptr<QSqlQuery> wayItr =
-        _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
-      while (wayItr->next())
+      LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
+      QSet<QString> wayIds;
+      boost::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
+      while (wayIdItr->next())
       {
-        //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
-        //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
-        //the problem yet with test data, but will continue to keep an eye on it.
-        WayPtr way = _resultToWay(*wayItr, *map);
-        map->addElement(way);
-        LOG_VART(way);
-        boundedWayCount++;
+        const long wayId = (*wayIdItr).value(0).toLongLong();
+        LOG_VART(ElementId(ElementType::Way, wayId));
+        wayIds.insert(QString::number(wayId));
       }
+      LOG_VARD(wayIds.size());
 
-      LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
-      QSet<QString> additionalWayNodeIds;
-      boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
-        _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
-      while (additionalWayNodeIdItr->next())
+      if (wayIds.size() > 0)
       {
-        const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
-        LOG_VART(ElementId(ElementType::Node, nodeId));
-        additionalWayNodeIds.insert(QString::number(nodeId));
-      }
-
-      //subtract nodeIds from additionalWayNodeIds so no dupes get added
-      LOG_VARD(nodeIds.size());
-      LOG_VARD(additionalWayNodeIds.size());
-      additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
-      LOG_VARD(additionalWayNodeIds.size());
-
-      if (additionalWayNodeIds.size() > 0)
-      {
-        nodeIds.unite(additionalWayNodeIds);
-        LOG_DEBUG(
-          "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
-        boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
-          _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
-        while (additionalWayNodeItr->next())
+        LOG_DEBUG("Retrieving ways by way ID...");
+        boost::shared_ptr<QSqlQuery> wayItr =
+          _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
+        while (wayItr->next())
         {
-          NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
-          map->addElement(node);
-          LOG_VART(node);
-          boundedNodeCount++;
+          //I'm a little confused why this wouldn't cause a problem in that you could be writing ways
+          //to the map here whose nodes haven't yet been written to the map yet.  Haven't encountered
+          //the problem yet with test data, but will continue to keep an eye on it.
+          WayPtr way = _resultToWay(*wayItr, *map);
+          map->addElement(way);
+          LOG_VART(way);
+          boundedWayCount++;
+        }
+
+        LOG_DEBUG("Retrieving way node IDs referenced by the selected ways...");
+        QSet<QString> additionalWayNodeIds;
+        boost::shared_ptr<QSqlQuery> additionalWayNodeIdItr =
+          _getDatabase()->selectWayNodeIdsByWayIds(wayIds);
+        while (additionalWayNodeIdItr->next())
+        {
+          const long nodeId = (*additionalWayNodeIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Node, nodeId));
+          additionalWayNodeIds.insert(QString::number(nodeId));
+        }
+
+        //subtract nodeIds from additionalWayNodeIds so no dupes get added
+        LOG_VARD(nodeIds.size());
+        LOG_VARD(additionalWayNodeIds.size());
+        additionalWayNodeIds = additionalWayNodeIds.subtract(nodeIds);
+        LOG_VARD(additionalWayNodeIds.size());
+
+        if (additionalWayNodeIds.size() > 0)
+        {
+          nodeIds.unite(additionalWayNodeIds);
+          LOG_DEBUG(
+            "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
+          boost::shared_ptr<QSqlQuery> additionalWayNodeItr =
+            _getDatabase()->selectElementsByElementIdList(additionalWayNodeIds, TableType::Node);
+          while (additionalWayNodeItr->next())
+          {
+            NodePtr node = _resultToNode(*additionalWayNodeItr, *map);
+            map->addElement(node);
+            LOG_VART(node);
+            boundedNodeCount++;
+          }
         }
       }
-    }
 
-    LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
-    QSet<QString> relationIds;
-    assert(nodeIds.size() > 0);
-    boost::shared_ptr<QSqlQuery> relationIdItr =
-      _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
-    while (relationIdItr->next())
-    {
-      const long relationId = (*relationIdItr).value(0).toLongLong();
-      LOG_VART(ElementId(ElementType::Relation, relationId));
-      relationIds.insert(QString::number(relationId));
-    }
-    if (wayIds.size() > 0)
-    {
-      relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+      LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
+      QSet<QString> relationIds;
+      assert(nodeIds.size() > 0);
+      boost::shared_ptr<QSqlQuery> relationIdItr =
+        _getDatabase()->selectRelationIdsByMemberIds(nodeIds, ElementType::Node);
       while (relationIdItr->next())
       {
         const long relationId = (*relationIdItr).value(0).toLongLong();
         LOG_VART(ElementId(ElementType::Relation, relationId));
         relationIds.insert(QString::number(relationId));
       }
-    }
-    LOG_VARD(relationIds.size());
-
-    if (relationIds.size() > 0)
-    {
-      LOG_DEBUG("Retrieving relations by relation ID...");
-      boost::shared_ptr<QSqlQuery> relationItr =
-        _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
-      while (relationItr->next())
+      if (wayIds.size() > 0)
       {
-        RelationPtr relation = _resultToRelation(*relationItr, *map);
-        map->addElement(relation);
-        LOG_VART(relation);
-        boundedRelationCount++;
+        relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
+        while (relationIdItr->next())
+        {
+          const long relationId = (*relationIdItr).value(0).toLongLong();
+          LOG_VART(ElementId(ElementType::Relation, relationId));
+          relationIds.insert(QString::number(relationId));
+        }
+      }
+      LOG_VARD(relationIds.size());
+
+      if (relationIds.size() > 0)
+      {
+        LOG_DEBUG("Retrieving relations by relation ID...");
+        boost::shared_ptr<QSqlQuery> relationItr =
+          _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
+        while (relationItr->next())
+        {
+          RelationPtr relation = _resultToRelation(*relationItr, *map);
+          map->addElement(relation);
+          LOG_VART(relation);
+          boundedRelationCount++;
+        }
       }
     }
   }
@@ -403,6 +418,219 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());
   LOG_VARD(map->getRelations().size());
+}
+
+bool ApiDbReader::hasMoreElements()
+{
+  if (_nextElement == 0)
+  {
+    _nextElement = _getElementUsingIterator();
+  }
+  return _nextElement != NULL;
+}
+
+void ApiDbReader::initializePartial()
+{
+  LOG_DEBUG("Initializing read operation...");
+  _partialMap.reset(new OsmMap());
+  _elementResultIterator.reset();
+  _selectElementType = ElementType::Node;
+  _elementsRead = 0;
+}
+
+void ApiDbReader::read(OsmMapPtr map)
+{
+  if (!_hasBounds())
+  {
+    LOG_DEBUG("Executing API read query...");
+    for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
+    {
+      if (_returnNodesOnly && ctr != ElementType::Node)
+      {
+        break;
+      }
+      _read(map, static_cast<ElementType::Type>(ctr));
+    }
+  }
+  else
+  {
+    Envelope bounds;
+    if (!_overrideBounds.isNull())
+    {
+      bounds = _overrideBounds;
+    }
+    else
+    {
+      bounds = _bounds;
+    }
+    LOG_DEBUG("Executing API bounded read query with bounds " << bounds.toString() << "...");
+    _readByBounds(map, bounds);
+  }
+}
+
+void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
+{
+  //This method could possibly be replaced by the _readBounds method set to a global extent.
+
+  long elementCount = 0;
+
+  // contact the DB and select all
+  boost::shared_ptr<QSqlQuery> elementResultsIterator = _getDatabase()->selectElements(elementType);
+
+  //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
+  //it will always return an extra null node at the end (see comments in _resultToElement)
+  while (elementResultsIterator->isActive())
+  {
+    boost::shared_ptr<Element> element =
+      _resultToElement(*elementResultsIterator, elementType, *map );
+    //this check is necessary due to an inefficiency in _resultToElement
+    if (element.get())
+    {
+      map->addElement(element);
+      LOG_VART(element);
+      elementCount++;
+    }
+  }
+
+  LOG_DEBUG(
+    "Select all query read " << elementCount << " " << elementType.toString() << " elements.");
+  LOG_VARD(map->getNodes().size());
+  LOG_VARD(map->getWays().size());
+  LOG_VARD(map->getRelations().size());
+}
+
+boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
+{
+  LOG_TRACE("Retrieving next element from iterator...");
+
+  if (_selectElementType == ElementType::Unknown)
+  {
+    return boost::shared_ptr<Element>();
+  }
+
+  //see if another result is available
+  if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
+  {
+    //no results available, so request some more results
+    LOG_TRACE("Requesting more query results...");
+    _elementResultIterator = _getDatabase()->selectElements(_selectElementType);
+  }
+
+  //results still available, so keep parsing through them
+  boost::shared_ptr<Element> element =
+    _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
+
+  //QSqlQuery::next() in _resultToElement will return null
+  //when end of records loop. The iterator will be reset and go to next element type
+  if (!element.get())
+  {
+    _elementResultIterator.reset();
+    const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
+    ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
+    ElementType t(nextType);
+    _selectElementType = t;
+    return _getElementUsingIterator();
+  }
+
+  assert(_selectElementType == element->getElementType());
+
+  return element;
+}
+
+boost::shared_ptr<Element> ApiDbReader::readNextElement()
+{
+  LOG_TRACE("Retrieving next element...");
+
+  if (hasMoreElements())
+  {
+    boost::shared_ptr<Element> result = _nextElement;
+    _nextElement.reset();
+    _elementsRead++;
+    return result;
+  }
+  else
+  {
+    throw HootException("readNextElement should not called if hasMoreElements returns false.");
+  }
+}
+
+void ApiDbReader::finalizePartial()
+{
+  LOG_DEBUG("Finalizing read operation...");
+  _elementResultIterator.reset();
+  _partialMap.reset();
+  if (_open)
+  {
+    //The exception thrown by this commit will mask exception text coming from failed queries.  Not
+    //sure yet how to prevent that from happening, so you may have to temporarily comment out the
+    //commit statement to see query error detail when debugging.
+    _getDatabase()->commit();
+    _getDatabase()->close();
+    _open = false;
+  }
+}
+
+void ApiDbReader::close()
+{
+  LOG_DEBUG("Closing database reader...");
+  finalizePartial();
+}
+
+boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterator,
+                                                         const ElementType& elementType,
+                                                         OsmMap& map)
+{
+  assert(resultIterator.isActive());
+  //It makes much more sense to have callers call next on the iterator before passing it into this
+  //method.  However, I was getting some initialization errors with QSqlQuery when the
+  //reader called it in that way during a partial map read.  So, calling it inside here
+  //instead.  A side effect is that this method will return a NULL element during the last
+  //iteration.  Therefore, callers should check resultIterator->isActive in a loop in place of
+  //calling resultIterator->next() and also should check for the null element.
+  if (resultIterator.next())
+  {
+    boost::shared_ptr<Element> element;
+    switch (elementType.getEnum())
+    {
+      case ElementType::Node:
+        {
+          element = _resultToNode(resultIterator, map);
+        }
+        break;
+
+      case ElementType::Way:
+        {
+          element = _resultToWay(resultIterator, map);
+        }
+        break;
+
+      case ElementType::Relation:
+        {
+          element = _resultToRelation(resultIterator, map);
+        }
+        break;
+
+      default:
+        throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+    }
+
+    return element;
+  }
+  else
+  {
+    resultIterator.finish();
+    return boost::shared_ptr<Element>();
+  }
+}
+
+boost::shared_ptr<OGRSpatialReference> ApiDbReader::getProjection() const
+{
+  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  if (wgs84->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
+  {
+    throw HootException("Error creating EPSG:4326 projection.");
+  }
+  return wgs84;
 }
 
 }

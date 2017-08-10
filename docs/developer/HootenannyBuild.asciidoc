@@ -90,7 +90,6 @@ Under the covers the Java Web Services code is built with Maven, so you may inte
 Web Services Maven files of note:
 
 * pom.xml
-* hoot-services/pom.xml.in
 * distribution/pom.xml
 * scripts/maven/mvn-build
 

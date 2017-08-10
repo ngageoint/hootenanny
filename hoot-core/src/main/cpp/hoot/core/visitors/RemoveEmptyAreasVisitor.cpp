@@ -39,7 +39,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveEmptyAreasVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveEmptyAreasVisitor)
 
 RemoveEmptyAreasVisitor::RemoveEmptyAreasVisitor()
 {
