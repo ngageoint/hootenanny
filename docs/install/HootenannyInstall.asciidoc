@@ -17,10 +17,25 @@ See the README.md Installation section.
 [[fullinstall]]
 == CentOS/RHEL Install Instructions
 
-The Hootenanny install on CentOS/RHEL is a work in progress.  In the near future, an RPM based install will be to
-ensure the easiest installation possible.
+The recommended and easiest installation method is to install from RPMs.  This can be accomplished by performing the following steps:
 
-For now, the script: `scripts/InstallHoot-CentOS-RHEL.sh` may be used to install.  This script requires custom 
+. Create the following file: +/etc/yum.repos.d/hoot.repo+
+. Add the following content to the file:
++
+--------------------------------------
+[hoot]
+name=hoot
+baseurl=https://s3.amazonaws.com/hoot-rpms/stable/el6/
+gpgcheck=0
+--------------------------------------
+. Run the following:
++
+--------------------------------------
+sudo yum update
+sudo yum install hootenanny-autostart
+--------------------------------------
+
+`scripts/InstallHoot-CentOS-RHEL.sh` may also be used to install.  This script requires custom 
 configuration as described within it.  It may require updating if you have installed certain Hootenanny 
 dependencies (Tomcat, Postgres, etc.) with non-standard methods.  It also may require that certain file 
 and directory permissions be relaxed within your the target environment.

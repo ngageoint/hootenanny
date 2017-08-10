@@ -32,7 +32,6 @@
 #include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmChangesetXmlFileWriter.h>
 #include <hoot/core/io/OsmChangesetSqlFileWriter.h>
-#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -58,57 +57,130 @@ public:
 
   DeriveChangesetCmd() { }
 
-  ~DeriveChangesetCmd()
-  {
-    _hootApiDb.close();
-  }
-
   virtual QString getName() const { return "derive-changeset"; }
 
   virtual int runSimple(QStringList args)
   {
-    bool isXmlOutput = false;
-    QString osmApiDbUrl = "";
-
-    if (args.size() == 0)
+    if (args.size() < 3 || args.size() > 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 with takes three to four parameters.").arg(getName()));
-    }
-    else if (args[2].endsWith(".osc"))
-    {
-      isXmlOutput = true;
-      if (args.size() != 3 && args.size() != 5)
-      {
-        cout << getHelp() << endl << endl;
-        throw HootException(
-          QString("%1 with XML output takes three parameters.").arg(getName()));
-      }
-    }
-    else if (args[2].endsWith(".osc.sql"))
-    {
-      if (args.size() != 4 && args.size() != 6)
-      {
-        cout << getHelp() << endl << endl;
-        throw HootException(
-          QString("%1 with SQL output takes four or parameters.").arg(getName()));
-      }
-      osmApiDbUrl = args[3];
-    }
-    else
-    {
-      throw HootException("Unsupported changeset output format: " + args[2]);
+      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
     const QString input1 = args[0];
     const QString input2 = args[1];
-    const QString output = args[2];
+    const QStringList outputs = args[2].split(";");
+    QString osmApiDbUrl = "";
+
+    LOG_VARD(input1);
+    LOG_VARD(input2);
+    LOG_VARD(outputs);
+
+    for (int i = 0; i < outputs.length(); i++)
+    {
+      const QString format = outputs[i];
+      if (!_isSupportedOutputFormat(format))
+      {
+        throw HootException("Unsupported changeset output format: " + format);
+      }
+      else if (format.endsWith(".osc.sql"))
+      {
+        if (args.size() != 4)
+        {
+          cout << getHelp() << endl << endl;
+          throw HootException(
+            QString("%1 with SQL output takes four parameters.").arg(getName()));
+        }
+        osmApiDbUrl = args[3];
+      }
+    }
+
+    LOG_VARD(osmApiDbUrl);
 
     LOG_INFO(
       "Deriving changeset for inputs " << input1.right(50) << ", " << input2.right(50) <<
-      " and writing output to " <<
-      output.right(50) << "...");
+      " and writing output(s) to " <<
+      outputs.join(",").right(50) << "...");
 
+    _parseBuffer();
+    _writeOutputs(_readInputs(input1, input2), outputs, osmApiDbUrl);
+
+    return 0;
+  }
+
+private:
+
+  QList<OsmMapPtr> _readInputs(const QString input1, const QString input2)
+  {
+    const bool singleInput = input2.trimmed().isEmpty();
+
+    //some in these datasets may have status=3 if you're loading conflated data, so use
+    //reader.use.file.status and reader.keep.file.status if you want to retain that value
+    OsmMapPtr map1(new OsmMap());
+    OsmMapPtr map2(new OsmMap());
+    if (!singleInput)
+    {
+      //map1 is the former state of the data
+      loadMap(map1, input1, true, Status::Unknown1);
+      //map2 is the newer state of the data
+      loadMap(map2, input2, true, Status::Unknown2);
+    }
+    else
+    {
+      //here we're passing all the input data through to the output changeset, so put it in the
+      //map2 newer data
+      loadMap(map2, input1, true, Status::Unknown2);
+    }
+
+    //we don't want to include review relations
+    boost::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
+    removeElementsVisitor.setRecursive(false);
+    map1->visitRw(removeElementsVisitor);
+    map2->visitRw(removeElementsVisitor);
+
+    QList<OsmMapPtr> inputMaps;
+    inputMaps.append(map1);
+    inputMaps.append(map2);
+    return inputMaps;
+  }
+
+  ChangesetDeriverPtr _sortInputs(QList<OsmMapPtr> inputMaps)
+  {
+    ElementSorterPtr sorted1(new ElementSorter(inputMaps[0]));
+    ElementSorterPtr sorted2(new ElementSorter(inputMaps[1]));
+    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
+    return delta;
+  }
+
+  void _writeOutputs(const QList<OsmMapPtr>& inputMaps, const QStringList outputs,
+    const QString osmApiDbUrl)
+  {
+    LOG_VARD(outputs.size());
+    for (int i = 0; i < outputs.size(); i++)
+    {
+      const QString output = outputs[i];
+      LOG_VARD(output);
+
+      //Changeset derivation requires element sorting to work properly.  Unfortunately, until this
+      //command is modified to be streaming (#1710), we'll have to sort the inputs multiple times
+      //before writing each output.
+
+      if (output.endsWith(".osc"))
+      {
+        OsmChangesetXmlFileWriter().write(output, _sortInputs(inputMaps));
+      }
+      else if (output.endsWith(".osc.sql"))
+      {
+        assert(!osmApiDbUrl.isEmpty());;
+        OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, _sortInputs(inputMaps));
+      }
+    }
+  }
+
+  void _parseBuffer()
+  {
     const double changesetBuffer = ConfigOptions().getChangesetBuffer();
     if (changesetBuffer > 0.0)
     {
@@ -144,44 +216,12 @@ public:
         convertBoundsParamName,
         GeometryUtils::envelopeToConfigString(convertBounds));
     }
-
-    //some in these datasets may have status=3 if you're loading conflated data, so use
-    //reader.use.file.status and reader.keep.file.status if you want to retain that value
-    OsmMapPtr map1(new OsmMap());
-    loadMap(map1, input1, true, Status::Unknown1);
-    OsmMapPtr map2(new OsmMap());
-    loadMap(map2, input2, true, Status::Unknown2);
-
-    //we don't want to include review relations
-    boost::shared_ptr<TagKeyCriterion> elementCriterion(
-      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-    RemoveElementsVisitor removeElementsVisitor(elementCriterion);
-    removeElementsVisitor.setRecursive(false);
-    map1->visitRw(removeElementsVisitor);
-    map2->visitRw(removeElementsVisitor);
-
-    //changeset derivation requires element sorting to work properly
-    ElementSorterPtr sorted1(new ElementSorter(map1));
-    ElementSorterPtr sorted2(new ElementSorter(map2));
-    ChangesetDeriverPtr delta(new ChangesetDeriver(sorted1, sorted2));
-
-    if (isXmlOutput)
-    {
-      OsmChangesetXmlFileWriter().write(output, delta);
-    }
-    else
-    {
-      assert(!osmApiDbUrl.isEmpty());
-      LOG_DEBUG(osmApiDbUrl);
-      OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, delta);
-    }
-
-    return 0;
   }
 
-private:
-
-  HootApiDb _hootApiDb;
+  bool _isSupportedOutputFormat(const QString format) const
+  {
+    return format.endsWith(".osc") || format.endsWith(".osc.sql");
+  }
 
 };
 
