@@ -31,6 +31,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 
 namespace hoot

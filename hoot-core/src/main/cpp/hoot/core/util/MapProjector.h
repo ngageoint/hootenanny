@@ -32,7 +32,9 @@
 #include <boost/shared_ptr.hpp>
 
 // GDAL
-#include <ogr_spatialref.h>
+#include <ogr_core.h>
+class OGRCoordinateTransformation;
+class OGRSpatialReference;
 
 // GEOS
 #include <geos/geom/Coordinate.h>

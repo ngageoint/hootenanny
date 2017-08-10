@@ -30,9 +30,6 @@
 // Qt
 #include <QString>
 
-// hoot
-#include <hoot/core/util/Log.h>
-
 // Standard
 #include <sstream>
 
@@ -126,11 +123,11 @@ public:
   virtual QString toString(QString indent = QString()) const
   {
     std::stringstream ss;
-    ss << indent << "Leaf: " << std::endl;
+    ss << indent.toUtf8().data() << "Leaf: " << std::endl;
     size_t c = getSize();
     for (size_t i = 0; i < c; ++i)
     {
-      ss << indent << "  " << get(i).first << " : " << get(i).second << std::endl;
+      ss << indent.toUtf8().data() << "  " << get(i).first << " : " << get(i).second << std::endl;
     }
     return QString::fromUtf8(ss.str().data());
   }

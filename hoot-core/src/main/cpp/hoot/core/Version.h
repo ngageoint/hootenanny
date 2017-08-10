@@ -28,8 +28,6 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#include "VersionDefines.h"
-
 namespace hoot
 {
 

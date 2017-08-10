@@ -29,6 +29,9 @@
 #include "EdgeMatch.h"
 #include "EdgeSublineMatch.h"
 
+// hoot
+#include <hoot/core/util/Log.h>
+
 namespace hoot
 {
 

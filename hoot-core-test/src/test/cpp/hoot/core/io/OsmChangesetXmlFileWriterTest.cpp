@@ -30,6 +30,7 @@
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/OsmChangesetXmlFileWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Boost
 using namespace boost;

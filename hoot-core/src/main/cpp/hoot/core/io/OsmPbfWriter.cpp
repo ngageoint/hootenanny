@@ -41,6 +41,7 @@
 
 //  Version must be included last
 #include <hoot/core/Version.h>
+#include <hoot/core/VersionDefines.h>
 
 using namespace hoot::pb;
 

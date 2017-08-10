@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Settings.h>
 using namespace hoot;
 
 // Boost

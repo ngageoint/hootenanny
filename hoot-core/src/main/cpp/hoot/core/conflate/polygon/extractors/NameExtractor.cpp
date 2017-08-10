@@ -35,6 +35,7 @@
 #include <hoot/core/algorithms/LevenshteinDistance.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
 using namespace std;

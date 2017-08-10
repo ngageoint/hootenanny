@@ -24,6 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "WayData.h"
 
 #include "Way.h"
 

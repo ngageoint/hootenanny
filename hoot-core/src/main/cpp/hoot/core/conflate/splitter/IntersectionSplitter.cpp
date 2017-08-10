@@ -35,6 +35,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDebug>
