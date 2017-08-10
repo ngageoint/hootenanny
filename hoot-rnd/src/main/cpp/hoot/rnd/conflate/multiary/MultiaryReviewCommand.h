@@ -275,6 +275,9 @@ private:
 
   // Get a comma-separated list of hashes
   QString _getHashIDList() const;
+
+  // Get a copy of the element
+  ElementPtr _copyElement (ElementPtr e) const;
 };
 
 }

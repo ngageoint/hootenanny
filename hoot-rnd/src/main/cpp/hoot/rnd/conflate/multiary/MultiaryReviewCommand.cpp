@@ -117,7 +117,7 @@ QString MultiaryReviewCommand::toJsonString() const
   // Put our element in a map to make it easy to write
   OsmMapPtr pMap(new OsmMap());
   if (_finalElement)
-    pMap->addElement(_finalElement);
+    pMap->addElement(_copyElement(_finalElement));
 
   // Get a json writer
   OsmJsonWriter jsonWriter;
@@ -268,6 +268,24 @@ QString MultiaryReviewCommand::_getHashIDList() const
   }
   hashStr.chop(1); // trailing comma
   return hashStr;
+}
+
+ElementPtr MultiaryReviewCommand::_copyElement (ElementPtr e) const
+{
+  switch(e->getElementType().getEnum())
+  {
+  case ElementType::Node:
+    return ElementPtr(new Node(*(boost::dynamic_pointer_cast<Node>(e))));
+    break;
+  case ElementType::Way:
+    return ElementPtr(new Way(*(boost::dynamic_pointer_cast<Way>(e))));
+    break;
+  case ElementType::Relation:
+    return ElementPtr(new Relation(*(boost::dynamic_pointer_cast<Relation>(e))));
+    break;
+  default:
+    return ElementPtr();
+  }
 }
 
 } // namespace hoot
