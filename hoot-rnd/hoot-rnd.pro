@@ -141,7 +141,9 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.cpp \
     src/main/cpp/hoot/rnd/io/SparkJsonWriter.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.cpp \
-    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.cpp
+    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.cpp \
+    src/main/cpp/hoot/rnd/visitors/DeriveImplicitTagsVisitor.cpp \
+    src/test/cpp/hoot/rnd/visitors/DeriveImplicitTagsVisitorTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -192,7 +194,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.h \
     src/main/cpp/hoot/rnd/io/SparkJsonWriter.h \
     src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.h \
-    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.h
+    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.h \
+    src/main/cpp/hoot/rnd/visitors/DeriveImplicitTagsVisitor.h
 
 FORMS +=
 

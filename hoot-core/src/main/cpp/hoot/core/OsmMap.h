@@ -38,6 +38,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -279,6 +280,7 @@ public:
    * visiting any elements.
    */
   void visitRw(ConstElementVisitor& visitor);
+  void visitRw(ElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);
 
   long getNodeCount() const { return _nodes.size(); }

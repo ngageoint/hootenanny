@@ -46,6 +46,8 @@
 #include <hoot/core/visitors/ElementIdSetVisitor.h>
 #include <hoot/core/util/Log.h>
 
+#include "MultiaryMatchTrainingValidator.h"
+
 // Qt
 #include <QSet>
 
@@ -81,6 +83,9 @@ void MultiaryMatchComparator::_clearCache()
 
 double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const OsmMapPtr& conflated)
 {
+  OsmMapPtr copyIn(new OsmMap(in));
+  MultiaryMatchTrainingValidator().apply(copyIn);
+
   _clearCache();
   // determine the expected & actual situation
   _findExpectedMatches(in);
