@@ -47,7 +47,7 @@ public class TranslationServiceResource extends NodejsService {
     private static final Logger logger = LoggerFactory.getLogger(TranslationServiceResource.class);
 
     //The purpose of the translationService is to provide the hoot-ui fast way to translate OSM to TDS and TDS to OSM.
-    // OSM - Open Street Maps (https://en.wikipedia.org/wiki/OpenStreetMap)
+    // OSM - OpenStreetMaps (https://en.wikipedia.org/wiki/OpenStreetMap)
     // TDS - Topographic Data Store (http://www.gwg.nga.mil/documents/asfe/NSG%20TDS%20Content%20Spec%20V2.0.htm)
     private static Process translationServiceProcess;
 
