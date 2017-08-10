@@ -83,6 +83,12 @@ public:
   static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y,
     Meters circularError);
 
+  static boost::shared_ptr<Node> newSp(Status s, long id, double x, double y, Meters circularError,
+                                       long changeset, long version, unsigned int timestamp,
+                                       QString user = ElementData::USER_EMPTY,
+                                       long uid = ElementData::UID_EMPTY,
+                                       bool visible = ElementData::VISIBLE_EMPTY);
+
   /**
    * Clears all tags. However, unlike the other elements the x/y data and circular error aren't
    * modified b/c there isn't a clear definition of "unset" for this value.
@@ -151,6 +157,19 @@ inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circula
   NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
 
   result->_nodeData.init(id, x, y);
+  result->_getElementData().setCircularError(circularError);
+  result->setStatus(s);
+
+  return result;
+}
+
+inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError,
+                           long changeset, long version, unsigned int timestamp, QString user,
+                           long uid, bool visible)
+{
+  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+
+  result->_nodeData.init(id, x, y, changeset, version, timestamp, user, uid, visible);
   result->_getElementData().setCircularError(circularError);
   result->setStatus(s);
 
