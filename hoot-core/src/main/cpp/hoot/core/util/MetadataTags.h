@@ -64,6 +64,8 @@ public:
   inline static const QString HootVertexScore12()       { return "hoot:vertex:score12"; }
   inline static const QString HootVertexScore21()       { return "hoot:vertex:score21"; }
 
+  inline static const QString HootHash()                { return "hoot:hash"; }
+
   inline static const QString HootId()                  { return "hoot:id"; }
 
   inline static const QString HootLayername()           { return "hoot:layername"; }

@@ -34,6 +34,8 @@
 #include <hoot/core/conflate/MergerFactory.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -100,6 +102,9 @@ public:
       loadMap(map, inputs[i], false, Status::fromInput(i));
     }
 
+    CalculateHashVisitor hashVisitor;
+    map->visitRw(hashVisitor);
+
     LOG_INFO("Applying pre-conflation operations...");
     NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
 
@@ -109,11 +114,13 @@ public:
 
     // Apply any user specified operations.
     LOG_INFO("Applying post-conflation operations...");
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(result);
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
 
-    MapProjector::projectToWgs84(result);
+    MapProjector::projectToWgs84(map);
 
-    saveMap(result, output);
+    map->visitRw(hashVisitor);
+
+    saveMap(map, output);
 
     LOG_INFO("Total time elapsed: " << totalTime.getElapsed());
 
