@@ -78,6 +78,7 @@ public:
 
   static const QString HOOT_ID;
   inline static const QString& HootId()                 { return HOOT_ID; }
+  inline static const QString HootHash()                { return "hoot:hash"; }
 
   inline static const QString HootLayername()           { return "hoot:layername"; }
 
