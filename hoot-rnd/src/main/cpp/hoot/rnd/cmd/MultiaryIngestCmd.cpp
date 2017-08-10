@@ -62,9 +62,9 @@ public:
       throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
-    const QString newDataInput = args[0];
-    const QString dbLayerOutput = args[1];
-    const QString changesetOutput = args[2];
+    const QString newDataInput = args[0];   //this must be streamable
+    const QString dbLayerOutput = args[1];  //this must be hootapidb://
+    const QString changesetOutput = args[2];    //this must be .spark
     bool sort = false;
     if (args.size() == 4 && args[3].toLower() == "true")
     {
@@ -76,6 +76,8 @@ public:
     LOG_VARD(changesetOutput);
     LOG_VARD(sort);
 
+    //do some input error checking before kicking a potentially long input sort
+
     //only supporting streamable i/o for the time being
     if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newDataInput))
     {
@@ -83,21 +85,18 @@ public:
           "This command does not support non-streamable inputs: " + newDataInput);
     }
 
-    HootApiDbReader tmpDbReader;
-    HootApiDbWriter tmpDbWriter;
-    if (!tmpDbReader.isSupported(dbLayerOutput) || !tmpDbWriter.isSupported(dbLayerOutput))
+    boost::shared_ptr<HootApiDbReader> dbLayerReader(new HootApiDbReader());
+    if (!dbLayerReader->isSupported(dbLayerOutput))
     {
-      throw IllegalArgumentException(
-        "Database layer output must be a Hootenanny API database URL: " + dbLayerOutput);
+      throw HootException(
+        "multiary-ingest only supports a hootapidb:// layer for existing data changeset derivation.");
     }
 
-    SparkChangesetWriter tmpChangesetWriter;
-    if (!tmpChangesetWriter.isSupported(changesetOutput))
+    SparkChangesetWriter changesetFileWriter;
+    if (!changesetFileWriter.isSupported(changesetOutput))
     {
-      throw IllegalArgumentException(
-        "Changeset output must be a Spark format: " + changesetOutput);
+      throw HootException("multiary-ingest only supports a .spark file for changeset output.");
     }
-
 
     LOG_INFO(
       "Streaming data ingest from " << newDataInput << " to database layer: " <<
@@ -121,21 +120,18 @@ public:
         OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
     newInputReader->open(sortedNewDataInput);
 
-    boost::shared_ptr<PartialOsmMapReader> dbLayerReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(dbLayerOutput));
     dbLayerReader->open(dbLayerOutput);
 
     ChangesetDeriverPtr changesetDeriver(
-      new ChangesetDeriver(dbLayerReader, newInputReader));
+      new ChangesetDeriver(
+        boost::dynamic_pointer_cast<ElementInputStream>(dbLayerReader),
+        boost::dynamic_pointer_cast<ElementInputStream>(newInputReader)));
 
-    boost::shared_ptr<OsmChangeWriter> dbLayerChangeWriter =
-      OsmChangeWriterFactory::getInstance().createWriter(dbLayerOutput);
-    dbLayerChangeWriter->open(dbLayerOutput);
+    HootApiDbWriter dbLayerChangeWriter;
+    //no need to check this input format type, since we did it for the reader above
+    dbLayerChangeWriter.open(dbLayerOutput);
 
-    boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
-      OsmChangeWriterFactory::getInstance().createWriter(changesetOutput);
-    changesetFileWriter->open(changesetOutput);
+    changesetFileWriter.open(changesetOutput);
 
     boost::shared_ptr<ElementCriterion> criterion = IoUtils::getStreamingCriterion();
 
@@ -146,8 +142,8 @@ public:
       {
         if (!criterion.get() || criterion->isSatisfied(change.e))
         {
-          dbLayerChangeWriter->writeChange(change);
-          changesetFileWriter->writeChange(change);
+          dbLayerChangeWriter.writeChange(change);
+          changesetFileWriter.writeChange(change);
         }
         else
         {
@@ -157,7 +153,6 @@ public:
     }
 
     newInputReader->finalizePartial();
-    dbLayerReader->finalizePartial();
 
     LOG_INFO(
       "Ingest complete for input: " << newDataInput << ", output database layer: " <<

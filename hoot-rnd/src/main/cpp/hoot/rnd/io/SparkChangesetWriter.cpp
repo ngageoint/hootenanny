@@ -90,7 +90,6 @@ void SparkChangesetWriter::open(QString fileName)
   }
 }
 
-//TODO: convert to tsv
 void SparkChangesetWriter::writeChange(const Change& change)
 {
   QString changeId;
