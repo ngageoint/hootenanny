@@ -3,7 +3,10 @@
 
 // Boost
 #include <boost/bind.hpp>
-#include <boost/pool/object_pool.hpp>
+#include <boost/pool/pool_alloc.hpp>
+
+// Hoot
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <deque>
@@ -24,7 +27,9 @@ public:
 
   boost::shared_ptr<T> allocate()
   {
-    return boost::shared_ptr<T>(_pool.construct(),
+    T* v = new (_pool.allocate()) T();
+
+    return boost::shared_ptr<T>(v,
       boost::bind(&SharedPtrPool<T>::_destroy, this, _1));
   }
 
@@ -33,11 +38,12 @@ public:
 private:
 
   static SharedPtrPool<T> _theInstance;
-  boost::object_pool<T> _pool;
+  boost::fast_pool_allocator<T> _pool;
 
   void _destroy(T* v)
   {
     _pool.destroy(v);
+    _pool.deallocate(v);
   }
 };
 

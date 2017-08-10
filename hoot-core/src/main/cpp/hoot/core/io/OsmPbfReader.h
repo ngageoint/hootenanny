@@ -170,6 +170,8 @@ private:
   std::istream* _in;
   bool _needToCloseInput;
 
+  std::vector< boost::shared_ptr<hoot::Node> > _denseNodeTmp;
+
   /// The last position of the pointer while reading data.
   long _lastPosition;
   /// The last time we reported speed

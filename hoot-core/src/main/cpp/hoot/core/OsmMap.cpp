@@ -189,6 +189,34 @@ void OsmMap::addNode(const NodePtr& n)
   //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
 }
 
+void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
+{
+  if (nodes.size() > 0)
+  {
+    long minId = nodes[0]->getId();
+    long maxId = minId;
+
+    int minBuckets = (int)(_nodes.size() + nodes.size() * 1.1);
+    if (_nodes.bucket_count() < minBuckets)
+    {
+      _nodes.resize(minBuckets);
+    }
+
+    for (size_t i = 0; i < nodes.size(); ++i)
+    {
+      long id = nodes[i]->getId();
+      _nodes[id] = nodes[i];
+      nodes[i]->registerListener(_index.get());
+      _index->addNode(nodes[i]);
+      maxId = std::max(id, maxId);
+      minId = std::min(id, minId);
+    }
+
+    _idGen->ensureNodeBounds(maxId);
+    _idGen->ensureNodeBounds(minId);
+  }
+}
+
 void OsmMap::addRelation(const RelationPtr& r)
 {
   VALIDATE(validate());

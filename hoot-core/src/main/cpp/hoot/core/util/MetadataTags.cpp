@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,19 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "Element.h"
+#include "MetadataTags.h"
 
 namespace hoot
 {
 
-long ElementData::CHANGESET_EMPTY = 0;
-long ElementData::VERSION_EMPTY = 0;
-unsigned int ElementData::TIMESTAMP_EMPTY = 0;
-QString ElementData::USER_EMPTY = QString();
-long ElementData::UID_EMPTY = 0;
-bool ElementData::VISIBLE_EMPTY = true;
+const QString MetadataTags::HOOT_STATUS = "hoot:status";
+const QString MetadataTags::ACCURACY = "accuracy";
+const QString MetadataTags::ERROR_CIRCULAR = "error:circular";
+const QString MetadataTags::HOOT_ID = "hoot:id";
 
 }

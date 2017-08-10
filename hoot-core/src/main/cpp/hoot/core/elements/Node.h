@@ -125,17 +125,18 @@ public:
 
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
 
-protected:
-
-
-  friend class SharedPtrPool<Node>;
-  friend class boost::object_pool<Node>;
+#warning uncomment and move to protected
+//  friend class SharedPtrPool<Node>;
+//  friend class boost::object_pool<Node>;
   /**
    * The default constructor shouldn't really be used in typical code. We really _need_ the
    * parameters passed into the other constructors. However, the pool method requires a default
    * constructor. To work around this, the pool objects are friends (above).
    */
   Node() {}
+
+protected:
+
 
   NodeData _nodeData;
 
@@ -147,6 +148,17 @@ protected:
 
 typedef boost::shared_ptr<Node> NodePtr;
 typedef boost::shared_ptr<const Node> ConstNodePtr;
+
+inline NodePtr Node::newSp(Status s, long id, double x, double y, Meters circularError)
+{
+  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+
+  result->_nodeData.init(id, x, y);
+  result->_getElementData().setCircularError(circularError);
+  result->setStatus(s);
+
+  return result;
+}
 
 inline uint qHash(const ConstNodePtr& n)
 {

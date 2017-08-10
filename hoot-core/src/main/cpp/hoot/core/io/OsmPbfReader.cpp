@@ -380,8 +380,10 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     logWarnCount++;
   }
 
-  vector< boost::shared_ptr<hoot::Node> > nodes;
-  nodes.reserve(size);
+  if (_denseNodeTmp.size() != size)
+  {
+    _denseNodeTmp.resize(size);
+  }
 
   // the file uses delta encoding
   long lon = 0;
@@ -395,8 +397,9 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     long newId = _getNodeId(id);
     double x = _convertLon(lon);
     double y = _convertLat(lat);
-    NodePtr n(Node::newSp(_status, newId, x, y, _circularError));
-    nodes.push_back(n);
+    _denseNodeTmp[i] = Node::newSp(_status, newId, x, y, _circularError);
+    //NodePtr n(Node::newSp(_status, newId, x, y, _circularError));
+    //nodes[i].reset(new Node(_status, newId, x, y, _circularError));
     if (_map->containsNode(newId))
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -409,8 +412,9 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       }
       logWarnCount++;
     }
-    _map->addNode(n);
   }
+
+  _map->addNodes(_denseNodeTmp);
 
   int index = 0;
   int kv = 0;
@@ -434,7 +438,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       else
       {
         v = str;
-        _addTag(nodes[index], k, v);
+        _addTag(_denseNodeTmp[index], k, v);
         kv = 0;
       }
     }
@@ -465,14 +469,14 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       {
         timestamp += di.timestamp().Get(i) * _dateGranularity;
 
-        if (timestamp != 0 && nodes[i]->getTags().getInformationCount() > 0)
+        if (timestamp != 0 && _denseNodeTmp[i]->getTags().hasInformationTag())
         {
           // QT 4.6 does not have fromMSecsSinceEpoch
           //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
     // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-          nodes[i]->setTag(MetadataTags::SourceDateTime(), dts);
+          _denseNodeTmp[i]->setTag(MetadataTags::SourceDateTime(), dts);
         }
       }
     }
@@ -933,7 +937,12 @@ void OsmPbfReader::parseBlob(long headerOffset, istream* strm, OsmMapPtr map)
     throw HootException("The stream passed in is not \"good\".");
   }
 
-  strm->seekg(headerOffset, ios_base::beg);
+//  if (strm->tellg() != headerOffset)
+//  {
+#warning remove me
+    LOG_INFO("Seeking...");
+    strm->seekg(headerOffset, ios_base::beg);
+//  }
   _parseBlobHeader();
   // Did we hit OSM header?
   if (_d->blobHeader.type() == PBF_OSM_DATA)
@@ -954,6 +963,7 @@ void OsmPbfReader::_parseBlob()
                                 "(%1 instead of %2)").
                         arg(_in->gcount()).arg(size));
   }
+  _d->blob.Clear();
   _d->blob.ParseFromArray(_buffer.data(), size);
 }
 
@@ -965,13 +975,16 @@ void OsmPbfReader::_parseBlobHeader()
     return;
   }
 
+  LOG_VAR(_in->tellg());
   _in->read(_getBuffer(size), size);
+  LOG_VAR(size);
   if (_in->gcount() != size)
   {
     throw HootException(QString("Did not read the expected number of bytes from blob header. "
                                 "(%1 instead of %2)").
                         arg(_in->gcount()).arg(size));
   }
+  _d->blobHeader.Clear();
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
@@ -987,6 +1000,7 @@ void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
                                 "(%1 instead of %2)").
                         arg(strm->gcount()).arg(size));
   }
+  _d->primitiveBlock.Clear();
   _d->primitiveBlock.ParseFromArray(_buffer.data(), size);
 
   _loadOsmData();
@@ -1009,6 +1023,7 @@ void OsmPbfReader::_parseOsmData()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
+  _d->primitiveBlock.Clear();
   _d->primitiveBlock.ParseFromArray(inflated, size);
 
   _loadOsmData();
@@ -1018,6 +1033,7 @@ void OsmPbfReader::_parseOsmHeader()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
+  _d->headerBlock.Clear();
   if (!_d->headerBlock.ParseFromArray(inflated, size))
   {
     throw IoException("Error reading headerBlock.");
@@ -1069,8 +1085,7 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
-#warning uncomment me.
-  //_firstPartialReadCompleted = false;
+  _firstPartialReadCompleted = false;
 
   // read blob header
   _parseBlobHeader();
@@ -1202,8 +1217,7 @@ void OsmPbfReader::initializePartial()
   _partialNodesRead = 0;
   _partialWaysRead = 0;
   _partialRelationsRead = 0;
-#warning uncomment me.
-  //_firstPartialReadCompleted = false;
+  _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
   if ( _in != NULL )

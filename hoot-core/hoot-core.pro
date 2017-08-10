@@ -552,7 +552,8 @@ SOURCES += \
 				src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
 				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp \
     src/main/cpp/hoot/core/util/SharedPtrPool.cpp \
-    src/main/cpp/hoot/core/io/ElementCriterionInputStream.cpp
+    src/main/cpp/hoot/core/io/ElementCriterionInputStream.cpp \
+    src/main/cpp/hoot/core/util/MetadataTags.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -579,7 +580,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/linearreference/WayLocation.h \
     src/main/cpp/hoot/core/algorithms/linearreference/LocationOfPoint.h \
     src/main/cpp/hoot/core/index/OsmMapIndex.h \
-    src/main/cpp/hoot/core/util/Assert.h \
     src/main/cpp/hoot/core/util/AssertionFailedException.h \
     src/main/cpp/hoot/core/util/HootException.h \
     src/main/cpp/hoot/core/manipulators/WayMatchSet.h \

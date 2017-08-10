@@ -119,6 +119,12 @@ public:
 
   void addNode(const NodePtr& n);
 
+  /**
+   * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
+   * times.
+   */
+  void addNodes(const std::vector<NodePtr>& nodes);
+
   void addRelation(const RelationPtr& r);
 
   void addWay(const WayPtr& w);
