@@ -179,7 +179,7 @@ ElementPtr ElementCacheLRU::readNextElement()
   return returnElement;
 }
 
-void ElementCacheLRU::writeElement(ElementPtr &element)
+void ElementCacheLRU::writeElement(const ConstElementPtr& element)
 {
   ConstElementPtr el = element;
   addElement(el);

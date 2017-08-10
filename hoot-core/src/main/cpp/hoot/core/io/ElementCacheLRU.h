@@ -93,7 +93,7 @@ public:
   virtual ElementPtr readNextElement();
 
   // Functions for ElementOutputStream
-  virtual void writeElement(ElementPtr& element);
+  virtual void writeElement(const ConstElementPtr& element);
 
   // Functions for ElementProvider
 

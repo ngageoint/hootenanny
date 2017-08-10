@@ -141,7 +141,8 @@ SOURCES += \
     src/main/cpp/hoot/rnd/conflate/multiary/MultiaryUtilities.cpp \
     src/main/cpp/hoot/rnd/io/SparkJsonWriter.cpp \
     src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.cpp \
-    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.cpp
+    src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.cpp \
+    src/main/cpp/hoot/rnd/cmd/MultiaryIngestCmd.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \

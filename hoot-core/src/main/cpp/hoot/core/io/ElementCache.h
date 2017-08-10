@@ -140,7 +140,7 @@ public:
   virtual ElementPtr readNextElement() = 0;
 
   // Functions for ElementOutputStream
-  virtual void writeElement(ElementPtr& element) = 0;
+  virtual void writeElement(const ConstElementPtr& element) = 0;
 
   // Functions from ElementProvider
 

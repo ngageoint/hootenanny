@@ -41,6 +41,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/io/IoUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -132,50 +133,6 @@ public:
     return 0;
   }
 
-  boost::shared_ptr<ElementCriterion> _getStreamingCriterion(const QStringList ops)
-  {
-    QStringList criterionNames;
-    Factory& factory = Factory::getInstance();
-    for (int i = 0; i < ops.size(); i++)
-    {
-      const QString opName = ops[i];
-      LOG_VART(opName);
-      if (!opName.trimmed().isEmpty())
-      {
-        if (factory.hasBase<ElementCriterion>(opName.toStdString()))
-        {
-          criterionNames.append(opName);
-        }
-      }
-    }
-    LOG_VART(criterionNames.size());
-
-    if (criterionNames.size() == 0)
-    {
-      return boost::shared_ptr<ElementCriterion>();
-    }
-    else if (criterionNames.size() != 1)
-    {
-      //We eventually could apply more than one and allow some simple syntax for AND/OR operations,
-      //but that hasn't been needed so far.
-      throw HootException(
-        "Only a single convert operation can be applied during a streaming write operation.");
-    }
-
-    const QString criterionName = criterionNames[0];
-    boost::shared_ptr<ElementCriterion> criterion(
-      Factory::getInstance().constructObject<ElementCriterion>(criterionName));
-    Configurable* c = dynamic_cast<Configurable*>(criterion.get());
-    if (c != 0)
-    {
-      c->setConfiguration(conf());
-    }
-
-    LOG_INFO("Filtering output with criterion: " << criterionName);
-
-    return criterion;
-  }
-
   void streamElements(QString in, QString out)
   {
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
@@ -196,10 +153,7 @@ public:
     {
       partialWriter->initializePartial();
 
-      if (ConfigOptions().getConvertOps().size() > 0)
-      {
-        criterion = _getStreamingCriterion(ConfigOptions().getConvertOps());
-      }
+      criterion = IoUtils::getStreamingCriterion();
     }
 
     ElementOutputStream::writeAllElements(*streamReader, *streamWriter, criterion);
