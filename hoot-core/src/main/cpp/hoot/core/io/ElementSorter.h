@@ -32,6 +32,10 @@
 
 #include "ElementInputStream.h"
 
+// Qt
+#include <QFile>
+#include <QUrl>
+
 namespace hoot
 {
 
@@ -67,6 +71,8 @@ public:
    * @see ElementInputStream
    */
   virtual ElementPtr readNextElement();
+
+  static QString sortInput(const QUrl& input);
 
 private:
 

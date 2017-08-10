@@ -114,6 +114,8 @@ void SparkChangesetWriter::writeChange(const Change& change)
     throw NotImplementedException();
   }
 
+  //TODO: multiary-ingest
+
 //  NodePtr copy(dynamic_cast<Node*>(n->clone()));
 //  AddExportTagsVisitor().visit(copy);
 //  Envelope e = _bounds->calculateSearchBounds(OsmMapPtr(), copy);

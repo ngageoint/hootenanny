@@ -37,6 +37,7 @@
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
+//#include <hoot/core/io/OsmPbfReader.h>
 
 using namespace std;
 
@@ -58,14 +59,14 @@ public:
     if (args.size() != 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
     const QString newDataInput = args[0];
     const QString dbLayerOutput = args[1];
     const QString changesetOutput = args[2];
     bool sort = false;
-    if (args[3].toLower() == "true")
+    if (args.size() == 4 && args[3].toLower() == "true")
     {
       sort = true;
     }
@@ -97,18 +98,18 @@ public:
         "Changeset output must be a Spark format: " + changesetOutput);
     }
 
-    conf().set(ConfigOptions().getApiDbReaderSortByIdKey(), true);
 
     LOG_INFO(
       "Streaming data ingest from " << newDataInput << " to database layer: " <<
       dbLayerOutput << " and changeset: " << changesetOutput << "...");
 
+    conf().set(ConfigOptions().getApiDbReaderSortByIdKey(), true);
+
     QString sortedNewDataInput;
+    //OsmPbfReader tmpPbfReader; //getSortedTypeThenId
     if (sort) //TODO: if pbf, check pbf format flag
     {
-      //TODO: implement file based element sorter which returns the sorted element file output
-      //path
-      //sortedNewDataInput = ElementSorter.sort(input);
+      sortedNewDataInput = ElementSorter::sortInput(QUrl(newDataInput));
     }
     else
     {
@@ -141,7 +142,7 @@ public:
     while (changesetDeriver->hasMoreChanges())
     {
       const Change change = changesetDeriver->readNextChange();
-      if (change.type != Change::Unknown)  //TODO: is this right?
+      if (change.type != Change::Unknown)  //TODO: multiary-ingest - is this right?
       {
         if (!criterion.get() || criterion->isSatisfied(change.e))
         {

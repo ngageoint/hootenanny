@@ -746,17 +746,17 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
 
 bool HootApiDb::insertNode(ConstNodePtr node)
 {
-  return false;
+  return insertNode(node->getId(), node->getY(), node->getX(), node->getTags());
 }
 
 void HootApiDb::updateNode(ConstNodePtr node)
 {
-
+  return updateNode(node->getId(), node->getY(), node->getX(), node->getVersion(), node->getTags());
 }
 
 void HootApiDb::deleteNode(ConstNodePtr node)
 {
-
+    //TODO: multiary-ingest
 }
 
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)
@@ -802,7 +802,6 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
 bool HootApiDb::insertRelationMember(const long relationId, const ElementType& type,
   const long elementId, const QString& role, const int sequenceId)
-
 {
   LOG_TRACE("Inserting relation member for relation: " << relationId << "...");
 
