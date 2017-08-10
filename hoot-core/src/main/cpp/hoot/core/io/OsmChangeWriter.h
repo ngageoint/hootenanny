@@ -24,46 +24,44 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTOUTPUTSTREAM_H
-#define ELEMENTOUTPUTSTREAM_H
+#ifndef OSMCHANGEWRITER_H
+#define OSMCHANGEWRITER_H
 
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
+// hoot
+#include <hoot/core/io/ChangesetProvider.h>
 
 namespace hoot
 {
 
-class ElementInputStream;
-
 /**
- * Element output stream interface.
+ * Interface for writing OSM changes
  */
-class ElementOutputStream
+class OsmChangeWriter
 {
+
 public:
 
-  ElementOutputStream();
-  virtual ~ElementOutputStream();
+  static std::string className() { return "hoot::OsmMapWriter"; }
 
   /**
-   * Close the output stream. It can safely be expected that if close isn't called explicitly it
-   * will be called by the destructor.
+   * Writes an OSM change.
+   *
+   * @param change an OSM change
    */
-  virtual void close() = 0;
+  virtual void writeChange(const Change& change) = 0;
 
   /**
-   * @brief writeElement
+   * Returns true if the output URL is supported.
    */
-  virtual void writeElement(ElementPtr& element) = 0;
+  virtual bool isSupported(QString url) = 0;
 
   /**
-   * Read elements from the input stream and write to the output stream. There may be a better place
-   * for this to live, but it works for now.
+   * Opens the specified URL for writing.
    */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos,
-    boost::shared_ptr<ElementCriterion> criterion = boost::shared_ptr<ElementCriterion>());
+  virtual void open(QString url) = 0;
+
 };
 
 }
 
-#endif // ELEMENTOUTPUTSTREAM_H
+#endif // OSMCHANGEWRITER_H

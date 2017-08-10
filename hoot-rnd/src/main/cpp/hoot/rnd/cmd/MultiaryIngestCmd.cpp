@@ -34,8 +34,9 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/io/IoUtils.h>
-#include <hoot/rnd/io/SparkJsonWriter.h>
+#include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/io/OsmChangeWriterFactory.h>
 
 using namespace std;
 
@@ -54,160 +55,112 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 3 && args.size() != 4)
+    if (args.size() != 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    const QStringList newDataInputs = args[0].split(";");
-    const QStringList existingDbLayerOutputs = args[1].split(";");
-    const QStringList changesetOutputs = args[2].split(";");
-    QStringList sorted;
-    if (args.size() > 3)
+    const QString newDataInput = args[0];
+    const QString dbLayerOutput = args[1];
+    const QString changesetOutput = args[2];
+    bool sort = false;
+    if (args[3].toLower() == "true")
     {
-      sorted = args[3].split(";");
-    }
-    else
-    {
-      for (int i = 0; i < newDataInputs.size(); i++)
-      {
-        sorted.append("false");
-      }
+      sort = true;
     }
 
-    LOG_VARD(newDataInputs);
-    LOG_VARD(existingDbLayerOutputs);
-    LOG_VARD(changesetOutputs);
-    LOG_VARD(sorted);
+    LOG_VARD(newDataInput);
+    LOG_VARD(dbLayerOutput);
+    LOG_VARD(changesetOutput);
+    LOG_VARD(sort);
 
-    if (newDataInputs.size() != existingDbLayerOutputs.size() ||
-        newDataInputs.size() != changesetOutputs.size() ||
-        (sorted.size() > 0 && (sorted.size() != newDataInputs.size())))
+    //only supporting streamable i/o for the time being
+    if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newDataInput))
     {
-      QString errorMsg =
-        "Mismatching input parameter list sizes.  Inputs: " + QString::number(newDataInputs.size()) +
-        ", Layer Outputs: " + QString::number(existingDbLayerOutputs.size()) +
-        ", Changeset Outputs: " + QString::number(changesetOutputs.size());
-      if (sorted.size() > 0)
-      {
-        errorMsg += ", Sorted descriptors: " + QString::number(sorted.size());
-      }
-      throw IllegalArgumentException(errorMsg);
-    }
-
-    for (int i = 0; i < newDataInputs.size(); i++)
-    {
-      const QString input = newDataInputs[i];
-      //only supporting streamable i/o for the time being
-      if (!OsmMapReaderFactory::getInstance().hasElementInputStream(input))
-      {
-        throw IllegalArgumentException(
-          "This command does not support non-streamable inputs: " + input);
-      }
+      throw IllegalArgumentException(
+          "This command does not support non-streamable inputs: " + newDataInput);
     }
 
     HootApiDbReader tmpDbReader;
     HootApiDbWriter tmpDbWriter;
-    for (int i = 0; i < existingDbLayerOutputs.size(); i++)
+    if (!tmpDbReader.isSupported(dbLayerOutput) || !tmpDbWriter.isSupported(dbLayerOutput))
     {
-      const QString dbOutput = existingDbLayerOutputs[i];
-      if (!tmpDbReader.isSupported(dbOutput) || !tmpDbWriter.isSupported(dbOutput))
-      {
-        throw IllegalArgumentException(
-          "Database layer output must be a Hootenanny API database URL: " + dbOutput);
-      }
+      throw IllegalArgumentException(
+        "Database layer output must be a Hootenanny API database URL: " + dbLayerOutput);
     }
 
-    SparkJsonWriter tmpChangesetWriter;
-    for (int i = 0; i < changesetOutputs.size(); i++)
+    SparkChangesetWriter tmpChangesetWriter;
+    if (!tmpChangesetWriter.isSupported(changesetOutput))
     {
-      const QString changesetOutput = changesetOutputs[i];
-      if (!tmpChangesetWriter.isSupported(changesetOutput))
-      {
-        throw IllegalArgumentException(
-          "Changeset output must be a Spark format: " + changesetOutput);
-      }
+      throw IllegalArgumentException(
+        "Changeset output must be a Spark format: " + changesetOutput);
     }
 
     conf().set(ConfigOptions().getApiDbReaderSortByIdKey(), true);
 
-    for (int i = 0; i < newDataInputs.size(); i++)
+    LOG_INFO(
+      "Streaming data ingest from " << newDataInput << " to database layer: " <<
+      dbLayerOutput << " and changeset: " << changesetOutput << "...");
+
+    QString sortedNewDataInput;
+    if (sort) //TODO: if pbf, check pbf format flag
     {
-      const QString newDataInput = newDataInputs[i];
-      const QString existingDbLayerOutput = existingDbLayerOutputs[i];
-      const QString changesetOutput = changesetOutputs[i];
+      //TODO: implement file based element sorter which returns the sorted element file output
+      //path
+      //sortedNewDataInput = ElementSorter.sort(input);
+    }
+    else
+    {
+      sortedNewDataInput = newDataInput;
+    }
 
-      LOG_INFO(
-        "Streaming data ingest from " << newDataInput << " to database layer: " <<
-        existingDbLayerOutput << " and changeset: " << changesetOutput << "...");
+    boost::shared_ptr<PartialOsmMapReader> newInputReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
+    newInputReader->open(sortedNewDataInput);
 
-      //If the user specified the input was already sorted, we believe it and move on.  The
-      //changeset derivation will fail miserably if it wasn't.
-      QString sortedNewDataInput;
-      if (sorted[i].toLower() == "true")  //TODO: if pbf, check pbf format flag
+    boost::shared_ptr<PartialOsmMapReader> dbLayerReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(dbLayerOutput));
+    dbLayerReader->open(dbLayerOutput);
+
+    ChangesetDeriverPtr changesetDeriver(
+      new ChangesetDeriver(dbLayerReader, newInputReader));
+
+    boost::shared_ptr<OsmChangeWriter> dbLayerChangeWriter =
+      OsmChangeWriterFactory::getInstance().createWriter(dbLayerOutput);
+    dbLayerChangeWriter->open(dbLayerOutput);
+
+    boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
+      OsmChangeWriterFactory::getInstance().createWriter(changesetOutput);
+    changesetFileWriter->open(changesetOutput);
+
+    boost::shared_ptr<ElementCriterion> criterion = IoUtils::getStreamingCriterion();
+
+    while (changesetDeriver->hasMoreChanges())
+    {
+      const Change change = changesetDeriver->readNextChange();
+      if (change.type != Change::Unknown)  //TODO: is this right?
       {
-        sortedNewDataInput = newDataInput;
-      }
-      else
-      {
-        //TODO: implement file based element sorter which returns the sorted element file output
-        //path
-        //sortedNewDataInput = ElementSorter.sort(input);
-      }
-
-      boost::shared_ptr<PartialOsmMapReader> newInputDataReader =
-        boost::dynamic_pointer_cast<PartialOsmMapReader>(
-          OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
-      newInputDataReader->open(sortedNewDataInput);
-
-      boost::shared_ptr<PartialOsmMapReader> existingDbLayerReader =
-        boost::dynamic_pointer_cast<PartialOsmMapReader>(
-          OsmMapReaderFactory::getInstance().createReader(existingDbLayerOutput));
-      existingDbLayerReader->open(existingDbLayerOutput);
-
-      ChangesetDeriverPtr changesetDeriver(
-        new ChangesetDeriver(existingDbLayerReader, newInputDataReader));
-
-      boost::shared_ptr<PartialOsmMapWriter> existingDbLayerWriter =
-        boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-          OsmMapWriterFactory::getInstance().createWriter(existingDbLayerOutput));
-      existingDbLayerWriter->open(existingDbLayerOutput);
-      existingDbLayerWriter->initializePartial();
-
-      //TODO: update spark changeset writer
-      boost::shared_ptr<PartialOsmMapWriter> changesetFileWriter =
-        boost::dynamic_pointer_cast<PartialOsmMapWriter>(
-          OsmMapWriterFactory::getInstance().createWriter(changesetOutput));
-      changesetFileWriter->open(changesetOutput);
-      changesetFileWriter->initializePartial();
-
-      boost::shared_ptr<ElementCriterion> criterion = IoUtils::getStreamingCriterion();
-
-      while (changesetDeriver->hasMoreChanges())
-      {
-        const Change change = changesetDeriver->readNextChange();
         if (!criterion.get() || criterion->isSatisfied(change.e))
         {
-          // TODO: add support for deletes
-          existingDbLayerWriter->writeElement(change.e);
-          changesetFileWriter->writeElement(change.e);
+          dbLayerChangeWriter->writeChange(change);
+          changesetFileWriter->writeChange(change);
         }
         else
         {
           LOG_TRACE("Element did not satisfy filter: " << change.e->getElementId());
         }
       }
-
-      newInputDataReader->finalizePartial();
-      existingDbLayerReader->finalizePartial();
-      existingDbLayerWriter->finalizePartial();
-      changesetFileWriter->finalizePartial();
-
-      LOG_INFO(
-        "Ingest complete for input: " << newDataInput << ", output database layer: " <<
-        existingDbLayerOutput << ", and output changeset: " << changesetOutput << "...");
     }
+
+    newInputReader->finalizePartial();
+    dbLayerReader->finalizePartial();
+
+    LOG_INFO(
+      "Ingest complete for input: " << newDataInput << ", output database layer: " <<
+      dbLayerOutput << ", and output changeset: " << changesetOutput << "...");
 
     return 0;
   }

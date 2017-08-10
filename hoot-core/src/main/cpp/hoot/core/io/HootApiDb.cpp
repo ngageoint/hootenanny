@@ -27,8 +27,6 @@
 #include "HootApiDb.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -744,6 +742,21 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   LOG_VART(QString::number(lon, 'g', 15));
 
   return true;
+}
+
+bool HootApiDb::insertNode(ConstNodePtr node)
+{
+  return false;
+}
+
+void HootApiDb::updateNode(ConstNodePtr node)
+{
+
+}
+
+void HootApiDb::deleteNode(ConstNodePtr node)
+{
+
 }
 
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)

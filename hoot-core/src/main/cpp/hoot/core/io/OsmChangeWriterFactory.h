@@ -24,46 +24,37 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTOUTPUTSTREAM_H
-#define ELEMENTOUTPUTSTREAM_H
+#ifndef OSMCHANGEWRITERFACTORY_H
+#define OSMCHANGEWRITERFACTORY_H
 
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
+// Qt
+#include <QString>
+
+// tgs
+#include <tgs/SharedPtr.h>
 
 namespace hoot
 {
-
-class ElementInputStream;
+class OsmChangeWriter;
 
 /**
- * Element output stream interface.
+ * A factory for constructing writers based on the URL.
  */
-class ElementOutputStream
+class OsmChangeWriterFactory
 {
 public:
 
-  ElementOutputStream();
-  virtual ~ElementOutputStream();
+  OsmChangeWriterFactory();
 
-  /**
-   * Close the output stream. It can safely be expected that if close isn't called explicitly it
-   * will be called by the destructor.
-   */
-  virtual void close() = 0;
+  boost::shared_ptr<OsmChangeWriter> createWriter(QString url);
 
-  /**
-   * @brief writeElement
-   */
-  virtual void writeElement(ElementPtr& element) = 0;
+  static OsmChangeWriterFactory& getInstance();
 
-  /**
-   * Read elements from the input stream and write to the output stream. There may be a better place
-   * for this to live, but it works for now.
-   */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos,
-    boost::shared_ptr<ElementCriterion> criterion = boost::shared_ptr<ElementCriterion>());
+private:
+
+  static boost::shared_ptr<OsmChangeWriterFactory> _theInstance;
 };
 
 }
 
-#endif // ELEMENTOUTPUTSTREAM_H
+#endif // OSMCHANGEWRITERFACTORY_H

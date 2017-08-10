@@ -87,7 +87,7 @@ void PartialOsmMapWriter::writePartial(const boost::shared_ptr<const Element>& e
   }
 }
 
-void PartialOsmMapWriter::writeElement(const ConstElementPtr& element)
+void PartialOsmMapWriter::writeElement(ElementPtr& element)
 {
   if (element != 0)
   {

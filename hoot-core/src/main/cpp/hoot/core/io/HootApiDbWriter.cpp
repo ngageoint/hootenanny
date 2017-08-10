@@ -46,6 +46,7 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbWriter)
+//HOOT_FACTORY_REGISTER(OsmChangeWriter, HootApiDbWriter)
 
 HootApiDbWriter::HootApiDbWriter()
 {
@@ -339,6 +340,63 @@ void HootApiDbWriter::_startNewChangeSet()
   tags["bot"] = "yes";
   tags["created_by"] = "hootenanny";
   _hootdb.beginChangeset(tags);
+}
+
+void HootApiDbWriter::writeChange(const Change& change)
+{
+  switch (change.type)
+  {
+    case Change::Create:
+      _createElement(change.e);
+      break;
+    case Change::Modify:
+      _modifyElement(change.e);
+      break;
+    case Change::Delete:
+      _deleteElement(change.e);
+      break;
+    default:
+      throw IllegalArgumentException("Unexpected change type.");
+  }
+}
+
+void HootApiDbWriter::_createElement(ConstElementPtr element)
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      _hootdb.insertNode(boost::dynamic_pointer_cast<const Node>(element));
+      break;
+    //only supporting nodes for now
+    default:
+      throw HootException("Unsupported element type");
+  }
+}
+
+void HootApiDbWriter::_modifyElement(ConstElementPtr element)
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      _hootdb.updateNode(boost::dynamic_pointer_cast<const Node>(element));
+      break;
+    //only supporting nodes for now
+    default:
+      throw HootException("Unsupported element type");
+  }
+}
+
+void HootApiDbWriter::_deleteElement(ConstElementPtr element)
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      _hootdb.deleteNode(boost::dynamic_pointer_cast<const Node>(element));
+      break;
+    //only supporting nodes for now
+    default:
+      throw HootException("Unsupported element type");
+  }
 }
 
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)

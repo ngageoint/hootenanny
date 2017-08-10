@@ -24,46 +24,26 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTOUTPUTSTREAM_H
-#define ELEMENTOUTPUTSTREAM_H
+#ifndef PARTIALOSMCHANGEWRITER_H
+#define PARTIALOSMCHANGEWRITER_H
 
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
+// hoot
+#include <hoot/core/io/ChangesetProvider.h>
 
 namespace hoot
 {
 
-class ElementInputStream;
-
 /**
- * Element output stream interface.
+ *
  */
-class ElementOutputStream
+class PartialOsmChangeWriter
 {
 public:
 
-  ElementOutputStream();
-  virtual ~ElementOutputStream();
+  virtual void writeChange(const Change& change) = 0;
 
-  /**
-   * Close the output stream. It can safely be expected that if close isn't called explicitly it
-   * will be called by the destructor.
-   */
-  virtual void close() = 0;
-
-  /**
-   * @brief writeElement
-   */
-  virtual void writeElement(ElementPtr& element) = 0;
-
-  /**
-   * Read elements from the input stream and write to the output stream. There may be a better place
-   * for this to live, but it works for now.
-   */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos,
-    boost::shared_ptr<ElementCriterion> criterion = boost::shared_ptr<ElementCriterion>());
 };
 
 }
 
-#endif // ELEMENTOUTPUTSTREAM_H
+#endif // PARTIALOSMCHANGEWRITER_H

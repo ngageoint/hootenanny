@@ -555,7 +555,8 @@ SOURCES += \
 				src/main/cpp/hoot/core/elements/Status.cpp \
 				src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
     src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp \
-    src/main/cpp/hoot/core/io/IoUtils.cpp
+    src/main/cpp/hoot/core/io/IoUtils.cpp \
+    src/main/cpp/hoot/core/io/OsmChangeWriterFactory.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1097,5 +1098,7 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/SearchRadiusProvider.h \
     src/main/cpp/hoot/core/elements/ElementVisitor.h \
     src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h \
-    src/main/cpp/hoot/core/io/IoUtils.h
+    src/main/cpp/hoot/core/io/IoUtils.h \
+    src/main/cpp/hoot/core/io/OsmChangeWriter.h \
+    src/main/cpp/hoot/core/io/OsmChangeWriterFactory.h
 
