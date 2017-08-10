@@ -253,6 +253,9 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
 bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
   ElementId other1, ElementId other2) const
 {
+  Context::Scope context_scope(_script->getContext());
+  HandleScope handleScope;
+
   set<ElementId> eids;
   eids.insert(sharedEid);
   eids.insert(other1);

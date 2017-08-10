@@ -2,6 +2,8 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="39.74862374516" minlon="-105.00779937932" maxlat="39.74862374516" maxlon="-105.00779937932"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7486237451600033" lon="-105.0077993793200051">
+        <tag k="hoot:hash" v="sha1sum:8ae3e0e6a20062afbf02a4c76c6b573bb5ae7a04"/>
+        <tag k="source:hash" v="sha1sum:1dfab1d896cb2b5d247c432083ff205161845130;sha1sum:b52e8f62b4dd05a4e76675977051da50a815178e;sha1sum:00c1ca065d5b78b9cce48dcc5955135a5c48c1f0;sha1sum:163e8812a8496de3b9cb056af7e333ca6f73705e"/>
         <tag k="leisure" v="stadium"/>
         <tag k="alt_name" v="Pepsi"/>
         <tag k="source" v="wikimapia"/>

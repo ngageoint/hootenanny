@@ -143,7 +143,15 @@ exports.mergeSets = function(map, pairs, replaced)
     first.setStatusString("Conflated");
 
     var tags = first.getTags();
-    tags.set("source:hash", first.getTags().get("hoot:hash"));
+
+    if (tags.contains("hoot:hash") === false)
+    {
+        // should we automatically generate it if it doesn't exist? This would require projecting
+        // the data and stuff. ugh.
+        throw "All candidates for conflation must contain a 'hoot:hash' key value pair.";
+    }
+
+    tags.set("source:hash", tags.get("hoot:hash"));
     tags.set("hoot:hash", "");
     first.setTags(tags);
 };
