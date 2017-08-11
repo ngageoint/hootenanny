@@ -81,6 +81,8 @@ protected:
 
 };
 
+typedef boost::shared_ptr<BaseCommand> BaseCommandPtr;
+
 }
 
 #endif // BASECOMMAND_H

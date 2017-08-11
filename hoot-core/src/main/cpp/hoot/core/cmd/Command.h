@@ -34,11 +34,16 @@
 // Standard
 #include <string>
 
+// Tgs
+#include <tgs/SharedPtr.h>
+
 namespace hoot
 {
 
 /**
  * @defgroup cmd Command Line Interface
+ *
+ * Generally you will want to subclass BaseCommand rather than implementing this interface directly.
  */
 
 class Command
@@ -67,9 +72,15 @@ public:
    */
   virtual QString getName() const = 0;
 
+  /**
+   * @sa BaseCommand for an example implementation.
+   */
   virtual int run(char* argv[], int argc) = 0;
 
 };
+
+typedef boost::shared_ptr<Command> CommandPtr;
+typedef boost::shared_ptr<const Command> ConstCommandPtr;
 
 }
 
