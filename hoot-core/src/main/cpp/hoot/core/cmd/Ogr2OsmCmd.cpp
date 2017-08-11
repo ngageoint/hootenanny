@@ -35,6 +35,7 @@
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/SplitLongLinearWaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 

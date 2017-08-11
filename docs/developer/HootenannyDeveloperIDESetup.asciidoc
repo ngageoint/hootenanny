@@ -173,7 +173,7 @@ The advantage to this method is that you're using the package manager to keep th
 * Install the Tomcat Server (Skip if not doing density tiles):
 ** Find Windows --> Show view --> Other  and find Server --> Servers (select that)
 ** Right-click the Servers tab --> "Add a new server"
-** Select "Tomcat v6.0 Server".  Click "Next".
+** Select "Tomcat v8.0 Server".  Click "Next".
 ** Browse to the installation directory at /usr/share/tomcat8 Click "Next".
 ** Add the hoot-services project to the configuration.  Click "Finish".
 * *TODO: This isn't working. (#4630)* To serve up the Density Raster tile images, the Tomcat server has to be configured with a static image directory.  From the Navigator or Project Explorer tab, open the "Servers" --> "Tomcat v6.0 Server at localhost-config" --> server.xml Then, under the <Host> section add: 
@@ -206,7 +206,7 @@ sudo service tomcat8 stop
 ------
 ** Select Window --> Show View --> Servers
 ** Right-click in the dialog, New --> Server
-** Select "Tomcat v6.0 Server" and Click Next.  Select the "Tomcat v6.0" server.  Even though you already have Tomcat installed, it may then force you to click the "Download and install" button. ("This":http://stackoverflow.com/questions/13423593/eclipse-4-2-juno-cannot-create-a-server-using-the-selected-type-in-tomcat-7 may be helpful.)
+** Select "Tomcat v8.0 Server" and Click Next.  Select the "Tomcat v8.0" server.  Even though you already have Tomcat installed, it may then force you to click the "Download and install" button. ("This":http://stackoverflow.com/questions/13423593/eclipse-4-2-juno-cannot-create-a-server-using-the-selected-type-in-tomcat-7 may be helpful.)
 ** Add the hoot-services and hoot-ui projects to the list of configured projects and click Finish.
 ** Right-click the hoot-services Java project, Debug As --> Debug Configurations
 ** Select "Apache Tomcat" from the list on the left.

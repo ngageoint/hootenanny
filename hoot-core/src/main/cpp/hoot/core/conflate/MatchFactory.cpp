@@ -31,6 +31,7 @@
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/MatchThreshold.h>
+#include <hoot/core/util/Log.h>
 
 //Qt
 #include <QString>

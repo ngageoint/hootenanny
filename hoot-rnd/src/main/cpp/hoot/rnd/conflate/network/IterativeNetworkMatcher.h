@@ -119,9 +119,6 @@ private:
       bool valid = (e1->getFromVertex() == v1 && e2->getFromVertex() == v2) ||
         (e1->getToVertex() == v1 && e2->getToVertex() == v2);
 
-      LOG_VAR(valid);
-      LOG_VAR(v1);
-      LOG_VAR(v2);
       double result = 0.0;
 
       if (valid)
@@ -129,8 +126,6 @@ private:
         ConstEdgeMatchPtr em(new EdgeMatch(e1->clone(), e2->clone()));
         result = pow((*em1)[em] * (*em2)[em], p);
       }
-
-      LOG_VAR(result);
 
       return result;
     }

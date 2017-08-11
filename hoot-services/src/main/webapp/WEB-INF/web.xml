@@ -5,6 +5,7 @@
          id="WebApp_ID" version="2.5">
     <display-name>hoot-services</display-name>
 
+    <!--contextConfigLocation has to be explicitly specified to successfully integrate Jersey and Spring -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>

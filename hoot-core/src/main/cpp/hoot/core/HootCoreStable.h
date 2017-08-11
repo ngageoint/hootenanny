@@ -22,33 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.command.common;
+#ifndef HOOTCORESTABLE_H
+#define HOOTCORESTABLE_H
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+// Boost
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
-import hoot.services.command.ExternalCommand;
+// GEOS Includes
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Envelope.h>
+#include <ogr_core.h>
+
+// hoot
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+
+// Qt
+#include <QString>
+
+// Standard
+#include <deque>
+#include <exception>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <string.h> // includes memcpy on Linux
+#include <vector>
 
 
-public class UnTARFileCommand extends ExternalCommand {
-
-    /**
-     * Decompresses a TAR file using system 'tar' utility
-     *
-     * @param sourceTAR TAR file to decompress
-     * @param targetFolder folder to store the contents of the TAR into
-     * @param caller identifies the caller of the command
-     */
-    public UnTARFileCommand(File sourceTAR, File targetFolder, Class<?> caller) {
-        Map<String, Object> substitutionMap = new HashMap<>();
-        substitutionMap.put("SOURCE_TAR_FILE", sourceTAR.getAbsolutePath());
-        substitutionMap.put("TARGET_FOLDER", targetFolder.getAbsolutePath());
-
-        String command = "tar -zxf ${SOURCE_TAR_FILE} -C ${TARGET_FOLDER}";
-
-        super.configureCommand(command, substitutionMap, caller, false);
-    }
-}
+#endif // HOOTCORESTABLE_H
