@@ -909,7 +909,6 @@ tds = {
             tds.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,rulesList);
         // translate.applyComplexRules(tags,attrs,tds.osmPostRules);
         // Pulling this out of translate
         for (var i = 0, rLen = tds.osmPostRules.length; i < rLen; i++)

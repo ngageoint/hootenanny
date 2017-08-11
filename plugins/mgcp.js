@@ -754,12 +754,12 @@ mgcp = {
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
+        // translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
         // Pulling this out of translate
-//         for (var i = 0, rLen = mgcp.osmPostRules.length; i < rLen; i++)
-//         {
-//             if (mgcp.osmPostRules[i][0](tags)) mgcp.osmPostRules[i][1](tags,attrs);
-//         }
+        for (var i = 0, rLen = mgcp.osmPostRules.length; i < rLen; i++)
+        {
+            if (mgcp.osmPostRules[i][0](tags)) mgcp.osmPostRules[i][1](tags,attrs);
+        }
 
 
         // Lifecycle tags
@@ -1034,8 +1034,11 @@ mgcp = {
         }
 
         // Apply the rulesList.
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,mgcp.mgcpPreRules);
+        //translate.applyComplexRules(tags,attrs,mgcp.mgcpPreRules);
+        for (var i = 0, rLen = mgcp.mgcpPreRules.length; i < rLen; i++)
+        {
+            if (mgcp.mgcpPreRules[i][0](tags)) mgcp.mgcpPreRules[i][1](tags,attrs);
+        }
 
         // Sort out landuse
         switch (tags.landuse)
@@ -1567,8 +1570,11 @@ mgcp = {
             mgcp.mgcpPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,rulesList);
-        translate.applyComplexRules(tags,attrs,mgcp.mgcpPostRules);
+        //translate.applyComplexRules(tags,attrs,mgcp.mgcpPostRules);
+        for (var i = 0, rLen = mgcp.mgcpPostRules.length; i < rLen; i++)
+        {
+            if (mgcp.mgcpPostRules[i][0](tags)) mgcp.mgcpPostRules[i][1](tags,attrs);
+        }
 
         // Fix up SRT values so we comply with the spec. These values came from data files
         // Format is: orig:new
