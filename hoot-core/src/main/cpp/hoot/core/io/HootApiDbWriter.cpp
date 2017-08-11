@@ -46,7 +46,6 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbWriter)
-//HOOT_FACTORY_REGISTER(OsmChangeWriter, HootApiDbWriter)
 
 HootApiDbWriter::HootApiDbWriter()
 {
