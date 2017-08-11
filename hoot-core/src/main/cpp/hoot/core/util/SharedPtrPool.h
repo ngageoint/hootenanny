@@ -22,49 +22,57 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef SHAREDPTRPOOL_H
+#define SHAREDPTRPOOL_H
+
+// Boost
+#include <boost/bind.hpp>
+#include <boost/pool/pool_alloc.hpp>
 
 // Hoot
-#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
-#include "Element.h"
-
-#include "ElementListener.h"
+// Standard
+#include <deque>
 
 namespace hoot
 {
 
-Element::Element() :
-  _status(Status::Invalid),
-  _listener(0)
+/**
+ * A super simple wrapper around boost's object pool and shared pointers. This should provide
+ * more efficient allocation/deleting when dealing with large numbers of elements. E.g. nodes.
+ */
+template <class T>
+class SharedPtrPool
 {
-}
+public:
 
-Element::Element(Status s) : _status(s)
-{
-  _listener = 0;
-}
+  SharedPtrPool() {}
 
-QString Element::getStatusString() const
-{
-  return _status.toString().toLower();
-}
-
-void Element::_postGeometryChange()
-{
-  if (_listener != 0)
+  boost::shared_ptr<T> allocate()
   {
-    _listener->postGeometryChange(this);
-  }
-}
+    T* v = new (_pool.allocate()) T();
 
-void Element::_preGeometryChange()
-{
-  if (_listener != 0)
+    return boost::shared_ptr<T>(v,
+      boost::bind(&SharedPtrPool<T>::_destroy, this, _1));
+  }
+
+  static SharedPtrPool<T>& getInstance() { return _theInstance; }
+
+private:
+
+  static SharedPtrPool<T> _theInstance;
+  boost::fast_pool_allocator<T> _pool;
+
+  void _destroy(T* v)
   {
-    _listener->preGeometryChange(this);
+    _pool.destroy(v);
+    _pool.deallocate(v);
   }
-}
+};
 
 }
+
+#endif // SHAREDPTRPOOL_H

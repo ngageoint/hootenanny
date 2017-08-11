@@ -40,19 +40,14 @@ ElementOutputStream::~ElementOutputStream()
 {
 }
 
-void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos,
-                                           boost::shared_ptr<ElementCriterion> criterion)
+void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutputStream& eos)
 {
   while (eis.hasMoreElements())
   {
-    ElementPtr element = eis.readNextElement();
-    if (!criterion.get() || criterion->isSatisfied(element))
+    ElementPtr e = eis.readNextElement();
+    if (e.get())
     {
-      eos.writeElement(element);
-    }
-    else
-    {
-      LOG_TRACE("Element did not satisfy filter: " << element->getElementId());
+      eos.writeElement(e);
     }
   }
 }

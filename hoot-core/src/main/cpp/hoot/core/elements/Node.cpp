@@ -43,6 +43,9 @@ using namespace geos::geom;
 namespace hoot
 {
 
+template<class Node>
+SharedPtrPool<Node> SharedPtrPool<Node>::_theInstance;
+
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)
 {
@@ -67,6 +70,15 @@ _nodeData(from._nodeData)
 void Node::clear()
 {
   _nodeData.clear();
+}
+
+boost::shared_ptr<Node> Node::cloneSp() const
+{
+  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+
+  result->_nodeData = _nodeData;
+
+  return result;
 }
 
 Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider> &/*ep*/) const
