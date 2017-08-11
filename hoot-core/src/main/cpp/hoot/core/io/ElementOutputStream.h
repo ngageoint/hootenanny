@@ -60,8 +60,7 @@ public:
    * Read elements from the input stream and write to the output stream. There may be a better place
    * for this to live, but it works for now.
    */
-  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos,
-    boost::shared_ptr<ElementCriterion> criterion = boost::shared_ptr<ElementCriterion>());
+  static void writeAllElements(ElementInputStream& eis, ElementOutputStream& eos);
 };
 
 }

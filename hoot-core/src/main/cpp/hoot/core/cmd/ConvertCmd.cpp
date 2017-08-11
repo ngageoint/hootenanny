@@ -26,23 +26,26 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/OsmMapConsumer.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/MapCleaner.h>
-#include <hoot/core/conflate/RubberSheet.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmMapWriter.h>
-#include <hoot/core/io/OsmMapReader.h>
-#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/io/PartialOsmMapReader.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+<<<<<<< HEAD
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/IoUtils.h>
+=======
+#include <hoot/core/util/Factory.h>
+>>>>>>> develop
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -76,6 +79,43 @@ public:
 
   virtual QString getName() const { return "convert"; }
 
+  /**
+   * Return true if all the specified operations are valid streaming operations.
+   *
+   * There are some ops that require the whole map be available in RAM (e.g. remove duplicate
+   * nodes). These operations are not applicable for streaming.
+   */
+  bool areValidStreamingOps(QStringList ops)
+  {
+    // add visitor/criterion operations if any of the convert ops are visitors.
+    foreach (QString opName, ops)
+    {
+      if (!opName.trimmed().isEmpty())
+      {
+        if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
+        {
+          ElementCriterionPtr criterion(
+                Factory::getInstance().constructObject<ElementCriterion>(opName));
+          // when streaming we can't provide a reliable OsmMap.
+          if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
+          {
+            return false;
+          }
+        }
+        else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+        {
+          // good, pass
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   virtual int runSimple(QStringList args)
   {
     if (args.size() != 2)
@@ -101,6 +141,7 @@ public:
 
     if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
         OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
+        areValidStreamingOps(ConfigOptions().getConvertOps()) &&
         //the XML writer can't keep sorted output when streaming, so require an additional config
         //option be specified in order to stream when writing that format
         (writerName != "hoot::OsmXmlWriter" ||
@@ -149,15 +190,35 @@ public:
 
     boost::shared_ptr<PartialOsmMapWriter> partialWriter =
       boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
-    boost::shared_ptr<ElementCriterion> criterion;
-    if (partialWriter.get())
-    {
-      partialWriter->initializePartial();
 
-      criterion = IoUtils::getStreamingCriterion();
+    // add visitor/criterion operations if any of the convert ops are visitors.
+    foreach (QString opName, ConfigOptions().getConvertOps())
+    {
+      if (!opName.trimmed().isEmpty())
+      {
+        if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
+        {
+          LOG_INFO("Filtering input with: " << opName);
+          ElementCriterionPtr criterion(
+                Factory::getInstance().constructObject<ElementCriterion>(opName));
+
+          streamReader.reset(new ElementCriterionInputStream(streamReader, criterion));
+        }
+        else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+        {
+          LOG_INFO("Visiting input with: " << opName);
+          ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));
+
+          streamReader.reset(new ElementVisitorInputStream(streamReader, visitor));
+        }
+        else
+        {
+          throw HootException("An unsupported operation was passed to a streaming conversion.");
+        }
+      }
     }
 
-    ElementOutputStream::writeAllElements(*streamReader, *streamWriter, criterion);
+    ElementOutputStream::writeAllElements(*streamReader, *streamWriter);
 
     boost::shared_ptr<PartialOsmMapReader> partialReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);

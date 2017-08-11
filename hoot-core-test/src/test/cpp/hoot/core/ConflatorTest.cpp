@@ -48,9 +48,9 @@ using namespace boost;
 // Qt
 #include <QDebug>
 
-class TDistributionTest : public CppUnit::TestFixture
+class ConflatorTest : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(TDistributionTest);
+  CPPUNIT_TEST_SUITE(ConflatorTest);
   CPPUNIT_TEST(runPbfTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runMergeTest);
@@ -133,5 +133,5 @@ public:
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflatorTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TDistributionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflatorTest, "quick");
 

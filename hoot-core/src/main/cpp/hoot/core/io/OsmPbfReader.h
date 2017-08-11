@@ -161,9 +161,6 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
-  virtual void closeStream(
-      void );
-
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
   bool getSortedTypeThenId() { return _typeThenId; }
@@ -174,6 +171,8 @@ private:
   std::string _buffer;
   std::istream* _in;
   bool _needToCloseInput;
+
+  std::vector< boost::shared_ptr<hoot::Node> > _denseNodeTmp;
 
   /// The last position of the pointer while reading data.
   long _lastPosition;

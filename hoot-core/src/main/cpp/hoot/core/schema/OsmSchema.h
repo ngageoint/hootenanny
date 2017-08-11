@@ -33,6 +33,7 @@
 #include <hoot/core/schema/SchemaVertex.h>
 
 // Qt
+#include <QSet>
 #include <QString>
 
 // Standard
@@ -456,6 +457,9 @@ private:
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
   SchemaVertex _empty;
+
+  /// Provide caching for isMetaData
+  QHash<QString, bool> _metadataKey;
 };
 
 }
