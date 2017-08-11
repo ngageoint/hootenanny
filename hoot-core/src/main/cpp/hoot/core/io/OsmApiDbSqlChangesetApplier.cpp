@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmApiDbChangesetSqlWriter.h"
+#include "OsmApiDbSqlChangesetApplier.h"
 
 // hoot
 #include <hoot/core/util/GeometryUtils.h>
@@ -42,7 +42,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-OsmApiDbChangesetSqlWriter::OsmApiDbChangesetSqlWriter(const QUrl targetDatabaseUrl)
+OsmApiDbSqlChangesetApplier::OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl)
 {
   if (!_db.isSupported(targetDatabaseUrl))
   {
@@ -53,17 +53,17 @@ OsmApiDbChangesetSqlWriter::OsmApiDbChangesetSqlWriter(const QUrl targetDatabase
   _initChangesetStats();
 }
 
-OsmApiDbChangesetSqlWriter::~OsmApiDbChangesetSqlWriter()
+OsmApiDbSqlChangesetApplier::~OsmApiDbSqlChangesetApplier()
 {
   _db.close();
 }
 
-void OsmApiDbChangesetSqlWriter::_initChangesetStats()
+void OsmApiDbSqlChangesetApplier::_initChangesetStats()
 {
   _changesetStats.clear();
 }
 
-void OsmApiDbChangesetSqlWriter::write(const QString sql)
+void OsmApiDbSqlChangesetApplier::write(const QString sql)
 {
   LOG_DEBUG("Executing changeset SQL queries against OSM API database...");
 
@@ -176,7 +176,7 @@ void OsmApiDbChangesetSqlWriter::write(const QString sql)
   LOG_DEBUG("Changeset SQL queries execute finished against OSM API database.");
 }
 
-void OsmApiDbChangesetSqlWriter::write(QFile& changesetSqlFile)
+void OsmApiDbSqlChangesetApplier::write(QFile& changesetSqlFile)
 {
   if (!changesetSqlFile.fileName().endsWith(".osc.sql"))
   {
@@ -194,7 +194,7 @@ void OsmApiDbChangesetSqlWriter::write(QFile& changesetSqlFile)
   }
 }
 
-QString OsmApiDbChangesetSqlWriter::getChangesetStats() const
+QString OsmApiDbSqlChangesetApplier::getChangesetStats() const
 {
   return
     "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
@@ -211,8 +211,8 @@ QString OsmApiDbChangesetSqlWriter::getChangesetStats() const
 }
 
 //This method may go away after #716.
-bool OsmApiDbChangesetSqlWriter::conflictExistsInTarget(const QString boundsStr,
-                                                        const QString timeStr)
+bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString boundsStr,
+                                                         const QString timeStr)
 {
   LOG_DEBUG("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
            " within " << boundsStr << " and created after " << timeStr << "...");

@@ -218,7 +218,7 @@ SOURCES += \
     src/test/cpp/hoot/core/io/OsmXmlReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfReaderTest.cpp \
     src/test/cpp/hoot/core/io/OsmPbfWriterTest.cpp \
-    src/test/cpp/hoot/core/io/OsmChangesetXmlFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/OsmXmlChangesetFileWriterTest.cpp \
     src/test/cpp/hoot/core/io/OsmMapReaderFactoryTest.cpp \
     src/test/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitorTest.cpp \
     src/test/cpp/hoot/core/visitors/SumNumericTagsVisitorTest.cpp \
@@ -243,8 +243,8 @@ services:SOURCES += \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbBulkWriterTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbTest.cpp \
     src/test/cpp/hoot/core/io/ServiceOsmApiDbReaderTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmChangesetSqlFileWriterTest.cpp \
-    src/test/cpp/hoot/core/io/ServiceOsmApiDbChangesetSqlWriterTest.cpp
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbSqlChangesetFileWriterTest.cpp \
+    src/test/cpp/hoot/core/io/ServiceOsmApiDbSqlChangesetApplierTest.cpp
 
 HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \

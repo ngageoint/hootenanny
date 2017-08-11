@@ -29,7 +29,7 @@
 #include "TestOsmChangesetProvider.h"
 #include "ServicesDbTestUtils.h"
 
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 
 // Boost
 using namespace boost;
@@ -45,9 +45,9 @@ using namespace boost;
 namespace hoot
 {
 
-class ServiceOsmApiDbChangesetSqlFileWriterTest : public CppUnit::TestFixture
+class ServiceOsmApiDbSqlChangesetFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(ServiceOsmApiDbChangesetSqlFileWriterTest);
+    CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetFileWriterTest);
     CPPUNIT_TEST(runBasicTest);
     CPPUNIT_TEST(runSplitTest);
     CPPUNIT_TEST_SUITE_END();
@@ -65,7 +65,7 @@ public:
 
   void runBasicTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
+    QDir().mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
@@ -74,22 +74,22 @@ public:
     const QString scriptDir = "test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
-    OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
+    OsmApiDbSqlChangesetFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     writer.setChangesetUserId(1);
     writer
       .write(
-        "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql",
+        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.osc.sql",
         changesetProvider);
     HOOT_STR_EQUALS(
       TestUtils::readFile(
-        "test-files/io/ServiceOsmApiDbChangesetSqlWriterTest/changeset.osc.sql"),
+        "test-files/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.osc.sql"),
       TestUtils::readFile(
-        "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.osc.sql"));
+        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.osc.sql"));
   }
 
   void runSplitTest()
   {
-    QDir().mkpath("test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest");
+    QDir().mkpath("test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest");
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(true));
 
     //clear out the db so we get consistent next id results
@@ -98,7 +98,7 @@ public:
     const QString scriptDir = "test-files/servicesdb";
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), scriptDir + "/users.sql");
 
-    OsmChangesetSqlFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
+    OsmApiDbSqlChangesetFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
     //  Set the changeset max size to 5 (half of the changes) for this test only
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");
@@ -106,16 +106,16 @@ public:
     writer.setChangesetUserId(1);
     writer
       .write(
-        "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.split.osc.sql",
+        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.split.osc.sql",
         changesetProvider);
     HOOT_STR_EQUALS(
       TestUtils::readFile(
-        "test-files/io/ServiceOsmApiDbChangesetSqlWriterTest/changeset.split.osc.sql"),
+        "test-files/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.split.osc.sql"),
       TestUtils::readFile(
-        "test-output/io/ServiceOsmApiDbChangesetSqlFileWriterTest/changeset.split.osc.sql"));
+        "test-output/io/ServiceOsmApiDbSqlChangesetFileWriterTest/changeset.split.osc.sql"));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbChangesetSqlFileWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetFileWriterTest, "quick");
 
 }

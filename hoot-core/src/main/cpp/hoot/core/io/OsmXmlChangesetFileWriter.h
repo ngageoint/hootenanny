@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCHANGESETXMLFILEWRITER_H
-#define OSMCHANGESETXMLFILEWRITER_H
+#ifndef OSMXMLCHANGESETFILEWRITER_H
+#define OSMXMLCHANGESETFILEWRITER_H
 
 // Hoot
 #include <hoot/core/elements/Node.h>
@@ -49,12 +49,12 @@ namespace hoot
  * would have to be created using the API.  Optionally, after writing this the changeset
  * can be closed via the API.
  */
-class OsmChangesetXmlFileWriter : public Configurable
+class OsmXmlChangesetFileWriter : public Configurable
 {
 
 public:
 
-  OsmChangesetXmlFileWriter();
+  OsmXmlChangesetFileWriter();
 
   /**
    * Write the changeset out to the specified file and any changes over changeset.max.size
@@ -105,4 +105,4 @@ private:
 
 }
 
-#endif // OSMCHANGESETXMLFILEWRITER_H
+#endif // OSMXMLCHANGESETFILEWRITER_H

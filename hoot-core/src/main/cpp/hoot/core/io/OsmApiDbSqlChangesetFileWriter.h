@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCHANGESETSQLFILEWRITER_H
-#define OSMCHANGESETSQLFILEWRITER_H
+#ifndef OSMAPIDBSQLCHANGESETFILEWRITER_H
+#define OSMAPIDBSQLCHANGESETFILEWRITER_H
 
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
@@ -49,13 +49,13 @@ namespace hoot
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
  */
-class OsmChangesetSqlFileWriter : public Configurable
+class OsmApiDbSqlChangesetFileWriter : public Configurable
 {
 
 public:
 
-  OsmChangesetSqlFileWriter(QUrl url);
-  ~OsmChangesetSqlFileWriter();
+  OsmApiDbSqlChangesetFileWriter(QUrl url);
+  ~OsmApiDbSqlChangesetFileWriter();
 
   /**
    * Write a SQL changeset to the specified output path
@@ -115,10 +115,9 @@ private:
   long _changesetMaxSize;
   double _changesetUserId;
 
-  friend class ServiceOsmApiDbChangesetSqlFileWriterTest;
-
+  friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };
 
 }
 
-#endif // OSMCHANGESETSQLFILEWRITER_H
+#endif // OSMAPIDBSQLCHANGESETFILEWRITER_H

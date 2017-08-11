@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "OsmChangesetXmlFileWriter.h"
+#include "OsmXmlChangesetFileWriter.h"
 
 // hoot
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -43,14 +43,14 @@ using namespace std;
 namespace hoot
 {
 
-OsmChangesetXmlFileWriter::OsmChangesetXmlFileWriter()
+OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
   : _precision(ConfigOptions().getWriterPrecision()),
     _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
     _multipleChangesetsWritten(false)
 {
 }
 
-void OsmChangesetXmlFileWriter::_initIdCounters()
+void OsmXmlChangesetFileWriter::_initIdCounters()
 {
   _newElementIdCtrs.clear();
   _newElementIdCtrs[ElementType::Node] = 1;
@@ -63,7 +63,7 @@ void OsmChangesetXmlFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
+void OsmXmlChangesetFileWriter::write(QString path, ChangeSetProviderPtr cs)
 {
   QFileInfo info(path);
   info.setCaching(false);
@@ -175,7 +175,7 @@ void OsmChangesetXmlFileWriter::write(QString path, ChangeSetProviderPtr cs)
 
 //TODO: consolidate redundant tag code in these element write methods
 
-void OsmChangesetXmlFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
+void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
 {
   writer.writeStartElement("node");
   long id = n->getId();
@@ -238,7 +238,7 @@ void OsmChangesetXmlFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   writer.writeEndElement();
 }
 
-void OsmChangesetXmlFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
+void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr w)
 {
   writer.writeStartElement("way");
   long id = w->getId();
@@ -311,7 +311,7 @@ void OsmChangesetXmlFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   writer.writeEndElement();
 }
 
-void OsmChangesetXmlFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
+void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRelationPtr r)
 {
   writer.writeStartElement("relation");
   long id = r->getId();
@@ -397,7 +397,7 @@ void OsmChangesetXmlFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   writer.writeEndElement();
 }
 
-void OsmChangesetXmlFileWriter::setConfiguration(const Settings &conf)
+void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
   _precision = co.getWriterPrecision();

@@ -29,7 +29,7 @@
 #include "TestOsmChangesetProvider.h"
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
+#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Boost
@@ -46,9 +46,9 @@ using namespace boost;
 namespace hoot
 {
 
-class OsmChangesetXmlFileWriterTest : public CppUnit::TestFixture
+class OsmXmlChangesetFileWriterTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(OsmChangesetXmlFileWriterTest);
+    CPPUNIT_TEST_SUITE(OsmXmlChangesetFileWriterTest);
     CPPUNIT_TEST(runSimpleTest);
     CPPUNIT_TEST(runSplitTest);
     CPPUNIT_TEST_SUITE_END();
@@ -58,36 +58,36 @@ public:
   void runSimpleTest()
   {
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    QDir().mkpath("test-output/io/OsmChangesetXmlFileWriterTest");
-    OsmChangesetXmlFileWriter().write(
-      "test-output/io/OsmChangesetXmlFileWriterTest/changeset.osc", changesetProvider);
+    QDir().mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
+    OsmXmlChangesetFileWriter().write(
+      "test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc", changesetProvider);
 
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset.osc"),
-      TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset.osc"));
+      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset.osc"),
+      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset.osc"));
   }
 
   void runSplitTest()
   {
     boost::shared_ptr<ChangeSetProvider> changesetProvider(new TestOsmChangesetProvider(false));
-    QDir().mkpath("test-output/io/OsmChangesetXmlWriterTest");
-    OsmChangesetXmlFileWriter writer;
+    QDir().mkpath("test-output/io/OsmXmlChangesetFileWriterTest");
+    OsmXmlChangesetFileWriter writer;
     Settings testSettings = conf();
     testSettings.set("changeset.max.size", "5");
     writer.setConfiguration(testSettings);
     writer.write(
-      "test-output/io/OsmChangesetXmlFileWriterTest/changeset.split.osc", changesetProvider);
+      "test-output/io/OsmXmlChangesetFileWriterTest/changeset.split.osc", changesetProvider);
 
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset.split.osc"),
-      TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset.split.osc"));
+      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset.split.osc"),
+      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset.split.osc"));
     HOOT_STR_EQUALS(
-      TestUtils::readFile("test-files/io/OsmChangesetXmlFileWriterTest/changeset-001.split.osc"),
-      TestUtils::readFile("test-output/io/OsmChangesetXmlFileWriterTest/changeset-001.split.osc"));
+      TestUtils::readFile("test-files/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc"),
+      TestUtils::readFile("test-output/io/OsmXmlChangesetFileWriterTest/changeset-001.split.osc"));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmChangesetXmlFileWriterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmXmlChangesetFileWriterTest, "quick");
 
 }
 
