@@ -44,6 +44,12 @@ using namespace std;
 namespace hoot
 {
 
+/**
+ * This command takes an input and database and changeset outputs.  The input is translated to OSM
+ * and filtered to POIs only, sorted by element type then ID if necessary, then compared to the
+ * database output layer in order to derive a changeset.  The changeset changes are written both
+ * to the database output layer as features and the changeset output as change statements.
+ */
 class MultiaryIngestCmd : public BaseCommand
 {
 public:
@@ -105,10 +111,11 @@ public:
       "Streaming multiary data ingest from input: " << newDataInput <<
       " to output database layer: " << dbLayerOutput << " and output changeset: " <<
       changesetOutput << "...");
-    //TODO: also need to translate to OSM
     QStringList convertOps = conf().get(ConfigOptions::getConvertOpsKey()).toStringList();
     convertOps.append("hoot::PoiCriterion");
+    //convertOps.append("hoot::TranslationVisitor");
     conf().set(ConfigOptions::getConvertOpsKey(), convertOps);
+    //conf().set(ConfigOptions::getTranslationScriptKey(), "OSM_Ingest.js");
     LOG_INFO("Applying filters: " << convertOps);
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
 
