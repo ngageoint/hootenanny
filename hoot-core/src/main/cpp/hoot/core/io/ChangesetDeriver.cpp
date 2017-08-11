@@ -185,6 +185,7 @@ Change ChangesetDeriver::_nextChange()
     {
       result.type = Change::Modify;
       result.e = _toE;
+      result.previousElement = _fromE;
 
       LOG_TRACE(
         "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<

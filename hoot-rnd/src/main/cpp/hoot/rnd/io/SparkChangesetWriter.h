@@ -29,6 +29,8 @@
 
 // hoot
 #include <hoot/core/io/OsmChangeWriter.h>
+#include <hoot/core/io/OsmJsonWriter.h>
+#include "../visitors/AddExportTagsVisitor.h"
 
 // Qt
 #include <QFile>
@@ -51,7 +53,7 @@ public:
 
   SparkChangesetWriter();
 
-  virtual ~SparkChangesetWriter() {}
+  virtual ~SparkChangesetWriter();
 
   void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
@@ -73,10 +75,11 @@ public:
 private:
 
   boost::shared_ptr<QFile> _fp;
-
   SearchBoundsCalculatorPtr _bounds;
-
   int _precision;
+  OsmMapPtr _tmpMap;
+  OsmJsonWriter _jsonWriter;
+  AddExportTagsVisitor _exportTagsVisitor;
 
 };
 

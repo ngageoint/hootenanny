@@ -81,6 +81,7 @@ public:
   }
 
   ConstElementPtr e;
+  ConstElementPtr previousElement;
   ChangeType type;
   QString note;
 

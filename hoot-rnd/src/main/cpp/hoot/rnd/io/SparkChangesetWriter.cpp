@@ -33,25 +33,30 @@ using namespace geos::geom;
 
 // hoot
 #include <hoot/core/conflate/MatchFactory.h>
-#include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 
-#include "../visitors/AddExportTagsVisitor.h"
+// Qt
+//#include <QStringBuilder> //could optimize with this later, if needed
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmChangeWriter, SparkChangesetWriter)
 
-using namespace boost;
-
 SparkChangesetWriter::SparkChangesetWriter() :
-_precision(round(ConfigOptions().getWriterPrecision()))
+_precision(round(ConfigOptions().getWriterPrecision())),
+_tmpMap(OsmMapPtr(new OsmMap()))
 {
 
+}
+
+SparkChangesetWriter::~SparkChangesetWriter()
+{
+  close();
 }
 
 void SparkChangesetWriter::open(QString fileName)
@@ -68,8 +73,7 @@ void SparkChangesetWriter::open(QString fileName)
   // find a match creator that can provide the search bounds.
   foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
   {
-    SearchRadiusProviderPtr sbc = dynamic_pointer_cast<SearchRadiusProvider>(mc);
-
+    SearchRadiusProviderPtr sbc = boost::dynamic_pointer_cast<SearchRadiusProvider>(mc);
     if (sbc.get())
     {
       if (_bounds.get())
@@ -90,67 +94,68 @@ void SparkChangesetWriter::open(QString fileName)
   }
 }
 
-//TODO: convert to tsv
 void SparkChangesetWriter::writeChange(const Change& change)
 {
-  QString changeId;
+  if (change.e->getElementType() != ElementType::Node)
+  {
+    throw NotImplementedException("Only nodes are supported.");
+  }
+
+  QString changeType;
   switch (change.type)
   {
     case Change::Create:
-      changeId = "A";
+      changeType = "A";
       break;
     case Change::Modify:
-      changeId = "M";
+      changeType = "M";
       break;
     case Change::Delete:
-      changeId = "D";
+      changeType = "D";
       break;
     default:
       throw IllegalArgumentException("Unexpected change type.");
   }
 
-  if (change.e->getElementType() != ElementType::Node)
+  ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.e);
+  NodePtr nodeCopy(dynamic_cast<Node*>(node->clone()));
+  _exportTagsVisitor.visit(nodeCopy);
+  Envelope env = _bounds->calculateSearchBounds(OsmMapPtr(), nodeCopy);
+
+  QString changeLine;
+  changeLine += changeType + "\t";
+  changeLine += QString::number(env.getMinX(), 'g', 16) + "\t";
+  changeLine += QString::number(env.getMinY(), 'g', 16) + "\t";
+  changeLine += QString::number(env.getMaxX(), 'g', 16) + "\t";
+  changeLine += QString::number(env.getMaxY(), 'g', 16) + "\t";
+  if (change.type == Change::Modify)
   {
-    throw NotImplementedException();
+    // element hash before change
+    if (!change.previousElement.get())
+    {
+      throw HootException("No previous element specified for modify change.");
+    }
+    else if (change.previousElement->getElementType() != ElementType::Node)
+    {
+      throw NotImplementedException("Only nodes are supported.");
+    }
+    ConstNodePtr previousNode = boost::dynamic_pointer_cast<const Node>(change.previousElement);
+    NodePtr previousNodeCopy(dynamic_cast<Node*>(previousNode->clone()));
+    _exportTagsVisitor.visit(previousNodeCopy);
+    changeLine +=
+      QString::fromUtf8(CalculateHashVisitor::toHash(previousNodeCopy).toHex().data()) + "\t";
   }
+  // element hash after change
+  changeLine += QString::fromUtf8(CalculateHashVisitor::toHash(nodeCopy).toHex().data()) + "\t";
+  _tmpMap->clear();
+  _tmpMap->addElement(nodeCopy);
+  changeLine += _jsonWriter.toString(_tmpMap);
+  changeLine += "\n";
 
-  //TODO: multiary-ingest
-
-//  NodePtr copy(dynamic_cast<Node*>(n->clone()));
-//  AddExportTagsVisitor().visit(copy);
-//  Envelope e = _bounds->calculateSearchBounds(OsmMapPtr(), copy);
-
-//  QString result = "{";
-
-//  result += "\"changeId\":" + QString::number(e.getMinX(), 'g', 16);
-//  result += "\"minx\":" + QString::number(e.getMinX(), 'g', 16);
-//  result += ",\"miny\":" + QString::number(e.getMinY(), 'g', 16);
-//  result += ",\"maxx\":" + QString::number(e.getMaxX(), 'g', 16);
-//  result += ",\"maxy\":" + QString::number(e.getMaxY(), 'g', 16);
-//  result += ",\"element\":{\"type\":\"node\"";
-//  result += ",\"id\":" + QString::number(copy->getId(), 'g', 16);
-//  result += ",\"lat\":" + QString::number(copy->getY(), 'g', 16);
-//  result += ",\"lon\":" + QString::number(copy->getX(), 'g', 16);
-//  result += ",\"tags\":{";
-
-//  bool first = true;
-//  const Tags& tags = copy->getTags();
-//  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-//  {
-//    if (!first)
-//    {
-//      result += ",";
-//    }
-//    result += OsmJsonWriter::markupString(it.key()) + ":" + OsmJsonWriter::markupString(it.value());
-//    first = false;
-//  }
-
-//  result += "}}}\n";
-
-//  if (_fp->write(result.toUtf8()) == -1)
-//  {
-//    throw HootException("Error writing to file: " + _fp->errorString());
-//  }
+  if (_fp->write(changeLine.toUtf8()) == -1)
+  {
+    throw HootException("Error writing to file: " + _fp->errorString());
+  }
 }
 
 }
