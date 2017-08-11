@@ -250,6 +250,8 @@ HEADERS += \
     src/test/cpp/hoot/core/algorithms/MaximalNearestSublineTest.h \
     src/test/cpp/hoot/core/TestUtils.h \
     src/test/cpp/hoot/core/io/ServicesDbTestUtils.h \
+
+HEADERS += \
     src/test/cpp/hoot/core/test/ConflateCaseTest.h \
     src/test/cpp/hoot/core/test/ConflateCaseTestSuite.h \
     src/test/cpp/hoot/core/io/TestOsmChangesetProvider.h \

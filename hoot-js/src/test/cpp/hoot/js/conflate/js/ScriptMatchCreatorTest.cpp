@@ -80,9 +80,10 @@ public:
     way1->getTags().appendValue("highway", "road");
     CPPUNIT_ASSERT(uut.isMatchCandidate(way1, map));
 
+    way1 = TestUtils::createWay(map, wayNodes, Status::Unknown1);
     way1->setStatus(Status::Unknown1);
     way1->getTags().clear();
-    CPPUNIT_ASSERT(!uut.isMatchCandidate(way1, map));
+    HOOT_STR_EQUALS(false, uut.isMatchCandidate(way1, map));
   }
 
 };

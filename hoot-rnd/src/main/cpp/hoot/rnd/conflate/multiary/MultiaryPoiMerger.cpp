@@ -125,8 +125,10 @@ void MultiaryPoiMerger::_mergeClusters(const OsmMapPtr& map,
             mc->mergedElement->getElementId()));
       }
     }
+    // Copy mergedElement so we know this is the only map that contains the element.
+    ElementPtr newE(mc->mergedElement->clone());
     // this will replace the old entry.
-    map->addElement(mc->mergedElement);
+    map->addElement(newE);
   }
 }
 

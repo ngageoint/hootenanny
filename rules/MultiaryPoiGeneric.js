@@ -27,7 +27,16 @@ exports.matchScore = function(map, e1, e2) {
     totalCount += 1;
     var result = { miss: 1.0, explain:'Miss' };
 
-    if (e1.getStatusString() == e2.getStatusString()) {
+    var s1 = e1.getTags().get("source");
+    var s2 = e2.getTags().get("source");
+
+    // if either of the inputs are from wikimapia, allow intradataset conflation
+    if ((s1 && s1.indexOf("wikimapia") !== -1) || (s2 && s2.indexOf("wikimapia") !== -1)) {
+        // pass
+    }
+    // otherwise, if they aren't from wikimapia, return a miss on any intradataset comparison
+    // e.g. OSM vs OSM always returns a miss.
+    else if (e1.getStatusString() === e2.getStatusString()) {
         return result;
     }
 

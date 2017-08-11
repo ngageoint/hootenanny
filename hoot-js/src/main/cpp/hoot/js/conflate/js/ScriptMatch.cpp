@@ -70,8 +70,8 @@ namespace hoot
 unsigned int ScriptMatch::logWarnCount = 0;
 
 ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Object> plugin,
-  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-  ConstMatchThresholdPtr mt) :
+  const ConstOsmMapPtr& map, Handle<Object> mapObj, const ElementId& eid1,
+  const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
@@ -80,10 +80,11 @@ ScriptMatch::ScriptMatch(boost::shared_ptr<PluginContext> script, Persistent<Obj
   _plugin(plugin),
   _script(script)
 {
-  _calculateClassification(map, plugin);
+  _calculateClassification(map, mapObj, plugin);
 }
 
-void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> plugin)
+void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Object> mapObj,
+  Handle<Object> plugin)
 {
   Context::Scope context_scope(_script->getContext());
   HandleScope handleScope;
@@ -106,7 +107,7 @@ void ScriptMatch::_calculateClassification(const ConstOsmMapPtr& map, Handle<Obj
 
   try
   {
-    Handle<Value> v = _call(map, plugin);
+    Handle<Value> v = _call(map, mapObj, plugin);
 
     if (v.IsEmpty() || v->IsObject() == false)
     {
@@ -252,6 +253,9 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
 bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
   ElementId other1, ElementId other2) const
 {
+  Context::Scope context_scope(_script->getContext());
+  HandleScope handleScope;
+
   set<ElementId> eids;
   eids.insert(sharedEid);
   eids.insert(other1);
@@ -259,6 +263,8 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
 
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
   CopySubsetOp(map, eids).apply(copiedMap);
+
+  Handle<Object> copiedMapJs = OsmMapJs::create(copiedMap);
 
   // make sure unknown1 is always first
   ElementId eid11, eid12, eid21, eid22;
@@ -277,7 +283,8 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     eid22 = sharedEid;
   }
 
-  auto_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, eid11, eid12, _threshold));
+  auto_ptr<ScriptMatch> m1(new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12,
+    _threshold));
   MatchSet ms;
   ms.insert(m1.get());
   vector<Merger*> mergers;
@@ -310,7 +317,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     if (copiedMap->containsElement(eid21) &&
         copiedMap->containsElement(eid22))
     {
-      ScriptMatch m2(_script, _plugin, copiedMap, eid21, eid22, _threshold);
+      ScriptMatch m2(_script, _plugin, copiedMap, copiedMapJs, eid21, eid22, _threshold);
       if (m2.getType() == MatchType::Match)
       {
         conflicting = false;
@@ -321,7 +328,8 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   return conflicting;
 }
 
-Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> plugin)
+Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
+  Handle<Object> plugin)
 {
   HandleScope handleScope;
   Context::Scope context_scope(_script->getContext());
@@ -336,8 +344,6 @@ Handle<Value> ScriptMatch::_call(const ConstOsmMapPtr& map, Handle<Object> plugi
   {
     throw IllegalArgumentException("matchScore must be a valid function.");
   }
-
-  Handle<Object> mapObj = OsmMapJs::create(map);
 
   int argc = 0;
   jsArgs[argc++] = mapObj;
