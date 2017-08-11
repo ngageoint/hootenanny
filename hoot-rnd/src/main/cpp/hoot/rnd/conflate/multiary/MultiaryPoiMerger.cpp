@@ -33,6 +33,7 @@
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 #include "MultiaryHierarchicalClusterAlgorithm.h"
 

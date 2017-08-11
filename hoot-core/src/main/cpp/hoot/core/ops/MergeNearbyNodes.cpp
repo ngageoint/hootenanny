@@ -34,6 +34,9 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 // Qt
 #include <QTime>

@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/AlphaShapeGenerator.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>

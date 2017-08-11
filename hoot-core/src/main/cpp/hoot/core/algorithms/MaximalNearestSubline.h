@@ -47,8 +47,9 @@
 #include <tgs/SharedPtr.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Units.h>
 
 #include "linearreference/WayLocation.h"
 #include "linearreference/LocationOfPoint.h"

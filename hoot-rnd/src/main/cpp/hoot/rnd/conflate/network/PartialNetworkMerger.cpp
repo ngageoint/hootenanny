@@ -37,6 +37,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ExtractNodesVisitor.h>
 
 using namespace std;

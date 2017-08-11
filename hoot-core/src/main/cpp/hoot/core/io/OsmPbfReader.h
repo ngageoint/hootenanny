@@ -28,6 +28,12 @@
 #ifndef OSMPBFREADER_H
 #define OSMPBFREADER_H
 
+// boost
+#include <boost/shared_ptr.hpp>
+
+// GDAL
+class OGRSpatialReference;
+
 // Qt
 #include <QHash>
 #include <QString>
@@ -43,10 +49,6 @@
 
 // tgs
 #include <tgs/BigContainers/BigMap.h>
-
-#include <boost/shared_ptr.hpp>
-
-#include <ogr_spatialref.h>
 
 namespace hoot
 {

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,38 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#include "Version.h"
+#ifndef HOOTJSSTABLE_H
+#define HOOTJSSTABLE_H
 
 // hoot
-#include "VersionDefines.h"
+#include <hoot/core/HootCoreStable.h>
 
-// Qt
-#include <QString>
+// v8
+#include <v8.h>
 
-namespace hoot
-{
-
-const char* Version::getBuiltBy()
-{
-  return HOOT_BUILT_BY;
-}
-
-const char* Version::getFullVersion()
-{
-  return HOOT_FULL_VERSION;
-}
-
-const char* Version::getRevision()
-{
-  return HOOT_REVISION;
-}
-
-const char* Version::getVersion()
-{
-  return HOOT_VERSION;
-}
-
-}
+#endif // HOOTJSSTABLE_H

@@ -33,13 +33,11 @@
 
 // Hoot
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QMutex>
 
 // Standard
-#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
@@ -186,7 +184,6 @@ public:
    */
   AutoRegister(std::string baseName, std::string name, bool baseClass = false)
   {
-    LOG_TRACE("Registering: " << baseName << " " << name);
     Factory::getInstance().registerCreator(
       new ObjectCreatorTemplate<Base, T>(baseName, name), baseClass);
   }

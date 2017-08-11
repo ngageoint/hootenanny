@@ -26,6 +26,9 @@
  */
 #include "NetworkMatcher.h"
 
+// hoot
+#include <hoot/core/util/Log.h>
+
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/MemoryPageStore.h>

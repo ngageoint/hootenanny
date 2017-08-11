@@ -27,9 +27,11 @@
 #ifndef __ELEMENT_PROVIDER_H__
 #define __ELEMENT_PROVIDER_H__
 
-#include <ogr_spatialref.h>
-
+// boost
 #include <boost/shared_ptr.hpp>
+
+// GDAL
+class OGRSpatialReference;
 
 #include "ElementId.h"
 #include "Element.h"
