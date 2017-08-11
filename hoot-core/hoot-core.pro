@@ -552,7 +552,6 @@ SOURCES += \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
-    src/main/cpp/hoot/core/io/IoUtils.cpp \
     src/main/cpp/hoot/core/io/OsmChangeWriterFactory.cpp \
     src/main/cpp/hoot/core/util/SharedPtrPool.cpp \
     src/main/cpp/hoot/core/io/ElementCriterionInputStream.cpp \
@@ -1101,7 +1100,6 @@ HEADERS += \
     src/main/cpp/hoot/core/conflate/SearchRadiusProvider.h \
     src/main/cpp/hoot/core/elements/ElementVisitor.h \
     src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h \
-    src/main/cpp/hoot/core/io/IoUtils.h \
     src/main/cpp/hoot/core/io/OsmChangeWriter.h \
     src/main/cpp/hoot/core/io/OsmChangeWriterFactory.h \
     src/main/cpp/hoot/core/util/SharedPtrPool.h \

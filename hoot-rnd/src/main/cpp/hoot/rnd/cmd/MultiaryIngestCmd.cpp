@@ -33,10 +33,12 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/HootApiDbWriter.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
+#include <hoot/rnd/io/ElementCriterionVisitorInputStream.h>
+#include <hoot/core/filters/PoiCriterion.h>
+#include <hoot/core/visitors/TranslationVisitor.h>
 //#include <hoot/core/io/OsmPbfReader.h>
 
 using namespace std;
@@ -82,6 +84,17 @@ public:
     LOG_VARD(changesetOutput);
     LOG_VARD(sort);
 
+    //reads the new input data
+    boost::shared_ptr<PartialOsmMapReader> newInputReader;
+    //reads out the existing data
+    boost::shared_ptr<HootApiDbReader> dbLayerReader(new HootApiDbReader());
+    //derives a changeset between the new and existing data
+    ChangesetDeriverPtr changesetDeriver;
+    //writes the result of the changeset back to the existing layer
+    HootApiDbWriter dbLayerChangeWriter;
+    //writes the changeset statements for external use
+    SparkChangesetWriter changesetFileWriter;
+
     //do some input error checking before kicking a potentially long input sort
 
     //only supporting streamable i/o for the time being
@@ -91,7 +104,6 @@ public:
         "This command does not support non-streamable inputs: " + newDataInput);
     }
 
-    boost::shared_ptr<HootApiDbReader> dbLayerReader(new HootApiDbReader());
     if (!dbLayerReader->isSupported(dbLayerOutput))
     {
       throw HootException(
@@ -99,11 +111,10 @@ public:
         "Specified target: " + dbLayerOutput);
     }
 
-    SparkChangesetWriter changesetFileWriter;
     if (!changesetFileWriter.isSupported(changesetOutput))
     {
       throw HootException(
-        getName() + "only supports a .spark.x file for changeset output.  Specified output: " +
+        getName() + " only supports a .spark.x file for changeset output.  Specified output: " +
         changesetOutput);
     }
 
@@ -111,12 +122,7 @@ public:
       "Streaming multiary data ingest from input: " << newDataInput <<
       " to output database layer: " << dbLayerOutput << " and output changeset: " <<
       changesetOutput << "...");
-    QStringList convertOps = conf().get(ConfigOptions::getConvertOpsKey()).toStringList();
-    convertOps.append("hoot::PoiCriterion");
-    //convertOps.append("hoot::TranslationVisitor");
-    conf().set(ConfigOptions::getConvertOpsKey(), convertOps);
-    //conf().set(ConfigOptions::getTranslationScriptKey(), "OSM_Ingest.js");
-    LOG_INFO("Applying filters: " << convertOps);
+
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
 
     QString sortedNewDataInput = newDataInput;
@@ -125,45 +131,41 @@ public:
     {
       sortedNewDataInput = ElementSorter::sortInput(QUrl(newDataInput));
     }
-
-    boost::shared_ptr<PartialOsmMapReader> newInputReader =
+    newInputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
+
     newInputReader->open(sortedNewDataInput);
-
     dbLayerReader->open(dbLayerOutput);
-
-    ChangesetDeriverPtr changesetDeriver(
-      new ChangesetDeriver(
-        boost::dynamic_pointer_cast<ElementInputStream>(dbLayerReader),
-        boost::dynamic_pointer_cast<ElementInputStream>(newInputReader)));
-
-    HootApiDbWriter dbLayerChangeWriter;
     //no need to check this input format type, since we did it for the reader above
     dbLayerChangeWriter.open(dbLayerOutput);
-
     changesetFileWriter.open(changesetOutput);
 
-    boost::shared_ptr<ElementCriterion> criterion = IoUtils::getStreamingCriterion();
+    //filter down to POIs only and translate each element when the changeset is generated
+    boost::shared_ptr<ElementInputStream> newInputStreamReader =
+      boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
+    boost::shared_ptr<PoiCriterion> poiFilter(new PoiCriterion());
+    boost::shared_ptr<TranslationVisitor> translator(new TranslationVisitor());
+    newInputStreamReader.reset(
+      new ElementCriterionVisitorInputStream(newInputStreamReader, poiFilter, translator));
 
+    changesetDeriver.reset(
+      new ChangesetDeriver(
+        boost::dynamic_pointer_cast<ElementInputStream>(dbLayerReader), newInputStreamReader));
     while (changesetDeriver->hasMoreChanges())
     {
       const Change change = changesetDeriver->readNextChange();
-      if (change.type != Change::Unknown)
+      if (change.type != Change::Unknown) //TODO: should this check be in the while loop?
       {
-        if (!criterion.get() || criterion->isSatisfied(change.e))
-        {
-          dbLayerChangeWriter.writeChange(change);
-          changesetFileWriter.writeChange(change);
-        }
-        else
-        {
-          LOG_TRACE("Element did not satisfy filter: " << change.e->getElementId());
-        }
+        dbLayerChangeWriter.writeChange(change);
+        changesetFileWriter.writeChange(change);
       }
     }
 
+    //are all of these needed?
     newInputReader->finalizePartial();
+    dbLayerReader->finalizePartial();
+    dbLayerChangeWriter.finalizePartial();
 
     LOG_INFO(
       "Multiary data ingest complete for input: " << newDataInput <<

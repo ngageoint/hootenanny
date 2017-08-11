@@ -37,13 +37,7 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
-<<<<<<< HEAD
-#include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/IoUtils.h>
-=======
 #include <hoot/core/util/Factory.h>
->>>>>>> develop
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 

@@ -22,28 +22,44 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IOUTILS_H
-#define IOUTILS_H
-
-#include <hoot/core/filters/ElementCriterion.h>
+#include <boost/shared_ptr.hpp>
+#include <hoot/core/io/ElementInputStream.h>
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include "ElementCriterionVisitorInputStream.h"
 
 namespace hoot
 {
 
-/**
- *
- */
-class IoUtils
+ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
+  const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
+  const ElementVisitorPtr& visitor) :
+_elementSource(elementSource),
+_criterion(criterion),
+_visitor(visitor)
 {
-
-public:
-
-  static boost::shared_ptr<ElementCriterion> getStreamingCriterion();
-
-};
-
 }
 
-#endif // IOUTILS_H
+boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
+{
+  return _elementSource->getProjection();
+}
+
+ElementPtr ElementCriterionVisitorInputStream::readNextElement()
+{
+  do {
+    ElementPtr e = _elementSource->readNextElement();
+    if (_criterion->isSatisfied(e))
+    {
+      _visitor->visit(e);
+      return e;
+    }
+  } while (hasMoreElements());
+
+  return ElementPtr();
+}
+
+
+}
