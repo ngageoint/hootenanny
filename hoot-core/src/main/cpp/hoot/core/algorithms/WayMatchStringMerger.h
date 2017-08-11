@@ -79,16 +79,7 @@ public:
 
     void setSubline2(const WaySubline& ws) { subline2 = ws; }
 
-    QString toString() const
-    {
-      return QString("{start: %1, end: %2, newWay1: %3, way2: %4, subline2: %5, newWay2: %6}")
-        .arg(hoot::toString(_start))
-        .arg(hoot::toString(_end))
-        .arg(hoot::toString(newWay1 ? newWay1->getElementId() : ElementId()))
-        .arg(hoot::toString(way2 ? way2->getElementId() : ElementId()))
-        .arg(hoot::toString(subline2))
-        .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
-    }
+    QString toString() const;
 
   private:
 

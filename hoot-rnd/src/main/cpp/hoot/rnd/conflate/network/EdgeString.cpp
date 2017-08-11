@@ -75,6 +75,11 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
   return result;
 }
 
+QString EdgeString::EdgeEntry::toString() const
+{
+  return hoot::toString(_subline);
+}
+
 EdgeString::EdgeString()
 {
 }

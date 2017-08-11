@@ -38,6 +38,8 @@
 #include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 // Qt

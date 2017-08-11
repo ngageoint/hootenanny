@@ -42,8 +42,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/conflate/MatchClassification.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/Log.h>
 
 // standard
 #include <algorithm>

@@ -21,7 +21,10 @@ INCLUDEPATH += \
 
 CONFIG += rtti \
     qtestlib \
-    debug
+    debug \
+    precompile_header
+
+PRECOMPILED_HEADER = ../hoot-core/src/main/cpp/hoot/core/HootCoreStable.h
 
 OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \

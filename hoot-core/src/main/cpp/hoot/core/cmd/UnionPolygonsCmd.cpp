@@ -30,13 +30,14 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/io/OgrReader.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 
 using namespace geos::geom;

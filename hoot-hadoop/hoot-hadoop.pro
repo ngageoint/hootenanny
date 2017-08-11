@@ -7,8 +7,11 @@ QT += testlib \
 
 TEMPLATE = lib
 
+PRECOMPILED_HEADER = ../hoot-core/src/main/cpp/hoot/core/HootCoreStable.h
+
 CONFIG += rtti \
     qtestlib \
+    precompile_header
 
 TARGET = HootHadoop
 

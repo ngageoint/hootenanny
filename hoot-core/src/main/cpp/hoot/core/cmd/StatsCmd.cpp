@@ -26,14 +26,15 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/io/MapStatsWriter.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
 
 using namespace std;
 

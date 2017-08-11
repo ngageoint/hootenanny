@@ -26,8 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/CumulativeConflator.h>
 
 using namespace std;

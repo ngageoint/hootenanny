@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>

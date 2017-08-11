@@ -26,6 +26,9 @@
  */
 #include "IterativeEdgeMatcher.h"
 
+// hoot
+#include <hoot/core/util/Log.h>
+
 using namespace geos::geom;
 using namespace std;
 using namespace Tgs;

@@ -38,6 +38,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/util/Log.h>
 
 
 // The older version of GCC in CentOS 6 gives a bunch of false warnings.
