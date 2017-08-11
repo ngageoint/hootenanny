@@ -105,6 +105,7 @@ public:
       "Streaming multiary data ingest from input: " << newDataInput <<
       " to output database layer: " << dbLayerOutput << " and output changeset: " <<
       changesetOutput << "...");
+    //TODO: also need to translate to OSM
     QStringList convertOps = conf().get(ConfigOptions::getConvertOpsKey()).toStringList();
     convertOps.append("hoot::PoiCriterion");
     conf().set(ConfigOptions::getConvertOpsKey(), convertOps);
