@@ -250,7 +250,7 @@ tds61 = {
         if (attrList != undefined)
         {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (tds61.config.OgrDebugDumpvalidate == 'true')
+            if (tds61.configOut.OgrDebugDumpvalidate == 'true')
             {
         	    for (var val in attrs)
         	    {
@@ -631,6 +631,15 @@ tds61 = {
                 delete attrs[col];
                 continue;
             }
+
+            // Check for an FCODE as a tag
+            if (col in tds61.fcodeLookup['F_CODE'])
+            {
+                attrs.F_CODE = col;
+                delete attrs[col];
+                continue;
+            }
+
 
             // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
             if (~tds61.rules.ignoreList.indexOf(col)) continue;
@@ -1962,15 +1971,15 @@ tds61 = {
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
         // Doing this so we don't have to keep calling into Hoot core
-        if (tds61.config == undefined)
+        if (tds61.configIn == undefined)
         {
-            tds61.config = {};
-            tds61.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-            tds61.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            tds61.configIn = {};
+            tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
         }
 
         // Debug:
-        if (tds61.config.OgrDebugDumptags == 'true')
+        if (tds61.configIn.OgrDebugDumptags == 'true')
         {
             print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
@@ -2005,7 +2014,7 @@ tds61 = {
         tds61.untangleAttributes(attrs, tags);
 
         // Debug:
-        if (tds61.config.OgrDebugDumptags == 'true')
+        if (tds61.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -2060,10 +2069,10 @@ tds61 = {
         tds61.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
-        if (tds61.config.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (tds61.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (tds61.config.OgrDebugDumptags == 'true')
+        if (tds61.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedAttrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
@@ -2089,16 +2098,16 @@ tds61 = {
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
         // Doing this so we don't have to keep calling into Hoot core
-        if (tds61.config == undefined)
+        if (tds61.configOut == undefined)
         {
-            tds61.config = {};
-            tds61.config.OgrDebugDumptags = config.getOgrDebugDumptags();
-            tds61.config.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
-            tds61.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-            tds61.config.OgrNoteExtra = config.getOgrNoteExtra();
-            tds61.config.OgrSplitO2s = config.getOgrSplitO2s();
-            tds61.config.OgrThematicStructure = config.getOgrThematicStructure();
-            tds61.config.OgrThrowError = config.getOgrThrowError();
+            tds61.configOut = {};
+            tds61.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
+            tds61.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
+            tds61.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
+            tds61.configOut.OgrNoteExtra = config.getOgrNoteExtra();
+            tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+            tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
+            tds61.configOut.OgrThrowError = config.getOgrThrowError();
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
@@ -2109,7 +2118,7 @@ tds61 = {
 
         // Start processing here
         // Debug:
-        if (tds61.config.OgrDebugDumptags == 'true')
+        if (tds61.configOut.OgrDebugDumptags == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -2203,14 +2212,14 @@ tds61 = {
         tds61.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (tds61.config.getOgrDebugDumptags == 'true')
+        if (tds61.configOut.getOgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedTags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
         // If we have unused tags, add them to the memo field.
-        if (Object.keys(notUsedTags).length > 0 && tds61.config.OgrNoteExtra == 'attribute')
+        if (Object.keys(notUsedTags).length > 0 && tds61.configOut.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -2224,7 +2233,7 @@ tds61 = {
         if (!(tds61.AttrLookup[gFcode.toUpperCase()]))
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (tds61.config.getOgrThrowError == 'true')
+            if (tds61.configOut.getOgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {
@@ -2245,7 +2254,7 @@ tds61 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (tds61.config.OgrDebugDumptags == 'true')
+            if (tds61.configOut.OgrDebugDumptags == 'true')
             {
                 var kList = Object.keys(attrs).sort()
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -2263,7 +2272,7 @@ tds61 = {
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || tds61.config.OgrSplitO2s == 'false')
+            if (str.length < 255 || tds61.configOut.OgrSplitO2s == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
                 attrs = {tag1:str};
@@ -2308,13 +2317,13 @@ tds61 = {
 
                     // Now set the FCSubtype.
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                    if (tds61.config.OgrEsriFcsubtype == 'true')
+                    if (tds61.configOut.OgrEsriFcsubtype == 'true')
                     {
                         returnData[i]['attrs']['FCSUBTYPE'] = tds61.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                     }
 
                     // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                    if (tds61.config.OgrThematicStructure == 'true')
+                    if (tds61.configOut.OgrThematicStructure == 'true')
                     {
                         returnData[i]['tableName'] = tds61.rules.thematicGroupList[gFcode];
                         tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);
@@ -2332,7 +2341,7 @@ tds61 = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && tds61.config.OgrNoteExtra == 'file')
+            if (Object.keys(notUsedTags).length > 0 && tds61.configOut.OgrNoteExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -2360,7 +2369,7 @@ tds61 = {
         } // End else We have a feature
 
         // Debug:
-        if (tds61.config.OgrDebugDumptags == 'true')
+        if (tds61.configOut.OgrDebugDumptags == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {

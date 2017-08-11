@@ -37,17 +37,17 @@ etds40 = {
 
         tdsData = tds.toTds(tags, elementType, geometryType)
 
-        // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            for (var i = 0, fLen = tdsData.length; i < fLen; i++)
-            {
-                print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(tdsData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
-            }
-            print('');
-        }
+        // Debug: Commenting this out to cut down the number of Hoot core calls
+//         if (config.getOgrDebugDumptags() == 'true')
+//         {
+//             for (var i = 0, fLen = tdsData.length; i < fLen; i++)
+//             {
+//                 print('eTableName ' + i + ': ' + tdsData[i]['tableName'] + '  FCode: ' + tdsData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+//                 var kList = Object.keys(tdsData[i]['attrs']).sort()
+//                 for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + tdsData[i]['attrs'][kList[j]] + ':');
+//             }
+//             print('');
+//         }
 
         var eAttrs = {}; // The final English output
         eAttrs['Feature Code'] = 'Not found';
@@ -95,12 +95,12 @@ etds40 = {
 
         }
 
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            var kList = Object.keys(eAttrs).sort()
-            for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
-            print('');
-        }
+//         if (config.getOgrDebugDumptags() == 'true')
+//         {
+//             var kList = Object.keys(eAttrs).sort()
+//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
+//             print('');
+//         }
 
         // Return the English results. The "tableName" is not set
         return {attrs: eAttrs, tableName: ''};

@@ -74,7 +74,7 @@ mgcp = {
         if (attrList != undefined)
         {
             // The code is duplicated but it is quicker than doing the "if" on each iteration
-            if (config.OgrDebugDumpvalidate == 'true')
+            if (mgcp.configOut.OgrDebugDumpvalidate == 'true')
             {
                 for (var val in attrs)
                 {
@@ -182,7 +182,7 @@ mgcp = {
             // Check if it is a valid enumerated value
             if (enumValueList.indexOf(attrValue) == -1)
             {
-                if (mgcp.config.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
+                if (mgcp.configOut.OgrDebugDumpvalidate == 'true') hoot.logWarn('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName);
 
                 var othVal = '(' + enumName + ':' + attrValue + ')';
 
@@ -389,6 +389,14 @@ mgcp = {
             if (tKey == 'fcode' && col !== 'F_CODE')
             {
                 attrs.F_CODE = attrs[col];
+                delete attrs[col];
+                continue;
+            }
+
+            // Check for an FCODE as a tag
+            if (col in mgcp.fcodeLookup['F_CODE'])
+            {
+                attrs.F_CODE = col;
                 delete attrs[col];
                 continue;
             }
@@ -746,13 +754,12 @@ mgcp = {
             mgcp.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        //translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
+        translate.applyComplexRules(tags,attrs,mgcp.osmPostRules);
         // Pulling this out of translate
-        for (var i = 0, rLen = mgcp.osmPostRules.length; i < rLen; i++)
-        {
-            if (mgcp.osmPostRules[i][0](tags)) mgcp.osmPostRules[i][1](tags,attrs);
-        }
-
+//         for (var i = 0, rLen = mgcp.osmPostRules.length; i < rLen; i++)
+//         {
+//             if (mgcp.osmPostRules[i][0](tags)) mgcp.osmPostRules[i][1](tags,attrs);
+//         }
 
 
         // Lifecycle tags
@@ -1590,15 +1597,15 @@ mgcp = {
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
         // Doing this so we don't have to keep calling into Hoot core
-        if (mgcp.config == undefined)
+        if (mgcp.configIn == undefined)
         {
-            mgcp.config = {};
-            mgcp.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-            mgcp.config.OgrDebugDumptags = config.getOgrDebugDumptags();
+            mgcp.configIn = {};
+            mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
         }
 
         // Debug:
-        if (mgcp.config.OgrDebugDumptags == 'true')
+        if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
             print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
@@ -1635,7 +1642,7 @@ mgcp = {
         mgcp.untangleAttributes(attrs, tags);
 
         // Debug:
-        if (mgcp.config.OgrDebugDumptags == 'true')
+        if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -1681,10 +1688,10 @@ mgcp = {
         mgcp.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
-        if (mgcp.config.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (mgcp.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Debug:
-        if (mgcp.config.OgrDebugDumptags == 'true')
+        if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
             for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
 
@@ -1707,16 +1714,15 @@ mgcp = {
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
         // Doing this so we don't have to keep calling into Hoot core
-        if (mgcp.config == undefined)
+        if (mgcp.configOut == undefined)
         {
-            mgcp.config = {};
-            mgcp.config.OgrDebugDumptags = config.getOgrDebugDumptags();
-            mgcp.config.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
-            mgcp.config.OgrNoteExtra = config.getOgrNoteExtra();
-            mgcp.config.OgrSplitO2s = config.getOgrSplitO2s();
-            mgcp.config.OgrThrowError = config.getOgrThrowError();
+            mgcp.configOut = {};
+            mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
+            mgcp.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
+            mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
+            mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+            mgcp.configOut.OgrThrowError = config.getOgrThrowError();
         }
-
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
         if (mgcp.rawSchema == undefined)
@@ -1732,7 +1738,7 @@ mgcp = {
         if (geometryType == 'Collection') return null;
 
         // Debug:
-        if (mgcp.config.OgrDebugDumptags == 'true')
+        if (mgcp.configOut.OgrDebugDumptags == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -1790,7 +1796,7 @@ mgcp = {
 
         // If we have unused tags, add them to the TXT field.
         // NOTE: We are not checking if this is longer than 255 characters
-        if (Object.keys(notUsedTags).length > 0 && mgcp.config.OgrNoteExtra == 'attribute')
+        if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
@@ -1806,7 +1812,7 @@ mgcp = {
         if (!mgcp.layerNameLookup[tableName])
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (mgcp.config.OgrThrowError == 'true')
+            if (mgcp.configOut.OgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {
@@ -1827,7 +1833,7 @@ mgcp = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (config.OgrDebugDumptags == 'true')
+            if (mgcp.configOut.OgrDebugDumptags == 'true')
             {
                 var kList = Object.keys(attrs).sort()
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -1849,7 +1855,7 @@ mgcp = {
             // Shapefiles can't handle fields > 254 chars.
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
             // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || mgcp.config.OgrSplitO2s == 'false')
+            if (str.length < 255 || mgcp.configOut.OgrSplitO2s == 'false')
             {
                 //return {attrs:{tag1:str}, tableName: tableName};
                 attrs = {tag1:str};
@@ -1905,7 +1911,7 @@ mgcp = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && mgcp.config.OgrNoteExtra == 'file')
+            if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -1933,7 +1939,7 @@ mgcp = {
         } // End else We have a feature
 
         // Debug:
-        if (mgcp.config.OgrDebugDumptags == 'true')
+        if (mgcp.configOut.OgrDebugDumptags == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {

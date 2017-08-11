@@ -1752,7 +1752,7 @@ ggdm30 = {
         }
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
+        if (ggdm30.config.OgrDebugDumptags == 'true')
         {
             print('In Layername: ' + layerName);
             var kList = Object.keys(attrs).sort()
