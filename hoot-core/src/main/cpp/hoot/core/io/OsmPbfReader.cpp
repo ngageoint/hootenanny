@@ -996,6 +996,7 @@ void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
                                 "(%1 instead of %2)").
                         arg(strm->gcount()).arg(size));
   }
+
   _d->primitiveBlock.Clear();
   _d->primitiveBlock.ParseFromArray(_buffer.data(), size);
 
@@ -1019,6 +1020,7 @@ void OsmPbfReader::_parseOsmData()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
+
   _d->primitiveBlock.Clear();
   _d->primitiveBlock.ParseFromArray(inflated, size);
 
@@ -1029,6 +1031,7 @@ void OsmPbfReader::_parseOsmHeader()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
+
   _d->headerBlock.Clear();
   if (!_d->headerBlock.ParseFromArray(inflated, size))
   {
@@ -1309,6 +1312,7 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     /// @optimize
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
+
 
     element = _nodesItr->second->cloneSp();
     ++_nodesItr;

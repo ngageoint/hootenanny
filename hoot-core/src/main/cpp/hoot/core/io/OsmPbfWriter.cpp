@@ -224,6 +224,7 @@ void OsmPbfWriter::open(QString url)
     throw HootException(QString("Error opening for writing: %1").arg(url));
   }
   _out = _openStream.get();
+
   initializePartial();
 }
 
