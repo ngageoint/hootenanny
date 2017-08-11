@@ -65,9 +65,14 @@ boost::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap()
 {
+  if (!_wgs84)
+  {
+    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+  }
+
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
-  _srs = MapProjector::createWgs84Projection();
+  _srs = _wgs84;
 }
 
 OsmMap::OsmMap(ConstOsmMapPtr map)

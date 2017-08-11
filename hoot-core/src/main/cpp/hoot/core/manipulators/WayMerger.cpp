@@ -53,6 +53,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>
 using namespace hoot::elements;
 

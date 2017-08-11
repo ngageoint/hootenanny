@@ -295,6 +295,11 @@ Meters WayString::getMaxCircularError() const
   return result;
 }
 
+QString WayString::toString() const
+{
+  return hoot::toString(_sublines);
+}
+
 void WayString::visitRo(const ElementProvider &map, ConstElementVisitor& v) const
 {
   // go through each subline and call visitRw on the subline. The sublines should only visit the

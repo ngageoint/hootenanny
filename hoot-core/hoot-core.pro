@@ -20,7 +20,8 @@ INCLUDEPATH += \
   ../local/include/ \
 
 CONFIG += rtti \
-    debug
+    debug \
+    precompile_header
 
 OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
@@ -52,6 +53,8 @@ PROTOS = $${PROTOPATH}/OsmFormat.proto $${PROTOPATH}/FileFormat.proto
 PROTO_TMP=src/main/cpp/hoot/core/proto/
 
 include(protobuf.pri)
+
+PRECOMPILED_HEADER = src/main/cpp/hoot/core/HootCoreStable.h
 
 log4cxx {
   SOURCES += src/main/cpp/hoot/core/util/LogLog4Cxx.cpp

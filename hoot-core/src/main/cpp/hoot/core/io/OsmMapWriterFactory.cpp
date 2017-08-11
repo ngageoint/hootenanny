@@ -32,6 +32,7 @@
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 

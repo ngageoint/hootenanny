@@ -27,6 +27,8 @@
 
 #include "DefaultIdGenerator.h"
 
+// hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -44,6 +46,13 @@ IdGeneratorPtr DefaultIdGenerator::clone() const
   copy->_relationId = _relationId;
 
   return result;
+}
+
+void DefaultIdGenerator::reset()
+{
+  _wayId = ConfigOptions().getIdGeneratorWayStart();
+  _nodeId = ConfigOptions().getIdGeneratorNodeStart();
+  _relationId = ConfigOptions().getIdGeneratorRelationStart();
 }
 
 }

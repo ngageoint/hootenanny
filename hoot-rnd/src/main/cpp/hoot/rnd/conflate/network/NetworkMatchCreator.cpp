@@ -39,8 +39,9 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/rnd/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/rnd/conflate/network/IterativeNetworkMatcher.h>
 #include <hoot/rnd/conflate/network/SingleSidedNetworkMatcher.h>

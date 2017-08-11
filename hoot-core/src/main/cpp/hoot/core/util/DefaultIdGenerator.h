@@ -30,12 +30,6 @@
 
 #include "IdGenerator.h"
 
-// hoot
-#include <hoot/core/util/ConfigOptions.h>
-
-// standard
-#include <algorithm>
-
 namespace hoot
 {
 
@@ -62,12 +56,7 @@ public:
 
   void ensureWayBounds(long wid) { _wayId = std::min(wid, _wayId); }
 
-  void reset()
-  {
-    _wayId = ConfigOptions().getIdGeneratorWayStart();
-    _nodeId = ConfigOptions().getIdGeneratorNodeStart();
-    _relationId = ConfigOptions().getIdGeneratorRelationStart();
-  }
+  void reset();
 
 private:
   long _nodeId;

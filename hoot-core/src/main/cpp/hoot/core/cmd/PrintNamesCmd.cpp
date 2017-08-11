@@ -34,6 +34,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/WordCount.h>
 #include <hoot/core/io/WordCountWriter.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <iomanip>

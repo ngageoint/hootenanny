@@ -42,6 +42,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QElapsedTimer>

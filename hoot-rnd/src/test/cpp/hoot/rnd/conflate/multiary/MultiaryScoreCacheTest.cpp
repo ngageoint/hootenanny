@@ -98,6 +98,8 @@ public:
       cache.getScore(map->getNode(-1), map->getNode(-3)));
     HOOT_STR_EQUALS("match: 0.542857 miss: 0.457143 review: 0",
       cache.getScore(map->getNode(-2), map->getNode(-3)));
+    cache.getScore(map->getNode(-1), map->getNode(-4));
+    LOG_VAR(cache.getLastExplainText());
     HOOT_STR_EQUALS("match: 0.4 miss: 0.6 review: 0",
       cache.getScore(map->getNode(-1), map->getNode(-4)));
     HOOT_STR_EQUALS("match: 0.542857 miss: 0.457143 review: 0",

@@ -30,6 +30,9 @@
 
 #include "ElementConverter.h"
 
+// GDAL
+#include <ogr_spatialref.h>
+
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
