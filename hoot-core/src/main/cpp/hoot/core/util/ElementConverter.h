@@ -28,9 +28,11 @@
 #ifndef ELEMENTCONVERTER_H
 #define ELEMENTCONVERTER_H
 
-#include <ogr_spatialref.h>
-
+// boost
 #include <boost/shared_ptr.hpp>
+
+// GDAL
+class OGRSpatialReference;
 
 // GEOS
 #include <geos/geom/Envelope.h>

@@ -33,6 +33,7 @@
 #include <hoot/core/io/PbfElementIterator.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <fstream>

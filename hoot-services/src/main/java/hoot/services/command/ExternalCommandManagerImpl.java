@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ExternalCommandManagerImpl implements ExternalCommandManager {
     private static final Logger logger = LoggerFactory.getLogger(ExternalCommandManagerImpl.class);
 
-    // This contains the command runner objects for the executing commands. Used for job cancellation and tracking.
+    // Contains currently active ExternalCommandRunner instances. Used for job tracking.
     private static final Map<String, ExternalCommandRunner> activeCommands = new ConcurrentHashMap<>();
 
     @Override

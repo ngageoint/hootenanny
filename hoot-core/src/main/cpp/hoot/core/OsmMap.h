@@ -56,11 +56,7 @@ namespace hoot
 }
 
 // Standard
-#include <deque>
 #include <vector>
-
-// TGS
-#include <tgs/RStarTree/HilbertRTree.h>
 
 namespace hoot
 {

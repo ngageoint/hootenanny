@@ -28,6 +28,15 @@
 #ifndef WAYAVERAGER_H
 #define WAYAVERAGER_H
 
+// GEOS
+namespace geos
+{
+  namespace geom
+  {
+    class LineString;
+  }
+}
+
 // Hoot
 #include <hoot/core/OsmMap.h>
 

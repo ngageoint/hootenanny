@@ -32,6 +32,7 @@
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

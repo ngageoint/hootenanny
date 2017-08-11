@@ -36,6 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

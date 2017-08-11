@@ -30,6 +30,9 @@
 // geos
 #include <geos/geom/Envelope.h>
 
+// hoot
+#include <hoot/core/util/Log.h>
+
 // Standard
 #include <assert.h>
 #include <math.h>

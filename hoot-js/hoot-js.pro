@@ -25,9 +25,11 @@ INCLUDEPATH += \
   /usr/include/nodejs \
   ../local/include/ \
 
+PRECOMPILED_HEADER = src/main/cpp/hoot/js/HootJsStable.h
+
 CONFIG += rtti \
     qtestlib \
-    debug
+    precompile_header
 
 include(../Configure.pri)
 
@@ -158,7 +160,8 @@ HEADERS += \
     src/main/cpp/hoot/js/schema/TagDifferencerJs.h \
     src/main/cpp/hoot/js/schema/JsonOsmSchemaLoader.h \
     src/main/cpp/hoot/js/algorithms/string/MostEnglishNameJs.h \
-    src/main/cpp/hoot/js/conflate/PoiPolygonMergerJs.h
+    src/main/cpp/hoot/js/conflate/PoiPolygonMergerJs.h \
+    src/main/cpp/hoot/js/HootJsStable.h
 
 FORMS +=
 

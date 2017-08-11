@@ -37,14 +37,6 @@
 // Geos
 #include <geos/geom/Envelope.h>
 
-namespace geos {
-  namespace geom {
-    class LinearRing;
-    class LineString;
-    class Polygon;
-  }
-}
-
 // Hoot
 #include <hoot/core/util/HootException.h>
 

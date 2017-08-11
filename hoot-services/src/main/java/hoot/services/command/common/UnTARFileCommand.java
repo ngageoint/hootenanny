@@ -39,7 +39,7 @@ public class UnTARFileCommand extends ExternalCommand {
      * Decompresses a TAR file using system 'tar' utility
      *
      * @param sourceTAR TAR file to decompress
-     * @param targetFolder Folder to store the contents of the TAR to
+     * @param targetFolder folder to store the contents of the TAR into
      * @param caller identifies the caller of the command
      */
     public UnTARFileCommand(File sourceTAR, File targetFolder, Class<?> caller) {

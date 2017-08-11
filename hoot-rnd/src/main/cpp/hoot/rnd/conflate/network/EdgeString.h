@@ -72,10 +72,7 @@ public:
 
     void setSubline(ConstEdgeSublinePtr s) { _subline = s; }
 
-    QString toString() const
-    {
-      return hoot::toString(_subline);
-    }
+    QString toString() const;
 
   private:
     /// The portion of the edge. The portion is always measured starting at "from" regardless of

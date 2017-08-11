@@ -34,10 +34,15 @@ import java.util.Map;
 public interface ExternalCommandRunner {
 
     /**
-     * Runs a process. The command to run is passed as a
-     * String[]. Collects all output on System.out and System.err, passing it to
-     * the CommandResult. Waits for all output and process completion then
-     * returns the process exit status.  This is a blocking call.
+     * Runs an external command. This is a blocking call.
+     *
+     * @param commandTemplate command to execute
+     * @param substitutionMap command params
+     * @param jobId ID of the job this command is associated with
+     * @param caller identifies caller of the command
+     * @param workingDir working directory during the command's execution
+     * @param trackable should this command be tracked?
+     * @return results of the command's execution
      */
     CommandResult exec(String commandTemplate, Map<String, ?> substitutionMap, String jobId, String caller, File workingDir, Boolean trackable);
 

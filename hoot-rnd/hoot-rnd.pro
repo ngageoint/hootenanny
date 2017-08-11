@@ -25,9 +25,11 @@ INCLUDEPATH += \
   /usr/include/nodejs \
   ../local/include/ \
 
+PRECOMPILED_HEADER = ../hoot-core/src/main/cpp/hoot/core/HootCoreStable.h
+
 CONFIG += rtti \
     qtestlib \
-    debug
+    precompile_header
 
 include(../Configure.pri)
 

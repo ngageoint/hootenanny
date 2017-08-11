@@ -39,6 +39,7 @@ using namespace geos::geom;
 #include <hoot/core/filters/ParallelWayFilter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
