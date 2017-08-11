@@ -756,7 +756,7 @@ void HootApiDb::updateNode(ConstNodePtr node)
 
 void HootApiDb::deleteNode(ConstNodePtr node)
 {
-    //TODO: multiary-ingest
+  //TODO: multiary-ingest - finish
 }
 
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)

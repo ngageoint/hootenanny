@@ -88,14 +88,16 @@ public:
     boost::shared_ptr<PartialOsmMapReader> newInputReader;
     //reads out the existing data
     boost::shared_ptr<HootApiDbReader> dbLayerReader(new HootApiDbReader());
+    conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
     //derives a changeset between the new and existing data
     ChangesetDeriverPtr changesetDeriver;
+    conf().set(ConfigOptions::getTranslationScriptKey(), "OSM_Ingest.js");
     //writes the result of the changeset back to the existing layer
     HootApiDbWriter dbLayerChangeWriter;
     //writes the changeset statements for external use
     SparkChangesetWriter changesetFileWriter;
 
-    //do some input error checking before kicking a potentially long input sort
+    //do some input error checking before kicking off a potentially long input sort
 
     //only supporting streamable i/o for the time being
     if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newDataInput))
@@ -123,8 +125,7 @@ public:
       " to output database layer: " << dbLayerOutput << " and output changeset: " <<
       changesetOutput << "...");
 
-    conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
-
+    //sort data by ID, if necessary (only passing nodes through)
     QString sortedNewDataInput = newDataInput;
     //OsmPbfReader tmpPbfReader; //getSortedTypeThenId
     if (sort) //TODO: if pbf, check pbf format flag
@@ -141,7 +142,7 @@ public:
     dbLayerChangeWriter.open(dbLayerOutput);
     changesetFileWriter.open(changesetOutput);
 
-    //filter down to POIs only and translate each element when the changeset is generated
+    //filter down to POIs only and translate each element as the changeset is generated
     boost::shared_ptr<ElementInputStream> newInputStreamReader =
       boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
     boost::shared_ptr<PoiCriterion> poiFilter(new PoiCriterion());
@@ -149,6 +150,7 @@ public:
     newInputStreamReader.reset(
       new ElementCriterionVisitorInputStream(newInputStreamReader, poiFilter, translator));
 
+    //stream changeset changes to db and changeset file outputs
     changesetDeriver.reset(
       new ChangesetDeriver(
         boost::dynamic_pointer_cast<ElementInputStream>(dbLayerReader), newInputStreamReader));
