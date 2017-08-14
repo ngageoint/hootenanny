@@ -1,8 +1,9 @@
-reference dataset:  test-files/cmd/slow/ServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromShp-cropped-4.osm
-secondary dataset:  test-files/cmd/slow/ServiceOsmApiDbHootApiDbBuildingConflateTest/BostonSubsetRoadBuilding_FromOsm-cropped-4.osm
-AOI:  -71.4771,42.4835,-71.4758,42.4841
-CONFLATION TYPE:  unifying
-TEST_NAME:  ServiceOsmApiDbHootApiDbBuildingConflateTest
+reference dataset:  test-files/DcGisRoads.osm
+secondary dataset:  test-files/DcTigerRoads.osm
+AOI:  -77.04,38.8916,-77.03324,38.8958
+CONFLATION TYPE:  network
+TEST_NAME:  ServiceOsmApiDbHootApiDbDcStreetsNetworkConflateTest
+TEST_CATEGORY:  glacial
 SELECT_RANDOM_AOI:  false
 RANDOM_SEED:  -1
 
@@ -19,7 +20,6 @@ STEP 2: Writing the complete reference dataset to the osm api db...
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
-17:40:37.080 WARN  ...portMissingElementsVisitor.cpp(  63) Missing Relation:1838255 in Relation:1354957.
 
 STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
 
@@ -36,13 +36,13 @@ STEP 11b: Writing a XML changeset file that is the difference between the croppe
 STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.483200, max_lat=42.485100, min_lon=-71.477000, max_lon=-71.475500, num_changes=104
-Node(s) Created: 6
+Changeset Details: min_lat=38.892093, max_lat=38.902523, min_lon=-77.050159, max_lon=-77.033632, num_changes=153
+Node(s) Created: 108
 Node(s) Modified: 0
-Node(s) Deleted: 93
-Way(s) Created: 0
-Way(s) Modified: 2
-Way(s) Deleted: 3
+Node(s) Deleted: 0
+Way(s) Created: 20
+Way(s) Modified: 25
+Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0

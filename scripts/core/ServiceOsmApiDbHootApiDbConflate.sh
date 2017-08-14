@@ -30,14 +30,16 @@ AOI=$3 # leave blank to select a random AOI
 #'unifying' or 'network'
 CONFLATION_TYPE=$4
 TEST_NAME=$5
-SELECT_RANDOM_AOI=$6
-RANDOM_SEED=$7
+TEST_CATEGORY=$6
+SELECT_RANDOM_AOI=$7
+RANDOM_SEED=$8
 
 echo "reference dataset: " $REF_DATASET
 echo "secondary dataset: " $SEC_DATASET
 echo "AOI: " $AOI
 echo "CONFLATION TYPE: " $CONFLATION_TYPE
 echo "TEST_NAME: " $TEST_NAME
+echo "TEST_CATEGORY: " $TEST_CATEGORY
 echo "SELECT_RANDOM_AOI: " $SELECT_RANDOM_AOI
 echo "RANDOM_SEED: " $RANDOM_SEED
 
@@ -59,7 +61,8 @@ if [ "$CONFLATION_TYPE" == "network" ]; then
   HOOT_OPTS=$HOOT_OPTS" -D match.creators=hoot::NetworkMatchCreator -D merger.creators=hoot::NetworkMergerCreator -D network.matcher=hoot::ConflictsNetworkMatcher -D conflate.match.highway.classifier=hoot::HighwayExpertClassifier -D way.subline.matcher=hoot::MaximalSublineMatcher"
 fi
 
-OUTPUT_DIR=test-output/cmd/slow/$TEST_NAME
+REF_DIR=test-files/cmd/$TEST_CATEGORY/$TEST_NAME
+OUTPUT_DIR=test-output/cmd/$TEST_CATEGORY/$TEST_NAME
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
@@ -200,7 +203,7 @@ echo ""
 echo "STEP 14: Reading the entire contents of the osm api db, for the SQL changeset workflow, writing it into a file, and verifying the data..."
 echo ""
 hoot convert $HOOT_OPTS -D reader.add.source.datetime=false -D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.file.status=true -D writer.include.circular.error.tags=false $OSM_API_DB_URL $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
-hoot is-match $HOOT_OPTS test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
+hoot is-match $HOOT_OPTS $REF_DIR/output.osm $OUTPUT_DIR/14-complete-output-PulledFromOsmApiDb.osm
 
 # The map comparison, step 14, should be enough to check the state of the changeset write.  Due to node coordinate
 # precision differences between Ubuntu and CentOS, we'd need the equivalent of the is-match command for changesets
@@ -209,11 +212,11 @@ hoot is-match $HOOT_OPTS test-files/cmd/slow/$TEST_NAME/output.osm $OUTPUT_DIR/1
 #echo ""
 #echo "STEP 15a: Verifying the SQL changeset..."
 #echo ""
-#diff test-files/cmd/slow/$TEST_NAME/output.osc.sql $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
+#diff $REF_DIR/output.osc.sql $OUTPUT_DIR/11a-conflated-changeset-ToBeAppliedToOsmApiDb.osc.sql
 
 #echo ""
 #echo "STEP 15b: Verifying the XML changeset..."
 #echo ""
-#diff test-files/cmd/slow/$TEST_NAME/output.osc $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
+#diff $REF_DIR/output.osc $OUTPUT_DIR/11b-conflated-changeset-ToBeAppliedToOsmApiDb.osc
 
 
