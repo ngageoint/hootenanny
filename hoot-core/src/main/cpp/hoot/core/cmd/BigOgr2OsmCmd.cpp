@@ -26,14 +26,15 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/elements/ElementIterator.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/ElementIterator.h>
 
 // Standard
 #include <fstream>

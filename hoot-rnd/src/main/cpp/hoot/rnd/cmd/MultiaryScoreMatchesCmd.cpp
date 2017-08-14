@@ -35,7 +35,9 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/multiary/MultiaryMatchComparator.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 
 using namespace std;
@@ -145,8 +147,11 @@ public:
       loadMap(map, args[i], false, s);
     }
 
-    MapProjector::projectToWgs84(map);
+    CalculateHashVisitor hashVisitor;
+    map->visitRw(hashVisitor);
+
     OsmMapWriterFactory::write(map, "/tmp/score-matches-after-prep.osm");
+    MapProjector::projectToPlanar(map);
 
     boost::shared_ptr<MatchThreshold> mt;
     QString result = evaluateThreshold(map, output, mt, showConfusion);

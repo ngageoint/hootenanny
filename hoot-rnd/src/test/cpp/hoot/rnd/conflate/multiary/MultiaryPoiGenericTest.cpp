@@ -69,12 +69,15 @@ public:
     foo["poi"] = "yes";
     foo["name"] = "foo";
     foo["alt_name"] = "bar";
+    foo["hoot:hash"] = "AAA";
     TestUtils::createNode(map, Status::fromInput(0), 0, 0, 15, foo);
 
     foo["alt_name"] = "baz";
+    foo["hoot:hash"] = "BBB";
     TestUtils::createNode(map, Status::fromInput(1), 5, 0, 15, foo);
 
     foo["alt_name"] = "qux";
+    foo["hoot:hash"] = "CCC";
     TestUtils::createNode(map, Status::fromInput(1), 10, 0, 15, foo);
 
     MatchFactory::getInstance().reset();
@@ -87,7 +90,7 @@ public:
 
     //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0,\"tags\":{\"poi\":\"yes\",\"alt_name\":\"bar;baz;qux\",\"name\":\"foo\",\"error:circular\":\"15\"}}]\n"
+                    "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0,\"tags\":{\"poi\":\"yes\",\"source:hash\":\"AAA;BBB;CCC\",\"alt_name\":\"bar;baz;qux\",\"name\":\"foo\",\"error:circular\":\"15\"}}]\n"
                     "}\n", OsmJsonWriter().toString(map));
   }
 

@@ -39,7 +39,8 @@ using namespace geos::geom;
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
-#include "../visitors/AddExportTagsVisitor.h"
+// Qt
+#include <QStringBuilder>
 
 namespace hoot
 {
@@ -93,19 +94,24 @@ void SparkJsonWriter::open(QString fileName)
 void SparkJsonWriter::writePartial(const ConstNodePtr& n)
 {
   NodePtr copy(dynamic_cast<Node*>(n->clone()));
-  AddExportTagsVisitor().visit(copy);
+  _addExportTagsVisitor.visit(copy);
   Envelope e = _bounds->calculateSearchBounds(OsmMapPtr(), copy);
 
-  QString result = "{";
+  QString result;
+  // 600 was picked b/c OSM POI records were generally ~500.
+  result.reserve(600);
+  result += "A\t";
 
-  result += "\"minx\":" + QString::number(e.getMinX(), 'g', 16);
-  result += ",\"miny\":" + QString::number(e.getMinY(), 'g', 16);
-  result += ",\"maxx\":" + QString::number(e.getMaxX(), 'g', 16);
-  result += ",\"maxy\":" + QString::number(e.getMaxY(), 'g', 16);
-  result += ",\"element\":{\"type\":\"node\"";
-  result += ",\"id\":" + QString::number(copy->getId(), 'g', 16);
-  result += ",\"lat\":" + QString::number(copy->getY(), 'g', 16);
-  result += ",\"lon\":" + QString::number(copy->getX(), 'g', 16);
+  result += QString::number(e.getMinX(), 'g', 16) % "\t";
+  result += QString::number(e.getMinY(), 'g', 16) % "\t";
+  result += QString::number(e.getMaxX(), 'g', 16) % "\t";
+  result += QString::number(e.getMaxY(), 'g', 16) % "\t";
+  /// @todo Update after https://github.com/ngageoint/hootenanny/issues/1663
+  result += "<hash>\t";
+  result += "{\"element\":{\"type\":\"node\"";
+  result += ",\"id\":" % QString::number(copy->getId(), 'g', 16);
+  result += ",\"lat\":" % QString::number(copy->getY(), 'g', 16);
+  result += ",\"lon\":" % QString::number(copy->getX(), 'g', 16);
   result += ",\"tags\":{";
 
   bool first = true;
@@ -116,7 +122,7 @@ void SparkJsonWriter::writePartial(const ConstNodePtr& n)
     {
       result += ",";
     }
-    result += OsmJsonWriter::markupString(it.key()) + ":" + OsmJsonWriter::markupString(it.value());
+    result += OsmJsonWriter::markupString(it.key()) % ":" % OsmJsonWriter::markupString(it.value());
     first = false;
   }
 

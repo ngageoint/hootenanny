@@ -133,6 +133,8 @@ protected:
   virtual void _translateToOsm(Tags& tags, const char *layerName, const char* geomType) = 0;
 };
 
+typedef boost::shared_ptr<ScriptTranslator> ScriptTranslatorPtr;
+
 }
 
 #endif // SCRIPTTRANSLATOR_H

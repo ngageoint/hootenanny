@@ -38,6 +38,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -55,11 +56,7 @@ namespace hoot
 }
 
 // Standard
-#include <deque>
 #include <vector>
-
-// TGS
-#include <tgs/RStarTree/HilbertRTree.h>
 
 namespace hoot
 {
@@ -117,6 +114,12 @@ public:
   void addElements(T it, T end);
 
   void addNode(const NodePtr& n);
+
+  /**
+   * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
+   * times.
+   */
+  void addNodes(const std::vector<NodePtr>& nodes);
 
   void addRelation(const RelationPtr& r);
 
@@ -278,6 +281,7 @@ public:
    * If the visitor implements OsmMapConsumer then setOsmMap will be called before
    * visiting any elements.
    */
+  void visitRw(ElementVisitor& visitor);
   void visitRw(ConstElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);
 

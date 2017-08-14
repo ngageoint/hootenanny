@@ -25,6 +25,7 @@
 #include <hoot/core/ops/OpList.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>

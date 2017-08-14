@@ -152,14 +152,14 @@ var typeTags = {
 /**
  * Returns true if one of the typeTags are found in the specified element.
  */
-function hasTypeTag(e1) {
+function hasTypeTag(t) {
     for (k in typeTags.related) {
-        if (getRelatedTags(k, e1.getTags().toDict()).length > 0) {
+        if (getRelatedTags(k, t).length > 0) {
             return true;
         }
     }
     for (k in typeTags.category) {
-        if (getTagsByCategory(k, e1.getTags().toDict()).length > 0) {
+        if (getTagsByCategory(k, t).length > 0) {
             return true;
         }
     }
@@ -188,7 +188,7 @@ function additiveScore(map, e1, e2) {
 
     // if there is no type information to compare the name becomes more
     // important
-    var oneGeneric = hasTypeTag(e1) == false || hasTypeTag(e2) == false;
+    var oneGeneric = hasTypeTag(t1) == false || hasTypeTag(t2) == false;
     if (oneGeneric)
     {
       hoot.trace("One element in the pair is generic.");
@@ -287,7 +287,7 @@ function additiveScore(map, e1, e2) {
     var powerDistance = 1.0;
     if (!ignoreType)
     {
-      powerDistance = getTagDistance("power", e1, e2);
+      powerDistance = getTagDistance("power", t1, t2);
     }
 
     if (powerDistance == 0) {
@@ -309,7 +309,7 @@ function additiveScore(map, e1, e2) {
     // if at least one of the points has a place and neither of them are
     // generic poi types
     if (placeCount > 0 && oneGeneric == false) {
-        var d = getTagDistance("place", e1, e2);
+        var d = getTagDistance("place", t1, t2);
         // if the places don't match
         if (d == undefined) {
             // don't give name similarity or proximity a high weight

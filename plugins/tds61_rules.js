@@ -3901,11 +3901,11 @@ tds61.rules = {
      ['FFN','999','landuse','other'], 
      ['FFN','999','leisure','other'], 
      ['FFN','999','military','other'], 
-     ['FFN','999','office','other'], 
-     ['FFN','999','repair','other'], 
-     ['FFN','999','shop','other'], 
-     ['FFN','999','social_facility','other'], 
-     ['FFN','999','tourism','other'], 
+     ['FFN','999','office','other'],
+     ['FFN','999','repair','other'],
+     ['FFN','999','shop','other'],
+     ['FFN','999','social_facility','other'],
+     ['FFN','999','tourism','other'],
 
      // Funky Road Type attributes from TDSv40
      ['RTY','4','ref:road:type','boulevard'], // Boulevard
@@ -3938,6 +3938,9 @@ tds61.rules = {
      ['FFN','572','amenity','cafe'], // Restaurant
      ['FFN','572','building','restaurant'], // Restaurant
 
+     // Backward compatibility for 'oil'
+     ['ZI014_PPO','83','product','oil'], // Petroleum
+     ['ZI014_PPO','83','product','fuel'], // Close...
 
      // Extra road stuff - see similarTable
      // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
@@ -3953,9 +3956,9 @@ tds61.rules = {
      // From MGCP
      ['FFN','480','building','transportation_outbuilding'], // Transportation
      ['FFN','481','man_made','depot'], // not a good fit for depot terminal
-     ['FFN','550','building','dwelling'], // Accomodation 
+     ['FFN','550','building','dwelling'], // Accomodation
      ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
-     ['FFN','811','amenity','government_administration_building'], // 
+     ['FFN','811','amenity','government_administration_building'], //
      ['FFN','835','military','military_outbuilding'], // Military
      ['FFN','835','military','barracks'], // Military
      ['FFN','843','amenity','jail'], // Imprisonment
@@ -3969,17 +3972,17 @@ tds61.rules = {
 
      // From UFD
      ['CAA','-999999','controlling_authority','unknown'],
-     ['FFN','190','use','oil_gas_facility'], //  
+     ['FFN','190','use','oil_gas_facility'], //
 
      // From UTP
      // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
      ['FFN','482','amenity','bus_station'], // Station
      ['FFN','831','amenity','courthouse'], // Public Order - from spec
-     ['FFN','610','building','communication'], 
-     ['FFN','530','building','warehouse'], 
-     ['FFN','835','building','military'], 
-     // ['FFN','999','landuse','institutional'], //  
-     ['ZI014_PPO','83','product','oil'], // Petroleum
+     ['FFN','610','building','communication'],
+     ['FFN','530','building','warehouse'],
+     ['FFN','835','building','military'],
+     // ['FFN','999','landuse','institutional'], //
+
 
      // From NAVTEQ
      ['FFN','122','man_made','winery'], // Winery
@@ -4208,13 +4211,12 @@ tds61.rules = {
                     },
     // ##### End of closureList #####
 
-
-    // ##### Start of swapList #####
+    // ##### Start of swapListIn #####
     // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
     // but renamed in different features. We swap these so that there is only one
     // set of rules needed in the One2One section.
     // These get converted back on output - if we need to.
-    swapList : {
+    swapListIn : {
             'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
             'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
             'HYP':'ZI024_HYP',
@@ -4239,7 +4241,46 @@ tds61.rules = {
             'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3',
             'ZVH_VDT':'VDT'
             },
-    // ##### End of swapList #####
+    // ##### End of swapListIn #####
+
+    // ##### Start of swapListOut #####
+    // Format is: <FCODE>:{<from>:<to>}
+    swapListOut : {
+            'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
+            'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AL020':{'ZI005_NFN':'ZI005_NFN1'},
+            'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
+            'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AM080':{'ZI014_YWQ':'YWQ'},
+            'AQ059':{'ZI016_WD1':'WD1'},
+            'AQ113':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AQ116':{'ZI014_PPO':'PPO','ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'AT005':{'WLE':'ZI025_WLE'},
+            'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB','CAB2':'AT005_CAB2','CAB3':'AT005_CAB3'},
+            'BD100':{'WLE':'ZI025_WLE'},
+            'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+            'BH070':{'PWA':'WBD'},
+            'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+            'ED010':{'ZI024_HYP':'HYP'},
+            'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
+            'BD115':{'MAN':'ZI025_MAN'},
+            'AP055':{'RIN_RTN':'RTN', 'RIN_RTN2':'RTN2', 'RIN_RTN3':'RTN3'},
+            'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
+            'ZI026':{'ZI026_SUR':'SUR'}
+            },
+
+    // ##### End of swapListOut #####
 
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export

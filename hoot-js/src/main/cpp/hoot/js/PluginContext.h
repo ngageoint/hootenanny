@@ -33,9 +33,6 @@
 // Qt
 #include <QString>
 
-// Standard
-#include <memory>
-
 // tgs
 #include <tgs/SharedPtr.h>
 

@@ -31,6 +31,7 @@
 #include <hoot/core/OsmMap.h>
 
 // Qt
+#include <QMap>
 #include <QSet>
 
 namespace hoot

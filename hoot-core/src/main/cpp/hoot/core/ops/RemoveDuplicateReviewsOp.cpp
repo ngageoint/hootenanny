@@ -33,6 +33,7 @@
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/conflate/MatchClassification.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 

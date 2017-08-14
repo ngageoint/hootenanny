@@ -41,6 +41,7 @@
 
 //  Version must be included last
 #include <hoot/core/Version.h>
+#include <hoot/core/VersionDefines.h>
 
 using namespace hoot::pb;
 
@@ -224,6 +225,8 @@ void OsmPbfWriter::open(QString url)
     throw HootException(QString("Error opening for writing: %1").arg(url));
   }
   _out = _openStream.get();
+
+  initializePartial();
 }
 
 void OsmPbfWriter::close()
@@ -571,28 +574,19 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   // create the header block
   _d->headerBlock.Clear();
 
-   LOG_VARD(includeBounds);
-  if (includeBounds)
+  LOG_VARD(includeBounds);
+  if (includeBounds && _map.get())
   {
     LOG_VARD(_map.get());
-    if (_map.get())
-    {
-      const OGREnvelope& env = CalculateMapBoundsVisitor::getBounds(_map);
-      _d->headerBlock.mutable_bbox()->set_bottom(env.MinY);
-      _d->headerBlock.mutable_bbox()->set_left(env.MinX);
-      _d->headerBlock.mutable_bbox()->set_right(env.MaxX);
-      _d->headerBlock.mutable_bbox()->set_top(env.MaxY);
-    }
-    else
-    {
-      //If this is a streaming write, there will be no map from which to obtain the bounds.  Tried
-      //not writing the bounds header since it is listed as optional, but was seeing error messages
-      //from the pbf reader when trying to read the data back without the bounds header.
-      _d->headerBlock.mutable_bbox()->set_bottom(-180.0);
-      _d->headerBlock.mutable_bbox()->set_left(-90.0);
-      _d->headerBlock.mutable_bbox()->set_right(90.0);
-      _d->headerBlock.mutable_bbox()->set_top(180.0);
-    }
+    const OGREnvelope& env = CalculateMapBoundsVisitor::getBounds(_map);
+    _d->headerBlock.mutable_bbox()->set_bottom(env.MinY);
+    _d->headerBlock.mutable_bbox()->set_left(env.MinX);
+    _d->headerBlock.mutable_bbox()->set_right(env.MaxX);
+    _d->headerBlock.mutable_bbox()->set_top(env.MaxY);
+  }
+  else
+  {
+    _d->headerBlock.clear_bbox();
   }
 
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_OSM_SCHEMA_V06);

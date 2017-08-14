@@ -2233,6 +2233,14 @@ renaming existing tag keys on all elements in a map.
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
 
+=== test.case.cmd
+
+* Data Type: string
+* Default Value: `hoot::ConflateCmd`
+
+Set the conflate command that should be used in a test case. This is only useful when writing
+test cases (`test-files/cases/`) and was originally added to support the MultiaryConflateCmd.
+
 === test.force.orthographic.projection
 
 * Data Type: bool
@@ -2632,3 +2640,13 @@ Set the output precision when writing. Not honored by all writers.
 * Default Value: `false`
 
 Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)
+
+=== writer.xml.sort.by.id
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setting this to true
+will require reading the entire source dataset into memory.  Setting it to false may result in
+using smaller amounts of memory during writing if the data source being written is also a streamable
+format (see the "Supported Data Formats" section in README.md).

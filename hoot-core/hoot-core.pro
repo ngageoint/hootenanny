@@ -20,22 +20,19 @@ INCLUDEPATH += \
   ../local/include/ \
 
 CONFIG += rtti \
-    debug
+    debug \
+    precompile_header
 
 OTHER_FILES = \
+    $$files(../plugins/*.js, true) \
+    $$files(../plugins/*.py, true) \
+    $$files(../translations/*.js, true) \
+    $$files(../translations/*.py, true) \
+    $$files(../rules/*.js, true) \
+    $$files(../conf/schema/*.json, true) \
     ../conf/core/ConfigOptions.asciidoc \
-    ../rules/LineStringGeneric.js \
-    ../rules/MultiaryPoiGeneric.js \
-    ../rules/PoiGeneric.js \
-    ../rules/lib/HootLib.js \
-    ../rules/LinearWaterway.js \
     ../conf/LinearWaterway.conf \
     ../conf/LinearWaterway-match-scoring.conf \
-    ../conf/schema/all_weather.json \
-    ../conf/schema/highway.json \
-    ../conf/schema/natural.json \
-    ../conf/schema/public_transport.json \
-    ../rules/template/ConflateRules.js \
 
 include(../Configure.pri)
 
@@ -52,6 +49,8 @@ PROTOS = $${PROTOPATH}/OsmFormat.proto $${PROTOPATH}/FileFormat.proto
 PROTO_TMP=src/main/cpp/hoot/core/proto/
 
 include(protobuf.pri)
+
+PRECOMPILED_HEADER = src/main/cpp/hoot/core/HootCoreStable.h
 
 log4cxx {
   SOURCES += src/main/cpp/hoot/core/util/LogLog4Cxx.cpp
@@ -546,15 +545,19 @@ SOURCES += \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.cpp \
     src/main/cpp/hoot/core/cmd/CalculateTilesCmd.cpp \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.cpp \
-				src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
-				src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.cpp \
-				src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.cpp \
+    src/main/cpp/hoot/core/visitors/CalculateHashVisitor.cpp \
+    src/main/cpp/hoot/core/filters/UselessElementCriterion.cpp \
+    src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.cpp \
+    src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.cpp \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.cpp \
     src/main/cpp/hoot/core/io/OsmGeoJsonWriter.cpp \
-				src/main/cpp/hoot/core/elements/Status.cpp \
-				src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
-				src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp
+    src/main/cpp/hoot/core/util/SharedPtrPool.cpp \
+    src/main/cpp/hoot/core/io/ElementCriterionInputStream.cpp \
+    src/main/cpp/hoot/core/util/MetadataTags.cpp \
+    src/main/cpp/hoot/core/elements/Status.cpp \
+    src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
+    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -581,7 +584,6 @@ HEADERS += \
     src/main/cpp/hoot/core/algorithms/linearreference/WayLocation.h \
     src/main/cpp/hoot/core/algorithms/linearreference/LocationOfPoint.h \
     src/main/cpp/hoot/core/index/OsmMapIndex.h \
-    src/main/cpp/hoot/core/util/Assert.h \
     src/main/cpp/hoot/core/util/AssertionFailedException.h \
     src/main/cpp/hoot/core/util/HootException.h \
     src/main/cpp/hoot/core/manipulators/WayMatchSet.h \
@@ -1085,9 +1087,10 @@ HEADERS += \
     src/main/cpp/hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
-				src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
-				src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.h \
-				src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h \
+    src/main/cpp/hoot/core/filters/UselessElementCriterion.h \
+    src/main/cpp/hoot/core/visitors/CalculateHashVisitor.h \
+    src/main/cpp/hoot/core/visitors/SumNumericTagsVisitor.h \
+    src/main/cpp/hoot/core/conflate/poi-polygon/visitors/PoiPolygonMatchVisitor.h \
     src/main/cpp/hoot/core/visitors/CriterionCountVisitor.h \
     src/main/cpp/hoot/core/scoring/multiary/MultiaryMatchComparator.h \
     src/main/cpp/hoot/core/io/OsmGeoJsonReader.h \
@@ -1095,5 +1098,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/NonIdRemappingHootApiDbWriter.h \
     src/main/cpp/hoot/core/conflate/SearchRadiusProvider.h \
     src/main/cpp/hoot/core/elements/ElementVisitor.h \
-    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h
+    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.h \
+    src/main/cpp/hoot/core/util/SharedPtrPool.h \
+    src/main/cpp/hoot/core/io/ElementCriterionInputStream.h
 

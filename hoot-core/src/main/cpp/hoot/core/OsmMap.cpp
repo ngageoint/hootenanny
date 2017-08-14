@@ -65,9 +65,14 @@ boost::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap()
 {
+  if (!_wgs84)
+  {
+    _wgs84 = MapProjector::getInstance().createWgs84Projection();
+  }
+
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
-  _srs = MapProjector::createWgs84Projection();
+  _srs = _wgs84;
 }
 
 OsmMap::OsmMap(ConstOsmMapPtr map)
@@ -187,6 +192,37 @@ void OsmMap::addNode(const NodePtr& n)
   n->registerListener(_index.get());
   _index->addNode(n);
   //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
+}
+
+void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
+{
+  if (nodes.size() > 0)
+  {
+    long minId = nodes[0]->getId();
+    long maxId = minId;
+
+    // this seemed like a clever optimization. However, this impacts the BigPertyCmd.sh test b/c
+    // it modifies the order in which the elements are written to the output. Which presumably (?)
+    // impacts the ID when reading the file with re-numbering. Sad.
+//    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
+//    if (_nodes.bucket_count() < minBuckets)
+//    {
+//      _nodes.resize(minBuckets);
+//    }
+
+    for (size_t i = 0; i < nodes.size(); ++i)
+    {
+      long id = nodes[i]->getId();
+      _nodes[id] = nodes[i];
+      nodes[i]->registerListener(_index.get());
+      _index->addNode(nodes[i]);
+      maxId = std::max(id, maxId);
+      minId = std::min(id, minId);
+    }
+
+    _idGen->ensureNodeBounds(maxId);
+    _idGen->ensureNodeBounds(minId);
+  }
 }
 
 void OsmMap::addRelation(const RelationPtr& r)
@@ -628,6 +664,45 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
 }
 
 void OsmMap::visitRw(ConstElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const NodeMap allNodes = getNodes();
+  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
+  {
+    if (containsNode(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRelations = getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(it->second);
+    }
+  }
+}
+
+void OsmMap::visitRw(ElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
   if (consumer != 0)
