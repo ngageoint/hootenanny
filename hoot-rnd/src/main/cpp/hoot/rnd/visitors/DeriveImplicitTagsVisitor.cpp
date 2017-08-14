@@ -97,6 +97,10 @@ DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor()
   _rules.back()->word += QString::fromUtf8("ﺲﻓﺍﺭﺓ");
   _rules.back()->tags["amenity"] = "embassy";
 
+  _rules.append(ImplicitRulePtr(new ImplicitRule()));
+  _rules.back()->word += QString::fromUtf8("petroleumeum");
+  _rules.back()->tags["amenity"] = "fuel";
+
   _rulesToLower();
 }
 

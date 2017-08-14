@@ -45,34 +45,36 @@ public:
   virtual void visit(const ConstElementPtr& e)
   {
     const Tags& t = e->getTags();
+    const QString REV = MetadataTags::TrainingReview();
+    const QString MAT = MetadataTags::TrainingMatch();
 
     if (t.contains(MetadataTags::TrainingId()) ||
-        t.contains(MetadataTags::TrainingMatch()) ||
-        t.contains(MetadataTags::TrainingReview()))
+        t.contains(MAT) ||
+        t.contains(REV))
     {
       if (t.contains(MetadataTags::TrainingId()) == false ||
-          t.contains(MetadataTags::TrainingMatch()) == false ||
-          t.contains(MetadataTags::TrainingReview()) == false)
+          t.contains(MAT) == false ||
+          t.contains(REV) == false)
       {
         LOG_WARN(QString("Element %1 doesn't contain %2, %3 and %4.")
                  .arg(e->getElementId().toString())
                  .arg(MetadataTags::TrainingId())
-                 .arg(MetadataTags::TrainingMatch())
-                 .arg(MetadataTags::TrainingReview()));
+                 .arg(MAT)
+                 .arg(REV));
       }
 
-      if (t[MetadataTags::TrainingMatch()] == "todo")
+      if (t[MAT] == "todo")
       {
         LOG_WARN("Element " << e->getElementId().toString() << " (" <<
                  t[MetadataTags::TrainingId()] << ") is still marked as todo: ");
       }
-      if (t[MetadataTags::TrainingMatch()] != "none" &&
-          t[MetadataTags::TrainingReview()] != "none")
+      if (!(t[MAT] == "none" || t[MAT] == "") &&
+          !(t[REV] == "none" || t[REV] == ""))
       {
         LOG_WARN("Element " << e->getElementId().toString() << " (" <<
                  t[MetadataTags::TrainingId()] << ") has both match and review populated.");
-        LOG_WARN("    '" << t[MetadataTags::TrainingMatch()] << "' and '" <<
-                 t[MetadataTags::TrainingReview()] << "'");
+        LOG_WARN("    '" << t[MAT] << "' and '" <<
+                 t[REV] << "'");
       }
     }
   }
