@@ -47,6 +47,7 @@ using namespace boost;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 #include "../TestUtils.h"
 
@@ -75,6 +76,7 @@ public:
     LargeWaySplitter::splitWays(map, 20.0);
     MapProjector::projectToWgs84(map);
 
+    QDir().mkdir("test-output/conflate/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
 

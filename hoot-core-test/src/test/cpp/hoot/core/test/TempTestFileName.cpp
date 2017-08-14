@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "TempFileName.h"
+#include "TempTestFileName.h"
 
 // Hoot
 #include <hoot/core/util/Log.h>
@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-TempFileName::TempFileName()
+TempTestFileName::TempTestFileName()
 {
   do
   {
@@ -48,7 +48,7 @@ TempFileName::TempFileName()
   while (QFile(_name).exists());
 }
 
-TempFileName::~TempFileName()
+TempTestFileName::~TempTestFileName()
 {
   if (QFile(_name).exists())
   {

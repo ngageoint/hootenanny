@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TEMPFILENAME_H
-#define TEMPFILENAME_H
+#ifndef TEMPTESTFILENAME_H
+#define TEMPTESTFILENAME_H
 
 // Qt
 #include <QDir>
@@ -37,13 +37,13 @@ namespace hoot
 /**
  * Represents a custom generated temporary file for use with test runs
  */
-class TempFileName
+class TempTestFileName
 {
 
 public:
 
-  TempFileName();
-  ~TempFileName();
+  TempTestFileName();
+  ~TempTestFileName();
 
   QString getFileName() const { return _name; }
 
@@ -54,4 +54,4 @@ private:
 
 }
 
-#endif // TEMPFILENAME_H
+#endif // TEMPTESTFILENAME_H
