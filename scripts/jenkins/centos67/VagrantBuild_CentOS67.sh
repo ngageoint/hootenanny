@@ -14,7 +14,7 @@ if [ -f missing ]; then
 fi
 
 # Remove C++11 since the compiler on Centos67 doesn't support it.
-sed s/"-std=c++11"// Configure.pri.in
+sed -i s/"-std=c++11"// Configure.pri.in
 
 # Sort out what version of Postgres we have - MJ
 PG_VERSION=`ls /etc/init.d | grep postgresql- | sort | tail -1 | egrep -o '[0-9]{1,}\.[0-9]{1,}'`
