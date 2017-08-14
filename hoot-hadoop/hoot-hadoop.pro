@@ -28,7 +28,7 @@ INCLUDEPATH += \
   $${DEPENDPATH} \
 
 UI_DIR = tmp/ui
-MOC_DIR = tmp/moc
+MOC_DIR = tmp/moctest
 release:OBJECTS_DIR = tmp/release
 else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../lib/
@@ -38,6 +38,26 @@ LIBS += -L../lib/ -lHootCore \
 
 # This avoids a conflict with an "emit" function defined in Hadoop Pipes.
 DEFINES += QT_NO_EMIT
+
+##################################
+
+#SOURCES += $$files(src/*.cpp, true)
+#HEADERS += $$files(src/*.h, true)
+
+# test files
+#SOURCES -= $$files(src/*Test*.cpp, true)
+#SOURCES -= $$files(src/*Test*.h, true)
+#cppunit {
+#SOURCES += $$files(src/*Test*.cpp, true)
+#SOURCES += $$files(src/*Test*.h, true)
+
+# services test files
+#SOURCES -= $$files(src/Service*Test.cpp, true)
+#services:SOURCES += $$files(src/Service*Test.cpp, true)
+
+#}
+
+###############################################
 
 cppunit {
 HEADERS += \

@@ -53,7 +53,7 @@ PRECOMPILED_HEADER = src/main/cpp/hoot/core/HootCoreStable.h
 SOURCES += $$files(src/*.cpp, true)
 HEADERS += $$files(src/*.h, true)
 
-# Add log file based on the availability of log4cxx
+# log4cxx
 SOURCES -= src/main/cpp/hoot/core/util/LogLog4Cxx.cpp
 SOURCES -= src/main/cpp/hoot/core/util/LogGeneric.cpp
 HEADERS -= src/main/cpp/hoot/core/util/LogLog4Cxx.h

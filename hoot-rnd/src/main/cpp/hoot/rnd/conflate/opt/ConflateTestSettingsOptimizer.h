@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CONFLATESETTINGSOPTIMIZER_H
-#define CONFLATESETTINGSOPTIMIZER_H
+#ifndef CONFLATETESTSETTINGSOPTIMIZER_H
+#define CONFLATETESTSETTINGSOPTIMIZER_H
 
 // Tgs
 #include <tgs/Optimization/State.h>
@@ -41,11 +41,11 @@ class AbstractTestFitnessFunction;
  * related configuration options, given a fitness function that describes how well a conflation
  * test performs.
  */
-class ConflateSettingsOptimizer
+class ConflateTestSettingsOptimizer
 {
 public:
 
-  ConflateSettingsOptimizer(bool verbose);
+  ConflateTestSettingsOptimizer(bool verbose);
 
   /**
    * Runs the optimization process
@@ -79,4 +79,4 @@ private:
 
 }
 
-#endif // CONFLATESETTINGSOPTIMIZER_H
+#endif // CONFLATETESTSETTINGSOPTIMIZER_H

@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/conflate/opt/ConflateSettingsOptimizer.h>
+#include <hoot/rnd/conflate/opt/ConflateTestSettingsOptimizer.h>
 #include <hoot/rnd/conflate/opt/CaseTestFitnessFunction.h>
 #include <hoot/rnd/conflate/opt/ReleaseTestFitnessFunction.h>
 #include <hoot/rnd/conflate/opt/PertyTestFitnessFunction.h>
@@ -95,7 +95,7 @@ public:
       fitnessFunction.reset(new PertyTestFitnessFunction(testsDir, configFilePath));
     }
 
-    ConflateSettingsOptimizer(verbose).runOptimization(
+    ConflateTestSettingsOptimizer(verbose).runOptimization(
       fitnessFunction, numIterations, testSettingsPath, summaryFilePath);
 
     return 0;

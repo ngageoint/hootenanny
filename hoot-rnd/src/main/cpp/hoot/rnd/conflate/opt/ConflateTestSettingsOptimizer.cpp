@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ConflateSettingsOptimizer.h"
+#include "ConflateTestSettingsOptimizer.h"
 
 // Hoot
 #include <hoot/core/util/FileUtils.h>
@@ -49,12 +49,12 @@
 namespace hoot
 {
 
-ConflateSettingsOptimizer::ConflateSettingsOptimizer(bool verbose) :
+ConflateTestSettingsOptimizer::ConflateTestSettingsOptimizer(bool verbose) :
 _verbose(verbose)
 {
 }
 
-Tgs::StateDescriptionPtr ConflateSettingsOptimizer::_initStateDescription(
+Tgs::StateDescriptionPtr ConflateTestSettingsOptimizer::_initStateDescription(
   const QString testSettingsFile)
 {
   LOG_VARD(testSettingsFile);
@@ -99,7 +99,7 @@ Tgs::StateDescriptionPtr ConflateSettingsOptimizer::_initStateDescription(
   return stateDescription;
 }
 
-void ConflateSettingsOptimizer::runOptimization(
+void ConflateTestSettingsOptimizer::runOptimization(
   boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction, const int numIterations,
   const QString testSettingsFile, const QString outputFile)
 {
@@ -110,7 +110,7 @@ void ConflateSettingsOptimizer::runOptimization(
   _writeOutput(fitnessFunction, sa.getBestStates(), numIterations, outputFile);
 }
 
-void ConflateSettingsOptimizer::_writeOutput(
+void ConflateTestSettingsOptimizer::_writeOutput(
   boost::shared_ptr<AbstractTestFitnessFunction> fitnessFunction,
   const QSet<Tgs::ConstStatePtr>& bestStates, const int numIterations, const QString outputFile)
 {

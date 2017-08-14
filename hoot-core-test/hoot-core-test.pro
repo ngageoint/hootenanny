@@ -42,12 +42,15 @@ DESTDIR = ../lib/
 
 cppunit {
 
+# test files (all files in this project are test files)
 SOURCES += $$files(src/*Test*.cpp, true)
 HEADERS += $$files(src/*Test*.h, true)
 
+# services test files
 SOURCES -= $$files(src/Service*.cpp, true)
 services:SOURCES += $$files(src/Service*.cpp, true)
 
+# nodejs test files
 SOURCES -= src/test/cpp/hoot/core/io/OgrReaderTest.cpp
 SOURCES -= src/test/cpp/hoot/core/io/OgrWriterTest.cpp
 SOURCES -= src/test/cpp/hoot/core/ops/CalculateStatsOpTest.cpp
