@@ -166,6 +166,13 @@ public:
   OsmMapPtr loadFromString(QString jsonStr);
 
   /**
+   * @brief loadFromPtree - Builds a map from the supplied boost property tree
+   * @param ptree - input boost property tree
+   * @return Smart pointer to the OSM map
+   */
+  OsmMapPtr loadFromPtree(const boost::property_tree::ptree &tree);
+
+  /**
    * @brief loadFromFile - Reads the whole file as a string, passes it
    *        to loadFromString()
    * @param path - Path to file

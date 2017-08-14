@@ -231,6 +231,8 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
   {
     QString reason = QString::fromStdString(e.message());
     QString line = QString::number(e.line());
+
+    LOG_DEBUG(jsonStr);
     throw HootException(QString("Error parsing JSON: %1 (line %2)").arg(reason).arg(line));
   }
   catch (const std::exception& e)
@@ -243,6 +245,14 @@ void OsmJsonReader::_loadJSON(QString jsonStr)
 OsmMapPtr OsmJsonReader::loadFromString(QString jsonStr)
 {
   _loadJSON(jsonStr);
+  _map.reset(new OsmMap());
+  _parseOverpassJson();
+  return _map;
+}
+
+OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
+{
+  _propTree = tree;
   _map.reset(new OsmMap());
   _parseOverpassJson();
   return _map;
