@@ -76,5 +76,5 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SmallWayMergerTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SmallWayMergerTest, "quick");
 
