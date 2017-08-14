@@ -22,49 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
-#include "Element.h"
-
-#include "ElementListener.h"
+#include "MetadataTags.h"
 
 namespace hoot
 {
 
-Element::Element() :
-  _status(Status::Invalid),
-  _listener(0)
-{
-}
-
-Element::Element(Status s) : _status(s)
-{
-  _listener = 0;
-}
-
-QString Element::getStatusString() const
-{
-  return _status.toString().toLower();
-}
-
-void Element::_postGeometryChange()
-{
-  if (_listener != 0)
-  {
-    _listener->postGeometryChange(this);
-  }
-}
-
-void Element::_preGeometryChange()
-{
-  if (_listener != 0)
-  {
-    _listener->preGeometryChange(this);
-  }
-}
+const QString MetadataTags::HOOT_STATUS = "hoot:status";
+const QString MetadataTags::ACCURACY = "accuracy";
+const QString MetadataTags::ERROR_CIRCULAR = "error:circular";
+const QString MetadataTags::HOOT_ID = "hoot:id";
 
 }

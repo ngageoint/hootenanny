@@ -115,6 +115,12 @@ public:
 
   void addNode(const NodePtr& n);
 
+  /**
+   * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
+   * times.
+   */
+  void addNodes(const std::vector<NodePtr>& nodes);
+
   void addRelation(const RelationPtr& r);
 
   void addWay(const WayPtr& w);
@@ -275,6 +281,7 @@ public:
    * If the visitor implements OsmMapConsumer then setOsmMap will be called before
    * visiting any elements.
    */
+  void visitRw(ElementVisitor& visitor);
   void visitRw(ConstElementVisitor& visitor);
   void visitRw(ElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);

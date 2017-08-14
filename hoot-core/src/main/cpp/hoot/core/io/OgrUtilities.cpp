@@ -92,6 +92,18 @@ OgrUtilities::OgrUtilities()
   loadDriverInfo();
 }
 
+OgrUtilities::~OgrUtilities()
+{
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    GDALDumpOpenDatasets( stderr );
+    CPLDumpSharedList( NULL );
+  }
+
+  GDALDestroyDriverManager();
+  OGRCleanupAll();
+}
+
 OgrUtilities& OgrUtilities::getInstance()
 {
   if (!_theInstance.get())

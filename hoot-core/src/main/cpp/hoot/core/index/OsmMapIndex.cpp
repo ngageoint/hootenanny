@@ -65,16 +65,6 @@ OsmMapIndex::OsmMapIndex(const OsmMap& map) : _map(map)
   _indexSlush = 0.0;
 }
 
-void OsmMapIndex::addNode(ConstNodePtr n)
-{
-  if (_nodeTree)
-  {
-    // rather than manipulate the R-Tree (expensive) we'll just keep track of what changed.
-    _pendingNodeInsert.insert(n->getId());
-    _pendingNodeRemoval.erase(n->getId());
-  }
-}
-
 void OsmMapIndex::addWay(ConstWayPtr w)
 {
   if (_nodeToWayMap != 0)

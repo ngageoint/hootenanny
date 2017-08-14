@@ -49,7 +49,7 @@ class OsmMapIndex : public ElementListener
 public:
   OsmMapIndex(const OsmMap& map);
 
-  void addNode(ConstNodePtr n);
+  void addNode(const ConstNodePtr& n);
 
   void addRelation(const ConstRelationPtr& r);
 
@@ -173,6 +173,16 @@ private:
   long _mapToWayId(int treeId) const { return _treeIdToWid[treeId]; }
   long _mapToNodeId(int treeId) const { return _treeIdToNid[treeId]; }
 };
+
+inline void OsmMapIndex::addNode(const ConstNodePtr& n)
+{
+  if (_nodeTree)
+  {
+    // rather than manipulate the R-Tree (expensive) we'll just keep track of what changed.
+    _pendingNodeInsert.insert(n->getId());
+    _pendingNodeRemoval.erase(n->getId());
+  }
+}
 
 }
 

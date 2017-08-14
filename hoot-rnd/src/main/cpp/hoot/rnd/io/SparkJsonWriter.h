@@ -34,6 +34,7 @@
 #include <QFile>
 
 #include "../conflate/multiary/SearchBoundsCalculator.h"
+#include "../visitors/AddExportTagsVisitor.h"
 
 namespace hoot
 {
@@ -93,6 +94,7 @@ private:
   boost::shared_ptr<QFile> _fp;
 
   SearchBoundsCalculatorPtr _bounds;
+  AddExportTagsVisitor _addExportTagsVisitor;
 
   int _precision;
 };

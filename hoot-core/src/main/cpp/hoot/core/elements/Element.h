@@ -70,6 +70,8 @@ public:
 
   static std::string className() { return "hoot::Element"; }
 
+  Element();
+
   virtual ~Element() {}
 
   virtual void clear() = 0;

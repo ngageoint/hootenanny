@@ -33,11 +33,16 @@
 namespace hoot
 {
 
-ElementVisitorInputStream::ElementVisitorInputStream(
-    const boost::shared_ptr<ElementInputStream>& elementSource, const boost::shared_ptr<ConstElementVisitor>& visitor) :
+ElementVisitorInputStream::ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
+    const ElementVisitorPtr& visitor) :
 _elementSource(elementSource),
 _visitor(visitor)
 {
+}
+
+boost::shared_ptr<OGRSpatialReference> ElementVisitorInputStream::getProjection() const
+{
+  return _elementSource->getProjection();
 }
 
 ElementPtr ElementVisitorInputStream::readNextElement()

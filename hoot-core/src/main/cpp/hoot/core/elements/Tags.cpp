@@ -126,6 +126,21 @@ void Tags::appendValueIfUnique(QString k, QString v)
   }
 }
 
+bool Tags::hasInformationTag() const
+{
+  for (Tags::const_iterator it = constBegin(); it != constEnd(); ++it)
+  {
+    QString key = it.key();
+    LOG_VART(key);
+    if (OsmSchema::getInstance().isMetaData(key, it.value()) == false &&
+        it.value() != "")
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 QStringList Tags::getCreateUuid()
 {
   QStringList result;
