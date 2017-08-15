@@ -33,6 +33,7 @@
 // hoot
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Status.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QUrl>
@@ -140,10 +141,6 @@ public:
    * Close the database.
    */
   virtual void close() = 0;
-
-  /**
-   *
-   */
 
   /**
    * Returns a results iterator to all OSM elements for a given element type in the database.
@@ -344,6 +341,10 @@ public:
    * @return a libpq command string
    */
   static QString getPqString(const QString url);
+
+  static Settings readDbConfig();
+
+  static void readDbConfig(Settings& settings, QString config_path);
 
 protected:
 

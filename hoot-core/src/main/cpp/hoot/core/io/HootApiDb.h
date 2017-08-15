@@ -289,6 +289,8 @@ public:
 
   virtual long getNextId(const ElementType& elementType);
 
+  static QUrl getBaseUrl();
+
 protected:
 
   virtual void _resetQueries();

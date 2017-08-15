@@ -72,15 +72,6 @@ public:
    */
   virtual ElementPtr readNextElement();
 
-  /**
-   * Sorts OSM input first by element type, then by element ID.  File based sort to support
-   * large datasets
-   *
-   * @param input data to sort
-   * @return path to the sorted data
-   */
-  static QString sortInput(const QUrl& input);
-
 private:
 
   ConstOsmMapPtr _source;
