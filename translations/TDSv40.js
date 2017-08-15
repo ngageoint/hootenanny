@@ -71,7 +71,7 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
-    return tds.toNfdd(tags, elementType, geometryType)
+    return tds.toTds(tags, elementType, geometryType)
 
 } // End of translateToOgr
 

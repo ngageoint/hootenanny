@@ -80,7 +80,8 @@ SOURCES += \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryScoreCacheTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiMergeCacheTest.cpp \
     src/test/cpp/hoot/rnd/conflate/multiary/MultiaryHierarchicalClusterAlgorithmTest.cpp \
-    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiGenericTest.cpp
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryPoiGenericTest.cpp \
+    src/test/cpp/hoot/rnd/conflate/multiary/MultiaryReviewCommandTest.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/opt/CaseTestFitnessFunction.h \
@@ -146,7 +147,8 @@ SOURCES += \
     src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.cpp \
     src/main/cpp/hoot/rnd/cmd/MultiaryIngestCmd.cpp \
     src/main/cpp/hoot/rnd/io/SparkChangesetWriter.cpp \
-    src/main/cpp/hoot/rnd/io/ElementCriterionVisitorInputStream.cpp
+    src/main/cpp/hoot/rnd/io/ElementCriterionVisitorInputStream.cpp \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryReviewCommand.cpp
 
 HEADERS += \
     src/main/cpp/hoot/rnd/conflate/network/NetworkMatchCreator.h \
@@ -199,7 +201,8 @@ HEADERS += \
     src/main/cpp/hoot/rnd/conflate/multiary/SearchBoundsCalculator.h \
     src/main/cpp/hoot/rnd/visitors/AddExportTagsVisitor.h \
     src/main/cpp/hoot/rnd/io/SparkChangesetWriter.h \
-    src/main/cpp/hoot/rnd/io/ElementCriterionVisitorInputStream.h
+    src/main/cpp/hoot/rnd/io/ElementCriterionVisitorInputStream.h \
+    src/main/cpp/hoot/rnd/conflate/multiary/MultiaryReviewCommand.h
 
 FORMS +=
 

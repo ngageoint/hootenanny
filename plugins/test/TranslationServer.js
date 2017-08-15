@@ -595,7 +595,7 @@ describe('TranslationServer', function () {
             });
         });
 
-        it('should untangle TDSv30 tags', function() {
+        it('should untangle TDSv40 tags', function() {
             //http://localhost:8094/osmtotds
             var trans2osm = server.handleInputs({
                 osm: '<osm version="0.6" upload="true" generator="hootenanny"><way id="-1" version="0"><nd ref="-1"/><nd ref="-4"/><nd ref="-7"/><nd ref="-10"/><nd ref="-1"/><tag k="AL013" v="building"/><tag k="levels" v="3"/>/></way></osm>',
