@@ -139,8 +139,10 @@ echo "##### Temp installs #####"
 
 # Stxxl:
 git clone http://github.com/stxxl/stxxl.git stxxl
-mkdir -p stxxl/build
-cd stxxl/build
+cd stxxl
+git checkout tags/1.3.1
+mkdir build
+cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -sj
 sudo make install -s
