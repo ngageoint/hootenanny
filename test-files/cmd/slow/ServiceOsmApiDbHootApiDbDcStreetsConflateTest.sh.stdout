@@ -3,6 +3,7 @@ secondary dataset:  test-files/DcTigerRoads.osm
 AOI:  -77.04,38.8916,-77.03324,38.8958
 CONFLATION TYPE:  unifying
 TEST_NAME:  ServiceOsmApiDbHootApiDbDcStreetsConflateTest
+TEST_CATEGORY:  slow
 SELECT_RANDOM_AOI:  false
 RANDOM_SEED:  -1
 

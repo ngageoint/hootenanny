@@ -213,7 +213,7 @@ var features = "== Statistical Aspects of the Input and Output Datasets\n" +
   "Statistics for a variety of aspects of the input and output datasets are presented in this section.\n" +
   "\n" +
   "=== Summary of Basic Feature Elements\n" +
-  "There are three basic elements of Open Street Map's conceptual data model of the physical world. These are nodes (points in space), ways (linear and area features), and relations (a high-level construct that helps coordinate how ways and nodes work together).  To go along with these are tags which can associate with any of the three basic elements.  In this section, a summary of the number of each element and tags are shown in the bar graph.  For each,  a comparison of the number of features for the two inputs and output are shown.\n" +
+  "There are three basic elements of OpenStreetMap's conceptual data model of the physical world. These are nodes (points in space), ways (linear and area features), and relations (a high-level construct that helps coordinate how ways and nodes work together).  To go along with these are tags which can associate with any of the three basic elements.  In this section, a summary of the number of each element and tags are shown in the bar graph.  For each,  a comparison of the number of features for the two inputs and output are shown.\n" +
   "\n" +
   "Note: More information about the OSM Elements is provided at: wiki.openstreetmap.org/wiki/Elements\n" +
   "\n" +

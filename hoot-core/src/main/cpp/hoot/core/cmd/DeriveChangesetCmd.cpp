@@ -30,8 +30,8 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -169,12 +169,12 @@ private:
 
       if (output.endsWith(".osc"))
       {
-        OsmChangesetXmlFileWriter().write(output, _sortInputs(inputMaps));
+        OsmXmlChangesetFileWriter().write(output, _sortInputs(inputMaps));
       }
       else if (output.endsWith(".osc.sql"))
       {
         assert(!osmApiDbUrl.isEmpty());;
-        OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, _sortInputs(inputMaps));
+        OsmApiDbSqlChangesetFileWriter(QUrl(osmApiDbUrl)).write(output, _sortInputs(inputMaps));
       }
     }
   }

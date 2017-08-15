@@ -1300,7 +1300,7 @@ the performance of writing records to a database, only on the input data parsing
 === osmapidb.bulk.writer.file.output.status.update.interval
 
 * Data Type: long
-* Default Value: `1000000`
+* Default Value: `10000`
 
 Count at which the parse status of each element type should be logged when writing to them to
 files.  e.g. With a value of 100, you will see a load status update message logged for every 100
@@ -1374,15 +1374,14 @@ purposes only.
 === osmapidb.bulk.writer.validate.data
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
-If true, the OSM API database bulk writer will create new element ID mappings, check for duplicate
-element IDs, invalid way node references, and invalid relation member references.  Only duplicate
-element IDs and invalid way node references will cause a failure.  Invalid relation members will
-cause a warning to be logged.  You should only set this to false as an optimization if you are
-loading data that was previously validated in another OSM API database, all element IDs are
-unique in the data you are loading, and the IDs will not conflict with any existing data in the
-destination database.
+If true, the OSM API database bulk writer will renumber element IDs, check for duplicated
+element IDs, check for invalid way node references, and check for invalid relation member
+references.  Only duplicate element IDs and invalid way node references will cause a failure.
+Invalid relation members will cause a warning to be logged.  You should enable this setting if you
+are loading data that has not been previously validated in another OSM API database.  Enabling this
+setting may cause writing to an OSM API database to occur more slowly.
 
 === osmapidb.id.aware.url
 

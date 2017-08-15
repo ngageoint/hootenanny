@@ -47,6 +47,7 @@ using namespace boost;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 #include "../TestUtils.h"
 
@@ -75,15 +76,15 @@ public:
     LargeWaySplitter::splitWays(map, 20.0);
     MapProjector::projectToWgs84(map);
 
+    QDir().mkdir("test-output/conflate/");
     OsmXmlWriter writer;
     writer.write(map, "test-output/conflate/LargeWaySplitterOutput1.osm");
 
     HOOT_FILE_EQUALS("test-files/conflate/LargeWaySplitterOutput1.osm",
                      "test-output/conflate/LargeWaySplitterOutput1.osm");
-
   }
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LargeWaySplitterTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LargeWaySplitterTest, "quick");
 
