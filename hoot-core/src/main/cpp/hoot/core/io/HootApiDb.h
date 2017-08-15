@@ -30,6 +30,7 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/BulkDelete.h>
 
 namespace hoot
 {
@@ -289,6 +290,8 @@ public:
 
   virtual long getNextId(const ElementType& elementType);
 
+  static QUrl getBaseUrl();
+
 protected:
 
   virtual void _resetQueries();
@@ -320,6 +323,9 @@ private:
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
   double _nodesInsertElapsed;
+  boost::shared_ptr<BulkDelete> _nodeBulkDelete;
+  long _nodesPerBulkDelete;
+  double _nodesDeleteElapsed;
   boost::shared_ptr<InternalIdReserver> _nodeIdReserver;
 
   boost::shared_ptr<BulkInsert> _wayBulkInsert;
@@ -381,6 +387,7 @@ private:
   QString _escapeTags(const Tags& tags) const;
 
   void _flushBulkInserts();
+  void _flushBulkDeletes();
   long _getNextNodeId();
   long _getNextRelationId();
   long _getNextWayId();

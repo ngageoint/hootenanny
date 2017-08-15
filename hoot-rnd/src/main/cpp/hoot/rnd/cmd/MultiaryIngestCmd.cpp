@@ -39,7 +39,11 @@
 #include <hoot/rnd/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
+#include <hoot/core/io/ElementOutputStream.h>
 //#include <hoot/core/io/OsmPbfReader.h>
+
+// Qt
+#include <QUuid>
 
 using namespace std;
 
@@ -47,10 +51,10 @@ namespace hoot
 {
 
 /**
- * This command takes an input and database and changeset outputs.  The input is translated to OSM
- * and filtered to POIs only, sorted by element type then ID if necessary, then compared to the
- * database output layer in order to derive a changeset.  The changeset changes are written both
- * to the database output layer as features and the changeset output as change statements.
+ * This command takes an input along with database and changeset outputs.  The input is filtered
+ * down to POIs only and translated to OSM, then sorted by element ID if necessary, then compared
+ * to the database output layer in order to derive a changeset.  The changeset changes are written
+ * both to the database output layer as features and the changeset output as change statements.
  */
 class MultiaryIngestCmd : public BaseCommand
 {
@@ -73,47 +77,31 @@ public:
     const QString newDataInput = args[0];   //this must be streamable
     const QString dbLayerOutput = args[1];  //this must be hootapidb://
     const QString changesetOutput = args[2];    //this must be .spark.x
-    bool sort = false;
+    bool sortInput = false;
     if (args[3].toLower() == "true")
     {
-      sort = true;
+      sortInput = true;
     }
 
     LOG_VARD(newDataInput);
     LOG_VARD(dbLayerOutput);
     LOG_VARD(changesetOutput);
-    LOG_VARD(sort);
+    LOG_VARD(sortInput);
 
-    //reads the new input data
-    boost::shared_ptr<PartialOsmMapReader> newInputReader;
-    //reads out the existing data
-    boost::shared_ptr<HootApiDbReader> dbLayerReader(new HootApiDbReader());
-    conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
-    //derives a changeset between the new and existing data
-    ChangesetDeriverPtr changesetDeriver;
-    conf().set(ConfigOptions::getTranslationScriptKey(), "OSM_Ingest.js");
-    //writes the result of the changeset back to the existing layer
-    HootApiDbWriter dbLayerChangeWriter;
-    //writes the changeset statements for external use
-    SparkChangesetWriter changesetFileWriter;
-
-    //do some input error checking before kicking off a potentially long input sort
-
-    //only supporting streamable i/o for the time being
     if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newDataInput))
     {
       throw IllegalArgumentException(
         "This command does not support non-streamable inputs: " + newDataInput);
     }
 
-    if (!dbLayerReader->isSupported(dbLayerOutput))
+    if (!HootApiDbReader().isSupported(dbLayerOutput))
     {
       throw HootException(
         getName() + " only supports a hootapidb:// data source as the target changeset layer.  " +
         "Specified target: " + dbLayerOutput);
     }
 
-    if (!changesetFileWriter.isSupported(changesetOutput))
+    if (!SparkChangesetWriter().isSupported(changesetOutput))
     {
       throw HootException(
         getName() + " only supports a .spark.x file for changeset output.  Specified output: " +
@@ -125,49 +113,28 @@ public:
       " to output database layer: " << dbLayerOutput << " and output changeset: " <<
       changesetOutput << "...");
 
-    //sort data by ID, if necessary (only passing nodes through)
-    QString sortedNewDataInput = newDataInput;
-    //OsmPbfReader tmpPbfReader; //getSortedTypeThenId
-    if (sort) //TODO: if pbf, check pbf format flag
+    //inputs must be sorted by id for changeset derivation to work
+    conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
+    //translating inputs to OSM
+    conf().set(ConfigOptions::getTranslationScriptKey(), "OSM_Ingest.js");
+
+    //sort incoming data by ID, if necessary, for changeset derivation (only passing nodes
+    //through, so don't need to also sort by element type) -
+    const QString sortedNewDataInput = _getSortedInput(newDataInput, sortInput);
+
+    //create changeset changes and write them to the existing db layer and a changeset file for
+    //external use in spark
+    _writeChangesetData(
+      //as the incoming data is read, filter it down to POIs only and translate each element
+      _getNewDataInputStream(sortedNewDataInput),
+      dbLayerOutput,
+      changesetOutput);
+
+    //delete the temporary db layer used for sorting
+    if (sortInput)
     {
-      sortedNewDataInput = ElementSorter::sortInput(QUrl(newDataInput));
+      HootApiDbWriter().deleteMap(sortedNewDataInput);
     }
-    newInputReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
-
-    newInputReader->open(sortedNewDataInput);
-    dbLayerReader->open(dbLayerOutput);
-    //no need to check this input format type, since we did it for the reader above
-    dbLayerChangeWriter.open(dbLayerOutput);
-    changesetFileWriter.open(changesetOutput);
-
-    //filter down to POIs only and translate each element as the changeset is generated
-    boost::shared_ptr<ElementInputStream> newInputStreamReader =
-      boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
-    boost::shared_ptr<PoiCriterion> poiFilter(new PoiCriterion());
-    boost::shared_ptr<TranslationVisitor> translator(new TranslationVisitor());
-    newInputStreamReader.reset(
-      new ElementCriterionVisitorInputStream(newInputStreamReader, poiFilter, translator));
-
-    //stream changeset changes to db and changeset file outputs
-    changesetDeriver.reset(
-      new ChangesetDeriver(
-        boost::dynamic_pointer_cast<ElementInputStream>(dbLayerReader), newInputStreamReader));
-    while (changesetDeriver->hasMoreChanges())
-    {
-      const Change change = changesetDeriver->readNextChange();
-      if (change.type != Change::Unknown) //TODO: should this check be in the while loop?
-      {
-        dbLayerChangeWriter.writeChange(change);
-        changesetFileWriter.writeChange(change);
-      }
-    }
-
-    //are all of these needed?
-    newInputReader->finalizePartial();
-    dbLayerReader->finalizePartial();
-    dbLayerChangeWriter.finalizePartial();
 
     LOG_INFO(
       "Multiary data ingest complete for input: " << newDataInput <<
@@ -175,6 +142,85 @@ public:
       changesetOutput << "...");
 
     return 0;
+  }
+
+private:
+
+  QString _getSortedInput(const QString newDataInput, const bool sortInput)
+  {
+    //OsmPbfReader tmpPbfReader; //getSortedTypeThenId
+    if (!sortInput) //TODO: if pbf, check pbf format flag
+    {
+      return newDataInput;
+    }
+
+    //write the unsorted input to temp db layer; later it willbe queried back out sorted by id
+    //TODO: assuming performance here is a bottleneck, will later implement something that
+    //performs faster
+
+    boost::shared_ptr<PartialOsmMapReader> unsortedNewInputReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(newDataInput));
+    boost::shared_ptr<ElementInputStream> unsortedNewInputStream =
+      boost::dynamic_pointer_cast<ElementInputStream>(unsortedNewInputReader);
+
+    const QString tempNewInputLayer =
+      HootApiDb::getBaseUrl().toString() + "/MultiaryIngest-" + QUuid::createUuid().toString();
+    boost::shared_ptr<HootApiDbWriter> unsortedNewInputLayerWriter(new HootApiDbWriter());
+    unsortedNewInputLayerWriter->open(tempNewInputLayer);
+    boost::shared_ptr<ElementOutputStream> unsortedNewOutputStream =
+      boost::dynamic_pointer_cast<ElementOutputStream>(unsortedNewInputLayerWriter);
+
+    ElementOutputStream::writeAllElements(*unsortedNewInputStream, *unsortedNewOutputStream);
+
+    return tempNewInputLayer;
+  }
+
+  boost::shared_ptr<ElementInputStream> _getNewDataInputStream(const QString sortedNewDataInput)
+  {
+    boost::shared_ptr<PartialOsmMapReader> newDataInputReader =
+      boost::dynamic_pointer_cast<PartialOsmMapReader>(
+        OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
+    newDataInputReader->open(sortedNewDataInput);
+
+    boost::shared_ptr<ElementInputStream> newDataInputStream =
+      boost::dynamic_pointer_cast<ElementInputStream>(newDataInputReader);
+    newDataInputStream.reset(
+      new ElementCriterionVisitorInputStream(
+        newDataInputStream,
+        boost::shared_ptr<PoiCriterion>(new PoiCriterion()),
+        boost::shared_ptr<TranslationVisitor>(new TranslationVisitor())));
+    return newDataInputStream;
+  }
+
+  void _writeChangesetData(boost::shared_ptr<ElementInputStream> newDataInputStream,
+                           const QString dbLayerOutput, const QString changesetOutput)
+  {
+    boost::shared_ptr<HootApiDbReader> existingDbLayerReader(new HootApiDbReader());
+    existingDbLayerReader->open(dbLayerOutput);
+
+    ChangesetDeriverPtr changesetDeriver(
+      new ChangesetDeriver(
+        boost::dynamic_pointer_cast<ElementInputStream>(existingDbLayerReader),
+        newDataInputStream));
+
+    HootApiDbWriter existingDbLayerChangeWriter;
+    existingDbLayerChangeWriter.open(dbLayerOutput);
+    SparkChangesetWriter changesetFileWriter;
+    changesetFileWriter.open(changesetOutput);
+    while (changesetDeriver->hasMoreChanges())
+    {
+      const Change change = changesetDeriver->readNextChange();
+      if (change.type != Change::Unknown)
+      {
+        existingDbLayerChangeWriter.writeChange(change);
+        changesetFileWriter.writeChange(change);
+      }
+    }
+
+    (boost::dynamic_pointer_cast<PartialOsmMapReader>(newDataInputStream))->finalizePartial();
+    existingDbLayerReader->finalizePartial();
+    existingDbLayerChangeWriter.finalizePartial();
   }
 };
 

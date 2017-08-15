@@ -22,67 +22,50 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTSORTER_H
-#define ELEMENTSORTER_H
-
-// hoot
-#include <hoot/core/OsmMap.h>
-
-#include "ElementInputStream.h"
+#ifndef SQLBULKDELETE_H
+#define SQLBULKDELETE_H
 
 // Qt
-#include <QFile>
-#include <QUrl>
+#include <QSqlQuery>
+#include <QStringList>
+
+#include "BulkDelete.h"
+
+class QSqlDatabase;
 
 namespace hoot
 {
 
 /**
- * An element stream that returns elements in the order of node, way, then relation, sorted by
- * element ID
+ * This is designed for combining multiple delete SQL operations into a single delete SQL statement.
  */
-class ElementSorter : public ElementInputStream
+class SqlBulkDelete : public BulkDelete
 {
-
 public:
 
-  ElementSorter(ConstOsmMapPtr map);
+  SqlBulkDelete(QSqlDatabase& db, const QString tableName);
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual ~SqlBulkDelete();
 
-  virtual ~ElementSorter() {}
+  virtual void flush();
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual void close() {}
+  virtual int getPendingCount() const { return _pending.size(); }
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual bool hasMoreElements();
+  virtual QString getTableName() const { return _tableName; }
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual ElementPtr readNextElement();
+  virtual void deleteElement(const long id);
 
 private:
 
-  ConstOsmMapPtr _source;
-
-  std::vector<long> _nodeIds, _wayIds, _relationIds;
-  size_t _nodeIndex, _wayIndex, _relationIndex;
-
+  QStringList _pending;
+  QSqlQuery _query;
+  QSqlDatabase _db;
+  QString _tableName;
+  double _time;
 };
-
-typedef boost::shared_ptr<ElementSorter> ElementSorterPtr;
 
 }
 
-#endif // ELEMENTSORTER_H
+#endif // SQLBULKDELETE_H

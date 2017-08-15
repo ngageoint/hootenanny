@@ -36,6 +36,7 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/io/SqlBulkDelete.h>
 
 // qt
 #include <QStringList>
@@ -85,6 +86,7 @@ void HootApiDb::_init()
   _nodesInsertElapsed = 0;
   // 500 found experimentally on my desktop -JRS
   _nodesPerBulkInsert = recordsPerBulkInsert;
+  _nodesPerBulkDelete = recordsPerBulkInsert; //TODO: figure out what this should be
 
   _wayNodesInsertElapsed = 0;
   // arbitrary, needs benchmarking
@@ -140,6 +142,7 @@ void HootApiDb::_checkLastMapId(long mapId)
   if (_lastMapId != mapId)
   {
     _flushBulkInserts();
+    _flushBulkDeletes();
     _resetQueries();
     _nodeIdReserver.reset();
     _wayIdReserver.reset();
@@ -154,6 +157,7 @@ void HootApiDb::close()
 
   createPendingMapIndexes();
   _flushBulkInserts();
+  _flushBulkDeletes();
 
   _resetQueries();
 
@@ -235,6 +239,7 @@ void HootApiDb::commit()
 
   createPendingMapIndexes();
   _flushBulkInserts();
+  _flushBulkDeletes();
   _resetQueries();
   if (!_db.commit())
   {
@@ -500,6 +505,16 @@ void HootApiDb::_flushBulkInserts()
   }
 }
 
+void HootApiDb::_flushBulkDeletes()
+{
+  LOG_TRACE("Flushing bulk deletes...");
+
+  if (_nodeBulkDelete != 0)
+  {
+    _nodeBulkDelete->flush();
+  }
+}
+
 bool HootApiDb::isCorrectHootDbVersion()
 {
   return getHootDbVersion() == ApiDb::expectedHootDbVersion();
@@ -756,7 +771,31 @@ void HootApiDb::updateNode(ConstNodePtr node)
 
 void HootApiDb::deleteNode(ConstNodePtr node)
 {
-  //TODO: multiary-ingest - finish
+  LOG_TRACE("Deleting node: " << node->getId() << "...");
+
+  const long mapId = _currMapId;
+  double start = Tgs::Time::getTime();
+
+  _checkLastMapId(mapId);
+
+  if (_nodeBulkDelete == 0)
+  {
+    _nodeBulkDelete.reset(new SqlBulkDelete(_db, getCurrentNodesTableName(mapId)));
+  }
+  _nodeBulkDelete->deleteElement(node->getId());
+
+  _nodesDeleteElapsed += Tgs::Time::getTime() - start;
+
+  if (_nodeBulkDelete->getPendingCount() >= _nodesPerBulkDelete)
+  {
+    _nodeBulkDelete->flush();
+  }
+
+  //TODO multiary-ingest: how to update envelope
+  //ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+  //_updateChangesetEnvelope(envelopeNode);
+
+  LOG_TRACE("Deleted node: " << ElementId(ElementType::Node, node->getId()));
 }
 
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)
@@ -1534,6 +1573,20 @@ QString HootApiDb::_getRenderDBName(long mapId)
   }
 
   return (dbName + "_renderdb_" + mapIdNumber);
+}
+
+QUrl HootApiDb::getBaseUrl()
+{
+  // read the DB values from the DB config file.
+  Settings s = readDbConfig();
+  QUrl result;
+  result.setScheme("hootapidb");
+  result.setHost(s.get("DB_HOST").toString());
+  result.setPort(s.get("DB_PORT").toInt());
+  result.setUserName(s.get("DB_USER").toString());
+  result.setPassword(s.get("DB_PASSWORD").toString());
+  result.setPath("/" + s.get("DB_NAME").toString());
+  return result;
 }
 
 }

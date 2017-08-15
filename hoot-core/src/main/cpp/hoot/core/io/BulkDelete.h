@@ -22,67 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTSORTER_H
-#define ELEMENTSORTER_H
-
-// hoot
-#include <hoot/core/OsmMap.h>
-
-#include "ElementInputStream.h"
+#ifndef BULKDELETE_H
+#define BULKDELETE_H
 
 // Qt
-#include <QFile>
-#include <QUrl>
+#include <QVariant>
 
 namespace hoot
 {
 
-/**
- * An element stream that returns elements in the order of node, way, then relation, sorted by
- * element ID
- */
-class ElementSorter : public ElementInputStream
+class BulkDelete
 {
-
 public:
 
-  ElementSorter(ConstOsmMapPtr map);
+  virtual ~BulkDelete() {}
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+  virtual void flush() = 0;
 
-  virtual ~ElementSorter() {}
+  virtual void deleteElement(const long id) = 0;
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual void close() {}
+  virtual int getPendingCount() const = 0;
 
-  /**
-   * @see ElementInputStream
-   */
-  virtual bool hasMoreElements();
-
-  /**
-   * @see ElementInputStream
-   */
-  virtual ElementPtr readNextElement();
-
-private:
-
-  ConstOsmMapPtr _source;
-
-  std::vector<long> _nodeIds, _wayIds, _relationIds;
-  size_t _nodeIndex, _wayIndex, _relationIndex;
+  virtual QString getTableName() const = 0;
 
 };
 
-typedef boost::shared_ptr<ElementSorter> ElementSorterPtr;
-
 }
 
-#endif // ELEMENTSORTER_H
+#endif // BULKDELETE_H

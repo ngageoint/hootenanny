@@ -43,6 +43,7 @@
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/ConfPath.h>
 
 // qt
 #include <QStringList>
@@ -50,6 +51,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlRecord>
 #include <QSet>
+#include <QFile>
 
 // Standard
 #include <math.h>
@@ -739,6 +741,43 @@ QString ApiDb::getPqString(const QString url)
   return
     "dbname=" + dbUrlParts["database"] + " user=" + dbUrlParts["user"] + " password=" +
     dbUrlParts["password"] + " hostaddr=" + hostAddr + " port=" + dbUrlParts["port"];
+}
+
+Settings ApiDb::readDbConfig()
+{
+  Settings result;
+  //  Read in the default values
+  QString defaults = ConfPath::getHootHome() + "/conf/database/DatabaseConfigDefault.sh";
+  readDbConfig(result, defaults);
+  //  Read in the local values if the file exists
+  QString local = ConfPath::getHootHome() + "/conf/database/DatabaseConfigLocal.sh";
+  if (QFile::exists(local))
+  {
+    readDbConfig(result, local);
+  }
+  return result;
+}
+
+void ApiDb::readDbConfig(Settings& settings, QString config_path)
+{
+  QFile fp(config_path);
+  if (fp.open(QIODevice::ReadOnly) == false)
+  {
+    throw HootException("Error opening: " + fp.fileName());
+  }
+  QString s = QString::fromUtf8(fp.readAll());
+
+  QStringList sl = s.split('\n', QString::SkipEmptyParts);
+
+  foreach (QString s, sl)
+  {
+    QString key = s.section("=", 0, 0).remove("export ").trimmed();
+    QString value = s.section("=", 1).trimmed();
+    if (!key.startsWith("#") && key.length() > 0)
+    {
+      settings.set(key, value);
+    }
+  }
 }
 
 }

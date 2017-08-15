@@ -105,15 +105,4 @@ ElementPtr ElementSorter::readNextElement()
   return result;
 }
 
-QString ElementSorter::sortInput(const QUrl& input)
-{
-  //TODO: multiary-ingest - finish
-
-  //implement file based element sorter which returns the sorted element file output path; only
-  //support nodes initially
-
-
-  return "";
-}
-
 }
