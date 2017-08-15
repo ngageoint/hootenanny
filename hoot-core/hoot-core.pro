@@ -53,15 +53,10 @@ PRECOMPILED_HEADER = src/main/cpp/hoot/core/HootCoreStable.h
 SOURCES += $$files(src/*.cpp, true)
 HEADERS += $$files(src/*.h, true)
 
-# log4cxx
-SOURCES -= src/main/cpp/hoot/core/util/LogLog4Cxx.cpp
-SOURCES -= src/main/cpp/hoot/core/util/LogGeneric.cpp
-HEADERS -= src/main/cpp/hoot/core/util/LogLog4Cxx.h
-HEADERS -= src/main/cpp/hoot/core/util/LogGeneric.h
 log4cxx {
-  SOURCES += src/main/cpp/hoot/core/util/LogLog4Cxx.cpp
-  HEADERS += src/main/cpp/hoot/core/util/LogLog4Cxx.h
+  SOURCES -= src/main/cpp/hoot/core/util/LogGeneric.cpp
+  HEADERS -= src/main/cpp/hoot/core/util/LogGeneric.h
 } else {
-  SOURCES += src/main/cpp/hoot/core/util/LogGeneric.cpp
-  HEADERS += src/main/cpp/hoot/core/util/LogGeneric.h
+  SOURCES -= src/main/cpp/hoot/core/util/LogLog4Cxx.cpp
+  HEADERS -= src/main/cpp/hoot/core/util/LogLog4Cxx.h
 }
