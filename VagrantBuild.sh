@@ -23,7 +23,9 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
-aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests
+# Taking out ui-tests until we get Tomcat8 etc installed
+# aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
@@ -36,8 +38,9 @@ echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
 make -s clean && make -sj$(nproc)
 
+# Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
+#sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now

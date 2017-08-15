@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+VMUSER=`id -u -n`
+echo USER: $VMUSER
+VMGROUP=`groups | grep -o $VMUSER`
+echo GROUP: $VMGROUP
+
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
@@ -7,8 +12,6 @@ source ~/.bash_profile
 
 # Keep VagrantBuild.sh happy
 #ln -s ~/.bash_profile ~/.profile
-
-VMUSER=`id -u -n`
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -36,13 +39,16 @@ sudo systemctl start ntpd
 # Install Java8
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
-if  ! rpm -qa | grep jdk-8u111-linux; then
+
+# Official download page:
+# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+if  ! rpm -qa | grep jdk-8u144-linux; then
     echo "### Installing Java8..."
-    if [ ! -f jdk-8u111-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.rpm
+    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
+      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
     fi
-    sudo yum -y install ./jdk-8u111-linux-x64.rpm
+    sudo yum -y install ./jdk-8u144-linux-x64.rpm
 fi
 
 echo "### Installing the repo for an ancient version of NodeJS"
@@ -52,6 +58,16 @@ echo "### Installing an ancient version of NodeJS"
 sudo yum install -y \
   nodejs-0.10.46 \
   nodejs-devel-0.10.46
+
+# echo "### Installing and locking the GEOS version to 3.4.2"
+# This works but yum colflicts with postgis2_95
+# sudo yum install -y yum-plugin-versionlock
+# sudo yum install -y \
+#     geos-3.4.2-2.el7 \
+#     geos-devel-3.4.2-2.el7
+#
+# sudo yum versionlock geos*
+
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -63,15 +79,16 @@ sudo yum -y install \
     ccache \
     gcc \
     gcc-c++ \
+    geos \
+    geos-devel \
     cppunit-devel \
+    doxygen \
     gdb \
     git \
     git-core \
-    geos-devel \
     libtool \
     m4 \
     qt \
-    qt-common \
     qt-devel \
     qtwebkit \
     qtwebkit-devel \
@@ -82,8 +99,6 @@ sudo yum -y install \
     postgresql95-server \
     proj \
     proj-devel \
-    stxxl \
-    stxxl-devel \
     python  \
     python-devel \
     python-matplotlib \
@@ -93,6 +108,7 @@ sudo yum -y install \
     opencv-core \
     opencv-devel \
     opencv-python \
+    perl-XML-LibXML \
     protobuf \
     protobuf-compiler \
     protobuf-devel \
@@ -106,21 +122,27 @@ sudo yum -y install \
     words \
     tex* \
     w3m \
-    doxygen \
 
 
+##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
+# to crawl through the Hoot documentation dependencies
 
+# Things to look at:
 #     asciidoc \
 #     texlive \
 #     dblatex \
 #     texlive-cyrillic \
-cd ~
 
 echo "##### Temp installs #####"
-# sudo yum -y install \
-#     gdal \
-#     gdal-devel \
-#     gdal-python \
+
+# Stxxl:
+# We could get an RPM from:
+#  https://www.rpmfind.net/linux/rpm2html/search.php?query=stxxl
+#  https://pkgs.org/download/stxxl
+#
+# Or build it like we do for the RPM's
+#     stxxl \
+#     stxxl-devel \
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
@@ -132,11 +154,10 @@ if ! hash qmake >/dev/null 2>&1 ; then
 fi
 
 #####
-# Temp changes until we get the C++11 support into develop
+# Temp change until we get the C++11 support into develop
+cd $HOOT_HOME
 cp LocalConfig.pri.orig LocalConfig.pri
 echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
-sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
-sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
 #####
 
 
@@ -155,11 +176,11 @@ fi
 
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk1.8.0_111" >> ~/.bash_profile
+    echo "export JAVA_HOME=/usr/java/jdk1.8.0_144" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 else
-    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_111' ~/.bash_profile
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
 fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
@@ -171,7 +192,9 @@ fi
 
 if ! ruby -v | grep --quiet 2.3.0; then
     # Ruby via rvm - from rvm.io
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 2>&1
+    # Running this twice so that it should not error out
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 || \
+        gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3  2>&1
 
     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
 
@@ -274,7 +297,7 @@ PG_VERSION=9.5
 
 if ! grep --quiet "psql-" ~/.bash_profile; then
     echo "Adding PostGres path vars to profile..."
-    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin"
+    echo "export PATH=\$PATH:/usr/pgsql-$PG_VERSION/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
@@ -282,10 +305,6 @@ if [ ! -f /etc/ld.so.conf.d/postgres$PG_VERSION.conf ]; then
     sudo sh -c "echo '/usr/pgsql-$PG_VERSION/lib' > /etc/ld.so.conf.d/postgres$PG_VERSION.conf"
     sudo ldconfig
 fi
-
-
-sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
-
 
 # For convenience, set the version of GDAL to download and install
 GDAL_VERSION=2.1.3
@@ -339,7 +358,6 @@ fi
 
 
 echo "### Configureing Postgres..."
-
 cd /tmp # Stop postgres "could not change directory to" warnings
 
 # NOTE: These have been changed to pg9.5
@@ -421,6 +439,8 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
 fi
 sudo systemctl restart postgresql-$PG_VERSION
 
+
+# Get ready to build Hoot
 cd $HOOT_HOME
 source ./SetupEnv.sh
 
@@ -429,6 +449,11 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     echo "init'ing and updating submodule"
     git submodule init && git submodule update
 fi
+
+##### Will add Tomcat8 in after the core is working.
+exit
+
+#####################################################
 
 # if dpkg -l | grep --quiet tomcat6; then
 #     echo "Disabling Tomcat 6 service"
@@ -447,8 +472,6 @@ fi
 #     sudo rm -rf /usr/share/tomcat6
 #     sudo sed -i '/^export TOMCAT6_HOME/d' ~/.profile
 # fi
-
-exit
 
 echo "### Installing Tomcat8..."
 # NOTE: We could pull the RPM from the Hoot repo and install it instead of doing all of the manual steps.
@@ -494,7 +517,7 @@ After=syslog.target network.target
 [Service]
 Type=forking
 
-Environment=JAVA_HOME=/usr/java/jdk1.8.0_111
+Environment=JAVA_HOME=/usr/java/jdk1.8.0_144
 Environment=CATALINA_PID=/var/lib/tomcat8/temp/tomcat8.pid
 Environment=CATALINA_HOME=/var/lib/tomcat8
 Environment=CATALINA_BASE=/var/lib/tomcat8
@@ -578,262 +601,3 @@ sudo update-alternatives --auto javac
 exit
 
 ####################################################
-# From RPM Job
-    apache-maven \
-      CharLS-devel \
-      ImageMagick \
-      ant \
-      apr-devel \
-      apr-util-devel \
-      armadillo-devel \
-      bison \
-      cairo-devel \
-      cfitsio-devel \
-      chrpath \
-      cppunit-devel \
-      createrepo \
-      ctags \
-      curl-devel \
-      doxygen \
-      emacs \
-      emacs \
-      emacs-el \
-      erlang \
-      erlang \
-      expat-devel \
-      flex \
-      fontconfig-devel \
-      freexl-devel \
-      g2clib-static \
-      gd-devel \
-      geos-devel \
-      giflib-devel \
-      giflib-devel \
-      graphviz \
-      hdf-devel \
-      hdf-static \
-      hdf5-devel \
-      help2man \
-      info \
-      libX11-devel \
-      libXrandr-devel \
-      libXrender-devel \
-      libXt-devel \
-      libdap-devel \
-      libdrm-devel \
-      libgta-devel \
-      libicu-devel \
-      libjpeg-turbo-devel \
-      libotf \
-      libpng-devel \
-      librx-devel \
-      libspatialite-devel \
-      libtool \
-      libxslt \
-      libxslt \
-      lua-devel \
-      m17n-lib* \
-      m4 \
-      mysql-devel \
-      netcdf-devel \
-      numpy \
-      pango-devel \
-      pcre-devel \
-      php-devel \
-      poppler-devel \
-      proj-devel \
-      pygtk2 \
-      python-argparse \
-      python-devel \
-      python-devel \
-      readline-devel \
-      rpm-build \
-      rpm-build \
-      ruby \
-      ruby-devel \
-      sqlite-devel \
-      swig \
-      tetex-tex4ht \
-      tex* \
-      transfig \
-      unixODBC-devel \
-      w3m \
-      wget \
-      words \
-      xerces-c-devel \
-      xz-devel \
-      zlib-devel \
-
-# install useful and needed packages for working with hootenanny
-echo "### Installing dependencies from repos..."
-sudo yum -y install \
- asciidoc  \
- automake  \
- boost-devel  \
- ccache  \
- cppunit-devel  \
- curl  \
- dblatex \
- doxygen  \
- fontconfig-devel  \
- freetype-devel  \
- gcc-c++  \
- gdal-devel \
- gdb  \
- geos-devel  \
- gettext  \
- git  \
- git-core  \
- glpk-devel  \
- gnuplot  \
- graphviz  \
- htop  \
- java  \
- lcov  \
- libX11-devel \
- libpng-devel \
- libtool  \
- libxslt  \
- liquibase  \
- log4cxx-devel \
- maven  \
- nodejs-devel \
- npm  \
- ogdi-devel  \
- opencv-devel  \
- openssh-server  \
- patch  \
- pgadmin3  \
- poppler  \
- postgis2_95 \
- postgresql95 \
- postgresql95-contrib \
- postgresql95-devel \
- postgresql95-server \
- proj-devel  \
- protobuf-compiler  \
- protobuf-devel  \
- python  \
- python-devel \
- python-matplotlib \
- python-pip  \
- python-setuptools \
- qt-devel  \
- ruby  \
- ruby-devel  \
- source-highlight  \
- swig  \
- texinfo-tex  \
- texlive-arabxetex  \
- texlive-collection-langcyrillic  \
- unzip  \
- w3m  \
- wget  \
- words  \
- x11vnc  \
- xerces-c  \
- xorg-x11-server-Xvfb  \
- zlib-devel  \
- >> CentOS_upgrade.txt 2>&1
-
-
-# Orig List
-#  asciidoc  \
-#  automake  \
-#  boost-devel  \
-#  ccache  \
-#  cppunit-devel  \
-#  curl  \
-#  dblatex \
-#  doxygen  \
-#  fontconfig-devel  \
-#  freetype-devel  \
-#  gcc-c++  \
-#  gdal-devel \
-#  gdb  \
-#  gettext  \
-#  git  \
-#  git-core  \
-#  glpk-devel  \
-#  gnuplot  \
-#  graphviz  \
-#  htop  \
-#  java-1.8.0-openjdk  \
-#  java-1.8.0-openjdk-debug  \
-#  lcov  \
-#  libX11-devel \
-#  libicu-devel  \
-#  libpng  \
-#  libpng-devel \
-#  libtool  \
-#  libxslt  \
-#  liquibase  \
-#  log4cxx-devel \
-#  maven  \
-#  nodejs-devel \
-#  npm  \
-#  ogdi-devel  \
-#  opencv-devel  \
-#  openssh-server  \
-#  patch  \
-#  pgadmin3  \
-#  poppler  \
-#  postgis  \
-#  postgresql \
-#  postgresql-contrib \
-#  postgresql-devel  \
-#  postgresql-libs  \
-#  postgresql-server  \
-#  proj-devel  \
-#  protobuf-compiler  \
-#  protobuf-devel  \
-#  python  \
-#  python-devel \
-#  python-matplotlib \
-#  python-pip  \
-#  python-setuptools \
-#  qt-devel  \
-#  qt5-qtwebkit-devel  \
-#  ruby  \
-#  ruby-devel  \
-#  source-highlight  \
-#  swig  \
-#  texinfo-tex  \
-#  texlive-arabxetex  \
-#  texlive-collection-langcyrillic  \
-#  tomcat  \
-#  unzip  \
-#  w3m  \
-#  wget  \
-#  words  \
-#  x11vnc  \
-#  xerces-c  \
-#  xorg-x11-server-Xvfb  \
-#  zlib-devel  \
-
-# TODO: Investigate these packages from the Ubuntu14.04 provisioning
-#libcv
-#newmat
-#libproj-dev
-#libqt4-sql-psql
-#libjson-spirit-dev
-#libstxll-dev
-#nodejs-legacy
-#geos-devel
-#libboost-all-dev
-#texlive-lang-hebrew
-#libqt4-sql-sqlite
-#postgresql-client-9.5
-#postgresql-9.5-postgis-scripts
-#postgresql-client-9.5
-#gdal-devel \
-#stxxl-devel \
-
-# TODO: Investigate the necessity of these
-#texlive-arabxetex \
-#texlive-collection-langcyrillic \
-
-
-
-
-
