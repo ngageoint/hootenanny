@@ -558,7 +558,8 @@ SOURCES += \
     src/main/cpp/hoot/core/util/MetadataTags.cpp \
     src/main/cpp/hoot/core/elements/Status.cpp \
     src/main/cpp/hoot/core/cmd/CalculateRandomTileCmd.cpp \
-    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp
+    src/main/cpp/hoot/core/cmd/BaseCalculateTilesCmd.cpp \
+    src/main/cpp/hoot/core/io/SqlBulkDelete.cpp
 
 HEADERS += \
     src/main/cpp/hoot/core/util/Progress.h \
@@ -1103,5 +1104,7 @@ HEADERS += \
     src/main/cpp/hoot/core/io/OsmChangeWriter.h \
     src/main/cpp/hoot/core/io/OsmChangeWriterFactory.h \
     src/main/cpp/hoot/core/util/SharedPtrPool.h \
-    src/main/cpp/hoot/core/io/ElementCriterionInputStream.h
+    src/main/cpp/hoot/core/io/ElementCriterionInputStream.h \
+    src/main/cpp/hoot/core/io/BulkDelete.h \
+    src/main/cpp/hoot/core/io/SqlBulkDelete.h
 
