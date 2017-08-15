@@ -74,9 +74,9 @@ public:
       throw HootException(QString("%1 takes four parameters.").arg(getName()));
     }
 
-    const QString newDataInput = args[0];   //this must be streamable
-    const QString dbLayerOutput = args[1];  //this must be hootapidb://
-    const QString changesetOutput = args[2];    //this must be .spark.x
+    const QString newDataInput = args[0];
+    const QString dbLayerOutput = args[1];
+    const QString changesetOutput = args[2];
     bool sortInput = false;
     if (args[3].toLower() == "true")
     {

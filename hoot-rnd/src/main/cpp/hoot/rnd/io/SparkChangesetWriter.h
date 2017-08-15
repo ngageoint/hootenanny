@@ -60,7 +60,7 @@ public:
   /**
    * @see OsmMapWriter
    */
-  virtual bool isSupported(QString url) { return url.endsWith(".spark"); }  //TODO: fix
+  virtual bool isSupported(QString url) { return url.endsWith(".spark.1"); }  //TODO: fix
 
   /**
    * Open the specified filename for writing.

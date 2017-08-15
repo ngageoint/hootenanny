@@ -11,20 +11,18 @@ if [ -z "$OPT_COMMAND" ]; then
  exit 0
 fi
 
+REF_DIR=test-files/cmd/slow/MultiaryIngestCmdTest
 OUTPUT_DIR=test-output/cmd/slow/MultiaryIngestCmdTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
 source conf/database/DatabaseConfig.sh
-export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
-export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false  -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D changeset.user.id=1 -D osmapidb.bulk.writer.reserve.record.ids.before.writing.data=false -D osmapidb.bulk.writer.validate.data=true -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
+HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 
-#echo "streaming hoot api db --> osm api db..."
-#echo ""
-#hoot convert $HOOT_OPTS test-files/ToyTestA.osm "$HOOT_DB_URL/ToyTestA"
-#scripts/database/CleanAndInitializeOsmApiDb.sh
-#hoot convert $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OSM_API_DB_URL
-#hoot is-match $HOOT_OPTS "$HOOT_DB_URL/ToyTestA" $OSM_API_DB_URL
+hoot convert $HOOT_OPTS dataset1.geonames "$HOOT_DB_URL/Geonames"
+hoot multiary-ingest dataset2.geonames "$HOOT_DB_URL/Geonames" $OUTPUT_DIR/geonames-changeset.spark.1 true
+hoot convert "$HOOT_DB_URL/Geonames" $OUTPUT_DIR/geonames-output.osm
+hoot is-match $REF_DIR/geonames-output.osm $OUTPUT_DIR/geonames-output.osm 
+diff $REF_DIR/geonames-changeset.spark.1 $OUTPUT_DIR/geonames-changeset.spark.1
+
