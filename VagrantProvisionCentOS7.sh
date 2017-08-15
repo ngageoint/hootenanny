@@ -60,7 +60,7 @@ sudo yum install -y \
   nodejs-devel-0.10.46
 
 # echo "### Installing and locking the GEOS version to 3.4.2"
-# This works but yum colflicts with postgis2_95
+# This works but yum conflicts with postgis2_95
 # sudo yum install -y yum-plugin-versionlock
 # sudo yum install -y \
 #     geos-3.4.2-2.el7 \
