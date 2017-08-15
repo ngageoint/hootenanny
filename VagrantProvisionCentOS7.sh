@@ -86,6 +86,7 @@ sudo yum -y install \
     gdb \
     git \
     git-core \
+    libpng-devel \
     libtool \
     m4 \
     qt \
@@ -322,14 +323,14 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB
         tar zxfp gdal-$GDAL_VERSION.tar.gz
     fi
 
-    if [ ! -f FileGDB_API_1_5_64.tar.gz ]; then
+    if [ ! -f FileGDB_API_1_5_1-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5/FileGDB_API_1_5_64.tar.gz
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64.tar.gz
     fi
 
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_5_1-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
 
