@@ -7,6 +7,9 @@ export HOOT_HOME=`readlink -m $SCRIPT_PATH/../`
 export HOOT_WORKING_NAME=`echo $HOOT_HOME | sed -e "s/.*\///g"`
 export PRETTY_PIPES_HOME=$HOOT_HOME/pretty-pipes
 
+# Enables precompiled headers with ccache
+export CCACHE_SLOPPINESS=time_macros
+
 # if the pretty pipes home isn't right
 if [ ! -x $PRETTY_PIPES_HOME/bin/PrettyPipes ]; then
     unset PRETTY_PIPES_HOME
