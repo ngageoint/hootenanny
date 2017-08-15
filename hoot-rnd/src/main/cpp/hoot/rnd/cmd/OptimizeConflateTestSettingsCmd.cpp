@@ -38,13 +38,13 @@ using namespace std;
 namespace hoot
 {
 
-class OptimizeConflateSettingsCmd : public BaseCommand
+class OptimizeConflateTestSettingsCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::OptimizeConflateSettingsCmd"; }
+  static string className() { return "hoot::OptimizeConflateTestSettingsCmd"; }
 
-  OptimizeConflateSettingsCmd() { }
+  OptimizeConflateTestSettingsCmd() { }
 
   virtual QString getName() const { return "optimize-conflate-settings"; }
 
@@ -102,7 +102,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, OptimizeConflateSettingsCmd)
+HOOT_FACTORY_REGISTER(Command, OptimizeConflateTestSettingsCmd)
 
 }
 

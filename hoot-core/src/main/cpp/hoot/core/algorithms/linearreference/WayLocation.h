@@ -74,13 +74,6 @@ public:
 
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction);
 
-  /**
-   * Move the location on the way. Negative values will move closer to the beginning of the way.
-   * Higher values will move towards the end of the way. This will create a new WayLocation and
-   * return it. The result will not go past the beginning or end of the line.
-   */
-  WayLocation move(Meters distance) const;
-
   virtual ~WayLocation() {}
 
   Meters calculateDistanceFromEnd() const;
@@ -153,6 +146,13 @@ public:
   bool isValid() const { return _segmentIndex != -1; }
 
   const geos::geom::Coordinate getCoordinate() const;
+
+  /**
+   * Move the location on the way. Negative values will move closer to the beginning of the way.
+   * Higher values will move towards the end of the way. This will create a new WayLocation and
+   * return it. The result will not go past the beginning or end of the line.
+   */
+  WayLocation move(Meters distance) const;
 
   QString toString() const;
 
