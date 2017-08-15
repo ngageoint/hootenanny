@@ -122,6 +122,7 @@ sudo yum -y install \
     words \
     tex* \
     w3m \
+    cmake \
 
 
 ##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
@@ -136,13 +137,12 @@ sudo yum -y install \
 echo "##### Temp installs #####"
 
 # Stxxl:
-# We could get an RPM from:
-#  https://www.rpmfind.net/linux/rpm2html/search.php?query=stxxl
-#  https://pkgs.org/download/stxxl
-#
-# Or build it like we do for the RPM's
-#     stxxl \
-#     stxxl-devel \
+git clone http://github.com/stxxl/stxxl.git stxxl
+mkdir -p stxxl/build
+cd stxxl/build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -sj
+sudo make install -s
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
