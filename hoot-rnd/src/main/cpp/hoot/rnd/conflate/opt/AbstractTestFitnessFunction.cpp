@@ -31,7 +31,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/test/SimpleTestListener.h>
-#include <hoot/core/test/TempFileName.h>
+#include <hoot/core/test/TempTestFileName.h>
 
 namespace hoot
 {
@@ -56,7 +56,7 @@ double AbstractTestFitnessFunction::f(const Tgs::ConstStatePtr& s)
   //normally be used with the network conflation case tests, add those here
   //settings.set("", "");
   LOG_VARD(settings);
-  TempFileName temp;
+  TempTestFileName temp;
   _settingsFileName = temp.getFileName();
   LOG_VARD(_settingsFileName);
   settings.storeJson(_settingsFileName);

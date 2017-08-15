@@ -357,6 +357,7 @@ public:
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
+    writer.setValidateData(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
@@ -419,6 +420,7 @@ public:
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
     writer.setStxxlMapMinSize(3);
+    writer.setValidateData(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
@@ -447,6 +449,7 @@ public:
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
+    writer.setValidateData(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
@@ -489,6 +492,7 @@ public:
     writer.setStartingNodeId(3);
     writer.setStartingWayId(4);
     writer.setStartingRelationId(5);
+    writer.setValidateData(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
@@ -518,6 +522,7 @@ public:
     writer.setChangesetUserId(1);
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
+    writer.setValidateData(true);
 
     writer.open(outFile);
     writer.write(ServicesDbTestUtils::createTestMap1());

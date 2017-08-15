@@ -150,6 +150,7 @@ public:
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setChangesetUserId(1);
     writer.setReserveRecordIdsBeforeWritingData(true);
+    writer.setValidateData(true);
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();

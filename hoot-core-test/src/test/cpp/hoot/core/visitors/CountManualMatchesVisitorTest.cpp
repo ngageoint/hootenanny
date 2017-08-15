@@ -52,7 +52,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/cmd/slow/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
+      "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
       false,
       Status::Unknown2);
 

@@ -46,6 +46,7 @@ using namespace boost;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 class SmallWayMergerTest : public CppUnit::TestFixture
 {
@@ -67,6 +68,7 @@ public:
       SmallWayMerger::mergeWays(map, 15.0);
       MapProjector::projectToWgs84(map);
 
+      QDir().mkdir("test-output/conflate/");
       OsmXmlWriter writer;
       writer.write(map, "test-output/conflate/SmallWayMergerOutput1.osm");
 
@@ -74,5 +76,5 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SmallWayMergerTest);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SmallWayMergerTest, "quick");
 
