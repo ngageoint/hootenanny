@@ -45,6 +45,7 @@ using namespace hoot;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 // TGS
 #include <tgs/StreamUtils.h>
@@ -56,7 +57,7 @@ namespace hoot
 class DividedHighwayMergerTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(DividedHighwayMergerTest);
-    //CPPUNIT_TEST(allManipulationsTest);
+    //CPPUNIT_TEST(allManipulationsTest); //TODO: re-enable or remove?
     CPPUNIT_TEST(preSplitTest);
     CPPUNIT_TEST(parallelFilterTest);
     CPPUNIT_TEST_SUITE_END();
@@ -81,6 +82,7 @@ public:
     OsmMapPtr after(new OsmMap(conflator.getBestMap()));
     MapProjector::projectToWgs84(after);
 
+    QDir().mkdir("test-output");
     OsmXmlWriter writer;
     writer.write(after, "test-output/DividedHighwayMergerTest.osm");
     writer.write(map, "test-output/DividedHighwayMergerTestPre.osm");
@@ -106,6 +108,7 @@ public:
     OsmMapPtr after(new OsmMap(conflator.getBestMap()));
     MapProjector::projectToWgs84(after);
 
+    QDir().mkdir("test-output");
     OsmXmlWriter writer;
     writer.setIncludeIds(true);
     writer.write(after, "test-output/DividedHighwayMergerPreSplitTest.osm");
