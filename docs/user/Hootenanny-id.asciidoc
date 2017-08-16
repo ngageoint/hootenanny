@@ -687,6 +687,12 @@ image::user/images/id/hoot_export_rtclick.png[scaledwidth="75%"]
 
 NOTE: Datasets must be selected (highlighted in yellow) to export. When selecting more than one dataset only delete and move are available options.
 
+*_Bulk Export_*
+
+Similar to the Bulk Import tool, users can use the _Bulk Export_ tool to export up to 10 datasets at once.  The user can set translation schema and export format to each independent job.  The user will be prompted each time to 'Save the File' as is the norm with downloading files from the web.  There is currently no option to package all files in one zipped folder.
+
+Users can also chose to export all data in a single folder (up to 10 datasets).  This will open the _Bulk Export_ form populated with the datasts found in the selected folder.
+
 ===== Other Dataset Options
 
 Layers can be managed by right-clicking on selected datasets to expose different options.  Note that the options presented will depend on what is selected or highlighted.  To select more than one dataset hold the ctrl key and select each dataset.  
