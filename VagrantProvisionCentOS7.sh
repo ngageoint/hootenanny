@@ -72,59 +72,61 @@ sudo yum install -y \
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
-    automake \
     autoconf \
+    automake \
     bc \
     boost-devel \
     ccache \
-    gcc \
-    gcc-c++ \
-    geos \
-    geos-devel \
+    cmake \
     cppunit-devel \
     doxygen \
+    gcc \
+    gcc-c++ \
     gdb \
+    geos \
+    geos-devel \
     git \
     git-core \
+    glpk \
+    glpk-devel \
+    libicu-devel \
     libpng-devel \
     libtool \
     m4 \
-    qt \
-    qt-devel \
-    qtwebkit \
-    qtwebkit-devel \
-    postgis2_95 \
+    maven \
+    opencv \
+    opencv-core \
+    opencv-devel \
+    opencv-python \
+    perl-XML-LibXML \
+    postgis23_95 \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
     postgresql95-server \
     proj \
     proj-devel \
+    protobuf \
+    protobuf-compiler \
+    protobuf-devel \
     python  \
     python-devel \
     python-matplotlib \
     python-pip  \
     python-setuptools \
-    opencv \
-    opencv-core \
-    opencv-devel \
-    opencv-python \
-    perl-XML-LibXML \
-    protobuf \
-    protobuf-compiler \
-    protobuf-devel \
+    qt \
+    qt-devel \
+    qt-postgresql \
+    qtwebkit \
+    qtwebkit-devel \
     swig \
-    libicu-devel \
-    maven \
-    glpk \
-    glpk-devel \
+    tex* \
     unzip \
     v8 \
     v8-devel \
-    words \
-    tex* \
     w3m \
-    cmake \
+    words \
+    zip \
 
 
 ##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
@@ -149,7 +151,7 @@ echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
 # Total hack because 1.3.1 doesn't compile right on CentOS7
 sed -i 's/#include <sys\/mman.h>/#include <sys\/mman.h>\n#include <unistd.h>/g' ./utils/mlock.cpp
 
-make library_g++
+make -s library_g++
 
 #### Isn't easy, no 'make install'
 sudo install -p -D -m 0755 lib/libstxxl.so /usr/local/lib/libstxxl.so.1.3.1
