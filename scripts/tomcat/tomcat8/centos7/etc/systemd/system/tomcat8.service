@@ -7,9 +7,9 @@ After=syslog.target network.target
 Type=forking
 
 Environment=JAVA_HOME=/usr/java/jdk1.8.0_144
-Environment=CATALINA_PID=/var/lib/tomcat8/temp/tomcat8.pid
-Environment=CATALINA_HOME=/var/lib/tomcat8
-Environment=CATALINA_BASE=/var/lib/tomcat8
+Environment=CATALINA_PID=/usr/share/tomcat8/temp/tomcat8.pid
+Environment=CATALINA_HOME=/usr/share/tomcat8
+Environment=CATALINA_BASE=/usr/share/tomcat8
 Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
@@ -20,10 +20,10 @@ Environment=LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT
 Environment=GDAL_DATA=/usr/local/share/gdal
 Environment=GDAL_LIB_DIR=/usr/local/lib
 Environment=HOOT_WORKING_NAME=hoot
-Environment=PATH=$HOOT_HOME/bin:$PATH
+Environment=PATH=$HOOT_HOME/bin:$CATALINA_HOME/bin:$PATH
 
-ExecStart=/var/lib/tomcat8/bin/startup.sh
-ExecStop=/var/lib/tomcat8/bin/shutdown.sh
+ExecStart=/usr/share/tomcat8/bin/startup.sh
+ExecStop=/usr/share/tomcat8/bin/shutdown.sh
 
 User=tomcat8
 Group=tomcat8
