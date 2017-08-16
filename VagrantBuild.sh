@@ -40,13 +40,13 @@ make -s clean && make -sj$(nproc)
 
 # Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-#sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
+sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now
 echo "Building Hoot docs... "
-make -sj$(nproc) docs &> /dev/null || true
-make -sj$(nproc) docs
+# make -sj$(nproc) docs &> /dev/null || true
+# make -sj$(nproc) docs
 
 hoot version
 

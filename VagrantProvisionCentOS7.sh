@@ -632,32 +632,98 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
+echo "### Installing Tomcat8..."
+TOMCAT_HOME=/usr/share/tomcat8
+
+# Install Tomcat 8
+$HOOT_HOME/scripts/tomcat/tomcat8/centos7/tomcat8_install.sh
+
+# Configure Tomcat for the user
+if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
+    echo "### Adding Tomcat to profile..."
+    echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.bash_profile
+    source ~/.bash_profile
+fi
+
+if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
+    echo "Removing LocalHoot.json..."
+    rm -f $HOOT_HOME/conf/LocalHoot.json
+fi
+
+if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
+    echo "Removing services local.conf..."
+    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
+fi
+
+# Making sure we know where we are
+cd ~
+
+echo "### Installing node-mapnik-server..."
+# sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+# sudo chmod a+x /etc/init.d/node-mapnik-server
+# # Make sure all npm modules are installed
+# cd $HOOT_HOME/node-mapnik-server
+# npm install --silent
+# # Clean up after the npm install
+# rm -rf ~/tmp
+
+echo "### Installing node-export-server..."
+# sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
+# sudo chmod a+x /etc/init.d/node-export-server
+# # Make sure all npm modules are installed
+# cd $HOOT_HOME/node-export-server
+# npm install --silent
+# # Clean up after the npm install
+# rm -rf ~/tmp
+
+cd $HOOT_HOME
+
+# Update marker file date now that dependency and config stuff has run
+# The make command will exit and provide a warning to run 'vagrant provision'
+# if the marker file is older than this file (VagrantProvision.sh)
+touch Vagrant.marker
+# Now we are ready to build Hoot.  The VagrantBuild.sh script will build Hoot.
+
+# switch to auto mode and use the highest priority installed alternatives for Java.
+sudo update-alternatives --auto java
+sudo update-alternatives --auto javac
 
 
-##### Will add Tomcat8 in after the core is working.
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+    mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
+
+# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
+rm -rf $HOOT_HOME/upload
+rm -rf $HOOT_HOME/tmp
+
+if [ -d "$HOOT_HOME/data/reports" ]; then
+    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/data/reports
+fi
+
+if [ -d "$HOOT_HOME/customscript" ]; then
+    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/customscript
+fi
+
+if [ -d "$HOOT_HOME/ingest" ]; then
+    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/ingest
+fi
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+rm -rf $HOOT_HOME/userfiles/tmp
+
 exit
 
-#####################################################
+##########################################
+# This stuff will be removed
 
-# if dpkg -l | grep --quiet tomcat6; then
-#     echo "Disabling Tomcat 6 service"
-#
-#     # Shut down tomcat6 service
-#     sudo service tomcat6 stop
-#
-#     # Deregister tomcat6 service from autostart
-#     sudo update-rc.d -f tomcat6 remove
-#
-#     #uninstall Tomcat
-#     sudo apt-get -y purge tomcat6
-#     sudo apt-get -y autoremove
-#     sudo rm -f /etc/default/tomcat6*
-#     sudo rm -rf /etc/tomcat6
-#     sudo rm -rf /usr/share/tomcat6
-#     sudo sed -i '/^export TOMCAT6_HOME/d' ~/.profile
-# fi
 
-echo "### Installing Tomcat8..."
 # NOTE: We could pull the RPM from the Hoot repo and install it instead of doing all of the manual steps.
 #sudo bash -c "cat >> /etc/yum.repos.d/hoot.repo" <<EOT
 # [hoot]
@@ -676,13 +742,13 @@ sudo groupadd tomcat8
 sudo useradd -M -s /bin/nologin -g tomcat8 -d /var/lib/tomcat8 tomcat8
 
 # NOTE: This is UGLY.
-TOMCAT_VERSION=8.5.14
+TOMCAT_VERSION=8.5.20
 
 if [ ! -f apache-tomcat-$TOMCAT_VERSION.tar.gz ]; then
-#     wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz
+    #wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz
     #wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.14/bin/apache-tomcat-8.5.14.tar.gz
     wget http://www-us.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
-    fi
+fi
 
 sudo mkdir /var/lib/tomcat8
 sudo tar xvf apache-tomcat-8*tar.gz -C /var/lib/tomcat8 --strip-components=1
@@ -709,7 +775,7 @@ Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
 ExecStart=/var/lib/tomcat8/bin/startup.sh
-ExecStop=/bin/kill -15 $MAINPID
+ExecStop=/var/lib/tomcat8/bin/shutdown.sh
 
 User=tomcat8
 Group=tomcat8
@@ -727,24 +793,6 @@ sudo systemctl start tomcat8
 sudo systemctl enable tomcat8
 
 
-# Configure Tomcat for the user
-if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
-    echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT8_HOME=/var/lib/tomcat8" >> ~/.bash_profile
-    source ~/.bash_profile
-fi
-
-if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
-    echo "Removing LocalHoot.json..."
-    rm -f $HOOT_HOME/conf/LocalHoot.json
-fi
-
-if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
-    echo "Removing services local.conf..."
-    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-fi
-
-cd ~
 
 echo "### Installing node-mapnik-server..."
 sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
@@ -766,11 +814,34 @@ rm -rf ~/tmp
 
 cd $HOOT_HOME
 
-rm -rf $HOOT_HOME/ingest
-mkdir -p $HOOT_HOME/ingest/processed
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+    mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
 
+# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
 rm -rf $HOOT_HOME/upload
-mkdir -p $HOOT_HOME/upload
+rm -rf $HOOT_HOME/tmp
+
+if [ -d "$HOOT_HOME/data/reports" ]; then
+    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/data/reports
+fi
+
+if [ -d "$HOOT_HOME/customscript" ]; then
+    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/customscript
+fi
+
+if [ -d "$HOOT_HOME/ingest" ]; then
+    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/ingest
+fi
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+rm -rf $HOOT_HOME/userfiles/tmp
 
 # Update marker file date now that dependency and config stuff has run
 # The make command will exit and provide a warning to run 'vagrant provision'
@@ -781,7 +852,5 @@ touch Vagrant.marker
 # switch to auto mode and use the highest priority installed alternatives for Java.
 sudo update-alternatives --auto java
 sudo update-alternatives --auto javac
-
-exit
 
 ####################################################
