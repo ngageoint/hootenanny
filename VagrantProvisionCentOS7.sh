@@ -91,6 +91,7 @@ sudo yum -y install \
     git-core \
     glpk \
     glpk-devel \
+    gnuplot \
     libicu-devel \
     libpng-devel \
     libtool \
