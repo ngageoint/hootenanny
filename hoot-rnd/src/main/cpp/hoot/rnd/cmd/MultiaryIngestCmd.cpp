@@ -109,14 +109,14 @@ public:
     }
 
     LOG_INFO(
-      "Streaming multiary data ingest from input: " << newDataInput <<
+      "Ingesting multiary data from input: " << newDataInput <<
       " to output database layer: " << dbLayerOutput << " and output changeset: " <<
       changesetOutput << "...");
 
     //inputs must be sorted by id for changeset derivation to work
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
     //translating inputs to OSM
-    conf().set(ConfigOptions::getTranslationScriptKey(), "OSM_Ingest.js");
+    conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
 
     //sort incoming data by ID, if necessary, for changeset derivation (only passing nodes
     //through, so don't need to also sort by element type) -
@@ -153,6 +153,8 @@ private:
     {
       return newDataInput;
     }
+
+    LOG_INFO("Writing multiary data input to temporary database layer...");
 
     //write the unsorted input to temp db layer; later it willbe queried back out sorted by id
     //TODO: assuming performance here is a bottleneck, will later implement something that
@@ -196,6 +198,8 @@ private:
   void _writeChangesetData(boost::shared_ptr<ElementInputStream> newDataInputStream,
                            const QString dbLayerOutput, const QString changesetOutput)
   {
+    LOG_INFO("Writing multiary changes...");
+
     boost::shared_ptr<HootApiDbReader> existingDbLayerReader(new HootApiDbReader());
     existingDbLayerReader->open(dbLayerOutput);
 
