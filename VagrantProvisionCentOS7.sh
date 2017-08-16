@@ -72,6 +72,7 @@ sudo yum install -y \
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
+    asciidoc \
     autoconf \
     automake \
     bc \
@@ -79,6 +80,7 @@ sudo yum -y install \
     ccache \
     cmake \
     cppunit-devel \
+    dblatex \
     doxygen \
     gcc \
     gcc-c++ \
@@ -133,9 +135,7 @@ sudo yum -y install \
 # to crawl through the Hoot documentation dependencies
 
 # Things to look at:
-#     asciidoc \
 #     texlive \
-#     dblatex \
 #     texlive-cyrillic \
 
 echo "##### Temp installs #####"
