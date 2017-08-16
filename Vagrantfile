@@ -96,6 +96,7 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     #hoot_centos7.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
     #hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    hoot_centos7.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
 
   # Provider-specific configuration so you can fine-tune various
