@@ -142,11 +142,33 @@ echo "##### Temp installs #####"
 git clone http://github.com/stxxl/stxxl.git stxxl
 cd stxxl
 git checkout tags/1.3.1
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-make -sj
-sudo make install -s
+make config_gnu
+echo "STXXL_ROOT	=`pwd`" > make.settings.local
+echo "ENABLE_SHARED     = yes" >> make.settings.local
+echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
+# Total hack because 1.3.1 doesn't compile right on CentOS7
+sed -i 's/#include <sys\/mman.h>/#include <sys\/mman.h>\n#include <unistd.h>/g' ./utils/mlock.cpp
+
+make library_g++
+
+#### Isn't easy, no 'make install'
+sudo install -p -D -m 0755 lib/libstxxl.so /usr/local/lib/libstxxl.so.1.3.1
+sudo mkdir -p /usr/local/include
+sudo cp -pr include/* /usr/local/include/
+pushd .
+cd /usr/local/lib
+sudo ln -s libstxxl.so.1.3.1 libstxxl.so.1
+sudo ln -s libstxxl.so.1.3.1 libstxxl.so
+popd
+
+sudo /sbin/ldconfig
+
+#### So much easier to make later versions, uncomment when we upgrade to 1.4.0+
+#mkdir build
+#cd build
+#cmake -DCMAKE_BUILD_TYPE=Release ..
+#make -sj
+#sudo make install -s
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
