@@ -117,6 +117,8 @@ sudo ln -sf ${TOMCAT_CACHE_HOME}/work ${TOMCAT_HOME}/work
 sudo chmod ${TOMCAT_CACHE_HOME_PERMISSIONS} ${TOMCAT_CACHE_HOME}/work
 sudo chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
 
+# Setup a run script and a service.
+sudo cp ${SCRIPT_HOME}/tomcat8_start.sh ${TOMCAT_HOME}/bin
 sudo cp ${SCRIPT_HOME}/etc/systemd/system/${TOMCAT_NAME}.service /etc/systemd/system
 sudo systemctl daemon-reload
 sudo systemctl enable ${TOMCAT_NAME}

@@ -13,16 +13,8 @@ Environment=CATALINA_BASE=/usr/share/tomcat8
 Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
-# Add the Hootenanny specific environment
-Environment=HOOT_HOME=/home/vagrant/hoot
-Environment=HADOOP_HOME=/home/vagrant/hadoop
-Environment=LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOOT_HOME/lib:$HOOT_HOME/pretty-pipes/lib
-Environment=GDAL_DATA=/usr/local/share/gdal
-Environment=GDAL_LIB_DIR=/usr/local/lib
-Environment=HOOT_WORKING_NAME=hoot
-Environment=PATH=$HOOT_HOME/bin:$CATALINA_HOME/bin:$PATH
-
-ExecStart=/usr/share/tomcat8/bin/startup.sh
+# NOTE: This start script is a wrapper that sets up the Hootenanny environment
+ExecStart=/usr/share/tomcat8/bin/tomcat8_start.sh
 ExecStop=/usr/share/tomcat8/bin/shutdown.sh
 
 User=tomcat8
