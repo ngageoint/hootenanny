@@ -125,6 +125,7 @@ sudo yum -y install \
     swig \
     tex* \
     unzip \
+    v8-devel \
     w3m \
     words \
     zip \
