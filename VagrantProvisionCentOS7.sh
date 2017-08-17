@@ -125,8 +125,6 @@ sudo yum -y install \
     swig \
     tex* \
     unzip \
-    v8 \
-    v8-devel \
     w3m \
     words \
     zip \
@@ -725,6 +723,13 @@ rm -rf $HOOT_HOME/userfiles/tmp
 # This is defensive!
 # We do this so that Tomcat doesnt. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
+
+# OK, this is seriously UGLY but it fixes an NFS problem
+chmod -R 777 $HOOT_HOME/userfiles
+
+# This is very ugly.
+# If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
+chmod go+rx ~
 
 
 ##########################################
