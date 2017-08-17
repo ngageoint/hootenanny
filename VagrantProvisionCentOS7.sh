@@ -671,13 +671,14 @@ rm -rf ~/tmp
 sudo systemctl start node-mapnik
 
 echo "### Installing node-export-server..."
-# sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
-# sudo chmod a+x /etc/init.d/node-export-server
-# # Make sure all npm modules are installed
-# cd $HOOT_HOME/node-export-server
-# npm install --silent
-# # Clean up after the npm install
-# rm -rf ~/tmp
+sudo ln -s $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
+# Make sure all npm modules are installed
+cd $HOOT_HOME/node-export-server
+npm install --silent
+# Clean up after the npm install
+rm -rf ~/tmp
+# Start the service
+sudo systemctl start node-export
 
 cd $HOOT_HOME
 
