@@ -280,15 +280,13 @@ fi
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-# This is commented out since it tries to install qt3. Once we get the core building, this will get
-# re-added
-# if  ! rpm -qa | grep google-chrome-stable; then
-#     echo "### Installing Chrome..."
-#     if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
-#       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-#     fi
-#     sudo yum -y install ./google-chrome-stable_current_*.rpm
-# fi
+if  ! rpm -qa | grep google-chrome-stable; then
+    echo "### Installing Chrome..."
+    if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
+        wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    fi
+    sudo yum -y install ./google-chrome-stable_current_*.rpm
+fi
 
 if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
@@ -663,13 +661,14 @@ cd ~
 
 ##### These two are next to do.
 echo "### Installing node-mapnik-server..."
-# sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-# sudo chmod a+x /etc/init.d/node-mapnik-server
-# # Make sure all npm modules are installed
-# cd $HOOT_HOME/node-mapnik-server
-# npm install --silent
-# # Clean up after the npm install
-# rm -rf ~/tmp
+sudo ln -s $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
+# Make sure all npm modules are installed
+cd $HOOT_HOME/node-mapnik-server
+npm install --silent
+# Clean up after the npm install
+rm -rf ~/tmp
+# Start the service
+sudo systemctl start node-mapnik
 
 echo "### Installing node-export-server..."
 # sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
