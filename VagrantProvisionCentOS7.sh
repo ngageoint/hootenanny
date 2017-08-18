@@ -132,9 +132,13 @@ sudo yum -y install \
     zip \
 
 
+
+# Now make sure that the version of Java we installed gets used.
+# maven installs java-1.8.0-openjdk
+sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
+
 ##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
 # to crawl through the Hoot documentation dependencies
-
 # Things to look at:
 #     texlive \
 #     texlive-cyrillic \
@@ -689,13 +693,8 @@ cd $HOOT_HOME
 # The make command will exit and provide a warning to run 'vagrant provision'
 # if the marker file is older than this file (VagrantProvision.sh)
 touch Vagrant.marker
-# Now we are ready to build Hoot.  The VagrantBuild.sh script will build Hoot.
 
-# switch to auto mode and use the highest priority installed alternatives for Java.
-sudo update-alternatives --auto java
-sudo update-alternatives --auto javac
-
-
+# Setup and clean out the directories that the UI uses
 if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
     mkdir -p $HOOT_HOME/userfiles/ingest/processed
 fi
