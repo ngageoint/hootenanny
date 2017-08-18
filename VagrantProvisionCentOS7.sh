@@ -125,10 +125,10 @@ sudo yum -y install \
     swig \
     tex* \
     unzip \
-    v8 \
     v8-devel \
     w3m \
     words \
+    xorg-x11-server-Xvfb \
     zip \
 
 
@@ -283,7 +283,7 @@ cd ~
 if  ! rpm -qa | grep google-chrome-stable; then
     echo "### Installing Chrome..."
     if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
-        wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+      wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
     fi
     sudo yum -y install ./google-chrome-stable_current_*.rpm
 fi
@@ -292,8 +292,12 @@ if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
     mkdir -p ~/bin
     if [ ! -f chromedriver_linux64.zip ]; then
-      LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
-      wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
+#       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+#       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
+
+# Errors with the latest release (2/31) wanting glibc v2.18 when only glibc v2.17 is available
+# https://bugs.chromium.org/p/chromedriver/issues/detail?id=1894#c2
+      wget --quiet http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
     fi
     unzip -d ~/bin chromedriver_linux64.zip
 else
@@ -721,6 +725,13 @@ rm -rf $HOOT_HOME/userfiles/tmp
 # This is defensive!
 # We do this so that Tomcat doesnt. If it does, it screws the permissions up
 mkdir -p $HOOT_HOME/userfiles/tmp
+
+# OK, this is seriously UGLY but it fixes an NFS problem
+chmod -R 777 $HOOT_HOME/userfiles
+
+# This is very ugly.
+# If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
+chmod go+rx ~
 
 
 ##########################################
