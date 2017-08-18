@@ -284,7 +284,6 @@ fi
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-
 if  ! rpm -qa | grep google-chrome-stable; then
     echo "### Installing Chrome..."
     if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
@@ -347,7 +346,7 @@ GDAL_VERSION=2.1.4
 FGDB_VERSION=1.5.1
 FGDB_VERSION2=`echo $FGDB_VERSION | sed 's/\./_/g;'`
 
-if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB ); then
+if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSION && ogrinfo --formats | grep -q FileGDB ); then
     if [ ! -f gdal-$GDAL_VERSION.tar.gz ]; then
         echo "### Downloading GDAL $GDAL_VERSION source..."
         wget --quiet http://download.osgeo.org/gdal/$GDAL_VERSION/gdal-$GDAL_VERSION.tar.gz
@@ -361,7 +360,6 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB
         echo "### Downloading FileGDB API source..."
         wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
     fi
-
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
         sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
@@ -670,22 +668,20 @@ cd ~
 
 ##### These two are next to do.
 echo "### Installing node-mapnik-server..."
-# sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-# sudo chmod a+x /etc/init.d/node-mapnik-server
-# # Make sure all npm modules are installed
-# cd $HOOT_HOME/node-mapnik-server
-# npm install --silent
-# # Clean up after the npm install
-# rm -rf ~/tmp
+sudo ln -s $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
+# Make sure all npm modules are installed
+cd $HOOT_HOME/node-mapnik-server
+npm install --silent
+# Clean up after the npm install
+rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
-# sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
-# sudo chmod a+x /etc/init.d/node-export-server
-# # Make sure all npm modules are installed
-# cd $HOOT_HOME/node-export-server
-# npm install --silent
-# # Clean up after the npm install
-# rm -rf ~/tmp
+sudo ln -s $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
+# Make sure all npm modules are installed
+cd $HOOT_HOME/node-export-server
+npm install --silent
+# Clean up after the npm install
+rm -rf ~/tmp
 
 cd $HOOT_HOME
 
