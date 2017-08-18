@@ -25,7 +25,7 @@ fi
 
 # Taking out ui-tests until we get Tomcat8 etc installed
 # aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests
-aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
