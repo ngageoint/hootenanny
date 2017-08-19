@@ -8,10 +8,6 @@ echo GROUP: $VMGROUP
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
-source ~/.bash_profile
-
-# Keep VagrantBuild.sh happy
-#ln -s ~/.bash_profile ~/.profile
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -27,19 +23,7 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
-echo "### Setup NTP..."
-sudo yum -q -y install ntp
-sudo chkconfig ntpd on
-#TODO: Better way to do this?
-sudo systemctl stop ntpd
-sudo ntpd -gq
-sudo systemctl start ntpd
-
-
 # Install Java8
-# Make sure that we are in ~ before trying to wget & install stuff
-cd ~
-
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 # if  ! rpm -qa | grep jdk-8u144-linux; then
@@ -115,10 +99,9 @@ sudo yum -y install \
     zip \
 
 
-
 # Now make sure that the version of Java we installed gets used.
 # maven installs java-1.8.0-openjdk
-#sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
+# sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
 
 echo "##### Temp installs #####"
 
@@ -129,7 +112,8 @@ git checkout tags/1.3.1
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
-echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
+# echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
+echo "COMPILER_GCC      = g++ -std=c++11" >> make.settings.local
 # Total hack because 1.3.1 doesn't compile right on CentOS7
 sed -i 's/#include <sys\/mman.h>/#include <sys\/mman.h>\n#include <unistd.h>/g' ./utils/mlock.cpp
 
@@ -170,6 +154,7 @@ cp LocalConfig.pri.orig LocalConfig.pri
 echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
 #####
 
+cd ~
 
 echo "### Configuring environment..."
 
@@ -184,14 +169,14 @@ if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
-    echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/usr/java/jdk1.8.0_144" >> ~/.bash_profile
-    echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
-    source ~/.bash_profile
-else
-    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
-fi
+# if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
+#     echo "Adding Java home to profile..."
+#     echo "export JAVA_HOME=/usr/java/jdk1.8.0_144" >> ~/.bash_profile
+#     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
+#     source ~/.bash_profile
+# else
+#     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
+# fi
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
@@ -363,19 +348,6 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
-if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
-    echo "Removing LocalHoot.json..."
-    rm -f $HOOT_HOME/conf/LocalHoot.json
-fi
-
-if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
-    echo "Removing services local.conf..."
-    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
-fi
-
-cd $HOOT_HOME
-source ./SetupEnv.sh
-
 echo "### Configuring Hoot..."
 echo HOOT_HOME: $HOOT_HOME
 
@@ -384,6 +356,7 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
+# Configure with just R&D and Services.
 aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
