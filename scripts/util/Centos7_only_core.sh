@@ -42,14 +42,14 @@ cd ~
 
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-if  ! rpm -qa | grep jdk-8u144-linux; then
-    echo "### Installing Java8..."
-    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
-      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
-    fi
-    sudo yum -y install ./jdk-8u144-linux-x64.rpm
-fi
+# if  ! rpm -qa | grep jdk-8u144-linux; then
+#     echo "### Installing Java8..."
+#     if [ ! -f jdk-8u144-linux-x64.rpm ]; then
+#       JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+#       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
+#     fi
+#     sudo yum -y install ./jdk-8u144-linux-x64.rpm
+# fi
 
 echo "### Installing the repo for an ancient version of NodeJS"
 curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
@@ -58,16 +58,6 @@ echo "### Installing an ancient version of NodeJS"
 sudo yum install -y \
   nodejs-0.10.46 \
   nodejs-devel-0.10.46
-
-# echo "### Installing and locking the GEOS version to 3.4.2"
-# This works but yum conflicts with postgis2_95
-# sudo yum install -y yum-plugin-versionlock
-# sudo yum install -y \
-#     geos-3.4.2-2.el7 \
-#     geos-devel-3.4.2-2.el7
-#
-# sudo yum versionlock geos*
-
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -80,8 +70,6 @@ sudo yum -y install \
     ccache \
     cmake \
     cppunit-devel \
-    dblatex \
-    doxygen \
     gcc \
     gcc-c++ \
     gdb \
@@ -91,7 +79,6 @@ sudo yum -y install \
     git-core \
     glpk \
     glpk-devel \
-    gnuplot \
     libicu-devel \
     libpng-devel \
     libtool \
@@ -120,28 +107,18 @@ sudo yum -y install \
     qt \
     qt-devel \
     qt-postgresql \
-    qtwebkit \
-    qtwebkit-devel \
     swig \
-    tex* \
     unzip \
     v8-devel \
     w3m \
     words \
-    xorg-x11-server-Xvfb \
     zip \
 
 
 
 # Now make sure that the version of Java we installed gets used.
 # maven installs java-1.8.0-openjdk
-sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
-
-##### tex* is not optimal. I think this adds too much stuff that we don't need. But, to remove it, we need
-# to crawl through the Hoot documentation dependencies
-# Things to look at:
-#     texlive \
-#     texlive-cyrillic \
+#sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
 
 echo "##### Temp installs #####"
 
@@ -424,9 +401,9 @@ make -s clean && make -sj3
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now
-echo "Building Hoot docs... "
-make -sj$(nproc) docs &> /dev/null || true
-make -sj$(nproc) docs
+# echo "Building Hoot docs... "
+# make -sj$(nproc) docs &> /dev/null || true
+# make -sj$(nproc) docs
 
 hoot version
 
