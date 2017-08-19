@@ -37,7 +37,6 @@ Vagrant.configure(2) do |config|
 
   # Global settings - default for Ubuntu1404
 
-
   # Ubuntu1404 Box
   # This is the standard, working box
   config.vm.define "default", primary: true do |hoot|
@@ -67,8 +66,8 @@ Vagrant.configure(2) do |config|
     #hoot_ubuntu1604.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
 
+
   # Centos7 box
-  # For testing
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     # This seems to be the "latest" version of centos7
     # hoot_centos7.vm.box = "centos/7"
@@ -98,6 +97,30 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik start", run: "always"
     hoot_centos7.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo service node-export start", run: "always"
     hoot_centos7.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+  end
+
+
+  # Centos7 - Hoot core ONLY. No UI
+  config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
+    hoot_centos7_core.vm.box = "bento/centos-7.2"
+    hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
+
+    # Stop the default vagrant rsyncing
+    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+
+    # Use the plugin to install bindfs and make a dummy mount
+    hoot_centos7_core.bindfs.bind_folder "/tmp", "/home/vagrant/bindfstmp", perms: nil
+
+    # Create an empty directory
+    config.vm.synced_folder ".", "/vagrant/home/.workspace-nfs", type: "rsync", disabled: true
+
+    hoot_centos7_core.vm.network "private_network", ip: "192.168.33.10"
+    hoot_centos7_core.nfs.map_uid = Process.uid
+    hoot_centos7_core.nfs.map_gid = Process.gid
+    hoot_centos7_core.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs", :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
+    hoot_centos7_core.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
+
+    hoot_centos7_core.vm.provision "hoot", type: "shell", :privileged => false, :path => "scripts/util/Centos7_only_core.sh"
   end
 
   # Provider-specific configuration so you can fine-tune various
