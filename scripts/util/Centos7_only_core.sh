@@ -731,4 +731,33 @@ chmod -R 777 $HOOT_HOME/userfiles
 chmod go+rx ~
 
 
+# Now build Hoot
+source ./SetupEnv.sh
+
+echo "### Configuring Hoot..."
+echo HOOT_HOME: $HOOT_HOME
+
+# Going to remove this so that it gets updated
+if [ -f missing ]; then
+  rm -f missing
+fi
+
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services
+
+if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
+    echo 'Customizing LocalConfig.pri...'
+    cp LocalConfig.pri.orig LocalConfig.pri
+    sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
+    sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
+fi
+
+echo "Building Hoot... "
+echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
+# Dropping this down by one as a test
+# make -s clean && make -sj$(nproc)
+make -s clean && make -sj3
+
+echo "### Done..."
+hoot version
+
 ##########################################
