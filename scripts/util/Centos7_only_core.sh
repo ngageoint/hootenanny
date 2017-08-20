@@ -8,6 +8,10 @@ echo GROUP: $VMGROUP
 HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
+source ~/.bash_profile
+
+# Keep VagrantBuild.sh happy
+#ln -s ~/.bash_profile ~/.profile
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -23,17 +27,29 @@ sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
 sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
+echo "### Setup NTP..."
+sudo yum -q -y install ntp
+sudo chkconfig ntpd on
+#TODO: Better way to do this?
+sudo systemctl stop ntpd
+sudo ntpd -gq
+sudo systemctl start ntpd
+
+
 # Install Java8
+# Make sure that we are in ~ before trying to wget & install stuff
+cd ~
+
 # Official download page:
 # http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-# if  ! rpm -qa | grep jdk-8u144-linux; then
-#     echo "### Installing Java8..."
-#     if [ ! -f jdk-8u144-linux-x64.rpm ]; then
-#       JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
-#       wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
-#     fi
-#     sudo yum -y install ./jdk-8u144-linux-x64.rpm
-# fi
+if  ! rpm -qa | grep jdk-8u144-linux; then
+    echo "### Installing Java8..."
+    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
+      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
+    fi
+    sudo yum -y install ./jdk-8u144-linux-x64.rpm
+fi
 
 echo "### Installing the repo for an ancient version of NodeJS"
 curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
@@ -42,6 +58,16 @@ echo "### Installing an ancient version of NodeJS"
 sudo yum install -y \
   nodejs-0.10.46 \
   nodejs-devel-0.10.46
+
+# echo "### Installing and locking the GEOS version to 3.4.2"
+# This works but yum conflicts with postgis2_95
+# sudo yum install -y yum-plugin-versionlock
+# sudo yum install -y \
+#     geos-3.4.2-2.el7 \
+#     geos-devel-3.4.2-2.el7
+#
+# sudo yum versionlock geos*
+
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -54,6 +80,8 @@ sudo yum -y install \
     ccache \
     cmake \
     cppunit-devel \
+    dblatex \
+    doxygen \
     gcc \
     gcc-c++ \
     gdb \
@@ -63,6 +91,7 @@ sudo yum -y install \
     git-core \
     glpk \
     glpk-devel \
+    gnuplot \
     libicu-devel \
     libpng-devel \
     libtool \
@@ -91,7 +120,10 @@ sudo yum -y install \
     qt \
     qt-devel \
     qt-postgresql \
+    qtwebkit \
+    qtwebkit-devel \
     swig \
+    tex* \
     unzip \
     v8-devel \
     w3m \
@@ -99,9 +131,12 @@ sudo yum -y install \
     zip \
 
 
+# Not installed:
+#    xorg-x11-server-Xvfb \
+
 # Now make sure that the version of Java we installed gets used.
 # maven installs java-1.8.0-openjdk
-# sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
+sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
 
 echo "##### Temp installs #####"
 
@@ -112,8 +147,7 @@ git checkout tags/1.3.1
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
-# echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
-echo "COMPILER_GCC      = g++ -std=c++11" >> make.settings.local
+echo "COMPILER_GCC      = g++ -std=c++0x" >> make.settings.local
 # Total hack because 1.3.1 doesn't compile right on CentOS7
 sed -i 's/#include <sys\/mman.h>/#include <sys\/mman.h>\n#include <unistd.h>/g' ./utils/mlock.cpp
 
@@ -154,7 +188,6 @@ cp LocalConfig.pri.orig LocalConfig.pri
 echo "QMAKE_CXXFLAGS += -std=c++11" >> LocalConfig.pri
 #####
 
-cd ~
 
 echo "### Configuring environment..."
 
@@ -169,13 +202,113 @@ if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-# if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
-#     echo "Adding Java home to profile..."
-#     echo "export JAVA_HOME=/usr/java/jdk1.8.0_144" >> ~/.bash_profile
-#     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
+if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
+    echo "Adding Java home to profile..."
+    echo "export JAVA_HOME=/usr/java/jdk1.8.0_144" >> ~/.bash_profile
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> ~/.bash_profile
+    source ~/.bash_profile
+else
+    sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
+fi
+
+# if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
+#     echo "Adding Hadoop home to profile..."
+#     echo "export HADOOP_HOME=~/hadoop" >> ~/.bash_profile
+#     echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.bash_profile
 #     source ~/.bash_profile
+# fi
+
+# if ! ruby -v | grep --quiet 2.3.0; then
+#     # Ruby via rvm - from rvm.io
+#     # Running this twice so that it should not error out
+#     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 || \
+#         gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3  2>&1
+#
+#     curl -sSL https://raw.githubusercontent.com/rvm/rvm/master/binscripts/rvm-installer | bash -s stable
+#
+# #     source /home/$VMUSER/.rvm/scripts/rvm
+#     source ~/.rvm/scripts/rvm
+#
+#     stdbuf -o L -e L rvm install ruby-2.3
+#     rvm --default use 2.3
+
+# Don't install documentation for gems
+# cat > ~/.gemrc <<EOT
+#   install: --no-document
+#   update: --no-document
+# EOT
+# fi
+
+# gem installs are *very* slow, hence all the checks in place here to facilitate debugging
+# gem list --local | grep -q mime-types
+# if [ $? -eq 1 ]; then
+#    #sudo gem install mime-types -v 2.6.2
+#    gem install mime-types
+# fi
+# gem list --local | grep -q cucumber
+# if [ $? -eq 1 ]; then
+#    #sudo gem install cucumber
+#    gem install cucumber
+# fi
+# gem list --local | grep -q capybara-webkit
+# if [ $? -eq 1 ]; then
+#    #sudo gem install capybara-webkit
+#    gem install capybara-webkit
+# fi
+# gem list --local | grep -q selenium-webdriver
+# if [ $? -eq 1 ]; then
+#    #sudo gem install selenium-webdriver
+#    gem install selenium-webdriver
+# fi
+# gem list --local | grep -q rspec
+# if [ $? -eq 1 ]; then
+#    #sudo gem install rspec
+#    gem install rspec
+# fi
+# gem list --local | grep -q capybara-screenshot
+# if [ $? -eq 1 ]; then
+#    #sudo gem install capybara-screenshot
+#    gem install capybara-screenshot
+# fi
+# gem list --local | grep -q selenium-cucumber
+# if [ $? -eq 1 ]; then
+#    #sudo gem install selenium-cucumber
+#    gem install selenium-cucumber
+# fi
+
+# Make sure that we are in ~ before trying to wget & install stuff
+cd ~
+
+
+# if  ! rpm -qa | grep google-chrome-stable; then
+#     echo "### Installing Chrome..."
+#     if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
+#       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+#     fi
+#     sudo yum -y install ./google-chrome-stable_current_*.rpm
+# fi
+#
+# if [ ! -f bin/chromedriver ]; then
+#     echo "### Installing Chromedriver..."
+#     mkdir -p ~/bin
+#     if [ ! -f chromedriver_linux64.zip ]; then
+# #       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+# #       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
+#
+# # Errors with the latest release (2/31) wanting glibc v2.18 when only glibc v2.17 is available
+# # https://bugs.chromium.org/p/chromedriver/issues/detail?id=1894#c2
+#       wget --quiet http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
+#     fi
+#     unzip -d ~/bin chromedriver_linux64.zip
 # else
-#     sed -i '/^export JAVA_HOME=.*/c\export JAVA_HOME=\/usr\/java\/jdk1.8.0_144' ~/.bash_profile
+#   LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
+#   if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
+#     echo "### Updating Chromedriver"
+#     rm ~/bin/chromedriver
+#     rm ~/chromedriver_linux64.zip
+#     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
+#     unzip -o -d ~/bin chromedriver_linux64.zip
+#   fi
 # fi
 
 if [ ! -f bin/osmosis ]; then
@@ -223,6 +356,7 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --version | grep -q $GDAL_VERSIO
         echo "### Downloading FileGDB API source..."
         wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_${FGDB_VERSION}/FileGDB_API_${FGDB_VERSION2}-64.tar.gz
     fi
+
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
         sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_${FGDB_VERSION2}-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
@@ -338,6 +472,161 @@ if ! grep --quiet 2097152 $SYSCTL_CONF; then
 fi
 sudo systemctl restart postgresql-$PG_VERSION
 
+##### Hadoop #####
+cd ~
+# hoot has only been tested successfully with hadoop 0.20.2, which is not available from public repos,
+# so purposefully not installing hoot from the repos.
+# if ! hash hadoop >/dev/null 2>&1 ; then
+#   echo "Installing Hadoop..."
+#   if [ ! -f hadoop-0.20.2.tar.gz ]; then
+#     wget --quiet https://archive.apache.org/dist/hadoop/core/hadoop-0.20.2/hadoop-0.20.2.tar.gz
+#   fi
+#
+#   if [ ! -f ~/.ssh/id_rsa ]; then
+#     ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+#     cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+#     ssh-keyscan -H localhost >> ~/.ssh/known_hosts
+#   fi
+#   chmod 600 ~/.ssh/authorized_keys
+#
+#   #cd /usr/local
+#   cd ~
+#   sudo tar -zxf ~/hadoop-0.20.2.tar.gz
+#   sudo chown -R $VMUSER:$VMGROUP hadoop-0.20.2
+#   sudo ln -s hadoop-0.20.2 hadoop
+#   sudo chown -R $VMUSER:$VMGROUP hadoop
+#   cd hadoop
+#   sudo find . -type d -exec chmod a+rwx {} \;
+#   sudo find . -type f -exec chmod a+rw {} \;
+#   cd ~
+#
+# sudo rm -f $HADOOP_HOME/conf/core-site.xml
+# sudo bash -c "cat >> $HADOOP_HOME/conf/core-site.xml" <<EOT
+#
+# <configuration>
+#   <property>
+#     <name>fs.default.name</name>
+#     <value>hdfs://localhost:9000/</value>
+#   </property>
+# </configuration>
+# EOT
+# sudo rm -f $HADOOP_HOME/conf/mapred-site.xml
+# sudo bash -c "cat >> $HADOOP_HOME/conf/mapred-site.xml" <<EOT
+#
+# <configuration>
+#   <property>
+#     <name>mapred.job.tracker</name>
+#     <value>localhost:9001</value>
+#   </property>
+#   <property>
+#     <name>mapred.job.tracker.http.address</name>
+#     <value>0.0.0.0:50030</value>
+#   </property>
+#   <property>
+#     <name>mapred.task.tracker.http.address</name>
+#     <value>0.0.0.0:50060</value>
+#   </property>
+#   <property>
+#     <name>mapred.child.java.opts</name>
+#     <value>-Xmx2048m</value>
+#   </property>
+#   <property>
+#     <name>mapred.map.tasks</name>
+#     <value>17</value>
+#   </property>
+#   <property>
+#     <name>mapred.tasktracker.map.tasks.maximum</name>
+#     <value>4</value>
+#   </property>
+#   <property>
+#     <name>mapred.tasktracker.reduce.tasks.maximum</name>
+#     <value>2</value>
+#   </property>
+#   <property>
+#     <name>mapred.reduce.tasks</name>
+#     <value>1</value>
+#   </property>
+# </configuration>
+# EOT
+# sudo rm -f $HADOOP_HOME/conf/hdfs-site.xml
+# sudo bash -c "cat >> $HADOOP_HOME/conf/hdfs-site.xml" <<EOT
+#
+# <configuration>
+#   <property>
+#     <name>dfs.secondary.http.address</name>
+#     <value>0.0.0.0:50090</value>
+#   </property>
+#   <property>
+#     <name>dfs.datanode.address</name>
+#     <value>0.0.0.0:50010</value>
+#   </property>
+#   <property>
+#     <name>dfs.datanode.http.address</name>
+#     <value>0.0.0.0:50075</value>
+#   </property>
+#   <property>
+#     <name>dfs.datanode.ipc.address</name>
+#     <value>0.0.0.0:50020</value>
+#   </property>
+#   <property>
+#     <name>dfs.http.address</name>
+#     <value>0.0.0.0:50070</value>
+#   </property>
+#   <property>
+#     <name>dfs.datanode.https.address</name>
+#     <value>0.0.0.0:50475</value>
+#   </property>
+#   <property>
+#     <name>dfs.https.address</name>
+#     <value>0.0.0.0:50470</value>
+#   </property>
+#   <property>
+#     <name>dfs.replication</name>
+#     <value>2</value>
+#   </property>
+#   <property>
+#     <name>dfs.umaskmode</name>
+#     <value>002</value>
+#   </property>
+#   <property>
+#     <name>fs.checkpoint.dir</name>
+#     <value>$HADOOP_HOME/dfs/namesecondary</value>
+#   </property>
+#   <property>
+#     <name>dfs.name.dir</name>
+#     <value>$HADOOP_HOME/dfs/name</value>
+#   </property>
+#   <property>
+#     <name>dfs.data.dir</name>
+#     <value>$HADOOP_HOME/dfs/data</value>
+#   </property>
+# </configuration>
+# EOT
+#
+#   sudo sed -i.bak 's/# export JAVA_HOME=\/usr\/lib\/j2sdk1.5-sun/export JAVA_HOME=\/usr\/java\/jdk1.8.0_144/g' $HADOOP_HOME/conf/hadoop-env.sh
+#   sudo sed -i.bak 's/#include <pthread.h>/#include <pthread.h>\n#include <unistd.h>/g' $HADOOP_HOME/src/c++/pipes/impl/HadoopPipes.cc
+#
+#   sudo mkdir -p $HADOOP_HOME/dfs/name/current
+#   # this could perhaps be more strict
+#   sudo chmod -R 777 $HADOOP_HOME
+#   sudo chmod go-w $HADOOP_HOME/bin $HADOOP_HOME
+#   echo 'Y' | hadoop namenode -format
+#
+#   cd /lib
+#   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
+#   cd /lib64
+#   sudo ln -s $JAVA_HOME/jre/lib/amd64/server/libjvm.so libjvm.so
+#   cd ~
+#
+#   # test hadoop out
+#   #stop-all.sh
+#   #start-all.sh
+#   #hadoop fs -ls /
+#   #hadoop jar ./hadoop-0.20.2-examples.jar pi 2 100
+# fi
+##### End Hadoop #####
+
+
 # Get ready to build Hoot
 cd $HOOT_HOME
 source ./SetupEnv.sh
@@ -348,35 +637,98 @@ if [ ! "$(ls -A hoot-ui)" ]; then
     git submodule init && git submodule update
 fi
 
-echo "### Configuring Hoot..."
-echo HOOT_HOME: $HOOT_HOME
+# echo "### Installing Tomcat8..."
+# TOMCAT_HOME=/usr/share/tomcat8
 
-# Going to remove this so that it gets updated
-if [ -f missing ]; then
-  rm -f missing
+# Install Tomcat 8
+# $HOOT_HOME/scripts/tomcat/tomcat8/centos7/tomcat8_install.sh
+
+# Configure Tomcat for the user
+# if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
+#     echo "### Adding Tomcat to profile..."
+#     echo "export TOMCAT8_HOME=$TOMCAT_HOME" >> ~/.bash_profile
+#     source ~/.bash_profile
+# fi
+
+if [ -f $HOOT_HOME/conf/LocalHoot.json ]; then
+    echo "Removing LocalHoot.json..."
+    rm -f $HOOT_HOME/conf/LocalHoot.json
 fi
 
-# Configure with just R&D and Services.
-aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services
-
-if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
-    echo 'Customizing LocalConfig.pri...'
-    cp LocalConfig.pri.orig LocalConfig.pri
-    sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
-    sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
+if [ -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf ]; then
+    echo "Removing services local.conf..."
+    rm -f $HOOT_HOME/hoot-services/src/main/resources/conf/local.conf
 fi
 
-echo "Building Hoot... "
-echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-# Dropping this down by one as a test
-# make -s clean && make -sj$(nproc)
-make -s clean && make -sj3
+# Making sure we know where we are
+cd ~
 
-# docs build is always failing the first time during the npm install portion for an unknown reason, but then
-# always passes the second time its run...needs fixed, but this is the workaround for now
-# echo "Building Hoot docs... "
-# make -sj$(nproc) docs &> /dev/null || true
-# make -sj$(nproc) docs
+##### These two are next to do.
+# echo "### Installing node-mapnik-server..."
+# sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
+# sudo chmod a+x /etc/init.d/node-mapnik-server
+# # Make sure all npm modules are installed
+# cd $HOOT_HOME/node-mapnik-server
+# npm install --silent
+# # Clean up after the npm install
+# rm -rf ~/tmp
+#
+# echo "### Installing node-export-server..."
+# sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
+# sudo chmod a+x /etc/init.d/node-export-server
+# # Make sure all npm modules are installed
+# cd $HOOT_HOME/node-export-server
+# npm install --silent
+# # Clean up after the npm install
+# rm -rf ~/tmp
 
-hoot version
+cd $HOOT_HOME
 
+# Update marker file date now that dependency and config stuff has run
+# The make command will exit and provide a warning to run 'vagrant provision'
+# if the marker file is older than this file (VagrantProvision.sh)
+touch Vagrant.marker
+
+# Setup and clean out the directories that the UI uses
+if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+    mkdir -p $HOOT_HOME/userfiles/ingest/processed
+fi
+
+# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
+rm -rf $HOOT_HOME/upload
+rm -rf $HOOT_HOME/tmp
+
+if [ -d "$HOOT_HOME/data/reports" ]; then
+    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/data/reports
+fi
+
+if [ -d "$HOOT_HOME/customscript" ]; then
+    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/customscript
+fi
+
+if [ -d "$HOOT_HOME/ingest" ]; then
+    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+    rm -rf $HOOT_HOME/ingest
+fi
+
+# Always start with a clean $HOOT_HOME/userfiles/tmp
+rm -rf $HOOT_HOME/userfiles/tmp
+
+# This is defensive!
+# We do this so that Tomcat doesnt. If it does, it screws the permissions up
+mkdir -p $HOOT_HOME/userfiles/tmp
+
+# OK, this is seriously UGLY but it fixes an NFS problem
+chmod -R 777 $HOOT_HOME/userfiles
+
+# This is very ugly.
+# If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
+chmod go+rx ~
+
+
+##########################################
