@@ -102,6 +102,12 @@ Vagrant.configure(2) do |config|
 
   # Centos7 - Hoot core ONLY. No UI
   config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
+    # Turn off port forwarding
+    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort, disabled: true
+    config.vm.network "forwarded_port", guest: 8094, host: transPort, disabled: true
+    config.vm.network "forwarded_port", guest: 8096, host: mergePort, disabled: true
+    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort, disabled: true
+
     hoot_centos7_core.vm.box = "bento/centos-7.2"
     hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
 
