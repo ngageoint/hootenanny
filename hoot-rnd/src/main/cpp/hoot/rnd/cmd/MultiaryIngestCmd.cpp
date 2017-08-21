@@ -117,7 +117,7 @@ public:
     //inputs must be sorted by id for changeset derivation to work
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
     //translating inputs to OSM
-    conf().set(ConfigOptions::getTranslationScriptKey(), "OSM_Ingest.js");
+    conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
 
     //sort incoming data by ID, if necessary, for changeset derivation (only passing nodes
     //through, so don't need to also sort by element type) -
