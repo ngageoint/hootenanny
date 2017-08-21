@@ -11,10 +11,10 @@ if [ -z "$OPT_COMMAND" ]; then
  exit 0
 fi
 
-EXISTING_INPUT=~/hoot/tmp/geonames/allCountries-11-18-13-10k.geonames
-NEW_INPUT=~/hoot/tmp/geonames/allCountries-8-15-17-10k.geonames
 REF_DIR=test-files/cmd/slow/MultiaryIngestCmdTest
-OUTPUT_DIR=~/hoot/test-output/cmd/slow/MultiaryIngestCmdTest
+EXISTING_INPUT=$REF_DIR/allCountries-11-18-13-10.geonames
+NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.geonames
+OUTPUT_DIR=test-output/cmd/slow/MultiaryIngestCmdTest
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-changeset.spark.1
@@ -22,7 +22,7 @@ FINAL_OUTPUT=$OUTPUT_DIR/allCountries.osm
 
 source conf/database/DatabaseConfig.sh
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-HOOT_OPTS="--info -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org"
+HOOT_OPTS="--trace -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org"
 
 echo ""
 echo "MULTIARY INGEST - DELETING EXISTING INPUT..."
@@ -37,7 +37,7 @@ hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-temp-"
 echo ""
 echo "MULTIARY INGEST - LOADING EXISTING INPUT..."
 echo ""
-hoot convert $HOOT_OPTS $EXISTING_INPUT "$HOOT_DB_URL/ExistingInput"
+hoot convert $HOOT_OPTS -D translation.script="translations/OSM_Ingest.js" -D convert.ops="hoot::TranslationVisitor" $EXISTING_INPUT "$HOOT_DB_URL/ExistingInput"
 
 echo ""
 echo "MULTIARY INGEST - INGESTING..."

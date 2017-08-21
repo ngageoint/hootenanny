@@ -53,7 +53,6 @@ boost::shared_ptr<OGRSpatialReference> ChangesetDeriver::getProjection() const
   return _from->getProjection();
 }
 
-
 void ChangesetDeriver::close()
 {
   _from->close();
@@ -77,6 +76,7 @@ Change ChangesetDeriver::_nextChange()
   LOG_VART(_from->hasMoreElements());
   LOG_VART(_toE.get());
   LOG_VART(_to->hasMoreElements());
+
   if (!_fromE.get() && _from->hasMoreElements())
   {
     _fromE = _from->readNextElement();

@@ -50,7 +50,6 @@ HOOT_FACTORY_REGISTER(OsmChangeWriter, SparkChangesetWriter)
 SparkChangesetWriter::SparkChangesetWriter() :
 _precision(round(ConfigOptions().getWriterPrecision()))
 {
-
 }
 
 SparkChangesetWriter::~SparkChangesetWriter()
@@ -126,11 +125,12 @@ void SparkChangesetWriter::writeChange(const Change& change)
   Envelope env = _bounds->calculateSearchBounds(/*OsmMapPtr()*/tmpMap, nodeCopy);
 
   QString changeLine;
-  changeLine += changeType % "\t";
-  changeLine += QString::number(env.getMinX(), 'g', 16) % "\t";
-  changeLine += QString::number(env.getMinY(), 'g', 16) % "\t";
-  changeLine += QString::number(env.getMaxX(), 'g', 16) % "\t";
-  changeLine += QString::number(env.getMaxY(), 'g', 16) % "\t";
+  changeLine +=
+    changeType % "\t" %
+    QString::number(env.getMinX(), 'g', _precision) % "\t" %
+    QString::number(env.getMinY(), 'g', _precision) % "\t" %
+    QString::number(env.getMaxX(), 'g', _precision) % "\t" %
+    QString::number(env.getMaxY(), 'g', _precision) % "\t";
   if (change.type == Change::Modify)
   {
     // element hash before change
@@ -149,9 +149,9 @@ void SparkChangesetWriter::writeChange(const Change& change)
       QString::fromUtf8(CalculateHashVisitor::toHash(previousNodeCopy).toHex().data()) % "\t";
   }
   // element hash after change
-  changeLine += QString::fromUtf8(CalculateHashVisitor::toHash(nodeCopy).toHex().data()) % "\t";
-  changeLine += _jsonWriter.toString(tmpMap);
-  changeLine += "\n";
+  changeLine +=
+    QString::fromUtf8(CalculateHashVisitor::toHash(nodeCopy).toHex().data()) % "\t" %
+    _jsonWriter.toString(tmpMap).trimmed() % "\n";
 
   if (_fp->write(changeLine.toUtf8()) == -1)
   {

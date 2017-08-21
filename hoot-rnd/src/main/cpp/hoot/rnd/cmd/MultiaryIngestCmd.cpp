@@ -172,8 +172,10 @@ private:
     boost::shared_ptr<PartialOsmMapReader> unsortedNewInputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(newDataInput));
+    unsortedNewInputReader->setUseDataSourceIds(true);
     boost::shared_ptr<ElementInputStream> unsortedNewInputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(unsortedNewInputReader);
+
     boost::shared_ptr<PoiCriterion> elementCriterion;
     //as the incoming data is read, filter it down to POIs only and translate each element
     //all geonames data are pois by definition, so skip the element criterion filtering expense
@@ -210,6 +212,7 @@ private:
     boost::shared_ptr<PartialOsmMapReader> newDataInputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
+    newDataInputReader->setUseDataSourceIds(true);
     newDataInputReader->open(sortedNewDataInput);
     return boost::dynamic_pointer_cast<ElementInputStream>(newDataInputReader);
   }
@@ -222,6 +225,7 @@ private:
       " and changeset file: " << changesetOutput << "...")
 
     boost::shared_ptr<HootApiDbReader> existingDbLayerReader(new HootApiDbReader());
+    existingDbLayerReader->setUseDataSourceIds(true);
     existingDbLayerReader->open(dbLayerOutput);
 
     ChangesetDeriverPtr changesetDeriver(
@@ -232,6 +236,7 @@ private:
     HootApiDbWriter existingDbLayerChangeWriter;
     existingDbLayerChangeWriter.setCreateUser(false);
     existingDbLayerChangeWriter.setOverwriteMap(false);
+    existingDbLayerChangeWriter.setRemap(false);
     existingDbLayerChangeWriter.open(dbLayerOutput);
 
     SparkChangesetWriter changesetFileWriter;
