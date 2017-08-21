@@ -53,9 +53,10 @@ namespace hoot
 
 /**
  * This command takes an input along with database and changeset outputs.  The input is filtered
- * down to POIs only and translated to OSM, then sorted by element ID if necessary, then compared
- * to the database output layer in order to derive a changeset.  The changeset changes are written
- * both to the database output layer as features and the changeset output as change statements.
+ * down to POIs only and translated to OSM, then sorted by element ID if necessary, and then
+ * compared to the database output layer in order to derive a changeset.  The changeset changes
+ * are written both to the database output layer as features and the changeset output as change
+ * statements.
  */
 class MultiaryIngestCmd : public BaseCommand
 {
@@ -63,7 +64,20 @@ public:
 
   static string className() { return "hoot::MultiaryIngestCmd"; }
 
-  MultiaryIngestCmd() { }
+  MultiaryIngestCmd() :
+  _sortInput(false)
+  {
+  }
+
+  virtual ~MultiaryIngestCmd()
+  {
+    //delete the temporary db layer used for sorting
+    if (_sortInput)
+    {
+      LOG_DEBUG("Deleting temporary map: " << _sortedNewDataInput << "...");
+      HootApiDbWriter().deleteMap(_sortedNewDataInput);
+    }
+  }
 
   virtual QString getName() const { return "multiary-ingest"; }
 
@@ -78,16 +92,16 @@ public:
     const QString newDataInput = args[0];   //this must be streamable
     const QString dbLayerOutput = args[1];  //this must be hootapidb://
     const QString changesetOutput = args[2];    //this must be .spark.x
-    bool sortInput = false;
+    _sortInput = false;
     if (args[3].toLower() == "true")
     {
-      sortInput = true;
+      _sortInput = true;
     }
 
     LOG_VARD(newDataInput);
     LOG_VARD(dbLayerOutput);
     LOG_VARD(changesetOutput);
-    LOG_VARD(sortInput);
+    LOG_VARD(_sortInput);
 
     if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newDataInput))
     {
@@ -121,21 +135,15 @@ public:
 
     //sort incoming data by ID, if necessary, for changeset derivation (only passing nodes
     //through, so don't need to also sort by element type) -
-    const QString sortedNewDataInput = _getSortedInput(newDataInput, sortInput);
+    _sortedNewDataInput = _getSortedInput(newDataInput);
 
     //create changeset changes and write them to the existing db layer and a changeset file for
     //external use in spark
     _writeChangesetData(
       //as the incoming data is read, filter it down to POIs only and translate each element
-      _getNewDataInputStream(sortedNewDataInput),
+      _getNewDataInputStream(_sortedNewDataInput),
       dbLayerOutput,
       changesetOutput);
-
-    //delete the temporary db layer used for sorting
-    if (sortInput)
-    {
-      HootApiDbWriter().deleteMap(sortedNewDataInput);
-    }
 
     LOG_INFO(
       "Multiary data ingest complete for input: " << newDataInput <<
@@ -147,10 +155,13 @@ public:
 
 private:
 
-  QString _getSortedInput(const QString newDataInput, const bool sortInput)
+  bool _sortInput;
+  QString _sortedNewDataInput;
+
+  QString _getSortedInput(const QString newDataInput)
   {
     //OsmPbfReader tmpPbfReader; //getSortedTypeThenId
-    if (!sortInput) //TODO: if pbf, check pbf format flag
+    if (!_sortInput) //TODO: if pbf, check pbf format flag
     {
       return newDataInput;
     }
@@ -231,14 +242,14 @@ private:
       const Change change = changesetDeriver->readNextChange();
       if (change.type != Change::Unknown)
       {
-        existingDbLayerChangeWriter.writeChange(change);
         changesetFileWriter.writeChange(change);
+        existingDbLayerChangeWriter.writeChange(change);
       }
     }
 
-    (boost::dynamic_pointer_cast<PartialOsmMapReader>(newDataInputStream))->finalizePartial();
-    existingDbLayerReader->finalizePartial();
-    existingDbLayerChangeWriter.finalizePartial();
+    //all readers/writers involved are cleaning up by themselves in their destructors
+
+    LOG_DEBUG("Multiary change writing complete.");
   }
 };
 

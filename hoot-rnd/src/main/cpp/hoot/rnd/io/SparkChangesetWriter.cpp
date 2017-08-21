@@ -40,7 +40,7 @@ using namespace geos::geom;
 #include <hoot/core/visitors/CalculateHashVisitor.h>
 
 // Qt
-//#include <QStringBuilder> //could optimize with this later, if needed
+#include <QStringBuilder>
 
 namespace hoot
 {
@@ -48,8 +48,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangeWriter, SparkChangesetWriter)
 
 SparkChangesetWriter::SparkChangesetWriter() :
-_precision(round(ConfigOptions().getWriterPrecision())),
-_tmpMap(OsmMapPtr(new OsmMap()))
+_precision(round(ConfigOptions().getWriterPrecision()))
 {
 
 }
@@ -89,8 +88,8 @@ void SparkChangesetWriter::open(QString fileName)
 
   if (!_bounds.get())
   {
-    throw HootException("You must specify one match creator that supports search radius "
-      "calculation.");
+    throw HootException(
+      "You must specify one match creator that supports search radius calculation.");
   }
 }
 
@@ -100,6 +99,8 @@ void SparkChangesetWriter::writeChange(const Change& change)
   {
     throw NotImplementedException("Only nodes are supported.");
   }
+
+  LOG_VART(change);
 
   QString changeType;
   switch (change.type)
@@ -120,14 +121,16 @@ void SparkChangesetWriter::writeChange(const Change& change)
   ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.e);
   NodePtr nodeCopy(dynamic_cast<Node*>(node->clone()));
   _exportTagsVisitor.visit(nodeCopy);
-  Envelope env = _bounds->calculateSearchBounds(OsmMapPtr(), nodeCopy);
+  OsmMapPtr tmpMap(new OsmMap());
+  tmpMap->addElement(nodeCopy);
+  Envelope env = _bounds->calculateSearchBounds(/*OsmMapPtr()*/tmpMap, nodeCopy);
 
   QString changeLine;
-  changeLine += changeType + "\t";
-  changeLine += QString::number(env.getMinX(), 'g', 16) + "\t";
-  changeLine += QString::number(env.getMinY(), 'g', 16) + "\t";
-  changeLine += QString::number(env.getMaxX(), 'g', 16) + "\t";
-  changeLine += QString::number(env.getMaxY(), 'g', 16) + "\t";
+  changeLine += changeType % "\t";
+  changeLine += QString::number(env.getMinX(), 'g', 16) % "\t";
+  changeLine += QString::number(env.getMinY(), 'g', 16) % "\t";
+  changeLine += QString::number(env.getMaxX(), 'g', 16) % "\t";
+  changeLine += QString::number(env.getMaxY(), 'g', 16) % "\t";
   if (change.type == Change::Modify)
   {
     // element hash before change
@@ -143,13 +146,11 @@ void SparkChangesetWriter::writeChange(const Change& change)
     NodePtr previousNodeCopy(dynamic_cast<Node*>(previousNode->clone()));
     _exportTagsVisitor.visit(previousNodeCopy);
     changeLine +=
-      QString::fromUtf8(CalculateHashVisitor::toHash(previousNodeCopy).toHex().data()) + "\t";
+      QString::fromUtf8(CalculateHashVisitor::toHash(previousNodeCopy).toHex().data()) % "\t";
   }
   // element hash after change
-  changeLine += QString::fromUtf8(CalculateHashVisitor::toHash(nodeCopy).toHex().data()) + "\t";
-  _tmpMap->clear();
-  _tmpMap->addElement(nodeCopy);
-  changeLine += _jsonWriter.toString(_tmpMap);
+  changeLine += QString::fromUtf8(CalculateHashVisitor::toHash(nodeCopy).toHex().data()) % "\t";
+  changeLine += _jsonWriter.toString(tmpMap);
   changeLine += "\n";
 
   if (_fp->write(changeLine.toUtf8()) == -1)

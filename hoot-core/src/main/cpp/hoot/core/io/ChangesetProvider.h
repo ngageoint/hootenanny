@@ -76,8 +76,8 @@ public:
   QString toString() const
   {
     return
-      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString() +
-      ", Note: " + note + "\n" + e->toString();
+      "Change type: " + changeTypeToString(type) + ", ID: " + e->getElementId().toString(); //+
+      //", Note: " + note + "\n" + e->toString();
   }
 
   ConstElementPtr e;

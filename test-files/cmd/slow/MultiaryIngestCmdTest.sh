@@ -11,8 +11,8 @@ if [ -z "$OPT_COMMAND" ]; then
  exit 0
 fi
 
-EXISTING_INPUT=~/hoot/tmp/geonames/allCountries-11-18-13-100k.geonames
-NEW_INPUT=~/hoot/tmp/geonames/allCountries-8-15-17-100k.geonames
+EXISTING_INPUT=~/hoot/tmp/geonames/allCountries-11-18-13-10k.geonames
+NEW_INPUT=~/hoot/tmp/geonames/allCountries-8-15-17-10k.geonames
 REF_DIR=test-files/cmd/slow/MultiaryIngestCmdTest
 OUTPUT_DIR=~/hoot/test-output/cmd/slow/MultiaryIngestCmdTest
 rm -rf $OUTPUT_DIR
@@ -22,12 +22,22 @@ FINAL_OUTPUT=$OUTPUT_DIR/allCountries.geonames
 
 source conf/database/DatabaseConfig.sh
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-HOOT_OPTS="--debug -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org"
+HOOT_OPTS="--info -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org"
 
+echo "DELETING EXISTING INPUT..."
+echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/ExistingInput"
+echo "DELETING TEMP INPUT..."
+echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-temp-"
+echo "LOADING EXISTING INPUT..."
+echo ""
 hoot convert $HOOT_OPTS $EXISTING_INPUT "$HOOT_DB_URL/ExistingInput"
+echo "INGESTING..."
+echo ""
 hoot multiary-ingest $HOOT_OPTS $NEW_INPUT "$HOOT_DB_URL/ExistingInput" $CHANGESET_OUTPUT true
+echo "EXPORTING FINAL OUTPUT..."
+echo ""
 hoot convert "$HOOT_DB_URL/ExistingInput" $FINAL_OUTPUT
 #hoot is-match $REF_DIR/geonames-output.osm $FINAL_OUTPUT 
 #diff $REF_DIR/geonames-changeset.spark.1 $CHANGESET_OUTPUT
