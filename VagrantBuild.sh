@@ -25,7 +25,7 @@ fi
 
 # Taking out ui-tests until we get Tomcat8 etc installed
 # aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests
-aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
@@ -36,7 +36,9 @@ fi
 
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-make -s clean && make -sj$(nproc)
+# Dropping this down by one as a test
+# make -s clean && make -sj$(nproc)
+make -s clean && make -sj3
 
 # Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
