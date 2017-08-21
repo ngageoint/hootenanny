@@ -40,6 +40,7 @@
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/io/ElementOutputStream.h>
+#include <hoot/core/io/GeoNamesReader.h>
 //#include <hoot/core/io/OsmPbfReader.h>
 
 // Qt
@@ -154,24 +155,41 @@ private:
       return newDataInput;
     }
 
-    //write the unsorted input to temp db layer; later it willbe queried back out sorted by id
+    //write the unsorted input to temp db layer; later it will be queried back out sorted by id
     //TODO: assuming performance here is a bottleneck, will later implement something that
-    //performs faster
+    //performs faster - either a file based merge sort, or using the db but with sql bulk copies
 
     boost::shared_ptr<PartialOsmMapReader> unsortedNewInputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(newDataInput));
     boost::shared_ptr<ElementInputStream> unsortedNewInputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(unsortedNewInputReader);
+    boost::shared_ptr<PoiCriterion> elementCriterion;
+    //all geonames data are pois by definition, so skip the element criterion filtering expense
+    //if (!GeoNamesReader().isSupported(newDataInput)) //TODO: re-enable this
+    //{
+      elementCriterion.reset(new PoiCriterion());
+    //}
+    unsortedNewInputStream.reset(
+      new ElementCriterionVisitorInputStream(
+        unsortedNewInputStream,
+        elementCriterion,
+        boost::shared_ptr<TranslationVisitor>(new TranslationVisitor())));
 
+    //TODO: add guid back in
     const QString tempNewInputLayer =
-      HootApiDb::getBaseUrl().toString() + "/MultiaryIngest-" + QUuid::createUuid().toString();
+      HootApiDb::getBaseUrl().toString() + "/MultiaryIngest-temp-";// + QUuid::createUuid().toString();
     boost::shared_ptr<HootApiDbWriter> unsortedNewInputLayerWriter(new HootApiDbWriter());
+    unsortedNewInputLayerWriter->setCreateUser(true);
+    unsortedNewInputLayerWriter->setOverwriteMap(true);
+    unsortedNewInputLayerWriter->setRemap(false);
     unsortedNewInputLayerWriter->open(tempNewInputLayer);
     boost::shared_ptr<ElementOutputStream> unsortedNewOutputStream =
       boost::dynamic_pointer_cast<ElementOutputStream>(unsortedNewInputLayerWriter);
 
+    LOG_DEBUG("Writing multiary input to temp location: " << tempNewInputLayer << "...");
     ElementOutputStream::writeAllElements(*unsortedNewInputStream, *unsortedNewOutputStream);
+    LOG_DEBUG("Multiary input written to temp location: " << tempNewInputLayer);
 
     return tempNewInputLayer;
   }
@@ -182,20 +200,16 @@ private:
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(sortedNewDataInput));
     newDataInputReader->open(sortedNewDataInput);
-
-    boost::shared_ptr<ElementInputStream> newDataInputStream =
-      boost::dynamic_pointer_cast<ElementInputStream>(newDataInputReader);
-    newDataInputStream.reset(
-      new ElementCriterionVisitorInputStream(
-        newDataInputStream,
-        boost::shared_ptr<PoiCriterion>(new PoiCriterion()),
-        boost::shared_ptr<TranslationVisitor>(new TranslationVisitor())));
-    return newDataInputStream;
+    return boost::dynamic_pointer_cast<ElementInputStream>(newDataInputReader);
   }
 
   void _writeChangesetData(boost::shared_ptr<ElementInputStream> newDataInputStream,
                            const QString dbLayerOutput, const QString changesetOutput)
   {
+    LOG_DEBUG(
+      "Writing multiary changeset data to existing layer: " << dbLayerOutput <<
+      " and changeset: " << changesetOutput << "...")
+
     boost::shared_ptr<HootApiDbReader> existingDbLayerReader(new HootApiDbReader());
     existingDbLayerReader->open(dbLayerOutput);
 
@@ -205,9 +219,13 @@ private:
         newDataInputStream));
 
     HootApiDbWriter existingDbLayerChangeWriter;
+    existingDbLayerChangeWriter.setCreateUser(false);
+    existingDbLayerChangeWriter.setOverwriteMap(false);
     existingDbLayerChangeWriter.open(dbLayerOutput);
+
     SparkChangesetWriter changesetFileWriter;
     changesetFileWriter.open(changesetOutput);
+
     while (changesetDeriver->hasMoreChanges())
     {
       const Change change = changesetDeriver->readNextChange();

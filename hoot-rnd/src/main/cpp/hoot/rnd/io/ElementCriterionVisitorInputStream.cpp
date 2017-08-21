@@ -49,9 +49,10 @@ boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getPr
 
 ElementPtr ElementCriterionVisitorInputStream::readNextElement()
 {
-  do {
+  do
+  {
     ElementPtr e = _elementSource->readNextElement();
-    if (_criterion->isSatisfied(e))
+    if (!_criterion.get() || _criterion->isSatisfied(e))
     {
       _visitor->visit(e);
       return e;
