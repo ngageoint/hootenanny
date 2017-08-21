@@ -30,7 +30,7 @@ Feature: Import Export Delete OSM Dataset
         And I context click the "dcpoi_clip_Cucumber" Dataset
         And I click the "Export" context menu item
         Then I should see element "[id='fileExportOutputName']" with value "dcpoi_clip_Cucumber"
-        When I select the "Open Street Map (OSM)" option in the "File Geodatabase" combobox
+        When I select the "OpenStreetMap (OSM)" option in the "File Geodatabase" combobox
         And I press "big.loud" span with text "Export"
         And I wait 30 seconds
         Then the download file "dcpoi_clip_Cucumber.zip" should exist
@@ -41,7 +41,7 @@ Feature: Import Export Delete OSM Dataset
         And I context click the "dcpoi_clip_Cucumber" Dataset
         And I click the "Export" context menu item
         Then I should see element "[id='fileExportOutputName']" with value "dcpoi_clip_Cucumber"
-        When I select the "Open Street Map (PBF)" option in the "File Geodatabase" combobox
+        When I select the "OpenStreetMap (PBF)" option in the "File Geodatabase" combobox
         And I press "big.loud" span with text "Export"
         And I wait 30 seconds
         Then the download file "dcpoi_clip_Cucumber.osm.pbf" should exist
