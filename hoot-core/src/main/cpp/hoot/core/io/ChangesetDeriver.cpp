@@ -100,7 +100,14 @@ Change ChangesetDeriver::_nextChange()
       "run out of from elements; 'from' element null; 'to' element not null: " <<
       _toE->getElementId() << "; creating 'to' element...");
 
-    _toE = _to->readNextElement();
+    if (_to->hasMoreElements())
+    {
+      _toE = _to->readNextElement();
+    }
+    else
+    {
+      _toE.reset();
+    }
     if (_toE)
     {
       LOG_TRACE("Next 'to' element: " << _toE->getElementId());
@@ -116,7 +123,14 @@ Change ChangesetDeriver::_nextChange()
       "run out of 'to' elements; to' element null; 'from' element not null: " <<
       _fromE->getElementId() << "; deleting 'from' element...");
 
-    _fromE = _from->readNextElement();
+    if (_from->hasMoreElements())
+    {
+      _fromE = _from->readNextElement();
+    }
+    else
+    {
+      _fromE.reset();
+    }
     if (_fromE)
     {
       LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
@@ -132,12 +146,27 @@ Change ChangesetDeriver::_nextChange()
         "skipping identical elements - 'from' element: " << _fromE->getElementId() <<
         " and 'to' element: " << _toE->getElementId() << "...");
 
-      _toE = _to->readNextElement();
+      if (_to->hasMoreElements())
+      {
+        _toE = _to->readNextElement();
+      }
+      else
+      {
+        _toE.reset();
+      }
       if (_toE)
       {
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
-      _fromE = _from->readNextElement();
+
+      if (_from->hasMoreElements())
+      {
+        _fromE = _from->readNextElement();
+      }
+      else
+      {
+        _fromE.reset();
+      }
       if (_fromE)
       {
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
@@ -159,7 +188,14 @@ Change ChangesetDeriver::_nextChange()
         "run out of from elements; 'from' element null; 'to' element not null: " <<
         _toE->getElementId() << "; creating 'to' element...");
 
-      _toE = _to->readNextElement();
+      if (_to->hasMoreElements())
+      {
+        _toE = _to->readNextElement();
+      }
+      else
+      {
+        _toE.reset();
+      }
       if (_toE)
       {
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
@@ -175,7 +211,14 @@ Change ChangesetDeriver::_nextChange()
         "run out of 'to' elements; to' element null; 'from' element not null: " <<
         _fromE->getElementId() << "; deleting 'from' element...");
 
-      _fromE = _from->readNextElement();
+      if (_from->hasMoreElements())
+      {
+        _fromE = _from->readNextElement();
+      }
+      else
+      {
+        _fromE.reset();
+      }
       if (_fromE)
       {
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
@@ -191,12 +234,27 @@ Change ChangesetDeriver::_nextChange()
         "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
         _toE->getElementId() << " modifying 'to' element: ");
 
-      _toE = _to->readNextElement();
+      if (_to->hasMoreElements())
+      {
+        _toE = _to->readNextElement();
+      }
+      else
+      {
+        _toE.reset();
+      }
       if (_toE)
       {
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
-      _fromE = _from->readNextElement(); //this line probably needs more testing
+
+      if (_from->hasMoreElements())
+      {
+        _fromE = _from->readNextElement(); //this line probably needs more testing
+      }
+      else
+      {
+        _fromE.reset();
+      }
       if (_fromE)
       {
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
@@ -237,7 +295,14 @@ Change ChangesetDeriver::_nextChange()
           "=true...");
       }
 
-      _fromE = _from->readNextElement();
+      if (_from->hasMoreElements())
+      {
+        _fromE = _from->readNextElement();
+      }
+      else
+      {
+        _fromE.reset();
+      }
       if (_fromE)
       {
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
@@ -252,7 +317,14 @@ Change ChangesetDeriver::_nextChange()
         "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
         _toE->getElementId() << "; creating 'to' element...");
 
-      _toE = _to->readNextElement();
+      if (_to->hasMoreElements())
+      {
+        _toE = _to->readNextElement();
+      }
+      else
+      {
+        _toE.reset();
+      }
       if (_toE)
       {
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());

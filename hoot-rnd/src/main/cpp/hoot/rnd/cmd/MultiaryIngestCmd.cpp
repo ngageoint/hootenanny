@@ -140,7 +140,6 @@ public:
     //create changeset changes and write them to the existing db layer and a changeset file for
     //external use in spark
     _writeChangesetData(
-      //as the incoming data is read, filter it down to POIs only and translate each element
       _getNewDataInputStream(_sortedNewDataInput),
       dbLayerOutput,
       changesetOutput);
@@ -176,6 +175,7 @@ private:
     boost::shared_ptr<ElementInputStream> unsortedNewInputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(unsortedNewInputReader);
     boost::shared_ptr<PoiCriterion> elementCriterion;
+    //as the incoming data is read, filter it down to POIs only and translate each element
     //all geonames data are pois by definition, so skip the element criterion filtering expense
     //if (!GeoNamesReader().isSupported(newDataInput)) //TODO: re-enable this
     //{
@@ -218,8 +218,8 @@ private:
                            const QString dbLayerOutput, const QString changesetOutput)
   {
     LOG_DEBUG(
-      "Writing multiary changeset data to existing layer: " << dbLayerOutput <<
-      " and changeset: " << changesetOutput << "...")
+      "Writing multiary change data to existing database layer: " << dbLayerOutput <<
+      " and changeset file: " << changesetOutput << "...")
 
     boost::shared_ptr<HootApiDbReader> existingDbLayerReader(new HootApiDbReader());
     existingDbLayerReader->open(dbLayerOutput);

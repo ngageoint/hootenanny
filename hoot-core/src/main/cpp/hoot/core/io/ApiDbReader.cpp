@@ -551,7 +551,7 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   }
   else
   {
-    throw HootException("readNextElement should not called if hasMoreElements returns false.");
+    throw HootException("readNextElement should not be called if hasMoreElements returns false.");
   }
 }
 
