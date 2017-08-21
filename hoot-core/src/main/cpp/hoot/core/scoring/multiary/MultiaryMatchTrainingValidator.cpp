@@ -53,14 +53,12 @@ public:
         t.contains(REV))
     {
       if (t.contains(MetadataTags::TrainingId()) == false ||
-          t.contains(MAT) == false ||
-          t.contains(REV) == false)
+          t.contains(MAT) == false)
       {
-        LOG_WARN(QString("Element %1 doesn't contain %2, %3 and %4.")
+        LOG_WARN(QString("Element %1 doesn't contain %2 and %3.")
                  .arg(e->getElementId().toString())
                  .arg(MetadataTags::TrainingId())
-                 .arg(MAT)
-                 .arg(REV));
+                 .arg(MAT));
       }
 
       if (t[MAT] == "todo")

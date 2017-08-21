@@ -88,6 +88,7 @@ MultiaryClusterAlgorithm::ClusterList MultiaryHierarchicalClusterAlgorithm::calc
 
     if (cl->isValid())
     {
+      // @todo Do we need to update the replaced vector?
       MultiaryClusterPtr newCluster = _mergeCache->merge(cl->a, cl->b);
 
       // update the connected links in all clusters to reflect the latest merger
@@ -104,11 +105,6 @@ MultiaryClusterAlgorithm::ClusterList MultiaryHierarchicalClusterAlgorithm::calc
       _addChildLinks(newCluster, cl->b);
     }
   }
-
-  // merge each cluster and update the replaced vector as appropriate
-
-  // Create reviews based on the constructed clusters. This will include any matches between two
-  // clusters, but we won't include reviews between two clusters for now.
 
   return _clusters;
 }

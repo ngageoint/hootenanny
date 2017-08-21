@@ -33,11 +33,13 @@ NEWFILES=`ls -R $OUTPUT_TILES | wc -l`
 # The expected number of files in the directory = 303
 [ $NEWFILES != 303 ] && echo "gdal2tiles.py: Expecting 303 files Got" $NEWFILES
 
-# The expected size of the new tiles is 2700
-NEWSIZE=`du -c $OUTPUT_TILES | grep total | awk '{print $1}'`
+# The expected size of the new tiles is 2200
+# The apparent-size flag avoids issues if the FS hasn't synced properly or if the FS
+# uses compression/etc that reduces disk usage.
+NEWSIZE=`du --apparent-size -c $OUTPUT_TILES | grep total | awk '{print $1}'`
 
-[ $NEWSIZE -gt 2710 ] && echo "gdal2tiles.py: Expecting a tile size around 2700. Got" $NEWSIZE
+[ $NEWSIZE -gt 2300 ] && echo "gdal2tiles.py: Expecting a tile size between 2100 and 2300. Got" $NEWSIZE
 
-[ $NEWSIZE -lt 2450 ] && echo "gdal2tiles.py: Expecting a tile size between 2500 and 2700. Got" $NEWSIZE
+[ $NEWSIZE -lt 2100 ] && echo "gdal2tiles.py: Expecting a tile size between 2100 and 2300. Got" $NEWSIZE
 
 

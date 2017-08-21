@@ -283,7 +283,6 @@ public:
    */
   void visitRw(ElementVisitor& visitor);
   void visitRw(ConstElementVisitor& visitor);
-  void visitRw(ElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);
 
   long getNodeCount() const { return _nodes.size(); }

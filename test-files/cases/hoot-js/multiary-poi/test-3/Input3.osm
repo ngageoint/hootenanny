@@ -1,9 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' upload='true' generator='JOSM'>
-  <node id='-22346' visible='true' lat='15.364548' lon='44.223589'>
-    <tag k='ID' v='3-00191' />
-    <tag k='MATCH' v='3-00018' />
-    <tag k='REVIEW' v='none' />
+  <node id='-27363' action='modify' visible='true' lat='15.364548' lon='44.223589'>
     <tag k='hoot:hash' v='sha1sum:2802ac21f2d5a705765cbb98202ee78a58e9477a' />
     <tag k='is_in:city' v='امانة العاصمة' />
     <tag k='is_in:country' v='Yemen' />
@@ -16,10 +13,7 @@
     <tag k='uuid' v='wikimapia:7439734' />
     <tag k='wm_No_Category' v='yes' />
   </node>
-  <node id='-22347' visible='true' lat='15.3645082' lon='44.223565'>
-    <tag k='ID' v='3-00018' />
-    <tag k='MATCH' v='3-00018' />
-    <tag k='REVIEW' v='none' />
+  <node id='-27365' action='modify' visible='true' lat='15.3645082' lon='44.223565'>
     <tag k='hoot:hash' v='sha1sum:06a350fe7d86a212c638f367c10b48bc24e79c17' />
     <tag k='is_in:city' v='Sanaa' />
     <tag k='is_in:country' v='Yemen' />

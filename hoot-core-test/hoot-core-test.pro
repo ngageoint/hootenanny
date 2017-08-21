@@ -271,5 +271,6 @@ nodejs:SOURCES += \
 }
 
 SOURCES += \
+    src/test/cpp/hoot/core/conflate/polygon/extractors/NameExtractorTest.cpp
 
 HEADERS += \

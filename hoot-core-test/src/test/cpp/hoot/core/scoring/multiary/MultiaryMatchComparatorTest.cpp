@@ -222,7 +222,7 @@ public:
       "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
       "  'tags':{'hoot:status':'1', 'ID':'1-000002', 'MATCH':'none', 'poi':'yes'}},\n"
       "{'type':'node','id': -4,'lat': 2.0,'lon': -3.0,\n"
-      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'REVIEW':'1-000000;1-000002', 'poi':'yes'}}\n"
+      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'MATCH':'none', 'REVIEW':'1-000000;1-000002', 'poi':'yes'}}\n"
       "]}\n";
 
     QString conflatedJson =
@@ -279,7 +279,7 @@ public:
       "{'type':'node','id': -3,'lat': 2.0,'lon': -3.0,\n"
       "  'tags':{'hoot:status':'1', 'ID':'1-000002', 'MATCH':'none', 'poi':'yes'}},\n"
       "{'type':'node','id': -4,'lat': 2.0,'lon': -3.0,\n"
-      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'REVIEW':'1-000002', 'poi':'yes'}}\n"
+      "  'tags':{'hoot:status':'2', 'ID':'2-000000', 'MATCH':'none', 'REVIEW':'1-000002', 'poi':'yes'}}\n"
       "]}\n";
 
     QString conflatedJson =
