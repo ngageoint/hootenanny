@@ -670,8 +670,7 @@ cd ~
 
 ##### These two are next to do.
 echo "### Installing node-mapnik-server..."
-sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-mapnik-server
+sudo ln -s $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
@@ -679,8 +678,7 @@ npm install --silent
 rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
-sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
-sudo chmod a+x /etc/init.d/node-export-server
+sudo ln -s $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server
 npm install --silent
