@@ -186,6 +186,13 @@ if ! hash qmake >/dev/null 2>&1 ; then
     fi
 fi
 
+# We need this big dictionary for text matching. On Ubuntu, this is a package
+if [ ! -f /usr/share/dict/american-english-insane ]; then
+    echo "### Installing american-english-insane dictionary..."
+    wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
+    sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+fi
+
 #####
 # Temp change until we get the C++11 support into develop
 cd $HOOT_HOME
@@ -300,7 +307,7 @@ if [ ! -f bin/chromedriver ]; then
 #       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
 #       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
 
-# Errors with the latest release (2/31) wanting glibc v2.18 when only glibc v2.17 is available
+# Errors with the latest release (2.31) wanting glibc v2.18 when only glibc v2.17 is available
 # https://bugs.chromium.org/p/chromedriver/issues/detail?id=1894#c2
       wget --quiet http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
     fi
