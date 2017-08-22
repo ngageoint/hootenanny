@@ -42,7 +42,13 @@ make -s clean && make -sj3
 
 # Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-sudo -u tomcat8 scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
+TOMCAT_USER=tomcat8
+VMUSER=`id -u -n`
+if ["$VMUSER" = "vagrant"]
+then
+  TOMCAT_USER=$VMUSER
+fi
+sudo -u $TOMCAT_USER  scripts/tomcat/CopyWebAppsToTomcat.sh #&> /dev/null
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now

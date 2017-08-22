@@ -670,7 +670,7 @@ cd ~
 
 ##### These two are next to do.
 echo "### Installing node-mapnik-server..."
-sudo ln -s $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
+sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
@@ -678,7 +678,7 @@ npm install --silent
 rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
-sudo ln -s $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
+sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 # Make sure all npm modules are installed
 cd $HOOT_HOME/node-export-server
 npm install --silent
@@ -727,11 +727,11 @@ rm -rf $HOOT_HOME/userfiles/tmp
 mkdir -p $HOOT_HOME/userfiles/tmp
 
 # OK, this is seriously UGLY but it fixes an NFS problem
-chmod -R 777 $HOOT_HOME/userfiles
+#chmod -R 777 $HOOT_HOME/userfiles
 
 # This is very ugly.
 # If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
-chmod go+rx ~
+#chmod go+rx ~
 
 
 ##########################################
