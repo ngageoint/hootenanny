@@ -712,6 +712,14 @@ If this value is set to a non-empty string, the system will attempt to open a fi
 specified name and output all the ID mappings (source to destination) used for nodes, ways, and
 relations that were written to the database.
 
+=== hootapi.db.writer.remap.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If this value is set to true, then all incoming element IDs are remapped into new IDs. This is
+appropriate if any of the incoming IDs are non-positive.
+
 === hootapi.db.writer.overwrite.map
 
 * Data Type: bool

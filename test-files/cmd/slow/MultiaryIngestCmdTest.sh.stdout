@@ -1,0 +1,13 @@
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+
+
+MULTIARY INGEST - LOADING REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING...
+
+15:12:18.181 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING FINAL REFERENCE LAYER...
+

@@ -340,6 +340,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setIncludeDebug(configOptions.getWriterIncludeDebugTags());
   setTextStatus(configOptions.getWriterTextStatus());
   setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
+  setRemap(configOptions.getHootapiDbWriterRemapIds());
 }
 
 void HootApiDbWriter::_startNewChangeSet()

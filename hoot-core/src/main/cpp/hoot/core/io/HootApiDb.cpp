@@ -555,7 +555,6 @@ long HootApiDb::_getNextNodeId()
   {
     _nodeIdReserver.reset(new InternalIdReserver(_db, getCurrentNodesSequenceName(mapId)));
   }
-
   return _nodeIdReserver->getNextId();
 }
 
@@ -701,8 +700,7 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   return mapId;
 }
 
-bool HootApiDb::insertNode(const double lat, const double lon,
-  const Tags& tags, long& assignedId)
+bool HootApiDb::insertNode(const double lat, const double lon, const Tags& tags, long& assignedId)
 {
   assignedId = _getNextNodeId();
 
@@ -791,7 +789,7 @@ void HootApiDb::deleteNode(ConstNodePtr node)
     _nodeBulkDelete->flush();
   }
 
-  //TODO multiary-ingest: how to update envelope
+  //TODO: multiary-ingest: how to update envelope here?
   //ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
   //_updateChangesetEnvelope(envelopeNode);
 
