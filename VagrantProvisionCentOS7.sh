@@ -148,7 +148,7 @@ echo "##### Temp installs #####"
 # Stxxl:
 git clone http://github.com/stxxl/stxxl.git stxxl
 cd stxxl
-git checkout tags/1.3.1
+git checkout -q tags/1.3.1
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local

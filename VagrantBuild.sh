@@ -42,7 +42,7 @@ make -s clean && make -sj$(nproc)
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
 TOMCAT_USER=tomcat8
 VMUSER=`id -u -n`
-if ["$VMUSER" = "vagrant"]
+if [ "$VMUSER" = 'vagrant' ]
 then
   TOMCAT_USER=$VMUSER
 fi

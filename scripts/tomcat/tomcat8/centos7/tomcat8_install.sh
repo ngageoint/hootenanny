@@ -14,7 +14,7 @@ SCRIPT_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Find out what user we have: vagrant or ubuntu
 # This comes from a user difference in one of the Vagrant boxes
 VMUSER=`id -u -n`
-if ["$VMUSER" = "vagrant"]
+if [ "$VMUSER" = 'vagrant' ]
 then
   TOMCAT_USER=$VMUSER
   TOMCAT_GROUP=$VMUSER
@@ -125,7 +125,7 @@ sudo chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
 # Setup a run script and a service.
 sudo cp ${SCRIPT_HOME}/tomcat8_start.sh ${TOMCAT_HOME}/bin
 sudo cp ${SCRIPT_HOME}/etc/systemd/system/${TOMCAT_NAME}.service /etc/systemd/system
-if [ "$TOMCAT_USER" != "tomcat8" ]
+if [ "$TOMCAT_USER" != 'tomcat8' ]
 then
   # replace the tomcat8 user and group with the user
   sudo sed -i "s/User=tomcat8/User=${TOMCAT_USER}/g" /etc/systemd/system/${TOMCAT_NAME}.service
