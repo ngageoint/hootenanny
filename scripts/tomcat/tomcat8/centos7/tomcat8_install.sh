@@ -125,7 +125,7 @@ sudo chgrp -R ${TOMCAT_GROUP} ${TOMCAT_CACHE_HOME}/work
 # Setup a run script and a service.
 sudo cp ${SCRIPT_HOME}/tomcat8_start.sh ${TOMCAT_HOME}/bin
 sudo cp ${SCRIPT_HOME}/etc/systemd/system/${TOMCAT_NAME}.service /etc/systemd/system
-if [ "$TOMCAT_USER" -ne "tomcat8" ]
+if [ "$TOMCAT_USER" != "tomcat8" ]
 then
   # replace the tomcat8 user and group with the user
   sudo sed -i "s/User=tomcat8/User=${TOMCAT_USER}/g" /etc/systemd/system/${TOMCAT_NAME}.service

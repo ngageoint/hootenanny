@@ -36,9 +36,7 @@ fi
 
 echo "Building Hoot... "
 echo "Will take several extra minutes to build the training data the initial time Hootenanny is installed only."
-# Dropping this down by one as a test
-# make -s clean && make -sj$(nproc)
-make -s clean && make -sj3
+make -s clean && make -sj$(nproc)
 
 # Waiting until Tomcat8 is installed
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
