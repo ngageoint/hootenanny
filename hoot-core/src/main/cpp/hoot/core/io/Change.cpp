@@ -24,65 +24,50 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGESETPROVIDER_H
-#define CHANGESETPROVIDER_H
+#include "Change.h"
 
-// GDAL
-#include <ogr_spatialref.h>
-
-// hoot
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/io/Change.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-/**
- * Interface for classes implementing OSM changeset capabilities
- */
-class ChangeSetProvider
+Change::Change()
 {
-
-public:
-
-  /**
-   * @brief getProjection
-   * @return
-   */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
-
-  /**
-   * @brief ~ElementInputStream
-   *
-   * If the stream is open when the destructor is called, closeStream must be called in the destructor
-   */
-  virtual ~ChangeSetProvider() {}
-
-  /**
-   * @brief closeStream
-   *
-   * Releases all resources associated with the stream, if any
-   */
-  virtual void close() = 0;
-
-  /**
-   * Determines if the changeset has any unparsed changes
-   *
-   * @return true if the changeset has more changes; false otherwise
-   */
-  virtual bool hasMoreChanges() = 0;
-
-  /**
-   * Returns the next change in the changeset
-   *
-   * @return a changeset change
-   */
-  virtual Change readNextChange() = 0;
-
-};
-
-typedef boost::shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
-
 }
 
-#endif // CHANGESETPROVIDER_H
+Change::Change(ChangeType type, ConstElementPtr element) :
+_type(type),
+_element(element)
+{
+}
+
+Change::Change(ChangeType type, ConstElementPtr element, ConstElementPtr reviousElement) :
+_type(type),
+_element(element),
+_previousElement(reviousElement)
+{
+}
+
+QString Change::changeTypeToString(const ChangeType changeType)
+{
+  switch (changeType)
+  {
+    case Create:
+      return "Create";
+    case Modify:
+      return "Modify";
+    case Delete:
+      return "Delete";
+    case Unknown:
+      return "Unknown";
+  }
+  throw HootException("Invalid change type.");
+}
+
+QString Change::toString() const
+{
+  return
+    "Change type: " + changeTypeToString(_type) + ", ID: " + _element->getElementId().toString();
+}
+
+}

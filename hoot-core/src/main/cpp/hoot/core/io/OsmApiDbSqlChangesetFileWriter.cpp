@@ -54,7 +54,8 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
   _db.close();
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString path, ChangeSetProviderPtr changesetProvider)
+void OsmApiDbSqlChangesetFileWriter::write(const QString path,
+                                           ChangeSetProviderPtr changesetProvider)
 {
   LOG_DEBUG("Writing changeset to " << path);
 
@@ -73,16 +74,16 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString path, ChangeSetProvider
   {
     LOG_TRACE("Reading next SQL change...");
     Change change = changesetProvider->readNextChange();
-    switch (change.type)
+    switch (change.getType())
     {
       case Change::Create:
-        _createNewElement(change.e);
+        _createNewElement(change.getElement());
         break;
       case Change::Modify:
-        _updateExistingElement(change.e);
+        _updateExistingElement(change.getElement());
         break;
       case Change::Delete:
-        _deleteExistingElement(change.e);
+        _deleteExistingElement(change.getElement());
         break;
       case Change::Unknown:
         //see comment in ChangesetDeriver::_nextChange() when
@@ -92,11 +93,11 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString path, ChangeSetProvider
         throw IllegalArgumentException("Unexpected change type.");
     }
 
-    if (change.type != Change::Unknown)
+    if (change.getType() != Change::Unknown)
     {
-      if (change.e->getElementType().getEnum() == ElementType::Node)
+      if (change.getElement()->getElementType().getEnum() == ElementType::Node)
       {
-        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.e);
+        ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
         _changesetBounds.expandToInclude(node->getX(), node->getY());
       }
       changes++;

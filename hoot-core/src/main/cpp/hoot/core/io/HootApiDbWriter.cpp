@@ -355,16 +355,16 @@ void HootApiDbWriter::_startNewChangeSet()
 
 void HootApiDbWriter::writeChange(const Change& change)
 {
-  switch (change.type)
+  switch (change.getType())
   {
     case Change::Create:
-      _createElement(change.e);
+      _createElement(change.getElement());
       break;
     case Change::Modify:
-      _modifyElement(change.e);
+      _modifyElement(change.getElement());
       break;
     case Change::Delete:
-      _deleteElement(change.e);
+      _deleteElement(change.getElement());
       break;
     default:
       throw IllegalArgumentException("Unexpected change type.");

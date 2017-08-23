@@ -24,65 +24,54 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGESETPROVIDER_H
-#define CHANGESETPROVIDER_H
+#ifndef CHANGE_H
+#define CHANGE_H
 
-// GDAL
-#include <ogr_spatialref.h>
-
-// hoot
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/io/Change.h>
 
 namespace hoot
 {
 
 /**
- * Interface for classes implementing OSM changeset capabilities
+ * Represents an individual OSM change in a changeset
  */
-class ChangeSetProvider
+class Change
 {
 
 public:
 
   /**
-   * @brief getProjection
-   * @return
+   * The allowable changeset types
    */
-  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const = 0;
+  enum ChangeType
+  {
+    Create = 0,
+    Modify = 1,
+    Delete = 2,
+    Unknown = 3
+  };
 
-  /**
-   * @brief ~ElementInputStream
-   *
-   * If the stream is open when the destructor is called, closeStream must be called in the destructor
-   */
-  virtual ~ChangeSetProvider() {}
+  Change();
+  Change(ChangeType type, ConstElementPtr element);
+  Change(ChangeType type, ConstElementPtr element, ConstElementPtr pe);
 
-  /**
-   * @brief closeStream
-   *
-   * Releases all resources associated with the stream, if any
-   */
-  virtual void close() = 0;
+  static QString changeTypeToString(const ChangeType changeType);
 
-  /**
-   * Determines if the changeset has any unparsed changes
-   *
-   * @return true if the changeset has more changes; false otherwise
-   */
-  virtual bool hasMoreChanges() = 0;
+  QString toString() const;
 
-  /**
-   * Returns the next change in the changeset
-   *
-   * @return a changeset change
-   */
-  virtual Change readNextChange() = 0;
+  ChangeType getType() const { return _type; }
+  ConstElementPtr getElement() const { return _element; }
+  void clearElement() { _element.reset(); }
+  ConstElementPtr getPreviousElement() const { return _previousElement; }
+
+private:
+
+  ChangeType _type;
+  ConstElementPtr _element;
+  ConstElementPtr _previousElement;
 
 };
 
-typedef boost::shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
-
 }
 
-#endif // CHANGESETPROVIDER_H
+#endif // CHANGE_H

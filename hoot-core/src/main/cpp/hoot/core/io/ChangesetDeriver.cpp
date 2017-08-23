@@ -61,11 +61,11 @@ void ChangesetDeriver::close()
 
 bool ChangesetDeriver::hasMoreChanges()
 {
-  if (_next.e.get() == 0)
+  if (_next.getElement().get() == 0)
   {
     _next = _nextChange();
   }
-  return _next.e.get() != 0;
+  return _next.getElement().get() != 0;
 }
 
 Change ChangesetDeriver::_nextChange()
@@ -93,8 +93,7 @@ Change ChangesetDeriver::_nextChange()
   // if we've run out of "from" elements, create all the remaining elements in "to"
   if (!_fromE.get() && _toE.get())
   {
-    result.type = Change::Create;
-    result.e = _toE;
+    result = Change(Change::Create, _toE);
 
     LOG_TRACE(
       "run out of from elements; 'from' element null; 'to' element not null: " <<
@@ -116,8 +115,7 @@ Change ChangesetDeriver::_nextChange()
   // if we've run out of "to" elements, delete all the remaining elements in "from"
   else if (_fromE.get() && !_toE.get())
   { 
-    result.type = Change::Delete;
-    result.e = _fromE;
+    result = Change(Change::Delete, _fromE);
 
     LOG_TRACE(
       "run out of 'to' elements; to' element null; 'from' element not null: " <<
@@ -181,8 +179,7 @@ Change ChangesetDeriver::_nextChange()
     // if we've run out of "from" elements, create all the remaining elements in "to"
     else if (!_fromE.get() && _toE.get())
     {
-      result.type = Change::Create;
-      result.e = _toE;
+      result = Change(Change::Create, _toE);
 
       LOG_TRACE(
         "run out of from elements; 'from' element null; 'to' element not null: " <<
@@ -204,8 +201,7 @@ Change ChangesetDeriver::_nextChange()
     // if we've run out of "to" elements, delete all the remaining elements in "from"
     else if (_fromE.get() && !_toE.get())
     {
-      result.type = Change::Delete;
-      result.e = _fromE;
+      result = Change(Change::Delete, _fromE);
 
       LOG_TRACE(
         "run out of 'to' elements; to' element null; 'from' element not null: " <<
@@ -226,9 +222,7 @@ Change ChangesetDeriver::_nextChange()
     }
     else if (_fromE->getElementId() == _toE->getElementId())
     {
-      result.type = Change::Modify;
-      result.e = _toE;
-      result.previousElement = _fromE;
+      result = Change(Change::Modify, _toE, _fromE);
 
       LOG_TRACE(
         "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
@@ -274,8 +268,7 @@ Change ChangesetDeriver::_nextChange()
           (!ConfigOptions().getChangesetAllowDeletingReferenceFeatures() &&
            _fromE->getStatus() != Status::Unknown1))
       {
-        result.type = Change::Delete;
-        result.e = _fromE;
+        result = Change(Change::Delete, _fromE);
 
         LOG_TRACE(
           "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
@@ -287,8 +280,7 @@ Change ChangesetDeriver::_nextChange()
         //want to force no changes for this particular element, so we're going to use the unknown
         //change type, which ends up being a no-op.  Skipping an element delete in this situation
         //minimizes the changeset impact on reference datasets in certain situations.
-        result.type = Change::Unknown;
-        result.e = _fromE;
+        result = Change(Change::Unknown, _fromE);
         LOG_TRACE(
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
@@ -310,8 +302,7 @@ Change ChangesetDeriver::_nextChange()
     }
     else
     {
-      result.type = Change::Create;
-      result.e = _toE;
+      result = Change(Change::Create, _toE);
 
       LOG_TRACE(
         "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
@@ -337,13 +328,13 @@ Change ChangesetDeriver::_nextChange()
 
 Change ChangesetDeriver::readNextChange()
 {
-  if (!_next.e)
+  if (!_next.getElement())
   {
     _next = _nextChange();
   }
 
   Change result = _next;
-  _next.e.reset();
+  _next.clearElement();
   return result;
 }
 
