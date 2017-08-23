@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * Interface for bulk insertion of elements into a database
+ */
 class BulkInsert
 {
 public:

@@ -141,7 +141,7 @@ private:
     map1->visitRw(removeElementsVisitor);
     map2->visitRw(removeElementsVisitor);
 
-    //only node comparisons use hashes right now
+    //node comparisons require hashes be present on the elements
     CalculateHashVisitor2 hashVis;
     map1->visitRw(hashVis);
     map2->visitRw(hashVis);

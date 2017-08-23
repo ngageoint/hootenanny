@@ -33,6 +33,9 @@
 namespace hoot
 {
 
+/**
+ * Interface for bulk deletion of elements from a database
+ */
 class BulkDelete
 {
 public:

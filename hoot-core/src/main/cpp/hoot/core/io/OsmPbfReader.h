@@ -255,8 +255,6 @@ private:
 
   void _loadOsmData();
 
-  void _parseOsmHeader();
-
   void _loadRelation(const hoot::pb::Relation& r);
 
   void _loadRelations();
@@ -274,6 +272,8 @@ private:
   int _parseInt(QString s);
 
   void _parseOsmData();
+
+  void _parseOsmHeader();
 
   Status _parseStatus(QString s);
 
