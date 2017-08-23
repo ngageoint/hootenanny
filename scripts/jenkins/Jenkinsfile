@@ -7,7 +7,6 @@ pipeline {
                 sh 'vagrant destroy -f || true'
                 cleanWs()
                 
-                git branch: 'develop', credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
                 sh 'git submodule update --init'
                 
                 sh 'cp -R ../software.ubuntu1404 software'
@@ -20,6 +19,19 @@ pipeline {
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
             }
              
+        }
+        stage("Static Analysis") {
+            steps {
+                sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml''
+            }
+
+        }
+        stage("License Header") {
+            steps {
+                echo 'This is a placeholder'
+                //sh 'vagrant up --provider aws'
+            }
+
         }
         stage("Vagrant Up") {
             steps {
