@@ -386,7 +386,7 @@ geonames.rules = {
         'MTRO':{'railway':'station','station':'subway'}, //  metro station: metro station (Underground, Tube, or Metro)
         'MTS':{'natural':'mountain'}, //  mountains: a mountain range or a group of mountains or high ridges
         'MTU':{'natural':'undersea_mountain'}, //  mountain: a well-delineated subdivision of a large and complex positive feature
-        'MUS':{'amenity':'museum'}, //  museum: a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited
+        'MUS':{'tourism':'museum'}, //  museum: a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited
         'MVA':{'military':'maneuver_area'}, //  maneuver area: a tract of land where military field exercises are carried out
         'NKM':{'poi':'meander_neck'}, //  meander neck: a narrow strip of land between the two limbs of a meander loop at its narrowest point
         'NOV':{'amenity':'place_of_worship','building':'novitiate'}, //  novitiate: a religious house or school where novices are trained
