@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("Setup") {
             steps {
-                // Attempt to destroy exiting VM but don't stop job if not there
+                // Attempt to destroy existing VM but don't stop job if not there
                 sh 'vagrant destroy -f || true'
                 cleanWs()
                 
@@ -18,6 +18,12 @@ pipeline {
                 echo 'QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
                 sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
+            }
+             
+        }
+        stage("Static Analysis") {
+            steps {
+                sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
             }
              
         }
