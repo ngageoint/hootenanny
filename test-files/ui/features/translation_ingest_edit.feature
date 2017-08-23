@@ -21,8 +21,7 @@ Feature: Translation Ingest, Edit, and Save
         And I should see "Cucumber Test Translation"
 
     Scenario: Edit Translation
-        And I hover over the "label" with text "Translations"
-        When I click the "export" icon under the "Cucumber Translation" link
+        And I click the "Cucumber Translation" link
         And I fill "translationDescription" input with "Jakarta Coastline"
         And I fill "translationText" textarea with: var attributeMapping = {"jakarta_raya_coastline": {"NATURAL": {"water": "other"}}};var fcode;var schema;
         And I add to "translationText" textarea with: //translateToOsm - takes 'attrs' and returns OSM 'tags'
@@ -32,6 +31,11 @@ Feature: Translation Ingest, Edit, and Save
         And I hover over the "label" with text "Translations"
         And I hover over the "a" with text "Cucumber Translation"
         And I should see "Jakarta Coastline"
+
+    # Scenario: Download Translation
+    #     When I click on the "Translations" option in the "settingsSidebar"
+    #     When I click the "export" icon under the "Cucumber Translation" link
+    #     Then the download file pattern "Cucumber Translation*.js" should exist
 
     Scenario: Delete Translation
         When I click the "trash" icon under the "Cucumber Translation" link
