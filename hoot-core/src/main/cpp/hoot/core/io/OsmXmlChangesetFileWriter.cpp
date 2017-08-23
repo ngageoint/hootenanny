@@ -217,7 +217,8 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   }
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
+    if (it.key().isEmpty() == false && it.value().isEmpty() == false &&
+        it.key() != MetadataTags::HootHash())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", _invalidCharacterRemover.removeInvalidCharacters(it.key()));

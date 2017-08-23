@@ -24,50 +24,30 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "CalculateHashVisitor2.h"
 
-#include "ElementCriterionVisitorInputStream.h"
-
+// hoot
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/core/util/MetadataTags.h>
 
 namespace hoot
 {
 
-ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
-  const ElementInputStreamPtr& elementSource, const ElementCriterionPtr& criterion,
-  const QList<ElementVisitorPtr>& visitors) :
-_elementSource(elementSource),
-_criterion(criterion),
-_visitors(visitors)
+HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor2)
+
+CalculateHashVisitor2::~CalculateHashVisitor2()
 {
 }
 
-boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
+void CalculateHashVisitor2::visit(const ElementPtr& e)
 {
-  return _elementSource->getProjection();
-}
-
-ElementPtr ElementCriterionVisitorInputStream::readNextElement()
-{
-  do
+  if (e->getElementType() == ElementType::Node)
   {
-    ElementPtr e = _elementSource->readNextElement();
-    LOG_VART(_criterion.get());
-    if (!_criterion.get() || _criterion->isSatisfied(e))
-    {
-      for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin();
-           itr != _visitors.end(); ++itr)
-      {
-        ElementVisitorPtr visitor = *itr;
-        LOG_VART(visitor->toString());
-        visitor->visit(e);
-        LOG_VART(e->getTags().contains(MetadataTags::HootHash()));
-      }
-      return e;
-    }
-  } while (hasMoreElements());
-
-  return ElementPtr();
+    e->getTags()[MetadataTags::HootHash()] =
+      "sha1sum:" + QString::fromUtf8(CalculateHashVisitor::toHash(e).toHex());
+  }
 }
 
 }

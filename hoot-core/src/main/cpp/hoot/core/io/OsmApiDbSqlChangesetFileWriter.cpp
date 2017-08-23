@@ -479,23 +479,27 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
     QString k = it.key();
     QString v = it.value();
 
-    const QString currentTagValues =
+    if (k != MetadataTags::HootHash())
+    {
+      const QString currentTagValues =
       QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n")
         .arg(element->getElementId().getType().toString().toLower())
         .arg(element->getElementId().getId())
         .arg(k.replace('\'', "''"))
         .arg(v.replace('\'', "''"));
 
-    const QString tagValues =
-      QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', %5);\n")
-        .arg(element->getElementId().getType().toString().toLower())
-        .arg(element->getElementId().getId())
-        .arg(k.replace('\'', "''"))
-        .arg(v.replace('\'', "''"))
-        .arg(element->getVersion());
+      const QString tagValues =
+        QString("(%1_id, k, v, version) VALUES (%2, '%3', '%4', %5);\n")
+          .arg(element->getElementId().getType().toString().toLower())
+          .arg(element->getElementId().getId())
+          .arg(k.replace('\'', "''"))
+          .arg(v.replace('\'', "''"))
+          .arg(element->getVersion());
 
-    _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(0)) + currentTagValues).toUtf8());
-    _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(1)) + tagValues).toUtf8());
+      _outputSql.write(
+        (QString("INSERT INTO %1 ").arg(tableNames.at(0)) + currentTagValues).toUtf8());
+      _outputSql.write((QString("INSERT INTO %1 ").arg(tableNames.at(1)) + tagValues).toUtf8());
+    }
   }
 }
 

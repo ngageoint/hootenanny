@@ -9,14 +9,15 @@ Ingests POI data for use by Multiary Conflation by calculating the difference be
 * +referenceOutput+ - path to reference data; must be a Hootenanny API database layer; if the layer does not exist, it will
                       be created 
 * +changesetOutput+ - path where to write the resulting changeset changes; must be a Spark changeset
-* +sortInput+ - If true, +newInput+ will be sorted by element ID; may disable this to increase performance if +newInput+
-                has already been sorted by element ID.  If set to false and +newInput+ has not been sorted by element
-                ID, the changeset derivation will fail.
+* +sortInput+ - (optional) If true, +newInput+ will be sorted by element ID; defaults to true; This option may be 
+                disabled to increase performance if +newInput+ has already been sorted by element ID.  If set to 
+                false and +newInput+ has not been sorted by element ID, the changeset derivation will fail.  
+                If +referenceOutput+ contains no data, input sorting will always be skipped.
 
 === Usage
 
 --------------------------------------
-multiary-ingest (newInput) (referenceOutput) (changesetOutput) (sortInput)
+multiary-ingest (newInput) (referenceOutput) (changesetOutput) [sortInput]
 --------------------------------------
 
 ==== Example

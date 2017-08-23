@@ -98,6 +98,11 @@ public:
   bool mapExists(const long id);
 
   /**
+   * Returns true if any map with the specified name exists in the services database
+   */
+  bool mapExists(const QString name);
+
+  /**
    * Returns true if the changeset with the specified ID exists in the services database
    */
   bool changesetExists(const long id);
@@ -306,7 +311,7 @@ private:
   boost::shared_ptr<QSqlQuery> _insertRelationMembers;
   boost::shared_ptr<QSqlQuery> _insertWayNodes;
   boost::shared_ptr<QSqlQuery> _selectHootDbVersion;
-  boost::shared_ptr<QSqlQuery> _mapExists;
+  boost::shared_ptr<QSqlQuery> _mapExistsById;
   boost::shared_ptr<QSqlQuery> _changesetExists;
   boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
   boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
@@ -319,6 +324,7 @@ private:
   boost::shared_ptr<QSqlQuery> _updateJobStatus;
   boost::shared_ptr<QSqlQuery> _insertJobStatus;
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
+  boost::shared_ptr<QSqlQuery> _mapExistsByName;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

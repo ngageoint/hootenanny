@@ -1,0 +1,20 @@
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING DATASET 1...
+
+15:15:24.454 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING DATASET 2...
+
+15:15:24.994 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING CHANGESET OUTPUT...
+

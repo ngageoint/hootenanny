@@ -27,15 +27,16 @@
 #ifndef ELEMENTCRITERIONVISITORINPUTSTREAM_H
 #define ELEMENTCRITERIONVISITORINPUTSTREAM_H
 
+// Hoot
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/filters/ElementCriterion.h>
+
+// Qt
+#include <QList>
 
 namespace hoot
 {
-
-class ConstElementVisitor;
 
 /**
  * Combination of ElementCriterionInputStream and ElementCriterionInputStream where a criterion
@@ -50,11 +51,12 @@ public:
    * @param elementSource The stream used to read elements from
    * @param criterion If this criterion is satisfied then the element is included, otherwise the
    *    element is dropped.
-   * @param visitor The operation that should be performed on elements that are read from the input source before being returned
+   * @param visitors The operations that should be performed on elements that are read from the
+   * input source before being returned
    */
   ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
                                      const ElementCriterionPtr& criterion,
-                                     const ElementVisitorPtr& visitor);
+                                     const QList<ElementVisitorPtr>& visitors);
 
   /**
    * @brief close
@@ -80,12 +82,11 @@ public:
    */
   virtual ElementPtr readNextElement();
 
-
 private:
 
   ElementInputStreamPtr _elementSource;
   ElementCriterionPtr _criterion;
-  ElementVisitorPtr _visitor;
+  QList<ElementVisitorPtr> _visitors;
 };
 
 }

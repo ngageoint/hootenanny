@@ -1071,6 +1071,22 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== node.comparison.coordinate.sensitivity
+
+* Data Type: int
+* Default Value: `7`
+
+The number of decimal places taken into account when comparing node coordinates.  Used by node
+hash calculation.
+
+=== node.comparison.circular.error.sensitivity
+
+* Data Type: int
+* Default Value: `6`
+
+The number of decimal places taken into account when comparing node circular error values.  Used by
+node hash calculation.
+
 === node.matcher.strictness
 
 * Data Type: double

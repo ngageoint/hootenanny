@@ -37,7 +37,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/CalculateHashVisitor.h>
+#include <hoot/core/util/MetadataTags.h>
 
 // Qt
 #include <QStringBuilder>
@@ -145,12 +145,11 @@ void SparkChangesetWriter::writeChange(const Change& change)
     ConstNodePtr previousNode = boost::dynamic_pointer_cast<const Node>(change.previousElement);
     NodePtr previousNodeCopy(dynamic_cast<Node*>(previousNode->clone()));
     _exportTagsVisitor.visit(previousNodeCopy);
-    changeLine +=
-      QString::fromUtf8(CalculateHashVisitor::toHash(previousNodeCopy).toHex().data()) % "\t";
+    changeLine += previousNodeCopy->getTags()[MetadataTags::HootHash()] % "\t";
   }
   // element hash after change
   changeLine +=
-    QString::fromUtf8(CalculateHashVisitor::toHash(nodeCopy).toHex().data()) % "\t" %
+    nodeCopy->getTags()[MetadataTags::HootHash()] % "\t" %
     _jsonWriter.toString(tmpMap).trimmed() % "\n";
 
   if (_fp->write(changeLine.toUtf8()) == -1)

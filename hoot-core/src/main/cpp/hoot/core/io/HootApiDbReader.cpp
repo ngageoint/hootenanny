@@ -93,7 +93,9 @@ void HootApiDbReader::open(QString urlStr)
     set<long> mapIds = _database->selectMapIds(mapName);
     if (mapIds.size() != 1)
     {
-      QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
+      QString str =
+        QString("Expected 1 map with the name '%1' but found %2 maps.")
+          .arg(mapName)
           .arg(mapIds.size());
       throw HootException(str);
     }

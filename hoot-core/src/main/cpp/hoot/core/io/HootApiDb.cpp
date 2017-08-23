@@ -226,12 +226,12 @@ void HootApiDb::commit()
 {
   LOG_TRACE("Committing transaction...");
 
-  if ( _db.isOpen() == false )
+  if (_db.isOpen() == false)
   {
     throw HootException("Tried to commit a transaction on a closed database.");
   }
 
-  if ( _inTransaction == false )
+  if (_inTransaction == false)
   {
     throw HootException(QString("Tried to commit but weren't in a transaction.  You may ") +
                         QString("need to set hootapi.db.writer.create.user=true."));
@@ -1032,7 +1032,7 @@ void HootApiDb::_resetQueries()
   _selectHootDbVersion.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
-  _mapExists.reset();
+  _mapExistsById.reset();
   _changesetExists.reset();
   _numTypeElementsForMap.reset();
   _selectElementsForMap.reset();
@@ -1046,6 +1046,7 @@ void HootApiDb::_resetQueries()
   _updateJobStatus.reset();
   _insertJobStatus.reset();
   _jobStatusExists.reset();
+  _mapExistsByName.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1149,19 +1150,36 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
 
 bool HootApiDb::mapExists(const long id)
 {
-  if (_mapExists == 0)
+  if (_mapExistsById == 0)
   {
-    _mapExists.reset(new QSqlQuery(_db));
-    _mapExists->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
+    _mapExistsById.reset(new QSqlQuery(_db));
+    _mapExistsById->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
                         " WHERE id = :mapId");
   }
-  _mapExists->bindValue(":mapId", (qlonglong)id);
-  if (_mapExists->exec() == false)
+  _mapExistsById->bindValue(":mapId", (qlonglong)id);
+  if (_mapExistsById->exec() == false)
   {
-    throw HootException(_mapExists->lastError().text());
+    throw HootException(_mapExistsById->lastError().text());
   }
 
-  return _mapExists->next();
+  return _mapExistsById->next();
+}
+
+bool HootApiDb::mapExists(const QString name)
+{
+  if (_mapExistsByName == 0)
+  {
+    _mapExistsByName.reset(new QSqlQuery(_db));
+    _mapExistsByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
+                        " WHERE display_name = :mapName");
+  }
+  _mapExistsByName->bindValue(":mapName", name);
+  if (_mapExistsByName->exec() == false)
+  {
+    throw HootException(_mapExistsByName->lastError().text());
+  }
+
+  return _mapExistsByName->next();
 }
 
 bool HootApiDb::changesetExists(const long id)

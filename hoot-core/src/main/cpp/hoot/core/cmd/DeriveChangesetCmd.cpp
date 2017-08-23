@@ -37,6 +37,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -139,6 +140,11 @@ private:
     removeElementsVisitor.setRecursive(false);
     map1->visitRw(removeElementsVisitor);
     map2->visitRw(removeElementsVisitor);
+
+    //only node comparisons use hashes right now
+    CalculateHashVisitor2 hashVis;
+    map1->visitRw(hashVis);
+    map2->visitRw(hashVis);
 
     QList<OsmMapPtr> inputMaps;
     inputMaps.append(map1);

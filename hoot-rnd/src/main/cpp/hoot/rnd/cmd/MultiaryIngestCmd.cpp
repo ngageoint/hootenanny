@@ -41,6 +41,7 @@
 #include <hoot/core/visitors/TranslationVisitor.h>
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/GeoNamesReader.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 //#include <hoot/core/io/OsmPbfReader.h>
 
 // Qt
@@ -52,13 +53,17 @@ namespace hoot
 {
 
 /**
- * This command takes a supported data input along with database and changeset output locations.
- * The input is filtered down to POIs only and translated to OSM, then sorted by element ID if
- * necessary, and finally compared to the database output layer in order to derive the difference
- * between the two in the form of a changeset.  The changeset changes are written both to the
- * database output layer as features and to the changeset output file as change statements.
+ * This command ingests data into the Multiary POI conflation workflow.  It takes a supported
+ * data input, a reference database layer, and a changeset output location.  The input is
+ * filtered down to POIs only and translated to OSM, then sorted by element ID (if not already).
+ * Finally, the input data is then compared to the database ref layer in order to derive the
+ * difference between the two in the form of a changeset.  The changeset changes are written both
+ * to the reference layer as features and to a changeset output file as change statements for later
+ * use by Spark.  Alternatively, if the specified database reference layer is empty, no changeset
+ * is derived and the entire contents of the data input are simply written directly to the
+ * reference layer.
  *
- * The command requires that the input be a streamable format, the output layer be a Hootenanny
+ * This command requires that the input be a streamable format, the output layer be a Hootenanny
  * API database layer, and the changeset output format be a Spark changeset.
  */
 class MultiaryIngestCmd : public BaseCommand
@@ -68,15 +73,16 @@ public:
   static string className() { return "hoot::MultiaryIngestCmd"; }
 
   MultiaryIngestCmd() :
-  _sortInput(false)
+  _sortInput(false),
+  _isGeoNamesInput(false)
   {
   }
 
   virtual ~MultiaryIngestCmd()
   {
-    //delete the temporary db layer used for sorting
     if (_sortInput)
     {
+      //delete the temporary db layer used for sorting
       LOG_DEBUG("Deleting temporary map: " << _sortedNewInput << "...");
       HootApiDbWriter().deleteMap(_sortedNewInput);
     }
@@ -86,19 +92,20 @@ public:
 
   virtual int runSimple(QStringList args)
   {
-    if (args.size() != 4)
+    if (args.size() != 3 && args.size() != 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
     const QString newInput = args[0];
+    _isGeoNamesInput = GeoNamesReader().isSupported(newInput);
     const QString referenceOutput = args[1];
     const QString changesetOutput = args[2];
-    _sortInput = false;
-    if (args[3].toLower() == "true")
+    _sortInput = true;
+    if (args.size() == 4 && args[3].toLower().trimmed() == "false")
     {
-      _sortInput = true;
+      _sortInput = false;
     }
 
     LOG_VARD(newInput);
@@ -109,14 +116,15 @@ public:
     if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
     {
       throw IllegalArgumentException(
-        "This command does not support non-streamable inputs: " + newInput);
+        QString("This command does not support non-streamable inputs.  See README.md - ") +
+        QString("Supported Data Formats for more details.  Input: ") + newInput);
     }
 
     if (!HootApiDbReader().isSupported(referenceOutput))
     {
       throw HootException(
         getName() + " only supports a hootapidb:// data source as the reference output.  " +
-        "Specified target: " + referenceOutput);
+        "Specified reference layer: " + referenceOutput);
     }
 
     if (!SparkChangesetWriter().isSupported(changesetOutput))
@@ -127,28 +135,42 @@ public:
     }
 
     LOG_INFO(
-      "Streaming multiary data ingest from input: " << newInput << " to reference output: " <<
-      referenceOutput << " and changeset: " << changesetOutput << "...");
+      "Streaming multiary data ingest from input: " << newInput << " to reference layer: " <<
+      referenceOutput << " and changeset file: " << changesetOutput << "...");
 
-    //inputs must be sorted by id for changeset derivation to work
+    //inputs must be sorted by element id for changeset derivation to work
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
-    //in order for the sorting to work, all original element ids must be retained; we're assuming
-    //no duplicate ids in the input
+    //in order for the sorting to work, all original element ids must be retained...no new ones
+    //assigned; we're assuming no duplicate ids in the input
     conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
-    //translating inputs to OSM
+    //translate inputs to OSM
     conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
 
-    //sort incoming data by ID, if necessary, for changeset derivation (only passing nodes
-    //through, so don't need to also sort by element type)
-    _sortedNewInput = _getSortedInput(newInput);
+    HootApiDb referenceDb;
+    referenceDb.open(referenceOutput);
+    const QStringList dbUrlParts = referenceOutput.split("/");
+    if (!referenceDb.mapExists(dbUrlParts[dbUrlParts.size() - 1]))
+    {
+      //If there's no existing reference data, then there's no point in sorting input data or
+      //deriving a changeset diff.  So in that case, write all of the input data directly to the
+      //ref layer and generate a Spark changeset consisting entirely of create statements.
+      _sortInput = false;
+      _writeChanges(_getNewInputStream(newInput), referenceOutput, changesetOutput);
+    }
+    else
+    {
+      //sort incoming data by element id, if necessary, for changeset derivation (only passing nodes
+      //through, so don't need to also sort by element type)
+      _sortedNewInput = _getSortedInput(newInput);
 
-    //create changes and write them to the existing db layer and also to a changeset file for
-    //external use in spark
-    _writeChangesetData(_getNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
+      //create the changes and write them to the ref db layer and also to a changeset file for
+      //external use by Spark
+      _deriveAndWriteChanges(_getNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
+    }
 
     LOG_INFO(
       "Multiary data ingest complete for input: " << newInput <<
-      " to reference output: " << referenceOutput << " and changeset: " <<
+      " to reference layer: " << referenceOutput << " and changeset file: " <<
       changesetOutput << "...");
 
     return 0;
@@ -158,6 +180,7 @@ private:
 
   bool _sortInput;
   QString _sortedNewInput;
+  bool _isGeoNamesInput;
 
   QString _getSortedInput(const QString newInput)
   {
@@ -167,7 +190,7 @@ private:
       return newInput;
     }
 
-    //write the unsorted input to temp db layer; later it will be queried back out sorted by id
+    //write the unsorted input to a temp db layer; later it will be queried back out sorted by id
 
     //TODO: if performance for this ends up being a bottleneck, will later implement something here
     //that performs faster - either a file based merge sort, or using the db like this but with sql
@@ -181,18 +204,8 @@ private:
     boost::shared_ptr<ElementInputStream> unsortedNewInputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(unsortedNewInputReader);
 
-    boost::shared_ptr<PoiCriterion> elementCriterion;
-    //as the incoming data is read, filter it down to POIs only and translate each element
-    //all geonames data are pois by definition, so skip the element criterion filtering expense
-    if (!GeoNamesReader().isSupported(newInput))
-    {
-      elementCriterion.reset(new PoiCriterion());
-    }
-    unsortedNewInputStream.reset(
-      new ElementCriterionVisitorInputStream(
-        unsortedNewInputStream,
-        elementCriterion,
-        boost::shared_ptr<TranslationVisitor>(new TranslationVisitor())));
+    boost::shared_ptr<ElementInputStream> filteredUnsortedNewInputStream =
+      _getFilteredNewInputStream(unsortedNewInputStream);
 
     const QString sortedNewInput =
       HootApiDb::getBaseUrl().toString() + "/MultiaryIngest-tempNewInput-" +
@@ -205,7 +218,8 @@ private:
       boost::dynamic_pointer_cast<ElementOutputStream>(unsortedNewInputWriter);
 
     LOG_DEBUG("Writing multiary input to temp location: " << sortedNewInput << "...");
-    ElementOutputStream::writeAllElements(*unsortedNewInputStream, *unsortedNewOutputStream);
+    ElementOutputStream::writeAllElements(
+      *filteredUnsortedNewInputStream, *unsortedNewOutputStream);
     LOG_DEBUG("Multiary input written to temp location: " << sortedNewInput);
 
     return sortedNewInput;
@@ -221,12 +235,56 @@ private:
     return boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
   }
 
-  void _writeChangesetData(boost::shared_ptr<ElementInputStream> newInputStream,
-                           const QString referenceOutput, const QString changesetOutput)
+  boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(
+    boost::shared_ptr<ElementInputStream> inputStream)
+  {
+    boost::shared_ptr<PoiCriterion> elementCriterion;
+    //as the incoming data is read, filter it down to POIs only and translate each element;
+    if (!_isGeoNamesInput) //all geonames are pois, so skip the element criterion filtering expense
+    {
+      elementCriterion.reset(new PoiCriterion());
+    }
+    QList<ElementVisitorPtr> visitors;
+    visitors.append(boost::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
+    visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
+    boost::shared_ptr<ElementInputStream> filteredNewInputStream(
+      new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));
+    return filteredNewInputStream;
+  }
+
+  void _writeChanges(boost::shared_ptr<ElementInputStream> newInputStream,
+                     const QString referenceOutput, const QString changesetOutput)
   {
     LOG_DEBUG(
-      "Writing multiary change data to existing database layer: " << referenceOutput <<
-      " and changeset file: " << changesetOutput << "...")
+      "Writing multiary change data to new reference output layer: " << referenceOutput <<
+      " and changeset file: " << changesetOutput << "...");
+
+    boost::shared_ptr<ElementInputStream> filteredNewInputStream =
+      _getFilteredNewInputStream(newInputStream);
+
+    HootApiDbWriter referenceWriter;
+    referenceWriter.setCreateUser(true);
+    referenceWriter.setOverwriteMap(true);
+    referenceWriter.open(referenceOutput);
+
+    SparkChangesetWriter changesetFileWriter;
+    changesetFileWriter.open(changesetOutput);
+
+    while (filteredNewInputStream->hasMoreElements())
+    {
+      ElementPtr element = filteredNewInputStream->readNextElement();
+      LOG_VART(element->getTags().contains(MetadataTags::HootHash()));
+      referenceWriter.writeElement(element);
+      changesetFileWriter.writeChange(Change(Change::Create, element));
+    }
+  }
+
+  void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> newInputStream,
+                              const QString referenceOutput, const QString changesetOutput)
+  {
+    LOG_DEBUG(
+      "Deriving and writing multiary change data to existing reference output layer: " <<
+      referenceOutput << " and changeset file: " << changesetOutput << "...");
 
     boost::shared_ptr<HootApiDbReader> referenceReader(new HootApiDbReader());
     referenceReader->setUseDataSourceIds(true);
@@ -249,12 +307,11 @@ private:
       const Change change = changesetDeriver->readNextChange();
       if (change.type != Change::Unknown)
       {
+        LOG_VART(change.e->getTags().contains(MetadataTags::HootHash()));
         changesetFileWriter.writeChange(change);
         referenceChangeWriter.writeChange(change);
       }
     }
-
-    //all readers/writers involved are cleaning up by themselves in their destructors
   }
 };
 

@@ -55,7 +55,13 @@ public:
     Unknown = 3
   };
 
-   Change() {}
+  Change() {}
+
+  Change(ChangeType type, ConstElementPtr element) :
+  type(type),
+  e(element)
+  {
+  }
 
   static QString changeTypeToString(const ChangeType changeType)
   {
@@ -80,9 +86,9 @@ public:
       //", Note: " + note + "\n" + e->toString();
   }
 
+  ChangeType type;
   ConstElementPtr e;
   ConstElementPtr previousElement;
-  ChangeType type;
   QString note;
 
 };

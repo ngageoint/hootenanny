@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/ChangesetProvider.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 #include "../TestUtils.h"
 
@@ -50,11 +51,15 @@ public:
 
     void runTest()
     {
+      CalculateHashVisitor2 hashVis;
+
       OsmMapPtr map1(new OsmMap());
       OsmMapReaderFactory::read(map1, "test-files/io/ChangesetDeriverTest/Map1.osm", true);
+      map1->visitRw(hashVis);
 
       OsmMapPtr map2(new OsmMap());
       OsmMapReaderFactory::read(map2, "test-files/io/ChangesetDeriverTest/Map2.osm", true);
+      map2->visitRw(hashVis);
 
       ElementSorterPtr map1SortedElements(new ElementSorter(map1));
       ElementSorterPtr map2SortedElements(new ElementSorter(map2));

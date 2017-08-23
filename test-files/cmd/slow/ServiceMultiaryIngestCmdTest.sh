@@ -11,11 +11,11 @@ if [ -z "$OPT_COMMAND" ]; then
  exit 0
 fi
 
-REF_DIR=test-files/cmd/slow/MultiaryIngestCmdTest
+REF_DIR=test-files/cmd/slow/ServiceMultiaryIngestCmdTest
 REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.geonames
 NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.geonames
 
-OUTPUT_DIR=test-output/cmd/slow/MultiaryIngestCmdTest
+OUTPUT_DIR=test-output/cmd/slow/ServiceMultiaryIngestCmdTest
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-changeset.spark.1
 FINAL_OUTPUT=$OUTPUT_DIR/allCountries-output.osm
 
@@ -35,20 +35,27 @@ echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 
 echo ""
-echo "MULTIARY INGEST - LOADING REFERENCE LAYER..."
+echo "MULTIARY INGEST - INGESTING DATASET 1..."
 echo ""
-hoot convert $HOOT_OPTS -D hootapi.db.writer.remap.ids=false -D hootapi.db.writer.create.user=true -D translation.script="translations/OSM_Ingest.js" -D convert.ops="hoot::TranslationVisitor" $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+hoot multiary-ingest $HOOT_OPTS $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
 
 echo ""
-echo "MULTIARY INGEST - INGESTING..."
+echo "MULTIARY INGEST - INGESTING DATASET 2..."
 echo ""
 hoot multiary-ingest $HOOT_OPTS $NEW_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
 
 echo ""
-echo "MULTIARY INGEST - EXPORTING FINAL REFERENCE LAYER..."
+echo "MULTIARY INGEST - EXPORTING REFERENCE LAYER..."
 echo ""
 hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTPUT
 
+echo ""
+echo "MULTIARY INGEST - COMPARING REFERENCE LAYER OUTPUT..."
+echo ""
 hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+
+echo ""
+echo "MULTIARY INGEST - COMPARING CHANGESET OUTPUT..."
+echo ""
 diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
