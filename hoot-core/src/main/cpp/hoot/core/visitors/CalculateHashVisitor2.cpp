@@ -45,6 +45,7 @@ void CalculateHashVisitor2::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
+    e->getTags().remove(Tags::uuidKey());
     e->getTags()[MetadataTags::HootHash()] =
       "sha1sum:" + QString::fromUtf8(CalculateHashVisitor::toHash(e).toHex());
   }

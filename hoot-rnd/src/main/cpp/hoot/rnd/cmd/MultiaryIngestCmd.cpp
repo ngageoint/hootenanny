@@ -42,7 +42,7 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
-//#include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmPbfReader.h>
 
 // Qt
 #include <QUuid>
@@ -161,7 +161,7 @@ public:
     {
       //sort incoming data by element id, if necessary, for changeset derivation (only passing nodes
       //through, so don't need to also sort by element type)
-      _sortedNewInput = _getSortedInput(newInput);
+      _sortedNewInput = _getSortedNewInput(newInput);
 
       //create the changes and write them to the ref db layer and also to a changeset file for
       //external use by Spark
@@ -182,13 +182,30 @@ private:
   QString _sortedNewInput;
   bool _isGeoNamesInput;
 
-  QString _getSortedInput(const QString newInput)
+  QString _getSortedNewInput(const QString newInput)
   {
-    //OsmPbfReader tmpPbfReader; //getSortedTypeThenId
-    if (!_sortInput) //TODO: if pbf, check pbf format flag
+    if (!_sortInput) //TODO:
     {
       return newInput;
     }
+
+//    //if input is pbf, check pbf format flag and don't sort if its already been sorted
+//    if (OsmPbfReader().isSupported(newInput))
+//    {
+//      //just read the header and then close
+//      OsmPbfReader tmpPbfReader;
+//      tmpPbfReader.open(newInput);
+//      tmpPbfReader.parseOsmHeader();
+//      const bool pbfSorted = tmpPbfReader.getSortedTypeThenId();
+//      tmpPbfReader.close();
+//      if (pbfSorted)
+//      {
+//        _sortInput = false;
+//        return newInput;
+//      }
+//    }
+
+    LOG_DEBUG("Retrieving input stream...");
 
     //write the unsorted input to a temp db layer; later it will be queried back out sorted by id
 
@@ -204,8 +221,12 @@ private:
     boost::shared_ptr<ElementInputStream> unsortedNewInputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(unsortedNewInputReader);
 
+    LOG_DEBUG("Retrieving filtered input stream...");
+
     boost::shared_ptr<ElementInputStream> filteredUnsortedNewInputStream =
       _getFilteredNewInputStream(unsortedNewInputStream);
+
+    LOG_DEBUG("Retrieving output stream...");
 
     const QString sortedNewInput =
       HootApiDb::getBaseUrl().toString() + "/MultiaryIngest-tempNewInput-" +
@@ -217,10 +238,10 @@ private:
     boost::shared_ptr<ElementOutputStream> unsortedNewOutputStream =
       boost::dynamic_pointer_cast<ElementOutputStream>(unsortedNewInputWriter);
 
-    LOG_DEBUG("Writing multiary input to temp location: " << sortedNewInput << "...");
+    LOG_DEBUG("Writing multiary input to temp location for sorting: " << sortedNewInput << "...");
     ElementOutputStream::writeAllElements(
       *filteredUnsortedNewInputStream, *unsortedNewOutputStream);
-    LOG_DEBUG("Multiary input written to temp location: " << sortedNewInput);
+    LOG_DEBUG("Multiary input written to temp location for sorting: " << sortedNewInput);
 
     return sortedNewInput;
   }
@@ -274,6 +295,8 @@ private:
     {
       ElementPtr element = filteredNewInputStream->readNextElement();
       LOG_VART(element->getTags().contains(MetadataTags::HootHash()));
+      LOG_VART(element->getTags().contains(Tags::uuidKey()));
+
       referenceWriter.writeElement(element);
       changesetFileWriter.writeChange(Change(Change::Create, element));
     }
@@ -308,6 +331,8 @@ private:
       if (change.type != Change::Unknown)
       {
         LOG_VART(change.e->getTags().contains(MetadataTags::HootHash()));
+        LOG_VART(change.e->getTags().contains(Tags::uuidKey()));
+
         changesetFileWriter.writeChange(change);
         referenceChangeWriter.writeChange(change);
       }

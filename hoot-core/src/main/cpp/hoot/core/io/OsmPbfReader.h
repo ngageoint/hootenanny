@@ -165,6 +165,8 @@ public:
 
   bool getSortedTypeThenId() { return _typeThenId; }
 
+  void parseOsmHeader();
+
 private:
 
   Meters _circularError;
@@ -272,8 +274,6 @@ private:
   int _parseInt(QString s);
 
   void _parseOsmData();
-
-  void _parseOsmHeader();
 
   Status _parseStatus(QString s);
 
