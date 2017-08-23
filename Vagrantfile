@@ -179,7 +179,7 @@ Vagrant.configure(2) do |config|
     override.ssh.username         = "vagrant"
     override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY_PATH']
     aws.instance_type             = "m3.xlarge"
-    aws.block_device_mapping      = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 16 }]
+    aws.block_device_mapping      = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 32 }]
     aws.access_key_id             = ENV['AWS_ACCESS_KEY_ID']
     aws.secret_access_key         = ENV['AWS_SECRET_ACCESS_KEY']
     aws.keypair_name              = ENV['AWS_KEYPAIR_NAME']
