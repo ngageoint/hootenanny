@@ -294,6 +294,7 @@ private:
     while (filteredNewInputStream->hasMoreElements())
     {
       ElementPtr element = filteredNewInputStream->readNextElement();
+
       LOG_VART(element->getTags().contains(MetadataTags::HootHash()));
       LOG_VART(element->getTags().contains(Tags::uuidKey()));
 
@@ -331,6 +332,10 @@ private:
       if (change.type != Change::Unknown)
       {
         LOG_VART(change.e->getTags().contains(MetadataTags::HootHash()));
+        if (change.previousElement)
+        {
+          LOG_VART(change.previousElement->getTags().contains(MetadataTags::HootHash()));
+        }
         LOG_VART(change.e->getTags().contains(Tags::uuidKey()));
 
         changesetFileWriter.writeChange(change);

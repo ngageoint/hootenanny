@@ -119,10 +119,12 @@ void SparkChangesetWriter::writeChange(const Change& change)
 
   ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.e);
   NodePtr nodeCopy(dynamic_cast<Node*>(node->clone()));
+  const QString nodeHash = nodeCopy->getTags()[MetadataTags::HootHash()];
+  nodeCopy->getTags().remove(MetadataTags::HootHash());
   _exportTagsVisitor.visit(nodeCopy);
   OsmMapPtr tmpMap(new OsmMap());
   tmpMap->addElement(nodeCopy);
-  Envelope env = _bounds->calculateSearchBounds(/*OsmMapPtr()*/tmpMap, nodeCopy);
+  Envelope env = _bounds->calculateSearchBounds(tmpMap, nodeCopy);
 
   QString changeLine;
   changeLine +=
@@ -133,7 +135,6 @@ void SparkChangesetWriter::writeChange(const Change& change)
     QString::number(env.getMaxY(), 'g', _precision) % "\t";
   if (change.type == Change::Modify)
   {
-    // element hash before change
     if (!change.previousElement.get())
     {
       throw HootException("No previous element specified for modify change.");
@@ -145,11 +146,12 @@ void SparkChangesetWriter::writeChange(const Change& change)
     ConstNodePtr previousNode = boost::dynamic_pointer_cast<const Node>(change.previousElement);
     NodePtr previousNodeCopy(dynamic_cast<Node*>(previousNode->clone()));
     _exportTagsVisitor.visit(previousNodeCopy);
+    // element hash before change
     changeLine += previousNodeCopy->getTags()[MetadataTags::HootHash()] % "\t";
   }
   // element hash after change
   changeLine +=
-    nodeCopy->getTags()[MetadataTags::HootHash()] % "\t" %
+    nodeHash % "\t" %
     _jsonWriter.toString(tmpMap).trimmed() % "\n";
 
   if (_fp->write(changeLine.toUtf8()) == -1)

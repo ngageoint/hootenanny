@@ -305,27 +305,31 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
   {
     if (it.key().isEmpty() == false && it.value().isEmpty() == false)
     {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", removeInvalidCharacters(it.key()));
-      if (it.key() == MetadataTags::HootStatus() &&
-          //status check here only for nodes/ways; should relation have this check too?
-          (type == ElementType::Relation ||
-           (type != ElementType::Relation && element->getStatus() != Status::Invalid)))
+      if (it.key() != MetadataTags::HootHash() ||
+          (it.key() == MetadataTags::HootHash() && _includeDebug))
       {
-        if (_textStatus)
+        _writer->writeStartElement("tag");
+        _writer->writeAttribute("k", removeInvalidCharacters(it.key()));
+        if (it.key() == MetadataTags::HootStatus() &&
+            //status check here only for nodes/ways; should relation have this check too?
+            (type == ElementType::Relation ||
+             (type != ElementType::Relation && element->getStatus() != Status::Invalid)))
         {
-          _writer->writeAttribute("v", element->getStatus().toTextStatus());
+          if (_textStatus)
+          {
+            _writer->writeAttribute("v", element->getStatus().toTextStatus());
+          }
+          else
+          {
+            _writer->writeAttribute("v", element->getStatus().toCompatString());
+          }
         }
         else
         {
-          _writer->writeAttribute("v", element->getStatus().toCompatString());
+          _writer->writeAttribute("v", removeInvalidCharacters(it.value()));
         }
+        _writer->writeEndElement();
       }
-      else
-      {
-        _writer->writeAttribute("v", removeInvalidCharacters(it.value()));
-      }
-      _writer->writeEndElement();
     }
   }
 
