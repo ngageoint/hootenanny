@@ -35,11 +35,13 @@ echo "MULTIARY INGEST - DELETING GEONAMES REFERENCE LAYER..."
 echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 
+# first time ref layer write
 echo ""
 echo "MULTIARY INGEST - INGESTING GEONAMES DATASET 1..."
 echo ""
 hoot multiary-ingest $HOOT_OPTS $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
 
+# ingest of new data, compare, and write to existing data
 echo ""
 echo "MULTIARY INGEST - INGESTING GEONAMES DATASET 2..."
 echo ""
@@ -74,11 +76,13 @@ echo "MULTIARY INGEST - DELETING OSM PBF REFERENCE LAYER..."
 echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 
+# first time ref layer write
 echo ""
 echo "MULTIARY INGEST - INGESTING OSM PBF DATASET 1..."
 echo ""
 hoot multiary-ingest $HOOT_OPTS $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
 
+# ingest of new data, compare, and write to existing data
 echo ""
 echo "MULTIARY INGEST - INGESTING OSM PBF DATASET 2..."
 echo ""

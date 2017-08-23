@@ -63,6 +63,13 @@ public:
   {
   }
 
+  Change(ChangeType type, ConstElementPtr element, ConstElementPtr pe) :
+  type(type),
+  e(element),
+  previousElement(pe)
+  {
+  }
+
   static QString changeTypeToString(const ChangeType changeType)
   {
     switch (changeType)

@@ -99,6 +99,17 @@ void SparkChangesetWriter::writeChange(const Change& change)
     throw NotImplementedException("Only nodes are supported.");
   }
 
+  if (!change.e->getTags().contains(MetadataTags::HootHash()))
+  {
+    throw IllegalArgumentException("No hash value set on element.");
+  }
+
+  if (change.previousElement &&
+      !change.previousElement->getTags().contains(MetadataTags::HootHash()))
+  {
+    throw IllegalArgumentException("No hash value set on previous element.");
+  }
+
   LOG_VART(change);
 
   QString changeType;
