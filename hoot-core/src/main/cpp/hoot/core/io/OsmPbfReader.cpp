@@ -1027,7 +1027,7 @@ void OsmPbfReader::_parseOsmData()
   _loadOsmData();
 }
 
-void OsmPbfReader::parseOsmHeader()
+void OsmPbfReader::_parseOsmHeader()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
@@ -1091,7 +1091,7 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
   // read blob
   _parseBlob();
   // read OSMHeader
-  parseOsmHeader();
+  _parseOsmHeader();
 
   // read blob header
   _parseBlobHeader();

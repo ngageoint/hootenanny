@@ -165,8 +165,6 @@ public:
 
   bool getSortedTypeThenId() { return _typeThenId; }
 
-  void parseOsmHeader();
-
 private:
 
   Meters _circularError;
@@ -256,6 +254,8 @@ private:
   void _loadNodes();
 
   void _loadOsmData();
+
+  void _parseOsmHeader();
 
   void _loadRelation(const hoot::pb::Relation& r);
 

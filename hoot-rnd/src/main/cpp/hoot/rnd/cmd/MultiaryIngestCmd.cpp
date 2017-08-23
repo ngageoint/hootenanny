@@ -42,7 +42,6 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
-#include <hoot/core/io/OsmPbfReader.h>
 
 // Qt
 #include <QUuid>
@@ -188,22 +187,6 @@ private:
     {
       return newInput;
     }
-
-//    //if input is pbf, check pbf format flag and don't sort if its already been sorted
-//    if (OsmPbfReader().isSupported(newInput))
-//    {
-//      //just read the header and then close
-//      OsmPbfReader tmpPbfReader;
-//      tmpPbfReader.open(newInput);
-//      tmpPbfReader.parseOsmHeader();
-//      const bool pbfSorted = tmpPbfReader.getSortedTypeThenId();
-//      tmpPbfReader.close();
-//      if (pbfSorted)
-//      {
-//        _sortInput = false;
-//        return newInput;
-//      }
-//    }
 
     LOG_DEBUG("Retrieving input stream...");
 
