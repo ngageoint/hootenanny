@@ -1,5 +1,50 @@
 #!/usr/bin/env bash
 
+#
+# Hootenanny Core Only configure and build script
+#
+# This script is basically the VagrantProvisionCentos7.sh script with the UI stuff removed. The intent is to
+# have a script that can configure a machine and then build Hootenanny either using Vagrant or straight on
+# an existing machine/VM
+#
+# You can run "vagrant up hoot_centos7_core" and you will get a Centos7 VM with just the Hootenanny core.
+#
+# To get this to build, we use a number of source and other packages outside of the normal core and EPEL repos.
+# This script looks for the packages in the users home directory and if it can't find them, it tries to
+# download them.
+#
+# The list of packages and their download locations are:
+#
+# Java8: jdk-8u144-linux-x64.rpm
+# From: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+#
+# NodeJS: nodejs-0.10.46 and nodejs-devel-0.10.46
+# Installed via this repo: https://rpm.nodesource.com/setup
+#
+# STXXL: Release v1.3.1
+# Pulled from GitHub: git clone http://github.com/stxxl/stxxl.git stxxl
+#
+# American-english-insane dictionary & words.sqlite. There isn't a package available for these so we use our own
+# copy stored on S3
+# https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
+# https://s3.amazonaws.com/hoot-rpms/support-files/words1.sqlite.bz2
+#
+# Alternate Maven mirror for packages
+# https://repo.maven.apache.org/maven2
+#
+# Osmosis: osmosis-latest.tgz
+# From: http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
+#
+# Postgresql95 from the Postgresql repo
+# http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm
+#
+# GDAL gdal-2.1.4.tar.gz
+# From: http://download.osgeo.org/gdal/2.1.4/gdal-2.1.4.tar.gz
+#
+# FileGDB API: FileGDB_API_1_5_1-64.tar.gz
+# From: https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64.tar.gz
+#
+
 VMUSER=`id -u -n`
 echo USER: $VMUSER
 VMGROUP=`groups | grep -o $VMUSER`
@@ -58,15 +103,6 @@ echo "### Installing an ancient version of NodeJS"
 sudo yum install -y \
   nodejs-0.10.46 \
   nodejs-devel-0.10.46
-
-# echo "### Installing and locking the GEOS version to 3.4.2"
-# This works but yum conflicts with postgis2_95
-# sudo yum install -y yum-plugin-versionlock
-# sudo yum install -y \
-#     geos-3.4.2-2.el7 \
-#     geos-devel-3.4.2-2.el7
-#
-# sudo yum versionlock geos*
 
 
 # install useful and needed packages for working with hootenanny
@@ -143,7 +179,7 @@ echo "##### Temp installs #####"
 # Stxxl:
 git clone http://github.com/stxxl/stxxl.git stxxl
 cd stxxl
-git checkout tags/1.3.1
+git checkout -q tags/1.3.1
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
@@ -179,6 +215,13 @@ if ! hash qmake >/dev/null 2>&1 ; then
     else
       echo "##### No qmake! #####"
     fi
+fi
+
+# We need this big dictionary for text matching. On Ubuntu, this is a package
+if [ ! -f /usr/share/dict/american-english-insane ]; then
+    echo "### Installing american-english-insane dictionary..."
+    wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
+    sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
 fi
 
 #####
@@ -631,6 +674,7 @@ cd ~
 cd $HOOT_HOME
 source ./SetupEnv.sh
 
+# Not sure if we really need this...
 if [ ! "$(ls -A hoot-ui)" ]; then
     echo "hoot-ui is empty"
     echo "init'ing and updating submodule"
@@ -665,8 +709,7 @@ cd ~
 
 ##### These two are next to do.
 # echo "### Installing node-mapnik-server..."
-# sudo cp $HOOT_HOME/node-mapnik-server/init.d/node-mapnik-server /etc/init.d
-# sudo chmod a+x /etc/init.d/node-mapnik-server
+# sudo cp $HOOT_HOME/node-mapnik-server/systemd/node-mapnik.service /etc/systemd/system/node-mapnik.service
 # # Make sure all npm modules are installed
 # cd $HOOT_HOME/node-mapnik-server
 # npm install --silent
@@ -674,8 +717,7 @@ cd ~
 # rm -rf ~/tmp
 #
 # echo "### Installing node-export-server..."
-# sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
-# sudo chmod a+x /etc/init.d/node-export-server
+# sudo cp $HOOT_HOME/node-export-server/systemd/node-export.service /etc/systemd/system/node-export.service
 # # Make sure all npm modules are installed
 # cd $HOOT_HOME/node-export-server
 # npm install --silent
@@ -684,51 +726,51 @@ cd ~
 
 cd $HOOT_HOME
 
-# Update marker file date now that dependency and config stuff has run
-# The make command will exit and provide a warning to run 'vagrant provision'
-# if the marker file is older than this file (VagrantProvision.sh)
-touch Vagrant.marker
-
-# Setup and clean out the directories that the UI uses
-if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
-    mkdir -p $HOOT_HOME/userfiles/ingest/processed
-fi
-
-# wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
-rm -rf $HOOT_HOME/upload
-rm -rf $HOOT_HOME/tmp
-
-if [ -d "$HOOT_HOME/data/reports" ]; then
-    echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
-    cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
-    rm -rf $HOOT_HOME/data/reports
-fi
-
-if [ -d "$HOOT_HOME/customscript" ]; then
-    echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
-    cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
-    rm -rf $HOOT_HOME/customscript
-fi
-
-if [ -d "$HOOT_HOME/ingest" ]; then
-    echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
-    cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
-    rm -rf $HOOT_HOME/ingest
-fi
-
-# Always start with a clean $HOOT_HOME/userfiles/tmp
-rm -rf $HOOT_HOME/userfiles/tmp
-
-# This is defensive!
-# We do this so that Tomcat doesnt. If it does, it screws the permissions up
-mkdir -p $HOOT_HOME/userfiles/tmp
-
-# OK, this is seriously UGLY but it fixes an NFS problem
-chmod -R 777 $HOOT_HOME/userfiles
-
-# This is very ugly.
-# If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
-chmod go+rx ~
+# # Update marker file date now that dependency and config stuff has run
+# # The make command will exit and provide a warning to run 'vagrant provision'
+# # if the marker file is older than this file (VagrantProvision.sh)
+# touch Vagrant.marker
+#
+# # Setup and clean out the directories that the UI uses
+# if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+#     mkdir -p $HOOT_HOME/userfiles/ingest/processed
+# fi
+#
+# # wipe out all dirs. tmp and upload now reside under $HOOT_HOME/userfiles/
+# rm -rf $HOOT_HOME/upload
+# rm -rf $HOOT_HOME/tmp
+#
+# if [ -d "$HOOT_HOME/data/reports" ]; then
+#     echo "Moving contents of $HOOT_HOME/data/reports to $HOOT_HOME/userfiles/"
+#     cp -R $HOOT_HOME/data/reports $HOOT_HOME/userfiles/
+#     rm -rf $HOOT_HOME/data/reports
+# fi
+#
+# if [ -d "$HOOT_HOME/customscript" ]; then
+#     echo "Moving contents of $HOOT_HOME/customscript to $HOOT_HOME/userfiles/"
+#     cp -R $HOOT_HOME/customscript $HOOT_HOME/userfiles/
+#     rm -rf $HOOT_HOME/customscript
+# fi
+#
+# if [ -d "$HOOT_HOME/ingest" ]; then
+#     echo "Moving contents of $HOOT_HOME/ingest to $HOOT_HOME/userfiles/"
+#     cp -R $HOOT_HOME/ingest $HOOT_HOME/userfiles/
+#     rm -rf $HOOT_HOME/ingest
+# fi
+#
+# # Always start with a clean $HOOT_HOME/userfiles/tmp
+# rm -rf $HOOT_HOME/userfiles/tmp
+#
+# # This is defensive!
+# # We do this so that Tomcat doesnt. If it does, it screws the permissions up
+# mkdir -p $HOOT_HOME/userfiles/tmp
+#
+# # OK, this is seriously UGLY but it fixes an NFS problem
+# chmod -R 777 $HOOT_HOME/userfiles
+#
+# # This is very ugly.
+# # If we don't have access to the directory where HOOT_HOME is, Tomcat chokes
+# chmod go+rx ~
 
 
 # Now build Hoot
