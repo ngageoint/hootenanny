@@ -115,46 +115,62 @@ double MultiaryMatchComparator::evaluateMatches(const ConstOsmMapPtr& in, const 
     actualReviewSet -= id;
     expectedReviewSet -= id;
 
-//    LOG_VAR(actualMatchSet);
-//    LOG_VAR(expectedMatchSet);
-//    LOG_VAR(actualReviewSet);
-//    LOG_VAR(expectedReviewSet);
+    LOG_VAR(id);
+    LOG_VAR(actualMatchSet);
+    LOG_VAR(expectedMatchSet);
+    LOG_VAR(actualReviewSet);
+    LOG_VAR(expectedReviewSet);
+
+    // confusion matrix contributions. Variables are named as: actualExpected
 
     // calculate the number of correct matches for this element.
-    int correctMatches = (expectedMatchSet & actualMatchSet).size();
+    int matchMatch = (expectedMatchSet & actualMatchSet).size();
+    int matchMiss = (actualMatchSet - (expectedReviewSet + expectedMatchSet)).size();
+    int matchReview = (actualMatchSet & expectedReviewSet).size();
+    // take the expected set of matches then remove the actual matches and reviews, what is left
+    // are the misses.
+    int missMatch = (expectedMatchSet - (actualMatchSet + actualReviewSet)).size();
+    int missReview = (expectedReviewSet - actualReviewSet - actualMatchSet).size();
+    int reviewMatch = (actualReviewSet & expectedMatchSet).size();
+    int reviewMiss = (actualReviewSet - expectedReviewSet - expectedMatchSet).size();
 
-    // calculate the number of incorrect matches for this element.
-    int incorrectMatches = (actualMatchSet - expectedMatchSet).size();
-
-    // calculate the number of missed matches for this element.
-    int missedMatches = (expectedMatchSet - actualMatchSet).size();
-
-    if (incorrectMatches || missedMatches)
+    if (matchMiss)
     {
-      _tagWrong(conflated, id);
+      _tagWrong(conflated, id, "matchMiss");
+    }
+    if (matchReview)
+    {
+      _tagWrong(conflated, id, "matchReview");
+    }
+    if (missMatch)
+    {
+      _tagWrong(conflated, id, "missMatch");
+    }
+    if (missReview)
+    {
+      _tagWrong(conflated, id, "missReview");
+    }
+    if (reviewMatch)
+    {
+      _tagWrong(conflated, id, "reviewMatch");
+    }
+    if (reviewMiss)
+    {
+      _tagWrong(conflated, id, "reviewMiss");
     }
 
-    // Weighting counts based on the cluster size is a bit unorthodoxed, but if we use the more
-    // typical pairwise comparison the large clusters will have a disproportionately large impact
-    // on the result. (e.g. a cluster of size 4 will have 4x the impact of a cluster with size 2)
-
-    _confusion[MatchType::Match][MatchType::Match] += correctMatches;
-    _confusion[MatchType::Miss][MatchType::Match] += missedMatches;
+    _confusion[MatchType::Match][MatchType::Match] += matchMatch;
+    _confusion[MatchType::Miss][MatchType::Match] += missMatch;
     // we expected a match, but got a review.
-    _confusion[MatchType::Review][MatchType::Match] += (actualReviewSet & expectedMatchSet).size();
-    _confusion[MatchType::Match][MatchType::Miss] += incorrectMatches;
+    _confusion[MatchType::Review][MatchType::Match] += reviewMatch;
+    _confusion[MatchType::Match][MatchType::Miss] += matchMiss;
     // we don't care about miss/miss. This isn't a meaningful value.
     // _confusion[MatchType::Miss][MatchType::Miss]
-    _confusion[MatchType::Review][MatchType::Miss] += (actualReviewSet -
-                                                       expectedReviewSet -
-                                                       expectedMatchSet).size();
+    _confusion[MatchType::Review][MatchType::Miss] += reviewMiss;
     _confusion[MatchType::Review][MatchType::Review] += (expectedReviewSet &
                                                          actualReviewSet).size();
-    _confusion[MatchType::Match][MatchType::Review] += (actualMatchSet &
-                                                        expectedReviewSet).size();
-    _confusion[MatchType::Miss][MatchType::Review] += (expectedReviewSet -
-                                                       actualReviewSet -
-                                                       actualMatchSet).size();
+    _confusion[MatchType::Match][MatchType::Review] += matchReview;
+    _confusion[MatchType::Miss][MatchType::Review] += missReview;
   }
 
   // we're counting both sides of each pair, so divide by two.
@@ -242,56 +258,31 @@ void MultiaryMatchComparator::_findActualReviews(const ConstOsmMapPtr& map)
   foreach (ReviewMarker::ReviewUid ruid, reviews)
   {
     set<ElementId> rEids = ReviewMarker::getReviewElements(map, ruid);
+    QList<ElementId> rEidList;
 
-    QSet<QString> allIds;
-
+    // convert the set to a list
     foreach (ElementId eid, rEids)
     {
-      allIds += QSet<QString>::fromList(_getAllIds(map->getElement(eid)));
+      rEidList.append(eid);
     }
 
-    bool foundExpectedPair = false;
-    // the IDs we will use to create the actual review.
-    QList<QString> idsToAdd;
-
-    foreach (QString id, allIds)
+    // go through all the possible pairwise combinations of rEidList (likely only two entries in
+    // rEidList, but it doesn't hurt to be thorough)
+    for (int i = 0; i < rEidList.size(); ++i)
     {
-      IdClusterPtr c = _expectedReviews.getCluster(id);
-      QSet<QString> copy = *c;
-      copy -= id;
-      QSet<QString> intersection = copy & allIds;
-
-      if (intersection.size() > 0)
+      QList<QString> allIds1 = _getAllIds(map->getElement(rEidList[i]));
+      for (int j = i + 1; j < rEidList.size(); ++j)
       {
-        idsToAdd.append(id);
-        idsToAdd.append(*intersection.begin());
-        foundExpectedPair = true;
-        break;
-      }
-    }
+        QList<QString> allIds2 = _getAllIds(map->getElement(rEidList[j]));
 
-    // for now this only when there are two elements in the review. You'll need to do a bit of
-    // noodling if this fails when we expand to buildings or similar that cause 3 or more elements
-    // in a review.
-    assert (rEids.size() == 2 || !foundExpectedPair);
-
-    // if we didn't find what we were looking for...
-    if (!foundExpectedPair)
-    {
-      // arbitrarily pick the first ID from each cluster. There is no need to report a bad review
-      // for every ID in the cluster. Seems kinda silly.
-      foreach (ElementId eid, rEids)
-      {
-        idsToAdd += *_getAllIds(map->getElement(eid)).begin();
-      }
-    }
-
-    // add an actual review between each of the chosen IDs.
-    for (int i = 0; i < idsToAdd.size(); ++i)
-    {
-      for (int j = i + 1; j < idsToAdd.size(); ++j)
-      {
-        _actualReviews.addReview(idsToAdd[i], idsToAdd[j]);
+        // add an actual review between each of the IDs in the two elements.
+        foreach (QString id1, allIds1)
+        {
+          foreach (QString id2, allIds2)
+          {
+            _actualReviews.addReview(id1, id2);
+          }
+        }
       }
     }
   }
@@ -486,7 +477,7 @@ int MultiaryMatchComparator::getTotalCount() const
   return result;
 }
 
-void MultiaryMatchComparator::_tagWrong(const OsmMapPtr &map, const QString &id)
+void MultiaryMatchComparator::_tagWrong(const OsmMapPtr &map, const QString &id, QString value)
 {
   if (_tagErrors)
   {
@@ -494,7 +485,7 @@ void MultiaryMatchComparator::_tagWrong(const OsmMapPtr &map, const QString &id)
 
     if (e.get())
     {
-      e->getTags()[MetadataTags::HootWrong()] = "1";
+      e->getTags().appendValue(MetadataTags::HootWrong(), value);
     }
   }
 }

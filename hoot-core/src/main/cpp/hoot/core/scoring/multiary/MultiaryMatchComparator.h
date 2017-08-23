@@ -253,7 +253,7 @@ private:
    * @param map The map that contains the element.
    * @param id The ID of the element to mark as wrong.
    */
-  void _tagWrong(const OsmMapPtr &map, const QString &id);
+  void _tagWrong(const OsmMapPtr &map, const QString &id, QString value);
 
   /**
    * Convenience method to convert a std::set to QSet.

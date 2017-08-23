@@ -105,6 +105,7 @@ MultiaryClusterAlgorithm::ClusterList MultiaryHierarchicalClusterAlgorithm::calc
       _addChildLinks(newCluster, cl->b);
     }
   }
+  LOG_VAR(_clusters);
 
   return _clusters;
 }

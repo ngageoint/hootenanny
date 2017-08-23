@@ -80,13 +80,8 @@ DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor()
   _rules.back()->tags["amenity"] = "hospital";
 
   _rules.append(ImplicitRulePtr(new ImplicitRule()));
-  _rules.back()->word += QString::fromUtf8("hotel");
-  _rules.back()->word += QString::fromUtf8("funduq");
-  _rules.back()->word += QString::fromUtf8("ﻢﻧﺎﻣﺓ");
-  _rules.back()->tags["tourism"] = "hotel";
-
-  _rules.append(ImplicitRulePtr(new ImplicitRule()));
   _rules.back()->word += QString::fromUtf8("Shurţat");
+  _rules.back()->word += QString::fromUtf8("Police");
   _rules.back()->tags["amenity"] = "police";
 
   _rules.append(ImplicitRulePtr(new ImplicitRule()));
@@ -101,6 +96,20 @@ DeriveImplicitTagsVisitor::DeriveImplicitTagsVisitor()
   _rules.append(ImplicitRulePtr(new ImplicitRule()));
   _rules.back()->word += QString::fromUtf8("petroleumeum");
   _rules.back()->tags["amenity"] = "fuel";
+
+  _rules.append(ImplicitRulePtr(new ImplicitRule()));
+  _rules.back()->word += QString::fromUtf8("bank");
+  _rules.back()->tags["amenity"] = "bank";
+
+  _rules.append(ImplicitRulePtr(new ImplicitRule()));
+  _rules.back()->word += QString::fromUtf8("hotel");
+  _rules.back()->word += QString::fromUtf8("funduq");
+  _rules.back()->word += QString::fromUtf8("ﻢﻧﺎﻣﺓ");
+  _rules.back()->tags["tourism"] = "hotel";
+
+  _rules.append(ImplicitRulePtr(new ImplicitRule()));
+  _rules.back()->word += QString::fromUtf8("museum");
+  _rules.back()->tags["tourism"] = "museum";
 
   _rulesToLower();
 }
