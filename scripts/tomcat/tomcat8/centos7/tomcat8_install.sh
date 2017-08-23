@@ -26,8 +26,8 @@ TOMCAT_USER_HOME_PERMISSIONS=755
 TOMCAT_LOGS_HOME_PERMISSIONS=755
 TOMCAT_CACHE_HOME_PERMISSIONS=775
 
-# TODO: This should not be hardcoded
-TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-8.5.20.tar.gz
+TOMCAT_VERSION='8.5.20'
+TOMCAT_TAR_FILE=${SCRIPT_HOME}/../apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
 echo "######## Begin $TOMCAT_NAME installation ########"
 echo "SCRIPT_HOME=$SCRIPT_HOME"
