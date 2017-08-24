@@ -195,7 +195,7 @@ private:
 
   QString _getSortedNewInput(const QString newInput)
   {
-    if (!_sortInput) //TODO:
+    if (!_sortInput)
     {
       return newInput;
     }
