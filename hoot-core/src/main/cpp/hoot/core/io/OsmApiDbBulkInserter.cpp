@@ -38,6 +38,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/FileUtils.h>
 
 #include <tgs/System/SystemInfo.h>
 
@@ -229,46 +230,45 @@ void OsmApiDbBulkInserter::_closeOutputFiles()
   }
 }
 
-QString OsmApiDbBulkInserter::_formatPotentiallyLargeNumber(const unsigned long number)
-{
-  //I want to see comma separators...probably a better way to handle this...will go with this for
-  //now.
-  const QLocale& cLocale = QLocale::c();
-  QString ss = cLocale.toString((qulonglong)number);
-  ss.replace(cLocale.groupSeparator(), ',');
-  return ss;
-}
-
 void OsmApiDbBulkInserter::_logStats(const bool debug)
 {
   QStringList messages;
-  messages.append(QString("\tNodes: ") + _formatPotentiallyLargeNumber(_writeStats.nodesWritten));
   messages.append(
-    QString("\tNode tags: ") + _formatPotentiallyLargeNumber(_writeStats.nodeTagsWritten));
-  messages.append(QString("\tWays: ") + _formatPotentiallyLargeNumber(_writeStats.waysWritten));
+    QString("\tNodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten));
   messages.append(
-    QString("\tWay nodes: ") + _formatPotentiallyLargeNumber(_writeStats.wayNodesWritten));
+    QString("\tNode tags: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.nodeTagsWritten));
   messages.append(
-    QString("\tWay tags: ") + _formatPotentiallyLargeNumber(_writeStats.wayTagsWritten));
+    QString("\tWays: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten));
   messages.append(
-    QString("\tRelations: ") + _formatPotentiallyLargeNumber(_writeStats.relationsWritten));
+    QString("\tWay nodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayNodesWritten));
+  messages.append(
+    QString("\tWay tags: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayTagsWritten));
+  messages.append(
+    QString("\tRelations: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten));
   messages.append(
     QString("\tRelation members: ") +
-    _formatPotentiallyLargeNumber(_writeStats.relationMembersWritten));
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersWritten));
   messages.append(
-    QString("\tRelation tags: ") + _formatPotentiallyLargeNumber(_writeStats.relationTagsWritten));
+    QString("\tRelation tags: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationTagsWritten));
   messages.append(
     QString("\tUnresolved relation members: ") +
-      _formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
   messages.append(
-    QString("\tTotal features: ") + _formatPotentiallyLargeNumber(_getTotalFeaturesWritten()));
+    QString("\tTotal features: ") +
+    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()));
   messages.append(
-    QString("\tChangesets: ") + _formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
+    QString("\tChangesets: ") +
+    FileUtils::formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
   messages.append(
-    QString("\tChangeset change size (each): ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
+    QString("\tChangeset change size (each): ") +
+    FileUtils::formatPotentiallyLargeNumber(_maxChangesetSize));
   messages.append(
     QString("\tExecutable SQL records: ") +
-    _formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
+    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
 
   for (int i = 0; i < messages.size(); i++)
   {
@@ -349,9 +349,10 @@ void OsmApiDbBulkInserter::_clearIdCollections()
 void OsmApiDbBulkInserter::finalizePartial()
 {
   LOG_INFO(
-    _formatPotentiallyLargeNumber(_getTotalFeaturesWritten()) << " input records parsed " <<
-    "(data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
-    ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()) <<
+    " input records parsed (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << ").  Time elapsed: " <<
+    FileUtils::secondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _clearIdCollections();
@@ -427,7 +428,8 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
   //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
   //to not write the header if there are no records to copy for the table...
   LOG_INFO(
-    "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    "Executing element SQL for " <<
+    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
     " records (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
     ").  17 separate SQL COPY statements will be executed...");
 
@@ -436,7 +438,8 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
   //applying it to a QSqlQuery.
   ApiDb::execSqlFile(_outputUrl, _sqlOutputCombinedFile->fileName());
 
-  LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+  LOG_INFO(
+    "SQL execution complete.  Time elapsed: " << FileUtils::secondsToDhms(_timer->elapsed()));
 }
 
 void OsmApiDbBulkInserter::_writeDataToDb()
@@ -582,8 +585,8 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             //size of the rest of the data
             PROGRESS_INFO(
               "Parsed " <<
-              _formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
-              _formatPotentiallyLargeNumber(
+              FileUtils::formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
+              FileUtils::formatPotentiallyLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
           }
@@ -621,9 +624,11 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 
   LOG_INFO(
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
-    _numberOfFileDataPasses() << ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    _numberOfFileDataPasses() << ").  Time elapsed: " <<
+    FileUtils::secondsToDhms(_timer->elapsed()));
   LOG_DEBUG(
-    "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
+    "Parsed " << FileUtils::formatPotentiallyLargeNumber(progressLineCtr) <<
+    " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
 }
@@ -824,7 +829,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
       " nodes to file...");
     _flushStreams();
   }
@@ -832,32 +837,11 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << _formatPotentiallyLargeNumber(_writeStats.nodesWritten) << " nodes from input.");
+      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten) <<
+      " nodes from input.");
   }
 
   LOG_VART(node->getVersion());
-}
-
-QString OsmApiDbBulkInserter::_secondsToDhms(const qint64 durationInMilliseconds) const
-{
-  //TODO: move to utility class
-  QString res;
-  int duration = (int)(durationInMilliseconds / 1000);
-  const int seconds = (int)(duration % 60);
-  duration /= 60;
-  const int minutes = (int)(duration % 60);
-  duration /= 60;
-  const int hours = (int)(duration % 24);
-  const int days = (int)(duration / 24);
-  if ((hours == 0) && (days == 0))
-  {
-    return res.sprintf("%02d:%02d", minutes, seconds);
-  }
-  if (days == 0)
-  {
-    return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
-  }
-  return res.sprintf("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
 }
 
 void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
@@ -904,7 +888,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
       " ways to file...");
     _flushStreams();
   }
@@ -912,7 +896,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << _formatPotentiallyLargeNumber(_writeStats.waysWritten) << " ways from input.");
+      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten) <<
+      " ways from input.");
   }
 }
 
@@ -960,7 +945,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
       " relations to file...");
     _flushStreams();
   }
@@ -968,7 +953,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << _formatPotentiallyLargeNumber(_writeStats.relationsWritten) <<
+      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten) <<
       " relations from input.");
   }
 }

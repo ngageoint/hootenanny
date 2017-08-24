@@ -68,6 +68,22 @@ public:
    * @param text text to be written
    */
   static void writeFully(const QString path, const QString text);
+
+  /**
+   * Converts seconds to DD:MM:SS
+   *
+   * @param durationInMilliseconds seconds to convert
+   * @return a DD:MM:SS string
+   */
+  static QString secondsToDhms(const qint64 durationInMilliseconds);
+
+  /**
+   *
+   *
+   * @param number
+   * @return
+   */
+  static QString formatPotentiallyLargeNumber(const unsigned long number);
 };
 
 }

@@ -42,9 +42,11 @@
 #include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QUuid>
+#include <QElapsedTimer>
 
 using namespace std;
 
@@ -73,7 +75,8 @@ public:
 
   MultiaryIngestCmd() :
   _sortInput(false),
-  _isGeoNamesInput(false)
+  _isGeoNamesInput(false),
+  _changesParsed(0)
   {
   }
 
@@ -141,32 +144,26 @@ public:
     //translate inputs to OSM
     conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
 
+    LOG_INFO(
+      "Ingesting Multiary data from " << newInput << " into reference output layer: " <<
+      referenceOutput << " and writing changes to changeset file: " << changesetOutput << "...");
+
     HootApiDb referenceDb;
     referenceDb.open(referenceOutput);
     const QStringList dbUrlParts = referenceOutput.split("/");
     if (!referenceDb.mapExists(dbUrlParts[dbUrlParts.size() - 1]))
     {
-      LOG_INFO(
-        "Ingesting new Multiary data from input: " << newInput << " to reference layer: " <<
-        referenceOutput << " and changeset file: " << changesetOutput << "...");
+      LOG_INFO("Not deriving a changeset.");
 
       //If there's no existing reference data, then there's no point in sorting input data or
       //deriving a changeset diff.  So in that case, write all of the input data directly to the
       //ref layer and generate a Spark changeset consisting entirely of create statements.
       _sortInput = false;
       _writeChanges(_getNewInputStream(newInput), referenceOutput, changesetOutput);
-
-      LOG_INFO(
-        "New Multiary data ingest complete for input: " << newInput << " to reference layer: " <<
-        referenceOutput << " and changeset file: " << changesetOutput << "...");
-
     }
     else
     {
-      LOG_INFO(
-        "Ingesting new Multiary data from input: " << newInput << " to reference layer: " <<
-        referenceOutput << " and changeset file: " << changesetOutput <<
-        ".  Deriving changeset between " << newInput << " and " << referenceOutput << "...");
+      LOG_INFO("Deriving a changeset.");
 
       //sort incoming data by element id, if necessary, for changeset derivation (only passing nodes
       //through, so don't need to also sort by element type)
@@ -175,12 +172,13 @@ public:
       //create the changes and write them to the ref db layer and also to a changeset file for
       //external use by Spark
       _deriveAndWriteChanges(_getNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
-
-      LOG_INFO(
-        "New Multiary data ingest complete for input: " << newInput << " to reference layer: " <<
-        referenceOutput << " and changeset file: " << changesetOutput <<
-        ".  Changeset derived between " << newInput << " and " << referenceOutput << "...");
     }
+
+    LOG_INFO(
+      "Multiary data ingested from " << newInput << " into reference output layer: " <<
+      referenceOutput << " and changes written to changeset file: " << changesetOutput <<
+      ".  Time: " << FileUtils::secondsToDhms(_timer.elapsed()));
+    LOG_INFO("Changes Parsed: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed));
 
     return 0;
   }
@@ -190,6 +188,10 @@ private:
   bool _sortInput;
   QString _sortedNewInput;
   bool _isGeoNamesInput;
+
+  long _changesParsed;
+
+  QElapsedTimer _timer;
 
   QString _getSortedNewInput(const QString newInput)
   {
@@ -231,10 +233,14 @@ private:
     boost::shared_ptr<ElementOutputStream> unsortedNewOutputStream =
       boost::dynamic_pointer_cast<ElementOutputStream>(unsortedNewInputWriter);
 
-    LOG_DEBUG("Writing multiary input to temp location for sorting: " << sortedNewInput << "...");
+    LOG_INFO(
+      "Writing Multiary new input data to temp location for sorting: " << sortedNewInput << "...");
+    _timer.restart();
     ElementOutputStream::writeAllElements(
       *filteredUnsortedNewInputStream, *unsortedNewOutputStream);
-    LOG_DEBUG("Multiary input written to temp location for sorting: " << sortedNewInput);
+    LOG_INFO(
+      "Multiary new input data written to temp location for sorting: " << sortedNewInput <<
+      ".  Time: " << FileUtils::secondsToDhms(_timer.elapsed()));
 
     return sortedNewInput;
   }
@@ -269,9 +275,7 @@ private:
   void _writeChanges(boost::shared_ptr<ElementInputStream> newInputStream,
                      const QString referenceOutput, const QString changesetOutput)
   {
-    LOG_DEBUG(
-      "Writing multiary change data to new reference output layer: " << referenceOutput <<
-      " and changeset file: " << changesetOutput << "...");
+    _timer.restart();
 
     boost::shared_ptr<ElementInputStream> filteredNewInputStream =
       _getFilteredNewInputStream(newInputStream);
@@ -288,20 +292,16 @@ private:
     {
       ElementPtr element = filteredNewInputStream->readNextElement();
 
-      LOG_VART(element->getTags().contains(MetadataTags::HootHash()));
-      LOG_VART(element->getTags().contains(Tags::uuidKey()));
-
       referenceWriter.writeElement(element);
       changesetFileWriter.writeChange(Change(Change::Create, element));
+      _changesParsed++;
     }
   }
 
   void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> newInputStream,
                               const QString referenceOutput, const QString changesetOutput)
   {
-    LOG_DEBUG(
-      "Deriving and writing multiary change data to existing reference output layer: " <<
-      referenceOutput << " and changeset file: " << changesetOutput << "...");
+    _timer.restart();
 
     boost::shared_ptr<HootApiDbReader> referenceReader(new HootApiDbReader());
     referenceReader->setUseDataSourceIds(true);
@@ -324,15 +324,9 @@ private:
       const Change change = changesetDeriver->readNextChange();
       if (change.getType() != Change::Unknown)
       {
-        LOG_VART(change.getElement()->getTags().contains(MetadataTags::HootHash()));
-        if (change.getPreviousElement())
-        {
-          LOG_VART(change.getPreviousElement()->getTags().contains(MetadataTags::HootHash()));
-        }
-        LOG_VART(change.getElement()->getTags().contains(Tags::uuidKey()));
-
         changesetFileWriter.writeChange(change);
         referenceChangeWriter.writeChange(change);
+        _changesParsed++;
       }
     }
   }

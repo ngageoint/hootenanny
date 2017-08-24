@@ -213,9 +213,6 @@ private:
 
   boost::shared_ptr<QElapsedTimer> _timer;
 
-  QString _formatPotentiallyLargeNumber(const unsigned long number);
-  QString _secondsToDhms(const qint64 durationInMilliseconds) const;
-
   void _reset();
   void _clearIdCollections();
   unsigned int _numberOfFileDataPasses() const;
