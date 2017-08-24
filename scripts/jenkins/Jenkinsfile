@@ -33,7 +33,7 @@ pipeline {
 
         }
         stage("License Header") {
-            whe {
+            when {
                 branch 'PR-*'
             }
             steps {
