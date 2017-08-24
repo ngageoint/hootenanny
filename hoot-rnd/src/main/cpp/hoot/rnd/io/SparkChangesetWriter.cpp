@@ -135,6 +135,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
   _exportTagsVisitor.visit(nodeCopy);
   OsmMapPtr tmpMap(new OsmMap());
   tmpMap->addElement(nodeCopy);
+
   Envelope env = _bounds->calculateSearchBounds(tmpMap, nodeCopy);
 
   QString changeLine;
@@ -161,10 +162,30 @@ void SparkChangesetWriter::writeChange(const Change& change)
     // element hash before change
     changeLine += previousNodeCopy->getTags()[MetadataTags::HootHash()] % "\t";
   }
-  // element hash after change
-  changeLine +=
-    nodeHash % "\t" %
-    _jsonWriter.toString(tmpMap).trimmed() % "\n";
+  changeLine += nodeHash % "\t";  // element hash after change
+  LOG_VART(changeLine);
+
+  //element payload
+
+  changeLine += "{\"element\":{\"type\":\"node\"";
+  changeLine += ",\"id\":" % QString::number(nodeCopy->getId(), 'g', _precision);
+  changeLine += ",\"lat\":" % QString::number(nodeCopy->getY(), 'g', _precision);
+  changeLine += ",\"lon\":" % QString::number(nodeCopy->getX(), 'g', _precision);
+  changeLine += ",\"tags\":{";
+  bool first = true;
+  const Tags& tags = nodeCopy->getTags();
+  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  {
+    if (!first)
+    {
+      changeLine += ",";
+    }
+    changeLine +=
+      OsmJsonWriter::markupString(it.key()) % ":" % OsmJsonWriter::markupString(it.value());
+    first = false;
+  }
+  changeLine += "}}}\n";
+  LOG_VART(changeLine);
 
   if (_fp->write(changeLine.toUtf8()) == -1)
   {

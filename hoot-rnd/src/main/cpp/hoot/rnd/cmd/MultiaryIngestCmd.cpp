@@ -85,8 +85,12 @@ public:
     if (_sortInput)
     {
       //delete the temporary db layer used for sorting
-      LOG_DEBUG("Deleting temporary map: " << _sortedNewInput << "...");
+      LOG_INFO("Deleting temporary map: " << _sortedNewInput << "...");
+      _timer.restart();
       HootApiDbWriter().deleteMap(_sortedNewInput);
+      LOG_INFO(
+        "Temporary map: " << _sortedNewInput << " deleted.  Time: " <<
+        FileUtils::secondsToDhms(_timer.elapsed()));
     }
   }
 
