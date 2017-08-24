@@ -131,11 +131,7 @@ public:
       throw HootException(
         getName() + " only supports a .spark.x file for changeset output.  Specified output: " +
         changesetOutput);
-    }
-
-    LOG_INFO(
-      "Streaming multiary data ingest from input: " << newInput << " to reference layer: " <<
-      referenceOutput << " and changeset file: " << changesetOutput << "...");
+    } 
 
     //inputs must be sorted by element id for changeset derivation to work
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
@@ -150,14 +146,28 @@ public:
     const QStringList dbUrlParts = referenceOutput.split("/");
     if (!referenceDb.mapExists(dbUrlParts[dbUrlParts.size() - 1]))
     {
+      LOG_INFO(
+        "Ingesting new Multiary data from input: " << newInput << " to reference layer: " <<
+        referenceOutput << " and changeset file: " << changesetOutput << "...");
+
       //If there's no existing reference data, then there's no point in sorting input data or
       //deriving a changeset diff.  So in that case, write all of the input data directly to the
       //ref layer and generate a Spark changeset consisting entirely of create statements.
       _sortInput = false;
       _writeChanges(_getNewInputStream(newInput), referenceOutput, changesetOutput);
+
+      LOG_INFO(
+        "New Multiary data ingest complete for input: " << newInput << " to reference layer: " <<
+        referenceOutput << " and changeset file: " << changesetOutput << "...");
+
     }
     else
     {
+      LOG_INFO(
+        "Ingesting new Multiary data from input: " << newInput << " to reference layer: " <<
+        referenceOutput << " and changeset file: " << changesetOutput <<
+        ".  Deriving changeset between " << newInput << " and " << referenceOutput << "...");
+
       //sort incoming data by element id, if necessary, for changeset derivation (only passing nodes
       //through, so don't need to also sort by element type)
       _sortedNewInput = _getSortedNewInput(newInput);
@@ -165,12 +175,12 @@ public:
       //create the changes and write them to the ref db layer and also to a changeset file for
       //external use by Spark
       _deriveAndWriteChanges(_getNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
-    }
 
-    LOG_INFO(
-      "Multiary data ingest complete for input: " << newInput <<
-      " to reference layer: " << referenceOutput << " and changeset file: " <<
-      changesetOutput << "...");
+      LOG_INFO(
+        "New Multiary data ingest complete for input: " << newInput << " to reference layer: " <<
+        referenceOutput << " and changeset file: " << changesetOutput <<
+        ".  Changeset derived between " << newInput << " and " << referenceOutput << "...");
+    }
 
     return 0;
   }
@@ -312,14 +322,14 @@ private:
     while (changesetDeriver->hasMoreChanges())
     {
       const Change change = changesetDeriver->readNextChange();
-      if (change.type != Change::Unknown)
+      if (change.getType() != Change::Unknown)
       {
-        LOG_VART(change.e->getTags().contains(MetadataTags::HootHash()));
-        if (change.previousElement)
+        LOG_VART(change.getElement()->getTags().contains(MetadataTags::HootHash()));
+        if (change.getPreviousElement())
         {
-          LOG_VART(change.previousElement->getTags().contains(MetadataTags::HootHash()));
+          LOG_VART(change.getPreviousElement()->getTags().contains(MetadataTags::HootHash()));
         }
-        LOG_VART(change.e->getTags().contains(Tags::uuidKey()));
+        LOG_VART(change.getElement()->getTags().contains(Tags::uuidKey()));
 
         changesetFileWriter.writeChange(change);
         referenceChangeWriter.writeChange(change);

@@ -72,7 +72,7 @@ public:
       {
         const Change change = changesetDiff->readNextChange();
         LOG_VART(change.toString());
-        changeTypeToIds[change.type].append(change.e->getElementId().getId());
+        changeTypeToIds[change.getType()].append(change.getElement()->getElementId().getId());
       }
 
       HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);

@@ -94,18 +94,18 @@ void SparkChangesetWriter::open(QString fileName)
 
 void SparkChangesetWriter::writeChange(const Change& change)
 {
-  if (change.e->getElementType() != ElementType::Node)
+  if (change.getElement()->getElementType() != ElementType::Node)
   {
     throw NotImplementedException("Only nodes are supported.");
   }
 
-  if (!change.e->getTags().contains(MetadataTags::HootHash()))
+  if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
   {
     throw IllegalArgumentException("No hash value set on element.");
   }
 
-  if (change.previousElement &&
-      !change.previousElement->getTags().contains(MetadataTags::HootHash()))
+  if (change.getPreviousElement() &&
+      !change.getPreviousElement()->getTags().contains(MetadataTags::HootHash()))
   {
     throw IllegalArgumentException("No hash value set on previous element.");
   }
@@ -113,7 +113,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
   LOG_VART(change);
 
   QString changeType;
-  switch (change.type)
+  switch (change.getType())
   {
     case Change::Create:
       changeType = "A";
@@ -128,7 +128,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
       throw IllegalArgumentException("Unexpected change type.");
   }
 
-  ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.e);
+  ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
   NodePtr nodeCopy(dynamic_cast<Node*>(node->clone()));
   const QString nodeHash = nodeCopy->getTags()[MetadataTags::HootHash()];
   nodeCopy->getTags().remove(MetadataTags::HootHash());
@@ -144,17 +144,18 @@ void SparkChangesetWriter::writeChange(const Change& change)
     QString::number(env.getMinY(), 'g', _precision) % "\t" %
     QString::number(env.getMaxX(), 'g', _precision) % "\t" %
     QString::number(env.getMaxY(), 'g', _precision) % "\t";
-  if (change.type == Change::Modify)
+  if (change.getType() == Change::Modify)
   {
-    if (!change.previousElement.get())
+    if (!change.getPreviousElement().get())
     {
       throw HootException("No previous element specified for modify change.");
     }
-    else if (change.previousElement->getElementType() != ElementType::Node)
+    else if (change.getPreviousElement()->getElementType() != ElementType::Node)
     {
       throw NotImplementedException("Only nodes are supported.");
     }
-    ConstNodePtr previousNode = boost::dynamic_pointer_cast<const Node>(change.previousElement);
+    ConstNodePtr previousNode =
+      boost::dynamic_pointer_cast<const Node>(change.getPreviousElement());
     NodePtr previousNodeCopy(dynamic_cast<Node*>(previousNode->clone()));
     _exportTagsVisitor.visit(previousNodeCopy);
     // element hash before change
