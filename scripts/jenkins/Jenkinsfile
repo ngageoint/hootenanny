@@ -15,7 +15,7 @@ pipeline {
                 //sh '( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )'
                
                 sh 'cp LocalConfig.pri.orig LocalConfig.pri'
-                echo 'QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
+                sh 'echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
                 sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
             }
