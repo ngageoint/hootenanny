@@ -31,9 +31,9 @@ pipeline {
             }
         }
         stage("License Header") {
-            when {
-                branch 'PR-*'
-            }
+            //when {
+            //    branch 'PR-*'
+            //}
             steps {
                 sh './scripts/copyright/UpdateAllCopyrightHeaders.sh'
             }
