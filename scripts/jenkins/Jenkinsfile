@@ -21,15 +21,23 @@ pipeline {
             }
         }
         stage("Static Analysis") {
+            when {
+                not {
+                    branch 'PR-*'
+                }
+            }
             steps {
-                echo 'This is a placeholder'
+                echo 'This is a static analysis placeholder'
                 //sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
             }
 
         }
         stage("License Header") {
+            whe {
+                branch 'PR-*'
+            }
             steps {
-                echo 'This is a placeholder'
+                echo 'This is a license header placeholder'
                 //sh 'vagrant up --provider aws'
             }
 
