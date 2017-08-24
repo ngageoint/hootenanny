@@ -153,7 +153,7 @@ public:
     const QStringList dbUrlParts = referenceOutput.split("/");
     if (!referenceDb.mapExists(dbUrlParts[dbUrlParts.size() - 1]))
     {
-      LOG_INFO("Not deriving a changeset.");
+      LOG_INFO("Generating a changeset from the input data only.");
 
       //If there's no existing reference data, then there's no point in sorting input data or
       //deriving a changeset diff.  So in that case, write all of the input data directly to the
@@ -163,7 +163,7 @@ public:
     }
     else
     {
-      LOG_INFO("Deriving a changeset.");
+      LOG_INFO("Deriving a changeset between the input and reference data.");
 
       //sort incoming data by element id, if necessary, for changeset derivation (only passing nodes
       //through, so don't need to also sort by element type)
