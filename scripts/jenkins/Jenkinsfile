@@ -35,6 +35,7 @@ pipeline {
             //    branch 'PR-*'
             //}
             steps {
+                sh 'export HOOT_HOME=`pwd`
                 sh './scripts/copyright/UpdateAllCopyrightHeaders.sh'
             }
         }
