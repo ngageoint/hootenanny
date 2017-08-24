@@ -77,6 +77,7 @@ sudo yum -y install \
     automake \
     bc \
     boost-devel \
+    bzip2 \
     ccache \
     cmake \
     cppunit-devel \
