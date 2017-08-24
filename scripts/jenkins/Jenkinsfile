@@ -27,26 +27,21 @@ pipeline {
                 }
             }
             steps {
-                echo 'This is a static analysis placeholder'
-                //sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
+                sh 'cppcheck --enable=all --inconclusive --xml-version=2 --verbose --check-config . 2> cppcheck.xml'
             }
-
         }
         stage("License Header") {
             when {
                 branch 'PR-*'
             }
             steps {
-                echo 'This is a license header placeholder'
-                //sh 'vagrant up --provider aws'
+                sh './scripts/copyright/UpdateAllCopyrightHeaders.sh'
             }
-
         }
         stage("Vagrant Up") {
             steps {
                 sh 'vagrant up --provider aws'
-            }
-             
+            }       
         }
         stage("Core Tests") {
             steps {
@@ -75,7 +70,6 @@ pipeline {
         }
         failure {
             slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
- 
         }
     }
 }
