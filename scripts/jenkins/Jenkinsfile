@@ -1,5 +1,25 @@
 pipeline {
     agent any
+    parameters {
+        booleanParam(name: 'DESTROY_VM',
+            defaulValue: true,
+            description: 'Destroy VM (Coming soon!)')
+        booleanParam(name: 'STATIC_ANALYSIS',
+            defaulValue: true,
+            description: 'Run static analysis')
+        booleanParam(name: 'LICENSE',
+            defaulValue: true,
+            description: 'Check license headers')
+        booleanParam(name: 'CORE',
+            defaulValue: true,
+            description: 'Run core test')
+        booleanParam(name: 'SERVICES',
+            defaulValue: true,
+            description: 'Run services tests')
+        booleanParam(name: 'UI',
+            defaulValue: true,
+            description: 'Run UI tests')
+    }
     stages {
         stage("Setup") {
             steps {
@@ -7,7 +27,7 @@ pipeline {
                 sh 'vagrant destroy -f || true'
                 cleanWs()
                 
-                git branch: 'develop', credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
+                //git branch: 'develop', credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
                 sh 'git submodule update --init'
                 
                 sh 'cp -R ../software.ubuntu1404 software'
@@ -22,6 +42,9 @@ pipeline {
         }
         stage("Static Analysis") {
             when {
+                expression {
+                    return params.STATIC_ANALYSIS
+                }
                 not {
                     branch 'PR-*'
                 }
@@ -31,9 +54,11 @@ pipeline {
             }
         }
         stage("License Header") {
-            //when {
-            //    branch 'PR-*'
-            //}
+            when {
+                expression {
+                    return params.LICENSE
+                }
+            }
             steps {
                 sh 'export HOOT_HOME=`pwd`; ./scripts/copyright/UpdateAllCopyrightHeaders.sh'
             }
@@ -44,6 +69,11 @@ pipeline {
             }       
         }
         stage("Core Tests") {
+            when {
+                expression {
+                    return params.CORE
+                }
+            }
             steps {
                 sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; hoot --version --debug"'
                 sh 'vagrant ssh -c "export HOOT_TEST_DIFF=--diff"'
@@ -51,6 +81,11 @@ pipeline {
             }
         }
         stage("Services Tests") {
+            when {
+                expression {
+                    return params.SERVICES
+                }
+            }
             steps {
                 sh 'vagrant ssh -c "cd hoot; make -sj`nproc` pp-test"'
                 sh 'vagrant ssh -c "cd hoot; make -sj`nproc` plugins-test"'
@@ -58,6 +93,11 @@ pipeline {
             }
         }
          stage("UI Tests") {
+            when {
+                expression {
+                    return params.UI
+                }
+            }
             steps {
                 sh 'vagrant ssh -c "cd hoot; make -s ui-test"'
             }
