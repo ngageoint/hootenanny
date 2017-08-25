@@ -125,7 +125,7 @@ public:
       throw HootException(
         getName() + " only supports a .spark.x file for changeset output.  Specified output: " +
         changesetOutput);
-    } 
+    }
 
     //inputs must be sorted by element id for changeset derivation to work
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
