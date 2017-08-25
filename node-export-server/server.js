@@ -8,6 +8,7 @@ var exec = require('child_process').exec;
 var config = require('configure');
 var _ = require('lodash');
 var rmdir = require('rimraf');
+var crypto = require('crypto');
 var done = false;
 var dir;
 var jobs = {};
@@ -34,6 +35,58 @@ app.get('/options', function(req, res) {
     });
 });
 
+/* Post export */
+// export/Overpass/OSM/Shapefile
+app.post('/export/:datasource/:schema/:format', function(req, res) {
+
+    //Build a hash for the input params used in file name
+    var params = (new Date()).getTime()
+        + req.params.datasource
+        + req.params.schema
+        + req.params.format;
+    var fileNameHash = crypto.createHash('sha1').update(params).digest('hex');
+
+    //Write payload to file
+    var input = 'export_' + fileNameHash + '.osm';
+
+    var sha1_for_file = crypto.createHash('sha1');
+
+    var writeStream = fs.createWriteStream(input, { flags : 'w' });
+    req.pipe(writeStream);
+    writeStream.on('error', function(err) {
+        if(err) {
+            return console.log(err);
+        }
+    }).on('data', function(data) {
+        //Calculate hash for file content
+        sha1_for_file.update(data);
+    }).on('close', function (err) {
+        var fileHash = sha1_for_file.digest('hex');
+        var jobParams = fileHash
+            + req.params.schema
+            + req.params.format;
+        //Create job hash from input file content and export params
+        var jobHash = crypto.createHash('sha1').update(jobParams).digest('hex');
+        //Make sure input is absolute path
+        doExport(req, res, jobHash, __dirname + '/' + input);
+    });
+
+});
+
+/* Get export */
+app.get('/export/:datasource/:schema/:format', function(req, res) {
+
+    //Build a hash for the input params using base64
+    var params = req.params.datasource
+        + req.params.schema
+        + req.params.format
+        + req.query.bbox;
+    var hash = crypto.createHash('sha1').update(params).digest('hex');
+    var input = config.datasources[req.params.datasource].conn;
+    doExport(req, res, hash, input);
+
+});
+
 exports.validateBbox = function(bbox) {
     //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
@@ -52,16 +105,7 @@ exports.validateBbox = function(bbox) {
     return null;
 }
 
-/* Get export */
-app.get('/export/:datasource/:schema/:format', function(req, res) {
-
-    //Build a hash for the input params using base64
-    var params = req.params.datasource
-        + req.params.schema
-        + req.params.format
-        + req.query.bbox;
-    var hash = new Buffer(params).toString('base64')
-
+function doExport(req, res, hash, input) {
     //Check existing jobs
     var job = jobs[hash];
 
@@ -93,7 +137,6 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
                 // clean up export files after configured delay
                 jobs[hash].timeout = setTimeout(function() {
                     if (jobs[hash]) {
-                        delete jobs[hash];
                         //delete export files
                         if (isFile) {
                             fs.unlink(outFile, function(err) {
@@ -128,6 +171,28 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
                                 }
                             });
                         }
+                        //Attempt to remove superfluous POST payload file if job is already running
+                        if (fs.existsSync(input)) {
+                            fs.unlink(input, function(err) {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log('deleted ' + input);
+                                }
+                            });
+                        }
+                        //This deletes the input files used by the job
+                        if (fs.existsSync(jobs[hash].input)) {
+                            var inputFile = jobs[hash].input;
+                            fs.unlink(inputFile, function(err) {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log('deleted ' + inputFile);
+                                }
+                            });
+                        }
+                        delete jobs[hash];
                     }
                 }, config.settings.cleanupDelay);
             });
@@ -138,11 +203,21 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
                 if (req.method === 'GET') delete jobs[hash];
             }
             res.send(job.status);
+            //Attempt to remove superfluous POST payload file if job is already running
+            if (fs.existsSync(input)) {
+                fs.unlink(input, function(err) {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log('deleted ' + input);
+                    }
+                });
+            }
+
         }
     } else { //if missing, run job
         var command = '';
         //if conn is url, write that response to a file
-        var input = config.datasources[req.params.datasource].conn;
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounding.box';
         var bbox = exports.validateBbox(req.query.bbox);
@@ -162,14 +237,14 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         command += 'hoot';
         if (isFile) {
             command += ' convert';
-            command += ' -D ' + bbox_param + '=' + bbox
+            if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             if (config.schemas[req.params.schema] !== '') {
                 command += ' -D convert.ops=hoot::TranslationOp -D translation.script=' + config.schemas[req.params.schema] + ' -D translation.direction=toogr';
             }
         } else {
             command += ' osm2ogr';
-            command += ' -D ' + bbox_param + '=' + bbox
-            command += ' ' + config.schemas[req.params.schema]
+            if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
+            command += ' ' + config.schemas[req.params.schema];
         }
         command += ' "' + input + '" '
             + outFile
@@ -218,14 +293,15 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         jobs[hash] = {
                         id: id,
                         status: runningStatus,
-                        process: child
+                        process: child,
+                        input: input
         };
 
         //return job status
         //if (job.status !== runningStatus) res.status(500);
-        res.send(jobs[hash].status)
+        res.send(jobs[hash].status);
     }
-});
+}
 
 /* Run the server. */
 var server = app.listen(config.settings.port, function() {
