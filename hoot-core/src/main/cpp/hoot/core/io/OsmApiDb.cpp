@@ -502,14 +502,13 @@ boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& element
 
   // setup base sql query string
   QString sql =  "SELECT " + _elementTypeToElementTableNameStr(elementType);
-
   // sort them in descending order, set limit and offset
   sql += " WHERE visible = true";
-
   if (sorted)
   {
-    sql += " ORDER BY id ASCENDING";
+    sql += " ORDER BY id";
   }
+  LOG_VARD(sql);
 
   _selectElementsForMap->prepare(sql);
 

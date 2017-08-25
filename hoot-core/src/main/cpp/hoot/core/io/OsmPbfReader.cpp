@@ -97,7 +97,7 @@ OsmPbfReader::OsmPbfReader(const QString urlString)
 {
   _init(false);
 
-  if ( isSupported(urlString) == true )
+  if (isSupported(urlString) == true)
   {
     open(urlString);
   }
@@ -125,7 +125,7 @@ void OsmPbfReader::_init(bool useFileId)
 OsmPbfReader::~OsmPbfReader()
 {
   delete _d;
-  if ( _needToCloseInput == true )
+  if (_needToCloseInput == true)
   {
     close();
   }
@@ -1177,6 +1177,10 @@ void OsmPbfReader::read(OsmMapPtr map)
 bool OsmPbfReader::isSupported(QString urlStr)
 {
   QFileInfo fileInfo(urlStr);
+  if (!fileInfo.exists())
+  {
+    throw HootException("Specified input: " + urlStr + " does not exist.");
+  }
   if (fileInfo.isDir())
   {
     throw HootException("Can't handle dirs with partial read yet.");
@@ -1187,6 +1191,28 @@ bool OsmPbfReader::isSupported(QString urlStr)
     //there is actually some test data that ends in .pbf instead of .osm.pbf, so allowing that
     //extension too for now
     input.exists() && (urlStr.toLower().endsWith(".osm.pbf") || urlStr.toLower().endsWith(".pbf"));
+}
+
+bool OsmPbfReader::isSorted(const QString file)
+{
+  _init(false);
+  if (isSupported(file))
+  {
+    open(file);
+  }
+  else
+  {
+    throw HootException("An invalid file format was specified: " + file + ".");
+  }
+
+  // read blob header
+  _parseBlobHeader();
+  // read blob
+  _parseBlob();
+  // read OSMHeader
+  _parseOsmHeader();
+
+  return _typeThenId;
 }
 
 void OsmPbfReader::open(QString urlStr)

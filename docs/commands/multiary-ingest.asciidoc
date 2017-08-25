@@ -4,25 +4,24 @@
 
 Ingests POI data for use by Multiary Conflation by calculating the difference between new and existing data
 
-* +newInput+ - path to a supported Hootenanny data format; the format must be streamable (see README.md 
-               "Supported Data Formats"); only POIs will be read and all will be translated to the OSM format
+* +newInput+ - path to a supported Hootenanny data format; only .geonames and .osm.pbf formats are currently supported
 * +referenceOutput+ - path to reference data; must be a Hootenanny API database layer; if the layer does not exist, it will
                       be created 
-* +changesetOutput+ - path where to write the resulting changeset changes; must be a Spark changeset
-* +sortInput+ - (optional) If true, +newInput+ will be sorted by element ID; defaults to true; This option may be 
-                disabled to increase performance if +newInput+ has already been sorted by element ID.  If set to 
-                false and +newInput+ has not been sorted by element ID, the changeset derivation will fail.  
-                If +referenceOutput+ contains no data, input sorting will always be skipped.
+* +changesetOutput+ - path to write the resulting changeset changes to; must be a Spark changeset
 
 === Usage
 
 --------------------------------------
-multiary-ingest (newInput) (referenceOutput) (changesetOutput) [sortInput]
+multiary-ingest (newInput) (referenceOutput) (changesetOutput)
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot multiary-ingest newData.geonames hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1 true
+hoot multiary-ingest newData.geonames hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1
 --------------------------------------
 
+NOTES:
+
+* Only POIs will be read from inputs and all data will be translated to the OSM format.
+* OSM PBF inputs must be sorted by element ID.

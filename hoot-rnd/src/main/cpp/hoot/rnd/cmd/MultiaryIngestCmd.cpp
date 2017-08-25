@@ -43,10 +43,12 @@
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/io/OsmPbfReader.h>
 
 // Qt
 #include <QUuid>
 #include <QElapsedTimer>
+#include <QTemporaryFile>
 
 using namespace std;
 
@@ -74,7 +76,6 @@ public:
   static string className() { return "hoot::MultiaryIngestCmd"; }
 
   MultiaryIngestCmd() :
-  _sortInput(false),
   _isGeoNamesInput(false),
   _changesParsed(0)
   {
@@ -82,16 +83,6 @@ public:
 
   virtual ~MultiaryIngestCmd()
   {
-    if (_sortInput)
-    {
-      //delete the temporary db layer used for sorting
-      LOG_INFO("Deleting temporary map: " << _sortedNewInput << "...");
-      _timer.restart();
-      HootApiDbWriter().deleteMap(_sortedNewInput);
-      LOG_INFO(
-        "Temporary map: " << _sortedNewInput << " deleted.  Time: " <<
-        FileUtils::secondsToDhms(_timer.elapsed()));
-    }
   }
 
   virtual QString getName() const { return "multiary-ingest"; }
@@ -108,23 +99,19 @@ public:
     _isGeoNamesInput = GeoNamesReader().isSupported(newInput);
     const QString referenceOutput = args[1];
     const QString changesetOutput = args[2];
-    _sortInput = true;
-    if (args.size() == 4 && args[3].toLower().trimmed() == "false")
-    {
-      _sortInput = false;
-    }
 
     LOG_VARD(newInput);
     LOG_VARD(referenceOutput);
     LOG_VARD(changesetOutput);
-    LOG_VARD(_sortInput);
 
-    if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
+    //TODO: support OSM XML reading here too after #1452
+    if (!OsmPbfReader().isSupported(newInput) && !GeoNamesReader().isSupported(newInput))
     {
       throw IllegalArgumentException(
-        QString("This command does not support non-streamable inputs.  See README.md - ") +
-        QString("Supported Data Formats for more details.  Input: ") + newInput);
+        QString("This command currently only supports OMS PBF and geonames input formats.  ") +
+        QString("Specified input: ") + newInput);
     }
+    assert(OsmMapReaderFactory::getInstance().hasElementInputStream(newInput));
 
     if (!HootApiDbReader().isSupported(referenceOutput))
     {
@@ -142,6 +129,7 @@ public:
 
     //inputs must be sorted by element id for changeset derivation to work
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
+    LOG_VARD(conf().get(ConfigOptions::getApiDbReaderSortByIdKey()));
     //in order for the sorting to work, all original element ids must be retained...no new ones
     //assigned; we're assuming no duplicate ids in the input
     conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
@@ -157,17 +145,18 @@ public:
     const QStringList dbUrlParts = referenceOutput.split("/");
     if (!referenceDb.mapExists(dbUrlParts[dbUrlParts.size() - 1]))
     {
-      LOG_INFO("Generating a changeset from the input data only.");
+      LOG_INFO(
+        "Reference dataset does not exist.  Generating a changeset from the input data only.");
 
-      //If there's no existing reference data, then there's no point in sorting input data or
-      //deriving a changeset diff.  So in that case, write all of the input data directly to the
-      //ref layer and generate a Spark changeset consisting entirely of create statements.
-      _sortInput = false;
-      _writeChanges(_getNewInputStream(newInput), referenceOutput, changesetOutput);
+      //If there's no existing reference data, then there's no point in deriving a changeset diff.
+      //So in that case, write all of the input data directly to the ref layer and generate a Spark
+      //changeset consisting entirely of create statements.
+      _writeChanges(_getFilteredNewInputStream(newInput), referenceOutput, changesetOutput);
     }
     else
     {
-      LOG_INFO("Deriving a changeset between the input and reference data.");
+      LOG_INFO(
+        "Reference dataset exists.  Deriving a changeset between the input and reference data.");
 
       //sort incoming data by element id, if necessary, for changeset derivation (only passing nodes
       //through, so don't need to also sort by element type)
@@ -175,7 +164,8 @@ public:
 
       //create the changes and write them to the ref db layer and also to a changeset file for
       //external use by Spark
-      _deriveAndWriteChanges(_getNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
+      _deriveAndWriteChanges(
+        _getFilteredNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
     }
 
     LOG_INFO(
@@ -189,82 +179,73 @@ public:
 
 private:
 
-  bool _sortInput;
   QString _sortedNewInput;
-  bool _isGeoNamesInput;
+  boost::shared_ptr<QTemporaryFile> _sortTempFile;
 
+  bool _isGeoNamesInput;
   long _changesParsed;
 
   QElapsedTimer _timer;
 
   QString _getSortedNewInput(const QString newInput)
   {
-    if (!_sortInput)
+    QString sortedNewInput;
+
+    if (GeoNamesReader().isSupported(newInput))
     {
-      return newInput;
+      //sort the input using the unix sort command
+
+      LOG_INFO("Sorting " << newInput << " by node ID...");
+      _timer.restart();
+
+      _sortTempFile.reset(new QTemporaryFile("multiary-ingest-sort-temp-XXXXXX.geonames"));
+      if (!_sortTempFile->open())
+      {
+        throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
+      }
+      sortedNewInput = _sortTempFile->fileName();
+
+      // > /dev/null
+      if (system(
+           QString("sort " + newInput + " --output=" + sortedNewInput).toStdString().c_str()) != 0)
+      {
+        throw HootException("Unable to sort input file.");
+      }
+
+      LOG_INFO(
+        newInput << " sorted by node ID.  Time: " << FileUtils::secondsToDhms(_timer.elapsed()));
     }
+    //TODO: support OSM XML sorting here too after #1452
+//    else if (OsmXmlReader().isSupported(newInput))
+//    {
 
-    LOG_DEBUG("Retrieving input stream...");
-
-    //write the unsorted input to a temp db layer; later it will be queried back out sorted by id
-
-    //TODO: if performance for this ends up being a bottleneck, will later implement something here
-    //that performs faster - either a file based merge sort, or using the db like this but with sql
-    //copy statements instead
-
-    boost::shared_ptr<PartialOsmMapReader> unsortedNewInputReader =
-      boost::dynamic_pointer_cast<PartialOsmMapReader>(
-        OsmMapReaderFactory::getInstance().createReader(newInput));
-    unsortedNewInputReader->setUseDataSourceIds(true);
-    unsortedNewInputReader->open(newInput);
-    boost::shared_ptr<ElementInputStream> unsortedNewInputStream =
-      boost::dynamic_pointer_cast<ElementInputStream>(unsortedNewInputReader);
-
-    LOG_DEBUG("Retrieving filtered input stream...");
-
-    boost::shared_ptr<ElementInputStream> filteredUnsortedNewInputStream =
-      _getFilteredNewInputStream(unsortedNewInputStream);
-
-    LOG_DEBUG("Retrieving output stream...");
-
-    const QString sortedNewInput =
-      HootApiDb::getBaseUrl().toString() + "/MultiaryIngest-tempNewInput-" +
-      QUuid::createUuid().toString();
-    boost::shared_ptr<HootApiDbWriter> unsortedNewInputWriter(new HootApiDbWriter());
-    unsortedNewInputWriter->setCreateUser(true);
-    unsortedNewInputWriter->setOverwriteMap(true);
-    unsortedNewInputWriter->open(sortedNewInput);
-    boost::shared_ptr<ElementOutputStream> unsortedNewOutputStream =
-      boost::dynamic_pointer_cast<ElementOutputStream>(unsortedNewInputWriter);
-
-    LOG_INFO(
-      "Writing Multiary new input data to temp location for sorting: " << sortedNewInput << "...");
-    _timer.restart();
-    ElementOutputStream::writeAllElements(
-      *filteredUnsortedNewInputStream, *unsortedNewOutputStream);
-    LOG_INFO(
-      "Multiary new input data written to temp location for sorting: " << sortedNewInput <<
-      ".  Time: " << FileUtils::secondsToDhms(_timer.elapsed()));
+//    }
+    else //must be a PBF
+    {
+      //check for sorted flag; fail if false
+      if (!OsmPbfReader().isSorted(newInput))
+      {
+        throw IllegalArgumentException("OSM PBF inputs must be sorted by node ID.");
+      }
+      sortedNewInput = newInput;
+    }
 
     return sortedNewInput;
   }
 
-  boost::shared_ptr<ElementInputStream> _getNewInputStream(const QString sortedNewInput)
+  boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput)
   {
     boost::shared_ptr<PartialOsmMapReader> newInputReader =
       boost::dynamic_pointer_cast<PartialOsmMapReader>(
         OsmMapReaderFactory::getInstance().createReader(sortedNewInput));
     newInputReader->setUseDataSourceIds(true);
     newInputReader->open(sortedNewInput);
-    return boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
-  }
+    boost::shared_ptr<ElementInputStream> inputStream =
+      boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
-  boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(
-    boost::shared_ptr<ElementInputStream> inputStream)
-  {
     boost::shared_ptr<PoiCriterion> elementCriterion;
     //as the incoming data is read, filter it down to POIs only and translate each element;
-    if (!_isGeoNamesInput) //all geonames are pois, so skip the element criterion filtering expense
+    if (!_isGeoNamesInput) //all geonames are pois, so skip the element filtering expense
     {
       elementCriterion.reset(new PoiCriterion());
     }
@@ -276,14 +257,12 @@ private:
     return filteredNewInputStream;
   }
 
-  void _writeChanges(boost::shared_ptr<ElementInputStream> newInputStream,
+  void _writeChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
                      const QString referenceOutput, const QString changesetOutput)
   {
     _timer.restart();
 
-    boost::shared_ptr<ElementInputStream> filteredNewInputStream =
-      _getFilteredNewInputStream(newInputStream);
-
+    //TODO: replace this with HootApiDbBulkInserter once its finished..should be faster
     HootApiDbWriter referenceWriter;
     referenceWriter.setCreateUser(true);
     referenceWriter.setOverwriteMap(true);
@@ -302,18 +281,19 @@ private:
     }
   }
 
-  void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> newInputStream,
+  void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
                               const QString referenceOutput, const QString changesetOutput)
   {
     _timer.restart();
 
+    LOG_VARD(conf().get(ConfigOptions::getApiDbReaderSortByIdKey()));
     boost::shared_ptr<HootApiDbReader> referenceReader(new HootApiDbReader());
     referenceReader->setUseDataSourceIds(true);
     referenceReader->open(referenceOutput);
 
     ChangesetDeriverPtr changesetDeriver(
       new ChangesetDeriver(
-        boost::dynamic_pointer_cast<ElementInputStream>(referenceReader), newInputStream));
+        boost::dynamic_pointer_cast<ElementInputStream>(referenceReader), filteredNewInputStream));
 
     HootApiDbWriter referenceChangeWriter;
     referenceChangeWriter.setCreateUser(false);

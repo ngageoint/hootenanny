@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SqlBulkDelete.h"
 
@@ -50,10 +50,10 @@ _tableName(tableName)
 
 SqlBulkDelete::~SqlBulkDelete()
 {
-  LOG_DEBUG("(" << _tableName << ") Total time inserting: " << _time);
+  LOG_DEBUG("(" << _tableName << ") Total time deleting: " << _time);
   if (_pending.size() > 0)
   {
-    LOG_WARN("(" << _tableName << ") There are pending inserts in SqlBulkDelete. You should call "
+    LOG_WARN("(" << _tableName << ") There are pending deletes in SqlBulkDelete. You should call "
              "flush before destruction.");
   }
 }

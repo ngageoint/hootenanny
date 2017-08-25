@@ -176,13 +176,17 @@ void SparkChangesetWriter::writeChange(const Change& change)
   const Tags& tags = nodeCopy->getTags();
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    if (!first)
+    const QString tagValue = it.value();
+    if (!tagValue.trimmed().isEmpty())
     {
-      changeLine += ",";
+      if (!first)
+      {
+        changeLine += ",";
+      }
+      changeLine +=
+        OsmJsonWriter::markupString(it.key()) % ":" % OsmJsonWriter::markupString(tagValue);
+      first = false;
     }
-    changeLine +=
-      OsmJsonWriter::markupString(it.key()) % ":" % OsmJsonWriter::markupString(it.value());
-    first = false;
   }
   changeLine += "}}}\n";
   LOG_VART(changeLine);

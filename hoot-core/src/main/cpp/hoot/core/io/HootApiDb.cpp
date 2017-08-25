@@ -1231,25 +1231,26 @@ long HootApiDb::numElements(const ElementType& elementType)
 boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
                                                        const bool sorted)
 {
-  const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
   QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType));
   if (sorted)
   {
-    sql += " ORDER BY id ASCENDING";
+    sql += " ORDER BY id";
   }
-  LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
+  LOG_VARD(sql);
 
   _selectElementsForMap->prepare(sql);
-  _selectElementsForMap->bindValue(":mapId", (qlonglong)mapId);
 
   if (_selectElementsForMap->exec() == false)
   {
-    QString err = _selectElementsForMap->lastError().text();
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " for map ID: " + QString::number(mapId) + " Error: " + err);
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() +
+      " for map ID: " + QString::number(_currMapId) + " Error: " +
+      _selectElementsForMap->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
   }
   LOG_VARD(_selectElementsForMap->numRowsAffected());
   LOG_VARD(_selectElementsForMap->executedQuery());
