@@ -81,7 +81,7 @@ Change ChangesetDeriver::_nextChange()
   {
     _fromE = _from->readNextElement();
     LOG_TRACE("'from' element null and 'from'' has more elements...");
-    LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+    LOG_TRACE("Next 'from' element: " << _fromE->getElementId()); //X
   }
   if (!_toE.get() && _to->hasMoreElements())
   {

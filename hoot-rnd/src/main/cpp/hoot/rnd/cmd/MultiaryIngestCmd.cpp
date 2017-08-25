@@ -44,11 +44,13 @@
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/io/OsmPbfReader.h>
+#include <hoot/core/io/OsmXmlReader.h>
 
 // Qt
 #include <QUuid>
 #include <QElapsedTimer>
 #include <QTemporaryFile>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -76,6 +78,7 @@ public:
   static string className() { return "hoot::MultiaryIngestCmd"; }
 
   MultiaryIngestCmd() :
+  _sortInput(true),
   _isGeoNamesInput(false),
   _changesParsed(0)
   {
@@ -99,14 +102,21 @@ public:
     _isGeoNamesInput = GeoNamesReader().isSupported(newInput);
     const QString referenceOutput = args[1];
     const QString changesetOutput = args[2];
+    _sortInput = true;
+    if (args.size() == 4 && args[3].toLower().trimmed() == "false")
+    {
+      _sortInput = false;
+    }
 
     LOG_VARD(newInput);
     LOG_VARD(referenceOutput);
     LOG_VARD(changesetOutput);
+    LOG_VARD(_sortInput);
 
-    //TODO: support OSM XML reading here too after #1452
-    if (!OsmPbfReader().isSupported(newInput) && !GeoNamesReader().isSupported(newInput))
+    if (!OsmPbfReader().isSupported(newInput) && !GeoNamesReader().isSupported(newInput) /*&&
+        !OsmXmlReader().isSupported(newInput)*/)
     {
+      //TODO: support OSM XML reading here too after #1452
       throw IllegalArgumentException(
         QString("This command currently only supports OMS PBF and geonames input formats.  ") +
         QString("Specified input: ") + newInput);
@@ -179,6 +189,7 @@ public:
 
 private:
 
+  bool _sortInput;
   QString _sortedNewInput;
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
 
@@ -187,50 +198,85 @@ private:
 
   QElapsedTimer _timer;
 
+  void _checkForOsmosis()
+  {
+    if (system(QString("osmosis -q > /dev/null").toStdString().c_str()) != 0)
+    {
+      throw HootException(
+        QString("Unable to access the Osmosis application.  Osmosis is required to") +
+        QString("sort OSM PBF and OSM XML files.  Is Osmosis installed?"));
+    }
+  }
+
   QString _getSortedNewInput(const QString newInput)
   {
-    QString sortedNewInput;
+    if (!_sortInput)
+    {
+      return newInput;
+    }
+
+    LOG_INFO("Sorting " << newInput << " by node ID...");
+    _timer.restart();
+
+    QFileInfo newInputFileInfo(newInput);
+    _sortTempFile.reset(
+      new QTemporaryFile("multiary-ingest-sort-temp-XXXXXX." + newInputFileInfo.completeSuffix()));
+    if (!_sortTempFile->open())
+    {
+      throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
+    }
 
     if (GeoNamesReader().isSupported(newInput))
     {
       //sort the input using the unix sort command
-
-      LOG_INFO("Sorting " << newInput << " by node ID...");
-      _timer.restart();
-
-      _sortTempFile.reset(new QTemporaryFile("multiary-ingest-sort-temp-XXXXXX.geonames"));
-      if (!_sortTempFile->open())
-      {
-        throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
-      }
-      sortedNewInput = _sortTempFile->fileName();
-
-      // > /dev/null
       if (system(
-           QString("sort " + newInput + " --output=" + sortedNewInput).toStdString().c_str()) != 0)
+           QString("sort " + newInput + " --output=" +
+             _sortTempFile->fileName()).toStdString().c_str()) != 0)
       {
         throw HootException("Unable to sort input file.");
       }
+    }
+    //use osmosis to sort the OSM files
+    else if (OsmPbfReader().isSupported(newInput))
+    {
+      //check for sorted flag
+      if (OsmPbfReader().isSorted(newInput))
+      {
+        LOG_WARN(
+          "OSM PBF input file: " << newInput << " is marked as sorted by node ID, as " <<
+          "indicated by its header, yet Hootenanny was instructed to sort the file.");
+      }
 
-      LOG_INFO(
-        newInput << " sorted by node ID.  Time: " << FileUtils::secondsToDhms(_timer.elapsed()));
+      _checkForOsmosis();
+
+      const QString cmd =
+        "osmosis -q --read-pbf file=\"" + newInput + "\" --sort --write-pbf " +
+        "omitmetadata=true file=\"" + _sortTempFile->fileName() + "\" > /dev/null";
+      if (system(cmd.toStdString().c_str()) != 0)
+      {
+        throw HootException("Unable to sort OSM PBF file.");
+      }
     }
     //TODO: support OSM XML sorting here too after #1452
-//    else if (OsmXmlReader().isSupported(newInput))
+//    else
 //    {
+//      assert(OsmXmlReader().isSupported(newInput);
 
+//      _checkForOsmosis();
+
+//      const QString cmd =
+//        "osmosis --read-xml file=\"" + newInput + "\" --sort --write-xml file=\"" +
+//        sortedNewInput + "\"  > /dev/null";
+//      if (system(cmd.toStdString().c_str()) != 0)
+//      {
+//        throw HootException("Unable to sort OSM XML file.");
+//      }
 //    }
-    else //must be a PBF
-    {
-      //check for sorted flag; fail if false
-      if (!OsmPbfReader().isSorted(newInput))
-      {
-        throw IllegalArgumentException("OSM PBF inputs must be sorted by node ID.");
-      }
-      sortedNewInput = newInput;
-    }
 
-    return sortedNewInput;
+    LOG_INFO(
+      newInput << " sorted by node ID.  Time: " << FileUtils::secondsToDhms(_timer.elapsed()));
+
+    return _sortTempFile->fileName();
   }
 
   boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput)
@@ -262,7 +308,6 @@ private:
   {
     _timer.restart();
 
-    //TODO: replace this with HootApiDbBulkInserter once its finished..should be faster
     HootApiDbWriter referenceWriter;
     referenceWriter.setCreateUser(true);
     referenceWriter.setOverwriteMap(true);
