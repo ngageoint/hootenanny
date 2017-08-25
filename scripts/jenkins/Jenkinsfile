@@ -2,22 +2,22 @@ pipeline {
     agent any
     parameters {
         booleanParam(name: 'DESTROY_VM',
-            defaulValue: true,
+            defaultValue: true,
             description: 'Destroy VM (Coming soon!)')
         booleanParam(name: 'STATIC_ANALYSIS',
-            defaulValue: true,
+            defaultValue: true,
             description: 'Run static analysis')
         booleanParam(name: 'LICENSE',
-            defaulValue: true,
+            defaultValue: true,
             description: 'Check license headers')
         booleanParam(name: 'CORE',
-            defaulValue: true,
+            defaultValue: true,
             description: 'Run core test')
         booleanParam(name: 'SERVICES',
-            defaulValue: true,
+            defaultValue: true,
             description: 'Run services tests')
         booleanParam(name: 'UI',
-            defaulValue: true,
+            defaultValue: true,
             description: 'Run UI tests')
     }
     stages {
