@@ -83,6 +83,12 @@ public:
     }
 
     const QString input = args[0];
+    QFileInfo fileInfo(input);
+    if (!fileInfo.exists())
+    {
+      throw HootException("Specified input: " + input + " does not exist.");
+    }
+
     if (OsmPbfReader().isSorted(input))
     {
       std::cout << input << " is sorted." << std::endl;

@@ -1177,10 +1177,6 @@ void OsmPbfReader::read(OsmMapPtr map)
 bool OsmPbfReader::isSupported(QString urlStr)
 {
   QFileInfo fileInfo(urlStr);
-  if (!fileInfo.exists())
-  {
-    throw HootException("Specified input: " + urlStr + " does not exist.");
-  }
   if (fileInfo.isDir())
   {
     throw HootException("Can't handle dirs with partial read yet.");
