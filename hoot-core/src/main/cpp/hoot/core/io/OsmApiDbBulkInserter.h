@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMAPIDBBULKWRITER_H
-#define OSMAPIDBBULKWRITER_H
+#ifndef OSMAPIDBBULKINSERTER_H
+#define OSMAPIDBBULKINSERTER_H
 
 #include <string>
 #include <map>
@@ -54,7 +54,7 @@ class OsmApiDbSqlStatementFormatter;
  * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
  *
  * If you need to write small amounts of elements to an OSM API database or modify data in an
- * existing database, you may be better off creating a new writer class or using the Rails Port.
+ * existing database, you should create a new writer class or use the Rails Port instead.
  *
  * This writer:
  *
@@ -72,7 +72,7 @@ class OsmApiDbSqlStatementFormatter;
  *
  * * requires two passes over the input data *before* writing it to the database
  */
-class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
+class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
 {
   //some ids are stored as unsigned long and some as long due to the fact, the incoming data could
   //have positive or negative ids and when writing the output we end up with only positive ids
@@ -130,12 +130,12 @@ class OsmApiDbBulkWriter : public PartialOsmMapWriter, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::OsmApiDbBulkWriter"; }
+  static std::string className() { return "hoot::OsmApiDbBulkInserter"; }
 
   static unsigned int logWarnCount;
 
-  OsmApiDbBulkWriter();
-  virtual ~OsmApiDbBulkWriter();
+  OsmApiDbBulkInserter();
+  virtual ~OsmApiDbBulkInserter();
 
   virtual bool isSupported(QString url);
   virtual void open(QString url);
@@ -213,9 +213,6 @@ private:
 
   boost::shared_ptr<QElapsedTimer> _timer;
 
-  QString _formatPotentiallyLargeNumber(const unsigned long number);
-  QString _secondsToDhms(const qint64 durationInMilliseconds) const;
-
   void _reset();
   void _clearIdCollections();
   unsigned int _numberOfFileDataPasses() const;
@@ -276,4 +273,4 @@ private:
 
 }
 
-#endif // OSMAPIDBBULKWRITER_H
+#endif // OSMAPIDBBULKINSERTER_H

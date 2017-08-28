@@ -193,22 +193,33 @@ void HootApiDbWriter::_overwriteMaps(const QString& mapName, const set<long>& ma
     {
       for (set<long>::const_iterator it = mapIds.begin(); it != mapIds.end(); ++it)
       {
-        LOG_DEBUG("Removing map with ID: " << *it);
+        LOG_DEBUG("Removing map with ID: " << *it << "...");
         _hootdb.deleteMap(*it);
         LOG_DEBUG("Finished removing map with ID: " << *it);
       }
 
       _hootdb.setMapId(_hootdb.insertMap(mapName, true));
     }
+//    else
+//    {
+//      LOG_ERROR("There are one or more maps with this name. Consider using "
+//                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
+//    }
+    else if (mapIds.size() > 1)
+    {
+      LOG_ERROR("There are multiple maps with this name. Consider using "
+                "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
+    }
     else
     {
-      LOG_ERROR("There are one or more maps with this name. Consider using "
-               "'hootapi.db.writer.overwrite.map'. Map IDs: " << mapIds);
+      set<long>::const_iterator idItr = mapIds.begin();
+      _hootdb.setMapId(*idItr);
+      LOG_DEBUG("Updating map with ID: " << _hootdb.getMapId() << "...");
     }
   }
-  else if ( mapIds.size() == 0 )
+  else if (mapIds.size() == 0)
   {
-    LOG_DEBUG("Map " << mapName << " was not found, must insert");
+    LOG_DEBUG("Map " << mapName << " was not found, must insert.");
     _hootdb.setMapId(_hootdb.insertMap(mapName, true));
   }
 }
@@ -329,6 +340,7 @@ void HootApiDbWriter::setConfiguration(const Settings &conf)
   setIncludeDebug(configOptions.getWriterIncludeDebugTags());
   setTextStatus(configOptions.getWriterTextStatus());
   setIncludeCircularError(configOptions.getWriterIncludeCircularErrorTags());
+  setRemap(configOptions.getHootapiDbWriterRemapIds());
 }
 
 void HootApiDbWriter::_startNewChangeSet()
@@ -339,6 +351,63 @@ void HootApiDbWriter::_startNewChangeSet()
   tags["bot"] = "yes";
   tags["created_by"] = "hootenanny";
   _hootdb.beginChangeset(tags);
+}
+
+void HootApiDbWriter::writeChange(const Change& change)
+{
+  switch (change.getType())
+  {
+    case Change::Create:
+      _createElement(change.getElement());
+      break;
+    case Change::Modify:
+      _modifyElement(change.getElement());
+      break;
+    case Change::Delete:
+      _deleteElement(change.getElement());
+      break;
+    default:
+      throw IllegalArgumentException("Unexpected change type.");
+  }
+}
+
+void HootApiDbWriter::_createElement(ConstElementPtr element)
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      _hootdb.insertNode(boost::dynamic_pointer_cast<const Node>(element));
+      break;
+    //only supporting nodes for now
+    default:
+      throw HootException("Unsupported element type");
+  }
+}
+
+void HootApiDbWriter::_modifyElement(ConstElementPtr element)
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      _hootdb.updateNode(boost::dynamic_pointer_cast<const Node>(element));
+      break;
+    //only supporting nodes for now
+    default:
+      throw HootException("Unsupported element type");
+  }
+}
+
+void HootApiDbWriter::_deleteElement(ConstElementPtr element)
+{
+  switch (element->getElementType().getEnum())
+  {
+    case ElementType::Node:
+      _hootdb.deleteNode(boost::dynamic_pointer_cast<const Node>(element));
+      break;
+    //only supporting nodes for now
+    default:
+      throw HootException("Unsupported element type");
+  }
 }
 
 void HootApiDbWriter::writePartial(const ConstNodePtr& n)

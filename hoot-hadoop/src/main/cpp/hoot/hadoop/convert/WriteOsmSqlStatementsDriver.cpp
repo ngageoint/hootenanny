@@ -353,8 +353,8 @@ void WriteOsmSqlStatementsDriver::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
-  setOutputFilesCopyLocation(confOptions.getOsmapidbBulkWriterOutputFilesCopyLocation().trimmed());
-  setFileOutputElementBufferSize(confOptions.getOsmapidbBulkWriterFileOutputElementBufferSize());
+  setOutputFilesCopyLocation(confOptions.getOsmapidbBulkInserterOutputFilesCopyLocation().trimmed());
+  setFileOutputElementBufferSize(confOptions.getOsmapidbBulkInserterFileOutputElementBufferSize());
   setChangesetUserId(confOptions.getChangesetUserId());
   setExecSqlWithMapreduce(confOptions.getBigConvertExecSqlWithMapreduce());
   setNumReduceTasks(confOptions.getBigConvertNumReduceTasks());

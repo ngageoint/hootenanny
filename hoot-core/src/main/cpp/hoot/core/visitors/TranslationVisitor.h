@@ -67,6 +67,8 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  virtual QString toString() { return "hoot::TranslationVisitor"; }
+
 private:
   ScriptTranslatorPtr _t;
   ScriptToOgrTranslator* _togr;
