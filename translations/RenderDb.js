@@ -90,7 +90,7 @@ function translateToOgr(tags, elementType, geometryType)
         delete tags['hoot:id']
     }
 
-    // Drop non usefull hoot tags.
+    // Drop non usefull/metadata hoot tags.
     if (tags['hoot:status'] == 'invalid' || tags['hoot:status'] == 'Invalid') delete tags['hoot:status'];
     if (tags['hoot:layername']) delete tags['hoot:layername'];
     if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
