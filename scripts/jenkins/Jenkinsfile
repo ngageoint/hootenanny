@@ -19,11 +19,11 @@ pipeline {
             steps {
                 // Attempt to destroy exiting VM but don't stop job if not there
                 sh 'vagrant destroy -f || true'
-                //cleanWs()
+                cleanWs()
                 
                 //checkout scm
-                //git branch: 'jenkinsfile', credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
-                //sh 'git submodule update --init'
+                git branch: ${env.BRANCH_NAME}, credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
+                sh 'git submodule update --init'
                 
                 sh 'cp -R ../software.ubuntu1404 software'
                 //sh 'export WORDS_HOME=/fouo/ubuntu'
