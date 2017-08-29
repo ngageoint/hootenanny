@@ -21,10 +21,6 @@ ln -s ../vagrant-hootenanny .vagrant
 # Update hoot-ui
 git submodule update --init
 
-# Jenkins Vagrant setup
-ln -s ../../vagrant/VSphereDummy.box VSphereDummy.box
-ln -s ../../vagrant/VagrantfileLocal.ubuntu1404 VagrantfileLocal
-
 # Copy words1.sqlite Db so we don't have to download it again
 ( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )
 
@@ -52,9 +48,9 @@ fi
 
 if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
-    time -p vagrant up --provider vsphere
+    time -p vagrant up --provider aws
 else
-    time -p vagrant up --provision-with nfs,build,EGD,tomcat,mapnik,hadoop --provider vsphere
+    time -p vagrant up --provision-with build,EGD,tomcat,mapnik,hadoop --provider aws
 fi
 
 # Disableing this until it gets moved earlier into the build.
