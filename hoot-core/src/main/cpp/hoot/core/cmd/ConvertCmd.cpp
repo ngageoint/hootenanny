@@ -126,6 +126,12 @@ public:
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
+    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
+    if (readerName.trimmed().isEmpty())
+    {
+      readerName = OsmMapReaderFactory::getReaderName(args[0]);
+    }
+    LOG_VARD(readerName);
     QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
     if (writerName.trimmed().isEmpty())
     {
@@ -139,14 +145,17 @@ public:
         //the XML writer can't keep sorted output when streaming, so require an additional config
         //option be specified in order to stream when writing that format
         (writerName != "hoot::OsmXmlWriter" ||
-         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
+         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById()))
+        /*&& readerName != "hoot::OsmXmlReader"*/)
     {
       streamElements(args[0], args[1]);
     }
     else
     {
       OsmMapPtr map(new OsmMap());
-      loadMap(map, args[0], true, Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+      loadMap(
+        map, args[0], /*true*/ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
       MapProjector::projectToWgs84(map);
@@ -173,15 +182,18 @@ public:
   {
     LOG_INFO("Streaming data conversion from " << in << " to " << out << "...");
 
-    boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(in);
+    boost::shared_ptr<OsmMapReader> reader =
+      OsmMapReaderFactory::getInstance().createReader(
+        in, ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
     reader->open(in);
     boost::shared_ptr<ElementInputStream> streamReader =
       boost::dynamic_pointer_cast<ElementInputStream>(reader);
+
     boost::shared_ptr<OsmMapWriter> writer = OsmMapWriterFactory::getInstance().createWriter(out);
     writer->open(out);
     boost::shared_ptr<ElementOutputStream> streamWriter =
       boost::dynamic_pointer_cast<ElementOutputStream>(writer);
-
     boost::shared_ptr<PartialOsmMapWriter> partialWriter =
       boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
 
@@ -220,6 +232,7 @@ public:
     {
       partialReader->finalizePartial();
     }
+
     if (partialWriter.get())
     {
       partialWriter->finalizePartial();

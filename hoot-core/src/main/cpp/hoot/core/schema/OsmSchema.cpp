@@ -1480,7 +1480,8 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    LOG_TRACE(_theInstance->toGraphvizString());
+    //TODO: write this out to temp file
+    //LOG_TRACE(_theInstance->toGraphvizString());
   }
   return *_theInstance;
 }
@@ -1561,8 +1562,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
     return false;
   }
 
-  // Print out tags
-  LOG_TRACE("Tags: " << t.toString() );
+  //LOG_VART(t.toString());
 
   result |= isBuilding(t, type);
   result |= t.isTrue("building:part");
@@ -1839,7 +1839,7 @@ bool OsmSchema::isPoi(const Element& e)
   // we consider all point features with a name, or part of the explicitly defined point category
   // to be POIs.
   if (e.getElementType() == ElementType::Node)
-  {
+  {;
     result = hasCategory(e.getTags(), "poi") || e.getTags().getNames().size() > 0;
   }
 

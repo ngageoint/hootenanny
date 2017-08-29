@@ -52,6 +52,8 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
   do
   {
     ElementPtr e = _elementSource->readNextElement();
+    LOG_VART(e->getElementId());
+
     LOG_VART(_criterion.get());
     if (!_criterion.get() || _criterion->isSatisfied(e))
     {
@@ -64,6 +66,10 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
         LOG_VART(e->getTags().contains(MetadataTags::HootHash()));
       }
       return e;
+    }
+    else
+    {
+      LOG_TRACE("Criterion not satisfied.");
     }
   } while (hasMoreElements());
 

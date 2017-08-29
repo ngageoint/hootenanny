@@ -1976,6 +1976,15 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 Sets the status on data being read.  Valid values are "unknown1" and "unknown2".  Not honored by all
 readers.
 
+=== reader.use.data.source.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the element IDs in the source data will be assigned to written elements.  Otherwise,
+Hootenanny manages element IDs internally.  This should not be set to true if any source elements
+have negative IDs.  Not honored by all readers.
+
 === reader.use.file.status
 
 * Data Type: bool
@@ -2660,7 +2669,7 @@ NoInformationElementRemover cleaning operation.
 
 === writer.precision
 
-* Data Type: double
+* Data Type: int
 * Default Value: `16`
 
 Set the output precision when writing. Not honored by all writers.

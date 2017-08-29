@@ -48,7 +48,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangeWriter, SparkChangesetWriter)
 
 SparkChangesetWriter::SparkChangesetWriter() :
-_precision(round(ConfigOptions().getWriterPrecision()))
+_precision(/*round(*/ConfigOptions().getWriterPrecision()/*)*/)
 {
 }
 

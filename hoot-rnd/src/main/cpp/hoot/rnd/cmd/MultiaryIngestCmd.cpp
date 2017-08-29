@@ -52,8 +52,6 @@
 #include <QTemporaryFile>
 #include <QFileInfo>
 
-using namespace std;
-
 namespace hoot
 {
 
@@ -75,7 +73,7 @@ class MultiaryIngestCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::MultiaryIngestCmd"; }
+  static std::string className() { return "hoot::MultiaryIngestCmd"; }
 
   MultiaryIngestCmd() :
   _sortInput(true),
@@ -94,7 +92,7 @@ public:
   {
     if (args.size() != 3 && args.size() != 4)
     {
-      cout << getHelp() << endl << endl;
+      std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
@@ -113,15 +111,13 @@ public:
     LOG_VARD(changesetOutput);
     LOG_VARD(_sortInput);
 
-    if (!OsmPbfReader().isSupported(newInput) && !GeoNamesReader().isSupported(newInput) /*&&
-        !OsmXmlReader().isSupported(newInput)*/)
+    if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
     {
-      //TODO: support OSM XML reading here too after #1452
       throw IllegalArgumentException(
-        QString("This command currently only supports OMS PBF and geonames input formats.  ") +
+        QString("This command currently only supports streamable input formats.") +
+        QString("See the Supported Data Formats section in README.md for more detail.") +
         QString("Specified input: ") + newInput);
     }
-    assert(OsmMapReaderFactory::getInstance().hasElementInputStream(newInput));
 
     if (!HootApiDbReader().isSupported(referenceOutput))
     {
@@ -145,6 +141,8 @@ public:
     conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
     //translate inputs to OSM
     conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
+    //for the changeset derivation to work, all input IDs must not be modified
+    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
 
     LOG_INFO(
       "Ingesting Multiary data from " << newInput << " into reference output layer: " <<
@@ -200,7 +198,7 @@ private:
 
   void _checkForOsmosis()
   {
-    if (system(QString("osmosis -q > /dev/null").toStdString().c_str()) != 0)
+    if (std::system(QString("osmosis -q > /dev/null").toStdString().c_str()) != 0)
     {
       throw HootException(
         QString("Unable to access the Osmosis application.  Osmosis is required to") +
@@ -229,7 +227,7 @@ private:
     if (GeoNamesReader().isSupported(newInput))
     {
       //sort the input using the unix sort command
-      if (system(
+      if (std::system(
            QString("sort " + newInput + " --output=" +
              _sortTempFile->fileName()).toStdString().c_str()) != 0)
       {
@@ -252,26 +250,25 @@ private:
       const QString cmd =
         "osmosis -q --read-pbf file=\"" + newInput + "\" --sort --write-pbf " +
         "omitmetadata=true file=\"" + _sortTempFile->fileName() + "\" > /dev/null";
-      if (system(cmd.toStdString().c_str()) != 0)
+      if (std::system(cmd.toStdString().c_str()) != 0)
       {
         throw HootException("Unable to sort OSM PBF file.");
       }
     }
-    //TODO: support OSM XML sorting here too after #1452
-//    else
-//    {
-//      assert(OsmXmlReader().isSupported(newInput);
+    else
+    {
+      assert(OsmXmlReader().isSupported(newInput));
 
-//      _checkForOsmosis();
+      _checkForOsmosis();
 
-//      const QString cmd =
-//        "osmosis --read-xml file=\"" + newInput + "\" --sort --write-xml file=\"" +
-//        sortedNewInput + "\"  > /dev/null";
-//      if (system(cmd.toStdString().c_str()) != 0)
-//      {
-//        throw HootException("Unable to sort OSM XML file.");
-//      }
-//    }
+      const QString cmd =
+        "osmosis -q --read-xml file=\"" + newInput + "\" --sort --write-xml file=\"" +
+        _sortTempFile->fileName() + "\"  > /dev/null";
+      if (std::system(cmd.toStdString().c_str()) != 0)
+      {
+        throw HootException("Unable to sort OSM XML file.");
+      }
+    }
 
     LOG_INFO(
       newInput << " sorted by node ID.  Time: " << FileUtils::secondsToDhms(_timer.elapsed()));

@@ -751,8 +751,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   _updateChangesetEnvelope(envelopeNode);
 
   LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
-  LOG_VART(QString::number(lat, 'g', 15))
-  LOG_VART(QString::number(lon, 'g', 15));
+  LOG_VART(QString::number(lat, 'g', ConfigOptions().getWriterPrecision()))
+  LOG_VART(QString::number(lon, 'g', ConfigOptions().getWriterPrecision()));
 
   return true;
 }

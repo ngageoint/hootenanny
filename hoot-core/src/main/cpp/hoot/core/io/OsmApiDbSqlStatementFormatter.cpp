@@ -125,7 +125,9 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
   //const long nodeYNanodegrees = OsmApiDb::toOsmApiDbCoord(node->getY());
   //const long nodeXNanodegrees = OsmApiDb::toOsmApiDbCoord(node->getX());
   const int nodeYNanodegrees = _convertDegreesToNanodegrees(node->getY());
+  LOG_VART(nodeYNanodegrees);
   const int nodeXNanodegrees = _convertDegreesToNanodegrees(node->getX());
+  LOG_VART(nodeXNanodegrees);
   if ((nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000))
   {
     throw HootException(
@@ -150,6 +152,7 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
       QString::number(changesetId),
       datestring,
       tileNumberString));
+  LOG_VART(sqlStrs[0]);
 
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getNodesTableName()].arg(
@@ -159,6 +162,7 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
       QString::number(changesetId),
       datestring,
       tileNumberString));
+  LOG_VART(sqlStrs[1]);
 
   return sqlStrs;
 }

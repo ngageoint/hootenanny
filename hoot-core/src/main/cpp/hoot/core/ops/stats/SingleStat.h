@@ -45,7 +45,7 @@ public:
 
   QString toString() const
   {
-    return QString("%1: %2").arg(name).arg(/*QString::number(value, 'g', 17)*/value);
+    return QString("%1: %2").arg(name).arg(value);
   }
 };
 
