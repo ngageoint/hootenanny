@@ -89,7 +89,7 @@ public:
         if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
         {
           ElementCriterionPtr criterion(
-                Factory::getInstance().constructObject<ElementCriterion>(opName));
+            Factory::getInstance().constructObject<ElementCriterion>(opName));
           // when streaming we can't provide a reliable OsmMap.
           if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
           {

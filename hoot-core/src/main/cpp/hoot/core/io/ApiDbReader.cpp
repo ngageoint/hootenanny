@@ -47,6 +47,7 @@ ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
+_sortById(false),
 _returnNodesOnly(false)
 {
 }
@@ -475,7 +476,8 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   long elementCount = 0;
 
   // contact the DB and select all
-  boost::shared_ptr<QSqlQuery> elementResultsIterator = _getDatabase()->selectElements(elementType);
+  boost::shared_ptr<QSqlQuery> elementResultsIterator =
+    _getDatabase()->selectElements(elementType, _sortById);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end (see comments in _resultToElement)
@@ -513,7 +515,8 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   {
     //no results available, so request some more results
     LOG_TRACE("Requesting more query results...");
-    _elementResultIterator = _getDatabase()->selectElements(_selectElementType);
+    LOG_VART(_sortById);
+    _elementResultIterator = _getDatabase()->selectElements(_selectElementType, _sortById);
   }
 
   //results still available, so keep parsing through them
@@ -550,7 +553,7 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   }
   else
   {
-    throw HootException("readNextElement should not called if hasMoreElements returns false.");
+    throw HootException("readNextElement should not be called if hasMoreElements returns false.");
   }
 }
 

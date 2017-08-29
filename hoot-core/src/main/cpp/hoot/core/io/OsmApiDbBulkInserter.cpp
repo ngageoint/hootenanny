@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "OsmApiDbBulkWriter.h"
+#include "OsmApiDbBulkInserter.h"
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -38,6 +38,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
+#include <hoot/core/util/FileUtils.h>
 
 #include <tgs/System/SystemInfo.h>
 
@@ -47,11 +48,11 @@ using namespace Tgs;
 namespace hoot
 {
 
-unsigned int OsmApiDbBulkWriter::logWarnCount = 0;
+unsigned int OsmApiDbBulkInserter::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkWriter)
+HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkInserter)
 
-OsmApiDbBulkWriter::OsmApiDbBulkWriter() :
+OsmApiDbBulkInserter::OsmApiDbBulkInserter() :
 _outputDelimiter("\t"),
 _fileDataPassCtr(0)
 {
@@ -61,12 +62,12 @@ _fileDataPassCtr(0)
   _sqlFormatter.reset(new OsmApiDbSqlStatementFormatter(_outputDelimiter));
 }
 
-OsmApiDbBulkWriter::~OsmApiDbBulkWriter()
+OsmApiDbBulkInserter::~OsmApiDbBulkInserter()
 {
   close();
 }
 
-bool OsmApiDbBulkWriter::isSupported(QString urlStr)
+bool OsmApiDbBulkInserter::isSupported(QString urlStr)
 {
   LOG_VARD(urlStr);
   QUrl url(urlStr);
@@ -75,7 +76,7 @@ bool OsmApiDbBulkWriter::isSupported(QString urlStr)
   return urlStr.toLower().endsWith(".sql") || _database.isSupported(url);
 }
 
-void OsmApiDbBulkWriter::open(QString url)
+void OsmApiDbBulkInserter::open(QString url)
 {
   _outputUrl = url;
 
@@ -106,7 +107,7 @@ void OsmApiDbBulkWriter::open(QString url)
   _verifyDependencies();
 }
 
-void OsmApiDbBulkWriter::_verifyFileOutputs()
+void OsmApiDbBulkInserter::_verifyFileOutputs()
 {
   QString finalOutput = _outputUrl;
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
@@ -127,7 +128,7 @@ void OsmApiDbBulkWriter::_verifyFileOutputs()
   outputFile.remove();
 }
 
-void OsmApiDbBulkWriter::_verifyStartingIds()
+void OsmApiDbBulkInserter::_verifyStartingIds()
 {
   if (_idMappings.startingNodeId < 1 || _idMappings.startingWayId < 1 ||
       _idMappings.startingRelationId < 1)
@@ -169,7 +170,7 @@ void OsmApiDbBulkWriter::_verifyStartingIds()
   }
 }
 
-void OsmApiDbBulkWriter::_verifyDependencies()
+void OsmApiDbBulkInserter::_verifyDependencies()
 {
   if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
   {
@@ -177,7 +178,7 @@ void OsmApiDbBulkWriter::_verifyDependencies()
   }
 }
 
-void OsmApiDbBulkWriter::_verifyOutputCopySettings()
+void OsmApiDbBulkInserter::_verifyOutputCopySettings()
 {
   if (_destinationIsDatabase() && !_outputFilesCopyLocation.isEmpty())
   {
@@ -191,7 +192,7 @@ void OsmApiDbBulkWriter::_verifyOutputCopySettings()
   }
 }
 
-void OsmApiDbBulkWriter::close()
+void OsmApiDbBulkInserter::close()
 {
   LOG_DEBUG("Closing writer...");
 
@@ -206,7 +207,7 @@ void OsmApiDbBulkWriter::close()
   setConfiguration(conf());
 }
 
-void OsmApiDbBulkWriter::_closeOutputFiles()
+void OsmApiDbBulkInserter::_closeOutputFiles()
 {
   for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
        sectionNamesItr != _sectionNames.end(); ++sectionNamesItr)
@@ -229,46 +230,45 @@ void OsmApiDbBulkWriter::_closeOutputFiles()
   }
 }
 
-QString OsmApiDbBulkWriter::_formatPotentiallyLargeNumber(const unsigned long number)
-{
-  //I want to see comma separators...probably a better way to handle this...will go with this for
-  //now.
-  const QLocale& cLocale = QLocale::c();
-  QString ss = cLocale.toString((qulonglong)number);
-  ss.replace(cLocale.groupSeparator(), ',');
-  return ss;
-}
-
-void OsmApiDbBulkWriter::_logStats(const bool debug)
+void OsmApiDbBulkInserter::_logStats(const bool debug)
 {
   QStringList messages;
-  messages.append(QString("\tNodes: ") + _formatPotentiallyLargeNumber(_writeStats.nodesWritten));
   messages.append(
-    QString("\tNode tags: ") + _formatPotentiallyLargeNumber(_writeStats.nodeTagsWritten));
-  messages.append(QString("\tWays: ") + _formatPotentiallyLargeNumber(_writeStats.waysWritten));
+    QString("\tNodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten));
   messages.append(
-    QString("\tWay nodes: ") + _formatPotentiallyLargeNumber(_writeStats.wayNodesWritten));
+    QString("\tNode tags: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.nodeTagsWritten));
   messages.append(
-    QString("\tWay tags: ") + _formatPotentiallyLargeNumber(_writeStats.wayTagsWritten));
+    QString("\tWays: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten));
   messages.append(
-    QString("\tRelations: ") + _formatPotentiallyLargeNumber(_writeStats.relationsWritten));
+    QString("\tWay nodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayNodesWritten));
+  messages.append(
+    QString("\tWay tags: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayTagsWritten));
+  messages.append(
+    QString("\tRelations: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten));
   messages.append(
     QString("\tRelation members: ") +
-    _formatPotentiallyLargeNumber(_writeStats.relationMembersWritten));
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersWritten));
   messages.append(
-    QString("\tRelation tags: ") + _formatPotentiallyLargeNumber(_writeStats.relationTagsWritten));
+    QString("\tRelation tags: ") +
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationTagsWritten));
   messages.append(
     QString("\tUnresolved relation members: ") +
-      _formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
+    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
   messages.append(
-    QString("\tTotal features: ") + _formatPotentiallyLargeNumber(_getTotalFeaturesWritten()));
+    QString("\tTotal features: ") +
+    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()));
   messages.append(
-    QString("\tChangesets: ") + _formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
+    QString("\tChangesets: ") +
+    FileUtils::formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
   messages.append(
-    QString("\tChangeset change size (each): ") + _formatPotentiallyLargeNumber(_maxChangesetSize));
+    QString("\tChangeset change size (each): ") +
+    FileUtils::formatPotentiallyLargeNumber(_maxChangesetSize));
   messages.append(
     QString("\tExecutable SQL records: ") +
-    _formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
+    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
 
   for (int i = 0; i < messages.size(); i++)
   {
@@ -283,7 +283,7 @@ void OsmApiDbBulkWriter::_logStats(const bool debug)
   }
 }
 
-unsigned int OsmApiDbBulkWriter::_numberOfFileDataPasses() const
+unsigned int OsmApiDbBulkInserter::_numberOfFileDataPasses() const
 {
   //using psql always requires a minimum of two passes due to having to combine all the temp
   //sql files into one
@@ -296,7 +296,7 @@ unsigned int OsmApiDbBulkWriter::_numberOfFileDataPasses() const
   return numPasses;
 }
 
-void OsmApiDbBulkWriter::_flushStreams(const bool writeClosingMark)
+void OsmApiDbBulkInserter::_flushStreams(const bool writeClosingMark)
 {
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
@@ -321,7 +321,7 @@ void OsmApiDbBulkWriter::_flushStreams(const bool writeClosingMark)
   }
 }
 
-void OsmApiDbBulkWriter::_clearIdCollections()
+void OsmApiDbBulkInserter::_clearIdCollections()
 {
   LOG_DEBUG("Clearing out ID mappings...");
   if (_idMappings.nodeIdMap)
@@ -346,12 +346,13 @@ void OsmApiDbBulkWriter::_clearIdCollections()
   _unresolvedRefs.unresolvedRelationRefs.reset();
 }
 
-void OsmApiDbBulkWriter::finalizePartial()
+void OsmApiDbBulkInserter::finalizePartial()
 {
   LOG_INFO(
-    _formatPotentiallyLargeNumber(_getTotalFeaturesWritten()) << " input records parsed " <<
-    "(data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
-    ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()) <<
+    " input records parsed (data pass #" << _fileDataPassCtr << " of " <<
+    _numberOfFileDataPasses() << ").  Time elapsed: " <<
+    FileUtils::secondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _clearIdCollections();
@@ -414,12 +415,12 @@ void OsmApiDbBulkWriter::finalizePartial()
   _logStats(true);
 }
 
-bool OsmApiDbBulkWriter::_destinationIsDatabase() const
+bool OsmApiDbBulkInserter::_destinationIsDatabase() const
 {
   return _outputUrl.toLower().startsWith("osmapidb://");
 }
 
-void OsmApiDbBulkWriter::_writeDataToDbPsql()
+void OsmApiDbBulkInserter::_writeDataToDbPsql()
 {
   _timer->restart();
   _fileDataPassCtr++;
@@ -427,7 +428,8 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
   //which is why the number of copy statements to be executed is hardcoded here.  Might be cleaner
   //to not write the header if there are no records to copy for the table...
   LOG_INFO(
-    "Executing element SQL for " << _formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    "Executing element SQL for " <<
+    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
     " records (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
     ").  17 separate SQL COPY statements will be executed...");
 
@@ -436,15 +438,16 @@ void OsmApiDbBulkWriter::_writeDataToDbPsql()
   //applying it to a QSqlQuery.
   ApiDb::execSqlFile(_outputUrl, _sqlOutputCombinedFile->fileName());
 
-  LOG_INFO("SQL execution complete.  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+  LOG_INFO(
+    "SQL execution complete.  Time elapsed: " << FileUtils::secondsToDhms(_timer->elapsed()));
 }
 
-void OsmApiDbBulkWriter::_writeDataToDb()
+void OsmApiDbBulkInserter::_writeDataToDb()
 {
   _writeDataToDbPsql();
 }
 
-QString OsmApiDbBulkWriter::_getCombinedSqlFileName() const
+QString OsmApiDbBulkInserter::_getCombinedSqlFileName() const
 {
   QString dest;
   if (!_destinationIsDatabase())
@@ -462,7 +465,7 @@ QString OsmApiDbBulkWriter::_getCombinedSqlFileName() const
   return dest;
 }
 
-void OsmApiDbBulkWriter::_writeCombinedSqlFile()
+void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 {
   _timer->restart();
   _fileDataPassCtr++;
@@ -582,8 +585,8 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
             //size of the rest of the data
             PROGRESS_INFO(
               "Parsed " <<
-              _formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
-              _formatPotentiallyLargeNumber(
+              FileUtils::formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
+              FileUtils::formatPotentiallyLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
           }
@@ -621,14 +624,17 @@ void OsmApiDbBulkWriter::_writeCombinedSqlFile()
 
   LOG_INFO(
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
-    _numberOfFileDataPasses() << ").  Time elapsed: " << _secondsToDhms(_timer->elapsed()));
+    _numberOfFileDataPasses() << ").  Time elapsed: " <<
+    FileUtils::secondsToDhms(_timer->elapsed()));
   LOG_DEBUG(
-    "Parsed " << _formatPotentiallyLargeNumber(progressLineCtr) << " total SQL file lines.");
+    "Parsed " << FileUtils::formatPotentiallyLargeNumber(progressLineCtr) <<
+    " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(SystemInfo::humanReadable(outputInfo.size()));
 }
 
-void OsmApiDbBulkWriter::_updateRecordLineWithIdOffset(const QString tableName, QString& recordLine)
+void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString tableName,
+                                                         QString& recordLine)
 {
   LOG_TRACE("Updating ID offset for line...");
   LOG_VART(tableName);
@@ -708,7 +714,7 @@ void OsmApiDbBulkWriter::_updateRecordLineWithIdOffset(const QString tableName, 
   LOG_TRACE("ID offset updated for line: " << recordLine.left(100));
 }
 
-void OsmApiDbBulkWriter::_reserveIdsInDb()
+void OsmApiDbBulkInserter::_reserveIdsInDb()
 {
   //this assumes the input data has already been written out to file once and _writeStats has valid
   //values for the number of elements written
@@ -737,12 +743,12 @@ void OsmApiDbBulkWriter::_reserveIdsInDb()
   LOG_DEBUG("Sequence updates written to database.");
 }
 
-unsigned long OsmApiDbBulkWriter::_getTotalFeaturesWritten() const
+unsigned long OsmApiDbBulkInserter::_getTotalFeaturesWritten() const
 {
   return _writeStats.nodesWritten + _writeStats.waysWritten + _writeStats.relationsWritten;
 }
 
-unsigned long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
+unsigned long OsmApiDbBulkInserter::_getTotalRecordsWritten() const
 {
   //the multiplications by 2 account for the fact that two records are written for each type (other
   //than changesets), one for the current tables and one for the historical tables
@@ -754,7 +760,7 @@ unsigned long OsmApiDbBulkWriter::_getTotalRecordsWritten() const
     _changesetData.changesetsWritten;
 }
 
-void OsmApiDbBulkWriter::_incrementAndGetLatestIdsFromDb()
+void OsmApiDbBulkInserter::_incrementAndGetLatestIdsFromDb()
 {
   LOG_DEBUG("Incrementing current ID sequences in database and updating local record IDs...");
   _idMappings.currentNodeId = _database.getNextId(ElementType::Node);
@@ -767,7 +773,7 @@ void OsmApiDbBulkWriter::_incrementAndGetLatestIdsFromDb()
   LOG_VART(_idMappings.currentRelationId);
 }
 
-void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
+void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 {
   if (_writeStats.nodesWritten == 0)
   {
@@ -823,7 +829,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
       " nodes to file...");
     _flushStreams();
   }
@@ -831,35 +837,14 @@ void OsmApiDbBulkWriter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << _formatPotentiallyLargeNumber(_writeStats.nodesWritten) << " nodes from input.");
+      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten) <<
+      " nodes from input.");
   }
 
   LOG_VART(node->getVersion());
 }
 
-QString OsmApiDbBulkWriter::_secondsToDhms(const qint64 durationInMilliseconds) const
-{
-  //TODO: move to utility class
-  QString res;
-  int duration = (int)(durationInMilliseconds / 1000);
-  const int seconds = (int)(duration % 60);
-  duration /= 60;
-  const int minutes = (int)(duration % 60);
-  duration /= 60;
-  const int hours = (int)(duration % 24);
-  const int days = (int)(duration / 24);
-  if ((hours == 0) && (days == 0))
-  {
-    return res.sprintf("%02d:%02d", minutes, seconds);
-  }
-  if (days == 0)
-  {
-    return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
-  }
-  return res.sprintf("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
-}
-
-void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
+void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
 {
   LOG_VART(way);
 
@@ -903,7 +888,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
       " ways to file...");
     _flushStreams();
   }
@@ -911,11 +896,12 @@ void OsmApiDbBulkWriter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << _formatPotentiallyLargeNumber(_writeStats.waysWritten) << " ways from input.");
+      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten) <<
+      " ways from input.");
   }
 }
 
-void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
+void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
 {
   LOG_VART(relation);
 
@@ -959,7 +945,7 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << _formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
       " relations to file...");
     _flushStreams();
   }
@@ -967,27 +953,27 @@ void OsmApiDbBulkWriter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << _formatPotentiallyLargeNumber(_writeStats.relationsWritten) <<
+      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten) <<
       " relations from input.");
   }
 }
 
-void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
+void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
-  setOutputFilesCopyLocation(confOptions.getOsmapidbBulkWriterOutputFilesCopyLocation().trimmed());
+  setOutputFilesCopyLocation(confOptions.getOsmapidbBulkInserterOutputFilesCopyLocation().trimmed());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
-  setFileOutputElementBufferSize(confOptions.getOsmapidbBulkWriterFileOutputElementBufferSize());
-  setStatusUpdateInterval(confOptions.getOsmapidbBulkWriterFileOutputStatusUpdateInterval());
+  setFileOutputElementBufferSize(confOptions.getOsmapidbBulkInserterFileOutputElementBufferSize());
+  setStatusUpdateInterval(confOptions.getOsmapidbBulkInserterFileOutputStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
   setReserveRecordIdsBeforeWritingData(
-    confOptions.getOsmapidbBulkWriterReserveRecordIdsBeforeWritingData());
-  setStartingNodeId(confOptions.getOsmapidbBulkWriterStartingNodeId());
-  setStartingWayId(confOptions.getOsmapidbBulkWriterStartingWayId());
-  setStartingRelationId(confOptions.getOsmapidbBulkWriterStartingRelationId());
-  setStxxlMapMinSize(confOptions.getOsmapidbBulkWriterStxxlMapMinSize());
-  setValidateData(confOptions.getOsmapidbBulkWriterValidateData());
+    confOptions.getOsmapidbBulkInserterReserveRecordIdsBeforeWritingData());
+  setStartingNodeId(confOptions.getOsmapidbBulkInserterStartingNodeId());
+  setStartingWayId(confOptions.getOsmapidbBulkInserterStartingWayId());
+  setStartingRelationId(confOptions.getOsmapidbBulkInserterStartingRelationId());
+  setStxxlMapMinSize(confOptions.getOsmapidbBulkInserterStxxlMapMinSize());
+  setValidateData(confOptions.getOsmapidbBulkInserterValidateData());
 
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_fileOutputElementBufferSize);
@@ -1004,7 +990,7 @@ void OsmApiDbBulkWriter::setConfiguration(const Settings& conf)
   LOG_VART(_validateData);
 }
 
-QStringList OsmApiDbBulkWriter::_createSectionNameList()
+QStringList OsmApiDbBulkInserter::_createSectionNameList()
 {
   QStringList sections;
   sections.push_back("byte_order_mark");
@@ -1028,7 +1014,7 @@ QStringList OsmApiDbBulkWriter::_createSectionNameList()
   return sections;
 }
 
-void OsmApiDbBulkWriter::_createNodeOutputFiles()
+void OsmApiDbBulkInserter::_createNodeOutputFiles()
 {
   const QStringList nodeSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeSqlHeaderStrings();
   const QStringList nodeTagSqlHeaders = OsmApiDbSqlStatementFormatter::getNodeTagSqlHeaderStrings();
@@ -1040,7 +1026,7 @@ void OsmApiDbBulkWriter::_createNodeOutputFiles()
   _createOutputFile(ApiDb::getNodeTagsTableName(), nodeTagSqlHeaders[1]);
 }
 
-void OsmApiDbBulkWriter::_reset()
+void OsmApiDbBulkInserter::_reset()
 {
   LOG_TRACE("Resetting variables...");
 
@@ -1077,7 +1063,7 @@ void OsmApiDbBulkWriter::_reset()
   _sectionNames.clear();
 }
 
-unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& sourceId)
+unsigned long OsmApiDbBulkInserter::_establishNewIdMapping(const ElementId& sourceId)
 {
   //TODO: can probably reduce the current element id increment logic to just that of when
   //_validateData = false
@@ -1145,7 +1131,8 @@ unsigned long OsmApiDbBulkWriter::_establishNewIdMapping(const ElementId& source
   return dbIdentifier;
 }
 
-void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId)
+void OsmApiDbBulkInserter::_writeNodeToStream(const ConstNodePtr& node,
+                                               const unsigned long nodeDbId)
 {
   LOG_TRACE("Writing node to stream...");
   const QStringList nodeSqlStrs =
@@ -1154,10 +1141,11 @@ void OsmApiDbBulkWriter::_writeNodeToStream(const ConstNodePtr& node, const unsi
   *(_outputSections[ApiDb::getNodesTableName()].second) << nodeSqlStrs[1];
 }
 
-void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
-                                            const unsigned long dbId,
-                                            boost::shared_ptr<QTextStream>& currentTable,
-                                            boost::shared_ptr<QTextStream>& historicalTable)
+void OsmApiDbBulkInserter::_writeTagsToStream(const Tags& tags,
+                                              const ElementType::Type& elementType,
+                                              const unsigned long dbId,
+                                              boost::shared_ptr<QTextStream>& currentTable,
+                                              boost::shared_ptr<QTextStream>& historicalTable)
 {
   LOG_TRACE("Writing tags to stream...");
 
@@ -1170,7 +1158,7 @@ void OsmApiDbBulkWriter::_writeTagsToStream(const Tags& tags, const ElementType:
   }
 }
 
-void OsmApiDbBulkWriter::_createWayOutputFiles()
+void OsmApiDbBulkInserter::_createWayOutputFiles()
 {
   const QStringList waySqlHeaders = OsmApiDbSqlStatementFormatter::getWaySqlHeaderStrings();
   const QStringList wayTagSqlHeaders = OsmApiDbSqlStatementFormatter::getWayTagSqlHeaderStrings();
@@ -1185,7 +1173,7 @@ void OsmApiDbBulkWriter::_createWayOutputFiles()
   _createOutputFile(ApiDb::getWayNodesTableName(), wayNodeSqlHeaders[1]);
 }
 
-void OsmApiDbBulkWriter::_writeWayToStream(const unsigned long wayDbId)
+void OsmApiDbBulkInserter::_writeWayToStream(const unsigned long wayDbId)
 {
   LOG_TRACE("Writing way to stream...");
 
@@ -1195,7 +1183,7 @@ void OsmApiDbBulkWriter::_writeWayToStream(const unsigned long wayDbId)
   *(_outputSections[ApiDb::getWaysTableName()].second) << waySqlStrs[1];
 }
 
-void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
+void OsmApiDbBulkInserter::_writeWayNodesToStream(const unsigned long dbWayId,
                                                 const vector<long>& wayNodeIds)
 {
   LOG_TRACE("Writing way nodes to stream...");
@@ -1228,7 +1216,7 @@ void OsmApiDbBulkWriter::_writeWayNodesToStream(const unsigned long dbWayId,
   }
 }
 
-void OsmApiDbBulkWriter::_createRelationOutputFiles()
+void OsmApiDbBulkInserter::_createRelationOutputFiles()
 {
   const QStringList relationSqlHeaders =
     OsmApiDbSqlStatementFormatter::getRelationSqlHeaderStrings();
@@ -1246,7 +1234,7 @@ void OsmApiDbBulkWriter::_createRelationOutputFiles()
   _createOutputFile(ApiDb::getRelationMembersTableName(),relationMemberSqlHeaders[1]);
 }
 
-void OsmApiDbBulkWriter::_writeRelationToStream(const unsigned long relationDbId)
+void OsmApiDbBulkInserter::_writeRelationToStream(const unsigned long relationDbId)
 {
   LOG_TRACE("Writing relation to stream...");
 
@@ -1256,7 +1244,7 @@ void OsmApiDbBulkWriter::_writeRelationToStream(const unsigned long relationDbId
   *(_outputSections[ApiDb::getRelationsTableName()].second) << relationSqlStrs[1];
 }
 
-void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& relation,
+void OsmApiDbBulkInserter::_writeRelationMembersToStream(const ConstRelationPtr& relation,
                                                        const unsigned long dbRelationId)
 {
   LOG_TRACE("Writing relation members to stream...");
@@ -1319,10 +1307,10 @@ void OsmApiDbBulkWriter::_writeRelationMembersToStream(const ConstRelationPtr& r
   }
 }
 
-void OsmApiDbBulkWriter::_writeRelationMemberToStream(const unsigned long sourceRelationDbId,
-                                                      const RelationData::Entry& member,
-                                                      const unsigned long memberDbId,
-                                                      const unsigned int memberSequenceIndex)
+void OsmApiDbBulkInserter::_writeRelationMemberToStream(const unsigned long sourceRelationDbId,
+                                                        const RelationData::Entry& member,
+                                                        const unsigned long memberDbId,
+                                                        const unsigned int memberSequenceIndex)
 {
   const QStringList relationMemberSqlStrs =
     _sqlFormatter->relationMemberToSqlStrings(
@@ -1332,13 +1320,13 @@ void OsmApiDbBulkWriter::_writeRelationMemberToStream(const unsigned long source
   _writeStats.relationMembersWritten++;
 }
 
-QString OsmApiDbBulkWriter::_getTableOutputFileName(const QString tableName) const
+QString OsmApiDbBulkInserter::_getTableOutputFileName(const QString tableName) const
 {
   return QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".sql";
 }
 
-void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QString header,
-                                           const bool addByteOrderMark)
+void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QString header,
+                                             const bool addByteOrderMark)
 {
   QString msg = "Creating output file " + tableName;
   if (!header.trimmed().isEmpty())
@@ -1381,7 +1369,7 @@ void OsmApiDbBulkWriter::_createOutputFile(const QString tableName, const QStrin
   }
 }
 
-void OsmApiDbBulkWriter::_incrementChangesInChangeset()
+void OsmApiDbBulkInserter::_incrementChangesInChangeset()
 {
   _changesetData.changesInChangeset++;
   if (_changesetData.changesInChangeset == _maxChangesetSize)
@@ -1397,8 +1385,8 @@ void OsmApiDbBulkWriter::_incrementChangesInChangeset()
   }
 }
 
-void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& element,
-                                                    const unsigned long elementDbId)
+void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& element,
+                                                      const unsigned long elementDbId)
 {
   // Regardless of type, may be referenced in relation
   if (_unresolvedRefs.unresolvedRelationRefs)
@@ -1431,7 +1419,7 @@ void OsmApiDbBulkWriter::_checkUnresolvedReferences(const ConstElementPtr& eleme
   }
 }
 
-void OsmApiDbBulkWriter::_writeChangesetToStream()
+void OsmApiDbBulkInserter::_writeChangesetToStream()
 {
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_changesetData.currentChangesetId);
@@ -1456,11 +1444,11 @@ void OsmApiDbBulkWriter::_writeChangesetToStream()
       _changesetData.changesetBounds);
 }
 
-void OsmApiDbBulkWriter::_writeSequenceUpdatesToStream(long changesetId,
-                                                       const unsigned long nodeId,
-                                                       const unsigned long wayId,
-                                                       const unsigned long relationId,
-                                                       QString& outputStr)
+void OsmApiDbBulkInserter::_writeSequenceUpdatesToStream(long changesetId,
+                                                         const unsigned long nodeId,
+                                                         const unsigned long wayId,
+                                                         const unsigned long relationId,
+                                                         QString& outputStr)
 {
   LOG_DEBUG("Writing sequence updates stream...");
 
