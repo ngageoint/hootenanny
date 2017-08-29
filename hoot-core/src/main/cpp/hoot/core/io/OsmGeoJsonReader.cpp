@@ -63,7 +63,7 @@ using namespace geos::geom;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmJsonReader, OsmGeoJsonReader)
+HOOT_FACTORY_REGISTER(OsmMapReader, OsmGeoJsonReader)
 
 OsmGeoJsonReader::OsmGeoJsonReader() : OsmJsonReader()
 {
@@ -174,6 +174,10 @@ void OsmGeoJsonReader::_parseGeoJson()
   {
     const pt::ptree& feature = featureIt->second;
     string id = feature.get("id", string(""));
+    //  Some IDs may be strings that start with "node/" or "way/", remove that
+    size_t pos = id.find("/");
+    if (pos != string::npos)
+      id = id.erase(0, pos + 1);
     if (feature.not_found() != feature.find("properties"))
     {
       pt::ptree properties = feature.get_child("properties");
