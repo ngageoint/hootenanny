@@ -32,6 +32,10 @@
 
 #include "ElementInputStream.h"
 
+// Qt
+#include <QFile>
+#include <QUrl>
+
 namespace hoot
 {
 

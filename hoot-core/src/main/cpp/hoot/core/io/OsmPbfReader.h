@@ -165,6 +165,14 @@ public:
 
   bool getSortedTypeThenId() { return _typeThenId; }
 
+  /**
+   * Checks to see if an input is sorted
+   *
+   * @param file input file to examine
+   * @return true if the specified file is sorted by element type, then element ID; false otherwise
+   */
+  bool isSorted(const QString file);
+
 private:
 
   Meters _circularError;
