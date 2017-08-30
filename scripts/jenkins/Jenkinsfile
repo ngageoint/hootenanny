@@ -7,6 +7,8 @@ pipeline {
             defaultValue: true)
         booleanParam(name: 'License_headers',
             defaultValue: true)
+        booleanParam(name: 'Configure_Tests',
+            defaultValue: true)
         booleanParam(name: 'Core_tests',
             defaultValue: true)
         booleanParam(name: 'Services_tests',
@@ -28,11 +30,6 @@ pipeline {
                 sh 'cp -R ../software.ubuntu1404 software'
                 //sh 'export WORDS_HOME=/fouo/ubuntu'
                 //sh '( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )'
-               
-                sh 'cp LocalConfig.pri.orig LocalConfig.pri'
-                sh 'echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
-                sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
-                sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
             }
         }
         stage("Static Analysis") {
@@ -60,7 +57,31 @@ pipeline {
         }
         stage("Vagrant Up") {
             steps {
-                sh 'vagrant up --provider aws'
+                sh 'vagrant up --provision-with hoot --provider aws'
+            }       
+        }
+        stage("Test Configure") {
+            when {
+                expression {
+                    return params.Configure_Tests
+                }
+                not {
+                    branch 'PR-*'
+                }
+            }
+            steps {
+                // Run configuration tests
+                sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }"'
+            }
+        }
+        stage("Vagrant Provision") {
+            steps {
+                sh 'cp LocalConfig.pri.orig LocalConfig.pri'
+                sh 'echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
+                sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
+                sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
+                
+                sh 'vagrant provision --provision-with build,EGD,tomcat,mapnik,hadoop'
             }       
         }
         stage("Core Tests") {
@@ -72,7 +93,7 @@ pipeline {
             steps {
                 sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; hoot --version --debug"'
                 sh 'vagrant ssh -c "export HOOT_TEST_DIFF=--diff"'
-                sh 'vagrant ssh -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial"'
+                sh 'vagrant ssh -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial; make -sj`nproc` archive"'
             }
         }
         stage("Services Tests") {
