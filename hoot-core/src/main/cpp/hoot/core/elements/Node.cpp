@@ -112,8 +112,8 @@ QString Node::toString() const
     QString(
       "Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6\n status: %7\n circular error: %8")
       .arg(getId())
-      .arg(QString::number(getX(), 'f', /*round(*/ConfigOptions().getWriterPrecision()/*)*/))
-      .arg(QString::number(getY(), 'f', /*round(*/ConfigOptions().getWriterPrecision()/*)*/))
+      .arg(QString::number(getX(), 'f', ConfigOptions().getWriterPrecision()))
+      .arg(QString::number(getY(), 'f', ConfigOptions().getWriterPrecision()))
       .arg(getTags().toString())
       .arg(getVersion())
       .arg(getVisible())

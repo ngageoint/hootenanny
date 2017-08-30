@@ -283,7 +283,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE(
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
-          "=true...");
+          "=false...");
         result = Change(Change::Unknown, _fromE);
       }
 

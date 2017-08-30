@@ -47,9 +47,6 @@
 #include <QBuffer>
 #include <QDateTime>
 
-// Boost
-#include <boost/lexical_cast.hpp>
-
 // Standard
 #include <iostream>
 #include <cstdlib> // std::system()
@@ -77,12 +74,6 @@ OsmXmlReader::~OsmXmlReader()
 {
   close();
 }
-
-//void OsmXmlReader::setConfiguration(const Settings& conf)
-//{
-//  ConfigOptions configOptions(conf);
-//  setKeepStatusFromFile(conf.getReaderKeepFileStatus());
-//}
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 {
@@ -314,10 +305,9 @@ void OsmXmlReader::read(OsmMapPtr map)
   finalizePartial();
   _map = map;
 
-  bool compressed = false;
   if (_path.endsWith(".osm.bz2") || _path.endsWith(".osm.gz"))
   {
-    compressed = true;
+    _inputCompressed = true;
     _uncompressInput();
   }
 
@@ -339,14 +329,6 @@ void OsmXmlReader::read(OsmMapPtr map)
     throw HootException(_errorString);
   }
   file.close();
-
-  // if we did have to decompress, delete the decompressed file when we're done
-  if (compressed)
-  {
-    // Delete the temp file
-    std::remove(_path.toStdString().c_str());
-    LOG_DEBUG("Removed decompressed file " << _path);
-  }
 
   ReportMissingElementsVisitor visitor;
   _map->visitRw(visitor);
@@ -470,7 +452,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       else
       {
         long newRef = _nodeIdMap.value(ref);
-        LOG_TRACE("Adding way node: " << newRef << "...");
+        //LOG_TRACE("Adding way node: " << newRef << "...");
 
         WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
 
@@ -503,7 +485,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         else
         {
           long newRef = _nodeIdMap.value(ref);
-          LOG_TRACE("Adding relation node member: " << newRef << "...");
+          //LOG_TRACE("Adding relation node member: " << newRef << "...");
           r->addElement(role, ElementType::Node, newRef);
         }
       }
@@ -525,7 +507,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         else
         {
           long newRef = _wayIdMap.value(ref);
-          LOG_TRACE("Adding relation way member: " << newRef << "...");
+          //LOG_TRACE("Adding relation way member: " << newRef << "...");
           r->addElement(role, ElementType::Way, newRef);
         }
       }
@@ -533,7 +515,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       {
         // relations may be out of order so we don't check for consistency at this stage.
         long newRef = _getRelationId(ref);
-        LOG_TRACE("Adding relation relation member: " << newRef << "...");
+        //LOG_TRACE("Adding relation relation member: " << newRef << "...");
         r->addElement(role, ElementType::Relation, newRef);
       }
       else
@@ -554,8 +536,8 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     {
       const QString& key = _saveMemory(attributes.value("k"));
       const QString& value = _saveMemory(attributes.value("v"));
-      LOG_VART(key);
-      LOG_VART(value);
+      //LOG_VART(key);
+      //LOG_VART(value);
 
       if (_useFileStatus && key == MetadataTags::HootStatus())
       {
@@ -617,7 +599,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         }
         if (ConfigOptions().getReaderPreserveAllTags())
         {
-          LOG_TRACE("setting tag with key: " << key << " and value: " << value);
+          //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
           _element->setTag(key, value);
         }
       }
@@ -625,7 +607,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       {
         if (key != MetadataTags::HootId() && value != "")
         {
-          LOG_TRACE("setting tag with key: " << key << " and value: " << value);
+          //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
           _element->setTag(key, value);
         }
       }
@@ -650,16 +632,19 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
     {
       NodePtr n = boost::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
+      LOG_VART(n);
     }
     else if (qName == "way")
     {
       WayPtr w = boost::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
+      LOG_VART(w);
     }
     else if (qName == "relation")
     {
       RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
+      LOG_VART(r);
     }
   }
 

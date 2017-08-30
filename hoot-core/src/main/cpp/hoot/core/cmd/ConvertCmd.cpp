@@ -126,12 +126,12 @@ public:
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
     conf().set(ConfigOptions().getReaderKeepFileStatusKey(), true);
 
-    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
-    if (readerName.trimmed().isEmpty())
-    {
-      readerName = OsmMapReaderFactory::getReaderName(args[0]);
-    }
-    LOG_VARD(readerName);
+//    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
+//    if (readerName.trimmed().isEmpty())
+//    {
+//      readerName = OsmMapReaderFactory::getReaderName(args[0]);
+//    }
+//    LOG_VARD(readerName);
     QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
     if (writerName.trimmed().isEmpty())
     {
@@ -145,8 +145,7 @@ public:
         //the XML writer can't keep sorted output when streaming, so require an additional config
         //option be specified in order to stream when writing that format
         (writerName != "hoot::OsmXmlWriter" ||
-         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById()))
-        /*&& readerName != "hoot::OsmXmlReader"*/)
+         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
     {
       streamElements(args[0], args[1]);
     }
@@ -154,7 +153,7 @@ public:
     {
       OsmMapPtr map(new OsmMap());
       loadMap(
-        map, args[0], /*true*/ConfigOptions().getReaderUseDataSourceIds(),
+        map, args[0], ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);

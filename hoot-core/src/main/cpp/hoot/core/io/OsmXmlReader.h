@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/elements/Tags.h>
-//#include <hoot/core/util/Configurable.h>
 #include "PartialOsmMapReader.h"
 
 // Qt
@@ -57,7 +56,7 @@ class Element;
  *
  * @todo This could use a nice overhaul for readability and possibly performance.
  */
-class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader//, public Configurable
+class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader
 {
 public:
 
@@ -99,8 +98,6 @@ public:
 
   virtual bool startElement(const QString &namespaceURI, const QString &localName,
                             const QString &qName, const QXmlAttributes &attributes);
-
-  //virtual void setConfiguration(const Settings &conf);
 
   void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
   void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }

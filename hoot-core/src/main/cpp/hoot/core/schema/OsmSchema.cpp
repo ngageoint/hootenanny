@@ -1839,7 +1839,7 @@ bool OsmSchema::isPoi(const Element& e)
   // we consider all point features with a name, or part of the explicitly defined point category
   // to be POIs.
   if (e.getElementType() == ElementType::Node)
-  {;
+  {
     result = hasCategory(e.getTags(), "poi") || e.getTags().getNames().size() > 0;
   }
 
