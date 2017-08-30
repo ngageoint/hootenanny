@@ -667,7 +667,7 @@ void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
     double x = ls->getX(i);
     double y = ls->getY(i);
     _reproject(x, y);
-    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(Node::newSp(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -720,7 +720,7 @@ void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
       throw HootException("Unable to parse node ID from field: " + nodeIdFieldName);
     }
   }
-  NodePtr node(new Node(_status, id, x, y, circularError));
+  NodePtr node(Node::newSp(_status, id, x, y, circularError));
 
   node->setTags(t);
   _map->addNode(node);
@@ -799,7 +799,7 @@ WayPtr OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
     double x = lr->getX(i);
     double y = lr->getY(i);
     _reproject(x, y);
-    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(Node::newSp(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -1248,12 +1248,12 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
 
   ElementPtr returnElement;
-  if ( _nodesItr != _map->getNodes().end() )
+  if (_nodesItr != _map->getNodes().end())
   {
-    returnElement.reset(new Node(*_nodesItr->second.get()));
+    returnElement = _nodesItr->second->cloneSp();
     ++_nodesItr;
   }
-  else if ( _waysItr != _map->getWays().end() )
+  else if (_waysItr != _map->getWays().end())
   {
     returnElement.reset(new Way(*_waysItr->second.get()));
     ++_waysItr;
