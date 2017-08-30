@@ -51,7 +51,7 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * OpenStreetMap XML file (.osm) (*)
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
-* Shapefile (.shp)
+* Shapefile (.shp) (M)
 
 **Hootenanny can export changesets to:** 
 * OpenStreetMap XML changeset file (.osc) (M)

@@ -1480,8 +1480,8 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    //TODO: write this out to temp file
-    //LOG_TRACE(_theInstance->toGraphvizString());
+    //TODO: write this out to temp file instead of to the log
+    LOG_TRACE(_theInstance->toGraphvizString());
   }
   return *_theInstance;
 }

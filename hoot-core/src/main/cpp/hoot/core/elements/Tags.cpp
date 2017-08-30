@@ -394,7 +394,7 @@ const QStringList& Tags::getNameKeys()
 
     for (size_t i = 0; i < tags.size(); i++)
     {
-      //LOG_TRACE("key : " << (tags[i].key.toStdString()));
+      LOG_TRACE("key : " << (tags[i].key.toStdString()));
       _nameKeys.append(tags[i].key);
     }
   }
@@ -410,7 +410,7 @@ int Tags::getNonDebugCount() const
     QString key = it.key();
     if (!key.startsWith(MetadataTags::HootTagPrefix()) && key != "created_by" && it.value() != "")
     {
-      //LOG_TRACE("non-debug key: " + key);
+      LOG_TRACE("non-debug key: " + key);
       count++;
     }
   }

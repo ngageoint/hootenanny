@@ -41,7 +41,6 @@ class ElementComparer
 
 public:
 
-  //TODO: threshold should be synced up with the same config setting used by the hash calculator
   ElementComparer(Meters threshold = 0.05);
 
   bool isSame(ElementPtr e1, ElementPtr e2) const;
