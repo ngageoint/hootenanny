@@ -83,7 +83,6 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
   {
     _element->setTag(MetadataTags::SourceDateTime(),attributes.value("timestamp"));
   }
-
 }
 
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
@@ -131,8 +130,8 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
     uid = _parseDouble(attributes.value("uid"));
   }
 
-  _element.reset(
-    new Node(_status, newId, x, y, _circularError, changeset, version, timestamp, user, uid));
+  _element =
+    Node::newSp(_status, newId, x, y, _circularError, changeset, version, timestamp, user, uid);
 
   if (_element->getTags().getInformationCount() > 0)
   {
