@@ -42,10 +42,6 @@ public:
 
   static std::string className() { return "hoot::MultiaryIngestCmd"; }
 
-//  MultiaryIngestCmd()
-//  {
-//  }
-
   virtual QString getName() const { return "multiary-ingest"; }
 
   virtual int runSimple(QStringList args)
