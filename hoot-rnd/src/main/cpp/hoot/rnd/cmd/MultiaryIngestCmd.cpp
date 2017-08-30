@@ -46,6 +46,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/OsmPbfWriter.h>
 
 // Qt
 #include <QUuid>
@@ -78,12 +79,7 @@ public:
 
   MultiaryIngestCmd() :
   _sortInput(true),
-  _isGeoNamesInput(false),
   _changesParsed(0)
-  {
-  }
-
-  virtual ~MultiaryIngestCmd()
   {
   }
 
@@ -98,7 +94,6 @@ public:
     }
 
     const QString newInput = args[0];
-    _isGeoNamesInput = GeoNamesReader().isSupported(newInput);
     const QString referenceOutput = args[1];
     const QString changesetOutput = args[2];
     _sortInput = true;
@@ -136,7 +131,6 @@ public:
 
     //inputs must be sorted by element id for changeset derivation to work
     conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
-    LOG_VARD(conf().get(ConfigOptions::getApiDbReaderSortByIdKey()));
     //in order for the sorting to work, all original element ids must be retained...no new ones
     //assigned; we're assuming no duplicate ids in the input
     conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
@@ -192,7 +186,6 @@ private:
   QString _sortedNewInput;
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
 
-  bool _isGeoNamesInput;
   long _changesParsed;
 
   QElapsedTimer _timer;
@@ -207,6 +200,53 @@ private:
     }
   }
 
+  void _sortPbf(const QString input, const QString output)
+  {
+    _checkForOsmosis();
+
+    const QString cmd =
+      "osmosis -q --read-pbf file=\"" + input + "\" --sort --write-pbf " +
+      "omitmetadata=true file=\"" + output + "\" > /dev/null";
+    if (std::system(cmd.toStdString().c_str()) != 0)
+    {
+      throw HootException("Unable to sort OSM PBF file.");
+    }
+  }
+
+  boost::shared_ptr<QTemporaryFile> _ogrToPbf(const QString input)
+  {
+    boost::shared_ptr<QTemporaryFile> pbfTemp(
+      new QTemporaryFile("multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+    if (!pbfTemp->open())
+    {
+      throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
+    }
+    LOG_INFO(
+      "Converting OGR input: " << input << " to sortable PBF output: " << pbfTemp->fileName() <<
+      "...");
+
+    OgrReader reader;
+    reader.open(input);
+    reader.initializePartial();
+
+    boost::shared_ptr<OsmPbfWriter> writer(new OsmPbfWriter());
+    writer->open(pbfTemp->fileName());
+    writer->initializePartial();
+    boost::shared_ptr<PartialOsmMapWriter> partialWriter =
+      boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
+
+    while (reader.hasMoreElements())
+    {
+      ElementPtr element = reader.readNextElement();
+      partialWriter->writeElement(element);
+    }
+
+    reader.finalizePartial();
+    partialWriter->finalizePartial();
+
+    return pbfTemp;
+  }
+
   QString _getSortedNewInput(const QString newInput)
   {
     if (!_sortInput)
@@ -217,9 +257,17 @@ private:
     LOG_INFO("Sorting " << newInput << " by node ID...");
     _timer.restart();
 
-    QFileInfo newInputFileInfo(newInput);
-    _sortTempFile.reset(
-      new QTemporaryFile("multiary-ingest-sort-temp-XXXXXX." + newInputFileInfo.completeSuffix()));
+    const QString sortTempFileBaseName = "multiary-ingest-sort-temp-XXXXXX";
+    if (!OgrReader().isSupported(newInput))
+    {
+      QFileInfo newInputFileInfo(newInput);
+      _sortTempFile.reset(
+        new QTemporaryFile(sortTempFileBaseName + "." + newInputFileInfo.completeSuffix()));
+    }
+    else
+    {
+      _sortTempFile.reset(new QTemporaryFile(sortTempFileBaseName + ".osm.pbf"));
+    }
     if (!_sortTempFile->open())
     {
       throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
@@ -227,7 +275,7 @@ private:
 
     if (GeoNamesReader().isSupported(newInput))
     {
-      //sort the input using the unix sort command
+      //sort the input by node id (first field) using the unix sort command
       if (std::system(
            QString("sort " + newInput + " --output=" +
              _sortTempFile->fileName()).toStdString().c_str()) != 0)
@@ -235,7 +283,7 @@ private:
         throw HootException("Unable to sort input file.");
       }
     }
-    //use osmosis to sort the OSM files
+    //use osmosis to sort the OSM files by node id
     else if (OsmPbfReader().isSupported(newInput))
     {
       //check for sorted flag
@@ -245,16 +293,7 @@ private:
           "OSM PBF input file: " << newInput << " is marked as sorted by node ID, as " <<
           "indicated by its header, yet Hootenanny was instructed to sort the file.");
       }
-
-      _checkForOsmosis();
-
-      const QString cmd =
-        "osmosis -q --read-pbf file=\"" + newInput + "\" --sort --write-pbf " +
-        "omitmetadata=true file=\"" + _sortTempFile->fileName() + "\" > /dev/null";
-      if (std::system(cmd.toStdString().c_str()) != 0)
-      {
-        throw HootException("Unable to sort OSM PBF file.");
-      }
+      _sortPbf(newInput, _sortTempFile->fileName());
     }
     else if (OsmXmlReader().isSupported(newInput))
     {
@@ -270,8 +309,13 @@ private:
     }
     else if (OgrReader().isSupported(newInput))
     {
-      LOG_WARN("Input sorting not supported for OGR input: " << newInput);
-      return newInput;
+      //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
+      //to first write it to a sortable format.
+      _sortPbf(_ogrToPbf(newInput)->fileName(), _sortTempFile->fileName());
+    }
+    else
+    {
+      throw HootException("Unsupported input format for node sorting.");
     }
 
     LOG_INFO(
@@ -290,9 +334,11 @@ private:
     boost::shared_ptr<ElementInputStream> inputStream =
       boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
-    boost::shared_ptr<PoiCriterion> elementCriterion;
     //as the incoming data is read, filter it down to POIs only and translate each element;
-    if (!_isGeoNamesInput) //all geonames are pois, so skip the element filtering expense
+
+    boost::shared_ptr<PoiCriterion> elementCriterion;
+    //all geonames are pois, so skip the element filtering expense for that format
+    if (!GeoNamesReader().isSupported(sortedNewInput))
     {
       elementCriterion.reset(new PoiCriterion());
     }

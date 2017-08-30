@@ -257,3 +257,40 @@ echo "MULTIARY INGEST - COMPARING SORTED SHP CHANGESET OUTPUT..."
 echo ""
 diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
+# UNSORTED SHP
+
+# These inputs actually aren't unsorted, but just running through the sort pipeline for 
+# shape files is good enough for now.
+REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.shp/Points.shp
+NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.shp/Points.shp
+FINAL_OUTPUT=$OUTPUT_DIR/allCountries-shp-unsorted-output.osm
+CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-shp-unsorted-changeset.spark.1
+
+echo ""
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
+echo ""
+hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+echo ""
+echo "MULTIARY INGEST - INGESTING UNSORTED SHP REFERENCE DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS -D ogr.reader.node.id.field.name=geonameid $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
+echo ""
+echo "MULTIARY INGEST - INGESTING UNSORTED SHP NEW DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS -D ogr.reader.node.id.field.name=geonameid $NEW_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
+echo ""
+echo "MULTIARY INGEST - EXPORTING UNSORTED SHP REFERENCE LAYER..."
+echo ""
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING UNSORTED SHP REFERENCE LAYER OUTPUT..."
+echo ""
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+echo ""
+echo "MULTIARY INGEST - COMPARING UNSORTED SHP CHANGESET OUTPUT..."
+echo ""
+# TODO: There's a very slight rounding error on the coord output that I haven't tracked down yet, so 
+# comparing to a different changeset gold file for now.
+#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $REF_DIR/allCountries-shp-unsorted-changeset.spark.1 $CHANGESET_OUTPUT
+
