@@ -133,7 +133,6 @@ public:
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
-
 protected:
 
   OgrReaderInternal* _d;

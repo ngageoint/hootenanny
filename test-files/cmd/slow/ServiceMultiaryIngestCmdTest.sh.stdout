@@ -4,11 +4,11 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING SORTED GEONAMES REFERENCE DATASET...
 
-14:02:46.509 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:23.051 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING SORTED GEONAMES NEW DATASET...
 
-14:02:46.890 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:23.459 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING SORTED GEONAMES REFERENCE LAYER...
 
@@ -24,11 +24,11 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING UNSORTED GEONAMES REFERENCE DATASET...
 
-14:02:47.809 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:24.400 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING UNSORTED GEONAMES NEW DATASET...
 
-14:02:48.190 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:24.789 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING UNSORTED GEONAMES REFERENCE LAYER...
 
@@ -44,11 +44,11 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING SORTED OSM PBF REFERENCE DATASET...
 
-14:02:49.119 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:25.766 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING SORTED OSM PBF NEW DATASET...
 
-14:02:49.510 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:26.197 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING SORTED OSM PBF REFERENCE LAYER...
 
@@ -64,12 +64,12 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING UNSORTED OSM PBF REFERENCE DATASET...
 
-14:02:50.458 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:27.183 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING UNSORTED OSM PBF NEW DATASET...
 
-14:02:50.668 WARN  .../rnd/cmd/MultiaryIngestCmd.cpp( 245) OSM PBF input file: test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10-unsorted.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
-14:02:52.159 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:27.402 WARN  .../rnd/cmd/MultiaryIngestCmd.cpp( 246) OSM PBF input file: test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10-unsorted.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
+19:31:28.812 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING UNSORTED OSM PBF REFERENCE LAYER...
 
@@ -85,11 +85,11 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING SORTED OSM XML REFERENCE DATASET...
 
-14:02:53.145 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:29.798 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING SORTED OSM XML NEW DATASET...
 
-14:02:53.555 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:30.192 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING SORTED OSM XML REFERENCE LAYER...
 
@@ -105,11 +105,11 @@ MULTIARY INGEST - DELETING REFERENCE LAYER...
 
 MULTIARY INGEST - INGESTING UNSORTED OSM XML REFERENCE DATASET...
 
-14:02:54.495 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:31.194 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - INGESTING UNSORTED OSM XML NEW DATASET...
 
-14:02:56.116 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+19:31:32.826 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
 
 MULTIARY INGEST - EXPORTING UNSORTED OSM XML REFERENCE LAYER...
 
@@ -118,4 +118,24 @@ MULTIARY INGEST - COMPARING UNSORTED OSM XML REFERENCE LAYER OUTPUT...
 
 
 MULTIARY INGEST - COMPARING UNSORTED OSM XML CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING SORTED SHP REFERENCE DATASET...
+
+19:31:33.844 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING SORTED SHP NEW DATASET...
+
+19:31:34.275 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING SORTED SHP REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING SORTED SHP REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING SORTED SHP CHANGESET OUTPUT...
 

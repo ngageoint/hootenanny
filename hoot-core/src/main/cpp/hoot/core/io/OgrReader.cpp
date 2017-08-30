@@ -572,11 +572,11 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
     if (f->GetDefnRef()->GetFieldDefn(i)->GetType() == OFTReal)
     {
-        value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
+      value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
     }
     else
     {
-        value = QString::fromUtf8(f->GetFieldAsString(i));
+      value = QString::fromUtf8(f->GetFieldAsString(i));
     }
 
     // Ticket 5833: make sure tag is only added if value is non-null
@@ -593,9 +593,12 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
   _translate(t);
 
-  // Add an ingest datetime tag
-  t.appendValue("source:ingest:datetime",
-                QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+  if (ConfigOptions().getReaderAddSourceDatetime())
+  {
+    // Add an ingest datetime tag
+    t.appendValue("source:ingest:datetime",
+                  QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+  }
 
   if (t.size() != 0)
   {
@@ -702,8 +705,22 @@ void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
   double x = p->getX();
   double y = p->getY();
   _reproject(x, y);
-  NodePtr node(new Node(_status, _map->createNextNodeId(), x, y,
-    circularError));
+  long id;
+  const QString nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
+  if (nodeIdFieldName.isEmpty())
+  {
+    id = _map->createNextNodeId();
+  }
+  else
+  {
+    bool ok = false;
+    id = t.get(nodeIdFieldName).toLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Unable to parse node ID from field: " + nodeIdFieldName);
+    }
+  }
+  NodePtr node(new Node(_status, id, x, y, circularError));
 
   node->setTags(t);
   _map->addNode(node);
@@ -1187,7 +1204,6 @@ void OgrReaderInternal::initializePartial()
   _relationsItr = _map->getRelations().begin();
 
   _useFileId = false;
-
 }
 
 void OgrReaderInternal::setUseDataSourceIds(bool useIds)

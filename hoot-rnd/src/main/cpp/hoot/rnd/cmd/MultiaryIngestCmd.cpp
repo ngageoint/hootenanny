@@ -45,6 +45,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QUuid>
@@ -255,10 +256,8 @@ private:
         throw HootException("Unable to sort OSM PBF file.");
       }
     }
-    else
+    else if (OsmXmlReader().isSupported(newInput))
     {
-      assert(OsmXmlReader().isSupported(newInput));
-
       _checkForOsmosis();
 
       const QString cmd =
@@ -268,6 +267,11 @@ private:
       {
         throw HootException("Unable to sort OSM XML file.");
       }
+    }
+    else if (OgrReader().isSupported(newInput))
+    {
+      LOG_WARN("Input sorting not supported for OGR input: " << newInput);
+      return newInput;
     }
 
     LOG_INFO(

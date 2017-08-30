@@ -52,11 +52,13 @@ using namespace boost;
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDomDocument>
 #include <QHash>
 #include <QSet>
+#include <QDir>
 
 // Standard
 #include <iostream>
@@ -1480,8 +1482,29 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    //TODO: write this out to temp file instead of to the log
-    LOG_TRACE(_theInstance->toGraphvizString());
+
+    //write this out to a temp file instead of to the log due to its size
+    if (Log::getInstance().getLevel() == Log::Trace)
+    {
+      const QString graphvizPath = "tmp/schema-graphviz";
+      const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
+      try
+      {
+        if (QDir().mkpath("tmp"))
+        {
+          FileUtils::writeFully(graphvizPath, _theInstance->toGraphvizString());
+          LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);
+        }
+        else
+        {
+          LOG_TRACE(errorMsg);
+        }
+      }
+      catch (const HootException&)
+      {
+        LOG_TRACE(errorMsg);
+      }
+    }
   }
   return *_theInstance;
 }

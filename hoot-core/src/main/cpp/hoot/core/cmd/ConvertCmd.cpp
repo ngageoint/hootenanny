@@ -120,7 +120,10 @@ public:
 
     QElapsedTimer timer;
     timer.start();
-    LOG_INFO("Converting " << args[0].right(100) << " to " << args[1].right(100) << "...");
+
+    const QString input = args[0];
+    const QString output = args[1];
+    LOG_INFO("Converting " << input.right(100) << " to " << output.right(100) << "...");
 
     // This keeps the status and the tags.
     conf().set(ConfigOptions().getReaderUseFileStatusKey(), true);
@@ -129,36 +132,39 @@ public:
 //    QString readerName = ConfigOptions().getOsmMapReaderFactoryReader();
 //    if (readerName.trimmed().isEmpty())
 //    {
-//      readerName = OsmMapReaderFactory::getReaderName(args[0]);
+//      readerName = OsmMapReaderFactory::getReaderName(input);
 //    }
 //    LOG_VARD(readerName);
+    LOG_VARD(OsmMapReaderFactory::getInstance().hasElementInputStream(input));
+
     QString writerName = ConfigOptions().getOsmMapWriterFactoryWriter();
     if (writerName.trimmed().isEmpty())
     {
       writerName = OsmMapWriterFactory::getWriterName(args[1]);
     }
     LOG_VARD(writerName);
+    LOG_VARD(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
 
-    if (OsmMapReaderFactory::getInstance().hasElementInputStream(args[0]) &&
-        OsmMapWriterFactory::getInstance().hasElementOutputStream(args[1]) &&
+    if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
+        OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
         areValidStreamingOps(ConfigOptions().getConvertOps()) &&
         //the XML writer can't keep sorted output when streaming, so require an additional config
         //option be specified in order to stream when writing that format
         (writerName != "hoot::OsmXmlWriter" ||
          (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
     {
-      streamElements(args[0], args[1]);
+      streamElements(input, output);
     }
     else
     {
       OsmMapPtr map(new OsmMap());
       loadMap(
-        map, args[0], ConfigOptions().getReaderUseDataSourceIds(),
+        map, input, ConfigOptions().getReaderUseDataSourceIds(),
         Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
       // Apply any user specified operations.
       NamedOp(ConfigOptions().getConvertOps()).apply(map);
       MapProjector::projectToWgs84(map);
-      saveMap(map, args[1]);
+      saveMap(map, output);
     }
 
     LOG_DEBUG("Convert operation complete.");
