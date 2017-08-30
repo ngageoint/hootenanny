@@ -181,6 +181,6 @@ inline uint qHash(const ConstNodePtr& n)
   return qHash(n->getElementId());
 }
 
-} // hoot
+}
 
 #endif
