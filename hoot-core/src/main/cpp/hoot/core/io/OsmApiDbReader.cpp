@@ -128,8 +128,18 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   const double lon =
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
 
+//  NodePtr node(
+//    new Node(
+//      _status,
+//      nodeId,
+//      lon,
+//      lat,
+//      ConfigOptions().getCircularErrorDefaultValue(),
+//      resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
+//      resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
+//      resultIterator.value(ApiDb::NODES_TIMESTAMP).toUInt()));
   NodePtr node(
-    new Node(
+    Node::newSp(
       _status,
       nodeId,
       lon,
