@@ -41,7 +41,7 @@ namespace hoot
 {
 
 /**
- *
+ * Outputs a changeset usable by Spark
  *
  * @note Only nodes are supported.
  */
