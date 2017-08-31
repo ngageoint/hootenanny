@@ -37,10 +37,10 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
 * JSON file (.json; similar to Overpass JSON) (M)
-* OpenStreetMap XML (.osm) (M)
+* OpenStreetMap XML (.osm)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
-* Shapefile (.shp) (M)
+* Shapefile (.shp)
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
 
 **Hootenanny can export to:** 
@@ -48,12 +48,14 @@ Conflation occurs at the dataset level, where the user’s workflow determines t
 * GeoJSON (.geojson) (M)
 * Hootenanny API Database (hootapidb://)
 * JSON file (.json; similar to Overpass JSON) (M)
-* OpenStreetMap XML changeset file (.osc) (M)
-* OpenStreetMap SQL changeset file (.osc.sql) (M)
 * OpenStreetMap XML file (.osm) (*)
 * OpenStreetMap Protocol Buffers file (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
 * Shapefile (.shp) (M)
+
+**Hootenanny can export changesets to:** 
+* OpenStreetMap XML changeset file (.osc) (M)
+* OpenStreetMap SQL changeset file (.osc.sql) (M)
 
 (M) = format requires reading entire dataset into memory during processing
 (*) = format requires reading entire dataset into memory during processing only if element ID output is sorted

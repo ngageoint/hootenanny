@@ -27,41 +27,36 @@
 #ifndef OSMXMLREADER_H
 #define OSMXMLREADER_H
 
-// Local
-#include <hoot/core/elements/Tags.h>
-namespace hoot
-{
-    class OsmMap;
-    class ElementData;
-    class Element;
-}
-
-// Boost
-#include <boost/shared_ptr.hpp>
-
 // Hoot
 #include <hoot/core/util/Units.h>
+#include <hoot/core/elements/Tags.h>
+#include "PartialOsmMapReader.h"
 
 // Qt
 #include <QHash>
 #include <QXmlDefaultHandler>
+#include <QXmlStreamReader>
 class QString;
+
+// Boost
+#include <boost/shared_ptr.hpp>
 
 // Standard
 #include <deque>
 
-#include "OsmMapReader.h"
-
 namespace hoot
 {
 
+class OsmMap;
+class ElementData;
+class Element;
+
 /**
- * Reads in a .osm file into an OsmMap data structure. During this process all IDs are mapped from
- * the .osm node/way ID to a new ID.
+ * Reads in a .osm file into an OsmMap data structure.
  *
  * @todo This could use a nice overhaul for readability and possibly performance.
  */
-class OsmXmlReader : public QXmlDefaultHandler, public OsmMapReader
+class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader
 {
 public:
 
@@ -70,6 +65,9 @@ public:
   static unsigned int logWarnCount;
 
   OsmXmlReader();
+  virtual ~OsmXmlReader();
+
+  virtual void close();
 
   virtual QString errorString() const { return _errorString; }
 
@@ -77,6 +75,12 @@ public:
                   const QString &qName);
 
   virtual bool fatalError(const QXmlParseException &exception);
+
+  virtual void finalizePartial();
+
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
+  virtual bool hasMoreElements();
 
   virtual bool isSupported(QString url);
 
@@ -88,52 +92,69 @@ public:
 
   void read(const QString& path, OsmMapPtr map);
 
+  virtual ElementPtr readNextElement();
+
   virtual void setDefaultStatus(Status s) { _status = s; }
 
   virtual bool startElement(const QString &namespaceURI, const QString &localName,
-                    const QString &qName, const QXmlAttributes &attributes);
+                            const QString &qName, const QXmlAttributes &attributes);
 
   void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceId = useDataSourceIds; }
   void setUseStatusFromFile(bool useFileStatus) { _useFileStatus = useFileStatus; }
   void setKeepStatusFromFile(bool keepFileStatus) { _keepFileStatus = keepFileStatus; }
-  void setDefaultAccuracy(Meters circularError) { _circularError = circularError; }
+  void setDefaultAccuracy(Meters circularError) { _circularError = circularError; } 
 
-protected:
+private:
 
   bool _osmFound;
   double _x, _y;
   long _id;
+
   std::deque<long> _nodeIds;
   /// Maps from old node ids to new node ids.
   QHash<long, long> _nodeIdMap;
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
+
   hoot::Tags _tags;
   QString _errorString;
   OsmMapPtr _map;
   boost::shared_ptr<Element> _element;
+
   Status _status;
   Meters _circularError;
+
   int _missingNodeCount;
   int _missingWayCount;
   int _badAccuracyCount;
   QString _path;
+
   bool _keepFileStatus;
   bool _useFileStatus;
   bool _useDataSourceId;
   bool _addSourceDateTime;      ///< Should reader add source:datetime attribute to values read in?
+
   long _wayId;
   long _relationId;
+
+  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+
+  bool _inputCompressed;
+
+  QFile _inputFile;  //used for partial reading
+  QXmlStreamReader _streamReader; //used for partial reading
 
   // store all key/value strings in this QHash, this promotes implicit sharing of string data. The
   // QHash goes away when the reading is done, but the memory sharing remains.
   QHash<QString, QString> _strings;
 
   void _createNode(const QXmlAttributes &attributes);
-
   void _createWay(const QXmlAttributes &attributes);
-
   void _createRelation(const QXmlAttributes &attributes);
+
+  bool _foundOsmElementXmlStartElement() const;
+  bool _foundOsmElementXmlEndElement() const;
+  bool _foundOsmHeaderXmlStartElement();
 
   void _parseTimeStamp(const QXmlAttributes &attributes);
 
@@ -149,6 +170,10 @@ protected:
   long _parseLong(QString s);
 
   const QString& _saveMemory(const QString& s);
+
+  QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes);
+
+  void _uncompressInput();
 };
 
 }

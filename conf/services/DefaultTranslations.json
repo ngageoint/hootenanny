@@ -31,6 +31,12 @@
         "EXPORTPATH" : "translations/RenderDb.js"
     },
     {
+        "NAME" : "GIFD D4",
+        "DESCRIPTION" : "Geospatial Intelligence Feature Database (GIFD) D4",
+        "CANEXPORT" : false,
+        "PATH" : "translations/GIFD_D4.js",
+    },
+    {
         "NAME" : "GEONAMES",
         "DESCRIPTION" : "GeoNames.org",
         "CANEXPORT" : false,

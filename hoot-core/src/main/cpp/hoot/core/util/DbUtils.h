@@ -35,6 +35,9 @@
 namespace hoot
 {
 
+/**
+ * Class meant for hoot-agnostic database common utility functions
+ */
 class DbUtils
 {
 public:

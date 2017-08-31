@@ -29,6 +29,7 @@
 
 #include "PartialOsmMapWriter.h"
 #include "HootApiDb.h"
+#include "OsmChangeWriter.h"
 
 // hoot
 #include <hoot/core/util/Configurable.h>
@@ -39,7 +40,7 @@
 namespace hoot
 {
 
-class HootApiDbWriter : public PartialOsmMapWriter, public Configurable
+class HootApiDbWriter : public PartialOsmMapWriter, public Configurable, public OsmChangeWriter
 {
 public:
 
@@ -87,7 +88,16 @@ public:
 
   virtual void writePartial(const ConstRelationPtr& r);
 
+  /**
+   * @see OsmChangeWriter
+   */
+  virtual void writeChange(const Change& change);
+
 protected:
+
+  void _createElement(ConstElementPtr element);
+  void _modifyElement(ConstElementPtr element);
+  void _deleteElement(ConstElementPtr element);
 
   /**
    * Return the remapped ID for the specified element if it exists

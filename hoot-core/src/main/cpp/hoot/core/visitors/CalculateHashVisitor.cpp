@@ -69,7 +69,9 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
 
   if (n->getRawCircularError() >= 0)
   {
-    infoTags["error:circular"] = QString::number(n->getRawCircularError(), 'g', 6);
+    infoTags["error:circular"] =
+      QString::number(
+        n->getRawCircularError(), 'g', ConfigOptions().getNodeComparisonCircularErrorSensitivity());
   }
 
   bool first = true;
@@ -84,9 +86,11 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
   }
 
   result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
-  result += QString::number(n->getX(), 'f', 7);
+  result +=
+    QString::number(n->getX(), 'f', ConfigOptions().getNodeComparisonCoordinateSensitivity());
   result += ",";
-  result += QString::number(n->getY(), 'f', 7);
+  result +=
+    QString::number(n->getY(), 'f', ConfigOptions().getNodeComparisonCoordinateSensitivity());
   result += "]}}";
 
   return result;

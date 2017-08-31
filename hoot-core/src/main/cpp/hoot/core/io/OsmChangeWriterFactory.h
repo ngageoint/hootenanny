@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,73 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMELEMENTSTREAMSOURCE_H
-#define OSMELEMENTSTREAMSOURCE_H 
+#ifndef OSMCHANGEWRITERFACTORY_H
+#define OSMCHANGEWRITERFACTORY_H
 
-#include <boost/shared_ptr.hpp>
+// Qt
 #include <QString>
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/io/OsmElementStream.h>
 
 namespace hoot
 {
+class OsmChangeWriter;
 
 /**
- * Class description
+ * A factory for constructing changeset writers based on the URL.
  */
-class OsmElementStreamSource : public OsmElementStream
+class OsmChangeWriterFactory
 {
-
 public:
 
-  /**
-   *
-   */
-  OsmElementStreamSource(
-    void
-  );
+  OsmChangeWriterFactory();
 
-  /**
-   *
-   */
-  virtual ~OsmElementStreamSource(
-    void
-  ) {}
+  boost::shared_ptr<OsmChangeWriter> createWriter(QString url);
 
-  /**
-   * 
-   */
-  virtual bool openSource(
-    const QString	sourceIdentifier  	 
-  ) = 0;
+  static OsmChangeWriterFactory& getInstance();
 
-  /**
-   * 
-   */
-  virtual bool isOpen(
-    void 
-  ) const { return mIsOpen; };
+private:
 
-  /**
-   * 
-   */
-  void close(
-    void
-  ) = 0;
-
-  /**
-   *
-   */
-  shared_ptr<Element> readNextElement(
-     void
-  ) = 0;
-
-protected:
-  bool mIsOpen;
+  static boost::shared_ptr<OsmChangeWriterFactory> _theInstance;
 };
 
 }
 
-#endif // OSMELEMENTSTREAMSOURCE_H
+#endif // OSMCHANGEWRITERFACTORY_H

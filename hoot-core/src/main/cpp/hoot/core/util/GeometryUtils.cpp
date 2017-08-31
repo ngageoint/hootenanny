@@ -39,6 +39,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QString>
@@ -171,10 +172,10 @@ OGREnvelope* GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
 QString GeometryUtils::toString(const Envelope& e)
 {
   return QString("%1,%2,%3,%4").
-      arg(e.getMinX(), 0, 'g', 15).
-      arg(e.getMaxX(), 0, 'g', 15).
-      arg(e.getMinY(), 0, 'g', 15).
-      arg(e.getMaxY(), 0, 'g', 15);
+      arg(e.getMinX(), 0, 'g', ConfigOptions().getWriterPrecision()).
+      arg(e.getMaxX(), 0, 'g', ConfigOptions().getWriterPrecision()).
+      arg(e.getMinY(), 0, 'g', ConfigOptions().getWriterPrecision()).
+      arg(e.getMaxY(), 0, 'g', ConfigOptions().getWriterPrecision());
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
