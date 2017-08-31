@@ -90,7 +90,7 @@ pipeline {
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
                 
                 // Perform remainder of provisioning
-                sh 'vagrant provision --provision-with build,EGD,tomcat,mapnik,hadoop'
+                sh 'vagrant provision --provision-with software, build,EGD,tomcat,mapnik,hadoop'
             }       
         }
         stage("Core Tests") {
