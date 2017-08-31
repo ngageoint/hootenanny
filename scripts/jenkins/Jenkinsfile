@@ -1,6 +1,8 @@
 pipeline {
     agent any
+    // Checkbox parameters for users to skip steps and control pipeline behavior
     parameters {
+        // TODO: Need logic to reuse VM.  Current logic destroys it every run
         booleanParam(name: 'Destroy_VM (Coming Soon)',
             defaultValue: true)
         booleanParam(name: 'Static_analysis',
@@ -24,20 +26,23 @@ pipeline {
                 cleanWs()
                 
                 //checkout scm
+                // NOTE: This step shouldn't be necessary.  Multi-branch pipeline should checkout the code for you
+                // Need to revist and do this properly
                 git branch: env.BRANCH_NAME, credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
                 sh 'git submodule update --init'
                 
                 sh 'cp -R ../software.ubuntu1404 software'
-                //sh 'export WORDS_HOME=/fouo/ubuntu'
-                //sh '( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )'
             }
         }
+        // Need to expand this step to more robust static analysis scanning with SonarQube
+        // and publish results
         stage("Static Analysis") {
             when {
                 expression {
                     return params.Static_analysis
                 }
                 not {
+                    // Don't run this stage on pull requests
                     branch 'PR-*'
                 }
             }
@@ -57,6 +62,7 @@ pipeline {
         }
         stage("Vagrant Up") {
             steps {
+                // NOTE: Only installs hoot build dependencies
                 sh 'vagrant up --provision-with hoot --provider aws'
             }       
         }
@@ -66,6 +72,7 @@ pipeline {
                     return params.Configure_Tests
                 }
                 not {
+                    // Don't run this step on pull requests
                     branch 'PR-*'
                 }
             }
@@ -76,11 +83,13 @@ pipeline {
         }
         stage("Vagrant Provision") {
             steps {
+                // NOTE: Ubuntu only, may need more complex logic if other OS are included in pipeline
                 sh 'cp LocalConfig.pri.orig LocalConfig.pri'
                 sh 'echo "QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
                 sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
                 
+                // Perform remainder of provisioning
                 sh 'vagrant provision --provision-with build,EGD,tomcat,mapnik,hadoop'
             }       
         }
@@ -121,11 +130,13 @@ pipeline {
     }
     post {
         success {
+            // If all tests passed, clean everything up
             sh 'vagrant destroy -f'
             cleanWs()
         }
         failure {
             slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
+        // TODO: Add more complex logic such as: Add screen shots to faillure messages, post message when a test starts to pass again
     }
 }
