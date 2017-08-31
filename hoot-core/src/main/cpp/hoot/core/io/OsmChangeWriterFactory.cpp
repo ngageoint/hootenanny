@@ -24,64 +24,60 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SPARKCHANGESETWRITER_H
-#define SPARKCHANGESETWRITER_H
+#include "OsmChangeWriterFactory.h"
 
 // hoot
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/OsmChangeWriter.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include "../visitors/AddExportTagsVisitor.h"
+#include <hoot/core/util/ConfigOptions.h>
 
-// Qt
-#include <QFile>
-
-#include "../conflate/multiary/SearchBoundsCalculator.h"
+using namespace std;
 
 namespace hoot
 {
 
-/**
- * Outputs a changeset usable by Spark
- *
- * @note Only nodes are supported.
- */
-class SparkChangesetWriter : public OsmChangeWriter
+boost::shared_ptr<OsmChangeWriterFactory> OsmChangeWriterFactory::_theInstance;
+
+OsmChangeWriterFactory::OsmChangeWriterFactory()
 {
-public:
-
-  static std::string className() { return "hoot::SparkChangesetWriter"; }
-
-  SparkChangesetWriter();
-
-  virtual ~SparkChangesetWriter();
-
-  void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
-
-  /**
-   * @see OsmChangeWriter
-   */
-  virtual bool isSupported(QString url) { return url.endsWith(".spark.1"); }  //TODO: fix
-
-  /**
-   * Open the specified filename for writing.
-   */
-  virtual void open(QString fileName);
-
-  /**
-   * @see OsmChangeWriter
-   */
-  virtual void writeChange(const Change& change);
-
-private:
-
-  boost::shared_ptr<QFile> _fp;
-  SearchBoundsCalculatorPtr _bounds;
-  int _precision;
-  OsmJsonWriter _jsonWriter;
-  AddExportTagsVisitor _exportTagsVisitor;
-
-};
-
 }
 
-#endif // SPARKCHANGESETWRITER_H
+OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
+{
+  if (!_theInstance.get())
+  {
+    _theInstance.reset(new OsmChangeWriterFactory());
+  }
+  return *_theInstance;
+}
+
+boost::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(QString url)
+{
+  LOG_VART(url);
+
+  vector<std::string> names =
+    Factory::getInstance().getObjectNamesByBase(OsmChangeWriter::className());
+  boost::shared_ptr<OsmChangeWriter> writer;
+  for (size_t i = 0; i < names.size() && !writer; ++i)
+  {
+    LOG_VART(names[i]);
+    writer.reset(Factory::getInstance().constructObject<OsmChangeWriter>(names[i]));
+    if (writer->isSupported(url))
+    {
+      LOG_DEBUG("Using changeset output writer: " << names[i]);
+    }
+    else
+    {
+      writer.reset();
+    }
+  }
+
+  if (!writer)
+  {
+    throw HootException("A valid writer could not be found for the URL: " + url);
+  }
+
+  return writer;
+}
+
+}

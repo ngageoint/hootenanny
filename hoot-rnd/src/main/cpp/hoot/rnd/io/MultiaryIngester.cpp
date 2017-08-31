@@ -30,7 +30,6 @@
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/rnd/io/ElementCriterionVisitorInputStream.h>
@@ -43,6 +42,8 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/OsmChangeWriterFactory.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Qt
 #include <QFileInfo>
@@ -54,39 +55,6 @@ MultiaryIngester::MultiaryIngester() :
 _sortInput(true),
 _changesParsed(0)
 {
-}
-
-void MultiaryIngester::ingest(const QString newInput, const QString referenceOutput,
-                              const QString changesetOutput, const bool sortInput)
-{
-  LOG_VARD(newInput);
-  LOG_VARD(referenceOutput);
-  LOG_VARD(changesetOutput);
-  _sortInput = sortInput;
-  LOG_VARD(_sortInput);
-
-  if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
-  {
-    throw IllegalArgumentException(
-      QString("This command currently only supports streamable input formats.") +
-      QString("See the Supported Data Formats section in README.md for more detail.") +
-      QString("Specified input: ") + newInput);
-  }
-
-  if (!HootApiDbReader().isSupported(referenceOutput))
-  {
-    throw HootException(
-      QString("Multiary Ingest only supports a hootapidb:// data source as the reference ") +
-      QString("output.  Specified reference layer: ") + referenceOutput);
-  }
-
-  if (!SparkChangesetWriter().isSupported(changesetOutput))
-  {
-    throw HootException(
-      "Multiary Ingest only supports a .spark.x file for changeset output.  Specified output: " +
-      changesetOutput);
-  }
-
   //inputs must be sorted by element id for changeset derivation to work
   conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
   //in order for the sorting to work, all original element ids must be retained...no new ones
@@ -96,6 +64,39 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
   conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
   //for the changeset derivation to work, all input IDs must not be modified
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+}
+
+void MultiaryIngester::ingest(const QString newInput, const QString referenceOutput,
+                              const QString changesetOutput, const bool sortInput)
+{
+  LOG_VARD(newInput);
+  LOG_VARD(referenceOutput);
+  LOG_VARD(changesetOutput);
+  LOG_VARD(sortInput);
+
+  _sortInput = sortInput;
+
+  if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
+  {
+    throw IllegalArgumentException(
+      QString("Multiary ingest only supports streamable input formats.") +
+      QString("See the Supported Data Formats section in README.md for more detail.") +
+      QString("Specified input: ") + newInput);
+  }
+
+  if (!HootApiDbReader().isSupported(referenceOutput))
+  {
+    throw IllegalArgumentException(
+      QString("Multiary ingest only supports a hootapidb:// data source as the reference ") +
+      QString("output.  Specified reference layer: ") + referenceOutput);
+  }
+
+  if (!SparkChangesetWriter().isSupported(changesetOutput))
+  {
+    throw IllegalArgumentException(
+      QString("Multiary ingest only supports a .spark.x file for changeset output.  Specified ") +
+      QString("changeset output: ") + changesetOutput);
+  }
 
   LOG_INFO(
     "Ingesting Multiary data from " << newInput << " into reference output layer: " <<
@@ -195,7 +196,7 @@ QString MultiaryIngester::_getSortedNewInput(const QString newInput)
   }
   else
   {
-    //OGR formats have to be converted to PBF for sorting
+    //OGR formats have to be converted to PBF for sorting (see below)
     _sortTempFile.reset(new QTemporaryFile(sortTempFileBaseName + ".osm.pbf"));
   }
   if (!_sortTempFile->open())
@@ -285,21 +286,28 @@ void MultiaryIngester::_writeChanges(boost::shared_ptr<ElementInputStream> filte
 {
   _timer.restart();
 
-  HootApiDbWriter referenceWriter;
-  referenceWriter.setCreateUser(true);
-  referenceWriter.setOverwriteMap(true);
-  referenceWriter.open(referenceOutput);
+  conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
+  conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
 
-  SparkChangesetWriter changesetFileWriter;
-  changesetFileWriter.open(changesetOutput);
+  boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
+    boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+      OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
+  referenceWriter->open(referenceOutput);
+
+  boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
+    OsmChangeWriterFactory::getInstance().createWriter(changesetOutput);
+  changesetFileWriter->open(changesetOutput);
 
   while (filteredNewInputStream->hasMoreElements())
   {
     ElementPtr element = filteredNewInputStream->readNextElement();
-    referenceWriter.writeElement(element);
-    changesetFileWriter.writeChange(Change(Change::Create, element));
+    referenceWriter->writeElement(element);
+    changesetFileWriter->writeChange(Change(Change::Create, element));
     _changesParsed++;
   }
+
+  referenceWriter->finalizePartial();
+  changesetFileWriter->close();
 }
 
 void MultiaryIngester::_deriveAndWriteChanges(
@@ -308,32 +316,47 @@ void MultiaryIngester::_deriveAndWriteChanges(
 {
   _timer.restart();
 
-  boost::shared_ptr<HootApiDbReader> referenceReader(new HootApiDbReader());
-  referenceReader->setUseDataSourceIds(true);
+  conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+  conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), false);
+  conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), false);
+
+  boost::shared_ptr<PartialOsmMapReader> referenceReader =
+    boost::dynamic_pointer_cast<PartialOsmMapReader>(
+      OsmMapReaderFactory::getInstance().createReader(referenceOutput));
   referenceReader->open(referenceOutput);
 
   ChangesetDeriverPtr changesetDeriver(
     new ChangesetDeriver(
       boost::dynamic_pointer_cast<ElementInputStream>(referenceReader), filteredNewInputStream));
 
-  HootApiDbWriter referenceChangeWriter;
-  referenceChangeWriter.setCreateUser(false);
-  referenceChangeWriter.setOverwriteMap(false);
-  referenceChangeWriter.open(referenceOutput);
+  //would cast straight to OsmChangeWriterFactory here, but haven't figured out a way around
+  //the fact that you can't use the factory macro twice on the same class.  Since HootApiDbWriter
+  //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter.
+  boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
+    boost::dynamic_pointer_cast<PartialOsmMapWriter>(
+      OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
+  boost::shared_ptr<OsmChangeWriter> referenceChangeWriter =
+    boost::dynamic_pointer_cast<OsmChangeWriter>(referenceWriter);
+  referenceChangeWriter->open(referenceOutput);
 
-  SparkChangesetWriter changesetFileWriter;
-  changesetFileWriter.open(changesetOutput);
+  boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
+    OsmChangeWriterFactory::getInstance().createWriter(changesetOutput);
+  changesetFileWriter->open(changesetOutput);
 
   while (changesetDeriver->hasMoreChanges())
   {
     const Change change = changesetDeriver->readNextChange();
     if (change.getType() != Change::Unknown)
     {
-      changesetFileWriter.writeChange(change);
-      referenceChangeWriter.writeChange(change);
+      changesetFileWriter->writeChange(change);
+      referenceChangeWriter->writeChange(change);
       _changesParsed++;
     }
   }
+
+  referenceReader->finalizePartial();
+  referenceWriter->finalizePartial();
+  changesetFileWriter->close();
 }
 
 }

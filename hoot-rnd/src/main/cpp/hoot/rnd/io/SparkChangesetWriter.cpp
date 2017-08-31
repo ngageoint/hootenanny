@@ -163,7 +163,6 @@ void SparkChangesetWriter::writeChange(const Change& change)
     changeLine += previousNodeCopy->getTags()[MetadataTags::HootHash()] % "\t";
   }
   changeLine += nodeHash % "\t";  // element hash after change
-  LOG_VART(changeLine);
 
   //element payload
 

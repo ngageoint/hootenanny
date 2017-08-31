@@ -24,64 +24,34 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SPARKCHANGESETWRITER_H
-#define SPARKCHANGESETWRITER_H
-
-// hoot
-#include <hoot/core/io/OsmChangeWriter.h>
-#include <hoot/core/io/OsmJsonWriter.h>
-#include "../visitors/AddExportTagsVisitor.h"
+#ifndef OSMCHANGEWRITERFACTORY_H
+#define OSMCHANGEWRITERFACTORY_H
 
 // Qt
-#include <QFile>
-
-#include "../conflate/multiary/SearchBoundsCalculator.h"
+#include <QString>
 
 namespace hoot
 {
+class OsmChangeWriter;
 
 /**
- * Outputs a changeset usable by Spark
- *
- * @note Only nodes are supported.
+ * A factory for constructing changeset writers based on the URL.
  */
-class SparkChangesetWriter : public OsmChangeWriter
+class OsmChangeWriterFactory
 {
 public:
 
-  static std::string className() { return "hoot::SparkChangesetWriter"; }
+  OsmChangeWriterFactory();
 
-  SparkChangesetWriter();
+  boost::shared_ptr<OsmChangeWriter> createWriter(QString url);
 
-  virtual ~SparkChangesetWriter();
-
-  void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
-
-  /**
-   * @see OsmChangeWriter
-   */
-  virtual bool isSupported(QString url) { return url.endsWith(".spark.1"); }  //TODO: fix
-
-  /**
-   * Open the specified filename for writing.
-   */
-  virtual void open(QString fileName);
-
-  /**
-   * @see OsmChangeWriter
-   */
-  virtual void writeChange(const Change& change);
+  static OsmChangeWriterFactory& getInstance();
 
 private:
 
-  boost::shared_ptr<QFile> _fp;
-  SearchBoundsCalculatorPtr _bounds;
-  int _precision;
-  OsmJsonWriter _jsonWriter;
-  AddExportTagsVisitor _exportTagsVisitor;
-
+  static boost::shared_ptr<OsmChangeWriterFactory> _theInstance;
 };
 
 }
 
-#endif // SPARKCHANGESETWRITER_H
+#endif // OSMCHANGEWRITERFACTORY_H
