@@ -24,37 +24,27 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCHANGEWRITERFACTORY_H
-#define OSMCHANGEWRITERFACTORY_H
+#ifndef ELEMENTSTREAMER_H
+#define ELEMENTSTREAMER_H
 
 // Qt
 #include <QString>
 
-// tgs
-#include <tgs/SharedPtr.h>
-
 namespace hoot
 {
-class OsmChangeWriter;
 
 /**
- * A factory for constructing writers based on the URL.
+ * Streams elements to output
  */
-class OsmChangeWriterFactory
+class ElementStreamer
 {
+
 public:
 
-  OsmChangeWriterFactory();
+  static void stream(const QString in, const QString out);
 
-  boost::shared_ptr<OsmChangeWriter> createWriter(QString url);
-
-  static OsmChangeWriterFactory& getInstance();
-
-private:
-
-  static boost::shared_ptr<OsmChangeWriterFactory> _theInstance;
 };
 
 }
 
-#endif // OSMCHANGEWRITERFACTORY_H
+#endif // ELEMENTSTREAMER_H

@@ -27,9 +27,6 @@
 #ifndef MULTIARYINGESTER_H
 #define MULTIARYINGESTER_H
 
-// hoot
-
-
 // Qt
 #include <QElapsedTimer>
 #include <QTemporaryFile>
@@ -83,7 +80,7 @@ private:
 
   void _checkForOsmosis() const;
   void _sortPbf(const QString input, const QString output);
-  boost::shared_ptr<QTemporaryFile> _ogrToPbf(const QString input);
+  boost::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
   QString _getSortedNewInput(const QString newInput);
 
   boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);

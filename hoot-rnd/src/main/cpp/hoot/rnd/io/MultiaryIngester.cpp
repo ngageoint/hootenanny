@@ -28,27 +28,23 @@
 
 // hoot
 #include <hoot/core/io/ChangesetDeriver.h>
-#include <hoot/core/io/ElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/io/HootApiDbReader.h>
-#include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/rnd/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
-#include <hoot/core/io/ElementOutputStream.h>
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OgrReader.h>
-#include <hoot/core/io/OsmPbfWriter.h>
+#include <hoot/core/io/ElementStreamer.h>
 
 // Qt
-#include <QUuid>
 #include <QFileInfo>
 
 namespace hoot
@@ -163,7 +159,7 @@ void MultiaryIngester::_sortPbf(const QString input, const QString output)
   }
 }
 
-boost::shared_ptr<QTemporaryFile> MultiaryIngester::_ogrToPbf(const QString input)
+boost::shared_ptr<QTemporaryFile> MultiaryIngester::_ogrToPbfTemp(const QString input)
 {
   boost::shared_ptr<QTemporaryFile> pbfTemp(
     new QTemporaryFile("multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
@@ -175,24 +171,7 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_ogrToPbf(const QString inpu
     "Converting OGR input: " << input << " to sortable PBF output: " << pbfTemp->fileName() <<
     "...");
 
-  OgrReader reader;
-  reader.open(input);
-  reader.initializePartial();
-
-  boost::shared_ptr<OsmPbfWriter> writer(new OsmPbfWriter());
-  writer->open(pbfTemp->fileName());
-  writer->initializePartial();
-  boost::shared_ptr<PartialOsmMapWriter> partialWriter =
-    boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
-
-  while (reader.hasMoreElements())
-  {
-    ElementPtr element = reader.readNextElement();
-    partialWriter->writeElement(element);
-  }
-
-  reader.finalizePartial();
-  partialWriter->finalizePartial();
+  ElementStreamer::stream(input, pbfTemp->fileName());
 
   return pbfTemp;
 }
@@ -262,7 +241,7 @@ QString MultiaryIngester::_getSortedNewInput(const QString newInput)
   {
     //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
     //to first write it to a sortable format.
-    _sortPbf(_ogrToPbf(newInput)->fileName(), _sortTempFile->fileName());
+    _sortPbf(_ogrToPbfTemp(newInput)->fileName(), _sortTempFile->fileName());
   }
   else
   {
@@ -317,7 +296,6 @@ void MultiaryIngester::_writeChanges(boost::shared_ptr<ElementInputStream> filte
   while (filteredNewInputStream->hasMoreElements())
   {
     ElementPtr element = filteredNewInputStream->readNextElement();
-
     referenceWriter.writeElement(element);
     changesetFileWriter.writeChange(Change(Change::Create, element));
     _changesParsed++;
@@ -330,7 +308,6 @@ void MultiaryIngester::_deriveAndWriteChanges(
 {
   _timer.restart();
 
-  LOG_VARD(conf().get(ConfigOptions::getApiDbReaderSortByIdKey()));
   boost::shared_ptr<HootApiDbReader> referenceReader(new HootApiDbReader());
   referenceReader->setUseDataSourceIds(true);
   referenceReader->open(referenceOutput);
