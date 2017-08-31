@@ -76,7 +76,7 @@ void OsmApiDbReader::open(QString urlStr)
 
 void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 {
-  //TODO: See if these tags can be read out at the same time the element itself is read out.
+  //We should see if these tags can be read out at the same time the element itself is read out...
 
   QStringList tags;
   boost::shared_ptr<QSqlQuery> tagItr;
@@ -129,7 +129,7 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong() / (double)ApiDb::COORDINATE_SCALE;
 
   NodePtr node(
-    new Node(
+    Node::newSp(
       _status,
       nodeId,
       lon,

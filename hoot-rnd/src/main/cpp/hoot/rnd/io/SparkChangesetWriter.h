@@ -41,7 +41,7 @@ namespace hoot
 {
 
 /**
- *
+ * Outputs a changeset usable by Spark
  *
  * @note Only nodes are supported.
  */
@@ -58,7 +58,7 @@ public:
   void close() { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
   /**
-   * @see OsmMapWriter
+   * @see OsmChangeWriter
    */
   virtual bool isSupported(QString url) { return url.endsWith(".spark.1"); }  //TODO: fix
 

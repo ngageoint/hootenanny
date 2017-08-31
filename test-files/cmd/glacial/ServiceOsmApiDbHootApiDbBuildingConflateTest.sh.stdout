@@ -20,7 +20,6 @@ STEP 2: Writing the complete reference dataset to the osm api db...
 
 STEP 5: Writing the complete secondary dataset to the hoot api db...
 
-21:24:17.133 WARN  ...portMissingElementsVisitor.cpp(  64) Missing Relation:1838255 in Relation:1354957.
 
 STEP 8a: Conflating the two datasets over the specified AOI with the SQL changeset workflow...
 
@@ -37,13 +36,13 @@ STEP 11b: Writing a XML changeset file that is the difference between the croppe
 STEP 12: Executing the SQL changeset on the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.483200, max_lat=42.485100, min_lon=-71.477000, max_lon=-71.475500, num_changes=104
+Changeset Details: min_lat=42.4832, max_lat=42.4851, min_lon=-71.4769999, max_lon=-71.4754999, num_changes=103
 Node(s) Created: 6
 Node(s) Modified: 0
 Node(s) Deleted: 93
 Way(s) Created: 0
 Way(s) Modified: 2
-Way(s) Deleted: 3
+Way(s) Deleted: 2
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0

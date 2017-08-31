@@ -262,7 +262,7 @@ private:
    * Since we're converting the input element IDs to our own sequence, we need to keep a mapping
    * between the two for reference.
    */
-  unsigned long _establishNewIdMapping(const ElementId& sourceId);
+  unsigned long _establishIdMapping(const ElementId& sourceId);
   void _checkUnresolvedReferences(const ConstElementPtr& element, const unsigned long elementDbId);
   void _updateRecordLineWithIdOffset(const QString tableName, QString& recordLine);
   void _writeCombinedSqlFile();

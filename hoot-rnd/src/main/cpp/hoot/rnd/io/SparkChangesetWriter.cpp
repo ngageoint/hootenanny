@@ -48,7 +48,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangeWriter, SparkChangesetWriter)
 
 SparkChangesetWriter::SparkChangesetWriter() :
-_precision(round(ConfigOptions().getWriterPrecision()))
+_precision(ConfigOptions().getWriterPrecision())
 {
 }
 
@@ -163,7 +163,6 @@ void SparkChangesetWriter::writeChange(const Change& change)
     changeLine += previousNodeCopy->getTags()[MetadataTags::HootHash()] % "\t";
   }
   changeLine += nodeHash % "\t";  // element hash after change
-  LOG_VART(changeLine);
 
   //element payload
 
