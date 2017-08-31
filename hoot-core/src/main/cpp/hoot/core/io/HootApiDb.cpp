@@ -430,6 +430,8 @@ void HootApiDb::deleteUser(long userId)
 
 QString HootApiDb::_escapeTags(const Tags& tags) const
 {
+  //TODO: this is likely redundant with other code
+
   QStringList l;
   static QChar f1('\\'), f2('"'), f3('\'');
   static QChar to('_');

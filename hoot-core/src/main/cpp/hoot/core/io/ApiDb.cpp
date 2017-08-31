@@ -322,6 +322,8 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectNodesForWay(long wayId, const QString 
 
 Tags ApiDb::unescapeTags(const QVariant &v)
 {
+  //TODO: this is likely redundant with other code
+
   /** NOTE:  When we upgrade from Qt4 to Qt5 we can use the QRegularExpression
    *  classes that should enable the regex below that has both greedy matching
    *  and lazy matching in the same regex.  The QRegExp class doesn't allow this

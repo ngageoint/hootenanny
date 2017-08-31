@@ -60,6 +60,8 @@ void ElementStreamer::stream(const QString in, const QString out)
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(writer);
 
   // add visitor/criterion operations if any of the convert ops are visitors.
+  //this check is a little out of place in this class but not hurting anything...may be able to
+  //move it back to ConvertCmd somehow at some point
   foreach (QString opName, ConfigOptions().getConvertOps())
   {
     if (!opName.trimmed().isEmpty())
