@@ -254,7 +254,7 @@ QString MultiaryIngester::_getSortedNewInput(const QString newInput)
     //to first write it to a sortable format.
     LOG_WARN(
       "OGR inputs are not currently sortable by node ID.  Must convert input to OSM format, " <<
-      "which will increase the processing time.")
+      "which will increase the processing time.");
     _sortPbf(_ogrToPbfTemp(newInput)->fileName(), _sortTempFile->fileName());
   }
   else
