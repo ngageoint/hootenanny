@@ -63,7 +63,7 @@ pipeline {
         stage("Vagrant Up") {
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh 'vagrant up --provision-with hoot --provider aws'
+                sh 'vagrant up --provision-with software,hoot --provider aws'
             }       
         }
         stage("Test Configure") {
@@ -90,7 +90,7 @@ pipeline {
                 sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
                 
                 // Perform remainder of provisioning
-                sh 'vagrant provision --provision-with software, build,EGD,tomcat,mapnik,hadoop'
+                sh 'vagrant provision --provision-with build,EGD,tomcat,mapnik,hadoop'
             }       
         }
         stage("Core Tests") {
