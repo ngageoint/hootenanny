@@ -71,9 +71,10 @@ public:
 
   /**
    * @see ApiDb::selectElements
-   */
+   */                                                       
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const bool sorted = false);
+                                                      const bool sorted = false,
+                                                      const long limit = 0, const long offset = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -89,11 +90,6 @@ public:
    * Returns a vector with all the relation members for a given relation
    */
   virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
-
-  /**
-   * Returns a results iterator to a node for a given node id.
-   */
-  boost::shared_ptr<QSqlQuery> selectNodeById(const long elementId);
 
   /**
     * Deletes data in the Osm Api db
@@ -188,6 +184,8 @@ public:
    */
   void enableConstraints();
 
+  virtual long numElements(const ElementType& elementType);
+
 protected:
 
   void _resetQueries();
@@ -201,13 +199,13 @@ private:
   boost::shared_ptr<QSqlQuery> _selectTagsForWay;
   boost::shared_ptr<QSqlQuery> _selectTagsForRelation;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
-  boost::shared_ptr<QSqlQuery> _selectNodeById;
+  boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _seqQueries;
 
   void _init();
 
-  QString _elementTypeToElementTableNameStr(const ElementType& elementType) const;
+  //QString _elementTypeToElementTableNameStr(const ElementType& elementType) const;
 
   long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
   long _getIdFromSequence(const QString tableName, const QString sequenceType);

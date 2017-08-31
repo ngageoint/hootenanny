@@ -207,9 +207,9 @@ void OsmApiDb::_resetQueries()
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
   _selectMembersForRelation.reset();
-  _selectNodeById.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
+  _numTypeElementsForMap.reset();
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
@@ -299,29 +299,29 @@ QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType,
   switch (elementType.getEnum())
   {
     case ElementType::Node:
-        if (historical)
+      if (historical)
+      {
+        if (tags)
         {
-          if (tags)
-          {
-            return ApiDb::getNodeTagsTableName();
-          }
-          else
-          {
-            return ApiDb::getNodesTableName();
-          }
+          return ApiDb::getNodeTagsTableName();
         }
         else
         {
-          if (tags)
-          {
-            return ApiDb::getCurrentNodeTagsTableName();
-          }
-          else
-          {
-            return ApiDb::getCurrentNodesTableName();
-          }
+          return ApiDb::getNodesTableName();
         }
-      break;
+      }
+      else
+      {
+        if (tags)
+        {
+          return ApiDb::getCurrentNodeTagsTableName();
+        }
+        else
+        {
+          return ApiDb::getCurrentNodesTableName();
+        }
+      }
+    break;
 
     case ElementType::Way:
       if (historical)
@@ -377,30 +377,6 @@ QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType,
       throw HootException("Unknown element type");
   }
 }
-
-QString OsmApiDb::_elementTypeToElementTableNameStr(const ElementType& elementType) const
-{
-  if (elementType == ElementType::Node)
-  {
-    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version ") +
-      QString("FROM %1").arg(ApiDb::getCurrentNodesTableName());
-  }
-  else if (elementType == ElementType::Way)
-  {
-    return QString("id, changeset_id, timestamp, visible, version ") +
-      QString("FROM %1").arg(ApiDb::getCurrentWaysTableName());
-  }
-  else if (elementType == ElementType::Relation)
-  {
-    return QString("id, changeset_id, timestamp, visible, version ") +
-      QString("FROM %1").arg(ApiDb::getCurrentRelationsTableName());
-  }
-  else
-  {
-    throw HootException("Unsupported element type.");
-  }
-}
-
 vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
 {
   QString sql =  "SELECT node_id FROM " +
@@ -471,58 +447,76 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   return result;
 }
 
-boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
-{
-  _selectNodeById.reset(new QSqlQuery(_db));
-  _selectNodeById->setForwardOnly(true);
-  QString sql =
-    "SELECT " + _elementTypeToElementTableNameStr(ElementType::Node) +
-    " WHERE (id=:elementId)";
-  _selectNodeById->prepare(sql);
-  _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
-
-  // execute the query on the DB and get the results back
-  if (_selectNodeById->exec() == false)
-  {
-    QString err = _selectNodeById->lastError().text();
-    throw HootException("Error selecting node by id: " + QString::number(elementId) +
-      " Error: " + err);
-  }
-  LOG_VARD(_selectNodeById->executedQuery());
-  LOG_VARD(_selectNodeById->numRowsAffected());
-
-  return _selectNodeById;
-}
-
 boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType,
-                                                      const bool sorted)
+                                                      const bool sorted, const long limit,
+                                                      const long offset)
 {
+  //TODO: this is completely redundant with HootApiDb::selectElements except for the table name
+  //string creation and should be rolled up into ApiDb
+
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
-  // setup base sql query string
-  QString sql =  "SELECT " + _elementTypeToElementTableNameStr(elementType);
-  // sort them in descending order, set limit and offset
-  sql += " WHERE visible = true";
+  QString sql =
+    "SELECT * FROM " + elementTypeToElementTableName(elementType, false, false) +
+    " WHERE visible = true";
   if (sorted)
   {
     sql += " ORDER BY id";
   }
+  if (limit > 0)
+  {
+    sql += " LIMIT " + QString::number(limit);
+  }
+  if (offset > 0)
+  {
+    sql += " OFFSET " + QString::number(offset);
+  }
   LOG_VARD(sql);
-
   _selectElementsForMap->prepare(sql);
 
-  // execute the query on the DB and get the results back
   if (_selectElementsForMap->exec() == false)
   {
-    QString err = _selectElementsForMap->lastError().text();
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " Error: " + err);
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() +
+      " Error: " + _selectElementsForMap->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
   }
-  LOG_VARD(_selectElementsForMap->executedQuery());
   LOG_VARD(_selectElementsForMap->numRowsAffected());
+  LOG_VARD(_selectElementsForMap->executedQuery());
 
   return _selectElementsForMap;
+}
+
+long OsmApiDb::numElements(const ElementType& elementType)
+{
+  //TODO: this is completely redundant with HootApiDb::numElements except for the table name string
+  //creation and should be rolled up into ApiDb
+
+  _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  _numTypeElementsForMap->prepare(
+    "SELECT COUNT(*) FROM " + elementTypeToElementTableName(elementType, false, false));
+
+  if (_numTypeElementsForMap->exec() == false)
+  {
+    LOG_ERROR(_numTypeElementsForMap->executedQuery());
+    LOG_ERROR(_numTypeElementsForMap->lastError().text());
+    throw HootException(_numTypeElementsForMap->lastError().text());
+  }
+
+  long result = -1;
+  if (_numTypeElementsForMap->next())
+  {
+    bool ok;
+    result = _numTypeElementsForMap->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve count for element type: " + elementType.toString());
+    }
+  }
+  _numTypeElementsForMap->finish();
+  return result;
 }
 
 boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)

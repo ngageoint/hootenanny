@@ -63,10 +63,15 @@ void SparkChangesetWriter::open(QString fileName)
 
   _fp.reset(new QFile());
   _fp->setFileName(fileName);
+  if (_fp->exists() && !_fp->remove())
+  {
+    throw HootException(QObject::tr("Error removing existing %1 for writing.").arg(fileName));
+  }
   if (!_fp->open(QIODevice::WriteOnly | QIODevice::Text))
   {
-    throw HootException(QObject::tr("Error opening %1 for writing").arg(fileName));
+    throw HootException(QObject::tr("Error opening %1 for writing.").arg(fileName));
   }
+  LOG_DEBUG("Opened: " << fileName << ".");
 
   // find a match creator that can provide the search bounds.
   foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())

@@ -782,4 +782,10 @@ void ApiDb::readDbConfig(Settings& settings, QString config_path)
   }
 }
 
+boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementType,
+                                                      const bool sorted)
+{
+  return selectElements(elementType, sorted);
+}
+
 }

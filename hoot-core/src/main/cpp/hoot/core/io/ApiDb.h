@@ -149,8 +149,24 @@ public:
    * @param sorted if true, elements are sorted by ID
    * @return a result iterator to the elements
    */
+  boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType,
+                                                 const bool sorted = false);
+
+  /**
+   * Returns a results iterator to all OSM elements for a given map and element type in the services
+   * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
+   * = 0, no records will be skipped in the returned result set.
+   *
+   * @param elementType
+   * @param sorted
+   * @param limit
+   * @param offset
+   * @return
+   */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const bool sorted = false) = 0;
+                                                      const bool sorted = false,
+                                                      const long limit = 0,
+                                                      const long offset = 0) = 0;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -270,6 +286,8 @@ public:
    * @return an element ID
    */
   virtual long getNextId(const ElementType& elementType) = 0;
+
+  virtual long numElements(const ElementType& elementType) = 0;
 
   QSqlError getLastError() const { return _db.lastError(); }
 

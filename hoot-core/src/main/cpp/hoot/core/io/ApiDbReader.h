@@ -122,21 +122,17 @@ protected:
 
   ElementType _selectElementType;
   boost::shared_ptr<QSqlQuery> _elementResultIterator;
-  boost::shared_ptr<Element> _nextElement;
-
-  const ElementType _getCurrentSelectElementType() const;
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
-  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator,
-                                                 const OsmMap& map) = 0;
+  virtual RelationPtr _resultToRelation(const QSqlQuery& resultIterator, const OsmMap& map) = 0;
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
   virtual boost::shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
-   * This is based off of the Map.java query method.
+   * This is the same logic as in the Map.java query method.
    */
   virtual void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
 
@@ -147,9 +143,17 @@ protected:
 
 private:
 
-  void _read(OsmMapPtr map, const ElementType& elementType);
+  bool _firstPartialReadCompleted;
 
-  boost::shared_ptr<Element> _getElementUsingIterator();
+  //indexes are 0 based and indicate the next record that should be returned by a partial query
+  long _nodeIndex;
+  long _totalNumMapNodes;
+  long _wayIndex;
+  long _totalNumMapWays;
+  long _relationIndex;
+  long _totalNumMapRelations;
+
+  void _read(OsmMapPtr map, const ElementType& elementType);
 
   /**
    * Converts a query result to an OSM element
@@ -158,6 +162,10 @@ private:
    */
   boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
                                               const ElementType& elementType, OsmMap& map);
+
+  long _getCurrentElementOffset(const ElementType& selectElementType) const;
+  void _incrementElementIndex(const ElementType& selectElementType);
+  const ElementType _getCurrentSelectElementType() const;
 };
 
 }

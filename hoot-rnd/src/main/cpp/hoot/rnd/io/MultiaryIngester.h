@@ -47,8 +47,15 @@ class ElementInputStream;
  * is derived and the entire contents of the data input are simply written directly to the
  * reference layer.
  *
- * This command requires that the input be a streamable format, the output layer be a Hootenanny
+ * This class requires that the input be a streamable format, the output layer be a Hootenanny
  * API database layer, and the changeset output format be a Spark changeset.
+ *
+ * This class uses the Unix sort command to sort the geonames input, which is possible due to the
+ * single line records.  Osmosis is used for sorting OSM files.  This could be replaced with a
+ * custom file based merge sort routine in the future to reduce the dependency on Osmosis, but
+ * for now using it is the best solution.  There is no good solution yet for sorting OGR inputs.
+ * Those inputs must be converted to an OSM format before sorting, which roughly doubles the input
+ * parsing time, unfortunately.
  */
 class MultiaryIngester
 {
@@ -75,6 +82,7 @@ private:
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
 
   long _changesParsed;
+  long _logUpdateInterval;
 
   QElapsedTimer _timer;
 

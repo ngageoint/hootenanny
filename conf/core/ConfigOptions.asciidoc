@@ -1325,17 +1325,6 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osmapidb.bulk.inserter.file.output.element.buffer.size
-
-* Data Type: long
-* Default Value: `10000`
-
-Maximum number of elements to keep in memory when serializing input elements to a file output
-before they are written to an OSM API database.  If you have enough memory available and the
-dataset you are writing is significantly larger than the value of this setting, you may be able to
-increase the input file parsing performance by raising this value.  This setting has no impact on
-the performance of writing records to a database, only on the input data parsing done beforehand.
-
 === osmapidb.bulk.inserter.file.output.status.update.interval
 
 * Data Type: long

@@ -1204,11 +1204,58 @@ bool HootApiDb::changesetExists(const long id)
   return _changesetExists->next();
 }
 
+boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
+                                                       const bool sorted, const long limit,
+                                                       const long offset)
+{
+  //TODO: this is completely redundant with OsmApiDb::selectElements except for the table name
+  //string creation and should be rolled up into ApiDb
+
+  _selectElementsForMap.reset(new QSqlQuery(_db));
+  _selectElementsForMap->setForwardOnly(true);
+
+  QString sql =
+    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
+    " WHERE visible = true";
+  if (sorted)
+  {
+    sql += " ORDER BY id";
+  }
+  if (limit > 0)
+  {
+    sql += " LIMIT " + QString::number(limit);
+  }
+  if (offset > 0)
+  {
+    sql += " OFFSET " + QString::number(offset);
+  }
+  LOG_VARD(sql);
+  _selectElementsForMap->prepare(sql);
+
+  if (_selectElementsForMap->exec() == false)
+  {
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() +
+      " for map ID: " + QString::number(_currMapId) + " Error: " +
+      _selectElementsForMap->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
+  LOG_VARD(_selectElementsForMap->executedQuery());
+
+  return _selectElementsForMap;
+}
+
 long HootApiDb::numElements(const ElementType& elementType)
 {
+  //TODO: this is completely redundant with OsmApiDb::numElements except for the table name string
+  //creation and should be rolled up into ApiDb
+
   _numTypeElementsForMap.reset(new QSqlQuery(_db));
   _numTypeElementsForMap->prepare(
     "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)));
+
   if (_numTypeElementsForMap->exec() == false)
   {
     LOG_ERROR(_numTypeElementsForMap->executedQuery());
@@ -1228,35 +1275,6 @@ long HootApiDb::numElements(const ElementType& elementType)
   }
   _numTypeElementsForMap->finish();
   return result;
-}
-
-boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
-                                                       const bool sorted)
-{
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
-
-  QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType));
-  if (sorted)
-  {
-    sql += " ORDER BY id";
-  }
-  LOG_VARD(sql);
-
-  _selectElementsForMap->prepare(sql);
-
-  if (_selectElementsForMap->exec() == false)
-  {
-    const QString err =
-      "Error selecting elements of type: " + elementType.toString() +
-      " for map ID: " + QString::number(_currMapId) + " Error: " +
-      _selectElementsForMap->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VARD(_selectElementsForMap->executedQuery());
-  return _selectElementsForMap;
 }
 
 vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
