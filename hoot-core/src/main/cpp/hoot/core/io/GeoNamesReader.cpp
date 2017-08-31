@@ -148,7 +148,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  NodePtr n(new Node(_status, id, x, y, _circularError));
+  NodePtr n(Node::newSp(_status, id, x, y, _circularError));
 
   if (_columns.size() != fields.size())
   {

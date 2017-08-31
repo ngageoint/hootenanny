@@ -69,6 +69,7 @@ public:
 
   void setBoundingBox(const QString bbox);
   void setOverrideBoundingBox(const QString bbox);
+  void setSortById(const bool sortById) { _sortById = sortById; }
   void setReturnNodesOnly(const bool returnNodesOnly)
   { _returnNodesOnly = returnNodesOnly; }
 
@@ -108,6 +109,7 @@ protected:
   Status _status;
   bool _open;
   QString _email;
+  bool _sortById;
 
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;

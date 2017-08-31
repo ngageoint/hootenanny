@@ -112,13 +112,13 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangeSetProviderPtr cs)
       LOG_TRACE("Reading next XML change...");
       _change = cs->readNextChange();
       LOG_VART(_change.toString());
-      if (_change.type != last)
+      if (_change.getType() != last)
       {
         if (last != Change::Unknown)
         {
           writer.writeEndElement();
         }
-        switch (_change.type)
+        switch (_change.getType())
         {
           case Change::Create:
             writer.writeStartElement("create");
@@ -136,22 +136,23 @@ void OsmXmlChangesetFileWriter::write(QString path, ChangeSetProviderPtr cs)
           default:
             throw IllegalArgumentException("Unexpected change type.");
         }
-        last = _change.type;
+        last = _change.getType();
         LOG_VART(last);
       }
 
-      if (_change.type != Change::Unknown)
+      if (_change.getType() != Change::Unknown)
       {
-        switch (_change.e->getElementType().getEnum())
+        switch (_change.getElement()->getElementType().getEnum())
         {
           case ElementType::Node:
-            _writeNode(writer, boost::dynamic_pointer_cast<const Node>(_change.e));
+            _writeNode(writer, boost::dynamic_pointer_cast<const Node>(_change.getElement()));
             break;
           case ElementType::Way:
-            _writeWay(writer, boost::dynamic_pointer_cast<const Way>(_change.e));
+            _writeWay(writer, boost::dynamic_pointer_cast<const Way>(_change.getElement()));
             break;
           case ElementType::Relation:
-            _writeRelation(writer, boost::dynamic_pointer_cast<const Relation>(_change.e));
+            _writeRelation(
+              writer, boost::dynamic_pointer_cast<const Relation>(_change.getElement()));
             break;
           default:
             throw IllegalArgumentException("Unexpected element type.");
@@ -179,7 +180,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
 {
   writer.writeStartElement("node");
   long id = n->getId();
-  if (_change.type == Change::Create)
+  if (_change.getType() == Change::Create)
   {
     //rails port expects negative ids for new elements; we're starting at -1 to match the convention
     //of iD editor, but that's not absolutely necessary to write the changeset to rails port
@@ -193,7 +194,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   writer.writeAttribute("id", QString::number(id));
   long version = -1;
   //  for xml changeset OSM rails port expects created elements to have version = 0
-  if (_change.type == Change::Create)
+  if (_change.getType() == Change::Create)
     version = 0;
   else
     version = n->getVersion();
@@ -217,7 +218,8 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   }
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    if (it.key().isEmpty() == false && it.value().isEmpty() == false)
+    if (it.key().isEmpty() == false && it.value().isEmpty() == false &&
+        it.key() != MetadataTags::HootHash())
     {
       writer.writeStartElement("tag");
       writer.writeAttribute("k", _invalidCharacterRemover.removeInvalidCharacters(it.key()));
@@ -242,7 +244,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
 {
   writer.writeStartElement("way");
   long id = w->getId();
-  if (_change.type == Change::Create)
+  if (_change.getType() == Change::Create)
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Way] * -1;
@@ -255,7 +257,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   writer.writeAttribute("id", QString::number(id));
   long version = -1;
   // for xml changeset OSM rails port expects created elements to have version = 0
-  if (_change.type == Change::Create)
+  if (_change.getType() == Change::Create)
     version = 0;
   else
     version = w->getVersion();
@@ -315,7 +317,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
 {
   writer.writeStartElement("relation");
   long id = r->getId();
-  if (_change.type == Change::Create)
+  if (_change.getType() == Change::Create)
   {
     //see corresponding note in _writeNode
     id = _newElementIdCtrs[ElementType::Relation] * -1;
@@ -328,7 +330,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   writer.writeAttribute("id", QString::number(id));
   long version = -1;
   //  for xml changeset OSM rails port expects created elements to have version = 0
-  if (_change.type == Change::Create)
+  if (_change.getType() == Change::Create)
     version = 0;
   else
     version = r->getVersion();

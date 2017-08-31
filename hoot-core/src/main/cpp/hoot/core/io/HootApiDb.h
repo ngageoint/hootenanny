@@ -30,6 +30,7 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/BulkDelete.h>
 
 namespace hoot
 {
@@ -71,10 +72,10 @@ public:
   //reading
 
   /**
-   * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database.
+   * @see ApiDb::selectElements
    */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
+                                                      const bool sorted = false);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -95,6 +96,11 @@ public:
    * Returns true if the map with the specified ID exists in the services database
    */
   bool mapExists(const long id);
+
+  /**
+   * Returns true if any map with the specified name exists in the services database
+   */
+  bool mapExists(const QString name);
 
   /**
    * Returns true if the changeset with the specified ID exists in the services database
@@ -180,6 +186,8 @@ public:
 
   bool insertNode(const long id, const double lat, const double lon, const Tags &tags);
 
+  bool insertNode(ConstNodePtr node);
+
   bool insertWay(const Tags& tags, long& assignedId);
 
   bool insertWay( const long wayId, const Tags& tags);
@@ -208,6 +216,10 @@ public:
 
   void updateNode(const long id, const double lat, const double lon, const long version,
                   const Tags& tags);
+
+  void updateNode(ConstNodePtr node);
+
+  void deleteNode(ConstNodePtr node);
 
   void updateRelation(const long id, const long version, const Tags& tags);
 
@@ -283,6 +295,8 @@ public:
 
   virtual long getNextId(const ElementType& elementType);
 
+  static QUrl getBaseUrl();
+
 protected:
 
   virtual void _resetQueries();
@@ -297,7 +311,7 @@ private:
   boost::shared_ptr<QSqlQuery> _insertRelationMembers;
   boost::shared_ptr<QSqlQuery> _insertWayNodes;
   boost::shared_ptr<QSqlQuery> _selectHootDbVersion;
-  boost::shared_ptr<QSqlQuery> _mapExists;
+  boost::shared_ptr<QSqlQuery> _mapExistsById;
   boost::shared_ptr<QSqlQuery> _changesetExists;
   boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
   boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
@@ -310,10 +324,14 @@ private:
   boost::shared_ptr<QSqlQuery> _updateJobStatus;
   boost::shared_ptr<QSqlQuery> _insertJobStatus;
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
+  boost::shared_ptr<QSqlQuery> _mapExistsByName;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
   double _nodesInsertElapsed;
+  boost::shared_ptr<BulkDelete> _nodeBulkDelete;
+  long _nodesPerBulkDelete;
+  double _nodesDeleteElapsed;
   boost::shared_ptr<InternalIdReserver> _nodeIdReserver;
 
   boost::shared_ptr<BulkInsert> _wayBulkInsert;
@@ -375,6 +393,7 @@ private:
   QString _escapeTags(const Tags& tags) const;
 
   void _flushBulkInserts();
+  void _flushBulkDeletes();
   long _getNextNodeId();
   long _getNextRelationId();
   long _getNextWayId();

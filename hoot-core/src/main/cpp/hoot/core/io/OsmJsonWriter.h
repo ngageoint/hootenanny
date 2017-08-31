@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -63,7 +64,7 @@ class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter
 public:
   static std::string className() { return "hoot::OsmJsonWriter"; }
 
-  OsmJsonWriter(int precision = 16);
+  OsmJsonWriter(int precision = ConfigOptions().getWriterPrecision());
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".json"); }
 
