@@ -54,19 +54,20 @@ namespace hoot
 MultiaryIngester::MultiaryIngester() :
 _sortInput(true),
 _changesParsed(0),
+_addToExistingRefDb(false),
 _logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval()),
 _numNodesBeforeApplyingChangeset(0),
 _numNodesAfterApplyingChangeset(0)
 {
-  //inputs must be sorted by node id for changeset derivation to work
-  conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
   //in order for the sorting to work, all original node ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
   conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
-  //translate inputs to OSM
-  conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
-  //for the changeset derivation to work, all input IDs must not be modified
+  //for the changeset derivation to work, all input IDs must not be modified as they are read
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+  //inputs must be sorted by node id for changeset derivation to work
+  conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
+  //script for translating input to OSM
+  conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
 }
 
 void MultiaryIngester::_clearChangeTypeCounts()
@@ -79,14 +80,11 @@ void MultiaryIngester::_clearChangeTypeCounts()
 void MultiaryIngester::ingest(const QString newInput, const QString referenceOutput,
                               const QString changesetOutput, const bool sortInput)
 {
-  LOG_VARD(newInput);
-  LOG_VARD(referenceOutput);
-  LOG_VARD(changesetOutput);
-  LOG_VARD(sortInput);
-
   _changesParsed = 0;
   _clearChangeTypeCounts();
   _sortInput = sortInput;
+
+  //do some input error checking before kicking off a potentially lengthy sort process
 
   if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
   {
@@ -115,32 +113,31 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
   LOG_INFO("into reference output layer: " << referenceOutput);
   LOG_INFO("and writing changes to changeset file: " << changesetOutput << "...");
 
-  _referenceDb.open(referenceOutput);
   const QStringList dbUrlParts = referenceOutput.split("/");
   const QString mapName = dbUrlParts[dbUrlParts.size() - 1];
+  _referenceDb.open(referenceOutput);
 
   if (!_referenceDb.mapExists(mapName))
   {
     LOG_INFO("The reference output dataset does not exist.");
     LOG_INFO("Skipping node sorting and changeset derivation.");
-    LOG_INFO(
-      "Writing the input data directly to the reference layer and generating " <<
-      "a changeset file consisting entirely of create statements...");
+    LOG_INFO("Writing the input data directly to the reference layer");
+    LOG_INFO("and generating a changeset file consisting entirely of create statements...");
 
     //If there's no existing reference data, then there's no point in deriving a changeset diff
     //or sorting the data by ID.  So in that case, write all of the input data directly to the ref
     //layer and generate a Spark changeset consisting entirely of create statements.
-    _writeChanges(_getFilteredNewInputStream(newInput), referenceOutput, changesetOutput);
+    _writeNewReferenceData(_getFilteredNewInputStream(newInput), referenceOutput, changesetOutput);
   }
   else
   {
-    LOG_INFO(
-      "The reference output dataset exists.  Deriving a changeset between the input and " <<
-      "reference data, writing the changes to the reference layer, and also writing " <<
-      "the changes to the changeset file...");
+    LOG_INFO("The reference output dataset exists.");
+    LOG_INFO("Deriving a changeset between the input and reference data,");
+    LOG_INFO("writing the changes to the reference layer,");
+    LOG_INFO("and also writing the changes to the changeset file...");
 
+    _addToExistingRefDb = true;
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
-
     _numNodesBeforeApplyingChangeset = _referenceDb.numElements(ElementType::Node);
 
     if (!_sortInput)
@@ -170,22 +167,36 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
 
 void MultiaryIngester::_printSummary()
 {
-  LOG_INFO("Total Changes Parsed: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed));
-  LOG_INFO(
-    "Create Changes Parsed: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
-  LOG_INFO(
-    "Modify Changes Parsed: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]));
-  LOG_INFO(
-    "Delete Changes Parsed: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
-  LOG_INFO(
-    "Number of nodes before applying changeset: " <<
-    FileUtils::formatPotentiallyLargeNumber(_numNodesBeforeApplyingChangeset));
-  LOG_INFO(
-    "Number of nodes after applying changeset: " <<
-    FileUtils::formatPotentiallyLargeNumber(_numNodesAfterApplyingChangeset));
+  if (_addToExistingRefDb)
+  {
+    LOG_INFO(
+      "Changes written to reference layer and changeset file: " <<
+      FileUtils::formatPotentiallyLargeNumber(_changesParsed));
+    LOG_INFO(
+      "  Create changes written: " <<
+      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
+    LOG_INFO(
+      "  Modify changes written: " <<
+      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]));
+    LOG_INFO(
+      "  Delete changes written: " <<
+      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
+    LOG_INFO(
+      "Number of nodes in reference layer before applying changeset: " <<
+      FileUtils::formatPotentiallyLargeNumber(_numNodesBeforeApplyingChangeset));
+    LOG_INFO(
+      "Number of nodes in reference layer after applying changeset: " <<
+      FileUtils::formatPotentiallyLargeNumber(_numNodesAfterApplyingChangeset));
+  }
+  else
+  {
+    LOG_INFO(
+      "Nodes written to reference layer: " <<
+      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
+    LOG_INFO(
+      "Changes written to changeset file: " <<
+      FileUtils::formatPotentiallyLargeNumber(_changesParsed));
+  }
 }
 
 void MultiaryIngester::_checkForOsmosis() const
@@ -334,8 +345,9 @@ boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStre
   return filteredNewInputStream;
 }
 
-void MultiaryIngester::_writeChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
-                                     const QString referenceOutput, const QString changesetOutput)
+void MultiaryIngester::_writeNewReferenceData(
+  boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceOutput,
+  const QString changesetOutput)
 {
   _timer.restart();
   LOG_DEBUG("Writing changes...");
@@ -365,7 +377,8 @@ void MultiaryIngester::_writeChanges(boost::shared_ptr<ElementInputStream> filte
       if (_changesParsed % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) << " nodes.");
+          "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          " nodes to the reference layer.");
       }
     }
   }
@@ -426,27 +439,27 @@ void MultiaryIngester::_deriveAndWriteChanges(
       if (_changesParsed % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "Parsed " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
           " changes.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
-          _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete] <<
-          //TODO: drop these from info logging later
-          ", Reference nodes parsed: " <<
+          _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
+        PROGRESS_DEBUG(
+          "Reference nodes parsed: " <<
           FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
           ", New nodes parsed: " <<
           FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()));
       }
     }
   }
-  _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
 
   referenceReader->finalizePartial();
   referenceWriter->finalizePartial();
   changesetFileWriter->close();
   changesetDeriver.close();
 
-  //TODO: change these to debug
-  LOG_VAR(changesetDeriver.getNumFromElementsParsed());
-  LOG_VAR(changesetDeriver.getNumToElementsParsed());
+  _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
+
+  LOG_VARD(changesetDeriver.getNumFromElementsParsed());
+  LOG_VARD(changesetDeriver.getNumToElementsParsed());
 }
 
 }

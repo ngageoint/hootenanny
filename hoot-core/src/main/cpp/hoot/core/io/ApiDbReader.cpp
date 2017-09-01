@@ -500,6 +500,16 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   LOG_VARD(map->getRelations().size());
 }
 
+long ApiDbReader::_numElementsRead() const
+{
+  return _nodeIndex + _wayIndex + _relationIndex;
+}
+
+long ApiDbReader::_numElementsTotal() const
+{
+  return _totalNumMapNodes + _totalNumMapWays + _totalNumMapRelations;
+}
+
 bool ApiDbReader::hasMoreElements()
 {
   if (!_firstPartialReadCompleted)
@@ -517,14 +527,10 @@ bool ApiDbReader::hasMoreElements()
     _firstPartialReadCompleted = true;
   }
 
-  const long numElementsRead = _nodeIndex + _wayIndex + _relationIndex;
-  LOG_VARD(numElementsRead);
-  const long numElementsTotal = _totalNumMapNodes + _totalNumMapWays + _totalNumMapRelations;
-  LOG_VARD(numElementsTotal);
-  assert(numElementsRead <= numElementsTotal);
+  assert(_numElementsRead() <= _numElementsTotal());
   //each results index is 0 based, so as soon as the sum of indexes is equal to the total number of
   //elements, we're done iterating through them
-  return (numElementsRead < numElementsTotal);
+  return (_numElementsRead() < _numElementsTotal());
 }
 
 boost::shared_ptr<Element> ApiDbReader::readNextElement()
@@ -536,7 +542,7 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
 
   ElementType selectElementType = _getCurrentSelectElementType();
   LOG_VART(selectElementType);
-  //see of another result is available
+  //see if another result is available
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
@@ -572,6 +578,12 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
     LOG_DEBUG("Closed result iterator.");
   }
   LOG_VART(element->getElementId());
+
+  if (_numElementsRead() % (_maxElementsPerMap / 10) == 0)
+  {
+    PROGRESS_DEBUG("Read: " << _numElementsRead() << " \ " << _numElementsTotal());
+  }
+
   return element;
 }
 
@@ -592,7 +604,8 @@ const ElementType ApiDbReader::_getCurrentSelectElementType() const
   }
   else
   {
-    assert(false);  //hasMoreElements should have kept us from being here
+    //hasMoreElements should have kept us from being here
+    throw HootException("_getCurrentSelectElementType");
   }
   return selectElementType;
 }
@@ -614,7 +627,8 @@ long ApiDbReader::_getCurrentElementOffset(const ElementType& selectElementType)
   }
   else
   {
-    assert(false);  //hasMoreElements should have kept us from being here
+    //hasMoreElements should have kept us from being here
+    throw HootException("_getCurrentElementOffset");
   }
   LOG_VART(selectOffset);
   return selectOffset;
@@ -639,7 +653,8 @@ void ApiDbReader::_incrementElementIndex(const ElementType& selectElementType)
   }
   else
   {
-    assert(false);  //hasMoreElements should have kept us from being here
+    //hasMoreElements should have kept us from being here
+    throw HootException("_incrementElementIndex");
   }
 }
 

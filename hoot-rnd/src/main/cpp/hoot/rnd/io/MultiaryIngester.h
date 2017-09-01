@@ -84,6 +84,7 @@ private:
   bool _sortInput;
   QString _sortedNewInput;
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
+  bool _addToExistingRefDb;
 
   long _changesParsed;
   long _logUpdateInterval;
@@ -101,8 +102,8 @@ private:
 
   boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);
 
-  void _writeChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
-                     const QString referenceOutput, const QString changesetOutput);
+  void _writeNewReferenceData(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
+                              const QString referenceOutput, const QString changesetOutput);
   void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
                               const QString referenceOutput,
                               const QString changesetOutput);

@@ -166,6 +166,8 @@ private:
   long _getCurrentElementOffset(const ElementType& selectElementType) const;
   void _incrementElementIndex(const ElementType& selectElementType);
   const ElementType _getCurrentSelectElementType() const;
+  long _numElementsRead() const;
+  long _numElementsTotal() const;
 };
 
 }
