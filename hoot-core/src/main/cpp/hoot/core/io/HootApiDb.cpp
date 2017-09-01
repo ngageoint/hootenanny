@@ -1049,6 +1049,7 @@ void HootApiDb::_resetQueries()
   _insertJobStatus.reset();
   _jobStatusExists.reset();
   _mapExistsByName.reset();
+  _getMapIdByName.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1173,7 +1174,7 @@ bool HootApiDb::mapExists(const QString name)
   {
     _mapExistsByName.reset(new QSqlQuery(_db));
     _mapExistsByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
-                        " WHERE display_name = :mapName");
+                              " WHERE display_name = :mapName");
   }
   _mapExistsByName->bindValue(":mapName", name);
   if (_mapExistsByName->exec() == false)
@@ -1182,6 +1183,35 @@ bool HootApiDb::mapExists(const QString name)
   }
 
   return _mapExistsByName->next();
+}
+
+long HootApiDb::getMapIdByName(const QString name)
+{
+  //assuming unique name here
+  if (_getMapIdByName == 0)
+  {
+    _getMapIdByName.reset(new QSqlQuery(_db));
+    _getMapIdByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
+                             " WHERE display_name = :mapName");
+  }
+  _getMapIdByName->bindValue(":mapName", name);
+  if (_getMapIdByName->exec() == false)
+  {
+    throw HootException(_getMapIdByName->lastError().text());
+  }
+
+  long result = -1;
+  if (_getMapIdByName->next())
+  {
+    bool ok;
+    result = _getMapIdByName->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException(_getMapIdByName->lastError().text());
+    }
+  }
+  _getMapIdByName->finish();
+  return result;
 }
 
 bool HootApiDb::changesetExists(const long id)

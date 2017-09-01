@@ -35,7 +35,9 @@ namespace hoot
 
 ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to) :
 _from(from),
-_to(to)
+_to(to),
+_numFromElementsParsed(0),
+_numToElementsParsed(0)
 {
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
@@ -81,12 +83,14 @@ Change ChangesetDeriver::_nextChange()
   {
     LOG_TRACE("'from' element null and 'from' has more elements; reading next 'from' element...");
     _fromE = _from->readNextElement();
+    _numFromElementsParsed++;
     LOG_TRACE("Read next 'from' element: " << _fromE->getElementId());
   }
   if (!_toE.get() && _to->hasMoreElements())
   {
     LOG_TRACE("'to' element null and 'to'' has more elements; reading next 'to'' element...");
     _toE = _to->readNextElement();
+    _numToElementsParsed++;
     LOG_TRACE("Read next 'to' element: " << _toE->getElementId());
   }
 
@@ -109,6 +113,7 @@ Change ChangesetDeriver::_nextChange()
     }
     if (_toE)
     {
+      _numToElementsParsed++;
       LOG_TRACE("Next 'to' element: " << _toE->getElementId());
     }
   }
@@ -131,6 +136,7 @@ Change ChangesetDeriver::_nextChange()
     }
     if (_fromE)
     {
+      _numFromElementsParsed++;
       LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
     }
   }
@@ -154,6 +160,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
 
@@ -167,6 +174,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
@@ -195,6 +203,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
     }
@@ -217,6 +226,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
@@ -238,6 +248,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
 
@@ -251,6 +262,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
@@ -297,6 +309,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
       }
     }
@@ -318,6 +331,7 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
       }
     }

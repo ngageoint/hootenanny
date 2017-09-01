@@ -298,6 +298,8 @@ public:
 
   static QUrl getBaseUrl();
 
+  long getMapIdByName(const QString name);
+
 protected:
 
   virtual void _resetQueries();
@@ -326,6 +328,7 @@ private:
   boost::shared_ptr<QSqlQuery> _insertJobStatus;
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
+  boost::shared_ptr<QSqlQuery> _getMapIdByName;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

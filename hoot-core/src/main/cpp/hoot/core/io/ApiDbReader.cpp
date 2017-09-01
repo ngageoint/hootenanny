@@ -32,6 +32,7 @@
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QSet>
@@ -508,17 +509,18 @@ bool ApiDbReader::hasMoreElements()
     _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
     _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
 
-    LOG_VARD(_totalNumMapNodes);
-    LOG_VARD(_totalNumMapWays);
-    LOG_VARD(_totalNumMapRelations);
+    LOG_INFO(
+      "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapNodes) <<
+      " nodes, " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapWays) << " ways, and " <<
+      FileUtils::formatPotentiallyLargeNumber(_totalNumMapRelations) << " relations...");
 
     _firstPartialReadCompleted = true;
   }
 
   const long numElementsRead = _nodeIndex + _wayIndex + _relationIndex;
-  LOG_VART(numElementsRead);
+  LOG_VARD(numElementsRead);
   const long numElementsTotal = _totalNumMapNodes + _totalNumMapWays + _totalNumMapRelations;
-  LOG_VART(numElementsTotal);
+  LOG_VARD(numElementsTotal);
   assert(numElementsRead <= numElementsTotal);
   //each results index is 0 based, so as soon as the sum of indexes is equal to the total number of
   //elements, we're done iterating through them
@@ -529,8 +531,7 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
 {
   if (!hasMoreElements())
   {
-    throw HootException(
-      "No more elements available to read from map");
+    throw HootException("No more elements available to read from map");
   }
 
   ElementType selectElementType = _getCurrentSelectElementType();
@@ -539,8 +540,7 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    LOG_DEBUG("Requesting more query results...");
-    LOG_VART(_sortById);
+    LOG_DEBUG("Requesting " << _maxElementsPerMap << " more query results...");
     _elementResultIterator =
       _getDatabase()->selectElements(
         selectElementType, _sortById, _maxElementsPerMap,
@@ -569,6 +569,7 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   if (_elementsRead == _maxElementsPerMap)
   {
     _elementResultIterator->finish();
+    LOG_DEBUG("Closed result iterator.");
   }
   LOG_VART(element->getElementId());
   return element;

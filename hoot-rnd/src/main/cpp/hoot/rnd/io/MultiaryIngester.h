@@ -27,6 +27,10 @@
 #ifndef MULTIARYINGESTER_H
 #define MULTIARYINGESTER_H
 
+// Hoot
+#include <hoot/core/io/Change.h>
+#include <hoot/core/io/HootApiDb.h>
+
 // Qt
 #include <QElapsedTimer>
 #include <QTemporaryFile>
@@ -54,8 +58,8 @@ class ElementInputStream;
  * single line records.  Osmosis is used for sorting OSM files.  This could be replaced with a
  * custom file based merge sort routine in the future to reduce the dependency on Osmosis, but
  * for now using it is the best solution.  There is no good solution yet for sorting OGR inputs.
- * Those inputs must be converted to an OSM format before sorting, which roughly doubles the input
- * parsing time, unfortunately.
+ * Those inputs must be converted to an OSM format before sorting, which unfortunately roughly
+ * doubles the input parsing time.
  */
 class MultiaryIngester
 {
@@ -83,6 +87,10 @@ private:
 
   long _changesParsed;
   long _logUpdateInterval;
+  QMap<Change::ChangeType, long> _changesByType;
+  long _numNodesBeforeApplyingChangeset;
+  long _numNodesAfterApplyingChangeset;
+  HootApiDb _referenceDb;
 
   QElapsedTimer _timer;
 
@@ -98,6 +106,9 @@ private:
   void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
                               const QString referenceOutput,
                               const QString changesetOutput);
+
+  void _printSummary();
+  void _clearChangeTypeCounts();
 
 };
 
