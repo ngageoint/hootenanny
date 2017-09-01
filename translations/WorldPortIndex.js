@@ -53,8 +53,8 @@ function translateToOsm(attrs, layerName, geometryType)
     // NOTE: The one2one rules have been converted to JSON
     translate.applyOne2OneQuiet(attrs, tags, wpi.one2one);
 
-    // This is not great but it is used in our Geonames translation
     tags.port = 'yes';
+    tags.source = 'worldportindex';
 
     // Add a UUID
     tags.uuid = createUuid();
