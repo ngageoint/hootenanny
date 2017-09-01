@@ -68,7 +68,7 @@ _includeCompatibilityTags(true),
 _textStatus(ConfigOptions().getWriterTextStatus()),
 _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
 _timestamp("1970-01-01T00:00:00Z"),
-_precision(round(ConfigOptions().getWriterPrecision())),
+_precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0)
 {
 }
@@ -253,10 +253,6 @@ void OsmXmlWriter::write(ConstOsmMapPtr map)
 
 void OsmXmlWriter::_writeMetadata(const Element *e)
 {
-  LOG_VART(e->getElementId());
-  LOG_VART(e->getVersion());
-  LOG_VART(e->getStatus());
-
   if (_includeCompatibilityTags)
   {
     _writer->writeAttribute("timestamp", OsmUtils::toTimeString(e->getTimestamp()));
@@ -463,6 +459,8 @@ void OsmXmlWriter::_writeBounds(const Envelope& bounds)
 
 void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 {
+  LOG_VART(n);
+
   _writer->writeStartElement("node");
 
   _writer->writeAttribute("visible", "true");
@@ -482,6 +480,8 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
+  LOG_VART(w);
+
   _writer->writeStartElement("way");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(w->getId()));
@@ -571,6 +571,8 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
 void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 {
+  LOG_VART(w);
+
   if (_includePointInWays)
   {
     throw HootException("Adding points to way output is not supported in streaming output.");
@@ -596,6 +598,8 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
 
 void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
 {
+  LOG_VART(r);
+
   _writer->writeStartElement("relation");
   _writer->writeAttribute("visible", "true");
   _writer->writeAttribute("id", QString::number(r->getId()));

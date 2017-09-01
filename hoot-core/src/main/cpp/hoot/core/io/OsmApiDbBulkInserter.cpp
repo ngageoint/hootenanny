@@ -499,7 +499,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     //statements to the sql output here for applying at a later time.  we want
     //setval to reflect the last id in the sequence
     QString reserveElementIdsSql;
-    //TODO: may be able to collapse this logic; see notes in _establishNewIdMapping
+    //TODO: may be able to collapse this logic; see notes in _establishIdMapping
     if (_validateData)
     {
       //with data validation on, we increment for each element read and all our counters are
@@ -801,8 +801,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   {
     throw NotImplementedException("Writer class does not support update operations.");
   }
-  // Have to establish new mapping
-  const unsigned long nodeDbId = _establishNewIdMapping(node->getElementId());
+  LOG_VART(node->getElementId());
+  const unsigned long nodeDbId = _establishIdMapping(node->getElementId());
   LOG_VART(ElementId(ElementType::Node, nodeDbId));
 
   if (ConfigOptions().getWriterIncludeDebugTags())
@@ -859,8 +859,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   {
     throw NotImplementedException("Writer class does not support update operations");
   }
-  // Have to establish new mapping
-  const unsigned long wayDbId = _establishNewIdMapping(way->getElementId());
+  LOG_VART(way->getElementId());
+  const unsigned long wayDbId = _establishIdMapping(way->getElementId());
   LOG_VART(ElementId(ElementType::Way, wayDbId));
 
   if (ConfigOptions().getWriterIncludeDebugTags())
@@ -916,8 +916,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   {
     throw NotImplementedException("Writer class does not support update operations");
   }
-  // Have to establish new mapping
-  const unsigned long relationDbId = _establishNewIdMapping(relation->getElementId());
+  LOG_VART(relation->getElementId());
+  const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
 
   if (ConfigOptions().getWriterIncludeDebugTags())
@@ -1063,7 +1063,7 @@ void OsmApiDbBulkInserter::_reset()
   _sectionNames.clear();
 }
 
-unsigned long OsmApiDbBulkInserter::_establishNewIdMapping(const ElementId& sourceId)
+unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceId)
 {
   //TODO: can probably reduce the current element id increment logic to just that of when
   //_validateData = false

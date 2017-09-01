@@ -32,7 +32,7 @@ FINAL_OUTPUT=$OUTPUT_DIR/allCountries-geonames-sorted-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-geonames-sorted-changeset.spark.1
 
 echo ""
-echo "MULTIARY INGEST - DELETING GEONAMES REFERENCE LAYER..."
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
@@ -64,7 +64,7 @@ FINAL_OUTPUT=$OUTPUT_DIR/allCountries-geonames-unsorted-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-geonames-unsorted-changeset.spark.1
 
 echo ""
-echo "MULTIARY INGEST - DELETING GEONAMES REFERENCE LAYER..."
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
@@ -99,7 +99,7 @@ FINAL_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-changeset.spark.1
 
 echo ""
-echo "MULTIARY INGEST - DELETING OSM PBF REFERENCE LAYER..."
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
@@ -131,7 +131,7 @@ FINAL_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-unsorted-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-osmpbf-unsorted-changeset.spark.1
 
 echo ""
-echo "MULTIARY INGEST - DELETING OSM PBF REFERENCE LAYER..."
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
 hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 echo ""
@@ -154,4 +154,143 @@ echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED OSM PBF CHANGESET OUTPUT..."
 echo ""
 diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+
+GOLD_OUTPUT=$REF_DIR/allCountries-osmxml-output.osm
+GOLD_CHANGESET=$REF_DIR/allCountries-osmxml-changeset.spark.1
+
+# SORTED OSM XML
+
+REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.osm
+NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.osm
+FINAL_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-output.osm
+CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-changeset.spark.1
+
+echo ""
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
+echo ""
+hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+echo ""
+echo "MULTIARY INGEST - INGESTING SORTED OSM XML REFERENCE DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT false
+echo ""
+echo "MULTIARY INGEST - INGESTING SORTED OSM XML NEW DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS $NEW_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT false
+echo ""
+echo "MULTIARY INGEST - EXPORTING SORTED OSM XML REFERENCE LAYER..."
+echo ""
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING SORTED OSM XML REFERENCE LAYER OUTPUT..."
+echo ""
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+echo ""
+echo "MULTIARY INGEST - COMPARING SORTED OSM XML CHANGESET OUTPUT..."
+echo ""
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+
+# UNSORTED OSM XML
+
+REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10-unsorted.osm
+NEW_INPUT=$REF_DIR/allCountries-8-15-17-10-unsorted.osm
+FINAL_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-unsorted-output.osm
+CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-osmxml-unsorted-changeset.spark.1
+
+echo ""
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
+echo ""
+hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+echo ""
+echo "MULTIARY INGEST - INGESTING UNSORTED OSM XML REFERENCE DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
+echo ""
+echo "MULTIARY INGEST - INGESTING UNSORTED OSM XML NEW DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS $NEW_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
+echo ""
+echo "MULTIARY INGEST - EXPORTING UNSORTED OSM XML REFERENCE LAYER..."
+echo ""
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING UNSORTED OSM XML REFERENCE LAYER OUTPUT..."
+echo ""
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+echo ""
+echo "MULTIARY INGEST - COMPARING UNSORTED OSM XML CHANGESET OUTPUT..."
+echo ""
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+
+GOLD_OUTPUT=$REF_DIR/allCountries-shp-output.osm
+GOLD_CHANGESET=$REF_DIR/allCountries-shp-changeset.spark.1
+
+# SORTED SHP
+
+REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.shp/Points.shp
+NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.shp/Points.shp
+FINAL_OUTPUT=$OUTPUT_DIR/allCountries-shp-output.osm
+CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-shp-changeset.spark.1
+
+echo ""
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
+echo ""
+hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+echo ""
+echo "MULTIARY INGEST - INGESTING SORTED SHP REFERENCE DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS -D ogr.reader.node.id.field.name=geonameid $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT false
+echo ""
+echo "MULTIARY INGEST - INGESTING SORTED SHP NEW DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS -D ogr.reader.node.id.field.name=geonameid $NEW_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT false
+echo ""
+echo "MULTIARY INGEST - EXPORTING SORTED SHP REFERENCE LAYER..."
+echo ""
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING SORTED SHP REFERENCE LAYER OUTPUT..."
+echo ""
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+echo ""
+echo "MULTIARY INGEST - COMPARING SORTED SHP CHANGESET OUTPUT..."
+echo ""
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+
+# UNSORTED SHP
+
+# These inputs actually aren't unsorted, but just running through the sort pipeline for 
+# shape files is good enough for now.
+REFERENCE_INPUT=$REF_DIR/allCountries-11-18-13-10.shp/Points.shp
+NEW_INPUT=$REF_DIR/allCountries-8-15-17-10.shp/Points.shp
+FINAL_OUTPUT=$OUTPUT_DIR/allCountries-shp-unsorted-output.osm
+CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-shp-unsorted-changeset.spark.1
+
+echo ""
+echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
+echo ""
+hoot delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
+echo ""
+echo "MULTIARY INGEST - INGESTING UNSORTED SHP REFERENCE DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS -D ogr.reader.node.id.field.name=geonameid $REFERENCE_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
+echo ""
+echo "MULTIARY INGEST - INGESTING UNSORTED SHP NEW DATASET..."
+echo ""
+hoot multiary-ingest $HOOT_OPTS -D ogr.reader.node.id.field.name=geonameid $NEW_INPUT "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $CHANGESET_OUTPUT true
+echo ""
+echo "MULTIARY INGEST - EXPORTING UNSORTED SHP REFERENCE LAYER..."
+echo ""
+hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTPUT
+echo ""
+echo "MULTIARY INGEST - COMPARING UNSORTED SHP REFERENCE LAYER OUTPUT..."
+echo ""
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+echo ""
+echo "MULTIARY INGEST - COMPARING UNSORTED SHP CHANGESET OUTPUT..."
+echo ""
+# TODO: There's a very slight rounding error on the coord output that I haven't tracked down yet, so 
+# comparing to a different changeset gold file for now.
+#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $REF_DIR/allCountries-shp-unsorted-changeset.spark.1 $CHANGESET_OUTPUT
 

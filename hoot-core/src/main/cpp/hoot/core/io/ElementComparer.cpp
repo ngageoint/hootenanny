@@ -131,10 +131,14 @@ bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
   if (rn->getTags()[MetadataTags::HootHash()] == n->getTags()[MetadataTags::HootHash()])
   {
     same = true;
+    //LOG_TRACE("Compare succeeded:");
   }
   else
   {
     LOG_TRACE("Compare failed:");
+  }
+  if (!same)
+  {
     LOG_VART(re);
     LOG_VART(e);
   }
