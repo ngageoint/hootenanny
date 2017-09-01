@@ -276,13 +276,13 @@ public:
     //optional method, so don't throw an error
     if (plugin->Has(initStr) == false)
     {
-      LOG_DEBUG("calculateSearchRadius function not present.");
+      LOG_TRACE("calculateSearchRadius function not present.");
       return;
     }
     Handle<v8::Value> value = plugin->Get(initStr);
     if (value->IsFunction() == false)
     {
-      LOG_DEBUG("calculateSearchRadius function not present.");
+      LOG_TRACE("calculateSearchRadius function not present.");
       return;
     }
 

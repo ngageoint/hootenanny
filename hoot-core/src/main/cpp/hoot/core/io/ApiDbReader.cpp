@@ -501,7 +501,6 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 
 bool ApiDbReader::hasMoreElements()
 {
-  LOG_VART(_firstPartialReadCompleted);
   if (!_firstPartialReadCompleted)
   {
     //get the total element counts before beginning results parsing
@@ -509,9 +508,9 @@ bool ApiDbReader::hasMoreElements()
     _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
     _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
 
-    LOG_VART(_totalNumMapNodes);
-    LOG_VART(_totalNumMapWays);
-    LOG_VART(_totalNumMapRelations);
+    LOG_VARD(_totalNumMapNodes);
+    LOG_VARD(_totalNumMapWays);
+    LOG_VARD(_totalNumMapRelations);
 
     _firstPartialReadCompleted = true;
   }
@@ -540,7 +539,7 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    LOG_TRACE("Requesting more query results...");
+    LOG_DEBUG("Requesting more query results...");
     LOG_VART(_sortById);
     _elementResultIterator =
       _getDatabase()->selectElements(

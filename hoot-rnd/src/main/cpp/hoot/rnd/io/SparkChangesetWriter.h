@@ -75,7 +75,7 @@ public:
 private:
 
   boost::shared_ptr<QFile> _fp;
-  SearchBoundsCalculatorPtr _bounds;
+  SearchBoundsCalculatorPtr _boundsCalculator;
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;

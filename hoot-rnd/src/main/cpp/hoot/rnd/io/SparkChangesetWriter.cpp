@@ -76,21 +76,22 @@ void SparkChangesetWriter::open(QString fileName)
   // find a match creator that can provide the search bounds.
   foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
   {
+    //TODO: Why is ScriptMatchVisitor::calculateSearchRadius getting called a ton of times?
     SearchRadiusProviderPtr sbc = boost::dynamic_pointer_cast<SearchRadiusProvider>(mc);
     if (sbc.get())
     {
-      if (_bounds.get())
+      if (_boundsCalculator.get())
       {
         LOG_WARN("Found more than one bounds calculator. Using the first one.");
       }
       else
       {
-        _bounds.reset(new SearchBoundsCalculator(sbc));
+        _boundsCalculator.reset(new SearchBoundsCalculator(sbc));
       }
     }
   }
 
-  if (!_bounds.get())
+  if (!_boundsCalculator.get())
   {
     throw HootException(
       "You must specify one match creator that supports search radius calculation.");
@@ -141,7 +142,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
   OsmMapPtr tmpMap(new OsmMap());
   tmpMap->addElement(nodeCopy);
 
-  Envelope env = _bounds->calculateSearchBounds(tmpMap, nodeCopy);
+  Envelope env = _boundsCalculator->calculateSearchBounds(tmpMap, nodeCopy);
 
   QString changeLine;
   changeLine.reserve(500);
