@@ -144,6 +144,7 @@ void SparkChangesetWriter::writeChange(const Change& change)
   Envelope env = _bounds->calculateSearchBounds(tmpMap, nodeCopy);
 
   QString changeLine;
+  changeLine.reserve(500);
   changeLine +=
     changeType % "\t" %
     QString::number(env.getMinX(), 'g', _precision) % "\t" %

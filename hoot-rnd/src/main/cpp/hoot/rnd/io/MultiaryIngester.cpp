@@ -56,9 +56,9 @@ _sortInput(true),
 _changesParsed(0),
 _logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval())
 {
-  //inputs must be sorted by element id for changeset derivation to work
+  //inputs must be sorted by node id for changeset derivation to work
   conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
-  //in order for the sorting to work, all original element ids must be retained...no new ones
+  //in order for the sorting to work, all original node ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
   conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
   //translate inputs to OSM
@@ -89,15 +89,16 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
   if (!HootApiDbReader().isSupported(referenceOutput))
   {
     throw IllegalArgumentException(
-      QString("Multiary ingest only supports a hootapidb:// data source as the reference ") +
-      QString("output.  Specified reference layer: ") + referenceOutput);
+      QString("Multiary ingest only supports a Hootenanny API database data source ") +
+      QString("(hootapidb://) as the reference output.  Specified reference layer: ") +
+      referenceOutput);
   }
 
   if (!SparkChangesetWriter().isSupported(changesetOutput))
   {
     throw IllegalArgumentException(
-      QString("Multiary ingest only supports a .spark.x file for changeset output.  Specified ") +
-      QString("changeset output: ") + changesetOutput);
+      QString("Multiary ingest only supports a Spark changeset file (.spark.x) for changeset ") +
+      QString("output.  Specified changeset output: ") + changesetOutput);
   }
 
   LOG_INFO(
@@ -128,11 +129,14 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     if (!_sortInput)
     {
       LOG_INFO("The input data will not be sorted by node ID.");
+      _sortedNewInput = newInput;
     }
-
-    //sort incoming data by element id, if necessary, for changeset derivation (only passing nodes
-    //through, so don't need to also sort by element type)
-    _sortedNewInput = _getSortedNewInput(newInput);
+    else
+    {
+      //sort incoming data by node id, if necessary, for changeset derivation (only passing nodes
+      //through, so don't need to also sort by element type)
+      _sortedNewInput = _getSortedNewInput(newInput);
+    }
 
     //create the changes and write them to the ref db layer and also to a changeset file for
     //external use by Spark
@@ -189,11 +193,6 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_ogrToPbfTemp(const QString 
 
 QString MultiaryIngester::_getSortedNewInput(const QString newInput)
 {
-  if (!_sortInput)
-  {
-    return newInput;
-  }
-
   LOG_INFO("Sorting " << newInput << " by node ID...");
   _timer.restart();
 
@@ -278,7 +277,7 @@ boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStre
   boost::shared_ptr<ElementInputStream> inputStream =
     boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
-  //as the incoming data is read, filter it down to POIs only and translate each element;
+  //as the incoming data is read, filter it down to POIs only and translate each element
 
   boost::shared_ptr<PoiCriterion> elementCriterion;
   //all geonames are pois, so skip the element filtering expense for that format
@@ -288,7 +287,7 @@ boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStre
   }
   else
   {
-    LOG_INFO("Skipping POI filtering for: " << sortedNewInput << ".");
+    LOG_INFO("Skipping POI filtering for: " << sortedNewInput << ", since data is POI only.");
   }
   QList<ElementVisitorPtr> visitors;
   visitors.append(boost::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
@@ -352,16 +351,15 @@ void MultiaryIngester::_deriveAndWriteChanges(
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
       OsmMapReaderFactory::getInstance().createReader(referenceOutput));
   referenceReader->open(referenceOutput);
-  LOG_DEBUG("Opened reader.");
+  LOG_DEBUG("Opened reference reader.");
 
-  ChangesetDeriverPtr changesetDeriver(
-    new ChangesetDeriver(
-      boost::dynamic_pointer_cast<ElementInputStream>(referenceReader), filteredNewInputStream));
+  ChangesetDeriver changesetDeriver(
+    boost::dynamic_pointer_cast<ElementInputStream>(referenceReader), filteredNewInputStream);
   LOG_DEBUG("Initialized changeset deriver.");
 
-  //would cast straight to OsmChangeWriterFactory here, but haven't figured out a way around
+  //would cast straight to OsmChangeWriter here, but haven't figured out a way around
   //the fact that you can't use the factory macro twice on the same class.  Since HootApiDbWriter
-  //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter.
+  //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter as well.
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
@@ -376,9 +374,9 @@ void MultiaryIngester::_deriveAndWriteChanges(
   changesetFileWriter->open(changesetOutput);
   LOG_DEBUG("Opened change file writer.");
 
-  while (changesetDeriver->hasMoreChanges())
+  while (changesetDeriver.hasMoreChanges())
   {
-    const Change change = changesetDeriver->readNextChange();
+    const Change change = changesetDeriver.readNextChange();
     if (change.getType() != Change::Unknown)
     {
       changesetFileWriter->writeChange(change);
@@ -396,6 +394,7 @@ void MultiaryIngester::_deriveAndWriteChanges(
   referenceReader->finalizePartial();
   referenceWriter->finalizePartial();
   changesetFileWriter->close();
+  changesetDeriver.close();
 }
 
 }

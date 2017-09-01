@@ -259,14 +259,18 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
   QStringList sqlStrs;
 
   const QString elementIdStr = QString::number(elementId);
-  QString key = _escapeCopyToData(tagKey);
+  QString key;
+  key.reserve(10);
+  key = _escapeCopyToData(tagKey);
   //pg_bulkload doesn't seem to be tolerating the empty data
   if (key.trimmed().isEmpty())
   {
     key = "<empty>";
   }
   LOG_VART(key);
-  QString value = _escapeCopyToData(tagValue);
+  QString value;
+  value.reserve(50);
+  value = _escapeCopyToData(tagValue);
   LOG_VART(value);
   if (value.trimmed().isEmpty())
   {
