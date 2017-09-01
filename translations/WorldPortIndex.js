@@ -26,7 +26,7 @@
  */
 
 //
-// Convert WorldPortIndex shapefiles to OSM
+// Convert NGA World Port Index shapefiles to OSM
 //
 
 hoot.require('config');
@@ -50,10 +50,10 @@ function translateToOsm(attrs, layerName, geometryType)
     translate.applySimpleNumBiased(attrs, tags, wpi.numRules, 'forward',[]);
     translate.applySimpleTxtBiased(attrs, tags, wpi.txtRules, 'forward');
 
-    // NOTE: The one2one has been converted to JSON
+    // NOTE: The one2one rules have been converted to JSON
     translate.applyOne2OneQuiet(attrs, tags, wpi.one2one);
 
-    // This is not great but it is used in out Geonames translation
+    // This is not great but it is used in our Geonames translation
     tags.landuse = 'port';
 
     // Add a UUID
@@ -62,9 +62,6 @@ function translateToOsm(attrs, layerName, geometryType)
     // Debug:
     if (config.getOgrDebugDumptags() == 'true')
     {
-//         var kList = Object.keys(notUsedAttrs).sort()
-//         for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
         var kList = Object.keys(tags).sort()
         for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
         print('');

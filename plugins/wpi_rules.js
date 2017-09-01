@@ -26,7 +26,7 @@
  */
 
 //
-// Rules for WorldPortIndex translation
+// Rules for NGA World Port Index translation
 //
 
 wpi = {
@@ -45,7 +45,7 @@ wpi = {
 
     // Text attribute translations
     txtRules : {
-        'CHART':'world_port_index:chart', // Chart it came from
+        'CHART':'world_port_index:chart', // The chart it came from
         'COUNTRY':'is_in:country_code',
         // 'LAT_HEMI':'',
         // 'LONG_HEMI':'',
