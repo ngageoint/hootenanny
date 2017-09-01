@@ -54,7 +54,7 @@ function translateToOsm(attrs, layerName, geometryType)
     translate.applyOne2OneQuiet(attrs, tags, wpi.one2one);
 
     // This is not great but it is used in our Geonames translation
-    tags.landuse = 'port';
+    tags.port = 'yes';
 
     // Add a UUID
     tags.uuid = createUuid();
