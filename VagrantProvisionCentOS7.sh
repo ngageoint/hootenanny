@@ -45,7 +45,8 @@ curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
 echo "### Installing an ancient version of NodeJS"
 sudo yum install -y \
   nodejs-0.10.46 \
-  nodejs-devel-0.10.46
+  nodejs-devel-0.10.46 \
+  yum-plugin-versionlock
 
 # Now try to lock NodeJS so that the next yum update doesn't remove it.
 sudo yum versionlock nodejs*
