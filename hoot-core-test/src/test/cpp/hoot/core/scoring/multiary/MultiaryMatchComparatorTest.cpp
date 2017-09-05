@@ -447,6 +447,7 @@ public:
     conflated->getNode(-2)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
+    uut.setTranslationScript("/home/vagrant/hoot/translation-local/HGISv20.js");
     double correct = uut.evaluateMatches(input, conflated);
 
     LOG_VAR(OsmJsonWriter().toString(conflated));

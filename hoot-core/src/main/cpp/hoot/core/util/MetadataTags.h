@@ -60,10 +60,13 @@ public:
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
+  /// These tags are used when evaluating multiary conflation results.
+  /// See MultiaryMatchComparator
   inline static const QString HootActual()              { return "hoot:actual"; }
   inline static const QString HootExpected()            { return "hoot:expected"; }
   inline static const QString HootMismatch()            { return "hoot:mismatch"; }
   inline static const QString HootWrong()               { return "hoot:wrong"; }
+  inline static const QString HootCorrectReview()       { return "hoot:correct_review"; }
 
   inline static const QString HootEdge()                { return "hoot:edge"; }
   inline static const QString HootEdgeId()              { return "hoot:edge:id"; }
