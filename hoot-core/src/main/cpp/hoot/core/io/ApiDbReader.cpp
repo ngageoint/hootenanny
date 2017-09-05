@@ -527,6 +527,8 @@ bool ApiDbReader::hasMoreElements()
     _firstPartialReadCompleted = true;
   }
 
+  //LOG_VART(_numElementsRead());
+  //LOG_VART(_numElementsTotal());
   assert(_numElementsRead() <= _numElementsTotal());
   //each results index is 0 based, so as soon as the sum of indexes is equal to the total number of
   //elements, we're done iterating through them
@@ -579,10 +581,11 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   }
   LOG_VART(element->getElementId());
 
-  if (_numElementsRead() % (_maxElementsPerMap / 10) == 0)
-  {
-    PROGRESS_DEBUG("Read: " << _numElementsRead() << " \ " << _numElementsTotal());
-  }
+//  if (Log::getInstance().getLevel() <= Log::Debug &&
+//      (_numElementsTotal() >= 10 || (_numElementsRead() % (_maxElementsPerMap / 10) == 0)))
+//  {
+//    PROGRESS_DEBUG("Read: " << _numElementsRead() << " \ " << _numElementsTotal());
+//  }
 
   return element;
 }

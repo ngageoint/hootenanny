@@ -101,6 +101,7 @@ public:
     }
   }
 
+  //TODO: this is redundant with code in ServiceOsmApiDbReaderTest; move to test utils class
   long populateMap()
   {
     OsmMapPtr map(new OsmMap());
@@ -456,6 +457,7 @@ public:
     HootApiDbReader reader;
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
+    reader.setSortById(true);
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.initializePartial();
 
