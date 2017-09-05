@@ -164,5 +164,4 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(const ConstOsmMapPtr
   return c.encode(point);
 }
 
-
 }

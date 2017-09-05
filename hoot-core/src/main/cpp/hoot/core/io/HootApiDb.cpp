@@ -27,8 +27,6 @@
 #include "HootApiDb.h"
 
 // hoot
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/SqlBulkInsert.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -38,6 +36,7 @@
 #include <hoot/core/util/OsmUtils.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/io/SqlBulkDelete.h>
 
 // qt
 #include <QStringList>
@@ -87,6 +86,7 @@ void HootApiDb::_init()
   _nodesInsertElapsed = 0;
   // 500 found experimentally on my desktop -JRS
   _nodesPerBulkInsert = recordsPerBulkInsert;
+  _nodesPerBulkDelete = recordsPerBulkInsert; //TODO: figure out what this should be
 
   _wayNodesInsertElapsed = 0;
   // arbitrary, needs benchmarking
@@ -108,6 +108,8 @@ void HootApiDb::_init()
 
 Envelope HootApiDb::calculateEnvelope() const
 {
+  LOG_TRACE("Calculating envelope...");
+
   const long mapId = _currMapId;
   Envelope result;
 
@@ -136,9 +138,11 @@ Envelope HootApiDb::calculateEnvelope() const
 
 void HootApiDb::_checkLastMapId(long mapId)
 {
+  LOG_TRACE("Checking last map ID: " << mapId << "...");
   if (_lastMapId != mapId)
   {
     _flushBulkInserts();
+    _flushBulkDeletes();
     _resetQueries();
     _nodeIdReserver.reset();
     _wayIdReserver.reset();
@@ -149,8 +153,11 @@ void HootApiDb::_checkLastMapId(long mapId)
 
 void HootApiDb::close()
 {
+  LOG_DEBUG("Closing database connection...");
+
   createPendingMapIndexes();
   _flushBulkInserts();
+  _flushBulkDeletes();
 
   _resetQueries();
 
@@ -167,6 +174,8 @@ void HootApiDb::close()
 
 void HootApiDb::endChangeset()
 {
+  LOG_TRACE("Ending changeset...");
+
   // If we're already closed, nothing to do
   if ( _currChangesetId == -1 )
   {
@@ -215,12 +224,14 @@ void HootApiDb::endChangeset()
 
 void HootApiDb::commit()
 {
-  if ( _db.isOpen() == false )
+  LOG_TRACE("Committing transaction...");
+
+  if (_db.isOpen() == false)
   {
     throw HootException("Tried to commit a transaction on a closed database.");
   }
 
-  if ( _inTransaction == false )
+  if (_inTransaction == false)
   {
     throw HootException(QString("Tried to commit but weren't in a transaction.  You may ") +
                         QString("need to set hootapi.db.writer.create.user=true."));
@@ -228,6 +239,7 @@ void HootApiDb::commit()
 
   createPendingMapIndexes();
   _flushBulkInserts();
+  _flushBulkDeletes();
   _resetQueries();
   if (!_db.commit())
   {
@@ -266,6 +278,8 @@ void HootApiDb::_copyTableStructure(QString from, QString to)
 
 void HootApiDb::createPendingMapIndexes()
 {
+  LOG_TRACE("Creating map indexes...");
+
   for (int i = 0; i < _pendingMapIndexes.size(); i++)
   {
     long mapId = _pendingMapIndexes[i];
@@ -325,6 +339,8 @@ void HootApiDb::createPendingMapIndexes()
 
 void HootApiDb::deleteMap(long mapId)
 {
+  LOG_TRACE("Deleting map: " << mapId << "...");
+
   // Drop related renderDB First
   dropDatabase(_getRenderDBName(mapId));
 
@@ -359,6 +375,8 @@ bool HootApiDb::hasTable(const QString& tableName)
 
 void HootApiDb::dropDatabase(const QString& databaseName)
 {
+  LOG_TRACE("Dropping database: " << databaseName << "...");
+
   QString sql = QString("DROP DATABASE IF EXISTS \"%1\"").arg(databaseName);
 
   // TRICKY: You are not allowed to drop a database within a transaction.
@@ -378,6 +396,8 @@ void HootApiDb::dropDatabase(const QString& databaseName)
 
 void HootApiDb::dropTable(const QString& tableName)
 {
+  LOG_TRACE("Dropping table: " << tableName << "...");
+
   // inserting strings in this fashion is safe b/c it is private and we closely control the table
   // names.
   QString sql = QString("DROP TABLE IF EXISTS %1").arg(tableName);
@@ -393,6 +413,8 @@ void HootApiDb::dropTable(const QString& tableName)
 
 void HootApiDb::deleteUser(long userId)
 {
+  LOG_TRACE("Deleting user: " << userId << "...");
+
   QSqlQuery maps = _exec("SELECT id FROM " + ApiDb::getMapsTableName() +
                          " WHERE user_id=:user_id", (qlonglong)userId);
 
@@ -463,6 +485,8 @@ QString HootApiDb::execToString(QString sql, QVariant v1, QVariant v2, QVariant 
 
 void HootApiDb::_flushBulkInserts()
 {
+  LOG_TRACE("Flushing bulk inserts...");
+
   if (_nodeBulkInsert != 0)
   {
     _nodeBulkInsert->flush();
@@ -478,6 +502,16 @@ void HootApiDb::_flushBulkInserts()
   if (_relationBulkInsert != 0)
   {
     _relationBulkInsert->flush();
+  }
+}
+
+void HootApiDb::_flushBulkDeletes()
+{
+  LOG_TRACE("Flushing bulk deletes...");
+
+  if (_nodeBulkDelete != 0)
+  {
+    _nodeBulkDelete->flush();
   }
 }
 
@@ -521,7 +555,6 @@ long HootApiDb::_getNextNodeId()
   {
     _nodeIdReserver.reset(new InternalIdReserver(_db, getCurrentNodesSequenceName(mapId)));
   }
-
   return _nodeIdReserver->getNextId();
 }
 
@@ -573,6 +606,8 @@ void HootApiDb::beginChangeset()
 
 void HootApiDb::beginChangeset(const Tags& tags)
 {
+  LOG_TRACE("Starting changeset...");
+
   _changesetEnvelope.init();
   _changesetChangeCount = 0;
   const long mapId = _currMapId;
@@ -604,6 +639,8 @@ void HootApiDb::beginChangeset(const Tags& tags)
 
 long HootApiDb::insertMap(QString displayName, bool publicVisibility)
 {
+  LOG_TRACE("Inserting map...");
+
   const int userId = _currUserId;
 
   if (_insertMap == 0)
@@ -663,8 +700,7 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   return mapId;
 }
 
-bool HootApiDb::insertNode(const double lat, const double lon,
-  const Tags& tags, long& assignedId)
+bool HootApiDb::insertNode(const double lat, const double lon, const Tags& tags, long& assignedId)
 {
   assignedId = _getNextNodeId();
 
@@ -673,6 +709,8 @@ bool HootApiDb::insertNode(const double lat, const double lon,
 
 bool HootApiDb::insertNode(const long id, const double lat, const double lon, const Tags &tags)
 {
+  LOG_TRACE("Inserting node: " << id << "...");
+
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
@@ -719,6 +757,45 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   return true;
 }
 
+bool HootApiDb::insertNode(ConstNodePtr node)
+{
+  return insertNode(node->getId(), node->getY(), node->getX(), node->getTags());
+}
+
+void HootApiDb::updateNode(ConstNodePtr node)
+{
+  return updateNode(node->getId(), node->getY(), node->getX(), node->getVersion(), node->getTags());
+}
+
+void HootApiDb::deleteNode(ConstNodePtr node)
+{
+  LOG_TRACE("Deleting node: " << node->getId() << "...");
+
+  const long mapId = _currMapId;
+  double start = Tgs::Time::getTime();
+
+  _checkLastMapId(mapId);
+
+  if (_nodeBulkDelete == 0)
+  {
+    _nodeBulkDelete.reset(new SqlBulkDelete(_db, getCurrentNodesTableName(mapId)));
+  }
+  _nodeBulkDelete->deleteElement(node->getId());
+
+  _nodesDeleteElapsed += Tgs::Time::getTime() - start;
+
+  if (_nodeBulkDelete->getPendingCount() >= _nodesPerBulkDelete)
+  {
+    _nodeBulkDelete->flush();
+  }
+
+  //TODO: multiary-ingest: how to update envelope here?
+  //ConstNodePtr envelopeNode(new Node(Status::Unknown1, id, lon, lat, 0.0));
+  //_updateChangesetEnvelope(envelopeNode);
+
+  LOG_TRACE("Deleted node: " << ElementId(ElementType::Node, node->getId()));
+}
+
 bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)
 {
   assignedId = _getNextRelationId();
@@ -728,6 +805,8 @@ bool HootApiDb::insertRelation(const Tags &tags, long& assignedId)
 
 bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 {
+  LOG_TRACE("Inserting relation: " << relationId << "...");
+
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
 
@@ -760,8 +839,9 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
 
 bool HootApiDb::insertRelationMember(const long relationId, const ElementType& type,
   const long elementId, const QString& role, const int sequenceId)
-
 {
+  LOG_TRACE("Inserting relation member for relation: " << relationId << "...");
+
   const long mapId = _currMapId;
   _checkLastMapId(mapId);
 
@@ -919,6 +999,8 @@ void HootApiDb::_lazyFlushBulkInsert()
 
 void HootApiDb::open(const QUrl& url)
 {
+  LOG_DEBUG("Opening database connection: " << url.toString() << "...");
+
   if (!isSupported(url))
   {
     throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString());
@@ -950,7 +1032,7 @@ void HootApiDb::_resetQueries()
   _selectHootDbVersion.reset();
   _selectUserByEmail.reset();
   _insertUser.reset();
-  _mapExists.reset();
+  _mapExistsById.reset();
   _changesetExists.reset();
   _numTypeElementsForMap.reset();
   _selectElementsForMap.reset();
@@ -964,6 +1046,7 @@ void HootApiDb::_resetQueries()
   _updateJobStatus.reset();
   _insertJobStatus.reset();
   _jobStatusExists.reset();
+  _mapExistsByName.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -977,6 +1060,8 @@ void HootApiDb::_resetQueries()
 
 void HootApiDb::rollback()
 {
+  LOG_TRACE("Rolling back transaction...");
+
   _resetQueries();
 
   if (!_db.rollback())
@@ -1024,6 +1109,8 @@ set<long> HootApiDb::selectMapIds(QString name)
 
 void HootApiDb::transaction()
 {
+  LOG_TRACE("Starting transaction...");
+
   // Queries must be created from within the current transaction.
   _resetQueries();
   if (!_db.transaction())
@@ -1063,19 +1150,36 @@ QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
 
 bool HootApiDb::mapExists(const long id)
 {
-  if (_mapExists == 0)
+  if (_mapExistsById == 0)
   {
-    _mapExists.reset(new QSqlQuery(_db));
-    _mapExists->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
+    _mapExistsById.reset(new QSqlQuery(_db));
+    _mapExistsById->prepare("SELECT display_name FROM " + ApiDb::getMapsTableName() +
                         " WHERE id = :mapId");
   }
-  _mapExists->bindValue(":mapId", (qlonglong)id);
-  if (_mapExists->exec() == false)
+  _mapExistsById->bindValue(":mapId", (qlonglong)id);
+  if (_mapExistsById->exec() == false)
   {
-    throw HootException(_mapExists->lastError().text());
+    throw HootException(_mapExistsById->lastError().text());
   }
 
-  return _mapExists->next();
+  return _mapExistsById->next();
+}
+
+bool HootApiDb::mapExists(const QString name)
+{
+  if (_mapExistsByName == 0)
+  {
+    _mapExistsByName.reset(new QSqlQuery(_db));
+    _mapExistsByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
+                        " WHERE display_name = :mapName");
+  }
+  _mapExistsByName->bindValue(":mapName", name);
+  if (_mapExistsByName->exec() == false)
+  {
+    throw HootException(_mapExistsByName->lastError().text());
+  }
+
+  return _mapExistsByName->next();
 }
 
 bool HootApiDb::changesetExists(const long id)
@@ -1124,23 +1228,29 @@ long HootApiDb::numElements(const ElementType& elementType)
   return result;
 }
 
-boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
+                                                       const bool sorted)
 {
-  const long mapId = _currMapId;
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
   QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType));
-  LOG_DEBUG(QString("SERVICES: Result sql query= "+sql));
+  if (sorted)
+  {
+    sql += " ORDER BY id";
+  }
+  LOG_VARD(sql);
 
   _selectElementsForMap->prepare(sql);
-  _selectElementsForMap->bindValue(":mapId", (qlonglong)mapId);
 
   if (_selectElementsForMap->exec() == false)
   {
-    QString err = _selectElementsForMap->lastError().text();
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " for map ID: " + QString::number(mapId) + " Error: " + err);
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() +
+      " for map ID: " + QString::number(_currMapId) + " Error: " +
+      _selectElementsForMap->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
   }
   LOG_VARD(_selectElementsForMap->numRowsAffected());
   LOG_VARD(_selectElementsForMap->executedQuery());
@@ -1224,6 +1334,8 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
 void HootApiDb::updateNode(const long id, const double lat, const double lon, const long version,
                            const Tags& tags)
 {
+  LOG_TRACE("Updating node: " << id << "...");
+
   const long mapId = _currMapId;
   _flushBulkInserts();
 
@@ -1261,6 +1373,8 @@ void HootApiDb::updateNode(const long id, const double lat, const double lon, co
 
 void HootApiDb::updateRelation(const long id, const long version, const Tags& tags)
 {
+  LOG_TRACE("Updating relation: " << id << "...");
+
   const long mapId = _currMapId;
   _flushBulkInserts();
   _checkLastMapId(mapId);
@@ -1293,6 +1407,8 @@ void HootApiDb::updateRelation(const long id, const long version, const Tags& ta
 
 void HootApiDb::updateWay(const long id, const long version, const Tags& tags)
 {
+  LOG_TRACE("Updating way: " << id << "...");
+
   const long mapId = _currMapId;
   _flushBulkInserts();
   _checkLastMapId(mapId);
@@ -1332,6 +1448,8 @@ bool HootApiDb::insertWay(const Tags &tags, long &assignedId)
 
 bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 {
+  LOG_TRACE("Inserting way: " << wayId << "...");
+
   const long mapId = _currMapId;
 
   double start = Tgs::Time::getTime();
@@ -1370,6 +1488,8 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
 
 void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
 {
+  LOG_TRACE("Inserting way nodes for way: " << wayId << "...");
+
   const long mapId = _currMapId;
   double start = Tgs::Time::getTime();
 
@@ -1470,6 +1590,20 @@ QString HootApiDb::_getRenderDBName(long mapId)
   }
 
   return (dbName + "_renderdb_" + mapIdNumber);
+}
+
+QUrl HootApiDb::getBaseUrl()
+{
+  // read the DB values from the DB config file.
+  Settings s = readDbConfig();
+  QUrl result;
+  result.setScheme("hootapidb");
+  result.setHost(s.get("DB_HOST").toString());
+  result.setPort(s.get("DB_PORT").toInt());
+  result.setUserName(s.get("DB_USER").toString());
+  result.setPassword(s.get("DB_PASSWORD").toString());
+  result.setPath("/" + s.get("DB_NAME").toString());
+  return result;
 }
 
 }

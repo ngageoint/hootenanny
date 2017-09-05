@@ -37,6 +37,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ExtractNodesVisitor.h>
 
 using namespace std;
@@ -90,7 +91,6 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector< pair<ElementId, ElementI
       eids.insert(e->getElementId());
     }
 
-    LOG_TRACE("Marking complex intersection match for review...");
     ReviewMarker().mark(map, eids, "Complex intersection match. Possible dogleg? "
       "Very short segment?", HighwayMatch::getHighwayMatchName());
   }

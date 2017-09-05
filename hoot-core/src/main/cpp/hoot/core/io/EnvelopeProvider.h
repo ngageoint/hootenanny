@@ -35,6 +35,9 @@ namespace hoot
 class EnvelopeProvider
 {
 public:
+
+  virtual ~EnvelopeProvider() {}
+
   /**
    * Calculates the envelope and returns it. In some cases this may be pre-calculated, in others
    * it may be quite expensive.

@@ -35,6 +35,12 @@
 namespace hoot
 {
 
+Element::Element() :
+  _status(Status::Invalid),
+  _listener(0)
+{
+}
+
 Element::Element(Status s) : _status(s)
 {
   _listener = 0;

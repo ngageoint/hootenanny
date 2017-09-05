@@ -179,10 +179,10 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
 private:
- boost::shared_ptr<HighwayClassifier> _classifier;
+  boost::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
- boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   LegacyVertexMatcherPtr _vertexMatcher;
 
   class SublineCache

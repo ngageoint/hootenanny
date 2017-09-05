@@ -35,7 +35,6 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
@@ -46,6 +45,8 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MetadataTags.h>
 
 // Qt

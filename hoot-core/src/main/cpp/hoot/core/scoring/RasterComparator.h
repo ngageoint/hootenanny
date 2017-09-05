@@ -47,7 +47,7 @@ public:
   /**
    * Takes two maps for comparison as input
    */
-  RasterComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
+  RasterComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   virtual ~RasterComparator() {}
 

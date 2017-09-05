@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 
 #include "../TestUtils.h"

@@ -38,6 +38,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/ops/CopySubsetOp.h>
+#include <hoot/core/util/Log.h>
 
 #include "../../TestUtils.h"
 

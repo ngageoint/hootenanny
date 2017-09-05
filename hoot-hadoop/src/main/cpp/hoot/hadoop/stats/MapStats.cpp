@@ -224,7 +224,7 @@ void MapStats::readDir(QString dir)
       if (fn.endsWith(".stats"))
       {
         MapStats s;
-       boost::shared_ptr<istream> is(fs.open(fn.toStdString()));
+        boost::shared_ptr<istream> is(fs.open(fn.toStdString()));
         s.read(*is);
         combine(s);
         is.reset();

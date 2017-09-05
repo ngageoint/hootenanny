@@ -1,0 +1,81 @@
+
+MULTIARY INGEST - DELETING GEONAMES REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING SORTED GEONAMES REFERENCE DATASET...
+
+20:59:08.120 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING SORTED GEONAMES NEW DATASET...
+
+20:59:08.503 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING SORTED GEONAMES REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING SORTED GEONAMES REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING SORTED GEONAMES CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING GEONAMES REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING UNSORTED GEONAMES REFERENCE DATASET...
+
+20:59:09.412 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING UNSORTED GEONAMES NEW DATASET...
+
+20:59:09.804 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING UNSORTED GEONAMES REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING UNSORTED GEONAMES REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING UNSORTED GEONAMES CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING OSM PBF REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING SORTED OSM PBF REFERENCE DATASET...
+
+20:59:10.745 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING SORTED OSM PBF NEW DATASET...
+
+20:59:11.119 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING SORTED OSM PBF REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING SORTED OSM PBF REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING SORTED OSM PBF CHANGESET OUTPUT...
+
+
+MULTIARY INGEST - DELETING OSM PBF REFERENCE LAYER...
+
+
+MULTIARY INGEST - INGESTING UNSORTED OSM PBF REFERENCE DATASET...
+
+20:59:12.063 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - INGESTING UNSORTED OSM PBF NEW DATASET...
+
+20:59:12.266 WARN  .../rnd/cmd/MultiaryIngestCmd.cpp( 247) OSM PBF input file: test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10-unsorted.osm.pbf is marked as sorted by node ID, as indicated by its header, yet Hootenanny was instructed to sort the file.
+20:59:13.599 WARN  ...nd/io/SparkChangesetWriter.cpp(  79) Found more than one bounds calculator. Using the first one.
+
+MULTIARY INGEST - EXPORTING UNSORTED OSM PBF REFERENCE LAYER...
+
+
+MULTIARY INGEST - COMPARING UNSORTED OSM PBF REFERENCE LAYER OUTPUT...
+
+
+MULTIARY INGEST - COMPARING UNSORTED OSM PBF CHANGESET OUTPUT...
+

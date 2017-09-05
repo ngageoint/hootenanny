@@ -28,7 +28,7 @@
 #define REPORTMISSINGELEMENTSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -40,7 +40,7 @@ namespace hoot
  * all missing references are removed. Note: This may not give desired results if your data
  * shouldn't contain missing references.
  */
-class ReportMissingElementsVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class ReportMissingElementsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
     public Configurable
 {
 public:

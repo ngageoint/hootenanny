@@ -38,11 +38,13 @@
 #include "Sparse2dMatrix.h"
 
 // OpenCV
-#include <opencv/cv.h>
+// #include <opencv/cv.h>
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
 
 namespace hoot
 {
-class Sparse2dMatrix;
 class WayLocation;
 class WaySublineMatch;
 

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <bounds minlat='39.7487738' minlon='-105.007496' maxlat='39.7487738' maxlon='-105.007496' origin='hootenanny' />
+  <node id='-1965' action='modify' visible='true' version='1' lat='39.74877384695' lon='-105.00749596596'>
+    <tag k='ID' v='2-00000' />
+    <tag k='MATCH' v='2-00000' />
+    <tag k='REVIEW' v='none' />
+    <tag k='leisure' v='stadium' />
+    <tag k='name' v='Pepsi Center' />
+  </node>
+  <node id='-1970' action='modify' visible='true' lat='39.74921928745' lon='-105.04665621757'>
+    <tag k='ID' v='2-00001' />
+    <tag k='MATCH' v='1-00001' />
+    <tag k='REVIEW' v='none' />
+    <tag k='name' v='Sloan&apos;s Lake' />
+  </node>
+  <node id='-1992' action='modify' visible='true' lat='39.74940070465' lon='-105.01264573216'>
+    <tag k='ID' v='2-00002' />
+    <tag k='MATCH' v='1-00002' />
+    <tag k='REVIEW' v='none' />
+    <tag k='name' v='Elitch Gardens' />
+    <tag k='tourism' v='theme_park' />
+  </node>
+</osm>

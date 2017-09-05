@@ -36,7 +36,10 @@
 
 // Hoot
 #include <hoot/core/util/Units.h>
+
+#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
+#undef int64
 
 // Qt
 #include <QRgb>
@@ -61,7 +64,7 @@ public:
   /**
    * Takes two maps for comparison as input
    */
-  BaseComparator(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
+  BaseComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   virtual ~BaseComparator() {}
 
@@ -83,7 +86,7 @@ protected:
 
   geos::geom::Coordinate _findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, geos::geom::Coordinate c);
 
-  virtual void _init(boost::shared_ptr<OsmMap> map1,boost::shared_ptr<OsmMap> map2);
+  virtual void _init(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true);
 

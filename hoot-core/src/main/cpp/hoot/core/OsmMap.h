@@ -37,12 +37,16 @@
 #include <geos/geom/Envelope.h>
 
 // Hoot
-#include <hoot/core/util/Units.h>
 #include <hoot/core/elements/ElementProvider.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/RelationMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/elements/WayMap.h>
+#include <hoot/core/util/DefaultIdGenerator.h>
+#include <hoot/core/util/Units.h>
 namespace hoot
 {
     namespace elements
@@ -52,17 +56,7 @@ namespace hoot
 }
 
 // Standard
-#include <deque>
 #include <vector>
-
-// TGS
-#include <tgs/RStarTree/HilbertRTree.h>
-
-#include <hoot/core/util/DefaultIdGenerator.h>
-#include <hoot/core/elements/RelationMap.h>
-#include <hoot/core/elements/WayMap.h>
-#include <hoot/core/elements/NodeMap.h>
-
 
 namespace hoot
 {
@@ -120,6 +114,12 @@ public:
   void addElements(T it, T end);
 
   void addNode(const NodePtr& n);
+
+  /**
+   * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
+   * times.
+   */
+  void addNodes(const std::vector<NodePtr>& nodes);
 
   void addRelation(const RelationPtr& r);
 
@@ -264,11 +264,10 @@ public:
    * If the visitor implements OsmMapConsumer then setOsmMap will be called before visiting any
    * elements.
    */
-  void visitRo(ElementVisitor& visitor) const;
-  void visitNodesRo(ElementVisitor& visitor) const;
-  void visitWaysRo(ElementVisitor& visitor) const;
-  void visitRelationsRo(ElementVisitor& visitor) const;
-
+  void visitRo(ConstElementVisitor& visitor) const;
+  void visitNodesRo(ConstElementVisitor& visitor) const;
+  void visitWaysRo(ConstElementVisitor& visitor) const;
+  void visitRelationsRo(ConstElementVisitor& visitor) const;
 
   /**
    * Calls the visitRw method on all elements. See Element::visitRw for a more
@@ -283,7 +282,12 @@ public:
    * visiting any elements.
    */
   void visitRw(ElementVisitor& visitor);
-  void visitWaysRw(ElementVisitor& visitor);
+  void visitRw(ConstElementVisitor& visitor);
+  void visitWaysRw(ConstElementVisitor& visitor);
+
+  long getNodeCount() const { return _nodes.size(); }
+  long getWayCount() const { return _ways.size(); }
+  long getRelationCount() const { return _relations.size(); }
 
 protected:
 

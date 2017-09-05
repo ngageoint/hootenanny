@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+    stages {
+        stage("Setup") {
+            steps {
+                // Attempt to destroy exiting VM but don't stop job if not there
+                sh 'vagrant destroy -f || true'
+                cleanWs()
+                
+                git branch: 'develop', credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
+                sh 'git submodule update --init'
+                
+                sh 'cp -R ../software.ubuntu1404 software'
+                //sh 'export WORDS_HOME=/fouo/ubuntu'
+                //sh '( [ -e $WORDS_HOME/words1.sqlite ] &&  cp $WORDS_HOME/words1.sqlite conf )'
+               
+                sh 'cp LocalConfig.pri.orig LocalConfig.pri'
+                echo 'QMAKE_CXXFLAGS += -Werror" >> LocalConfig.pri'
+                sh 'sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri'                 
+                sh 'sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri'
+            }
+             
+        }
+        stage("Vagrant Up") {
+            steps {
+                sh 'vagrant up --provider aws'
+            }
+             
+        }
+        stage("Core Tests") {
+            steps {
+                sh 'vagrant ssh -c "cd hoot; source ./SetupEnv.sh; hoot --version --debug"'
+                sh 'vagrant ssh -c "export HOOT_TEST_DIFF=--diff"'
+                sh 'vagrant ssh -c "cd hoot; bin/HootTest $HOOT_TEST_DIFF --glacial"'
+            }
+        }
+        stage("Services Tests") {
+            steps {
+                sh 'vagrant ssh -c "cd hoot; make -sj`nproc` pp-test"'
+                sh 'vagrant ssh -c "cd hoot; make -sj`nproc` plugins-test"'
+                sh 'vagrant ssh -c "cd hoot; make -sj`nproc` services-test"'
+            }
+        }
+         stage("UI Tests") {
+            steps {
+                sh 'vagrant ssh -c "cd hoot; make -s ui-test"'
+            }
+        }
+    }
+    post {
+        success {
+            sh 'vagrant destroy -f'
+            cleanWs()
+        }
+        failure {
+            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+ 
+        }
+    }
+}

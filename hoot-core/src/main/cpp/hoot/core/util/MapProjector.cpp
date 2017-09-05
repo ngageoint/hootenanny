@@ -35,6 +35,7 @@ using namespace boost;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -137,7 +138,7 @@ Radians MapProjector::_calculateAngle(Coordinate p1, Coordinate p2, Coordinate p
 
 boost::shared_ptr<OGRSpatialReference> MapProjector::createAeacProjection(const OGREnvelope& env)
 {
- boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double height = env.MaxY - env.MinY;
   double stdP1 = env.MinY + height * .25;
   double stdP2 = env.MinY + height * .75;
@@ -175,92 +176,92 @@ vector<boost::shared_ptr<OGRSpatialReference> > MapProjector::createAllPlanarPro
     try { result.push_back(createAeacProjection(env)); } catch (const HootException&) { }
     try { result.push_back(createSinusoidalProjection(env)); } catch (const HootException&) { }
 
-   boost::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> mollweide(new OGRSpatialReference());
     if (mollweide->importFromEPSG(54009) == OGRERR_NONE)
     {
       result.push_back(mollweide);
     }
 
-   boost::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> eckertVI(new OGRSpatialReference());
     if (eckertVI->importFromEPSG(53010) == OGRERR_NONE)
     {
       result.push_back(eckertVI);
     }
 
-   boost::shared_ptr<OGRSpatialReference> sphereBonne(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> sphereBonne(new OGRSpatialReference());
     if (sphereBonne->importFromEPSG(53024) == OGRERR_NONE)
     {
       result.push_back(sphereBonne);
     }
 
-   boost::shared_ptr<OGRSpatialReference> customMercator(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customMercator(new OGRSpatialReference());
     if (customMercator->SetMercator(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customMercator);
     }
 
-   boost::shared_ptr<OGRSpatialReference> customBonne(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customBonne(new OGRSpatialReference());
     if (customBonne->SetBonne(M_PI_2, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customBonne);
     }
 
     // Lambert azimuthal equal-area projection
-   boost::shared_ptr<OGRSpatialReference> customLaea(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customLaea(new OGRSpatialReference());
     if (customLaea->SetLAEA(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customLaea);
     }
 
-   boost::shared_ptr<OGRSpatialReference> customLcc1sp(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customLcc1sp(new OGRSpatialReference());
     if (customLcc1sp->SetLCC1SP(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customLcc1sp);
     }
 
-   boost::shared_ptr<OGRSpatialReference> customRobinson(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customRobinson(new OGRSpatialReference());
     if (customRobinson->SetRobinson(centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customRobinson);
     }
 
     // custom transverse mercator
-   boost::shared_ptr<OGRSpatialReference> customTm(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customTm(new OGRSpatialReference());
     if (customTm->SetTM(centerLat, centerLon, 1.0, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customTm);
     }
 
     // Polyconic
-   boost::shared_ptr<OGRSpatialReference> customPolyconic(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customPolyconic(new OGRSpatialReference());
     if (customPolyconic->SetPolyconic(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customPolyconic);
     }
 
     // Two Point Equidistant
-   boost::shared_ptr<OGRSpatialReference> customTped(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customTped(new OGRSpatialReference());
     if (customTped->SetTPED(stdP1, centerLon, stdP2, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customTped);
     }
 
     // Equidistant Conic
-   boost::shared_ptr<OGRSpatialReference> customEc(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customEc(new OGRSpatialReference());
     if (customEc->SetEC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customEc);
     }
 
     // Azimuthal Equidistant
-   boost::shared_ptr<OGRSpatialReference> customAe(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customAe(new OGRSpatialReference());
     if (customAe->SetAE(centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customAe);
     }
 
     // Lambert Convformal Conic
-   boost::shared_ptr<OGRSpatialReference> customLcc(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> customLcc(new OGRSpatialReference());
     if (customLcc->SetLCC(stdP1, stdP2, centerLat, centerLon, 0.0, 0.0) == OGRERR_NONE)
     {
       result.push_back(customLcc);
@@ -272,9 +273,19 @@ vector<boost::shared_ptr<OGRSpatialReference> > MapProjector::createAllPlanarPro
 
 boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OGREnvelope& env)
 {
- boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
+  if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
+  {
+    throw HootException("Error creating orthographic projection.");
+  }
+  return srs;
+}
+
+boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, double y)
+{
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
   {
     throw HootException("Error creating orthographic projection.");
@@ -375,7 +386,7 @@ boost::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(
 {
   double centerLon = (env.MaxX + env.MinX) / 2.0;
 
- boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
 
   if (srs->SetSinusoidal(centerLon, 0.0, 0.0) != OGRERR_NONE)
   {
@@ -387,7 +398,7 @@ boost::shared_ptr<OGRSpatialReference> MapProjector::createSinusoidalProjection(
 
 boost::shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
 {
- boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
 
   // EPSG 4326 = WGS84
   // if (srs->SetWellKnownGeogCS("WGS84") != OGRERR_NONE)
@@ -400,13 +411,13 @@ boost::shared_ptr<OGRSpatialReference> MapProjector::createWgs84Projection()
 }
 
 bool MapProjector::_evaluateProjection(const OGREnvelope& env,
- boost::shared_ptr<OGRSpatialReference> srs, Meters testDistance, Meters& maxDistanceError,
+  boost::shared_ptr<OGRSpatialReference> srs, Meters testDistance, Meters& maxDistanceError,
   Radians& maxAngleError)
 {
   // Disable CPL error messages. They will be re-enabled when the DisableCplErrors object is
   // destructed.
   DisableCplErrors disableErrors;
- boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
+  boost::shared_ptr<OGRSpatialReference> wgs84 = MapProjector::createWgs84Projection();
 
   auto_ptr<OGRCoordinateTransformation> t(OGRCreateCoordinateTransformation(wgs84.get(),
                                                                             srs.get()));
@@ -515,8 +526,8 @@ bool MapProjector::isGeographic(const ConstElementProviderPtr& provider)
   return provider->getProjection()->IsGeographic();
 }
 
-Coordinate MapProjector::project(const Coordinate& c,boost::shared_ptr<OGRSpatialReference> srs1,
-                           boost::shared_ptr<OGRSpatialReference> srs2)
+Coordinate MapProjector::project(const Coordinate& c, boost::shared_ptr<OGRSpatialReference> srs1,
+                                 boost::shared_ptr<OGRSpatialReference> srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 
@@ -537,9 +548,9 @@ Coordinate MapProjector::project(const Coordinate& c,boost::shared_ptr<OGRSpatia
 }
 
 
-void MapProjector::project(boost::shared_ptr<OsmMap> map,boost::shared_ptr<OGRSpatialReference> ref)
+void MapProjector::project(boost::shared_ptr<OsmMap> map, boost::shared_ptr<OGRSpatialReference> ref)
 {
- boost::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
+  boost::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
 
   if (t == 0)
@@ -610,7 +621,7 @@ void MapProjector::project(const boost::shared_ptr<Geometry>& g,
 
 void MapProjector::projectToAeac(boost::shared_ptr<OsmMap> map)
 {
- boost::shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
+  boost::shared_ptr<OGRSpatialReference> srs = getInstance().createAeacProjection(
     CalculateMapBoundsVisitor::getBounds(map));
   project(map, srs);
 }
@@ -624,7 +635,7 @@ void MapProjector::projectToOrthographic(boost::shared_ptr<OsmMap> map)
 void MapProjector::projectToOrthographic(boost::shared_ptr<OsmMap> map, const OGREnvelope& env)
 {
   MapProjector proj;
- boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
   if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
@@ -647,7 +658,7 @@ void MapProjector::projectToPlanar(boost::shared_ptr<OsmMap> map, const OGREnvel
 {
   if (map->getProjection()->IsProjected() == false)
   {
-   boost::shared_ptr<OGRSpatialReference> srs = getInstance().createPlanarProjection(env);
+    boost::shared_ptr<OGRSpatialReference> srs = getInstance().createPlanarProjection(env);
     project(map, srs);
   }
 }
@@ -657,7 +668,7 @@ void MapProjector::projectToWgs84(boost::shared_ptr<OsmMap> map)
   if (isGeographic(map) == false)
   {
     MapProjector proj;
-   boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
+    boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
     //srs->importFromEPSG(4326);
     srs->SetWellKnownGeogCS("WGS84");
     proj.project(map, srs);
@@ -667,7 +678,7 @@ void MapProjector::projectToWgs84(boost::shared_ptr<OsmMap> map)
 Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
                                     boost::shared_ptr<OGRSpatialReference> srs)
 {
- boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
+  boost::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   wgs84->importFromEPSG(4326);
 
   return project(c, wgs84, srs);

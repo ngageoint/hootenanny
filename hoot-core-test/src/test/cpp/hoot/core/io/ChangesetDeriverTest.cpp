@@ -30,6 +30,8 @@
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 #include "../TestUtils.h"
 
@@ -49,11 +51,15 @@ public:
 
     void runTest()
     {
+      CalculateHashVisitor2 hashVis;
+
       OsmMapPtr map1(new OsmMap());
       OsmMapReaderFactory::read(map1, "test-files/io/ChangesetDeriverTest/Map1.osm", true);
+      map1->visitRw(hashVis);
 
       OsmMapPtr map2(new OsmMap());
       OsmMapReaderFactory::read(map2, "test-files/io/ChangesetDeriverTest/Map2.osm", true);
+      map2->visitRw(hashVis);
 
       ElementSorterPtr map1SortedElements(new ElementSorter(map1));
       ElementSorterPtr map2SortedElements(new ElementSorter(map2));
@@ -66,7 +72,7 @@ public:
       {
         const Change change = changesetDiff->readNextChange();
         LOG_VART(change.toString());
-        changeTypeToIds[change.type].append(change.e->getElementId().getId());
+        changeTypeToIds[change.getType()].append(change.getElement()->getElementId().getId());
       }
 
       HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);

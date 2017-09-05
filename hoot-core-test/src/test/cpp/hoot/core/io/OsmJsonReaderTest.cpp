@@ -52,6 +52,8 @@ class OsmJsonReaderTest : public CppUnit::TestFixture
   CPPUNIT_TEST(wayTest);
   CPPUNIT_TEST(relationTest);
   CPPUNIT_TEST(urlTest);
+  CPPUNIT_TEST(scrubQuoteTest);
+  CPPUNIT_TEST(scrubBigIntsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -379,6 +381,139 @@ public:
 
     // Not failure == success
   }
+
+  void scrubQuoteTest()
+  {
+    QString singleQuoteTest =
+        "{\n"
+        " 'version': 0.6,\n"
+        " 'generator': 'Overpass API',\n"
+        " 'osm3s': {\n"
+        "   'timestamp_osm_base': 'date',\n"
+        "   'copyright': 'blah blah blah'\n"
+        " },\n"
+        " 'elements': [\n"
+        " {\n"
+        "   'type': 'node',\n"
+        "   'id': -1,\n"
+        "   'lat': 0,\n"
+        "   'lon': 0\n"
+        " }]\n"
+        "}";
+    QString doubleQuoteTest =
+        "{\n"
+        " \"version\": 0.6,\n"
+        " \"generator\": \"Overpass API\",\n"
+        " \"osm3s\": {\n"
+        "   \"timestamp_osm_base\": \"date\",\n"
+        "   \"copyright\": \"blah blah blah\"\n"
+        " },\n"
+        " \"elements\": [\n"
+        " {\n"
+        "   \"type\": \"node\",\n"
+        "   \"id\": -1,\n"
+        "   \"lat\": 0,\n"
+        "   \"lon\": 0\n"
+        " }]\n"
+        "}";
+    OsmJsonReader::scrubQuotes(singleQuoteTest);
+    HOOT_STR_EQUALS(doubleQuoteTest, singleQuoteTest);
+  }
+
+  void scrubBigIntsTest()
+  {
+    QString bigIntTest =
+        "{\n"
+        " \"test1\": 1.123456789,\n"
+        " \"test2\": 2222222222,\n"
+        " \"test3\": \"3333333333\",\n"
+        " \"test4\": -4444444444,\n"
+        " \"test5\": \"-5555555555\",\n"
+        " \"test6\": \"This is text with a big int 1111111111 right in the middle, don't break this.\"\n"
+        "}";
+    QString bigIntCorrect =
+        "{\n"
+        " \"test1\": 1.123456789,\n"
+        " \"test2\": \"2222222222\",\n"
+        " \"test3\": \"3333333333\",\n"
+        " \"test4\": \"-4444444444\",\n"
+        " \"test5\": \"-5555555555\",\n"
+        " \"test6\": \"This is text with a big int 1111111111 right in the middle, don't break this.\"\n"
+        "}";
+    OsmJsonReader::scrubBigInts(bigIntTest);
+    HOOT_STR_EQUALS(bigIntCorrect, bigIntTest);
+
+    QString bigIntMultiline =
+    "{\n"
+    "  \"version\": 0.6,\n"
+    "  \"generator\": \"Overpass API\",\n"
+    "  \"osm3s\": {\n"
+    "    \"timestamp_osm_base\": \"2017-07-14T15:12:03Z\",\n"
+    "    \"copyright\": \"The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.\"\n"
+    "  },\n"
+    "  \"elements\": [\n"
+    "    {\n"
+    "      \"type\": \"way\",\n"
+    "      \"id\": \"10575627\",\n"
+    "      \"nodes\": [\n"
+    "        91356553,\n"
+    "        91711357,\n"
+    "        3886528792,\n"
+    "        3886528800,\n"
+    "        91711634\n"
+    "      ],\n"
+    "      \"tags\": {\n"
+    "        \"highway\": \"tertiary\",\n"
+    "        \"maxspeed\": \"55 mph\",\n"
+    "        \"name\": \"Orcutt Road\",\n"
+    "        \"source:maxspeed\": \"Survey\",\n"
+    "        \"tiger:cfcc\": \"A41\",\n"
+    "        \"tiger:county\": \"San Luis Obispo, CA\",\n"
+    "        \"tiger:name_base\": \"Orcutt\",\n"
+    "        \"tiger:name_type\": \"Rd\",\n"
+    "        \"tiger:reviewed\": \"yes\"\n"
+    "      }\n"
+    "    }\n"
+    "  ]\n"
+    "}";
+    QString bigIntMultilineCorrect =
+    "{\n"
+    "  \"version\": 0.6,\n"
+    "  \"generator\": \"Overpass API\",\n"
+    "  \"osm3s\": {\n"
+    "    \"timestamp_osm_base\": \"2017-07-14T15:12:03Z\",\n"
+    "    \"copyright\": \"The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.\"\n"
+    "  },\n"
+    "  \"elements\": [\n"
+    "    {\n"
+    "      \"type\": \"way\",\n"
+    "      \"id\": \"10575627\",\n"
+    "      \"nodes\": [\n"
+    "        \"91356553\",\n"
+    "        \"91711357\",\n"
+    "        \"3886528792\",\n"
+    "        \"3886528800\",\n"
+    "        \"91711634\"\n"
+    "      ],\n"
+    "      \"tags\": {\n"
+    "        \"highway\": \"tertiary\",\n"
+    "        \"maxspeed\": \"55 mph\",\n"
+    "        \"name\": \"Orcutt Road\",\n"
+    "        \"source:maxspeed\": \"Survey\",\n"
+    "        \"tiger:cfcc\": \"A41\",\n"
+    "        \"tiger:county\": \"San Luis Obispo, CA\",\n"
+    "        \"tiger:name_base\": \"Orcutt\",\n"
+    "        \"tiger:name_type\": \"Rd\",\n"
+    "        \"tiger:reviewed\": \"yes\"\n"
+    "      }\n"
+    "    }\n"
+    "  ]\n"
+    "}";
+
+    OsmJsonReader::scrubBigInts(bigIntMultiline);
+    HOOT_STR_EQUALS(bigIntMultilineCorrect, bigIntMultiline);
+  }
+
 }; // class OsmJsonReaderTest
 } // namespace hoot
 

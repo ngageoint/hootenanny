@@ -28,6 +28,7 @@
 #define ELEMENTOUTPUTSTREAM_H
 
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/filters/ElementCriterion.h>
 
 namespace hoot
 {
@@ -53,7 +54,6 @@ public:
   /**
    * @brief writeElement
    */
-  virtual void writeElement(ElementInputStream& inputStream) = 0;
   virtual void writeElement(ElementPtr& element) = 0;
 
   /**

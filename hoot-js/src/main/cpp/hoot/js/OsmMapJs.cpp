@@ -109,7 +109,7 @@ Handle<Value> OsmMapJs::setIdGenerator(const Arguments& args)
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
- boost::shared_ptr<IdGenerator> idGen =  toCpp<boost::shared_ptr<IdGenerator> >(args[0]);
+  boost::shared_ptr<IdGenerator> idGen =  toCpp<boost::shared_ptr<IdGenerator> >(args[0]);
 
   if (obj->getMap()) {
     obj->getMap()->setIdGenerator(idGen);
@@ -174,7 +174,6 @@ Handle<Value> OsmMapJs::getElement(const Arguments& args)
   {
     OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
 
-    LOG_VAR(args[0]->ToObject());
     ElementId eid = toCpp<ElementId>(args[0]);
 
     if (obj->isConst())
@@ -248,7 +247,7 @@ Handle<Value> OsmMapJs::visit(const Arguments& args)
     }
     else
     {
-     boost::shared_ptr<ElementVisitor> v =
+      boost::shared_ptr<ConstElementVisitor> v =
           ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
 
       map->getMap()->visitRw(*v);

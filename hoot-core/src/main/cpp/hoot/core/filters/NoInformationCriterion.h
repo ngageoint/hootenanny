@@ -28,12 +28,11 @@
 #define NOINFORMATIONCRITERION_H
 
 // hoot
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Element.h>
 
 #include "ElementCriterion.h"
 

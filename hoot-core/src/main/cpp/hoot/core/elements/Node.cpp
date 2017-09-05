@@ -38,10 +38,13 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
+
+template<class Node>
+SharedPtrPool<Node> SharedPtrPool<Node>::_theInstance;
 
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)
@@ -67,6 +70,15 @@ _nodeData(from._nodeData)
 void Node::clear()
 {
   _nodeData.clear();
+}
+
+boost::shared_ptr<Node> Node::cloneSp() const
+{
+  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+
+  result->_nodeData = _nodeData;
+
+  return result;
 }
 
 Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider> &/*ep*/) const
@@ -108,12 +120,12 @@ QString Node::toString() const
       .arg(QString::number(getCircularError()));
 }
 
-void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const
+void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
 {
   filter.visit(map.getNode(getId()));
 }
 
-void Node::visitRw(ElementProvider& map, ElementVisitor& filter)
+void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
   filter.visit(map.getNode(getId()));
 }

@@ -33,6 +33,7 @@
 // hoot
 #include <hoot/core/elements/RelationData.h>
 #include <hoot/core/elements/Status.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QUrl>
@@ -143,8 +144,13 @@ public:
 
   /**
    * Returns a results iterator to all OSM elements for a given element type in the database.
+   *
+   * @param elementType the type of element to return
+   * @param sorted if true, elements are sorted by ID
+   * @return a result iterator to the elements
    */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType) = 0;
+  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
+                                                      const bool sorted = false) = 0;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -335,6 +341,10 @@ public:
    * @return a libpq command string
    */
   static QString getPqString(const QString url);
+
+  static Settings readDbConfig();
+
+  static void readDbConfig(Settings& settings, QString config_path);
 
 protected:
 

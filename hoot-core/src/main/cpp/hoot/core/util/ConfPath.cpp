@@ -43,6 +43,8 @@
 
 #include <hoot/core/util/Log.h>
 
+using namespace std;
+
 namespace hoot
 {
 

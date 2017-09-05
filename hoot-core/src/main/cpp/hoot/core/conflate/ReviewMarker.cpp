@@ -232,7 +232,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
   const QString &reviewType, double score, vector<QString> choices)
 {
-  LOG_TRACE("Marking review...");
+  LOG_TRACE("Marking review with note: " << note);
 
   if (note.isEmpty())
   {

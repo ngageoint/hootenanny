@@ -38,10 +38,6 @@
 # error "A valid glpk.h was not found during configure."
 #endif
 
-// Hoot
-#include <hoot/core/util/Exception.h>
-#include <hoot/core/util/Log.h>
-
 // Qt
 #include <QString>
 

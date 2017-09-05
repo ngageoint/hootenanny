@@ -26,8 +26,10 @@
  */
 
 // Hoot
-#include "../../TestUtils.h"
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
+#include <hoot/core/util/Log.h>
+
+#include "../../TestUtils.h"
 
 using namespace geos::geom;
 
@@ -41,6 +43,11 @@ class PoiPolygonMatchTest : public CppUnit::TestFixture
   CPPUNIT_TEST(missTest);
   CPPUNIT_TEST(reviewTest);
   CPPUNIT_TEST(reviewIfMatchedTest);
+  CPPUNIT_TEST(badMatchDistanceInputsTest);
+  CPPUNIT_TEST(badReviewDistanceInputsTest);
+  CPPUNIT_TEST(badNameScoreThresholdInputsTest);
+  CPPUNIT_TEST(badTypeScoreThresholdInputsTest);
+  CPPUNIT_TEST(badReviewIfMatchedTypesInputsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -274,6 +281,201 @@ public:
 
       HOOT_STR_EQUALS("match: 1 miss: 0 review: 0", uut.getClassification());
     }
+  }
+
+  void badMatchDistanceInputsTest()
+  {
+    OsmMapPtr map;
+    PoiPolygonMatch uut(
+      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    QString exceptionMsg1("");
+    try
+    {
+      uut.setMatchDistanceThreshold(-1.0);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg1 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg1.contains("Invalid POI/Polygon match distance configuration option value"));
+
+    QString exceptionMsg2("");
+    try
+    {
+      uut.setMatchDistanceThreshold(5001.0);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg2 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg2.contains("Invalid POI/Polygon match distance configuration option value"));
+  }
+
+  void badReviewDistanceInputsTest()
+  {
+    OsmMapPtr map;
+    PoiPolygonMatch uut(
+      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    QString exceptionMsg1("");
+    try
+    {
+      uut.setReviewDistanceThreshold(-1.0);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg1 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg1.contains("Invalid POI/Polygon review distance configuration option value"));
+
+    QString exceptionMsg2("");
+    try
+    {
+      uut.setReviewDistanceThreshold(5001.0);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg2 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg2.contains("Invalid POI/Polygon review distance configuration option value"));
+  }
+
+  void badNameScoreThresholdInputsTest()
+  {
+    OsmMapPtr map;
+    PoiPolygonMatch uut(
+      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    QString exceptionMsg1("");
+    try
+    {
+      uut.setNameScoreThreshold(0.001);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg1 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg1.contains("Invalid POI/Polygon name score threshold configuration option value"));
+
+    QString exceptionMsg2("");
+    try
+    {
+      uut.setNameScoreThreshold(1.1);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg2 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg2.contains("Invalid POI/Polygon name score threshold configuration option value"));
+  }
+
+  void badTypeScoreThresholdInputsTest()
+  {
+    OsmMapPtr map;
+    PoiPolygonMatch uut(
+      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    QString exceptionMsg1("");
+    try
+    {
+      uut.setTypeScoreThreshold(0.001);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg1 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg1.contains("Invalid POI/Polygon type score threshold configuration option value"));
+
+    QString exceptionMsg2("");
+    try
+    {
+      uut.setTypeScoreThreshold(1.1);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg2 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg2.contains("Invalid POI/Polygon type score threshold configuration option value"));
+  }
+
+  void badReviewIfMatchedTypesInputsTest()
+  {
+    OsmMapPtr map;
+    PoiPolygonMatch uut(
+      map, boost::shared_ptr<MatchThreshold>(), boost::shared_ptr<PoiPolygonRfClassifier>());
+
+    QString exceptionMsg1("");
+    QStringList badKvp1;
+    badKvp1.append("key=value");
+    badKvp1.append("blah");
+    try
+    {
+      uut.setReviewIfMatchedTypes(badKvp1);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg1 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg1.contains(
+        "Invalid POI/Polygon review if matched type configuration option value"));
+
+    QString exceptionMsg2("");
+    QStringList badKvp2;
+    badKvp2.append("blah=");
+    badKvp2.append("key=value");
+    try
+    {
+      uut.setReviewIfMatchedTypes(badKvp2);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg2 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg2.contains(
+        "Invalid POI/Polygon review if matched type configuration option value"));
+
+    QString exceptionMsg3("");
+    QStringList badKvp3;
+    badKvp3.append("key=value");
+    badKvp3.append("=blah");
+    try
+    {
+      uut.setReviewIfMatchedTypes(badKvp3);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg3 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg3.contains(
+        "Invalid POI/Polygon review if matched type configuration option value"));
+
+    QString exceptionMsg4("");
+    QStringList badKvp4;
+    badKvp4.append("");
+    badKvp4.append("key=value");
+    try
+    {
+      uut.setReviewIfMatchedTypes(badKvp4);
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg4 = e.what();
+    }
+    CPPUNIT_ASSERT(
+      exceptionMsg4.contains(
+        "Invalid POI/Polygon review if matched type configuration option value"));
   }
 };
 

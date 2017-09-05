@@ -30,6 +30,15 @@
 //  Boost
 #include <boost/multi_array.hpp>
 
+// GEOS
+namespace geos
+{
+  namespace geom
+  {
+    class LineString;
+  }
+}
+
 // Hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/util/Units.h>

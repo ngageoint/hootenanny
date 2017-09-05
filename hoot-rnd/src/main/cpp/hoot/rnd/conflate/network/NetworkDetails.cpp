@@ -30,19 +30,20 @@
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
+#include <hoot/core/algorithms/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
 #include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
 #include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/polygon/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/conflate/polygon/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopySubsetOp.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/SublineStringMatcher.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;

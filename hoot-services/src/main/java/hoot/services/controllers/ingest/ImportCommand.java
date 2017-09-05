@@ -28,6 +28,7 @@ package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.SCRIPT_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.*;
 
 import java.io.File;
@@ -63,7 +64,7 @@ class ImportCommand extends ExternalCommand {
             translationPath = new File(HOME_FOLDER, translation).getAbsolutePath();
         }
         else {
-            translationPath = new File(new File(HOME_FOLDER, "translations"), translation).getAbsolutePath();
+            translationPath = new File(new File(SCRIPT_FOLDER), translation).getAbsolutePath();
         }
 
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());

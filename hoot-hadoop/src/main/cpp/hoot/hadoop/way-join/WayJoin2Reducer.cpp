@@ -21,13 +21,13 @@
 
 // Hoot
 #include <hoot/core/algorithms/WaySplitter.h>
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/hadoop/HadoopIdGenerator.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/hadoop/Debug.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/hadoop/HadoopIdGenerator.h>
 #include <hoot/hadoop/pbf/PbfRecordWriter.h>
 

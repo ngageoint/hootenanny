@@ -59,7 +59,7 @@ unsigned int MatchComparator::logWarnCount = 0;
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.
  */
-class GetRefUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class GetRefUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
   typedef map<QString, set<QString> > RefToUuid;
@@ -114,7 +114,7 @@ private:
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class UuidToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class UuidToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
@@ -664,7 +664,7 @@ void MatchComparator::_tagError(const OsmMapPtr &map, const QString &uuid, const
   {
     if (it.key().contains(uuid))
     {
-     boost::shared_ptr<Element> eid = map->getElement(it.value());
+      boost::shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
     }
   }
@@ -678,7 +678,7 @@ void MatchComparator::_tagWrong(const OsmMapPtr &map, const QString &uuid)
   {
     if (it.key().contains(uuid))
     {
-     boost::shared_ptr<Element> eid = map->getElement(it.value());
+      boost::shared_ptr<Element> eid = map->getElement(it.value());
       stv.visit(eid);
     }
   }

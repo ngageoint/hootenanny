@@ -34,6 +34,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -66,7 +67,7 @@ public:
     l.removeAll(QString::fromStdString(RubberSheet::className()));
     conf().set(MapCleaner::opsKey(), l);
     MapCleaner().apply(map);
-    RubberSheet().apply(map);
+    RubberSheet(true).apply(map);
 
     MapProjector::projectToWgs84(map);
 

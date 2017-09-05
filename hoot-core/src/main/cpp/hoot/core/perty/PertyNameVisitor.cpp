@@ -36,6 +36,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/RandomNumberUtils.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <algorithm>
@@ -45,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyNameVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, PertyNameVisitor)
 
 PertyNameVisitor::PertyNameVisitor()
 {

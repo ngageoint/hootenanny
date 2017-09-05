@@ -86,7 +86,7 @@ public:
         {
           populateCriterionConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(ElementVisitor::className()))
+        else if (str(obj->Get(baseClass())) == QString::fromStdString(ConstElementVisitor::className()))
         {
           populateVisitorConsumer<T>(consumer, v);
         }
@@ -205,7 +205,7 @@ public:
     }
     else if (ecc != 0)
     {
-     boost::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
+      boost::shared_ptr<JsFunctionCriterion> ecp(new JsFunctionCriterion());
       ecp->addFunction(func);
       ecc->addCriterion(ecp);
     }

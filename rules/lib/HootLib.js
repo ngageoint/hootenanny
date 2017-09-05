@@ -138,10 +138,8 @@ function getTagCategoryDistance(category, map, e1, e2) {
  * Given a common kvp, find the distance between e1 and e2 where common exists
  * between them.
  */
-function getTagDistance(commonKvp, e1, e2) {
+function getTagDistance(commonKvp, t1, t2) {
     var result = 1;
-    var t1 = e1.getTags().toDict();
-    var t2 = e2.getTags().toDict();
     var c1 = getRelatedTags(commonKvp, t1);
     var c2 = getRelatedTags(commonKvp, t2);
 

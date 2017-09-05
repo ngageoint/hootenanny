@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Finds all intersections (nodes), adds some parameters to them and records their node ids
  */
-class FindIntersectionsVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class FindIntersectionsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

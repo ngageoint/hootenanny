@@ -41,15 +41,15 @@ class ElementComparer
 
 public:
 
-  /**
-   * Defaults to 5cm threshold
-   */
   ElementComparer(Meters threshold = 0.05);
 
   bool isSame(ElementPtr e1, ElementPtr e2) const;
 
 private:
 
+  //currently, this threshold applies only to non-node circular error checks and the var would
+  //eventually go away completely if all element types were converted over to uses hashes for
+  //comparisons
   Meters _threshold;
 
   bool _compareNode(const boost::shared_ptr<const Element>& re,

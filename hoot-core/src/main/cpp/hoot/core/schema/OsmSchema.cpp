@@ -1661,6 +1661,11 @@ bool OsmSchema::isBuildingPart(const Tags& t, ElementType type) const
   return result;
 }
 
+bool OsmSchema::isBuildingPart(const ConstElementPtr& e) const
+{
+  return isBuildingPart(e->getTags(), e->getElementType());
+}
+
 bool OsmSchema::isCollection(const Element& e) const
 {
   bool result = false;
@@ -1782,9 +1787,20 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
     return true;
   }
 
-  // for now all metadata tags are text so they're referenced by the key only. If that changes then
-  // we'll need some logic here to check if a vertex is a text vertex.
-  return isAncestor(key, "metadata");
+  if (_metadataKey.contains(key))
+  {
+    return _metadataKey[key];
+  }
+  else
+  {
+    // for now all metadata tags are text so they're referenced by the key only. If that changes then
+    // we'll need some logic here to check if a vertex is a text vertex.
+    bool metadata = isAncestor(key, "metadata");
+
+    _metadataKey[key] = metadata;
+
+    return metadata;
+  }
 }
 
 bool OsmSchema::isMultiLineString(const Relation& r) const

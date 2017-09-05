@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <node visible="true" id="-170866" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8985381075082657" lon="-77.0532418950269431"/>
     <node visible="true" id="-170865" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8986830086314725" lon="-77.0531381821688797"/>
     <node visible="true" id="-170864" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8993291674760187" lon="-77.0536278448743843"/>
@@ -4337,7 +4337,7 @@
     <node visible="true" id="-2182" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9017115550575667" lon="-77.0345958424248352"/>
     <node visible="true" id="-2181" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9015453837132767" lon="-77.0345952430533885"/>
     <node visible="true" id="-2180" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9013355347201326" lon="-77.0345929530444522"/>
-    <way visible="true" id="-13665" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13663" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13592"/>
         <nd ref="-13593"/>
         <nd ref="-13594"/>
@@ -4349,7 +4349,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13664" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13662" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12457"/>
         <nd ref="-13585"/>
         <nd ref="-13586"/>
@@ -4363,7 +4363,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13663" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13661" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13592"/>
         <nd ref="-77945"/>
         <nd ref="-77946"/>
@@ -4375,7 +4375,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13662" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13660" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77942"/>
         <nd ref="-77943"/>
         <nd ref="-77944"/>
@@ -4384,7 +4384,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13661" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13659" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8687"/>
         <nd ref="-28674"/>
         <nd ref="-12440"/>
@@ -4392,7 +4392,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13660" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13658" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5802"/>
         <nd ref="-28673"/>
         <nd ref="-8687"/>
@@ -4400,14 +4400,14 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13659" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13657" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8687"/>
         <nd ref="-7486"/>
         <tag k="name" v="23RD ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13658" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13656" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7485"/>
         <nd ref="-8668"/>
         <nd ref="-8669"/>
@@ -4433,7 +4433,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13657" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13655" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5863"/>
         <nd ref="-5864"/>
         <nd ref="-5865"/>
@@ -4446,7 +4446,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13656" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13654" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5855"/>
         <nd ref="-5856"/>
         <nd ref="-5857"/>
@@ -4460,7 +4460,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13655" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13653" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5863"/>
         <nd ref="-77940"/>
         <nd ref="-77941"/>
@@ -4468,7 +4468,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13654" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13652" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6028"/>
         <nd ref="-77939"/>
         <nd ref="-5863"/>
@@ -4476,7 +4476,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13653" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13651" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14575"/>
         <nd ref="-153862"/>
         <nd ref="-153863"/>
@@ -4529,7 +4529,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13652" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13650" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-71054"/>
         <nd ref="-153860"/>
         <nd ref="-153861"/>
@@ -4538,7 +4538,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13651" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13649" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14575"/>
         <nd ref="-14576"/>
         <nd ref="-14577"/>
@@ -4546,7 +4546,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13650" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13648" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14552"/>
         <nd ref="-14553"/>
         <nd ref="-14554"/>
@@ -4575,7 +4575,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13649" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13647" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27666"/>
         <nd ref="-142640"/>
         <nd ref="-142641"/>
@@ -4589,7 +4589,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13648" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13646" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27392"/>
         <nd ref="-142597"/>
         <nd ref="-142598"/>
@@ -4639,7 +4639,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13647" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13645" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170854"/>
         <nd ref="-27667"/>
         <nd ref="-27668"/>
@@ -4648,7 +4648,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13645" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13643" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170855"/>
         <nd ref="-123963"/>
         <nd ref="-123964"/>
@@ -4658,7 +4658,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13644" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13642" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-123960"/>
         <nd ref="-123961"/>
         <nd ref="-123962"/>
@@ -4667,7 +4667,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13642" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13640" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7480"/>
         <nd ref="-27636"/>
         <nd ref="-27637"/>
@@ -4704,7 +4704,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13640" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13638" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-123885"/>
         <nd ref="-142584"/>
         <nd ref="-142585"/>
@@ -4724,7 +4724,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13639" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13637" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170858"/>
         <nd ref="-27393"/>
         <nd ref="-27394"/>
@@ -4748,7 +4748,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13637" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13635" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170859"/>
         <nd ref="-142517"/>
         <nd ref="-142518"/>
@@ -4804,7 +4804,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13636" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13634" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-123890"/>
         <nd ref="-142507"/>
         <nd ref="-142508"/>
@@ -4821,7 +4821,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13634" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13632" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27379"/>
         <nd ref="-27380"/>
         <nd ref="-27381"/>
@@ -4840,7 +4840,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13632" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13630" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8651"/>
         <nd ref="-27321"/>
         <nd ref="-27322"/>
@@ -4905,7 +4905,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13631" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13629" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170860"/>
         <nd ref="-123926"/>
         <nd ref="-123927"/>
@@ -4946,7 +4946,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13630" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13628" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-123890"/>
         <nd ref="-123891"/>
         <nd ref="-123892"/>
@@ -4988,7 +4988,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13629" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13627" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27625"/>
         <nd ref="-28668"/>
         <nd ref="-28669"/>
@@ -4997,14 +4997,14 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13628" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13626" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28051"/>
         <nd ref="-27625"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13627" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13625" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27625"/>
         <nd ref="-27626"/>
         <nd ref="-27627"/>
@@ -5021,7 +5021,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13626" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13624" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6000"/>
         <nd ref="-27622"/>
         <nd ref="-27623"/>
@@ -5031,14 +5031,14 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13625" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13623" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34034"/>
         <nd ref="-13662"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13624" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13622" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13642"/>
         <nd ref="-141267"/>
         <nd ref="-141268"/>
@@ -5047,21 +5047,21 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13623" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13621" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34034"/>
         <nd ref="-13446"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13622" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13620" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34033"/>
         <nd ref="-34034"/>
         <tag k="name" v="VIRGINIA AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13620" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13618" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9616"/>
         <nd ref="-34032"/>
         <nd ref="-34033"/>
@@ -5069,7 +5069,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13619" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13617" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34033"/>
         <nd ref="-123996"/>
         <nd ref="-13654"/>
@@ -5077,14 +5077,14 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13618" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13616" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13650"/>
         <nd ref="-34033"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13617" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13615" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6002"/>
         <nd ref="-27504"/>
         <nd ref="-27505"/>
@@ -5095,7 +5095,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13616" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13614" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6332"/>
         <nd ref="-27494"/>
         <nd ref="-27495"/>
@@ -5112,7 +5112,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13615" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13613" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6002"/>
         <nd ref="-6003"/>
         <nd ref="-6004"/>
@@ -5120,7 +5120,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13614" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13612" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6000"/>
         <nd ref="-6001"/>
         <nd ref="-6002"/>
@@ -5128,7 +5128,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13612" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13610" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5996"/>
         <nd ref="-5997"/>
         <nd ref="-5998"/>
@@ -5138,7 +5138,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13610" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13608" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8135"/>
         <nd ref="-27611"/>
         <nd ref="-27612"/>
@@ -5156,7 +5156,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13609" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13607" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77942"/>
         <nd ref="-167363"/>
         <nd ref="-167364"/>
@@ -5173,7 +5173,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13608" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13606" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-65580"/>
         <nd ref="-167360"/>
         <nd ref="-167361"/>
@@ -5183,14 +5183,14 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13606" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13604" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77941"/>
         <nd ref="-77942"/>
         <tag k="name" v="K ST NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13603" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13601" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77941"/>
         <nd ref="-167342"/>
         <nd ref="-167343"/>
@@ -5209,7 +5209,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13602" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13600" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-66368"/>
         <nd ref="-167336"/>
         <nd ref="-167337"/>
@@ -5222,7 +5222,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13601" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13599" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27563"/>
         <nd ref="-27669"/>
         <nd ref="-27670"/>
@@ -5240,7 +5240,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13599" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13597" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27563"/>
         <nd ref="-27564"/>
         <nd ref="-27565"/>
@@ -5293,7 +5293,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13598" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13596" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27556"/>
         <nd ref="-27557"/>
         <nd ref="-27558"/>
@@ -5306,7 +5306,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13597" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13595" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27556"/>
         <nd ref="-142647"/>
         <nd ref="-142648"/>
@@ -5351,7 +5351,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13594" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13592" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170857"/>
         <nd ref="-27554"/>
         <nd ref="-27555"/>
@@ -5360,7 +5360,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13592" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13590" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7482"/>
         <nd ref="-27513"/>
         <nd ref="-27514"/>
@@ -5407,7 +5407,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13591" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13589" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27553"/>
         <nd ref="-123966"/>
         <nd ref="-123967"/>
@@ -5444,7 +5444,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13589" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13587" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24715"/>
         <nd ref="-142580"/>
         <nd ref="-142581"/>
@@ -5455,7 +5455,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13588" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13586" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14590"/>
         <nd ref="-142566"/>
         <nd ref="-142567"/>
@@ -5476,7 +5476,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13587" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13585" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170861"/>
         <nd ref="-24716"/>
         <nd ref="-24717"/>
@@ -5490,14 +5490,14 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13586" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13584" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24714"/>
         <nd ref="-170861"/>
         <tag k="name" v="CONSTITUTION AVE NW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13584" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13582" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8651"/>
         <nd ref="-24694"/>
         <nd ref="-24695"/>
@@ -5524,7 +5524,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13583" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13581" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170862"/>
         <nd ref="-142504"/>
         <nd ref="-142505"/>
@@ -5534,7 +5534,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13582" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13580" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14577"/>
         <nd ref="-142460"/>
         <nd ref="-142461"/>
@@ -5585,7 +5585,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13581" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13579" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13662"/>
         <nd ref="-141269"/>
         <nd ref="-141270"/>
@@ -5612,7 +5612,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13576" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13574" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9641"/>
         <nd ref="-13652"/>
         <nd ref="-13653"/>
@@ -5630,7 +5630,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13575" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13573" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13654"/>
         <nd ref="-123997"/>
         <nd ref="-123998"/>
@@ -5659,7 +5659,7 @@
         <tag k="highway" v="motorway"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13573" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13571" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-99747"/>
         <nd ref="-101712"/>
         <nd ref="-101713"/>
@@ -5672,14 +5672,14 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13572" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13570" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-101711"/>
         <nd ref="-99747"/>
         <tag k="name" v="ARLINGTON MEMORIAL BRG SW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13571" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13569" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-99747"/>
         <nd ref="-99748"/>
         <nd ref="-99749"/>
@@ -5707,7 +5707,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13570" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13568" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-99716"/>
         <nd ref="-99717"/>
         <nd ref="-99718"/>
@@ -5744,7 +5744,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13566" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13564" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170866"/>
         <nd ref="-13643"/>
         <nd ref="-13644"/>
@@ -5760,7 +5760,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13564" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13562" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27508"/>
         <nd ref="-27509"/>
         <nd ref="-27510"/>
@@ -5771,7 +5771,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13563" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13561" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7482"/>
         <nd ref="-7483"/>
         <nd ref="-7484"/>
@@ -5780,7 +5780,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13562" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13560" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7480"/>
         <nd ref="-7481"/>
         <nd ref="-7482"/>
@@ -5788,7 +5788,7 @@
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-13558" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13556" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7472"/>
         <nd ref="-7473"/>
         <nd ref="-7474"/>
@@ -5799,59 +5799,6 @@
         <nd ref="-7479"/>
         <nd ref="-7480"/>
         <tag k="name" v="23RD ST NW"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-13557" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102566"/>
-        <nd ref="-101711"/>
-        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
-        <tag k="highway" v="road"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-13556" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102526"/>
-        <nd ref="-102527"/>
-        <nd ref="-102528"/>
-        <nd ref="-102529"/>
-        <nd ref="-102530"/>
-        <nd ref="-102531"/>
-        <nd ref="-102532"/>
-        <nd ref="-102533"/>
-        <nd ref="-102534"/>
-        <nd ref="-102535"/>
-        <nd ref="-102536"/>
-        <nd ref="-102537"/>
-        <nd ref="-102538"/>
-        <nd ref="-102539"/>
-        <nd ref="-102540"/>
-        <nd ref="-102541"/>
-        <nd ref="-102542"/>
-        <nd ref="-102543"/>
-        <nd ref="-102544"/>
-        <nd ref="-102545"/>
-        <nd ref="-102546"/>
-        <nd ref="-102547"/>
-        <nd ref="-102548"/>
-        <nd ref="-102549"/>
-        <nd ref="-102550"/>
-        <nd ref="-102551"/>
-        <nd ref="-102552"/>
-        <nd ref="-102553"/>
-        <nd ref="-102554"/>
-        <nd ref="-102555"/>
-        <nd ref="-102556"/>
-        <nd ref="-102557"/>
-        <nd ref="-102558"/>
-        <nd ref="-102559"/>
-        <nd ref="-102560"/>
-        <nd ref="-102561"/>
-        <nd ref="-102562"/>
-        <nd ref="-102563"/>
-        <nd ref="-102564"/>
-        <nd ref="-102565"/>
-        <nd ref="-102566"/>
-        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>
@@ -10710,6 +10657,59 @@
         <nd ref="-97555"/>
         <nd ref="-97556"/>
         <tag k="name" v="15TH ST SW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5137" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102526"/>
+        <nd ref="-102527"/>
+        <nd ref="-102528"/>
+        <nd ref="-102529"/>
+        <nd ref="-102530"/>
+        <nd ref="-102531"/>
+        <nd ref="-102532"/>
+        <nd ref="-102533"/>
+        <nd ref="-102534"/>
+        <nd ref="-102535"/>
+        <nd ref="-102536"/>
+        <nd ref="-102537"/>
+        <nd ref="-102538"/>
+        <nd ref="-102539"/>
+        <nd ref="-102540"/>
+        <nd ref="-102541"/>
+        <nd ref="-102542"/>
+        <nd ref="-102543"/>
+        <nd ref="-102544"/>
+        <nd ref="-102545"/>
+        <nd ref="-102546"/>
+        <nd ref="-102547"/>
+        <nd ref="-102548"/>
+        <nd ref="-102549"/>
+        <nd ref="-102550"/>
+        <nd ref="-102551"/>
+        <nd ref="-102552"/>
+        <nd ref="-102553"/>
+        <nd ref="-102554"/>
+        <nd ref="-102555"/>
+        <nd ref="-102556"/>
+        <nd ref="-102557"/>
+        <nd ref="-102558"/>
+        <nd ref="-102559"/>
+        <nd ref="-102560"/>
+        <nd ref="-102561"/>
+        <nd ref="-102562"/>
+        <nd ref="-102563"/>
+        <nd ref="-102564"/>
+        <nd ref="-102565"/>
+        <nd ref="-102566"/>
+        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5136" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102566"/>
+        <nd ref="-101711"/>
+        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
         <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
     </way>

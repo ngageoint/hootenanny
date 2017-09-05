@@ -36,7 +36,7 @@ using namespace boost;
 
 // Hoot
 #include <hoot/core/util/Exception.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Tags.h>
@@ -289,28 +289,6 @@ int OsmXmlReader::_parseInt(QString s)
   if (ok == false)
   {
       throw Exception("Error parsing int: " + s);
-  }
-
-  return result;
-}
-
-Status OsmXmlReader::_parseStatus(QString s)
-{
-  Status result;
-
-  if (s.length() > 2)
-  {
-    // Try parsing the status as a string, not an int
-    result = Status::fromString(s);
-  }
-  else
-  {
-    result = Status((Status::Type)_parseInt(s));
-  }
-
-  if (result.getEnum() < Status::Invalid || result.getEnum() > Status::Conflated)
-  {
-    throw HootException(QObject::tr("Invalid status value: %1").arg(s));
   }
 
   return result;
@@ -611,7 +589,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
 
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
-          _element->setStatus(_parseStatus(value));
+          _element->setStatus(Status::fromString(value));
 
           if (_keepFileStatus)  { _element->setTag(key, value); }
         }

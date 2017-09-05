@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <node visible="true" id="1" timestamp="2017-04-03T19:10:47Z" version="1" changeset="162" lat="31.1815646720351012" lon="34.0472591500500030"/>
+    <node visible="true" id="2" timestamp="2017-04-03T19:10:47Z" version="1" changeset="162" lat="31.1816708426572013" lon="34.0482519434817021"/>
+    <node visible="true" id="3" timestamp="2017-04-03T19:10:47Z" version="1" changeset="162" lat="31.1832952383287001" lon="34.0565417686369969"/>
+    <node visible="true" id="4" timestamp="2017-04-04T21:30:40Z" version="3" changeset="172" lat="31.1821475631791003" lon="34.0507315991344015">
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="5" timestamp="2017-04-04T21:30:40Z" version="2" changeset="172" lat="31.1811936938578995" lon="34.0510083282243983">
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="6" timestamp="2017-04-04T15:32:59Z" version="1" changeset="166" lat="31.1808389138965012" lon="34.0508637407727974"/>
+    <node visible="true" id="7" timestamp="2017-04-04T21:30:40Z" version="2" changeset="172" lat="31.1806915985442998" lon="34.0508147859266970">
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="8" timestamp="2017-04-04T21:30:40Z" version="2" changeset="172" lat="31.1797585891326001" lon="34.0510751137761005">
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="9" timestamp="2017-04-04T21:30:40Z" version="2" changeset="172" lat="31.1801011930199010" lon="34.0526026703586027">
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="10" timestamp="2017-04-04T21:30:40Z" version="2" changeset="172" lat="31.1790695842523000" lon="34.0528372329481996">
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="11" timestamp="2017-04-04T16:56:13Z" version="1" changeset="168" lat="31.1797236673692986" lon="34.0556248104406976"/>
+    <node visible="true" id="12" timestamp="2017-04-04T16:56:13Z" version="1" changeset="168" lat="31.1798808645357006" lon="34.0563597657355999"/>
+    <way visible="true" id="1" timestamp="2017-04-04T16:18:52Z" version="2" changeset="167">
+        <nd ref="1"/>
+        <nd ref="2"/>
+        <nd ref="4"/>
+        <nd ref="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="4" timestamp="2017-04-04T21:29:07Z" version="2" changeset="171">
+        <nd ref="4"/>
+        <nd ref="5"/>
+        <nd ref="6"/>
+        <nd ref="7"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="6" timestamp="2017-04-04T16:56:13Z" version="1" changeset="168">
+        <nd ref="7"/>
+        <nd ref="8"/>
+        <nd ref="9"/>
+        <nd ref="10"/>
+        <nd ref="11"/>
+        <nd ref="12"/>
+        <tag k="highway" v="road"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

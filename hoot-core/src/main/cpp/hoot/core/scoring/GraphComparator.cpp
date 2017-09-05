@@ -66,7 +66,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-GraphComparator::GraphComparator(OsmMapPtr map1,OsmMapPtr map2) :
+GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
       BaseComparator(map1, map2)
 {
   _iterations = 100;
@@ -278,7 +278,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   }
 
   // populate graph
- boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
+  boost::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
   LOG_DEBUG("Running cost");
@@ -415,7 +415,7 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
 
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-   WayPtr w = it->second;
+    WayPtr w = it->second;
     double cost = sp.getNodeCost(w->getNodeIds()[0]);
     if (cost >= 0)
     {
@@ -433,7 +433,7 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
   return mat;
 }
 
-void GraphComparator::_paintWay(cv::Mat& mat, ConstOsmMapPtr map,WayPtr way, double friction,
+void GraphComparator::_paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
                                 double startCost, double endCost)
 {
   LocationOfPoint lop(map, way);

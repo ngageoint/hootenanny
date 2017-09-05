@@ -109,6 +109,7 @@ OgrWriter::OgrWriter():
   setConfiguration(conf());
 
   _textStatus = ConfigOptions().getWriterTextStatus();
+  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
 
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
@@ -602,6 +603,11 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
       t[MetadataTags::HootStatus()] = e->getStatusString();
     }
 
+    if (_includeDebug)
+    {
+      t[MetadataTags::HootId()] = QString::number(e->getId());
+    }
+
     for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
     {
       if (t[it.key()] == "")
@@ -798,20 +804,6 @@ void OgrWriter::writePartial(const boost::shared_ptr<const hoot::Relation>& newR
 void OgrWriter::writeElement(ElementPtr &element)
 {
   writeElement(element, false);
-}
-
-void OgrWriter::writeElement(ElementInputStream& inputStream)
-{
-  writeElement(inputStream, false);
-}
-
-void OgrWriter::writeElement(ElementInputStream& inputStream, bool debug)
-{
-  // Make sure incoming element is in WGS84
-  assert( inputStream.getProjection()->IsSame(&_wgs84) == true );
-  ElementPtr nextElement = inputStream.readNextElement();
-
-  writeElement(nextElement, debug);
 }
 
 void OgrWriter::writeElement(ElementPtr &element, bool debug)

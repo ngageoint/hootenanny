@@ -30,6 +30,7 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>

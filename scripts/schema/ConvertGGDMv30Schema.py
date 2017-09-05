@@ -277,7 +277,7 @@ def printFcodeSchema(schema):
             tList[schema[i]['fcode']]['objectType'] = 'tag'
             tList[schema[i]['fcode']]['geometries'] = []
 
-        tList[schema[i]['fcode']]['geom'].append(gList[schema[i]['geom']])
+        tList[schema[i]['fcode']]['geometries'].append(gList[schema[i]['geom']])
 
     #print '"FCODE","Name"'
     for i in sorted(tList.keys()):
@@ -466,6 +466,7 @@ def printIntAttr(schema):
     for i in sorted(tList):
         print "     '%s'," % (i)
 # End printIntAttr
+
 
 # Print Number Rules
 def printNumRules(schema):
@@ -786,22 +787,22 @@ def processFile(fileName,enValues):
 # Main Starts Here
 #
 parser = argparse.ArgumentParser(description='Process GGDM files and build a schema')
-parser.add_argument('-q','--quiet', help="Don't print warning messages.",action='store_true')
-parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
-parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
-parser.add_argument('--txtlen', help='Dump out the lengths of all of the text attributes',action='store_true')
-parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
-parser.add_argument('--intattr', help='Dump out all attributes that are integers',action='store_true')
+parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
 parser.add_argument('--attrlist', help='Dump out a list of attributes',action='store_true')
+parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
 parser.add_argument('--fcodelist', help='Dump out a list of fcodes',action='store_true')
 parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
-parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
-parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
-parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
-parser.add_argument('--layerlist', help='Dump out a list of fcodes and layer names',action='store_true')
 parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
+parser.add_argument('--intattr', help='Dump out all attributes that are integers',action='store_true')
+parser.add_argument('--layerlist', help='Dump out a list of fcodes and layer names',action='store_true')
+parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
+parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
+parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
+parser.add_argument('--txtlen', help='Dump out the lengths of all of the text attributes',action='store_true')
+parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
 parser.add_argument('--withdefs', help='Add feature ad attribute definitions to the schema',action='store_true')
+parser.add_argument('-q','--quiet', help="Don't print warning messages.",action='store_true')
 parser.add_argument('mainfile', help='The main GGDM spec csv file', action='store')
 parser.add_argument('layerfile', help='A csv file with layer information', action='store')
 parser.add_argument('valuesfile', help='A csv file with enumerated values', action='store')

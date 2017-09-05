@@ -37,7 +37,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/NodeToWayMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/ops/RemoveNodeOp.h>
 #include <hoot/core/util/ElementConverter.h>
@@ -46,6 +46,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/ReviewMarker.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -57,7 +58,7 @@ unsigned int BuildingOutlineUpdateOp::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, BuildingOutlineUpdateOp)
 
-class NodeIdVisitor : public ElementVisitor
+class NodeIdVisitor : public ConstElementVisitor
 {
 public:
   set<long>& allNodes;
@@ -73,7 +74,7 @@ public:
   }
 };
 
-class NodeReplaceVisitor : public ElementVisitor
+class NodeReplaceVisitor : public ConstElementVisitor
 {
 public:
   NodeReplaceVisitor(OsmMap& map, const std::map<long, long>& fromTo) : _fromTo(fromTo), _map(map)

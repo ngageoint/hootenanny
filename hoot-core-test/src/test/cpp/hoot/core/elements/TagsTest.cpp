@@ -33,6 +33,7 @@
 
 // Hoot
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/Log.h>
 using namespace hoot;
 
 // Qt

@@ -20,6 +20,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/filters/TagCriterion.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // Pretty Pipes

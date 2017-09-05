@@ -101,11 +101,11 @@ double AttributeComparator::compareMaps()
     double bestScore = -1.0;
     for (size_t j = 0; j < wids1.size(); j++)
     {
-     WayPtr w1 = referenceMap->getWay(wids1[j]);
+      WayPtr w1 = referenceMap->getWay(wids1[j]);
 
       for (size_t k = 0; k < wids2.size(); k++)
       {
-       WayPtr w2 = otherMap->getWay(wids2[k]);
+        WayPtr w2 = otherMap->getWay(wids2[k]);
         double score = TagComparator::getInstance().compareTags(w1->getTags(), w2->getTags());
         if (score > bestScore)
         {
