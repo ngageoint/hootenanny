@@ -65,8 +65,6 @@ void CornerSplitter::splitCorners(boost::shared_ptr<OsmMap> map)
 
 void CornerSplitter::splitCorners()
 {
-  Meters testLen = 0.1;
-
   // Get a list of ways in the map
   for (WayMap::const_iterator it = _map->getWays().begin(); it != _map->getWays().end(); ++it)
   {
@@ -85,13 +83,18 @@ void CornerSplitter::splitCorners()
     {
       for (size_t nodeIdx = 1; nodeIdx < nodeCount-1; nodeIdx++)
       {
-        Radians prevHeading = WayHeading::calculateHeading(WayLocation(_map, pWay, nodeIdx-1), testLen);
-        Radians thisHeading = WayHeading::calculateHeading(WayLocation(_map, pWay, nodeIdx), testLen);
-        Radians nextHeading = WayHeading::calculateHeading(WayLocation(_map, pWay, nodeIdx+1), testLen);
+        WayLocation prev(_map, pWay, nodeIdx-1, 0.0);
+        WayLocation current(_map, pWay, nodeIdx, 0.0);
+        WayLocation next(_map, pWay, nodeIdx+1, 0.0);
+
+        double h1 = atan2(current.getCoordinate().y - prev.getCoordinate().y,
+                          current.getCoordinate().x - prev.getCoordinate().x);
+        double h2 = atan2(next.getCoordinate().y - current.getCoordinate().y,
+                          next.getCoordinate().x - current.getCoordinate().x);
 
         double threshold = toRadians(45.0);
-        double delta = fabs(thisHeading - prevHeading);
-        delta += fabs(nextHeading - thisHeading);
+        double delta = fabs(h2-h1);
+
 
         // If we make enough of a turn, split the way
         if (delta > threshold)
@@ -132,9 +135,10 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
     foreach (const boost::shared_ptr<Way>& w, splits)
     {
       newWays.append(w);
+      _todoWays.push_back(w->getId());
     }
 
-    // make sure any ways that are part of relations continue to be part of those relations after
+    // Make sure any ways that are part of relations continue to be part of those relations after
     // they're split.
     _map->replace(pWay, newWays);
 
@@ -151,6 +155,7 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
     }
 
     //_removeWayFromMap(pWay);
+
 
     LOG_VART(_map->containsElement(splitWayId));
   }
