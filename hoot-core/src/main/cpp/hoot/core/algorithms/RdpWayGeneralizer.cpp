@@ -34,7 +34,11 @@
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/OsmUtils.h>
+
+using namespace std;
 
 namespace hoot
 {
@@ -157,6 +161,16 @@ QList<boost::shared_ptr<const Node> > RdpWayGeneralizer::getGeneralizedPoints(
     OsmUtils::printNodes("reducedLine", reducedLine);
     return reducedLine;
   }
+}
+
+void RdpWayGeneralizer::setEpsilon(double epsilon)
+{
+  if (epsilon <= 0.0)
+  {
+    throw HootException("Invalid epsilon value: " + QString::number(epsilon));
+  }
+  _epsilon = epsilon;
+  LOG_VART(_epsilon);
 }
 
 double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(

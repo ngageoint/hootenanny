@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/string/TextFileWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/SqliteWordWeightDictionary.h>
 #include <hoot/core/algorithms/string/WeightedWordDistance.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 

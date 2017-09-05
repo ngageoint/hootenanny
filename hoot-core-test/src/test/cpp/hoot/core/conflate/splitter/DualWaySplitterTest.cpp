@@ -76,7 +76,6 @@ public:
     OsmXmlWriter writer;
     writer.write(after, "test-output/DualWaySplitterTest.osm");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DualWaySplitterTest);

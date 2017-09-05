@@ -79,7 +79,6 @@ public class ExportResource {
     @Autowired
     private ExportCommandFactory exportCommandFactory;
 
-
     public ExportResource() {}
 
     /**
@@ -95,11 +94,12 @@ public class ExportResource {
      *                            //a file path will be specified.
      *   "input":"ToyTestA",      //Input name. for inputtype = db then specify name from hoot db.
      *                            //For inputtype=file, specify full path to a file.
-     *   "outputtype":"gdb",      //[gdb | shp | osm_api_db | osc]. gdb will produce file gdb,
-     *                            //shp will output shapefile. osm_api_db will derive and apply a
+     *   "outputtype":"gdb",      //[gdb | shp | osm_api_db | osc | tiles]. gdb will produce an ESRI file
+     *                             geodatabase, shp will output shapefile. osm_api_db will derive and apply a
      *                            //changeset to an OSM API database . osc will derive changeset
      *                            //xml computing the the difference between the configured
-     *                            //OSM API database and the specified input layer
+     *                            //OSM API database and the specified input layer.  tiles outputs a GeoJSON file
+     *                            //containing partitioned concentrations of node tiles
      *   "removereview" : "false"
      * }
      *
@@ -142,15 +142,12 @@ public class ExportResource {
 
                 workflow.add(exportOSMCommand);
             }
-            // As of 04/03/2017, OSC support is not fully implemented yet.  This REST controller might not
-            // even be the right place to host it.
             else if (outputType.equalsIgnoreCase("osc")) {
                 ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
                         debugLevel, DeriveChangesetCommand.class, this.getClass());
 
                 workflow.add(deriveChangesetCommand);
             }
-            //TODO outputtype=osm_api_db may end up being obsolete with the addition of osc
             else if (outputType.equalsIgnoreCase("osm_api_db")) {
                 ExternalCommand deriveChangesetCommand = exportCommandFactory.build(jobId, params,
                         debugLevel, DeriveChangesetCommand.class, this.getClass());
@@ -160,6 +157,12 @@ public class ExportResource {
 
                 workflow.add(deriveChangesetCommand);
                 workflow.add(applyChangesetCommand);
+            }
+            else if (outputType.startsWith("tiles")) {
+                ExternalCommand calculateTilesCommand = exportCommandFactory.build(jobId, params,
+                        debugLevel, CalculateTilesCommand.class, this.getClass());
+
+                workflow.add(calculateTilesCommand);
             }
             else { //else Shape/FGDB
                 ExternalCommand exportCommand = exportCommandFactory.build(jobId, params,
@@ -266,6 +269,43 @@ public class ExportResource {
         try {
             File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "xml" : ext);
             response = Response.ok(new DOMSource(XmlDocumentBuilder.parse(FileUtils.readFileToString(out, "UTF-8")))).build();
+        }
+        catch (WebApplicationException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new WebApplicationException(e);
+        }
+
+        return response;
+    }
+
+    /**
+     * Returns the contents of a geojson job output file
+     *
+     * GET hoot-services/job/export/geojson/[job id from exportjob]
+     *
+     * @param jobId
+     *            job id
+     * @param ext
+     *            parameter overrides the file extension of the file being downloaded
+     *            but is also used to identify the export file on the server, so not really!
+     * @return job output geojson
+     *
+     * @throws WebApplicationException
+     *             if the job with ID = id does not exist, the referenced job
+     *             output file no longer exists.
+     */
+    @GET
+    @Path("/geojson/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getGeoJsonOutput(@PathParam("id") String jobId,
+                                 @QueryParam("ext") String ext) {
+        Response response;
+
+        try {
+            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "geojson" : ext);
+            response = Response.ok(FileUtils.readFileToString(out, "UTF-8")).build();
         }
         catch (WebApplicationException e) {
             throw e;

@@ -169,6 +169,38 @@ public class ExportResourceTest extends HootServicesJerseyTestAbstract {
         assertEquals(1, job.getCommands().length);
         assertSame(DeriveChangesetCommand.class, job.getCommands()[0].getClass());
     }
+    
+    @Test
+    @Category(UnitTest.class)
+    public void testExportTilesResource() throws Exception {
+        long userId = MapUtils.insertUser();
+        long mapId = MapUtils.insertMap(userId);
+        String aoi = "-104.8192,38.8162,-104.6926,38.9181";
+
+        ExportParams jobParams = new ExportParams();
+        jobParams.setOutputName("output");
+        jobParams.setAppend(false);
+        jobParams.setTextStatus(false);
+        jobParams.setInputType("file");
+        jobParams.setOutputType("tiles");
+        jobParams.setInput("input1;input2");
+        jobParams.setBounds(aoi);
+        jobParams.setMaxNodeCountPerTile(1000);
+        jobParams.setPixelSize(0.001);
+        jobParams.setUserId(String.valueOf(userId));
+
+        String responseData = target("export/execute")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(jobParams, MediaType.APPLICATION_JSON), String.class);
+
+        assertNotNull(responseData);
+
+        Job job = super.getSubmittedJob();
+
+        assertNotNull(job);
+        assertEquals(1, job.getCommands().length);
+        assertSame(CalculateTilesCommand.class, job.getCommands()[0].getClass());
+    }
 
     @Test
     @Category(UnitTest.class)

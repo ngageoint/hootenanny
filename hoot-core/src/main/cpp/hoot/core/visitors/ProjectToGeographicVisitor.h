@@ -53,7 +53,7 @@ public:
 private:
 
   OGRCoordinateTransformation* _transform;
- boost::shared_ptr<ReprojectCoordinateFilter> _rcf;
+  boost::shared_ptr<ReprojectCoordinateFilter> _rcf;
 };
 
 }

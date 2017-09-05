@@ -78,11 +78,8 @@ public:
       cout << getHelp() << endl << endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
-    QString input = args[0];
 
-    HootApiDbWriter writer;
-
-    writer.deleteMap(input);
+    HootApiDbWriter().deleteMap(args[0]);
 
     return 0;
   }

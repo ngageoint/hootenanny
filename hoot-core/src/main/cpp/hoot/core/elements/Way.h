@@ -37,14 +37,6 @@
 // Geos
 #include <geos/geom/Envelope.h>
 
-namespace geos {
-  namespace geom {
-    class LinearRing;
-    class LineString;
-    class Polygon;
-  }
-}
-
 // Hoot
 #include <hoot/core/util/HootException.h>
 
@@ -183,9 +175,9 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
 
-  virtual void visitRw(ElementProvider& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
 protected:
 

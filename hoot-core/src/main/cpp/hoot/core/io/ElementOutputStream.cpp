@@ -25,6 +25,7 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
+#include <hoot/core/util/Log.h>
 #include "ElementInputStream.h"
 #include "ElementOutputStream.h"
 
@@ -43,7 +44,11 @@ void ElementOutputStream::writeAllElements(ElementInputStream& eis, ElementOutpu
 {
   while (eis.hasMoreElements())
   {
-    eos.writeElement(eis);
+    ElementPtr e = eis.readNextElement();
+    if (e.get())
+    {
+      eos.writeElement(e);
+    }
   }
 }
 

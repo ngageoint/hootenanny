@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-16' action='modify' visible='true' lat='39.748871213' lon='-105.00741314122'>
+    <tag k='leisure' v='stadium' />
+    <tag k='name' v='Pepsi' />
+    <tag k='source' v='wikimapia' />
+  </node>
+  <node id='-19' action='modify' visible='true' lat='39.74906918663' lon='-105.00782083699'>
+    <tag k='leisure' v='sports_centre' />
+    <tag k='name' v='Pepsi Center' />
+    <tag k='source' v='wikimapia' />
+  </node>
+</osm>

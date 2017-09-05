@@ -33,6 +33,7 @@
 #include <hoot/core/io/PbfElementIterator.h>
 #include <hoot/core/io/OsmPbfWriter.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <fstream>
@@ -75,7 +76,7 @@ public:
     {
       throw HootException("Error opening " + output + " for writing.");
     }
-    writer.intializePartial(&fp);
+    writer.initializePartial(&fp);
 
     int nodeCount = 0;
     int wayCount = 0;

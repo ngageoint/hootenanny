@@ -72,10 +72,7 @@ public:
 
     void setSubline(ConstEdgeSublinePtr s) { _subline = s; }
 
-    QString toString() const
-    {
-      return hoot::toString(_subline);
-    }
+    QString toString() const;
 
   private:
     /// The portion of the edge. The portion is always measured starting at "from" regardless of
@@ -108,7 +105,7 @@ public:
    */
   ConstEdgeLocationPtr calculateNearestLocation(ConstEdgeLocationPtr el) const;
 
- boost::shared_ptr<EdgeString> clone() const;
+  boost::shared_ptr<EdgeString> clone() const;
 
   /**
    * Returns true if the entire string in other is contained by this.

@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/ReviewMarker.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
@@ -43,7 +43,7 @@ class OsmMap;
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CountUniqueReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class CountUniqueReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
 public:

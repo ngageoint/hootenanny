@@ -30,6 +30,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/poi-polygon/extractors/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Log.h>
 using namespace hoot;
 
 // CPP Unit

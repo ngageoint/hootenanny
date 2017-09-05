@@ -29,7 +29,6 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include "ElementInputStream.h"
 
 namespace hoot
 {
@@ -88,18 +87,7 @@ void PartialOsmMapWriter::writePartial(const boost::shared_ptr<const Element>& e
   }
 }
 
-void PartialOsmMapWriter::writePartial(const RelationPtr& r)
-{
-  writePartial((const ConstRelationPtr)r);
-}
-
-void PartialOsmMapWriter::writeElement(ElementInputStream& in)
-{
-  ElementPtr ele = in.readNextElement();
-  writePartial(ele);
-}
-
-void PartialOsmMapWriter::writeElement(ElementPtr &element)
+void PartialOsmMapWriter::writeElement(ElementPtr& element)
 {
   if (element != 0)
   {

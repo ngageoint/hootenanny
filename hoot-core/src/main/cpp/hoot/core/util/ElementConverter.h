@@ -28,9 +28,11 @@
 #ifndef ELEMENTCONVERTER_H
 #define ELEMENTCONVERTER_H
 
-#include <ogr_spatialref.h>
-
+// boost
 #include <boost/shared_ptr.hpp>
+
+// GDAL
+class OGRSpatialReference;
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -89,19 +91,19 @@ public:
    * Converts the given element to a geos geometry object. The tags are used with OsmSchema to
    * determine the geometry type.
    */
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const boost::shared_ptr<const Element>& e,
-                                                           bool throwError=true,
-                                                           const bool statsFlag=false) const;
- boost::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
-                                                           const bool statsFlag=false) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r,
-                                                           bool throwError,
-                                                           const bool statsFlag=false) const;
- boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;
- boost::shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
- boost::shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;
+  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const boost::shared_ptr<const Element>& e,
+                                                            bool throwError=true,
+                                                            const bool statsFlag=false) const;
+  boost::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
+  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
+  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
+                                                            const bool statsFlag=false) const;
+  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstRelationPtr& r,
+                                                            bool throwError,
+                                                            const bool statsFlag=false) const;
+  boost::shared_ptr<geos::geom::Geometry> convertToGeometry(const RelationPtr& r) const;
+  boost::shared_ptr<geos::geom::LineString> convertToLineString(const ConstWayPtr& w) const;
+  boost::shared_ptr<geos::geom::Polygon> convertToPolygon(const ConstWayPtr& w) const;
 
   /**
    * Return the geometry type of the specific element.

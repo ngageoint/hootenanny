@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
@@ -40,7 +40,7 @@ class ScriptToOgrTranslator;
 class ScriptTranslator;
 class Schema;
 
-class TranslatedTagCountVisitor : public ElementVisitor, public ConstOsmMapConsumer,
+class TranslatedTagCountVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
   public SingleStatistic
 {
 public:
@@ -69,8 +69,8 @@ public:
 private:
 
   const OsmMap* _map;
- boost::shared_ptr<const Schema> _schema;
- boost::shared_ptr<ScriptToOgrTranslator> _translator;
+  boost::shared_ptr<const Schema> _schema;
+  boost::shared_ptr<ScriptToOgrTranslator> _translator;
   long _populatedCount, _defaultCount, _nullCount;
 
   void _countTags(boost::shared_ptr<Feature>& f);

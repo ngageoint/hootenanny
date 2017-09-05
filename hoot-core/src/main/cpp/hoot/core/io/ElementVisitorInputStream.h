@@ -29,11 +29,12 @@
 
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
 
-class ElementVisitor;
+class ConstElementVisitor;
 
 class ElementVisitorInputStream : public ElementInputStream
 {
@@ -43,14 +44,19 @@ public:
    * @param elementSource The stream used to read elements from
    * @param visitor The operation that should be performed on elements that are read from the input source before being returned
    */
-  ElementVisitorInputStream(const boost::shared_ptr<ElementInputStream>& elementSource,
-                            const boost::shared_ptr<ElementVisitor>& visitor);
+  ElementVisitorInputStream(const ElementInputStreamPtr& elementSource,
+                            const ElementVisitorPtr& visitor);
 
   /**
    * @brief close
    * Invokes the close function on the source element input stream
    */
   virtual void close() { _elementSource->close(); }
+
+  /**
+   * Returns the source's projection.
+   */
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
   /**
    * @brief hasMoreElements
@@ -67,8 +73,8 @@ public:
 
 
 private:
-  boost::shared_ptr<ElementInputStream> _elementSource;
-  boost::shared_ptr<ElementVisitor> _visitor;
+  ElementInputStreamPtr _elementSource;
+  ElementVisitorPtr _visitor;
 };
 
 }

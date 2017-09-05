@@ -33,13 +33,13 @@
 
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
-#include <hoot/core/io/OsmApiDbReader.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
-#include <QFile>
 #include <QStringList>
 
 // Tgs
@@ -91,16 +91,7 @@ void ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase()
 
 QUrl ServicesDbTestUtils::getDbModifyUrl()
 {
-  // read the DB values from the DB config file.
-  Settings s = _readDbConfig();
-  QUrl result;
-  result.setScheme("hootapidb");
-  result.setHost(s.get("DB_HOST").toString());
-  result.setPort(s.get("DB_PORT").toInt());
-  result.setUserName(s.get("DB_USER").toString());
-  result.setPassword(s.get("DB_PASSWORD").toString());
-  result.setPath("/" + s.get("DB_NAME").toString() + "/testMap");
-  return result;
+  return QUrl(HootApiDb::getBaseUrl().toString() + "/testMap");
 }
 
 QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId)
@@ -135,7 +126,7 @@ QUrl ServicesDbTestUtils::getDbReadUrl(const long mapId, const long elemId, cons
 QUrl ServicesDbTestUtils::getOsmApiDbUrl()
 {
   // read the DB values from the DB config file.
-  Settings s = _readDbConfig();
+  Settings s = ApiDb::readDbConfig();
   QUrl result;
   result.setScheme("osmapidb");
   result.setHost(s.get("DB_HOST_OSMAPI").toString());
@@ -167,43 +158,6 @@ int ServicesDbTestUtils::findIndex(const QList<QString>& keys, const QString& ke
 
   // didn't find a match so return -1
   return -1;
-}
-
-Settings ServicesDbTestUtils::_readDbConfig()
-{
-  Settings result;
-  //  Read in the default values
-  QString defaults = ConfPath::getHootHome() + "/conf/database/DatabaseConfigDefault.sh";
-  _readDbConfig(result, defaults);
-  //  Read in the local values if the file exists
-  QString local = ConfPath::getHootHome() + "/conf/database/DatabaseConfigLocal.sh";
-  if (QFile::exists(local))
-  {
-    _readDbConfig(result, local);
-  }
-  return result;
-}
-
-void ServicesDbTestUtils::_readDbConfig(Settings& settings, QString config_path)
-{
-  QFile fp(config_path);
-  if (fp.open(QIODevice::ReadOnly) == false)
-  {
-    throw HootException("Error opening: " + fp.fileName());
-  }
-  QString s = QString::fromUtf8(fp.readAll());
-
-  QStringList sl = s.split('\n', QString::SkipEmptyParts);
-
-  foreach (QString s, sl)
-  {
-    QString key = s.section("=", 0, 0).remove("export ").trimmed();
-    QString value = s.section("=", 1).trimmed();
-    if (!key.startsWith("#") && key.length() > 0)
-    {
-      settings.set(key, value);
-    }
-  }
 }
 
 void ServicesDbTestUtils::verifyTestDatabaseEmpty()

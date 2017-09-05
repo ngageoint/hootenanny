@@ -94,7 +94,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
     return;
   }
 
-  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
+  boost::shared_ptr<RubberSheet> rubberSheet(new RubberSheet(false));
   rubberSheet->setReference(_rubberSheetRef);
   rubberSheet->setMinimumTies(_minTies);
   try
@@ -112,7 +112,7 @@ void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
     try
     {
       MapCleaner().apply(mapWithOnlyUnknown1And2);
-      rubberSheet.reset(new RubberSheet());
+      rubberSheet.reset(new RubberSheet(false));
       rubberSheet->setReference(_rubberSheetRef);
       rubberSheet->setMinimumTies(_minTies);
       rubberSheet->calculateTransform(mapWithOnlyUnknown1And2);
@@ -153,7 +153,9 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 16));
+    LOG_INFO(
+      "Calculated search radius = " +
+      QString::number(_result, 'g', ConfigOptions().getWriterPrecision()));
   }
 }
 

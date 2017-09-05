@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
@@ -84,8 +85,8 @@ public:
 
     uut.conflate("test-output/conflate/TileConflatorTest.osm");
 
-    CPPUNIT_ASSERT_EQUAL(true, TestUtils::compareMaps("test-files/conflate/TileConflatorTest.osm",
-      "test-output/conflate/TileConflatorTest.osm"));
+    HOOT_FILE_EQUALS("test-files/conflate/TileConflatorTest.osm",
+                     "test-output/conflate/TileConflatorTest.osm");
   }
 
   virtual void tearDown()

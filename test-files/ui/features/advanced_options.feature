@@ -46,8 +46,8 @@ Feature: Advanced Conflation Options
         Then I click on "#hoot_general_conflation_options_label"
         And I should see element "#unify_optimizer_time_limit" with no value and placeholder "60"
         And I should see checkbox "OGR Split O2S" unchecked
-        And I should see checkbox "OGR TDS Add FCSubtype" checked
-        And I should see checkbox "OGR TDS Structure" checked
+        And I should see checkbox "OGR Esri FCSubtype" checked
+        And I should see checkbox "OGR Thematic Structure" checked
         And I should see checkbox "Duplicate Name Case Sensitive" checked
         And I should see element "#element_cache_size_node" with no value and placeholder "2000000"
         And I should see element "#element_cache_size_relation" with no value and placeholder "200000"

@@ -72,6 +72,8 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
       FunctionTemplate::New(getElementId)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getId"),
       FunctionTemplate::New(getId)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol("getStatusInput"),
+      FunctionTemplate::New(getStatusString)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getStatusString"),
       FunctionTemplate::New(getStatusString)->GetFunction());
   tpl->PrototypeTemplate()->Set(String::NewSymbol("getTags"),
@@ -108,6 +110,15 @@ Handle<Value> ElementJs::getId(const Arguments& args) {
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
 
   return scope.Close(v8::Integer::New(e->getId()));
+}
+
+Handle<Value> ElementJs::getStatusInput(const Arguments& args)
+{
+  HandleScope scope;
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getConstElement();
+
+  return scope.Close(toV8(e->getStatus().getInput()));
 }
 
 Handle<Value> ElementJs::getStatusString(const Arguments& args)

@@ -43,6 +43,7 @@ using namespace hoot;
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 // TGS
 #include <tgs/StreamUtils.h>
@@ -53,9 +54,9 @@ using namespace Tgs;
 namespace hoot
 {
 
-class DividedHighwayManipulatorTest : public CppUnit::TestFixture
+class DividedHighwayManipulationTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(DividedHighwayManipulatorTest);
+    CPPUNIT_TEST_SUITE(DividedHighwayManipulationTest);
     CPPUNIT_TEST(individualManipulationsTest);
     CPPUNIT_TEST_SUITE_END();
 
@@ -105,12 +106,13 @@ public:
 
     MapProjector::projectToWgs84(after);
 
+    QDir().mkdir("test-output");
     OsmXmlWriter writer;
-    writer.write(after, "test-output/DividedHighwayManipulatorTest.osm");
+    writer.write(after, "test-output/DividedHighwayManipulationTest.osm");
   }
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DividedHighwayManipulatorTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(DividedHighwayManipulationTest);
 
 }

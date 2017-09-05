@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <create>
+        <node id="-1" version="0" lat="18.5274010000000011" lon="-72.4805895049999975">
+            <tag k="hoot:id" v="1547"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+    </create>
+    <create>
+        <node id="-2" version="0" lat="18.5388102970001007" lon="-72.4758941719999967">
+            <tag k="hoot:id" v="1617"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-3" version="0" lat="18.5387332889999996" lon="-72.4759055809999069">
+            <tag k="hoot:id" v="1618"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-4" version="0" lat="18.5386306109999985" lon="-72.4759455110000061">
+            <tag k="hoot:id" v="1619"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-5" version="0" lat="18.5385307859999990" lon="-72.4759626240000046">
+            <tag k="hoot:id" v="1620"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-6" version="0" lat="18.5384637600000985" lon="-72.4759626240000046">
+            <tag k="hoot:id" v="1621"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-7" version="0" lat="18.5383967349999992" lon="-72.4759626240000046">
+            <tag k="hoot:id" v="1622"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-8" version="0" lat="18.5382370140000994" lon="-72.4759882929999009">
+            <tag k="hoot:id" v="1623"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-9" version="0" lat="18.5382234040000995" lon="-72.4759908850000016">
+            <tag k="hoot:id" v="1624"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-10" version="0" lat="18.5382097940000996" lon="-72.4759934780000066">
+            <tag k="hoot:id" v="1625"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-11" version="0" lat="18.5381172240001000" lon="-72.4760111099999023">
+            <tag k="hoot:id" v="1626"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-12" version="0" lat="18.5379945810000990" lon="-72.4759939970000033">
+            <tag k="hoot:id" v="1627"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-13" version="0" lat="18.5378776430001011" lon="-72.4759825889999973">
+            <tag k="hoot:id" v="1628"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-14" version="0" lat="18.5377321840000988" lon="-72.4760054059999987">
+            <tag k="hoot:id" v="1629"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-15" version="0" lat="18.5376009850000010" lon="-72.4760339269999037">
+            <tag k="hoot:id" v="1630"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-16" version="0" lat="18.5375211240000013" lon="-72.4760852659999983">
+            <tag k="hoot:id" v="1631"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-17" version="0" lat="18.5373385870000007" lon="-72.4761736829999990">
+            <tag k="hoot:id" v="1632"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-18" version="0" lat="18.5372016829999993" lon="-72.4762592470000016">
+            <tag k="hoot:id" v="1633"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-19" version="0" lat="18.5369649549999984" lon="-72.4763048819999938">
+            <tag k="hoot:id" v="1634"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-20" version="0" lat="18.5368023820001007" lon="-72.4763105859999968">
+            <tag k="hoot:id" v="1635"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-21" version="0" lat="18.5366112880000991" lon="-72.4762763600000000">
+            <tag k="hoot:id" v="1636"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-22" version="0" lat="18.5364087849999990" lon="-72.4762050559999977">
+            <tag k="hoot:id" v="1637"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-23" version="0" lat="18.5361777610000011" lon="-72.4761251959998987">
+            <tag k="hoot:id" v="1638"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-24" version="0" lat="18.5359609980000997" lon="-72.4760196669999033">
+            <tag k="hoot:id" v="1639"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-25" version="0" lat="18.5357727560000001" lon="-72.4759455110000061">
+            <tag k="hoot:id" v="1640"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-26" version="0" lat="18.5355160620000987" lon="-72.4758086070000047">
+            <tag k="hoot:id" v="1641"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-27" version="0" lat="18.5354105330000998" lon="-72.4757658249998968">
+            <tag k="hoot:id" v="1642"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-28" version="0" lat="18.5352679249999994" lon="-72.4757743819998979">
+            <tag k="hoot:id" v="1643"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-29" version="0" lat="18.5350853869999987" lon="-72.4758086070000047">
+            <tag k="hoot:id" v="1644"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-30" version="0" lat="18.5348486590000014" lon="-72.4758827630000013">
+            <tag k="hoot:id" v="1645"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-31" version="0" lat="18.5346404520001009" lon="-72.4759426579999939">
+            <tag k="hoot:id" v="1646"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-32" version="0" lat="18.5344408010000983" lon="-72.4759825889999973">
+            <tag k="hoot:id" v="1647"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-33" version="0" lat="18.5342183330001014" lon="-72.4760253709999063">
+            <tag k="hoot:id" v="1648"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-34" version="0" lat="18.5341497110001008" lon="-72.4760287349999004">
+            <tag k="hoot:id" v="1649"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-35" version="0" lat="18.5339274140001002" lon="-72.4760396319999955">
+            <tag k="hoot:id" v="1650"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-36" version="0" lat="18.5338561099999986" lon="-72.4760111099999023">
+            <tag k="hoot:id" v="1651"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-37" version="0" lat="18.5338047720000993" lon="-72.4759683279999933">
+            <tag k="hoot:id" v="1652"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-38" version="0" lat="18.5337505810000991" lon="-72.4759426579999939">
+            <tag k="hoot:id" v="1653"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-39" version="0" lat="18.5336935380000014" lon="-72.4759255459999991">
+            <tag k="hoot:id" v="1654"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-40" version="0" lat="18.5336165300000992" lon="-72.4759084330000007">
+            <tag k="hoot:id" v="1655"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-41" version="0" lat="18.5335423739999996" lon="-72.4758970239999059">
+            <tag k="hoot:id" v="1656"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-42" version="0" lat="18.5334796259999983" lon="-72.4758856149999957">
+            <tag k="hoot:id" v="1657"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-43" version="0" lat="18.5334596610001014" lon="-72.4759255459999991">
+            <tag k="hoot:id" v="1658"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-44" version="0" lat="18.5334511050000010" lon="-72.4759997019999958">
+            <tag k="hoot:id" v="1659"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-45" version="0" lat="18.5334511050000010" lon="-72.4760852659999983">
+            <tag k="hoot:id" v="1660"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-46" version="0" lat="18.5334396960001015" lon="-72.4761736829999990">
+            <tag k="hoot:id" v="1661"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-47" version="0" lat="18.5334111750000012" lon="-72.4762478389998961">
+            <tag k="hoot:id" v="1662"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-48" version="0" lat="18.5333712450001009" lon="-72.4762906210000040">
+            <tag k="hoot:id" v="1663"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-49" version="0" lat="18.5333284620000001" lon="-72.4763077340000024">
+            <tag k="hoot:id" v="1664"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-50" version="0" lat="18.5332742709999998" lon="-72.4762963250000070">
+            <tag k="hoot:id" v="1665"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-51" version="0" lat="18.5332115239999986" lon="-72.4762792119999943">
+            <tag k="hoot:id" v="1666"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-52" version="0" lat="18.5331601849999998" lon="-72.4762877689999954">
+            <tag k="hoot:id" v="1667"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-53" version="0" lat="18.5331174030001016" lon="-72.4763419599998997">
+            <tag k="hoot:id" v="1668"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-54" version="0" lat="18.5330632120001013" lon="-72.4764474889999946">
+            <tag k="hoot:id" v="1669"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-55" version="0" lat="18.5330375429999989" lon="-72.4765302019999069">
+            <tag k="hoot:id" v="1670"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-56" version="0" lat="18.5330033170001016" lon="-72.4766243229998963">
+            <tag k="hoot:id" v="1671"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-57" version="0" lat="18.5328778219999997" lon="-72.4768125650000030">
+            <tag k="hoot:id" v="1672"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-58" version="0" lat="18.5327722930000007" lon="-72.4769979539999980">
+            <tag k="hoot:id" v="1673"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-59" version="0" lat="18.5326097200000000" lon="-72.4771576749999014">
+            <tag k="hoot:id" v="1674"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-60" version="0" lat="18.5325013390000990" lon="-72.4772746130000058">
+            <tag k="hoot:id" v="1675"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-61" version="0" lat="18.5324471480000987" lon="-72.4773972560000033">
+            <tag k="hoot:id" v="1676"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-62" version="0" lat="18.5323901050000011" lon="-72.4775341590000011">
+            <tag k="hoot:id" v="1677"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-63" version="0" lat="18.5323473220000992" lon="-72.4776054630000033">
+            <tag k="hoot:id" v="1678"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-64" version="0" lat="18.5322931320000990" lon="-72.4776682099999050">
+            <tag k="hoot:id" v="1679"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-65" version="0" lat="18.5321448199999992" lon="-72.4777509219999985">
+            <tag k="hoot:id" v="1680"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-66" version="0" lat="18.5319993600000998" lon="-72.4778307819999981">
+            <tag k="hoot:id" v="1681"/>
+            <tag k="hoot:status" v="2"/>
+        </node>
+        <node id="-67" version="0" lat="18.5274081479490995" lon="-72.4805939877279002">
+            <tag k="hoot:id" v="1689"/>
+            <tag k="hoot:status" v="1"/>
+        </node>
+    </create>
+    <modify>
+        <way id="158" version="1">
+            <nd ref="-67"/>
+            <nd ref="1454"/>
+            <nd ref="1455"/>
+            <nd ref="1456"/>
+            <nd ref="1457"/>
+            <nd ref="1458"/>
+            <nd ref="1459"/>
+            <nd ref="1460"/>
+            <nd ref="1461"/>
+            <nd ref="1472"/>
+            <nd ref="1473"/>
+            <nd ref="1474"/>
+            <nd ref="1475"/>
+            <nd ref="1476"/>
+            <nd ref="1477"/>
+            <nd ref="1478"/>
+            <nd ref="1479"/>
+            <nd ref="1480"/>
+            <nd ref="1481"/>
+            <nd ref="1482"/>
+            <nd ref="1483"/>
+            <nd ref="1484"/>
+            <nd ref="1485"/>
+            <nd ref="1486"/>
+            <nd ref="1487"/>
+            <nd ref="1488"/>
+            <nd ref="1489"/>
+            <nd ref="1490"/>
+            <nd ref="1491"/>
+            <nd ref="1492"/>
+            <nd ref="1493"/>
+            <nd ref="1494"/>
+            <nd ref="1495"/>
+            <nd ref="1496"/>
+            <nd ref="1497"/>
+            <nd ref="1498"/>
+            <nd ref="1499"/>
+            <nd ref="1500"/>
+            <nd ref="1501"/>
+            <nd ref="1502"/>
+            <nd ref="1503"/>
+            <nd ref="1504"/>
+            <nd ref="1505"/>
+            <nd ref="1506"/>
+            <nd ref="1507"/>
+            <nd ref="1508"/>
+            <nd ref="1509"/>
+            <tag k="hoot:status" v="3"/>
+            <tag k="source" v="geoeye"/>
+            <tag k="source:horiz_accuracy_cat" v="accurate"/>
+            <tag k="status" v="functional"/>
+            <tag k="highway:min_width" v="3"/>
+            <tag k="source:date_time" v="2010-01-13"/>
+            <tag k="lanes" v="1"/>
+            <tag k="seasonal" v="no"/>
+            <tag k="source:vertical_source_category" v="no_elevations"/>
+            <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+            <tag k="surface" v="unpaved"/>
+            <tag k="source:abs_horiz_accuracy" v="25"/>
+            <tag k="median" v="no"/>
+            <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+            <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+            <tag k="source:description" v="IKONOS Imagery"/>
+            <tag k="source:review_source_type" v="NA"/>
+            <tag k="REF2" v="todo"/>
+            <tag k="highway" v="path"/>
+            <tag k="source:datetime" v="2010-01-18T18:46:23.000Z;2016-09-29T18:41:47Z"/>
+            <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+            <tag k="location" v="surface"/>
+            <tag k="source:abs_vert_accuracy" v="-32765"/>
+            <tag k="hoot:id" v="158"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+    </modify>
+    <create>
+        <way id="-1" version="0">
+            <nd ref="1415"/>
+            <nd ref="1420"/>
+            <nd ref="1429"/>
+            <nd ref="1430"/>
+            <nd ref="1431"/>
+            <nd ref="1432"/>
+            <nd ref="1433"/>
+            <nd ref="1434"/>
+            <nd ref="1435"/>
+            <nd ref="1436"/>
+            <nd ref="1437"/>
+            <nd ref="1438"/>
+            <nd ref="1439"/>
+            <nd ref="1440"/>
+            <nd ref="1441"/>
+            <nd ref="1442"/>
+            <nd ref="1412"/>
+            <nd ref="1462"/>
+            <nd ref="1443"/>
+            <nd ref="1444"/>
+            <nd ref="1445"/>
+            <nd ref="1446"/>
+            <nd ref="1447"/>
+            <nd ref="1448"/>
+            <nd ref="1449"/>
+            <nd ref="1450"/>
+            <nd ref="1451"/>
+            <nd ref="1452"/>
+            <nd ref="1453"/>
+            <nd ref="-67"/>
+            <tag k="hoot:id" v="169"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="source" v="geoeye"/>
+            <tag k="highway" v="path"/>
+            <tag k="source:datetime" v="2010-01-18T18:46:23.000Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-2" version="0">
+            <nd ref="1509"/>
+            <nd ref="1510"/>
+            <nd ref="1511"/>
+            <nd ref="1512"/>
+            <nd ref="1513"/>
+            <nd ref="1514"/>
+            <nd ref="1515"/>
+            <nd ref="1516"/>
+            <nd ref="1517"/>
+            <nd ref="1518"/>
+            <nd ref="1540"/>
+            <nd ref="1541"/>
+            <nd ref="1542"/>
+            <nd ref="1544"/>
+            <nd ref="1545"/>
+            <nd ref="1546"/>
+            <nd ref="1543"/>
+            <tag k="hoot:id" v="170"/>
+            <tag k="hoot:status" v="1"/>
+            <tag k="source" v="geoeye"/>
+            <tag k="highway" v="path"/>
+            <tag k="source:datetime" v="2010-01-18T18:46:23.000Z"/>
+            <tag k="error:circular" v="15"/>
+        </way>
+        <way id="-3" version="0">
+            <nd ref="-2"/>
+            <nd ref="-3"/>
+            <nd ref="-4"/>
+            <nd ref="-5"/>
+            <nd ref="-6"/>
+            <nd ref="-7"/>
+            <nd ref="-8"/>
+            <nd ref="-9"/>
+            <nd ref="-10"/>
+            <nd ref="-11"/>
+            <nd ref="-12"/>
+            <nd ref="-13"/>
+            <nd ref="-14"/>
+            <nd ref="-15"/>
+            <nd ref="-16"/>
+            <nd ref="-17"/>
+            <nd ref="-18"/>
+            <nd ref="-19"/>
+            <nd ref="-20"/>
+            <nd ref="-21"/>
+            <nd ref="-22"/>
+            <nd ref="-23"/>
+            <nd ref="-24"/>
+            <nd ref="-25"/>
+            <nd ref="-26"/>
+            <nd ref="-27"/>
+            <nd ref="-28"/>
+            <nd ref="-29"/>
+            <nd ref="-30"/>
+            <nd ref="-31"/>
+            <nd ref="-32"/>
+            <nd ref="-33"/>
+            <nd ref="-34"/>
+            <nd ref="-35"/>
+            <nd ref="-36"/>
+            <nd ref="-37"/>
+            <nd ref="-38"/>
+            <nd ref="-39"/>
+            <nd ref="-40"/>
+            <nd ref="-41"/>
+            <nd ref="-42"/>
+            <nd ref="-43"/>
+            <nd ref="-44"/>
+            <nd ref="-45"/>
+            <nd ref="-46"/>
+            <nd ref="-47"/>
+            <nd ref="-48"/>
+            <nd ref="-49"/>
+            <nd ref="-50"/>
+            <nd ref="-51"/>
+            <nd ref="-52"/>
+            <nd ref="-53"/>
+            <nd ref="-54"/>
+            <nd ref="-55"/>
+            <nd ref="-56"/>
+            <nd ref="-57"/>
+            <nd ref="-58"/>
+            <nd ref="-59"/>
+            <nd ref="-60"/>
+            <nd ref="-61"/>
+            <nd ref="-62"/>
+            <nd ref="-63"/>
+            <nd ref="-64"/>
+            <nd ref="-65"/>
+            <nd ref="-66"/>
+            <nd ref="1509"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="source:horiz_accuracy_cat" v="accurate"/>
+            <tag k="status" v="functional"/>
+            <tag k="highway:min_width" v="3"/>
+            <tag k="source:date_time" v="2010-01-13"/>
+            <tag k="lanes" v="1"/>
+            <tag k="seasonal" v="no"/>
+            <tag k="source:vertical_source_category" v="no_elevations"/>
+            <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+            <tag k="surface" v="unpaved"/>
+            <tag k="source:abs_horiz_accuracy" v="25"/>
+            <tag k="median" v="no"/>
+            <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+            <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+            <tag k="source:description" v="IKONOS Imagery"/>
+            <tag k="source:review_source_type" v="NA"/>
+            <tag k="REF2" v="todo"/>
+            <tag k="highway" v="road"/>
+            <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+            <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+            <tag k="location" v="surface"/>
+            <tag k="source:abs_vert_accuracy" v="-32765"/>
+            <tag k="hoot:id" v="172"/>
+            <tag k="error:circular" v="28.65"/>
+        </way>
+        <way id="-4" version="0">
+            <nd ref="-67"/>
+            <nd ref="-1"/>
+            <tag k="hoot:status" v="2"/>
+            <tag k="source:horiz_accuracy_cat" v="accurate"/>
+            <tag k="status" v="functional"/>
+            <tag k="highway:min_width" v="3"/>
+            <tag k="source:date_time" v="2010-01-13"/>
+            <tag k="lanes" v="1"/>
+            <tag k="seasonal" v="no"/>
+            <tag k="source:vertical_source_category" v="no_elevations"/>
+            <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+            <tag k="surface" v="unpaved"/>
+            <tag k="source:abs_horiz_accuracy" v="25"/>
+            <tag k="median" v="no"/>
+            <tag k="source:copyright" v="Â© 2010. Her Majesty the Queen in Right of Canada."/>
+            <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+            <tag k="source:description" v="IKONOS Imagery"/>
+            <tag k="source:review_source_type" v="NA"/>
+            <tag k="REF2" v="todo"/>
+            <tag k="highway" v="road"/>
+            <tag k="source:datetime" v="2016-09-29T18:41:47Z"/>
+            <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+            <tag k="location" v="surface"/>
+            <tag k="source:abs_vert_accuracy" v="-32765"/>
+            <tag k="hoot:id" v="173"/>
+            <tag k="error:circular" v="28.65"/>
+        </way>
+    </create>
+</osmChange>

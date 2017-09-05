@@ -50,9 +50,9 @@ public:
    */
   void addEdgeMatch(const ConstEdgeMatchPtr& em, double score);
 
- boost::shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
+  boost::shared_ptr<IndexedEdgeLinks> calculateEdgeLinks();
 
- boost::shared_ptr<IndexedEdgeMatchSet> clone() const;
+  boost::shared_ptr<IndexedEdgeMatchSet> clone() const;
 
   /**
    * Returns true if the specified element (or the reversed equivalent) is contained in this set.

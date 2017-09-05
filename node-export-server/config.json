@@ -19,7 +19,8 @@
     "OSM": "translations/RenderDb.js",
     "TDSv40": "translations/TDSv40.js",
     "TDSv61": "translations/TDSv61.js",
-    "MGCP": "translations/MGCP_TRD4.js"
+    "MGCP": "translations/MGCP_TRD4.js",
+    "GGDMv30": "translations/GGDMv30.js"
   },
   "settings": {
     "cleanupDelay": 30000,

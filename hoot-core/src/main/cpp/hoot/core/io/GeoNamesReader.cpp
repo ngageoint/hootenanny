@@ -42,6 +42,7 @@ HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
 
 GeoNamesReader::GeoNamesReader()
 {
+  _maxSaveMemoryStrings = 100000;
   _circularError = 15.0;
   _useDataSourceIds = false;
 
@@ -147,7 +148,7 @@ ElementPtr GeoNamesReader::readNextElement()
     id = _partialMap->createNextNodeId();
   }
 
-  NodePtr n(new Node(_status, id, x, y, _circularError));
+  NodePtr n(Node::newSp(_status, id, x, y, _circularError));
 
   if (_columns.size() != fields.size())
   {
@@ -164,13 +165,27 @@ ElementPtr GeoNamesReader::readNextElement()
   return n;
 }
 
-const QString& GeoNamesReader::_saveMemory(const QString& s)
+QString GeoNamesReader::_saveMemory(const QString& s)
 {
-  if (!_strings.contains(s))
+  QString result;
+  if (_strings.size() < _maxSaveMemoryStrings)
   {
-    _strings[s] = s;
+    if (!_strings.contains(s))
+    {
+      result = s;
+      _strings[s] = s;
+    }
+    else
+    {
+      result = _strings[s];
+    }
   }
-  return _strings[s];
+  else
+  {
+    result = s;
+  }
+
+  return result;
 }
 
 }

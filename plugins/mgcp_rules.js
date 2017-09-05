@@ -1103,28 +1103,28 @@ mgcp.rules = {
         // STA - Maritime Station Type 
         // ['STA','0','raw:STA','unknown'], // Unknown 
         ['STA','0',undefined,undefined], // Unknown 
-        ['STA','1','raw:STA','coast_guard_station'], // Coast Guard Station 
-        ['STA','11','raw:STA','pilot_station'], // Pilot Station 
-        ['STA','13','raw:STA','signal_station'], // Signal Station 
-        ['STA','15','raw:STA','storm_signal_station'], // Storm Signal Station 
-        ['STA','17','raw:STA','tide_station'], // Tide Station 
-        ['STA','19','raw:STA','time_signal_station'], // Time Signal Station 
-        ['STA','2','raw:STA','fireboat_station'], // Fireboat Station 
-        ['STA','21','raw:STA','weather_signal_station'], // Weather Signal Station 
-        ['STA','27','raw:STA','tidal_stream_station'], // Tidal Stream Station 
-        ['STA','28','raw:STA','traffic_signal_station'], // Traffic Signal Station 
-        ['STA','29','raw:STA','bridge_signal_station'], // Bridge Signal Station 
-        ['STA','3','raw:STA','water-police_station'], // Water-police Station 
-        ['STA','30','raw:STA','lock_signal_station'], // Lock Signal Station 
-        ['STA','32','raw:STA','international_port_signals_station'], // International Port Signals Station 
-        ['STA','33','raw:STA','military_practice_signal_station'], // Military Practice Signal Station 
-        ['STA','35','raw:STA','warning_signal_station'], // Warning Signal Station 
-        ['STA','36','raw:STA','radar_surveillance_station'], // Radar Surveillance Station 
-        ['STA','37','raw:STA','pilot_lookout_station'], // Pilot Lookout Station 
-        ['STA','4','raw:STA','ice_signal_station'], // Ice Signal Station 
-        ['STA','5','raw:STA','rescue_station'], // Rescue Station 
-        ['STA','6','raw:STA','port_control_station'], // Port Control Station 
-        ['STA','999','raw:STA','other'], // Other 
+        ['STA','1','seamark:signal_station','coast_guard'], // Coast Guard Station
+        ['STA','11','seamark:signal_station','pilot'], // Pilot Station
+        ['STA','13','seamark:signal_station','signal'], // Signal Station
+        ['STA','15','seamark:signal_station','storm_signal'], // Storm Signal Station
+        ['STA','17','seamark:signal_station','tide'], // Tide Station
+        ['STA','19','seamark:signal_station','time_signal'], // Time Signal Station
+        ['STA','2','seamark:signal_station','fireboat'], // Fireboat Station
+        ['STA','21','seamark:signal_station','weather_signal'], // Weather Signal Station
+        ['STA','27','seamark:signal_station','tidal_stream'], // Tidal Stream Station
+        ['STA','28','seamark:signal_station','traffic_signal'], // Traffic Signal Station
+        ['STA','29','seamark:signal_station','bridge_signal'], // Bridge Signal Station
+        ['STA','3','seamark:signal_station','water-police'], // Water-police Station
+        ['STA','30','seamark:signal_station','lock_signal'], // Lock Signal Station
+        ['STA','32','seamark:signal_station','international_port_signals'], // International Port Signals Station
+        ['STA','33','seamark:signal_station','military_practice_signal'], // Military Practice Signal Station
+        ['STA','35','seamark:signal_station','warning_signal'], // Warning Signal Station
+        ['STA','36','seamark:signal_station','radar_surveillance'], // Radar Surveillance Station
+        ['STA','37','seamark:signal_station','pilot_lookout'], // Pilot Lookout Station
+        ['STA','4','seamark:signal_station','ice_signal'], // Ice Signal Station
+        ['STA','5','seamark:signal_station','rescue'], // Rescue Station
+        ['STA','6','seamark:signal_station','port_control'], // Port Control Station
+        ['STA','999','seamark:signal_station','other'], // Other
 
         // SUC - Shed Type
         ['SUC','0',undefined,undefined],
@@ -1254,7 +1254,7 @@ mgcp.rules = {
         ['WCC','1','waterway','stream'],
         ['WCC','2','waterway','braided_stream'],
         ['WCC','3','waterway','gorge'],
-        ['WCC','4','waterway','wadi'],
+        ['WCC','4','wadi','yes'],
         ['WCC','7','waterway','river'],
 
         // WFT - Well Type

@@ -93,12 +93,11 @@ OsmPbfReader::OsmPbfReader(bool useFileId)
   _init(useFileId);
 }
 
-OsmPbfReader::OsmPbfReader(
-  const QString urlString )
+OsmPbfReader::OsmPbfReader(const QString urlString)
 {
   _init(false);
 
-  if ( isSupported(urlString) == true )
+  if (isSupported(urlString) == true)
   {
     open(urlString);
   }
@@ -126,7 +125,7 @@ void OsmPbfReader::_init(bool useFileId)
 OsmPbfReader::~OsmPbfReader()
 {
   delete _d;
-  if ( _needToCloseInput == true )
+  if (_needToCloseInput == true)
   {
     close();
   }
@@ -346,7 +345,10 @@ const char* OsmPbfReader::_inflate(const string& compressed, size_t rawSize)
   strm.zalloc = Z_NULL;
   strm.zfree = Z_NULL;
   strm.opaque = Z_NULL;
-  inflateInit(&strm);
+  if (inflateInit(&strm) != Z_OK)
+  {
+    throw HootException(QString("Error initializing zlib stream."));
+  }
   strm.next_in = (Bytef*)compressed.data();
   strm.avail_in = compressed.size();
   strm.avail_out = rawSize;
@@ -364,7 +366,7 @@ const char* OsmPbfReader::_inflate(const string& compressed, size_t rawSize)
 
 void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
 {
-  int size = std::min(dn.id_size(), std::min(dn.lat_size(), dn.lon_size()));
+  size_t size = std::min(dn.id_size(), std::min(dn.lat_size(), dn.lon_size()));
   if (dn.id_size() != dn.lat_size() || dn.id_size() != dn.lon_size())
   {
     if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -378,14 +380,16 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     logWarnCount++;
   }
 
-  vector< boost::shared_ptr<hoot::Node> > nodes;
-  nodes.reserve(size);
+  if (_denseNodeTmp.size() != size)
+  {
+    _denseNodeTmp.resize(size);
+  }
 
   // the file uses delta encoding
   long lon = 0;
   long lat = 0;
   long id = 0;
-  for (int i = 0; i < size; i++)
+  for (size_t i = 0; i < size; i++)
   {
     id += dn.id().Get(i);
     lon += dn.lon().Get(i);
@@ -393,8 +397,9 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     long newId = _getNodeId(id);
     double x = _convertLon(lon);
     double y = _convertLat(lat);
-    NodePtr n(new hoot::Node(_status, newId, x, y, _circularError));
-    nodes.push_back(n);
+    _denseNodeTmp[i] = Node::newSp(_status, newId, x, y, _circularError);
+    //NodePtr n(Node::newSp(_status, newId, x, y, _circularError));
+    //nodes[i].reset(new Node(_status, newId, x, y, _circularError));
     if (_map->containsNode(newId))
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
@@ -407,8 +412,9 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       }
       logWarnCount++;
     }
-    _map->addNode(n);
   }
+
+  _map->addNodes(_denseNodeTmp);
 
   int index = 0;
   int kv = 0;
@@ -432,7 +438,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       else
       {
         v = str;
-        _addTag(nodes[index], k, v);
+        _addTag(_denseNodeTmp[index], k, v);
         kv = 0;
       }
     }
@@ -442,7 +448,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
   {
     const DenseInfo& di = dn.denseinfo();
     int timestampSize = di.timestamp_size();
-    if (timestampSize != size)
+    if ((size_t)timestampSize != size)
     {
       if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
       {
@@ -453,7 +459,7 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
       logWarnCount++;
-      timestampSize = std::min(size, timestampSize);
+      timestampSize = std::min<int>(size, timestampSize);
     }
 
     if (_addSourceDateTime)
@@ -463,14 +469,14 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
       {
         timestamp += di.timestamp().Get(i) * _dateGranularity;
 
-        if (timestamp != 0 && nodes[i]->getTags().getInformationCount() > 0)
+        if (timestamp != 0 && _denseNodeTmp[i]->getTags().hasInformationTag())
         {
           // QT 4.6 does not have fromMSecsSinceEpoch
           //QDateTime dt = QDateTime::fromMSecsSinceEpoch(timestamp).toTimeSpec(Qt::UTC);
     // same time, but friendly to earlier Qt version
           QDateTime dt = QDateTime::fromTime_t(0).addMSecs(timestamp).toUTC();
           QString dts = dt.toString("yyyy-MM-ddThh:mm:ss.zzzZ");
-          nodes[i]->setTag(MetadataTags::SourceDateTime(), dts);
+          _denseNodeTmp[i]->setTag(MetadataTags::SourceDateTime(), dts);
         }
       }
     }
@@ -549,6 +555,8 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
     logWarnCount++;
   }
   _map->addNode(newNode);
+
+  LOG_TRACE("Loaded node: " << newNode->getElementId());
 }
 
 void OsmPbfReader::_loadNodes()
@@ -758,6 +766,8 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     logWarnCount++;
   }
   _map->addRelation(newRelation);
+
+  LOG_TRACE("Loaded relation: " << newRelation->getElementId());
 }
 
 void OsmPbfReader::_loadRelations()
@@ -894,6 +904,8 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
     logWarnCount++;
   }
   _map->addWay(newWay);
+
+  LOG_TRACE("Loaded way: " << newWay->getElementId());
 }
 
 void OsmPbfReader::_loadWays()
@@ -925,7 +937,10 @@ void OsmPbfReader::parseBlob(long headerOffset, istream* strm, OsmMapPtr map)
     throw HootException("The stream passed in is not \"good\".");
   }
 
-  strm->seekg(headerOffset, ios_base::beg);
+  if (strm->tellg() != headerOffset)
+  {
+    strm->seekg(headerOffset, ios_base::beg);
+  }
   _parseBlobHeader();
   // Did we hit OSM header?
   if (_d->blobHeader.type() == PBF_OSM_DATA)
@@ -946,6 +961,7 @@ void OsmPbfReader::_parseBlob()
                                 "(%1 instead of %2)").
                         arg(_in->gcount()).arg(size));
   }
+  _d->blob.Clear();
   _d->blob.ParseFromArray(_buffer.data(), size);
 }
 
@@ -964,6 +980,7 @@ void OsmPbfReader::_parseBlobHeader()
                                 "(%1 instead of %2)").
                         arg(_in->gcount()).arg(size));
   }
+  _d->blobHeader.Clear();
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
@@ -979,6 +996,8 @@ void OsmPbfReader::parseElements(istream* strm, const OsmMapPtr& map)
                                 "(%1 instead of %2)").
                         arg(strm->gcount()).arg(size));
   }
+
+  _d->primitiveBlock.Clear();
   _d->primitiveBlock.ParseFromArray(_buffer.data(), size);
 
   _loadOsmData();
@@ -1001,6 +1020,8 @@ void OsmPbfReader::_parseOsmData()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
+
+  _d->primitiveBlock.Clear();
   _d->primitiveBlock.ParseFromArray(inflated, size);
 
   _loadOsmData();
@@ -1010,7 +1031,12 @@ void OsmPbfReader::_parseOsmHeader()
 {
   size_t size = _d->blob.raw_size();
   const char* inflated = _inflate(_d->blob.zlib_data(), size);
-  _d->headerBlock.ParseFromArray(inflated, size);
+
+  _d->headerBlock.Clear();
+  if (!_d->headerBlock.ParseFromArray(inflated, size))
+  {
+    throw IoException("Error reading headerBlock.");
+  }
 
   int optionalFeatureSize = _d->headerBlock.optional_features_size();
   for (int i = 0; i < optionalFeatureSize; i++)
@@ -1058,6 +1084,7 @@ void OsmPbfReader::parse(istream* strm, OsmMapPtr map)
 {
   _in = strm;
   _map = map;
+  _firstPartialReadCompleted = false;
 
   // read blob header
   _parseBlobHeader();
@@ -1162,6 +1189,28 @@ bool OsmPbfReader::isSupported(QString urlStr)
     input.exists() && (urlStr.toLower().endsWith(".osm.pbf") || urlStr.toLower().endsWith(".pbf"));
 }
 
+bool OsmPbfReader::isSorted(const QString file)
+{
+  _init(false);
+  if (isSupported(file))
+  {
+    open(file);
+  }
+  else
+  {
+    throw HootException("An invalid file format was specified: " + file + ".");
+  }
+
+  // read blob header
+  _parseBlobHeader();
+  // read blob
+  _parseBlob();
+  // read OSMHeader
+  _parseOsmHeader();
+
+  return _typeThenId;
+}
+
 void OsmPbfReader::open(QString urlStr)
 {
   fstream* fp = new fstream();
@@ -1189,6 +1238,7 @@ void OsmPbfReader::initializePartial()
   _partialNodesRead = 0;
   _partialWaysRead = 0;
   _partialRelationsRead = 0;
+  _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
   if ( _in != NULL )
@@ -1285,7 +1335,8 @@ boost::shared_ptr<Element> OsmPbfReader::readNextElement()
     // we have to copy here so that the element isn't part of two maps. This should be fixed if we
     // need the reader to go faster.
 
-    element.reset(new Node(*_nodesItr->second.get()));
+
+    element = _nodesItr->second->cloneSp();
     ++_nodesItr;
     _partialNodesRead++;
   }
@@ -1329,12 +1380,6 @@ void OsmPbfReader::close()
 
   // Either path, drop our pointer to the stream
   _in = NULL;
-}
-
-void OsmPbfReader::closeStream(
-  void )
-{
-  close();
 }
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)

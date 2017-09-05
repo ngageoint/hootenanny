@@ -33,6 +33,7 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <iostream>

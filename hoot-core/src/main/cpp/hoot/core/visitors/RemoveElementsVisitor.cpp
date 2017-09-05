@@ -37,16 +37,18 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, RemoveElementsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, RemoveElementsVisitor)
 
-RemoveElementsVisitor::RemoveElementsVisitor()
+RemoveElementsVisitor::RemoveElementsVisitor():
+  _count(0)
 {
   setConfiguration(conf());
 }
 
 RemoveElementsVisitor::RemoveElementsVisitor(const boost::shared_ptr<ElementCriterion>& filter) :
   _filter(filter),
-  _recursive(false)
+  _recursive(false),
+  _count(0)
 {
 }
 
@@ -71,6 +73,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
 
   if (_filter->isSatisfied(ee))
   {
+    _count++;
     if (_recursive)
     {
       RecursiveElementRemover(ee->getElementId()).apply(_map->shared_from_this());

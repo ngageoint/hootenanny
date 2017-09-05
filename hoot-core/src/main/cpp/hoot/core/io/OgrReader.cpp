@@ -27,6 +27,9 @@
 
 #include "OgrReader.h"
 
+// boost
+#include <boost/shared_ptr.hpp>
+
 // GDAL
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
@@ -36,24 +39,21 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/OsmMap.h>
+#include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementIterator.h>
-#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/util/Progress.h>
-
-#include <boost/shared_ptr.hpp>
 
 // Qt
 #include <QDir>
@@ -566,6 +566,10 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
   for (int i = 0; i < fieldDefn->GetFieldCount(); i++)
   {
     QString value;
+
+    // This skips NULL fields.
+    if (! f->IsFieldSet(i)) continue;
+
     if (f->GetDefnRef()->GetFieldDefn(i)->GetType() == OFTReal)
     {
       value = QString::number(f->GetFieldAsDouble(i), 'g', 17);
@@ -578,10 +582,10 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
     // Ticket 5833: make sure tag is only added if value is non-null
     if ( value.length() == 0 )
     {
-      LOG_TRACE(
-        "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
-        " since the value field is empty");
-      continue;
+        LOG_TRACE(
+                    "Skipping tag w/ key=" << fieldDefn->GetFieldDefn(i)->GetNameRef() <<
+                    " since the value field is empty");
+        continue;
     }
 
     t[fieldDefn->GetFieldDefn(i)->GetNameRef()] = value;
@@ -589,9 +593,12 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
   _translate(t);
 
-  // Add an ingest datetime tag
-  t.appendValue("source:ingest:datetime",
-                QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+  if (ConfigOptions().getReaderAddSourceDatetime())
+  {
+    // Add an ingest datetime tag
+    t.appendValue("source:ingest:datetime",
+                  QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
+  }
 
   if (t.size() != 0)
   {
@@ -660,7 +667,7 @@ void OgrReaderInternal::_addLineString(OGRLineString* ls, Tags& t)
     double x = ls->getX(i);
     double y = ls->getY(i);
     _reproject(x, y);
-    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(Node::newSp(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -698,8 +705,22 @@ void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
   double x = p->getX();
   double y = p->getY();
   _reproject(x, y);
-  NodePtr node(new Node(_status, _map->createNextNodeId(), x, y,
-    circularError));
+  long id;
+  const QString nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
+  if (nodeIdFieldName.isEmpty())
+  {
+    id = _map->createNextNodeId();
+  }
+  else
+  {
+    bool ok = false;
+    id = t.get(nodeIdFieldName).toLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Unable to parse node ID from field: " + nodeIdFieldName);
+    }
+  }
+  NodePtr node(Node::newSp(_status, id, x, y, circularError));
 
   node->setTags(t);
   _map->addNode(node);
@@ -778,7 +799,7 @@ WayPtr OgrReaderInternal::_createWay(OGRLinearRing* lr, Meters circularError)
     double x = lr->getX(i);
     double y = lr->getY(i);
     _reproject(x, y);
-    NodePtr n(new Node(_status, _map->createNextNodeId(), x, y, circularError));
+    NodePtr n(Node::newSp(_status, _map->createNextNodeId(), x, y, circularError));
     _map->addNode(n);
     way->addNode(n->getId());
   }
@@ -1183,7 +1204,6 @@ void OgrReaderInternal::initializePartial()
   _relationsItr = _map->getRelations().begin();
 
   _useFileId = false;
-
 }
 
 void OgrReaderInternal::setUseDataSourceIds(bool useIds)
@@ -1228,12 +1248,12 @@ ElementPtr OgrReaderInternal::readNextElement()
   }
 
   ElementPtr returnElement;
-  if ( _nodesItr != _map->getNodes().end() )
+  if (_nodesItr != _map->getNodes().end())
   {
-    returnElement.reset(new Node(*_nodesItr->second.get()));
+    returnElement = _nodesItr->second->cloneSp();
     ++_nodesItr;
   }
-  else if ( _waysItr != _map->getWays().end() )
+  else if (_waysItr != _map->getWays().end())
   {
     returnElement.reset(new Way(*_waysItr->second.get()));
     ++_waysItr;

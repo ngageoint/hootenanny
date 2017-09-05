@@ -28,8 +28,6 @@
 #define WAYSTRING_H
 
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/Hoot.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 
 // Qt
@@ -86,7 +84,7 @@ public:
   /** returns number of sublines in this string */
   int getSize() { return _sublines.size(); }
 
-  QString toString() const { return hoot::toString(_sublines); }
+  QString toString() const;
 
   /**
    * Similar to the visitRw method in Element, this will visit all elements in the way string along
@@ -95,7 +93,7 @@ public:
    * Only nodes that are part of the way string will be visited (e.g. if they intersect the
    * WaySubline).
    */
-  void visitRo(const ElementProvider& map, ElementVisitor& v) const;
+  void visitRo(const ElementProvider& map, ConstElementVisitor& v) const;
 
 private:
 

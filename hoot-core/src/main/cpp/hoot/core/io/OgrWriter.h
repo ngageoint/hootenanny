@@ -132,10 +132,6 @@ public:
 
   virtual void writeElement(ElementPtr& element, bool debug);
 
-  virtual void writeElement(ElementInputStream& inputStream);
-
-  virtual void writeElement(ElementInputStream& inputStream, bool debug);
-
 protected:
 
   bool _createAllLayers;
@@ -148,6 +144,7 @@ protected:
   boost::shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;
   bool _textStatus;
+  bool _includeDebug;
   ElementCachePtr _elementCache;
   OGRSpatialReference _wgs84;
 
@@ -178,7 +175,7 @@ private:
 
 };
 
-} // hoot
+}
 
 
 #endif // OGRWRITER_H

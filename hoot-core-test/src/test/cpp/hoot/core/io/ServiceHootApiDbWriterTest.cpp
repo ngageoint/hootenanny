@@ -34,9 +34,10 @@
 // Hoot
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/io/HootApiDbWriter.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/OsmUtils.h>
+#include <hoot/core/util/Settings.h>
 
 // Standard
 #include <functional>

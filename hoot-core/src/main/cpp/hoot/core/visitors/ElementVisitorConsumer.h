@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTVISITORCONSUMER_H
 #define ELEMENTVISITORCONSUMER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // tgs
 #include <tgs/SharedPtr.h>
@@ -40,7 +40,7 @@ class ElementVisitorConsumer
 {
 public:
 
-  virtual void addVisitor(const ElementVisitorPtr& e) = 0;
+  virtual void addVisitor(const ConstElementVisitorPtr& e) = 0;
 };
 
 }

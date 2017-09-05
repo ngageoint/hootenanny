@@ -31,10 +31,10 @@
 #include <boost/any.hpp>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/NotImplementedException.h>
 
 // Qt
 #include <QDataStream>

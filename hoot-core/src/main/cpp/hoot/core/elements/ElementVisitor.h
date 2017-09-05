@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,23 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
 #ifndef ELEMENTVISITOR_H
 #define ELEMENTVISITOR_H
 
-// hoot includes
+// hoot
 #include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 /**
- * Visits elements in a collection. See Element::visit* and OsmMap::visit* for ways to use the
- * class. See hoot::AddRefVisitor for an example implementation.
+ * Visits elements in a collection in a that they can be modified.
  *
- * This is also used by hoot::VisitorOp and hoot::NamedOp.
+ * @note This interface hasn't been propagated throughout the code base so it will not likely be
+ * honored in the same was as a ConstElementVisitor. Developers are encouraged to add ElementVisitor
+ * support wherever it is relevant.
  */
 class ElementVisitor
 {
@@ -47,7 +47,7 @@ public:
 
   static std::string className() { return "hoot::ElementVisitor"; }
 
-  virtual void visit(const ConstElementPtr& e) = 0;
+  virtual void visit(const ElementPtr& e) = 0;
 
   /**
     Returns a string representation of the visitor

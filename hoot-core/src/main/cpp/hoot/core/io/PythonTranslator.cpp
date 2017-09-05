@@ -47,6 +47,8 @@
 typedef int Py_ssize_t;
 #endif
 
+using namespace std;
+
 namespace hoot
 {
 
@@ -70,6 +72,7 @@ void PythonTranslator::_init()
   QStringList pythonPath;
   QString moduleName;
 
+  LOG_VART(_scriptPath);
   if (_scriptPath.endsWith(".py"))
   {
     QFileInfo info(_scriptPath);

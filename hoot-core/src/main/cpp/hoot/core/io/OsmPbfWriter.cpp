@@ -30,15 +30,18 @@
 #include <arpa/inet.h>
 
 // Hoot Includes
-#include <hoot/core/Version.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/OsmMap.h>
 #include <hoot/core/proto/FileFormat.pb.h>
 #include <hoot/core/proto/OsmFormat.pb.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/OsmMap.h>
+
+//  Version must be included last
+#include <hoot/core/Version.h>
+#include <hoot/core/VersionDefines.h>
 
 using namespace hoot::pb;
 
@@ -98,7 +101,7 @@ OsmPbfWriter::OsmPbfWriter()
 
 OsmPbfWriter::~OsmPbfWriter()
 {
-  delete _d;
+  close();
 }
 
 long OsmPbfWriter::_convertLon(double lon)
@@ -199,7 +202,7 @@ void OsmPbfWriter::_initBlob()
   _strings.clear();
 }
 
-void OsmPbfWriter::intializePartial(ostream* strm)
+void OsmPbfWriter::initializePartial(ostream* strm)
 {
   _out = strm;
 
@@ -208,14 +211,31 @@ void OsmPbfWriter::intializePartial(ostream* strm)
   _initBlob();
 }
 
+void OsmPbfWriter::initializePartial()
+{
+  _writeOsmHeader();
+  _initBlob();
+}
+
 void OsmPbfWriter::open(QString url)
 {
   _openStream.reset(new fstream(url.toUtf8().constData(), ios::out | ios::binary));
-
   if (_openStream->good() == false)
   {
     throw HootException(QString("Error opening for writing: %1").arg(url));
   }
+  _out = _openStream.get();
+
+  initializePartial();
+}
+
+void OsmPbfWriter::close()
+{
+  if (_openStream.get())
+  {
+    _openStream->close();
+  }
+  delete _d;
 }
 
 void OsmPbfWriter::setIdDelta(long nodeIdDelta, long wayIdDelta, long relationIdDelta)
@@ -486,6 +506,8 @@ void OsmPbfWriter::_writeNode(const boost::shared_ptr<const hoot::Node>& n)
 
 void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
 {
+  LOG_TRACE("Writing node: " << n->getElementId());
+
   _elementsWritten++;
   if (_dn == 0)
   {
@@ -552,13 +574,19 @@ void OsmPbfWriter::_writeOsmHeader(bool includeBounds, bool sorted)
   // create the header block
   _d->headerBlock.Clear();
 
-  if (includeBounds)
+  LOG_VARD(includeBounds);
+  if (includeBounds && _map.get())
   {
+    LOG_VARD(_map.get());
     const OGREnvelope& env = CalculateMapBoundsVisitor::getBounds(_map);
     _d->headerBlock.mutable_bbox()->set_bottom(env.MinY);
     _d->headerBlock.mutable_bbox()->set_left(env.MinX);
     _d->headerBlock.mutable_bbox()->set_right(env.MaxX);
     _d->headerBlock.mutable_bbox()->set_top(env.MaxY);
+  }
+  else
+  {
+    _d->headerBlock.clear_bbox();
   }
 
   _d->headerBlock.mutable_required_features()->Add()->assign(PBF_OSM_SCHEMA_V06);
@@ -632,6 +660,8 @@ void OsmPbfWriter::_writePrimitiveBlock()
 
 void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>& r)
 {
+  LOG_TRACE("Writing relation: " << r->getElementId());
+
   _elementsWritten++;
 
   if (_pg == 0)
@@ -692,6 +722,8 @@ void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>&
 
 void OsmPbfWriter::_writeWay(const boost::shared_ptr<const hoot::Way>& w)
 {
+  LOG_TRACE("Writing way: " << w->getElementId());
+
   _elementsWritten++;
 
   if (_pg == 0)
@@ -757,6 +789,5 @@ void OsmPbfWriter::_writeWay(const boost::shared_ptr<const hoot::Way>& w)
   _dirty = true;
 
 }
-
 
 }

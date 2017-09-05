@@ -41,7 +41,7 @@ using namespace std;
 
 namespace Tgs
 {
-  MimicGa::MimicGa(boost::shared_ptr<Genome> seed,boost::shared_ptr<FitnessFunction> fitness) :
+  MimicGa::MimicGa(boost::shared_ptr<Genome> seed, boost::shared_ptr<FitnessFunction> fitness) :
     GeneticAlgorithm(seed, fitness)
   {
     _thetaPercentile = .5;

@@ -28,7 +28,7 @@
 #define KEEPPOISVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Removes all elements that are not Nodes w/ meaningful tags.
  */
-class KeepNodesVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class KeepNodesVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

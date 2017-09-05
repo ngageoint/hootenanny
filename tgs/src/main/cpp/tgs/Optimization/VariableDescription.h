@@ -39,6 +39,7 @@ namespace Tgs
 class VariableDescription
 {
 public:
+
   typedef enum
   {
     Real,
@@ -61,7 +62,10 @@ public:
 
   QString getName() const { return _name; }
 
+  QString toString() const;
+
 private:
+
   QString _name;
   double _min, _max;
   VariableType _type;

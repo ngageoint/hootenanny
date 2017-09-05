@@ -38,7 +38,7 @@ namespace hoot
 {
 
 class FilteredVisitor :
-    public ElementVisitor,
+    public ConstElementVisitor,
     public ConstOsmMapConsumer,
     public ElementCriterionConsumer,
     public ElementVisitorConsumer
@@ -52,44 +52,44 @@ public:
   /**
    * Calls the visit method on visitor whenever ElementCriterion::isSatisfied == true.
    */
-  FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor);
+  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor& visitor);
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary visitor. In this
    * case FilteredVisitor will take ownership of the visitor and delete it when destructed.
    */
-  FilteredVisitor(const ElementCriterion& criterion, ElementVisitor* visitor);
+  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor* visitor);
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary criterion and
    * visitor. In this case FilteredVisitor will take ownership of the criterion and visitor and
    * delete it when destructed.
    */
-  FilteredVisitor(ElementCriterion *criterion, ElementVisitor* visitor);
+  FilteredVisitor(ElementCriterion *criterion, ConstElementVisitor* visitor);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
-  virtual void addVisitor(const ElementVisitorPtr& v);
+  virtual void addVisitor(const ConstElementVisitorPtr& v);
 
-  ElementVisitor& getChildVisitor() const { return *_visitor; }
+  ConstElementVisitor& getChildVisitor() const { return *_visitor; }
 
   virtual void setOsmMap(OsmMap* map);
   virtual void setOsmMap(const OsmMap* map);
 
   virtual void visit(const ConstElementPtr& e);
 
-  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+  static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
                         const ConstOsmMapPtr& map);
-  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
+  static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
 private:
 
   const ElementCriterion* _criterion;
- boost::shared_ptr<ElementCriterion> _criterionDelete;
+  boost::shared_ptr<ElementCriterion> _criterionDelete;
   const OsmMap* _map;
-  ElementVisitor* _visitor;
- boost::shared_ptr<ElementVisitor> _visitDelete;
+  ConstElementVisitor* _visitor;
+  boost::shared_ptr<ConstElementVisitor> _visitDelete;
 };
 
 }

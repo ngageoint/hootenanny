@@ -63,7 +63,7 @@ public:
     WayJoin1Reducer::Value v;
     int64_t wid;
 
-   boost::shared_ptr<ostream> sample(fs.create(csqIn));
+    boost::shared_ptr<ostream> sample(fs.create(csqIn));
 
     pp::CppSeqFile::Writer writer(*sample);
 
@@ -102,4 +102,4 @@ public:
 }
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin2InputFormatTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin2InputFormatTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::WayJoin2InputFormatTest, "glacial");

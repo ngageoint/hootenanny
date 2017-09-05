@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, SplitNameVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, SplitNameVisitor)
 
 SplitNameVisitor::SplitNameVisitor() : _maxSize(255)
 {

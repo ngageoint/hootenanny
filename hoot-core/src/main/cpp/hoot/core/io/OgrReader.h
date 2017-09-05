@@ -53,6 +53,7 @@ class ElementIterator;
 class Tags;
 class Progress;
 class OgrReaderInternal;
+class Settings;
 
 /**
  * This class is broken out into an internal and external class to avoid issues with Python's
@@ -131,7 +132,6 @@ public:
     OGRSpatialReference* srs);
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
-
 
 protected:
 

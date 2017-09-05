@@ -40,7 +40,7 @@ public class ZIPDirectoryContentsCommand extends ExternalCommand {
      * Recursively compresses directory contents into a ZIP file using system 'zip' utility
      *
      * @param targetZIP ZIP file to produce
-     * @param workDir present working directory (PWD) during execution
+     * @param workDir work directory during execution
      * @param caller class that identifies caller of the command
      */
     public ZIPDirectoryContentsCommand(File targetZIP, File workDir, Class<?> caller) {

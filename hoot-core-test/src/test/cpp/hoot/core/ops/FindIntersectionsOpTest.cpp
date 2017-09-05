@@ -62,6 +62,11 @@ class FindIntersectionsOpTest : public CppUnit::TestFixture
 
 public:
 
+  void setUp()
+  {
+    TestUtils::resetEnvironment();
+  }
+
   void runToyTest()
   {
     OsmXmlReader reader;

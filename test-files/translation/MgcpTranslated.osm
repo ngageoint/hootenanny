@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="GEOGCS[&quot;WGS 84&quot;,&#10;    DATUM[&quot;WGS_1984&quot;,&#10;        SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,&#10;            AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],&#10;        TOWGS84[0,0,0,0,0,0,0],&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],&#10;    PRIMEM[&quot;Greenwich&quot;,0,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],&#10;    UNIT[&quot;degree&quot;,0.0174532925199433,&#10;        AUTHORITY[&quot;EPSG&quot;,&quot;9108&quot;]],&#10;    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]">
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="0.5057640698558695" minlon="0.4967290573075239" maxlat="0.5080809073552338" maxlon="0.5008496700894106"/>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.5065265734281342" lon="0.5001751213777849"/>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.5065412369575185" lon="0.4982834521647482"/>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.5057640698558695" lon="0.4967290573075239"/>
@@ -10,7 +11,7 @@
         <nd ref="-4"/>
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:04:28.990Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:07.992Z"/>
         <tag k="seasonal" v="no"/>
         <tag k="uuid" v="{9640f2cf-19f0-47b0-b081-5478bb03eb3c}"/>
         <tag k="source" v="mgcp:mgcptestlines"/>
@@ -21,7 +22,7 @@
         <nd ref="-1"/>
         <nd ref="-2"/>
         <nd ref="-3"/>
-        <tag k="source:ingest:datetime" v="2016-06-06T23:04:28.989Z"/>
+        <tag k="source:ingest:datetime" v="2017-07-26T06:18:07.991Z"/>
         <tag k="seasonal" v="fair"/>
         <tag k="uuid" v="{4fb4200b-c94d-4916-a4ed-144658b22ae3}"/>
         <tag k="source" v="mgcp:mgcptestlines"/>

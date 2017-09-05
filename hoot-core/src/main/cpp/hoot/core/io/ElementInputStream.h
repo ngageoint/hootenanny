@@ -42,9 +42,6 @@ class ElementInputStream
 
 public:
 
-  /**
-   *
-   */
   ElementInputStream() {}
 
   /**

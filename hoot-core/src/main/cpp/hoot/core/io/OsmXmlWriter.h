@@ -28,7 +28,7 @@
 #define OSMXMLWRITER_H
 
 // hoot
-#include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/io/PartialOsmMapWriter.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -43,6 +43,8 @@ class QXmlStreamWriter;
 // Standard
 #include <deque>
 
+// geos
+#include <geos/geom/Envelope.h>
 
 namespace hoot
 {
@@ -50,7 +52,7 @@ namespace hoot
 /**
  * Writes an OsmMap to a .osm (XML) file format.
  */
-class OsmXmlWriter : public QXmlDefaultHandler, public OsmMapWriter
+class OsmXmlWriter : public QXmlDefaultHandler, public PartialOsmMapWriter
 {
 public:
 
@@ -59,10 +61,13 @@ public:
   static unsigned int logWarnCount;
 
   OsmXmlWriter();
+  virtual ~OsmXmlWriter();
 
   virtual bool isSupported(QString url) { return url.toLower().endsWith(".osm"); }
 
   virtual void open(QString url);
+
+  void close();
 
   /**
    * These tags can be included to allow Osmosis to read the files. There is no useful
@@ -96,6 +101,11 @@ public:
 
   virtual void write(ConstOsmMapPtr map);
 
+  virtual void writePartial(const ConstNodePtr& node);
+  virtual void writePartial(const ConstWayPtr& way);
+  virtual void writePartial(const ConstRelationPtr& relation);
+  virtual void finalizePartial();
+
   /**
    * Remove any invalid characters from the string s and print an error if one is found.
    */
@@ -114,15 +124,28 @@ private:
   int _precision;
   std::auto_ptr<QIODevice> _fp;
   int _encodingErrorCount;
+  boost::shared_ptr<QXmlStreamWriter> _writer;
+  geos::geom::Envelope _bounds;
 
   static QString _typeName(ElementType e);
 
-  void _writeMetadata(QXmlStreamWriter& writer, const Element* e);
-  void _writeNodes(ConstOsmMapPtr map, QXmlStreamWriter& writer);
-  void _writeWays(ConstOsmMapPtr map, QXmlStreamWriter& writer);
-  void _writeRelations(ConstOsmMapPtr map, QXmlStreamWriter& writer);
+  void _initWriter();
+
+  void _writeTags(const ConstElementPtr& element);
+  void _writeMetadata(const Element* e);
+  void _writeNodes(ConstOsmMapPtr map);
+  void _writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map);
+  void _writeWays(ConstOsmMapPtr map);
+  void _writeRelations(ConstOsmMapPtr map);
+
+  /**
+   * @brief _writeBounds Writes out the OSM <bounds> tag in the format:
+   *  <bounds minlat="xxx" minlon="xxx" maxlat="xxx" maxlong="xxx" />
+   * @param bounds the bounds to write
+   */
+  void _writeBounds(const geos::geom::Envelope& bounds);
 };
 
-} // hoot
+}
 
 #endif // OSMXMLWRITER_H

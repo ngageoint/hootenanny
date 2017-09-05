@@ -35,6 +35,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDebug>
@@ -256,11 +258,10 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         // they're split.
         _map->replace(way, newWays);
 
+        // see comments for similar functionality in HighwaySnapMerger::_mergePair
         if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
             way->getStatus() == Status::Unknown1)
         {
-          //see similar notes in HighwaySnapMerger::_mergePair
-
           LOG_TRACE(
             "Setting unknown1 " << way->getElementId().getId() << " on " <<
             splits[0]->getElementId() << "...");

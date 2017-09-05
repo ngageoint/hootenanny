@@ -49,6 +49,7 @@
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/conflate/MatchClassification.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <sstream>

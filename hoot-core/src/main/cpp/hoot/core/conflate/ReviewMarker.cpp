@@ -138,21 +138,24 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr &map, ConstElementPtr e1, 
   return intersection.size() >= 1;
 }
 
-bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
+bool ReviewMarker::isReview(ConstElementPtr e)
 {
   bool result = false;
 
-  if (uid.getType() == ElementType::Relation)
+  if (e->getElementType() == ElementType::Relation)
   {
-    ConstRelationPtr r = map->getRelation(uid.getId());
-
-    if (r->getTags().isTrue(MetadataTags::HootReviewNeeds()))
+    if (e->getTags().isTrue(MetadataTags::HootReviewNeeds()))
     {
       result = true;
     }
   }
 
   return result;
+}
+
+bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
+{
+  return isReview(map->getElement(uid));
 }
 
 void ReviewMarker::mark(const OsmMapPtr &map, const ElementPtr& e1, const ElementPtr& e2,
@@ -232,7 +235,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, set<ElementId> ids, const QString&
 void ReviewMarker::mark(const OsmMapPtr& map, const ElementPtr& e, const QString& note,
   const QString &reviewType, double score, vector<QString> choices)
 {
-  LOG_TRACE("Marking review...");
+  LOG_TRACE("Marking review with note: " << note);
 
   if (note.isEmpty())
   {

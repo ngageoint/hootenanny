@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="42.4836685" minlon="-71.477" maxlat="42.4851" maxlon="-71.4758588"/>
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4851000000000028" lon="-71.4761371999999966">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="4"/>
+    </node>
+    <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4839740000000035" lon="-71.4770000000000039">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="5"/>
+    </node>
+    <node visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838346000000016" lon="-71.4770000000000039">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="8"/>
+    </node>
+    <node visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4836685000000003" lon="-71.4770000000000039">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="9"/>
+    </node>
+    <node visible="true" id="54" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4836764000000002" lon="-71.4769397999999967">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="54"/>
+    </node>
+    <node visible="true" id="55" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4837845999999999" lon="-71.4769660000000044">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="55"/>
+    </node>
+    <node visible="true" id="56" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4837883000000005" lon="-71.4769385999999969">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="56"/>
+    </node>
+    <node visible="true" id="57" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838092999999972" lon="-71.4769437000000067">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="57"/>
+    </node>
+    <node visible="true" id="58" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838055999999966" lon="-71.4769713999999965">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="58"/>
+    </node>
+    <node visible="true" id="59" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838373999999988" lon="-71.4769790999999941">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="59"/>
+    </node>
+    <node visible="true" id="105" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4839598000000009" lon="-71.4762750999999952">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="105"/>
+    </node>
+    <node visible="true" id="106" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4839423000000025" lon="-71.4764014000000003">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="106"/>
+    </node>
+    <node visible="true" id="107" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838738999999990" lon="-71.4763841000000042">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="107"/>
+    </node>
+    <node visible="true" id="108" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838913999999974" lon="-71.4762577999999991">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="108"/>
+    </node>
+    <node visible="true" id="109" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4839045000000013" lon="-71.4766646000000065">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="109"/>
+    </node>
+    <node visible="true" id="110" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838913000000034" lon="-71.4766618999999963">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="110"/>
+    </node>
+    <node visible="true" id="111" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838860999999994" lon="-71.4767077000000057">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="111"/>
+    </node>
+    <node visible="true" id="112" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4837872000000019" lon="-71.4766872000000006">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="112"/>
+    </node>
+    <node visible="true" id="113" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4837953999999982" lon="-71.4766142000000002">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="113"/>
+    </node>
+    <node visible="true" id="114" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838284000000002" lon="-71.4766209999999944">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="114"/>
+    </node>
+    <node visible="true" id="115" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838339000000005" lon="-71.4765723999999949">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="115"/>
+    </node>
+    <node visible="true" id="116" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4839022000000028" lon="-71.4765864999999962">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="116"/>
+    </node>
+    <node visible="true" id="117" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4838973000000024" lon="-71.4766299000000060">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="117"/>
+    </node>
+    <node visible="true" id="118" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4839082000000019" lon="-71.4766321999999974">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="118"/>
+    </node>
+    <node visible="true" id="119" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4847192000000007" lon="-71.4760845999999930">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="119"/>
+    </node>
+    <node visible="true" id="120" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4844531000000032" lon="-71.4760394999999988">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="120"/>
+    </node>
+    <node visible="true" id="121" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4843061999999989" lon="-71.4760327000000046">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="121"/>
+    </node>
+    <node visible="true" id="122" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4842309000000000" lon="-71.4760395999999929">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="122"/>
+    </node>
+    <node visible="true" id="123" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4841690000000014" lon="-71.4760919000000001">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="123"/>
+    </node>
+    <node visible="true" id="124" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4841199999999972" lon="-71.4761615000000035">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="124"/>
+    </node>
+    <node visible="true" id="125" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4840761999999970" lon="-71.4762939000000017">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="125"/>
+    </node>
+    <node visible="true" id="126" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4840481000000025" lon="-71.4764887000000044">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="126"/>
+    </node>
+    <node visible="true" id="127" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2" lat="42.4840171999999967" lon="-71.4767114999999933">
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:id" v="127"/>
+    </node>
+    <node visible="true" id="128" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="42.4840441999999996" lon="-71.4759116999999975">
+        <tag k="hoot:id" v="128"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="128"/>
+    </node>
+    <node visible="true" id="129" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="42.4839958999999965" lon="-71.4758587999999975">
+        <tag k="hoot:id" v="129"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="129"/>
+    </node>
+    <node visible="true" id="130" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="42.4839575000000025" lon="-71.4760559000000057">
+        <tag k="hoot:id" v="130"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="130"/>
+    </node>
+    <node visible="true" id="132" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="42.4839433000000000" lon="-71.4759654000000069">
+        <tag k="hoot:id" v="132"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="132"/>
+    </node>
+    <node visible="true" id="133" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="42.4839363999999975" lon="-71.4759578000000033">
+        <tag k="hoot:id" v="133"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="133"/>
+    </node>
+    <node visible="true" id="135" timestamp="1970-01-01T00:00:00Z" version="1" changeset="3" lat="42.4839162000000030" lon="-71.4760105000000010">
+        <tag k="hoot:id" v="135"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:id" v="135"/>
+    </node>
+    <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:06:34.143Z"/>
+        <tag k="width:minimum_traveled_way" v="6.4008"/>
+        <tag k="condition" v="functional"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{a8472be7-2930-4496-b621-3d8908536b64}"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="surface" v="asphalt_over_concrete"/>
+        <tag k="lanes" v="2"/>
+        <tag k="hoot:id" v="2"/>
+    </way>
+    <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+        <nd ref="5"/>
+        <nd ref="127"/>
+        <nd ref="126"/>
+        <nd ref="125"/>
+        <nd ref="124"/>
+        <nd ref="123"/>
+        <nd ref="122"/>
+        <nd ref="121"/>
+        <nd ref="120"/>
+        <nd ref="119"/>
+        <nd ref="4"/>
+        <tag k="width" v="9.8"/>
+        <tag k="source:ingest:datetime" v="2017-04-19T17:06:34.105Z"/>
+        <tag k="condition" v="functional"/>
+        <tag k="width:minimum_traveled_way" v="7.315200000000001"/>
+        <tag k="hoot:id" v="3"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="uuid" v="{c749fa63-2000-4490-a754-530cfdbb20c7}"/>
+        <tag k="source" v="MassNh_GIS;massgis_import_v0.1_20071009100433"/>
+        <tag k="name" v="Mohawk Drive"/>
+        <tag k="attribution" v="Office of Geographic and Environmental Information (MassGIS)"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:datetime" v="2007-10-15T15:32:17Z"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="massgis:way_id" v="181982"/>
+        <tag k="hoot:id" v="3"/>
+    </way>
+    <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.669Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{371de487-b41a-4830-a278-737d490111b9}"/>
+        <tag k="hoot:id" v="4"/>
+    </way>
+    <way visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="59"/>
+        <nd ref="58"/>
+        <nd ref="57"/>
+        <nd ref="56"/>
+        <nd ref="55"/>
+        <nd ref="54"/>
+        <nd ref="9"/>
+        <nd ref="8"/>
+        <nd ref="59"/>
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.401Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{80dadbe6-f609-493a-b7f0-ebc825a4bfed}"/>
+        <tag k="hoot:id" v="5"/>
+    </way>
+    <way visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.321Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{837a3b27-d5d3-43a7-99b0-c84b0909a51c}"/>
+        <tag k="hoot:id" v="6"/>
+    </way>
+    <way visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.229Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{f527e789-6e54-46ba-b623-2d47ee586f93}"/>
+        <tag k="hoot:id" v="7"/>
+    </way>
+    <way visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.160Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{d31737e5-5a58-414a-bb12-4f1edc67ee37}"/>
+        <tag k="hoot:id" v="8"/>
+    </way>
+    <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="118"/>
+        <nd ref="117"/>
+        <nd ref="116"/>
+        <nd ref="115"/>
+        <nd ref="114"/>
+        <nd ref="113"/>
+        <nd ref="112"/>
+        <nd ref="111"/>
+        <nd ref="110"/>
+        <nd ref="109"/>
+        <nd ref="118"/>
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.072Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{f062c8ae-7d6d-4564-ad81-756ed17cf029}"/>
+        <tag k="hoot:id" v="9"/>
+    </way>
+    <way visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <nd ref="108"/>
+        <nd ref="107"/>
+        <nd ref="106"/>
+        <nd ref="105"/>
+        <nd ref="108"/>
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.101Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{054d1e17-0adb-4e46-a7c9-8ec0a43305a0}"/>
+        <tag k="hoot:id" v="10"/>
+    </way>
+    <way visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.140Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{bbc3cf23-0466-4925-b1e0-72246c71746c}"/>
+        <tag k="hoot:id" v="11"/>
+    </way>
+    <way visible="true" id="12" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.315Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{ce44ca82-9cb5-4109-b819-aafd4a58e302}"/>
+        <tag k="hoot:id" v="12"/>
+    </way>
+    <way visible="true" id="13" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.352Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{51e8cfb2-c0ce-45ed-befb-9821e304eff5}"/>
+        <tag k="hoot:id" v="13"/>
+    </way>
+    <way visible="true" id="14" timestamp="1970-01-01T00:00:00Z" version="1" changeset="2">
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.694Z"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="uuid" v="{5601976d-b4a0-438a-b91c-b954ea9a9e3e}"/>
+        <tag k="hoot:id" v="14"/>
+    </way>
+    <way visible="true" id="15" timestamp="1970-01-01T00:00:00Z" version="2" changeset="3">
+        <nd ref="132"/>
+        <nd ref="135"/>
+        <nd ref="130"/>
+        <nd ref="128"/>
+        <nd ref="129"/>
+        <nd ref="133"/>
+        <nd ref="132"/>
+        <tag k="source:ingest:datetime" v="2017-04-19T17:07:16.707Z"/>
+        <tag k="hoot:id" v="15"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="building" v="yes"/>
+        <tag k="uuid" v="{b40174d3-a4a4-4c78-82a1-f8092bd69d33}"/>
+        <tag k="source" v="MassNh_GIS"/>
+        <tag k="source:datetime" v="2012-12-15T01:53:48Z"/>
+        <tag k="hoot:id" v="15"/>
+    </way>
+</osm>

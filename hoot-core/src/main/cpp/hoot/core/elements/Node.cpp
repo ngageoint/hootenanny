@@ -38,10 +38,14 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
+
+template<class Node>
+SharedPtrPool<Node> SharedPtrPool<Node>::_theInstance;
 
 Node::Node(Status s, long id, const Coordinate& c, Meters circularError) :
 Element(s)
@@ -67,6 +71,15 @@ _nodeData(from._nodeData)
 void Node::clear()
 {
   _nodeData.clear();
+}
+
+boost::shared_ptr<Node> Node::cloneSp() const
+{
+  NodePtr result = SharedPtrPool<Node>::getInstance().allocate();
+
+  result->_nodeData = _nodeData;
+
+  return result;
 }
 
 Envelope* Node::getEnvelope(const boost::shared_ptr<const ElementProvider> &/*ep*/) const
@@ -99,8 +112,8 @@ QString Node::toString() const
     QString(
       "Node(%1): x: %2 y: %3 tags:\n%4\n version: %5\n visible: %6\n status: %7\n circular error: %8")
       .arg(getId())
-      .arg(getX())
-      .arg(getY())
+      .arg(QString::number(getX(), 'f', ConfigOptions().getWriterPrecision()))
+      .arg(QString::number(getY(), 'f', ConfigOptions().getWriterPrecision()))
       .arg(getTags().toString())
       .arg(getVersion())
       .arg(getVisible())
@@ -108,12 +121,12 @@ QString Node::toString() const
       .arg(QString::number(getCircularError()));
 }
 
-void Node::visitRo(const ElementProvider& map, ElementVisitor& filter) const
+void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
 {
   filter.visit(map.getNode(getId()));
 }
 
-void Node::visitRw(ElementProvider& map, ElementVisitor& filter)
+void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
 {
   filter.visit(map.getNode(getId()));
 }
