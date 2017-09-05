@@ -30,13 +30,14 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetDeriver.h>
 #include <hoot/core/io/ElementSorter.h>
-#include <hoot/core/io/OsmChangesetXmlFileWriter.h>
-#include <hoot/core/io/OsmChangesetSqlFileWriter.h>
+#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/filters/TagKeyCriterion.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -140,6 +141,11 @@ private:
     map1->visitRw(removeElementsVisitor);
     map2->visitRw(removeElementsVisitor);
 
+    //node comparisons require hashes be present on the elements
+    CalculateHashVisitor2 hashVis;
+    map1->visitRw(hashVis);
+    map2->visitRw(hashVis);
+
     QList<OsmMapPtr> inputMaps;
     inputMaps.append(map1);
     inputMaps.append(map2);
@@ -169,12 +175,12 @@ private:
 
       if (output.endsWith(".osc"))
       {
-        OsmChangesetXmlFileWriter().write(output, _sortInputs(inputMaps));
+        OsmXmlChangesetFileWriter().write(output, _sortInputs(inputMaps));
       }
       else if (output.endsWith(".osc.sql"))
       {
         assert(!osmApiDbUrl.isEmpty());;
-        OsmChangesetSqlFileWriter(QUrl(osmApiDbUrl)).write(output, _sortInputs(inputMaps));
+        OsmApiDbSqlChangesetFileWriter(QUrl(osmApiDbUrl)).write(output, _sortInputs(inputMaps));
       }
     }
   }

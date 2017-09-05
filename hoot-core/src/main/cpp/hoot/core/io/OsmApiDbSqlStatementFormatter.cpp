@@ -311,6 +311,8 @@ QString OsmApiDbSqlStatementFormatter::changesetToSqlString(const long changeset
 
 QString OsmApiDbSqlStatementFormatter::_escapeCopyToData(const QString stringToOutput)
 {
+  //TODO: this is likely redundant with other code
+
   QString escapedString(stringToOutput);
   // Escape any special characters as required by
   //    http://www.postgresql.org/docs/9.2/static/sql-copy.html

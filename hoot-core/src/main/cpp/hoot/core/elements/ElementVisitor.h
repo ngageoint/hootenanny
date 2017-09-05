@@ -27,7 +27,7 @@
 #ifndef ELEMENTVISITOR_H
 #define ELEMENTVISITOR_H
 
-// hoot includes
+// hoot
 #include <hoot/core/elements/Element.h>
 
 namespace hoot

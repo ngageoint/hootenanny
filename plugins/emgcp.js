@@ -37,17 +37,17 @@ emgcp = {
 
         mgcpData = mgcp.toMgcp(tags, elementType, geometryType);
 
-        // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            for (var i = 0, fLen = mgcpData.length; i < fLen; i++)
-            {
-                print('eTableName ' + i + ': ' + mgcpData[i]['tableName'] + '  FCode: ' + mgcpData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(mgcpData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + mgcpData[i]['attrs'][kList[j]] + ':');
-            }
-            print('');
-        }
+        // Debug: Commenting this out to cut down the number of Hoot core calls
+//         if (config.getOgrDebugDumptags() == 'true')
+//         {
+//             for (var i = 0, fLen = mgcpData.length; i < fLen; i++)
+//             {
+//                 print('eTableName ' + i + ': ' + mgcpData[i]['tableName'] + '  FCode: ' + mgcpData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
+//                 var kList = Object.keys(mgcpData[i]['attrs']).sort()
+//                 for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Attrs:' + kList[j] + ': :' + mgcpData[i]['attrs'][kList[j]] + ':');
+//             }
+//             print('');
+//         }
 
         var eAttrs = {}; // The final English output
 
@@ -95,12 +95,12 @@ emgcp = {
 
         }
 
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            var kList = Object.keys(eAttrs).sort()
-            for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
-            print('');
-        }
+//         if (config.getOgrDebugDumptags() == 'true')
+//         {
+//             var kList = Object.keys(eAttrs).sort()
+//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('Final Attrs:' + kList[j] + ': :' + eAttrs[kList[j]] + ':');
+//             print('');
+//         }
 
         // Return the English results. The "tableName" is not set
         return {attrs: eAttrs, tableName: ''};

@@ -51,7 +51,7 @@ public:
    */
   virtual geos::geom::Envelope calculateEnvelope() const;
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings& conf);
 
   virtual void open(QString urlStr);
 

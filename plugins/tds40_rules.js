@@ -4261,8 +4261,12 @@ tds.rules = {
      // Extra road stuff
      ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
      ['ZI016_ROC','2','surface','unpaved'], // Stabilized earth
-     ['ZI016_ROC','1','surface','dirt'], // Unimproved 
-     ['ZI016_ROC','1','surface','earth'], // Unimproved 
+     ['ZI016_ROC','1','surface','dirt'], // Unimproved
+     ['ZI016_ROC','1','surface','earth'], // Unimproved
+
+     // Backward compatibility for 'oil'
+     ['ZI014_PPO','83','product','oil'], // Petroleum
+     ['ZI014_PPO','83','product','fuel'], // Close...
 
      // Fix up some of the Defaults
      // ['FFN','-999999','building','yes'], // Map to No Information
@@ -4272,7 +4276,7 @@ tds.rules = {
      // From MGCP
      ['FFN','480','building','transportation_outbuilding'], // Transportation
      ['FFN','481','man_made','depot'], // not a good fit for depot terminal
-     ['FFN','550','building','dwelling'], // Accomodation 
+     ['FFN','550','building','dwelling'], // Accomodation
      ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
      ['FFN','811','amenity','government_administration_building'],
      ['FFN','835','military','military_outbuilding'], // Military
@@ -4298,7 +4302,6 @@ tds.rules = {
      ['FFN','530','building','warehouse'],
      ['FFN','835','building','military'],
      // ['FFN','999','landuse','institutional'],
-     ['ZI014_PPO','83','product','oil'], // Petroleum
 
      // From NAVTEQ
      ['FFN','122','man_made','winery'], // Winery

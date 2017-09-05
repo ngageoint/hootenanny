@@ -64,12 +64,12 @@ etds40_osm = {
             if (attrs[col] in ignoreList) delete attrs[col];
         }
 
-        // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        // Debug: Commenting this out to cut down the number of Hoot core calls
+//         if (config.getOgrDebugDumptags() == 'true')
+//         {
+//             var kList = Object.keys(attrs).sort()
+//             for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+//         }
 
         // Go through the attrs and turn them back into TDS
         var nAttrs = {}; // the "new" TDS attrs
@@ -151,12 +151,12 @@ etds40_osm = {
         }
 
         // Debug:
-        if (config.getOgrDebugDumptags() == 'true')
-        {
-            var kList = Object.keys(tags).sort()
-            for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
-            print('');
-        }
+//         if (config.getOgrDebugDumptags() == 'true')
+//         {
+//             var kList = Object.keys(tags).sort()
+//             for (var j = 0, kLen = kList.length; j < kLen; j++) print('eOut Tags:' + kList[j] + ': :' + tags[kList[j]] + ':');
+//             print('');
+//         }
 
         return {attrs: tags, tableName: ''};
 
@@ -169,5 +169,5 @@ if (typeof exports !== 'undefined') {
     exports.EnglishtoOSM = etds40_osm.toOSM;
     exports.RawtoOSM = tds.toOsm;
     exports.OSMtoEnglish = etds40.toEnglish;
-    exports.OSMtoRaw = tds.toNfdd;
+    exports.OSMtoRaw = tds.toTds;
 }

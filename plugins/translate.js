@@ -121,7 +121,7 @@ translate = {
     },
     
     
-    // This is used by anything that "exports" - toNfdd, toMGCP 
+    // This is used by anything that "exports" - toTds, toMGCP
     createBackwardsLookup : function(one2one)
     {
         // build a more efficient lookup
@@ -236,7 +236,9 @@ translate = {
                 }
                 else
                 {
-                    if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
+                    // Removing the var test for a while.
+                    // if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
+                    hoot.logTrace('Column not found:: (' + col + '=' + value + ')');
                 }
             } // End !col in lookup
         } // End for col in inList
@@ -273,9 +275,9 @@ translate = {
     }, // End applyOne2OneQuiet
 
 
-    // Apply one to one translations - For NFDD export
+    // Apply one to one translations - For TDS export
     // This version populates the OTH field for values that are not in the rules
-    applyNfddOne2One : function(inList, outList, lookup, fCodeList)
+    applyTdsOne2One : function(inList, outList, lookup, fCodeList)
     { 
         var endChar = '',
             tAttrib = '',
@@ -370,7 +372,7 @@ translate = {
             } // End !col in lookup
         } // End for col in inList
 
-    }, // End applyNfddOne2One
+    }, // End applyTdsOne2One
 
 
     // Translate XX2, XX3 etc attributes
@@ -1016,15 +1018,10 @@ translate = {
             }
         }
     */
-        function applyRules(t,a)
+        for (var i = 0, rLen = rulesList.length; i < rLen; i++)
         {
-            for (var i = 0, rLen = rulesList.length; i < rLen; i++)
-            {
-                if (rulesList[i][0](t)) rulesList[i][1](t,a);
-            }
+            if (rulesList[i][0](tgs)) rulesList[i][1](tgs,atrs);
         }
-
-        applyRules(tgs,atrs);
 
     }, // End applyComplexRules
 

@@ -14,57 +14,69 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "WayJoinCmd.h"
-
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/hadoop/way-join/WayJoinDriver.h>
+#include <hoot/core/cmd/BaseCommand.h>
 
 // Qt
 #include <QImage>
 
-using namespace std;
+// Std
+#include <iostream>
+#include <string>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(Command, WayJoinCmd)
-
-WayJoinCmd::WayJoinCmd()
+class WayJoinCmd : public BaseCommand
 {
-}
 
-QString WayJoinCmd::getHelp() const
-{
-  return "way-bbox (input.pbf) (output.pbf) (maxWaySize)\n"
+public:
+
+  static std::string className() { return "hoot::WayJoinCmd"; }
+
+  QString getName() const { return "way-join"; }
+
+  WayJoinCmd()
+  {
+  }
+
+  QString getHelp() const
+  {
+    return "way-bbox (input.pbf) (output.pbf) (maxWaySize)\n"
       "  Reads the data from input.pbf, calculates the bbox for each way and write the result\n"
       "  including the optional bbox value into output.pbf. This uses Hadoop for distribution.\n"
       "  * input.pbf - Input .pbf directory -- must reside on HDFS.\n"
       "  * output.pbf - Output .pbf directory -- must reside on HDFS.\n"
       "  * maxWaySize - Max way size in degrees.";
-}
-
-int WayJoinCmd::run(char *argv[], int argc)
-{
-  if (argc != 5)
-  {
-    cout << getHelp() << endl << endl;
-    throw HootException(QString("%1 takes exactly three parameters.").arg(getName()));
-  }
-  QString in = argv[2];
-  QString out = argv[3];
-  bool ok;
-  double maxWaySize = QString(argv[4]).toDouble(&ok);
-  if (!ok)
-  {
-    throw HootException(QString("Expected max way size as a double. Got: %1").arg(argv[4]));
   }
 
-  WayJoinDriver driver(maxWaySize);
-  driver.calculateWayBounds(in, out);
+  int runSimple(QStringList args)
+  {
+    if (args.size() != 3)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw HootException(QString("%1 takes exactly three parameters.").arg(getName()));
+    }
+    QString in = args[0];
+    QString out = args[1];
+    bool ok;
+    double maxWaySize = args[2].toDouble(&ok);
+    if (!ok)
+    {
+      throw HootException(QString("Expected max way size as a double. Got: %1").arg(args[2]));
+    }
 
-  return 0;
-}
+    WayJoinDriver driver(maxWaySize);
+    driver.calculateWayBounds(in, out);
+
+    return 0;
+  }
+
+};
+
+HOOT_FACTORY_REGISTER(Command, WayJoinCmd)
 
 }

@@ -26,12 +26,12 @@ Feature: Clip Dataset
         And I should see "#maxlon" with a value between "-78" and "-76"
         And I should see "#minlon" with a value between "-78" and "-76"
         And I should see "#maxlon" with a value greater than "#minlon"
-        Then I click the "Use Visual Extent" link
+        Then I press "Use Visual Extent"
         And I fill "#maxlat" with "38.901164"
         And I fill "#maxlon" with "-77.016836"
         And I fill "#minlat" with "38.882563"
         And I fill "#minlon" with "-77.071161"
-        Then I click the "Clip to Bounding Box" link
+        Then I press "Clip to Bounding Box"
         And I click the "map" at "100","100"
         And I click the "map" at "400","400"
         Then I wait 5 "seconds" to see "Enter Coordinates for Clip Bounding Box"
@@ -40,8 +40,8 @@ Feature: Clip Dataset
     Scenario: I can submit clip operation
         When I fill "LayerName" input with "CucumberClip_BB"
         And I press "big.loud" span with text "Clip"
-        Then I wait 15 "seconds" to see "has been submitted."
-        Then I wait 15 "seconds" to see "Success:"
+        Then I wait 30 "seconds" to see "has been submitted."
+        Then I wait 30 "seconds" to see "Success:"
         Then I remove the first layer
         When I click the "Add Reference Dataset" link
         And I click the "CucumberClip_BB" Dataset

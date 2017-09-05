@@ -57,7 +57,7 @@ protected:
 private:
 
   //for white box testing
-  friend class ServiceOsmApiDbBulkWriterTest;
+  friend class ServiceOsmApiDbBulkInserterTest;
   friend class ServicesDbTestUtils;
   friend class ServiceWriteOsmSqlStatementsDriverTest;
 
