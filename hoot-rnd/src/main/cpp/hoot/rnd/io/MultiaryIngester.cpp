@@ -53,8 +53,8 @@ namespace hoot
 
 MultiaryIngester::MultiaryIngester() :
 _sortInput(true),
-_changesParsed(0),
 _addToExistingRefDb(false),
+_changesParsed(0),
 _logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval()),
 _numNodesBeforeApplyingChangeset(0),
 _numNodesAfterApplyingChangeset(0)
