@@ -44,9 +44,9 @@ class OsmMap;
 class Way;
 
 /**
- * Given an OsmMap
+ * Given an OsmMap, ways are split at sharp corners. This can help when conflating data
+ * that is mostly major roads with data that contains a lot of neighborhood - level data.
  *
- *   - OsmSchema::isHighway must return true for a way to be considered for splitting.
  */
 class CornerSplitter : public OsmMapOperation
 {

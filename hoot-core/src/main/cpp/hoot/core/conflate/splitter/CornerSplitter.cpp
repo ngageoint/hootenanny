@@ -87,6 +87,7 @@ void CornerSplitter::splitCorners()
         WayLocation current(_map, pWay, nodeIdx, 0.0);
         WayLocation next(_map, pWay, nodeIdx+1, 0.0);
 
+        // Calculate headings
         double h1 = atan2(current.getCoordinate().y - prev.getCoordinate().y,
                           current.getCoordinate().x - prev.getCoordinate().x);
         double h2 = atan2(next.getCoordinate().y - current.getCoordinate().y,
@@ -145,17 +146,13 @@ void CornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId)
     if (ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures() &&
         pWay->getStatus() == Status::Unknown1)
     {
-      //see similar notes in HighwaySnapMerger::_mergePair
-
+      // see similar notes in HighwaySnapMerger::_mergePair
       LOG_TRACE("Setting unknown1 " << pWay->getElementId().getId() << " on " <<
                 splits[0]->getElementId() << "...");
       ElementPtr newWaySegment(_map->getElement(splits[0]->getElementId())->clone());
       newWaySegment->setId(pWay->getElementId().getId());
       _map->replace(_map->getElement(splits[0]->getElementId()), newWaySegment);
     }
-
-    //_removeWayFromMap(pWay);
-
 
     LOG_VART(_map->containsElement(splitWayId));
   }
