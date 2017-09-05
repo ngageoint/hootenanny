@@ -2009,7 +2009,7 @@ Sets the minimum number of tie points that will be used when calculating a rubbe
 === rubber.sheet.ref
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If this configuration setting is set to true, then the first layer is treated as the reference
 layer and will not be moved. If set to false the two layers will be moved towards each other. The
@@ -2377,7 +2377,17 @@ before the operations in `conflate.post.ops`.
 * Default Value:
 ** ``
 
+
 List of operations to apply immediately before conflating when using Unifying Conflation only.  Runs
+after the operations in `conflate.pre.ops`.
+
+=== network.pre.ops
+
+* Data Type: list
+* Default Value:
+** `hoot::RubberSheet`
+
+List of operations to apply immediately before conflating when using Network Conflation only.  Runs
 after the operations in `conflate.pre.ops`.
 
 === uuid.helper.repeatable
