@@ -25,7 +25,7 @@ using namespace pp;
 #include <hoot/core/TestUtils.h>
 #include <hoot/hadoop/convert/WriteOsmSqlStatementsDriver.h>
 #include <hoot/core/io/OsmApiDbReader.h>
-#include <hoot/core/io/OsmApiDbBulkWriter.h>
+#include <hoot/core/io/OsmApiDbBulkInserter.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/DbUtils.h>
 
@@ -146,10 +146,11 @@ public:
 
   void writeAdditionalNewRecords()
   {
-    OsmApiDbBulkWriter writer;
+    OsmApiDbBulkInserter writer;
     writer.setReserveRecordIdsBeforeWritingData(false);
     writer.setChangesetUserId(1);
     writer.setReserveRecordIdsBeforeWritingData(true);
+    writer.setValidateData(true);
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
     writer.close();

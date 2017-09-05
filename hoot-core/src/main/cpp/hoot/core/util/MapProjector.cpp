@@ -35,6 +35,7 @@ using namespace boost;
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -275,6 +276,16 @@ boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(const OG
   boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double x = (env.MinX + env.MaxX) / 2.0;
   double y = (env.MinY + env.MaxY) / 2.0;
+  if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
+  {
+    throw HootException("Error creating orthographic projection.");
+  }
+  return srs;
+}
+
+boost::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, double y)
+{
+  boost::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   if (srs->SetOrthographic(y, x, 0, 0) != OGRERR_NONE)
   {
     throw HootException("Error creating orthographic projection.");

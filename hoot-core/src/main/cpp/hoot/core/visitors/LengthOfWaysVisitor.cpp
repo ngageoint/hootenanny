@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, LengthOfWaysVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, LengthOfWaysVisitor)
 
 Meters LengthOfWaysVisitor::getLengthOfWays(const OsmMapPtr& map, ElementPtr e)
 {

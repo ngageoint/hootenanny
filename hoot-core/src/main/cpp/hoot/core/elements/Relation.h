@@ -32,6 +32,9 @@
 #include "Element.h"
 #include "RelationData.h"
 
+// hoot
+#include <hoot/core/util/MetadataTags.h>
+
 namespace geos
 {
   namespace geom
@@ -151,9 +154,9 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ElementVisitor& filter) const;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
 
-  virtual void visitRw(ElementProvider& map, ElementVisitor& filter);
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
 
 private:
 
@@ -165,10 +168,10 @@ private:
 
   void _makeWritable();
 
-  void _visitRo(const ElementProvider& map, ElementVisitor& filter,
+  void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
     QList<long>& visitedRelations) const;
 
-  void _visitRw(ElementProvider &map, ElementVisitor& filter,
+  void _visitRw(ElementProvider &map, ConstElementVisitor& filter,
     QList<long> &visitedRelations);
 
 };

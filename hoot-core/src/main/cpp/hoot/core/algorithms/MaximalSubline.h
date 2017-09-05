@@ -45,7 +45,6 @@
 
 namespace hoot
 {
-class Sparse2dMatrix;
 class WayLocation;
 class WaySublineMatch;
 

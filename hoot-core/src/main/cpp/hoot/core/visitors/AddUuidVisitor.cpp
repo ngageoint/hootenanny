@@ -34,7 +34,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, AddUuidVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, AddUuidVisitor)
 
 AddUuidVisitor::AddUuidVisitor(QString key) : _key(key)
 {

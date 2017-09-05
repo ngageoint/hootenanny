@@ -53,6 +53,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/visitors/FindNodesVisitor.h>
 #include <hoot/core/visitors/FindWaysVisitor.h>

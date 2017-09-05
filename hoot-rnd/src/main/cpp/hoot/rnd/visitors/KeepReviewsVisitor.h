@@ -28,7 +28,7 @@
 #define KEEPREVIEWSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
 
 namespace hoot
@@ -39,7 +39,7 @@ namespace hoot
  *
  * This could do bad things if the element is in use.
  */
-class KeepReviewsVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class KeepReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

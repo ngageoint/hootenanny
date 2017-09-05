@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/ScriptTranslator.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -58,15 +59,19 @@ bool CompareSt(ScriptTranslator* st1, ScriptTranslator* st2)
 
 ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
 {
+  LOG_VARD(scriptPath);
+
   _init();
 
   vector<ScriptTranslator*> st;
   for (size_t i = 0; i < _translators.size(); ++i)
   {
+    LOG_VART(_translators[i]);
     st.push_back(Factory::getInstance().constructObject<ScriptTranslator>(_translators[i]));
   }
 
   sort(st.begin(), st.end(), CompareSt);
+  LOG_VART(st);
 
   ScriptTranslator* result = 0;
   for (size_t i = 0; i < st.size(); ++i)
@@ -74,6 +79,7 @@ ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
     try
     {
       st[i]->setScript(scriptPath);
+      LOG_VART(st[i]->isValidScript());
       if (result == 0 && st[i]->isValidScript())
       {
         result = st[i];
@@ -82,6 +88,7 @@ ScriptTranslator* ScriptTranslatorFactory::createTranslator(QString scriptPath)
       {
         delete st[i];
       }
+      LOG_VART(result);
     }
     catch (...)
     {

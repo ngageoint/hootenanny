@@ -63,6 +63,13 @@ details.
 
 Email address of the API database user.  Can be set here for debugging and testing.
 
+=== api.db.reader.sort.by.id
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, elements read from the Hootenanny API database will be sorted by element ID.
+
 === attribute.count.values
 
 * Data Type: int
@@ -704,6 +711,15 @@ If this value is set to a non-empty string, the system will attempt to open a fi
 specified name and output all the ID mappings (source to destination) used for nodes, ways, and
 relations that were written to the database.
 
+=== hootapi.db.writer.remap.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If this value is set to true, then all incoming element IDs are remapped into new IDs as the
+elements are written to a Hootenanny API database. Setting it to true is appropriate if any of the
+incoming IDs are non-positive.
+
 === hootapi.db.writer.overwrite.map
 
 * Data Type: bool
@@ -762,6 +778,7 @@ default the first assigned id will be -1)
 ** `${HOOT_TRANSLATE_PATH}`
 ** `${HOOT_HOME}/plugins`
 ** `${HOOT_HOME}/plugins-local`
+** `${HOOT_HOME}/rules`
 
 A list of paths to include in the javascript translator search path.
 
@@ -1054,6 +1071,22 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== node.comparison.coordinate.sensitivity
+
+* Data Type: int
+* Default Value: `7`
+
+The number of decimal places taken into account when comparing node coordinates.  Used by node
+hash calculation.
+
+=== node.comparison.circular.error.sensitivity
+
+* Data Type: int
+* Default Value: `6`
+
+The number of decimal places taken into account when comparing node circular error values.  Used by
+node hash calculation.
+
 === node.matcher.strictness
 
 * Data Type: double
@@ -1108,6 +1141,21 @@ Attribute columns and values that do not match a one2one rule.
 
 Debugging: Print out which attributes are dropped during export validation.
 
+=== ogr.esri.fcsubtype
+
+* Data Type: bool
+* Default Value: `true`
+
+Add the ESRI specific FCSUBTYPE field to the output.
+
+=== ogr.esri.fdname
+
+* Data Type: string
+* Default Value: `TDS`
+
+The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
+Geodatabases.
+
 === ogr.import.filter
 
 * Data Type: string
@@ -1118,14 +1166,19 @@ Geodatabase. The default is to import all layers from a FGDB.  Setting this vari
 override the filter value that can be set by the layerNameFilter function inside a translation
 script.
 
-=== ogr.mgcp.extra
+=== ogr.note.extra
 
 * Data Type: string
-* Default Value: `file`
+* Default Value: `attribute`
+
+When exporting to TDSv40 and TDSv61:
+- "attribute" Add unused tags to the "ZI006_MEM" field.
+- "file" Save the unused tags in a new layer (extra_[PLA]).
+- "none" Don't save the unused tags, just drop them.
 
 When exporting to MGCP:
+- "attribute" Add unused tags to the "TXT" field.
 - "file" Save the unused tags in a new layer (extra_[PLA]).
-- "note" Add unused tags to the "TXT" field.
 - "none" Don't save the unused tags, just drop them.
 
 NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
@@ -1176,6 +1229,13 @@ This can sometimes be necessary when reading from a DB created with osm2pgsql. E
 hoot convert -D ogr.reader.epsg.override=900913 PG:"dbname='gis' host='localhost' port='5432' user='hoot' password='blahblah'" tmp/output.shp
 ----
 
+=== ogr.reader.node.id.field.name
+
+* Data Type: string
+* Default Value: ``
+
+If set, the ogr reader will use the value at the specified field to populate node IDs.
+
 === ogr.split.o2s
 
 * Data Type: bool
@@ -1210,27 +1270,12 @@ When exporting to TDSv40 and TDSv61:
 
 NOTE: If exporting to Shapefile, this field will be truncated to 255 characters.
 
-=== ogr.tds.add.fcsubtype
+=== ogr.thematic.structure
 
 * Data Type: bool
 * Default Value: `true`
 
-Add the ESRI specific FCSUBTYPE field to the output.
-
-=== ogr.tds.fdname
-
-* Data Type: string
-* Default Value: `TDS`
-
-The name to use for the ESRI Feature Dataset on export. Note: This only applies to ESRI File
-Geodatabases.
-
-=== ogr.tds.structure
-
-* Data Type: bool
-* Default Value: `true`
-
-Export TDS data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
+Where applicable, export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one
 FCODE per file/layer (ROAD_L, BUILDING_P etc).
 
 === ogr.throw.error
@@ -1280,7 +1325,7 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osmapidb.bulk.writer.file.output.element.buffer.size
+=== osmapidb.bulk.inserter.file.output.element.buffer.size
 
 * Data Type: long
 * Default Value: `10000`
@@ -1291,17 +1336,17 @@ dataset you are writing is significantly larger than the value of this setting, 
 increase the input file parsing performance by raising this value.  This setting has no impact on
 the performance of writing records to a database, only on the input data parsing done beforehand.
 
-=== osmapidb.bulk.writer.file.output.status.update.interval
+=== osmapidb.bulk.inserter.file.output.status.update.interval
 
 * Data Type: long
-* Default Value: `1000000`
+* Default Value: `10000`
 
 Count at which the parse status of each element type should be logged when writing to them to
 files.  e.g. With a value of 100, you will see a load status update message logged for every 100
 elements parsed or file lines written.  This setting will have a negative impact on performance
 if set to a very low value.
 
-=== osmapidb.bulk.writer.output.files.copy.location
+=== osmapidb.bulk.inserter.output.files.copy.location
 
 * Data Type: string
 * Default Value: ``
@@ -1313,7 +1358,7 @@ files generated as a result of executing the hoot convert command with an OSM AP
 are copied to the specified location.  This option should be set to a full file path to a SQL
 file (.sql).
 
-=== osmapidb.bulk.writer.reserve.record.ids.before.writing.data
+=== osmapidb.bulk.inserter.reserve.record.ids.before.writing.data
 
 * Data Type: bool
 * Default Value: `false`
@@ -1326,7 +1371,7 @@ destination must be an OSM API database or this setting will always be treated a
 If the output destination is a SQL file, the SQL statements to update the record IDs will be
 written to the SQL output for later execution.
 
-=== osmapidb.bulk.writer.starting.node.id
+=== osmapidb.bulk.inserter.starting.node.id
 
 * Data Type: long
 * Default Value: `1`
@@ -1334,9 +1379,9 @@ written to the SQL output for later execution.
 First record ID to assign to written nodes when writing to an OSM API database or SQL file.  Must
 be a positive number.  Use this when working with an offline database and know the ID range you
 want to assign to node records.  This option is ignored if
-"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
+"osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
 
-=== osmapidb.bulk.writer.starting.way.id
+=== osmapidb.bulk.inserter.starting.way.id
 
 * Data Type: long
 * Default Value: `1`
@@ -1344,9 +1389,9 @@ want to assign to node records.  This option is ignored if
 First record ID to assign to written ways when writing to an OSM API database or SQL file.  Must
 be a positive number.  Use this when working with an offline database and know the ID range you
 want to assign to way records.  This option is ignored if
-"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
+"osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
 
-=== osmapidb.bulk.writer.starting.relation.id
+=== osmapidb.bulk.inserter.starting.relation.id
 
 * Data Type: long
 * Default Value: `1`
@@ -1354,29 +1399,28 @@ want to assign to way records.  This option is ignored if
 First record ID to assign to written relations when writing to an OSM API database or SQL file.
 Must be a positive number.  Use this when working with an offline database and know the ID range
 you want to assign to relation records.  This option is ignored if
-"osmapidb.bulk.writer.reserve.record.ids.before.writing.data" is set to true.
+"osmapidb.bulk.inserter.reserve.record.ids.before.writing.data" is set to true.
 
-=== osmapidb.bulk.writer.stxxl.map.min.size
+=== osmapidb.bulk.inserter.stxxl.map.min.size
 
 * Data Type: long
 * Default Value: `10000000`
 
-Size at which the ID mappings storage for the OSM API database bulk writer switches from a std::map
-to an stxxl::map, which is a container optimized for very large amounts of data.  For debugging
-purposes only.
+Size at which the ID mappings storage for the OSM API database bulk inserter switches from a
+std::map to an stxxl::map, which is a container optimized for very large amounts of data.  For
+debugging purposes only.
 
-=== osmapidb.bulk.writer.validate.data
+=== osmapidb.bulk.inserter.validate.data
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
-If true, the OSM API database bulk writer will create new element ID mappings, check for duplicate
-element IDs, invalid way node references, and invalid relation member references.  Only duplicate
-element IDs and invalid way node references will cause a failure.  Invalid relation members will
-cause a warning to be logged.  You should only set this to false as an optimization if you are
-loading data that was previously validated in another OSM API database, all element IDs are
-unique in the data you are loading, and the IDs will not conflict with any existing data in the
-destination database.
+If true, the OSM API database bulk inserter will renumber element IDs, check for duplicated
+element IDs, check for invalid way node references, and check for invalid relation member
+references.  Only duplicate element IDs and invalid way node references will cause a failure.
+Invalid relation members will cause a warning to be logged.  You should enable this setting if you
+are loading data that has not been previously validated in another OSM API database.  Enabling this
+setting may cause writing to an OSM API database to occur more slowly.
 
 === osmapidb.id.aware.url
 
@@ -1894,7 +1938,8 @@ reported.
 * Data Type: bool
 * Default Value: `true`
 
-By default add the `source:datetime` stamp when reading files.  Not honored by all readers.
+By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
+honored by all readers.
 
 === reader.conflate.use.data.source.ids.1
 
@@ -1938,6 +1983,15 @@ an 'accuracy' tag will not be replaced by a 'error:circular' tag; both tags will
 
 Sets the status on data being read.  Valid values are "unknown1" and "unknown2".  Not honored by all
 readers.
+
+=== reader.use.data.source.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, the element IDs in the source data will be assigned to written elements.  Otherwise,
+Hootenanny manages element IDs internally.  This should not be set to true if any source elements
+have negative IDs.  Not honored by all readers.
 
 === reader.use.file.status
 
@@ -2226,6 +2280,14 @@ renaming existing tag keys on all elements in a map.
 
 The key to be replaced by the TagRenameKeyVisitor.  TagRenameKeyVisitor allows for
 renaming existing tag keys on all elements in a map.
+
+=== test.case.cmd
+
+* Data Type: string
+* Default Value: `hoot::ConflateCmd`
+
+Set the conflate command that should be used in a test case. This is only useful when writing
+test cases (`test-files/cases/`) and was originally added to support the MultiaryConflateCmd.
 
 === test.force.orthographic.projection
 
@@ -2615,7 +2677,7 @@ NoInformationElementRemover cleaning operation.
 
 === writer.precision
 
-* Data Type: double
+* Data Type: int
 * Default Value: `16`
 
 Set the output precision when writing. Not honored by all writers.
@@ -2626,3 +2688,13 @@ Set the output precision when writing. Not honored by all writers.
 * Default Value: `false`
 
 Add hoot:status values as text (Reference, Merged etc) instead of numbers (1,2,3)
+
+=== writer.xml.sort.by.id
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, OSM elements written to XML file output (.osm) are sorted by ID.  Setting this to true
+will require reading the entire source dataset into memory.  Setting it to false may result in
+using smaller amounts of memory during writing if the data source being written is also a streamable
+format (see the "Supported Data Formats" section in README.md).

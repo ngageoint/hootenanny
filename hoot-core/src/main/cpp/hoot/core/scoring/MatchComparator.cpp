@@ -59,7 +59,7 @@ unsigned int MatchComparator::logWarnCount = 0;
 /**
  * Traverses the OsmMap and creates a map from REF tags to all the uuids that have that REF.
  */
-class GetRefUuidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class GetRefUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
   typedef map<QString, set<QString> > RefToUuid;
@@ -114,7 +114,7 @@ private:
 /**
  * Traverses the OsmMap and creates a map from uuid tags to ElementIds.
  */
-class UuidToEidVisitor : public ElementVisitor, public ConstOsmMapConsumer
+class UuidToEidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 

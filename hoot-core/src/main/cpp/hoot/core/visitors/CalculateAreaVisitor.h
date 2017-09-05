@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
@@ -41,7 +41,7 @@ namespace hoot
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first reprojected into meters.
  */
-class CalculateAreaVisitor : public ElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
+class CalculateAreaVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public SingleStatistic
 {
 public:
 

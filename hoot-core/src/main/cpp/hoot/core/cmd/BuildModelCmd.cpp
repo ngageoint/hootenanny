@@ -35,6 +35,7 @@
 #include <hoot/core/io/ArffWriter.h>
 #include <hoot/core/scoring/MatchFeatureExtractor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <fstream>

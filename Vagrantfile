@@ -1,15 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
 Vagrant.configure(2) do |config|
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-
+  # Hoot port mapping
   tomcatPort = ENV['TOMCAT_PORT']
   if tomcatPort.nil?
     tomcatPort = '8888'
@@ -30,14 +23,17 @@ Vagrant.configure(2) do |config|
     mapnikPort = '8000'
   end
 
-  # tomcat service
-  config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
-  # translation nodejs service
-  config.vm.network "forwarded_port", guest: 8094, host: transPort
-  # merge nodejs service
-  config.vm.network "forwarded_port", guest: 8096, host: mergePort
-  # node-mapnik-server nodejs service
-  config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
+  disableForwarding = ENV['DISABLE_VAGRANT_FORWARDING']
+  if disableForwarding.nil?
+    # tomcat service
+    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort
+    # translation nodejs service
+    config.vm.network "forwarded_port", guest: 8094, host: transPort
+    # merge nodejs service
+    config.vm.network "forwarded_port", guest: 8096, host: mergePort
+    # node-mapnik-server nodejs service
+    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort
+  end
 
   # Global settings - default for Ubuntu1404
 
@@ -70,7 +66,6 @@ Vagrant.configure(2) do |config|
     #hoot_ubuntu1604.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
     #hoot_ubuntu1604.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
-
 
   # Centos7 box
   # For testing
@@ -108,23 +103,56 @@ Vagrant.configure(2) do |config|
   # Example for VirtualBox:
   #
   config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
+  # Display the VirtualBox GUI when booting the machine
+  #vb.gui = true
 
-  #   # Customize the amount of memory on the VM:
-     vb.memory = 8192
-     vb.cpus = 4
+  # Customize the amount of memory on the VM:
+    vb.memory = 8192
+    vb.cpus = 4
+  end
+
+  # This is a provider for KVM
+  # See https://github.com/pradels/vagrant-libvirt for install instructions
+  # Run "vagrant up --provider=libvirt" to spin up using KVM.
+  #
+  # On Ubuntu 14.04 I had to use v0.0.35 of the vagrant-libvirt plugin. -JRS
+  # https://github.com/vagrant-libvirt/vagrant-libvirt/issues/669
+  #
+  # vagrant plugin install --plugin-version 0.0.35 vagrant-libvirt
+  # WARNING: Minimally tested
+  config.vm.provider "libvirt" do |libvirt, override|
+    override.nfs.map_uid = Process.uid
+    override.nfs.map_gid = Process.gid
+    # Disable the standard folders so we can use NFS
+    override.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+    override.vm.synced_folder '.', '/home/vagrant/hoot', disabled: true
+
+    # Configure some fancy NFS syncing
+    override.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs",
+      :mount_options => ['vers=3','udp','noatime','nodiratime','nocto', 'nolock'],
+      :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
+    override.bindfs.bind_folder "/home/vagrant/.hoot-nfs",
+      "/home/vagrant/hoot",
+      chgrp_ignore: true,
+      chown_ignore: true,
+      perms: nil
+    override.vm.box = "s3than/trusty64"
+    override.vm.box_url = "https://app.vagrantup.com/s3than/boxes/trusty64"
+    #override.vm.box = "iknite/trusty64"
+    #override.vm.box_url = "https://app.vagrantup.com/iknite/boxes/trusty64"
+    libvirt.memory = 8192
+    libvirt.cpus = 8
   end
 
   # This is a provider for the Parallels Virtualization Software
   # Run "vagrant up --provider=parallels" to spin up using parallels.
+  # WARNING: Minimally tested
   config.vm.provider "parallels" do |para, override|
         para.memory = 8192
         para.cpus = 4
         override.hoot.vm.box = "parallels/ubuntu-14.04"
         override.hoot.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04"
 
-        # NOTE: I have no way to test these - mattj
         override.hoot_ubuntu1604.vm.box = "parallels/ubuntu-16.04"
         override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-16.04"
         override.hoot_centos7.vm.box = "parallels/centos-7.3"
@@ -133,17 +161,42 @@ Vagrant.configure(2) do |config|
 
   # This is a provider for VMware Workstation
   # Run "vagrant up --provider=vmware_workstation" to spin up using VMware.
+  # WARNING: Minimally tested
   config.vm.provider "vmware_workstation" do |vw, override|
       vw.memory = 8192
       vw.cpus = 4
       override.hoot.vm.box = "puphpet/ubuntu1404-x64"
       override.hoot.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1404-x64"
 
-      # NOTE: Yet again, I have no way to test this - mattj
       override.hoot_ubuntu1604.vm.box = "puphpet/ubuntu1604-x64"
       override.hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/puphpet/boxes/ubuntu1604-x64"
   end
 
+  # AWS Provider.  Set enviornment variables for values below to use
+  config.vm.provider "aws" do |aws, override|
+    override.vm.box               = "dummy"
+    override.nfs.functional       = false
+    override.ssh.username         = "vagrant"
+    override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY_PATH']
+    aws.instance_type             = "m3.xlarge"
+    aws.block_device_mapping      = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 32 }]
+    aws.access_key_id             = ENV['AWS_ACCESS_KEY_ID']
+    aws.secret_access_key         = ENV['AWS_SECRET_ACCESS_KEY']
+    aws.keypair_name              = ENV['AWS_KEYPAIR_NAME']
+    aws.security_groups           = ENV['AWS_SECURITY_GROUP']
+    aws.ami                       = ENV['AWS_AMI_UBUNTU1404']
+
+    # Copy over predownloaded packages if they are found
+    override.vm.provision "software", type: "shell", run: "always", :inline => "( [ -d /home/vagrant/hoot/software ] && cp /home/vagrant/hoot/software/* /home/vagrant ) || true"
+    override.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvision.sh"
+    override.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    override.vm.provision "EGD", type: "shell", :privileged => false, :inline  => "([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat8 ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true"
+    override.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    override.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    override.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+  end
+
+  # TODO: Add vSphere provider
 end
 
 # Allow local overrides of vagrant settings
@@ -154,5 +207,4 @@ else
     load 'VagrantfileLocal.vbox'
   end
 end
-
 

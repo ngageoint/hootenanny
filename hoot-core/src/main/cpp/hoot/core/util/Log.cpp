@@ -118,6 +118,10 @@ Log::WarningLevel Log::getLevelFromString(QString l)
   {
     return Debug;
   }
+  if (l == "info")
+  {
+    return Info;
+  }
   if (l == "warn")
   {
     return Warn;

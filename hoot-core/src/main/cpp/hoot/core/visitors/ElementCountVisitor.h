@@ -28,7 +28,7 @@
 #define ELEMENTCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 #include "SingleStatistic.h"
 
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Counts the number of elements.
  */
-class ElementCountVisitor : public ElementVisitor, public SingleStatistic
+class ElementCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 

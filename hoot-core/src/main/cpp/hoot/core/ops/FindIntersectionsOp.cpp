@@ -50,6 +50,7 @@
 #include <hoot/core/visitors/FindIntersectionsVisitor.h>
 #include <hoot/core/filters/IntersectionFilter.h>
 #include <hoot/core/filters/ElementTypeCriterion.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

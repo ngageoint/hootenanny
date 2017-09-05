@@ -29,8 +29,10 @@
 
 // Hoot
 #include <hoot/core/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/io/ScriptTranslator.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
@@ -40,23 +42,36 @@ namespace hoot
 
 class ScriptToOgrTranslator;
 
-class TranslationVisitor : public ElementVisitor, public ConstOsmMapConsumer
+/**
+ * Translates elements that are passed to the visitor.
+ */
+class TranslationVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  TranslationVisitor(ScriptTranslator& t, bool toOgr, OsmMap* map);
+  static std::string className() { return "hoot::TranslationVisitor"; }
+
+  TranslationVisitor();
+
   virtual ~TranslationVisitor() {}
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
 
-  virtual void setOsmMap(const OsmMap*) { assert(false); }
+  /**
+   * Set the path to the translation script.
+   */
+  void setPath(QString path);
 
-  virtual void visit(const ConstElementPtr& ce);
+  virtual void visit(const ElementPtr& e);
+
+  virtual QString toString() { return "hoot::TranslationVisitor"; }
 
 private:
-  ScriptTranslator& _t;
+  ScriptTranslatorPtr _t;
   ScriptToOgrTranslator* _togr;
-  OsmMap* _map;
   bool _toOgr;
 };
 

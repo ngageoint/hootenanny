@@ -33,7 +33,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/extractors/Histogram.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/GeometryConverter.h>
 
 using namespace geos::geom;
@@ -44,7 +44,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AngleHistogramExtractor)
 
-class HistogramVisitor : public ElementVisitor
+class HistogramVisitor : public ConstElementVisitor
 {
 public:
   static std::string className() { return "hoot::HistogramVisitor"; }

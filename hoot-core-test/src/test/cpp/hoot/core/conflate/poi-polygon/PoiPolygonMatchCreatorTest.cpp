@@ -105,7 +105,7 @@ public:
     CPPUNIT_ASSERT(
       uut.isMatchCandidate(map->getNode(FindNodesVisitor::findNodesByTag(map, "name", "foo")[0]), map));
     CPPUNIT_ASSERT(
-      !uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
+      uut.isMatchCandidate(map->getWay(FindWaysVisitor::findWaysByTag(map, "name", "foo")[0]), map));
 
     OsmXmlReader reader;
     OsmMap::resetCounters();

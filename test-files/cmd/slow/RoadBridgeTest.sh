@@ -9,7 +9,7 @@ OUTPUT=test-output/RoadBridge
 rm -rf $OUTPUT
 
 # Make shapefiles
-hoot --osm2ogr -D ogr.tds.structure=false $HOOT_HOME/translations/HootTest.js $INPUT $OUTPUT".shp"
+hoot --osm2ogr -D ogr.thematic.structure=false $HOOT_HOME/translations/HootTest.js $INPUT $OUTPUT".shp"
 
 hoot stats --brief test-output/RoadBridge/BRIDGE_C.shp | grep Count
 hoot stats --brief test-output/RoadBridge/CART_TRACK_C.shp | grep Count

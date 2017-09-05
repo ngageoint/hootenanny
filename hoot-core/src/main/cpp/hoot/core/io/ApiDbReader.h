@@ -30,6 +30,8 @@
 // hoot
 #include <hoot/core/OsmMap.h>
 #include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Configurable.h>
+#include "PartialOsmMapReader.h"
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -50,7 +52,7 @@ class ApiDb;
 /**
  * Abstract parent class for reading from an API style OSM database
  */
-class ApiDbReader : public Boundable
+class ApiDbReader : public PartialOsmMapReader, public Boundable, public Configurable
 {
 public:
 
@@ -61,18 +63,53 @@ public:
   ApiDbReader();
   virtual ~ApiDbReader() {}
 
+  virtual bool isSupported(QString urlStr);
+
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
   void setBoundingBox(const QString bbox);
   void setOverrideBoundingBox(const QString bbox);
+  void setSortById(const bool sortById) { _sortById = sortById; }
   void setReturnNodesOnly(const bool returnNodesOnly)
   { _returnNodesOnly = returnNodesOnly; }
+
+  /**
+   * Determines the reader's default element status. By default this is Invalid which specifies that
+   * the file's status will be used.
+   */
+  virtual void setDefaultStatus(Status status) { _status = status; }
+
+  /**
+   * Determines whether the reader should use the element id's from the file being read
+   */
+  virtual void setUseDataSourceIds(bool useDataSourceIds) { _useDataSourceIds = useDataSourceIds; }
+
+  void setUserEmail(const QString& email) { _email = email; }
+
+  virtual void initializePartial();
+
+  /**
+   * The read command called after open.
+   */
+  virtual void read(OsmMapPtr map);
+
+  virtual void finalizePartial();
+
+  void close();
+
+  virtual bool hasMoreElements();
+
+  virtual boost::shared_ptr<Element> readNextElement();
+
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
 protected:
 
   bool _useDataSourceIds;
   Status _status;
   bool _open;
+  QString _email;
+  bool _sortById;
 
   Tgs::BigMap<long, long> _nodeIdMap;
   Tgs::BigMap<long, long> _relationIdMap;
@@ -82,6 +119,12 @@ protected:
   geos::geom::Envelope _overrideBounds; //this will override _bounds
 
   bool _returnNodesOnly;
+
+  ElementType _selectElementType;
+  boost::shared_ptr<QSqlQuery> _elementResultIterator;
+  boost::shared_ptr<Element> _nextElement;
+
+  const ElementType _getCurrentSelectElementType() const;
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -102,6 +145,19 @@ protected:
   static bool _isValidBounds(const geos::geom::Envelope& bounds);
   bool _hasBounds();
 
+private:
+
+  void _read(OsmMapPtr map, const ElementType& elementType);
+
+  boost::shared_ptr<Element> _getElementUsingIterator();
+
+  /**
+   * Converts a query result to an OSM element
+   * 
+   * This will advance the results iterator *before* reading each element.
+   */
+  boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
+                                              const ElementType& elementType, OsmMap& map);
 };
 
 }

@@ -40,6 +40,7 @@
 #include <hoot/core/util/ElementConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Log.h>
 
 // tgs
 #include <tgs/StreamUtils.h>

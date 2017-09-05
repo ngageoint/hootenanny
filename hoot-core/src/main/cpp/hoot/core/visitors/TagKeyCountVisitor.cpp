@@ -31,7 +31,7 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, TagKeyCountVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, TagKeyCountVisitor)
 
 TagKeyCountVisitor::TagKeyCountVisitor(const QString key) :
 _key(key),

@@ -77,7 +77,7 @@ class ScriptMatchVisitor;
 /**
  * Searches the specified map for any match potentials.
  */
-class ScriptMatchVisitor : public ElementVisitor
+class ScriptMatchVisitor : public ConstElementVisitor
 {
 
 public:
@@ -92,7 +92,9 @@ public:
   {
     _neighborCountMax = -1;
     _neighborCountSum = 0;
+    _elementCount = map->getElementCount();
     _elementsEvaluated = 0;
+    _elementsVisited = 0;
     _maxGroupSize = 0;
 
     HandleScope handleScope;
@@ -117,14 +119,6 @@ public:
     {
       _getSearchRadius = Persistent<Function>::New(Handle<Function>::Cast(value));
     }
-
-    boost::function<bool (ConstElementPtr e)> f =
-      boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-    ArbitraryCriterion crit(f);
-    WorstCircularErrorVisitor worstV;
-    FilteredVisitor filteredV(crit, worstV);
-    map->visitRo(filteredV);
-    _worstCircularError = worstV.getWorstCircularError();
   }
 
   ~ScriptMatchVisitor()
@@ -149,15 +143,14 @@ public:
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
-    int neighborCount = 0;
 
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
-      if ((e->getStatus() != e2->getStatus() || from < *it) && isMatchCandidate(e2))
+      if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
-        ScriptMatch* m = new ScriptMatch(_script, getPlugin(), map, from, *it, _mt);
+        ScriptMatch* m = new ScriptMatch(_script, getPlugin(), map, _mapJs, from, *it, _mt);
         // if we're confident this is a miss
         if (m->getType() == MatchType::Miss)
         {
@@ -166,13 +159,12 @@ public:
         else
         {
           _result.push_back(m);
-          neighborCount++;
         }
       }
     }
 
-    _neighborCountSum += neighborCount;
-    _neighborCountMax = std::max(_neighborCountMax, neighborCount);
+    _neighborCountSum += neighbors.size();
+    _neighborCountMax = std::max(_neighborCountMax, (int)neighbors.size());
   }
 
   ConstOsmMapPtr getMap() const { return _map.lock(); }
@@ -244,15 +236,27 @@ public:
     }
     else
     {
-      Handle<Value> jsArgs[1];
+      if (_searchRadiusCache.contains(e->getElementId()))
+      {
+        result = _searchRadiusCache[e->getElementId()];
+      }
+      else
+      {
+        Context::Scope context_scope(_script->getContext());
+        HandleScope handleScope;
 
-      int argc = 0;
-      jsArgs[argc++] = ElementJs::New(e);
+        Handle<Value> jsArgs[1];
 
-      LOG_TRACE("Calling getSearchRadius...");
-      Handle<Value> f = _getSearchRadius->Call(getPlugin(), argc, jsArgs);
+        int argc = 0;
+        jsArgs[argc++] = ElementJs::New(e);
 
-      result = toCpp<Meters>(f) * _candidateDistanceSigma;
+        LOG_TRACE("Calling getSearchRadius...");
+        Handle<Value> f = _getSearchRadius->Call(getPlugin(), argc, jsArgs);
+
+        result = toCpp<Meters>(f) * _candidateDistanceSigma;
+
+        _searchRadiusCache[e->getElementId()] = result;
+      }
     }
 
     LOG_VART(result);
@@ -300,6 +304,11 @@ public:
     LOG_DEBUG("Search radius calculation complete for " << scriptFileInfo.fileName());
   }
 
+  void cleanMapCache()
+  {
+    _mapJs.Clear();
+  }
+
   boost::shared_ptr<HilbertRTree>& getIndex()
   {
     if (!_index)
@@ -309,19 +318,20 @@ public:
       boost::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      // Only index elements that have Status::Unknown2 and
-      boost::shared_ptr<StatusCriterion> pC1(new StatusCriterion(Status::Unknown2));
+      // Only index elements that satisfy the isMatchCandidate
+      // previously we only indexed Unknown2, but that causes issues when wanting to conflate
+      // from n datasets and support intradataset conflation. This approach over-indexes a bit and
+      // will likely slow things down, but should give the same results.
+      // An option in the future would be to support an "isIndexedFeature" or similar function
+      // to speed the operation back up again.
       boost::function<bool (ConstElementPtr e)> f =
         boost::bind(&ScriptMatchVisitor::isMatchCandidate, this, _1);
-      boost::shared_ptr<ArbitraryCriterion> pC2(new ArbitraryCriterion(f));
-      boost::shared_ptr<ChainCriterion> pCC(new ChainCriterion());
-      pCC->addCriterion(pC1);
-      pCC->addCriterion(pC2);
+      boost::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
       IndexElementsVisitor v(_index,
                              _indexToEid,
-                             pCC,
+                             pC,
                              boost::bind(&ScriptMatchVisitor::getSearchRadius, this, _1),
                              getMap());
 
@@ -333,8 +343,41 @@ public:
     return _index;
   }
 
+  Persistent<Object> getOsmMapJs()
+  {
+    if (_mapJs.IsEmpty())
+    {
+      _mapJs = Persistent<Object>::New(OsmMapJs::create(getMap()));
+    }
+    return _mapJs;
+  }
+
+  /**
+   * Returns true if e1, e2 is in the correct ordering for matching. This does a few things:
+   *
+   *  - Avoid comparing e1 to e2 and e2 to e1
+   *  - The Unknown1/Input1 is always e1. This is a requirement for some of the older code.
+   *  - Gives a consistent ordering to allow backwards compatibility with system tests.
+   */
+  bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2)
+  {
+    if (e1->getStatus().getEnum() == e2->getStatus().getEnum())
+    {
+      return e1->getElementId() < e2->getElementId();
+    }
+    else
+    {
+      return e1->getStatus().getEnum() < e2->getStatus().getEnum();
+    }
+  }
+
   bool isMatchCandidate(ConstElementPtr e)
   {
+    if (_matchCandidateCache.contains(e->getElementId()))
+    {
+      return _matchCandidateCache[e->getElementId()];
+    }
+
     Context::Scope context_scope(_script->getContext());
     HandleScope handleScope;
     Persistent<Object> plugin = getPlugin();
@@ -352,19 +395,28 @@ public:
     Handle<Value> jsArgs[2];
 
     int argc = 0;
-    jsArgs[argc++] = OsmMapJs::create(getMap());
+    jsArgs[argc++] = getOsmMapJs();
     jsArgs[argc++] = ElementJs::New(e);
 
     Handle<Value> f = func->Call(plugin, argc, jsArgs);
 
-    return f->BooleanValue();
+    bool result = f->BooleanValue();
+    _matchCandidateCache[e->getElementId()] = result;
+    return result;
   }
 
   virtual void visit(const ConstElementPtr& e)
   {
-    if (e->getStatus() == Status::Unknown1 && isMatchCandidate(e))
+    if (isMatchCandidate(e))
     {
       checkForMatch(e);
+    }
+    _elementsVisited++;
+    if (_elementsVisited % 10 == 0 && Log::getInstance().getLevel() <= Log::Info)
+    {
+      cout << "Progress: " << _elementsVisited << " of " << _elementCount <<
+              " _neighborCountSum: " << _neighborCountSum << "          \r";
+      cout << flush;
     }
   }
 
@@ -378,16 +430,21 @@ private:
 
   // don't hold on to the map.
   boost::weak_ptr<const OsmMap> _map;
+  Persistent<Object> _mapJs;
   vector<const Match*>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;
   int _neighborCountSum;
+  long _elementCount;
   int _elementsEvaluated;
+  long _elementsVisited;
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _mt;
-  Meters _worstCircularError;
   boost::shared_ptr<PluginContext> _script;
   Persistent<v8::Function> _getSearchRadius;
+
+  QHash<ElementId, bool> _matchCandidateCache;
+  QHash<ElementId, double> _searchRadiusCache;
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;
@@ -400,14 +457,19 @@ private:
   QString _scriptPath;
 };
 
-ScriptMatchCreator::ScriptMatchCreator() :
-_worstCircularError(-1.0)
+ScriptMatchCreator::ScriptMatchCreator()
 {
-  _matchCandidateChecker.reset();
+  _cachedScriptVisitor.reset();
 }
 
 ScriptMatchCreator::~ScriptMatchCreator()
 {
+}
+
+Meters ScriptMatchCreator::calculateSearchRadius(const ConstOsmMapPtr& map,
+  const ConstElementPtr& e)
+{
+  return _getCachedVisitor(map)->getSearchRadius(e);
 }
 
 void ScriptMatchCreator::setArguments(QStringList args)
@@ -424,7 +486,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   _script->loadScript(_scriptPath, "plugin");
   //bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
-  _matchCandidateChecker.reset();
+  _cachedScriptVisitor.reset();
 
   QFileInfo scriptFileInfo(_scriptPath);
   LOG_DEBUG("Set arguments for: " << className() << " - rules: " << scriptFileInfo.fileName());
@@ -434,9 +496,15 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
 {
   if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
   {
+    Context::Scope context_scope(_script->getContext());
+    HandleScope handleScope;
+
+    Handle<Object> mapJs = OsmMapJs::create(map);
+
     return
       new ScriptMatch(
-        _script, ScriptMatchVisitor::getPlugin(_script), map, eid1, eid2, getMatchThreshold());
+        _script, ScriptMatchVisitor::getPlugin(_script), map, mapJs, eid1, eid2,
+        getMatchThreshold());
   }
   else
   {
@@ -499,6 +567,44 @@ vector<MatchCreator::Description> ScriptMatchCreator::getAllCreators() const
   return result;
 }
 
+boost::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
+  const ConstOsmMapPtr& map)
+{
+  if (!_cachedScriptVisitor.get() || _cachedScriptVisitor->getMap() != map)
+  {
+    LOG_VART(_cachedScriptVisitor.get());
+    QString scriptPath = _scriptPath;
+    if (_cachedScriptVisitor.get())
+    {
+      LOG_VART(_cachedScriptVisitor->getMap() == map);
+      scriptPath = _cachedScriptVisitor->getScriptPath();
+    }
+    LOG_VART(scriptPath);
+
+    QFileInfo scriptFileInfo(_scriptPath);
+    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
+
+    vector<const Match*> emptyMatches;
+    _cachedScriptVisitor.reset(
+      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script));
+    _cachedScriptVisitor->setScriptPath(scriptPath);
+    //If the search radius has already been calculated for this matcher once, we don't want to do
+    //it again due to the expense.
+    LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
+    if (!_cachedCustomSearchRadii.contains(scriptPath))
+    {
+      _cachedScriptVisitor->calculateSearchRadius();
+    }
+    else
+    {
+      LOG_VART(_cachedCustomSearchRadii[scriptPath]);
+      _cachedScriptVisitor->setCustomSearchRadius(_cachedCustomSearchRadii[scriptPath]);
+    }
+  }
+
+  return _cachedScriptVisitor;
+}
+
 MatchCreator::Description ScriptMatchCreator::_getScriptDescription(QString path) const
 {
   MatchCreator::Description result;
@@ -542,39 +648,7 @@ bool ScriptMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOs
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
-  if (!_matchCandidateChecker.get() || _matchCandidateChecker->getMap() != map)
-  {
-    LOG_VART(_matchCandidateChecker.get());
-    QString scriptPath = _scriptPath;
-    if (_matchCandidateChecker.get())
-    {
-      LOG_VART(_matchCandidateChecker->getMap() == map);
-      scriptPath = _matchCandidateChecker->getScriptPath();
-    }
-    LOG_VART(scriptPath);
-
-    QFileInfo scriptFileInfo(_scriptPath);
-    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
-
-    vector<const Match*> emptyMatches;
-    _matchCandidateChecker.reset(
-      new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script));
-    _matchCandidateChecker->setScriptPath(scriptPath);
-    //If the search radius has already been calculated for this matcher once, we don't want to do
-    //it again due to the expense.
-    LOG_VART(_cachedCustomSearchRadii.contains(scriptPath));
-    if (!_cachedCustomSearchRadii.contains(scriptPath))
-    {
-      _matchCandidateChecker->calculateSearchRadius();
-    }
-    else
-    {
-      LOG_VART(_cachedCustomSearchRadii[scriptPath]);
-      _matchCandidateChecker->setCustomSearchRadius(_cachedCustomSearchRadii[scriptPath]);
-    }
-  }
-
-  return _matchCandidateChecker->isMatchCandidate(element);
+  return _getCachedVisitor(map)->isMatchCandidate(element);
 }
 
 boost::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()

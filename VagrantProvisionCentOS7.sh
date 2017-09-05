@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-#TODO: Fix HOOT_HOME
-HOOT_HOME=$HOME/hoot
+HOOT_HOME=~/hoot
 echo HOOT_HOME: $HOOT_HOME
 cd ~
 source ~/.bash_profile
@@ -9,16 +8,7 @@ source ~/.bash_profile
 # Keep VagrantBuild.sh happy
 #ln -s ~/.bash_profile ~/.profile
 
-# Find out what user we have: vagrant or ubuntu
-# This comes from a user difference in one of the Vagrant boxes
-if [ "$(getent passwd vagrant)" ]; then
-  VMUSER=vagrant
-else
-  if [ "$(getent passwd ubuntu)" ]; then
-    VMUSER=ubuntu
-  fi
-fi
-
+VMUSER=`id -u -n`
 
 # add EPEL repo for extra packages
 echo "### Add epel repo ###" > CentOS_upgrade.txt
@@ -158,7 +148,7 @@ sudo /usr/bin/perl $HOOT_HOME/scripts/maven/SetMavenHttps.pl
 
 if ! grep --quiet "export HOOT_HOME" ~/.bash_profile; then
     echo "Adding hoot home to profile..."
-    echo "export HOOT_HOME=\$HOME/hoot" >> ~/.bash_profile
+    echo "export HOOT_HOME=~/hoot" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HOOT_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
@@ -174,7 +164,7 @@ fi
 
 if ! grep --quiet "export HADOOP_HOME" ~/.bash_profile; then
     echo "Adding Hadoop home to profile..."
-    echo "export HADOOP_HOME=\$HOME/hadoop" >> ~/.bash_profile
+    echo "export HADOOP_HOME=~/hadoop" >> ~/.bash_profile
     echo "export PATH=\$PATH:\$HADOOP_HOME/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
@@ -250,32 +240,32 @@ cd ~
 
 if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f chromedriver_linux64.zip ]; then
       LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
       wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
     fi
-    unzip -d $HOME/bin chromedriver_linux64.zip
+    unzip -d ~/bin chromedriver_linux64.zip
 else
   LATEST_RELEASE="`wget --quiet -O- http://chromedriver.storage.googleapis.com/LATEST_RELEASE`"
   if [[ "$(chromedriver --version)" != "ChromeDriver $LATEST_RELEASE."* ]]; then
     echo "### Updating Chromedriver"
-    rm $HOME/bin/chromedriver
-    rm $HOME/chromedriver_linux64.zip
+    rm ~/bin/chromedriver
+    rm ~/chromedriver_linux64.zip
     wget --quiet http://chromedriver.storage.googleapis.com/$LATEST_RELEASE/chromedriver_linux64.zip
-    unzip -o -d $HOME/bin chromedriver_linux64.zip
+    unzip -o -d ~/bin chromedriver_linux64.zip
   fi
 fi
 
 if [ ! -f bin/osmosis ]; then
     echo "### Installing Osmosis"
-    mkdir -p $HOME/bin
+    mkdir -p ~/bin
     if [ ! -f osmosis-latest.tgz ]; then
       wget --quiet http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
     fi
-    mkdir -p $HOME/bin/osmosis_src
-    tar -zxf osmosis-latest.tgz -C $HOME/bin/osmosis_src
-    ln -s $HOME/bin/osmosis_src/bin/osmosis $HOME/bin/osmosis
+    mkdir -p ~/bin/osmosis_src
+    tar -zxf osmosis-latest.tgz -C ~/bin/osmosis_src
+    ln -s ~/bin/osmosis_src/bin/osmosis ~/bin/osmosis
 fi
 
 # Need to figure out a way to do this automagically
@@ -344,7 +334,7 @@ if ! mocha --version &>/dev/null; then
     echo "### Installing mocha for plugins test..."
     sudo npm install --silent -g mocha
     # Clean up after the npm install
-    sudo rm -rf $HOME/tmp
+    sudo rm -rf ~/tmp
 fi
 
 
@@ -556,7 +546,7 @@ sudo chmod a+x /etc/init.d/node-mapnik-server
 cd $HOOT_HOME/node-mapnik-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 echo "### Installing node-export-server..."
 sudo cp $HOOT_HOME/node-export-server/init.d/node-export-server /etc/init.d
@@ -565,7 +555,7 @@ sudo chmod a+x /etc/init.d/node-export-server
 cd $HOOT_HOME/node-export-server
 npm install --silent
 # Clean up after the npm install
-rm -rf $HOME/tmp
+rm -rf ~/tmp
 
 cd $HOOT_HOME
 

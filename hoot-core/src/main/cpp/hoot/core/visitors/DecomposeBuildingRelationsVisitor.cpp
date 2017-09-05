@@ -39,7 +39,7 @@ namespace hoot
 
 unsigned int DecomposeBuildingRelationsVisitor::logWarnCount = 0;
 
-HOOT_FACTORY_REGISTER(ElementVisitor, DecomposeBuildingRelationsVisitor)
+HOOT_FACTORY_REGISTER(ConstElementVisitor, DecomposeBuildingRelationsVisitor)
 
 DecomposeBuildingRelationsVisitor::DecomposeBuildingRelationsVisitor()
 {

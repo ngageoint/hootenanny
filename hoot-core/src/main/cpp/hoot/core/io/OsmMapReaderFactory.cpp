@@ -34,6 +34,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Log.h>
 
 using namespace std;
 
@@ -81,7 +82,8 @@ bool OsmMapReaderFactory::hasPartialReader(QString url)
   return result;
 }
 
-boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, bool useDataSourceIds,
+boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url,
+                                                                  bool useDataSourceIds,
                                                                   Status defaultStatus)
 {
   LOG_VART(url);
@@ -130,6 +132,26 @@ boost::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(QString url, b
   reader->setDefaultStatus(defaultStatus);
 
   return reader;
+}
+
+QString OsmMapReaderFactory::getReaderName(const QString url)
+{
+  LOG_VARD(url);
+  vector<std::string> names =
+    Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
+  LOG_VARD(names.size());
+  boost::shared_ptr<OsmMapReader> writer;
+  for (size_t i = 0; i < names.size(); i++)
+  {
+    const std::string name = names[i];
+    LOG_VART(name);
+    writer.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
+    if (writer->isSupported(url))
+    {
+      return QString::fromStdString(name);
+    }
+  }
+  return "";
 }
 
 void OsmMapReaderFactory::read(boost::shared_ptr<OsmMap> map, QString url, bool useDataSourceIds,

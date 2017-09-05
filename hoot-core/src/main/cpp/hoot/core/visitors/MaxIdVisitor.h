@@ -29,7 +29,7 @@
 #define MAXIDVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 // Standard
 #include <limits>
@@ -42,7 +42,7 @@ namespace hoot
 /**
  * Counts the number of elements.
  */
-class MaxIdVisitor : public ElementVisitor, public SingleStatistic
+class MaxIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 

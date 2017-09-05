@@ -29,7 +29,6 @@
 
 #include "ElementData.h"
 #include "ElementId.h"
-#include "ElementType.h"
 
 // Standard
 #include <ostream>

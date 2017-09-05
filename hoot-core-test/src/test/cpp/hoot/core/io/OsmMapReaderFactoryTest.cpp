@@ -27,6 +27,7 @@
 
 // Hoot
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include "../TestUtils.h"
 

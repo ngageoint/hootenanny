@@ -28,15 +28,9 @@
 #ifndef WAYDIRECTIONCRITERION_H
 #define WAYDIRECTIONCRITERION_H
 
-// GEOS
-#include <geos/geom/LineString.h>
-
 // Hoot
 #include <hoot/core/OsmMap.h>
-#include <hoot/core/util/Units.h>
 #include <hoot/core/filters/ElementCriterion.h>
-
-#include "WayFilter.h"
 
 namespace hoot
 {

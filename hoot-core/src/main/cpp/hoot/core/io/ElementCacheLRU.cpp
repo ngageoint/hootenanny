@@ -179,29 +179,7 @@ ElementPtr ElementCacheLRU::readNextElement()
   return returnElement;
 }
 
-void ElementCacheLRU::writeElement(ElementInputStream& inputStream)
-{
-  boost::shared_ptr<OGRSpatialReference> emptyProjection;
-
-  // Find out if we need to set our projection
-  if ( _projection == emptyProjection )
-  {
-    _projection = inputStream.getProjection();
-  }
-  else
-  {
-    // Make sure they haven't shifted projections on us
-    if ( inputStream.getProjection()->IsSame(&(*_projection)) == false )
-    {
-      LOG_ERROR("Tried to change projections in mid-stream");
-      return;
-    }
-  }
-  ConstElementPtr newElement = inputStream.readNextElement();
-  addElement(newElement);
-}
-
-void ElementCacheLRU::writeElement(ElementPtr &element)
+void ElementCacheLRU::writeElement(ElementPtr& element)
 {
   ConstElementPtr el = element;
   addElement(el);

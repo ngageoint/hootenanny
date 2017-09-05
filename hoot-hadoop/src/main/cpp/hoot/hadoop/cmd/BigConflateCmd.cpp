@@ -18,6 +18,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/TileConflator.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/hadoop/HadoopTileWorker.h>
 #include <hoot/hadoop/HadoopTileWorker2.h>

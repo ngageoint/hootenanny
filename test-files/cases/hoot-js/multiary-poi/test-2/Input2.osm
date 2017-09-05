@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-70' action='modify' visible='true' lat='39.74892070646' lon='-105.00764917561'>
+    <tag k='leisure' v='stadium' />
+    <tag k='name' v='Pepsi Center' />
+    <tag k='note' v='2a' />
+  </node>
+</osm>

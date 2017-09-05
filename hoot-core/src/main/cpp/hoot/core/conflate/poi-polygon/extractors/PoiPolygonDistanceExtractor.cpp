@@ -27,8 +27,9 @@
 #include "PoiPolygonDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // geos
 #include <geos/util/TopologyException.h>

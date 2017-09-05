@@ -33,6 +33,7 @@
 #include <hoot/core/schema/SchemaVertex.h>
 
 // Qt
+#include <QSet>
 #include <QString>
 
 // Standard
@@ -347,6 +348,7 @@ public:
    * Returns true if this is a building:part. This is mutually exclusive with isBuilding.
    */
   bool isBuildingPart(const Tags& t, ElementType type) const;
+  bool isBuildingPart(const ConstElementPtr& e) const;
 
   /**
    * Returns true if this is a geometry collection.
@@ -455,6 +457,9 @@ private:
   OsmSchemaData* d;
   static OsmSchema* _theInstance;
   SchemaVertex _empty;
+
+  /// Provide caching for isMetaData
+  QHash<QString, bool> _metadataKey;
 };
 
 }

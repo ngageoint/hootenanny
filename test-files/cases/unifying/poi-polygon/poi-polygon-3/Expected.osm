@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-0.3493510609999362" minlon="42.55138219700007" maxlat="-0.3490478039999517" maxlon="42.55163231300003"/>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3490907189999460" lon="42.5516323130000274"/>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493510609999362" lon="42.5515746450000663"/>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493262099999583" lon="42.5514636400000654"/>
@@ -19,9 +20,11 @@
         <nd ref="-8"/>
         <nd ref="-7"/>
         <nd ref="-12"/>
+        <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="building" v="mosque"/>
         <tag k="uuid" v="c;a;d"/>
         <tag k="amenity" v="place_of_worship"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4" role="reviewee"/>

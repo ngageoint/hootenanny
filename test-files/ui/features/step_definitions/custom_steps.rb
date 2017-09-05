@@ -58,6 +58,29 @@ When(/^I should (not )?see a way map feature with OSM id "([^"]*)"$/) do |negate
   find('div.layer-data').assert_selector('path[class*=" ' + id + '"]',:maximum => expectation)
 end
 
+When(/^I should (not )?see land use areas on the map$/) do |negate|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css('.area:not(.tag-building):not(.tag-natural-water):not(.activeReviewFeature):not(.activeReviewFeature2)'))
+end
+
+When(/^I should (not )?see service roads on the map$/) do |negate|
+  expectation = negate ? :should_not : :should
+  page.send(expectation, have_css('.tag-highway-road:not(.activeReviewFeature):not(.activeReviewFeature2)'))
+end
+
+When(/^I should (not )?see paths on the map$/) do |negate|
+  expectation = negate ? 0 : 1
+    if negate
+      find('div.layer-data').assert_selector('.tag-highway-path:not(.activeReviewFeature):not(.activeReviewFeature2)',:maximum => expectation)
+      find('div.layer-data').assert_selector('.tag-highway-footway:not(.activeReviewFeature):not(.activeReviewFeature2)',:maximum => expectation)
+      find('div.layer-data').assert_selector('.tag-highway-pedestrian:not(.activeReviewFeature):not(.activeReviewFeature2)',:maximum => expectation)
+    else
+      page.should have_css('.tag-highway-path')
+      page.should have_css('.tag-highway-footway')
+      page.should have_css('.tag-highway-pedestrian')
+    end
+end
+
 When(/^I select a way map feature with class "([^"]*)"$/) do |cls|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
@@ -441,6 +464,14 @@ When(/^I press span with text "([^"]*)"$/) do |txt|
   find('span', :text=>txt).click
 end
 
+When(/^I scroll "([^"]*)" element into view and press it$/) do |txt|
+  include_hidden_fields do
+    element = page.driver.browser.find_element(:xpath=>"//*[contains(text(), '" + txt + "')]")
+    page.driver.browser.execute_script("arguments[0].scrollIntoView(true)", element)
+    element.click
+  end
+end
+
 When(/^I press "([^"]*)" big loud link$/) do |cls|
   find('a.big.loud.' + cls).click
 end
@@ -455,6 +486,7 @@ When(/^I wait$/) do
 end
 
 When(/^I remove the first layer$/) do
+
   trash_cans = all('button._icon.trash')
   trash_cans[0].click
   sleep 5
@@ -687,7 +719,7 @@ Then(/^I double click on the first thumbnail$/) do
 end
 
 Then(/^I accept the alert$/) do
-  sleep 5
+  sleep 10
   page.driver.browser.switch_to.alert.accept
 end
 

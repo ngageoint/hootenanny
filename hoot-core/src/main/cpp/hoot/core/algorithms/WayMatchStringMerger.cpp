@@ -40,6 +40,17 @@ namespace hoot
 
 unsigned int WayMatchStringMerger::logWarnCount = 0;
 
+QString WayMatchStringMerger::SublineMapping::toString() const
+{
+  return QString("{start: %1, end: %2, newWay1: %3, way2: %4, subline2: %5, newWay2: %6}")
+    .arg(hoot::toString(_start))
+    .arg(hoot::toString(_end))
+    .arg(hoot::toString(newWay1 ? newWay1->getElementId() : ElementId()))
+    .arg(hoot::toString(way2 ? way2->getElementId() : ElementId()))
+    .arg(hoot::toString(subline2))
+    .arg(_newWay2 ? hoot::toString(_newWay2->getElementId()) : "<empty>");
+}
+
 WayMatchStringMerger::WayMatchStringMerger(const OsmMapPtr& map,
   WayMatchStringMappingPtr mapping, vector<pair<ElementId, ElementId> > &replaced) :
   _map(map),

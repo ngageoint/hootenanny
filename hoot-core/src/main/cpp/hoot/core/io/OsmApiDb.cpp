@@ -84,6 +84,8 @@ void OsmApiDb::_init()
 
 void OsmApiDb::close()
 {
+  LOG_DEBUG("Closing database connection...");
+
   _resetQueries();
 
   if (_inTransaction)
@@ -99,6 +101,8 @@ void OsmApiDb::close()
 
 void OsmApiDb::deleteData()
 {
+  LOG_TRACE("Deleting all data...");
+
   DbUtils::execNoPrepare(
     _db,
     "DELETE FROM " + ApiDb::getCurrentRelationMembersTableName() + " CASCADE");
@@ -177,6 +181,7 @@ bool OsmApiDb::isSupported(const QUrl& url)
 
 void OsmApiDb::open(const QUrl& url)
 {
+  LOG_DEBUG("Opening database connection: " << url.toString() << "...");
   if (!isSupported(url))
   {
     throw HootException("An unsupported URL was passed into OsmApiDb: " + url.toString());
@@ -186,11 +191,14 @@ void OsmApiDb::open(const QUrl& url)
 
 void OsmApiDb::deleteUser(long userId)
 {
+  LOG_TRACE("Deleting user: " << userId << "...");
   _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
 }
 
 void OsmApiDb::_resetQueries()
 {
+  LOG_TRACE("Resetting queries...");
+
   ApiDb::_resetQueries();
 
   _selectElementsForMap.reset();
@@ -211,6 +219,8 @@ void OsmApiDb::_resetQueries()
 
 void OsmApiDb::rollback()
 {
+  LOG_TRACE("Rolling back transaction...");
+
   _resetQueries();
 
   if (!_db.rollback())
@@ -222,6 +232,8 @@ void OsmApiDb::rollback()
 
 void OsmApiDb::transaction()
 {
+  LOG_TRACE("Starting transaction...");
+
   // Queries must be created from within the current transaction.
   _resetQueries();
   if (!_db.transaction())
@@ -233,6 +245,8 @@ void OsmApiDb::transaction()
 
 void OsmApiDb::commit()
 {
+  LOG_TRACE("Committing transaction...");
+
   if ( _db.isOpen() == false )
   {
     throw HootException("Tried to commit a transaction on a closed database");
@@ -368,24 +382,18 @@ QString OsmApiDb::_elementTypeToElementTableNameStr(const ElementType& elementTy
 {
   if (elementType == ElementType::Node)
   {
-    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version, k, v ") +
-      QString("FROM %1 LEFT OUTER JOIN %2 ON %1.id=%2.node_id")
-      .arg(ApiDb::getCurrentNodesTableName())
-      .arg(ApiDb::getCurrentNodeTagsTableName());
+    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version ") +
+      QString("FROM %1").arg(ApiDb::getCurrentNodesTableName());
   }
   else if (elementType == ElementType::Way)
   {
-    return QString("id, changeset_id, timestamp, visible, version, k, v ") +
-      QString("FROM %1 LEFT OUTER JOIN %2 ON %1.id=%2.way_id")
-      .arg(ApiDb::getCurrentWaysTableName())
-      .arg(ApiDb::getCurrentWayTagsTableName());
+    return QString("id, changeset_id, timestamp, visible, version ") +
+      QString("FROM %1").arg(ApiDb::getCurrentWaysTableName());
   }
   else if (elementType == ElementType::Relation)
   {
-    return QString("id, changeset_id, timestamp, visible, version, k, v ") +
-      QString("FROM %1 LEFT OUTER JOIN %2 ON %1.id=%2.relation_id")
-      .arg(ApiDb::getCurrentRelationsTableName())
-      .arg(ApiDb::getCurrentRelationTagsTableName());
+    return QString("id, changeset_id, timestamp, visible, version ") +
+      QString("FROM %1").arg(ApiDb::getCurrentRelationsTableName());
   }
   else
   {
@@ -469,7 +477,7 @@ boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   _selectNodeById->setForwardOnly(true);
   QString sql =
     "SELECT " + _elementTypeToElementTableNameStr(ElementType::Node) +
-    " WHERE (id=:elementId) ORDER BY id DESC";
+    " WHERE (id=:elementId)";
   _selectNodeById->prepare(sql);
   _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
 
@@ -486,16 +494,21 @@ boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
   return _selectNodeById;
 }
 
-boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
+boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType,
+                                                      const bool sorted)
 {
   _selectElementsForMap.reset(new QSqlQuery(_db));
   _selectElementsForMap->setForwardOnly(true);
 
   // setup base sql query string
   QString sql =  "SELECT " + _elementTypeToElementTableNameStr(elementType);
-
   // sort them in descending order, set limit and offset
-  sql += " WHERE visible = true ORDER BY id DESC";
+  sql += " WHERE visible = true";
+  if (sorted)
+  {
+    sql += " ORDER BY id";
+  }
+  LOG_VARD(sql);
 
   _selectElementsForMap->prepare(sql);
 
