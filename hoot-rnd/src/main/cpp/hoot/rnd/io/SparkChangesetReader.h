@@ -24,35 +24,48 @@
  *
  * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCHANGEWRITERFACTORY_H
-#define OSMCHANGEWRITERFACTORY_H
+#ifndef SPARKCHANGESETREADER_H
+#define SPARKCHANGESETREADER_H
+
+// hoot
+#include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/ChangesetProvider.h>
+#include <hoot/core/io/OsmXmlReader.h>
 
 // Qt
-#include <QString>
+#include <QFile>
 
 namespace hoot
 {
-class OsmChangeWriter;
 
-/**
- * A factory for constructing changeset writers based on the URL.
- */
-class OsmChangeWriterFactory
+class SparkChangesetReader : public ChangeSetProvider
 {
+
 public:
 
-  OsmChangeWriterFactory();
+  SparkChangesetReader();
 
-  boost::shared_ptr<OsmChangeWriter> createWriter(
-    QString url, QString elementPayloadFormat = "json");
+  virtual ~SparkChangesetReader();
 
-  static OsmChangeWriterFactory& getInstance();
+  virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
+
+  void open(QString fileName);
+
+  virtual void close();
+
+  virtual bool hasMoreChanges();
+
+  virtual Change readNextChange();
 
 private:
 
-  static boost::shared_ptr<OsmChangeWriterFactory> _theInstance;
+  QFile _file;
+  mutable boost::shared_ptr<OGRSpatialReference> _wgs84;
+  OsmJsonReader _jsonReader;
+  OsmXmlReader _xmlReader;
+
 };
 
 }
 
-#endif // OSMCHANGEWRITERFACTORY_H
+#endif // SPARKCHANGESETREADER_H

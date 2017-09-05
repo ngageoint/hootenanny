@@ -92,6 +92,7 @@ public:
    * @see OsmChangeWriter
    */
   virtual void writeChange(const Change& change);
+  virtual void setElementPayloadFormat(const QString /*format*/) {}
 
 protected:
 

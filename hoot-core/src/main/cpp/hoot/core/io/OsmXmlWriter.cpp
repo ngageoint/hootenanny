@@ -82,8 +82,6 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
 {
   // See #3553 for an explanation.
 
-  //TODO: refactor this
-
   QString result;
   result.reserve(s.size());
 
@@ -154,9 +152,10 @@ void OsmXmlWriter::setIncludeCompatibilityTags(bool includeCompatibility)
   _includeCompatibilityTags = includeCompatibility;
 }
 
-QString OsmXmlWriter::toString(const ConstOsmMapPtr& map)
+QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 {
   OsmXmlWriter writer;
+  writer.setFormatXml(formatXml);
   // this will be deleted by the _fp auto_ptr
   QBuffer* buf = new QBuffer();
   writer._fp.reset(buf);
@@ -417,7 +416,7 @@ void OsmXmlWriter::_writeWays(ConstOsmMapPtr map)
   qSort(wids.begin(), wids.end(), qLess<long>());
   for (int i = 0; i < wids.size(); i++)
   {
-    //I'm not really sure how to reconcile the duplicated code between these two version of
+    //I'm not really sure how to reconcile the duplicated code between these two versions of
     //partial way writing.
     if (_includePointInWays)
     {

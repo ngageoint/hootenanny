@@ -28,6 +28,9 @@
 #include <hoot/rnd/io/SparkChangesetWriter.h>
 #include <hoot/core/TestUtils.h>
 
+#include <hoot/core/io/GeoNamesReader.h>
+#include <hoot/rnd/io/SparkChangesetReader.h>
+
 // Qt
 #include <QDir>
 
@@ -37,7 +40,9 @@ namespace hoot
 class SparkChangesetWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SparkChangesetWriterTest);
-  CPPUNIT_TEST(basicTest);
+  //CPPUNIT_TEST(conversionTest);
+  CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST(elementAsXmlTest);
   CPPUNIT_TEST(missingHashTest);
   CPPUNIT_TEST(missingPreviousHashTest);
   CPPUNIT_TEST(wrongElementTypeTest);
@@ -45,16 +50,11 @@ class SparkChangesetWriterTest : public CppUnit::TestFixture
 
 public:
 
-  void basicTest()
+  void writeNodes(const QString output, const QString format)
   {
-    DisableLog dl;
-
-    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
-    QDir().mkpath(outputDir);
-    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
-
     SparkChangesetWriter changesetFileWriter;
-    changesetFileWriter.open(changesetOutput);
+    changesetFileWriter.setElementPayloadFormat(format);
+    changesetFileWriter.open(output);
 
     NodePtr node1(new Node(Status::Unknown1, 1, 56.546465, 99.21651651, 15.0));
     node1->getTags().set(MetadataTags::HootHash(), "1");
@@ -63,6 +63,8 @@ public:
 
     NodePtr node2(new Node(Status::Unknown1, 2, -34.44534436, 45.6575656, 15.0));
     node2->getTags().set(MetadataTags::HootHash(), "2");
+    node2->getTags().set("test2", "2");
+    node2->getTags().set("test3", "3");
     NodePtr node3(new Node(Status::Unknown1, 3, -34.44534436, 45.6575656, 15.0));
     node3->getTags().set(MetadataTags::HootHash(), "3");
     changesetFileWriter.writeChange(Change(Change::Modify, node2, node3));
@@ -72,8 +74,66 @@ public:
     changesetFileWriter.writeChange(Change(Change::Delete, node4));
 
     changesetFileWriter.close();
+  }
+
+//this reproduces #1772
+
+//  void conversionTest()
+//  {
+//    GeoNamesReader test;
+//    test.setUseDataSourceIds(true);
+//    test.open("test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.geonames");
+
+//    SparkChangesetWriter test2;
+//    test2.setElementPayloadFormat("json");
+//    test2.open("tmp/test.spark.1");
+
+//    while (test.hasMoreElements())
+//    {
+//      ElementPtr element = test.readNextElement();
+//      //these elements will have uncorrupted tags
+//      LOG_VART(element);
+//      test2.writeChange(Change(Change::Create, element));
+//    }
+//    test.close();
+//    test2.close();
+
+//    SparkChangesetReader test3;
+//    test3.open("tmp/test.spark.1");
+//    while (test3.hasMoreChanges())
+//    {
+//      Change change = test3.readNextChange();
+//      //these elements will have corrupted tags; seems to be caused by the boost property json
+//      //reader
+//      LOG_VART(change.getElement());
+//    }
+//    test3.close();
+//  }
+
+  void elementAsJsonTest()
+  {
+    DisableLog dl;
+
+    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    QDir().mkpath(outputDir);
+    const QString changesetOutput = outputDir + "/changeset-1.spark.1";
+
+    writeNodes(changesetOutput, "json");
 
     HOOT_FILE_EQUALS("test-files/io/SparkChangesetWriterTest/changeset-1.spark.1", changesetOutput);
+  }
+
+  void elementAsXmlTest()
+  {
+    DisableLog dl;
+
+    const QString outputDir = "test-output/io/SparkChangesetWriterTest";
+    QDir().mkpath(outputDir);
+    const QString changesetOutput = outputDir + "/changeset-2.spark.1";
+
+    writeNodes(changesetOutput, "xml");
+
+    HOOT_FILE_EQUALS("test-files/io/SparkChangesetWriterTest/changeset-2.spark.1", changesetOutput);
   }
 
   void missingHashTest()

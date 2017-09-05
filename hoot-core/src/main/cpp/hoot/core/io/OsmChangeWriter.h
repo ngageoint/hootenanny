@@ -65,6 +65,9 @@ public:
    */
   virtual void close() = 0;
 
+  //TODO: get rid of this
+  virtual void setElementPayloadFormat(const QString format) = 0;
+
 };
 
 }

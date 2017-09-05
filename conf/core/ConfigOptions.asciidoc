@@ -2157,6 +2157,14 @@ then they'll be a candidate for merging.
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
 
+=== spark.changeset.writer.element.payload.format
+
+* Data Type: string
+* Default Value: `json`
+
+The format used to write the element payload portion of the Spark changeset file.  Valid options are
+'json' or 'xml'.
+
 === status.criterion.status
 
 * Data Type: string

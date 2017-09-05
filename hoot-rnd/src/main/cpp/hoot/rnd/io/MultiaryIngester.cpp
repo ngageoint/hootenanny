@@ -44,6 +44,7 @@
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
+#include <hoot/rnd/io/SparkChangesetReader.h>
 
 // Qt
 #include <QFileInfo>
@@ -109,9 +110,7 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
       QString("output.  Specified changeset output: ") + changesetOutput);
   }
 
-  LOG_INFO("Ingesting Multiary data from " << newInput);
-  LOG_INFO("into reference output layer: " << referenceOutput);
-  LOG_INFO("and writing changes to changeset file: " << changesetOutput << "...");
+  LOG_INFO("Ingesting Multiary data from " << newInput << "...");
 
   const QStringList dbUrlParts = referenceOutput.split("/");
   const QString mapName = dbUrlParts[dbUrlParts.size() - 1];
@@ -134,7 +133,7 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     LOG_INFO("The reference output dataset exists.");
     LOG_INFO("Deriving a changeset between the input and reference data,");
     LOG_INFO("writing the changes to the reference layer,");
-    LOG_INFO("and also writing the changes to the changeset file...");
+    LOG_INFO("and writing the changes to the changeset file...");
 
     _addToExistingRefDb = true;
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
@@ -160,9 +159,8 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
 
   LOG_INFO("Multiary data ingested from " << newInput);
   LOG_INFO("into reference layer: " << referenceOutput);
-  LOG_INFO("and changes written to changeset file: " << changesetOutput << ".");
+  LOG_INFO("and changeset file: " << changesetOutput << ".");
   _printSummary();
-  LOG_INFO("Total time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
 void MultiaryIngester::_printSummary()
@@ -173,13 +171,13 @@ void MultiaryIngester::_printSummary()
       "Changes written to reference layer and changeset file: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesParsed));
     LOG_INFO(
-      "  Create changes written: " <<
+      "  Create statements: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
     LOG_INFO(
-      "  Modify changes written: " <<
+      "  Modify statements: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]));
     LOG_INFO(
-      "  Delete changes written: " <<
+      "  Delete statements: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
     LOG_INFO(
       "Number of nodes in reference layer before applying changeset: " <<
@@ -350,7 +348,7 @@ void MultiaryIngester::_writeNewReferenceData(
   const QString changesetOutput)
 {
   _timer.restart();
-  LOG_DEBUG("Writing changes...");
+  LOG_INFO("Writing nodes to reference layer: " << referenceOutput << "...");
 
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
@@ -385,14 +383,22 @@ void MultiaryIngester::_writeNewReferenceData(
 
   referenceWriter->finalizePartial();
   changesetFileWriter->close();
+
+  LOG_INFO("Nodes written to reference layer: " << referenceOutput << ".");
+  LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
 void MultiaryIngester::_deriveAndWriteChanges(
   boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceOutput,
   const QString changesetOutput)
 {
+  //The changeset file changes and reference layer node updates are written in two separate steps.
+  //If we tried to write the node changes to the reference layer as we streamed in the nodes
+  //from the ref layer to the changeset deriver, we'd have a moving target as far as number of
+  //elements is concerned, and the partial map reader would behave correctly.
+
   _timer.restart();
-  LOG_DEBUG("Deriving and writing changes...");
+  LOG_INFO("Deriving and writing changes to changeset file: " << changesetOutput << "...");
 
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), false);
@@ -408,6 +414,70 @@ void MultiaryIngester::_deriveAndWriteChanges(
     boost::dynamic_pointer_cast<ElementInputStream>(referenceReader), filteredNewInputStream);
   LOG_DEBUG("Initialized changeset deriver.");
 
+  //this spark changeset writer will write the element payload as json for external spark use
+  boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
+    OsmChangeWriterFactory::getInstance().createWriter(changesetOutput, "json");
+  changesetFileWriter->open(changesetOutput);
+  LOG_DEBUG("Opened change file writer.");
+
+  //This is an unfortunate extra expense, but due to not being able to correctly read back out
+  //the element payload json for writing the change to the database in the next step, write out
+  //a second changeset with the payload in xml; this spark changeset writer will write the
+  //element payload as xml for db writing
+  QTemporaryFile tmpChangeset("multiary-ingest-changeset-temp-XXXXXX.spark.1");
+  if (!tmpChangeset.open())
+  {
+    throw HootException("Unable to open sort temp file: " + tmpChangeset.fileName() + ".");
+  }
+  LOG_VART(tmpChangeset.fileName());
+  boost::shared_ptr<OsmChangeWriter> changesetTempFileWriter =
+    OsmChangeWriterFactory::getInstance().createWriter(tmpChangeset.fileName(), "xml");
+  changesetTempFileWriter->open(tmpChangeset.fileName());
+  LOG_DEBUG("Opened temp change file writer.");
+
+  while (changesetDeriver.hasMoreChanges())
+  {
+    const Change change = changesetDeriver.readNextChange();
+    LOG_VART(change.getType());
+    if (change.getType() != Change::Unknown)
+    {
+      //writes changeset file with json element payload for external spark use
+      changesetFileWriter->writeChange(change);
+      //writes changeset file with xml element payload to avoid reading back in corrupted unicode
+      //chars when writing the final changes to the reference db
+      changesetTempFileWriter->writeChange(change);
+      _changesParsed++;
+      _changesByType[change.getType()] = _changesByType[change.getType()] + 1;
+
+      if (_changesParsed % _logUpdateInterval == 0)
+      {
+        PROGRESS_INFO(
+          "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          " changes to file.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
+          _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
+        PROGRESS_DEBUG(
+          "Reference nodes parsed: " <<
+          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
+          ", New nodes parsed: " <<
+          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()));
+      }
+    }
+  }
+
+  referenceReader->finalizePartial();
+  changesetFileWriter->close();
+  changesetDeriver.close();
+  changesetTempFileWriter->close();
+
+  LOG_VARD(changesetDeriver.getNumFromElementsParsed());
+  LOG_VARD(changesetDeriver.getNumToElementsParsed());
+
+  LOG_INFO("Changes derived and written to changeset file: " << changesetOutput << ".");
+  LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
+
+  _timer.restart();
+  LOG_INFO("Writing changes to reference layer: " << referenceOutput << "...");
+
   //would cast straight to OsmChangeWriter here, but haven't figured out a way around
   //the fact that you can't use the factory macro twice on the same class.  Since HootApiDbWriter
   //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter as well.
@@ -420,46 +490,34 @@ void MultiaryIngester::_deriveAndWriteChanges(
   referenceChangeWriter->open(referenceOutput);
   LOG_DEBUG("Opened change layer writer.");
 
-  boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
-    OsmChangeWriterFactory::getInstance().createWriter(changesetOutput);
-  changesetFileWriter->open(changesetOutput);
-  LOG_DEBUG("Opened change file writer.");
+  //this spark changeset reader will read in the element payload as xml
+  //TODO: add an OsmChangeReaderFactory to get rid of this dependency?
+  SparkChangesetReader changesetFileReader;
+  changesetFileReader.open(tmpChangeset.fileName());
+  LOG_DEBUG("Opened temp changeset file reader.");
 
-  while (changesetDeriver.hasMoreChanges())
+  long changesParsed2 = 0;
+  while (changesetFileReader.hasMoreChanges())
   {
-    const Change change = changesetDeriver.readNextChange();
-    LOG_VART(change.getType());
-    if (change.getType() != Change::Unknown)
-    {
-      changesetFileWriter->writeChange(change);
-      referenceChangeWriter->writeChange(change);
-      _changesParsed++;
-      _changesByType[change.getType()] = _changesByType[change.getType()] + 1;
+    referenceChangeWriter->writeChange(changesetFileReader.readNextChange());
+    changesParsed2++;
 
-      if (_changesParsed % _logUpdateInterval == 0)
-      {
-        PROGRESS_INFO(
-          "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-          " changes.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
-          _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
-        PROGRESS_DEBUG(
-          "Reference nodes parsed: " <<
-          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
-          ", New nodes parsed: " <<
-          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()));
-      }
+    if (changesParsed2 % _logUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Wrote " << FileUtils::formatPotentiallyLargeNumber(changesParsed2) <<
+        " changes to reference layer.");
     }
   }
 
-  referenceReader->finalizePartial();
   referenceWriter->finalizePartial();
-  changesetFileWriter->close();
-  changesetDeriver.close();
+  referenceChangeWriter->close();
+  changesetFileReader.close();
 
   _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
 
-  LOG_VARD(changesetDeriver.getNumFromElementsParsed());
-  LOG_VARD(changesetDeriver.getNumToElementsParsed());
+  LOG_INFO("Changes written to reference layer: " << referenceOutput << ".");
+  LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
 }

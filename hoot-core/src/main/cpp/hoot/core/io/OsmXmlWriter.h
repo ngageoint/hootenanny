@@ -92,7 +92,7 @@ public:
    * Write the map out to a string and return it. This is handy for debugging, but has obvious
    * memory limitations with real data.
    */
-  static QString toString(const ConstOsmMapPtr& map);
+  static QString toString(const ConstOsmMapPtr& map, const bool formatXml = true);
 
   /**
    * Provided for backwards compatibility. Better to just use OsmMapWriterFactory::write()
@@ -110,6 +110,9 @@ public:
    * Remove any invalid characters from the string s and print an error if one is found.
    */
   QString removeInvalidCharacters(const QString& s);
+
+  bool getFormatXml() const { return _formatXml; }
+  void setFormatXml(const bool format) { _formatXml = format; }
 
 private:
 

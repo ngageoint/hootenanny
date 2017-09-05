@@ -43,10 +43,10 @@ using namespace std;
 namespace hoot
 {
 
-OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter()
-  : _precision(ConfigOptions().getWriterPrecision()),
-    _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-    _multipleChangesetsWritten(false)
+OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
+_precision(ConfigOptions().getWriterPrecision()),
+_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
+_multipleChangesetsWritten(false)
 {
 }
 

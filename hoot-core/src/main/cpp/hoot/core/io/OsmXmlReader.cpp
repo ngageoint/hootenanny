@@ -88,6 +88,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
 {
   long id = _parseLong(attributes.value("id"));
+  LOG_VART(id);
   long newId;
   if (_useDataSourceId)
   {
@@ -97,6 +98,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   {
     newId = _map->createNextNodeId();
   }
+  LOG_VART(newId);
   _nodeIdMap.insert(id, newId);
 
   double x = _parseDouble(attributes.value("lon"));
@@ -351,6 +353,7 @@ void OsmXmlReader::readFromString(QString xml, OsmMapPtr map)
   QXmlInputSource xmlInputSource(&buffer);
   if (reader.parse(xmlInputSource) == false)
   {
+    LOG_ERROR(_errorString);
     throw Exception(_errorString);
   }
 

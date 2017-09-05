@@ -38,6 +38,7 @@ using namespace geos::geom;
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MetadataTags.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 // Qt
 #include <QStringBuilder>
@@ -48,13 +49,21 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangeWriter, SparkChangesetWriter)
 
 SparkChangesetWriter::SparkChangesetWriter() :
-_precision(ConfigOptions().getWriterPrecision())
+_precision(16),
+_elementPayloadFormat("json")
 {
 }
 
 SparkChangesetWriter::~SparkChangesetWriter()
 {
   close();
+}
+
+void SparkChangesetWriter::setConfiguration(const Settings& conf)
+{
+  ConfigOptions options(conf);
+  _precision = options.getWriterPrecision();
+  _elementPayloadFormat = options.getSparkChangesetWriterElementPayloadFormat().toLower();
 }
 
 void SparkChangesetWriter::open(QString fileName)
@@ -76,7 +85,7 @@ void SparkChangesetWriter::open(QString fileName)
   // find a match creator that can provide the search bounds.
   foreach (boost::shared_ptr<MatchCreator> mc, MatchFactory::getInstance().getCreators())
   {
-    //TODO: Why is ScriptMatchVisitor::calculateSearchRadius getting called a ton of times?
+    //TODO: Why is ScriptMatchVisitor::calculateSearchRadius getting called a ton of times by this?
     SearchRadiusProviderPtr sbc = boost::dynamic_pointer_cast<SearchRadiusProvider>(mc);
     if (sbc.get())
     {
@@ -100,10 +109,15 @@ void SparkChangesetWriter::open(QString fileName)
 
 void SparkChangesetWriter::writeChange(const Change& change)
 {
+  //TODO: this needs cleanup...probably a lot of unnecessary code in here added while debugging
+  //#1772
+
   if (change.getElement()->getElementType() != ElementType::Node)
   {
     throw NotImplementedException("Only nodes are supported.");
   }
+
+  LOG_VART(change.getElement());
 
   if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
   {
@@ -122,36 +136,42 @@ void SparkChangesetWriter::writeChange(const Change& change)
   switch (change.getType())
   {
     case Change::Create:
-      changeType = "A";
+      changeType = QString("A").toUtf8();
       break;
     case Change::Modify:
-      changeType = "M";
+      changeType = QString("M").toUtf8();
       break;
     case Change::Delete:
-      changeType = "D";
+      changeType = QString("D").toUtf8();
       break;
     default:
       throw IllegalArgumentException("Unexpected change type.");
   }
 
   ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
-  NodePtr nodeCopy(dynamic_cast<Node*>(node->clone()));
+  LOG_VART(node);
+  NodePtr nodeCopy = node->cloneSp();
+  LOG_VART(nodeCopy);
   const QString nodeHash = nodeCopy->getTags()[MetadataTags::HootHash()];
   nodeCopy->getTags().remove(MetadataTags::HootHash());
+  LOG_VART(nodeCopy);
   _exportTagsVisitor.visit(nodeCopy);
+  LOG_VART(nodeCopy);
   OsmMapPtr tmpMap(new OsmMap());
   tmpMap->addElement(nodeCopy);
+  LOG_VART(nodeCopy);
 
-  Envelope env = _boundsCalculator->calculateSearchBounds(tmpMap, nodeCopy);
+  const Envelope env = _boundsCalculator->calculateSearchBounds(tmpMap, nodeCopy);
+  LOG_VART(nodeCopy);
 
   QString changeLine;
   changeLine.reserve(500);
   changeLine +=
-    changeType % "\t" %
-    QString::number(env.getMinX(), 'g', _precision) % "\t" %
-    QString::number(env.getMinY(), 'g', _precision) % "\t" %
-    QString::number(env.getMaxX(), 'g', _precision) % "\t" %
-    QString::number(env.getMaxY(), 'g', _precision) % "\t";
+    changeType % QString("\t").toUtf8() %
+    QString::number(env.getMinX(), 'g', _precision).toUtf8() % QString("\t").toUtf8() %
+    QString::number(env.getMinY(), 'g', _precision).toUtf8() % QString("\t").toUtf8() %
+    QString::number(env.getMaxX(), 'g', _precision).toUtf8() % QString("\t").toUtf8() %
+    QString::number(env.getMaxY(), 'g', _precision).toUtf8() % QString("\t").toUtf8();
   if (change.getType() == Change::Modify)
   {
     if (!change.getPreviousElement().get())
@@ -167,40 +187,67 @@ void SparkChangesetWriter::writeChange(const Change& change)
     NodePtr previousNodeCopy(dynamic_cast<Node*>(previousNode->clone()));
     _exportTagsVisitor.visit(previousNodeCopy);
     // element hash before change
-    changeLine += previousNodeCopy->getTags()[MetadataTags::HootHash()] % "\t";
+    changeLine += QString(previousNodeCopy->getTags()[MetadataTags::HootHash()]).toUtf8() % QString("\t").toUtf8();
   }
-  changeLine += nodeHash % "\t";  // element hash after change
+  changeLine += nodeHash.toUtf8() % QString("\t").toUtf8();  // element hash after change
 
   //element payload
 
-  changeLine += "{\"element\":{\"type\":\"node\"";
-  changeLine += ",\"id\":" % QString::number(nodeCopy->getId(), 'g', _precision);
-  changeLine += ",\"lat\":" % QString::number(nodeCopy->getY(), 'g', _precision);
-  changeLine += ",\"lon\":" % QString::number(nodeCopy->getX(), 'g', _precision);
-  changeLine += ",\"tags\":{";
-  bool first = true;
-  const Tags& tags = nodeCopy->getTags();
-  for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+  if (_elementPayloadFormat == QLatin1String("json"))
   {
-    const QString tagValue = it.value();
-    if (!tagValue.trimmed().isEmpty())
+    //TODO: some of this may be redundant with what's in OsmJsonWriter
+
+    //using elements in an array here, since that's what OsmJsonReader expects when using that
+    //to parse (although we're not currently doing that with multiary ingest due to #1772)
+    changeLine += QString("{\"elements\":[{\"type\":\"node\"").toUtf8();
+    changeLine +=
+      QString(",\"id\":").toUtf8() % QString::number(nodeCopy->getId(), 'g', _precision).toUtf8();
+    changeLine +=
+      QString(",\"lat\":").toUtf8() % QString::number(nodeCopy->getY(), 'g', _precision).toUtf8();
+    changeLine +=
+      QString(",\"lon\":").toUtf8() % QString::number(nodeCopy->getX(), 'g', _precision).toUtf8();
+    changeLine += QString(",\"tags\":{").toUtf8();
+    bool first = true;
+    const Tags& tags = nodeCopy->getTags();
+    LOG_VART(tags);
+    for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
-      if (!first)
+      const QString tagValue = it.value()/*.toUtf8()*/;
+      LOG_VART(tagValue);
+      if (!tagValue.trimmed().isEmpty())
       {
-        changeLine += ",";
+        if (!first)
+        {
+          changeLine += QString(",").toUtf8();
+        }
+        changeLine +=
+          OsmJsonWriter::markupString(it.key().toUtf8()) % ":" %
+          OsmJsonWriter::markupString(tagValue);
+        first = false;
       }
-      changeLine +=
-        OsmJsonWriter::markupString(it.key()) % ":" % OsmJsonWriter::markupString(tagValue);
-      first = false;
     }
+    changeLine += QString("}}]}\n").toUtf8();
   }
-  changeLine += "}}}\n";
+  else //xml
+  {
+    changeLine += OsmXmlWriter::toString(tmpMap, false);
+  }
+
   LOG_VART(changeLine);
 
   if (_fp->write(changeLine.toUtf8()) == -1)
   {
     throw HootException("Error writing to file: " + _fp->errorString());
   }
+}
+
+void SparkChangesetWriter::setElementPayloadFormat(const QString format)
+{
+  if (format != "json" && format != "xml")
+  {
+    throw IllegalArgumentException("Invalid format: " + format);
+  }
+  _elementPayloadFormat = format;
 }
 
 }
