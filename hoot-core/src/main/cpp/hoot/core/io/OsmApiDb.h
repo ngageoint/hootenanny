@@ -73,7 +73,6 @@ public:
    * @see ApiDb::selectElements
    */                                                       
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const bool sorted = false,
                                                       const long limit = 0, const long offset = 0);
 
   /**

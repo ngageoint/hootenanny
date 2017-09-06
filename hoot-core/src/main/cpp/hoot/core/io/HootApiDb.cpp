@@ -1235,39 +1235,32 @@ bool HootApiDb::changesetExists(const long id)
 }
 
 boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
-                                                       const bool sorted, const long limit,
-                                                       const long offset)
+                                                       const long limit, const long offset)
 {
   //TODO: this is completely redundant with OsmApiDb::selectElements except for the table name
   //string creation and should be rolled up into ApiDb
 
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
-
-  QString sql =
-    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
-    " WHERE visible = true";
-  if (sorted)
+  if (!_selectElementsForMap)
   {
-    sql += " ORDER BY id";
+    _selectElementsForMap.reset(new QSqlQuery(_db));
+    _selectElementsForMap->setForwardOnly(true);
   }
+
+  QString limitStr = "ALL";
   if (limit > 0)
   {
-    sql += " LIMIT " + QString::number(limit);
+    limitStr = QString::number(limit);
   }
-  if (offset > 0)
-  {
-    sql += " OFFSET " + QString::number(offset);
-  }
-  LOG_VARD(sql);
-  _selectElementsForMap->prepare(sql);
+  _selectElementsForMap->prepare(
+    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
+    " WHERE visible = true ORDER BY id LIMIT " + limitStr + " OFFSET " + QString::number(offset));
+  LOG_VARD(_selectElementsForMap->lastQuery());
 
   if (_selectElementsForMap->exec() == false)
   {
     const QString err =
-      "Error selecting elements of type: " + elementType.toString() +
-      " for map ID: " + QString::number(_currMapId) + " Error: " +
-      _selectElementsForMap->lastError().text();
+      "Error selecting elements of type: " + elementType.toString() + " for map ID: " +
+      QString::number(_currMapId) + " Error: " + _selectElementsForMap->lastError().text();
     LOG_ERROR(err);
     throw HootException(err);
   }
@@ -1282,9 +1275,14 @@ long HootApiDb::numElements(const ElementType& elementType)
   //TODO: this is completely redundant with OsmApiDb::numElements except for the table name string
   //creation and should be rolled up into ApiDb
 
-  _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  if (!_numTypeElementsForMap)
+  {
+    _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  }
+
   _numTypeElementsForMap->prepare(
     "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)));
+  LOG_VARD(_numTypeElementsForMap->lastQuery());
 
   if (_numTypeElementsForMap->exec() == false)
   {

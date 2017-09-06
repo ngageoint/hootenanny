@@ -37,6 +37,7 @@ namespace hoot
 
 SparkChangesetReader::SparkChangesetReader()
 {
+  _jsonReader.setUseDataSourceIds(true);
   _xmlReader.setUseDataSourceIds(true);
 }
 

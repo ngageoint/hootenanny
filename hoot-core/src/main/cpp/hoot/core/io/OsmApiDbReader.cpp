@@ -248,7 +248,6 @@ void OsmApiDbReader::setConfiguration(const Settings& conf)
   setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
   setOverrideBoundingBox(configOptions.getConvertBoundingBoxOsmApiDatabase());
-  setSortById(configOptions.getApiDbReaderSortById());
 }
 
 }

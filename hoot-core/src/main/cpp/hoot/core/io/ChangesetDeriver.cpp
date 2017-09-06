@@ -26,9 +26,9 @@
  */
 #include "ChangesetDeriver.h"
 
-#include <hoot/core/elements/Node.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -37,7 +37,8 @@ ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStrea
 _from(from),
 _to(to),
 _numFromElementsParsed(0),
-_numToElementsParsed(0)
+_numToElementsParsed(0),
+_allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures())
 {
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
@@ -48,6 +49,7 @@ _numToElementsParsed(0)
 
 ChangesetDeriver::~ChangesetDeriver()
 {
+  close();
 }
 
 boost::shared_ptr<OGRSpatialReference> ChangesetDeriver::getProjection() const
@@ -275,10 +277,9 @@ Change ChangesetDeriver::_nextChange()
       //ref features crossing the changeset bounds or split features created from former ref
       //features crossing the changeset bounds
 
-      if (ConfigOptions().getChangesetAllowDeletingReferenceFeatures() ||
+      if (_allowDeletingReferenceFeatures ||
           //this assumes the 'from' dataset was loaded as unknown1
-          (!ConfigOptions().getChangesetAllowDeletingReferenceFeatures() &&
-           _fromE->getStatus() != Status::Unknown1))
+          (!_allowDeletingReferenceFeatures && _fromE->getStatus() != Status::Unknown1))
       {
         LOG_TRACE(
           "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<

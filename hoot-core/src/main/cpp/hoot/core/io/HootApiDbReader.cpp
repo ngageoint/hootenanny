@@ -239,7 +239,6 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   setUserEmail(configOptions.getApiDbEmail());
   setBoundingBox(configOptions.getConvertBoundingBox());
   setOverrideBoundingBox(configOptions.getConvertBoundingBoxHootApiDatabase());
-  setSortById(configOptions.getApiDbReaderSortById());
 }
 
 }

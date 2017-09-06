@@ -264,7 +264,6 @@ public:
     OsmApiDbReader reader;
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
-    reader.setSortById(true);
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     reader.initializePartial();
 

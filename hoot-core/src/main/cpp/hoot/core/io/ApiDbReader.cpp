@@ -48,7 +48,6 @@ ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
-_sortById(false),
 _returnNodesOnly(false)
 {
 }
@@ -476,7 +475,7 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 
   // contact the DB and select all
   boost::shared_ptr<QSqlQuery> elementResultsIterator =
-    _getDatabase()->selectAllElements(elementType, _sortById);
+    _getDatabase()->selectAllElements(elementType);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end (see comments in _resultToElement)
@@ -515,6 +514,7 @@ bool ApiDbReader::hasMoreElements()
   if (!_firstPartialReadCompleted)
   {
     //get the total element counts before beginning results parsing
+    LOG_DEBUG("Retrieving num elements...");
     _totalNumMapNodes = _getDatabase()->numElements(ElementType::Node);
     _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
     _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
@@ -549,10 +549,15 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   {
     //no results available, so request some more results
     LOG_DEBUG("Requesting " << _maxElementsPerMap << " more query results...");
+    if (_elementResultIterator)
+    {
+      _elementResultIterator->finish();
+      _elementResultIterator->clear();
+      _elementResultIterator.reset();
+    }
     _elementResultIterator =
       _getDatabase()->selectElements(
-        selectElementType, _sortById, _maxElementsPerMap,
-        _getCurrentElementOffset(selectElementType));
+        selectElementType, _maxElementsPerMap, _getCurrentElementOffset(selectElementType));
   }
 
   //results still available, so keep parsing through them
@@ -661,6 +666,11 @@ void ApiDbReader::_incrementElementIndex(const ElementType& selectElementType)
 void ApiDbReader::finalizePartial()
 {
   LOG_DEBUG("Finalizing read operation...");
+  if (_elementResultIterator)
+  {
+    _elementResultIterator->finish();
+    _elementResultIterator->clear();
+  }
   _elementResultIterator.reset();
   _partialMap.reset();
   if (_open)
@@ -723,6 +733,7 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   else
   {
     resultIterator.finish();
+    resultIterator.clear();
     return boost::shared_ptr<Element>();
   }
 }

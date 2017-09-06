@@ -457,7 +457,6 @@ public:
     HootApiDbReader reader;
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
-    reader.setSortById(true);
     reader.open(ServicesDbTestUtils::getDbReadUrl(mapId).toString());
     reader.initializePartial();
 

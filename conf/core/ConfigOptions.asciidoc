@@ -63,13 +63,6 @@ details.
 
 Email address of the API database user.  Can be set here for debugging and testing.
 
-=== api.db.reader.sort.by.id
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, elements read from the Hootenanny API database will be sorted by element ID.
-
 === attribute.count.values
 
 * Data Type: int

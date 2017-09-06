@@ -66,8 +66,6 @@ _numNodesAfterApplyingChangeset(0)
   conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
   //for the changeset derivation to work, all input IDs must not be modified as they are read
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-  //inputs must be sorted by node id for changeset derivation to work
-  conf().set(ConfigOptions::getApiDbReaderSortByIdKey(), true);
   //script for translating input to OSM
   conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
 }
@@ -138,7 +136,10 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
 
     _addToExistingRefDb = true;
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
+    //TODO: why is this query taking so long?
+    LOG_DEBUG("Querying for current reference node count...");
     _numNodesBeforeApplyingChangeset = _referenceDb.numElements(ElementType::Node);
+    LOG_DEBUG(_numNodesBeforeApplyingChangeset);
 
     if (!_sortInput)
     {
@@ -375,7 +376,8 @@ void MultiaryIngester::_writeNewReferenceData(
       referenceWriter->writeElement(element);
       changesetFileWriter->writeChange(Change(Change::Create, element));
       _changesParsed++;
-      _changesByType[Change::Create] = _changesByType[Change::Create] + 1;
+      const long numChanges = _changesByType[Change::Create];
+      _changesByType[Change::Create] = numChanges + 1;
 
       if (_changesParsed % _logUpdateInterval == 0)
       {
@@ -433,7 +435,7 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
     new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-changeset-temp-XXXXXX.spark.1"));
   if (!tmpChangeset->open())
   {
-    throw HootException("Unable to open sort temp file: " + tmpChangeset->fileName() + ".");
+    throw HootException("Unable to open changeset temp file: " + tmpChangeset->fileName() + ".");
   }
   LOG_VART(tmpChangeset->fileName());
   boost::shared_ptr<OsmChangeWriter> changesetTempFileWriter =
@@ -453,7 +455,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
       //chars when writing the final changes to the reference db
       changesetTempFileWriter->writeChange(change);
       _changesParsed++;
-      _changesByType[change.getType()] = _changesByType[change.getType()] + 1;
+      const long numChanges = _changesByType[change.getType()];
+      _changesByType[change.getType()] = numChanges + 1;
 
       if (_changesParsed % _logUpdateInterval == 0)
       {
@@ -461,6 +464,10 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
           "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
           " changes to file.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
           _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
+      }
+      if ((changesetDeriver.getNumFromElementsParsed() % (_logUpdateInterval * 10) == 0) ||
+          (changesetDeriver.getNumToElementsParsed() % (_logUpdateInterval * 10) == 0))
+      {
         PROGRESS_DEBUG(
           "Reference nodes parsed: " <<
           FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
@@ -478,7 +485,9 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   LOG_VARD(changesetDeriver.getNumFromElementsParsed());
   LOG_VARD(changesetDeriver.getNumToElementsParsed());
 
-  LOG_INFO("Changes derived and written to changeset file: " << changesetOutput << ".");
+  LOG_INFO(
+    FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+    " changes derived and written to changeset file: " << changesetOutput << ".");
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 
   return tmpChangeset;
@@ -503,21 +512,21 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   LOG_DEBUG("Opened change layer writer.");
 
   //this spark changeset reader will read in the element payload as xml
-  //TODO: add an OsmChangeReaderFactory to get rid of this dependency?
+  //TODO: add an OsmChangeReaderFactory to get rid of the SparkChangesetReader dependency?
   SparkChangesetReader changesetFileReader;
   changesetFileReader.open(changesetOutput);
   LOG_DEBUG("Opened temp changeset file reader.");
 
-  long changesParsed2 = 0;
+  long changesWritten = 0;
   while (changesetFileReader.hasMoreChanges())
   {
     referenceChangeWriter->writeChange(changesetFileReader.readNextChange());
-    changesParsed2++;
+    changesWritten++;
 
-    if (changesParsed2 % _logUpdateInterval == 0)
+    if (changesWritten % _logUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Wrote " << FileUtils::formatPotentiallyLargeNumber(changesParsed2) <<
+        "Wrote " << FileUtils::formatPotentiallyLargeNumber(changesWritten) <<
         " changes to reference layer.");
     }
   }
@@ -526,9 +535,13 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceChangeWriter->close();
   changesetFileReader.close();
 
+  LOG_DEBUG("Querying for final reference node count...");
   _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
+  LOG_VARD(_numNodesAfterApplyingChangeset);
 
-  LOG_INFO("Changes written to reference layer: " << referenceOutput << ".");
+  LOG_INFO(
+    FileUtils::formatPotentiallyLargeNumber(changesWritten) <<
+    " changes written to reference layer: " << referenceOutput << ".");
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 

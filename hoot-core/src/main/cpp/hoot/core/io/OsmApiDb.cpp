@@ -448,32 +448,26 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 }
 
 boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType,
-                                                      const bool sorted, const long limit,
-                                                      const long offset)
+                                                      const long limit, const long offset)
 {
   //TODO: this is completely redundant with HootApiDb::selectElements except for the table name
   //string creation and should be rolled up into ApiDb
 
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
-
-  QString sql =
-    "SELECT * FROM " + elementTypeToElementTableName(elementType, false, false) +
-    " WHERE visible = true";
-  if (sorted)
+  if (!_selectElementsForMap)
   {
-    sql += " ORDER BY id";
+    _selectElementsForMap.reset(new QSqlQuery(_db));
+    _selectElementsForMap->setForwardOnly(true);
   }
+
+  QString limitStr = "ALL";
   if (limit > 0)
   {
-    sql += " LIMIT " + QString::number(limit);
+    limitStr = QString::number(limit);
   }
-  if (offset > 0)
-  {
-    sql += " OFFSET " + QString::number(offset);
-  }
-  LOG_VARD(sql);
-  _selectElementsForMap->prepare(sql);
+  _selectElementsForMap->prepare(
+    "SELECT * FROM " + elementTypeToElementTableName(elementType, false, false) +
+    " WHERE visible = true ORDER BY id LIMIT " + limitStr + " OFFSET " + QString::number(offset));
+  LOG_VARD(_selectElementsForMap->lastQuery());
 
   if (_selectElementsForMap->exec() == false)
   {
@@ -494,9 +488,14 @@ long OsmApiDb::numElements(const ElementType& elementType)
   //TODO: this is completely redundant with HootApiDb::numElements except for the table name string
   //creation and should be rolled up into ApiDb
 
-  _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  if (!_numTypeElementsForMap)
+  {
+    _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  }
+
   _numTypeElementsForMap->prepare(
     "SELECT COUNT(*) FROM " + elementTypeToElementTableName(elementType, false, false));
+  LOG_VARD(_numTypeElementsForMap->lastQuery());
 
   if (_numTypeElementsForMap->exec() == false)
   {
