@@ -28,9 +28,7 @@
 #define CALCULATEHASHVISITOR_H
 
 // hoot
-#include <hoot/core/OsmMap.h>
-#include <hoot/core/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -45,7 +43,7 @@ namespace hoot
  * code rather than re-using the GeoJson code in: https://github.com/ngageoint/hootenanny/pull/1658
  * When #1658 is merged it probably makes sense to refactor this to use the GeoJSON writer.
  */
-class CalculateHashVisitor : public ConstElementVisitor, public OsmMapConsumer
+class CalculateHashVisitor : public ElementVisitor
 {
 public:
 
@@ -53,16 +51,13 @@ public:
 
   virtual ~CalculateHashVisitor();
 
-  virtual void visit(const ConstElementPtr &e);
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
+  virtual void visit(const ElementPtr &e);
 
   static QString toJsonString(const ConstElementPtr& e);
 
   static QByteArray toHash(const ConstElementPtr& e);
 
-private:
-  OsmMap* _map;
+  static QString toHashString(const ConstElementPtr& e);
 };
 
 }
