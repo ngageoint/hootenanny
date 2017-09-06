@@ -35,6 +35,18 @@ app.get('/options', function(req, res) {
     });
 });
 
+/* Get job status*/
+app.get('/job/:hash', function(req, res) {
+    var hash = req.params.hash;
+    var job = jobs[hash];
+    if (job) {
+        var input = job.input;
+        doExport(req, res, hash, __dirname + '/' + input);
+    } else {
+        res.status(404).send('Job ' + hash + ' not found.');
+    }
+});
+
 /* Post export */
 // export/Overpass/OSM/Shapefile
 app.post('/export/:datasource/:schema/:format', function(req, res) {
@@ -109,65 +121,47 @@ function doExport(req, res, hash, input) {
     //Check existing jobs
     var job = jobs[hash];
 
-    var id;
-    if (job) {
-        id = job.id;
-    } else {
-        id = uuid.v1();
-    }
-    var output = 'export_' + id;
-    var hootHome = process.env['HOOT_HOME'];
-    var isFile = req.params.format === 'OSM XML';
-    var appDir = hootHome + '/node-export-server/';
-    var outDir = appDir + output;
-    var outFile = outDir + config.formats[req.params.format];
-    if (req.params.format === 'File Geodatabase') outDir = outFile;
-    var outzip = outDir + '.zip';
-    var downloadFile = req.params.datasource.replace(' ', '_')
-        + '_' + req.params.schema.replace(' ', '_')
-        + '_' + req.params.format.replace(' ', '_')
-        + '.zip';
-
     if (job) {
         if (job.status === completeStatus) { //if complete, return file
-            res.download(outzip, downloadFile, function(err) {
+            res.download(job.outZip, downloadFile, function(err) {
                 if (jobs[hash].timeout)
                     clearTimeout(jobs[hash].timeout);
 
                 // clean up export files after configured delay
                 jobs[hash].timeout = setTimeout(function() {
                     if (jobs[hash]) {
+                        var job = jobs[hash];
                         //delete export files
                         if (isFile) {
-                            fs.unlink(outFile, function(err) {
+                            fs.unlink(job.outFile, function(err) {
                                 if (err) {
                                     console.error(err);
                                 } else {
-                                    console.log('deleted ' + outFile);
+                                    console.log('deleted ' + job.outFile);
                                 }
                             });
                         } else {
-                            rmdir(outDir, function(err) {
+                            rmdir(job.outDir, function(err) {
                                 if (err) {
                                     console.error(err);
                                 } else {
-                                    console.log('deleted ' + outDir);
+                                    console.log('deleted ' + job.outDir);
                                 }
                             });
                         }
-                        fs.unlink(outzip, function(err) {
+                        fs.unlink(job.outZip, function(err) {
                             if (err) {
                                 console.error(err);
                             } else {
-                                console.log('deleted ' + outzip);
+                                console.log('deleted ' + job.outZip);
                             }
                         });
-                        if (fs.existsSync(outDir + '.osm')) {
-                            fs.unlink(outDir + '.osm', function(err) {
+                        if (fs.existsSync(job.outDir + '.osm')) {
+                            fs.unlink(job.outDir + '.osm', function(err) {
                                 if (err) {
                                     console.error(err);
                                 } else {
-                                    console.log('deleted ' + outDir + '.osm');
+                                    console.log('deleted ' + job.outDir + '.osm');
                                 }
                             });
                         }
@@ -182,13 +176,12 @@ function doExport(req, res, hash, input) {
                             });
                         }
                         //This deletes the input files used by the job
-                        if (fs.existsSync(jobs[hash].input)) {
-                            var inputFile = jobs[hash].input;
-                            fs.unlink(inputFile, function(err) {
+                        if (fs.existsSync(job.input)) {
+                            fs.unlink(job.input, function(err) {
                                 if (err) {
                                     console.error(err);
                                 } else {
-                                    console.log('deleted ' + inputFile);
+                                    console.log('deleted ' + job.input);
                                 }
                             });
                         }
@@ -216,6 +209,20 @@ function doExport(req, res, hash, input) {
 
         }
     } else { //if missing, run job
+        var id = uuid.v1();
+        var output = 'export_' + id;
+        var hootHome = process.env['HOOT_HOME'];
+        var isFile = req.params.format === 'OSM XML';
+        var appDir = hootHome + '/node-export-server/';
+        var outDir = appDir + output;
+        var outFile = outDir + config.formats[req.params.format];
+        if (req.params.format === 'File Geodatabase') outDir = outFile;
+        var outZip = outDir + '.zip';
+        var downloadFile = req.params.datasource.replace(' ', '_')
+            + '_' + req.params.schema.replace(' ', '_')
+            + '_' + req.params.format.replace(' ', '_')
+            + '.zip';
+
         var command = '';
         //if conn is url, write that response to a file
         //handle different flavors of bbox param
@@ -243,6 +250,7 @@ function doExport(req, res, hash, input) {
             }
         } else {
             command += ' osm2ogr';
+            if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             command += ' ' + config.schemas[req.params.schema];
         }
@@ -263,7 +271,7 @@ function doExport(req, res, hash, input) {
                     jobs[hash].status = stderr;
 
                 } else {
-                    var stream = fs.createWriteStream(outzip);
+                    var stream = fs.createWriteStream(outZip);
                     stream.on('close', function() {
                         jobs[hash].status = 'complete';
                         console.log(jobs[hash].id + ' complete');
@@ -294,12 +302,17 @@ function doExport(req, res, hash, input) {
                         id: id,
                         status: runningStatus,
                         process: child,
-                        input: input
+                        input: input,
+                        isFile: isFile,
+                        outFile: outFile,
+                        outDir: outDir,
+                        outZip: outZip,
+                        downloadFile: downloadFile
         };
 
         //return job status
         //if (job.status !== runningStatus) res.status(500);
-        res.send(jobs[hash].status);
+        res.send(hash);
     }
 }
 
