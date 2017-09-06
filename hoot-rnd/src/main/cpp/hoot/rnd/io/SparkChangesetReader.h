@@ -47,14 +47,26 @@ public:
 
   virtual ~SparkChangesetReader();
 
+  /**
+   * @see ChangesetProvider
+   */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
   void open(QString fileName);
 
+  /**
+   * @see ChangesetProvider
+   */
   virtual void close();
 
+  /**
+   * @see ChangesetProvider
+   */
   virtual bool hasMoreChanges();
 
+  /**
+   * @see ChangesetProvider
+   */
   virtual Change readNextChange();
 
 private:

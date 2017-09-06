@@ -91,6 +91,10 @@ public:
   /**
    * Write the map out to a string and return it. This is handy for debugging, but has obvious
    * memory limitations with real data.
+   *
+   * @param map the map to write out as a string
+   * @param formatXml if true, formats the xml with indentations and new lines
+   * @return an OSM XML string
    */
   static QString toString(const ConstOsmMapPtr& map, const bool formatXml = true);
 

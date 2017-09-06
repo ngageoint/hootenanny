@@ -86,6 +86,9 @@ public:
 
   void setUserEmail(const QString& email) { _email = email; }
 
+  /**
+   * @see PartialOsmMapReader
+   */
   virtual void initializePartial();
 
   /**
@@ -93,14 +96,26 @@ public:
    */
   virtual void read(OsmMapPtr map);
 
+  /**
+   * @see PartialOsmMapReader
+   */
   virtual void finalizePartial();
 
   void close();
 
+  /**
+   * @see PartialOsmMapReader
+   */
   virtual bool hasMoreElements();
 
+  /**
+   * @see PartialOsmMapReader
+   */
   virtual boost::shared_ptr<Element> readNextElement();
 
+  /**
+   * @see PartialOsmMapReader
+   */
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;
 
 protected:
@@ -165,8 +180,18 @@ private:
 
   long _getCurrentElementOffset(const ElementType& selectElementType) const;
   void _incrementElementIndex(const ElementType& selectElementType);
+  /*
+   * the current element type being returned by the partial query; order is: node, way, and then
+   * relation
+   */
   const ElementType _getCurrentSelectElementType() const;
+  /*
+   * number of elements read by the partial querying so far
+   */
   long _numElementsRead() const;
+  /*
+   * number of total elements of all types in the db
+   */
   long _numElementsTotal() const;
 };
 

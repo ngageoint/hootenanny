@@ -38,9 +38,9 @@ namespace hoot
 class SparkChangesetReaderTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SparkChangesetReaderTest);
-  //CPPUNIT_TEST(elementAsJsonTest);
+  CPPUNIT_TEST(elementAsJsonTest);
   CPPUNIT_TEST(elementAsXmlTest);
-  //CPPUNIT_TEST(wrongElementTypeTest);
+  CPPUNIT_TEST(wrongElementTypeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

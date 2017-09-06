@@ -109,9 +109,6 @@ void SparkChangesetWriter::open(QString fileName)
 
 void SparkChangesetWriter::writeChange(const Change& change)
 {
-  //TODO: this needs cleanup...probably a lot of unnecessary code in here added while debugging
-  //#1772
-
   if (change.getElement()->getElementType() != ElementType::Node)
   {
     throw NotImplementedException("Only nodes are supported.");
@@ -136,42 +133,37 @@ void SparkChangesetWriter::writeChange(const Change& change)
   switch (change.getType())
   {
     case Change::Create:
-      changeType = QString("A").toUtf8();
+      changeType = "A";
       break;
     case Change::Modify:
-      changeType = QString("M").toUtf8();
+      changeType = "M";
       break;
     case Change::Delete:
-      changeType = QString("D").toUtf8();
+      changeType = "D";
       break;
     default:
       throw IllegalArgumentException("Unexpected change type.");
   }
 
-  ConstNodePtr node = boost::dynamic_pointer_cast<const Node>(change.getElement());
-  LOG_VART(node);
-  NodePtr nodeCopy = node->cloneSp();
-  LOG_VART(nodeCopy);
+  NodePtr nodeCopy = (boost::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
+
   const QString nodeHash = nodeCopy->getTags()[MetadataTags::HootHash()];
   nodeCopy->getTags().remove(MetadataTags::HootHash());
-  LOG_VART(nodeCopy);
   _exportTagsVisitor.visit(nodeCopy);
-  LOG_VART(nodeCopy);
+
   OsmMapPtr tmpMap(new OsmMap());
   tmpMap->addElement(nodeCopy);
-  LOG_VART(nodeCopy);
 
   const Envelope env = _boundsCalculator->calculateSearchBounds(tmpMap, nodeCopy);
-  LOG_VART(nodeCopy);
 
   QString changeLine;
   changeLine.reserve(500);
   changeLine +=
-    changeType % QString("\t").toUtf8() %
-    QString::number(env.getMinX(), 'g', _precision).toUtf8() % QString("\t").toUtf8() %
-    QString::number(env.getMinY(), 'g', _precision).toUtf8() % QString("\t").toUtf8() %
-    QString::number(env.getMaxX(), 'g', _precision).toUtf8() % QString("\t").toUtf8() %
-    QString::number(env.getMaxY(), 'g', _precision).toUtf8() % QString("\t").toUtf8();
+    changeType % "\t" %
+    QString::number(env.getMinX(), 'g', _precision) % "\t" %
+    QString::number(env.getMinY(), 'g', _precision) % "\t" %
+    QString::number(env.getMaxX(), 'g', _precision) % "\t" %
+    QString::number(env.getMaxY(), 'g', _precision) % "\t";
   if (change.getType() == Change::Modify)
   {
     if (!change.getPreviousElement().get())
@@ -182,14 +174,15 @@ void SparkChangesetWriter::writeChange(const Change& change)
     {
       throw NotImplementedException("Only nodes are supported.");
     }
-    ConstNodePtr previousNode =
-      boost::dynamic_pointer_cast<const Node>(change.getPreviousElement());
-    NodePtr previousNodeCopy(dynamic_cast<Node*>(previousNode->clone()));
+
+    NodePtr previousNodeCopy =
+      (boost::dynamic_pointer_cast<const Node>(change.getPreviousElement()))->cloneSp();
+
     _exportTagsVisitor.visit(previousNodeCopy);
     // element hash before change
-    changeLine += QString(previousNodeCopy->getTags()[MetadataTags::HootHash()]).toUtf8() % QString("\t").toUtf8();
+    changeLine += QString(previousNodeCopy->getTags()[MetadataTags::HootHash()]) % "\t";
   }
-  changeLine += nodeHash.toUtf8() % QString("\t").toUtf8();  // element hash after change
+  changeLine += nodeHash % "\t";  // element hash after change
 
   //element payload
 
@@ -199,34 +192,28 @@ void SparkChangesetWriter::writeChange(const Change& change)
 
     //using elements in an array here, since that's what OsmJsonReader expects when using that
     //to parse (although we're not currently doing that with multiary ingest due to #1772)
-    changeLine += QString("{\"elements\":[{\"type\":\"node\"").toUtf8();
-    changeLine +=
-      QString(",\"id\":").toUtf8() % QString::number(nodeCopy->getId(), 'g', _precision).toUtf8();
-    changeLine +=
-      QString(",\"lat\":").toUtf8() % QString::number(nodeCopy->getY(), 'g', _precision).toUtf8();
-    changeLine +=
-      QString(",\"lon\":").toUtf8() % QString::number(nodeCopy->getX(), 'g', _precision).toUtf8();
-    changeLine += QString(",\"tags\":{").toUtf8();
+    changeLine += "{\"elements\":[{\"type\":\"node\"";
+    changeLine += ",\"id\":" % QString::number(nodeCopy->getId(), 'g', _precision);
+    changeLine += ",\"lat\":" % QString::number(nodeCopy->getY(), 'g', _precision);
+    changeLine += ",\"lon\":" % QString::number(nodeCopy->getX(), 'g', _precision);
+    changeLine += ",\"tags\":{";
     bool first = true;
     const Tags& tags = nodeCopy->getTags();
-    LOG_VART(tags);
     for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
-      const QString tagValue = it.value()/*.toUtf8()*/;
-      LOG_VART(tagValue);
+      const QString tagValue = it.value();
       if (!tagValue.trimmed().isEmpty())
       {
         if (!first)
         {
-          changeLine += QString(",").toUtf8();
+          changeLine += ",";
         }
         changeLine +=
-          OsmJsonWriter::markupString(it.key().toUtf8()) % ":" %
-          OsmJsonWriter::markupString(tagValue);
+          OsmJsonWriter::markupString(it.key()) % ":" % OsmJsonWriter::markupString(tagValue);
         first = false;
       }
     }
-    changeLine += QString("}}]}\n").toUtf8();
+    changeLine += "}}]}\n";
   }
   else //xml
   {

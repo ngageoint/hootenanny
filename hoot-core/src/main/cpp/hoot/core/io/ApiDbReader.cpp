@@ -568,12 +568,12 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   }
 
   _incrementElementIndex(selectElementType);
-  LOG_VART(selectElementType);
-  LOG_VART(element->getElementType());
+  //LOG_VART(selectElementType);
+  //LOG_VART(element->getElementType());
   assert(selectElementType == element->getElementType());
   _elementsRead++;
-  LOG_VART(_elementsRead);
-  LOG_VART(_maxElementsPerMap);
+  //LOG_VART(_elementsRead);
+  //LOG_VART(_maxElementsPerMap);
   if (_elementsRead == _maxElementsPerMap)
   {
     _elementResultIterator->finish();
@@ -642,17 +642,14 @@ void ApiDbReader::_incrementElementIndex(const ElementType& selectElementType)
   if (selectElementType == ElementType::Node)
   {
     _nodeIndex++;
-    LOG_VART(_nodeIndex);
   }
   else if (selectElementType == ElementType::Way)
   {
     _wayIndex++;
-    LOG_VART(_wayIndex);
   }
   else if (selectElementType == ElementType::Relation)
   {
     _relationIndex++;
-    LOG_VART(_relationIndex);
   }
   else
   {

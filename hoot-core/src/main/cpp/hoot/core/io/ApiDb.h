@@ -157,11 +157,11 @@ public:
    * database.  If limit = 0, no limit will be placed on the number of elements returned.  If offset
    * = 0, no records will be skipped in the returned result set.
    *
-   * @param elementType
-   * @param sorted
-   * @param limit
-   * @param offset
-   * @return
+   * @param elementType the element type to query for
+   * @param sorted if true; elements returned are sorted by ID
+   * @param limit the number of elements to query for
+   * @param offset the starting ID for the query
+   * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
                                                       const bool sorted = false,
@@ -287,6 +287,12 @@ public:
    */
   virtual long getNextId(const ElementType& elementType) = 0;
 
+  /**
+   * Return the number of elements of the given type in the database
+   *
+   * @param elementType the type of element to return a count for
+   * @return an element count
+   */
   virtual long numElements(const ElementType& elementType) = 0;
 
   QSqlError getLastError() const { return _db.lastError(); }

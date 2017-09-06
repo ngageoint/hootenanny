@@ -40,12 +40,13 @@ namespace hoot
 class SparkChangesetWriterTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(SparkChangesetWriterTest);
-  //CPPUNIT_TEST(conversionTest);
   CPPUNIT_TEST(elementAsJsonTest);
   CPPUNIT_TEST(elementAsXmlTest);
   CPPUNIT_TEST(missingHashTest);
   CPPUNIT_TEST(missingPreviousHashTest);
   CPPUNIT_TEST(wrongElementTypeTest);
+  //CPPUNIT_TEST(passingUnicodeConversionTest);
+  //CPPUNIT_TEST(failingUnicodeConversionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -75,40 +76,6 @@ public:
 
     changesetFileWriter.close();
   }
-
-//this reproduces #1772
-
-//  void conversionTest()
-//  {
-//    GeoNamesReader test;
-//    test.setUseDataSourceIds(true);
-//    test.open("test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.geonames");
-
-//    SparkChangesetWriter test2;
-//    test2.setElementPayloadFormat("json");
-//    test2.open("tmp/test.spark.1");
-
-//    while (test.hasMoreElements())
-//    {
-//      ElementPtr element = test.readNextElement();
-//      //these elements will have uncorrupted tags
-//      LOG_VART(element);
-//      test2.writeChange(Change(Change::Create, element));
-//    }
-//    test.close();
-//    test2.close();
-
-//    SparkChangesetReader test3;
-//    test3.open("tmp/test.spark.1");
-//    while (test3.hasMoreChanges())
-//    {
-//      Change change = test3.readNextChange();
-//      //these elements will have corrupted tags; seems to be caused by the boost property json
-//      //reader
-//      LOG_VART(change.getElement());
-//    }
-//    test3.close();
-//  }
 
   void elementAsJsonTest()
   {
@@ -221,6 +188,87 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Only nodes are supported"));
   }
+
+//  void passingUnicodeConversionTest()
+//  {
+//    //TODO: to use this you have to comment out the line:
+      //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
+      //in SparkChangesetWriter
+
+//    GeoNamesReader geonamesReader;
+//    geonamesReader.setUseDataSourceIds(true);
+//    geonamesReader.open(
+//      "test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.geonames");
+
+//    SparkChangesetWriter sparkChangesetWriter;
+//    //This line is the only difference between this test and failingConversionTest
+//    sparkChangesetWriter.setElementPayloadFormat("xml");
+//    sparkChangesetWriter.open("tmp/test.spark.1");
+//
+//    LOG_DEBUG("Reading geonames and writing to spark xml...");
+//    while (geonamesReader.hasMoreElements())
+//    {
+//      ElementPtr element = geonamesReader.readNextElement();
+//      //these elements will *not* have uncorrupted tags
+//      LOG_VART(element);
+//      sparkChangesetWriter.writeChange(Change(Change::Create, element));
+//    }
+//    geonamesReader.close();
+//    sparkChangesetWriter.close();
+
+//    SparkChangesetReader sparkChangesetReader;
+//    sparkChangesetReader.open("tmp/test.spark.1");
+//    LOG_DEBUG("Reading spark xml...");
+//    while (sparkChangesetReader.hasMoreChanges())
+//    {
+//      Change change = sparkChangesetReader.readNextChange();
+//      //these elements will *not* have corrupted tags
+//      //reader
+//      LOG_VART(change.getElement());
+//    }
+//    sparkChangesetReader.close();
+//  }
+
+//  //this reproduces #1772
+//  void failingUnicodeConversionTest()
+//  {
+//    //TODO: to use this you have to comment out the line:
+//    //if (!change.getElement()->getTags().contains(MetadataTags::HootHash()))
+//    //in SparkChangesetWriter
+
+//    GeoNamesReader geonamesReader;
+//    geonamesReader.setUseDataSourceIds(true);
+//    geonamesReader.open(
+//      "test-files/cmd/slow/ServiceMultiaryIngestCmdTest/allCountries-8-15-17-10.geonames");
+
+//    SparkChangesetWriter sparkChangesetWriter;
+//    //This line is the only difference between this test and passingConversionTest
+//    sparkChangesetWriter.setElementPayloadFormat("json");
+//    sparkChangesetWriter.open("tmp/test.spark.1");
+
+//    LOG_DEBUG("Reading geonames and writing to spark json...");
+//    while (geonamesReader.hasMoreElements())
+//    {
+//      ElementPtr element = geonamesReader.readNextElement();
+//      //these elements will *not* have uncorrupted tags
+//      LOG_VART(element);
+//      sparkChangesetWriter.writeChange(Change(Change::Create, element));
+//    }
+//    geonamesReader.close();
+//    sparkChangesetWriter.close();
+
+//    SparkChangesetReader sparkChangesetReader;
+//    sparkChangesetReader.open("tmp/test.spark.1");
+//    LOG_DEBUG("Reading spark json...");
+//    while (sparkChangesetReader.hasMoreChanges())
+//    {
+//      Change change = sparkChangesetReader.readNextChange();
+//      //these elements *will* have corrupted tags; seems to be caused by the boost property json
+//      //reader
+//      LOG_VART(change.getElement());
+//    }
+//    sparkChangesetReader.close();
+//  }
 
 };
 

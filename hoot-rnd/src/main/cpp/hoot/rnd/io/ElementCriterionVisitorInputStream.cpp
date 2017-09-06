@@ -55,8 +55,8 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
     if (e.get())
     {
       LOG_VART(e->getElementId());
-
       LOG_VART(_criterion.get());
+
       if (!_criterion.get() || _criterion->isSatisfied(e))
       {
         for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin();

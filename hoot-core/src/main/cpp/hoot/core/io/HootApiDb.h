@@ -298,6 +298,12 @@ public:
 
   static QUrl getBaseUrl();
 
+  /**
+   * Given a map name, returns its ID; assumes only one map with the given name
+   *
+   * @param name name of the map to retrieve
+   * @return a map ID
+   */
   long getMapIdByName(const QString name);
 
 protected:

@@ -353,7 +353,6 @@ void OsmXmlReader::readFromString(QString xml, OsmMapPtr map)
   QXmlInputSource xmlInputSource(&buffer);
   if (reader.parse(xmlInputSource) == false)
   {
-    LOG_ERROR(_errorString);
     throw Exception(_errorString);
   }
 
