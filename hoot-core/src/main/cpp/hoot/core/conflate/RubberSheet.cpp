@@ -146,7 +146,8 @@ void RubberSheet::applyTransform(boost::shared_ptr<OsmMap>& map)
 
   if (!_interpolator2to1)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit()
+        && _logNotEnoughTiePointsAsWarning)
     {
       LOG_WARN("No appropriate interpolator was specified, skipping rubber sheet transform.");
     }

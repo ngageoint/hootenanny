@@ -2009,7 +2009,7 @@ Sets the minimum number of tie points that will be used when calculating a rubbe
 === rubber.sheet.ref
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If this configuration setting is set to true, then the first layer is treated as the reference
 layer and will not be moved. If set to false the two layers will be moved towards each other. The
