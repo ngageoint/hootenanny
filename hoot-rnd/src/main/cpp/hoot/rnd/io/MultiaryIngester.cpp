@@ -154,10 +154,10 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
 
     //create the changes and write them to the ref db layer and also to a changeset file for
     //external use by Spark
-    boost::shared_ptr<QTemporaryFile> tmpChangeset =
+    _writeChangesToReferenceLayer(
       _deriveAndWriteChangesToChangeset(
-        _getFilteredNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
-    _writeChangesToReferenceLayer(tmpChangeset->fileName(), referenceOutput);
+        _getFilteredNewInputStream(_sortedNewInput), referenceOutput, changesetOutput)->fileName(),
+      referenceOutput);
   }
 
   LOG_INFO("Multiary data ingested from " << newInput);
@@ -364,7 +364,7 @@ void MultiaryIngester::_writeNewReferenceData(
   referenceWriter->open(referenceOutput);
 
   boost::shared_ptr<OsmChangeWriter> changesetFileWriter =
-    OsmChangeWriterFactory::getInstance().createWriter(changesetOutput);
+    OsmChangeWriterFactory::getInstance().createWriter(changesetOutput, "json");
   changesetFileWriter->open(changesetOutput);
 
   while (filteredNewInputStream->hasMoreElements())
