@@ -48,6 +48,7 @@
 
 // Qt
 #include <QFileInfo>
+#include <QDir>
 
 namespace hoot
 {
@@ -153,8 +154,10 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
 
     //create the changes and write them to the ref db layer and also to a changeset file for
     //external use by Spark
-    _deriveAndWriteChanges(
-      _getFilteredNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
+    boost::shared_ptr<QTemporaryFile> tmpChangeset =
+      _deriveAndWriteChangesToChangeset(
+        _getFilteredNewInputStream(_sortedNewInput), referenceOutput, changesetOutput);
+    _writeChangesToReferenceLayer(tmpChangeset->fileName(), referenceOutput);
   }
 
   LOG_INFO("Multiary data ingested from " << newInput);
@@ -223,7 +226,7 @@ void MultiaryIngester::_sortPbf(const QString input, const QString output)
 boost::shared_ptr<QTemporaryFile> MultiaryIngester::_ogrToPbfTemp(const QString input)
 {
   boost::shared_ptr<QTemporaryFile> pbfTemp(
-    new QTemporaryFile("multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+    new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
   if (!pbfTemp->open())
   {
     throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
@@ -247,12 +250,14 @@ QString MultiaryIngester::_getSortedNewInput(const QString newInput)
   {
     QFileInfo newInputFileInfo(newInput);
     _sortTempFile.reset(
-      new QTemporaryFile(sortTempFileBaseName + "." + newInputFileInfo.completeSuffix()));
+      new QTemporaryFile(
+        QDir::tempPath() + "/" + sortTempFileBaseName + "." + newInputFileInfo.completeSuffix()));
   }
   else
   {
     //OGR formats have to be converted to PBF for sorting (see below)
-    _sortTempFile.reset(new QTemporaryFile(sortTempFileBaseName + ".osm.pbf"));
+    _sortTempFile.reset(
+      new QTemporaryFile(QDir::tempPath() + "/" + sortTempFileBaseName + ".osm.pbf"));
   }
   if (!_sortTempFile->open())
   {
@@ -388,8 +393,8 @@ void MultiaryIngester::_writeNewReferenceData(
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
-void MultiaryIngester::_deriveAndWriteChanges(
-  boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceOutput,
+boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChangeset(
+  boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
   const QString changesetOutput)
 {
   //The changeset file changes and reference layer node updates are written in two separate steps.
@@ -406,8 +411,8 @@ void MultiaryIngester::_deriveAndWriteChanges(
 
   boost::shared_ptr<PartialOsmMapReader> referenceReader =
     boost::dynamic_pointer_cast<PartialOsmMapReader>(
-      OsmMapReaderFactory::getInstance().createReader(referenceOutput));
-  referenceReader->open(referenceOutput);
+      OsmMapReaderFactory::getInstance().createReader(referenceInput));
+  referenceReader->open(referenceInput);
   LOG_DEBUG("Opened reference reader.");
 
   ChangesetDeriver changesetDeriver(
@@ -424,15 +429,16 @@ void MultiaryIngester::_deriveAndWriteChanges(
   //the element payload json for writing the change to the database in the next step, write out
   //a second changeset with the payload in xml; this spark changeset writer will write the
   //element payload as xml for db writing
-  QTemporaryFile tmpChangeset("multiary-ingest-changeset-temp-XXXXXX.spark.1");
-  if (!tmpChangeset.open())
+  boost::shared_ptr<QTemporaryFile> tmpChangeset(
+    new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-changeset-temp-XXXXXX.spark.1"));
+  if (!tmpChangeset->open())
   {
-    throw HootException("Unable to open sort temp file: " + tmpChangeset.fileName() + ".");
+    throw HootException("Unable to open sort temp file: " + tmpChangeset->fileName() + ".");
   }
-  LOG_VART(tmpChangeset.fileName());
+  LOG_VART(tmpChangeset->fileName());
   boost::shared_ptr<OsmChangeWriter> changesetTempFileWriter =
-    OsmChangeWriterFactory::getInstance().createWriter(tmpChangeset.fileName(), "xml");
-  changesetTempFileWriter->open(tmpChangeset.fileName());
+    OsmChangeWriterFactory::getInstance().createWriter(tmpChangeset->fileName(), "xml");
+  changesetTempFileWriter->open(tmpChangeset->fileName());
   LOG_DEBUG("Opened temp change file writer.");
 
   while (changesetDeriver.hasMoreChanges())
@@ -475,6 +481,12 @@ void MultiaryIngester::_deriveAndWriteChanges(
   LOG_INFO("Changes derived and written to changeset file: " << changesetOutput << ".");
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 
+  return tmpChangeset;
+}
+
+void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutput,
+                                                     const QString referenceOutput)
+{
   _timer.restart();
   LOG_INFO("Writing changes to reference layer: " << referenceOutput << "...");
 
@@ -493,7 +505,7 @@ void MultiaryIngester::_deriveAndWriteChanges(
   //this spark changeset reader will read in the element payload as xml
   //TODO: add an OsmChangeReaderFactory to get rid of this dependency?
   SparkChangesetReader changesetFileReader;
-  changesetFileReader.open(tmpChangeset.fileName());
+  changesetFileReader.open(changesetOutput);
   LOG_DEBUG("Opened temp changeset file reader.");
 
   long changesParsed2 = 0;

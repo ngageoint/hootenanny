@@ -102,11 +102,24 @@ private:
 
   boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);
 
+  /*
+   * Writes data to the reference layer when no data exists there (no changeset derivation)
+   */
   void _writeNewReferenceData(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
                               const QString referenceOutput, const QString changesetOutput);
-  void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
-                              const QString referenceOutput,
-                              const QString changesetOutput);
+
+  /*
+   * Derives a changeset between the ref layer and another source; writes the output to a changeset
+   * file; returns the changeset file
+   */
+  boost::shared_ptr<QTemporaryFile> _deriveAndWriteChangesToChangeset(
+    boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
+    const QString changesetOutput);
+
+  /*
+   * Writes the contents of a changeset to the ref layer
+   */
+  void _writeChangesToReferenceLayer(const QString changesetOutput, const QString referenceOutput);
 
   void _printSummary();
   void _clearChangeTypeCounts();
