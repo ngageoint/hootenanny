@@ -449,10 +449,10 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
     LOG_VART(change.getType());
     if (change.getType() != Change::Unknown)
     {
-      //writes changeset file with json element payload for external spark use
+      //write changeset file with json element payload for external spark use
       changesetFileWriter->writeChange(change);
-      //writes changeset file with xml element payload to avoid reading back in corrupted unicode
-      //chars when writing the final changes to the reference db
+      //write temp changeset file with xml element payload to avoid reading back in corrupted
+      //unicode chars when writing the final changes to the reference db
       changesetTempFileWriter->writeChange(change);
       _changesParsed++;
       const long numChanges = _changesByType[change.getType()];
