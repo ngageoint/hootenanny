@@ -95,11 +95,6 @@ private:
 
   QElapsedTimer _timer;
 
-  void _checkForOsmosis() const;
-  void _sortPbf(const QString input, const QString output);
-  boost::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
-  QString _getSortedNewInput(const QString newInput);
-
   boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);
 
   /*
@@ -124,6 +119,7 @@ private:
   void _printSummary();
   void _clearChangeTypeCounts();
 
+  void _sortInputFile(const QString input);
 };
 
 }

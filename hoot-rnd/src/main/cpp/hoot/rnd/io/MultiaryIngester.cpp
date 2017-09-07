@@ -38,13 +38,12 @@
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/rnd/io/SparkChangesetReader.h>
+#include <hoot/core/io/OsmFileSorter.h>
+#include <hoot/core/io/OgrReader.h>
 
 // Qt
 #include <QFileInfo>
@@ -141,23 +140,23 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     _numNodesBeforeApplyingChangeset = _referenceDb.numElements(ElementType::Node);
     LOG_VARD(_numNodesBeforeApplyingChangeset);
 
+    QString sortedNewInput;
     if (!_sortInput)
     {
       LOG_INFO("The input data will not be sorted by node ID.");
-      _sortedNewInput = newInput;
+      sortedNewInput = newInput;
     }
     else
     {
-      //sort incoming data by node id, if necessary, for changeset derivation (only passing nodes
-      //through, so don't need to also sort by element type)
-      _sortedNewInput = _getSortedNewInput(newInput);
+      _sortInputFile(newInput);
+      sortedNewInput = _sortTempFile->fileName();
     }
 
     //create the changes and write them to the ref db layer and also to a changeset file for
     //external use by Spark
     _writeChangesToReferenceLayer(
       _deriveAndWriteChangesToChangeset(
-        _getFilteredNewInputStream(_sortedNewInput), referenceOutput, changesetOutput)->fileName(),
+        _getFilteredNewInputStream(sortedNewInput), referenceOutput, changesetOutput)->fileName(),
       referenceOutput);
   }
 
@@ -165,6 +164,39 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
   LOG_INFO("into reference layer: " << referenceOutput);
   LOG_INFO("and changeset file: " << changesetOutput << ".");
   _printSummary();
+}
+
+void MultiaryIngester::_sortInputFile(const QString input)
+{
+  _timer.restart();
+  LOG_INFO("Sorting " << input << " by node ID...");
+
+  //sort incoming data by node id, if necessary, for changeset derivation
+  const QString sortTempFileBaseName = "multiary-ingest-sort-temp-XXXXXX";
+  if (!OgrReader().isSupported(input))
+  {
+    QFileInfo newInputFileInfo(input);
+      _sortTempFile.reset(
+        new QTemporaryFile(
+          QDir::tempPath() + "/" + sortTempFileBaseName + "." + newInputFileInfo.completeSuffix()));
+  }
+  else
+  {
+    //OGR formats have to be converted to PBF for sorting
+    _sortTempFile.reset(
+      new QTemporaryFile(QDir::tempPath() + "/" + sortTempFileBaseName + ".osm.pbf"));
+  }
+  //for debugging only
+  //sortTempFile->setAutoRemove(false);
+  if (!_sortTempFile->open())
+  {
+    throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
+  }
+
+  OsmFileSorter().sort(input, _sortTempFile->fileName());
+
+  LOG_INFO(input << " sorted by node ID to output: " << _sortTempFile->fileName() << ".");
+  LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
 void MultiaryIngester::_printSummary()
@@ -199,128 +231,6 @@ void MultiaryIngester::_printSummary()
       "Changes written to changeset file: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesParsed));
   }
-}
-
-void MultiaryIngester::_checkForOsmosis() const
-{
-  if (std::system(QString("osmosis -q > /dev/null").toStdString().c_str()) != 0)
-  {
-    throw HootException(
-      QString("Unable to access the Osmosis application.  Osmosis is required to") +
-      QString("sort OSM PBF and OSM XML files.  Is Osmosis installed?"));
-  }
-}
-
-void MultiaryIngester::_sortPbf(const QString input, const QString output)
-{
-  _checkForOsmosis();
-
-  const QString cmd =
-    "osmosis -q --read-pbf file=\"" + input + "\" --sort --write-pbf " +
-    "omitmetadata=true file=\"" + output + "\" > /dev/null";
-  if (std::system(cmd.toStdString().c_str()) != 0)
-  {
-    throw HootException("Unable to sort OSM PBF file.");
-  }
-}
-
-boost::shared_ptr<QTemporaryFile> MultiaryIngester::_ogrToPbfTemp(const QString input)
-{
-  boost::shared_ptr<QTemporaryFile> pbfTemp(
-    new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
-  //for debugging only
-  //pbfTemp->setAutoRemove(false);
-  if (!pbfTemp->open())
-  {
-    throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
-  }
-  LOG_INFO(
-    "Converting OGR input: " << input << " to sortable PBF output: " << pbfTemp->fileName() <<
-    "...");
-
-  ElementStreamer::stream(input, pbfTemp->fileName());
-
-  return pbfTemp;
-}
-
-QString MultiaryIngester::_getSortedNewInput(const QString newInput)
-{
-  LOG_INFO("Sorting " << newInput << " by node ID...");
-  _timer.restart();
-
-  const QString sortTempFileBaseName = "multiary-ingest-sort-temp-XXXXXX";
-  if (!OgrReader().isSupported(newInput))
-  {
-    QFileInfo newInputFileInfo(newInput);
-    _sortTempFile.reset(
-      new QTemporaryFile(
-        QDir::tempPath() + "/" + sortTempFileBaseName + "." + newInputFileInfo.completeSuffix()));
-  }
-  else
-  {
-    //OGR formats have to be converted to PBF for sorting (see below)
-    _sortTempFile.reset(
-      new QTemporaryFile(QDir::tempPath() + "/" + sortTempFileBaseName + ".osm.pbf"));
-  }
-  //for debugging only
-  //_sortTempFile->setAutoRemove(false);
-  if (!_sortTempFile->open())
-  {
-    throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
-  }
-  LOG_DEBUG("Writing to sorted temp file: " << _sortTempFile->fileName() << "...");
-
-  if (GeoNamesReader().isSupported(newInput))
-  {
-    //sort the input by node id (first field) using the unix sort command
-    if (std::system(
-         QString("sort -n " + newInput + " --output=" +
-           _sortTempFile->fileName()).toStdString().c_str()) != 0)
-    {
-      throw HootException("Unable to sort input file.");
-    }
-  }
-  //use osmosis to sort the OSM files by node id
-  else if (OsmPbfReader().isSupported(newInput))
-  {
-    //check for sorted flag
-    if (OsmPbfReader().isSorted(newInput))
-    {
-      LOG_WARN(
-        "OSM PBF input file: " << newInput << " is marked as sorted by node ID, as " <<
-        "indicated by its header, yet Hootenanny was instructed to sort the file.");
-    }
-    _sortPbf(newInput, _sortTempFile->fileName());
-  }
-  else if (OsmXmlReader().isSupported(newInput))
-  {
-    _checkForOsmosis();
-
-    const QString cmd =
-      "osmosis -q --read-xml file=\"" + newInput + "\" --sort --write-xml file=\"" +
-      _sortTempFile->fileName() + "\"  > /dev/null";
-    if (std::system(cmd.toStdString().c_str()) != 0)
-    {
-      throw HootException("Unable to sort OSM XML file.");
-    }
-  }
-  else if (OgrReader().isSupported(newInput))
-  {
-    //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
-    //to first write it to a sortable format.
-    LOG_WARN("OGR inputs are not currently sortable by node ID.");
-    LOG_WARN("Must convert input to OSM format, which will increase the processing time.");
-    _sortPbf(_ogrToPbfTemp(newInput)->fileName(), _sortTempFile->fileName());
-  }
-  else
-  {
-    throw HootException("Unsupported input format for node sorting.");
-  }
-
-  LOG_INFO(newInput << " sorted by node ID.");
-  LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
-
-  return _sortTempFile->fileName();
 }
 
 boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
