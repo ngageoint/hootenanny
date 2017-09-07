@@ -46,6 +46,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/HootConfig.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/test/ConflateCaseTestSuite.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -57,9 +58,9 @@ using namespace hoot;
 
 // Qt
 #include <QtGui/QApplication>
+#include <QDateTime>
 #include <QString>
 #include <QStringList>
-#include <QDateTime>
 
 // Standard
 #include <iostream>
@@ -69,19 +70,20 @@ using namespace std;
 #include <tgs/System/Time.h>
 
 #include "ScriptTestSuite.h"
-#include <hoot/core/HootConfig.h>
+#include "ProcessPool.h"
 
 class HootTestListener : public CppUnit::TestListener
 {
 public:
 
-  HootTestListener(bool showTestName, double slowTest = 2.0)
+  HootTestListener(bool showTestName, double slowTest = 2.0, bool showElapsed = true)
+    : _success(true),
+      _showTestName(showTestName),
+      _showElapsed(showElapsed),
+      _start(Tgs::Time::getTime()),
+      _allStart(_start),
+      _slowTest(slowTest)
   {
-    _showTestName = showTestName;
-    _slowTest = slowTest;
-    _start = Tgs::Time::getTime();
-    _allStart = _start;
-    _success = true;
   }
 
   virtual void addFailure(const CppUnit::TestFailure& failure)
@@ -131,13 +133,17 @@ public:
 
   virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/ )
   {
-    cout << endl;
-    cout << "Elapsed: " << Tgs::Time::getTime() - _allStart << endl;
+    if (_showElapsed)
+    {
+      cout << endl;
+      cout << "Elapsed: " << Tgs::Time::getTime() - _allStart << endl;
+    }
   }
 
 private:
   bool _success;
   bool _showTestName;
+  bool _showElapsed;
 
   double _start;
   double _allStart;
@@ -188,7 +194,7 @@ CppUnit::Test* findTest(CppUnit::Test* t, QString name)
   return 0;
 }
 
-void printNames(CppUnit::Test* t)
+void getNames(vector<string>& names, CppUnit::Test* t)
 {
   CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(t);
   if (suite != 0)
@@ -196,13 +202,21 @@ void printNames(CppUnit::Test* t)
     vector<CppUnit::Test*> children = suite->getTests();
     for (size_t i = 0; i < children.size(); ++i)
     {
-      printNames(children[i]);
+      getNames(names, children[i]);
     }
   }
   else
   {
-    cout << t->getName() << endl;
+    names.push_back(t->getName());
   }
+}
+
+void printNames(CppUnit::Test* t)
+{
+  vector<string> names;
+  getNames(names, t);
+  for (vector<string>::iterator it = names.begin(); it != names.end(); ++it)
+    cout << *it << endl;
 }
 
 enum _TestType
@@ -284,27 +298,6 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
 
 int main(int argc, char *argv[])
 {
-  Hoot::getInstance().init();
-
-  QCoreApplication app(argc, argv);
-
-  QStringList args;
-  for (int i = 1; i < argc; i++)
-  {
-    args << argv[i];
-  }
-
-  Log::getInstance().setLevel(Log::Warn);
-  CppUnit::TextUi::TestRunner runner;
-  CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
-
-# if HOOT_HAVE_HADOOP
-    Hoot::getInstance().loadLibrary("PrettyPipesExample");
-# endif
-
-  // initialize OSM Schema so the time expense doesn't print in other tests.
-  OsmSchema::getInstance();
-
   if (argc == 1)
   {
     cout << argv[0] << " Usage:\n"
@@ -333,79 +326,123 @@ int main(int argc, char *argv[])
   }
   else
   {
-    HootTestListener* listener;
+    Hoot::getInstance().init();
+
+    QCoreApplication app(argc, argv);
+
+    QStringList args;
+    for (int i = 1; i < argc; i++)
+    {
+      args << argv[i];
+    }
+
+    Log::getInstance().setLevel(Log::Warn);
+    CppUnit::TextUi::TestRunner runner;
+    CppUnit::TextTestResult result;
+
+# if HOOT_HAVE_HADOOP
+    Hoot::getInstance().loadLibrary("PrettyPipesExample");
+# endif
+
+    // initialize OSM Schema so the time expense doesn't print in other tests.
+    OsmSchema::getInstance();
+
+    boost::shared_ptr<HootTestListener> listener;
 
     bool printDiff = args.contains("--diff");
+    string test_name;
 
-    CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
     if (args.contains("--all-names"))
     {
-      populateTests(ALL, searchSuite, printDiff);
-      printNames(searchSuite);
-      delete searchSuite;
+      CppUnit::TestSuite testSuite("All tests");
+      populateTests(ALL, &testSuite, printDiff);
+      printNames(&testSuite);
       return 0;
     }
-    else if (args.contains("--single"))
+    CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
+    if (args.contains("--single"))
     {
       int i = args.indexOf("--single") + 1;
       if (i >= args.size())
       {
-        delete searchSuite;
+        delete rootSuite;
         throw HootException("Expected a test name after --single.");
       }
       QString testName = args[i];
+      test_name = testName.toStdString();
 
-      listener = new HootTestListener(false, -1);
+      listener.reset(new HootTestListener(false, -1));
       Log::getInstance().setLevel(Log::Info);
-      CppUnit::TestSuite *searchSuite = new CppUnit::TestSuite( "Search Tests" );
-      populateTests(ALL, searchSuite, printDiff);
+      populateTests(ALL, rootSuite, printDiff);
+      runner.addTest(rootSuite);
+    }
+    else if (args.contains("--listen"))
+    {
+      listener.reset(new HootTestListener(false, -1, false));
+      Log::getInstance().setLevel(Log::Info);
+      populateTests(ALL, rootSuite, printDiff);
+      runner.addTest(rootSuite);
+      result.addListener(listener.get());
 
-      CppUnit::Test* t = findTest(searchSuite, testName);
-      if (t == 0)
+      string testName;
+      cin >> testName;
+      while (testName != HOOT_TEST_FINISHED)
       {
-        delete searchSuite;
-        delete listener;
-        throw HootException("Could not find the specified test: " + testName);
+        CppUnit::Test* t = rootSuite->findTest(testName);
+        if (t != 0)
+        {
+          // clear all user configuration so we have consistent tests.
+          conf().clear();
+          ConfigOptions::populateDefaults(conf());
+          conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+          //  Run only the test sent from the main process
+          runner.run(result, testName);
+          cout << endl << HOOT_TEST_FINISHED << endl;
+        }
+        else
+        {
+          LOG_ERROR("Could not find the specified test: " + testName);
+        }
+        cin >> testName;
       }
-
-      runner.addTest(t);
+      return result.failures().size() > 0 ? -1 : 0;
     }
     else
     {
       if (args.contains("--current"))
       {
-        listener = new HootTestListener(true);
+        listener.reset(new HootTestListener(true));
         Log::getInstance().setLevel(Log::Info);
         populateTests(CURRENT, rootSuite, printDiff);
       }
       else if (args.contains("--quick"))
       {
-        listener = new HootTestListener(false, 1.0);
+        listener.reset(new HootTestListener(false, 1.0));
         populateTests(QUICK, rootSuite, printDiff);
       }
       else if (args.contains("--quick-only"))
       {
-        listener = new HootTestListener(false, 1.0);
+        listener.reset(new HootTestListener(false, 1.0));
         populateTests(QUICK_ONLY, rootSuite, printDiff);
       }
       else if (args.contains("--slow"))
       {
-        listener = new HootTestListener(false, 30.0);
+        listener.reset(new HootTestListener(false, 30.0));
         populateTests(SLOW, rootSuite, printDiff);
       }
       else if (args.contains("--slow-only"))
       {
-        listener = new HootTestListener(false, 30.0);
+        listener.reset(new HootTestListener(false, 30.0));
         populateTests(SLOW_ONLY, rootSuite, printDiff);
       }
       else if (args.contains("--all") || args.contains("--glacial"))
       {
-        listener = new HootTestListener(false, 900.0);
+        listener.reset(new HootTestListener(false, 900.0));
         populateTests(GLACIAL, rootSuite, printDiff);
       }
       else if (args.contains("--glacial-only"))
       {
-        listener = new HootTestListener(false, 900.0);
+        listener.reset(new HootTestListener(false, 900.0));
         populateTests(GLACIAL_ONLY, rootSuite, printDiff);
       }
 
@@ -435,26 +472,50 @@ int main(int argc, char *argv[])
       cout << "Running core tests.  Test count: " << rootSuite->countTestCases() << endl;
     }
 
-    CppUnit::TextTestResult result;
-
     if (args.contains("--names"))
     {
       listener->showTestNames(true);
     }
 
-    // clear all user configuration so we have consistent tests.
-    conf().clear();
-    ConfigOptions::populateDefaults(conf());
-    LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
-    conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+    if (args.contains("--parallel"))
+    {
+      double start = Tgs::Time::getTime();
 
-    //allows us to pass config options through HootTest
-    Settings::parseCommonArguments(args);
+      int i = args.indexOf("--parallel") + 1;
+      if (i >= args.size())
+      {
+        delete rootSuite;
+        throw HootException("Expected integer after --parallel.");
+      }
+      bool ok = false;
+      int nproc = args[i].toInt(&ok);
+      if (!ok || nproc < 1)
+      {
+        delete rootSuite;
+        throw HootException("Expected integer after --parallel");
+      }
 
-    result.addListener(listener);
-    runner.run(result);
-    delete searchSuite;
-    delete listener;
-    return result.failures().size() > 0 ? -1 : 0;
+      vector<string> names;
+      getNames(names, rootSuite);
+
+      cout << endl;
+      cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
+      return -1;
+    }
+    else
+    {
+      // clear all user configuration so we have consistent tests.
+      conf().clear();
+      ConfigOptions::populateDefaults(conf());
+      LOG_DEBUG("HOOT_HOME: " + QString(getenv("HOOT_HOME")))
+      conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+
+      //allows us to pass config options through HootTest
+      Settings::parseCommonArguments(args);
+
+      result.addListener(listener.get());
+      runner.run(result, test_name);
+      return result.failures().size() > 0 ? -1 : 0;
+    }
   }
 }

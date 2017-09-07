@@ -17,7 +17,7 @@ CONFIG += release
 CONFIG -= debug
 
 # We don't use multiple threads in Hootenanny, speed things up a bit.
-DEFINES += BOOST_SP_DISABLE_THREADS
+#DEFINES += BOOST_SP_DISABLE_THREADS
 
 exists(LocalConfig.pri):include(LocalConfig.pri)
 
