@@ -38,7 +38,6 @@
 #include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/rnd/io/SparkChangesetReader.h>
