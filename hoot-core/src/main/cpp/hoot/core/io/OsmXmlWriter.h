@@ -133,6 +133,7 @@ private:
   int _encodingErrorCount;
   boost::shared_ptr<QXmlStreamWriter> _writer;
   geos::geom::Envelope _bounds;
+  bool _includeCircularErrorTags;
 
   static QString _typeName(ElementType e);
 

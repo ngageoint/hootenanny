@@ -432,11 +432,11 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

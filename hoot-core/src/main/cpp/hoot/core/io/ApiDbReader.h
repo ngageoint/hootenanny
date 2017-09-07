@@ -133,6 +133,8 @@ protected:
 
   bool _returnNodesOnly;
 
+  bool _keepFileStatus;
+
   ElementType _selectElementType;
   boost::shared_ptr<QSqlQuery> _elementResultIterator;
 

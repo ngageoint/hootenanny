@@ -62,7 +62,8 @@ namespace hoot
 
 unsigned int HootApiDb::logWarnCount = 0;
 
-HootApiDb::HootApiDb()
+HootApiDb::HootApiDb() :
+_precision(ConfigOptions().getWriterPrecision())
 {
   _init();
 }
@@ -753,8 +754,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   _updateChangesetEnvelope(envelopeNode);
 
   LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
-  LOG_VART(QString::number(lat, 'g', ConfigOptions().getWriterPrecision()))
-  LOG_VART(QString::number(lon, 'g', ConfigOptions().getWriterPrecision()));
+  LOG_VART(QString::number(lat, 'g', _precision))
+  LOG_VART(QString::number(lon, 'g', _precision));
 
   return true;
 }
@@ -1364,11 +1365,11 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

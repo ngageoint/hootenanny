@@ -171,11 +171,12 @@ OGREnvelope* GeometryUtils::toOGREnvelope(const geos::geom::Envelope& e)
 
 QString GeometryUtils::toString(const Envelope& e)
 {
+  const int precision = ConfigOptions().getWriterPrecision();
   return QString("%1,%2,%3,%4").
-      arg(e.getMinX(), 0, 'g', ConfigOptions().getWriterPrecision()).
-      arg(e.getMaxX(), 0, 'g', ConfigOptions().getWriterPrecision()).
-      arg(e.getMinY(), 0, 'g', ConfigOptions().getWriterPrecision()).
-      arg(e.getMaxY(), 0, 'g', ConfigOptions().getWriterPrecision());
+      arg(e.getMinX(), 0, 'g', precision).
+      arg(e.getMaxX(), 0, 'g', precision).
+      arg(e.getMinY(), 0, 'g', precision).
+      arg(e.getMaxY(), 0, 'g', precision);
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
@@ -194,11 +195,12 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   case GEOS_POLYGON:
     return validatePolygon(dynamic_cast<const Polygon*>(g));
   default:
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    const unsigned int logWarnMessageLimit = ConfigOptions().getLogWarnMessageLimit();
+    if (logWarnCount < logWarnMessageLimit)
     {
       LOG_WARN("Got an unrecognized geometry. " << g->getGeometryTypeId());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == logWarnMessageLimit)
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

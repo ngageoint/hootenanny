@@ -109,11 +109,15 @@ public:
   double getFeatureDistance() { return _featureDistance; }
   void setFeatureDistance(double distance) { _featureDistance = distance; }
 
+  bool getPrintMatchDistanceTruth() { return _printMatchDistanceTruth; }
+  void setPrintMatchDistanceTruth(bool print) { _printMatchDistanceTruth = print; }
+
 private:
 
   double _typeScoreThreshold;
   static QSet<QString> _allTagKeys;
   double _featureDistance;
+  bool _printMatchDistanceTruth;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;

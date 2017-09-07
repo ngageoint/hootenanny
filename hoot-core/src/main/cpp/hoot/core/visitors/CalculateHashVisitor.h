@@ -51,6 +51,8 @@ public:
 
   static std::string className() { return "hoot::CalculateHashVisitor"; }
 
+  CalculateHashVisitor();
+
   virtual ~CalculateHashVisitor();
 
   virtual void visit(const ConstElementPtr &e);
@@ -62,6 +64,7 @@ public:
   static QByteArray toHash(const ConstElementPtr& e);
 
 private:
+
   OsmMap* _map;
 };
 

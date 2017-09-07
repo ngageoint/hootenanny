@@ -810,12 +810,12 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   // there isn't much we can do.
   if (!_checkForSortedSecondSubline(rawSublineMatches))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Way matches sublines out of order. This is unusual and may give a sub-optimal "
         "result.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -855,11 +855,11 @@ vector<WaySublineMatch> MaximalSubline::_snapIntersections(const ConstOsmMapPtr&
   }
   catch (const HootException& e)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN(e.getWhat());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

@@ -870,11 +870,11 @@ public:
     const SchemaVertex& v = _graph[vid];
     if (v.isValid())
     {
-      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (_logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(tv.name << " was specified multiple times in the schema file.");
       }
-      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (_logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -1297,11 +1297,11 @@ private:
     {
       if (childTv.influence == -1.0)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Influence for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -1310,11 +1310,11 @@ private:
       }
       if (childTv.valueType == Unknown)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Value type for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

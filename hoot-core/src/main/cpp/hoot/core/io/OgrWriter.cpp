@@ -294,11 +294,11 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
 
       if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -577,11 +577,11 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     }
     catch (const IllegalArgumentException& err)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

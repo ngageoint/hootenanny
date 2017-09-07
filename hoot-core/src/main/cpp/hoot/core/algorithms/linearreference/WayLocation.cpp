@@ -190,11 +190,11 @@ int WayLocation::compareTo(const WayLocation& other) const
 {
   if (!(_segmentFraction < 1.0 && other._segmentFraction < 1.0))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN(_segmentFraction << " other: " << other._segmentFraction);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

@@ -90,6 +90,8 @@ private:
 
   QMap<QString, long> _changesetStats;
   QString _changesetDetailsStr;
+
+  int _precision;
 };
 
 }

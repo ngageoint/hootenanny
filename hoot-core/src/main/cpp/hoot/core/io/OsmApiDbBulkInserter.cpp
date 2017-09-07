@@ -34,6 +34,7 @@
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QDateTime>
@@ -55,7 +56,8 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmApiDbBulkInserter)
 
 OsmApiDbBulkInserter::OsmApiDbBulkInserter() :
 _outputDelimiter("\t"),
-_fileDataPassCtr(0)
+_fileDataPassCtr(0),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
   _reset();
   _sectionNames = _createSectionNameList();
@@ -807,7 +809,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   const unsigned long nodeDbId = _establishIdMapping(node->getElementId());
   LOG_VART(ElementId(ElementType::Node, nodeDbId));
 
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     Tags tags = node->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
@@ -865,7 +867,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   const unsigned long wayDbId = _establishIdMapping(way->getElementId());
   LOG_VART(ElementId(ElementType::Way, wayDbId));
 
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     Tags tags = way->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
@@ -922,7 +924,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   const unsigned long relationDbId = _establishIdMapping(relation->getElementId());
   LOG_VART(ElementId(ElementType::Relation, relationDbId));
 
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     Tags tags = relation->getTags();
     //keep the hoot:id tag in sync with what could be a newly assigned id
@@ -1398,14 +1400,14 @@ void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& ele
 
     if (relationRef != _unresolvedRefs.unresolvedRelationRefs->end())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Found unresolved relation member ref!:");
         LOG_WARN(QString( "Relation ID ") % QString::number(relationRef->second.sourceRelationId) %
           QString(" (DB ID=") % QString::number(relationRef->second.sourceDbRelationId) %
            QString(") has ref to ") % relationRef->second.relationMemberData.toString());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

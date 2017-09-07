@@ -370,6 +370,8 @@ private:
   unsigned long _nodesAddedToCache;
   unsigned long _nodesFlushedFromCache;
 
+  int _precision;
+
   /**
    * There are some statements that cannot be executed within a transaction
    * (like DROP DATABASE). There are times (when deleting a map) where we

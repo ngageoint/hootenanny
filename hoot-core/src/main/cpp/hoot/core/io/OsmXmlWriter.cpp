@@ -69,7 +69,8 @@ _textStatus(ConfigOptions().getWriterTextStatus()),
 _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
 _timestamp("1970-01-01T00:00:00Z"),
 _precision(ConfigOptions().getWriterPrecision()),
-_encodingErrorCount(0)
+_encodingErrorCount(0),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
 }
 
@@ -103,12 +104,12 @@ QString OsmXmlWriter::removeInvalidCharacters(const QString& s)
   if (foundError)
   {
     _encodingErrorCount++;
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Found an invalid character in string: '" << s << "'");
       LOG_WARN("  UCS-4 version of the string: " << s.toUcs4());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -366,7 +367,7 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
     }
   }
 
-  if (element->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags() &&
+  if (element->hasCircularError() && _includeCircularErrorTags &&
       //non debug count check for nodes only
       (type != ElementType::Node ||
        (type == ElementType::Node && tags.getNonDebugCount() > 0)))
@@ -549,7 +550,7 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
     }
   }
 
-  if (w->hasCircularError() && ConfigOptions().getWriterIncludeCircularErrorTags())
+  if (w->hasCircularError() && _includeCircularErrorTags)
   {
     _writer->writeStartElement("tag");
     _writer->writeAttribute("k", MetadataTags::ErrorCircular());

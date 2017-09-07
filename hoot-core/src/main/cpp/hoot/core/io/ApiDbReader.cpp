@@ -48,7 +48,8 @@ ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
-_returnNodesOnly(false)
+_returnNodesOnly(false),
+_keepFileStatus(ConfigOptions().getReaderKeepFileStatus())
 {
 }
 
@@ -174,12 +175,12 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
       }
       catch (const HootException&)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
                    QString::number(element->getId()));
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -188,7 +189,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    if (!ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
+    if (!_keepFileStatus) { tags.remove(MetadataTags::HootStatus()); }
   }
 
   if (tags.contains("type"))
@@ -220,11 +221,11 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -254,11 +255,11 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
