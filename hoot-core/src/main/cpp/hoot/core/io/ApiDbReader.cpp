@@ -549,7 +549,9 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    LOG_DEBUG("Requesting " << _maxElementsPerMap << " more query results...");
+    LOG_DEBUG(
+      "Requesting " << FileUtils::formatPotentiallyLargeNumber(_maxElementsPerMap) <<
+      " more query results...");
     if (_elementResultIterator)
     {
       _elementResultIterator->finish();

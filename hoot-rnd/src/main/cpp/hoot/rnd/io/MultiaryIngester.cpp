@@ -68,6 +68,8 @@ _numNodesAfterApplyingChangeset(0)
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
   //script for translating input to OSM
   conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
+  //for debugging only
+  //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
 }
 
 void MultiaryIngester::_clearChangeTypeCounts()
@@ -136,10 +138,8 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
 
     _addToExistingRefDb = true;
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
-    //TODO: why is this query taking so long?
-    LOG_DEBUG("Querying for current reference node count...");
     _numNodesBeforeApplyingChangeset = _referenceDb.numElements(ElementType::Node);
-    LOG_DEBUG(_numNodesBeforeApplyingChangeset);
+    LOG_VARD(_numNodesBeforeApplyingChangeset);
 
     if (!_sortInput)
     {
@@ -228,6 +228,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_ogrToPbfTemp(const QString 
 {
   boost::shared_ptr<QTemporaryFile> pbfTemp(
     new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-sort-temp-XXXXXX.osm.pbf"));
+  //for debugging only
+  //pbfTemp->setAutoRemove(false);
   if (!pbfTemp->open())
   {
     throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
@@ -260,16 +262,19 @@ QString MultiaryIngester::_getSortedNewInput(const QString newInput)
     _sortTempFile.reset(
       new QTemporaryFile(QDir::tempPath() + "/" + sortTempFileBaseName + ".osm.pbf"));
   }
+  //for debugging only
+  //_sortTempFile->setAutoRemove(false);
   if (!_sortTempFile->open())
   {
     throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
   }
+  LOG_DEBUG("Writing to sorted temp file: " << _sortTempFile->fileName() << "...");
 
   if (GeoNamesReader().isSupported(newInput))
   {
     //sort the input by node id (first field) using the unix sort command
     if (std::system(
-         QString("sort " + newInput + " --output=" +
+         QString("sort -n " + newInput + " --output=" +
            _sortTempFile->fileName()).toStdString().c_str()) != 0)
     {
       throw HootException("Unable to sort input file.");
@@ -433,6 +438,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   //element payload as xml for db writing
   boost::shared_ptr<QTemporaryFile> tmpChangeset(
     new QTemporaryFile(QDir::tempPath() + "/multiary-ingest-changeset-temp-XXXXXX.spark.1"));
+  //for debugging only
+  //tmpChangeset->setAutoRemove(false);
   if (!tmpChangeset->open())
   {
     throw HootException("Unable to open changeset temp file: " + tmpChangeset->fileName() + ".");
@@ -465,15 +472,6 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
           " changes to file.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
           _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
       }
-      if ((changesetDeriver.getNumFromElementsParsed() % (_logUpdateInterval * 10) == 0) ||
-          (changesetDeriver.getNumToElementsParsed() % (_logUpdateInterval * 10) == 0))
-      {
-        PROGRESS_DEBUG(
-          "Reference nodes parsed: " <<
-          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
-          ", New nodes parsed: " <<
-          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()));
-      }
     }
   }
 
@@ -488,6 +486,15 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   LOG_INFO(
     FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
     " changes derived and written to changeset file: " << changesetOutput << ".");
+  LOG_INFO(
+    "  Create statements: " <<
+    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
+  LOG_INFO(
+    "  Modify statements: " <<
+    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]));
+  LOG_INFO(
+    "  Delete statements: " <<
+    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 
   return tmpChangeset;
@@ -527,7 +534,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
     {
       PROGRESS_INFO(
         "Wrote " << FileUtils::formatPotentiallyLargeNumber(changesWritten) <<
-        " changes to reference layer.");
+        " changes to ref layer.");
     }
   }
 
@@ -535,7 +542,6 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceChangeWriter->close();
   changesetFileReader.close();
 
-  LOG_DEBUG("Querying for final reference node count...");
   _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
   LOG_VARD(_numNodesAfterApplyingChangeset);
 
