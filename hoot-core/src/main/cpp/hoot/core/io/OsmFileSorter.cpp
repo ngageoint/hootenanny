@@ -40,10 +40,6 @@
 namespace hoot
 {
 
-OsmFileSorter::OsmFileSorter()
-{
-}
-
 void OsmFileSorter::sort(const QString input, const QString output)
 {
   if (GeoNamesReader().isSupported(input))
@@ -89,7 +85,7 @@ void OsmFileSorter::sort(const QString input, const QString output)
     //Unfortunately for now, sorting an OGR input is going to require an extra pass over the data
     //to first write it to a sortable format.
     LOG_WARN("OGR inputs are not currently sortable by node ID.");
-    LOG_WARN("Must convert input to OSM format, which will increase the processing time.");
+    LOG_WARN("Converting input to OSM format...");
     _sortPbf(_ogrToPbfTemp(input)->fileName(), output);
   }
   else
@@ -98,7 +94,7 @@ void OsmFileSorter::sort(const QString input, const QString output)
   }
 }
 
-void OsmFileSorter::_checkForOsmosis() const
+void OsmFileSorter::_checkForOsmosis()
 {
   if (std::system(QString("osmosis -q > /dev/null").toStdString().c_str()) != 0)
   {
@@ -131,9 +127,6 @@ boost::shared_ptr<QTemporaryFile> OsmFileSorter::_ogrToPbfTemp(const QString inp
   {
     throw HootException("Unable to open sort temp file: " + pbfTemp->fileName() + ".");
   }
-  LOG_INFO(
-    "Converting OGR input: " << input << " to sortable PBF output: " << pbfTemp->fileName() <<
-    "...");
 
   ElementStreamer::stream(input, pbfTemp->fileName());
 

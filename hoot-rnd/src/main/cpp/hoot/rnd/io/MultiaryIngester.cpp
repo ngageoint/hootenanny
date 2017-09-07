@@ -193,7 +193,7 @@ void MultiaryIngester::_sortInputFile(const QString input)
     throw HootException("Unable to open sort temp file: " + _sortTempFile->fileName() + ".");
   }
 
-  OsmFileSorter().sort(input, _sortTempFile->fileName());
+  OsmFileSorter::sort(input, _sortTempFile->fileName());
 
   LOG_INFO(input << " sorted by node ID to output: " << _sortTempFile->fileName() << ".");
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));

@@ -44,8 +44,6 @@ class OsmFileSorter
 
 public:
 
-  OsmFileSorter();
-
   /**
    * Reads in the input and writes a file sorted by OSM element type, then element ID
    *
@@ -53,13 +51,13 @@ public:
    * @param output the output file path; for OSM and GeoNames inputs, the output extension must
    * match; for OGR inputs, the output format must be OSM PBF
    */
-  void sort(const QString input, const QString output);
+  static void sort(const QString input, const QString output);
 
 private:
 
-  void _checkForOsmosis() const;
-  void _sortPbf(const QString input, const QString output);
-  boost::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
+  static void _checkForOsmosis();
+  static void _sortPbf(const QString input, const QString output);
+  static boost::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
 
 };
 
