@@ -69,13 +69,13 @@ void ChangesetDeriver::_logProgress(const QString type)
 {
   if (type == QLatin1String("from") && (_numFromElementsParsed % (_logUpdateInterval * 10) == 0))
   {
-    PROGRESS_DEBUG(
+    PROGRESS_INFO(
       "Reference nodes parsed: " <<
       FileUtils::formatPotentiallyLargeNumber(_numFromElementsParsed));
   }
   else if (type == QLatin1String("to") && (_numToElementsParsed % (_logUpdateInterval * 10) == 0))
   {
-    PROGRESS_DEBUG(
+    PROGRESS_INFO(
       "New nodes parsed: " <<
       FileUtils::formatPotentiallyLargeNumber(_numToElementsParsed));
   }

@@ -468,8 +468,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
       if (_changesParsed % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-          " changes to file.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
+          "Derived " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          " changes.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
           _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
       }
     }
