@@ -217,7 +217,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
 
   if (wl1.isExtreme(WayLocation::SLOPPY_EPSILON) == false)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       //TODO: Possibly change this back to an exception as part of the work to be done in #1311.
       //throw IllegalArgumentException("scrapNode should line up with the beginning or end of a way.");
@@ -229,7 +229,7 @@ void WayMatchStringMerger::mergeIntersection(ElementId scrapNodeId)
       LOG_VART(wl1.getWay());
       LOG_VART(wl1);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

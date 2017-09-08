@@ -73,9 +73,9 @@ public:
 
   /**
    * @see ApiDb::selectElements
-   */
+   */                                                     
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const bool sorted = false);
+                                                      const long limit = 0, const long offset = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -111,7 +111,7 @@ public:
    * Returns the number of OSM elements of a given type for a particular map in the services
    * database
    */
-  long numElements(const ElementType& elementType);
+  virtual long numElements(const ElementType& elementType);
 
   //writing
 
@@ -297,6 +297,14 @@ public:
 
   static QUrl getBaseUrl();
 
+  /**
+   * Given a map name, returns its ID; assumes only one map with the given name
+   *
+   * @param name name of the map to retrieve
+   * @return a map ID
+   */
+  long getMapIdByName(const QString name);
+
 protected:
 
   virtual void _resetQueries();
@@ -325,6 +333,7 @@ private:
   boost::shared_ptr<QSqlQuery> _insertJobStatus;
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
+  boost::shared_ptr<QSqlQuery> _getMapIdByName;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
@@ -360,6 +369,8 @@ private:
 
   unsigned long _nodesAddedToCache;
   unsigned long _nodesFlushedFromCache;
+
+  int _precision;
 
   /**
    * There are some statements that cannot be executed within a transaction

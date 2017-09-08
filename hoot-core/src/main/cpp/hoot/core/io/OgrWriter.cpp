@@ -294,11 +294,11 @@ void OgrWriter::_createLayer(boost::shared_ptr<const Layer> layer)
 
       if (poFDefn->GetFieldIndex(f->getName().toAscii()) == -1)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Unable to find field: " << QString(f->getName()) << " in layer " << layerName);
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -577,11 +577,11 @@ void OgrWriter::_writePartial(ElementProviderPtr& provider, const ConstElementPt
     }
     catch (const IllegalArgumentException& err)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Error converting geometry: " << err.getWhat() << " (" << e->toString() << ")");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -808,25 +808,28 @@ void OgrWriter::writeElement(ElementPtr &element)
 
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
-  Tags sourceTags = element->getTags();
-  Tags destTags;
-  for (Tags::const_iterator it = element->getTags().begin();
-       it != element->getTags().end(); ++it)
+  if (element.get())
   {
-    if (sourceTags[it.key()] != "")
+    Tags sourceTags = element->getTags();
+    Tags destTags;
+    for (Tags::const_iterator it = element->getTags().begin();
+         it != element->getTags().end(); ++it)
     {
-      destTags.appendValue(it.key(), it.value());
+      if (sourceTags[it.key()] != "")
+      {
+        destTags.appendValue(it.key(), it.value());
+      }
     }
-  }
-  // Now that all the empties are gone, update our element
-  element->setTags(destTags);
+    // Now that all the empties are gone, update our element
+    element->setTags(destTags);
 
-  if (debug == true)
-  {
-    LOG_TRACE(element->toString());
-  }
+    if (debug == true)
+    {
+      LOG_TRACE(element->toString());
+    }
 
-  PartialOsmMapWriter::writePartial(element);
+    PartialOsmMapWriter::writePartial(element);
+  }
 }
 
 void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,

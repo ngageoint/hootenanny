@@ -26,16 +26,21 @@
  */
 #include "ChangesetDeriver.h"
 
-#include <hoot/core/elements/Node.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 namespace hoot
 {
 
 ChangesetDeriver::ChangesetDeriver(ElementInputStreamPtr from, ElementInputStreamPtr to) :
 _from(from),
-_to(to)
+_to(to),
+_numFromElementsParsed(0),
+_numToElementsParsed(0),
+_allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures()),
+_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval())
 {
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
@@ -46,6 +51,7 @@ _to(to)
 
 ChangesetDeriver::~ChangesetDeriver()
 {
+  close();
 }
 
 boost::shared_ptr<OGRSpatialReference> ChangesetDeriver::getProjection() const
@@ -57,6 +63,22 @@ void ChangesetDeriver::close()
 {
   _from->close();
   _to->close();
+}
+
+void ChangesetDeriver::_logProgress(const QString type)
+{
+  if (type == QLatin1String("from") && (_numFromElementsParsed % (_logUpdateInterval * 10) == 0))
+  {
+    PROGRESS_INFO(
+      "Reference nodes parsed: " <<
+      FileUtils::formatPotentiallyLargeNumber(_numFromElementsParsed));
+  }
+  else if (type == QLatin1String("to") && (_numToElementsParsed % (_logUpdateInterval * 10) == 0))
+  {
+    PROGRESS_INFO(
+      "New nodes parsed: " <<
+      FileUtils::formatPotentiallyLargeNumber(_numToElementsParsed));
+  }
 }
 
 bool ChangesetDeriver::hasMoreChanges()
@@ -81,13 +103,17 @@ Change ChangesetDeriver::_nextChange()
   {
     LOG_TRACE("'from' element null and 'from' has more elements; reading next 'from' element...");
     _fromE = _from->readNextElement();
+    _numFromElementsParsed++;
     LOG_TRACE("Read next 'from' element: " << _fromE->getElementId());
+    _logProgress("from");
   }
   if (!_toE.get() && _to->hasMoreElements())
   {
     LOG_TRACE("'to' element null and 'to'' has more elements; reading next 'to'' element...");
     _toE = _to->readNextElement();
+    _numToElementsParsed++;
     LOG_TRACE("Read next 'to' element: " << _toE->getElementId());
+    _logProgress("to");
   }
 
   // if we've run out of "from" elements, create all the remaining elements in "to"
@@ -109,7 +135,9 @@ Change ChangesetDeriver::_nextChange()
     }
     if (_toE)
     {
+      _numToElementsParsed++;
       LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+      _logProgress("to");
     }
   }
   // if we've run out of "to" elements, delete all the remaining elements in "from"
@@ -131,7 +159,9 @@ Change ChangesetDeriver::_nextChange()
     }
     if (_fromE)
     {
+      _numFromElementsParsed++;
       LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+      _logProgress("from");
     }
   }
   else
@@ -154,7 +184,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+        _logProgress("to");
       }
 
       if (_from->hasMoreElements())
@@ -167,7 +199,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+        _logProgress("from");
       }
     }
 
@@ -195,7 +229,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+        _logProgress("to");
       }
     }
     // if we've run out of "to" elements, delete all the remaining elements in "from"
@@ -217,7 +253,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+        _logProgress("from");
       }
     }
     else if (_fromE->getElementId() == _toE->getElementId())
@@ -238,7 +276,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+        _logProgress("to");
       }
 
       if (_from->hasMoreElements())
@@ -251,7 +291,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+        _logProgress("from");
       }
     }
     else if (_fromE->getElementId() < _toE->getElementId())
@@ -263,10 +305,9 @@ Change ChangesetDeriver::_nextChange()
       //ref features crossing the changeset bounds or split features created from former ref
       //features crossing the changeset bounds
 
-      if (ConfigOptions().getChangesetAllowDeletingReferenceFeatures() ||
+      if (_allowDeletingReferenceFeatures ||
           //this assumes the 'from' dataset was loaded as unknown1
-          (!ConfigOptions().getChangesetAllowDeletingReferenceFeatures() &&
-           _fromE->getStatus() != Status::Unknown1))
+          (!_allowDeletingReferenceFeatures && _fromE->getStatus() != Status::Unknown1))
       {
         LOG_TRACE(
           "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
@@ -297,7 +338,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_fromE)
       {
+        _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
+        _logProgress("from");
       }
     }
     else
@@ -318,7 +361,9 @@ Change ChangesetDeriver::_nextChange()
       }
       if (_toE)
       {
+        _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
+        _logProgress("to");
       }
     }
   }

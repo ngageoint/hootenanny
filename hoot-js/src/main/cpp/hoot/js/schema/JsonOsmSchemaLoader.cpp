@@ -226,12 +226,12 @@ void JsonOsmSchemaLoader::_loadBase(QVariantMap& copy, OsmSchema& s, SchemaVerte
 
   if (copy.size() != 0)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN(QString("Unrecognized tags found in %1: (%2)").arg(tv.name).
         arg(toJson(toV8(copy.keys()))));
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

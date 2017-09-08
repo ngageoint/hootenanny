@@ -32,6 +32,7 @@
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QSet>
@@ -47,8 +48,8 @@ ApiDbReader::ApiDbReader() :
 _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
-_sortById(false),
-_returnNodesOnly(false)
+_returnNodesOnly(false),
+_keepFileStatus(ConfigOptions().getReaderKeepFileStatus())
 {
 }
 
@@ -174,12 +175,12 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
       }
       catch (const HootException&)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Invalid status: " + statusStr + " for element with ID: " +
                    QString::number(element->getId()));
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -188,7 +189,7 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
     }
     //We don't need to carry this tag around once the value is set on the element...it will
     //be reinstated by some writers, though.
-    if (!ConfigOptions().getReaderKeepFileStatus()) { tags.remove(MetadataTags::HootStatus()); }
+    if (!_keepFileStatus) { tags.remove(MetadataTags::HootStatus()); }
   }
 
   if (tags.contains("type"))
@@ -220,11 +221,11 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Error parsing " + MetadataTags::ErrorCircular() + ".");
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -254,11 +255,11 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
 
       if (!ok)
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Error parsing " + MetadataTags::Accuracy() + ".");
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -421,22 +422,20 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VARD(map->getRelations().size());
 }
 
-bool ApiDbReader::hasMoreElements()
-{
-  if (_nextElement == 0)
-  {
-    _nextElement = _getElementUsingIterator();
-  }
-  return _nextElement != NULL;
-}
-
 void ApiDbReader::initializePartial()
 {
-  LOG_DEBUG("Initializing read operation...");
   _partialMap.reset(new OsmMap());
+
   _elementResultIterator.reset();
-  _selectElementType = ElementType::Node;
+  _firstPartialReadCompleted = false;
   _elementsRead = 0;
+
+  _nodeIndex = 0;
+  _totalNumMapNodes = 0;
+  _wayIndex = 0;
+  _totalNumMapWays = 0;
+  _relationIndex = 0;
+  _totalNumMapRelations = 0;
 }
 
 void ApiDbReader::read(OsmMapPtr map)
@@ -477,7 +476,7 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 
   // contact the DB and select all
   boost::shared_ptr<QSqlQuery> elementResultsIterator =
-    _getDatabase()->selectElements(elementType, _sortById);
+    _getDatabase()->selectAllElements(elementType);
 
   //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
   //it will always return an extra null node at the end (see comments in _resultToElement)
@@ -501,65 +500,180 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   LOG_VARD(map->getRelations().size());
 }
 
-boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
+long ApiDbReader::_numElementsRead() const
 {
-  LOG_TRACE("Retrieving next element from iterator...");
+  return _nodeIndex + _wayIndex + _relationIndex;
+}
 
-  if (_selectElementType == ElementType::Unknown)
+long ApiDbReader::_numElementsTotal() const
+{
+  return _totalNumMapNodes + _totalNumMapWays + _totalNumMapRelations;
+}
+
+bool ApiDbReader::hasMoreElements()
+{
+  if (!_firstPartialReadCompleted)
   {
-    return boost::shared_ptr<Element>();
+    //get the total element counts before beginning results parsing
+    LOG_DEBUG("Retrieving num elements...");
+    _totalNumMapNodes = _getDatabase()->numElements(ElementType::Node);
+    _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
+    _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
+
+    LOG_INFO(
+      "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapNodes) <<
+      " nodes, " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapWays) << " ways, and " <<
+      FileUtils::formatPotentiallyLargeNumber(_totalNumMapRelations) << " relations...");
+
+    _firstPartialReadCompleted = true;
   }
 
-  //see if another result is available
-  if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
-  {
-    //no results available, so request some more results
-    LOG_TRACE("Requesting more query results...");
-    LOG_VART(_sortById);
-    _elementResultIterator = _getDatabase()->selectElements(_selectElementType, _sortById);
-  }
-
-  //results still available, so keep parsing through them
-  boost::shared_ptr<Element> element =
-    _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
-
-  //QSqlQuery::next() in _resultToElement will return null
-  //when end of records loop. The iterator will be reset and go to next element type
-  if (!element.get())
-  {
-    _elementResultIterator.reset();
-    const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
-    ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
-    ElementType t(nextType);
-    _selectElementType = t;
-    return _getElementUsingIterator();
-  }
-
-  assert(_selectElementType == element->getElementType());
-
-  return element;
+  //LOG_VART(_numElementsRead());
+  //LOG_VART(_numElementsTotal());
+  assert(_numElementsRead() <= _numElementsTotal());
+  //each results index is 0 based, so as soon as the sum of indexes is equal to the total number of
+  //elements, we're done iterating through them
+  return (_numElementsRead() < _numElementsTotal());
 }
 
 boost::shared_ptr<Element> ApiDbReader::readNextElement()
 {
-  LOG_TRACE("Retrieving next element...");
-
-  if (hasMoreElements())
+  if (!hasMoreElements())
   {
-    boost::shared_ptr<Element> result = _nextElement;
-    _nextElement.reset();
-    _elementsRead++;
-    return result;
+    throw HootException("No more elements available to read from map");
+  }
+
+  ElementType selectElementType = _getCurrentSelectElementType();
+  LOG_VART(selectElementType);
+  //see if another result is available
+  if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
+  {
+    //no results available, so request some more results
+    LOG_DEBUG(
+      "Requesting " << FileUtils::formatPotentiallyLargeNumber(_maxElementsPerMap) <<
+      " more query results...");
+    if (_elementResultIterator)
+    {
+      _elementResultIterator->finish();
+      _elementResultIterator->clear();
+      _elementResultIterator.reset();
+    }
+    _elementResultIterator =
+      _getDatabase()->selectElements(
+        selectElementType, _maxElementsPerMap, _getCurrentElementOffset(selectElementType));
+  }
+
+  //results still available, so keep parsing through them
+  boost::shared_ptr<Element> element =
+    _resultToElement(*_elementResultIterator, selectElementType, *_partialMap);
+  LOG_VART(element.get());
+  if (!element.get())
+  {
+    //exceptional case to deal with having to call QSqlQuery::next() inside of
+    //ServicesDb::resultToElement rather than from inside this method
+    _elementResultIterator.reset();
+    return boost::shared_ptr<Element>();
+  }
+
+  _incrementElementIndex(selectElementType);
+  //LOG_VART(selectElementType);
+  //LOG_VART(element->getElementType());
+  assert(selectElementType == element->getElementType());
+  _elementsRead++;
+  //LOG_VART(_elementsRead);
+  //LOG_VART(_maxElementsPerMap);
+  if (_elementsRead == _maxElementsPerMap)
+  {
+    _elementResultIterator->finish();
+    LOG_DEBUG("Closed result iterator.");
+  }
+  LOG_VART(element->getElementId());
+
+//  if (Log::getInstance().getLevel() <= Log::Debug &&
+//      (_numElementsTotal() >= 10 || (_numElementsRead() % (_maxElementsPerMap / 10) == 0)))
+//  {
+//    PROGRESS_DEBUG("Read: " << _numElementsRead() << " \ " << _numElementsTotal());
+//  }
+
+  return element;
+}
+
+const ElementType ApiDbReader::_getCurrentSelectElementType() const
+{
+  ElementType selectElementType;
+  if (_nodeIndex < _totalNumMapNodes)
+  {
+    selectElementType = ElementType::Node;
+  }
+  else if (_wayIndex < _totalNumMapWays)
+  {
+    selectElementType = ElementType::Way;
+  }
+  else if (_relationIndex < _totalNumMapRelations)
+  {
+    selectElementType = ElementType::Relation;
   }
   else
   {
-    throw HootException("readNextElement should not be called if hasMoreElements returns false.");
+    //hasMoreElements should have kept us from being here
+    throw HootException("_getCurrentSelectElementType");
+  }
+  return selectElementType;
+}
+
+long ApiDbReader::_getCurrentElementOffset(const ElementType& selectElementType) const
+{
+  long selectOffset = -1;
+  if (selectElementType == ElementType::Node)
+  {
+    selectOffset = _nodeIndex;
+  }
+  else if (selectElementType == ElementType::Way)
+  {
+    selectOffset = _wayIndex;
+  }
+  else if (selectElementType == ElementType::Relation)
+  {
+    selectOffset = _relationIndex;
+  }
+  else
+  {
+    //hasMoreElements should have kept us from being here
+    throw HootException("_getCurrentElementOffset");
+  }
+  LOG_VART(selectOffset);
+  return selectOffset;
+}
+
+void ApiDbReader::_incrementElementIndex(const ElementType& selectElementType)
+{
+  if (selectElementType == ElementType::Node)
+  {
+    _nodeIndex++;
+  }
+  else if (selectElementType == ElementType::Way)
+  {
+    _wayIndex++;
+  }
+  else if (selectElementType == ElementType::Relation)
+  {
+    _relationIndex++;
+  }
+  else
+  {
+    //hasMoreElements should have kept us from being here
+    throw HootException("_incrementElementIndex");
   }
 }
 
 void ApiDbReader::finalizePartial()
 {
   LOG_DEBUG("Finalizing read operation...");
+  if (_elementResultIterator)
+  {
+    _elementResultIterator->finish();
+    _elementResultIterator->clear();
+  }
   _elementResultIterator.reset();
   _partialMap.reset();
   if (_open)
@@ -622,6 +736,7 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   else
   {
     resultIterator.finish();
+    resultIterator.clear();
     return boost::shared_ptr<Element>();
   }
 }

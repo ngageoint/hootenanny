@@ -440,11 +440,11 @@ void JavaScriptTranslator::_parseEnumerations(DoubleFieldDefinition* fd, QVarian
 
     if (fd->hasEnumeratedValue(v))
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Enumerated value repeated in enumerations table: " << v);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -482,11 +482,11 @@ void JavaScriptTranslator::_parseEnumerations(IntegerFieldDefinition *fd, QVaria
 
     if (fd->hasEnumeratedValue(v))
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Enumerated value repeated in enumerations table: " << v);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -524,11 +524,11 @@ void JavaScriptTranslator::_parseEnumerations(LongIntegerFieldDefinition* fd, QV
 
     if (fd->hasEnumeratedValue(v))
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Enumerated value repeated in enumerations table: " << v);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

@@ -66,7 +66,8 @@ _keepFileStatus(ConfigOptions().getReaderKeepFileStatus()),
 _useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
 _addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
-_inputCompressed(false)
+_inputCompressed(false),
+_preserveAllTags(ConfigOptions().getReaderPreserveAllTags())
 {
 }
 
@@ -88,6 +89,7 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
 {
   long id = _parseLong(attributes.value("id"));
+  LOG_VART(id);
   long newId;
   if (_useDataSourceId)
   {
@@ -97,6 +99,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   {
     newId = _map->createNextNodeId();
   }
+  LOG_VART(newId);
   _nodeIdMap.insert(id, newId);
 
   double x = _parseDouble(attributes.value("lon"));
@@ -438,11 +441,11 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       if (_nodeIdMap.contains(ref) == false)
       {
         _missingNodeCount++;
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -471,11 +474,11 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         if (_nodeIdMap.contains(ref) == false)
         {
           _missingNodeCount++;
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
@@ -493,11 +496,11 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         if (_wayIdMap.contains(ref) == false)
         {
           _missingWayCount++;
-          if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+          if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
           }
-          else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+          else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
@@ -519,12 +522,12 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       }
       else
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Found a relation member with unexpected type: " << type << " in relation ("
                      << _relationId << ")");
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -585,18 +588,18 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
           if (isBad)
           {
             _badAccuracyCount++;
-            if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+            if (logWarnCount < Log::getWarnMessageLimit())
             {
               LOG_WARN("Bad circular error value: " << value.toStdString());
             }
-            else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+            else if (logWarnCount == Log::getWarnMessageLimit())
             {
               LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
             }
             logWarnCount++;
           }
         }
-        if (ConfigOptions().getReaderPreserveAllTags())
+        if (_preserveAllTags)
         {
           //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
           _element->setTag(key, value);
@@ -741,15 +744,7 @@ QXmlAttributes OsmXmlReader::_streamAttributesToAttributes(
   {
     const QXmlStreamAttribute streamAttribute = *itr;
     attributes.append(
-      streamAttribute.qualifiedName().toString(), /*streamAttribute.namespaceUri().toString()*/"",
-      /*streamAttribute.name().toString()*/"", streamAttribute.value().toString());
-    //if (streamAttribute.qualifiedName().toString() == "lat" ||
-        //streamAttribute.qualifiedName().toString() == "lon")
-    //{
-//      LOG_VART(streamAttribute.qualifiedName());
-//      LOG_VART(attributes.value(streamAttribute.qualifiedName().toString()));
-//      LOG_VART(streamAttribute.value().toString());
-    //}
+      streamAttribute.qualifiedName().toString(), "", "", streamAttribute.value().toString());
   }
   return attributes;
 }

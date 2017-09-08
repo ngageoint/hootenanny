@@ -44,7 +44,8 @@ namespace hoot
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(QUrl url) :
 _changesetId(0),
 _changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
-_changesetUserId(ConfigOptions().getChangesetUserId())
+_changesetUserId(ConfigOptions().getChangesetUserId()),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
   _db.open(url);
 }
@@ -464,7 +465,7 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
   QStringList tableNames = _tagTableNamesForElement(element->getElementId());
 
   Tags tags = element->getTags();
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
   }

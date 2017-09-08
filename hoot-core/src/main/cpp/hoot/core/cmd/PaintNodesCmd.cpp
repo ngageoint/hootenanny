@@ -129,7 +129,7 @@ class PaintNodesCmd : public BaseCommand
       {
         ElementPtr e = r->readNextElement();
 
-        if (e->getElementType() == ElementType::Node)
+        if (e.get() && e->getElementType() == ElementType::Node)
         {
           NodePtr n = boost::dynamic_pointer_cast<Node>(e);
           int px = int((n->getX() - envelope.getMinX()) / pixelSize);

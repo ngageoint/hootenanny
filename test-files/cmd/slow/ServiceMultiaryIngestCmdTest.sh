@@ -19,7 +19,8 @@ mkdir -p $OUTPUT_DIR
 
 source conf/database/DatabaseConfig.sh
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true"
+# set the max elements per map in such a way that the partial reading occurs
+HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D max.elements.per.partial.map=2"
 
 GOLD_OUTPUT=$REF_DIR/allCountries-geonames-output.osm
 GOLD_CHANGESET=$REF_DIR/allCountries-geonames-changeset.spark.1

@@ -141,6 +141,8 @@ private:
 
   bool _inputCompressed;
 
+  bool _preserveAllTags;
+
   QFile _inputFile;  //used for partial reading
   QXmlStreamReader _streamReader; //used for partial reading
 

@@ -62,7 +62,8 @@ namespace hoot
 
 unsigned int HootApiDb::logWarnCount = 0;
 
-HootApiDb::HootApiDb()
+HootApiDb::HootApiDb() :
+_precision(ConfigOptions().getWriterPrecision())
 {
   _init();
 }
@@ -753,8 +754,8 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
   _updateChangesetEnvelope(envelopeNode);
 
   LOG_TRACE("Inserted node: " << ElementId(ElementType::Node, id));
-  LOG_VART(QString::number(lat, 'g', ConfigOptions().getWriterPrecision()))
-  LOG_VART(QString::number(lon, 'g', ConfigOptions().getWriterPrecision()));
+  LOG_VART(QString::number(lat, 'g', _precision))
+  LOG_VART(QString::number(lon, 'g', _precision));
 
   return true;
 }
@@ -1049,6 +1050,7 @@ void HootApiDb::_resetQueries()
   _insertJobStatus.reset();
   _jobStatusExists.reset();
   _mapExistsByName.reset();
+  _getMapIdByName.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1173,7 +1175,7 @@ bool HootApiDb::mapExists(const QString name)
   {
     _mapExistsByName.reset(new QSqlQuery(_db));
     _mapExistsByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
-                        " WHERE display_name = :mapName");
+                              " WHERE display_name = :mapName");
   }
   _mapExistsByName->bindValue(":mapName", name);
   if (_mapExistsByName->exec() == false)
@@ -1182,6 +1184,35 @@ bool HootApiDb::mapExists(const QString name)
   }
 
   return _mapExistsByName->next();
+}
+
+long HootApiDb::getMapIdByName(const QString name)
+{
+  //assuming unique name here
+  if (_getMapIdByName == 0)
+  {
+    _getMapIdByName.reset(new QSqlQuery(_db));
+    _getMapIdByName->prepare("SELECT id FROM " + ApiDb::getMapsTableName() +
+                             " WHERE display_name = :mapName");
+  }
+  _getMapIdByName->bindValue(":mapName", name);
+  if (_getMapIdByName->exec() == false)
+  {
+    throw HootException(_getMapIdByName->lastError().text());
+  }
+
+  long result = -1;
+  if (_getMapIdByName->next())
+  {
+    bool ok;
+    result = _getMapIdByName->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException(_getMapIdByName->lastError().text());
+    }
+  }
+  _getMapIdByName->finish();
+  return result;
 }
 
 bool HootApiDb::changesetExists(const long id)
@@ -1204,11 +1235,56 @@ bool HootApiDb::changesetExists(const long id)
   return _changesetExists->next();
 }
 
+boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
+                                                       const long limit, const long offset)
+{
+  //TODO: this is completely redundant with OsmApiDb::selectElements except for the table name
+  //string creation and should be rolled up into ApiDb
+
+  if (!_selectElementsForMap)
+  {
+    _selectElementsForMap.reset(new QSqlQuery(_db));
+    _selectElementsForMap->setForwardOnly(true);
+  }
+
+  QString limitStr = "ALL";
+  if (limit > 0)
+  {
+    limitStr = QString::number(limit);
+  }
+  _selectElementsForMap->prepare(
+    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
+    " WHERE visible = true ORDER BY id LIMIT " + limitStr + " OFFSET " + QString::number(offset));
+  LOG_VARD(_selectElementsForMap->lastQuery());
+
+  if (_selectElementsForMap->exec() == false)
+  {
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() + " for map ID: " +
+      QString::number(_currMapId) + " Error: " + _selectElementsForMap->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
+  LOG_VARD(_selectElementsForMap->executedQuery());
+
+  return _selectElementsForMap;
+}
+
 long HootApiDb::numElements(const ElementType& elementType)
 {
-  _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  //TODO: this is completely redundant with OsmApiDb::numElements except for the table name string
+  //creation and should be rolled up into ApiDb
+
+  if (!_numTypeElementsForMap)
+  {
+    _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  }
+
   _numTypeElementsForMap->prepare(
     "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)));
+  LOG_VARD(_numTypeElementsForMap->lastQuery());
+
   if (_numTypeElementsForMap->exec() == false)
   {
     LOG_ERROR(_numTypeElementsForMap->executedQuery());
@@ -1228,35 +1304,6 @@ long HootApiDb::numElements(const ElementType& elementType)
   }
   _numTypeElementsForMap->finish();
   return result;
-}
-
-boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
-                                                       const bool sorted)
-{
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
-
-  QString sql = "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType));
-  if (sorted)
-  {
-    sql += " ORDER BY id";
-  }
-  LOG_VARD(sql);
-
-  _selectElementsForMap->prepare(sql);
-
-  if (_selectElementsForMap->exec() == false)
-  {
-    const QString err =
-      "Error selecting elements of type: " + elementType.toString() +
-      " for map ID: " + QString::number(_currMapId) + " Error: " +
-      _selectElementsForMap->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VARD(_selectElementsForMap->executedQuery());
-  return _selectElementsForMap;
 }
 
 vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
@@ -1318,11 +1365,11 @@ vector<RelationData::Entry> HootApiDb::selectMembersForRelation(long relationId)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }

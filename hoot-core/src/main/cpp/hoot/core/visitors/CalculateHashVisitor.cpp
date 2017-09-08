@@ -40,6 +40,11 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, CalculateHashVisitor)
 
+CalculateHashVisitor::CalculateHashVisitor()
+{
+
+}
+
 CalculateHashVisitor::~CalculateHashVisitor()
 {
 }
@@ -67,11 +72,12 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     }
   }
 
+  const int circularErrorComparisonSensitivity =
+    ConfigOptions().getNodeComparisonCircularErrorSensitivity();
   if (n->getRawCircularError() >= 0)
   {
     infoTags["error:circular"] =
-      QString::number(
-        n->getRawCircularError(), 'g', ConfigOptions().getNodeComparisonCircularErrorSensitivity());
+      QString::number(n->getRawCircularError(), 'g', circularErrorComparisonSensitivity);
   }
 
   bool first = true;
@@ -85,12 +91,12 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
     first = false;
   }
 
+  const int coordinateComparisonSensitivity =
+    ConfigOptions().getNodeComparisonCoordinateSensitivity();
   result += "}},\"geometry\":{\"type\":\"Point\",\"coordinates\":[";
-  result +=
-    QString::number(n->getX(), 'f', ConfigOptions().getNodeComparisonCoordinateSensitivity());
+  result += QString::number(n->getX(), 'f', coordinateComparisonSensitivity);
   result += ",";
-  result +=
-    QString::number(n->getY(), 'f', ConfigOptions().getNodeComparisonCoordinateSensitivity());
+  result += QString::number(n->getY(), 'f', coordinateComparisonSensitivity);
   result += "]}}";
 
   return result;

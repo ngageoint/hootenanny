@@ -85,6 +85,11 @@ private:
 
   boost::shared_ptr<PoiPolygonRfClassifier> _rf;
 
+  bool _enableAdvancedMatching;
+  bool _enableReviewReduction;
+
+  double _reviewDistanceThreshold;
+
   void _checkForMatch(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const boost::shared_ptr<const Element>& e);
   void _collectSurroundingPoiIds(const boost::shared_ptr<const Element>& e);

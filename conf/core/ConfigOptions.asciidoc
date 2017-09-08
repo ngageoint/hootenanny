@@ -63,13 +63,6 @@ details.
 
 Email address of the API database user.  Can be set here for debugging and testing.
 
-=== api.db.reader.sort.by.id
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, elements read from the Hootenanny API database will be sorted by element ID.
-
 === attribute.count.values
 
 * Data Type: int
@@ -1325,17 +1318,6 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
-=== osmapidb.bulk.inserter.file.output.element.buffer.size
-
-* Data Type: long
-* Default Value: `10000`
-
-Maximum number of elements to keep in memory when serializing input elements to a file output
-before they are written to an OSM API database.  If you have enough memory available and the
-dataset you are writing is significantly larger than the value of this setting, you may be able to
-increase the input file parsing performance by raising this value.  This setting has no impact on
-the performance of writing records to a database, only on the input data parsing done beforehand.
-
 === osmapidb.bulk.inserter.file.output.status.update.interval
 
 * Data Type: long
@@ -2167,6 +2149,14 @@ then they'll be a candidate for merging.
 
 If highways are smaller than threshold and the tags matched, then they will be merged together into
 a single way.
+
+=== spark.changeset.writer.element.payload.format
+
+* Data Type: string
+* Default Value: `json`
+
+The format used to write the element payload portion of the Spark changeset file.  Valid options are
+'json' or 'xml'.
 
 === status.criterion.status
 

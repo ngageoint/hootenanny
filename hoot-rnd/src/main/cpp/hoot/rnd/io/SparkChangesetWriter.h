@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmChangeWriter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include "../visitors/AddExportTagsVisitor.h"
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QFile>
@@ -45,7 +46,7 @@ namespace hoot
  *
  * @note Only nodes are supported.
  */
-class SparkChangesetWriter : public OsmChangeWriter
+class SparkChangesetWriter : public OsmChangeWriter, public Configurable
 {
 public:
 
@@ -72,13 +73,20 @@ public:
    */
   virtual void writeChange(const Change& change);
 
+  virtual void setConfiguration(const Settings& conf);
+
+  QString getElementPayloadFormat() const { return _elementPayloadFormat; }
+  virtual void setElementPayloadFormat(const QString format);
+
 private:
 
   boost::shared_ptr<QFile> _fp;
-  SearchBoundsCalculatorPtr _bounds;
+  SearchBoundsCalculatorPtr _boundsCalculator;
   int _precision;
   OsmJsonWriter _jsonWriter;
   AddExportTagsVisitor _exportTagsVisitor;
+  //needed due to #1772 - options are "json" (default) and "xml"
+  QString _elementPayloadFormat;
 
 };
 
