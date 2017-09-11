@@ -67,6 +67,9 @@ public:
 private:
   boost::shared_ptr<OsmMap> _map;
   std::vector<long> _todoWays;
+
+  // Split the way at the given node, using the WaySplitter, then process the results
+  void _splitWay(long wayId, long nodeIdx, long nodeId);
 };
 
 }
