@@ -15,9 +15,9 @@ cd $HOOT_HOME
 scripts/jenkins/VeryClean.sh
 
 # Recreate this folder that Tomcat requires
-if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
-  mkdir -p $HOOT_HOME/userfiles/ingest/processed
-fi
+#if [ ! -d "$HOOT_HOME/userfiles/ingest/processed" ]; then
+#  mkdir -p $HOOT_HOME/userfiles/ingest/processed
+#fi
 
 # Maintain vagrant state in the parent directory so very clean will still work.
 mkdir -p ../vagrant-hootenanny
