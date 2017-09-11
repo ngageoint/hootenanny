@@ -109,6 +109,8 @@ void SparkChangesetWriter::open(QString fileName)
 
 void SparkChangesetWriter::writeChange(const Change& change)
 {
+  const long debugId = 6633775;
+
   if (change.getElement()->getElementType() != ElementType::Node)
   {
     throw NotImplementedException("Only nodes are supported.");
@@ -143,6 +145,11 @@ void SparkChangesetWriter::writeChange(const Change& change)
       break;
     default:
       throw IllegalArgumentException("Unexpected change type.");
+  }
+
+  if (change.getElement()->getElementId().getId() == debugId)
+  {
+    LOG_VARD(change.getElement());
   }
 
   NodePtr nodeCopy = (boost::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
@@ -201,15 +208,16 @@ void SparkChangesetWriter::writeChange(const Change& change)
     const Tags& tags = nodeCopy->getTags();
     for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
-      const QString tagValue = it.value();
-      if (!tagValue.trimmed().isEmpty())
+      const QString tagKey = it.key().trimmed();
+      const QString tagValue = it.value().trimmed();
+      if (!tagKey.isEmpty() && !tagValue.isEmpty())
       {
         if (!first)
         {
           changeLine += ",";
         }
         changeLine +=
-          OsmJsonWriter::markupString(it.key()) % ":" % OsmJsonWriter::markupString(tagValue);
+          OsmJsonWriter::markupString(tagKey) % ":" % OsmJsonWriter::markupString(tagValue);
         first = false;
       }
     }

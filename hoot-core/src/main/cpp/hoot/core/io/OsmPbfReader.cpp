@@ -140,6 +140,11 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
 
 void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString value)
 {
+  if (key.trimmed().isEmpty() || value.trimmed().isEmpty())
+  {
+    return;
+  }
+
   if (key == MetadataTags::HootStatus())
   {
     if (_useFileStatus)

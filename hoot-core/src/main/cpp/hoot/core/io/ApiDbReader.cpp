@@ -429,6 +429,7 @@ void ApiDbReader::initializePartial()
   _elementResultIterator.reset();
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
+  _selectElementType = ElementType::Node;
 
   _nodeIndex = 0;
   _totalNumMapNodes = 0;
@@ -515,154 +516,149 @@ bool ApiDbReader::hasMoreElements()
   if (!_firstPartialReadCompleted)
   {
     //get the total element counts before beginning results parsing
-    LOG_DEBUG("Retrieving num elements...");
     _totalNumMapNodes = _getDatabase()->numElements(ElementType::Node);
-    _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
-    _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
-
+    if (!_returnNodesOnly)
+    {
+      _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
+      _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
+    }
     LOG_INFO(
       "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapNodes) <<
       " nodes, " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapWays) << " ways, and " <<
       FileUtils::formatPotentiallyLargeNumber(_totalNumMapRelations) << " relations...");
-
     _firstPartialReadCompleted = true;
   }
 
   //LOG_VART(_numElementsRead());
   //LOG_VART(_numElementsTotal());
-  assert(_numElementsRead() <= _numElementsTotal());
-  //each results index is 0 based, so as soon as the sum of indexes is equal to the total number of
-  //elements, we're done iterating through them
-  return (_numElementsRead() < _numElementsTotal());
+  //assert(_numElementsRead() <= _numElementsTotal());
+
+  if (_nextElement == 0)
+  {
+    _nextElement = _getElementUsingIterator();
+  }
+  return _nextElement.get();
 }
 
-boost::shared_ptr<Element> ApiDbReader::readNextElement()
+boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
 {
-  if (!hasMoreElements())
+  LOG_TRACE("Retrieving next element from iterator...");
+
+  _selectElementType = _getCurrentSelectElementType();
+  //LOG_VART(_selectElementType);
+  if (_selectElementType == ElementType::Unknown)
   {
-    throw HootException("No more elements available to read from map");
+    return boost::shared_ptr<Element>();
   }
 
-  ElementType selectElementType = _getCurrentSelectElementType();
-  LOG_VART(selectElementType);
   //see if another result is available
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    LOG_DEBUG(
-      "Requesting " << FileUtils::formatPotentiallyLargeNumber(_maxElementsPerMap) <<
-      " more query results...");
+    LOG_TRACE("Requesting more query results...");
+    _elementResultIterator =
+      _getDatabase()->selectElements(
+        _selectElementType, _maxElementsPerMap, _getCurrentElementOffset(_selectElementType));
+  }
+
+  //results still available, so keep parsing through them
+  boost::shared_ptr<Element> element =
+    _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
+
+  //QSqlQuery::next() in _resultToElement will return null when at the end of records collection
+  //for a given element type.  We don't want to ever return a null element as the last record to
+  //clients, so here when we get past the last element the iterator will be reset and go to next
+  //element type.  After going through all the element types, the "unknown" element type will
+  //return, which tells hasMoreElements that we don't have any more to return.
+  if (!element.get())
+  {
     if (_elementResultIterator)
     {
       _elementResultIterator->finish();
       _elementResultIterator->clear();
       _elementResultIterator.reset();
     }
-    _elementResultIterator =
-      _getDatabase()->selectElements(
-        selectElementType, _maxElementsPerMap, _getCurrentElementOffset(selectElementType));
+    const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
+    const ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
+    _selectElementType = ElementType(nextType);
+    //LOG_VART(_selectElementType);
+    return _getElementUsingIterator();
   }
 
-  //results still available, so keep parsing through them
-  boost::shared_ptr<Element> element =
-    _resultToElement(*_elementResultIterator, selectElementType, *_partialMap);
-  LOG_VART(element.get());
-  if (!element.get())
-  {
-    //exceptional case to deal with having to call QSqlQuery::next() inside of
-    //ServicesDb::resultToElement rather than from inside this method
-    _elementResultIterator.reset();
-    return boost::shared_ptr<Element>();
-  }
-
-  _incrementElementIndex(selectElementType);
-  //LOG_VART(selectElementType);
-  //LOG_VART(element->getElementType());
-  assert(selectElementType == element->getElementType());
-  _elementsRead++;
-  //LOG_VART(_elementsRead);
-  //LOG_VART(_maxElementsPerMap);
-  if (_elementsRead == _maxElementsPerMap)
-  {
-    _elementResultIterator->finish();
-    LOG_DEBUG("Closed result iterator.");
-  }
-  LOG_VART(element->getElementId());
-
-//  if (Log::getInstance().getLevel() <= Log::Debug &&
-//      (_numElementsTotal() >= 10 || (_numElementsRead() % (_maxElementsPerMap / 10) == 0)))
-//  {
-//    PROGRESS_DEBUG("Read: " << _numElementsRead() << " \ " << _numElementsTotal());
-//  }
+  assert(_selectElementType == element->getElementType());
 
   return element;
 }
 
-const ElementType ApiDbReader::_getCurrentSelectElementType() const
+boost::shared_ptr<Element> ApiDbReader::readNextElement()
 {
-  ElementType selectElementType;
-  if (_nodeIndex < _totalNumMapNodes)
+  LOG_TRACE("Retrieving next element...");
+
+  if (hasMoreElements())
   {
-    selectElementType = ElementType::Node;
-  }
-  else if (_wayIndex < _totalNumMapWays)
-  {
-    selectElementType = ElementType::Way;
-  }
-  else if (_relationIndex < _totalNumMapRelations)
-  {
-    selectElementType = ElementType::Relation;
+    boost::shared_ptr<Element> result = _nextElement;
+    _nextElement.reset();
+    _incrementElementIndex(_selectElementType);
+    _elementsRead++;
+    LOG_VART(_elementsRead);
+    LOG_VART(result->getId());
+    return result;
   }
   else
   {
-    //hasMoreElements should have kept us from being here
-    throw HootException("_getCurrentSelectElementType");
+    throw HootException("readNextElement should not be called if hasMoreElements returns false.");
   }
-  return selectElementType;
+}
+
+const ElementType ApiDbReader::_getCurrentSelectElementType() const
+{
+  if (_nodeIndex < _totalNumMapNodes)
+  {
+    return ElementType::Node;
+  }
+  else if (_wayIndex < _totalNumMapWays)
+  {
+    return ElementType::Way;
+  }
+  else if (_relationIndex < _totalNumMapRelations)
+  {
+    return ElementType::Relation;
+  }
+  return ElementType::Unknown;
 }
 
 long ApiDbReader::_getCurrentElementOffset(const ElementType& selectElementType) const
 {
-  long selectOffset = -1;
-  if (selectElementType == ElementType::Node)
+  switch (selectElementType.getEnum())
   {
-    selectOffset = _nodeIndex;
+    case ElementType::Node:
+      return _nodeIndex;
+    case ElementType::Way:
+      return _wayIndex;
+    case ElementType::Relation:
+      return _relationIndex;
+    default:
+      //shouldn't ever get here
+      throw HootException("_getCurrentElementOffset");
   }
-  else if (selectElementType == ElementType::Way)
-  {
-    selectOffset = _wayIndex;
-  }
-  else if (selectElementType == ElementType::Relation)
-  {
-    selectOffset = _relationIndex;
-  }
-  else
-  {
-    //hasMoreElements should have kept us from being here
-    throw HootException("_getCurrentElementOffset");
-  }
-  LOG_VART(selectOffset);
-  return selectOffset;
 }
 
 void ApiDbReader::_incrementElementIndex(const ElementType& selectElementType)
 {
-  if (selectElementType == ElementType::Node)
+  switch (selectElementType.getEnum())
   {
-    _nodeIndex++;
-  }
-  else if (selectElementType == ElementType::Way)
-  {
-    _wayIndex++;
-  }
-  else if (selectElementType == ElementType::Relation)
-  {
-    _relationIndex++;
-  }
-  else
-  {
-    //hasMoreElements should have kept us from being here
-    throw HootException("_incrementElementIndex");
+    case ElementType::Node:
+      _nodeIndex++;
+      break;
+    case ElementType::Way:
+      _wayIndex++;
+      break;
+    case ElementType::Relation:
+      _relationIndex++;
+      break;
+    default:
+      //shouldn't ever get here
+      throw HootException("_incrementElementIndex");
   }
 }
 

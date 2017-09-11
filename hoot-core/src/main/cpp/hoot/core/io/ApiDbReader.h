@@ -137,6 +137,7 @@ protected:
 
   ElementType _selectElementType;
   boost::shared_ptr<QSqlQuery> _elementResultIterator;
+  boost::shared_ptr<Element> _nextElement;
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -193,6 +194,8 @@ private:
    * number of total elements of all types in the db
    */
   long _numElementsTotal() const;
+
+  boost::shared_ptr<Element> _getElementUsingIterator();
 };
 
 }

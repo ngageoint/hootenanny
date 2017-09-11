@@ -415,9 +415,9 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
     pt::ptree tags = item.get_child("tags");
     for (pt::ptree::const_iterator tagIt = tags.begin(); tagIt != tags.end(); ++tagIt)
     {
-      QString k = QString::fromStdString(tagIt->first);
+      QString k = QString::fromStdString(tagIt->first).trimmed();
       LOG_VART(k);
-      QString v = QString::fromStdString(tagIt->second.get_value<string>());
+      QString v = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
       LOG_VART(v);
 
       // If we are "error:circular", need to set it on the element object,
@@ -426,7 +426,7 @@ void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::Elem
       {
         pElement->setCircularError(Meters(v.toInt()));
       }
-      else
+      else if (!k.isEmpty() && !v.isEmpty())
       {
         pElement->setTag(k, v);
       }

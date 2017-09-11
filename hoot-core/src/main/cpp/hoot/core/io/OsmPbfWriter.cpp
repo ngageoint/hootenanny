@@ -537,11 +537,11 @@ void OsmPbfWriter::_writeNodeDense(const boost::shared_ptr<const hoot::Node>& n)
   const Tags& tags = n->getTags();
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QString& key = it.key();
-    const QString& value = it.value();
+    const QString& key = it.key().trimmed();
+    const QString& value = it.value().trimmed();
     int kid = _convertString(key);
     int vid = _convertString(value);
-    if (!value.isEmpty())
+    if (!key.isEmpty() && !value.isEmpty())
     {
       _dn->add_keys_vals(kid);
       _dn->add_keys_vals(vid);
@@ -696,9 +696,9 @@ void OsmPbfWriter::_writeRelation(const boost::shared_ptr<const hoot::Relation>&
   const Tags& tags = r->getTags();
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QString& key = it.key();
-    const QString& value = it.value();
-    if (!value.isEmpty())
+    const QString& key = it.key().trimmed();
+    const QString& value = it.value().trimmed();
+    if (!key.isEmpty() && !value.isEmpty())
     {
       pbr->add_keys(_convertString(key));
       pbr->add_vals(_convertString(value));
@@ -765,9 +765,9 @@ void OsmPbfWriter::_writeWay(const boost::shared_ptr<const hoot::Way>& w)
   const Tags& tags = w->getTags();
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QString& key = it.key();
-    const QString& value = it.value();
-    if (!value.isEmpty())
+    const QString& key = it.key().trimmed();
+    const QString& value = it.value().trimmed();
+    if (!key.isEmpty() && !value.isEmpty())
     {
       pbw->add_keys(_convertString(key));
       pbw->add_vals(_convertString(value));

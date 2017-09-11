@@ -350,14 +350,18 @@ Tags ApiDb::unescapeTags(const QVariant &v)
     //  Then match the value, ignoring any key/value pairs that don't match
     if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
-      QString key = rxKey.cap(1);
+      QString key = rxKey.cap(1).trimmed();
       LOG_VART(key);
-      QString value = rxValue.cap(1);
+      QString value = rxValue.cap(1).trimmed();
       LOG_VART(value);
-      //  Unescape the actual key/value pairs
-      _unescapeString(key);
-      _unescapeString(value);
-      result.insert(key, value);
+      if (!key.isEmpty() && !value.isEmpty())
+      {
+        // Unescape the actual key/value pairs
+        _unescapeString(key);
+        _unescapeString(value);
+        result.insert(key, value);
+      }
+
       pos += rxValue.matchedLength();
     }
   }

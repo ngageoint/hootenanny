@@ -446,6 +446,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
         " changes to ref layer.");
     }
   }
+  assert(changesWritten == _changesParsed);
 
   referenceWriter->finalizePartial();
   referenceChangeWriter->close();

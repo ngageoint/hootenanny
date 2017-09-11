@@ -439,13 +439,15 @@ QString HootApiDb::_escapeTags(const Tags& tags) const
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    if (it.value().isEmpty() == false && it.key().isEmpty() == false)
+    const QString key = it.key().trimmed();
+    const QString val = it.value().trimmed();
+    if (key.isEmpty() == false && val.isEmpty() == false)
     {
       // this doesn't appear to be working, but I think it is implementing the spec as described here:
       // http://www.postgresql.org/docs/9.0/static/hstore.html
       // The spec described above does seem to work on the psql command line. Curious.
-      QString k = QString(it.key()).replace(f1, "\\\\").replace(f2, "\\\"");
-      QString v = QString(it.value()).replace(f1, "\\\\").replace(f2, "\\\"");
+      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"");
+      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"");
       k.replace("'", "''");
       v.replace("'", "''");
 

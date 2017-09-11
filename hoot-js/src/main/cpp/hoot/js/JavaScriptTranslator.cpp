@@ -827,7 +827,12 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
 
     for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
     {
-      t[it.key()] = it.value().toString();
+      const QString key = it.key().trimmed();
+      const QString val = it.value().toString().trimmed();
+      if (!key.isEmpty() && !val.isEmpty())
+      {
+        t[key] = val;
+      }
     }
 
     result[i] = t;

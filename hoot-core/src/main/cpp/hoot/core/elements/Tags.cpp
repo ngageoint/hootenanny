@@ -528,9 +528,13 @@ void Tags::removeEmptyTags()
   // remove all the empty tags.
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
-    if (get(it.key()) == "")
+    const QString key = it.key().trimmed();
+    if (!key.isEmpty())
     {
-      remove(it.key());
+      if (get(key).trimmed().isEmpty())
+      {
+        remove(key);
+      }
     }
   }
 }

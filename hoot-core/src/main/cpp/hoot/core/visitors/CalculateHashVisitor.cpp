@@ -65,8 +65,8 @@ QString CalculateHashVisitor::toJsonString(const ConstElementPtr& e)
   QMap<QString, QString> infoTags;
   foreach (QString key, e->getTags().keys())
   {
-    QString v = e->getTags()[key];
-    if (OsmSchema::getInstance().isMetaData(key, v) == false)
+    QString v = e->getTags()[key].trimmed();
+    if (!v.isEmpty() && OsmSchema::getInstance().isMetaData(key, v) == false)
     {
       infoTags[key] = v;
     }
