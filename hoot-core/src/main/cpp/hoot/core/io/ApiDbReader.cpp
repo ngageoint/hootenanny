@@ -526,7 +526,7 @@ bool ApiDbReader::hasMoreElements()
     //get the total element counts before beginning results parsing
     const double start = Tgs::Time::getTime();
     LOG_DEBUG("Retrieving element counts...");
-    //TODO: this may be risky using the estimated counts here at all.  they are much faster, though.
+    //this may be risky using the estimated counts here at all.  they are *much* faster, though.
     _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
     if (_totalNumMapNodes == 0)
     {
@@ -568,18 +568,18 @@ bool ApiDbReader::hasMoreElements()
 
 boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
 {
-  LOG_TRACE("Retrieving next element from iterator...");
-
   const ElementType currentSelectElementType = _selectElementType;
-  LOG_VART(currentSelectElementType);
+  //LOG_VART(currentSelectElementType);
   _selectElementType = _getCurrentSelectElementType();
-  LOG_VART(_selectElementType);
+  //LOG_VART(_selectElementType);
+  //If the next select element type retrieved doesn't match the previous one, we know that we've
+  //moved to a new element type.  So, reset the ID counter.
   if (currentSelectElementType != _selectElementType)
   {
     _lastId = 0;
   }
-  LOG_VART(_lastId);
-  LOG_VART(_selectElementType);
+  //LOG_VART(_lastId);
+  //LOG_VART(_selectElementType);
   if (_selectElementType == ElementType::Unknown)
   {
     return boost::shared_ptr<Element>();
@@ -589,19 +589,18 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    LOG_INFO("Requesting more query results..."); //TODO: change back to debug
+    LOG_DEBUG("Requesting more query results...");
     if (_elementResultIterator)
     {
       _elementResultIterator->finish();
       _elementResultIterator->clear();
     }
     _elementResultIterator.reset();
-    LOG_VART(_lastId);
+    //LOG_VART(_lastId);
     const double start = Tgs::Time::getTime();
     _elementResultIterator =
       _getDatabase()->selectElements(_selectElementType, _maxElementsPerMap, _lastId);
-
-    LOG_INFO("Query took " << Tgs::Time::getTime() - start << " seconds.");
+    LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
   }
 
   //results are still available, so keep parsing through them
@@ -638,11 +637,11 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   {
     boost::shared_ptr<Element> result = _nextElement;
     _lastId = result->getId();
-    LOG_VART(_lastId);
+    //LOG_VART(_lastId);
     _nextElement.reset();
     _incrementElementIndex(_selectElementType);
     _elementsRead++;
-    LOG_VART(_elementsRead);
+    //LOG_VART(_elementsRead);
     return result;
   }
   else

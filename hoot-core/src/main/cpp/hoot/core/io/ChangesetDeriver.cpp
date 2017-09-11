@@ -67,7 +67,6 @@ void ChangesetDeriver::close()
 
 void ChangesetDeriver::_logProgress(const QString type)
 {
-  //TODO: probably change these back to debug eventually
   if (type == QLatin1String("from") && (_numFromElementsParsed % (_logUpdateInterval * 10) == 0))
   {
     PROGRESS_INFO(
