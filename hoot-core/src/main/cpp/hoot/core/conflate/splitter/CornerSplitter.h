@@ -67,13 +67,6 @@ public:
 private:
   boost::shared_ptr<OsmMap> _map;
   std::vector<long> _todoWays;
-
-  void _removeWayFromMap(boost::shared_ptr<Way> way);
-
-  /**
-   * Given a way and a node, split the way at that node.
-   */
-  void _splitWay(long wayId, long nodeIdx, long nodeId);
 };
 
 }

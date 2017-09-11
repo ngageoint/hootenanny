@@ -40,7 +40,7 @@ sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
 sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri   
 
 # Make sure we are not running
-vagrant halt -f
+vagrant halt
 
 REBUILD_VAGRANT=false
 
