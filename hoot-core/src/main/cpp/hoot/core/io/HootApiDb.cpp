@@ -1239,7 +1239,7 @@ bool HootApiDb::changesetExists(const long id)
 }
 
 boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
-                                                       const long limit, const long offset)
+                                                       const long limit, const long minId)
 {
   //TODO: this is completely redundant with OsmApiDb::selectElements except for the table name
   //string creation and should be rolled up into ApiDb
@@ -1250,14 +1250,21 @@ boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elemen
     _selectElementsForMap->setForwardOnly(true);
   }
 
-  QString limitStr = "ALL";
+  QString sql =
+    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
+    " WHERE visible = true";
+  if (minId > 0)
+  {
+    //adding this part of the where clause in can prevent the offset calc from becoming too costly
+    //for very large offsets
+    sql += " AND id > " + QString::number(minId);
+  }
+  sql += " ORDER BY id";
   if (limit > 0)
   {
-    limitStr = QString::number(limit);
+    sql += " LIMIT " + QString::number(limit);
   }
-  _selectElementsForMap->prepare(
-    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
-    " WHERE visible = true ORDER BY id LIMIT " + limitStr + " OFFSET " + QString::number(offset));
+  _selectElementsForMap->prepare(sql);
   LOG_VARD(_selectElementsForMap->lastQuery());
 
   if (_selectElementsForMap->exec() == false)
@@ -1269,15 +1276,15 @@ boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elemen
     throw HootException(err);
   }
   LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VARD(_selectElementsForMap->executedQuery());
+  LOG_VART(_selectElementsForMap->executedQuery());
 
   return _selectElementsForMap;
 }
 
 long HootApiDb::numEstimatedElements(const ElementType& elementType)
 {
-  //TODO: this is completely redundant with OsmApiDb::numElements except for the table name string
-  //creation and should be rolled up into ApiDb
+  //TODO: this is completely redundant with OsmApiDb::numEstimatedElements except for the table
+  //name string creation and should be rolled up into ApiDb
 
   if (!_numEstimatedTypeElementsForMap)
   {

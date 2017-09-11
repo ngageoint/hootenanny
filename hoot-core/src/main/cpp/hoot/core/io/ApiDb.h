@@ -152,17 +152,18 @@ public:
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
-   * database, sorted by element ID.  If limit = 0, no limit will be placed on the number of
-   * elements returned.  If offset = 0, no records will be skipped in the returned result set.
+   * database, sorted by element ID.
    *
    * @param elementType the element type to query for
-   * @param limit the number of elements to query for
-   * @param offset the starting ID for the query
+   * @param limit the number of elements to query for; If limit = 0, no limit will be placed on the
+   * number of elements returned
+   * @param minId the minimum element ID to return; this is more efficient than using an offset when
+   * dealing with very large record sets
    * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
                                                       const long limit = 0,
-                                                      const long offset = 0) = 0;
+                                                      const long minId = 0) = 0;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -284,13 +285,20 @@ public:
   virtual long getNextId(const ElementType& elementType) = 0;
 
   /**
-   * Return the number of elements of the given type in the database
+   * Returns the number of elements of the given type in the database
    *
    * @param elementType the type of element to return a count for
    * @return an element count
    */
   virtual long numElements(const ElementType& elementType) = 0;
 
+  /**
+   * Returns the number of elements of the given type in the database.  Do not use this when exact
+   * counts are required.
+   *
+   * @param elementType the type of element to return an estimated count for
+   * @return an element count
+   */
   virtual long numEstimatedElements(const ElementType& elementType) = 0;
 
   QSqlError getLastError() const { return _db.lastError(); }

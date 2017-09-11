@@ -449,7 +449,8 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
 }
 
 boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType,
-                                                      const long limit, const long offset)
+                                                      const long limit, /*const long offset,*/
+                                                      const long minId)
 {
   //TODO: this is completely redundant with HootApiDb::selectElements except for the table name
   //string creation and should be rolled up into ApiDb
@@ -460,33 +461,40 @@ boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& element
     _selectElementsForMap->setForwardOnly(true);
   }
 
-  QString limitStr = "ALL";
+  QString sql =
+    "SELECT * FROM " + elementTypeToElementTableName(elementType, false, false) +
+    " WHERE visible = true";
+  if (minId > 0)
+  {
+    //adding this part of the where clause in can prevent the offset calc from becoming too costly
+    //for very large offsets
+    sql += " AND id > " + QString::number(minId);
+  }
+  sql += " ORDER BY id";
   if (limit > 0)
   {
-    limitStr = QString::number(limit);
+    sql += " LIMIT " + QString::number(limit);
   }
-  _selectElementsForMap->prepare(
-    "SELECT * FROM " + elementTypeToElementTableName(elementType, false, false) +
-    " WHERE visible = true ORDER BY id LIMIT " + limitStr + " OFFSET " + QString::number(offset));
+  _selectElementsForMap->prepare(sql);
   LOG_VARD(_selectElementsForMap->lastQuery());
 
   if (_selectElementsForMap->exec() == false)
   {
     const QString err =
-      "Error selecting elements of type: " + elementType.toString() +
-      " Error: " + _selectElementsForMap->lastError().text();
+      "Error selecting elements of type: " + elementType.toString() + " Error: " +
+      _selectElementsForMap->lastError().text();
     LOG_ERROR(err);
     throw HootException(err);
   }
   LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VARD(_selectElementsForMap->executedQuery());
+  LOG_VART(_selectElementsForMap->executedQuery());
 
   return _selectElementsForMap;
 }
 
 long OsmApiDb::numEstimatedElements(const ElementType& elementType)
 {
-  //TODO: this is completely redundant with HootApiDb::numElements except for the table name string
+  //TODO: this is completely redundant with HootApiDb::numEstimatedElements except for the table name string
   //creation and should be rolled up into ApiDb
 
   if (!_numEstimatedTypeElementsForMap)

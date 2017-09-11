@@ -168,6 +168,7 @@ private:
   long _totalNumMapWays;
   long _relationIndex;
   long _totalNumMapRelations;
+  long _lastId;
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 
@@ -179,7 +180,7 @@ private:
   boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
                                               const ElementType& elementType, OsmMap& map);
 
-  long _getCurrentElementOffset(const ElementType& selectElementType) const;
+  //long _getCurrentElementOffset(const ElementType& selectElementType) const;
   void _incrementElementIndex(const ElementType& selectElementType);
   /*
    * the current element type being returned by the partial query; order is: node, way, and then

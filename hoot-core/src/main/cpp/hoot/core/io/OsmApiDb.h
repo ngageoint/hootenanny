@@ -73,7 +73,8 @@ public:
    * @see ApiDb::selectElements
    */                                                       
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long limit = 0, const long offset = 0);
+                                                      const long limit = 0,
+                                                      const long minId = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -183,7 +184,14 @@ public:
    */
   void enableConstraints();
 
+  /**
+   * See ApiDb::numElements
+   */
   virtual long numElements(const ElementType& elementType);
+
+  /**
+   * See ApiDb::numEstimatedElements
+   */
   virtual long numEstimatedElements(const ElementType& elementType);
 
 protected:

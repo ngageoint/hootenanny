@@ -75,7 +75,8 @@ public:
    * @see ApiDb::selectElements
    */                                                     
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long limit = 0, const long offset = 0);
+                                                      const long limit = 0,
+                                                      const long minId = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -108,14 +109,12 @@ public:
   bool changesetExists(const long id);
 
   /**
-   * Returns the exact number of OSM elements of a given type for a particular map in the services
-   * database
+   * See ApiDb::numElements
    */
   virtual long numElements(const ElementType& elementType);
 
   /**
-   * Returns an estimated number of OSM elements of a given type for a particular map in the
-   * services database; may be faster than numElements
+   * See ApiDb::numEstimatedElements
    */
   virtual long numEstimatedElements(const ElementType& elementType);
 

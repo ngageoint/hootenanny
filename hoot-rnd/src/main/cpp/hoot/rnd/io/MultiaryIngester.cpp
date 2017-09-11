@@ -140,13 +140,13 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     _addToExistingRefDb = true;
     //assuming no duplicate map names here
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
-    LOG_INFO("Retrieving the number of nodes..."); //TODO: change back to debug
+    LOG_DEBUG("Retrieving the number of nodes...");
     const double start = Tgs::Time::getTime();
-    _numNodesBeforeApplyingChangeset =
-      _referenceDb./*numElements*/numEstimatedElements(ElementType::Node);
-    //TODO: change back to debug
-    LOG_VAR(_numNodesBeforeApplyingChangeset);
-    LOG_INFO("Query took " << Tgs::Time::getTime() - start << " seconds.");
+    _numNodesBeforeApplyingChangeset = _referenceDb.numEstimatedElements(ElementType::Node);
+    LOG_INFO(
+      "Current number of nodes in the reference layer: " <<
+      FileUtils::formatPotentiallyLargeNumber(_numNodesBeforeApplyingChangeset));
+    LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
 
     QString sortedNewInput;
     if (!_sortInput)
@@ -461,12 +461,13 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceChangeWriter->close();
   changesetFileReader.close();
 
+  LOG_DEBUG("Retrieving the number of nodes...");
   const double start = Tgs::Time::getTime();
-  _numNodesAfterApplyingChangeset =
-    _referenceDb./*numElements*/numEstimatedElements(ElementType::Node);
-  //TODO: change back to debug
-  LOG_VAR(_numNodesAfterApplyingChangeset);
-  LOG_INFO("Query took " << Tgs::Time::getTime() - start << " seconds.");
+  _numNodesAfterApplyingChangeset = _referenceDb.numEstimatedElements(ElementType::Node);
+  LOG_INFO(
+    "New number of nodes in the reference layer: " <<
+    FileUtils::formatPotentiallyLargeNumber(_numNodesAfterApplyingChangeset));
+  LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
 
   LOG_INFO(
     FileUtils::formatPotentiallyLargeNumber(changesWritten) <<

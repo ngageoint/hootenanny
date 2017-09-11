@@ -433,6 +433,7 @@ void ApiDbReader::initializePartial()
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
+  _lastId = 0;
 
   _nodeIndex = 0;
   _totalNumMapNodes = 0;
@@ -518,17 +519,39 @@ bool ApiDbReader::hasMoreElements()
 {
   if (!_firstPartialReadCompleted)
   {
+    //TODO: Could this be a cleaner implementation if we just executed separate queries for
+    //each element type and returned the elements seamlessly by getNextElement?  That would prevent
+    //having to do these total element queries.
+
     //get the total element counts before beginning results parsing
-    _totalNumMapNodes = _getDatabase()->numElements(ElementType::Node);
+    const double start = Tgs::Time::getTime();
+    LOG_DEBUG("Retrieving element counts...");
+    //TODO: this may be risky using the estimated counts here at all.  they are much faster, though.
+    _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
+    if (_totalNumMapNodes == 0)
+    {
+      _totalNumMapNodes = _getDatabase()->numElements(ElementType::Node);
+    }
     if (!_returnNodesOnly)
     {
-      _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
-      _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
+      _totalNumMapWays = _getDatabase()->numEstimatedElements(ElementType::Way);
+      if (_totalNumMapWays == 0)
+      {
+        _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
+      }
+      _totalNumMapRelations = _getDatabase()->numEstimatedElements(ElementType::Relation);
+      if (_totalNumMapRelations == 0)
+      {
+        _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
+      }
     }
+    LOG_DEBUG("Queries took " << Tgs::Time::getTime() - start << " seconds.");
+
     LOG_INFO(
       "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapNodes) <<
       " nodes, " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapWays) << " ways, and " <<
       FileUtils::formatPotentiallyLargeNumber(_totalNumMapRelations) << " relations...");
+
     _firstPartialReadCompleted = true;
   }
 
@@ -547,8 +570,16 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
 {
   LOG_TRACE("Retrieving next element from iterator...");
 
+  const ElementType currentSelectElementType = _selectElementType;
+  LOG_VART(currentSelectElementType);
   _selectElementType = _getCurrentSelectElementType();
-  //LOG_VART(_selectElementType);
+  LOG_VART(_selectElementType);
+  if (currentSelectElementType != _selectElementType)
+  {
+    _lastId = 0;
+  }
+  LOG_VART(_lastId);
+  LOG_VART(_selectElementType);
   if (_selectElementType == ElementType::Unknown)
   {
     return boost::shared_ptr<Element>();
@@ -558,42 +589,39 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    LOG_INFO("Requesting more query results...");
+    LOG_INFO("Requesting more query results..."); //TODO: change back to debug
     if (_elementResultIterator)
     {
       _elementResultIterator->finish();
       _elementResultIterator->clear();
     }
     _elementResultIterator.reset();
+    LOG_VART(_lastId);
     const double start = Tgs::Time::getTime();
     _elementResultIterator =
-      _getDatabase()->selectElements(
-        _selectElementType, _maxElementsPerMap, _getCurrentElementOffset(_selectElementType));
-    //TODO: change back to debug
+      _getDatabase()->selectElements(_selectElementType, _maxElementsPerMap, _lastId);
+
     LOG_INFO("Query took " << Tgs::Time::getTime() - start << " seconds.");
   }
 
-  //results still available, so keep parsing through them
+  //results are still available, so keep parsing through them
   boost::shared_ptr<Element> element =
     _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
 
   //QSqlQuery::next() in _resultToElement will return null when at the end of records collection
   //for a given element type.  We don't want to ever return a null element as the last record to
-  //clients, so here when we get past the last element the iterator will be reset and go to next
-  //element type.  After going through all the element types, the "unknown" element type will
-  //return, which tells hasMoreElements that we don't have any more to return.
+  //clients, so here we'll just swallow it.  After going through all the element types, the
+  //"unknown" element type will return, which tells hasMoreElements that we don't have any more
+  //to return.
   if (!element.get())
   {
+    LOG_TRACE("Received null element.");
     if (_elementResultIterator)
     {
       _elementResultIterator->finish();
       _elementResultIterator->clear();
     }
     _elementResultIterator.reset();
-    const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
-    const ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
-    _selectElementType = ElementType(nextType);
-    //LOG_VART(_selectElementType);
     return _getElementUsingIterator();
   }
 
@@ -609,11 +637,12 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   if (hasMoreElements())
   {
     boost::shared_ptr<Element> result = _nextElement;
+    _lastId = result->getId();
+    LOG_VART(_lastId);
     _nextElement.reset();
     _incrementElementIndex(_selectElementType);
     _elementsRead++;
     LOG_VART(_elementsRead);
-    LOG_VART(result->getId());
     return result;
   }
   else
@@ -639,21 +668,21 @@ const ElementType ApiDbReader::_getCurrentSelectElementType() const
   return ElementType::Unknown;
 }
 
-long ApiDbReader::_getCurrentElementOffset(const ElementType& selectElementType) const
-{
-  switch (selectElementType.getEnum())
-  {
-    case ElementType::Node:
-      return _nodeIndex;
-    case ElementType::Way:
-      return _wayIndex;
-    case ElementType::Relation:
-      return _relationIndex;
-    default:
-      //shouldn't ever get here
-      throw HootException("_getCurrentElementOffset");
-  }
-}
+//long ApiDbReader::_getCurrentElementOffset(const ElementType& selectElementType) const
+//{
+//  switch (selectElementType.getEnum())
+//  {
+//    case ElementType::Node:
+//      return _nodeIndex;
+//    case ElementType::Way:
+//      return _wayIndex;
+//    case ElementType::Relation:
+//      return _relationIndex;
+//    default:
+//      //shouldn't ever get here
+//      throw HootException("_getCurrentElementOffset");
+//  }
+//}
 
 void ApiDbReader::_incrementElementIndex(const ElementType& selectElementType)
 {
