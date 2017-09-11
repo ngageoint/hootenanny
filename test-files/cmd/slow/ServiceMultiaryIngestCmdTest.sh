@@ -51,11 +51,11 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED GEONAMES REFERENCE LAYER OUTPUT..."
 echo ""
-#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED GEONAMES CHANGESET OUTPUT..."
 echo ""
-#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
 # UNSORTED GEONAMES
 
@@ -83,11 +83,11 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED GEONAMES REFERENCE LAYER OUTPUT..."
 echo ""
-#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED GEONAMES CHANGESET OUTPUT..."
 echo ""
-#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
 GOLD_OUTPUT=$REF_DIR/allCountries-osmpbf-output.osm
 GOLD_CHANGESET=$REF_DIR/allCountries-osmpbf-changeset.spark.1
@@ -118,11 +118,11 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED OSM PBF REFERENCE LAYER OUTPUT..."
 echo ""
-#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED OSM PBF CHANGESET OUTPUT..."
 echo ""
-#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
 # UNSORTED OSM PBF
 
@@ -150,11 +150,11 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED OSM PBF REFERENCE LAYER OUTPUT..."
 echo ""
-#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED OSM PBF CHANGESET OUTPUT..."
 echo ""
-#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
 GOLD_OUTPUT=$REF_DIR/allCountries-osmxml-output.osm
 GOLD_CHANGESET=$REF_DIR/allCountries-osmxml-changeset.spark.1
@@ -185,11 +185,11 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED OSM XML REFERENCE LAYER OUTPUT..."
 echo ""
-#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED OSM XML CHANGESET OUTPUT..."
 echo ""
-#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
 # UNSORTED OSM XML
 
@@ -217,11 +217,11 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED OSM XML REFERENCE LAYER OUTPUT..."
 echo ""
-#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED OSM XML CHANGESET OUTPUT..."
 echo ""
-#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
 GOLD_OUTPUT=$REF_DIR/allCountries-shp-output.osm
 GOLD_CHANGESET=$REF_DIR/allCountries-shp-changeset.spark.1
@@ -252,11 +252,11 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED SHP REFERENCE LAYER OUTPUT..."
 echo ""
-#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
 echo ""
 echo "MULTIARY INGEST - COMPARING SORTED SHP CHANGESET OUTPUT..."
 echo ""
-#diff $GOLD_CHANGESET $CHANGESET_OUTPUT
+diff $GOLD_CHANGESET $CHANGESET_OUTPUT
 
 # UNSORTED SHP
 
@@ -287,11 +287,12 @@ echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED SHP REFERENCE LAYER OUTPUT..."
 echo ""
 #hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $REF_DIR/allCountries-shp-unsorted-output.osm $FINAL_OUTPUT #TODO: doublecheck this
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED SHP CHANGESET OUTPUT..."
 echo ""
 # TODO: There's a very slight rounding error on the coord output that I haven't tracked down yet, so 
 # comparing to a different changeset gold file for now.
 #diff $GOLD_CHANGESET $CHANGESET_OUTPUT
-#diff $REF_DIR/allCountries-shp-unsorted-changeset.spark.1 $CHANGESET_OUTPUT
+diff $REF_DIR/allCountries-shp-unsorted-changeset.spark.1 $CHANGESET_OUTPUT
 
