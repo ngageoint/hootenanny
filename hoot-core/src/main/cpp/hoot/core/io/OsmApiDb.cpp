@@ -210,6 +210,7 @@ void OsmApiDb::_resetQueries()
   _selectUserByEmail.reset();
   _insertUser.reset();
   _numTypeElementsForMap.reset();
+  _numEstimatedTypeElementsForMap.reset();
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
@@ -481,6 +482,42 @@ boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& element
   LOG_VARD(_selectElementsForMap->executedQuery());
 
   return _selectElementsForMap;
+}
+
+long OsmApiDb::numEstimatedElements(const ElementType& elementType)
+{
+  //TODO: this is completely redundant with HootApiDb::numElements except for the table name string
+  //creation and should be rolled up into ApiDb
+
+  if (!_numEstimatedTypeElementsForMap)
+  {
+    _numEstimatedTypeElementsForMap.reset(new QSqlQuery(_db));
+  }
+
+  _numEstimatedTypeElementsForMap->prepare(
+    "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
+    tableTypeToTableName(TableType::fromElementType(elementType)) + "'");
+  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
+
+  if (_numEstimatedTypeElementsForMap->exec() == false)
+  {
+    LOG_ERROR(_numEstimatedTypeElementsForMap->executedQuery());
+    LOG_ERROR(_numEstimatedTypeElementsForMap->lastError().text());
+    throw HootException(_numEstimatedTypeElementsForMap->lastError().text());
+  }
+
+  long result = -1;
+  if (_numEstimatedTypeElementsForMap->next())
+  {
+    bool ok;
+    result = _numEstimatedTypeElementsForMap->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve count for element type: " + elementType.toString());
+    }
+  }
+  _numEstimatedTypeElementsForMap->finish();
+  return result;
 }
 
 long OsmApiDb::numElements(const ElementType& elementType)

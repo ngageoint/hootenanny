@@ -291,6 +291,8 @@ public:
    */
   virtual long numElements(const ElementType& elementType) = 0;
 
+  virtual long numEstimatedElements(const ElementType& elementType) = 0;
+
   QSqlError getLastError() const { return _db.lastError(); }
 
   inline static QString getChangesetsTableName()                { return "changesets"; }

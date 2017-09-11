@@ -184,6 +184,7 @@ public:
   void enableConstraints();
 
   virtual long numElements(const ElementType& elementType);
+  virtual long numEstimatedElements(const ElementType& elementType);
 
 protected:
 
@@ -199,6 +200,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectTagsForRelation;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
   boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
+  boost::shared_ptr<QSqlQuery> _numEstimatedTypeElementsForMap;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _seqQueries;
 

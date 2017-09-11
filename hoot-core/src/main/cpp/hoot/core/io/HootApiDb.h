@@ -108,10 +108,16 @@ public:
   bool changesetExists(const long id);
 
   /**
-   * Returns the number of OSM elements of a given type for a particular map in the services
+   * Returns the exact number of OSM elements of a given type for a particular map in the services
    * database
    */
   virtual long numElements(const ElementType& elementType);
+
+  /**
+   * Returns an estimated number of OSM elements of a given type for a particular map in the
+   * services database; may be faster than numElements
+   */
+  virtual long numEstimatedElements(const ElementType& elementType);
 
   //writing
 
@@ -334,6 +340,7 @@ private:
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
+  boost::shared_ptr<QSqlQuery> _numEstimatedTypeElementsForMap;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

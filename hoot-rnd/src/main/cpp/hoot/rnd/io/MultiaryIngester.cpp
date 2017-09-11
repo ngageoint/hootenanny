@@ -44,6 +44,9 @@
 #include <hoot/core/io/OsmFileSorter.h>
 #include <hoot/core/io/OgrReader.h>
 
+// tgs
+#include <tgs/System/Time.h>
+
 // Qt
 #include <QFileInfo>
 #include <QDir>
@@ -137,9 +140,13 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     _addToExistingRefDb = true;
     //assuming no duplicate map names here
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
-    LOG_DEBUG("Retrieving the number of nodes...");
-    _numNodesBeforeApplyingChangeset = _referenceDb.numElements(ElementType::Node);
-    LOG_VARD(_numNodesBeforeApplyingChangeset);
+    LOG_INFO("Retrieving the number of nodes..."); //TODO: change back to debug
+    const double start = Tgs::Time::getTime();
+    _numNodesBeforeApplyingChangeset =
+      _referenceDb./*numElements*/numEstimatedElements(ElementType::Node);
+    //TODO: change back to debug
+    LOG_VAR(_numNodesBeforeApplyingChangeset);
+    LOG_INFO("Query took " << Tgs::Time::getTime() - start << " seconds.");
 
     QString sortedNewInput;
     if (!_sortInput)
@@ -454,9 +461,12 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceChangeWriter->close();
   changesetFileReader.close();
 
-  LOG_DEBUG("Retrieving the number of nodes...");
-  _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
-  LOG_VARD(_numNodesAfterApplyingChangeset);
+  const double start = Tgs::Time::getTime();
+  _numNodesAfterApplyingChangeset =
+    _referenceDb./*numElements*/numEstimatedElements(ElementType::Node);
+  //TODO: change back to debug
+  LOG_VAR(_numNodesAfterApplyingChangeset);
+  LOG_INFO("Query took " << Tgs::Time::getTime() - start << " seconds.");
 
   LOG_INFO(
     FileUtils::formatPotentiallyLargeNumber(changesWritten) <<

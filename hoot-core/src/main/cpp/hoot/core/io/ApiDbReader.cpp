@@ -34,6 +34,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/FileUtils.h>
 
+// tgs
+#include <tgs/System/Time.h>
+
 // Qt
 #include <QSet>
 
@@ -555,16 +558,19 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
     //no results available, so request some more results
-    LOG_TRACE("Requesting more query results...");
+    LOG_INFO("Requesting more query results...");
     if (_elementResultIterator)
     {
       _elementResultIterator->finish();
       _elementResultIterator->clear();
     }
     _elementResultIterator.reset();
+    const double start = Tgs::Time::getTime();
     _elementResultIterator =
       _getDatabase()->selectElements(
         _selectElementType, _maxElementsPerMap, _getCurrentElementOffset(_selectElementType));
+    //TODO: change back to debug
+    LOG_INFO("Query took " << Tgs::Time::getTime() - start << " seconds.");
   }
 
   //results still available, so keep parsing through them
@@ -578,12 +584,12 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   //return, which tells hasMoreElements that we don't have any more to return.
   if (!element.get())
   {
-//    if (_elementResultIterator)
-//    {
-//      _elementResultIterator->finish();
-//      _elementResultIterator->clear();
-//      _elementResultIterator.reset();
-//    }
+    if (_elementResultIterator)
+    {
+      _elementResultIterator->finish();
+      _elementResultIterator->clear();
+    }
+    _elementResultIterator.reset();
     const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
     const ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
     _selectElementType = ElementType(nextType);
