@@ -29,25 +29,8 @@
 using namespace std;
 
 ProcessThread::ProcessThread(QMutex* mutex, std::queue<QString>* jobs)
-  : _mutex(mutex), _jobs(jobs), _failures(0), _thread()
+  : _mutex(mutex), _jobs(jobs), _failures(0)
 {
-}
-
-void ProcessThread::start()
-{
-  _thread.reset(new boost::thread(&ProcessThread::doWork, this));
-}
-
-void ProcessThread::join()
-{
-  if (_thread)
-    _thread->join();
-}
-
-void ProcessThread::quit()
-{
-  if (_thread)
-    _thread->interrupt();
 }
 
 int ProcessThread::getFailures()
@@ -55,12 +38,22 @@ int ProcessThread::getFailures()
   return _failures;
 }
 
-void ProcessThread::doWork()
+QProcess* ProcessThread::createProcess()
 {
-  QProcessPtr proc(new QProcess());
+  QProcess* proc = new QProcess();
   proc->setProcessChannelMode(QProcess::MergedChannels);
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  proc->setProcessEnvironment(env);
   proc->start("HootTest --listen");
+  return proc;
+}
 
+void ProcessThread::run()
+{
+  QProcessPtr proc(createProcess());
+
+  int restart_count = 0;
+  const int MAX_RESTART = 3;
   bool working = true;
   while (working)
   {
@@ -79,13 +72,31 @@ void ProcessThread::doWork()
       line = line.trimmed();
       while (line != HOOT_TEST_FINISHED)
       {
-        if (proc->state() != QProcess::Running)
+        if (proc->state() == QProcess::NotRunning)
         {
-          ++_failures;
-          working = false;
-          continue;
+          //  Put this job that failed back on the queue
+          _mutex->lock();
+          _jobs->push(test);
+          _mutex->unlock();
+          ++restart_count;
+          //  Restart the process if there was a process failure
+          if (restart_count < MAX_RESTART)
+            proc.reset(createProcess());
+          else
+            working = false;
+          break;
         }
-        if (line != ".")
+        else if (line == "")
+        {
+          proc->waitForReadyRead();
+/*
+          ++_failures;
+          QProcess::ProcessError error = proc->error();
+          QString errorMessage = proc->errorString();
+          cout << error << ": " << errorMessage.toStdString() << endl;
+*/
+        }
+        else if (line.contains(" ERROR "))
           ++_failures;
         output.append(line);
         line = QString(proc->readLine());
@@ -120,7 +131,7 @@ ProcessPool::~ProcessPool()
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
   {
     _threads[i]->quit();
-    _threads[i]->join();
+    _threads[i]->wait();
   }
 }
 
@@ -133,7 +144,7 @@ void ProcessPool::startProcessing()
 void ProcessPool::wait()
 {
   for (vector<ProcessThreadPtr>::size_type i = 0; i < _threads.size(); ++i)
-    _threads[i]->join();
+    _threads[i]->wait();
 }
 
 void ProcessPool::addJob(const QString& test)
