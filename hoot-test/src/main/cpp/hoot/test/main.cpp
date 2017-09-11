@@ -42,7 +42,7 @@ using namespace geos::geom;
 #include <cppunit/TextTestResult.h>
 #include <cppunit/XmlOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/ui/text/TextTestRunner.h>
 
 // Hoot
 #include <hoot/core/Hoot.h>
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
     }
 
     Log::getInstance().setLevel(Log::Warn);
-    CppUnit::TextUi::TestRunner runner;
+    CppUnit::TextTestRunner runner;
     CppUnit::TextTestResult result;
 
 # if HOOT_HAVE_HADOOP
@@ -350,7 +350,6 @@ int main(int argc, char *argv[])
     boost::shared_ptr<HootTestListener> listener;
 
     bool printDiff = args.contains("--diff");
-    string test_name;
 
     if (args.contains("--all-names"))
     {
@@ -359,35 +358,42 @@ int main(int argc, char *argv[])
       printNames(&testSuite);
       return 0;
     }
-    CppUnit::TestSuite *rootSuite = new CppUnit::TestSuite( "All tests" );
+    CppUnit::TestSuite *rootSuite = NULL;
     if (args.contains("--single"))
     {
       int i = args.indexOf("--single") + 1;
       if (i >= args.size())
       {
-        delete rootSuite;
         throw HootException("Expected a test name after --single.");
       }
       QString testName = args[i];
-      test_name = testName.toStdString();
 
       listener.reset(new HootTestListener(false, -1));
       Log::getInstance().setLevel(Log::Info);
+      rootSuite = new CppUnit::TestSuite( "All tests" );
       populateTests(ALL, rootSuite, printDiff);
-      runner.addTest(rootSuite);
+      CppUnit::Test* t = rootSuite->findTest(testName.toStdString());
+      if (t == 0)
+      {
+        cout << "Could not find the specified test: " << testName.toStdString() << endl;
+        delete rootSuite;
+        return -1;
+      }
+      runner.addTest(t);
     }
     else if (args.contains("--listen"))
     {
       listener.reset(new HootTestListener(false, -1, false));
-      Log::getInstance().setLevel(Log::Info);
-      populateTests(ALL, rootSuite, printDiff);
-      runner.addTest(rootSuite);
+      if (args.contains("--names"))
+        listener->showTestNames(true);
       result.addListener(listener.get());
 
       string testName;
       cin >> testName;
       while (testName != HOOT_TEST_FINISHED)
       {
+        rootSuite = new CppUnit::TestSuite( "All tests" );
+        populateTests(ALL, rootSuite, printDiff);
         CppUnit::Test* t = rootSuite->findTest(testName);
         if (t != 0)
         {
@@ -396,12 +402,15 @@ int main(int argc, char *argv[])
           ConfigOptions::populateDefaults(conf());
           conf().set("HOOT_HOME", getenv("HOOT_HOME"));
           //  Run only the test sent from the main process
-          runner.run(result, testName);
+          CppUnit::TestRunner test_runner;
+          test_runner.addTest(t);
+          test_runner.run(result);
           cout << endl << HOOT_TEST_FINISHED << endl;
         }
         else
         {
-          LOG_ERROR("Could not find the specified test: " + testName);
+          cerr << "Could not find the specified test: " <<  testName << endl;
+          cout << HOOT_TEST_FINISHED << endl;
         }
         cin >> testName;
       }
@@ -409,6 +418,7 @@ int main(int argc, char *argv[])
     }
     else
     {
+      rootSuite = new CppUnit::TestSuite( "All tests" );
       if (args.contains("--current"))
       {
         listener.reset(new HootTestListener(true));
@@ -495,12 +505,19 @@ int main(int argc, char *argv[])
         throw HootException("Expected integer after --parallel");
       }
 
+      ProcessPool pool(nproc);
       vector<string> names;
       getNames(names, rootSuite);
+      for (vector<string>::iterator it = names.begin(); it != names.end(); ++it)
+        pool.addJob(QString(it->c_str()));
+
+      pool.startProcessing();
+      pool.wait();
 
       cout << endl;
       cout << "Elapsed: " << Tgs::Time::getTime() - start << endl;
-      return -1;
+
+      return pool.getFailures() > 0 ? -1 : 0;
     }
     else
     {
@@ -514,7 +531,7 @@ int main(int argc, char *argv[])
       Settings::parseCommonArguments(args);
 
       result.addListener(listener.get());
-      runner.run(result, test_name);
+      runner.run(result);
       return result.failures().size() > 0 ? -1 : 0;
     }
   }

@@ -39,32 +39,26 @@
 
 //  Boost
 #include <boost/shared_ptr.hpp>
-#include <boost/thread.hpp>
 
 #define HOOT_TEST_FINISHED "HOOT_TEST_FINISHED"
 
 typedef boost::shared_ptr<QProcess> QProcessPtr;
 
-class ProcessThread
+class ProcessThread : public QThread
 {
 public:
   ProcessThread(QMutex* mutex, std::queue<QString>* jobs);
 
-  void start();
-
-  void join();
-
-  void quit();
+  void run();
 
   int getFailures();
 
 private:
-  void doWork();
+  QProcess* createProcess();
 
   QMutex* _mutex;
   std::queue<QString>* _jobs;
   int _failures;
-  boost::shared_ptr<boost::thread> _thread;
 };
 
 typedef boost::shared_ptr<ProcessThread> ProcessThreadPtr;

@@ -30,7 +30,7 @@ else:OBJECTS_DIR = tmp/debug
 DESTDIR = ../bin/
 
 LIBS += \
-    -L../lib/ -lHootCore -lHootCoreTest -lTgs -ltbs -lpthread -lboost_thread \
+    -L../lib/ -lHootCore -lHootCoreTest -lTgs -ltbs \
 
 HEADERS += \
     src/main/cpp/hoot/test/ScriptTestSuite.h \
