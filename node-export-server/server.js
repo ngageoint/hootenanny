@@ -56,12 +56,10 @@ app.post('/export/:datasource/:schema/:format', function(req, res) {
         + req.params.datasource
         + req.params.schema
         + req.params.format;
-    var fileNameHash = crypto.createHash('sha1').update(params).digest('hex');
+    var fileNameHash = crypto.createHash('sha1').update(params, 'utf-8').digest('hex');
 
     //Write payload to file
     var input = 'export_' + fileNameHash + '.osm';
-
-    var sha1_for_file = crypto.createHash('sha1');
 
     var writeStream = fs.createWriteStream(input, { flags : 'w' });
     req.pipe(writeStream);
@@ -69,18 +67,23 @@ app.post('/export/:datasource/:schema/:format', function(req, res) {
         if(err) {
             return console.log(err);
         }
-    }).on('data', function(data) {
-        //Calculate hash for file content
-        sha1_for_file.update(data);
-    }).on('close', function (err) {
-        var fileHash = sha1_for_file.digest('hex');
-        var jobParams = fileHash
-            + req.params.schema
-            + req.params.format;
-        //Create job hash from input file content and export params
-        var jobHash = crypto.createHash('sha1').update(jobParams).digest('hex');
-        //Make sure input is absolute path
-        doExport(req, res, jobHash, __dirname + '/' + input);
+    }).on('close', function () {
+        //Calc sha1 for input file contents
+        var read = fs.createReadStream(input);
+        var hash = crypto.createHash('sha1');
+        hash.setEncoding('hex');
+        read.pipe(hash);
+        read.on('end', function () {
+            hash.end();
+            var fileHash = hash.read();
+            var jobParams = fileHash
+                + req.params.schema
+                + req.params.format;
+            //Create job hash from input file content and export params
+            var jobHash = crypto.createHash('sha1').update(jobParams, 'utf-8').digest('hex');
+            //Make sure input is absolute path
+            doExport(req, res, jobHash, __dirname + '/' + input);
+        });
     });
 
 });
