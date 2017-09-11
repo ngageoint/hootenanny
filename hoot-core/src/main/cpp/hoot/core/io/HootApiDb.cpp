@@ -439,9 +439,9 @@ QString HootApiDb::_escapeTags(const Tags& tags) const
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QString key = it.key().trimmed();
+    const QString key = it.key();
     const QString val = it.value().trimmed();
-    if (key.isEmpty() == false && val.isEmpty() == false)
+    if (val.isEmpty() == false)
     {
       // this doesn't appear to be working, but I think it is implementing the spec as described here:
       // http://www.postgresql.org/docs/9.0/static/hstore.html
@@ -1283,8 +1283,10 @@ long HootApiDb::numElements(const ElementType& elementType)
     _numTypeElementsForMap.reset(new QSqlQuery(_db));
   }
 
+  //adding the where clause prevents postgres from doing a scan of the entire table
   _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)));
+    "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
+    " WHERE visible = true");
   LOG_VARD(_numTypeElementsForMap->lastQuery());
 
   if (_numTypeElementsForMap->exec() == false)

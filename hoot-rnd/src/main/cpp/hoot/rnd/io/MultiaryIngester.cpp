@@ -135,7 +135,9 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     LOG_INFO("and writing the changes to the changeset file...");
 
     _addToExistingRefDb = true;
+    //assuming no duplicate map names here
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
+    LOG_DEBUG("Retrieving the number of nodes...");
     _numNodesBeforeApplyingChangeset = _referenceDb.numElements(ElementType::Node);
     LOG_VARD(_numNodesBeforeApplyingChangeset);
 
@@ -452,6 +454,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceChangeWriter->close();
   changesetFileReader.close();
 
+  LOG_DEBUG("Retrieving the number of nodes...");
   _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
   LOG_VARD(_numNodesAfterApplyingChangeset);
 

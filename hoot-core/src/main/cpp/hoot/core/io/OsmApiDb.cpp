@@ -493,8 +493,10 @@ long OsmApiDb::numElements(const ElementType& elementType)
     _numTypeElementsForMap.reset(new QSqlQuery(_db));
   }
 
+  //adding the where clause prevents postgres from doing a scan of the entire table
   _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + elementTypeToElementTableName(elementType, false, false));
+    "SELECT COUNT(*) FROM " + elementTypeToElementTableName(elementType, false, false) +
+    " WHERE visible = true");
   LOG_VARD(_numTypeElementsForMap->lastQuery());
 
   if (_numTypeElementsForMap->exec() == false)

@@ -227,7 +227,8 @@ int JavaScriptTranslator::getLogCount(QString log)
 
 void JavaScriptTranslator::_init()
 {
-  LOG_DEBUG("Loading script: " << _scriptPath);
+  //This can be a costly operation, hence putting it at INFO.
+  LOG_INFO("Loading script: " << _scriptPath);
 
   _error = false;
   _gContext.reset(new PluginContext());
@@ -827,9 +828,9 @@ vector<Tags> JavaScriptTranslator::translateToOgrTags(Tags& tags, ElementType el
 
     for (QVariantMap::const_iterator it = vm.constBegin(); it != vm.constEnd(); ++it)
     {
-      const QString key = it.key().trimmed();
+      const QString key = it.key();
       const QString val = it.value().toString().trimmed();
-      if (!key.isEmpty() && !val.isEmpty())
+      if (!val.isEmpty())
       {
         t[key] = val;
       }

@@ -556,6 +556,12 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   {
     //no results available, so request some more results
     LOG_TRACE("Requesting more query results...");
+    if (_elementResultIterator)
+    {
+      _elementResultIterator->finish();
+      _elementResultIterator->clear();
+    }
+    _elementResultIterator.reset();
     _elementResultIterator =
       _getDatabase()->selectElements(
         _selectElementType, _maxElementsPerMap, _getCurrentElementOffset(_selectElementType));
@@ -572,12 +578,12 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   //return, which tells hasMoreElements that we don't have any more to return.
   if (!element.get())
   {
-    if (_elementResultIterator)
-    {
-      _elementResultIterator->finish();
-      _elementResultIterator->clear();
-      _elementResultIterator.reset();
-    }
+//    if (_elementResultIterator)
+//    {
+//      _elementResultIterator->finish();
+//      _elementResultIterator->clear();
+//      _elementResultIterator.reset();
+//    }
     const int currentTypeIndex = static_cast<int>(_selectElementType.getEnum());
     const ElementType::Type nextType = static_cast<ElementType::Type>((currentTypeIndex + 1));
     _selectElementType = ElementType(nextType);

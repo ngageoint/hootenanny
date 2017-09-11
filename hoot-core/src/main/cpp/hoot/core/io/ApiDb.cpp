@@ -350,11 +350,11 @@ Tags ApiDb::unescapeTags(const QVariant &v)
     //  Then match the value, ignoring any key/value pairs that don't match
     if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
-      QString key = rxKey.cap(1).trimmed();
+      QString key = rxKey.cap(1);
       LOG_VART(key);
       QString value = rxValue.cap(1).trimmed();
       LOG_VART(value);
-      if (!key.isEmpty() && !value.isEmpty())
+      if (!value.isEmpty())
       {
         // Unescape the actual key/value pairs
         _unescapeString(key);

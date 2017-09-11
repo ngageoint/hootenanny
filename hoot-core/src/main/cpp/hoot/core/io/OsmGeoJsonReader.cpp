@@ -622,11 +622,11 @@ void OsmGeoJsonReader::_addTags(const pt::ptree &item, ElementPtr element)
   {
     for (pt::ptree::const_iterator tagIt = item.begin(); tagIt != item.end(); ++tagIt)
     {
-      QString k = QString::fromStdString(tagIt->first).trimmed();
-      QString v = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
-      if (!k.isEmpty() && !v.isEmpty())
+      const QString key = QString::fromStdString(tagIt->first).trimmed();
+      const QString value = QString::fromStdString(tagIt->second.get_value<string>()).trimmed();
+      if (!value.isEmpty())
       {
-        element->setTag(k, v);
+        element->setTag(key, value);
       }
     }
   }

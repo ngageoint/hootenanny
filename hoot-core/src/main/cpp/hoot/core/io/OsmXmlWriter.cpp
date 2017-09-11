@@ -299,9 +299,9 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const QString key = it.key().trimmed();
+    const QString key = it.key();
     const QString val = it.value().trimmed();
-    if (key.isEmpty() == false && val.isEmpty() == false)
+    if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
       _writer->writeAttribute("k", removeInvalidCharacters(key));
@@ -508,9 +508,9 @@ void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapP
 
   for (Tags::const_iterator tit = tags.constBegin(); tit != tags.constEnd(); ++tit)
   {
-    const QString key = tit.key().trimmed();
+    const QString key = tit.key();
     const QString val = tit.value().trimmed();
-    if (key.isEmpty() == false && val.isEmpty() == false)
+    if (val.isEmpty() == false)
     {
       _writer->writeStartElement("tag");
       _writer->writeAttribute("k", removeInvalidCharacters(key));

@@ -147,9 +147,10 @@ void SparkChangesetWriter::writeChange(const Change& change)
       throw IllegalArgumentException("Unexpected change type.");
   }
 
-  if (change.getElement()->getElementId().getId() == debugId)
+  if (Log::getInstance().getLevel() <= Log::Trace &&
+      change.getElement()->getElementId().getId() == debugId)
   {
-    LOG_VARD(change.getElement());
+    LOG_VART(change.getElement());
   }
 
   NodePtr nodeCopy = (boost::dynamic_pointer_cast<const Node>(change.getElement()))->cloneSp();
@@ -208,9 +209,9 @@ void SparkChangesetWriter::writeChange(const Change& change)
     const Tags& tags = nodeCopy->getTags();
     for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
-      const QString tagKey = it.key().trimmed();
+      const QString tagKey = it.key();
       const QString tagValue = it.value().trimmed();
-      if (!tagKey.isEmpty() && !tagValue.isEmpty())
+      if (!tagValue.isEmpty())
       {
         if (!first)
         {
