@@ -194,6 +194,11 @@ public:
    */
   virtual long numEstimatedElements(const ElementType& elementType);
 
+  /**
+   * See ApiDb::maxId
+   */
+  virtual long maxId(const ElementType& elementType);
+
 protected:
 
   void _resetQueries();
@@ -209,6 +214,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
   boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
   boost::shared_ptr<QSqlQuery> _numEstimatedTypeElementsForMap;
+  boost::shared_ptr<QSqlQuery> _maxIdForElementType;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _seqQueries;
 

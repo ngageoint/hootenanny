@@ -211,6 +211,7 @@ void OsmApiDb::_resetQueries()
   _insertUser.reset();
   _numTypeElementsForMap.reset();
   _numEstimatedTypeElementsForMap.reset();
+  _maxIdForElementType.reset();
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
@@ -504,7 +505,7 @@ long OsmApiDb::numEstimatedElements(const ElementType& elementType)
 
   _numEstimatedTypeElementsForMap->prepare(
     "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
-    tableTypeToTableName(TableType::fromElementType(elementType)) + "'");
+    elementTypeToElementTableName(elementType, false, false) + "'");
   LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
 
   if (_numEstimatedTypeElementsForMap->exec() == false)
@@ -525,6 +526,42 @@ long OsmApiDb::numEstimatedElements(const ElementType& elementType)
     }
   }
   _numEstimatedTypeElementsForMap->finish();
+  return result;
+}
+
+long OsmApiDb::maxId(const ElementType& elementType)
+{
+  //TODO: this is completely redundant with HootApiDb::maxId except for the table
+  //name string creation and should be rolled up into ApiDb
+
+  if (!_maxIdForElementType)
+  {
+    _maxIdForElementType.reset(new QSqlQuery(_db));
+  }
+
+  _maxIdForElementType->prepare(
+    "SELECT id FROM " + elementTypeToElementTableName(elementType, false, false) +
+    " ORDER BY id DESC LIMIT 1");
+  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
+
+  if (_maxIdForElementType->exec() == false)
+  {
+    LOG_ERROR(_maxIdForElementType->executedQuery());
+    LOG_ERROR(_maxIdForElementType->lastError().text());
+    throw HootException(_maxIdForElementType->lastError().text());
+  }
+
+  long result = -1;
+  if (_maxIdForElementType->next())
+  {
+    bool ok;
+    result = _maxIdForElementType->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve max ID for element type: " + elementType.toString());
+    }
+  }
+  _maxIdForElementType->finish();
   return result;
 }
 

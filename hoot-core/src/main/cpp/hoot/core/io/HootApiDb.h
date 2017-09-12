@@ -118,6 +118,11 @@ public:
    */
   virtual long numEstimatedElements(const ElementType& elementType);
 
+  /**
+   * See ApiDb::maxId
+   */
+  virtual long maxId(const ElementType& elementType);
+
   //writing
 
   void endChangeset();
@@ -340,6 +345,7 @@ private:
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
   boost::shared_ptr<QSqlQuery> _getMapIdByName;
   boost::shared_ptr<QSqlQuery> _numEstimatedTypeElementsForMap;
+  boost::shared_ptr<QSqlQuery> _maxIdForElementType;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

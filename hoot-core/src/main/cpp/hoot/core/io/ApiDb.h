@@ -301,6 +301,14 @@ public:
    */
   virtual long numEstimatedElements(const ElementType& elementType) = 0;
 
+  /**
+   * Returns the largest row ID for the given element type
+   *
+   * @param elementType the type of element to return a max ID for
+   * @return an element ID
+   */
+  virtual long maxId(const ElementType& elementType) = 0;
+
   QSqlError getLastError() const { return _db.lastError(); }
 
   inline static QString getChangesetsTableName()                { return "changesets"; }

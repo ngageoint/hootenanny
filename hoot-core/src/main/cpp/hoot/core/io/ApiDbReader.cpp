@@ -434,13 +434,9 @@ void ApiDbReader::initializePartial()
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
   _lastId = 0;
-
-  _nodeIndex = 0;
-  _totalNumMapNodes = 0;
-  _wayIndex = 0;
-  _totalNumMapWays = 0;
-  _relationIndex = 0;
-  _totalNumMapRelations = 0;
+  _maxNodeId = 0;
+  _maxWayId = 0;
+  _maxRelationId = 0;
 }
 
 void ApiDbReader::read(OsmMapPtr map)
@@ -489,7 +485,7 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   {
     boost::shared_ptr<Element> element =
       _resultToElement(*elementResultsIterator, elementType, *map );
-    //this check is necessary due to an inefficiency in _resultToElement
+    //this check is necessary due to the way _resultToElement behaves
     if (element.get())
     {
       map->addElement(element);
@@ -505,61 +501,45 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   LOG_VARD(map->getRelations().size());
 }
 
-long ApiDbReader::_numElementsRead() const
-{
-  return _nodeIndex + _wayIndex + _relationIndex;
-}
-
-long ApiDbReader::_numElementsTotal() const
-{
-  return _totalNumMapNodes + _totalNumMapWays + _totalNumMapRelations;
-}
-
 bool ApiDbReader::hasMoreElements()
 {
   if (!_firstPartialReadCompleted)
   {
-    //TODO: Could this be a cleaner implementation if we just executed separate queries for
-    //each element type and returned the elements seamlessly by getNextElement?  That would prevent
-    //having to do these total element queries.
+    //The estimated counts will only be accurate if the table has recently been analyzed.  The
+    //non-estimated counts are always accurate, but can be expensive for large tables that haven't
+    //recently been analyzed.  Since the count obtained here is for informational purposes only,
+    //we'll just grab the estimated count and expect it to be wrong from time to time.
 
-    //get the total element counts before beginning results parsing
     const double start = Tgs::Time::getTime();
-    LOG_DEBUG("Retrieving element counts...");
-    //this may be risky using the estimated counts here at all.  they are *much* faster, though.
-    _totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
-    if (_totalNumMapNodes == 0)
-    {
-      _totalNumMapNodes = _getDatabase()->numElements(ElementType::Node);
-    }
+    LOG_DEBUG("Retrieving element counts and max IDs...");
+
+    const long totalNumMapNodes = _getDatabase()->numEstimatedElements(ElementType::Node);
+    long totalNumMapWays = 0;
+    long totalNumMapRelations = 0;
     if (!_returnNodesOnly)
     {
-      _totalNumMapWays = _getDatabase()->numEstimatedElements(ElementType::Way);
-      if (_totalNumMapWays == 0)
-      {
-        _totalNumMapWays = _getDatabase()->numElements(ElementType::Way);
-      }
-      _totalNumMapRelations = _getDatabase()->numEstimatedElements(ElementType::Relation);
-      if (_totalNumMapRelations == 0)
-      {
-        _totalNumMapRelations = _getDatabase()->numElements(ElementType::Relation);
-      }
+      totalNumMapWays = _getDatabase()->numEstimatedElements(ElementType::Way);
+      totalNumMapRelations = _getDatabase()->numEstimatedElements(ElementType::Relation);
     }
+
+    _maxNodeId = _getDatabase()->maxId(ElementType::Node);
+    LOG_VARD(_maxNodeId);
+    _maxWayId = _getDatabase()->maxId(ElementType::Way);
+    LOG_VARD(_maxWayId);
+    _maxRelationId = _getDatabase()->maxId(ElementType::Relation);
+    LOG_VARD(_maxRelationId);
+
     LOG_DEBUG("Queries took " << Tgs::Time::getTime() - start << " seconds.");
 
     LOG_INFO(
-      "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapNodes) <<
-      " nodes, " << FileUtils::formatPotentiallyLargeNumber(_totalNumMapWays) << " ways, and " <<
-      FileUtils::formatPotentiallyLargeNumber(_totalNumMapRelations) << " relations...");
+      "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(totalNumMapNodes) <<
+      " nodes, " << FileUtils::formatPotentiallyLargeNumber(totalNumMapWays) << " ways, and " <<
+      FileUtils::formatPotentiallyLargeNumber(totalNumMapRelations) << " relations...");
 
     _firstPartialReadCompleted = true;
   }
 
-  //LOG_VART(_numElementsRead());
-  //LOG_VART(_numElementsTotal());
-  //assert(_numElementsRead() <= _numElementsTotal());
-
-  if (_nextElement == 0)
+  if (!_nextElement.get())
   {
     _nextElement = _getElementUsingIterator();
   }
@@ -568,17 +548,7 @@ bool ApiDbReader::hasMoreElements()
 
 boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
 {
-  const ElementType currentSelectElementType = _selectElementType;
-  //LOG_VART(currentSelectElementType);
   _selectElementType = _getCurrentSelectElementType();
-  //LOG_VART(_selectElementType);
-  //If the next select element type retrieved doesn't match the previous one, we know that we've
-  //moved to a new element type.  So, reset the ID counter.
-  if (currentSelectElementType != _selectElementType)
-  {
-    _lastId = 0;
-  }
-  //LOG_VART(_lastId);
   //LOG_VART(_selectElementType);
   if (_selectElementType == ElementType::Unknown)
   {
@@ -588,7 +558,7 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   //see if another result is available
   if (!_elementResultIterator.get() || !_elementResultIterator->isActive())
   {
-    //no results available, so request some more results
+    //no results are available, so request some more results
     LOG_DEBUG("Requesting more query results...");
     if (_elementResultIterator)
     {
@@ -639,7 +609,6 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
     _lastId = result->getId();
     //LOG_VART(_lastId);
     _nextElement.reset();
-    _incrementElementIndex(_selectElementType);
     _elementsRead++;
     //LOG_VART(_elementsRead);
     return result;
@@ -650,56 +619,31 @@ boost::shared_ptr<Element> ApiDbReader::readNextElement()
   }
 }
 
-const ElementType ApiDbReader::_getCurrentSelectElementType() const
+ElementType ApiDbReader::_getCurrentSelectElementType()
 {
-  if (_nodeIndex < _totalNumMapNodes)
+  if (_selectElementType == ElementType::Node && _lastId < _maxNodeId)
   {
     return ElementType::Node;
   }
-  else if (_wayIndex < _totalNumMapWays)
+  else if (_selectElementType == ElementType::Node && _lastId == _maxNodeId)
+  {
+    _lastId = 0;
+    return ElementType::Way;
+  }
+  else if (_selectElementType == ElementType::Way && _lastId < _maxWayId)
   {
     return ElementType::Way;
   }
-  else if (_relationIndex < _totalNumMapRelations)
+  else if (_selectElementType == ElementType::Way && _lastId == _maxWayId)
+  {
+    _lastId = 0;
+    return ElementType::Relation;
+  }
+  else if (_selectElementType == ElementType::Relation && _lastId < _maxRelationId)
   {
     return ElementType::Relation;
   }
   return ElementType::Unknown;
-}
-
-//long ApiDbReader::_getCurrentElementOffset(const ElementType& selectElementType) const
-//{
-//  switch (selectElementType.getEnum())
-//  {
-//    case ElementType::Node:
-//      return _nodeIndex;
-//    case ElementType::Way:
-//      return _wayIndex;
-//    case ElementType::Relation:
-//      return _relationIndex;
-//    default:
-//      //shouldn't ever get here
-//      throw HootException("_getCurrentElementOffset");
-//  }
-//}
-
-void ApiDbReader::_incrementElementIndex(const ElementType& selectElementType)
-{
-  switch (selectElementType.getEnum())
-  {
-    case ElementType::Node:
-      _nodeIndex++;
-      break;
-    case ElementType::Way:
-      _wayIndex++;
-      break;
-    case ElementType::Relation:
-      _relationIndex++;
-      break;
-    default:
-      //shouldn't ever get here
-      throw HootException("_incrementElementIndex");
-  }
 }
 
 void ApiDbReader::finalizePartial()

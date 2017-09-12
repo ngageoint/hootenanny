@@ -1054,6 +1054,7 @@ void HootApiDb::_resetQueries()
   _mapExistsByName.reset();
   _getMapIdByName.reset();
   _numEstimatedTypeElementsForMap.reset();
+  _maxIdForElementType.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1314,6 +1315,42 @@ long HootApiDb::numEstimatedElements(const ElementType& elementType)
     }
   }
   _numEstimatedTypeElementsForMap->finish();
+  return result;
+}
+
+long HootApiDb::maxId(const ElementType& elementType)
+{
+  //TODO: this is completely redundant with OsmApiDb::maxId except for the table
+  //name string creation and should be rolled up into ApiDb
+
+  if (!_maxIdForElementType)
+  {
+    _maxIdForElementType.reset(new QSqlQuery(_db));
+  }
+
+  _maxIdForElementType->prepare(
+    "SELECT id FROM " +
+    tableTypeToTableName(TableType::fromElementType(elementType)) + " ORDER BY id DESC LIMIT 1");
+  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
+
+  if (_maxIdForElementType->exec() == false)
+  {
+    LOG_ERROR(_maxIdForElementType->executedQuery());
+    LOG_ERROR(_maxIdForElementType->lastError().text());
+    throw HootException(_maxIdForElementType->lastError().text());
+  }
+
+  long result = -1;
+  if (_maxIdForElementType->next())
+  {
+    bool ok;
+    result = _maxIdForElementType->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve max ID for element type: " + elementType.toString());
+    }
+  }
+  _maxIdForElementType->finish();
   return result;
 }
 
