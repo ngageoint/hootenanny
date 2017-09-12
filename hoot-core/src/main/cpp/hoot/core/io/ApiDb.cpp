@@ -71,7 +71,8 @@ namespace hoot
 
 const Status ApiDb::DEFAULT_ELEMENT_STATUS(Status::Invalid);
 
-ApiDb::ApiDb()
+ApiDb::ApiDb() :
+_maxElementsPerPartialMap(ConfigOptions().getMaxElementsPerPartialMap())
 {
 }
 
@@ -105,10 +106,33 @@ void ApiDb::_resetQueries()
   _selectWayNodeIdsByWayIds.reset();
   _selectRelationIdsByMemberIds.reset();
   _selectChangesetsCreatedAfterTime.reset();
-  _numTypeElementsForMap.reset();
-  _selectElementsForMap.reset();
-  _numEstimatedTypeElementsForMap.reset();
-  _maxIdForElementType.reset();
+
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _maxIdQueries.begin();
+       itr != _maxIdQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _numElementsQueries.begin();
+       itr != _numElementsQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _numEstimatedElementsQueries.begin();
+       itr != _numEstimatedElementsQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectQueries.begin();
+       itr != _selectQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  _selectQueries.clear();
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectAllQueries.begin();
+       itr != _selectAllQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -548,7 +572,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>
 }
 
 boost::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
-                                                           const TableType& tableType)
+                                                                  const TableType& tableType)
 {
   if (elementIds.size() == 0)
   {
@@ -608,7 +632,7 @@ boost::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>
 }
 
 boost::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
-                                                          const ElementType& memberElementType)
+                                                               const ElementType& memberElementType)
 {
   if (memberIds.size() == 0)
   {
@@ -820,142 +844,166 @@ void ApiDb::readDbConfig(Settings& settings, QString config_path)
 
 boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementType)
 {
-  return selectElements(elementType);
-}
-
-boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType,
-                                                   const long limit, const long minId)
-{
-  if (!_selectElementsForMap)
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_selectAllQueries[elementTableName])
   {
-    _selectElementsForMap.reset(new QSqlQuery(_db));
-    _selectElementsForMap->setForwardOnly(true);
+    _selectAllQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectAllQueries[elementTableName]->setForwardOnly(true);
+    const QString sql = "SELECT * FROM " + elementTableName + " WHERE visible = true ORDER BY id";
+    _selectAllQueries[elementTableName]->prepare(sql);
   }
+  LOG_VARD(_selectAllQueries[elementTableName]->lastQuery());
 
-  QString sql =
-    "SELECT * FROM " + elementTypeToElementTableName(elementType) + " WHERE visible = true";
-  if (minId > 0)
-  {
-    //adding this part of the where clause is a better alternative than using an OFFSET statement
-    //for very large tables
-    sql += " AND id > " + QString::number(minId);
-  }
-  sql += " ORDER BY id";
-  if (limit > 0)
-  {
-    sql += " LIMIT " + QString::number(limit);
-  }
-  _selectElementsForMap->prepare(sql);
-  LOG_VARD(_selectElementsForMap->lastQuery());
-
-  if (_selectElementsForMap->exec() == false)
+  if (_selectAllQueries[elementTableName]->exec() == false)
   {
     const QString err =
-      "Error selecting elements of type: " + elementType.toString() + " Error: " +
-      _selectElementsForMap->lastError().text();
+      "Error selecting all elements of type: " + elementType.toString() + " Error: " +
+      _selectAllQueries[elementTableName]->lastError().text();
     LOG_ERROR(err);
     throw HootException(err);
   }
-  LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VART(_selectElementsForMap->executedQuery());
+  LOG_VARD(_selectAllQueries[elementTableName]->numRowsAffected());
+  LOG_VART(_selectAllQueries[elementTableName]->executedQuery());
 
-  return _selectElementsForMap;
+  return _selectAllQueries[elementTableName];
+}
+
+boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType,
+                                                   const long minId)
+{
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  LOG_VART(elementTableName);
+  LOG_VART(_selectQueries[elementTableName].get());
+  if (!_selectQueries[elementTableName])
+  {
+    _selectQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectQueries[elementTableName]->setForwardOnly(true);
+    const QString sql =
+      "SELECT * FROM " + elementTableName + " WHERE visible = true AND id > :minId ORDER BY id " +
+      "LIMIT " + QString::number(_maxElementsPerPartialMap);
+    LOG_VART(sql);
+    _selectQueries[elementTableName]->prepare(sql);
+  }
+  LOG_VART(_selectQueries[elementTableName].get());
+  _selectQueries[elementTableName]->bindValue(":minId", (qlonglong)minId);
+  LOG_VART(_selectQueries[elementTableName].get());
+  //LOG_VART(_selectQueries[elementTableName]);
+  LOG_VARD(_selectQueries[elementTableName]->lastQuery());
+  LOG_VARD(_selectQueries[elementTableName]->boundValues());
+
+  if (_selectQueries[elementTableName]->exec() == false)
+  {
+    LOG_VART(_selectQueries[elementTableName]->executedQuery());
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() + " Error: " +
+      _selectQueries[elementTableName]->lastError().text();
+    LOG_ERROR(err);
+    LOG_ERROR(_selectQueries[elementTableName]->lastError().databaseText());
+    LOG_ERROR(_selectQueries[elementTableName]->lastError().driverText());
+    LOG_ERROR(_selectQueries[elementTableName]->lastError().number());
+    LOG_ERROR(_selectQueries[elementTableName]->lastError().type());
+    throw HootException(err);
+  }
+  LOG_VARD(_selectQueries[elementTableName]->numRowsAffected());
+  LOG_VART(_selectQueries[elementTableName]->executedQuery());
+
+  return _selectQueries[elementTableName];
 }
 
 long ApiDb::maxId(const ElementType& elementType)
 {
-  if (!_maxIdForElementType)
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_maxIdQueries[elementTableName])
   {
-    _maxIdForElementType.reset(new QSqlQuery(_db));
+    _maxIdQueries[elementTableName].reset(new QSqlQuery(_db));
+    _maxIdQueries[elementTableName]->prepare(
+      "SELECT id FROM " + elementTableName + " ORDER BY id DESC LIMIT 1");
   }
+  LOG_VARD(_maxIdQueries[elementTableName]->lastQuery());
 
-  _maxIdForElementType->prepare(
-    "SELECT id FROM " + elementTypeToElementTableName(elementType) + " ORDER BY id DESC LIMIT 1");
-  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
-
-  if (_maxIdForElementType->exec() == false)
+  if (_maxIdQueries[elementTableName]->exec() == false)
   {
-    LOG_ERROR(_maxIdForElementType->executedQuery());
-    LOG_ERROR(_maxIdForElementType->lastError().text());
-    throw HootException(_maxIdForElementType->lastError().text());
+    LOG_ERROR(_maxIdQueries[elementTableName]->executedQuery());
+    LOG_ERROR(_maxIdQueries[elementTableName]->lastError().text());
+    throw HootException(_maxIdQueries[elementTableName]->lastError().text());
   }
 
   long result = -1;
-  if (_maxIdForElementType->next())
+  if (_maxIdQueries[elementTableName]->next())
   {
     bool ok;
-    result = _maxIdForElementType->value(0).toLongLong(&ok);
+    result = _maxIdQueries[elementTableName]->value(0).toLongLong(&ok);
     if (!ok)
     {
       throw HootException("Count not retrieve max ID for element type: " + elementType.toString());
     }
   }
-  _maxIdForElementType->finish();
+  _maxIdQueries[elementTableName]->finish();
   return result;
 }
 
 long ApiDb::numElements(const ElementType& elementType)
 {
-  if (!_numTypeElementsForMap)
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_numElementsQueries[elementTableName])
   {
-    _numTypeElementsForMap.reset(new QSqlQuery(_db));
+    _numElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numElementsQueries[elementTableName]->prepare(
+      "SELECT COUNT(*) FROM " + elementTableName + " WHERE visible = true");
   }
+  LOG_VARD(_numElementsQueries[elementTableName]->lastQuery());
 
-  _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + elementTypeToElementTableName(elementType) + " WHERE visible = true");
-  LOG_VARD(_numTypeElementsForMap->lastQuery());
-
-  if (_numTypeElementsForMap->exec() == false)
+  if (_numElementsQueries[elementTableName]->exec() == false)
   {
-    LOG_ERROR(_numTypeElementsForMap->executedQuery());
-    LOG_ERROR(_numTypeElementsForMap->lastError().text());
-    throw HootException(_numTypeElementsForMap->lastError().text());
+    LOG_ERROR(_numElementsQueries[elementTableName]->executedQuery());
+    LOG_ERROR(_numElementsQueries[elementTableName]->lastError().text());
+    throw HootException(_numElementsQueries[elementTableName]->lastError().text());
   }
 
   long result = -1;
-  if (_numTypeElementsForMap->next())
+  if (_numElementsQueries[elementTableName]->next())
   {
     bool ok;
-    result = _numTypeElementsForMap->value(0).toLongLong(&ok);
+    result = _numElementsQueries[elementTableName]->value(0).toLongLong(&ok);
     if (!ok)
     {
       throw HootException("Count not retrieve count for element type: " + elementType.toString());
     }
   }
-  _numTypeElementsForMap->finish();
+  _numElementsQueries[elementTableName]->finish();
   return result;
 }
 
 long ApiDb::numEstimatedElements(const ElementType& elementType)
 {
-  if (!_numEstimatedTypeElementsForMap)
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_numEstimatedElementsQueries[elementTableName])
   {
-    _numEstimatedTypeElementsForMap.reset(new QSqlQuery(_db));
+    _numEstimatedElementsQueries[elementTableName].reset(new QSqlQuery(_db));
+    _numEstimatedElementsQueries[elementTableName]->prepare(
+      "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
+      elementTableName + "'");
   }
+  LOG_VARD(_numEstimatedElementsQueries[elementTableName]->lastQuery());
 
-  _numEstimatedTypeElementsForMap->prepare(
-    "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
-    elementTypeToElementTableName(elementType) + "'");
-  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
-
-  if (_numEstimatedTypeElementsForMap->exec() == false)
+  if (_numEstimatedElementsQueries[elementTableName]->exec() == false)
   {
-    LOG_ERROR(_numEstimatedTypeElementsForMap->executedQuery());
-    LOG_ERROR(_numEstimatedTypeElementsForMap->lastError().text());
-    throw HootException(_numEstimatedTypeElementsForMap->lastError().text());
+    LOG_ERROR(_numEstimatedElementsQueries[elementTableName]->executedQuery());
+    LOG_ERROR(_numEstimatedElementsQueries[elementTableName]->lastError().text());
+    throw HootException(_numEstimatedElementsQueries[elementTableName]->lastError().text());
   }
 
   long result = -1;
-  if (_numEstimatedTypeElementsForMap->next())
+  if (_numEstimatedElementsQueries[elementTableName]->next())
   {
     bool ok;
-    result = _numEstimatedTypeElementsForMap->value(0).toLongLong(&ok);
+    result = _numEstimatedElementsQueries[elementTableName]->value(0).toLongLong(&ok);
     if (!ok)
     {
       throw HootException("Count not retrieve count for element type: " + elementType.toString());
     }
   }
-  _numEstimatedTypeElementsForMap->finish();
+  _numEstimatedElementsQueries[elementTableName]->finish();
   return result;
 }
 

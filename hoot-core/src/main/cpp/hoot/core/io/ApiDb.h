@@ -163,14 +163,11 @@ public:
    * database, sorted by element ID.
    *
    * @param elementType the element type to query for
-   * @param limit the number of elements to query for; If limit = 0, no limit will be placed on the
-   * number of elements returned
    * @param minId the minimum element ID to return; this is more efficient than using an offset when
    * dealing with very large record sets
    * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long limit = 0,
                                                       const long minId = 0);
 
   /**
@@ -428,18 +425,20 @@ protected:
 
 private:
 
-  //element bounds related queries
   boost::shared_ptr<QSqlQuery> _selectNodesByBounds;
   boost::shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
   boost::shared_ptr<QSqlQuery> _selectElementsByElementIdList;
   boost::shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
   boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
-  boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
-  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
-  boost::shared_ptr<QSqlQuery> _numEstimatedTypeElementsForMap;
-  boost::shared_ptr<QSqlQuery> _maxIdForElementType;
-
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _numEstimatedElementsQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectAllQueries;
+
+  long _maxElementsPerPartialMap;
 
   QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
   std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;

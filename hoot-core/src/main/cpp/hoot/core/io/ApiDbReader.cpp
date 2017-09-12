@@ -573,10 +573,9 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
     _elementResultIterator.reset();
     //LOG_VART(_lastId);
     const double start = Tgs::Time::getTime();
-    //Never ever remove the _maxElementsPerMap and _lastId inputs from this call.  Doing that will
-    //turn the query into a selectAll.
-    _elementResultIterator =
-      _getDatabase()->selectElements(_selectElementType, _maxElementsPerMap, _lastId);
+    //Never ever remove the _lastId input from this call.  Doing that will turn the query into a
+    //select all query.
+    _elementResultIterator = _getDatabase()->selectElements(_selectElementType, _lastId);
     LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
   }
 
