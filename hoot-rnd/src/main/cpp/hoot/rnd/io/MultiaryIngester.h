@@ -90,6 +90,8 @@ private:
   long _logUpdateInterval;
   QMap<Change::ChangeType, long> _changesByType;
   HootApiDb _referenceDb;
+  long _referenceNodesParsed;
+  long _newNodesParsed;
 
   QElapsedTimer _timer;
 

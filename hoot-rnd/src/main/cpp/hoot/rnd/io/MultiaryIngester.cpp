@@ -58,7 +58,9 @@ MultiaryIngester::MultiaryIngester() :
 _sortInput(true),
 _addToExistingRefDb(false),
 _changesParsed(0),
-_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval())
+_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval()),
+_referenceNodesParsed(0),
+_newNodesParsed(0)
 {
   //in order for the sorting to work, all original node ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
@@ -214,6 +216,9 @@ void MultiaryIngester::_printSummary()
     LOG_INFO(
       "  Delete statements: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
+    LOG_INFO(
+      "Reference nodes parsed: " << FileUtils::formatPotentiallyLargeNumber(_referenceNodesParsed));
+    LOG_INFO("New nodes parsed: " << FileUtils::formatPotentiallyLargeNumber(_newNodesParsed));
   }
   else
   {
@@ -299,7 +304,7 @@ void MultiaryIngester::_writeNewReferenceData(
   referenceWriter->finalizePartial();
   changesetFileWriter->close();
 
-  LOG_INFO("Nodes written to reference layer: " << referenceOutput << ".");
+  _printSummary();
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
@@ -375,33 +380,24 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
           FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
           ", New: " <<
           FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()) <<
-          ", Changes: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-          " Cr: " << _changesByType[Change::Create] << ", Mod: " <<
-          _changesByType[Change::Modify] << ", Del: " << _changesByType[Change::Delete]);
+          ", Chng: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          " Cr: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]) <<
+          ", Mod: " <<
+          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]) << ", Del: " <<
+          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
       }
     }
   }
+
+  _referenceNodesParsed = changesetDeriver.getNumFromElementsParsed();
+  _newNodesParsed = changesetDeriver.getNumToElementsParsed();
 
   referenceReader->finalizePartial();
   changesetFileWriter->close();
   changesetDeriver.close();
   changesetTempFileWriter->close();
 
-  LOG_VARD(changesetDeriver.getNumFromElementsParsed());
-  LOG_VARD(changesetDeriver.getNumToElementsParsed());
-
-  LOG_INFO(
-    FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-    " changes derived and written to changeset file: " << changesetOutput << ".");
-  LOG_INFO(
-    "  Create statements: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
-  LOG_INFO(
-    "  Modify statements: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]));
-  LOG_INFO(
-    "  Delete statements: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
+  _printSummary();
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 
   return tmpChangeset;
