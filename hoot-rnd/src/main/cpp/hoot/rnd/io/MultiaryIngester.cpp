@@ -58,9 +58,7 @@ MultiaryIngester::MultiaryIngester() :
 _sortInput(true),
 _addToExistingRefDb(false),
 _changesParsed(0),
-_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval()),
-_numNodesBeforeApplyingChangeset(0),
-_numNodesAfterApplyingChangeset(0)
+_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval())
 {
   //in order for the sorting to work, all original node ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
@@ -140,13 +138,6 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     _addToExistingRefDb = true;
     //assuming no duplicate map names here
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
-    LOG_DEBUG("Retrieving the number of nodes...");
-    const double start = Tgs::Time::getTime();
-    _numNodesBeforeApplyingChangeset = _referenceDb.numEstimatedElements(ElementType::Node);
-    LOG_INFO(
-      "Current number of nodes in the reference layer: " <<
-      FileUtils::formatPotentiallyLargeNumber(_numNodesBeforeApplyingChangeset));
-    LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
 
     QString sortedNewInput;
     if (!_sortInput)
@@ -223,12 +214,6 @@ void MultiaryIngester::_printSummary()
     LOG_INFO(
       "  Delete statements: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
-    LOG_INFO(
-      "Number of nodes in reference layer before applying changeset: " <<
-      FileUtils::formatPotentiallyLargeNumber(_numNodesBeforeApplyingChangeset));
-    LOG_INFO(
-      "Number of nodes in reference layer after applying changeset: " <<
-      FileUtils::formatPotentiallyLargeNumber(_numNodesAfterApplyingChangeset));
   }
   else
   {
@@ -386,9 +371,13 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
       if (_changesParsed % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "Derived " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-          " changes.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
-          _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
+          "Ref: " <<
+          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
+          ", New: " <<
+          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()) <<
+          ", Changes: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          " Cr: " << _changesByType[Change::Create] << ", Mod: " <<
+          _changesByType[Change::Modify] << ", Del: " << _changesByType[Change::Delete]);
       }
     }
   }
@@ -460,14 +449,6 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   referenceWriter->finalizePartial();
   referenceChangeWriter->close();
   changesetFileReader.close();
-
-  LOG_DEBUG("Retrieving the number of nodes...");
-  const double start = Tgs::Time::getTime();
-  _numNodesAfterApplyingChangeset = _referenceDb.numEstimatedElements(ElementType::Node);
-  LOG_INFO(
-    "New number of nodes in the reference layer: " <<
-    FileUtils::formatPotentiallyLargeNumber(_numNodesAfterApplyingChangeset));
-  LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
 
   LOG_INFO(
     FileUtils::formatPotentiallyLargeNumber(changesWritten) <<
