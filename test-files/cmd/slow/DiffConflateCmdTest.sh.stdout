@@ -1,0 +1,20 @@
+16:31:23.911 INFO  ...t/core/cmd/DiffConflateCmd.cpp( 121) Conflating test-files/conflate/diff/me.osm with test-files/conflate/diff/mgcp.osm and writing the output to test-output/cmd/DiffConflateCmdTest/output.osm
+16:31:23.924 INFO  ...ore/io/OsmMapReaderFactory.cpp( 139) Loading map from test-files/conflate/diff/me.osm...
+16:31:24.077 INFO  ...ore/io/OsmMapReaderFactory.cpp( 139) Loading map from test-files/conflate/diff/mgcp.osm...
+16:31:28.608 INFO  ...t/core/cmd/DiffConflateCmd.cpp( 165) Applying pre-conflation operations...
+16:31:28.612 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::BuildingOutlineRemoveOp
+16:31:28.613 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::MapCleaner
+16:31:28.620 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::ReprojectToPlanarOp
+
+16:31:28.898 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::DuplicateWayRemover
+16:31:29.259 INFO  ...hoot/core/schema/OsmSchema.cpp(1867) Loading translation files...
+16:31:30.271 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::SuperfluousWayRemover
+16:31:30.274 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::IntersectionSplitter
+16:31:30.418 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::UnlikelyIntersectionRemover
+16:31:30.870 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::DualWaySplitter
+16:31:31.292 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::ImpliedDividedMarker
+16:31:32.019 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::DuplicateNameRemover
+16:31:32.031 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::SmallWayMerger
+16:31:32.334 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  78) Applying visitor: hoot::RemoveEmptyAreasVisitor
+16:31:32.718 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  78) Applying visitor: hoot::RemoveDuplicateAreaVisitor
+16:31:33.411 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  58) Applying operation: hoot::NoInformationElementRemover

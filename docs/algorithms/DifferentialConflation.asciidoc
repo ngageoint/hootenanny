@@ -1,0 +1,14 @@
+
+
+[[DifferentialConflation]]
+== Differential Conflation
+
+Differential Conflation makes use of the Unifying conflation framework within Hootenanny,
+but attempts a much simpler operation than "full" conflation. The idea is to allow a user to
+take two datasets, A and B, and generate a changeset from them such that the changeset
+includes all of the data in set B that does not overlap (conflict, need merging, etc.) with
+set A. The changeset can then be applied directly to dataset A.
+
+
+
+This algorithm is still under development.
