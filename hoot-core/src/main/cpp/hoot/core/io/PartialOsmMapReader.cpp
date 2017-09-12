@@ -47,11 +47,7 @@ void PartialOsmMapReader::readPartial(OsmMapPtr map)
   _partialMap = map;
   while (hasMoreElements() && (_elementsRead < _maxElementsPerMap))
   {
-    boost::shared_ptr<Element> element = readNextElement();
-    if (element.get())
-    {
-      _partialMap->addElement(element);
-    }
+    _partialMap->addElement(readNextElement());
   }
   _elementsRead = 0;
 }

@@ -137,6 +137,7 @@ protected:
 
   ElementType _selectElementType;
   boost::shared_ptr<QSqlQuery> _elementResultIterator;
+  boost::shared_ptr<Element> _nextElement;
 
   virtual NodePtr _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
   virtual WayPtr _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
@@ -160,13 +161,14 @@ private:
 
   bool _firstPartialReadCompleted;
 
-  //indexes are 0 based and indicate the next record that should be returned by a partial query
-  long _nodeIndex;
-  long _totalNumMapNodes;
-  long _wayIndex;
-  long _totalNumMapWays;
-  long _relationIndex;
-  long _totalNumMapRelations;
+  //the maximum ID for each element present in the table; since the results coming back are sorted
+  //by ID, these can be used to know when to stop reading elements of each type
+  long _maxNodeId;
+  long _maxWayId;
+  long _maxRelationId;
+
+  //last element ID read
+  long _lastId;
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 
@@ -178,21 +180,13 @@ private:
   boost::shared_ptr<Element> _resultToElement(QSqlQuery& resultIterator,
                                               const ElementType& elementType, OsmMap& map);
 
-  long _getCurrentElementOffset(const ElementType& selectElementType) const;
-  void _incrementElementIndex(const ElementType& selectElementType);
   /*
    * the current element type being returned by the partial query; order is: node, way, and then
    * relation
    */
-  const ElementType _getCurrentSelectElementType() const;
-  /*
-   * number of elements read by the partial querying so far
-   */
-  long _numElementsRead() const;
-  /*
-   * number of total elements of all types in the db
-   */
-  long _numElementsTotal() const;
+  ElementType _getCurrentSelectElementType();
+
+  boost::shared_ptr<Element> _getElementUsingIterator();
 };
 
 }

@@ -286,7 +286,8 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED SHP REFERENCE LAYER OUTPUT..."
 echo ""
-hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $REF_DIR/allCountries-shp-unsorted-output.osm $FINAL_OUTPUT #TODO: doublecheck this
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED SHP CHANGESET OUTPUT..."
 echo ""

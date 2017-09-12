@@ -44,6 +44,9 @@
 #include <hoot/core/io/OsmFileSorter.h>
 #include <hoot/core/io/OgrReader.h>
 
+// tgs
+#include <tgs/System/Time.h>
+
 // Qt
 #include <QFileInfo>
 #include <QDir>
@@ -56,8 +59,8 @@ _sortInput(true),
 _addToExistingRefDb(false),
 _changesParsed(0),
 _logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval()),
-_numNodesBeforeApplyingChangeset(0),
-_numNodesAfterApplyingChangeset(0)
+_referenceNodesParsed(0),
+_newNodesParsed(0)
 {
   //in order for the sorting to work, all original node ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
@@ -135,9 +138,8 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     LOG_INFO("and writing the changes to the changeset file...");
 
     _addToExistingRefDb = true;
+    //assuming no duplicate map names here
     _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
-    _numNodesBeforeApplyingChangeset = _referenceDb.numElements(ElementType::Node);
-    LOG_VARD(_numNodesBeforeApplyingChangeset);
 
     QString sortedNewInput;
     if (!_sortInput)
@@ -215,11 +217,8 @@ void MultiaryIngester::_printSummary()
       "  Delete statements: " <<
       FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
     LOG_INFO(
-      "Number of nodes in reference layer before applying changeset: " <<
-      FileUtils::formatPotentiallyLargeNumber(_numNodesBeforeApplyingChangeset));
-    LOG_INFO(
-      "Number of nodes in reference layer after applying changeset: " <<
-      FileUtils::formatPotentiallyLargeNumber(_numNodesAfterApplyingChangeset));
+      "Reference nodes parsed: " << FileUtils::formatPotentiallyLargeNumber(_referenceNodesParsed));
+    LOG_INFO("New nodes parsed: " << FileUtils::formatPotentiallyLargeNumber(_newNodesParsed));
   }
   else
   {
@@ -305,7 +304,7 @@ void MultiaryIngester::_writeNewReferenceData(
   referenceWriter->finalizePartial();
   changesetFileWriter->close();
 
-  LOG_INFO("Nodes written to reference layer: " << referenceOutput << ".");
+  _printSummary();
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
@@ -377,33 +376,28 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
       if (_changesParsed % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "Derived " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-          " changes.  Create: " << _changesByType[Change::Create] << ", Modify: " <<
-          _changesByType[Change::Modify] << ", Delete: " << _changesByType[Change::Delete]);
+          "Ref: " <<
+          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
+          " New: " <<
+          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()) <<
+          " Chng: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          " Cr: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]) <<
+          " Mod: " <<
+          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]) << " Del: " <<
+          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
       }
     }
   }
+
+  _referenceNodesParsed = changesetDeriver.getNumFromElementsParsed();
+  _newNodesParsed = changesetDeriver.getNumToElementsParsed();
 
   referenceReader->finalizePartial();
   changesetFileWriter->close();
   changesetDeriver.close();
   changesetTempFileWriter->close();
 
-  LOG_VARD(changesetDeriver.getNumFromElementsParsed());
-  LOG_VARD(changesetDeriver.getNumToElementsParsed());
-
-  LOG_INFO(
-    FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-    " changes derived and written to changeset file: " << changesetOutput << ".");
-  LOG_INFO(
-    "  Create statements: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
-  LOG_INFO(
-    "  Modify statements: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]));
-  LOG_INFO(
-    "  Delete statements: " <<
-    FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
+  _printSummary();
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 
   return tmpChangeset;
@@ -446,13 +440,11 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
         " changes to ref layer.");
     }
   }
+  assert(changesWritten == _changesParsed);
 
   referenceWriter->finalizePartial();
   referenceChangeWriter->close();
   changesetFileReader.close();
-
-  _numNodesAfterApplyingChangeset = _referenceDb.numElements(ElementType::Node);
-  LOG_VARD(_numNodesAfterApplyingChangeset);
 
   LOG_INFO(
     FileUtils::formatPotentiallyLargeNumber(changesWritten) <<

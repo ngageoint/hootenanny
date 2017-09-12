@@ -161,7 +161,11 @@ ElementPtr GeoNamesReader::readNextElement()
   for (int i = 0; i < _columns.size(); i++)
   {
     int j = i; //convertColumns[i];
-    n->getTags()[_columns[j]] = _saveMemory(fields[j]);
+    const QString val = fields[j].trimmed();
+    if (!val.isEmpty())
+    {
+      n->getTags()[_columns[j]] = _saveMemory(val);
+    }
   }
 
   LOG_VART(n);
