@@ -378,12 +378,12 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
         PROGRESS_INFO(
           "Ref: " <<
           FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
-          ", New: " <<
+          " New: " <<
           FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()) <<
-          ", Chng: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
+          " Chng: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
           " Cr: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]) <<
-          ", Mod: " <<
-          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]) << ", Del: " <<
+          " Mod: " <<
+          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]) << " Del: " <<
           FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
       }
     }
