@@ -9,7 +9,7 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
         When I click on the "Datasets" option in the "settingsSidebar"
         And I context click "Import Single Dataset"
         And I click the first "dataset-option" list item
-        And I wait 5 "seconds" to see "Bulk Import Datasets"
+        And I wait 5 "seconds" to see "Import Multiple Datasets"
         Then I press "big.loud" span with text "Add Row"
         Then I select in row 0 the "File (osm,osm.zip,pbf)" option in the "Select Import Type" combobox
         And I select in row 0 the "/test-files/conflate/unified/AllDataTypesA.osm" dataset
@@ -23,7 +23,7 @@ Feature: Review Conflated Layer with Active Reviews After Deleting Inputs
         And I should see "Initializing..."
         And I wait 2 "minutes" to see "Close"
         Then I press "big.loud" span with text "Close"
-        Then I wait 2 "minutes" to not see "Bulk Import Datasets"
+        Then I wait 2 "minutes" to not see "Import Multiple Datasets"
         Then I wait 2 "minutes" to see "1AllDataTypes_Cucumber"
         And I wait 2 "minutes" to see "2AllDataTypes_Cucumber"
         And I select the "sprocket" div
