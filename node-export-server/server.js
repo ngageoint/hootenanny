@@ -196,7 +196,7 @@ function doExport(req, res, hash, input) {
                     }, config.settings.cleanupDelay);
                 });
             }
-        } else { //if present, return status
+        } else { //if present, return status or hash
             if (job.status !== runningStatus) {
                 res.status(500);
                 res.send(job.status);
@@ -272,9 +272,9 @@ function doExport(req, res, hash, input) {
         console.log(command);
 
         //hoot osm2ogr -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/TDSv61.js "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''" osm.shp
-        //setTimeout(function() { //used to simulate a long request
         var child = exec(command, {cwd: hootHome},
             function(error, stdout, stderr) {
+                //setTimeout(function() { //used to simulate a long request
                 if (stderr || error) {
                     //res.send({command: command, stderr: stderr, error: error});
                     jobs[hash].status = stderr;
@@ -302,9 +302,9 @@ function doExport(req, res, hash, input) {
                     zip.finalize();
 
                 }
+                //}, 10000); //used to simulate a long request
             }
         );
-        //}, 5000); //used to simulate a long request
 
         //create new job entry
         jobs[hash] = {
