@@ -524,10 +524,13 @@ bool ApiDbReader::hasMoreElements()
 
     _maxNodeId = _getDatabase()->maxId(ElementType::Node);
     LOG_VARD(_maxNodeId);
-    _maxWayId = _getDatabase()->maxId(ElementType::Way);
-    LOG_VARD(_maxWayId);
-    _maxRelationId = _getDatabase()->maxId(ElementType::Relation);
-    LOG_VARD(_maxRelationId);
+    if (!_returnNodesOnly)
+    {
+      _maxWayId = _getDatabase()->maxId(ElementType::Way);
+      LOG_VARD(_maxWayId);
+      _maxRelationId = _getDatabase()->maxId(ElementType::Relation);
+      LOG_VARD(_maxRelationId);
+    }
 
     LOG_DEBUG("Queries took " << Tgs::Time::getTime() - start << " seconds.");
 
@@ -550,6 +553,8 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
 {
   _selectElementType = _getCurrentSelectElementType();
   //LOG_VART(_selectElementType);
+  //After going through all the element types, the "unknown" element type will be returned, which
+  //tells hasMoreElements that we don't have any more to return.
   if (_selectElementType == ElementType::Unknown)
   {
     return boost::shared_ptr<Element>();
@@ -568,6 +573,8 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
     _elementResultIterator.reset();
     //LOG_VART(_lastId);
     const double start = Tgs::Time::getTime();
+    //Never ever remove the _maxElementsPerMap and _lastId inputs from this call.  Doing that will
+    //turn the query into a selectAll.
     _elementResultIterator =
       _getDatabase()->selectElements(_selectElementType, _maxElementsPerMap, _lastId);
     LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
@@ -577,13 +584,13 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   boost::shared_ptr<Element> element =
     _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
 
-  //QSqlQuery::next() in _resultToElement will return null when at the end of records collection
-  //for a given element type.  We don't want to ever return a null element as the last record to
-  //clients, so here we'll just swallow it.  After going through all the element types, the
-  //"unknown" element type will return, which tells hasMoreElements that we don't have any more
-  //to return.
+
   if (!element.get())
   {
+    //QSqlQuery::next() in _resultToElement will return null when at the end of records collection
+    //for a given element type.  We don't want to ever return a null element as the last record to
+    //clients, so here we'll just swallow it.
+
     LOG_TRACE("Received null element.");
     if (_elementResultIterator)
     {

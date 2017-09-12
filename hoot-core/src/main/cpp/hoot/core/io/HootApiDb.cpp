@@ -1035,12 +1035,9 @@ void HootApiDb::_resetQueries()
   _insertWayNodes.reset();
   _insertRelationMembers.reset();
   _selectHootDbVersion.reset();
-  _selectUserByEmail.reset();
   _insertUser.reset();
   _mapExistsById.reset();
   _changesetExists.reset();
-  _numTypeElementsForMap.reset();
-  _selectElementsForMap.reset();
   _selectReserveNodeIds.reset();
   _selectNodeIdsForWay.reset();
   _selectMapIds.reset();
@@ -1053,8 +1050,6 @@ void HootApiDb::_resetQueries()
   _jobStatusExists.reset();
   _mapExistsByName.reset();
   _getMapIdByName.reset();
-  _numEstimatedTypeElementsForMap.reset();
-  _maxIdForElementType.reset();
 
   // bulk insert objects.
   _nodeBulkInsert.reset();
@@ -1064,20 +1059,6 @@ void HootApiDb::_resetQueries()
   _wayNodeBulkInsert.reset();
   _wayBulkInsert.reset();
   _wayIdReserver.reset();
-}
-
-void HootApiDb::rollback()
-{
-  LOG_TRACE("Rolling back transaction...");
-
-  _resetQueries();
-
-  if (!_db.rollback())
-  {
-    throw HootException("Error rolling back transaction: " + _db.lastError().text());
-  }
-
-  _inTransaction = false;
 }
 
 set<long> HootApiDb::selectMapIds(QString name)
@@ -1113,19 +1094,6 @@ set<long> HootApiDb::selectMapIds(QString name)
   }
 
   return result;
-}
-
-void HootApiDb::transaction()
-{
-  LOG_TRACE("Starting transaction...");
-
-  // Queries must be created from within the current transaction.
-  _resetQueries();
-  if (!_db.transaction())
-  {
-    throw HootException(_db.lastError().text());
-  }
-  _inTransaction = true;
 }
 
 QString HootApiDb::tableTypeToTableName(const TableType& tableType) const
@@ -1239,156 +1207,9 @@ bool HootApiDb::changesetExists(const long id)
   return _changesetExists->next();
 }
 
-boost::shared_ptr<QSqlQuery> HootApiDb::selectElements(const ElementType& elementType,
-                                                       const long limit, const long minId)
+QString HootApiDb::elementTypeToElementTableName(const ElementType& elementType) const
 {
-  //TODO: this is completely redundant with OsmApiDb::selectElements except for the table name
-  //string creation and should be rolled up into ApiDb
-
-  if (!_selectElementsForMap)
-  {
-    _selectElementsForMap.reset(new QSqlQuery(_db));
-    _selectElementsForMap->setForwardOnly(true);
-  }
-
-  QString sql =
-    "SELECT * FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
-    " WHERE visible = true";
-  if (minId > 0)
-  {
-    //adding this part of the where clause in can prevent the offset calc from becoming too costly
-    //for very large offsets
-    sql += " AND id > " + QString::number(minId);
-  }
-  sql += " ORDER BY id";
-  if (limit > 0)
-  {
-    sql += " LIMIT " + QString::number(limit);
-  }
-  _selectElementsForMap->prepare(sql);
-  LOG_VARD(_selectElementsForMap->lastQuery());
-
-  if (_selectElementsForMap->exec() == false)
-  {
-    const QString err =
-      "Error selecting elements of type: " + elementType.toString() + " for map ID: " +
-      QString::number(_currMapId) + " Error: " + _selectElementsForMap->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VART(_selectElementsForMap->executedQuery());
-
-  return _selectElementsForMap;
-}
-
-long HootApiDb::numEstimatedElements(const ElementType& elementType)
-{
-  //TODO: this is completely redundant with OsmApiDb::numEstimatedElements except for the table
-  //name string creation and should be rolled up into ApiDb
-
-  if (!_numEstimatedTypeElementsForMap)
-  {
-    _numEstimatedTypeElementsForMap.reset(new QSqlQuery(_db));
-  }
-
-  _numEstimatedTypeElementsForMap->prepare(
-    "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
-    tableTypeToTableName(TableType::fromElementType(elementType)) + "'");
-  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
-
-  if (_numEstimatedTypeElementsForMap->exec() == false)
-  {
-    LOG_ERROR(_numEstimatedTypeElementsForMap->executedQuery());
-    LOG_ERROR(_numEstimatedTypeElementsForMap->lastError().text());
-    throw HootException(_numEstimatedTypeElementsForMap->lastError().text());
-  }
-
-  long result = -1;
-  if (_numEstimatedTypeElementsForMap->next())
-  {
-    bool ok;
-    result = _numEstimatedTypeElementsForMap->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Count not retrieve count for element type: " + elementType.toString());
-    }
-  }
-  _numEstimatedTypeElementsForMap->finish();
-  return result;
-}
-
-long HootApiDb::maxId(const ElementType& elementType)
-{
-  //TODO: this is completely redundant with OsmApiDb::maxId except for the table
-  //name string creation and should be rolled up into ApiDb
-
-  if (!_maxIdForElementType)
-  {
-    _maxIdForElementType.reset(new QSqlQuery(_db));
-  }
-
-  _maxIdForElementType->prepare(
-    "SELECT id FROM " +
-    tableTypeToTableName(TableType::fromElementType(elementType)) + " ORDER BY id DESC LIMIT 1");
-  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
-
-  if (_maxIdForElementType->exec() == false)
-  {
-    LOG_ERROR(_maxIdForElementType->executedQuery());
-    LOG_ERROR(_maxIdForElementType->lastError().text());
-    throw HootException(_maxIdForElementType->lastError().text());
-  }
-
-  long result = -1;
-  if (_maxIdForElementType->next())
-  {
-    bool ok;
-    result = _maxIdForElementType->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Count not retrieve max ID for element type: " + elementType.toString());
-    }
-  }
-  _maxIdForElementType->finish();
-  return result;
-}
-
-long HootApiDb::numElements(const ElementType& elementType)
-{
-  //TODO: this is completely redundant with OsmApiDb::numElements except for the table name string
-  //creation and should be rolled up into ApiDb
-
-  if (!_numTypeElementsForMap)
-  {
-    _numTypeElementsForMap.reset(new QSqlQuery(_db));
-  }
-
-  //adding the where clause prevents postgres from doing a scan of the entire table
-  _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + tableTypeToTableName(TableType::fromElementType(elementType)) +
-    " WHERE visible = true");
-  LOG_VARD(_numTypeElementsForMap->lastQuery());
-
-  if (_numTypeElementsForMap->exec() == false)
-  {
-    LOG_ERROR(_numTypeElementsForMap->executedQuery());
-    LOG_ERROR(_numTypeElementsForMap->lastError().text());
-    throw HootException(_numTypeElementsForMap->lastError().text());
-  }
-
-  long result = -1;
-  if (_numTypeElementsForMap->next())
-  {
-    bool ok;
-    result = _numTypeElementsForMap->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Count not retrieve count for element type: " + elementType.toString());
-    }
-  }
-  _numTypeElementsForMap->finish();
-  return result;
+  return tableTypeToTableName(TableType::fromElementType(elementType));
 }
 
 vector<long> HootApiDb::selectNodeIdsForWay(long wayId)
