@@ -126,79 +126,85 @@ function doExport(req, res, hash, input) {
 
     if (job) {
         if (job.status === completeStatus) { //if complete, return file
-            res.download(job.outZip, downloadFile, function(err) {
-                if (jobs[hash].timeout)
-                    clearTimeout(jobs[hash].timeout);
+            if (req.method === 'POST') {
+                res.send(hash);
+            } else {
+                res.download(job.outZip, downloadFile, function(err) {
+                    if (jobs[hash].timeout)
+                        clearTimeout(jobs[hash].timeout);
 
-                // clean up export files after configured delay
-                jobs[hash].timeout = setTimeout(function() {
-                    if (jobs[hash]) {
-                        var job = jobs[hash];
-                        //delete export files
-                        if (isFile) {
-                            fs.unlink(job.outFile, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + job.outFile);
-                                }
-                            });
-                        } else {
-                            rmdir(job.outDir, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + job.outDir);
-                                }
-                            });
-                        }
-                        fs.unlink(job.outZip, function(err) {
-                            if (err) {
-                                console.error(err);
+                    // clean up export files after configured delay
+                    jobs[hash].timeout = setTimeout(function() {
+                        if (jobs[hash]) {
+                            var job = jobs[hash];
+                            //delete export files
+                            if (isFile) {
+                                fs.unlink(job.outFile, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.outFile);
+                                    }
+                                });
                             } else {
-                                console.log('deleted ' + job.outZip);
+                                rmdir(job.outDir, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.outDir);
+                                    }
+                                });
                             }
-                        });
-                        if (fs.existsSync(job.outDir + '.osm')) {
-                            fs.unlink(job.outDir + '.osm', function(err) {
+                            fs.unlink(job.outZip, function(err) {
                                 if (err) {
                                     console.error(err);
                                 } else {
-                                    console.log('deleted ' + job.outDir + '.osm');
+                                    console.log('deleted ' + job.outZip);
                                 }
                             });
+                            if (fs.existsSync(job.outDir + '.osm')) {
+                                fs.unlink(job.outDir + '.osm', function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.outDir + '.osm');
+                                    }
+                                });
+                            }
+                            //Attempt to remove superfluous POST payload file if job is already running
+                            if (fs.existsSync(input)) {
+                                fs.unlink(input, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + input);
+                                    }
+                                });
+                            }
+                            //This deletes the input files used by the job
+                            if (fs.existsSync(job.input)) {
+                                fs.unlink(job.input, function(err) {
+                                    if (err) {
+                                        console.error(err);
+                                    } else {
+                                        console.log('deleted ' + job.input);
+                                    }
+                                });
+                            }
+                            delete jobs[hash];
                         }
-                        //Attempt to remove superfluous POST payload file if job is already running
-                        if (fs.existsSync(input)) {
-                            fs.unlink(input, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + input);
-                                }
-                            });
-                        }
-                        //This deletes the input files used by the job
-                        if (fs.existsSync(job.input)) {
-                            fs.unlink(job.input, function(err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('deleted ' + job.input);
-                                }
-                            });
-                        }
-                        delete jobs[hash];
-                    }
-                }, config.settings.cleanupDelay);
-            });
+                    }, config.settings.cleanupDelay);
+                });
+            }
         } else { //if present, return status
             if (job.status !== runningStatus) {
                 res.status(500);
+                res.send(job.status);
                 //remove error'd job
                 if (req.method === 'GET') delete jobs[hash];
+            } else {
+                res.send(hash);
             }
-            res.send(job.status);
             //Attempt to remove superfluous POST payload file if job is already running
             if (fs.existsSync(input)) {
                 fs.unlink(input, function(err) {
