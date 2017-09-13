@@ -51,12 +51,13 @@ if [ "`date +%F`" != "`test -e ../BuildDate.txt && cat ../BuildDate.txt`" ]; the
     REBUILD_VAGRANT=true
 fi
 
-if [ $REBUILD_VAGRANT == 'true' ]; then
+# Disable VM reuse option.  Not working with AWS provider.
+#if [ $REBUILD_VAGRANT == 'true' ]; then
     vagrant destroy -f
     time -p vagrant up --provider aws
-else
-    time -p vagrant up --provision-with build,EGD,tomcat,mapnik,hadoop --provider aws
-fi
+#else
+#    time -p vagrant up --provision-with build,EGD,tomcat,mapnik,hadoop --provider aws
+#fi
 
 # Disableing this until it gets moved earlier into the build.
 # Clean out the Database

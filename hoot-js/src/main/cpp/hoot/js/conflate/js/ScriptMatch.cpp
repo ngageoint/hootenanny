@@ -414,11 +414,11 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
       result[it.key()] = d;
       if (::qIsNaN(result[it.key()]))
       {
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("found NaN feature value for: " << it.key());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }

@@ -259,11 +259,11 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -315,11 +315,11 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
 {
   if (visitedRelations.contains(getId()))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Invalid data. This relation contains a circular reference. " + toString());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

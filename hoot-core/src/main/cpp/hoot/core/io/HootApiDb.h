@@ -35,6 +35,10 @@
 namespace hoot
 {
 
+/**
+ * Used for interaction with an Hootenanny API database (Hootenanny's internal customized version
+ * of the OSM API database).
+ */
 class HootApiDb : public ApiDb
 {
 public:
@@ -63,19 +67,12 @@ public:
 
   virtual void open(const QUrl& url);
 
-  virtual void transaction();
-
-  virtual void rollback();
-
   virtual void commit();
 
-  //reading
-
   /**
-   * @see ApiDb::selectElements
+   * @see ApiDb::elementTypeToElementTableName
    */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const bool sorted = false);
+  virtual QString elementTypeToElementTableName(const ElementType& elementType) const;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -106,14 +103,6 @@ public:
    * Returns true if the changeset with the specified ID exists in the services database
    */
   bool changesetExists(const long id);
-
-  /**
-   * Returns the number of OSM elements of a given type for a particular map in the services
-   * database
-   */
-  long numElements(const ElementType& elementType);
-
-  //writing
 
   void endChangeset();
 
@@ -269,19 +258,31 @@ public:
   inline static QString getMapIdString(long id) { return QString("_%1").arg(id); }
 
   // Services DB table strings
-  inline static QString getChangesetsTableName(long mapId)                { return ApiDb::getChangesetsTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentNodesTableName(long mapId)              { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentRelationMembersTableName(long mapId)    { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentRelationsTableName(long mapId)          { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentWayNodesTableName(long mapId)           { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId); }
-  inline static QString getCurrentWaysTableName(long mapId)               { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId); }
+  inline static QString getChangesetsTableName(long mapId)
+  { return ApiDb::getChangesetsTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentNodesTableName(long mapId)
+  { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentRelationMembersTableName(long mapId)
+  { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentRelationsTableName(long mapId)
+  { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentWayNodesTableName(long mapId)
+  { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId); }
+  inline static QString getCurrentWaysTableName(long mapId)
+  { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId); }
 
-  inline static QString getChangesetsSequenceName(long mapId)             { return ApiDb::getChangesetsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentNodesSequenceName(long mapId)           { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentRelationMembersSequenceName(long mapId) { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentRelationsSequenceName(long mapId)       { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentWayNodesSequenceName(long mapId)        { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
-  inline static QString getCurrentWaysSequenceName(long mapId)            { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getChangesetsSequenceName(long mapId)
+  { return ApiDb::getChangesetsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentNodesSequenceName(long mapId)
+  { return ApiDb::getCurrentNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentRelationMembersSequenceName(long mapId)
+  { return ApiDb::getCurrentRelationMembersTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentRelationsSequenceName(long mapId)
+  { return ApiDb::getCurrentRelationsTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentWayNodesSequenceName(long mapId)
+  { return ApiDb::getCurrentWayNodesTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
+  inline static QString getCurrentWaysSequenceName(long mapId)
+  { return ApiDb::getCurrentWaysTableName() + getMapIdString(mapId) + ApiDb::getSequenceId(); }
 
   inline static QString getJobStatusTableName() { return "job_status"; }
 
@@ -297,13 +298,20 @@ public:
 
   static QUrl getBaseUrl();
 
+  /**
+   * Given a map name, returns its ID; assumes only one map with the given name
+   *
+   * @param name name of the map to retrieve
+   * @return a map ID
+   */
+  long getMapIdByName(const QString name);
+
 protected:
 
   virtual void _resetQueries();
 
 private:
 
-  bool _inTransaction;
   boost::shared_ptr<QSqlQuery> _closeChangeSet;
   boost::shared_ptr<QSqlQuery> _insertChangeSet;
   boost::shared_ptr<QSqlQuery> _insertChangeSetTag;
@@ -313,9 +321,7 @@ private:
   boost::shared_ptr<QSqlQuery> _selectHootDbVersion;
   boost::shared_ptr<QSqlQuery> _mapExistsById;
   boost::shared_ptr<QSqlQuery> _changesetExists;
-  boost::shared_ptr<QSqlQuery> _numTypeElementsForMap;
   boost::shared_ptr<QSqlQuery> _selectReserveNodeIds;
-  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
   boost::shared_ptr<QSqlQuery> _selectMapIds;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
   boost::shared_ptr<QSqlQuery> _updateNode;
@@ -325,6 +331,7 @@ private:
   boost::shared_ptr<QSqlQuery> _insertJobStatus;
   boost::shared_ptr<QSqlQuery> _jobStatusExists;
   boost::shared_ptr<QSqlQuery> _mapExistsByName;
+  boost::shared_ptr<QSqlQuery> _getMapIdByName;
 
   boost::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
@@ -360,6 +367,8 @@ private:
 
   unsigned long _nodesAddedToCache;
   unsigned long _nodesFlushedFromCache;
+
+  int _precision;
 
   /**
    * There are some statements that cannot be executed within a transaction

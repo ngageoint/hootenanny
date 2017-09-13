@@ -143,10 +143,11 @@ void SqlBulkInsert::flush()
     QSqlQuery q(_db);
     if (q.exec(sql) == false)
     {
-      LOG_ERROR(q.executedQuery());
-      LOG_ERROR(q.lastError().text());
-      throw HootException(QString("Error executing bulk insert: %1 (%2)").arg(q.lastError().text()).
-                          arg(sql));
+      LOG_ERROR(q.executedQuery().left(500));
+      LOG_ERROR(q.lastError().text().left(500));
+      throw HootException(
+        QString("Error executing bulk insert: %1 (%2)")
+        .arg(q.lastError().text().left(500)).arg(sql));
     }
 
     q.finish();

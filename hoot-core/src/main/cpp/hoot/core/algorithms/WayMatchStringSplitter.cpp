@@ -42,7 +42,9 @@ QString WayMatchStringSplitter::_overlyAggressiveMergeReviewText =
   "Please review the length of the review for overly aggressive merges and manually merge features "
   "using input data/imagery. There may also be one or more zero length ways at intersections.";
 
-WayMatchStringSplitter::WayMatchStringSplitter()
+WayMatchStringSplitter::WayMatchStringSplitter() :
+_preserveUnknown1ElementIdWhenModifyingFeatures(
+  ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
 {
 }
 
@@ -175,8 +177,7 @@ void WayMatchStringSplitter::_splitWay1(OsmMapPtr map, vector<pair<ElementId, El
     }
 
     // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (w1->getStatus() == Status::Unknown1 &&
-        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+    if (w1->getStatus() == Status::Unknown1 && _preserveUnknown1ElementIdWhenModifyingFeatures)
     {
       LOG_TRACE(
         "Retaining reference ID by mapping unknown1 ID: " << w1->getElementId() << " to ID: " <<
@@ -288,8 +289,7 @@ void WayMatchStringSplitter::_splitWay2(OsmMapPtr map, vector<pair<ElementId, El
     }
 
     // see comments for similar functionality in HighwaySnapMerger::_mergePair
-    if (w2->getStatus() == Status::Unknown1 &&
-        ConfigOptions().getPreserveUnknown1ElementIdWhenModifyingFeatures())
+    if (w2->getStatus() == Status::Unknown1 && _preserveUnknown1ElementIdWhenModifyingFeatures)
     {
       LOG_TRACE(
         "Retaining reference ID by mapping unknown1 ID: " << w2->getElementId() << " to ID: " <<

@@ -528,7 +528,7 @@ void Tags::removeEmptyTags()
   // remove all the empty tags.
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
-    if (get(it.key()) == "")
+    if (get(it.key()).trimmed().isEmpty())
     {
       remove(it.key());
     }

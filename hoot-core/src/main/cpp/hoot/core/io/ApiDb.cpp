@@ -105,6 +105,10 @@ void ApiDb::_resetQueries()
   _selectWayNodeIdsByWayIds.reset();
   _selectRelationIdsByMemberIds.reset();
   _selectChangesetsCreatedAfterTime.reset();
+  _numTypeElementsForMap.reset();
+  _selectElementsForMap.reset();
+  _numEstimatedTypeElementsForMap.reset();
+  _maxIdForElementType.reset();
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -168,6 +172,32 @@ void ApiDb::open(const QUrl& url)
 
   LOG_DEBUG("Successfully opened db: " << url.toString());
   LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_db));
+}
+
+void ApiDb::transaction()
+{
+  LOG_TRACE("Starting transaction...");
+
+  // Queries must be created from within the current transaction.
+  _resetQueries();
+  if (!_db.transaction())
+  {
+    throw HootException(_db.lastError().text());
+  }
+  _inTransaction = true;
+}
+
+void ApiDb::rollback()
+{
+  LOG_TRACE("Rolling back transaction...");
+
+  _resetQueries();
+
+  if (!_db.rollback())
+  {
+    throw HootException("Error rolling back transaction: " + _db.lastError().text());
+  }
+  _inTransaction = false;
 }
 
 long ApiDb::getUserId(const QString email, bool throwWhenMissing)
@@ -351,11 +381,17 @@ Tags ApiDb::unescapeTags(const QVariant &v)
     if ((pos = rxValue.indexIn(str, pos)) != -1)
     {
       QString key = rxKey.cap(1);
-      QString value = rxValue.cap(1);
-      //  Unescape the actual key/value pairs
-      _unescapeString(key);
-      _unescapeString(value);
-      result.insert(key, value);
+      LOG_VART(key);
+      QString value = rxValue.cap(1).trimmed();
+      LOG_VART(value);
+      if (!value.isEmpty())
+      {
+        // Unescape the actual key/value pairs
+        _unescapeString(key);
+        _unescapeString(value);
+        result.insert(key, value);
+      }
+
       pos += rxValue.matchedLength();
     }
   }
@@ -780,6 +816,147 @@ void ApiDb::readDbConfig(Settings& settings, QString config_path)
       settings.set(key, value);
     }
   }
+}
+
+boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementType)
+{
+  return selectElements(elementType);
+}
+
+boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType,
+                                                   const long limit, const long minId)
+{
+  if (!_selectElementsForMap)
+  {
+    _selectElementsForMap.reset(new QSqlQuery(_db));
+    _selectElementsForMap->setForwardOnly(true);
+  }
+
+  QString sql =
+    "SELECT * FROM " + elementTypeToElementTableName(elementType) + " WHERE visible = true";
+  if (minId > 0)
+  {
+    //adding this part of the where clause is a better alternative than using an OFFSET statement
+    //for very large tables
+    sql += " AND id > " + QString::number(minId);
+  }
+  sql += " ORDER BY id";
+  if (limit > 0)
+  {
+    sql += " LIMIT " + QString::number(limit);
+  }
+  _selectElementsForMap->prepare(sql);
+  LOG_VARD(_selectElementsForMap->lastQuery());
+
+  if (_selectElementsForMap->exec() == false)
+  {
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() + " Error: " +
+      _selectElementsForMap->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+  LOG_VARD(_selectElementsForMap->numRowsAffected());
+  LOG_VART(_selectElementsForMap->executedQuery());
+
+  return _selectElementsForMap;
+}
+
+long ApiDb::maxId(const ElementType& elementType)
+{
+  if (!_maxIdForElementType)
+  {
+    _maxIdForElementType.reset(new QSqlQuery(_db));
+  }
+
+  _maxIdForElementType->prepare(
+    "SELECT id FROM " + elementTypeToElementTableName(elementType) + " ORDER BY id DESC LIMIT 1");
+  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
+
+  if (_maxIdForElementType->exec() == false)
+  {
+    LOG_ERROR(_maxIdForElementType->executedQuery());
+    LOG_ERROR(_maxIdForElementType->lastError().text());
+    throw HootException(_maxIdForElementType->lastError().text());
+  }
+
+  long result = -1;
+  if (_maxIdForElementType->next())
+  {
+    bool ok;
+    result = _maxIdForElementType->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve max ID for element type: " + elementType.toString());
+    }
+  }
+  _maxIdForElementType->finish();
+  return result;
+}
+
+long ApiDb::numElements(const ElementType& elementType)
+{
+  if (!_numTypeElementsForMap)
+  {
+    _numTypeElementsForMap.reset(new QSqlQuery(_db));
+  }
+
+  _numTypeElementsForMap->prepare(
+    "SELECT COUNT(*) FROM " + elementTypeToElementTableName(elementType) + " WHERE visible = true");
+  LOG_VARD(_numTypeElementsForMap->lastQuery());
+
+  if (_numTypeElementsForMap->exec() == false)
+  {
+    LOG_ERROR(_numTypeElementsForMap->executedQuery());
+    LOG_ERROR(_numTypeElementsForMap->lastError().text());
+    throw HootException(_numTypeElementsForMap->lastError().text());
+  }
+
+  long result = -1;
+  if (_numTypeElementsForMap->next())
+  {
+    bool ok;
+    result = _numTypeElementsForMap->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve count for element type: " + elementType.toString());
+    }
+  }
+  _numTypeElementsForMap->finish();
+  return result;
+}
+
+long ApiDb::numEstimatedElements(const ElementType& elementType)
+{
+  if (!_numEstimatedTypeElementsForMap)
+  {
+    _numEstimatedTypeElementsForMap.reset(new QSqlQuery(_db));
+  }
+
+  _numEstimatedTypeElementsForMap->prepare(
+    "SELECT reltuples AS approximate_row_count FROM pg_class WHERE relname = '" +
+    elementTypeToElementTableName(elementType) + "'");
+  LOG_VARD(_numEstimatedTypeElementsForMap->lastQuery());
+
+  if (_numEstimatedTypeElementsForMap->exec() == false)
+  {
+    LOG_ERROR(_numEstimatedTypeElementsForMap->executedQuery());
+    LOG_ERROR(_numEstimatedTypeElementsForMap->lastError().text());
+    throw HootException(_numEstimatedTypeElementsForMap->lastError().text());
+  }
+
+  long result = -1;
+  if (_numEstimatedTypeElementsForMap->next())
+  {
+    bool ok;
+    result = _numEstimatedTypeElementsForMap->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Count not retrieve count for element type: " + elementType.toString());
+    }
+  }
+  _numEstimatedTypeElementsForMap->finish();
+  return result;
 }
 
 }

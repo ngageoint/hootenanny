@@ -19,7 +19,8 @@ mkdir -p $OUTPUT_DIR
 
 source conf/database/DatabaseConfig.sh
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
-HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true"
+# set the max elements per map in such a way that the partial reading occurs
+HOOT_OPTS="--warn -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D max.elements.per.partial.map=2"
 
 GOLD_OUTPUT=$REF_DIR/allCountries-geonames-output.osm
 GOLD_CHANGESET=$REF_DIR/allCountries-geonames-changeset.spark.1
@@ -285,7 +286,8 @@ hoot convert $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer" $FINAL_OUTP
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED SHP REFERENCE LAYER OUTPUT..."
 echo ""
-hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+#hoot is-match $HOOT_OPTS $GOLD_OUTPUT $FINAL_OUTPUT 
+hoot is-match $HOOT_OPTS $REF_DIR/allCountries-shp-unsorted-output.osm $FINAL_OUTPUT #TODO: doublecheck this
 echo ""
 echo "MULTIARY INGEST - COMPARING UNSORTED SHP CHANGESET OUTPUT..."
 echo ""

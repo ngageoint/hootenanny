@@ -27,6 +27,10 @@
 #ifndef MULTIARYINGESTER_H
 #define MULTIARYINGESTER_H
 
+// Hoot
+#include <hoot/core/io/Change.h>
+#include <hoot/core/io/HootApiDb.h>
+
 // Qt
 #include <QElapsedTimer>
 #include <QTemporaryFile>
@@ -47,8 +51,15 @@ class ElementInputStream;
  * is derived and the entire contents of the data input are simply written directly to the
  * reference layer.
  *
- * This command requires that the input be a streamable format, the output layer be a Hootenanny
+ * This class requires that the input be a streamable format, the output layer be a Hootenanny
  * API database layer, and the changeset output format be a Spark changeset.
+ *
+ * This class uses the Unix sort command to sort the geonames input, which is possible due to the
+ * single line records.  Osmosis is used for sorting OSM files.  This could be replaced with a
+ * custom file based merge sort routine in the future to reduce the dependency on Osmosis, but
+ * for now using it is the best solution.  There is no good solution yet for sorting OGR inputs.
+ * Those inputs must be converted to an OSM format before sorting, which unfortunately roughly
+ * doubles the input parsing time.
  */
 class MultiaryIngester
 {
@@ -73,24 +84,42 @@ private:
   bool _sortInput;
   QString _sortedNewInput;
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
+  bool _addToExistingRefDb;
 
   long _changesParsed;
+  long _logUpdateInterval;
+  QMap<Change::ChangeType, long> _changesByType;
+  HootApiDb _referenceDb;
+  long _referenceNodesParsed;
+  long _newNodesParsed;
 
   QElapsedTimer _timer;
 
-  void _checkForOsmosis() const;
-  void _sortPbf(const QString input, const QString output);
-  boost::shared_ptr<QTemporaryFile> _ogrToPbfTemp(const QString input);
-  QString _getSortedNewInput(const QString newInput);
-
   boost::shared_ptr<ElementInputStream> _getFilteredNewInputStream(const QString sortedNewInput);
 
-  void _writeChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
-                     const QString referenceOutput, const QString changesetOutput);
-  void _deriveAndWriteChanges(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
-                              const QString referenceOutput,
-                              const QString changesetOutput);
+  /*
+   * Writes data to the reference layer when no data exists there (no changeset derivation)
+   */
+  void _writeNewReferenceData(boost::shared_ptr<ElementInputStream> filteredNewInputStream,
+                              const QString referenceOutput, const QString changesetOutput);
 
+  /*
+   * Derives a changeset between the ref layer and another source; writes the output to a changeset
+   * file; returns the changeset file
+   */
+  boost::shared_ptr<QTemporaryFile> _deriveAndWriteChangesToChangeset(
+    boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
+    const QString changesetOutput);
+
+  /*
+   * Writes the contents of a changeset to the ref layer
+   */
+  void _writeChangesToReferenceLayer(const QString changesetOutput, const QString referenceOutput);
+
+  void _printSummary();
+  void _clearChangeTypeCounts();
+
+  void _sortInputFile(const QString input);
 };
 
 }

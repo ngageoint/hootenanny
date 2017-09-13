@@ -49,6 +49,8 @@ public:
 
   static std::string className() { return "hoot::CalculateHashVisitor"; }
 
+  CalculateHashVisitor();
+
   virtual ~CalculateHashVisitor();
 
   virtual void visit(const ElementPtr &e);

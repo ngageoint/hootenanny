@@ -88,7 +88,7 @@ void WayString::append(const WaySubline& subline)
         //exception as part of the work to be done in #1312, or create a new class for the new
         //behavior.
         //throw IllegalArgumentException("Ways must connect at a node in the WayString.");
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Ways must connect at a node in the WayString.");
           LOG_VART(back());
@@ -99,7 +99,7 @@ void WayString::append(const WaySubline& subline)
             << back().getEnd().getNode(WayLocation::SLOPPY_EPSILON)->getElementId()
             << " vs. " << subline.getStart().getNode(WayLocation::SLOPPY_EPSILON)->getElementId());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
