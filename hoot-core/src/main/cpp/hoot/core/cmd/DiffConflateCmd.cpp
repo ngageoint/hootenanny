@@ -70,6 +70,7 @@ public:
 
   virtual QString getName() const { return "diff-conflate"; }
 
+  // Convenience function used when deriving a changeset
   boost::shared_ptr<ChangesetDeriver> _sortInputs(QList<OsmMapPtr> inputMaps)
   {
     ElementSorterPtr sorted1(new ElementSorter(inputMaps[0]));
@@ -82,55 +83,37 @@ public:
   {
     Timer totalTime;
     Timer t;
+    bool findChangeset = false;
 
     QList<SingleStat> stats;
     bool displayStats = false;
     QString outputStatsFile;
-    if (args.contains("--stats"))
+
+    // Handle Stats
+    if (args.endsWith("--stats"))
     {
-      if (args.endsWith("--stats"))
-      {
-        displayStats = true;
-        //remove "--stats" from args list
-        args.pop_back();
-      }
-      else if (args.size() == 5)
-      {
-        displayStats = true;
-        outputStatsFile = args[4];
-        //remove "--stats" and stats output file name from args list
-        args.pop_back();
-        args.pop_back();
-      }
+      displayStats = true;
+      args.pop_back();
     }
 
-    if (args.size() < 2 || args.size() > 3)
+    if (args.size() != 3)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three parameters.").arg(getName()));
     }
 
-    if (!args[2].endsWith("osc", Qt::CaseInsensitive))
+    // Decide if we need to create a changeset
+    if (args[2].endsWith("osc", Qt::CaseInsensitive))
     {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 only supported output is an osm changeset file.").arg(getName()));
+      findChangeset = true;
     }
 
     QString input1 = args[0];
-    QString input2, output;
-
-    if (args.size() == 3)
-    {
-      input2 = args[1];
-      output = args[2];
-    }
-    else
-    {
-      output = args[1];
-    }
+    QString input2 = args[1];
+    QString output = args[2];
 
     LOG_INFO("Differentially conflating " << input1.right(50) << " with " << input2.right(50) <<
-             " and writing changeset to " << output.right(50));
+             " and writing output to " << output.right(50));
 
     double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
     LOG_VART(bytesRead);
@@ -145,10 +128,8 @@ public:
     loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
 
     // read input 2 into our working map
-    if (!input2.isEmpty())
-    {
-      loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
-    }
+    loadMap(map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+
     double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
     LOG_VART(inputBytes);
     double elapsed = t.getElapsedAndRestart();
@@ -199,20 +180,22 @@ public:
     MapProjector::projectToWgs84(result);
     stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
 
-    // If debug, write out a map real quick
-    if (Log::getInstance().isDebugEnabled())
+    // Either write changeset, or osm map
+    if (findChangeset)
     {
-      saveMap(result, output + ".osm");
+      // Calculate & write the changeset
+      QList<OsmMapPtr> inputMaps;
+      inputMaps.push_back(originalMap);
+      inputMaps.push_back(result);
+      OsmXmlChangesetFileWriter().write(output, _sortInputs(inputMaps));
+    }
+    else
+    {
+      saveMap(result, output);
     }
 
-    // Calculate & write the changeset
-    QList<OsmMapPtr> inputMaps;
-    inputMaps.push_back(originalMap);
-    inputMaps.push_back(result);
-    OsmXmlChangesetFileWriter().write(output, _sortInputs(inputMaps));
-
+    // Do more stats
     double timingOutput = t.getElapsedAndRestart();
-
     if (displayStats)
     {
       CalculateStatsOp outputCso("output map", true);
@@ -263,7 +246,7 @@ public:
       }
     }
 
-    LOG_INFO("Conflation job completed.");
+    LOG_INFO("Differential Conflation job completed.");
 
     return 0;
   }

@@ -7,13 +7,13 @@ Conflates two input sources into a single output using the differential conflati
 
 * +input1+ - First input.
 * +input2+ - Second input.
-* +output+ - The output path.
-* +--stats+ - Hootenanny map statistics such as node and way count
+* +output+ - The output path. If the output is a .osc, a changeset will be created, otherwise expect .osm output.
+* +--stats+ - Hootenanny map statistics such as node and way count.
 
 === Usage
 
 --------------------------------------
-diff-conflate (input1) [input2] (output) [--stats]
+diff-conflate (input1) (input2) (output) [--stats]
 ---------------------------------
 
 ==== Example

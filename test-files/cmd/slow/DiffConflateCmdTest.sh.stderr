@@ -1,1 +1,0 @@
-/hoot-release-7/hoot/bin/hoot.bin: symbol lookup error: /hoot-release-7/hoot/lib/libHootCore.so.1: undefined symbol: _ZN4hoot13DiffConflatorC1Ev
