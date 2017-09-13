@@ -445,18 +445,11 @@ private:
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numEstimatedElementsQueries;
-  //QHash<QString, boost::shared_ptr<QSqlQuery> > _selectQueries;
-  //QHash<QString, boost::shared_ptr<QSqlQuery> > _selectAllQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectAllQueries;
 
   QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
   std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;
-
-  boost::shared_ptr<QSqlQuery> _getSelectNodesItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectWaysItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectRelationsItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectAllNodesItr();
-  boost::shared_ptr<QSqlQuery> _getSelectAllWaysItr();
-  boost::shared_ptr<QSqlQuery> _getSelectAllRelationsItr();
 };
 
 }

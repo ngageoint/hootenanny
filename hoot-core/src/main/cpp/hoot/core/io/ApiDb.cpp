@@ -122,24 +122,16 @@ void ApiDb::_resetQueries()
   {
     itr.value().reset();
   }
-//  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectQueries.begin();
-//       itr != _selectQueries.end(); ++itr)
-//  {
-//    itr.value().reset();
-//  }
-//  _selectQueries.clear();
-//  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectAllQueries.begin();
-//       itr != _selectAllQueries.end(); ++itr)
-//  {
-//    itr.value().reset();
-//  }
-
-  _selectNodes.reset();
-  _selectWays.reset();
-  _selectRelations.reset();
-  _selectAllNodes.reset();
-  _selectAllWays.reset();
-  _selectAllRelations.reset();
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectQueries.begin();
+       itr != _selectQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
+  for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _selectAllQueries.begin();
+       itr != _selectAllQueries.end(); ++itr)
+  {
+    itr.value().reset();
+  }
 }
 
 bool ApiDb::isSupported(const QUrl& url)
@@ -1016,194 +1008,58 @@ long ApiDb::numEstimatedElements(const ElementType& elementType)
 
 boost::shared_ptr<QSqlQuery> ApiDb::selectAllElements(const ElementType& elementType)
 {
-  switch (elementType.getEnum())
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_selectAllQueries[elementTableName])
   {
-    case ElementType::Node:
-      return _getSelectAllNodesItr();
-    case ElementType::Way:
-      return _getSelectAllWaysItr();
-    case ElementType::Relation:
-      return _getSelectAllRelationsItr();
-    default:
-      throw HootException("Unexpected element type.");
+    _selectAllQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectAllQueries[elementTableName]->setForwardOnly(true);
+    const QString sql = "SELECT * FROM " + elementTableName + " WHERE visible = true ORDER BY id";
+    _selectAllQueries[elementTableName]->prepare(sql);
   }
+  LOG_VARD(_selectAllQueries[elementTableName]->lastQuery());
+
+  if (_selectAllQueries[elementTableName]->exec() == false)
+  {
+    const QString err =
+      "Error selecting all elements of type: " + elementType.toString() + " Error: " +
+      _selectAllQueries[elementTableName]->lastError().text();
+    LOG_ERROR(err);
+    throw HootException(err);
+  }
+  LOG_VARD(_selectAllQueries[elementTableName]->numRowsAffected());
+  LOG_VART(_selectAllQueries[elementTableName]->executedQuery());
+
+  return _selectAllQueries[elementTableName];
 }
 
-boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType,
-                                                   const long minId)
+boost::shared_ptr<QSqlQuery> ApiDb::selectElements(const ElementType& elementType, const long minId)
 {
-  switch (elementType.getEnum())
+  const QString elementTableName = elementTypeToElementTableName(elementType);
+  if (!_selectQueries[elementTableName])
   {
-    case ElementType::Node:
-      return _getSelectNodesItr(minId);
-    case ElementType::Way:
-      return _getSelectWaysItr(minId);
-    case ElementType::Relation:
-      return _getSelectRelationsItr(minId);
-    default:
-      throw HootException("Unexpected element type.");
-  }
-}
-
-boost::shared_ptr<QSqlQuery> ApiDb::_getSelectNodesItr(const long minId)
-{
-  if (!_selectNodes)
-  {
-    _selectNodes.reset(new QSqlQuery(_db));
-    _selectNodes->setForwardOnly(true);
+    _selectQueries[elementTableName].reset(new QSqlQuery(_db));
+    _selectQueries[elementTableName]->setForwardOnly(true);
     const QString sql =
-      "SELECT * FROM " + elementTypeToElementTableName(ElementType::Node) +
-      " WHERE visible = true AND id > :minId ORDER BY id " +
+      "SELECT * FROM " + elementTableName + " WHERE visible = true AND id > :minId ORDER BY id " +
       "LIMIT " + QString::number(_maxElementsPerPartialMap);
-    LOG_VART(sql);
-    _selectNodes->prepare(sql);
+    LOG_VARD(sql);
+    _selectQueries[elementTableName]->prepare(sql);
   }
-  LOG_VART(_selectNodes.get());
-  _selectNodes->bindValue(":minId", (qlonglong)minId);
-  LOG_VARD(_selectNodes.get());
-  LOG_VARD(_selectNodes->lastQuery());
-  LOG_VARD(_selectNodes->boundValues());
+  _selectQueries[elementTableName]->bindValue(":minId", (qlonglong)minId);
+  LOG_VARD(_selectQueries[elementTableName]->lastQuery());
 
-  if (_selectNodes->exec() == false)
+  if (_selectQueries[elementTableName]->exec() == false)
   {
-    LOG_VART(_selectNodes->executedQuery());
-    const QString err = "Error selecting nodes. Error: " + _selectNodes->lastError().text();
-    LOG_ERROR(err);
-    LOG_ERROR(_selectNodes->lastError().databaseText());
-    LOG_ERROR(_selectNodes->lastError().driverText());
-    LOG_ERROR(_selectNodes->lastError().number());
-    LOG_ERROR(_selectNodes->lastError().type());
-    throw HootException(err);
-  }
-  LOG_VARD(_selectNodes->numRowsAffected());
-  LOG_VARD(_selectNodes->executedQuery());
-
-  return _selectNodes;
-}
-
-boost::shared_ptr<QSqlQuery> ApiDb::_getSelectWaysItr(const long minId)
-{
-  if (!_selectWays)
-  {
-    _selectWays.reset(new QSqlQuery(_db));
-    _selectWays->setForwardOnly(true);
-    const QString sql =
-      "SELECT * FROM " + elementTypeToElementTableName(ElementType::Way) +
-      " WHERE visible = true AND id > :minId ORDER BY id " +
-      "LIMIT " + QString::number(_maxElementsPerPartialMap);
-    _selectWays->prepare(sql);
-  }
-  _selectWays->bindValue(":minId", (qlonglong)minId);
-
-  if (_selectWays->exec() == false)
-  {
-    const QString err = "Error selecting ways. Error: " + _selectWays->lastError().text();
+    const QString err =
+      "Error selecting elements of type: " + elementType.toString() + " Error: " +
+      _selectQueries[elementTableName]->lastError().text();
     LOG_ERROR(err);
     throw HootException(err);
   }
-  LOG_VARD(_selectWays->numRowsAffected());
-  LOG_VART(_selectWays->executedQuery());
+  LOG_VARD(_selectQueries[elementTableName]->numRowsAffected());
+  LOG_VART(_selectQueries[elementTableName]->executedQuery());
 
-  return _selectWays;
-}
-
-boost::shared_ptr<QSqlQuery> ApiDb::_getSelectRelationsItr(const long minId)
-{
-  if (!_selectRelations)
-  {
-    _selectRelations.reset(new QSqlQuery(_db));
-    _selectRelations->setForwardOnly(true);
-    const QString sql =
-      "SELECT * FROM " + elementTypeToElementTableName(ElementType::Relation) +
-      " WHERE visible = true AND id > :minId ORDER BY id " +
-      "LIMIT " + QString::number(_maxElementsPerPartialMap);
-    _selectRelations->prepare(sql);
-  }
-  _selectRelations->bindValue(":minId", (qlonglong)minId);
-
-  if (_selectRelations->exec() == false)
-  {
-    const QString err = "Error selecting relations Error: " + _selectRelations->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectRelations->numRowsAffected());
-  LOG_VART(_selectRelations->executedQuery());
-
-  return _selectRelations;
-}
-
-boost::shared_ptr<QSqlQuery> ApiDb::_getSelectAllNodesItr()
-{
-  if (!_selectAllNodes)
-  {
-    _selectAllNodes.reset(new QSqlQuery(_db));
-    _selectAllNodes->setForwardOnly(true);
-    const QString sql =
-      "SELECT * FROM " + elementTypeToElementTableName(ElementType::Node) +
-      " WHERE visible = true ORDER BY id";
-    _selectAllNodes->prepare(sql);
-  }
-
-  if (_selectAllNodes->exec() == false)
-  {
-    const QString err = "Error selecting all nodes Error: " + _selectAllNodes->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectAllNodes->numRowsAffected());
-  LOG_VART(_selectAllNodes->executedQuery());
-
-  return _selectAllNodes;
-}
-
-boost::shared_ptr<QSqlQuery> ApiDb::_getSelectAllWaysItr()
-{
-  if (!_selectAllWays)
-  {
-    _selectAllWays.reset(new QSqlQuery(_db));
-    _selectAllWays->setForwardOnly(true);
-    const QString sql =
-      "SELECT * FROM " + elementTypeToElementTableName(ElementType::Way) +
-      " WHERE visible = true ORDER BY id";
-    _selectAllWays->prepare(sql);
-  }
-
-  if (_selectAllWays->exec() == false)
-  {
-    const QString err = "Error selecting all ways. Error: " + _selectAllWays->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectAllWays->numRowsAffected());
-  LOG_VART(_selectAllWays->executedQuery());
-
-  return _selectAllWays;
-}
-
-boost::shared_ptr<QSqlQuery> ApiDb::_getSelectAllRelationsItr()
-{
-  if (!_selectAllRelations)
-  {
-    _selectAllRelations.reset(new QSqlQuery(_db));
-    _selectAllRelations->setForwardOnly(true);
-    const QString sql =
-      "SELECT * FROM " + elementTypeToElementTableName(ElementType::Relation) +
-      " WHERE visible = true ORDER BY id";
-    _selectAllRelations->prepare(sql);
-  }
-
-  if (_selectAllRelations->exec() == false)
-  {
-    const QString err = "Error selecting all relations. Error: " +
-      _selectAllRelations->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectAllRelations->numRowsAffected());
-  LOG_VART(_selectAllRelations->executedQuery());
-
-  return _selectAllRelations;
+  return _selectQueries[elementTableName];
 }
 
 }
