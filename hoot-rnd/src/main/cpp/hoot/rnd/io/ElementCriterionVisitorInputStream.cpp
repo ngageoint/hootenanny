@@ -53,15 +53,15 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
   {
     ElementPtr e = _elementSource->readNextElement();
     LOG_VART(e->getElementId());
-    LOG_VART(_criterion.get());
 
+    //LOG_VART(_criterion.get());
     if (!_criterion.get() || _criterion->isSatisfied(e))
     {
       for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin(); itr != _visitors.end();
            ++itr)
       {
         ElementVisitorPtr visitor = *itr;
-        LOG_VART(visitor->toString());
+        //LOG_VART(visitor->toString());
         visitor->visit(e);
         LOG_VART(e->getTags().contains(MetadataTags::HootHash()));
       }
@@ -69,7 +69,8 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
     }
     else
     {
-      LOG_TRACE("Criterion not satisfied.");
+      LOG_TRACE("Criterion not satisfied:");
+      LOG_VART(e);
     }
   } while (hasMoreElements());
 
