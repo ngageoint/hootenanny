@@ -129,7 +129,7 @@ function doExport(req, res, hash, input) {
             if (req.method === 'POST') {
                 res.send(hash);
             } else {
-                res.download(job.outZip, downloadFile, function(err) {
+                res.download(job.outZip, job.downloadFile, function(err) {
                     if (jobs[hash].timeout)
                         clearTimeout(jobs[hash].timeout);
 
