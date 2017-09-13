@@ -70,17 +70,6 @@ public:
   virtual void commit();
 
   /**
-   * @see ApiDb
-   */
-  virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
-
-  /**
-   * @see ApiDb
-   */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long minId = 0);
-
-  /**
    * @see ApiDb::elementTypeToElementTableName
    */
   virtual QString elementTypeToElementTableName(const ElementType& elementType) const;
@@ -445,13 +434,6 @@ private:
    * @return should be <dbname>_renderdb_<map_id>
    */
   QString _getRenderDBName(long mapId);
-
-  boost::shared_ptr<QSqlQuery> _getSelectNodesItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectWaysItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectRelationsItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectAllNodesItr();
-  boost::shared_ptr<QSqlQuery> _getSelectAllWaysItr();
-  boost::shared_ptr<QSqlQuery> _getSelectAllRelationsItr();
 };
 
 }

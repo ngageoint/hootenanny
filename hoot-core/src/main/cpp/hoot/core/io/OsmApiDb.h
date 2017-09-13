@@ -69,17 +69,6 @@ public:
   virtual void deleteUser(long userId);
 
   /**
-   * @see ApiDb
-   */
-  virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
-
-  /**
-   * @see ApiDb
-   */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long minId = 0);
-
-  /**
    * Returns a vector with all the OSM node ID's for a given way
    */
   virtual std::vector<long> selectNodeIdsForWay(long wayId);
@@ -212,13 +201,6 @@ private:
 
   static QStringList _getTables();
   void _modifyConstraints(const QStringList tableNames, const bool disable);
-
-  boost::shared_ptr<QSqlQuery> _getSelectNodesItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectWaysItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectRelationsItr(const long minId);
-  boost::shared_ptr<QSqlQuery> _getSelectAllNodesItr();
-  boost::shared_ptr<QSqlQuery> _getSelectAllWaysItr();
-  boost::shared_ptr<QSqlQuery> _getSelectAllRelationsItr();
 };
 
 }

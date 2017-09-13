@@ -156,7 +156,7 @@ public:
    * @param elementType the type of element to return
    * @return a result iterator to the elements
    */
-  virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType) = 0;
+  virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
@@ -164,11 +164,11 @@ public:
    *
    * @param elementType the element type to query for
    * @param minId the minimum element ID to return; this is more efficient than using an offset when
-   * dealing with very large record sets
+   * dealing with very large record sets sorted by ID
    * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long minId = 0) = 0;
+                                                      const long minId = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -450,6 +450,13 @@ private:
 
   QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
   std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;
+
+  boost::shared_ptr<QSqlQuery> _getSelectNodesItr(const long minId);
+  boost::shared_ptr<QSqlQuery> _getSelectWaysItr(const long minId);
+  boost::shared_ptr<QSqlQuery> _getSelectRelationsItr(const long minId);
+  boost::shared_ptr<QSqlQuery> _getSelectAllNodesItr();
+  boost::shared_ptr<QSqlQuery> _getSelectAllWaysItr();
+  boost::shared_ptr<QSqlQuery> _getSelectAllRelationsItr();
 };
 
 }
