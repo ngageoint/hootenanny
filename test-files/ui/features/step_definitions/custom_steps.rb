@@ -49,7 +49,7 @@ end
 When(/^I select a way map feature with OSM id "([^"]*)"$/) do |id|
   oldTimeout = Capybara.default_max_wait_time
   Capybara.default_max_wait_time = 10
-  find('div.layer-data').all('path[class*=" ' + id + '"].casing').last.click
+  find('div.layer-data').all('path[class*=" ' + id + '"]').last.click
   Capybara.default_max_wait_time = oldTimeout
 end
 
