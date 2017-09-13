@@ -23,14 +23,8 @@ pipeline {
             steps {
                 // Attempt to destroy exiting VM but don't stop job if not there
                 sh 'vagrant destroy -f || true'
-                //cleanWs()
-                
-                //checkout scm
-                // NOTE: This step shouldn't be necessary.  Multi-branch pipeline should checkout the code for you
-                // Need to revist and do this properly
-                //git branch: env.BRANCH_NAME, credentialsId: 'bebe8221-2edd-4ef5-bc85-fa5ec52c8ffc', url: 'https://github.com/ngageoint/hootenanny'
-                //sh 'git submodule update --init'
-                
+                // Make sure we have the tags info because figuring out the version is required in the build process
+                sh 'git fetch --tags'
                 sh 'cp -R ../software.ubuntu1404 software'
             }
         }
