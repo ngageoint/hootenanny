@@ -68,8 +68,7 @@ void ProcessThread::run()
       //  Read all of the output
       QString output;
       proc->waitForReadyRead();
-      QString line2 = QString(proc->readLine());
-      QString line = line2.trimmed();
+      QString line = QString(proc->readLine()).trimmed();
       while (line != HOOT_TEST_FINISHED)
       {
         if (proc->state() == QProcess::NotRunning)
@@ -88,25 +87,14 @@ void ProcessThread::run()
         }
         else if (line == "")
         {
-/*
-          //  Kill the process
-          proc->write(HOOT_TEST_FINISHED);
-          proc->write("\n");
-          proc->waitForFinished();
-          //  Start a new process
-          proc.reset(createProcess());
-          proc->write(test.toAscii());
-          proc->write("\n");
-/*
-          ++_failures;
-          QProcess::ProcessError error = proc->error();
-          QString errorMessage = proc->errorString();
-          cout << error << ": " << errorMessage.toStdString() << endl;
-*/
+          if (output != ".")
+            output.append("\n");
         }
         else if (line.contains(" ERROR "))
         {
           ++_failures;
+          output.append(line);
+          output.append("\n");
           //  Kill the process
           proc->write(HOOT_TEST_FINISHED);
           proc->write("\n");
@@ -114,11 +102,14 @@ void ProcessThread::run()
           //  Start a new process
           proc.reset(createProcess());
           line = HOOT_TEST_FINISHED;
-//          continue;
+          continue;
         }
+        else if (line != ".")
+          line.append("\n");
         output.append(line);
-        line2 = QString(proc->readLine());
-        line = line2.trimmed();
+        if (proc->bytesAvailable() < 1)
+          proc->waitForReadyRead();
+        line = QString(proc->readLine()).trimmed();
       }
       _mutex->lock();
       cout << output.toStdString();
