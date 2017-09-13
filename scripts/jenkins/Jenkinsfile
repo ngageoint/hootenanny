@@ -3,8 +3,8 @@ pipeline {
     // Checkbox parameters for users to skip steps and control pipeline behavior
     parameters {
         // TODO: Need logic to reuse VM.  Current logic destroys it every run
-        booleanParam(name: 'Destroy_VM (Coming Soon)',
-            defaultValue: true)
+        //booleanParam(name: 'Destroy_VM (Coming Soon)',
+        //    defaultValue: true)
         booleanParam(name: 'Static_analysis',
             defaultValue: true)
         booleanParam(name: 'License_headers',
