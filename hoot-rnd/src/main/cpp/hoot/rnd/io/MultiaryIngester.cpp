@@ -64,8 +64,6 @@ _logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdate
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
   //script for translating input to OSM
   conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
-  //this must be set to false for xml reads to be streamed
-  conf().set(ConfigOptions::getWriterXmlSortByIdKey(), false);
 
   //for debugging only
   //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
