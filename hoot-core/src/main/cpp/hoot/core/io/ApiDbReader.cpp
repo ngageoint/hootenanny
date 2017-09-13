@@ -534,8 +534,9 @@ bool ApiDbReader::hasMoreElements()
     LOG_DEBUG("Queries took " << Tgs::Time::getTime() - start << " seconds.");
 
     LOG_INFO(
-      "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(totalNumMapNodes) <<
-      " nodes, " << FileUtils::formatPotentiallyLargeNumber(totalNumMapWays) << " ways, and " <<
+      "Reading dataset with approximately " <<
+      FileUtils::formatPotentiallyLargeNumber(totalNumMapNodes) << " nodes, " <<
+      FileUtils::formatPotentiallyLargeNumber(totalNumMapWays) << " ways, and " <<
       FileUtils::formatPotentiallyLargeNumber(totalNumMapRelations) << " relations...");
 
     _firstPartialReadCompleted = true;

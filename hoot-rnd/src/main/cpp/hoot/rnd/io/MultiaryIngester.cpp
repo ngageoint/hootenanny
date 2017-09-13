@@ -35,7 +35,6 @@
 #include <hoot/rnd/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/filters/PoiCriterion.h>
 #include <hoot/core/visitors/TranslationVisitor.h>
-#include <hoot/core/io/GeoNamesReader.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
@@ -69,6 +68,9 @@ _newNodesParsed(0)
   conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
   //script for translating input to OSM
   conf().set(ConfigOptions::getTranslationScriptKey(), "translations/OSM_Ingest.js");
+  //this must be set to false for xml reads to be streamed
+  conf().set(ConfigOptions::getWriterXmlSortByIdKey(), false);
+
   //for debugging only
   //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
 }
@@ -110,6 +112,14 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     throw IllegalArgumentException(
       QString("Multiary ingest only supports a Spark changeset file (.spark.x) for changeset ") +
       QString("output.  Specified changeset output: ") + changesetOutput);
+  }
+
+  if (OgrReader().isSupported(newInput) &&
+      conf().get(ConfigOptions::getOgrReaderNodeIdFieldNameKey()).toString().trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(
+      "When ingesting OGR formats the " + ConfigOptions::getOgrReaderNodeIdFieldNameKey() +
+      " configuration option must be set in order to identify the ID field.");
   }
 
   LOG_INFO("Ingesting Multiary data from " << newInput << "...");
@@ -244,16 +254,7 @@ boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStre
 
   //as the incoming data is read, filter it down to POIs only and translate each element
 
-  boost::shared_ptr<PoiCriterion> elementCriterion;
-  //all geonames are pois, so skip the element filtering expense for that format
-  if (!GeoNamesReader().isSupported(sortedNewInput))
-  {
-    elementCriterion.reset(new PoiCriterion());
-  }
-  else
-  {
-    LOG_INFO("Skipping POI filtering for: " << sortedNewInput << ", since data is POI only.");
-  }
+  boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
   QList<ElementVisitorPtr> visitors;
   visitors.append(boost::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
   visitors.append(boost::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
@@ -373,24 +374,23 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
       const long numChanges = _changesByType[change.getType()];
       _changesByType[change.getType()] = numChanges + 1;
 
-      if (_changesParsed % _logUpdateInterval == 0)
+      _referenceNodesParsed = changesetDeriver.getNumFromElementsParsed();
+      _newNodesParsed = changesetDeriver.getNumToElementsParsed();
+      if ((_changesParsed % _logUpdateInterval == 0) ||
+          ((_referenceNodesParsed + _newNodesParsed) % _logUpdateInterval == 0))
       {
+        //For some reason this one prints a separate line for each output, which in all other cases
+        //using PROGRESS_INFO, a single line is overwitten each time...strange.
         PROGRESS_INFO(
-          "Ref: " <<
-          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumFromElementsParsed()) <<
-          " New: " <<
-          FileUtils::formatPotentiallyLargeNumber(changesetDeriver.getNumToElementsParsed()) <<
+          "Ref: " << FileUtils::formatPotentiallyLargeNumber(_referenceNodesParsed) <<
+          " New: " << FileUtils::formatPotentiallyLargeNumber(_newNodesParsed) <<
           " Chng: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
           " Cr: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]) <<
-          " Mod: " <<
-          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]) << " Del: " <<
-          FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
+          " Mod: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]) <<
+          " Del: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
       }
     }
   }
-
-  _referenceNodesParsed = changesetDeriver.getNumFromElementsParsed();
-  _newNodesParsed = changesetDeriver.getNumToElementsParsed();
 
   referenceReader->finalizePartial();
   changesetFileWriter->close();
