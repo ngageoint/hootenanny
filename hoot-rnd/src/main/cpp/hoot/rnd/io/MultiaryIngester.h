@@ -84,14 +84,8 @@ private:
   bool _sortInput;
   QString _sortedNewInput;
   boost::shared_ptr<QTemporaryFile> _sortTempFile;
-  bool _addToExistingRefDb;
 
-  long _changesParsed;
   long _logUpdateInterval;
-  QMap<Change::ChangeType, long> _changesByType;
-  HootApiDb _referenceDb;
-  long _referenceNodesParsed;
-  long _newNodesParsed;
 
   QElapsedTimer _timer;
 
@@ -116,10 +110,10 @@ private:
    */
   void _writeChangesToReferenceLayer(const QString changesetOutput, const QString referenceOutput);
 
-  void _printSummary();
-  void _clearChangeTypeCounts();
-
   void _sortInputFile(const QString input);
+
+  void _doInputErrorChecking(const QString newInput, const QString referenceOutput,
+                             const QString changesetOutput);
 };
 
 }

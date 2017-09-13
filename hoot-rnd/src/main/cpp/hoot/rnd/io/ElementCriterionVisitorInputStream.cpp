@@ -38,7 +38,9 @@ ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
   const QList<ElementVisitorPtr>& visitors) :
 _elementSource(elementSource),
 _criterion(criterion),
-_visitors(visitors)
+_visitors(visitors),
+_numFeaturesTotal(0),
+_numFeaturesPassingCriterion(0)
 {
 }
 
@@ -57,6 +59,7 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
     //LOG_VART(_criterion.get());
     if (!_criterion.get() || _criterion->isSatisfied(e))
     {
+      _numFeaturesPassingCriterion++;
       for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin(); itr != _visitors.end();
            ++itr)
       {
@@ -72,6 +75,7 @@ ElementPtr ElementCriterionVisitorInputStream::readNextElement()
       LOG_TRACE("Criterion not satisfied:");
       LOG_VART(e);
     }
+    _numFeaturesTotal++;
   } while (hasMoreElements());
 
   return ElementPtr();

@@ -82,11 +82,17 @@ public:
    */
   virtual ElementPtr readNextElement();
 
+  long getNumFeaturesTotal() const { return _numFeaturesTotal; }
+  long getNumFeaturesPassingCriterion() const { return _numFeaturesPassingCriterion; }
+
 private:
 
   ElementInputStreamPtr _elementSource;
   ElementCriterionPtr _criterion;
   QList<ElementVisitorPtr> _visitors;
+
+  long _numFeaturesTotal;
+  long _numFeaturesPassingCriterion;
 };
 
 }

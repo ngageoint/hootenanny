@@ -55,13 +55,9 @@ namespace hoot
 
 MultiaryIngester::MultiaryIngester() :
 _sortInput(true),
-_addToExistingRefDb(false),
-_changesParsed(0),
-_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval()),
-_referenceNodesParsed(0),
-_newNodesParsed(0)
+_logUpdateInterval(ConfigOptions().getOsmapidbBulkInserterFileOutputStatusUpdateInterval())
 {
-  //in order for the sorting to work, all original node ids must be retained...no new ones
+  //in order for the sorting to work, all original POI ids must be retained...no new ones
   //assigned; we're assuming no duplicate ids in the input
   conf().set(ConfigOptions::getHootapiDbWriterRemapIdsKey(), false);
   //for the changeset derivation to work, all input IDs must not be modified as they are read
@@ -75,22 +71,9 @@ _newNodesParsed(0)
   //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
 }
 
-void MultiaryIngester::_clearChangeTypeCounts()
+void MultiaryIngester::_doInputErrorChecking(const QString newInput, const QString referenceOutput,
+                                             const QString changesetOutput)
 {
-  _changesByType[Change::Create] = 0;
-  _changesByType[Change::Modify] = 0;
-  _changesByType[Change::Delete] = 0;
-}
-
-void MultiaryIngester::ingest(const QString newInput, const QString referenceOutput,
-                              const QString changesetOutput, const bool sortInput)
-{
-  _changesParsed = 0;
-  _clearChangeTypeCounts();
-  _sortInput = sortInput;
-
-  //do some input error checking before kicking off a potentially lengthy sort process
-
   if (!OsmMapReaderFactory::getInstance().hasElementInputStream(newInput))
   {
     throw IllegalArgumentException(
@@ -121,17 +104,27 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
       "When ingesting OGR formats the " + ConfigOptions::getOgrReaderNodeIdFieldNameKey() +
       " configuration option must be set in order to identify the ID field.");
   }
+}
 
+void MultiaryIngester::ingest(const QString newInput, const QString referenceOutput,
+                              const QString changesetOutput, const bool sortInput)
+{
   LOG_INFO("Ingesting Multiary data from " << newInput << "...");
+
+  _sortInput = sortInput;
+
+  //do some input error checking before kicking off a potentially lengthy sort process
+  _doInputErrorChecking(newInput, referenceOutput, changesetOutput);
 
   const QStringList dbUrlParts = referenceOutput.split("/");
   const QString mapName = dbUrlParts[dbUrlParts.size() - 1];
-  _referenceDb.open(referenceOutput);
+  HootApiDb referenceDb;
+  referenceDb.open(referenceOutput);
 
-  if (!_referenceDb.mapExists(mapName))
+  if (!referenceDb.mapExists(mapName))
   {
     LOG_INFO("The reference output dataset does not exist.");
-    LOG_INFO("Skipping node sorting and changeset derivation.");
+    LOG_INFO("Skipping POI sorting and changeset derivation.");
     LOG_INFO("Writing the input data directly to the reference layer");
     LOG_INFO("and generating a changeset file consisting entirely of create statements...");
 
@@ -147,14 +140,13 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
     LOG_INFO("writing the changes to the reference layer,");
     LOG_INFO("and writing the changes to the changeset file...");
 
-    _addToExistingRefDb = true;
     //assuming no duplicate map names here
-    _referenceDb.setMapId(_referenceDb.getMapIdByName(mapName));
+    referenceDb.setMapId(referenceDb.getMapIdByName(mapName));
 
     QString sortedNewInput;
     if (!_sortInput)
     {
-      LOG_INFO("The input data will not be sorted by node ID.");
+      LOG_INFO("The input data will not be sorted by POI ID.");
       sortedNewInput = newInput;
     }
     else
@@ -170,19 +162,14 @@ void MultiaryIngester::ingest(const QString newInput, const QString referenceOut
         _getFilteredNewInputStream(sortedNewInput), referenceOutput, changesetOutput)->fileName(),
       referenceOutput);
   }
-
-  LOG_INFO("Multiary data ingested from " << newInput);
-  LOG_INFO("into reference layer: " << referenceOutput);
-  LOG_INFO("and changeset file: " << changesetOutput << ".");
-  _printSummary();
 }
 
 void MultiaryIngester::_sortInputFile(const QString input)
 {
   _timer.restart();
-  LOG_INFO("Sorting " << input << " by node ID...");
+  LOG_INFO("Sorting " << input << " by POI ID...");
 
-  //sort incoming data by node id, if necessary, for changeset derivation
+  //sort incoming data by POI id, if necessary, for changeset derivation
   const QString sortTempFileBaseName = "multiary-ingest-sort-temp-XXXXXX";
   if (!OgrReader().isSupported(input))
   {
@@ -206,39 +193,8 @@ void MultiaryIngester::_sortInputFile(const QString input)
 
   OsmFileSorter::sort(input, _sortTempFile->fileName());
 
-  LOG_INFO(input << " sorted by node ID to output: " << _sortTempFile->fileName() << ".");
+  LOG_INFO(input << " sorted by POI ID to output: " << _sortTempFile->fileName() << ".");
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
-}
-
-void MultiaryIngester::_printSummary()
-{
-  if (_addToExistingRefDb)
-  {
-    LOG_INFO(
-      "Changes written to reference layer and changeset file: " <<
-      FileUtils::formatPotentiallyLargeNumber(_changesParsed));
-    LOG_INFO(
-      "  Create statements: " <<
-      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
-    LOG_INFO(
-      "  Modify statements: " <<
-      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]));
-    LOG_INFO(
-      "  Delete statements: " <<
-      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
-    LOG_INFO(
-      "Reference nodes parsed: " << FileUtils::formatPotentiallyLargeNumber(_referenceNodesParsed));
-    LOG_INFO("New nodes parsed: " << FileUtils::formatPotentiallyLargeNumber(_newNodesParsed));
-  }
-  else
-  {
-    LOG_INFO(
-      "Nodes written to reference layer: " <<
-      FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]));
-    LOG_INFO(
-      "Changes written to changeset file: " <<
-      FileUtils::formatPotentiallyLargeNumber(_changesParsed));
-  }
 }
 
 boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
@@ -268,7 +224,7 @@ void MultiaryIngester::_writeNewReferenceData(
   const QString changesetOutput)
 {
   _timer.restart();
-  LOG_INFO("Writing nodes to reference layer: " << referenceOutput << "...");
+  LOG_INFO("Writing POIs to reference layer: " << referenceOutput << "...");
 
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
@@ -282,6 +238,11 @@ void MultiaryIngester::_writeNewReferenceData(
     OsmChangeWriterFactory::getInstance().createWriter(changesetOutput, "json");
   changesetFileWriter->open(changesetOutput);
 
+  boost::shared_ptr<ElementCriterionVisitorInputStream> critInputStrm =
+    boost::dynamic_pointer_cast<ElementCriterionVisitorInputStream>(filteredNewInputStream);
+
+  long changesParsed = 0;
+  long featuresSkipped = 0;
   while (filteredNewInputStream->hasMoreElements())
   {
     ElementPtr element = filteredNewInputStream->readNextElement();
@@ -289,23 +250,28 @@ void MultiaryIngester::_writeNewReferenceData(
     {
       referenceWriter->writeElement(element);
       changesetFileWriter->writeChange(Change(Change::Create, element));
-      _changesParsed++;
-      const long numChanges = _changesByType[Change::Create];
-      _changesByType[Change::Create] = numChanges + 1;
+      changesParsed++;
+      featuresSkipped = critInputStrm->getNumFeaturesTotal() - changesParsed;
 
-      if (_changesParsed % _logUpdateInterval == 0)
+      if (changesParsed % _logUpdateInterval == 0 || featuresSkipped % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "Wrote " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-          " nodes to the reference layer.");
+          "POIs written to ref layer: " << FileUtils::formatPotentiallyLargeNumber(changesParsed) <<
+          " Non-POIs skipped: " << FileUtils::formatPotentiallyLargeNumber(featuresSkipped));
       }
     }
   }
 
+  LOG_INFO("Flushing data...");
   referenceWriter->finalizePartial();
   changesetFileWriter->close();
 
-  _printSummary();
+  LOG_INFO(
+    "POIs written to reference layer: " << FileUtils::formatPotentiallyLargeNumber(changesParsed));
+  LOG_INFO("Non-POIs skipped: " << FileUtils::formatPotentiallyLargeNumber(featuresSkipped));
+  LOG_INFO(
+    "Changes written to changeset file: " <<
+    FileUtils::formatPotentiallyLargeNumber(changesParsed));
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 }
 
@@ -313,8 +279,8 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   boost::shared_ptr<ElementInputStream> filteredNewInputStream, const QString referenceInput,
   const QString changesetOutput)
 {
-  //The changeset file changes and reference layer node updates are written in two separate steps.
-  //If we tried to write the node changes to the reference layer as we streamed in the nodes
+  //The changeset file changes and reference layer POI updates are written in two separate steps.
+  //If we tried to write the POI changes to the reference layer as we streamed in the POIs
   //from the ref layer to the changeset deriver, we'd have a moving target as far as number of
   //elements is concerned, and the partial map reader would behave correctly.
 
@@ -359,6 +325,18 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
   changesetTempFileWriter->open(tmpChangeset->fileName());
   LOG_DEBUG("Opened temp change file writer.");
 
+  boost::shared_ptr<ElementCriterionVisitorInputStream> critInputStrm =
+    boost::dynamic_pointer_cast<ElementCriterionVisitorInputStream>(filteredNewInputStream);
+
+  long changesParsed = 0;
+  long featuresSkipped = 0;
+  long referencePoisParsed = 0;
+  long newPoisParsed = 0;
+  QMap<Change::ChangeType, long> changesByType;
+  changesByType[Change::Create] = 0;
+  changesByType[Change::Modify] = 0;
+  changesByType[Change::Delete] = 0;
+
   while (changesetDeriver.hasMoreChanges())
   {
     const Change change = changesetDeriver.readNextChange();
@@ -370,34 +348,50 @@ boost::shared_ptr<QTemporaryFile> MultiaryIngester::_deriveAndWriteChangesToChan
       //write temp changeset file with xml element payload to avoid reading back in corrupted
       //unicode chars when writing the final changes to the reference db
       changesetTempFileWriter->writeChange(change);
-      _changesParsed++;
-      const long numChanges = _changesByType[change.getType()];
-      _changesByType[change.getType()] = numChanges + 1;
+      changesParsed++;
+      const long numChanges = changesByType[change.getType()];
+      changesByType[change.getType()] = numChanges + 1;
+      featuresSkipped = critInputStrm->getNumFeaturesTotal() - changesParsed;
 
-      _referenceNodesParsed = changesetDeriver.getNumFromElementsParsed();
-      _newNodesParsed = changesetDeriver.getNumToElementsParsed();
-      if ((_changesParsed % _logUpdateInterval == 0) ||
-          ((_referenceNodesParsed + _newNodesParsed) % _logUpdateInterval == 0))
+      referencePoisParsed = changesetDeriver.getNumFromElementsParsed();
+      newPoisParsed = changesetDeriver.getNumToElementsParsed();
+      if ((changesParsed % _logUpdateInterval == 0) ||
+          ((referencePoisParsed + newPoisParsed) % _logUpdateInterval == 0))
       {
-        //For some reason this one prints a separate line for each output, which in all other cases
-        //using PROGRESS_INFO, a single line is overwitten each time...strange.
         PROGRESS_INFO(
-          "Ref: " << FileUtils::formatPotentiallyLargeNumber(_referenceNodesParsed) <<
-          " New: " << FileUtils::formatPotentiallyLargeNumber(_newNodesParsed) <<
-          " Chng: " << FileUtils::formatPotentiallyLargeNumber(_changesParsed) <<
-          " Cr: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Create]) <<
-          " Mod: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Modify]) <<
-          " Del: " << FileUtils::formatPotentiallyLargeNumber(_changesByType[Change::Delete]));
+          "Ref: " << FileUtils::formatPotentiallyLargeNumber(referencePoisParsed) <<
+          " New: " << FileUtils::formatPotentiallyLargeNumber(newPoisParsed) <<
+          " Skip: " << FileUtils::formatPotentiallyLargeNumber(featuresSkipped) <<
+          " Chng: " << FileUtils::formatPotentiallyLargeNumber(changesParsed) <<
+          " Cr: " << FileUtils::formatPotentiallyLargeNumber(changesByType[Change::Create]) <<
+          " Mod: " << FileUtils::formatPotentiallyLargeNumber(changesByType[Change::Modify]) <<
+          " Del: " << FileUtils::formatPotentiallyLargeNumber(changesByType[Change::Delete]));
       }
     }
   }
 
+  LOG_INFO("Flushing data...");
   referenceReader->finalizePartial();
   changesetFileWriter->close();
   changesetDeriver.close();
   changesetTempFileWriter->close();
 
-  _printSummary();
+  LOG_INFO(
+    "Reference POIs parsed: " << FileUtils::formatPotentiallyLargeNumber(referencePoisParsed));
+  LOG_INFO("New POIs parsed: " << FileUtils::formatPotentiallyLargeNumber(newPoisParsed));
+  LOG_INFO("Non-POIs skipped: " << FileUtils::formatPotentiallyLargeNumber(featuresSkipped));
+  LOG_INFO(
+    "Changes written to changeset file: " <<
+    FileUtils::formatPotentiallyLargeNumber(changesParsed));
+  LOG_INFO(
+    "  Create statements: " <<
+    FileUtils::formatPotentiallyLargeNumber(changesByType[Change::Create]));
+  LOG_INFO(
+    "  Modify statements: " <<
+    FileUtils::formatPotentiallyLargeNumber(changesByType[Change::Modify]));
+  LOG_INFO(
+    "  Delete statements: " <<
+    FileUtils::formatPotentiallyLargeNumber(changesByType[Change::Delete]));
   LOG_INFO("Time elapsed: " << FileUtils::secondsToDhms(_timer.elapsed()));
 
   return tmpChangeset;
@@ -440,8 +434,8 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
         " changes to ref layer.");
     }
   }
-  assert(changesWritten == _changesParsed);
 
+  LOG_INFO("Flushing data...");
   referenceWriter->finalizePartial();
   referenceChangeWriter->close();
   changesetFileReader.close();
