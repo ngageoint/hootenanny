@@ -156,7 +156,7 @@ public:
    * @param elementType the type of element to return
    * @return a result iterator to the elements
    */
-  boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
+  virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType) = 0;
 
   /**
    * Returns a results iterator to all OSM elements for a given map and element type in the services
@@ -168,7 +168,7 @@ public:
    * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const long minId = 0);
+                                                      const long minId = 0) = 0;
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -338,7 +338,7 @@ public:
   inline static QString getRelationMembersTableName()           { return "relation_members"; }
   inline static QString getRelationTagsTableName()              { return "relation_tags"; }
   inline static QString getRelationsTableName()                 { return "relations"; }
-  inline static QString getWayNodesTableName()                  { return "way_nodes"; }
+  inline static QString getWayNodesTableName()                 { return "way_nodes"; }
   inline static QString getWayTagsTableName()                   { return "way_tags"; }
   inline static QString getWaysTableName()                      { return "ways"; }
 
@@ -411,10 +411,20 @@ protected:
   bool _capitalizeRelationMemberType;
 
   QSqlDatabase _db;
+
   boost::shared_ptr<QSqlQuery> _selectUserByEmail;
   boost::shared_ptr<QSqlQuery> _insertUser;
   boost::shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+  boost::shared_ptr<QSqlQuery> _selectNodes;
+  boost::shared_ptr<QSqlQuery> _selectWays;
+  boost::shared_ptr<QSqlQuery> _selectRelations;
+  boost::shared_ptr<QSqlQuery> _selectAllNodes;
+  boost::shared_ptr<QSqlQuery> _selectAllWays;
+  boost::shared_ptr<QSqlQuery> _selectAllRelations;
+
   bool _inTransaction;
+
+  long _maxElementsPerPartialMap;
 
   QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                   QVariant v3 = QVariant()) const;
@@ -435,10 +445,8 @@ private:
   QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;
   QHash<QString, boost::shared_ptr<QSqlQuery> > _numEstimatedElementsQueries;
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectQueries;
-  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectAllQueries;
-
-  long _maxElementsPerPartialMap;
+  //QHash<QString, boost::shared_ptr<QSqlQuery> > _selectQueries;
+  //QHash<QString, boost::shared_ptr<QSqlQuery> > _selectAllQueries;
 
   QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
   std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;

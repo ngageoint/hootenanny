@@ -429,7 +429,7 @@ void ApiDbReader::initializePartial()
 {
   _partialMap.reset(new OsmMap());
 
-  _elementResultIterator.reset();
+  //_elementResultIterator.reset();
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
@@ -565,12 +565,6 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   {
     //no results are available, so request some more results
     LOG_DEBUG("Requesting more query results...");
-    if (_elementResultIterator)
-    {
-      _elementResultIterator->finish();
-      _elementResultIterator->clear();
-    }
-    _elementResultIterator.reset();
     //LOG_VART(_lastId);
     const double start = Tgs::Time::getTime();
     //Never ever remove the _lastId input from this call.  Doing that will turn the query into a
@@ -583,7 +577,6 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   boost::shared_ptr<Element> element =
     _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
 
-
   if (!element.get())
   {
     //QSqlQuery::next() in _resultToElement will return null when at the end of records collection
@@ -591,12 +584,6 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
     //clients, so here we'll just swallow it.
 
     LOG_TRACE("Received null element.");
-    if (_elementResultIterator)
-    {
-      _elementResultIterator->finish();
-      _elementResultIterator->clear();
-    }
-    _elementResultIterator.reset();
     return _getElementUsingIterator();
   }
 
@@ -634,6 +621,8 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   else if (_selectElementType == ElementType::Node && _lastId == _maxNodeId)
   {
     _lastId = 0;
+    _elementResultIterator->finish();
+    _elementResultIterator->clear();
     return ElementType::Way;
   }
   else if (_selectElementType == ElementType::Way && _lastId < _maxWayId)
@@ -643,6 +632,8 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   else if (_selectElementType == ElementType::Way && _lastId == _maxWayId)
   {
     _lastId = 0;
+    _elementResultIterator->finish();
+    _elementResultIterator->clear();
     return ElementType::Relation;
   }
   else if (_selectElementType == ElementType::Relation && _lastId < _maxRelationId)
@@ -655,13 +646,17 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
 void ApiDbReader::finalizePartial()
 {
   LOG_DEBUG("Finalizing read operation...");
+
+  _partialMap.reset();
+
+  //the query has to be freed before the database is closed
   if (_elementResultIterator)
   {
     _elementResultIterator->finish();
     _elementResultIterator->clear();
   }
   _elementResultIterator.reset();
-  _partialMap.reset();
+
   if (_open)
   {
     //The exception thrown by this commit will mask exception text coming from failed queries.  Not
@@ -722,7 +717,6 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   else
   {
     resultIterator.finish();
-    resultIterator.clear();
     return boost::shared_ptr<Element>();
   }
 }
