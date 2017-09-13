@@ -415,12 +415,6 @@ protected:
   boost::shared_ptr<QSqlQuery> _selectUserByEmail;
   boost::shared_ptr<QSqlQuery> _insertUser;
   boost::shared_ptr<QSqlQuery> _selectNodeIdsForWay;
-  boost::shared_ptr<QSqlQuery> _selectNodes;
-  boost::shared_ptr<QSqlQuery> _selectWays;
-  boost::shared_ptr<QSqlQuery> _selectRelations;
-  boost::shared_ptr<QSqlQuery> _selectAllNodes;
-  boost::shared_ptr<QSqlQuery> _selectAllWays;
-  boost::shared_ptr<QSqlQuery> _selectAllRelations;
 
   bool _inTransaction;
 

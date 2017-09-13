@@ -429,7 +429,6 @@ void ApiDbReader::initializePartial()
 {
   _partialMap.reset(new OsmMap());
 
-  //_elementResultIterator.reset();
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
@@ -621,6 +620,8 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   else if (_selectElementType == ElementType::Node && _lastId == _maxNodeId)
   {
     _lastId = 0;
+    //calling finish/clear as the underlying query would have changed here to the query for the
+    //next element type; this may not be necessary
     _elementResultIterator->finish();
     _elementResultIterator->clear();
     return ElementType::Way;
@@ -632,6 +633,7 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   else if (_selectElementType == ElementType::Way && _lastId == _maxWayId)
   {
     _lastId = 0;
+    //see comment above
     _elementResultIterator->finish();
     _elementResultIterator->clear();
     return ElementType::Relation;
@@ -681,10 +683,11 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
   //method.  However, I was getting some initialization errors with QSqlQuery when the
-  //reader called it in that way during a partial map read.  So, calling it inside here
-  //instead.  A side effect is that this method will return a NULL element during the last
-  //iteration.  Therefore, callers should check resultIterator->isActive in a loop in place of
-  //calling resultIterator->next() and also should check for the null element.
+  //reader called it in that way during a partial map read.  So, calling next inside of this method
+  //instead.  A side effect of this is that this method will always return a null element during the
+  //last iteration.  Therefore, callers of this method should check resultIterator->isActive in a
+  //loop in place of calling resultIterator->next() and also should check to see if the element is
+  //null.
   if (resultIterator.next())
   {
     boost::shared_ptr<Element> element;
@@ -716,6 +719,7 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   }
   else
   {
+    //don't call clear here, as the prepared query may be executed again in a following iteration
     resultIterator.finish();
     return boost::shared_ptr<Element>();
   }
