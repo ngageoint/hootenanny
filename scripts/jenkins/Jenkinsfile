@@ -129,8 +129,59 @@ pipeline {
             cleanWs()
         }
         failure {
-            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            script {
+                // Check to see if we failed last time
+                if (currentBuild.previousBuild.result == 'FAILURE') {
+                    // Copy over any UI failure screenshots
+                    sh 'vagrant scp default:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/'
+                    emailext (
+                        to: '$DEFAULT_RECIPIENTS',
+                        subject: "Still Failing: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        mimeType: 'text/html',
+                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
+                        body: """<p>Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'CulpritsRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']]
+                    )
+                }
+            }
+        } 
+        changed {
+            script {
+                // Job has been fixed
+                if (currentBuild.currentResult == 'SUCCESS') {
+                    emailext (
+                        to: '$DEFAULT_RECIPIENTS',
+                        subject: "Back to normal: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        mimeType: 'text/html',
+                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
+                        body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                            <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'CulpritsRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']]
+                        )
+                } else  if (currentBuild.currentResult == 'FAILURE') {
+                    // Copy over any UI failure screenshots
+                    sh 'vagrant scp default:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/'
+                    emailext (
+                        to: '$DEFAULT_RECIPIENTS',
+                        subject: "Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                        mimeType: 'text/html',
+                        attachmentsPattern: 'test-files/ui/screenshot_*.png',
+                        body: """<p>Fixed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                        <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                            recipientProviders: [
+                                [$class: 'DevelopersRecipientProvider'],
+                                [$class: 'CulpritsRecipientProvider'],
+                                [$class: 'RequesterRecipientProvider']]
+                    )
+                }
+            }
         }
-        // TODO: Add more complex logic such as: Add screen shots to faillure messages, post message when a test starts to pass again
     }
 }
