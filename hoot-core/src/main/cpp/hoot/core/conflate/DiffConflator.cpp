@@ -141,7 +141,6 @@ void DiffConflator::setConfiguration(const Settings &conf)
 
 void DiffConflator::_reset()
 {
-  //_e2m.clear();
   _deleteAll(_matches);
 }
 
