@@ -240,6 +240,7 @@ private:
   Meters _searchRadius;
   ConstMatchThresholdPtr _threshold;
   boost::shared_ptr<TagAncestorDifferencer> _tagAncestorDiff;
+  double _highwayMaxEnumDiff;
 
   // Used for finding neighbors
   boost::shared_ptr<HilbertRTree> _index;

@@ -344,7 +344,7 @@ void ShapefileWriter::writePoints(ConstOsmMapPtr map, const QString& path)
 
     if (node->getTags().getNonDebugCount() > 0)
     {
-      OGRFeature* poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
+      OGRFeature* poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
       // set all the column values.
       for (int i = 0; i < columns.size(); i++)
       {

@@ -39,6 +39,9 @@
 namespace hoot
 {
 
+/**
+ * Used for interaction with an OSM API database (official public OSM database).
+ */
 class OsmApiDb : public ApiDb
 {
 
@@ -61,18 +64,9 @@ public:
 
   virtual void open(const QUrl& url);
 
-  virtual void transaction();
-
-  virtual void rollback();
-
   virtual void commit();
 
   virtual void deleteUser(long userId);
-
-  /**
-   * Returns a results iterator to all OSM elements for a given element type in the database.
-   */
-  virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -88,11 +82,6 @@ public:
    * Returns a vector with all the relation members for a given relation
    */
   virtual std::vector<RelationData::Entry> selectMembersForRelation(long relationId);
-
-  /**
-   * Returns a results iterator to a node for a given node id.
-   */
-  boost::shared_ptr<QSqlQuery> selectNodeById(const long elementId);
 
   /**
     * Deletes data in the Osm Api db
@@ -156,7 +145,12 @@ public:
    */
   static double fromOsmApiDbCoord(const long x);
 
-  //TODO: two methods below may be able to be combined
+  //TODO: the three methods below may be able to be combined somehow
+
+  /**
+   * @see ApiDb::elementTypeToElementTableName
+   */
+  virtual QString elementTypeToElementTableName(const ElementType& elementType) const;
 
   /**
    * Converts a table type to a OSM API database table name
@@ -193,20 +187,14 @@ protected:
 
 private:
 
-  bool _inTransaction;
-
-  boost::shared_ptr<QSqlQuery> _selectElementsForMap;
   boost::shared_ptr<QSqlQuery> _selectTagsForNode;
   boost::shared_ptr<QSqlQuery> _selectTagsForWay;
   boost::shared_ptr<QSqlQuery> _selectTagsForRelation;
   boost::shared_ptr<QSqlQuery> _selectMembersForRelation;
-  boost::shared_ptr<QSqlQuery> _selectNodeById;
 
   QHash<QString, boost::shared_ptr<QSqlQuery> > _seqQueries;
 
   void _init();
-
-  QString _elementTypeToElementTableNameStr(const ElementType& elementType) const;
 
   long _getIdFromSequence(const ElementType& elementType, const QString sequenceType);
   long _getIdFromSequence(const QString tableName, const QString sequenceType);

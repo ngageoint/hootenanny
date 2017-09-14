@@ -231,6 +231,7 @@ private:
   friend class EdgeStringTest;
 
   QList<EdgeEntry> _edges;
+
 };
 
 typedef boost::shared_ptr<EdgeString> EdgeStringPtr;

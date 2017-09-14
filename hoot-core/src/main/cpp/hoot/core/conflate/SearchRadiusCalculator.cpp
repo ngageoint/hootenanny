@@ -63,6 +63,7 @@ void SearchRadiusCalculator::setConfiguration(const Settings& conf)
   setCircularError(config.getCircularErrorDefaultValue());
   setRubberSheetRef(config.getRubberSheetRef());
   setRubberSheetMinTies(config.getRubberSheetMinimumTies());
+  setPrecision(config.getWriterPrecision());
 }
 
 void SearchRadiusCalculator::apply(boost::shared_ptr<OsmMap> &map)
@@ -153,7 +154,7 @@ void SearchRadiusCalculator::_calculateSearchRadius(const vector<double>& tiePoi
   else
   {
     _result = 2 * _calculateStandardDeviation(tiePointDistances);
-    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', 16));
+    LOG_INFO("Calculated search radius = " + QString::number(_result, 'g', _precision));
   }
 }
 

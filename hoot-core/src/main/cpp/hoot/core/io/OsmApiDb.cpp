@@ -201,46 +201,16 @@ void OsmApiDb::_resetQueries()
 
   ApiDb::_resetQueries();
 
-  _selectElementsForMap.reset();
   _selectTagsForNode.reset();
   _selectTagsForWay.reset();
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
   _selectMembersForRelation.reset();
-  _selectNodeById.reset();
-  _selectUserByEmail.reset();
-  _insertUser.reset();
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
     itr.value().reset();
   }
-}
-
-void OsmApiDb::rollback()
-{
-  LOG_TRACE("Rolling back transaction...");
-
-  _resetQueries();
-
-  if (!_db.rollback())
-  {
-    throw HootException("Error rolling back transaction: " + _db.lastError().text());
-  }
-  _inTransaction = false;
-}
-
-void OsmApiDb::transaction()
-{
-  LOG_TRACE("Starting transaction...");
-
-  // Queries must be created from within the current transaction.
-  _resetQueries();
-  if (!_db.transaction())
-  {
-    throw HootException(_db.lastError().text());
-  }
-  _inTransaction = true;
 }
 
 void OsmApiDb::commit()
@@ -299,29 +269,29 @@ QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType,
   switch (elementType.getEnum())
   {
     case ElementType::Node:
-        if (historical)
+      if (historical)
+      {
+        if (tags)
         {
-          if (tags)
-          {
-            return ApiDb::getNodeTagsTableName();
-          }
-          else
-          {
-            return ApiDb::getNodesTableName();
-          }
+          return ApiDb::getNodeTagsTableName();
         }
         else
         {
-          if (tags)
-          {
-            return ApiDb::getCurrentNodeTagsTableName();
-          }
-          else
-          {
-            return ApiDb::getCurrentNodesTableName();
-          }
+          return ApiDb::getNodesTableName();
         }
-      break;
+      }
+      else
+      {
+        if (tags)
+        {
+          return ApiDb::getCurrentNodeTagsTableName();
+        }
+        else
+        {
+          return ApiDb::getCurrentNodesTableName();
+        }
+      }
+    break;
 
     case ElementType::Way:
       if (historical)
@@ -377,30 +347,6 @@ QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType,
       throw HootException("Unknown element type");
   }
 }
-
-QString OsmApiDb::_elementTypeToElementTableNameStr(const ElementType& elementType) const
-{
-  if (elementType == ElementType::Node)
-  {
-    return QString("id, latitude, longitude, changeset_id, visible, timestamp, tile, version ") +
-      QString("FROM %1").arg(ApiDb::getCurrentNodesTableName());
-  }
-  else if (elementType == ElementType::Way)
-  {
-    return QString("id, changeset_id, timestamp, visible, version ") +
-      QString("FROM %1").arg(ApiDb::getCurrentWaysTableName());
-  }
-  else if (elementType == ElementType::Relation)
-  {
-    return QString("id, changeset_id, timestamp, visible, version ") +
-      QString("FROM %1").arg(ApiDb::getCurrentRelationsTableName());
-  }
-  else
-  {
-    throw HootException("Unsupported element type.");
-  }
-}
-
 vector<long> OsmApiDb::selectNodeIdsForWay(long wayId)
 {
   QString sql =  "SELECT node_id FROM " +
@@ -456,11 +402,11 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Invalid relation member type: " + memberType + ".  Skipping relation member.");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -471,53 +417,9 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   return result;
 }
 
-boost::shared_ptr<QSqlQuery> OsmApiDb::selectNodeById(const long elementId)
+QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType) const
 {
-  _selectNodeById.reset(new QSqlQuery(_db));
-  _selectNodeById->setForwardOnly(true);
-  QString sql =
-    "SELECT " + _elementTypeToElementTableNameStr(ElementType::Node) +
-    " WHERE (id=:elementId)";
-  _selectNodeById->prepare(sql);
-  _selectNodeById->bindValue(":elementId", (qlonglong)elementId);
-
-  // execute the query on the DB and get the results back
-  if (_selectNodeById->exec() == false)
-  {
-    QString err = _selectNodeById->lastError().text();
-    throw HootException("Error selecting node by id: " + QString::number(elementId) +
-      " Error: " + err);
-  }
-  LOG_VARD(_selectNodeById->executedQuery());
-  LOG_VARD(_selectNodeById->numRowsAffected());
-
-  return _selectNodeById;
-}
-
-boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType)
-{
-  _selectElementsForMap.reset(new QSqlQuery(_db));
-  _selectElementsForMap->setForwardOnly(true);
-
-  // setup base sql query string
-  QString sql =  "SELECT " + _elementTypeToElementTableNameStr(elementType);
-
-  // sort them in descending order, set limit and offset
-  sql += " WHERE visible = true";
-
-  _selectElementsForMap->prepare(sql);
-
-  // execute the query on the DB and get the results back
-  if (_selectElementsForMap->exec() == false)
-  {
-    QString err = _selectElementsForMap->lastError().text();
-    throw HootException("Error selecting elements of type: " + elementType.toString() +
-      " Error: " + err);
-  }
-  LOG_VARD(_selectElementsForMap->executedQuery());
-  LOG_VARD(_selectElementsForMap->numRowsAffected());
-
-  return _selectElementsForMap;
+  return elementTypeToElementTableName(elementType, false, false);
 }
 
 boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)

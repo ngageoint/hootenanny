@@ -47,6 +47,7 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
+  setLevDist(config.getLevenshteinDistanceAlpha());
 }
 
 double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
@@ -57,7 +58,8 @@ double PoiPolygonNameScoreExtractor::extract(const OsmMap& /*map*/,
     NameExtractor(
       new TranslateStringDistance(
         new MeanWordSetDistance(
-          new LevenshteinDistance(ConfigOptions().getLevenshteinDistanceAlpha()))))
+          //TODO: why does this fail when the mem var is used?
+          new LevenshteinDistance(/*_levDist*/ConfigOptions().getLevenshteinDistanceAlpha()))))
    .extract(poi, poly);
   LOG_VART(nameScore);
   return nameScore;

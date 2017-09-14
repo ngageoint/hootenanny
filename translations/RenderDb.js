@@ -84,11 +84,16 @@ function translateToOgr(tags, elementType, geometryType)
     // There is no way we can translate these to a single geometry.
     if (geometryType == 'Collection') return null;
 
-    // Drop non usefull hoot tags.
-    if (tags['hoot:status'] == 'invalid')
+    if (tags['hoot:id'] && !(tags.osm_id))
     {
-        delete tags['hoot:status'];
+        tags.osm_id = tags['hoot:id'];
+        delete tags['hoot:id']
     }
+
+    // Drop non usefull/metadata hoot tags.
+    if (tags['hoot:status'] == 'invalid' || tags['hoot:status'] == 'Invalid') delete tags['hoot:status'];
+    if (tags['hoot:layername']) delete tags['hoot:layername'];
+    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
 
 
     // Clean out the Tags
@@ -96,6 +101,7 @@ function translateToOgr(tags, elementType, geometryType)
     {
         // Drop Hoot specific stuff
         // if (i.indexOf('hoot:') !== -1 || i.indexOf('error:') !== -1)
+
         if (i.indexOf('error:') !== -1)
         {
             delete tags[i];

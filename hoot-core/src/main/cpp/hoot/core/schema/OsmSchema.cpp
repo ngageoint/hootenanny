@@ -52,11 +52,13 @@ using namespace boost;
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/OsmSchemaLoader.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
 
 // Qt
 #include <QDomDocument>
 #include <QHash>
 #include <QSet>
+#include <QDir>
 
 // Standard
 #include <iostream>
@@ -868,11 +870,11 @@ public:
     const SchemaVertex& v = _graph[vid];
     if (v.isValid())
     {
-      if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (_logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN(tv.name << " was specified multiple times in the schema file.");
       }
-      else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (_logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -1295,11 +1297,11 @@ private:
     {
       if (childTv.influence == -1.0)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Influence for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -1308,11 +1310,11 @@ private:
       }
       if (childTv.valueType == Unknown)
       {
-        if (_logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (_logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Value type for " << childTv.name << " has not been specified.");
         }
-        else if (_logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (_logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(typeid(this).name() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -1480,7 +1482,29 @@ OsmSchema& OsmSchema::getInstance()
   {
     _theInstance = new OsmSchema();
     _theInstance->loadDefault();
-    LOG_TRACE(_theInstance->toGraphvizString());
+
+    //write this out to a temp file instead of to the log due to its size
+    if (Log::getInstance().getLevel() == Log::Trace)
+    {
+      const QString graphvizPath = "tmp/schema-graphviz";
+      const QString errorMsg = "Unable to write schema graphviz file to " + graphvizPath;
+      try
+      {
+        if (QDir().mkpath("tmp"))
+        {
+          FileUtils::writeFully(graphvizPath, _theInstance->toGraphvizString());
+          LOG_TRACE("Wrote schema graph viz file to: " << graphvizPath);
+        }
+        else
+        {
+          LOG_TRACE(errorMsg);
+        }
+      }
+      catch (const HootException&)
+      {
+        LOG_TRACE(errorMsg);
+      }
+    }
   }
   return *_theInstance;
 }
@@ -1561,8 +1585,7 @@ bool OsmSchema::isArea(const Tags& t, ElementType type) const
     return false;
   }
 
-  // Print out tags
-  LOG_TRACE("Tags: " << t.toString() );
+  //LOG_VART(t.toString());
 
   result |= isBuilding(t, type);
   result |= t.isTrue("building:part");
@@ -1864,7 +1887,7 @@ void OsmSchema::loadDefault()
   delete d;
   d = new OsmSchemaData();
 
-  LOG_INFO("Loading translation files...");
+  LOG_DEBUG("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
 }
 

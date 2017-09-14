@@ -28,7 +28,7 @@
 #ifndef CONSTELEMENTVISITOR_H
 #define CONSTELEMENTVISITOR_H
 
-// hoot includes
+// hoot
 #include <hoot/core/elements/Element.h>
 
 namespace hoot

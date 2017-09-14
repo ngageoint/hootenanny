@@ -37,7 +37,6 @@ using namespace boost;
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MetadataTags.h>
 #include <hoot/core/elements/ElementData.h>
 #include <hoot/core/elements/ElementType.h>
@@ -56,12 +55,12 @@ namespace hoot {
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
-OsmJsonWriter::OsmJsonWriter(int precision)
+OsmJsonWriter::OsmJsonWriter(int precision) :
+_includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+_precision(precision),
+_out(0),
+_pretty(false)
 {
-  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
-  _precision = precision;
-  _out = 0;
-  _pretty = false;
 }
 
 QString OsmJsonWriter::markupString(const QString& str)

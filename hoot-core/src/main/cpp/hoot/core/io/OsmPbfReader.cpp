@@ -97,7 +97,7 @@ OsmPbfReader::OsmPbfReader(const QString urlString)
 {
   _init(false);
 
-  if ( isSupported(urlString) == true )
+  if (isSupported(urlString) == true)
   {
     open(urlString);
   }
@@ -125,7 +125,7 @@ void OsmPbfReader::_init(bool useFileId)
 OsmPbfReader::~OsmPbfReader()
 {
   delete _d;
-  if ( _needToCloseInput == true )
+  if (_needToCloseInput == true)
   {
     close();
   }
@@ -140,6 +140,14 @@ void OsmPbfReader::setConfiguration(const Settings &conf)
 
 void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString value)
 {
+  key = key.trimmed();
+  value = value.trimmed();
+
+  if (value.isEmpty())
+  {
+    return;
+  }
+
   if (key == MetadataTags::HootStatus())
   {
     if (_useFileStatus)
@@ -185,11 +193,11 @@ void OsmPbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString va
       {
         e->setCircularError(_circularError);
 
-        if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Bad circular error value: " << value.toStdString());
         }
-        else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+        else if (logWarnCount == Log::getWarnMessageLimit())
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
@@ -369,11 +377,11 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
   size_t size = std::min(dn.id_size(), std::min(dn.lat_size(), dn.lon_size()));
   if (dn.id_size() != dn.lat_size() || dn.id_size() != dn.lon_size())
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Dense node list sizes are not equal.");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -402,11 +410,11 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     //nodes[i].reset(new Node(_status, newId, x, y, _circularError));
     if (_map->containsNode(newId))
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Map already contains node: " << newId);
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -450,11 +458,11 @@ void OsmPbfReader::_loadDenseNodes(const DenseNodes& dn)
     int timestampSize = di.timestamp_size();
     if ((size_t)timestampSize != size)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Dense info timestamp size doesn't match other node counts");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -509,11 +517,11 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
   {
     if (n.keys().Get(i) >= _strings.size())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Key was out of bounds: " << n.keys().Get(i) << " size: " << _strings.size());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -521,11 +529,11 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
     }
     else if (n.vals().Get(i) >= _strings.size())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Value was out of bounds: " << n.keys().Get(i) << " size: " << _strings.size());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -544,11 +552,11 @@ void OsmPbfReader::_loadNode(const hoot::pb::Node& n)
 
   if (_map->containsNode(newId))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Map already contains node: " << newId);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -654,14 +662,14 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("roles_sid size, memids size or types size don't match."
                << " roles_sid size: " << r.roles_sid_size()
                << " memids size: " << r.memids_size()
                << " types size: " << r.types_size());
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -683,11 +691,11 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     }
     else
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Relation SID was out of bounds: " << sid << " size: " << _strings.size());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -704,12 +712,12 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 
   if (r.keys().size() != r.vals().size())
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Key and value arrays are not the same size. (" << r.keys().size() << " vs. " <<
                r.vals().size() << " way id: " << r.id() << ")");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -720,11 +728,11 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
   {
     if (r.keys().Get(i) >= _strings.size())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Key was out of bounds: " << r.keys().Get(i) << " size: " << _strings.size());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -732,11 +740,11 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
     }
     else if (r.vals().Get(i) >= _strings.size())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Value was out of bounds: " << r.vals().Get(i) << " size: " << _strings.size());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -755,11 +763,11 @@ void OsmPbfReader::_loadRelation(const hoot::pb::Relation& r)
 
   if (_map->containsRelation(newId))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Map already contains relation: " << newId);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -823,11 +831,11 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
     long ref = nid;
     if (_permissive == false && _nodeIdMap.contains(ref) == false)
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Missing node (" << ref << ") in way (" << w.id() << ").");
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -842,12 +850,12 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 
   if (w.keys().size() != w.vals().size())
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Key and value arrays are not the same size. (" << w.keys().size() << " vs. " <<
                w.vals().size() << " way id: " << w.id() << ")");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -858,11 +866,11 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
   {
     if (w.keys().Get(i) >= _strings.size())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Key was out of bounds: " << w.keys().Get(i) << " size: " << _strings.size());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -870,11 +878,11 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
     }
     else if (w.vals().Get(i) >= _strings.size())
     {
-      if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+      if (logWarnCount < Log::getWarnMessageLimit())
       {
         LOG_WARN("Value was out of bounds: " << w.vals().Get(i) << " size: " << _strings.size());
       }
-      else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+      else if (logWarnCount == Log::getWarnMessageLimit())
       {
         LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
       }
@@ -893,11 +901,11 @@ void OsmPbfReader::_loadWay(const hoot::pb::Way& w)
 
   if (_map->containsWay(newId))
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Map already contains way: " << newId);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
@@ -1187,6 +1195,28 @@ bool OsmPbfReader::isSupported(QString urlStr)
     //there is actually some test data that ends in .pbf instead of .osm.pbf, so allowing that
     //extension too for now
     input.exists() && (urlStr.toLower().endsWith(".osm.pbf") || urlStr.toLower().endsWith(".pbf"));
+}
+
+bool OsmPbfReader::isSorted(const QString file)
+{
+  _init(false);
+  if (isSupported(file))
+  {
+    open(file);
+  }
+  else
+  {
+    throw HootException("An invalid file format was specified: " + file + ".");
+  }
+
+  // read blob header
+  _parseBlobHeader();
+  // read blob
+  _parseBlob();
+  // read OSMHeader
+  _parseOsmHeader();
+
+  return _typeThenId;
 }
 
 void OsmPbfReader::open(QString urlStr)

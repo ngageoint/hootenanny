@@ -93,7 +93,9 @@ void HootApiDbReader::open(QString urlStr)
     set<long> mapIds = _database->selectMapIds(mapName);
     if (mapIds.size() != 1)
     {
-      QString str = QString("Expected 1 map with the name '%1' but found %2 maps.").arg(mapName)
+      QString str =
+        QString("Expected 1 map with the name '%1' but found %2 maps.")
+          .arg(mapName)
           .arg(mapIds.size());
       throw HootException(str);
     }
@@ -122,7 +124,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
   LOG_VART(ElementId(ElementType::Node, nodeId));
 
   NodePtr node(
-    new Node(
+    Node::newSp(
       _status,
       nodeId,
       resultIterator.value(ApiDb::NODES_LONGITUDE).toDouble(),
@@ -131,14 +133,16 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
       resultIterator.value(ApiDb::NODES_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::NODES_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
+        resultIterator.value(ApiDb::NODES_TIMESTAMP)
+          .toDateTime()
+          .toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   node->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::NODES_TAGS)));
   _updateMetadataOnElement(node);
 
   // We want the reader's status to always override any existing status
   // Unless, we really want to keep the status.
-  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  if (!_keepFileStatus && _status != Status::Invalid)
   {
     node->setStatus(_status);
   }
@@ -164,13 +168,14 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
       resultIterator.value(ApiDb::WAYS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::WAYS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))
-      ));
+        resultIterator.value(ApiDb::WAYS_TIMESTAMP)
+          .toDateTime()
+          .toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   way->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::WAYS_TAGS)));
   _updateMetadataOnElement(way);
   //we want the reader's status to always override any existing status
-  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  if (!_keepFileStatus && _status != Status::Invalid)
   {
     way->setStatus(_status);
   }
@@ -204,12 +209,14 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       OsmUtils::fromTimeString(
-        resultIterator.value(ApiDb::RELATIONS_TIMESTAMP).toDateTime().toString("yyyy-MM-ddThh:mm:ssZ"))));
+        resultIterator.value(ApiDb::RELATIONS_TIMESTAMP)
+          .toDateTime()
+          .toString("yyyy-MM-ddThh:mm:ssZ"))));
 
   relation->setTags(ApiDb::unescapeTags(resultIterator.value(ApiDb::RELATIONS_TAGS)));
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
-  if (!ConfigOptions().getReaderKeepFileStatus() && _status != Status::Invalid)
+  if (!_keepFileStatus && _status != Status::Invalid)
   {
     relation->setStatus(_status);
   }

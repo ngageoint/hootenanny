@@ -226,7 +226,8 @@ private:
   deque<ElementId> _indexToEid;
 };
 
-BuildingMatchCreator::BuildingMatchCreator()
+BuildingMatchCreator::BuildingMatchCreator() :
+_conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
@@ -270,7 +271,7 @@ boost::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 {
   if (!_rf)
   {
-    QString path = ConfPath::search(ConfigOptions().getConflateMatchBuildingModel());
+    QString path = ConfPath::search(_conflateMatchBuildingModel);
     LOG_DEBUG("Loading model from: " << path);
 
     QFile file(path.toAscii().data());
