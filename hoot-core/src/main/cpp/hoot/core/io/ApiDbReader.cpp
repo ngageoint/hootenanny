@@ -32,7 +32,7 @@
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -535,9 +535,9 @@ bool ApiDbReader::hasMoreElements()
 
     LOG_INFO(
       "Reading dataset with approximately " <<
-      FileUtils::formatPotentiallyLargeNumber(totalNumMapNodes) << " nodes, " <<
-      FileUtils::formatPotentiallyLargeNumber(totalNumMapWays) << " ways, and " <<
-      FileUtils::formatPotentiallyLargeNumber(totalNumMapRelations) << " relations...");
+      StringUtils::formatLargeNumber(totalNumMapNodes) << " nodes, " <<
+      StringUtils::formatLargeNumber(totalNumMapWays) << " ways, and " <<
+      StringUtils::formatLargeNumber(totalNumMapRelations) << " relations...");
 
     _firstPartialReadCompleted = true;
   }

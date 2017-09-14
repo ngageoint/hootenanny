@@ -44,38 +44,57 @@ _numFeaturesPassingCriterion(0)
 {
 }
 
+ElementCriterionVisitorInputStream::~ElementCriterionVisitorInputStream()
+{
+  close();
+}
+
+void ElementCriterionVisitorInputStream::close()
+{
+  _elementSource->close();
+  _numFeaturesTotal = 0;
+  _numFeaturesPassingCriterion = 0;
+}
+
 boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
 {
   return _elementSource->getProjection();
+}
+
+bool ElementCriterionVisitorInputStream::hasMoreElements()
+{
+  return _elementSource->hasMoreElements();
 }
 
 ElementPtr ElementCriterionVisitorInputStream::readNextElement()
 {
   do
   {
-    ElementPtr e = _elementSource->readNextElement();
-    LOG_VART(e->getElementId());
+    ElementPtr element = _elementSource->readNextElement();
+    _numFeaturesTotal++;
+    //LOG_VART(_numFeaturesTotal);
+    LOG_VART(element->getElementId());
 
     //LOG_VART(_criterion.get());
-    if (!_criterion.get() || _criterion->isSatisfied(e))
+    if (!_criterion.get() || _criterion->isSatisfied(element))
     {
       _numFeaturesPassingCriterion++;
+      //LOG_VART(_numFeaturesPassingCriterion);
       for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin(); itr != _visitors.end();
            ++itr)
       {
         ElementVisitorPtr visitor = *itr;
         //LOG_VART(visitor->toString());
-        visitor->visit(e);
-        LOG_VART(e->getTags().contains(MetadataTags::HootHash()));
+        visitor->visit(element);
+        //LOG_VART(element->getTags().contains(MetadataTags::HootHash()));
       }
-      return e;
+      return element;
     }
     else
     {
       LOG_TRACE("Criterion not satisfied:");
-      LOG_VART(e);
+      LOG_VART(element);
     }
-    _numFeaturesTotal++;
   } while (hasMoreElements());
 
   return ElementPtr();
