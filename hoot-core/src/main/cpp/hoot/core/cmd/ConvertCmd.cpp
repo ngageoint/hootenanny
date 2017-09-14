@@ -39,6 +39,7 @@
 #include <hoot/core/filters/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/OsmMap.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -143,6 +144,7 @@ public:
     }
     LOG_VARD(writerName);
     LOG_VARD(OsmMapWriterFactory::getInstance().hasElementOutputStream(output));
+    LOG_VARD(ConfigUtils::boundsOptionEnabled());
 
     if (OsmMapReaderFactory::getInstance().hasElementInputStream(input) &&
         OsmMapWriterFactory::getInstance().hasElementOutputStream(output) &&
@@ -150,7 +152,9 @@ public:
         //the XML writer can't keep sorted output when streaming, so require an additional config
         //option be specified in order to stream when writing that format
         (writerName != "hoot::OsmXmlWriter" ||
-         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())))
+         (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
+        //none of the convert bounding box supports are able to do streaming I/O at this point
+        !ConfigUtils::boundsOptionEnabled())
     {
       ElementStreamer::stream(input, output);
     }
