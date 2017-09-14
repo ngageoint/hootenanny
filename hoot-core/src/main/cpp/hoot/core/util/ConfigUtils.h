@@ -31,6 +31,9 @@
 namespace hoot
 {
 
+/**
+ * Utilities for dealing with hoot config options
+ */
 class ConfigUtils
 {
 
