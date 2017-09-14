@@ -47,8 +47,6 @@ class Match;
 class MatchClassification;
 class MatchFactory;
 class MatchThreshold;
-class Merger;
-class MergerFactory;
 class Settings;
 class ElementId;
 
@@ -93,11 +91,6 @@ public:
 
   virtual void setConfiguration(const Settings &conf);
 
-  /**
-   * Set the factory to use when creating mergers. This method is likely only useful when testing.
-   */
-  void setMergerFactory(boost::shared_ptr<MergerFactory> mf) { _mergerFactory = mf; }
-
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
@@ -105,15 +98,9 @@ private:
   geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
   boost::shared_ptr<MatchThreshold> _matchThreshold;
-  boost::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
-  HashMap<ElementId, std::vector<Merger*> > _e2m;
   std::vector<const Match*> _matches;
-  std::vector<Merger*> _mergers;
   QList<SingleStat> _stats;
-
-  void _addReviewTags(const OsmMapPtr &map, const std::vector<const Match *> &matches);
-  void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
 
   template <typename InputCollection>
   void _deleteAll(InputCollection& ic)
@@ -124,16 +111,6 @@ private:
     }
     ic.clear();
   }
-
-  /**
-   * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
-   * is helpful when replacing element ids with new ids.
-   *
-   * @optimize It may make sense to write a custom multi-map for storing values. Check out this
-   * for an example:
-   * http://stackoverflow.com/questions/10064422/java-on-memory-efficient-key-value-store
-   */
-  void _mapElementIdsToMergers();
 
   void _removeWholeGroups(std::vector<const Match *> &matches, MatchSetVector &matchSets,
     const OsmMapPtr &map);
