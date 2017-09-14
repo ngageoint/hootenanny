@@ -35,7 +35,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -88,9 +88,9 @@ void HootApiDbWriter::close()
   if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
   {
     LOG_DEBUG("Write stats:");
-    LOG_DEBUG("\t    Nodes: " << FileUtils::formatPotentiallyLargeNumber(_nodesWritten));
-    LOG_DEBUG("\t     Ways: " << FileUtils::formatPotentiallyLargeNumber(_waysWritten));
-    LOG_DEBUG("\tRelations: " << FileUtils::formatPotentiallyLargeNumber(_relationsWritten));
+    LOG_DEBUG("\t    Nodes: " << StringUtils::formatLargeNumber(_nodesWritten));
+    LOG_DEBUG("\t     Ways: " << StringUtils::formatLargeNumber(_waysWritten));
+    LOG_DEBUG("\tRelations: " << StringUtils::formatLargeNumber(_relationsWritten));
   }
 }
 

@@ -38,8 +38,22 @@ ElementCriterionVisitorInputStream::ElementCriterionVisitorInputStream(
   const QList<ElementVisitorPtr>& visitors) :
 _elementSource(elementSource),
 _criterion(criterion),
-_visitors(visitors)
+_visitors(visitors),
+_numFeaturesTotal(0),
+_numFeaturesPassingCriterion(0)
 {
+}
+
+ElementCriterionVisitorInputStream::~ElementCriterionVisitorInputStream()
+{
+  close();
+}
+
+void ElementCriterionVisitorInputStream::close()
+{
+  _elementSource->close();
+  _numFeaturesTotal = 0;
+  _numFeaturesPassingCriterion = 0;
 }
 
 boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getProjection() const
@@ -47,32 +61,39 @@ boost::shared_ptr<OGRSpatialReference> ElementCriterionVisitorInputStream::getPr
   return _elementSource->getProjection();
 }
 
+bool ElementCriterionVisitorInputStream::hasMoreElements()
+{
+  return _elementSource->hasMoreElements();
+}
+
 ElementPtr ElementCriterionVisitorInputStream::readNextElement()
 {
   do
   {
-    ElementPtr e = _elementSource->readNextElement();
-    if (e.get())
-    {
-      LOG_VART(e->getElementId());
-      LOG_VART(_criterion.get());
+    ElementPtr element = _elementSource->readNextElement();
+    _numFeaturesTotal++;
+    //LOG_VART(_numFeaturesTotal);
+    LOG_VART(element->getElementId());
 
-      if (!_criterion.get() || _criterion->isSatisfied(e))
+    //LOG_VART(_criterion.get());
+    if (!_criterion.get() || _criterion->isSatisfied(element))
+    {
+      _numFeaturesPassingCriterion++;
+      //LOG_VART(_numFeaturesPassingCriterion);
+      for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin(); itr != _visitors.end();
+           ++itr)
       {
-        for (QList<ElementVisitorPtr>::const_iterator itr = _visitors.begin();
-             itr != _visitors.end(); ++itr)
-        {
-          ElementVisitorPtr visitor = *itr;
-          LOG_VART(visitor->toString());
-          visitor->visit(e);
-          LOG_VART(e->getTags().contains(MetadataTags::HootHash()));
-        }
-        return e;
+        ElementVisitorPtr visitor = *itr;
+        //LOG_VART(visitor->toString());
+        visitor->visit(element);
+        //LOG_VART(element->getTags().contains(MetadataTags::HootHash()));
       }
-      else
-      {
-        LOG_TRACE("Criterion not satisfied.");
-      }
+      return element;
+    }
+    else
+    {
+      LOG_TRACE("Criterion not satisfied:");
+      LOG_VART(element);
     }
   } while (hasMoreElements());
 

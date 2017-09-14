@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef FILEUTILS_H
-#define FILEUTILS_H
+#ifndef STRINGUTILS_H
+#define STRINGUTILS_H
 
 // Qt
 #include <QString>
@@ -35,46 +35,30 @@ namespace hoot
 {
 
 /**
- * General utilities needed when working with files
+ * General utilities needed when working with strings
  */
-class FileUtils
+class StringUtils
 {
 
 public:
 
   /**
-   * Delete a directory along with all of its contents.
+   * Converts seconds to DD:MM:SS
    *
-   * @param dirName Path of directory to remove.
-   * @return true on success; false on error.
+   * @param durationInMilliseconds seconds to convert
+   * @return a DD:MM:SS string
    */
-  static void removeDir(const QString& dirName);
+  static QString secondsToDhms(const qint64 durationInMilliseconds);
 
   /**
-   * Tokenize a file by line and remove the date from each line
+   * Converts a large number to a more human readable format
    *
-   * @param filePath file to read
-   * @return a list of file lines
+   * @param number the number to format
+   * @return a formatted number string
    */
-  static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
-
-  /**
-   * Reads an entire file to string
-   *
-   * @param path file path to read from
-   * @return a string
-   */
-  static QString readFully(const QString path);
-
-  /**
-   * Writes an entire file to string.  Closes the file on success.
-   *
-   * @param path file path to write to
-   * @param text text to be written
-   */
-  static void writeFully(const QString path, const QString text);
+  static QString formatLargeNumber(const unsigned long number);
 };
 
 }
 
-#endif // FILEUTILS_H
+#endif // STRINGUTILS_H
