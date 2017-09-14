@@ -463,7 +463,7 @@ QString OsmApiDbBulkInserter::_getCombinedSqlFileName() const
   }
   else
   {
-    dest = QDir::tempPath() + "/OsmApiDbBulkWriter-" + QUuid::createUuid().toString() + ".sql";
+    dest = QDir::tempPath() + "/OsmApiDbBulkInserter-" + QUuid::createUuid().toString() + ".sql";
   }
   return dest;
 }
@@ -551,12 +551,14 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
         LOG_DEBUG("Parsing file for table: " << *it << "...");
         QTextStream inStream(&tempInputFile);
         QString line;
+        line.reserve(75);
         long lineCtr = 0;
         const bool updateIdOffsets = _destinationIsDatabase() && _reserveRecordIdsBeforeWritingData;
         do
         {
-          line = inStream.readLine();
-          LOG_VART(line.left(100));
+          line.clear();
+          line.append(inStream.readLine());
+          LOG_VART(line.left(75));
           LOG_VART(line.length());
 
           if (!line.isEmpty() && line != "\\." && !line.startsWith("COPY"))
@@ -581,7 +583,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             lineCtr = 0;
           }
 
-          if (progressLineCtr > 0 && (progressLineCtr % _statusUpdateInterval == 0))
+          if (progressLineCtr > 0 && (progressLineCtr % (_statusUpdateInterval * 10) == 0))
           {
             //TODO: changesets is throwing off the progress totals here...not sure why...don't
             //care that much right now, since the changeset count is far outnumbered by the
@@ -1136,7 +1138,7 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
 }
 
 void OsmApiDbBulkInserter::_writeNodeToStream(const ConstNodePtr& node,
-                                               const unsigned long nodeDbId)
+                                              const unsigned long nodeDbId)
 {
   LOG_TRACE("Writing node to stream...");
   const QStringList nodeSqlStrs =

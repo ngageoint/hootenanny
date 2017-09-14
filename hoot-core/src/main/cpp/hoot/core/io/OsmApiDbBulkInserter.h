@@ -184,9 +184,6 @@ public:
 
 private:
 
-  // for white box testing.
-  friend class ServiceOsmApiDbBulkWriterTest;
-
   ElementWriteStats _writeStats;
   ChangesetData _changesetData;
   IdMappings _idMappings;

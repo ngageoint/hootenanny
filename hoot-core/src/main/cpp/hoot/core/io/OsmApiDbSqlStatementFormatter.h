@@ -72,7 +72,8 @@ public:
 
   OsmApiDbSqlStatementFormatter(const QString delimiter);
 
-  QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId);
+  QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId,
+                               const bool validate = false);
   QStringList wayToSqlStrings(const long wayId, const long changesetId);
   QStringList wayNodeToSqlStrings(const long wayId, const long wayNodeId,
                                   const unsigned int wayNodeIndex);
@@ -195,6 +196,7 @@ public:
 private:
 
   QMap<QString, QString> _outputFormatStrings;
+  QString _dateString;
 
   void _initOutputFormatStrings(const QString delimiter);
   static unsigned int _convertDegreesToNanodegrees(const double degrees);
