@@ -53,7 +53,8 @@ class OsmApiDbSqlStatementFormatter;
  * OSM element writer optimized for bulk element additions to an OSM API v0.6 database.
  *
  * If you need to write small amounts of elements to an OSM API database or modify data in an
- * existing database, you should create a new writer class or use the Rails Port instead.
+ * existing database, you should create a new writer class similar to how HootApiDbWriter works or
+ * use the Rails Port instead.
  *
  * This writer:
  *
@@ -70,6 +71,11 @@ class OsmApiDbSqlStatementFormatter;
  * * is transaction safe
  *
  * * requires two passes over the input data *before* writing it to the database
+ *
+ * * uses the psql command to execute SQL statements; There is a version which uses pg_bulkload
+ * instead, which is several times faster.  It is currently in the 1446 development branch.
+ *
+ * TODO: add the capability to auto-create the table indexes
  */
 class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
 {
@@ -180,6 +186,8 @@ public:
   }
   void setStxxlMapMinSize(long size) { _stxxlMapMinSize = size; }
   void setValidateData(bool validate) { _validateData = validate; }
+  void setDisableDatabaseConstraintsDuringWrite(bool disable)
+  { _disableDatabaseConstraintsDuringWrite = disable; }
 
 private:
 
@@ -200,6 +208,7 @@ private:
   long _stxxlMapMinSize;
   bool _validateData;
   bool _includeDebugTags;
+  bool _disableDatabaseConstraintsDuringWrite;
 
   std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
   QStringList _sectionNames;

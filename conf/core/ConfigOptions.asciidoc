@@ -1318,6 +1318,15 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
+=== osmapidb.bulk.inserter.disable.database.constraints.during.write
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writer drop the database constraints before writing the data and
+re-enable them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
+
 === osmapidb.bulk.inserter.file.output.status.update.interval
 
 * Data Type: long

@@ -440,7 +440,15 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
 
 void OsmApiDbBulkInserter::_writeDataToDb()
 {
+  if (_disableDatabaseConstraintsDuringWrite)
+  {
+    _database.disableConstraints();
+  }
   _writeDataToDbPsql();
+  if (_disableDatabaseConstraintsDuringWrite)
+  {
+    _database.enableConstraints();
+  }
 }
 
 QString OsmApiDbBulkInserter::_getCombinedSqlFileName() const
@@ -518,7 +526,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     _sqlOutputCombinedFile->write(reserveElementIdsSql.toUtf8());
   }
 
-  long progressLineCtr = 0;
+  long lineCtr = 0;
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
     LOG_DEBUG("Parsing data for temp file " << *it);
@@ -549,25 +557,22 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
           LOG_VART(line.left(25));
           LOG_VART(line.length());
 
-          if (!line.trimmed().isEmpty() && !line.trimmed().contains("\\.") &&
-              !line.startsWith("COPY"))
+          if (updateIdOffsets && !line.trimmed().isEmpty() &&
+              line.trimmed() != QLatin1String("\\.") && !line.startsWith("COPY"))
           {
-            if (updateIdOffsets)
-            {
-              _updateRecordLineWithIdOffset(*it, line);
-            }
-            progressLineCtr++;
+            _updateRecordLineWithIdOffset(*it, line);
           }
-          _sqlOutputCombinedFile->write(QString(line).toUtf8());
 
-          if (progressLineCtr > 0 && (progressLineCtr % (_statusUpdateInterval * 10) == 0))
+          _sqlOutputCombinedFile->write(QString(line).toUtf8());
+          lineCtr++;
+
+          if (lineCtr > 0 && (lineCtr % (_statusUpdateInterval * 10) == 0))
           {
             //changesets is throwing off the progress totals here...not sure why...don't
             //care that much right now, since the changeset count is far outnumbered by the
             //size of the rest of the data
             PROGRESS_INFO(
-              "Parsed " <<
-              StringUtils::formatLargeNumber(progressLineCtr) << "/" <<
+              "Parsed " << StringUtils::formatLargeNumber(lineCtr) << "/" <<
               StringUtils::formatLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
@@ -603,8 +608,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
     StringUtils::secondsToDhms(_timer->elapsed()));
-  LOG_DEBUG(
-    "Parsed " << StringUtils::formatLargeNumber(progressLineCtr) << " total SQL file lines.");
+  LOG_DEBUG("Parsed " << StringUtils::formatLargeNumber(lineCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
 }
@@ -923,6 +927,8 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setStartingRelationId(confOptions.getOsmapidbBulkInserterStartingRelationId());
   setStxxlMapMinSize(confOptions.getOsmapidbBulkInserterStxxlMapMinSize());
   setValidateData(confOptions.getOsmapidbBulkInserterValidateData());
+  setDisableDatabaseConstraintsDuringWrite(
+    confOptions.getOsmapidbBulkInserterDisableDatabaseConstraintsDuringWrite());
 
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_fileOutputElementBufferSize);
@@ -937,6 +943,7 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   LOG_VART(_idMappings.startingRelationId);
   LOG_VART(_stxxlMapMinSize);
   LOG_VART(_validateData);
+  LOG_VART(_disableDatabaseConstraintsDuringWrite);
 }
 
 QStringList OsmApiDbBulkInserter::_createSectionNameList()

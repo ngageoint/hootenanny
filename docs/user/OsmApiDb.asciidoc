@@ -43,12 +43,12 @@ hoot convert -D changeset.user.id=1 myOsmDataInput.osm.pbf myOsmDataOutput.sql
 
 Write directly to a database and handle all record ID updates outside of Hootenanny:
 -----------------
-hoot convert -D changeset.user.id=1 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
 Write directly to a database, handle all record ID updates outside of Hootenanny, and retain the SQL output file:
 -----------------
-hoot convert -D changeset.user.id=1 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
 ==== Use Case #2 (offline) ==== 
@@ -60,12 +60,12 @@ hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.starting.node.id=1
 
 Write directly to a database and manually specify record starting IDs with Hootenanny:
 -----------------
-hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.starting.node.id=10 -D osmapidb.bulk.inserter.starting.way.id=10 -D osmapidb.bulk.inserter.starting.relation.id=10 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true -D osmapidb.bulk.inserter.starting.node.id=10 -D osmapidb.bulk.inserter.starting.way.id=10 -D osmapidb.bulk.inserter.starting.relation.id=10 myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
 Write directly to a database, manually specify record starting IDs with Hootenanny, and retain the SQL output file:
 -----------------
-hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.starting.node.id=10 -D osmapidb.bulk.inserter.starting.way.id=10 -D osmapidb.bulk.inserter.starting.relation.id=10 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
+hoot convert -D changeset.user.id=1 -D osmapidb.bulk.inserter.disable.database.constraints.during.write=true -D osmapidb.bulk.inserter.starting.node.id=10 -D osmapidb.bulk.inserter.starting.way.id=10 -D osmapidb.bulk.inserter.starting.relation.id=10 -D osmapidb.bulk.writer.output.files.copy.location=myOsmDataOutput.sql myOsmDataInput.osm.pbf osmapidb://hoot:hoottest@localhost:5432/osmapi_test
 -----------------
 
 ==== Use Case #3 (online) ==== 
@@ -90,6 +90,10 @@ record ID safe, meaning that it can be used while other concurrent users are wri
 record ID conflicts.
 
 If you are writing extreme amounts of data and have adequate memory available, you may be able to improve the performance of the write operation with additional tweaks.  The configuration option, 'max.elements.per.partial.map', determines how many file lines are held in memory before they are flushed out to disk when generating the output files.  The default setting is fairly large, but you may be able to improve write performance by increasing it (conversely, if your memory is limited, you may need to decrease this setting).  This optimization deals *only* with the output file generation, however, and does nothing to increase the performance of the SQL execution against the target database (database tuning may help there).
+
+The configuration option, 'osmapidb.bulk.inserter.disable.database.constraints.during.write', allows for disabling database
+constraints during writing.  This should generally speed up data loads, but should only be used with databases that have
+been taken completely offline.
 
 The configuration option, 'osmapidb.bulk.inserter.file.output.status.update.interval', simply determines how often you see progress updates when generating the output files.  The default value is fairly large, but for very large amounts of data you may wish to increase the value of this option to avoid too frequent of progress update messages.
 
