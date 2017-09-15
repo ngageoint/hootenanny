@@ -140,6 +140,8 @@ public:
     }
   }
 
+  double getSlowTest() { return _slowTest; }
+
 private:
   bool _success;
   bool _showTestName;
@@ -228,7 +230,15 @@ enum _TestType
   SLOW_ONLY,
   GLACIAL,
   GLACIAL_ONLY,
+  SYNCHRONOUS,
   ALL
+};
+
+enum _TimeOutValue
+{
+  QUICK_WAIT    = 2,
+  SLOW_WAIT     = 30,
+  GLACIAL_WAIT  = 900
 };
 
 void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
@@ -243,27 +253,28 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
   default:
   case CURRENT:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
     break;
   case QUICK:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
     break;
   case QUICK_ONLY:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest());
     break;
   case SLOW:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/sync/", printDiff, SLOW_WAIT));
     suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
@@ -271,17 +282,20 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
     break;
   case SLOW_ONLY:
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/sync/", printDiff, SLOW_WAIT));
     suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest());
     break;
   case GLACIAL:
   case ALL:
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff));
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/sync/", printDiff, SLOW_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/sync/", printDiff, GLACIAL_WAIT));
     suite->addTest(new ConflateCaseTestSuite("test-files/cases"));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest());
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest());
@@ -290,8 +304,14 @@ void populateTests(_TestType t, CppUnit::TestSuite *suite, bool printDiff)
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
     break;
   case GLACIAL_ONLY:
-    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/sync/", printDiff, GLACIAL_WAIT));
     suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest());
+    break;
+  case SYNCHRONOUS:
+    suite->addTest(new ScriptTestSuite("test-files/cmd/glacial/sync/", printDiff, GLACIAL_WAIT));
+    suite->addTest(new ScriptTestSuite("test-files/cmd/slow/sync/", printDiff, SLOW_WAIT));
+    suite->addTest(CppUnit::TestFactoryRegistry::getRegistry("synchronous").makeTest());
     break;
   }
 }
@@ -383,7 +403,11 @@ int main(int argc, char *argv[])
     }
     else if (args.contains("--listen"))
     {
-      listener.reset(new HootTestListener(false, -1, false));
+      double slowTest = -1;
+      int i = args.indexOf("--listen") + 1;
+      if (i < args.size())
+        slowTest = args[i].toDouble();
+      listener.reset(new HootTestListener(false, slowTest, false));
       if (args.contains("--names"))
         listener->showTestNames(true);
       result.addListener(listener.get());
@@ -427,32 +451,32 @@ int main(int argc, char *argv[])
       }
       else if (args.contains("--quick"))
       {
-        listener.reset(new HootTestListener(false, 1.0));
+        listener.reset(new HootTestListener(false, QUICK_WAIT));
         populateTests(QUICK, rootSuite, printDiff);
       }
       else if (args.contains("--quick-only"))
       {
-        listener.reset(new HootTestListener(false, 1.0));
+        listener.reset(new HootTestListener(false, QUICK_WAIT));
         populateTests(QUICK_ONLY, rootSuite, printDiff);
       }
       else if (args.contains("--slow"))
       {
-        listener.reset(new HootTestListener(false, 30.0));
+        listener.reset(new HootTestListener(false, SLOW_WAIT));
         populateTests(SLOW, rootSuite, printDiff);
       }
       else if (args.contains("--slow-only"))
       {
-        listener.reset(new HootTestListener(false, 30.0));
+        listener.reset(new HootTestListener(false, SLOW_WAIT));
         populateTests(SLOW_ONLY, rootSuite, printDiff);
       }
       else if (args.contains("--all") || args.contains("--glacial"))
       {
-        listener.reset(new HootTestListener(false, 900.0));
+        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
         populateTests(GLACIAL, rootSuite, printDiff);
       }
       else if (args.contains("--glacial-only"))
       {
-        listener.reset(new HootTestListener(false, 900.0));
+        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
         populateTests(GLACIAL_ONLY, rootSuite, printDiff);
       }
 
@@ -505,10 +529,25 @@ int main(int argc, char *argv[])
         throw HootException("Expected integer after --parallel");
       }
 
-      ProcessPool pool(nproc);
-      vector<string> names;
-      getNames(names, rootSuite);
-      for (vector<string>::iterator it = names.begin(); it != names.end(); ++it)
+      ProcessPool pool(nproc, listener->getSlowTest());
+      //  Get the names of all of the tests to run
+      vector<string> allNames;
+      getNames(allNames, rootSuite);
+      set<string> nameCheck;
+      for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
+        nameCheck.insert(*it);
+      //  Add all of the jobs that must be done synchronously and are a part of the selected tests
+      CppUnit::TestSuite syncTests;
+      populateTests(SYNCHRONOUS, &syncTests, printDiff);
+      vector<string> syncNames;
+      getNames(syncNames, &syncTests);
+      for (vector<string>::iterator it = syncNames.begin(); it != syncNames.end(); ++it)
+      {
+        if (nameCheck.find(*it) != nameCheck.end())
+          pool.addJob(QString(it->c_str()), false);
+      }
+      //  Add all of the remaining jobs in the test suite
+      for (vector<string>::iterator it = allNames.begin(); it != allNames.end(); ++it)
         pool.addJob(QString(it->c_str()));
 
       pool.startProcessing();

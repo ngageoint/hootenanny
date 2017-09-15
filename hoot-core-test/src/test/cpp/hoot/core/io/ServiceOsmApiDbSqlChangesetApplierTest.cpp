@@ -289,5 +289,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetApplierTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetApplierTest, "synchronous");
 
 }
