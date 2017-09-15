@@ -34,8 +34,8 @@
 #include <QWaitCondition>
 
 //  Standard
-#include <map>
-#include <queue>
+#include <set>
+#include <vector>
 
 //  Boost
 #include <boost/shared_ptr.hpp>
@@ -44,10 +44,28 @@
 
 typedef boost::shared_ptr<QProcess> QProcessPtr;
 
+class JobQueue
+{
+public:
+  JobQueue();
+
+  bool empty();
+
+  bool contains(const QString& job);
+
+  QString pop();
+
+  void push(const QString& job);
+
+private:
+  QMutex _mutex;
+  std::set<QString> _jobs;
+};
+
 class ProcessThread : public QThread
 {
 public:
-  ProcessThread(QMutex* mutex, std::queue<QString>* jobs);
+  ProcessThread(double waitTime, QMutex* outMutex, JobQueue* asyncJobs, JobQueue* syncJobs = NULL);
 
   void run();
 
@@ -56,9 +74,14 @@ public:
 private:
   QProcess* createProcess();
 
-  QMutex* _mutex;
-  std::queue<QString>* _jobs;
+  void processJobs(JobQueue* queue);
+
+  double _waitTime;
+  QMutex* _outMutex;
+  JobQueue* _asyncJobs;
+  JobQueue* _syncJobs;
   int _failures;
+  QProcessPtr _proc;
 };
 
 typedef boost::shared_ptr<ProcessThread> ProcessThreadPtr;
@@ -66,11 +89,11 @@ typedef boost::shared_ptr<ProcessThread> ProcessThreadPtr;
 class ProcessPool
 {
 public:
-  explicit ProcessPool(int nproc);
+  explicit ProcessPool(int nproc, double waitTime);
 
   virtual ~ProcessPool();
 
-  void addJob(const QString& test);
+  void addJob(const QString& test, bool async = true);
 
   void startProcessing();
 
@@ -79,9 +102,9 @@ public:
   void wait();
 private:
   std::vector<ProcessThreadPtr> _threads;
-  std::queue<QString> _queue;
+  JobQueue _syncJobs;
+  JobQueue _asyncJobs;
   QMutex _mutex;
-  QWaitCondition _wait;
   int _failed;
   int _finished;
 };

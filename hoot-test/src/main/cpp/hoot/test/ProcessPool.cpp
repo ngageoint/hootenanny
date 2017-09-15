@@ -28,8 +28,45 @@
 
 using namespace std;
 
-ProcessThread::ProcessThread(QMutex* mutex, std::queue<QString>* jobs)
-  : _mutex(mutex), _jobs(jobs), _failures(0)
+
+JobQueue::JobQueue()
+{
+}
+
+bool JobQueue::empty()
+{
+  _mutex.lock();
+  bool e = _jobs.empty();
+  _mutex.unlock();
+  return e;
+}
+
+bool JobQueue::contains(const QString& job)
+{
+  _mutex.lock();
+  bool c = _jobs.find(job) != _jobs.end();
+  _mutex.unlock();
+  return c;
+}
+
+QString JobQueue::pop()
+{
+  _mutex.lock();
+  QString job = *_jobs.begin();
+  _jobs.erase(_jobs.begin());
+  _mutex.unlock();
+  return job;
+}
+
+void JobQueue::push(const QString& job)
+{
+  _mutex.lock();
+  _jobs.insert(job);
+  _mutex.unlock();
+}
+
+ProcessThread::ProcessThread(double waitTime, QMutex* outMutex, JobQueue* asyncJobs, JobQueue* syncJobs)
+  : _waitTime(waitTime), _outMutex(outMutex), _asyncJobs(asyncJobs), _syncJobs(syncJobs), _failures(0), _proc(createProcess())
 {
 }
 
@@ -44,50 +81,53 @@ QProcess* ProcessThread::createProcess()
   proc->setProcessChannelMode(QProcess::MergedChannels);
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   proc->setProcessEnvironment(env);
-  proc->start("HootTest --listen");
+  proc->start(QString("HootTest --listen %1").arg((int)_waitTime));
   return proc;
 }
 
 void ProcessThread::run()
 {
-  QProcessPtr proc(createProcess());
+  if (_syncJobs != NULL)
+    processJobs(_syncJobs);
+  processJobs(_asyncJobs);
 
+  _proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toAscii());
+  _proc->waitForFinished();
+}
+
+void ProcessThread::processJobs(JobQueue* queue)
+{
   int restart_count = 0;
   const int MAX_RESTART = 3;
   bool working = true;
   while (working)
   {
-    _mutex->lock();
-    if (!_jobs->empty())
+    if (!queue->empty())
     {
-      QString test = _jobs->front();
-      _jobs->pop();
-      _mutex->unlock();
-      proc->write(test.toAscii());
-      proc->write("\n");
+      QString test = queue->pop();
+      _proc->write(test.toAscii());
+      _proc->write("\n");
       //  Read all of the output
       QString output;
-      proc->waitForReadyRead();
-      QString line = QString(proc->readLine()).trimmed();
+      _proc->waitForReadyRead();
+      QString line = QString(_proc->readLine()).trimmed();
       while (line != HOOT_TEST_FINISHED)
       {
-        if (proc->state() == QProcess::NotRunning)
+        if (_proc->state() == QProcess::NotRunning)
         {
           //  Put this job that failed back on the queue
-          _mutex->lock();
-          _jobs->push(test);
-          _mutex->unlock();
+          queue->push(test);
           ++restart_count;
           //  Restart the process if there was a process failure
           if (restart_count < MAX_RESTART)
-            proc.reset(createProcess());
+            _proc.reset(createProcess());
           else
             working = false;
           break;
         }
         else if (line == "")
         {
-          if (output != ".")
+          if (output != "." && !output.endsWith("\n"))
             output.append("\n");
         }
         else if (line.contains(" ERROR "))
@@ -96,42 +136,39 @@ void ProcessThread::run()
           output.append(line);
           output.append("\n");
           //  Kill the process
-          proc->write(HOOT_TEST_FINISHED);
-          proc->write("\n");
-          proc->waitForFinished();
+          _proc->write(HOOT_TEST_FINISHED);
+          _proc->write("\n");
+          _proc->waitForFinished();
           //  Start a new process
-          proc.reset(createProcess());
+          _proc.reset(createProcess());
           line = HOOT_TEST_FINISHED;
           continue;
         }
         else if (line != ".")
           line.append("\n");
         output.append(line);
-        if (proc->bytesAvailable() < 1)
-          proc->waitForReadyRead();
-        line = QString(proc->readLine()).trimmed();
+        if (_proc->bytesAvailable() < 1)
+          _proc->waitForReadyRead();
+        line = QString(_proc->readLine()).trimmed();
       }
-      _mutex->lock();
+      output = output.replace("\n\n\n", "\n").replace("\n\n", "\n");
+      _outMutex->lock();
       cout << output.toStdString();
       cout.flush();
-      _mutex->unlock();
+      _outMutex->unlock();
     }
     else
-    {
-      _mutex->unlock();
-      proc->write(QString("%1\n").arg(HOOT_TEST_FINISHED).toAscii());
-      proc->waitForFinished();
       working = false;
-    }
   }
 }
 
-ProcessPool::ProcessPool(int nproc)
+ProcessPool::ProcessPool(int nproc, double waitTime)
   : _failed(0), _finished(0)
 {
   for (int i = 0; i < nproc; ++i)
   {
-    ProcessThreadPtr thread(new ProcessThread(&_mutex, &_queue));
+    JobQueue* sync = (i == 0) ? &_syncJobs : NULL;
+    ProcessThreadPtr thread(new ProcessThread(waitTime, &_mutex, &_asyncJobs, sync));
     _threads.push_back(thread);
   }
 }
@@ -157,11 +194,12 @@ void ProcessPool::wait()
     _threads[i]->wait();
 }
 
-void ProcessPool::addJob(const QString& test)
+void ProcessPool::addJob(const QString& test, bool async)
 {
-  _mutex.lock();
-  _queue.push(test);
-  _mutex.unlock();
+  if (async && !_syncJobs.contains(test))
+    _asyncJobs.push(test);
+  else if (!async)
+    _syncJobs.push(test);
 }
 
 int ProcessPool::getFailures()

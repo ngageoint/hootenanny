@@ -43,7 +43,7 @@ namespace hoot
 class ScriptTest : public CppUnit::TestCase
 {
 public:
-  ScriptTest(QString script, bool printDiff);
+  ScriptTest(QString script, bool printDiff, int waitToFinishTime = 30000);
 
   virtual void runTest();
 
@@ -53,6 +53,8 @@ private:
   QString _script;
   QString _stderr, _baseStderr;
   QString _stdout, _baseStdout;
+  /** Timeout before emitting warning "Waiting for process to finish" in msecs */
+  int _waitToFinishTime;
 
   QString _readFile(QString path);
   void _writeFile(QString path, QString content);
