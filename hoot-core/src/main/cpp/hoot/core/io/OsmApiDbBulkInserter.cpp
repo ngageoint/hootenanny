@@ -300,7 +300,7 @@ unsigned int OsmApiDbBulkInserter::_numberOfFileDataPasses() const
   return numPasses;
 }
 
-void OsmApiDbBulkInserter::_flushStreams()
+void OsmApiDbBulkInserter::_flush()
 {
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
@@ -365,7 +365,7 @@ void OsmApiDbBulkInserter::finalizePartial()
   // Do we have an unfinished changeset that needs flushing?
   if (_changesetData.changesInChangeset > 0)
   {
-    _writeChangesetToStream();
+    _writeChangeset();
   }
   //If there was only one changeset written total, this won't have yet been incremented, so do it
   //now.
@@ -373,7 +373,7 @@ void OsmApiDbBulkInserter::finalizePartial()
   {
     _changesetData.changesetsWritten++;
   }
-  _flushStreams();
+  _flush();
   _closeOutputFiles();
 
   if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
@@ -498,7 +498,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     {
       //with data validation on, we increment for each element read and all our counters are
       //incremented one past the element/changeset count and we need to decrement them by one
-      _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
+      _writeSequenceUpdates(_changesetData.currentChangesetId - 1,
                                     _idMappings.currentNodeId - 1,
                                     _idMappings.currentWayId - 1,
                                     _idMappings.currentRelationId - 1,
@@ -508,7 +508,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     {
       //with data validation off, changesets are incremented one past, but the element current
       //id's were always assigned the highest parsed value
-      _writeSequenceUpdatesToStream(_changesetData.currentChangesetId - 1,
+      _writeSequenceUpdates(_changesetData.currentChangesetId - 1,
                                     _idMappings.currentNodeId,
                                     _idMappings.currentWayId,
                                     _idMappings.currentRelationId,
@@ -706,7 +706,7 @@ void OsmApiDbBulkInserter::_reserveIdsInDb()
   _incrementAndGetLatestIdsFromDb();
   //generate setval statements to reserve each of the id ranges out from use by others
   QString reserveElementIdsSql;
-  _writeSequenceUpdatesToStream(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
+  _writeSequenceUpdates(_changesetData.currentChangesetId + _changesetData.changesetsWritten,
                                 _idMappings.currentNodeId + _writeStats.nodesWritten,
                                 _idMappings.currentWayId + _writeStats.waysWritten,
                                 _idMappings.currentRelationId + _writeStats.relationsWritten,
@@ -789,8 +789,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
     tags.set(MetadataTags::HootId(), QString::number(nodeDbId));
   }
 
-  _writeNodeToStream(node, nodeDbId);
-  _writeTagsToStream(node->getTags(), ElementType::Node, nodeDbId,
+  _writeNode(node, nodeDbId);
+  _writeTags(node->getTags(), ElementType::Node, nodeDbId,
     _outputSections[ApiDb::getCurrentNodeTagsTableName()],
     _outputSections[ApiDb::getNodeTagsTableName()]);
   _writeStats.nodesWritten++;
@@ -837,9 +837,9 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
     tags.set(MetadataTags::HootId(), QString::number(wayDbId));
   }
 
-  _writeWayToStream(wayDbId);
-  _writeWayNodesToStream(wayDbId, way->getNodeIds());
-  _writeTagsToStream(way->getTags(), ElementType::Way, wayDbId,
+  _writeWay(wayDbId);
+  _writeWayNodes(wayDbId, way->getNodeIds());
+  _writeTags(way->getTags(), ElementType::Way, wayDbId,
     _outputSections[ApiDb::getCurrentWayTagsTableName()],
     _outputSections[ApiDb::getWayTagsTableName()]);
   _writeStats.waysWritten++;
@@ -885,9 +885,9 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
     tags.set(MetadataTags::HootId(), QString::number(relationDbId));
   }
 
-  _writeRelationToStream(relationDbId);
-  _writeRelationMembersToStream(relation, relationDbId);
-  _writeTagsToStream(relation->getTags(), ElementType::Relation, relationDbId,
+  _writeRelation(relationDbId);
+  _writeRelationMembers(relation, relationDbId);
+  _writeTags(relation->getTags(), ElementType::Relation, relationDbId,
     _outputSections[ApiDb::getCurrentRelationTagsTableName()],
     _outputSections[ApiDb::getRelationTagsTableName()]);
   _writeStats.relationsWritten++;
@@ -1080,7 +1080,7 @@ unsigned long OsmApiDbBulkInserter::_establishIdMapping(const ElementId& sourceI
   return dbIdentifier;
 }
 
-void OsmApiDbBulkInserter::_writeNodeToStream(const ConstNodePtr& node,
+void OsmApiDbBulkInserter::_writeNode(const ConstNodePtr& node,
                                               const unsigned long nodeDbId)
 {
   LOG_TRACE("Writing node to stream...");
@@ -1090,7 +1090,7 @@ void OsmApiDbBulkInserter::_writeNodeToStream(const ConstNodePtr& node,
   _outputSections[ApiDb::getNodesTableName()]->write(nodeSqlStrs[1].toUtf8());
 }
 
-void OsmApiDbBulkInserter::_writeTagsToStream(const Tags& tags,
+void OsmApiDbBulkInserter::_writeTags(const Tags& tags,
                                               const ElementType::Type& elementType,
                                               const unsigned long dbId,
                                               boost::shared_ptr<QFile> currentTableFile,
@@ -1126,7 +1126,7 @@ void OsmApiDbBulkInserter::_createWayOutputFiles()
   _createOutputFile(ApiDb::getWayNodesTableName(), wayNodeSqlHeaders[1]);
 }
 
-void OsmApiDbBulkInserter::_writeWayToStream(const unsigned long wayDbId)
+void OsmApiDbBulkInserter::_writeWay(const unsigned long wayDbId)
 {
   LOG_TRACE("Writing way to stream...");
 
@@ -1136,7 +1136,7 @@ void OsmApiDbBulkInserter::_writeWayToStream(const unsigned long wayDbId)
   _outputSections[ApiDb::getWaysTableName()]->write(waySqlStrs[1].toUtf8());
 }
 
-void OsmApiDbBulkInserter::_writeWayNodesToStream(const unsigned long dbWayId,
+void OsmApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
                                                 const std::vector<long>& wayNodeIds)
 {
   LOG_TRACE("Writing way nodes to stream...");
@@ -1187,7 +1187,7 @@ void OsmApiDbBulkInserter::_createRelationOutputFiles()
   _createOutputFile(ApiDb::getRelationMembersTableName(),relationMemberSqlHeaders[1]);
 }
 
-void OsmApiDbBulkInserter::_writeRelationToStream(const unsigned long relationDbId)
+void OsmApiDbBulkInserter::_writeRelation(const unsigned long relationDbId)
 {
   LOG_TRACE("Writing relation to stream...");
 
@@ -1197,7 +1197,7 @@ void OsmApiDbBulkInserter::_writeRelationToStream(const unsigned long relationDb
   _outputSections[ApiDb::getRelationsTableName()]->write(relationSqlStrs[1].toUtf8());
 }
 
-void OsmApiDbBulkInserter::_writeRelationMembersToStream(const ConstRelationPtr& relation,
+void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relation,
                                                        const unsigned long dbRelationId)
 {
   LOG_TRACE("Writing relation members to stream...");
@@ -1236,11 +1236,11 @@ void OsmApiDbBulkInserter::_writeRelationMembersToStream(const ConstRelationPtr&
     if (!_validateData)
     {
       unsigned long memberIdVal = abs(memberElementId.getId());
-      _writeRelationMemberToStream(dbRelationId, *it, memberIdVal, memberSequenceIndex);
+      _writeRelationMember(dbRelationId, *it, memberIdVal, memberSequenceIndex);
     }
     else if (knownElementMap && knownElementMap->contains(memberElementId.getId()))
     {
-      _writeRelationMemberToStream(
+      _writeRelationMember(
         dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
     }
     else
@@ -1260,7 +1260,7 @@ void OsmApiDbBulkInserter::_writeRelationMembersToStream(const ConstRelationPtr&
   }
 }
 
-void OsmApiDbBulkInserter::_writeRelationMemberToStream(const unsigned long sourceRelationDbId,
+void OsmApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelationDbId,
                                                         const RelationData::Entry& member,
                                                         const unsigned long memberDbId,
                                                         const unsigned int memberSequenceIndex)
@@ -1307,7 +1307,7 @@ void OsmApiDbBulkInserter::_incrementChangesInChangeset()
   if (_changesetData.changesInChangeset == _maxChangesetSize)
   {
     LOG_VART(_changesetData.changesInChangeset);
-    _writeChangesetToStream();
+    _writeChangeset();
     _changesetData.currentChangesetId++;
     LOG_VART(_changesetData.currentChangesetId);
     _changesetData.changesInChangeset = 0;
@@ -1341,7 +1341,7 @@ void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& ele
       }
       logWarnCount++;
 
-      _writeRelationMemberToStream(
+      _writeRelationMember(
         relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
         elementDbId, relationRef->second.relationMemberSequenceId);
 
@@ -1351,7 +1351,7 @@ void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& ele
   }
 }
 
-void OsmApiDbBulkInserter::_writeChangesetToStream()
+void OsmApiDbBulkInserter::_writeChangeset()
 {
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_changesetData.currentChangesetId);
@@ -1376,7 +1376,7 @@ void OsmApiDbBulkInserter::_writeChangesetToStream()
       _changesetData.changesetBounds).toUtf8());
 }
 
-void OsmApiDbBulkInserter::_writeSequenceUpdatesToStream(long changesetId,
+void OsmApiDbBulkInserter::_writeSequenceUpdates(long changesetId,
                                                          const unsigned long nodeId,
                                                          const unsigned long wayId,
                                                          const unsigned long relationId,

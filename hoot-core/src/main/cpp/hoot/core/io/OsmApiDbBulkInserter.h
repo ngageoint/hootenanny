@@ -222,7 +222,7 @@ private:
   void _verifyStartingIds();
   void _verifyFileOutputs();
   void _closeOutputFiles();
-  void _flushStreams();
+  void _flush();
 
   //creates the output files containing the data
   void _createNodeOutputFiles();
@@ -232,23 +232,23 @@ private:
   void _createOutputFile(const QString tableName, const QString header = "");
   QString _getCombinedSqlFileName() const;
 
-  void _writeSequenceUpdatesToStream(long changesetId, const unsigned long nodeId,
-                                     const unsigned long wayId,
-                                     const unsigned long relationId, QString& outputStr);
-  void _writeChangesetToStream();
-  void _writeRelationToStream(const unsigned long relationDbId);
-  void _writeRelationMembersToStream(const ConstRelationPtr& relation,
-                                     const unsigned long dbRelationId);
-  void _writeRelationMemberToStream(const unsigned long sourceRelationDbId,
-                                    const RelationData::Entry& member,
-                                    const unsigned long memberDbId,
-                                    const unsigned int memberSequenceIndex);
-  void _writeWayToStream(const unsigned long wayDbId);
-  void _writeWayNodesToStream(const unsigned long wayId, const std::vector<long>& wayNodeIds);
-  void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
-  void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
-                          const unsigned long dbId, boost::shared_ptr<QFile> currentTableFile,
-                          boost::shared_ptr<QFile> historicalTableFile);
+  void _writeSequenceUpdates(long changesetId, const unsigned long nodeId,
+                             const unsigned long wayId, const unsigned long relationId,
+                             QString& outputStr);
+  void _writeChangeset();
+  void _writeRelation(const unsigned long relationDbId);
+  void _writeRelationMembers(const ConstRelationPtr& relation,
+                             const unsigned long dbRelationId);
+  void _writeRelationMember(const unsigned long sourceRelationDbId,
+                            const RelationData::Entry& member,
+                            const unsigned long memberDbId,
+                            const unsigned int memberSequenceIndex);
+  void _writeWay(const unsigned long wayDbId);
+  void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds);
+  void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId);
+  void _writeTags(const Tags& tags, const ElementType::Type& elementType,
+                  const unsigned long dbId, boost::shared_ptr<QFile> currentTableFile,
+                  boost::shared_ptr<QFile> historicalTableFile);
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();
