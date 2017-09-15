@@ -26,6 +26,8 @@
  */
 #include "ProcessPool.h"
 
+#include <iostream>
+
 using namespace std;
 
 
