@@ -43,6 +43,7 @@
 #include <QDir>
 #include <QUuid>
 #include <QLatin1String>
+#include <QTextStream>
 
 // Tgs
 #include <tgs/System/SystemInfo.h>
@@ -577,7 +578,6 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
         tempInputFile.close();
         LOG_DEBUG("Closing and removing file for " << *it << "...");
         _outputSections[*it]->close();
-        _outputSections[*it]->remove();
         _outputSections[*it].reset();
       }
       else
@@ -1274,11 +1274,6 @@ void OsmApiDbBulkInserter::_writeRelationMemberToStream(const unsigned long sour
   _writeStats.relationMembersWritten++;
 }
 
-QString OsmApiDbBulkInserter::_getTableOutputFileName(const QString tableName) const
-{
-  return QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".sql";
-}
-
 void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QString header)
 {
   QString msg = "Creating output file " + tableName;
@@ -1289,19 +1284,15 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QStr
   msg += "...";
   LOG_DEBUG(msg);
 
-  const QString dest = _getTableOutputFileName(tableName);
-  LOG_VART(dest);
-  QFile outputFile(dest);
-  if (outputFile.exists())
-  {
-    outputFile.remove();
-  }
-  boost::shared_ptr<QFile> file(new QFile(dest));
-  if (!file->open(QFile::WriteOnly | QFile::Truncate | QIODevice::Append))
+  boost::shared_ptr<QTemporaryFile> file(
+    new QTemporaryFile(QDir::tempPath() + "/OsmApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql"));
+  if (!file->open())
   {
     throw HootException(
       "Could not open file at: " + file->fileName() + " for contents of table: " + tableName);
   }
+  //for debugging only
+  //file->setAutoRemove(false);
   _outputSections[tableName] = file;
 
   if (!header.trimmed().isEmpty())

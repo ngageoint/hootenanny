@@ -32,8 +32,7 @@
 #include <vector>
 
 #include <QString>
-#include <QFile>
-#include <QTextStream>
+#include <QTemporaryFile>
 #include <QElapsedTimer>
 
 #include <hoot/core/io/PartialOsmMapWriter.h>
@@ -202,8 +201,7 @@ private:
   bool _validateData;
   bool _includeDebugTags;
 
-  //ended up not going with temp files here, since the file outputs aren't always temporary
-  std::map<QString, boost::shared_ptr<QFile> > _outputSections;
+  std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
@@ -233,7 +231,6 @@ private:
   void _createRelationOutputFiles();
   void _createOutputFile(const QString tableName, const QString header = "");
   QString _getCombinedSqlFileName() const;
-  QString _getTableOutputFileName(const QString tableName) const;
 
   void _writeSequenceUpdatesToStream(long changesetId, const unsigned long nodeId,
                                      const unsigned long wayId,
