@@ -32,6 +32,7 @@
 
 // Qt
 #include <QDateTime>
+#include <QStringBuilder>
 
 using namespace geos::geom;
 using namespace std;

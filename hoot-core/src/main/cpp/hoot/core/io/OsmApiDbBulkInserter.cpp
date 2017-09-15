@@ -221,9 +221,9 @@ void OsmApiDbBulkInserter::_closeOutputFiles()
       continue;
     }
 
-    if (_outputSections[*sectionNamesItr].first)
+    if (_outputSections[*sectionNamesItr])
     {
-      _outputSections[*sectionNamesItr].first->close();
+      _outputSections[*sectionNamesItr]->close();
     }
   }
 
@@ -299,7 +299,7 @@ unsigned int OsmApiDbBulkInserter::_numberOfFileDataPasses() const
   return numPasses;
 }
 
-void OsmApiDbBulkInserter::_flushStreams(const bool writeClosingMark)
+void OsmApiDbBulkInserter::_flushStreams()
 {
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
@@ -309,15 +309,10 @@ void OsmApiDbBulkInserter::_flushStreams(const bool writeClosingMark)
       continue;
     }
 
-    LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it].first->fileName());
-    if (writeClosingMark && *it != "byte_order_mark")
-    {
-      LOG_TRACE("Writing closing byte order mark to stream...");
-      *(_outputSections[*it].second) << QString("\\.\n\n\n");
-    }
-    // Flush any residual content from text stream/file
-    _outputSections[*it].second->flush();
-    if (!_outputSections[*it].first->flush())
+    LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it]->fileName());
+    _outputSections[*it]->write(QString("\\.\n\n").toUtf8());
+    // Flush any residual content from file
+    if (!_outputSections[*it]->flush())
     {
       throw HootException("Could not flush file for table " + *it);
     }
@@ -377,7 +372,7 @@ void OsmApiDbBulkInserter::finalizePartial()
   {
     _changesetData.changesetsWritten++;
   }
-  _flushStreams(true);
+  _flushStreams();
   _closeOutputFiles();
 
   if (_destinationIsDatabase() && _reserveRecordIdsBeforeWritingData)
@@ -392,10 +387,7 @@ void OsmApiDbBulkInserter::finalizePartial()
     //If the output is a sql file, the setval statements will be written to the file later.  If
     //the output is csv files, then ID sequences must be managed manually outside of this writer.
     LOG_DEBUG("Skipping record ID reservation in database due to configuration or output type...");
-  }
-
-  // Start initial section that holds nothing but UTF-8 byte-order mark (BOM)
-  _createOutputFile("byte_order_mark", "\n", true);
+  };
 
   //combine all the element/changeset files that were written during partial streaming into
   //one file and update the ids in the SQL file according to the id sequences previously reserved
@@ -492,9 +484,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   LOG_VART(_sectionNames.size());
   LOG_VART(_outputSections.size());
 
-  QTextStream outStream(_sqlOutputCombinedFile.get());
-  outStream << "BEGIN TRANSACTION;\n\n";
-  outStream.flush();
+  _sqlOutputCombinedFile->write(QString("BEGIN TRANSACTION;\n\n").toUtf8());
 
   if (!_reserveRecordIdsBeforeWritingData)
   {
@@ -524,8 +514,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
                                     reserveElementIdsSql);
     }
     LOG_VART(reserveElementIdsSql);
-    outStream << reserveElementIdsSql;
-    outStream.flush();
+    _sqlOutputCombinedFile->write(reserveElementIdsSql.toUtf8());
   }
 
   long progressLineCtr = 0;
@@ -540,28 +529,27 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 
     // Append contents of section subfiles to output file
 
-    //This file was originallyl opened as write only and has already been closed by this point,
+    //This file was originally opened as write only and has already been closed by this point,
     //so create a new readonly file for reading it back in.
-    QFile tempInputFile(_outputSections[*it].first->fileName());
+    QFile tempInputFile(_outputSections[*it]->fileName());
     try
     {
-      LOG_DEBUG("Opening file: " << _outputSections[*it].first->fileName());
+      LOG_DEBUG("Opening file: " << _outputSections[*it]->fileName());
       if (tempInputFile.open(QIODevice::ReadOnly))
       {
         LOG_DEBUG("Parsing file for table: " << *it << "...");
-        QTextStream inStream(&tempInputFile);
         QString line;
         line.reserve(75);
-        long lineCtr = 0;
         const bool updateIdOffsets = _destinationIsDatabase() && _reserveRecordIdsBeforeWritingData;
         do
         {
           line.clear();
-          line.append(inStream.readLine());
-          LOG_VART(line.left(75));
+          line.append(QString::fromUtf8(tempInputFile.readLine().constData()));
+          LOG_VART(line.left(25));
           LOG_VART(line.length());
 
-          if (!line.isEmpty() && line != "\\." && !line.startsWith("COPY"))
+          if (!line.trimmed().isEmpty() && !line.trimmed().contains("\\.") &&
+              !line.startsWith("COPY"))
           {
             if (updateIdOffsets)
             {
@@ -569,23 +557,11 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             }
             progressLineCtr++;
           }
-          outStream << line % "\n";
-          lineCtr++;
-
-          //technically, this buffer size is for elements, not record lines, but we'll use this
-          //value anyway...the two could be separated into different config settings if deemed
-          //necessary
-          if (lineCtr == _fileOutputElementBufferSize)
-          {
-            LOG_TRACE(
-              "Flushing records to combined file " << _sqlOutputCombinedFile->fileName() << "...");
-            outStream.flush();
-            lineCtr = 0;
-          }
+          _sqlOutputCombinedFile->write(QString(line).toUtf8());
 
           if (progressLineCtr > 0 && (progressLineCtr % (_statusUpdateInterval * 10) == 0))
           {
-            //TODO: changesets is throwing off the progress totals here...not sure why...don't
+            //changesets is throwing off the progress totals here...not sure why...don't
             //care that much right now, since the changeset count is far outnumbered by the
             //size of the rest of the data
             PROGRESS_INFO(
@@ -596,16 +572,13 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
               " SQL file lines.");
           }
         }
-        while (!line.isNull());
-        outStream.flush();
+        while (!tempInputFile.atEnd());
 
         tempInputFile.close();
         LOG_DEBUG("Closing and removing file for " << *it << "...");
-        _outputSections[*it].second->flush();
-        _outputSections[*it].second.reset();
-        _outputSections[*it].first->close();
-        _outputSections[*it].first->remove();
-        _outputSections[*it].first.reset();
+        _outputSections[*it]->close();
+        _outputSections[*it]->remove();
+        _outputSections[*it].reset();
       }
       else
       {
@@ -622,8 +595,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     LOG_DEBUG("Wrote contents of section " << *it);
   }
   LOG_DEBUG("Finished parsing temp files...");
-  outStream << "COMMIT;";
-  outStream.flush();
+  _sqlOutputCombinedFile->write("COMMIT;");
   _sqlOutputCombinedFile->flush();
   _sqlOutputCombinedFile->close();
 
@@ -632,8 +604,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
     StringUtils::secondsToDhms(_timer->elapsed()));
   LOG_DEBUG(
-    "Parsed " << StringUtils::formatLargeNumber(progressLineCtr) <<
-    " total SQL file lines.");
+    "Parsed " << StringUtils::formatLargeNumber(progressLineCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
 }
@@ -641,7 +612,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
 void OsmApiDbBulkInserter::_updateRecordLineWithIdOffset(const QString tableName,
                                                          QString& recordLine)
 {
-  LOG_TRACE("Updating ID offset for line...");
+  LOG_TRACE("Updating ID offset for line: " << recordLine.left(25));
   LOG_VART(tableName);
 
   QStringList lineParts = recordLine.split(_outputDelimiter);
@@ -820,24 +791,14 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
 
   _writeNodeToStream(node, nodeDbId);
   _writeTagsToStream(node->getTags(), ElementType::Node, nodeDbId,
-    _outputSections[ApiDb::getCurrentNodeTagsTableName()].second,
-    _outputSections[ApiDb::getNodeTagsTableName()].second);
+    _outputSections[ApiDb::getCurrentNodeTagsTableName()],
+    _outputSections[ApiDb::getNodeTagsTableName()]);
   _writeStats.nodesWritten++;
   _writeStats.nodeTagsWritten += node->getTags().size();
   _incrementChangesInChangeset();
   if (_validateData)
   {
     _checkUnresolvedReferences(node, nodeDbId);
-  }
-
-  //we're never going to partially write a node (node without some of its tags), so we buffer on
-  //element count, not record count here
-  if (_writeStats.nodesWritten % _fileOutputElementBufferSize == 0)
-  {
-    LOG_TRACE(
-      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
-      " nodes to file...");
-    _flushStreams();
   }
 
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
@@ -879,8 +840,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   _writeWayToStream(wayDbId);
   _writeWayNodesToStream(wayDbId, way->getNodeIds());
   _writeTagsToStream(way->getTags(), ElementType::Way, wayDbId,
-    _outputSections[ApiDb::getCurrentWayTagsTableName()].second,
-    _outputSections[ApiDb::getWayTagsTableName()].second);
+    _outputSections[ApiDb::getCurrentWayTagsTableName()],
+    _outputSections[ApiDb::getWayTagsTableName()]);
   _writeStats.waysWritten++;
   _writeStats.wayTagsWritten += way->getTags().size();
   _writeStats.wayNodesWritten += way->getNodeIds().size();
@@ -888,15 +849,6 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_validateData)
   {
     _checkUnresolvedReferences(way, wayDbId);
-  }
-
-  //see comment in writePartial node
-  if (_writeStats.waysWritten % _fileOutputElementBufferSize == 0)
-  {
-    LOG_TRACE(
-      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
-      " ways to file...");
-    _flushStreams();
   }
 
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
@@ -936,8 +888,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   _writeRelationToStream(relationDbId);
   _writeRelationMembersToStream(relation, relationDbId);
   _writeTagsToStream(relation->getTags(), ElementType::Relation, relationDbId,
-    _outputSections[ApiDb::getCurrentRelationTagsTableName()].second,
-    _outputSections[ApiDb::getRelationTagsTableName()].second);
+    _outputSections[ApiDb::getCurrentRelationTagsTableName()],
+    _outputSections[ApiDb::getRelationTagsTableName()]);
   _writeStats.relationsWritten++;
   _writeStats.relationTagsWritten += relation->getTags().size();
   _writeStats.relationMembersWritten += relation->getMembers().size();
@@ -945,15 +897,6 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_validateData)
   {
     _checkUnresolvedReferences(relation, relationDbId);
-  }
-
-  //see comment in writePartial node
-  if (_writeStats.relationsWritten % _fileOutputElementBufferSize == 0)
-  {
-    LOG_TRACE(
-      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
-      " relations to file...");
-    _flushStreams();
   }
 
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
@@ -999,7 +942,7 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
 QStringList OsmApiDbBulkInserter::_createSectionNameList()
 {
   QStringList sections;
-  sections.push_back("byte_order_mark");
+  //sections.push_back("byte_order_mark");
   sections.push_back(ApiDb::getChangesetsTableName());
   sections.push_back(ApiDb::getCurrentNodesTableName());
   sections.push_back(ApiDb::getCurrentNodeTagsTableName());
@@ -1142,16 +1085,16 @@ void OsmApiDbBulkInserter::_writeNodeToStream(const ConstNodePtr& node,
 {
   LOG_TRACE("Writing node to stream...");
   const QStringList nodeSqlStrs =
-    _sqlFormatter->nodeToSqlStrings(node, nodeDbId, _changesetData.currentChangesetId);
-  *(_outputSections[ApiDb::getCurrentNodesTableName()].second) << nodeSqlStrs[0];
-  *(_outputSections[ApiDb::getNodesTableName()].second) << nodeSqlStrs[1];
+    _sqlFormatter->nodeToSqlStrings(node, nodeDbId, _changesetData.currentChangesetId, _validateData);
+  _outputSections[ApiDb::getCurrentNodesTableName()]->write(nodeSqlStrs[0].toUtf8());
+  _outputSections[ApiDb::getNodesTableName()]->write(nodeSqlStrs[1].toUtf8());
 }
 
 void OsmApiDbBulkInserter::_writeTagsToStream(const Tags& tags,
                                               const ElementType::Type& elementType,
                                               const unsigned long dbId,
-                                              boost::shared_ptr<QTextStream>& currentTable,
-                                              boost::shared_ptr<QTextStream>& historicalTable)
+                                              boost::shared_ptr<QFile> currentTableFile,
+                                              boost::shared_ptr<QFile> historicalTableFile)
 {
   LOG_TRACE("Writing tags to stream...");
 
@@ -1162,8 +1105,8 @@ void OsmApiDbBulkInserter::_writeTagsToStream(const Tags& tags,
     if (!value.isEmpty())
     {
       const QStringList tagSqlStrs = _sqlFormatter->tagToSqlStrings(dbId, elementType, key, value);
-      *currentTable << tagSqlStrs[0];
-      *historicalTable << tagSqlStrs[1];
+      currentTableFile->write(tagSqlStrs[0].toUtf8());
+      historicalTableFile->write(tagSqlStrs[1].toUtf8());
     }
   }
 }
@@ -1189,8 +1132,8 @@ void OsmApiDbBulkInserter::_writeWayToStream(const unsigned long wayDbId)
 
   const QStringList waySqlStrs =
     _sqlFormatter->wayToSqlStrings(wayDbId, _changesetData.currentChangesetId);
-  *(_outputSections[ApiDb::getCurrentWaysTableName()].second) << waySqlStrs[0];
-  *(_outputSections[ApiDb::getWaysTableName()].second) << waySqlStrs[1];
+  _outputSections[ApiDb::getCurrentWaysTableName()]->write(waySqlStrs[0].toUtf8());
+  _outputSections[ApiDb::getWaysTableName()]->write(waySqlStrs[1].toUtf8());
 }
 
 void OsmApiDbBulkInserter::_writeWayNodesToStream(const unsigned long dbWayId,
@@ -1219,8 +1162,8 @@ void OsmApiDbBulkInserter::_writeWayNodesToStream(const unsigned long dbWayId,
 
     const QStringList wayNodeSqlStrs =
       _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex);
-    *_outputSections[ApiDb::getCurrentWayNodesTableName()].second << wayNodeSqlStrs[0];
-    *_outputSections[ApiDb::getWayNodesTableName()].second << wayNodeSqlStrs[1];
+    _outputSections[ApiDb::getCurrentWayNodesTableName()]->write(wayNodeSqlStrs[0].toUtf8());
+    _outputSections[ApiDb::getWayNodesTableName()]->write(wayNodeSqlStrs[1].toUtf8());
 
     ++wayNodeIndex;
   }
@@ -1250,8 +1193,8 @@ void OsmApiDbBulkInserter::_writeRelationToStream(const unsigned long relationDb
 
   const QStringList relationSqlStrs =
     _sqlFormatter->relationToSqlStrings(relationDbId, _changesetData.currentChangesetId);
-  *(_outputSections[ApiDb::getCurrentRelationsTableName()].second) << relationSqlStrs[0];
-  *(_outputSections[ApiDb::getRelationsTableName()].second) << relationSqlStrs[1];
+  _outputSections[ApiDb::getCurrentRelationsTableName()]->write(relationSqlStrs[0].toUtf8());
+  _outputSections[ApiDb::getRelationsTableName()]->write(relationSqlStrs[1].toUtf8());
 }
 
 void OsmApiDbBulkInserter::_writeRelationMembersToStream(const ConstRelationPtr& relation,
@@ -1325,8 +1268,9 @@ void OsmApiDbBulkInserter::_writeRelationMemberToStream(const unsigned long sour
   const QStringList relationMemberSqlStrs =
     _sqlFormatter->relationMemberToSqlStrings(
       sourceRelationDbId, memberDbId, member, memberSequenceIndex);
-  *_outputSections[ApiDb::getCurrentRelationMembersTableName()].second << relationMemberSqlStrs[0];
-  *_outputSections[ApiDb::getRelationMembersTableName()].second << relationMemberSqlStrs[1];
+  _outputSections[ApiDb::getCurrentRelationMembersTableName()]->write(
+    relationMemberSqlStrs[0].toUtf8());
+  _outputSections[ApiDb::getRelationMembersTableName()]->write(relationMemberSqlStrs[1].toUtf8());
   _writeStats.relationMembersWritten++;
 }
 
@@ -1335,8 +1279,7 @@ QString OsmApiDbBulkInserter::_getTableOutputFileName(const QString tableName) c
   return QDir::tempPath() + "/" + tableName + "-temp-" + QUuid::createUuid().toString() + ".sql";
 }
 
-void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QString header,
-                                             const bool addByteOrderMark)
+void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QString header)
 {
   QString msg = "Creating output file " + tableName;
   if (!header.trimmed().isEmpty())
@@ -1359,23 +1302,11 @@ void OsmApiDbBulkInserter::_createOutputFile(const QString tableName, const QStr
     throw HootException(
       "Could not open file at: " + file->fileName() + " for contents of table: " + tableName);
   }
-  _outputSections[tableName] =
-    std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> >(
-      file, boost::shared_ptr<QTextStream>(new QTextStream(file.get())));
-
-  // Database is encoded in UTF-8, so force encoding as otherwise file is in local
-  //    Western encoding which goes poorly for a lot of countries
-  _outputSections[tableName].second->setCodec("UTF-8");
-
-  // First table written out should have byte order mark to help identify content as UTF-8
-  if (addByteOrderMark)
-  {
-    _outputSections[tableName].second->setGenerateByteOrderMark(true);
-  }
+  _outputSections[tableName] = file;
 
   if (!header.trimmed().isEmpty())
   {
-    *(_outputSections[tableName].second) << header;
+    _outputSections[tableName]->write(header.toUtf8());
   }
 }
 
@@ -1440,18 +1371,18 @@ void OsmApiDbBulkInserter::_writeChangesetToStream()
       "Invalid changeset user ID: " + QString::number(_changesetData.changesetUserId));
   }
 
-  if (!_outputSections[ApiDb::getChangesetsTableName()].second)
+  if (!_outputSections[ApiDb::getChangesetsTableName()])
   {
     _createOutputFile(
       ApiDb::getChangesetsTableName(), _sqlFormatter->getChangesetSqlHeaderString());
   }
 
-  *_outputSections[ApiDb::getChangesetsTableName()].second <<
+  _outputSections[ApiDb::getChangesetsTableName()]->write(
     _sqlFormatter->changesetToSqlString(
       _changesetData.currentChangesetId,
       _changesetData.changesetUserId,
       _changesetData.changesInChangeset,
-      _changesetData.changesetBounds);
+      _changesetData.changesetBounds).toUtf8());
 }
 
 void OsmApiDbBulkInserter::_writeSequenceUpdatesToStream(long changesetId,
@@ -1475,24 +1406,26 @@ void OsmApiDbBulkInserter::_writeSequenceUpdatesToStream(long changesetId,
 
   assert(changesetId > 0);
   *sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(), QString::number(changesetId));
+    sequenceUpdateFormat.arg(ApiDb::getChangesetsSequenceName(), QString::number(changesetId)).toUtf8();
 
   assert(nodeId > 0);
   *sequenceUpdatesStream <<
-    sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(), QString::number(nodeId));
+    sequenceUpdateFormat.arg(ApiDb::getCurrentNodesSequenceName(), QString::number(nodeId)).toUtf8();
 
   if (wayId > 0)
   {
     *sequenceUpdatesStream <<
-      sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(), QString::number(wayId));
+      sequenceUpdateFormat.arg(ApiDb::getCurrentWaysSequenceName(), QString::number(wayId)).toUtf8();
   }
 
   if (relationId > 0)
   {
     *sequenceUpdatesStream <<
       sequenceUpdateFormat.arg(
-        ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)) << "\n\n";
+        ApiDb::getCurrentRelationsSequenceName(), QString::number(relationId)).toUtf8();
   }
+
+  *sequenceUpdatesStream << QString("\n").toUtf8();
 }
 
 }

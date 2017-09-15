@@ -203,7 +203,7 @@ private:
   bool _includeDebugTags;
 
   //ended up not going with temp files here, since the file outputs aren't always temporary
-  std::map<QString, std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;
+  std::map<QString, boost::shared_ptr<QFile> > _outputSections;
   QStringList _sectionNames;
 
   OsmApiDb _database;
@@ -224,15 +224,14 @@ private:
   void _verifyStartingIds();
   void _verifyFileOutputs();
   void _closeOutputFiles();
-  void _flushStreams(const bool writeClosingMark = false);
+  void _flushStreams();
 
   //creates the output files containing the data
   void _createNodeOutputFiles();
   QStringList _createSectionNameList();
   void _createWayOutputFiles();
   void _createRelationOutputFiles();
-  void _createOutputFile(const QString tableName, const QString header = "",
-                         const bool addByteOrderMarker = false);
+  void _createOutputFile(const QString tableName, const QString header = "");
   QString _getCombinedSqlFileName() const;
   QString _getTableOutputFileName(const QString tableName) const;
 
@@ -251,8 +250,8 @@ private:
   void _writeWayNodesToStream(const unsigned long wayId, const std::vector<long>& wayNodeIds);
   void _writeNodeToStream(const ConstNodePtr& node, const unsigned long nodeDbId);
   void _writeTagsToStream(const Tags& tags, const ElementType::Type& elementType,
-                          const unsigned long dbId, boost::shared_ptr<QTextStream>& currentTable,
-                          boost::shared_ptr<QTextStream>& historicalTable);
+                          const unsigned long dbId, boost::shared_ptr<QFile> currentTableFile,
+                          boost::shared_ptr<QFile> historicalTableFile);
 
   void _incrementAndGetLatestIdsFromDb();
   void _incrementChangesInChangeset();
