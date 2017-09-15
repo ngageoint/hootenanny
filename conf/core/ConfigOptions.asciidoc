@@ -2120,15 +2120,16 @@ will have the value specified in the set.tag.visitor.value option appended to it
 
 === set.tag.visitor.key
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
 Set the key member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a
-particular tag on all elements in a map.
+particular tag on all elements in a map. The number of keys in `set.tag.visitor.key` should match
+the number of keys in `set.tag.visitor.value`.
 
 === set.tag.visitor.value
 
-* Data Type: string
+* Data Type: list
 * Default Value: ``
 
 Set the value member in the SetTagVisitor class.  SetTagVisitor allows for adding/modifying a

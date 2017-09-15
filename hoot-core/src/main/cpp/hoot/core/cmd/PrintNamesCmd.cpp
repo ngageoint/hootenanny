@@ -133,18 +133,16 @@ public:
     {
       if (OsmMapReaderFactory::getInstance().hasPartialReader(args[i]))
       {
-        boost::shared_ptr<OsmMapReader> reader = OsmMapReaderFactory::getInstance().createReader(args[i]);
-        boost::shared_ptr<PartialOsmMapReader> pomr = boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
+        boost::shared_ptr<OsmMapReader> reader =
+          OsmMapReaderFactory::getInstance().createReader(args[i]);
+        boost::shared_ptr<PartialOsmMapReader> pomr =
+          boost::dynamic_pointer_cast<PartialOsmMapReader>(reader);
 
         pomr->open(args[i]);
 
         while (pomr->hasMoreElements())
         {
-          ElementPtr e = pomr->readNextElement();
-          if (e.get())
-          {
-            v.visit(e);
-          }
+          v.visit(pomr->readNextElement());
         }
       }
       else

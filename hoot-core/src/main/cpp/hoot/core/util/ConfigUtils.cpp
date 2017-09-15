@@ -22,42 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTAGVISITOR_H
-#define SETTAGVISITOR_H
 
-// hoot
-#include <hoot/core/util/Configurable.h>
+#include "ConfigUtils.h"
 
-#include "ElementOsmMapVisitor.h"
+// Hoot
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
-/**
- * Sets any tags on any elements with the specified key to the specified value
- */
-class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
+bool ConfigUtils::boundsOptionEnabled()
 {
-public:
-
-  static std::string className() { return "hoot::SetTagVisitor"; }
-
-  SetTagVisitor();
-  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false);
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual void visit(const boost::shared_ptr<Element>& e);
-
-private:
-  QStringList _k, _v;
-  bool _appendToExistingValue;
-
-  void _setTag(const ElementPtr& e, QString k, QString v);
-};
-
+  return
+    !conf().get(ConfigOptions::getConvertBoundingBoxKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
-#endif // SETTAGVISITOR_H
+}

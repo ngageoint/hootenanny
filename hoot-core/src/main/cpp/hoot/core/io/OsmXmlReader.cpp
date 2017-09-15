@@ -536,81 +536,86 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     }
     else if (qName == "tag" && _element)
     {
-      const QString& key = _saveMemory(attributes.value("k"));
-      const QString& value = _saveMemory(attributes.value("v"));
-      //LOG_VART(key);
-      //LOG_VART(value);
-
-      if (_useFileStatus && key == MetadataTags::HootStatus())
+      const QString keyAttr = attributes.value("k").trimmed();
+      const QString valAttr = attributes.value("v").trimmed();
+      if (!keyAttr.isEmpty() && !valAttr.isEmpty())
       {
-        _element->setStatus(Status::fromString(value));
+        const QString& key = _saveMemory(keyAttr);
+        const QString& value = _saveMemory(valAttr);
+        //LOG_VART(key);
+        //LOG_VART(value);
 
-        if (_keepFileStatus)  { _element->setTag(key, value); }
-      }
-      else if (key == "type" && _element->getElementType() == ElementType::Relation)
-      {
-        RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
-        r->setType(value);
-
-        if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
-      }
-      else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
-      {
-        bool ok;
-        Meters circularError = value.toDouble(&ok);
-
-        if (circularError > 0 && ok)
+        if (_useFileStatus && key == MetadataTags::HootStatus())
         {
-          _element->setCircularError(circularError);
+          _element->setStatus(Status::fromString(value));
+
+          if (_keepFileStatus)  { _element->setTag(key, value); }
         }
-        else
+        else if (key == "type" && _element->getElementType() == ElementType::Relation)
         {
-          bool isBad = false;
-          hoot::Tags t1;
-          t1.set(key, value);
-          try
+          RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
+          r->setType(value);
+
+          if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
+        }
+        else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
+        {
+          bool ok;
+          Meters circularError = value.toDouble(&ok);
+
+          if (circularError > 0 && ok)
           {
-            circularError = t1.getLength(key).value();
-            if (circularError > 0)
+            _element->setCircularError(circularError);
+          }
+          else
+          {
+            bool isBad = false;
+            hoot::Tags t1;
+            t1.set(key, value);
+            try
             {
-              _element->setCircularError(circularError);
+              circularError = t1.getLength(key).value();
+              if (circularError > 0)
+              {
+                _element->setCircularError(circularError);
+              }
+              else
+              {
+                isBad = true;
+              }
             }
-            else
+            catch (const HootException&)
             {
               isBad = true;
             }
-          }
-          catch (const HootException&)
-          {
-            isBad = true;
-          }
 
-          if (isBad)
+            if (isBad)
+            {
+              _badAccuracyCount++;
+              if (logWarnCount < Log::getWarnMessageLimit())
+              {
+                LOG_WARN("Bad circular error value: " << value.toStdString());
+              }
+              else if (logWarnCount == Log::getWarnMessageLimit())
+              {
+                LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+              }
+              logWarnCount++;
+            }
+          }
+          if (_preserveAllTags)
           {
-            _badAccuracyCount++;
-            if (logWarnCount < Log::getWarnMessageLimit())
-            {
-              LOG_WARN("Bad circular error value: " << value.toStdString());
-            }
-            else if (logWarnCount == Log::getWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
+            //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
+            _element->setTag(key, value);
           }
         }
-        if (_preserveAllTags)
+        else
         {
-          //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
-          _element->setTag(key, value);
-        }
-      }
-      else
-      {
-        if (key != MetadataTags::HootId() && value != "")
-        {
-          //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
-          _element->setTag(key, value);
+          if (key != MetadataTags::HootId() && value != "")
+          {
+            //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
+            _element->setTag(key, value);
+          }
         }
       }
     }

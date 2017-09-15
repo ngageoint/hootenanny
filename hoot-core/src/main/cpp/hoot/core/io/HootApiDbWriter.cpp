@@ -35,6 +35,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -87,9 +88,9 @@ void HootApiDbWriter::close()
   if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
   {
     LOG_DEBUG("Write stats:");
-    LOG_DEBUG("\t    Nodes: " << QString::number(_nodesWritten));
-    LOG_DEBUG("\t     Ways: " << QString::number(_waysWritten));
-    LOG_DEBUG("\tRelations: " << QString::number(_relationsWritten));
+    LOG_DEBUG("\t    Nodes: " << StringUtils::formatLargeNumber(_nodesWritten));
+    LOG_DEBUG("\t     Ways: " << StringUtils::formatLargeNumber(_waysWritten));
+    LOG_DEBUG("\tRelations: " << StringUtils::formatLargeNumber(_relationsWritten));
   }
 }
 
@@ -416,6 +417,8 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 
   Tags tags = n->getTags();
   _addElementTags(n, tags);
+  //TODO: move this to other partial writes
+  //tags.removeEmptyTags();
 
   if (_remapIds)
   {

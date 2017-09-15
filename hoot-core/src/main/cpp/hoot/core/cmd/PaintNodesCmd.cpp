@@ -84,7 +84,7 @@ class PaintNodesCmd : public BaseCommand
         {
           ElementPtr e = r->readNextElement();
 
-          if (e.get() && e->getElementType() == ElementType::Node)
+          if (e->getElementType() == ElementType::Node)
           {
             nodeCount++;
             NodePtr n = boost::dynamic_pointer_cast<Node>(e);

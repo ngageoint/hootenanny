@@ -201,46 +201,16 @@ void OsmApiDb::_resetQueries()
 
   ApiDb::_resetQueries();
 
-  _selectElementsForMap.reset();
   _selectTagsForNode.reset();
   _selectTagsForWay.reset();
   _selectTagsForRelation.reset();
   _selectNodeIdsForWay.reset();
   _selectMembersForRelation.reset();
-  _selectUserByEmail.reset();
-  _insertUser.reset();
-  _numTypeElementsForMap.reset();
   for (QHash<QString, boost::shared_ptr<QSqlQuery> >::iterator itr = _seqQueries.begin();
        itr != _seqQueries.end(); ++itr)
   {
     itr.value().reset();
   }
-}
-
-void OsmApiDb::rollback()
-{
-  LOG_TRACE("Rolling back transaction...");
-
-  _resetQueries();
-
-  if (!_db.rollback())
-  {
-    throw HootException("Error rolling back transaction: " + _db.lastError().text());
-  }
-  _inTransaction = false;
-}
-
-void OsmApiDb::transaction()
-{
-  LOG_TRACE("Starting transaction...");
-
-  // Queries must be created from within the current transaction.
-  _resetQueries();
-  if (!_db.transaction())
-  {
-    throw HootException(_db.lastError().text());
-  }
-  _inTransaction = true;
 }
 
 void OsmApiDb::commit()
@@ -447,75 +417,9 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
   return result;
 }
 
-boost::shared_ptr<QSqlQuery> OsmApiDb::selectElements(const ElementType& elementType,
-                                                      const long limit, const long offset)
+QString OsmApiDb::elementTypeToElementTableName(const ElementType& elementType) const
 {
-  //TODO: this is completely redundant with HootApiDb::selectElements except for the table name
-  //string creation and should be rolled up into ApiDb
-
-  if (!_selectElementsForMap)
-  {
-    _selectElementsForMap.reset(new QSqlQuery(_db));
-    _selectElementsForMap->setForwardOnly(true);
-  }
-
-  QString limitStr = "ALL";
-  if (limit > 0)
-  {
-    limitStr = QString::number(limit);
-  }
-  _selectElementsForMap->prepare(
-    "SELECT * FROM " + elementTypeToElementTableName(elementType, false, false) +
-    " WHERE visible = true ORDER BY id LIMIT " + limitStr + " OFFSET " + QString::number(offset));
-  LOG_VARD(_selectElementsForMap->lastQuery());
-
-  if (_selectElementsForMap->exec() == false)
-  {
-    const QString err =
-      "Error selecting elements of type: " + elementType.toString() +
-      " Error: " + _selectElementsForMap->lastError().text();
-    LOG_ERROR(err);
-    throw HootException(err);
-  }
-  LOG_VARD(_selectElementsForMap->numRowsAffected());
-  LOG_VARD(_selectElementsForMap->executedQuery());
-
-  return _selectElementsForMap;
-}
-
-long OsmApiDb::numElements(const ElementType& elementType)
-{
-  //TODO: this is completely redundant with HootApiDb::numElements except for the table name string
-  //creation and should be rolled up into ApiDb
-
-  if (!_numTypeElementsForMap)
-  {
-    _numTypeElementsForMap.reset(new QSqlQuery(_db));
-  }
-
-  _numTypeElementsForMap->prepare(
-    "SELECT COUNT(*) FROM " + elementTypeToElementTableName(elementType, false, false));
-  LOG_VARD(_numTypeElementsForMap->lastQuery());
-
-  if (_numTypeElementsForMap->exec() == false)
-  {
-    LOG_ERROR(_numTypeElementsForMap->executedQuery());
-    LOG_ERROR(_numTypeElementsForMap->lastError().text());
-    throw HootException(_numTypeElementsForMap->lastError().text());
-  }
-
-  long result = -1;
-  if (_numTypeElementsForMap->next())
-  {
-    bool ok;
-    result = _numTypeElementsForMap->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Count not retrieve count for element type: " + elementType.toString());
-    }
-  }
-  _numTypeElementsForMap->finish();
-  return result;
+  return elementTypeToElementTableName(elementType, false, false);
 }
 
 boost::shared_ptr<QSqlQuery> OsmApiDb::selectTagsForRelation(long relId)

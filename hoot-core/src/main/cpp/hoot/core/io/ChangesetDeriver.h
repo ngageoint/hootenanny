@@ -83,9 +83,6 @@ private:
   long _numFromElementsParsed;
   long _numToElementsParsed;
   bool _allowDeletingReferenceFeatures;
-  long _logUpdateInterval;
-
-  void _logProgress(const QString type);
 
 };
 

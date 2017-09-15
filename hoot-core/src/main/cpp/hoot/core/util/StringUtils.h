@@ -22,42 +22,43 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTAGVISITOR_H
-#define SETTAGVISITOR_H
 
-// hoot
-#include <hoot/core/util/Configurable.h>
+#ifndef STRINGUTILS_H
+#define STRINGUTILS_H
 
-#include "ElementOsmMapVisitor.h"
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
 /**
- * Sets any tags on any elements with the specified key to the specified value
+ * General utilities needed when working with strings
  */
-class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
+class StringUtils
 {
+
 public:
 
-  static std::string className() { return "hoot::SetTagVisitor"; }
+  /**
+   * Converts seconds to DD:MM:SS
+   *
+   * @param durationInMilliseconds seconds to convert
+   * @return a DD:MM:SS string
+   */
+  static QString secondsToDhms(const qint64 durationInMilliseconds);
 
-  SetTagVisitor();
-  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false);
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual void visit(const boost::shared_ptr<Element>& e);
-
-private:
-  QStringList _k, _v;
-  bool _appendToExistingValue;
-
-  void _setTag(const ElementPtr& e, QString k, QString v);
+  /**
+   * Converts a large number to a more human readable format
+   *
+   * @param number the number to format
+   * @return a formatted number string
+   */
+  static QString formatLargeNumber(const unsigned long number);
 };
 
 }
 
-#endif // SETTAGVISITOR_H
+#endif // STRINGUTILS_H

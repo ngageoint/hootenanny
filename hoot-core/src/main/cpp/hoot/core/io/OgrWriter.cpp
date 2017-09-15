@@ -808,28 +808,24 @@ void OgrWriter::writeElement(ElementPtr &element)
 
 void OgrWriter::writeElement(ElementPtr &element, bool debug)
 {
-  if (element.get())
+  Tags sourceTags = element->getTags();
+  Tags destTags;
+  for (Tags::const_iterator it = element->getTags().begin(); it != element->getTags().end(); ++it)
   {
-    Tags sourceTags = element->getTags();
-    Tags destTags;
-    for (Tags::const_iterator it = element->getTags().begin();
-         it != element->getTags().end(); ++it)
+    if (sourceTags[it.key()] != "")
     {
-      if (sourceTags[it.key()] != "")
-      {
-        destTags.appendValue(it.key(), it.value());
-      }
+      destTags.appendValue(it.key(), it.value());
     }
-    // Now that all the empties are gone, update our element
-    element->setTags(destTags);
-
-    if (debug == true)
-    {
-      LOG_TRACE(element->toString());
-    }
-
-    PartialOsmMapWriter::writePartial(element);
   }
+  // Now that all the empties are gone, update our element
+  element->setTags(destTags);
+
+  if (debug == true)
+  {
+    LOG_TRACE(element->toString());
+  }
+
+  PartialOsmMapWriter::writePartial(element);
 }
 
 void OgrWriter::setCacheCapacity(const unsigned long maxNodes, const unsigned long maxWays,

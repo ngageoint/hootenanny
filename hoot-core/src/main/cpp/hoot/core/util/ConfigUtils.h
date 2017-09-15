@@ -22,42 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTAGVISITOR_H
-#define SETTAGVISITOR_H
 
-// hoot
-#include <hoot/core/util/Configurable.h>
-
-#include "ElementOsmMapVisitor.h"
+#ifndef CONFIGUTILS_H
+#define CONFIGUTILS_H
 
 namespace hoot
 {
 
 /**
- * Sets any tags on any elements with the specified key to the specified value
+ * Utilities for dealing with hoot config options
  */
-class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
+class ConfigUtils
 {
+
 public:
 
-  static std::string className() { return "hoot::SetTagVisitor"; }
-
-  SetTagVisitor();
-  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false);
-
-  virtual void setConfiguration(const Settings& conf);
-
-  virtual void visit(const boost::shared_ptr<Element>& e);
-
-private:
-  QStringList _k, _v;
-  bool _appendToExistingValue;
-
-  void _setTag(const ElementPtr& e, QString k, QString v);
+  /**
+   * Determines if any of the filter by bounds options are enabled
+   *
+   * @return true if any of the bounds options are enabled
+   */
+  static bool boundsOptionEnabled();
 };
 
 }
 
-#endif // SETTAGVISITOR_H
+#endif // CONFIGUTILS_H

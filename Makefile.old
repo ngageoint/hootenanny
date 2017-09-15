@@ -21,8 +21,15 @@ default: build
 all: build
 always:
 
-build: js-make qt-make pp-build services-build ui-build model-build conf/dictionary/words.sqlite \
+build: makedirs js-make qt-make pp-build services-build ui-build model-build conf/dictionary/words.sqlite \
 	conf/dictionary/WordsAbridged.sqlite osmapidb
+
+makedirs: 
+	mkdir -p $$HOOT_HOME/userfiles/customscript
+	mkdir -p $$HOOT_HOME/userfiles/ingest/processed/BASEMAP
+	mkdir -p $$HOOT_HOME/userfiles/ingest/upload/BASEMAP
+	mkdir -p $$HOOT_HOME/userfiles/reports
+	mkdir -p $$HOOT_HOME/userfiles/tmp/upload
 
 clean: Makefile.qmake services-clean clean-coverage
 	$(MAKE) -f Makefile.qmake clean 2>&1 \

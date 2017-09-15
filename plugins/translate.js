@@ -77,7 +77,11 @@ translate = {
     // In the future this might sort the list of values
     appendValue : function(oldValue,newValue,sepValue)
     {
-        if (oldValue == undefined)
+        if (sepValue === undefined) {
+            sepValue = ";";
+        }
+
+        if (oldValue === undefined || oldValue === null || oldValue === "")
         {
             return newValue;
         }

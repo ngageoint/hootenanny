@@ -22,42 +22,56 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SETTAGVISITOR_H
-#define SETTAGVISITOR_H
 
-// hoot
-#include <hoot/core/util/Configurable.h>
+#ifndef CORNERSPLITTER_H
+#define CORNERSPLITTER_H
 
-#include "ElementOsmMapVisitor.h"
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
+
+// Qt
+#include <QMultiHash>
+#include <QSet>
+#include <QMap>
+#include <vector>
 
 namespace hoot
 {
 
+class OsmMap;
+class Way;
+
 /**
- * Sets any tags on any elements with the specified key to the specified value
+ * Given an OsmMap, ways are split at sharp corners. This can help when conflating data
+ * that is mostly major roads with data that contains a lot of neighborhood - level data.
+ *
  */
-class SetTagVisitor : public ElementOsmMapVisitor, public Configurable
+class CornerSplitter : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::SetTagVisitor"; }
+  static std::string className() { return "hoot::CornerSplitter"; }
 
-  SetTagVisitor();
-  SetTagVisitor(QString key, QString value, bool appendToExistingValue = false);
+  CornerSplitter();
 
-  virtual void setConfiguration(const Settings& conf);
+  CornerSplitter(boost::shared_ptr<OsmMap> map);
 
-  virtual void visit(const boost::shared_ptr<Element>& e);
+  void apply(boost::shared_ptr<OsmMap>& map);
+
+  static void splitCorners(boost::shared_ptr<OsmMap> map);
+
+  void splitCorners();
 
 private:
-  QStringList _k, _v;
-  bool _appendToExistingValue;
+  boost::shared_ptr<OsmMap> _map;
+  std::vector<long> _todoWays;
 
-  void _setTag(const ElementPtr& e, QString k, QString v);
+  // Split the way at the given node, using the WaySplitter, then process the results
+  void _splitWay(long wayId, long nodeIdx, long nodeId);
 };
 
 }
 
-#endif // SETTAGVISITOR_H
+#endif // CORNERSPLITTER_H
