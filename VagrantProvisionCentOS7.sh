@@ -328,6 +328,13 @@ if ! $( hash ogrinfo >/dev/null 2>&1 && ogrinfo --formats | grep --quiet FileGDB
     sudo python setup.py install >> GDAL_Build.txt 2>&1
     sudo ldconfig
     cd ~
+
+    # Update the GDAL_DATA folder in ~/.bash_profile
+    if ! grep --quiet GDAL_DATA ~/.bash_profile; then
+      echo "Adding GDAL data path to profile..."
+      echo "export GDAL_DATA=`gdal-config --datadir`" >> ~/.bash_profile
+      source ~/.bash_profile
+    fi
 fi
 
 if ! mocha --version &>/dev/null; then
