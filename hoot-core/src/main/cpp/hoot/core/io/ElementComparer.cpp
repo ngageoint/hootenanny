@@ -116,29 +116,28 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 bool ElementComparer::_compareNode(const boost::shared_ptr<const Element>& re,
                                    const boost::shared_ptr<const Element>& e) const
 {
-  ConstNodePtr rn = boost::dynamic_pointer_cast<const Node>(re);
-  ConstNodePtr n = boost::dynamic_pointer_cast<const Node>(e);
-
-  if (!rn->getTags().contains(MetadataTags::HootHash()) ||
-      !n->getTags().contains(MetadataTags::HootHash()))
+  if (!re->getTags().contains(MetadataTags::HootHash()) ||
+      !e->getTags().contains(MetadataTags::HootHash()))
   {
     throw HootException(
       "ElementComparer requires the " + MetadataTags::HootHash() +
       " tag be set for node comparison.");
   }
 
+  if (re->getElementId().getId() == DEBUG_ID || e->getElementId().getId() == DEBUG_ID)
+  {
+    LOG_VARD(re);
+    LOG_VARD(e);
+  }
+
   bool same = false;
-  if (rn->getTags()[MetadataTags::HootHash()] == n->getTags()[MetadataTags::HootHash()])
+  if (re->getTags()[MetadataTags::HootHash()] == e->getTags()[MetadataTags::HootHash()])
   {
     same = true;
-    //LOG_TRACE("Compare succeeded:");
   }
   else
   {
     LOG_TRACE("Compare failed:");
-  }
-  if (!same)
-  {
     LOG_VART(re);
     LOG_VART(e);
   }

@@ -35,6 +35,7 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -87,9 +88,9 @@ void HootApiDbWriter::close()
   if ( (_nodesWritten > 0) || (_waysWritten > 0) || (_relationsWritten > 0) )
   {
     LOG_DEBUG("Write stats:");
-    LOG_DEBUG("\t    Nodes: " << QString::number(_nodesWritten));
-    LOG_DEBUG("\t     Ways: " << QString::number(_waysWritten));
-    LOG_DEBUG("\tRelations: " << QString::number(_relationsWritten));
+    LOG_DEBUG("\t    Nodes: " << StringUtils::formatLargeNumber(_nodesWritten));
+    LOG_DEBUG("\t     Ways: " << StringUtils::formatLargeNumber(_waysWritten));
+    LOG_DEBUG("\tRelations: " << StringUtils::formatLargeNumber(_relationsWritten));
   }
 }
 
@@ -416,19 +417,15 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 
   Tags tags = n->getTags();
   _addElementTags(n, tags);
+  //TODO: move this to other partial writes
+  //tags.removeEmptyTags();
 
   if (_remapIds)
   {
     bool alreadyThere = _nodeRemap.count(n->getId()) != 0;
     long nodeId = _getRemappedElementId(n->getElementId());
-
-    if (ConfigOptions().getWriterIncludeDebugTags())
-    {
-      //keep the hoot:id tag in sync with what could be a newly assigned id
-      tags.set(MetadataTags::HootId(), QString::number(nodeId));
-    }
-
     LOG_VART(nodeId);
+
     if (alreadyThere)
     {
       _hootdb.updateNode(nodeId, n->getY(), n->getX(), n->getVersion() + 1, tags);
@@ -469,12 +466,6 @@ void HootApiDbWriter::writePartial(const ConstWayPtr& w)
   {
     bool alreadyThere = _wayRemap.count(w->getId()) != 0;
     wayId = _getRemappedElementId(w->getElementId());
-
-    if (ConfigOptions().getWriterIncludeDebugTags())
-    {
-      //keep the hoot:id tag in sync with what could be a newly assigned id
-      tags.set(MetadataTags::HootId(), QString::number(wayId));
-    }
 
     if (alreadyThere)
     {
@@ -526,12 +517,6 @@ void HootApiDbWriter::writePartial(const ConstRelationPtr& r)
   if (_remapIds)
   {
     relationId = _getRemappedElementId(r->getElementId());
-
-    if (ConfigOptions().getWriterIncludeDebugTags())
-    {
-      //keep the hoot:id tag in sync with what could be a newly assigned id
-      tags.set(MetadataTags::HootId(), QString::number(relationId));
-    }
 
     _hootdb.insertRelation(relationId, tags);
   }

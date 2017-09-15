@@ -106,8 +106,7 @@ private:
 
 };
 
-SampledAngleHistogramExtractor::SampledAngleHistogramExtractor() :
-_sampleDistance(ConfigOptions().getWayAngleSampleDistance())
+SampledAngleHistogramExtractor::SampledAngleHistogramExtractor()
 {
 }
 

@@ -305,12 +305,12 @@ void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
 {
   if (r > M_PI)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN("Max relevant angle is greaer than PI, did you specify the value in degrees instead "
                "of radians?");
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

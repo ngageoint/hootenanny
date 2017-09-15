@@ -72,6 +72,8 @@ private:
   QSet<long> _todoNodes;
   QMap<long, long> _wayReplacements;
 
+  bool _preserveUnknown1ElementIdWhenModifyingFeatures;
+
   void _mapNodesToWays();
 
   void _mapNodesToWay(boost::shared_ptr<Way> w);

@@ -203,6 +203,7 @@ private:
   unsigned int _fileDataPassCtr;
   long _stxxlMapMinSize;
   bool _validateData;
+  bool _includeDebugTags;
 
   //ended up not going with temp files here, since the file outputs aren't always temporary
   std::map<QString, std::pair<boost::shared_ptr<QFile>, boost::shared_ptr<QTextStream> > > _outputSections;

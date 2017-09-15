@@ -81,7 +81,7 @@ void SqlBulkDelete::flush()
       LOG_ERROR(q.executedQuery());
       LOG_ERROR(q.lastError().text());
       throw HootException(QString("Error executing bulk delete: %1 (%2)").arg(q.lastError().text()).
-                          arg(sql));
+                          arg(sql.left(500)));
     }
 
     q.finish();

@@ -153,6 +153,8 @@ protected:
   auto_ptr<ScriptTranslator> _translator;
   long _streamFeatureCount;
   QStringList _pendingLayers;
+  bool _addSourceDateTime;
+  QString _nodeIdFieldName;
 
   //partial read iterators
   NodeMap::const_iterator _nodesItr;
@@ -502,6 +504,8 @@ OgrReaderInternal::OgrReaderInternal()
   _limit = -1;
   _featureCount = 0;
   _streamFeatureCount = 0;
+  _addSourceDateTime = ConfigOptions().getReaderAddSourceDatetime();
+  _nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
 }
 
 OgrReaderInternal::~OgrReaderInternal()
@@ -593,7 +597,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
 
   _translate(t);
 
-  if (ConfigOptions().getReaderAddSourceDatetime())
+  if (_addSourceDateTime)
   {
     // Add an ingest datetime tag
     t.appendValue("source:ingest:datetime",
@@ -706,18 +710,17 @@ void OgrReaderInternal::_addPoint(OGRPoint* p, Tags& t)
   double y = p->getY();
   _reproject(x, y);
   long id;
-  const QString nodeIdFieldName = ConfigOptions().getOgrReaderNodeIdFieldName();
-  if (nodeIdFieldName.isEmpty())
+  if (_nodeIdFieldName.isEmpty())
   {
     id = _map->createNextNodeId();
   }
   else
   {
     bool ok = false;
-    id = t.get(nodeIdFieldName).toLong(&ok);
+    id = t.get(_nodeIdFieldName).toLong(&ok);
     if (!ok)
     {
-      throw HootException("Unable to parse node ID from field: " + nodeIdFieldName);
+      throw HootException("Unable to parse node ID from field: " + _nodeIdFieldName);
     }
   }
   NodePtr node(Node::newSp(_status, id, x, y, circularError));

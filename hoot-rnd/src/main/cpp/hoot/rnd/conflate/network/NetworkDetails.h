@@ -184,6 +184,7 @@ private:
   ConstOsmNetworkPtr _n1, _n2;
   boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   LegacyVertexMatcherPtr _vertexMatcher;
+  double _maxStubLength;
 
   class SublineCache
   {

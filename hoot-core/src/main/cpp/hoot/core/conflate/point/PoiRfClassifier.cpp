@@ -123,7 +123,7 @@ PoiRfClassifier::PoiRfClassifier()
 
   if (missingExtractors.size() > 0)
   {
-    if (logWarnCount < ConfigOptions().getLogWarnMessageLimit())
+    if (logWarnCount < Log::getWarnMessageLimit())
     {
       LOG_WARN(
         "An extractor used by the model is not being calculated. We will still try, but this will "
@@ -131,7 +131,7 @@ PoiRfClassifier::PoiRfClassifier()
       LOG_TRACE("Missing extractors: " << missingExtractors);
       LOG_TRACE("Available extractors: " << extractorNames);
     }
-    else if (logWarnCount == ConfigOptions().getLogWarnMessageLimit())
+    else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }

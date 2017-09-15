@@ -150,7 +150,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstNodePtr& node)
 
   Tags tags = node->getTags();
   _addElementTags(node, tags);
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebug)
   {
     //keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(nodeId));
@@ -191,7 +191,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstWayPtr& way)
 
   Tags tags = way->getTags();
   _addElementTags(way, tags);
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebug)
   {
     //keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(wayId));
@@ -241,7 +241,7 @@ void OsmApiDbAwareHootApiDbWriter::writePartial(const ConstRelationPtr& relation
   {
     tags["type"] = relation->getType();
   }
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  if (_includeDebug)
   {
     //keep the hoot:id tag in sync with what could be a newly assigned id
     tags.set(MetadataTags::HootId(), QString::number(relationId));

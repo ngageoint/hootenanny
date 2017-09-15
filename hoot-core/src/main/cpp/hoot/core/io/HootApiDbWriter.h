@@ -92,6 +92,7 @@ public:
    * @see OsmChangeWriter
    */
   virtual void writeChange(const Change& change);
+  virtual void setElementPayloadFormat(const QString /*format*/) {}
 
 protected:
 
@@ -137,12 +138,13 @@ protected:
 
   bool _remapIds;
 
+  bool _includeDebug;
+
 private:
 
   bool _createUserIfNotFound;
   bool _overwriteMap;
   QString _userEmail;
-  bool _includeDebug;
   bool _includeIds;
   bool _textStatus;
   bool _includeCircularError;

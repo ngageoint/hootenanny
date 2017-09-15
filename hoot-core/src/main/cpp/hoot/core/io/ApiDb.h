@@ -69,9 +69,9 @@ class Range;
 class TableType;
 
 /**
- * This class abstracts out all SQL calls to interact with an API DB (either hoot or OSM). It also
- * strives to abstract out some of the storage details such as the conversion of lat/lng to integers
- * and the calculation of quad tiles.
+ * Represents an abstract API database.  This class abstracts out all SQL calls to interact with an
+ * API DB (either hoot or OSM). It also strives to abstract out some of the storage details such
+ * as the conversion of lat/lng to integers and the calculation of quad tiles.
  */
 class ApiDb
 {
@@ -125,12 +125,12 @@ public:
   /**
    * Transact the data.
    */
-  virtual void transaction() = 0;
+  virtual void transaction();
 
   /**
    * Rollback the current transaction.
    */
-  virtual void rollback() = 0;
+  virtual void rollback();
 
   /**
    * Commit the current transaction.
@@ -143,14 +143,32 @@ public:
   virtual void close() = 0;
 
   /**
+   * Returns an element table name given an element type
+   *
+   * @param elementType the type to return the table name for
+   * @return a table name
+   */
+  virtual QString elementTypeToElementTableName(const ElementType& elementType) const = 0;
+
+  /**
    * Returns a results iterator to all OSM elements for a given element type in the database.
    *
    * @param elementType the type of element to return
-   * @param sorted if true, elements are sorted by ID
+   * @return a result iterator to the elements
+   */
+  virtual boost::shared_ptr<QSqlQuery> selectAllElements(const ElementType& elementType);
+
+  /**
+   * Returns a results iterator to all OSM elements for a given map and element type in the services
+   * database, sorted by element ID.
+   *
+   * @param elementType the element type to query for
+   * @param minId the minimum element ID to return; this is more efficient than using an offset when
+   * dealing with very large record sets sorted by ID
    * @return a result iterator to the elements
    */
   virtual boost::shared_ptr<QSqlQuery> selectElements(const ElementType& elementType,
-                                                      const bool sorted = false) = 0;
+                                                      const long minId = 0);
 
   /**
    * Returns a vector with all the OSM node ID's for a given way
@@ -232,7 +250,7 @@ public:
    * @return a SQL results iterator
    */
   boost::shared_ptr<QSqlQuery> selectElementsByElementIdList(const QSet<QString>& elementIds,
-                                                      const TableType& tableType);
+                                                             const TableType& tableType);
 
   /**
    * Returns all the IDs of all nodes owned by the input way IDs
@@ -271,6 +289,35 @@ public:
    */
   virtual long getNextId(const ElementType& elementType) = 0;
 
+  /**
+   * Returns the number of elements of the given type in the database
+   *
+   * This can be slow for large tables if they haven't recently been analyzed.  If the most up to
+   * date count isn't needed, use numEstimatedElements instead.
+   *
+   * @param elementType the type of element to return a count for
+   * @return an element count
+   */
+  virtual long numElements(const ElementType& elementType);
+
+  /**
+   * Returns the estimated number of elements of the given type in the database
+   *
+   * Do not use this when exact counts are required.
+   *
+   * @param elementType the type of element to return an estimated count for
+   * @return an element count
+   */
+  virtual long numEstimatedElements(const ElementType& elementType);
+
+  /**
+   * Returns the largest element ID in the table for the given element type
+   *
+   * @param elementType the type of element to return a max ID for
+   * @return an element ID
+   */
+  virtual long maxId(const ElementType& elementType);
+
   QSqlError getLastError() const { return _db.lastError(); }
 
   inline static QString getChangesetsTableName()                { return "changesets"; }
@@ -291,7 +338,7 @@ public:
   inline static QString getRelationMembersTableName()           { return "relation_members"; }
   inline static QString getRelationTagsTableName()              { return "relation_tags"; }
   inline static QString getRelationsTableName()                 { return "relations"; }
-  inline static QString getWayNodesTableName()                  { return "way_nodes"; }
+  inline static QString getWayNodesTableName()                 { return "way_nodes"; }
   inline static QString getWayTagsTableName()                   { return "way_tags"; }
   inline static QString getWaysTableName()                      { return "ways"; }
 
@@ -300,15 +347,23 @@ public:
 
   inline static QString getSequenceId()                         { return "_id_seq"; }
 
-  inline static QString getChangesetsSequenceName()             { return getChangesetsTableName() + getSequenceId(); }
-  inline static QString getCurrentNodesSequenceName()           { return getCurrentNodesTableName() + getSequenceId(); }
-  inline static QString getCurrentRelationMembersSequenceName() { return getCurrentRelationMembersTableName() + getSequenceId(); }
-  inline static QString getCurrentRelationsSequenceName()       { return getCurrentRelationsTableName() + getSequenceId(); }
-  inline static QString getCurrentWayNodesSequenceName()        { return getCurrentWayNodesTableName() + getSequenceId(); }
-  inline static QString getCurrentWaysSequenceName()            { return getCurrentWaysTableName() + getSequenceId(); }
+  inline static QString getChangesetsSequenceName()
+  { return getChangesetsTableName() + getSequenceId(); }
+  inline static QString getCurrentNodesSequenceName()
+  { return getCurrentNodesTableName() + getSequenceId(); }
+  inline static QString getCurrentRelationMembersSequenceName()
+  { return getCurrentRelationMembersTableName() + getSequenceId(); }
+  inline static QString getCurrentRelationsSequenceName()
+  { return getCurrentRelationsTableName() + getSequenceId(); }
+  inline static QString getCurrentWayNodesSequenceName()
+  { return getCurrentWayNodesTableName() + getSequenceId(); }
+  inline static QString getCurrentWaysSequenceName()
+  { return getCurrentWaysTableName() + getSequenceId(); }
 
-  inline static QString getMapsSequenceName()                   { return getMapsTableName() + getSequenceId(); }
-  inline static QString getUsersSequenceName()                  { return getUsersTableName() + getSequenceId(); }
+  inline static QString getMapsSequenceName()
+  { return getMapsTableName() + getSequenceId(); }
+  inline static QString getUsersSequenceName()
+  { return getUsersTableName() + getSequenceId(); }
 
   /**
    * Decomposes an API database URL up into parts
@@ -356,9 +411,14 @@ protected:
   bool _capitalizeRelationMemberType;
 
   QSqlDatabase _db;
+
   boost::shared_ptr<QSqlQuery> _selectUserByEmail;
   boost::shared_ptr<QSqlQuery> _insertUser;
   boost::shared_ptr<QSqlQuery> _selectNodeIdsForWay;
+
+  bool _inTransaction;
+
+  long _maxElementsPerPartialMap;
 
   QSqlQuery _exec(const QString sql, QVariant v1 = QVariant(), QVariant v2 = QVariant(),
                   QVariant v3 = QVariant()) const;
@@ -369,14 +429,18 @@ protected:
 
 private:
 
-  //element bounds related queries
   boost::shared_ptr<QSqlQuery> _selectNodesByBounds;
   boost::shared_ptr<QSqlQuery> _selectWayIdsByWayNodeIds;
   boost::shared_ptr<QSqlQuery> _selectElementsByElementIdList;
   boost::shared_ptr<QSqlQuery> _selectWayNodeIdsByWayIds;
   boost::shared_ptr<QSqlQuery> _selectRelationIdsByMemberIds;
-
   boost::shared_ptr<QSqlQuery> _selectChangesetsCreatedAfterTime;
+
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _maxIdQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _numElementsQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _numEstimatedElementsQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectQueries;
+  QHash<QString, boost::shared_ptr<QSqlQuery> > _selectAllQueries;
 
   QString _getTileWhereCondition(const std::vector<Range>& tileIdRanges) const;
   std::vector<Range> _getTileRanges(const geos::geom::Envelope& env) const;

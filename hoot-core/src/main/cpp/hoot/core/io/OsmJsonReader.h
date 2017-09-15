@@ -286,6 +286,6 @@ protected:
 
 };
 
-} // end namespace hoot
+}
 
 #endif // OSM_JSON_READER_H
