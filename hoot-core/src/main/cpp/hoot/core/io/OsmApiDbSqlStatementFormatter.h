@@ -88,6 +88,30 @@ public:
   QStringList elementToSqlStrings(const ConstElementPtr& element, const long elementId,
                                   const long changesetId);
 
+  inline QString _escapeCopyToData(const QString stringToOutput)
+  {
+    //TODO: this is likely redundant with other code
+
+    QString escapedString;
+    escapedString.reserve(50);
+    escapedString.append(stringToOutput);
+    // Escape any special characters as required by
+    //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
+    escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
+    escapedString.replace(QChar(8), QString("\\b"));
+    escapedString.replace(QChar(9), QString("\\t"));
+    escapedString.replace(QChar(10), QString("\\n"));
+    escapedString.replace(QChar(11), QString("\\v"));
+    escapedString.replace(QChar(12), QString("\\f"));
+    escapedString.replace(QChar(13), QString("\\r"));
+    return escapedString;
+  }
+
+  inline unsigned int _convertDegreesToNanodegrees(const double degrees)
+  {
+    return round(degrees * ApiDb::COORDINATE_SCALE);
+  }
+
   inline static QStringList getNodeSqlHeaderStrings()
   {
     QStringList sqlStrs;
@@ -199,8 +223,6 @@ private:
   QString _dateString;
 
   void _initOutputFormatStrings(const QString delimiter);
-  static unsigned int _convertDegreesToNanodegrees(const double degrees);
-  static QString _escapeCopyToData(const QString stringToOutput);
 };
 
 }

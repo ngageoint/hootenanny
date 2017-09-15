@@ -62,7 +62,7 @@ class OsmApiDbSqlStatementFormatter;
  *   up by configuring the writer with the appropriate options.  See the user documentation for
  *   details on the two workflows and examples of how to use them.
  *
- * * allows for directly writing to a target database or an generating output SQL file that can be
+ * * allows for directly writing to a target database or for generating output SQL file that can be
  *   manually written to a database
  *
  * * has the ability to guarantee element ID uniqueness against a live database if the record ID
@@ -72,8 +72,9 @@ class OsmApiDbSqlStatementFormatter;
  *
  * * requires two passes over the input data *before* writing it to the database
  *
- * * uses the psql command to execute SQL statements; There is a version which uses pg_bulkload
- * instead, which is several times faster.  It is currently in the 1446 development branch.
+ * * uses the psql command to execute SQL statements; There is another version available that gives
+ * the option of using pg_bulkload instead, which is several times faster than psql.  It is
+ * currently in the 1446 development branch.
  *
  * TODO: add the capability to auto-create the table indexes
  */
@@ -188,6 +189,7 @@ public:
   void setValidateData(bool validate) { _validateData = validate; }
   void setDisableDatabaseConstraintsDuringWrite(bool disable)
   { _disableDatabaseConstraintsDuringWrite = disable; }
+  void setTempDir(QString location) { _tempDir = location; }
 
 private:
 
@@ -209,6 +211,7 @@ private:
   bool _validateData;
   bool _includeDebugTags;
   bool _disableDatabaseConstraintsDuringWrite;
+  QString _tempDir;
 
   std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
   QStringList _sectionNames;

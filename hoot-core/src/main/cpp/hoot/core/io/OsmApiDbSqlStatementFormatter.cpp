@@ -47,11 +47,6 @@ OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString delim
   _dateString = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 }
 
-unsigned int OsmApiDbSqlStatementFormatter::_convertDegreesToNanodegrees(const double degrees)
-{
-  return round(degrees * ApiDb::COORDINATE_SCALE);
-}
-
 void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter)
 {
   QString formatString = CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT;
@@ -316,23 +311,6 @@ QString OsmApiDbSqlStatementFormatter::changesetToSqlString(const long changeset
         QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMaxX())),
         _dateString,
         QString::number(numChangesInChangeset));
-}
-
-QString OsmApiDbSqlStatementFormatter::_escapeCopyToData(const QString stringToOutput)
-{
-  //TODO: this is likely redundant with other code
-
-  QString escapedString(stringToOutput);
-  // Escape any special characters as required by
-  //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
-  escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
-  escapedString.replace(QChar(8), QString("\\b"));
-  escapedString.replace(QChar(9), QString("\\t"));
-  escapedString.replace(QChar(10), QString("\\n"));
-  escapedString.replace(QChar(11), QString("\\v"));
-  escapedString.replace(QChar(12), QString("\\f"));
-  escapedString.replace(QChar(13), QString("\\r"));
-  return escapedString;
 }
 
 QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElementPtr& element,

@@ -1401,6 +1401,13 @@ Size at which the ID mappings storage for the OSM API database bulk inserter swi
 std::map to an stxxl::map, which is a container optimized for very large amounts of data.  For
 debugging purposes only.
 
+=== osmapidb.bulk.inserter.temp.file.dir
+
+* Data Type: string
+* Default Value: `/tmp`
+
+Allows for customizing where the OSM API database bulk inserter stores temp files.
+
 === osmapidb.bulk.inserter.validate.data
 
 * Data Type: bool
