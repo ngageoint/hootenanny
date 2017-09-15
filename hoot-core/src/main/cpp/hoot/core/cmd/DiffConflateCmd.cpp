@@ -119,10 +119,6 @@ public:
     LOG_VART(bytesRead);
     QList< QList<SingleStat> > allStats;
 
-    // read input 1, save an original copy
-    OsmMapPtr originalMap(new OsmMap());
-    loadMap(originalMap, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
-
     // read input 1 into our working map
     OsmMapPtr map(new OsmMap());
     loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
@@ -183,6 +179,10 @@ public:
     // Either write changeset, or osm map
     if (findChangeset)
     {
+      // read input 1, save an original copy
+      OsmMapPtr originalMap(new OsmMap());
+      loadMap(originalMap, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(), Status::Unknown1);
+
       // Calculate & write the changeset
       QList<OsmMapPtr> inputMaps;
       inputMaps.push_back(originalMap);
