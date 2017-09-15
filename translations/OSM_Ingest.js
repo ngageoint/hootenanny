@@ -31,6 +31,13 @@
 
 hoot.require('translate');
 
+function initialize()
+{
+    // Get any changes
+    toChange = hoot.Settings.get("translation.override");
+}
+
+
 function translateAttributes(attrs, layerName, geometryType)
 { 
     // Add UUID
@@ -59,6 +66,9 @@ function translateAttributes(attrs, layerName, geometryType)
 
     // Add the Open Database Licence
     if (!(attrs.license)) attrs.license =  'This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/.'
+
+    // Override attributes if appropriate
+    translate.overrideValues(attrs,toChange);
 
     return attrs;
 }
