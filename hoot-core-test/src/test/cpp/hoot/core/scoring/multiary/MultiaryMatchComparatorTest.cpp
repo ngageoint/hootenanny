@@ -30,6 +30,7 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/scoring/multiary/MultiaryMatchComparator.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Log.h>
 
 using namespace hoot;
@@ -416,6 +417,15 @@ public:
    */
   void runReviewTest4()
   {
+    QString translationScript = ConfPath::getHootHome() + "/translation-local/HGISv20.js";
+
+    if (QFile::exists(translationScript) == false)
+    {
+      LOG_INFO("HGIS translation script doesn't exist, skipping "
+        "MultiaryMatchComparatorTest::runReviewTest4.");
+      return;
+    }
+
     QString inputJson =
       "{'version': 0.6,'generator': 'Overpass API','elements':[\n"
       "{'type':'node','id': -1,'lat': 2.0,'lon': -3.0,\n"
@@ -447,7 +457,8 @@ public:
     conflated->getNode(-2)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
-    uut.setTranslationScript("/home/vagrant/hoot/translation-local/HGISv20.js");
+
+    uut.setTranslationScript(translationScript);
     double correct = uut.evaluateMatches(input, conflated);
 
     LOG_VAR(OsmJsonWriter().toString(conflated));
