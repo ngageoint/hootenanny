@@ -72,7 +72,8 @@ public:
 
   OsmApiDbSqlStatementFormatter(const QString delimiter);
 
-  QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId);
+  QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId,
+                               const bool validate = false);
   QStringList wayToSqlStrings(const long wayId, const long changesetId);
   QStringList wayNodeToSqlStrings(const long wayId, const long wayNodeId,
                                   const unsigned int wayNodeIndex);
@@ -83,9 +84,34 @@ public:
   QStringList tagToSqlStrings(const long elementId, const ElementType& elementType,
                               const QString tagKey, const QString tagValue);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
-                               const long numChangesInChangeset, const geos::geom::Envelope& changesetBounds);
+                               const long numChangesInChangeset,
+                               const geos::geom::Envelope& changesetBounds);
   QStringList elementToSqlStrings(const ConstElementPtr& element, const long elementId,
                                   const long changesetId);
+
+  inline QString _escapeCopyToData(const QString stringToOutput)
+  {
+    //TODO: this is likely redundant with other code
+
+    QString escapedString;
+    escapedString.reserve(50);
+    escapedString.append(stringToOutput);
+    // Escape any special characters as required by
+    //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
+    escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
+    escapedString.replace(QChar(8), QString("\\b"));
+    escapedString.replace(QChar(9), QString("\\t"));
+    escapedString.replace(QChar(10), QString("\\n"));
+    escapedString.replace(QChar(11), QString("\\v"));
+    escapedString.replace(QChar(12), QString("\\f"));
+    escapedString.replace(QChar(13), QString("\\r"));
+    return escapedString;
+  }
+
+  inline unsigned int _convertDegreesToNanodegrees(const double degrees)
+  {
+    return round(degrees * ApiDb::COORDINATE_SCALE);
+  }
 
   inline static QStringList getNodeSqlHeaderStrings()
   {
@@ -195,10 +221,9 @@ public:
 private:
 
   QMap<QString, QString> _outputFormatStrings;
+  QString _dateString;
 
   void _initOutputFormatStrings(const QString delimiter);
-  static unsigned int _convertDegreesToNanodegrees(const double degrees);
-  static QString _escapeCopyToData(const QString stringToOutput);
 };
 
 }

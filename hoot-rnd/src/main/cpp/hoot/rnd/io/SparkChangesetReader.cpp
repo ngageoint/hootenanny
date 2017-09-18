@@ -83,7 +83,10 @@ bool SparkChangesetReader::hasMoreChanges()
 
 Change SparkChangesetReader::readNextChange()
 {
-  const QStringList lineParts = QString::fromUtf8(_file.readLine().constData()).split("\t");
+  QString line;
+  line.reserve(500);
+  line.append(QString::fromUtf8(_file.readLine().constData()));
+  const QStringList lineParts = line.split("\t");
   LOG_VART(lineParts);
 
   int nodePayloadIndex = 6;

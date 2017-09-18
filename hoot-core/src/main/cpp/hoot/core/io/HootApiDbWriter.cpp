@@ -417,8 +417,6 @@ void HootApiDbWriter::writePartial(const ConstNodePtr& n)
 
   Tags tags = n->getTags();
   _addElementTags(n, tags);
-  //TODO: move this to other partial writes
-  //tags.removeEmptyTags();
 
   if (_remapIds)
   {

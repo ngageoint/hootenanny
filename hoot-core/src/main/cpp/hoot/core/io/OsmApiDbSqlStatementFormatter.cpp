@@ -32,6 +32,7 @@
 
 // Qt
 #include <QDateTime>
+#include <QStringBuilder>
 
 using namespace geos::geom;
 using namespace std;
@@ -42,11 +43,8 @@ namespace hoot
 OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString delimiter)
 {
   _initOutputFormatStrings(delimiter);
-}
-
-unsigned int OsmApiDbSqlStatementFormatter::_convertDegreesToNanodegrees(const double degrees)
-{
-  return round(degrees * ApiDb::COORDINATE_SCALE);
+  //let's just do this once at the beginning, since it could be expensive
+  _dateString = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 }
 
 void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delimiter)
@@ -117,47 +115,57 @@ void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString delim
 
 QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& node,
                                                             const long nodeId,
-                                                            const long changesetId)
+                                                            const long changesetId,
+                                                            const bool validate)
 {
   QStringList sqlStrs;
 
+  const QString nodeIdStr = QString::number(nodeId);
   //TODO: should be able to use OsmApiDb::toOsmApiDbCoord here instead
-  //const long nodeYNanodegrees = OsmApiDb::toOsmApiDbCoord(node->getY());
-  //const long nodeXNanodegrees = OsmApiDb::toOsmApiDbCoord(node->getX());
-  const int nodeYNanodegrees = _convertDegreesToNanodegrees(node->getY());
-  const int nodeXNanodegrees = _convertDegreesToNanodegrees(node->getX());
-  if ((nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000))
+  QString nodeYNanodegreesStr;
+  QString nodeXNanodegreesStr;
+  if (validate)
   {
-    throw HootException(
-      QString("Invalid latitude conversion, Y = %1 to %2").arg(
-        QString::number(node->getY()), QString::number(nodeYNanodegrees)));
+    const int nodeYNanodegrees = _convertDegreesToNanodegrees(node->getY());
+    const int nodeXNanodegrees = _convertDegreesToNanodegrees(node->getX());
+    if ((nodeYNanodegrees < -900000000) || (nodeYNanodegrees > 900000000))
+    {
+      throw HootException(
+        QString("Invalid latitude conversion, Y = %1 to %2").arg(
+          QString::number(node->getY()), QString::number(nodeYNanodegrees)));
+    }
+    if ((nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000))
+    {
+      throw HootException(
+        QString("Invalid longitude conversion, X = %1 to %2").arg(
+          QString::number(node->getX()), QString::number(nodeXNanodegrees)));
+    }
+    nodeYNanodegreesStr = QString::number(nodeYNanodegrees);
+    nodeXNanodegreesStr = QString::number(nodeXNanodegrees);
   }
-  if ((nodeXNanodegrees < -1800000000) || (nodeXNanodegrees > 1800000000))
+  else
   {
-    throw HootException(
-      QString("Invalid longitude conversion, X = %1 to %2").arg(
-        QString::number(node->getX()), QString::number(nodeXNanodegrees)));
+    nodeYNanodegreesStr = QString::number((int)_convertDegreesToNanodegrees(node->getY()));
+    nodeXNanodegreesStr = QString::number((int)_convertDegreesToNanodegrees(node->getX()));
   }
-  const QString datestring =
-    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
+  const QString changesetIdStr = QString::number(changesetId);
   const QString tileNumberString(QString::number(ApiDb::tileForPoint(node->getY(), node->getX())));
 
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentNodesTableName()].arg(
-      QString::number(nodeId),
-      QString::number(nodeYNanodegrees),
-      QString::number(nodeXNanodegrees),
-      QString::number(changesetId),
-      datestring,
+      nodeIdStr,
+      nodeYNanodegreesStr,
+      nodeXNanodegreesStr,
+      changesetIdStr,
+      _dateString,
       tileNumberString));
-
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getNodesTableName()].arg(
-      QString::number(nodeId),
-      QString::number(nodeYNanodegrees),
-      QString::number(nodeXNanodegrees),
-      QString::number(changesetId),
-      datestring,
+      nodeIdStr,
+      nodeYNanodegreesStr,
+      nodeXNanodegreesStr,
+      changesetIdStr,
+      _dateString,
       tileNumberString));
 
   return sqlStrs;
@@ -167,18 +175,16 @@ QStringList OsmApiDbSqlStatementFormatter::wayToSqlStrings(const long wayId, con
 {
   QStringList sqlStrs;
 
-  const QString datestring =
-    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentWaysTableName()]
       .arg(wayId)
       .arg(changesetId)
-      .arg(datestring));
+      .arg(_dateString));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getWaysTableName()]
       .arg(wayId)
       .arg(changesetId)
-      .arg(datestring));
+      .arg(_dateString));
 
   return sqlStrs;
 }
@@ -207,18 +213,16 @@ QStringList OsmApiDbSqlStatementFormatter::relationToSqlStrings(const long relat
 {
   QStringList sqlStrs;
 
-  const QString datestring =
-    QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentRelationsTableName()]
       .arg(relationId)
       .arg(changesetId)
-      .arg(datestring));
+      .arg(_dateString));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getRelationsTableName()]
       .arg(relationId)
       .arg(changesetId)
-      .arg(datestring));
+      .arg(_dateString));
 
   return sqlStrs;
 }
@@ -259,28 +263,24 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
   QStringList sqlStrs;
 
   const QString elementIdStr = QString::number(elementId);
+  //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
+  //larger datasets due to the varying string sizes
   QString key;
   key.reserve(10);
-  key = _escapeCopyToData(tagKey);
-  //pg_bulkload doesn't seem to be tolerating the empty data
-  if (key.trimmed().isEmpty())
-  {
-    key = "<empty>";
-  }
+  key.append(_escapeCopyToData(tagKey));
   LOG_VART(key);
   QString value;
   value.reserve(50);
-  value = _escapeCopyToData(tagValue);
+  value.append(_escapeCopyToData(tagValue));
   LOG_VART(value);
-  if (value.trimmed().isEmpty())
-  {
-    value = "<empty>";
-  }
 
   //all three of them are the same for current
-  sqlStrs.append(
+  QString currentSql;
+  currentSql.reserve(75);
+  currentSql.append(
     _outputFormatStrings[ApiDb::getCurrentNodeTagsTableName()]
       .arg(elementIdStr, key, value));
+  sqlStrs.append(currentSql);
   //all three of them are not the same for historical
   QString historicalFormatString = _outputFormatStrings[ApiDb::getWayTagsTableName()];
   if (elementType == ElementType::Node)
@@ -288,7 +288,10 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
     //see explanation for this silliness in the header file
     historicalFormatString = _outputFormatStrings[ApiDb::getNodeTagsTableName()];
   }
-  sqlStrs.append(historicalFormatString.arg(elementIdStr, key, value));
+  QString historicalSql;
+  historicalSql.reserve(75);
+  historicalSql.append(historicalFormatString.arg(elementIdStr, key, value));
+  sqlStrs.append(historicalSql);
 
   return sqlStrs;
 }
@@ -298,36 +301,18 @@ QString OsmApiDbSqlStatementFormatter::changesetToSqlString(const long changeset
                                                             const long numChangesInChangeset,
                                                             const Envelope& changesetBounds)
 {
-  const QString dateStr = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
   return
     _outputFormatStrings[ApiDb::getChangesetsTableName()]
       .arg(
         QString::number(changesetId),
         QString::number(changesetUserId),
-        dateStr,
+        _dateString,
         QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMinY())),
         QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMaxY())),
         QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMinX())),
         QString::number((qlonglong)OsmApiDb::toOsmApiDbCoord(changesetBounds.getMaxX())),
-        dateStr,
+        _dateString,
         QString::number(numChangesInChangeset));
-}
-
-QString OsmApiDbSqlStatementFormatter::_escapeCopyToData(const QString stringToOutput)
-{
-  //TODO: this is likely redundant with other code
-
-  QString escapedString(stringToOutput);
-  // Escape any special characters as required by
-  //    http://www.postgresql.org/docs/9.2/static/sql-copy.html
-  escapedString.replace(QChar(92), QString("\\\\"));  // Escape single backslashes first
-  escapedString.replace(QChar(8), QString("\\b"));
-  escapedString.replace(QChar(9), QString("\\t"));
-  escapedString.replace(QChar(10), QString("\\n"));
-  escapedString.replace(QChar(11), QString("\\v"));
-  escapedString.replace(QChar(12), QString("\\f"));
-  escapedString.replace(QChar(13), QString("\\r"));
-  return escapedString;
 }
 
 QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElementPtr& element,

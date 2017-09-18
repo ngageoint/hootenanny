@@ -115,9 +115,15 @@ void GeoNamesReader::open(QString url)
 ElementPtr GeoNamesReader::readNextElement()
 {
   QByteArray lineBytes = _fp.readLine();
-  QString line = QString::fromUtf8(lineBytes.constData());
+  //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
+  //larger datasets due to the varying string sizes
+  QString line;
+  line.reserve(500);
+  line.append(QString::fromUtf8(lineBytes.constData()));
   LOG_VART(line);
-  QStringList fields = line.split('\t');
+  QStringList fields;
+  fields.reserve(20);
+  fields.append(line.split('\t'));
   LOG_VART(fields);
 
   bool ok;
@@ -161,7 +167,9 @@ ElementPtr GeoNamesReader::readNextElement()
   for (int i = 0; i < _columns.size(); i++)
   {
     int j = i; //convertColumns[i];
-    const QString val = fields[j].trimmed();
+    QString val;
+    val.reserve(50);
+    val.append(fields[j].trimmed());
     if (!val.isEmpty())
     {
       n->getTags()[_columns[j]] = _saveMemory(val);
@@ -174,22 +182,26 @@ ElementPtr GeoNamesReader::readNextElement()
 
 QString GeoNamesReader::_saveMemory(const QString& s)
 {
+  //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
+  //larger datasets due to the varying string sizes
   QString result;
+  result.reserve(50);
   if (_strings.size() < _maxSaveMemoryStrings)
   {
     if (!_strings.contains(s))
     {
-      result = s;
-      _strings[s] = s;
+      result.append(s);
+      _strings[s].reserve(50);
+      _strings[s].append(s);
     }
     else
     {
-      result = _strings[s];
+      result.append(_strings[s]);
     }
   }
   else
   {
-    result = s;
+    result.append(s);
   }
 
   return result;

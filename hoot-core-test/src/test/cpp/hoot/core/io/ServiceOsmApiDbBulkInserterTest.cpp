@@ -357,6 +357,8 @@ public:
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
     writer.setValidateData(true);
+    writer.setDisableDatabaseConstraintsDuringWrite(true);
+    writer.setDisableDatabaseIndexesDuringWrite(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
@@ -388,6 +390,8 @@ public:
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
     writer.setValidateData(false);
+    writer.setDisableDatabaseConstraintsDuringWrite(true);
+    writer.setDisableDatabaseIndexesDuringWrite(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
@@ -421,6 +425,8 @@ public:
     writer.setFileOutputElementBufferSize(3);
     writer.setStxxlMapMinSize(3);
     writer.setValidateData(true);
+    writer.setDisableDatabaseConstraintsDuringWrite(true);
+    writer.setDisableDatabaseIndexesDuringWrite(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());
@@ -449,6 +455,8 @@ public:
     writer.setMaxChangesetSize(5);
     writer.setFileOutputElementBufferSize(3);
     writer.setValidateData(true);
+    writer.setDisableDatabaseConstraintsDuringWrite(false);
+    writer.setDisableDatabaseIndexesDuringWrite(false);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
 
@@ -492,6 +500,8 @@ public:
     writer.setStartingWayId(4);
     writer.setStartingRelationId(5);
     writer.setValidateData(true);
+    writer.setDisableDatabaseConstraintsDuringWrite(true);
+    writer.setDisableDatabaseIndexesDuringWrite(true);
 
     writer.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     writer.write(ServicesDbTestUtils::createTestMap1());

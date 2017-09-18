@@ -1318,6 +1318,24 @@ hoot --convert \
 
 Operations that should be applied to ingested OGR data before saving the data.
 
+=== osmapidb.bulk.inserter.disable.database.constraints.during.write
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writer drops the database constraints before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
+
+=== osmapidb.bulk.inserter.disable.database.indexes.during.write
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writer drops the database indexes before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
+
 === osmapidb.bulk.inserter.file.output.status.update.interval
 
 * Data Type: long
@@ -1391,6 +1409,13 @@ you want to assign to relation records.  This option is ignored if
 Size at which the ID mappings storage for the OSM API database bulk inserter switches from a
 std::map to an stxxl::map, which is a container optimized for very large amounts of data.  For
 debugging purposes only.
+
+=== osmapidb.bulk.inserter.temp.file.dir
+
+* Data Type: string
+* Default Value: `/tmp`
+
+Allows for customizing where the OSM API database bulk inserter stores temp files.
 
 === osmapidb.bulk.inserter.validate.data
 
