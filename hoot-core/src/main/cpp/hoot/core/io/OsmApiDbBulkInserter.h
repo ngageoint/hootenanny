@@ -75,8 +75,6 @@ class OsmApiDbSqlStatementFormatter;
  * * uses the psql command to execute SQL statements; There is another version available that gives
  * the option of using pg_bulkload instead, which is several times faster than psql.  It is
  * currently in the 1446 development branch.
- *
- * TODO: add the capability to auto-create the table indexes
  */
 class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
 {
@@ -190,6 +188,8 @@ public:
   void setDisableDatabaseConstraintsDuringWrite(bool disable)
   { _disableDatabaseConstraintsDuringWrite = disable; }
   void setTempDir(QString location) { _tempDir = location; }
+  void setDisableDatabaseIndexesDuringWrite(bool disable)
+  { _disableDatabaseIndexesDuringWrite = disable; }
 
 private:
 
@@ -212,6 +212,7 @@ private:
   bool _includeDebugTags;
   bool _disableDatabaseConstraintsDuringWrite;
   QString _tempDir;
+  bool _disableDatabaseIndexesDuringWrite;
 
   std::map<QString, boost::shared_ptr<QTemporaryFile> > _outputSections;
   QStringList _sectionNames;

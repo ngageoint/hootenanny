@@ -263,6 +263,8 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
   QStringList sqlStrs;
 
   const QString elementIdStr = QString::number(elementId);
+  //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
+  //larger datasets due to the varying string sizes
   QString key;
   key.reserve(10);
   key.append(_escapeCopyToData(tagKey));

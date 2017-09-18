@@ -181,6 +181,16 @@ public:
    */
   void enableConstraints();
 
+  /**
+   * Drops all OSM table indexes
+   */
+  void dropIndexes();
+
+  /**
+   * Creates all OSM table indexes
+   */
+  void createIndexes();
+
 protected:
 
   void _resetQueries();

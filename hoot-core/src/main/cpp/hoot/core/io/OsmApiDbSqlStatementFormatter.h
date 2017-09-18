@@ -84,7 +84,8 @@ public:
   QStringList tagToSqlStrings(const long elementId, const ElementType& elementType,
                               const QString tagKey, const QString tagValue);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
-                               const long numChangesInChangeset, const geos::geom::Envelope& changesetBounds);
+                               const long numChangesInChangeset,
+                               const geos::geom::Envelope& changesetBounds);
   QStringList elementToSqlStrings(const ConstElementPtr& element, const long elementId,
                                   const long changesetId);
 

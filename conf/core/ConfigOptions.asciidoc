@@ -1323,8 +1323,17 @@ Operations that should be applied to ingested OGR data before saving the data.
 * Data Type: bool
 * Default Value: `false`
 
-If true, the OSM API database writer drop the database constraints before writing the data and
-re-enable them after the writing is complete.  This can only be used with databases that have been
+If true, the OSM API database writer drops the database constraints before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
+taken offline from other users.
+
+=== osmapidb.bulk.inserter.disable.database.indexes.during.write
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM API database writer drops the database indexes before writing the data and
+re-enables them after the writing is complete.  This can only be used with databases that have been
 taken offline from other users.
 
 === osmapidb.bulk.inserter.file.output.status.update.interval

@@ -434,29 +434,40 @@ QString HootApiDb::_escapeTags(const Tags& tags) const
   //TODO: this is likely redundant with other code
 
   QStringList l;
+  l.reserve(50);
   static QChar f1('\\'), f2('"'), f3('\'');
   static QChar to('_');
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QString key = it.key();
-    const QString val = it.value().trimmed();
+    //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
+    //larger datasets due to the varying string sizes
+    QString key;
+    key.reserve(10);
+    key.append(it.key());
+    QString val;
+    val.reserve(50);
+    val.append(it.value().trimmed());
     if (val.isEmpty() == false)
     {
       // this doesn't appear to be working, but I think it is implementing the spec as described here:
       // http://www.postgresql.org/docs/9.0/static/hstore.html
       // The spec described above does seem to work on the psql command line. Curious.
-      QString k = QString(key).replace(f1, "\\\\").replace(f2, "\\\"");
-      QString v = QString(val).replace(f1, "\\\\").replace(f2, "\\\"");
-      k.replace("'", "''");
-      v.replace("'", "''");
+      QString k;
+      k.reserve(10);
+      k.append(QString(key).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''"));
+      QString v;
+      v.reserve(50);
+      v.append(QString(val).replace(f1, "\\\\").replace(f2, "\\\"").replace("'", "''"));
 
       l << QString("'%1'").arg(k);
       l << QString("'%1'").arg(v);
     }
   }
 
-  QString hstoreStr = l.join(",");
+  QString hstoreStr;
+  hstoreStr.reserve(60);
+  hstoreStr.append(l.join(","));
   if (!hstoreStr.isEmpty())
   {
      hstoreStr = "hstore(ARRAY[" + hstoreStr + "])";

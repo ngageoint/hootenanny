@@ -438,10 +438,20 @@ void OsmApiDbBulkInserter::_writeDataToDb()
   {
     _database.disableConstraints();
   }
+  if (_disableDatabaseIndexesDuringWrite)
+  {
+    _database.dropIndexes();
+  }
+
   _writeDataToDbPsql();
+
   if (_disableDatabaseConstraintsDuringWrite)
   {
     _database.enableConstraints();
+  }
+  if (_disableDatabaseIndexesDuringWrite)
+  {
+    _database.createIndexes();
   }
 }
 
@@ -520,7 +530,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     _sqlOutputCombinedFile->write(reserveElementIdsSql.toUtf8());
   }
 
-  long lineCtr = 0;
+  long recordCtr = 0;
   for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
   {
     LOG_DEBUG("Parsing data for temp file " << *it);
@@ -551,22 +561,25 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
           LOG_VART(line.left(25));
           LOG_VART(line.length());
 
-          if (updateIdOffsets && !line.trimmed().isEmpty() &&
+          if (!line.trimmed().isEmpty() &&
               line.trimmed() != QLatin1String("\\.") && !line.startsWith("COPY"))
           {
-            _updateRecordLineWithIdOffset(*it, line);
+            if (updateIdOffsets)
+            {
+              _updateRecordLineWithIdOffset(*it, line);
+            }
+            recordCtr++;
           }
 
           _sqlOutputCombinedFile->write(QString(line).toUtf8());
-          lineCtr++;
 
-          if (lineCtr > 0 && (lineCtr % (_statusUpdateInterval * 100) == 0))
+          if (recordCtr > 0 && (recordCtr % (_statusUpdateInterval * 100) == 0))
           {
             //changesets is throwing off the progress totals here...not sure why...don't
             //care that much right now, since the changeset count is far outnumbered by the
             //size of the rest of the data
             PROGRESS_INFO(
-              "Parsed " << StringUtils::formatLargeNumber(lineCtr) << "/" <<
+              "Parsed " << StringUtils::formatLargeNumber(recordCtr) << "/" <<
               StringUtils::formatLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
@@ -604,7 +617,7 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
     StringUtils::secondsToDhms(_timer->elapsed()));
-  LOG_DEBUG("Parsed " << StringUtils::formatLargeNumber(lineCtr) << " total SQL file lines.");
+  LOG_DEBUG("Parsed " << StringUtils::formatLargeNumber(recordCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
 }
@@ -928,6 +941,8 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   setDisableDatabaseConstraintsDuringWrite(
     confOptions.getOsmapidbBulkInserterDisableDatabaseConstraintsDuringWrite());
   setTempDir(confOptions.getOsmapidbBulkInserterTempFileDir());
+  setDisableDatabaseIndexesDuringWrite(
+    confOptions.getOsmapidbBulkInserterDisableDatabaseIndexesDuringWrite());
 
   LOG_VART(_changesetData.changesetUserId);
   LOG_VART(_fileOutputElementBufferSize);
@@ -944,12 +959,12 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
   LOG_VART(_validateData);
   LOG_VART(_disableDatabaseConstraintsDuringWrite);
   LOG_VART(_tempDir);
+  LOG_VART(_disableDatabaseIndexesDuringWrite);
 }
 
 QStringList OsmApiDbBulkInserter::_createSectionNameList()
 {
   QStringList sections;
-  //sections.push_back("byte_order_mark");
   sections.push_back(ApiDb::getChangesetsTableName());
   sections.push_back(ApiDb::getCurrentNodesTableName());
   sections.push_back(ApiDb::getCurrentNodeTagsTableName());
@@ -1106,6 +1121,8 @@ void OsmApiDbBulkInserter::_writeTags(const Tags& tags,
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
+    //pre-allocating the string memory here reduces memory fragmentation significantly when parsing
+    //larger datasets due to the varying string sizes
     QString key;
     key.reserve(10);
     key.append(it.key());
