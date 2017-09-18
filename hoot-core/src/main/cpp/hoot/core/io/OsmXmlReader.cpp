@@ -536,15 +536,12 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     }
     else if (qName == QLatin1String("tag") && _element)
     {
-      const QString keyAttr = attributes.value("k").trimmed();
-      const QString valAttr = attributes.value("v").trimmed();
-      if (!keyAttr.isEmpty() && !valAttr.isEmpty())
+      const QString& key = _saveMemory(attributes.value("k").trimmed());
+      const QString& value = _saveMemory(attributes.value("v").trimmed());
+      //LOG_VART(key);
+      //LOG_VART(value);
+      if (!key.isEmpty() && !value.isEmpty())
       {
-        const QString& key = _saveMemory(keyAttr);
-        const QString& value = _saveMemory(valAttr);
-        //LOG_VART(key);
-        //LOG_VART(value);
-
         if (_useFileStatus && key == MetadataTags::HootStatus())
         {
           _element->setStatus(Status::fromString(value));
@@ -557,7 +554,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
           RelationPtr r = boost::dynamic_pointer_cast<Relation, Element>(_element);
           r->setType(value);
 
-          if (ConfigOptions().getReaderPreserveAllTags()) { _element->setTag(key, value); }
+          if (_preserveAllTags) { _element->setTag(key, value); }
         }
         else if (key == MetadataTags::Accuracy() || key == MetadataTags::ErrorCircular())
         {
