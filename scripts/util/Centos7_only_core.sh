@@ -7,6 +7,9 @@
 # have a script that can configure a machine and then build Hootenanny either using Vagrant or straight on
 # an existing machine/VM
 #
+# VERY IMPORTANT NOTE: This script is designed to run in a very particular environment. Some of the directory
+#   choices reflect this.
+#
 # You can run "vagrant up hoot_centos7_core" and you will get a Centos7 VM with just the Hootenanny core.
 #
 # To get this to build, we use a number of source and other packages outside of the normal core and EPEL repos.
@@ -177,9 +180,13 @@ sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1
 echo "##### Temp installs #####"
 
 # Stxxl:
-git clone http://github.com/stxxl/stxxl.git stxxl
-cd stxxl
-git checkout -q tags/1.3.1
+if [ -d /home/centos/hoot-deps/stxxl ]
+    cd /home/centos/hoot-deps/stxxl
+else
+    git clone http://github.com/stxxl/stxxl.git stxxl
+    cd stxxl
+    git checkout -q tags/1.3.1
+fi
 make config_gnu
 echo "STXXL_ROOT	=`pwd`" > make.settings.local
 echo "ENABLE_SHARED     = yes" >> make.settings.local
@@ -200,13 +207,15 @@ sudo ln -s libstxxl.so.1.3.1 libstxxl.so
 popd
 
 sudo /sbin/ldconfig
-
 #### So much easier to make later versions, uncomment when we upgrade to 1.4.0+
 #mkdir build
 #cd build
 #cmake -DCMAKE_BUILD_TYPE=Release ..
 #make -sj
 #sudo make install -s
+
+# Make sure we know where we are
+cd ~
 
 # Fix missing qmake
 if ! hash qmake >/dev/null 2>&1 ; then
@@ -220,8 +229,12 @@ fi
 # We need this big dictionary for text matching. On Ubuntu, this is a package
 if [ ! -f /usr/share/dict/american-english-insane ]; then
     echo "### Installing american-english-insane dictionary..."
-    wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
-    sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    if [ -f /home/centos/hoot-deps/american-english-insane.bz2 ]
+        sudo bash -c "bzcat /home/centos/hoot-deps/american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    else
+        wget --quiet -N https://s3.amazonaws.com/hoot-rpms/support-files/american-english-insane.bz2
+        sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
+    fi
 fi
 
 #####
