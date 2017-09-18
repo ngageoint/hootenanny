@@ -65,6 +65,5 @@ nodejs:SOURCES += src/test/cpp/hoot/core/schema/TranslatedTagDifferencerTest.cpp
 }
 
 SOURCES += \
-    src/test/cpp/hoot/core/conflate/polygon/extractors/NameExtractorTest.cpp
 
 HEADERS += \
