@@ -206,7 +206,7 @@ boost::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStre
   boost::shared_ptr<ElementInputStream> inputStream =
     boost::dynamic_pointer_cast<ElementInputStream>(newInputReader);
 
-  //filter new data down to POIs only and translate each element
+  //filter data down to POIs only, translate each element, and assign it a unique hash id
   boost::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
   QList<ElementVisitorPtr> visitors;
   visitors.append(boost::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
@@ -229,7 +229,9 @@ void MultiaryIngester::_writeNewReferenceData(
 
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
-  //We're able to use the faster bulk inserter here, since this is a brand new dataset.
+  //We're able to use the faster bulk inserter here, since this is a brand new dataset.  The reads
+  //are much slower than the writing, so we could maybe even get better performance by splitting
+  //the reading and writing into separate threads.
   conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), true);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
@@ -259,7 +261,7 @@ void MultiaryIngester::_writeNewReferenceData(
           critInputStrm->getNumFeaturesTotal() % _logUpdateInterval == 0)
       {
         PROGRESS_INFO(
-          "POIs written to ref layer: " << StringUtils::formatLargeNumber(changesParsed) <<
+          "POIs found: " << StringUtils::formatLargeNumber(changesParsed) <<
           " Non-POIs skipped: " << StringUtils::formatLargeNumber(featuresSkipped));
       }
     }
@@ -400,9 +402,9 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter as well.
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), false);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), false);
-  //TODO: if we end up writing change types to separate files, then we can possibly use the bulk
-  //inserter here for the inserts only
-  //The bulk inserter won't work here, b/c we're writing more than just inserts.
+  //The bulk inserter won't work here, b/c we're writing more than just inserts and even if we
+  //executed the inserts separately with the bulk inserter, we would still want the modifies/deletes
+  //to run within the same transaction which isn't possible unless we run with the HootApiDbWriter.
   conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), false);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
@@ -429,8 +431,7 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
     if (changesWritten % _logUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Wrote " << StringUtils::formatLargeNumber(changesWritten) <<
-        " changes to ref layer.");
+        "Wrote " << StringUtils::formatLargeNumber(changesWritten) << " changes to ref layer.");
     }
   }
 
