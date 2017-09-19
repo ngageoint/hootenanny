@@ -38,8 +38,8 @@ NEWFILES=`ls -R $OUTPUT_TILES | wc -l`
 # uses compression/etc that reduces disk usage.
 NEWSIZE=`du --apparent-size -c $OUTPUT_TILES | grep total | awk '{print $1}'`
 
-[ $NEWSIZE -gt 2300 ] && echo "gdal2tiles.py: Expecting a tile size between 2100 and 2300. Got" $NEWSIZE
+[ $NEWSIZE -gt 3000 ] && echo "gdal2tiles.py: Expecting a tile size between 2000 and 3000. Got" $NEWSIZE
 
-[ $NEWSIZE -lt 2100 ] && echo "gdal2tiles.py: Expecting a tile size between 2100 and 2300. Got" $NEWSIZE
+[ $NEWSIZE -lt 2000 ] && echo "gdal2tiles.py: Expecting a tile size between 2000 and 2000. Got" $NEWSIZE
 
 

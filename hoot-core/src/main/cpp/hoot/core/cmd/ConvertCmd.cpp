@@ -86,7 +86,6 @@ public:
     {
       if (!opName.trimmed().isEmpty())
       {
-        LOG_VAR(opName);
         if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
         {
           ElementCriterionPtr criterion(
@@ -94,7 +93,6 @@ public:
           // when streaming we can't provide a reliable OsmMap.
           if (dynamic_cast<OsmMapConsumer*>(criterion.get()) != 0)
           {
-            LOG_VAR(false);
             return false;
           }
         }
@@ -104,7 +102,6 @@ public:
         }
         else
         {
-          LOG_VAR(false);
           return false;
         }
       }
