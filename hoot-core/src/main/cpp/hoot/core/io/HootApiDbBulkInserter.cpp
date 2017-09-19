@@ -549,7 +549,6 @@ void HootApiDbBulkInserter::setConfiguration(const Settings& conf)
   OsmApiDbBulkInserter::setConfiguration(conf);
 
   const ConfigOptions confOptions(conf);
-
   setUserEmail(confOptions.getApiDbEmail());
   setCreateUser(confOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(confOptions.getHootapiDbWriterOverwriteMap());

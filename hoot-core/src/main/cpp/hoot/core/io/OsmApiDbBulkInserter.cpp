@@ -926,21 +926,21 @@ void OsmApiDbBulkInserter::setConfiguration(const Settings& conf)
 {
   const ConfigOptions confOptions(conf);
 
-  setOutputFilesCopyLocation(confOptions.getOsmapidbBulkInserterOutputFilesCopyLocation().trimmed());
+  setOutputFilesCopyLocation(confOptions.getApidbBulkInserterOutputFilesCopyLocation().trimmed());
   _changesetData.changesetUserId = confOptions.getChangesetUserId();
   setFileOutputElementBufferSize(confOptions.getMaxElementsPerPartialMap());
-  setStatusUpdateInterval(confOptions.getOsmapidbBulkInserterFileOutputStatusUpdateInterval());
+  setStatusUpdateInterval(confOptions.getApidbBulkInserterFileOutputStatusUpdateInterval());
   setMaxChangesetSize(confOptions.getChangesetMaxSize());
   setReserveRecordIdsBeforeWritingData(
     confOptions.getOsmapidbBulkInserterReserveRecordIdsBeforeWritingData());
-  setStartingNodeId(confOptions.getOsmapidbBulkInserterStartingNodeId());
-  setStartingWayId(confOptions.getOsmapidbBulkInserterStartingWayId());
-  setStartingRelationId(confOptions.getOsmapidbBulkInserterStartingRelationId());
-  setStxxlMapMinSize(confOptions.getOsmapidbBulkInserterStxxlMapMinSize());
-  setValidateData(confOptions.getOsmapidbBulkInserterValidateData());
+  setStartingNodeId(confOptions.getApidbBulkInserterStartingNodeId());
+  setStartingWayId(confOptions.getApidbBulkInserterStartingWayId());
+  setStartingRelationId(confOptions.getApidbBulkInserterStartingRelationId());
+  setStxxlMapMinSize(confOptions.getApidbBulkInserterStxxlMapMinSize());
+  setValidateData(confOptions.getApidbBulkInserterValidateData());
   setDisableDatabaseConstraintsDuringWrite(
     confOptions.getOsmapidbBulkInserterDisableDatabaseConstraintsDuringWrite());
-  setTempDir(confOptions.getOsmapidbBulkInserterTempFileDir());
+  setTempDir(confOptions.getApidbBulkInserterTempFileDir());
   setDisableDatabaseIndexesDuringWrite(
     confOptions.getOsmapidbBulkInserterDisableDatabaseIndexesDuringWrite());
 }
