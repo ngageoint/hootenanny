@@ -121,6 +121,7 @@ sudo yum -y install \
     unzip \
     v8-devel \
     w3m \
+    wget \
     words \
     xorg-x11-server-Xvfb \
     zip \

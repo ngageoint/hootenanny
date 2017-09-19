@@ -88,17 +88,6 @@ sudo systemctl start ntpd
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
 
-# Official download page:
-# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
-if  ! rpm -qa | grep jdk-8u144-linux; then
-    echo "### Installing Java8..."
-    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
-      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
-      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
-    fi
-    sudo yum -y install ./jdk-8u144-linux-x64.rpm
-fi
-
 echo "### Installing the repo for an ancient version of NodeJS"
 curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
 
@@ -166,6 +155,7 @@ sudo yum -y install \
     unzip \
     v8-devel \
     w3m \
+    wget \
     words \
     zip \
 
@@ -173,9 +163,35 @@ sudo yum -y install \
 # Not installed:
 #    xorg-x11-server-Xvfb \
 
+# Official download page:
+# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+if  ! rpm -qa | grep jdk-8u144-linux; then
+    echo "### Installing Java8..."
+    if [ ! -f jdk-8u144-linux-x64.rpm ]; then
+      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
+    fi
+    sudo yum -y install ./jdk-8u144-linux-x64.rpm
+fi
+
+# Trying the following instead of removing the OpenJDK
+# Setting /usr/java/jdk1.8.0_144/bin/java's priority to something really atrocious to guarantee that it will be
+# the one used when alternatives' auto mode is used.
+sudo alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_144/bin/java 999999
+
+# Setting /usr/java/jdk1.8.0_144/bin/javac's priority to something really atrocious to guarantee that it will be
+# the one used when alternatives' auto mode is enabled.
+sudo alternatives --install /usr/bin/javac javac /usr/java/jdk1.8.0_144/bin/javac 9999999
+
+# switching to manual and forcing the desired version of java be configured
+sudo alternatives --set java /usr/java/jdk1.8.0_144/bin/java
+
+# switching to manual and forcing the desired version of javac be configured
+sudo alternatives --set javac /usr/java/jdk1.8.0_144/bin/javac
+
 # Now make sure that the version of Java we installed gets used.
 # maven installs java-1.8.0-openjdk
-sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
+#sudo rpm -e --nodeps java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel java-1.8.0-openjdk
 
 echo "##### Temp installs #####"
 
