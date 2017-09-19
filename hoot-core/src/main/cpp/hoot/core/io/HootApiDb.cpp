@@ -429,14 +429,13 @@ void HootApiDb::deleteUser(long userId)
   _exec("DELETE FROM " + ApiDb::getUsersTableName() + " WHERE id=:id", (qlonglong)userId);
 }
 
-QString HootApiDb::_escapeTags(const Tags& tags) const
+QString HootApiDb::_escapeTags(const Tags& tags)
 {
   //TODO: this is likely redundant with other code
 
   QStringList l;
   l.reserve(50);
-  static QChar f1('\\'), f2('"'), f3('\'');
-  static QChar to('_');
+  static QChar f1('\\'), f2('"');
 
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
@@ -466,7 +465,7 @@ QString HootApiDb::_escapeTags(const Tags& tags) const
   }
 
   QString hstoreStr;
-  hstoreStr.reserve(60);
+  hstoreStr.reserve(500);
   hstoreStr.append(l.join(","));
   if (!hstoreStr.isEmpty())
   {
@@ -681,6 +680,7 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   _copyTableStructure(ApiDb::getCurrentWayNodesTableName(), getCurrentWayNodesTableName(mapId));
   _copyTableStructure(ApiDb::getCurrentWaysTableName(), getCurrentWaysTableName(mapId));
 
+  DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getChangesetsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentNodesSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentRelationsSequenceName(mapId));
   DbUtils::execNoPrepare(_db, "CREATE SEQUENCE " + getCurrentWaysSequenceName(mapId));
@@ -710,6 +710,7 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   DbUtils::execNoPrepare(
     _db,
     QString("DROP INDEX %1_tile_idx").arg(getCurrentNodesTableName(mapId)));
+  //TODO: have this also drop the relation member table index
 
   _pendingMapIndexes.append(mapId);
 
@@ -1570,6 +1571,90 @@ QUrl HootApiDb::getBaseUrl()
   result.setPassword(s.get("DB_PASSWORD").toString());
   result.setPath("/" + s.get("DB_NAME").toString());
   return result;
+}
+
+QString HootApiDb::removeLayerName(const QString url)
+{
+  QStringList urlParts =  url.split("/");
+  QString modifiedUrl;
+  for (int i = 0; i < urlParts.size() - 1; i++)
+  {
+    modifiedUrl += urlParts[i] + "/";
+  }
+  modifiedUrl.chop(1);
+  return modifiedUrl;
+}
+
+QStringList HootApiDb::_getTables()
+{
+  //The table ordering doesn't matter for constraint enabling/disabling.  It would, however,
+  //matter for constraint adding/removing (would need to reverse this ordering for dropping,
+  //I think).
+
+  QStringList tableNames;
+
+  tableNames.append(HootApiDb::getCurrentRelationMembersTableName(_currMapId));
+  tableNames.append(HootApiDb::getCurrentRelationsTableName(_currMapId));
+
+  tableNames.append(HootApiDb::getCurrentWayNodesTableName(_currMapId));
+  tableNames.append(HootApiDb::getCurrentWaysTableName(_currMapId));
+
+  tableNames.append(HootApiDb::getCurrentNodesTableName(_currMapId));
+
+  tableNames.append(HootApiDb::getChangesetsTableName(_currMapId));
+
+  return tableNames;
+}
+
+void HootApiDb::disableConstraints()
+{
+  _modifyConstraints(_getTables(), true);
+}
+
+void HootApiDb::enableConstraints()
+{
+  _modifyConstraints(_getTables(), false);
+}
+
+void HootApiDb::_modifyConstraints(const QStringList tableNames, const bool disable)
+{
+  for (int i = 0; i < tableNames.size(); i++)
+  {
+    if (disable)
+    {
+      DbUtils::disableTableConstraints(getDB(), tableNames.at(i));
+    }
+    else
+    {
+      DbUtils::enableTableConstraints(getDB(), tableNames.at(i));
+    }
+  }
+}
+
+void HootApiDb::dropIndexes()
+{
+  //current nodes
+  DbUtils::execNoPrepare(
+    getDB(), QString("DROP INDEX %1_tile_idx").arg(getCurrentNodesTableName(_currMapId)));
+
+  //current relation members
+  DbUtils::execNoPrepare(
+    getDB(), QString("DROP INDEX %1_member_idx").arg(getCurrentRelationMembersTableName(_currMapId)));
+}
+
+void HootApiDb::createIndexes()
+{
+  //current nodes
+  DbUtils::execNoPrepare(
+    getDB(),
+    QString("CREATE INDEX %1_tile_idx ON %1 USING btree (tile)")
+      .arg(getCurrentNodesTableName(_currMapId)));
+
+  //current relation members
+  DbUtils::execNoPrepare(
+    getDB(),
+    QString("CREATE INDEX %1_member_idx ON %1 USING btree (member_type, member_id)")
+      .arg(getCurrentRelationMembersTableName(_currMapId)));
 }
 
 }

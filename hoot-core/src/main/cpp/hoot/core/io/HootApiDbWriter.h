@@ -94,6 +94,8 @@ public:
   virtual void writeChange(const Change& change);
   virtual void setElementPayloadFormat(const QString /*format*/) {}
 
+  void setFastBulkInsertActivated(bool activated) { _fastBulkInsertActivated = activated; }
+
 protected:
 
   void _createElement(ConstElementPtr element);
@@ -150,6 +152,8 @@ private:
   bool _includeCircularError;
 
   bool _open;
+
+  bool _fastBulkInsertActivated;
 
   std::set<long> _openDb(QString& urlStr);
 

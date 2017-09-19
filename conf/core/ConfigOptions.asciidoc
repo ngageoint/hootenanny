@@ -695,6 +695,16 @@ The size of a pixel when calculating node density. See User Manual for details.
 Should the hootapi services DB writer automatically create the specified user if it doesn't exist.
 This is most useful when debugging and testing.
 
+=== hootapi.db.writer.fast.bulk.insert
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true, the Hootenanny API database writer will insert new records using Postgres COPY
+statements, which may increase performance when writing large datasets.  This setting can only
+be activated when writing new records and will not work when existing records need to be modified
+or deleted.  It also requires writing out temporary files, so extra disk space is needed.
+
 === hootapi.db.writer.output.id.mappings
 
 * Data Type: string

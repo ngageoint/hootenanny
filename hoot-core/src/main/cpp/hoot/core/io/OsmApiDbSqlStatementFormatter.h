@@ -63,7 +63,8 @@ static const QString HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\
 static const QString HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\t%2\t%3\n";
 
 /**
- * Converts OSM elements and their children into executable SQL statements
+ * Converts OSM elements and their children into executable Postgres SQL COPY statements against an
+ * OSM API database
  */
 class OsmApiDbSqlStatementFormatter
 {

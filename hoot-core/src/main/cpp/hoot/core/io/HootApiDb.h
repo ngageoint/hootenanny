@@ -306,6 +306,28 @@ public:
    */
   long getMapIdByName(const QString name);
 
+  /**
+   * @see ApiDb::disableConstraints
+   */
+  virtual void disableConstraints();
+
+  /**
+   * @see ApiDb::enableConstraints
+   */
+  virtual void enableConstraints();
+
+  /**
+   * @see ApiDb::dropIndexes
+   */
+  virtual void dropIndexes();
+
+  /**
+   * @see ApiDb::createIndexes
+   */
+  virtual void createIndexes();
+
+  static QString removeLayerName(const QString url);
+
 protected:
 
   virtual void _resetQueries();
@@ -399,8 +421,6 @@ private:
    */
   void _copyTableStructure(QString from, QString to);
 
-  QString _escapeTags(const Tags& tags) const;
-
   void _flushBulkInserts();
   void _flushBulkDeletes();
   long _getNextNodeId();
@@ -434,6 +454,11 @@ private:
    * @return should be <dbname>_renderdb_<map_id>
    */
   QString _getRenderDBName(long mapId);
+
+  QStringList _getTables();
+  void _modifyConstraints(const QStringList tableNames, const bool disable);
+
+  static QString _escapeTags(const Tags& tags);
 };
 
 }

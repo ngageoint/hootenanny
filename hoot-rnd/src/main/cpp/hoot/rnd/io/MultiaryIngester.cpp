@@ -229,6 +229,8 @@ void MultiaryIngester::_writeNewReferenceData(
 
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
+  //We're able to use the faster bulk inserter here, since this is a brand new dataset.
+  conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), true);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
@@ -398,6 +400,8 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter as well.
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), false);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), false);
+  //The bulk inserter won't work here, b/c we're writing more than just inserts.
+  conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), false);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =
     boost::dynamic_pointer_cast<PartialOsmMapWriter>(
       OsmMapWriterFactory::getInstance().createWriter(referenceOutput));
