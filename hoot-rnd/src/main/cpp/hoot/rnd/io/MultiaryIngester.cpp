@@ -400,6 +400,8 @@ void MultiaryIngester::_writeChangesToReferenceLayer(const QString changesetOutp
   //already has the macro for OsmMapWriter, it can't be added for OsmChangeWriter as well.
   conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), false);
   conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), false);
+  //TODO: if we end up writing change types to separate files, then we can possibly use the bulk
+  //inserter here for the inserts only
   //The bulk inserter won't work here, b/c we're writing more than just inserts.
   conf().set(ConfigOptions::getHootapiDbWriterFastBulkInsertKey(), false);
   boost::shared_ptr<PartialOsmMapWriter> referenceWriter =

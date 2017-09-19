@@ -37,7 +37,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QDateTime>
 #include <QFileInfo>
 #include <QStringBuilder>
 #include <QDir>
@@ -408,7 +407,9 @@ void OsmApiDbBulkInserter::finalizePartial()
 
 bool OsmApiDbBulkInserter::_destinationIsDatabase() const
 {
-  return _outputUrl.toLower().startsWith("osmapidb://");
+  return
+    _outputUrl.toLower().startsWith("osmapidb://") ||
+    _outputUrl.toLower().startsWith("hootapidb://");
 }
 
 void OsmApiDbBulkInserter::_writeDataToDbPsql()
@@ -467,7 +468,7 @@ QString OsmApiDbBulkInserter::_getCombinedSqlFileName() const
   }
   else
   {
-    dest = _tempDir + "/OsmApiDbBulkInserter-" + QUuid::createUuid().toString() + ".sql";
+    dest = _tempDir + "/ApiDbBulkInserter-" + QUuid::createUuid().toString() + ".sql";
   }
   return dest;
 }

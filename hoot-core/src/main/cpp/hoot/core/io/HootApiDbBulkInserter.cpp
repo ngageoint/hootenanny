@@ -31,18 +31,13 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/io/HootApiDbSqlStatementFormatter.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
-#include <QDateTime>
 #include <QFileInfo>
 #include <QStringBuilder>
-#include <QDir>
-#include <QUuid>
-#include <QLatin1String>
 #include <QTextStream>
 
 // Tgs
@@ -58,10 +53,7 @@ unsigned int HootApiDbBulkInserter::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapWriter, HootApiDbBulkInserter)
 
-HootApiDbBulkInserter::HootApiDbBulkInserter() :
-_outputDelimiter("\t"),
-_fileDataPassCtr(0),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+HootApiDbBulkInserter::HootApiDbBulkInserter() : OsmApiDbBulkInserter()
 {
   _reset();
   setConfiguration(conf());
@@ -162,163 +154,9 @@ void HootApiDbBulkInserter::open(QString url)
   _verifyDependencies();
 }
 
-void HootApiDbBulkInserter::_verifyStartingIds()
-{
-  if (_idMappings.startingNodeId < 1 || _idMappings.startingWayId < 1 ||
-      _idMappings.startingRelationId < 1)
-  {
-    throw HootException(
-      "Invalid element starting ID specified.  IDs must be greater than or equal to 1.");
-  }
-  else if (!_validateData &&
-           (_idMappings.startingNodeId > 1 || _idMappings.startingWayId > 1 ||
-            _idMappings.startingRelationId > 1))
-  {
-    throw HootException("Cannot specify element starting IDs when data validation is turned off.");
-  }
-
-  _idMappings.currentNodeId = _idMappings.startingNodeId;
-  _idMappings.currentWayId = _idMappings.startingWayId;
-  _idMappings.currentRelationId = _idMappings.startingRelationId;
-}
-
-void HootApiDbBulkInserter::_verifyDependencies()
-{
-  if (system(QString("psql --version > /dev/null").toStdString().c_str()) != 0)
-  {
-    throw HootException("Unable to access the psql application.  Is Postgres installed?");
-  }
-}
-
-void HootApiDbBulkInserter::close()
-{
-  LOG_DEBUG("Closing writer...");
-
-  _closeOutputFiles();
-  _database.close();
-
-  _reset();
-  _sectionNames = _createSectionNameList();
-  setConfiguration(conf());
-}
-
-void HootApiDbBulkInserter::_closeOutputFiles()
-{
-  for (QStringList::const_iterator sectionNamesItr = _sectionNames.begin();
-       sectionNamesItr != _sectionNames.end(); ++sectionNamesItr)
-  {
-    if (_outputSections.find(*sectionNamesItr) == _outputSections.end())
-    {
-      LOG_TRACE("No data for table " + *sectionNamesItr);
-      continue;
-    }
-
-    if (_outputSections[*sectionNamesItr])
-    {
-      _outputSections[*sectionNamesItr]->close();
-    }
-  }
-
-  if (_sqlOutputCombinedFile)
-  {
-    _sqlOutputCombinedFile->close();
-  }
-}
-
-void HootApiDbBulkInserter::_logStats(const bool debug)
-{
-  QStringList messages;
-  messages.append(QString("\tNodes: ") + StringUtils::formatLargeNumber(_writeStats.nodesWritten));
-  messages.append(
-    QString("\tNode tags: ") + StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
-  messages.append(QString("\tWays: ") + StringUtils::formatLargeNumber(_writeStats.waysWritten));
-  messages.append(
-    QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
-  messages.append(
-    QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
-  messages.append(
-    QString("\tRelations: ") + StringUtils::formatLargeNumber(_writeStats.relationsWritten));
-  messages.append(
-    QString("\tRelation members: ") +
-    StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
-  messages.append(
-    QString("\tRelation tags: ") + StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
-  messages.append(
-    QString("\tUnresolved relation members: ") +
-    StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
-  messages.append(
-    QString("\tTotal features: ") + StringUtils::formatLargeNumber(_getTotalFeaturesWritten()));
-  messages.append(
-    QString("\tChangesets: ") + StringUtils::formatLargeNumber(_changesetData.changesetsWritten));
-  messages.append(
-    QString("\tChangeset change size (each): ") +
-    StringUtils::formatLargeNumber(_maxChangesetSize));
-  messages.append(
-    QString("\tExecutable SQL records: ") +
-    StringUtils::formatLargeNumber(_getTotalRecordsWritten()));
-
-  for (int i = 0; i < messages.size(); i++)
-  {
-    if (debug)
-    {
-      LOG_DEBUG(messages.at(i));
-    }
-    else
-    {
-      LOG_INFO(messages.at(i));
-    }
-  }
-}
-
 unsigned int HootApiDbBulkInserter::_numberOfFileDataPasses() const
 {
   return 3;
-}
-
-void HootApiDbBulkInserter::_flush()
-{
-  for (QStringList::const_iterator it = _sectionNames.begin(); it != _sectionNames.end(); ++it)
-  {
-    if (_outputSections.find(*it) == _outputSections.end())
-    {
-      LOG_TRACE("No data for table " + *it);
-      continue;
-    }
-
-    LOG_VART(*it);
-    LOG_TRACE("Flushing section " << *it << " to file " << _outputSections[*it]->fileName());
-    _outputSections[*it]->write(QString("\\.\n\n").toUtf8());
-    // Flush any residual content from file
-    if (!_outputSections[*it]->flush())
-    {
-      throw HootException("Could not flush file for table " + *it);
-    }
-  }
-}
-
-void HootApiDbBulkInserter::_clearIdCollections()
-{
-  LOG_DEBUG("Clearing out ID mappings...");
-  if (_idMappings.nodeIdMap)
-  {
-    _idMappings.nodeIdMap->clear();
-  }
-  _idMappings.nodeIdMap.reset();
-  if (_idMappings.wayIdMap)
-  {
-    _idMappings.wayIdMap->clear();
-  }
-  _idMappings.wayIdMap.reset();
-  if (_idMappings.relationIdMap)
-  {
-    _idMappings.relationIdMap->clear();
-  }
-  _idMappings.relationIdMap.reset();
-  if (_unresolvedRefs.unresolvedRelationRefs)
-  {
-    _unresolvedRefs.unresolvedRelationRefs->clear();
-  }
-  _unresolvedRefs.unresolvedRelationRefs.reset();
 }
 
 void HootApiDbBulkInserter::finalizePartial()
@@ -402,20 +240,6 @@ void HootApiDbBulkInserter::_writeDataToDb()
   _writeDataToDbPsql();
 
   //_database.enableConstraints();
-}
-
-QString HootApiDbBulkInserter::_getCombinedSqlFileName() const
-{
-  QString dest;
-  if (!_outputFilesCopyLocation.isEmpty())
-  {
-    dest = _outputFilesCopyLocation;
-  }
-  else
-  {
-    dest = _tempDir + "/HootApiDbBulkInserter-" + QUuid::createUuid().toString() + ".sql";
-  }
-  return dest;
 }
 
 void HootApiDbBulkInserter::_writeCombinedSqlFile()
@@ -722,18 +546,10 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
 
 void HootApiDbBulkInserter::setConfiguration(const Settings& conf)
 {
+  OsmApiDbBulkInserter::setConfiguration(conf);
+
   const ConfigOptions confOptions(conf);
 
-  setOutputFilesCopyLocation(confOptions.getOsmapidbBulkInserterOutputFilesCopyLocation().trimmed());
-  setFileOutputElementBufferSize(confOptions.getMaxElementsPerPartialMap());
-  setStatusUpdateInterval(confOptions.getOsmapidbBulkInserterFileOutputStatusUpdateInterval());
-  setMaxChangesetSize(confOptions.getChangesetMaxSize());
-  setStartingNodeId(confOptions.getOsmapidbBulkInserterStartingNodeId());
-  setStartingWayId(confOptions.getOsmapidbBulkInserterStartingWayId());
-  setStartingRelationId(confOptions.getOsmapidbBulkInserterStartingRelationId());
-  setStxxlMapMinSize(confOptions.getOsmapidbBulkInserterStxxlMapMinSize());
-  setValidateData(confOptions.getOsmapidbBulkInserterValidateData());
-  setTempDir(confOptions.getOsmapidbBulkInserterTempFileDir());
   setUserEmail(confOptions.getApiDbEmail());
   setCreateUser(confOptions.getHootapiDbWriterCreateUser());
   setOverwriteMap(confOptions.getHootapiDbWriterOverwriteMap());
@@ -757,110 +573,6 @@ void HootApiDbBulkInserter::_createNodeOutputFiles()
   const QStringList nodeSqlHeaders = HootApiDbSqlStatementFormatter::getNodeSqlHeaderStrings(_database.getMapId());
 
   _createOutputFile(HootApiDb::getCurrentNodesTableName(_database.getMapId()), nodeSqlHeaders[0]);
-}
-
-void HootApiDbBulkInserter::_reset()
-{
-  LOG_TRACE("Resetting variables...");
-
-  _writeStats.nodesWritten = 0;
-  _writeStats.nodeTagsWritten = 0;
-  _writeStats.waysWritten = 0;
-  _writeStats.wayNodesWritten = 0;
-  _writeStats.wayTagsWritten = 0;
-  _writeStats.relationsWritten = 0;
-  _writeStats.relationMembersWritten = 0;
-  _writeStats.relationMembersUnresolved = 0;
-  _writeStats.relationTagsWritten = 0;
-
-  _changesetData.changesetUserId = -1;
-  _changesetData.currentChangesetId = 1;
-  _changesetData.changesInChangeset = 0;
-  _changesetData.changesetsWritten = 0;
-
-  _idMappings.startingNodeId = 1;
-  _idMappings.currentNodeId = 1;
-  _idMappings.nodeIdMap.reset();
-
-  _idMappings.startingWayId = 1;
-  _idMappings.currentWayId = 1;
-  _idMappings.wayIdMap.reset();
-
-  _idMappings.startingRelationId = 1;
-  _idMappings.currentRelationId = 1;
-  _idMappings.relationIdMap.reset();
-
-  _unresolvedRefs.unresolvedRelationRefs.reset();
-
-  _outputSections.clear();
-  _sectionNames.clear();
-}
-
-unsigned long HootApiDbBulkInserter::_establishIdMapping(const ElementId& sourceId)
-{
-  //TODO: can probably reduce the current element id increment logic to just that of when
-  //_validateData = false
-
-  unsigned long dbIdentifier;
-
-  switch (sourceId.getType().getEnum())
-  {
-    case ElementType::Node:
-      if (_validateData)
-      {
-        dbIdentifier = _idMappings.currentNodeId;
-        _idMappings.nodeIdMap->insert(sourceId.getId(), dbIdentifier);
-        _idMappings.currentNodeId++;
-      }
-      else
-      {
-        dbIdentifier = abs(sourceId.getId());
-        if (dbIdentifier > _idMappings.currentNodeId)
-        {
-          _idMappings.currentNodeId = dbIdentifier;
-        }
-      }
-      break;
-
-    case ElementType::Way:
-      if (_validateData)
-      {
-        dbIdentifier = _idMappings.currentWayId;
-        _idMappings.wayIdMap->insert(sourceId.getId(), dbIdentifier);
-        _idMappings.currentWayId++;
-      }
-      else
-      {
-        dbIdentifier = abs(sourceId.getId());
-        if (dbIdentifier > _idMappings.currentWayId)
-        {
-          _idMappings.currentWayId = dbIdentifier;
-        }
-      }
-    break;
-
-    case ElementType::Relation:
-      if (_validateData)
-      {
-        dbIdentifier = _idMappings.currentRelationId;
-        _idMappings.relationIdMap->insert(sourceId.getId(), dbIdentifier);
-        _idMappings.currentRelationId++;
-      }
-      else
-      {
-        dbIdentifier = abs(sourceId.getId());
-        if (dbIdentifier > _idMappings.currentRelationId)
-        {
-          _idMappings.currentRelationId = dbIdentifier;
-        }
-      }
-    break;
-
-    default:
-      throw UnsupportedException("Unsupported element type.");
-  }
-
-  return dbIdentifier;
 }
 
 void HootApiDbBulkInserter::_writeNode(const ConstNodePtr& node, const unsigned long nodeDbId)
@@ -943,69 +655,6 @@ void HootApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, con
   _outputSections[HootApiDb::getCurrentRelationsTableName(_database.getMapId())]->write(relationSqlStrs[0].toUtf8());
 }
 
-void HootApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relation,
-                                                 const unsigned long dbRelationId)
-{
-  LOG_TRACE("Writing relation members to stream...");
-
-  unsigned int memberSequenceIndex = 1;
-  const long relationId = relation->getId();
-  const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
-  boost::shared_ptr<Tgs::BigMap<long, unsigned long> > knownElementMap;
-
-  for (std::vector<RelationData::Entry>::const_iterator it = relationMembers.begin();
-       it != relationMembers.end(); ++it)
-  {
-    const ElementId memberElementId = it->getElementId();
-
-    if (_validateData)
-    {
-      switch (memberElementId.getType().getEnum())
-      {
-        case ElementType::Node:
-          knownElementMap = _idMappings.nodeIdMap;
-          break;
-
-        case ElementType::Way:
-          knownElementMap = _idMappings.wayIdMap;
-          break;
-
-        case ElementType::Relation:
-          knownElementMap = _idMappings.relationIdMap;
-          break;
-
-        default:
-          throw HootException("Unsupported element member type");
-       }
-    }
-
-    if (!_validateData)
-    {
-      unsigned long memberIdVal = abs(memberElementId.getId());
-      _writeRelationMember(dbRelationId, *it, memberIdVal, memberSequenceIndex);
-    }
-    else if (knownElementMap && knownElementMap->contains(memberElementId.getId()))
-    {
-      _writeRelationMember(
-        dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
-    }
-    else
-    {
-      if (!_unresolvedRefs.unresolvedRelationRefs)
-      {
-        _unresolvedRefs.unresolvedRelationRefs.reset(
-          new std::map<ElementId, UnresolvedRelationReference>());
-      }
-      const UnresolvedRelationReference relationRef =
-        { relationId, dbRelationId, *it, memberSequenceIndex };
-      _unresolvedRefs.unresolvedRelationRefs->insert(
-        std::pair<ElementId, UnresolvedRelationReference>(memberElementId, relationRef));
-    }
-
-    ++memberSequenceIndex;
-  }
-}
-
 void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelationDbId,
                                                 const RelationData::Entry& member,
                                                 const unsigned long memberDbId,
@@ -1017,83 +666,6 @@ void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelat
   _outputSections[HootApiDb::getCurrentRelationMembersTableName(_database.getMapId())]->write(
     relationMemberSqlStrs[0].toUtf8());
   _writeStats.relationMembersWritten++;
-}
-
-void HootApiDbBulkInserter::_createOutputFile(const QString tableName, const QString header)
-{
-  QString msg = "Creating output file " + tableName;
-  if (!header.trimmed().isEmpty())
-  {
-    msg += " and writing table header";
-  }
-  msg += "...";
-  LOG_DEBUG(msg);
-
-  _outputSections[tableName].reset(
-    new QTemporaryFile(_tempDir + "/HootApiDbBulkInserter-" + tableName + "-temp-XXXXXX.sql"));
-  if (!_outputSections[tableName]->open())
-  {
-    throw HootException(
-      "Could not open file at: " + _outputSections[tableName]->fileName() +
-      " for contents of table: " + tableName);
-  }
-  //for debugging only
-  //_outputSections[tableName]->setAutoRemove(false);
-
-  if (!header.trimmed().isEmpty())
-  {
-    _outputSections[tableName]->write(header.toUtf8());
-  }
-}
-
-void HootApiDbBulkInserter::_incrementChangesInChangeset()
-{
-  _changesetData.changesInChangeset++;
-  if (_changesetData.changesInChangeset == _maxChangesetSize)
-  {
-    LOG_VART(_changesetData.changesInChangeset);
-    _writeChangeset();
-    _changesetData.currentChangesetId++;
-    LOG_VART(_changesetData.currentChangesetId);
-    _changesetData.changesInChangeset = 0;
-    _changesetData.changesetBounds.init();
-    _changesetData.changesetsWritten++;
-    LOG_VART(_changesetData.changesetsWritten);
-  }
-}
-
-void HootApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& element,
-                                                      const unsigned long elementDbId)
-{
-  // Regardless of type, may be referenced in relation
-  if (_unresolvedRefs.unresolvedRelationRefs)
-  {
-    std::map<ElementId, UnresolvedRelationReference >::iterator relationRef =
-      _unresolvedRefs.unresolvedRelationRefs->find(element->getElementId());
-
-    if (relationRef != _unresolvedRefs.unresolvedRelationRefs->end())
-    {
-      if (logWarnCount < Log::getWarnMessageLimit())
-      {
-        LOG_WARN("Found unresolved relation member ref!:");
-        LOG_WARN(QString( "Relation ID ") % QString::number(relationRef->second.sourceRelationId) %
-          QString(" (DB ID=") % QString::number(relationRef->second.sourceDbRelationId) %
-           QString(") has ref to ") % relationRef->second.relationMemberData.toString());
-      }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
-
-      _writeRelationMember(
-        relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
-        elementDbId, relationRef->second.relationMemberSequenceId);
-
-      // Remove entry from unresolved list
-      _unresolvedRefs.unresolvedRelationRefs->erase(relationRef);
-    }
-  }
 }
 
 void HootApiDbBulkInserter::_writeChangeset()
