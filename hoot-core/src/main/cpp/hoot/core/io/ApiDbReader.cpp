@@ -32,7 +32,7 @@
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -429,7 +429,6 @@ void ApiDbReader::initializePartial()
 {
   _partialMap.reset(new OsmMap());
 
-  _elementResultIterator.reset();
   _firstPartialReadCompleted = false;
   _elementsRead = 0;
   _selectElementType = ElementType::Node;
@@ -535,9 +534,10 @@ bool ApiDbReader::hasMoreElements()
     LOG_DEBUG("Queries took " << Tgs::Time::getTime() - start << " seconds.");
 
     LOG_INFO(
-      "Reading dataset with " << FileUtils::formatPotentiallyLargeNumber(totalNumMapNodes) <<
-      " nodes, " << FileUtils::formatPotentiallyLargeNumber(totalNumMapWays) << " ways, and " <<
-      FileUtils::formatPotentiallyLargeNumber(totalNumMapRelations) << " relations...");
+      "Reading dataset with approximately " <<
+      StringUtils::formatLargeNumber(totalNumMapNodes) << " nodes, " <<
+      StringUtils::formatLargeNumber(totalNumMapWays) << " ways, and " <<
+      StringUtils::formatLargeNumber(totalNumMapRelations) << " relations...");
 
     _firstPartialReadCompleted = true;
   }
@@ -565,25 +565,17 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
   {
     //no results are available, so request some more results
     LOG_DEBUG("Requesting more query results...");
-    if (_elementResultIterator)
-    {
-      _elementResultIterator->finish();
-      _elementResultIterator->clear();
-    }
-    _elementResultIterator.reset();
     //LOG_VART(_lastId);
     const double start = Tgs::Time::getTime();
-    //Never ever remove the _maxElementsPerMap and _lastId inputs from this call.  Doing that will
-    //turn the query into a selectAll.
-    _elementResultIterator =
-      _getDatabase()->selectElements(_selectElementType, _maxElementsPerMap, _lastId);
+    //Never ever remove the _lastId input from this call.  Doing that will turn the query into a
+    //select all query.
+    _elementResultIterator = _getDatabase()->selectElements(_selectElementType, _lastId);
     LOG_DEBUG("Query took " << Tgs::Time::getTime() - start << " seconds.");
   }
 
   //results are still available, so keep parsing through them
   boost::shared_ptr<Element> element =
     _resultToElement(*_elementResultIterator, _selectElementType, *_partialMap);
-
 
   if (!element.get())
   {
@@ -592,12 +584,6 @@ boost::shared_ptr<Element> ApiDbReader::_getElementUsingIterator()
     //clients, so here we'll just swallow it.
 
     LOG_TRACE("Received null element.");
-    if (_elementResultIterator)
-    {
-      _elementResultIterator->finish();
-      _elementResultIterator->clear();
-    }
-    _elementResultIterator.reset();
     return _getElementUsingIterator();
   }
 
@@ -635,6 +621,10 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   else if (_selectElementType == ElementType::Node && _lastId == _maxNodeId)
   {
     _lastId = 0;
+    //calling finish/clear as the underlying query would have changed here to the query for the
+    //next element type; this may not be necessary
+    _elementResultIterator->finish();
+    _elementResultIterator->clear();
     return ElementType::Way;
   }
   else if (_selectElementType == ElementType::Way && _lastId < _maxWayId)
@@ -644,6 +634,9 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
   else if (_selectElementType == ElementType::Way && _lastId == _maxWayId)
   {
     _lastId = 0;
+    //see comment above
+    _elementResultIterator->finish();
+    _elementResultIterator->clear();
     return ElementType::Relation;
   }
   else if (_selectElementType == ElementType::Relation && _lastId < _maxRelationId)
@@ -656,13 +649,17 @@ ElementType ApiDbReader::_getCurrentSelectElementType()
 void ApiDbReader::finalizePartial()
 {
   LOG_DEBUG("Finalizing read operation...");
+
+  _partialMap.reset();
+
+  //the query has to be freed before the database is closed
   if (_elementResultIterator)
   {
     _elementResultIterator->finish();
     _elementResultIterator->clear();
   }
   _elementResultIterator.reset();
-  _partialMap.reset();
+
   if (_open)
   {
     //The exception thrown by this commit will mask exception text coming from failed queries.  Not
@@ -687,10 +684,11 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
   //method.  However, I was getting some initialization errors with QSqlQuery when the
-  //reader called it in that way during a partial map read.  So, calling it inside here
-  //instead.  A side effect is that this method will return a NULL element during the last
-  //iteration.  Therefore, callers should check resultIterator->isActive in a loop in place of
-  //calling resultIterator->next() and also should check for the null element.
+  //reader called it in that way during a partial map read.  So, calling next inside of this method
+  //instead.  A side effect of this is that this method will always return a null element during the
+  //last iteration.  Therefore, callers of this method should check resultIterator->isActive in a
+  //loop in place of calling resultIterator->next() and also should check to see if the element is
+  //null.
   if (resultIterator.next())
   {
     boost::shared_ptr<Element> element;
@@ -722,8 +720,8 @@ boost::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterat
   }
   else
   {
+    //don't call clear here, as the prepared query may be executed again in a following iteration
     resultIterator.finish();
-    resultIterator.clear();
     return boost::shared_ptr<Element>();
   }
 }

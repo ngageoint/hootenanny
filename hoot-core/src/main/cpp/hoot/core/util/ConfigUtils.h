@@ -25,56 +25,28 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef FILEUTILS_H
-#define FILEUTILS_H
-
-// Qt
-#include <QString>
+#ifndef CONFIGUTILS_H
+#define CONFIGUTILS_H
 
 namespace hoot
 {
 
 /**
- * General utilities needed when working with files
+ * Utilities for dealing with hoot config options
  */
-class FileUtils
+class ConfigUtils
 {
 
 public:
 
   /**
-   * Delete a directory along with all of its contents.
+   * Determines if any of the filter by bounds options are enabled
    *
-   * @param dirName Path of directory to remove.
-   * @return true on success; false on error.
+   * @return true if any of the bounds options are enabled
    */
-  static void removeDir(const QString& dirName);
-
-  /**
-   * Tokenize a file by line and remove the date from each line
-   *
-   * @param filePath file to read
-   * @return a list of file lines
-   */
-  static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
-
-  /**
-   * Reads an entire file to string
-   *
-   * @param path file path to read from
-   * @return a string
-   */
-  static QString readFully(const QString path);
-
-  /**
-   * Writes an entire file to string.  Closes the file on success.
-   *
-   * @param path file path to write to
-   * @param text text to be written
-   */
-  static void writeFully(const QString path, const QString text);
+  static bool boundsOptionEnabled();
 };
 
 }
 
-#endif // FILEUTILS_H
+#endif // CONFIGUTILS_H

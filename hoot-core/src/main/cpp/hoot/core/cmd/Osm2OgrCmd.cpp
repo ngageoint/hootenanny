@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 using namespace std;
 
@@ -93,7 +94,9 @@ public:
 
     OsmMapReaderFactory readerFactory = OsmMapReaderFactory::getInstance();
     if (readerFactory.hasElementInputStream(input) &&
-      ConfigOptions().getOsm2ogrOps().size() == 0)
+        ConfigOptions().getOsm2ogrOps().size() == 0 &&
+        //none of the convert bounding box supports are able to do streaming I/O at this point
+        !ConfigUtils::boundsOptionEnabled())
     {
       boost::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::getInstance().createReader(input);

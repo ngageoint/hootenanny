@@ -33,7 +33,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/io/OsmApiDbSqlStatementFormatter.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt
@@ -237,41 +237,41 @@ void OsmApiDbBulkInserter::_logStats(const bool debug)
 {
   QStringList messages;
   messages.append(
-    QString("\tNodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten));
+    QString("\tNodes: ") + StringUtils::formatLargeNumber(_writeStats.nodesWritten));
   messages.append(
     QString("\tNode tags: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.nodeTagsWritten));
+    StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
   messages.append(
     QString("\tWays: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten));
+    StringUtils::formatLargeNumber(_writeStats.waysWritten));
   messages.append(
-    QString("\tWay nodes: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayNodesWritten));
+    QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
   messages.append(
-    QString("\tWay tags: ") + FileUtils::formatPotentiallyLargeNumber(_writeStats.wayTagsWritten));
+    QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
   messages.append(
     QString("\tRelations: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten));
+    StringUtils::formatLargeNumber(_writeStats.relationsWritten));
   messages.append(
     QString("\tRelation members: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersWritten));
+    StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
   messages.append(
     QString("\tRelation tags: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationTagsWritten));
+    StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
   messages.append(
     QString("\tUnresolved relation members: ") +
-    FileUtils::formatPotentiallyLargeNumber(_writeStats.relationMembersUnresolved));
+    StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
   messages.append(
     QString("\tTotal features: ") +
-    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()));
+    StringUtils::formatLargeNumber(_getTotalFeaturesWritten()));
   messages.append(
     QString("\tChangesets: ") +
-    FileUtils::formatPotentiallyLargeNumber(_changesetData.changesetsWritten));
+    StringUtils::formatLargeNumber(_changesetData.changesetsWritten));
   messages.append(
     QString("\tChangeset change size (each): ") +
-    FileUtils::formatPotentiallyLargeNumber(_maxChangesetSize));
+    StringUtils::formatLargeNumber(_maxChangesetSize));
   messages.append(
     QString("\tExecutable SQL records: ") +
-    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()));
+    StringUtils::formatLargeNumber(_getTotalRecordsWritten()));
 
   for (int i = 0; i < messages.size(); i++)
   {
@@ -352,10 +352,10 @@ void OsmApiDbBulkInserter::_clearIdCollections()
 void OsmApiDbBulkInserter::finalizePartial()
 {
   LOG_INFO(
-    FileUtils::formatPotentiallyLargeNumber(_getTotalFeaturesWritten()) <<
+    StringUtils::formatLargeNumber(_getTotalFeaturesWritten()) <<
     " input records parsed (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
-    FileUtils::secondsToDhms(_timer->elapsed()));
+    StringUtils::secondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _clearIdCollections();
@@ -432,7 +432,7 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
   //to not write the header if there are no records to copy for the table...
   LOG_INFO(
     "Executing element SQL for " <<
-    FileUtils::formatPotentiallyLargeNumber(_getTotalRecordsWritten()) <<
+    StringUtils::formatLargeNumber(_getTotalRecordsWritten()) <<
     " records (data pass #" << _fileDataPassCtr << " of " << _numberOfFileDataPasses() <<
     ").  17 separate SQL COPY statements will be executed...");
 
@@ -442,7 +442,7 @@ void OsmApiDbBulkInserter::_writeDataToDbPsql()
   ApiDb::execSqlFile(_outputUrl, _sqlOutputCombinedFile->fileName());
 
   LOG_INFO(
-    "SQL execution complete.  Time elapsed: " << FileUtils::secondsToDhms(_timer->elapsed()));
+    "SQL execution complete.  Time elapsed: " << StringUtils::secondsToDhms(_timer->elapsed()));
 }
 
 void OsmApiDbBulkInserter::_writeDataToDb()
@@ -588,8 +588,8 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
             //size of the rest of the data
             PROGRESS_INFO(
               "Parsed " <<
-              FileUtils::formatPotentiallyLargeNumber(progressLineCtr) << "/" <<
-              FileUtils::formatPotentiallyLargeNumber(
+              StringUtils::formatLargeNumber(progressLineCtr) << "/" <<
+              StringUtils::formatLargeNumber(
                 _getTotalRecordsWritten() - _changesetData.changesetsWritten) <<
               " SQL file lines.");
           }
@@ -628,9 +628,9 @@ void OsmApiDbBulkInserter::_writeCombinedSqlFile()
   LOG_INFO(
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
-    FileUtils::secondsToDhms(_timer->elapsed()));
+    StringUtils::secondsToDhms(_timer->elapsed()));
   LOG_DEBUG(
-    "Parsed " << FileUtils::formatPotentiallyLargeNumber(progressLineCtr) <<
+    "Parsed " << StringUtils::formatLargeNumber(progressLineCtr) <<
     " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));
@@ -833,7 +833,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
       " nodes to file...");
     _flushStreams();
   }
@@ -841,7 +841,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   if (_writeStats.nodesWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.nodesWritten) <<
+      "Parsed " << StringUtils::formatLargeNumber(_writeStats.nodesWritten) <<
       " nodes from input.");
   }
 
@@ -892,7 +892,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
       " ways to file...");
     _flushStreams();
   }
@@ -900,7 +900,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   if (_writeStats.waysWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.waysWritten) <<
+      "Parsed " << StringUtils::formatLargeNumber(_writeStats.waysWritten) <<
       " ways from input.");
   }
 }
@@ -949,7 +949,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _fileOutputElementBufferSize == 0)
   {
     LOG_TRACE(
-      "Flushing " << FileUtils::formatPotentiallyLargeNumber(_fileOutputElementBufferSize) <<
+      "Flushing " << StringUtils::formatLargeNumber(_fileOutputElementBufferSize) <<
       " relations to file...");
     _flushStreams();
   }
@@ -957,7 +957,7 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (_writeStats.relationsWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO(
-      "Parsed " << FileUtils::formatPotentiallyLargeNumber(_writeStats.relationsWritten) <<
+      "Parsed " << StringUtils::formatLargeNumber(_writeStats.relationsWritten) <<
       " relations from input.");
   }
 }

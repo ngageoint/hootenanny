@@ -25,56 +25,44 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef FILEUTILS_H
-#define FILEUTILS_H
+#include "StringUtils.h"
 
 // Qt
-#include <QString>
+#include <QLocale>
 
 namespace hoot
 {
 
-/**
- * General utilities needed when working with files
- */
-class FileUtils
+QString StringUtils::secondsToDhms(const qint64 durationInMilliseconds)
 {
-
-public:
-
-  /**
-   * Delete a directory along with all of its contents.
-   *
-   * @param dirName Path of directory to remove.
-   * @return true on success; false on error.
-   */
-  static void removeDir(const QString& dirName);
-
-  /**
-   * Tokenize a file by line and remove the date from each line
-   *
-   * @param filePath file to read
-   * @return a list of file lines
-   */
-  static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
-
-  /**
-   * Reads an entire file to string
-   *
-   * @param path file path to read from
-   * @return a string
-   */
-  static QString readFully(const QString path);
-
-  /**
-   * Writes an entire file to string.  Closes the file on success.
-   *
-   * @param path file path to write to
-   * @param text text to be written
-   */
-  static void writeFully(const QString path, const QString text);
-};
-
+  //TODO: move to utility class
+  QString res;
+  int duration = (int)(durationInMilliseconds / 1000);
+  const int seconds = (int)(duration % 60);
+  duration /= 60;
+  const int minutes = (int)(duration % 60);
+  duration /= 60;
+  const int hours = (int)(duration % 24);
+  const int days = (int)(duration / 24);
+  if ((hours == 0) && (days == 0))
+  {
+    return res.sprintf("%02d:%02d", minutes, seconds);
+  }
+  if (days == 0)
+  {
+    return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
+  }
+  return res.sprintf("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
 }
 
-#endif // FILEUTILS_H
+QString StringUtils::formatLargeNumber(const unsigned long number)
+{
+  //I want to see comma separators...probably a better way to handle this...will go with this for
+  //now.
+  const QLocale& cLocale = QLocale::c();
+  QString ss = cLocale.toString((qulonglong)number);
+  ss.replace(cLocale.groupSeparator(), ',');
+  return ss;
+}
+
+}

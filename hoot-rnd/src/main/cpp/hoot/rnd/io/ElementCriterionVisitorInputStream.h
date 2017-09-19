@@ -40,7 +40,7 @@ namespace hoot
 
 /**
  * Combination of ElementCriterionInputStream and ElementCriterionInputStream where a criterion
- * is first checked for each element, then a visitor is applied to the element.
+ * is first checked for each element, then one or more visitors are applied to the element.
  */
 class ElementCriterionVisitorInputStream : public ElementInputStream
 {
@@ -57,12 +57,13 @@ public:
   ElementCriterionVisitorInputStream(const ElementInputStreamPtr& elementSource,
                                      const ElementCriterionPtr& criterion,
                                      const QList<ElementVisitorPtr>& visitors);
+  virtual ~ElementCriterionVisitorInputStream();
 
   /**
    * @brief close
    * Invokes the close function on the source element input stream
    */
-  virtual void close() { _elementSource->close(); }
+  virtual void close();
 
   /**
    * Returns the source's projection.
@@ -73,7 +74,7 @@ public:
    * @brief hasMoreElements
    * @return return value from call to source ElementInputStream's hasMoreElements() method
    */
-  virtual bool hasMoreElements() { return _elementSource->hasMoreElements(); }
+  virtual bool hasMoreElements();
 
   /**
    * @brief readNextElement
@@ -82,11 +83,18 @@ public:
    */
   virtual ElementPtr readNextElement();
 
+  long getNumFeaturesTotal() const { return _numFeaturesTotal; }
+
+  long getNumFeaturesPassingCriterion() const { return _numFeaturesPassingCriterion; }
+
 private:
 
   ElementInputStreamPtr _elementSource;
   ElementCriterionPtr _criterion;
   QList<ElementVisitorPtr> _visitors;
+
+  long _numFeaturesTotal;
+  long _numFeaturesPassingCriterion;
 };
 
 }

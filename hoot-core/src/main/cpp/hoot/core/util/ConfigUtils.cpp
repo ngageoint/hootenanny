@@ -25,56 +25,20 @@
  * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef FILEUTILS_H
-#define FILEUTILS_H
+#include "ConfigUtils.h"
 
-// Qt
-#include <QString>
+// Hoot
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
-/**
- * General utilities needed when working with files
- */
-class FileUtils
+bool ConfigUtils::boundsOptionEnabled()
 {
-
-public:
-
-  /**
-   * Delete a directory along with all of its contents.
-   *
-   * @param dirName Path of directory to remove.
-   * @return true on success; false on error.
-   */
-  static void removeDir(const QString& dirName);
-
-  /**
-   * Tokenize a file by line and remove the date from each line
-   *
-   * @param filePath file to read
-   * @return a list of file lines
-   */
-  static QStringList tokenizeOutputFileWithoutDates(const QString filePath);
-
-  /**
-   * Reads an entire file to string
-   *
-   * @param path file path to read from
-   * @return a string
-   */
-  static QString readFully(const QString path);
-
-  /**
-   * Writes an entire file to string.  Closes the file on success.
-   *
-   * @param path file path to write to
-   * @param text text to be written
-   */
-  static void writeFully(const QString path, const QString text);
-};
-
+  return
+    !conf().get(ConfigOptions::getConvertBoundingBoxKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
-#endif // FILEUTILS_H
+}
