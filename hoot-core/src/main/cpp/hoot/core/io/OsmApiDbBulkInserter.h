@@ -265,6 +265,8 @@ protected:
   virtual unsigned long _getTotalRecordsWritten() const;
   virtual unsigned long _getTotalFeaturesWritten() const;
 
+  virtual bool _destinationIsDatabase() const;
+
 private:
 
   UnresolvedReferences _unresolvedRefs;
@@ -278,8 +280,6 @@ private:
 
   OsmApiDb _database;
   boost::shared_ptr<OsmApiDbSqlStatementFormatter> _sqlFormatter;
-
-  bool _destinationIsDatabase() const;
 
   void _verifyOutputCopySettings();
   void _verifyFileOutputs();

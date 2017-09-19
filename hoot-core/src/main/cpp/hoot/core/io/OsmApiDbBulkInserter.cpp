@@ -201,6 +201,10 @@ void OsmApiDbBulkInserter::close()
   _closeOutputFiles();
   if (_destinationIsDatabase())
   {
+//    if (_database.getDB().isOpen())
+//    {
+//      _database.commit();
+//    }
     _database.close();
   }
 

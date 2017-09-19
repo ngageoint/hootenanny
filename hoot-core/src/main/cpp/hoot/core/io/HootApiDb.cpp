@@ -710,7 +710,6 @@ long HootApiDb::insertMap(QString displayName, bool publicVisibility)
   DbUtils::execNoPrepare(
     _db,
     QString("DROP INDEX %1_tile_idx").arg(getCurrentNodesTableName(mapId)));
-  //TODO: have this also drop the relation member table index
 
   _pendingMapIndexes.append(mapId);
 

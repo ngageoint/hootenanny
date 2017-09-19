@@ -81,24 +81,36 @@ void HootApiDbBulkInserter::open(QString url)
     throw HootException(QString("Could not open URL ") + url);
   }
 
+  _verifyDependencies();
   _verifyStartingIds();
   if (_database.getDB().isOpen())
   {
     throw HootException(
       QString("Database already open.  Close the existing database connection before opening ") +
-      QString("a new one.  URL: ") + url);
+      QString("a new one.  URL: ") + _outputUrl);
   }
+  _database.open(_outputUrl);
 
-  //TODO: a lot of duplicated code here from HootApiDbWriter
+  _database.transaction();
+  _getOrCreateMap();
+  //committing here is going to create the indexes...didn't want to do that initially, but with
+  //the copy statements, I'm not seeing much difference in performance; if no commit is made here,
+  //then the sequences won't exist and the sql query will fail
+  _database.commit();
 
+  LOG_VART(_database.getMapId());
+
+  _sectionNames = _createSectionNameList();
+  _sqlFormatter.reset(new HootApiDbSqlStatementFormatter(_outputDelimiter, _database.getMapId()));
+}
+
+void HootApiDbBulkInserter::_getOrCreateMap()
+{
   if (_userEmail.isEmpty())
   {
     throw HootException("Please set the user's email address via the '" +
                         ConfigOptions::getApiDbEmailKey() + "' configuration setting.");
   }
-
-  _database.open(_outputUrl);
-  _database.transaction();
 
   // create the user before we have a transaction so we can make sure the user gets added.
   if (_createUserIfNotFound)
@@ -111,7 +123,7 @@ void HootApiDbBulkInserter::open(QString url)
   }
   _changesetData.changesetUserId = _database.getUserId(_userEmail, true);
 
-  QStringList pList = QUrl(url).path().split("/");
+  QStringList pList = QUrl(_outputUrl).path().split("/");
   QString mapName = pList[2];
   std::set<long> mapIds = _database.selectMapIds(mapName);
   assert(mapIds.size() == 1);
@@ -145,13 +157,6 @@ void HootApiDbBulkInserter::open(QString url)
     LOG_DEBUG("Map " << mapName << " was not found, must insert.");
     _database.setMapId(_database.insertMap(mapName, true));
   }
-  _database.commit();
-  LOG_VART(_database.getMapId());
-
-  _sectionNames = _createSectionNameList();
-  _sqlFormatter.reset(new HootApiDbSqlStatementFormatter(_outputDelimiter, _database.getMapId()));
-
-  _verifyDependencies();
 }
 
 unsigned int HootApiDbBulkInserter::_numberOfFileDataPasses() const
@@ -232,14 +237,16 @@ void HootApiDbBulkInserter::_writeDataToDbPsql()
 
 void HootApiDbBulkInserter::_writeDataToDb()
 {
-  //indexes are already being handled in HootApiDb
-
-  //TODO: figure out what's going on with constraints
+  //indexes are already being dropped in HootApiDb when the map is inserted, so don't worry about
+  //dropping them here
+  //TODO: figure out what's going on with constraints...HootApiDb creating them too?
   //_database.disableConstraints();
 
   _writeDataToDbPsql();
 
   //_database.enableConstraints();
+  //this will re-create the indexes
+  //_database.commit();
 }
 
 void HootApiDbBulkInserter::_writeCombinedSqlFile()

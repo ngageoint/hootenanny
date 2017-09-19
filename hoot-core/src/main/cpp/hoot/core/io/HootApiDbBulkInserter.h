@@ -103,6 +103,8 @@ protected:
   virtual void _writeDataToDb();
   virtual void _writeDataToDbPsql();
 
+  virtual bool _destinationIsDatabase() const { return true; }
+
 private:
 
   QString _userEmail;
@@ -113,6 +115,8 @@ private:
   boost::shared_ptr<HootApiDbSqlStatementFormatter> _sqlFormatter;
 
   bool _fastBulkInsertActivated;
+
+  void _getOrCreateMap();
 };
 
 }
