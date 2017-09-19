@@ -40,6 +40,7 @@ mgcp.rules = {
         ['F_CODE','AQ064','man_made','causeway'], // Causeway - NFDD AQ063
         ['F_CODE','AT080','tower:type','communication'], // Communications Tower - NFDD AL241
         ['F_CODE','BB008','landuse','harbour'], // Harbour Waters - NFDD BB005
+        ['F_CODE','DB030','natural','cave_entrance'], // Cave - FCODE Retired, moveing to DB029
         ['F_CODE','GA035','aeroway','navigationaid'], // Aeronautical NAVAID - FCODE Retired
         ['F_CODE','GB010','man_made','beacon'], // Airport Navigation Lights - FCODE Retired
         ], // End fcodeOne2oneInV3
