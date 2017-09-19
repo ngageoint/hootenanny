@@ -37,7 +37,6 @@ Vagrant.configure(2) do |config|
 
   # Global settings - default for Ubuntu1404
 
-
   # Ubuntu1404 Box
   # This is the standard, working box
   config.vm.define "default", primary: true do |hoot|
@@ -68,7 +67,6 @@ Vagrant.configure(2) do |config|
   end
 
   # Centos7 box
-  # For testing
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     # This seems to be the "latest" version of centos7
     # hoot_centos7.vm.box = "centos/7"
@@ -93,9 +91,41 @@ Vagrant.configure(2) do |config|
     hoot_centos7.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
 
     hoot_centos7.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
-    #hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    #hoot_centos7.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
-    #hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    hoot_centos7.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    hoot_centos7.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    hoot_centos7.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-mapnik", run: "always"
+    hoot_centos7.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+    hoot_centos7.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+  end
+
+
+  # Centos7 - Hoot core ONLY. No UI
+  config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
+    # Turn off port forwarding
+    config.vm.network "forwarded_port", guest: 8080, host: tomcatPort, disabled: true
+    config.vm.network "forwarded_port", guest: 8094, host: transPort, disabled: true
+    config.vm.network "forwarded_port", guest: 8096, host: mergePort, disabled: true
+    config.vm.network "forwarded_port", guest: 8000, host: mapnikPort, disabled: true
+
+    hoot_centos7_core.vm.box = "bento/centos-7.2"
+    hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
+
+    # Stop the default vagrant rsyncing
+    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+
+    # Use the plugin to install bindfs and make a dummy mount
+    hoot_centos7_core.bindfs.bind_folder "/tmp", "/home/vagrant/bindfstmp", perms: nil
+
+    # Create an empty directory
+    config.vm.synced_folder ".", "/vagrant/home/.workspace-nfs", type: "rsync", disabled: true
+
+    hoot_centos7_core.vm.network "private_network", ip: "192.168.33.10"
+    hoot_centos7_core.nfs.map_uid = Process.uid
+    hoot_centos7_core.nfs.map_gid = Process.gid
+    hoot_centos7_core.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs", :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
+    hoot_centos7_core.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
+
+    hoot_centos7_core.vm.provision "hoot", type: "shell", :privileged => false, :path => "scripts/util/Centos7_only_core.sh"
   end
 
   # Provider-specific configuration so you can fine-tune various
@@ -107,7 +137,8 @@ Vagrant.configure(2) do |config|
   #vb.gui = true
 
   # Customize the amount of memory on the VM:
-    vb.memory = 8192
+#    vb.memory = 8192
+    vb.memory = 10240
     vb.cpus = 4
   end
 

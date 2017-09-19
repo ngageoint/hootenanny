@@ -36,8 +36,8 @@ fi
 if test "${GDAL_VERSION}" = "1.9.1" ; then
   AC_MSG_WARN(["GDAL v1.9.1 is known to have a bug in FileGDB export where the file can't be opened by ArcMap 10.2. GDAL v1.10.1 is known to work."]);
 fi
-if test "${GDAL_VERSION}" != "2.1.3" ; then
-  AC_MSG_WARN([Most development occurs with GDAL v2.1.3, using v$GDAL_VERSION. Please run all tests after build (make test).]);
+if test "${GDAL_VERSION}" != "2.1.4" ; then
+  AC_MSG_WARN([Most development occurs with GDAL v2.1.4, using v$GDAL_VERSION. Please run all tests after build (make test).]);
 fi
 
 # GEOS
@@ -52,8 +52,8 @@ fi
 if test "${GEOS_VERSION}" = "3.3.2" ; then
   AC_MSG_WARN([There is a serious bug in GEOS v3.3.2 distance calculations. GEOS v3.2.2 is known to work.]);
 fi
-if test "${GEOS_VERSION}" != "3.4.2" ; then
-  AC_MSG_WARN([Most development occurs with GEOS v3.4.2, using v$GEOS_VERSION. Please run all tests after build (make test).]);
+if test "${GEOS_VERSION}" != "3.5.0" ; then
+  AC_MSG_WARN([Most development occurs with GEOS v3.5.0, using v$GEOS_VERSION. Please run all tests after build (make test).]);
 fi
 
 # Python
@@ -167,9 +167,6 @@ CHECK_PRECISION_INIT()
 
 m4_include([m4/nodejs.m4])
 NODEJS_INIT()
-
-# Look for the json_spirit header
-AC_CHECK_HEADERS([json_spirit.h])
 
 # Checks for header files.
 AC_CHECK_HEADERS([float.h limits.h malloc.h stdint.h stdlib.h string.h sys/time.h unistd.h])
